@@ -5,6 +5,8 @@ const CemeteryEvidencePresentation = preload("res://scripts/cemetery_evidence_pr
 const WychwoodEvidencePresentation = preload("res://scripts/wychwood_evidence_presentation.gd")
 var CampaignRecordPresentation: Script:
 	get: return _gameplay_script("campaign_record_presentation")
+var CampaignWildernessSection: Script:
+	get: return _gameplay_script("zones/campaign_wilderness_section")
 const WychwoodTerrainPresentation = preload("res://scripts/wychwood_terrain_presentation.gd")
 const StoryActorPresence = preload("res://scripts/story_actor_presence.gd")
 var StoryDecisionCoordinator: Script:
@@ -568,6 +570,9 @@ func _process(delta: float) -> void:
 		return
 	if seamless_world != null and seamless_world.update_player(player, current_zone_id, delta):
 		return
+	if inventory != null and input_router.is_gameplay_context() and player.can_control and not player.transition_locked \
+			and player.health_component.health > 0.0 and not zone_load_request_pending and not opening_pack_waiting and not campaign_pack_waiting:
+		inventory.advance_oil(delta)
 	_keep_player_in_world()
 	interaction_focus_cooldown -= delta
 	if interaction_focus_cooldown <= 0.0:
@@ -760,6 +765,9 @@ func _perform_requested_zone_load() -> void:
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 	_ensure_gameplay_runtime()
+	var encounter_packs: Array[String] = []
+	if zone_id == "greyfen" and quests.is_active("main_bell_beneath_greyfen") and not _boss_is_resolved("bell_eater"):
+		encounter_packs.append("monsters")
 	if _zone_requires_campaign_pack(zone_id):
 		runtime_services.configure_campaign()
 	journey_loading.begin_arrival(self, "travel", zone_id)
@@ -777,12 +785,12 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 		# gameplay-critical opening art is owned by the startup opening pack. The
 		# manifest-backed check below prevents a gate from bypassing that pack just
 		# because a builder script happens to be embedded in the root.
-		if not runtime_packs.zone_packs_ready(zone_id):
+		if not runtime_packs.zone_packs_ready(zone_id, encounter_packs):
 			opening_pack_waiting = true
 			if hud != null and hud.has_method("arm_loading"):
-				hud.arm_loading("Preparing the road into Wychwood...")
-			runtime_packs.request_zone_packs(zone_id)
-			_wait_for_opening_pack(zone_id, spawn_pos, zone_pack_request_serial)
+				hud.arm_loading("Preparing Greyfen's saved encounter..." if not encounter_packs.is_empty() else "Preparing the road into Wychwood...")
+			runtime_packs.request_zone_packs(zone_id, encounter_packs)
+			_wait_for_opening_pack(zone_id, spawn_pos, zone_pack_request_serial, encounter_packs)
 			return
 	if not _zone_requires_campaign_pack(zone_id) or not OS.has_feature("web"):
 		_load_zone(zone_id, spawn_pos)
@@ -818,18 +826,18 @@ func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial
 	campaign_pack_waiting = false
 	_recover_failed_pack_load("The road pack could not be prepared. Your current location remains open; use the crossing to retry.")
 
-func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial: int) -> void:
+func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial: int, encounter_packs: Array[String] = []) -> void:
 	for _frame in range(900):
 		await get_tree().process_frame
 		if request_serial != zone_pack_request_serial or not opening_pack_waiting:
 			return
-		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id):
+		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id, encounter_packs):
 			opening_pack_waiting = false
 			if hud != null and hud.has_method("hide_loading"):
 				hud.hide_loading()
 			_load_zone(zone_id, spawn_pos)
 			return
-		if runtime_packs != null and not runtime_packs.zone_pack_failures(zone_id).is_empty():
+		if runtime_packs != null and not runtime_packs.zone_pack_failures(zone_id, encounter_packs).is_empty():
 			break
 	opening_pack_waiting = false
 	_recover_failed_pack_load("The opening pack could not be prepared. Your current location remains open; use the crossing to retry.")
@@ -920,7 +928,9 @@ func _start_new_game_world() -> void:
 	progression.load_state({})
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
-	opening_detail_pending = prewarmed_greyfen != null and str(prewarmed_greyfen.get_meta("opening_build_profile", "")) in ["opening_fast", "opening_boot"]
+	opening_detail_pending = prewarmed_greyfen != null \
+		and not bool(prewarmed_greyfen.get_meta("opening_detail_complete", false)) \
+		and str(prewarmed_greyfen.get_meta("opening_build_profile", "")) in ["opening_fast", "opening_boot"]
 	opening_detail_stage_index = 0
 	opening_detail_generation += 1
 	opening_save_generation += 1
@@ -1063,7 +1073,6 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 		audio.set_game_paused(false)
 	get_tree().paused = false
 	hud.hide_menus()
-	inventory.load_state(data.get("inventory", {}))
 	if vendor_service != null:
 		vendor_service.load_state(data.get("vendors", {}))
 	quests.load_state(data.get("quests", {}))
@@ -1071,7 +1080,9 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 		quest_presentation.load_state(data.get("quest_presentation", {}))
 	if quest_beats != null:
 		quest_beats.load_state(data.get("quest_beats", {}))
-	if settings != null and typeof(data.get("settings", {})) == TYPE_DICTIONARY and not data.get("settings", {}).is_empty():
+	# Journey snapshots are a legacy fallback, not an override for newer global
+	# input/accessibility preferences selected before loading that journey.
+	if settings != null and not settings.loaded_user_settings and typeof(data.get("settings", {})) == TYPE_DICTIONARY and not data.get("settings", {}).is_empty():
 		settings.restore_settings(data.settings)
 		settings.apply()
 	story_state.load_state(data.get("story_state", {}))
@@ -1081,6 +1092,8 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 	var saved_sector := str(data.get("world_sector", data.get("zone", "greyfen")))
 	var discovered: Dictionary = seamless_world.discovered_sectors if seamless_world != null else {}
 	progression.restore_journey(quests, story_state, saved_sector, discovered)
+	# Restore entitlement ownership before migrating a legacy coating duration.
+	inventory.load_state(data.get("inventory", {}), int(data.get("migrated_from_version", data.get("version", 0))) < 13)
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
@@ -1269,7 +1282,7 @@ func _activate_prewarmed_player_runtime() -> void:
 	var gameplay_camera := camera_rig.find_child("Camera3D", true, false) as Camera3D
 	if gameplay_camera != null:
 		gameplay_camera.current = true
-	call_deferred("_finish_prewarmed_greyfen_runtime")
+	_finish_prewarmed_greyfen_runtime()
 
 func _start_campaign_visual_prewarm() -> void:
 	if not game_started or resource_shutdown_prepared or asset_helper == null:
@@ -1471,11 +1484,8 @@ func _schedule_zone_runtime_finalize(zone_id: String, root: Node3D, service: Nod
 	call_deferred("_finish_zone_runtime_finalize", zone_id, root, service, enemies, navigation_pending)
 
 func _finish_zone_runtime_finalize(zone_id: String, root: Node3D, service: Node, enemies: Array, navigation_pending: bool) -> void:
-	# Yield once and then give the renderer a short normal frame window. This
-	# keeps cold activation responsive without weakening the active-zone audit.
-	await get_tree().process_frame
-	var settle_timer := _create_owned_timer(0.12, true)
-	await settle_timer.timeout
+	# Arrival still owns input: required navigation and consequences must not
+	# create a second construction stall after the playable boundary.
 	if not game_started or current_zone_id != zone_id:
 		return
 	if root == null or not is_instance_valid(root) or zone_root != root:
@@ -1502,10 +1512,7 @@ func _finish_zone_runtime_finalize(zone_id: String, root: Node3D, service: Node,
 	print("LOADING: zone_stage=runtime_finalized zone=%s navigation=%s ms=%d" % [zone_id, navigation_pending, Time.get_ticks_msec() - started])
 
 func _finish_prewarmed_greyfen_runtime() -> void:
-	# Complete deferred navigation and renderer validation only after the first
-	# controllable frame. The metadata guard prevents a late callback from
-	# touching a zone that has already been replaced or retired.
-	await get_tree().process_frame
+	# Compatibility for older prepared roots; new roots finish this under cover.
 	if not game_started or current_zone_id != "greyfen" or zone_root == null or not is_instance_valid(zone_root):
 		return
 	if not bool(zone_root.get_meta("prewarm_navigation_pending", false)):
@@ -1971,7 +1978,7 @@ func _handle_interaction(area) -> void:
 		if _road_ready_to_report() and area.interaction_id in ["sister_anwen", "notice_board", "retain_evidence"]:
 			report_chosen = true
 			dialogue_data = dialogue.get_dialogue("report_decision")
-		if area.interaction_id == "sister_anwen" and not bool(tutorial_flags.get("anwen_talked", false)):
+		if area.interaction_id == "sister_anwen" and not quests.is_completed("main_road_of_crows") and not bool(tutorial_flags.get("anwen_talked", false)):
 			tutorial_flags["anwen_talked"] = true
 			quests.complete_objective("main_road_of_crows", "speak_anwen")
 		elif area.interaction_id == "sister_anwen" and not report_chosen and quests.is_active("main_bell_beneath_greyfen"):
@@ -2684,7 +2691,7 @@ func _on_launch_accepted() -> void:
 		# request_startup_packs may mount a cache immediately, before the
 		# signal connection above can observe a later state change. Recheck on
 		# the next idle frame as well as through pack_ready.
-		call_deferred("_begin_opening_prewarm_if_ready")
+		call_deferred("_begin_opening_prewarm_if_ready", opening_prepare_generation)
 		# Cached Web packs can complete synchronously. The signal path handles
 		# asynchronous downloads without depending on a paused-tree frame.
 		call_deferred("_wait_for_startup_packs_then_prewarm", opening_prepare_generation)
@@ -2705,8 +2712,9 @@ func _on_startup_pack_ready(_pack_id: String) -> void:
 	startup_packs_waiting = false
 	_begin_opening_prewarm()
 
-func _begin_opening_prewarm_if_ready() -> void:
-	if game_started or greyfen_prewarm_started or runtime_packs == null:
+func _begin_opening_prewarm_if_ready(generation: int) -> void:
+	if not _opening_attempt_current(generation) or not startup_packs_waiting \
+			or greyfen_prewarm_started or runtime_packs == null:
 		return
 	if runtime_packs.has_method("startup_packs_ready") and runtime_packs.startup_packs_ready():
 		print("LOADING: startup_pack_ready source=deferred")
@@ -2728,9 +2736,9 @@ func _wait_for_startup_packs_then_prewarm(generation: int) -> void:
 			_opening_prepare_failed("Opening content could not be prepared: %s. Select Retry to try again." % "; ".join(failures))
 			return
 		await get_tree().process_frame
+	if not _opening_attempt_current(generation):
+		return
 	startup_packs_waiting = false
-	if hud != null:
-		hud.toast("Opening content took too long to prepare. Select New Game to retry.")
 	_opening_prepare_failed("Opening content took too long to prepare. Select New Game to retry.")
 
 func _begin_opening_prewarm() -> void:
@@ -2771,7 +2779,8 @@ func _begin_opening_prewarm() -> void:
 	call_deferred("_prepare_opening_resources", opening_prepare_generation)
 
 func _opening_attempt_current(generation: int) -> bool:
-	return generation == opening_prepare_generation and not resource_shutdown_prepared and not game_started
+	return generation == opening_prepare_generation and not resource_shutdown_prepared \
+		and not game_started and not startup_prepare_failed
 
 func _prepare_opening_resources(generation: int) -> void:
 	if not _opening_attempt_current(generation):
@@ -2787,7 +2796,8 @@ func _prepare_opening_resources(generation: int) -> void:
 				break
 			if surfaces not in [OK, ERR_BUSY] or actors not in [OK, ERR_BUSY] or Time.get_ticks_msec() >= deadline:
 				print("LOADING: opening_resource_failure materials=%s actors=%s" % [world_materials.prewarm_error, asset_helper.resource_prewarm_error])
-				_opening_prepare_failed("Greyfen's authored resources could not be prepared. Select New Game to retry.")
+				var detail := str(world_materials.prewarm_error) + " " + str(asset_helper.resource_prewarm_error)
+				_opening_prepare_failed("Greyfen's authored resources could not be prepared. %s Select Retry to try again." % detail.strip_edges())
 				return
 			await get_tree().process_frame
 	if _opening_attempt_current(generation):
@@ -2814,9 +2824,13 @@ func _restart_menu_opening() -> void:
 		_on_launch_accepted()
 
 func _opening_prepare_failed(message: String) -> void:
-	if not game_started:
-		get_viewport().disable_3d = true
-		get_tree().paused = true
+	if game_started or resource_shutdown_prepared:
+		return
+	# Retry must not retain a partial world that makes the next build early-out.
+	if zone_root != null or player != null or route_zone_cache.has("greyfen"):
+		_discard_menu_opening()
+	get_viewport().disable_3d = true
+	get_tree().paused = true
 	opening_prepare_generation += 1
 	startup_packs_waiting = false
 	greyfen_prewarm_started = false
@@ -2928,9 +2942,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	_flush_environment_batches()
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
-	# These are correctness passes, not prerequisites for the first player frame.
-	# Publish a valid cache now and finish them after handoff so a menu click does
-	# not inherit a synchronous navigation or recursive renderer walk.
+	# Cleared below after every opening stage has been published under cover.
 	prewarm_root.set_meta("prewarm_navigation_pending", true)
 	prewarm_root.set_meta("opening_build_profile", "opening_boot")
 	_clear_environment_batch_buffers()
@@ -2997,6 +3009,11 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		get_tree().paused = was_paused
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's scenery is incomplete. Select New Game to retry.")
 		return
+	_publish_web_opening_state("resources", "Finishing Greyfen's routes and characters...")
+	prewarm_service.build_navigation(prewarm_root)
+	prewarm_root.set_meta("prewarm_navigation_pending", false)
+	_validate_zone_render_resources(prewarm_root)
+	prewarm_root.set_meta("opening_detail_complete", true)
 	if visual_director != null:
 		visual_director.refresh_zone_lighting(prewarm_root)
 	camera_rig.prepare_view()
@@ -3666,10 +3683,8 @@ func _use_inventory_item(item_id: String) -> Dictionary:
 		var selected: bool = player.select_arrow(item_id)
 		return _preparation_item_result(item_id, selected, "%s selected for the next shot." % item_name if selected else "These arrows cannot be selected.", "select")
 	if inventory.get_item_type(item_id) == "oil":
-		if str(inventory.active_oil) == item_id:
-			return _preparation_item_result(item_id, false, "%s already coats the blade." % item_name, "apply")
 		var applied: bool = inventory.apply_oil(item_id)
-		return _preparation_item_result(item_id, applied, "%s coats the blade." % item_name if applied else "The coating could not be applied.", "apply")
+		return _preparation_item_result(item_id, applied, "%s coats the blades for %s of active play. One bottle used." % [item_name, inventory.oil_time_text()] if applied else "The coating could not be applied.", "apply", 1 if applied else 0)
 	var effect: Dictionary = preload("res://scripts/preparation_view_model.gd").resolved_effect(item_id, inventory, progression)
 	if item_id == "redroot_potion":
 		var missing_health: float = maxf(0.0, player.health_component.max_health - player.health_component.health)
@@ -4388,6 +4403,7 @@ func _on_touch_quick_action(action: String) -> void:
 func _resume_game() -> void:
 	if not game_started or not is_instance_valid(player) or _journey_load_pending() or hud.active_menu == "main":
 		return
+	var returning_from_ending: bool = hud.active_menu == "ending"
 	var touch_reason: String = mobile_touch.gameplay_layout_reason() if mobile_touch != null else ""
 	hud.set_touch_layout_reason(touch_reason)
 	if not touch_reason.is_empty():
@@ -4402,7 +4418,7 @@ func _resume_game() -> void:
 	audio.play_event("ui")
 	hud.hide_menus()
 	_publish_journey_arrival()
-	if bool(story_state.get_flag("final_choice_completed", false)) and current_zone_id == "hart_glade":
+	if returning_from_ending and bool(story_state.get_flag("final_choice_completed", false)) and current_zone_id == "hart_glade":
 		story_state.set_flag("aftermath_returned", true)
 		story_save_pending = true
 		_load_zone_after_runtime_pack("greyfen", Vector3(0, 1, 9.8))
@@ -4467,7 +4483,8 @@ func _apply_runtime_settings(current_settings: Dictionary) -> void:
 		var preset := str(current_settings.get("quality_preset", "balanced"))
 		var changed: bool = runtime_packs.quality_preset != preset
 		runtime_packs.quality_preset = preset
-		if changed and not game_started and (greyfen_prewarm_started or startup_packs_waiting or route_zone_cache.has("greyfen")):
+		if changed and not game_started and (greyfen_prewarm_started or startup_packs_waiting \
+				or startup_prepare_failed or route_zone_cache.has("greyfen")):
 			_restart_menu_opening()
 	if performance_budget_monitor != null:
 		performance_budget_monitor.quality = str(current_settings.get("quality_preset", "balanced"))
@@ -4532,7 +4549,7 @@ func _refresh_equipment_readout() -> void:
 	var arrow_type := str({"standard_arrow": "Standard", "bodkin_arrow": "Bodkin", "ashfire_arrow": "Ashfire"}.get(arrow_id, "Standard"))
 	var remedy_id: String = inventory.quick_item("use_potion")
 	var tool_id: String = inventory.quick_item("throw_bomb")
-	hud.update_equipment(int(inventory.items.get(remedy_id, 0)), int(inventory.items.get(tool_id, 0)), oil_name, int(inventory.items.get(arrow_id, 0)), arrow_type, weapon_name, remedy_id, tool_id)
+	hud.update_equipment(int(inventory.items.get(remedy_id, 0)), int(inventory.items.get(tool_id, 0)), oil_name, int(inventory.items.get(arrow_id, 0)), arrow_type, weapon_name, remedy_id, tool_id, ceili(inventory.oil_remaining_seconds))
 	if mobile_touch != null and is_instance_valid(player):
 		mobile_touch.set_weapon_mode(player.get_weapon_mode())
 

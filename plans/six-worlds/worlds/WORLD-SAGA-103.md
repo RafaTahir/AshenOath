@@ -1,9 +1,9 @@
 # WORLD-SAGA-103 - Deep Woods: A Roof Before Rain
 
-Parent: [WORLD-SAGA-000](../WORLD-SAGA-000.md). Status: runtime content implemented; oil-duration effect deferred; user acceptance pending.
+Parent: [WORLD-SAGA-000](../WORLD-SAGA-000.md). Status: runtime content implemented; oil-duration follow-up approved/implemented; verification and user acceptance pending.
 Current compilation/publication details: [implementation record](../IMPLEMENTATION.md).
 Region: `deep_wood`. Sectors: deep_wood, old_mill, burned_farmstead.
-Implementation/compilation/publication not performed; user acceptance pending.
+The setup-only no-implementation statement is historical; current status is in the implementation record.
 
 ## People And Regional Story
 
@@ -74,10 +74,10 @@ artifacts. None replaces the refugee register, mill ledger or guaranteed evidenc
 
 - [ ] Ash-Tempered Blade Fitting (`saga_ash_tempered_fitting`) records the Ashwing
   entitlement and a forge provenance entry. Retain existing 500-XP Ashwing reward.
-- [ ] Intended mechanical effect: blade-oil duration x1.20. BLOCKED: current oils
-  never expire. On 2026-10-19 the user chose to defer this perk until a separate
-  oil-system decision. Do not add a timer, substitute damage or claim it works.
-  Documentation is complete with this dependency; full reward implementation is not.
+- [ ] Mechanical effect: blade-oil duration x1.20, from five to six minutes of
+  active play. The initial deferral was superseded by the approved timed-oil
+  follow-up in [FINISH-017](../../finish-line/FINISH-017.md). Its implementation
+  is not runtime acceptance; verify application, refresh, pause and persistence.
 - [ ] After DEP-Q05, later return to the workers' chosen dry work/supply station
   grants `return:saga_dep_settled` (100 XP). Closed/supervised/restitution states
   have different dressing but equivalent useful continuation and reward access.
@@ -88,4 +88,5 @@ artifacts. None replaces the refugee register, mill ledger or guaranteed evidenc
 2. Complete all three mill choices, Rootbound outcomes and distinct new orchard work.
 3. Interrupt cellar/plot/roof work; reload without losing records or supplies.
 4. Inspect all secrets and phased Ashwing saves; preserve original Mill/Names quests.
-5. Confirm the duration perk stays explicitly blocked until separately approved and implemented.
+5. Confirm the approved duration perk grants six minutes per bottle, refreshes
+   without stacking, pauses correctly and preserves remaining time on Continue.

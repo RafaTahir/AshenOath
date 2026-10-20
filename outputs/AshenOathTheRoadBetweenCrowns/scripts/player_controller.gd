@@ -858,11 +858,14 @@ func _release_bow() -> void:
 		arrow_unavailable.emit()
 		return
 	var direction := -global_transform.basis.z
+	var locked_aim_point := Vector3.ZERO
+	var has_locked_aim := false
 	if camera_controller != null:
 		var locked_target: Node3D = camera_controller.get_locked_combat_target() if camera_controller.has_method("get_locked_combat_target") else null
 		if locked_target != null and is_instance_valid(locked_target):
-			var bounds: AABB = locked_target.get_meta("camera_subject_bounds", AABB(Vector3.ZERO, Vector3(0, 1.84, 0)))
-			direction = (locked_target.global_transform * bounds.get_center() - get_arrow_origin()).normalized()
+			locked_aim_point = locked_bow_aim_point(locked_target)
+			has_locked_aim = true
+			direction = (locked_aim_point - get_arrow_origin()).normalized()
 		else:
 			direction = camera_controller.training_aim_direction(get_arrow_origin())
 	if direction.length_squared() < 0.5:
@@ -870,7 +873,9 @@ func _release_bow() -> void:
 	direction = direction.normalized()
 	face_target(global_position + Vector3(direction.x, 0, direction.z) * 4.0)
 	var arrow_origin := get_arrow_origin()
-	if training and camera_controller != null:
+	if has_locked_aim and not training:
+		direction = (locked_aim_point - arrow_origin).normalized()
+	elif training and camera_controller != null:
 		direction = camera_controller.training_aim_direction(arrow_origin)
 	if not training:
 		inventory_ref.consume(selected_arrow_id)
@@ -891,6 +896,14 @@ func _release_bow() -> void:
 	bow_recovery = maxf(0.10, 0.24 * _progression_value("bow_recovery_multiplier", 1.0) - _progression_value("saga_bow_recovery_reduction", 0.0))
 	if animation_driver != null:
 		animation_driver.trigger_action("attack_light", 1.0, 0.08)
+
+static func locked_bow_aim_point(actor: Node3D) -> Vector3:
+	# Presentation bounds may include limbs behind the actual damage capsule.
+	for child in actor.get_children():
+		if child is CollisionShape3D and child.shape is CapsuleShape3D and not child.disabled:
+			return child.global_position
+	var bounds: AABB = actor.get_meta("camera_subject_bounds", AABB(Vector3.ZERO, Vector3(0, 1.84, 0)))
+	return actor.global_transform * bounds.get_center()
 
 func get_arrow_origin() -> Vector3:
 	if bow_attachment != null and is_instance_valid(bow_attachment):

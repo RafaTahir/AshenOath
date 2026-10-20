@@ -326,7 +326,7 @@ func _build_grave_court(context: ZoneBuildContext, origin: Vector3) -> void:
 	var graves := [
 		[Vector3(-1.8, 0, -2.10), -7.0], [Vector3(0.0, 0, 2.28), 4.0],
 		[Vector3(2.2, 0, -2.10), 7.0], [Vector3(-1.8, 0, 1.05), -4.0],
-		[Vector3(0.2, 0, -2.55), 5.0], [Vector3(2.0, 0, 1.95), -6.0],
+		[Vector3(0.2, 0, -2.55), 5.0], [Vector3(3.2, 0, 1.95), -6.0],
 	]
 	for grave_index in range(graves.size()):
 		var grave = graves[grave_index]

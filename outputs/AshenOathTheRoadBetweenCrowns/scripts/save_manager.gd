@@ -1,6 +1,6 @@
 extends Node
 
-const CURRENT_VERSION := 12
+const CURRENT_VERSION := 13
 const PRE_COVENANT_PATH := "user://ashen_oath_before_covenant.json"
 const SAVE_PATH := "user://ashen_oath_save.json"
 const AUTOSAVE_PATH := "user://ashen_oath_autosave.json"
@@ -37,6 +37,7 @@ var _summary_items: Dictionary = {}
 var _decoded_slots: Dictionary = {}
 var _summary_cache: Dictionary = {}
 var _payload_tokens: Dictionary = {}
+var _browser_sync_pending := false
 
 func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") -> bool:
 	# Deferred autosaves can outlive a zone teardown. Never serialize a partially
@@ -52,8 +53,8 @@ func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") ->
 	if not _write_atomic(path, data):
 		message.emit("Save failed. Your previous save was preserved.")
 		return false
-	message.emit(label)
-	_remember_gameplay_save(path, data)
+	if _remember_gameplay_save(path, data):
+		message.emit(_save_message(label))
 	library_changed.emit()
 	return true
 
@@ -253,7 +254,25 @@ func _write_atomic(path: String, data: Dictionary) -> bool:
 			DirAccess.rename_absolute(absolute_backup, absolute_path)
 		_remove_if_present(temporary)
 		return false
+	_queue_browser_sync()
 	return true
+
+func _queue_browser_sync() -> void:
+	if not OS.has_feature("web") or _browser_sync_pending:
+		return
+	_browser_sync_pending = true
+	call_deferred("_sync_browser_files")
+
+func _sync_browser_files() -> void:
+	_browser_sync_pending = false
+	# FileAccess closes the temporary file before the atomic rename. Request
+	# persistence again after the complete batch has published its final names.
+	if OS.has_feature("web"):
+		JavaScriptBridge.force_fs_sync()
+
+func _save_message(text: String) -> String:
+	# force_fs_sync requests persistence; it does not acknowledge its completion.
+	return text + " Browser storage is syncing; keep this tab open." if OS.has_feature("web") else text
 
 func _read_slot(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -568,6 +587,8 @@ func _card_for_result(slot_id: String, source: String, result: Dictionary) -> Di
 	var backup: bool = source == "backup"
 	var summary: Dictionary = _summary_for_result(result, _slot_label(slot_id))
 	var source_label: String = ("Previous copy of " if backup else "") + _slot_label(slot_id)
+	if source == "resume":
+		source_label = "Recorded Continue copy of " + _slot_label(slot_id)
 	if bool(summary.get("replay", false)) and not source_label.to_lower().contains("replay"):
 		source_label += " (replay)"
 	return {"available": true, "selection": {"slot_id": slot_id, "source": source, "token": str(result.get("token", ""))}, "state_token": _payload_token_for_result(result), "summary": summary, "source_label": source_label, "status": "recoverable" if backup else "ready", "reason": "Loads the previous recorded copy, including its story state." if backup else "", "recovery": []}
@@ -635,9 +656,18 @@ func continue_model() -> Dictionary:
 		var same_journey: bool = bool(model.get("available", false)) and _matches_journey(model.get("summary", {}), str(identity.get("journey_id", "")), bool(identity.get("replay", false)))
 		var remembered_time: String = str(identity.get("summary", {}).get("saved_at", ""))
 		var recorded_time: String = str(model.get("summary", {}).get("saved_at", ""))
-		if follows_automatic and same_journey and remembered_time != "" and _timestamp_value(recorded_time) >= _timestamp_value(remembered_time):
+		if follows_automatic and same_journey and remembered_time != "" \
+				and _timestamp_value(recorded_time) >= _timestamp_value(remembered_time) \
+				and (recorded_time != remembered_time or not identity.has("payload")):
 			model["reason"] = "Continue follows the updated %s of this same journey." % str(model.get("source_label", "record"))
 			return model
+		# New Continue records contain their exact selected state in the same
+		# atomic JSON file. Do not substitute a slot belonging to another journey.
+		if str(model.get("status", "")) != "newer_version" and (same_journey or not bool(model.get("available", false))):
+			var snapshot: Dictionary = _specific_model(str(identity.get("slot_id", "")), "resume")
+			if bool(snapshot.get("available", false)):
+				snapshot["reason"] = "Loads the exact recorded Continue state; the separate slot write was interrupted."
+				return snapshot
 		var reason: String = str(model.get("reason", ""))
 		if bool(model.get("available", false)):
 			reason = "The remembered slot now holds a different recorded state. Choose that copy or a recovery explicitly in Saved Journeys."
@@ -740,6 +770,15 @@ func slot_path(slot_id: String) -> String:
 func _read_selection(selection: Dictionary, require_token: bool = true) -> Dictionary:
 	var slot_id: String = str(selection.get("slot_id", ""))
 	var source: String = str(selection.get("source", ""))
+	if source == "resume":
+		var primary := _read_slot(slot_path(slot_id)) if slot_path(slot_id) != "" else {}
+		if str(primary.get("reason", "")) == "future_version":
+			return primary
+		var snapshot := _read_resume_snapshot(slot_id)
+		if bool(snapshot.get("ok", false)) and require_token \
+				and str(snapshot.get("token", "")) != str(selection.get("token", "")):
+			return {"ok": false, "reason": "changed", "path": RESUME_PATH}
+		return snapshot
 	var path: String = ""
 	if slot_id.begins_with("chapter:") and source == "chapter":
 		var chapter_id: String = slot_id.trim_prefix("chapter:")
@@ -848,7 +887,9 @@ func finish_load(game, request_id: String, success: bool, reason: String = "") -
 	_restore_text_history(game, data)
 	var pointer_slot: String = str(source.get("slot_id", ""))
 	var pointer_source: String = str(source.get("source", "primary"))
-	if pointer_source == "chapter":
+	if pointer_source == "resume":
+		pointer_source = str(pending.get("read_result", {}).get("resume_source", "primary"))
+	elif pointer_source == "chapter":
 		pointer_slot = "replay_checkpoint"
 		pointer_source = "primary"
 	var remembered: bool = _write_resume_pointer(pointer_slot, pointer_source, data, summary)
@@ -865,7 +906,8 @@ func _read_resume_pointer() -> Dictionary:
 	var file := FileAccess.open(RESUME_PATH, FileAccess.READ)
 	if file == null or file.get_length() > MAX_IMPORT_BYTES:
 		return {"ok": false, "exists": true}
-	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	var content := file.get_as_text()
+	var parsed: Variant = JSON.parse_string(content)
 	if typeof(parsed) != TYPE_DICTIONARY:
 		return {"ok": false, "exists": true}
 	if typeof(parsed.get("version")) not in [TYPE_INT, TYPE_FLOAT] or float(parsed.version) != 1.0:
@@ -874,7 +916,32 @@ func _read_resume_pointer() -> Dictionary:
 		return {"ok": false, "exists": true}
 	if typeof(parsed.get("summary")) != TYPE_DICTIONARY:
 		parsed["summary"] = {}
-	return {"ok": true, "exists": true, "data": parsed}
+	return {"ok": true, "exists": true, "data": parsed, "token": content.sha256_text()}
+
+func _read_resume_snapshot(slot_id: String) -> Dictionary:
+	var record := _read_resume_pointer()
+	if not bool(record.get("ok", false)):
+		return {"ok": false, "reason": "invalid_selection"}
+	var pointer: Dictionary = record.data
+	var raw: Variant = pointer.get("payload")
+	if str(pointer.get("slot_id", "")) != slot_id or not raw is Dictionary:
+		return {"ok": false, "reason": "invalid_selection"}
+	var version_error := _version_error(raw)
+	if not version_error.is_empty():
+		return {"ok": false, "reason": version_error}
+	if str(raw.get("game_id", "ashen-oath")) != "ashen-oath" \
+			or not _supported_saved_zone(str(raw.get("zone", ""))) \
+			or not _supported_saved_zone(str(raw.get("world_sector", raw.get("zone", "")))):
+		return {"ok": false, "reason": "invalid_save"}
+	var data := migrate_save_data(raw)
+	if data.is_empty() or str(data.get("journey_id", "")) != str(pointer.get("journey_id", "")) \
+			or bool(data.get("replay_session", false)) != bool(pointer.get("replay", false)) \
+			or str(pointer.get("state_token", "")) == "" \
+			or _journey_payload_token(data) != str(pointer.state_token):
+		return {"ok": false, "reason": "invalid_save"}
+	return {"ok": true, "path": RESUME_PATH, "data": data,
+		"recorded": _recorded_metadata(raw), "token": str(record.token),
+		"resume_source": str(pointer.source)}
 
 func _write_resume_pointer(slot_id: String, source: String, data: Dictionary, summary: Dictionary = {}) -> bool:
 	if slot_path(slot_id) == "" or source not in ["primary", "backup"]:
@@ -882,12 +949,15 @@ func _write_resume_pointer(slot_id: String, source: String, data: Dictionary, su
 	var saved_summary: Dictionary = summary.duplicate(true)
 	if saved_summary.is_empty():
 		saved_summary = JourneySummary.describe(data, _recorded_metadata(data), _summary_quests, _summary_items)
-	var pointer: Dictionary = {"version": 1, "slot_id": slot_id, "source": source, "journey_id": str(data.get("journey_id", "")), "replay": bool(data.get("replay_session", false)), "state_token": _journey_payload_token(data), "summary": saved_summary}
+	var pointer: Dictionary = {"version": 1, "slot_id": slot_id, "source": source, "journey_id": str(data.get("journey_id", "")), "replay": bool(data.get("replay_session", false)), "state_token": _journey_payload_token(data), "summary": saved_summary, "payload": data}
+	var content := JSON.stringify(pointer, "\t")
+	if content.to_utf8_buffer().size() > MAX_IMPORT_BYTES:
+		return false
 	var temporary: String = RESUME_PATH + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return false
-	file.store_string(JSON.stringify(pointer, "\t"))
+	file.store_string(content)
 	file.flush()
 	file = null
 	var destination: String = ProjectSettings.globalize_path(RESUME_PATH)
@@ -901,16 +971,28 @@ func _write_resume_pointer(slot_id: String, source: String, data: Dictionary, su
 			DirAccess.rename_absolute(previous, destination)
 		_remove_if_present(temporary)
 		return false
+	_queue_browser_sync()
 	return true
 
-func _remember_gameplay_save(path: String, data: Dictionary) -> void:
+func _remember_gameplay_save(path: String, data: Dictionary) -> bool:
 	for slot_id: String in _all_slot_ids():
 		if path != slot_path(slot_id) or (slot_id not in CAMPAIGN_RESUME_SLOTS and slot_id not in REPLAY_RESUME_SLOTS):
 			continue
+		if slot_id in ["checkpoint", "replay_checkpoint"]:
+			var pointer: Dictionary = _read_resume_pointer()
+			var selected: Dictionary = pointer.get("data", {})
+			var selected_slot := str(selected.get("slot_id", ""))
+			var explicit_copy := selected_slot.begins_with("manual_") or selected_slot in ["quick", "replay_quick"] or str(selected.get("source", "")) == "backup"
+			if bool(pointer.get("ok", false)) and explicit_copy and str(selected.get("journey_id", "")) == str(data.get("journey_id", "")):
+				# Background/death checkpoints remain available independently;
+				# they must not retarget an explicit quick/manual/recovery choice.
+				return true
 		var recorded: Dictionary = _read_slot(path)
 		if not bool(recorded.get("ok", false)) or not _write_resume_pointer(slot_id, "primary", recorded.get("data", data)):
-			message.emit("The journey was saved, but Continue could not remember its source. It remains available in Saved Journeys.")
-		return
+			message.emit(_save_message("The journey was written, but Continue could not remember its source. Choose the copy in Saved Journeys."))
+			return false
+		return true
+	return true
 
 func list_slots() -> Array[Dictionary]:
 	var slots: Array[Dictionary] = []
@@ -945,8 +1027,11 @@ func save_named(game, slot_id: String, title: String) -> bool:
 	if not _write_atomic(slot_path(slot_id), data):
 		operation_finished.emit(slot_id, "save", false, "The save could not be written. The previous copy is preserved.")
 		return false
-	operation_finished.emit(slot_id, "save", true, "Saved: " + str(data.slot_name))
-	_remember_gameplay_save(slot_path(slot_id), data)
+	var remembered := _remember_gameplay_save(slot_path(slot_id), data)
+	var text := "Saved: " + str(data.slot_name)
+	if not remembered:
+		text += ". Continue selection is unchanged; choose this copy in Saved Journeys."
+	operation_finished.emit(slot_id, "save", true, _save_message(text))
 	library_changed.emit()
 	return true
 

@@ -3,14 +3,25 @@ extends SceneTree
 const CameraController = preload("res://scripts/camera_controller.gd")
 const PlayerController = preload("res://scripts/player_controller.gd")
 const InputRouter = preload("res://scripts/input_router.gd")
+const MaterialBindings = preload("res://scripts/character_material_bindings.gd")
 
 var failures: Array[String] = []
 var stage: Node3D
 var controller
 var player
 var router
+var watchdog: Timer
 
 func _initialize() -> void:
+	watchdog = Timer.new()
+	watchdog.one_shot = true
+	watchdog.wait_time = 90.0
+	root.add_child(watchdog)
+	watchdog.timeout.connect(func():
+		push_error("Movement/camera session exceeded its 90-second deadline")
+		quit(1)
+	)
+	watchdog.start()
 	call_deferred("_run")
 
 func _check(condition: bool, message: String) -> void:
@@ -91,6 +102,14 @@ func _run() -> void:
 	plane.size = Vector2(30, 30)
 	floor_mesh.mesh = plane
 	stage.add_child(floor_mesh)
+	var floor_body := StaticBody3D.new()
+	var floor_shape := CollisionShape3D.new()
+	var floor_box := BoxShape3D.new()
+	floor_box.size = Vector3(30.0, 0.5, 30.0)
+	floor_shape.shape = floor_box
+	floor_body.position.y = -0.25
+	floor_body.add_child(floor_shape)
+	stage.add_child(floor_body)
 	for index in range(4):
 		var landmark := MeshInstance3D.new()
 		landmark.mesh = BoxMesh.new()
@@ -106,6 +125,7 @@ func _run() -> void:
 	_check(controller.camera.global_position.distance_to(player.global_position) > 4.0, "Covered prewarm camera was left at the origin")
 	_check(not router.is_gameplay_context(), "Preparing the view enabled gameplay input")
 	router.set_context("gameplay")
+	await _verify_travel_directions()
 	await _settle()
 	await _capture("third-person")
 
@@ -146,6 +166,7 @@ func _run() -> void:
 	player._face_attack_direction()
 	_check((-player.global_basis.z).dot(controller.get_flat_forward()) > 0.999, "First-person melee faces away from the view")
 	player.position += Vector3(0.3, 0.5, 0.2)
+	player.reset_physics_interpolation()
 	controller._process(1.0 / 60.0)
 	eye = player.global_position + Vector3.UP * player.get_camera_eye_height()
 	_check(controller.camera.global_position.distance_to(eye) < 0.01, "Moving/jumping drags the eye behind the body")
@@ -178,4 +199,41 @@ func _run() -> void:
 	for failure in failures:
 		push_error(failure)
 	print("CAMERA ORBIT / FIRST PERSON: %s" % ("PASS" if failures.is_empty() else "FAIL"))
+	watchdog.stop()
+	watchdog.free()
 	quit(0 if failures.is_empty() else 1)
+
+func _verify_travel_directions() -> void:
+	player.set_physics_process(true)
+	for keys in [[KEY_W], [KEY_S], [KEY_A], [KEY_D], [KEY_W, KEY_A], [KEY_W, KEY_D], [KEY_S, KEY_A], [KEY_S, KEY_D]]:
+		for code in [KEY_W, KEY_S, KEY_A, KEY_D]:
+			_key(code, false)
+		for frame in range(12):
+			await physics_frame
+		controller.yaw = 0.0
+		player.position = Vector3(0, 0.05, 0)
+		player.velocity = Vector3.ZERO
+		player.reset_physics_interpolation()
+		var start: Vector3 = player.position
+		for code in keys:
+			_key(code, true)
+		for frame in range(48):
+			await physics_frame
+		var travel: Vector3 = player.position - start
+		travel.y = 0.0
+		_check(travel.length() > 0.5, "Ordinary input did not move the actual body: %s" % str(keys))
+		_check((-player.global_basis.z).dot(travel.normalized()) > 0.90, "Body did not face travel: %s" % str(keys))
+		_check(player.animation_driver.current_state not in ["walk_back", "strafe", "strafe_left", "strafe_right"], "Ordinary movement selected a reverse/directional clip")
+		for code in keys:
+			_key(code, false)
+	for frame in range(24):
+		await physics_frame
+	_check(player.locomotion_velocity.length() < 0.05, "Released movement did not settle")
+	_check(MaterialBindings.has_textured_identity(player), "Kael lost his required authored atlas")
+	player.set_physics_process(false)
+	player.position = Vector3.ZERO
+	player.velocity = Vector3.ZERO
+	player.rotation.y = 0.0
+	player.reset_physics_interpolation()
+	controller.yaw = 0.0
+	controller.reset_follow()

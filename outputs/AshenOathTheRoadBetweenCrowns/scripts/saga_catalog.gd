@@ -13,7 +13,7 @@ const WORLDS := {
 const REWARDS := {
 	"saga_bellkeeper_clasp":{"name":"Bellkeeper's Clasp", "description":"A repaired warning bell, not another binding. Guarded hits cost 10% less stamina; parries are unchanged.", "effects":{"saga_guard_multiplier":0.90}},
 	"saga_wayfarer_grip":{"name":"Wayfarer's Bow Grip", "description":"A forester's steady fitting. Full bow draw takes 10% less time.", "effects":{"saga_draw_multiplier":0.90}},
-	"saga_ash_tempered_fitting":{"name":"Ash-Tempered Blade Fitting", "description":"Earned at the mill. Intended oil-duration benefit is unavailable: oils currently remain selected without expiring. No substitute bonus is applied.", "effects":{}},
+	"saga_ash_tempered_fitting":{"name":"Ash-Tempered Blade Fitting", "description":"Earned at the mill. Applied blade oils last 20% longer: six minutes of active play instead of five. Reapplication refreshes the duration; it does not stack.", "effects":{"saga_oil_duration_multiplier":1.20}},
 	"saga_roadwarden_baldric":{"name":"Roadwarden's Baldric", "description":"Passage without a pledge. Sprint stamina expenditure is reduced by 10%.", "effects":{"saga_sprint_multiplier":0.90}},
 	"saga_witnessguard_pommel":{"name":"Witnessguard Pommel", "description":"A successful parry restores 5 additional stamina, including with Measured Riposte.", "effects":{"saga_parry_restore":5.0}},
 	"saga_oathbearer_inlay":{"name":"Oathbearer's Inlay", "description":"An earned fitting, not authority over another person. Oathfire cooldown is reduced by half a second, to its existing minimum.", "effects":{"saga_cooldown_reduction":0.5}}
@@ -36,7 +36,7 @@ const PEOPLE := {
 ## These shoulders are outside the existing main route and combat lanes.
 ## The activity owner fits them to the shared spatial occupancy contract.
 const SITES := {
-	"greyfen":{"kitchen":Vector3(-3.7,0,7.4), "cart":Vector3(-5.6,0,10.3), "store":Vector3(-9.0,0,10.3), "bell":Vector3(-11,0,-7), "basket":Vector3(-9,0,-6), "door":Vector3(9,0,8.8), "timber":Vector3(6.2,0,10.5), "table":Vector3(-7,0,12.1), "arrivals":Vector3(-2.8,0,13.5), "courtyard":Vector3(4,0,10), "well":Vector3(-2.8,0,1.4), "letter":Vector3(8,0,10.4)},
+	"greyfen":{"kitchen":Vector3(-3.7,0,7.4), "cart":Vector3(-5.6,0,10.3), "store":Vector3(-9.0,0,10.3), "bell":Vector3(-11,0,-7), "basket":Vector3(-9,0,-6), "door":Vector3(9,0,8.8), "timber":Vector3(6.2,0,12.5), "table":Vector3(-7,0,12.1), "arrivals":Vector3(-2.8,0,13.5), "courtyard":Vector3(4,0,10), "well":Vector3(-2.8,0,1.4), "letter":Vector3(8,0,10.4)},
 	"wychwood":{"workers":Vector3(-5.8,0,10.2), "grove":Vector3(-8.2,0,8), "boundary":Vector3(-10,0,6.7), "shelter":Vector3(6,0,10), "snares":Vector3(8,0,7.8), "deadfall":Vector3(-5,0,12), "blind":Vector3(-10,0,10.8), "water":Vector3(7.7,0,-5.8), "pots":Vector3(10,0,-6), "bog":Vector3(3.6,0,-7.0)},
 	"old_mill":{"dispatch":Vector3(-3.6,0,7.5), "sacks":Vector3(-6,0,8.3), "slip":Vector3(-8,0,7), "shelter":Vector3(-4.5,0,11), "timber":Vector3(-7.3,0,10), "records":Vector3(-2.4,0,9.5), "hatch":Vector3(-7.8,0,1.1)},
 	"burned_farmstead":{"garden":Vector3(3.5,0,8), "runoff":Vector3(5.5,0,9), "fill":Vector3(1.7,0,10.5), "cellar":Vector3(-4,0,-6), "flue":Vector3(-3.7,0,-3.6), "crock":Vector3(-3,0,-5.1), "orchard":Vector3(-5,0,7.8), "graft":Vector3(-7.2,0,7.8), "fallen":Vector3(-8.5,0,5.7)},

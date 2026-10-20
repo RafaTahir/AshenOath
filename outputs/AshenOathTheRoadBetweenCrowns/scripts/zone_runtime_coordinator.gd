@@ -398,11 +398,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		zone_id, reused_zone, host.zone_root.visible, host.zone_root.global_position,
 	])
 	host.active_zone_signature = host._zone_state_signature()
-	# Navigation baking and the recursive render-resource audit are correctness
-	# work, not prerequisites for the first visible arrival. A cold campaign
-	# build can otherwise spend most of its transition budget here before the
-	# player receives control. The deferred finalizer is guarded by the active
-	# root/service pair so a fast return cannot let stale work touch a new zone.
+	# Complete navigation before the arrival can publish control.
 	var navigation_pending = not using_prewarmed_spatial and not using_cached_spatial
 	var life_controller = host.zone_root.find_child("GreyfenLifeController", true, false)
 	if life_controller != null and life_controller.has_method("set_spatial_service"):
@@ -447,27 +443,13 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if life_controller != null:
 		life_controller.player = host.player
 	host._install_opening_soundscape(zone_id)
-	# The builder and imported-asset helper attach validated materials as each
-	# mesh is created. The full zone tree is audited by lifecycle gates; doing the
-	# same recursive walk on every player transition adds visible latency on
-	# Compatibility/ANGLE, so keep that audit off the swap path.
-	# The late-created render roots still receive the fast, focused validation.
-	# The full zone tree is checked explicitly by verify_engine_003/004.
-	if host.visual_director != null:
-		host._validate_zone_render_resources(host.visual_director)
-	if host.player != null:
-		host._validate_zone_render_resources(host.player)
-	for enemy in host.active_enemies:
-		if is_instance_valid(enemy):
-			host._validate_zone_render_resources(enemy)
-	# The finalizer prints the render_validated stage after the player is live.
-	# Full-zone lifecycle verifiers still audit every surface independently.
-	print("LOADING: zone_stage=render_validation_deferred elapsed=%.1f" % (float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0))
+	# This finalizer owns the focused render audit once, before control. Do not
+	# repeat it here and again on a deferred first-playable frame.
+	host._finish_zone_runtime_finalize(zone_id, host.zone_root, host.spatial_service, host.active_enemies.duplicate(), navigation_pending)
 	if host.performance_budget_monitor != null:
 		var quality_preset = str(host.settings.settings.get("quality_preset", "balanced")) if host.settings != null else "balanced"
 		host.performance_budget_monitor.set_active_zone(host.current_zone_id, host.zone_root, host.player, quality_preset)
 	print("LOADING: zone_stage=budget_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0))
-	host._schedule_zone_runtime_finalize(zone_id, host.zone_root, host.spatial_service, host.active_enemies.duplicate(), navigation_pending)
 	if host.player != null:
 		host.pending_spawn_facing = host.player.rotation.y
 		host.pending_spawn_position = safe_spawn
@@ -487,10 +469,8 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			host.last_safe_player_position = host.player.global_position
 			host.zone_transition_pending = false
 			host.campaign_visual_prewarm_suspended = false
-			# The player and camera are already visible behind the menu. Enabling
-			# their full process tree can trigger synchronous WebGL animation and
-			# physics setup, so finish activation after the playable marker.
-			host.call_deferred("_activate_prewarmed_player_runtime")
+			# Prepared runtime activation is part of readiness, not late gameplay work.
+			host._activate_prewarmed_player_runtime()
 			var elapsed_ms = float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0
 			host._record_loading_metrics({
 				"zone": host.current_zone_id,

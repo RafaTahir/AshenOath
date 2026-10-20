@@ -22,7 +22,7 @@ static func describe(data: Dictionary, recorded: Dictionary, quest_defs: Diction
 	var saved_at: String = str(recorded.get("saved_at_utc", ""))
 	var known_time: bool = bool(recorded.get("saved_at_known", false))
 	var place: String = str(Routes.zone_name(zone_id)) if bool(recorded.get("place_known", false)) else "Place not recorded"
-	var resources: Array[String] = _resources(recorded, item_defs)
+	var resources: Array[String] = _resources(recorded, item_defs, int(data.get("migrated_from_version", data.get("version", 0))) < 13)
 	if bool(recorded.get("story_known", false)):
 		resources.append(company)
 	return {
@@ -41,7 +41,7 @@ static func describe(data: Dictionary, recorded: Dictionary, quest_defs: Diction
 		"journey_id": str(data.get("journey_id", ""))
 	}
 
-static func _resources(recorded: Dictionary, item_defs: Dictionary) -> Array[String]:
+static func _resources(recorded: Dictionary, item_defs: Dictionary, allow_legacy_oil := true) -> Array[String]:
 	var result: Array[String] = []
 	var health: Dictionary = recorded.get("player_health", {})
 	var stamina: Dictionary = recorded.get("player_stamina", {})
@@ -68,7 +68,16 @@ static func _resources(recorded: Dictionary, item_defs: Dictionary) -> Array[Str
 		result.append("Selected arrows: %s x%d" % [str(item_defs.get(selected, {}).get("name", selected.replace("_", " ").capitalize())), int(items[selected])])
 	if inventory.has("active_oil"):
 		var oil: String = str(inventory.active_oil)
-		result.append("Blade coating: " + (str(item_defs.get(oil, {}).get("name", oil.replace("_", " ").capitalize())) if oil != "" else "None selected"))
+		var coating: String = str(item_defs.get(oil, {}).get("name", oil.replace("_", " ").capitalize())) if oil != "" else "None selected"
+		if oil != "":
+			if allow_legacy_oil and not inventory.has("oil_version") and not inventory.has("oil_remaining_seconds"):
+				coating += " (full duration on Continue)"
+			elif typeof(inventory.get("oil_version")) in [TYPE_INT, TYPE_FLOAT] and inventory.get("oil_version") == 1 and _number(inventory.get("oil_remaining_seconds")) and float(inventory.oil_remaining_seconds) > 0.0:
+				var seconds: int = ceili(minf(float(inventory.oil_remaining_seconds), 360.0))
+				coating += " (%d:%02d remaining)" % [floori(float(seconds) / 60.0), seconds % 60]
+			else:
+				coating = "None (expired or invalid saved timer)"
+		result.append("Blade coating: " + coating)
 	return result
 
 static func _world_clock(raw: Variant) -> String:

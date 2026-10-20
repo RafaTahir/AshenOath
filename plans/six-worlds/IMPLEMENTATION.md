@@ -5,6 +5,11 @@ Branch: `codex/masterpiece-rebuild`. Source base: `d0a735f` plus the preserved w
 
 ## Current Delivery
 
+Follow-up 2026-10-19: the user approved finite oils and the fitting's 20% duration
+effect. Source implementation now exists under [FINISH-017](../finish-line/FINISH-017.md);
+its new compilation/verification are pending. The published world-saga baseline
+below still represents the earlier deferred mechanic until a full finishing release.
+
 The user authorized implementation after the story-package setup. The earlier
 "documentation only" statements describe that setup, not this delivery.
 
@@ -32,7 +37,7 @@ The user authorized implementation after the story-package setup. The earlier
 | WORLD-SAGA-000 | Level 30; original thresholds/purchases retained; 17 total Marks; 20 practices; saved claims and overflow deliveries | User pending |
 | WORLD-SAGA-101 / GRE-Q01-Q05 | Grain measures, bell repair, door work, wager/kettle, travelers' shelter; three secrets; clasp and changed return | User pending |
 | WORLD-SAGA-102 / WYC-Q01-Q05 | Timber boundary, snares, private song, blind, watercourse; single migrated Bog encounter/core; secrets and bow grip | User pending |
-| WORLD-SAGA-103 / DEP-Q01-Q05 | Freight, trial bed, cellar, graft, yard roof; retained Ashwing/Rootbound and mill work; secrets and fitting ownership | Oil-duration effect blocked by user decision; gameplay user pending |
+| WORLD-SAGA-103 / DEP-Q01-Q05 | Freight, trial bed, cellar, graft, yard roof; retained Ashwing/Rootbound and mill work; secrets and fitting; timed-oil follow-up source present | Follow-up verification and gameplay user pending |
 | WORLD-SAGA-104 / ROA-Q01-Q05 | Tolls, rescue account, returned identity, signal line, open road; nonlethal Senn duel/earned stand-down; secrets and baldric | User pending |
 | WORLD-SAGA-105 / VAR-Q01-Q05 | Attributed orders, servant pass, Odran's garden, supply forms, memorial repository; retained Halvern; secrets and pommel | User pending |
 | WORLD-SAGA-106 / HAR-Q01-Q05 | Memorial, Oris's finite promise, habitat, seed reserve, practical aftermath; late Glade/Ruins branch; actual Hart and equal inlay | User pending |
@@ -61,8 +66,9 @@ The quest cards remain the detailed narrative/manual acceptance contract.
 - New quests do not gate existing endings or replace their homecoming. Q05
   always contains work after the regional capstone, not a second kill reward.
 - Permanent fittings survive Mark redistribution and are not consumables or
-  vendor stock. The Ash-Tempered fitting records ownership only: no oil timer,
-  substitute damage effect or claimed duration gain was introduced.
+  vendor stock. The published baseline recorded Ash-Tempered ownership only.
+  The approved follow-up adds the active-play duration effect without a substitute
+  damage effect; see FINISH-017 for exact migration/pause/consumption rules.
 
 ## Build / Publication
 
@@ -117,8 +123,8 @@ or performed for this implementation. Publication does not establish user accept
 3. Check each capstone and its once-only reward; exercise old Bog/core and Senn
    saves, peaceful resolutions, all four endings and the original homecoming.
 4. Find secrets and return after Q05; reload repeatedly and check XP cannot farm.
-5. Learn/respec the new practices without healing/refilling; check the five
-   effective fittings and the explicitly unavailable oil-duration effect.
+5. Learn/respec the new practices without healing/refilling; check the six fitting
+   effects, including FINISH-017's timed-oil benefit in the follow-up candidate.
 6. Fill the quiver before an arrow reward, then make room and collect the
    remainder at the original request/secret without repeating XP or other items.
 

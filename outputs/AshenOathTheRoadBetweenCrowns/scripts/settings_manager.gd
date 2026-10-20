@@ -57,6 +57,7 @@ var _frame_time_cursor := 0
 var _frame_time_count := 0
 var loaded_user_settings := false
 var persistence_available := true
+var _browser_sync_pending := false
 var performance_logging_enabled := OS.get_environment("ASHEN_PERF_LOG") == "1"
 const FRAME_TIME_CAPACITY := 600
 
@@ -171,14 +172,26 @@ func restore_settings(stored: Dictionary) -> void:
 		settings["control_preset"] = "standard"
 
 func _save_settings() -> void:
+	# Initial _ready() writes defaults; later edits are current preferences even
+	# before this process is restarted or another journey is opened.
+	if is_node_ready():
+		loaded_user_settings = true
 	var file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	if file != null:
 		file.store_string(JSON.stringify(settings))
 		file.flush()
 		file.close()
+		if OS.has_feature("web") and not _browser_sync_pending:
+			_browser_sync_pending = true
+			call_deferred("_sync_browser_settings")
 	else:
 		persistence_available = false
 		push_warning("Settings persistence unavailable in this runtime: %s" % FileAccess.get_open_error())
+
+func _sync_browser_settings() -> void:
+	_browser_sync_pending = false
+	if OS.has_feature("web"):
+		JavaScriptBridge.force_fs_sync()
 
 func can_persist_settings() -> bool:
 	return persistence_available

@@ -19,6 +19,7 @@ var failed_transition_count := 0
 var last_transition: Dictionary = {}
 var last_world_position := Vector3.ZERO
 var cooldown := 0.0
+var _arrival_edge := ""
 
 func configure(runtime_host: Node, stream_service: Node) -> void:
 	host = runtime_host
@@ -59,6 +60,12 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 		return false
 	var bounds := _zone_bounds(source)
 	var edge := WorldSectorManifest.edge_for_position(source, actor.global_position, bounds, 0.85)
+	# An older save may already be inside an exit. Require leaving that entry
+	# trigger before it can fire, rather than bouncing back after the cooldown.
+	if not _arrival_edge.is_empty():
+		if str(edge.get("id", "")) == _arrival_edge:
+			return false
+		_arrival_edge = ""
 	if edge.is_empty():
 		return false
 	var target := WorldSectorManifest.canonical(str(edge.get("target", "")))
@@ -94,6 +101,8 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 		host.progression.record_saga_departure(current_sector, host.quests)
 	previous_sector = current_sector if current_sector != normalized else previous_sector
 	current_sector = normalized
+	_arrival_edge = str(WorldSectorManifest.edge_for_position(normalized, local_position,
+		_zone_bounds(normalized), 0.85).get("id", ""))
 	last_world_position = WorldSectorManifest.local_to_world(normalized, local_position)
 	if normalized not in discovered_sectors:
 		discovered_sectors[normalized] = true

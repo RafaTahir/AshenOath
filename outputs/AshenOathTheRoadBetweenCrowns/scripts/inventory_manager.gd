@@ -2,6 +2,7 @@ extends Node
 
 signal changed
 signal message(text: String)
+signal oil_time_changed
 
 var item_defs = {}
 const STARTING_ITEMS = {
@@ -29,6 +30,10 @@ const STARTING_COIN := 15
 var items: Dictionary = STARTING_ITEMS.duplicate(true)
 var ingredients: Dictionary = STARTING_INGREDIENTS.duplicate(true)
 var active_oil = ""
+var oil_remaining_seconds := 0.0
+var progression: Node
+const OIL_STATE_VERSION := 1
+const BASE_OIL_DURATION_SECONDS := 300.0
 var coin = STARTING_COIN
 const ITEM_TYPE_ORDER := ["ammo", "potion", "food", "bomb", "oil", "trap"]
 const DEFAULT_QUICK_SLOTS := {"use_potion": "redroot_potion", "throw_bomb": "ash_bomb"}
@@ -121,9 +126,38 @@ func apply_oil(id: String) -> bool:
 	if get_item_type(id) != "oil" or not can_consume(id):
 		message.emit("No %s left." % get_item_name(id))
 		return false
+	items[id] = int(items[id]) - 1
 	active_oil = id
+	oil_remaining_seconds = get_oil_duration_seconds(id)
 	changed.emit()
 	return true
+
+func set_progression(service: Node) -> void:
+	progression = service
+
+func get_oil_duration_seconds(id: String) -> float:
+	var duration := float(item_defs.get(id, {}).get("duration_seconds", BASE_OIL_DURATION_SECONDS))
+	var multiplier := 1.0
+	if is_instance_valid(progression):
+		multiplier = float(progression.call("entitlement_effect", "saga_oil_duration_multiplier", 1.0))
+	return duration * multiplier
+
+func oil_time_text() -> String:
+	var seconds := maxi(ceili(oil_remaining_seconds), 0)
+	return "%d:%02d" % [floori(float(seconds) / 60.0), seconds % 60]
+
+func advance_oil(delta: float) -> void:
+	if active_oil.is_empty() or not is_finite(delta) or delta <= 0.0:
+		return
+	var previous_seconds := ceili(oil_remaining_seconds)
+	oil_remaining_seconds = maxf(0.0, oil_remaining_seconds - delta)
+	if oil_remaining_seconds <= 0.0:
+		var expired_name := get_item_name(active_oil)
+		active_oil = ""
+		changed.emit()
+		message.emit("%s has worn off the blades." % expired_name)
+	if ceili(oil_remaining_seconds) != previous_seconds:
+		oil_time_changed.emit()
 
 func get_item_type(id: String) -> String:
 	return str(item_defs.get(id, {}).get("type", "misc"))
@@ -228,6 +262,7 @@ func get_preparation_summary() -> Dictionary:
 			craftable.append(id)
 	return {
 		"active_oil": active_oil,
+		"oil_remaining_seconds": oil_remaining_seconds,
 		"potions": int(items.get("redroot_potion", 0)) + int(items.get("bitterleaf_tonic", 0)),
 		"bombs": int(items.get("ash_bomb", 0)),
 		"traps": int(items.get("iron_trap", 0)),
@@ -268,6 +303,8 @@ func save_state() -> Dictionary:
 		"items": items.duplicate(true),
 		"ingredients": ingredients.duplicate(true),
 		"active_oil": active_oil,
+		"oil_version": OIL_STATE_VERSION,
+		"oil_remaining_seconds": oil_remaining_seconds,
 		"coin": coin,
 		"quick_slots": quick_slots.duplicate(),
 		"sort_mode": sort_mode,
@@ -276,7 +313,7 @@ func save_state() -> Dictionary:
 		"reward_deliveries": reward_deliveries.duplicate(true)
 	}
 
-func load_state(state: Dictionary) -> void:
+func load_state(state: Dictionary, allow_legacy_oil := true) -> void:
 	# Missing legacy fields use the same defaults as a fresh load, never the
 	# inventory belonging to the session that this save is replacing.
 	items = STARTING_ITEMS.duplicate(true)
@@ -294,7 +331,19 @@ func load_state(state: Dictionary) -> void:
 			if typeof(id) == TYPE_STRING:
 				ingredients[id] = _restore_quantity(saved_ingredients[id])
 	var saved_oil := str(state.get("active_oil", ""))
-	active_oil = saved_oil if get_item_type(saved_oil) == "oil" and int(items.get(saved_oil, 0)) > 0 else ""
+	active_oil = ""
+	oil_remaining_seconds = 0.0
+	if get_item_type(saved_oil) == "oil":
+		if allow_legacy_oil and not state.has("oil_version") and not state.has("oil_remaining_seconds"):
+			# Legacy coatings were not consumable timers. Migrate once, without
+			# charging another bottle or inheriting the previous journey's fitting.
+			active_oil = saved_oil
+			oil_remaining_seconds = get_oil_duration_seconds(saved_oil)
+		elif typeof(state.get("oil_version")) in [TYPE_INT, TYPE_FLOAT] and state.get("oil_version") == OIL_STATE_VERSION:
+			var remaining: Variant = state.get("oil_remaining_seconds")
+			if typeof(remaining) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(remaining)) and float(remaining) > 0.0:
+				active_oil = saved_oil
+				oil_remaining_seconds = minf(float(remaining), get_oil_duration_seconds(saved_oil))
 	coin = _restore_quantity(state.get("coin", STARTING_COIN))
 	quick_slots = DEFAULT_QUICK_SLOTS.duplicate()
 	var saved_slots: Variant = state.get("quick_slots", {})
@@ -348,6 +397,7 @@ func reset_starting_loadout() -> void:
 	items = STARTING_ITEMS.duplicate(true)
 	ingredients = STARTING_INGREDIENTS.duplicate(true)
 	active_oil = ""
+	oil_remaining_seconds = 0.0
 	coin = STARTING_COIN
 	quick_slots = DEFAULT_QUICK_SLOTS.duplicate()
 	sort_mode = "type"

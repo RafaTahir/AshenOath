@@ -178,7 +178,7 @@ func request_background_packs() -> bool:
 			accepted = false
 	return accepted
 
-func required_zone_packs(zone_id: String) -> Array[String]:
+func required_zone_packs(zone_id: String, encounter_packs: Array[String] = []) -> Array[String]:
 	var result: Array[String] = required_startup_packs()
 	if zone_id in ["wychwood", "cemetery", "ruins"]:
 		result.append("adjacent")
@@ -186,24 +186,27 @@ func required_zone_packs(zone_id: String) -> Array[String]:
 		result.append("monsters")
 	if zone_id not in ["greyfen", "wychwood", "cemetery", "ruins"]:
 		result.append_array(["characters", "campaign"])
+	for id: String in encounter_packs:
+		if id not in result:
+			result.append(id)
 	return result
 
-func request_zone_packs(zone_id: String) -> bool:
+func request_zone_packs(zone_id: String, encounter_packs: Array[String] = []) -> bool:
 	var accepted := true
-	for id in required_zone_packs(zone_id):
+	for id in required_zone_packs(zone_id, encounter_packs):
 		if not request_pack(id, 0):
 			accepted = false
 	return accepted
 
-func zone_packs_ready(zone_id: String) -> bool:
-	for id in required_zone_packs(zone_id):
+func zone_packs_ready(zone_id: String, encounter_packs: Array[String] = []) -> bool:
+	for id in required_zone_packs(zone_id, encounter_packs):
 		if not is_ready(id):
 			return false
 	return true
 
-func zone_pack_failures(zone_id: String) -> Array[String]:
+func zone_pack_failures(zone_id: String, encounter_packs: Array[String] = []) -> Array[String]:
 	var failures: Array[String] = []
-	for id in required_zone_packs(zone_id):
+	for id in required_zone_packs(zone_id, encounter_packs):
 		if get_state(id) == "failed":
 			failures.append("%s: %s" % [id, get_last_error(id)])
 	return failures

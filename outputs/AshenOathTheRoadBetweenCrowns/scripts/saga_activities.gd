@@ -545,7 +545,15 @@ func _dress_aftermath(area: Node3D, id: String) -> void:
 	WorkPresentation.build(host, area, id, true, str(host.story_state.get_flag(id + "_outcome", "")))
 
 func _within_reach(area: Node3D) -> bool:
-	return is_instance_valid(area) and is_instance_valid(host.player) and is_ancestor_of(area) and area.is_visible_in_tree() and area.is_interaction_enabled() and host.player.global_position.distance_to(area.global_position) <= 4.0 and not host._story_has_active_combat() and not host.zone_transition_pending and not host._journey_load_pending()
+	if not is_instance_valid(area) or not is_instance_valid(host.player) or not is_ancestor_of(area) \
+		or not area.is_visible_in_tree() or not area.is_interaction_enabled():
+		return false
+	# This starts the encounter; requiring its guards to be gone first retires
+	# the challenge itself. Ordinary regional work remains unavailable in combat.
+	var encounter_start := str(area.get("interaction_id")) == "saga_senn_challenge"
+	return host.player.global_position.distance_to(area.global_position) <= 4.0 \
+		and (encounter_start or not host._story_has_active_combat()) \
+		and not host.zone_transition_pending and not host._journey_load_pending()
 
 func _flag(id: String) -> bool:
 	return bool(host.story_state.get_flag(id, false))

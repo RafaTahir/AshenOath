@@ -169,7 +169,7 @@ func _mound(position: Vector3, radius: Vector2) -> void:
 		_triangle("earth", middle, position + Vector3(cos(a) * radius.x * scale_a, 0, sin(a) * radius.y * scale_a), position + Vector3(cos(b) * radius.x * scale_b, 0, sin(b) * radius.y * scale_b))
 
 func _grave_earth() -> void:
-	for offset in [Vector3(-1.8, 0, -2.10), Vector3(0, 0, 2.28), Vector3(2.2, 0, -2.10), Vector3(-1.8, 0, 1.05), Vector3(0.2, 0, -2.55), Vector3(2.0, 0, 1.95)]:
+	for offset in [Vector3(-1.8, 0, -2.10), Vector3(0, 0, 2.28), Vector3(2.2, 0, -2.10), Vector3(-1.8, 0, 1.05), Vector3(0.2, 0, -2.55), Vector3(3.2, 0, 1.95)]:
 		_mound(offset + Vector3(0, 0.057, 0.52), Vector2(0.36, 0.525))
 
 func _memory_window() -> void:

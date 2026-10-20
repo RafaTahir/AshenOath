@@ -33,7 +33,8 @@
     "name": "Moon Oil",
     "type": "oil",
     "icon": "res://assets/icons/moon_oil.svg",
-    "description": "Silver-blue oil that bites deep into spirits.",
+    "description": "Silver-blue oil that bites deep into spirits. One bottle coats the blades for five minutes of active play; six with Ash-Tempered Blade Fitting.",
+    "duration_seconds": 300.0,
     "recipe": {"mooncap": 2, "redroot": 1},
     "effect": {"bonus_tag": "spirit", "bonus": 15}
   },
@@ -41,7 +42,8 @@
     "name": "Rot Oil",
     "type": "oil",
     "icon": "res://assets/icons/rot_oil.svg",
-    "description": "A rancid oil brewed for grave-things and restless dead.",
+    "description": "A rancid oil brewed for grave-things and restless dead. One bottle coats the blades for five minutes of active play; six with Ash-Tempered Blade Fitting.",
+    "duration_seconds": 300.0,
     "recipe": {"grave_moss": 2, "bitterleaf": 1},
     "effect": {"bonus_tag": "undead", "bonus": 15}
   },

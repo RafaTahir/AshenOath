@@ -1,102 +1,106 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-19T12:05:15.1111206Z",
-  "build_id": "world-saga-20261019-final",
-  "generated_from_commit": "d0a735f9a38b640823ce2402282477d3c72a126e",
+  "generated_at_utc": "2026-10-20T13:46:54.3230125Z",
+  "build_id": "finish-line-20261020-user-candidate",
+  "generated_from_commit": "2b1be253eb493991e5dc7d208d46694e6eb319d2",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\world-saga-20261019-final\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-user-candidate\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 100617484,
+  "total_bytes": 100631788,
   "packs": [
     {
       "id": "base",
-      "version": "world-saga-20261019-final",
+      "version": "finish-line-20261020-user-candidate",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 6392896,
-      "sha256": "2401576d235e25f492af53a5c15fa482454624bba7a4be28df8ff2f769196d1c",
+      "bytes": 6405008,
+      "sha256": "27531e5123f57e524a9f449f329caf1cc92a16b9a3e7e7462e845f7d6b5d765d",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "world-saga-20261019-final",
+      "version": "finish-line-20261020-user-candidate",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 35474164,
-      "sha256": "92d964de2e18d5a1fc50317b01093092ea10e433ab22eeea9e0c90271788fd54",
+      "bytes": 35474180,
+      "sha256": "c90742d36aac1246a961f0c062b26eb8bdadb4a000b26eea103407e3a3efa363",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "adjacent",
-      "version": "world-saga-20261019-final",
+      "version": "finish-line-20261020-user-candidate",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
-      "bytes": 1403800,
-      "sha256": "c2ae2e1d453e1ab64983728d7401847c3dac86af6d5f2ac7e0c76e47e5ea7e59",
+      "bytes": 1404944,
+      "sha256": "7c02367f46a0f3739dcd1c47c5d533e85b1e2007a047045887b3f578cc1a0a94",
       "status": "candidate_external",
       "log": "logs/pack-adjacent.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "world-saga-20261019-final",
+      "version": "finish-line-20261020-user-candidate",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 6321984,
-      "sha256": "5b1351f0c0b253e4d49a35118fa3cd7f03d46e7ca6a7f32ae0e5f2b7e8844c85",
+      "bytes": 6323016,
+      "sha256": "663a0216fb3f00d502babb778786312e3e2b56caeed767363927a236ea4e23fd",
       "status": "candidate_external",
       "log": "logs/pack-campaign.stdout.log"
     },
     {
       "id": "characters",
-      "version": "world-saga-20261019-final",
+      "version": "finish-line-20261020-user-candidate",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9657120,
       "sha256": "d91e949a1da24d91ee625433371178f48dc420cb66aac5d1e09afbf70aaefad7",
       "status": "candidate_external",
-      "log": "logs/pack-characters.stdout.log"
+      "log": "logs/pack-characters.stdout.log",
+      "reused_from": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-prompt-verbs\\runtime-packs\\characters.pck"
     },
     {
       "id": "monsters",
-      "version": "world-saga-20261019-final",
+      "version": "finish-line-20261020-user-candidate",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14697432,
       "sha256": "dcc096f1bd4476954b25adeae8c51414ee05d6206dbab48f824bd8ca5d6b6159",
       "status": "candidate_external",
-      "log": "logs/pack-monsters.stdout.log"
+      "log": "logs/pack-monsters.stdout.log",
+      "reused_from": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-prompt-verbs\\runtime-packs\\monsters.pck"
     },
     {
       "id": "audio",
-      "version": "world-saga-20261019-final",
+      "version": "finish-line-20261020-user-candidate",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19291260,
       "sha256": "3ade091beb5c917fb8a067793b059cb84a1d4057113b86f90c8439a2fa08a07d",
       "status": "candidate_external",
-      "log": "logs/pack-audio.stdout.log"
+      "log": "logs/pack-audio.stdout.log",
+      "reused_from": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-prompt-verbs\\runtime-packs\\audio.pck"
     },
     {
       "id": "quality_materials",
-      "version": "world-saga-20261019-final",
+      "version": "finish-line-20261020-user-candidate",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7378828,
       "sha256": "f2222d9048b239f892e1d5f002a826d0890867785b6f8512e3981338dcd28619",
       "status": "candidate_external",
-      "log": "logs/pack-quality_materials.stdout.log"
+      "log": "logs/pack-quality_materials.stdout.log",
+      "reused_from": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-prompt-verbs\\runtime-packs\\quality_materials.pck"
     }
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "world-saga-20261019-final",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\world-saga-20261019-final\\export",
-    "generated_from_commit": "d0a735f9a38b640823ce2402282477d3c72a126e",
-    "artifacts_total_bytes": 104665612,
-    "root_pck_sha256": "2ee5e7e496f0d8601b26a00d3f46684bad0b7a8273c970e34e7a4bd92895a195",
-    "note": "Build-only final candidate; no gameplay/browser validation or publication."
+    "build_id": "finish-line-20261020-user-candidate",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-user-candidate\\export",
+    "generated_from_commit": "2b1be253eb493991e5dc7d208d46694e6eb319d2",
+    "artifacts_total_bytes": 104681203,
+    "root_pck_sha256": "1c020eebb38d27f48cc5eafe8f394c61bc2817a938f1f5dcc7087a1246d77385",
+    "note": "Gzip delivery; native pack records describe decoded artifacts."
   }
 }

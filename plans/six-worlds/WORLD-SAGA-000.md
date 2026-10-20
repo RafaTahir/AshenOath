@@ -4,7 +4,8 @@ Parent: none. Children: WORLD-SAGA-101 through WORLD-SAGA-106 and their 30 quest
 Date: 2026-10-19. Status: build-only implementation present; user acceptance pending.
 Current delivery: [implementation record](IMPLEMENTATION.md). Runtime definitions
 extend the retained 21 quests to 51 and the global level cap to 30. The oil-duration
-mechanic remains explicitly blocked. The setup-only boundaries below describe
+mechanic was deferred at setup; the approved follow-up is tracked in
+[FINISH-017](../finish-line/FINISH-017.md). The setup-only boundaries below describe
 the original authoring pass; the subsequent user authorization permits this implementation.
 Source baseline: `d0a735f9a38b640823ce2402282477d3c72a126e` on `codex/masterpiece-rebuild`.
 
@@ -217,7 +218,7 @@ may hit the cap. Display excess deeds at cap without fabricating extra levels.
 | --- | --- | --- |
 | `saga_bellkeeper_clasp` | Greyfen | Bell-Eater defeated, or explicit grandfathered shrine-retired legacy state: successful guarded-hit stamina cost x0.90; does not extend parry window |
 | `saga_wayfarer_grip` | Wychwood | Existing Bog Wretch fight resolved: time to full bow draw x0.90; damage, aim settings, ammo unchanged |
-| `saga_ash_tempered_fitting` | Deep Woods | Ashwing resolved: intended oil duration x1.20; BLOCKED, see below |
+| `saga_ash_tempered_fitting` | Deep Woods | Ashwing resolved: applied oil duration x1.20 (300 to 360 active-play seconds); follow-up verification pending |
 | `saga_roadwarden_baldric` | Long Road | Any settled existing Senn fate: sprint drain x0.90, including the retained 10 stamina/second base |
 | `saga_witnessguard_pommel` | Castle Vargan | Any final Halvern resolution: +5 stamina on successful parry, added to Measured Riposte if learned; clamp at max |
 | `saga_oathbearer_inlay` | Hartlands | `final_choice_completed`: cooldown -0.5 seconds after existing reductions, minimum 0.5; covenant-specific description/appearance, same effect |
@@ -228,16 +229,17 @@ the bow, back sockets or required relics. Visual variants reuse approved assets.
 All legal narrative resolutions earn equivalent mechanical power; coercion,
 romance and public disclosure are never prerequisites for the best stats.
 
-### Approved Oil Dependency
+### Oil Dependency And Approved Follow-Up
 
-Source inspection shows `InventoryManager.apply_oil` selects a persistent oil;
-there is no duration/expiry owner. On 2026-10-19 the user explicitly chose to
-keep the planned duration perk documented as blocked until a separate oil-system
-decision. Do not add an expiry timer, substitute damage or claim an effective
-20% duration improvement. The Deep Woods item/story entitlement may be recorded,
-but its perk and the world reward checklist remain dependency-blocked. Other
-quest/boss/story authoring is not blocked. This is the sole identified design
-decision deferred from this package, not permission to resolve it speculatively.
+At setup the user explicitly deferred the perk because oils did not expire.
+The subsequent 2026-10-19 approval resolves that decision: one bottle applies
+five minutes of active-play coating, six with the fitting; reapplication refreshes,
+another oil replaces, and menus/dialogue/loading/death/offline time do not spend it.
+Remaining duration is saved. Legacy selected oils get one full duration without
+charging another bottle; new invalid/expired timers never refill. Existing blade
+tags/damage and optional preparation objectives are preserved. Implementation and
+pending single-run acceptance are tracked in [FINISH-017](../finish-line/FINISH-017.md),
+not inferred from this story specification or the earlier published package.
 
 ## Save And Encounter Migration
 

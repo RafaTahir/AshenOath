@@ -512,8 +512,10 @@ func _apply_keyboard_camera(delta: float) -> void:
 		if input_source != null and input_source.has_method("action_axis") \
 		else Input.get_axis("camera_zoom_in", "camera_zoom_out")
 	if target != null and target.has_method("get_weapon_mode") and target.get_weapon_mode() == "bow" \
-			and input_source != null and str(input_source.get("active_device")) == "gamepad" \
+			and input_source != null \
 			and input_source.is_action_pressed("cycle_arrow"):
+		# The shared arrow-selection gesture owns this input even if a pointer
+		# capture/mouse event changes the last-reported device during the press.
 		zoom_axis = 0.0
 	if zoom_axis > 0.0 and input_source != null and input_source.companion_zoom_reserved():
 		zoom_axis = 0.0

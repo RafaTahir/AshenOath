@@ -46,7 +46,7 @@
       "bounds": [20.0, 16.0],
       "edges": {
         "south": {"target": "old_mill", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 13.5], "arrival": [7.0, 0.9, -11.0]},
-        "north": {"target": "marsh_crossing", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -13.5], "arrival": [0.0, 0.9, 13.0]}
+        "north": {"target": "marsh_crossing", "lane": 7.0, "half_width": 3.2, "trigger": [7.0, 0.0, -13.5], "arrival": [0.0, 0.9, 11.0]}
       }
     },
     "marsh_crossing": {
@@ -63,7 +63,7 @@
       "exterior": true,
       "bounds": [22.0, 19.0],
       "edges": {
-        "south": {"target": "marsh_crossing", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 16.5], "arrival": [0.0, 0.9, -13.0]},
+        "south": {"target": "marsh_crossing", "lane": -7.0, "half_width": 3.2, "trigger": [-7.0, 0.0, 16.5], "arrival": [0.0, 0.9, -11.0]},
         "east": {"target": "vargan_approach", "lane": 7.0, "half_width": 3.2, "trigger": [20.0, 0.0, 7.0], "arrival": [-16.0, 0.9, 16.0], "approach": [[8.0, 0.0, 5.8], [12.0, 0.0, 7.0], [16.0, 0.0, 7.0]]}
       }
     },

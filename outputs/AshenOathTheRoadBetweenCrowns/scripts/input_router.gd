@@ -724,7 +724,7 @@ func _hardware_action_held(action: StringName) -> bool:
 	return false
 
 func _action_strength(action: StringName) -> float:
-	if not InputMap.has_action(action) or _awaiting_release.has(str(action)):
+	if not InputMap.has_action(action) or _awaiting_release.has(str(action)) or _suppressed_frame == Engine.get_physics_frames():
 		return 0.0
 	return Input.get_action_strength(action)
 

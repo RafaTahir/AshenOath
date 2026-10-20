@@ -1,8 +1,10 @@
-import { createServer } from "node:http";
+import { createServer, get as httpGet } from "node:http";
 import { createReadStream, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
 import { gzipSync, gunzipSync } from "node:zlib";
+import { isDeepStrictEqual } from "node:util";
+import WebSocket from "ws";
 import { artifactIdentity } from "./qa_002_artifact_identity.mjs";
 import { measureFirefoxContentMemory } from "./firefox_content_memory.mjs";
 import { measureChromiumRendererMemory } from "./chromium_renderer_memory.mjs";
@@ -108,6 +110,27 @@ const traceMovement = Boolean(args["trace-movement"]);
 const noRearm = !Boolean(args["reassert-movement"]) || Boolean(args["no-rearm"]);
 const QA_TEMP_ROOT = "D:\\Temp\\AshenOath";
 mkdirSync(QA_TEMP_ROOT, { recursive: true });
+const resumeStage = String(args["resume-earned"] || "");
+if ((args["resume-controls"] || args["resume-growth"] || args["resume-quality"]) && (!browserSmoke || !productionObserver || !args.profile || !args.port)) {
+  throw new Error("Targeted resumption requires the isolated earned profile/origin and production browser smoke scope");
+}
+if (["resume-controls", "resume-growth", "resume-quality"].filter(key => args[key]).length > 1) throw new Error("Choose one targeted continuation scope");
+if (args["restore-quality"] && (!args["resume-quality"] || !["potato", "balanced", "quality"].includes(args["restore-quality"]))) throw new Error("Original quality restoration requires a targeted quality continuation and a known preset");
+if (args["hart-branch"] && (!["mercy", "duty", "ash"].includes(args["hart-branch"])
+  || !throughFinale || !productionObserver || !resumeStage || !args.profile || !args.port)) {
+  throw new Error("A targeted Hart branch requires a known ending, earned profile/origin and production finale observation");
+}
+if (resumeStage && !["opening", "report", "teeth", "ash", "soldier", "last_witness"].includes(resumeStage)) {
+  throw new Error("Unknown earned resume stage");
+}
+const retainedProfile = args.profile ? resolve(String(args.profile)) : "";
+if (retainedProfile && (!retainedProfile.toLowerCase().startsWith(resolve(QA_TEMP_ROOT).toLowerCase() + "\\")
+  || ["all", "chromium"].includes(requestedBrowser))) throw new Error("Resume profile must be an isolated D: QA profile for one browser");
+const requestedPort = args.port ? Number(args.port) : 0;
+if (requestedPort && (!Number.isInteger(requestedPort) || requestedPort < 30000 || requestedPort >= 60000)) {
+  throw new Error("QA origin must use a high localhost port");
+}
+if (resumeStage && (!retainedProfile || !requestedPort)) throw new Error("Earned Continue requires its original QA profile and origin port");
 // A hardware desktop campaign must enforce its own browser FPS floor; native
 // Compatibility performance is an additional, independent release gate.
 const enforcePerformance = String(args["enforce-performance"] || (!functionalCandidate && fullCampaign && !mobileMode && rendererMode === "hardware" ? "true" : "false")) === "true";
@@ -188,6 +211,9 @@ if (!browsers.length) {
   throw new Error(`QA-002 BROWSER: requested browser is unavailable: ${requestedBrowser}`);
 }
 const candidateIdentity = artifactIdentity(exportDir);
+const transportManifest = JSON.parse(readFileSync(join(exportDir, "release_manifest.json"), "utf8"));
+const encodedArtifacts = new Set((transportManifest.artifacts || [])
+  .filter(artifact => artifact.content_encoding === "gzip").map(artifact => artifact.path));
 
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -203,24 +229,26 @@ const mime = {
 // and keeps the HTTP behavior representative without changing game bytes.
 const serverFileCache = new Map();
 const serverGzipCache = new Map();
-for (const relative of [
+for (const relative of new Set([
   "index.html",
   "index.js",
   "index.wasm",
+  transportManifest.engine?.script,
+  transportManifest.engine?.wasm,
   "index.pck",
   "runtime_pack_manifest.json",
   "packs/opening.pck",
-]) {
+].filter(Boolean))) {
   const path = resolve(exportDir, relative);
   if (existsSync(path)) {
     const payload = readFileSync(path);
-    const encodedWasm = relative === "index.wasm" && payload[0] === 0x1f && payload[1] === 0x8b;
-    serverFileCache.set(relative, encodedWasm ? gunzipSync(payload) : payload);
+    const encodedOnDisk = encodedArtifacts.has(relative);
+    serverFileCache.set(relative, encodedOnDisk ? gunzipSync(payload) : payload);
     // Vercel serves the production HTML, JavaScript, WebAssembly, and PCK
     // responses with gzip. Prepare equivalent bytes before the measured
     // navigation so local cold-start timing does not benchmark an artificial
     // 37.7 MB uncompressed transfer path.
-    serverGzipCache.set(relative, encodedWasm ? payload : gzipSync(payload, { level: 6 }));
+    serverGzipCache.set(relative, encodedOnDisk ? payload : gzipSync(payload, { level: 6 }));
   }
 }
 const server = createServer((request, response) => {
@@ -235,7 +263,8 @@ const server = createServer((request, response) => {
   const cached = serverFileCache.get(relative);
   const acceptsGzip = /(?:^|,|\s)gzip(?:\s|,|$)/i.test(String(request.headers["accept-encoding"] || ""));
   const compressed = acceptsGzip ? serverGzipCache.get(relative) : null;
-  const body = compressed || cached;
+  const encodedOnDisk = encodedArtifacts.has(relative);
+  const body = compressed || cached || (!acceptsGzip && encodedOnDisk ? gunzipSync(readFileSync(path)) : null);
   const contentLength = body ? body.byteLength : statSync(path).size;
   const headers = {
     "Content-Type": mime[extname(path)] || "application/octet-stream",
@@ -244,11 +273,11 @@ const server = createServer((request, response) => {
     // Match production's content-addressed runtime-pack policy. Root files and
     // the manifest still revalidate; versioned /packs/* bytes are immutable so
     // the shell prefetch can be reused by Godot instead of downloaded twice.
-    "Cache-Control": relative.startsWith("packs/")
+    "Cache-Control": relative.startsWith("packs/") || relative.startsWith("engine/")
       ? "public, max-age=31536000, immutable"
       : "no-cache, must-revalidate",
   };
-  if (compressed) headers["Content-Encoding"] = "gzip";
+  if (compressed || (!body && encodedOnDisk)) headers["Content-Encoding"] = "gzip";
   response.writeHead(200, headers);
   if (body) response.end(body);
   else createReadStream(path).pipe(response);
@@ -260,14 +289,14 @@ for (let attempt = 0; ; attempt += 1) {
     await new Promise((done, reject) => {
       const failed = error => reject(error);
       server.once("error", failed);
-      server.listen(30000 + Math.floor(Math.random() * 30000), "127.0.0.1", () => {
+      server.listen(requestedPort || 30000 + Math.floor(Math.random() * 30000), "127.0.0.1", () => {
         server.removeListener("error", failed);
         done();
       });
     });
     break;
   } catch (error) {
-    if (error.code !== "EADDRINUSE" || attempt >= 9) throw error;
+    if (requestedPort || error.code !== "EADDRINUSE" || attempt >= 9) throw error;
   }
 }
 const port = server.address().port;
@@ -308,15 +337,30 @@ async function availablePort() {
 }
 
 async function fetchJson(url, timeout = 5000) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeout);
-  try {
-    const response = await fetch(url, { signal: controller.signal });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response.json();
-  } finally {
-    clearTimeout(timer);
-  }
+  const endpoint = new URL(url);
+  if (endpoint.protocol !== "http:" || endpoint.hostname !== "127.0.0.1") throw new Error("DevTools discovery is loopback-only");
+  // Chrome's OS-selected port can be on Fetch's browser-oriented blocked list.
+  return new Promise((resolve, reject) => {
+    const request = httpGet(endpoint, response => {
+      if (response.statusCode !== 200) {
+        response.resume();
+        reject(new Error(`HTTP ${response.statusCode}`));
+        return;
+      }
+      response.setEncoding("utf8");
+      let body = "";
+      response.on("data", chunk => {
+        body += chunk;
+        if (body.length > 1048576) request.destroy(new Error("DevTools discovery response exceeds 1 MiB"));
+      });
+      response.once("error", reject);
+      response.once("end", () => {
+        try { resolve(JSON.parse(body)); } catch (error) { reject(error); }
+      });
+    });
+    request.setTimeout(timeout, () => request.destroy(new Error("DevTools discovery timed out")));
+    request.once("error", reject);
+  });
 }
 
 async function waitFor(predicate, label, timeout = timeoutMs) {
@@ -846,7 +890,7 @@ async function turnCameraToward(cdp, desiredYaw, currentYaw, tolerance = 0.12, t
   let yaw = Number(currentYaw);
   while (Date.now() < deadline) {
     if (!Number.isFinite(yaw)) {
-      const initial = await cdp.waitForObservation();
+      const initial = await telemetry(cdp);
       yaw = Number(initial?.camera?.yaw);
       if (!Number.isFinite(yaw)) continue;
     }
@@ -861,7 +905,7 @@ async function turnCameraToward(cdp, desiredYaw, currentYaw, tolerance = 0.12, t
       await dispatchKey(cdp, code, key, false).catch(() => {});
     }
     cdp.observationQueue.length = 0;
-    const observed = await cdp.waitForObservation();
+    const observed = await telemetry(cdp);
     yaw = Number(observed?.camera?.yaw);
   }
   throw new Error(`Physical camera turn did not converge to ${desiredYaw.toFixed(3)} rad`);
@@ -1282,6 +1326,8 @@ function authoredCemeteryDeparture(points, state) {
 }
 
 function authoredGreyfenGateDeparture(points, state) {
+  const frontageRoute = authoredGreyfenWestLaneDeparture(points, state);
+  if (frontageRoute !== points) return frontageRoute;
   const start = state?.player?.position;
   const destination = points?.at(-1);
   if (state?.zone !== "greyfen" || !start || !destination
@@ -1296,6 +1342,8 @@ function authoredGreyfenGateDeparture(points, state) {
 }
 
 function authoredGreyfenInteractionDeparture(points, state) {
+  const frontageRoute = authoredGreyfenWestLaneDeparture(points, state);
+  if (frontageRoute !== points) return frontageRoute;
   const start = state?.player?.position;
   const destination = points?.at(-1);
   if (state?.zone !== "greyfen" || !start || !destination
@@ -1305,6 +1353,19 @@ function authoredGreyfenInteractionDeparture(points, state) {
   // GreyfenForgeRack's occupied workshop, not the central pedestrian road.
   return [points[0], { x: start.x, y: start.y, z: -4.3 },
     { x: 0, y: start.y, z: -4.3 }, ...points.slice(1)];
+}
+
+function authoredGreyfenWestLaneDeparture(points, state) {
+  const start = state?.player?.position;
+  const end = points?.at(-1);
+  if (state?.zone !== "greyfen" || !start || !end || start.x <= -11 || start.x >= -6.4
+    || start.z <= -5.6 || start.z >= 1.3
+    || (end.x < -4 && end.z > -5.6 && end.z < 1.3)) return points;
+  // The rotated 4.2x3.4 west-lane house occupies the direct centre-road
+  // segment. Join the proven north road around its west/north sides instead
+  // of repeatedly steering through its solid wall or moving scenery.
+  return [points[0], { x: -10, y: start.y, z: -4 },
+    { x: -10, y: start.y, z: -10 }, { x: 0, y: start.y, z: -10 }, ...points.slice(1)];
 }
 
 function collapseCollinearRoute(points) {
@@ -1461,18 +1522,88 @@ async function approachMovingEnemy(cdp, meleeDistance, timeout = 5000, targetId 
   return lastState;
 }
 
-async function clickDialogueAction(cdp, actionLabel = "", pageIndex) {
+// Legacy route names keep their original outcome assertions. Match the current
+// authored labels for those same outcomes; never select by button row/order.
+const DIALOGUE_ACTION_LABELS = {
+  "preserve the ledger": "Close the tainted channels. Preserve the ledger and ration reserves.",
+  "burn the ledger": "Keep supervised milling. Replace the contaminated working copy.",
+  "post copies in greyfen": "Post the accounts. Begin clean repairs and pay for restitution.",
+  "testify in greyfen": "Accept surrender under custody. Ask for freely given testimony.",
+  "leave and never return": "Take the written account. Disarm the camp and permit exile.",
+  "answer for the dead": "Execute Senn for the road killings. Keep the documented account.",
+  "stand as the last witness": "Preserve the refusal as testimony. Do not demand another oath.",
+  "let every witness speak": "Release the grain. Invite only those who choose to speak.",
+  "testify under protection": "Protect his hearing, not his title. Ask him to stop the renewal.",
+  "expose him now": "Make the ledger public. Remove his power to require signatures.",
+  "compel a confession": "Compel his admission. Use the ledger as evidence, not his oath.",
+  "witness: name every dead": "Witness \u2014 make the account public; stay to preserve it.",
+  "mercy: release me, keep selected guilt": "Mercy \u2014 release the Hart; safeguard names and private memories.",
+  "duty: bind the covenant to kael": "Duty \u2014 freely carry the unresolved binding myself.",
+  "ash: destroy the witness": "Ash \u2014 destroy the Hart; keep the human record and face the loss.",
+  "a widow's bell": "Visit Elna about Harl's bell.",
+  "iron remembers": "Ask Tor about the marks in his iron.",
+  "bitter roots": "Help Mira find another fever treatment.",
+  "the black dog contract": "Hear Toma's account of the sheepfold.",
+  "the man who walked home": "Follow the watch that left an empty grave.",
+  "oren's red thread": "Return Oren's thread to a named place.",
+  "the bannerless": "Carry the Bannerless soldiers' refusal.",
+  "a measure of ash": "Recover the true weight of the ash.",
+  "the road that bends": "Walk Rook's road against the waystone.",
+  "three candles unlit": "Light a candle for each missing traveler.",
+  "cleanse the shrine": "Clean the rite. Accept the danger shifting to the wood.",
+  "disturb it for memory": "Open the memory. Keep the gathered names intact.",
+  "bind it and leave": "Hold the seal for now. Mark its limits in the record.",
+  "publish every recovered name": "Publish the recovered names and order. Remove family addresses.",
+  "leave it and copy the seal": "Keep a signed copy. Leave the original where it can be read.",
+  "accept a widow's bell": "I will hear what the bell is carrying.",
+  "he was calling for a witness.": "Give Elna the whole account, and let her decide to speak.",
+  "the wind caught an old cord.": "Offer the gentler account. Leave the evidence with her.",
+};
+
+function dialogueActionLabel(label) {
+  const normalized = String(label || "").replace(/^Commit:\s*/i, "").trim().toLowerCase();
+  return (DIALOGUE_ACTION_LABELS[normalized] || normalized).toLowerCase();
+}
+
+async function clickDialogueAction(cdp, actionLabel = "", pageIndex, allowFocusScroll = true) {
 	// Use the existing read-only UI binding, not DOM evaluation or a fixed row.
 	// Choices and subtitle scaling change the actual lower-third geometry.
-	const selected = await waitFor(() => {
-	  const state = cdp.lastObservation;
+	await cdp.send("Page.bringToFront");
+	let previousGeometry = "";
+	let previousTimestamp = -1;
+	const selected = await waitFor(async () => {
+	  const state = await telemetry(cdp);
 	  if (!state?.dialogue?.visible || state.dialogue.page !== pageIndex) return null;
 	  const label = actionLabel || state.dialogue.actions?.[0];
+	  if (!label) return null;
 	  const matches = (state.ui?.buttons || []).filter(button => button.enabled
-	    && button.text?.toLowerCase().startsWith(String(label).toLowerCase()));
-	  if (matches.length !== 1) return null;
-	  return { button: matches[0], viewport: state.ui.viewport,
-	    timestamp: Number(state.timestamp_ms), pages: Number(state.dialogue.pages) };
+	    && dialogueActionLabel(button.text).startsWith(dialogueActionLabel(label)));
+	  let button = matches.length === 1 ? matches[0] : null;
+	  // Read-only records expose both the header Back/Close and a focused Close
+	  // action. Only disambiguate that exact, non-branching action by real focus.
+	  if (!button && dialogueActionLabel(label) === "close"
+	    && state.dialogue.actions?.length === 1
+	    && dialogueActionLabel(state.dialogue.actions[0]) === "close"
+	    && state.dialogue.focused_action === 0
+	    && matches.every(candidate => dialogueActionLabel(candidate.text) === "close")) {
+	    const focused = matches.filter(candidate => candidate.focused);
+	    if (focused.length === 1) button = focused[0];
+	  }
+	  if (!button) return null;
+	  const geometry = JSON.stringify([button.name, button.text,
+	    button.position, button.size, state.ui.viewport]);
+	  // The stakes panel schedules a deferred layout on the final page. Require
+	  // stable geometry in two distinct published observations before clicking.
+	  if (geometry !== previousGeometry) {
+	    previousGeometry = geometry;
+	    previousTimestamp = Number(state.timestamp_ms);
+	    return null;
+	  }
+	  if (Number(state.timestamp_ms) <= previousTimestamp) return null;
+	  return { button, viewport: state.ui.viewport,
+	    timestamp: Number(state.timestamp_ms), pages: Number(state.dialogue.pages),
+	    last_page: Math.max(1, Number(state.dialogue.pages)) - 1,
+	    text: state.dialogue.text, speaker: state.dialogue.speaker };
 	}, `rendered dialogue button ${actionLabel || "Continue"}`, 5000);
 	const button = selected.button;
 	const logical = selected.viewport;
@@ -1480,9 +1611,19 @@ async function clickDialogueAction(cdp, actionLabel = "", pageIndex) {
 	  || button.position.x < 0 || button.position.y < 0
 	  || button.position.x + button.size.x > logical.x
 	  || button.position.y + button.size.y > logical.y) {
+	  if (allowFocusScroll) {
+	    await focusDialogueAction(cdp, actionLabel || button.text, pageIndex);
+	    await waitFor(async () => {
+	      const state = await telemetry(cdp);
+	      const visible = state?.ui?.buttons?.find(candidate => candidate.name === button.name);
+	      return visible?.focused && visible.position.x >= 0 && visible.position.y >= 0
+	        && visible.position.x + visible.size.x <= state.ui.viewport.x
+	        && visible.position.y + visible.size.y <= state.ui.viewport.y;
+	    }, `focused dialogue choice is visible: ${button.text}`, 5000);
+	    return clickDialogueAction(cdp, actionLabel, pageIndex, false);
+	  }
 	  throw new Error(`Dialogue button is outside the viewport: ${button.text}`);
 	}
-	await cdp.send("Page.bringToFront");
 	const x = (button.position.x + button.size.x * 0.5) * viewport.width / logical.x;
 	const y = (button.position.y + button.size.y * 0.5) * viewport.height / logical.y;
 	// Press/release already carry the target coordinates. A stationary hover
@@ -1505,18 +1646,20 @@ async function clickDialogueAction(cdp, actionLabel = "", pageIndex) {
 	}
 	if (inputError) {
 	  if (inputError?.fatal || !String(inputError?.message || inputError).includes("timed out")) throw inputError;
-	  // Do not replay an activation whose acknowledgement was lost. Only a
-	  // newer game-published frame proving this page's outcome can accept it.
-	  await waitFor(() => {
-	    const state = cdp.lastObservation;
-	    const dialogue = state?.dialogue;
-	    return Number(state?.timestamp_ms) > selected.timestamp
-	      && Number(dialogue?.pages) === selected.pages
-	      && ((dialogue.visible && Number(dialogue.page) > pageIndex)
-	        || (!dialogue.visible && pageIndex === selected.pages - 1
-	          && Number(dialogue.page) === pageIndex));
-	  }, `delivered dialogue click ${button.text}`, 5000);
 	}
+	// A delivered CDP packet does not prove activation. Never replay a choice;
+	// require its page outcome before the route sends another page's input.
+	await waitFor(async () => {
+	  const state = await telemetry(cdp);
+	  const dialogue = state?.dialogue;
+	  return Number(state?.timestamp_ms) > selected.timestamp
+	    && ((Number(dialogue?.pages) === selected.pages && dialogue.visible && Number(dialogue.page) > pageIndex)
+	      || (!dialogue.visible && pageIndex === selected.last_page
+	        && Number(dialogue.page) === pageIndex)
+	      || (pageIndex === selected.last_page && dialogue.visible && Number(dialogue.page) === 0
+	        && (dialogue.text !== selected.text || dialogue.speaker !== selected.speaker
+	          || Number(dialogue.pages) !== selected.pages)));
+	}, `delivered dialogue click ${button.text}`, 5000);
 	return button.text;
 }
 
@@ -1525,8 +1668,7 @@ async function advanceDialogueInput(cdp, pageIndex) {
   return clickDialogueAction(cdp, "", pageIndex);
 }
 
-async function chooseDialogueAction(cdp, actionLabel, pageIndex) {
-  if (dialogueInput === "mouse") return clickDialogueAction(cdp, actionLabel, pageIndex);
+async function focusDialogueAction(cdp, actionLabel, pageIndex) {
   const initial = await freshDialogueState(cdp);
   if (initial?.visible && initial.page === pageIndex && initial.focused_action < 0) {
     await tapKey(cdp, "ArrowDown", "ArrowDown", 70);
@@ -1535,7 +1677,7 @@ async function chooseDialogueAction(cdp, actionLabel, pageIndex) {
     const dialogue = await freshDialogueState(cdp).catch(() => null);
     if (!dialogue?.visible || dialogue.page !== pageIndex || dialogue.focused_action < 0) return null;
     const matches = dialogue.actions.map((label, index) =>
-      label.toLowerCase().startsWith(actionLabel.toLowerCase()) ? index : -1
+      dialogueActionLabel(label).startsWith(dialogueActionLabel(actionLabel)) ? index : -1
     ).filter((index) => index >= 0);
     if (matches.length !== 1) throw new Error(`Dialogue action ${actionLabel} is absent or ambiguous: ${dialogue.actions.join(" | ")}`);
     return { dialogue, target: matches[0] };
@@ -1544,7 +1686,9 @@ async function chooseDialogueAction(cdp, actionLabel, pageIndex) {
   const target = selected.target;
   const count = selected.dialogue.actions.length;
   for (let step = 0; current !== target && step < count; step += 1) {
-    const down = (target - current + count) % count <= (current - target + count) % count;
+    // Actions are contiguous in the real focus ring. Wrapping through its
+    // headers/readers is not the same as wrapping the action-index array.
+    const down = target > current;
     await tapKey(cdp, down ? "ArrowDown" : "ArrowUp", down ? "ArrowDown" : "ArrowUp", 70);
     const focused = await waitFor(async () => {
       const dialogue = await freshDialogueState(cdp).catch(() => null);
@@ -1553,8 +1697,14 @@ async function chooseDialogueAction(cdp, actionLabel, pageIndex) {
     current = focused.focused_action;
   }
   if (current !== target) throw new Error(`Dialogue focus did not reach ${actionLabel}`);
-  await acceptDialogue(cdp);
   return selected.dialogue.actions[target];
+}
+
+async function chooseDialogueAction(cdp, actionLabel, pageIndex) {
+  if (dialogueInput === "mouse") return clickDialogueAction(cdp, actionLabel, pageIndex);
+  const selected = await focusDialogueAction(cdp, actionLabel, pageIndex);
+  await acceptDialogue(cdp);
+  return selected;
 }
 
 async function telemetry(cdp) {
@@ -1577,8 +1727,10 @@ async function telemetry(cdp) {
     }
     return current;
   } catch (error) {
-    // Retained state is diagnostic evidence, not a new movement observation.
-    // Callers may retry a missing sample, but must not steer from stale state.
+    // A new binding can arrive while the direct read is awaiting CDP. Match
+    // freshTelemetry's fallback, without replaying input or using retained state.
+    const published = productionObserver ? cdp.takeObservation() : null;
+    if (published) return published;
     throw error;
   }
 }
@@ -1799,16 +1951,10 @@ function findGate(state, target) {
   return state?.gates?.find((gate) => gate.target === target);
 }
 
-const SEAMLESS_EXTERIOR_ROUTES = new Set([
-  "greyfen>wychwood", "wychwood>greyfen",
-  "greyfen>deep_wood", "deep_wood>wychwood", "wychwood>deep_wood",
-  "deep_wood>old_mill", "old_mill>deep_wood",
-  "old_mill>burned_farmstead", "burned_farmstead>old_mill",
-  "burned_farmstead>marsh_crossing", "marsh_crossing>burned_farmstead",
-  "marsh_crossing>bandit_road", "bandit_road>marsh_crossing",
-  "bandit_road>vargan_approach", "vargan_approach>bandit_road",
-  "vargan_approach>greyfen",
-]);
+const worldSectors = JSON.parse(readFileSync(new URL("../world_sector_manifest.json", import.meta.url), "utf8")).sectors;
+const SEAMLESS_EXTERIOR_ROUTES = new Set(Object.entries(worldSectors).flatMap(([source, sector]) =>
+  sector.exterior ? Object.values(sector.edges || {}).filter(edge => worldSectors[edge.target]?.exterior)
+    .map(edge => `${source}>${edge.target}`) : []));
 
 function isSeamlessExteriorRoute(source, target) {
   return SEAMLESS_EXTERIOR_ROUTES.has(`${source}>${target}`);
@@ -1900,6 +2046,7 @@ async function activateNewGame(cdp, point) {
 }
 
 async function activateBootShell(cdp) {
+  await cdp.send("Page.bringToFront");
   if (await cdp.evaluate("Boolean(window.__ashenOathBoot?.engine_start_ms)")) return;
   const point = await waitFor(async () => cdp.evaluate(`(() => {
     const button = document.getElementById("start");
@@ -1947,7 +2094,11 @@ async function startNewGame(cdp, expectedUrl, onStartupReady = async () => {}) {
   // renderer while the prewarm signal is already progressing. Keep this a
   // bounded readiness gate, but do not turn normal first-run compilation into
   // a false browser failure.
-	await waitFor(async () => cdp.evaluate(`window.__ashenOathOpeningState?.state === 'ready'`), "opening readiness", timeoutMs);
+	await waitFor(async () => {
+		const errors = consoleErrors(cdp);
+		if (errors.length) throw fatal(`startup console error: ${errors[0]}`);
+		return cdp.evaluate(`window.__ashenOathOpeningState?.state === 'ready'`);
+	}, "opening readiness", timeoutMs);
 	// The periodic observation binding is intentionally coalesced and may still
 	// contain the final pre-ready sample. Read the current state directly after
 	// the shell marker so readiness ordering is tested without queue latency.
@@ -1970,11 +2121,15 @@ async function startNewGame(cdp, expectedUrl, onStartupReady = async () => {}) {
   const errors = consoleErrors(cdp);
   if (errors.length) throw fatal(`startup console error: ${errors[0]}`);
   await onStartupReady();
-  // Arrival is timed at first control above. Complete campaign interaction
-  // starts after the existing opening assembly finishes; its cold stalls are
-  // retained in the frame/startup evidence, not mistaken for a lost E edge.
+  // The current menu is revealed only after complete-world preparation. Do
+  // not wait for the retired post-control deferred-detail console marker.
   if (productionObserver) {
-    await waitForLoadingLine(cdp, "LOADING: Greyfen deferred_detail complete", functionalCandidate ? 120000 : 45000);
+    await waitFor(async () => {
+      const current = await freshTelemetry(cdp);
+      return current?.zone === "greyfen" && current?.ready && current?.player?.visual?.ready
+        && current?.player?.can_control && !current?.transition_pending
+        && !current?.zone_load_request_pending ? current : null;
+    }, "complete prepared Greyfen and required Kael body", 10000);
     cdp.startupTimings.opening_detail_ready_ms = Date.now();
   }
   return state;
@@ -1987,6 +2142,7 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
   let route = [];
   let routeIndex = 0;
   let lastWaypoint = null;
+  let physicalTolerance = null;
   let lastProgressAt = Date.now();
   let lastDistance = Number.POSITIVE_INFINITY;
   let seamless = false;
@@ -2001,6 +2157,11 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       continue;
     }
     if (!sourceZone) sourceZone = state.zone;
+    if (state.zone === target && !seamless) {
+      if (state.player?.can_control) return state;
+      await sleep(150);
+      continue;
+    }
     if (state.zone === target && seamless) {
       checkpoints.push({
         event: "seamless_boundary_crossed",
@@ -2042,7 +2203,9 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
       const routeResult = await routeToCatalogEntry(cdp, gate);
       const fullRoute = routeResult.points || [];
       if (!fullRoute.length) throw new Error(`No navigation route to ${target} in ${state.zone}`);
-      route = collapseCollinearRoute(authoredGreyfenGateDeparture(fullRoute, state));
+      physicalTolerance = Number(routeResult.waypoint_tolerance) > 0
+        ? Number(routeResult.waypoint_tolerance) : null;
+      route = physicalTolerance ? fullRoute : collapseCollinearRoute(authoredGreyfenGateDeparture(fullRoute, state));
       routeIndex = route.length > 1 ? 1 : 0;
       checkpoints.push({
         event: "gate_route",
@@ -2056,16 +2219,16 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
     let waypoint = route[Math.min(routeIndex, route.length - 1)] || gate.position;
     lastWaypoint = { index: routeIndex, point: waypoint };
     const previous = route[Math.max(0, routeIndex - 1)] || player;
-    const passedWaypoint = routeIndex > 0
+    const passedWaypoint = physicalTolerance == null && routeIndex > 0
       && ((player.x - waypoint.x) * (waypoint.x - previous.x) + (player.z - waypoint.z) * (waypoint.z - previous.z)) >= 0;
-    if ((Math.hypot(waypoint.x - player.x, waypoint.z - player.z) < 0.75 || passedWaypoint) && routeIndex < route.length - 1) {
+    if ((Math.hypot(waypoint.x - player.x, waypoint.z - player.z) <= (physicalTolerance ?? 0.75) || passedWaypoint) && routeIndex < route.length - 1) {
       routeIndex += 1;
       waypoint = route[routeIndex];
     }
     const dx = waypoint.x - player.x;
     const dz = waypoint.z - player.z;
     const distance = Math.hypot(dx, dz);
-    if (distance > 0.42) {
+    if (distance > (physicalTolerance ?? 0.42)) {
       // Keyboard diagonals are normalized to equal strength by InputRouter.
       // Align the camera to the route segment first so a straight waypoint
       // resolves to one forward key instead of an unequal world-space drift
@@ -2110,14 +2273,17 @@ async function driveToGate(cdp, target, checkpoints, timeout = 45000) {
         });
         return progress;
       }
-    } else if (distance > 0.42) {
+    } else if (distance > (physicalTolerance ?? 0.42)) {
       // Compatibility WebGL can defer input delivery while a frame is being
       // presented. Release from an observed waypoint arrival so the route
       // cannot crawl from short fixed pulses or overshoot into scenery.
       const movementTimeout = seamless
         ? clamp((distance / 2.6) * 1000 + 28000, 30000, 60000)
         : clamp((distance / 2.6) * 1000 + 9000, 14000, 30000);
-      const progress = await holdTowardPoint(cdp, waypoint, movementTimeout, seamless ? target : "");
+      const progress = physicalTolerance
+        ? await approachPointWithReplan(cdp, waypoint, movementTimeout, 0.20,
+          (_position, current) => seamless && current.zone === target)
+        : await holdTowardPoint(cdp, waypoint, movementTimeout, seamless ? target : "");
       lastState = progress || lastState;
       if (!progress?.player?.position) throw new Error(`No player telemetry while approaching ${target}`);
       // A seamless hold can return the first valid target-zone sample while a
@@ -2198,17 +2364,73 @@ async function useGate(cdp, expectedZone, checkpoints) {
 }
 
 async function traverse(cdp, target, checkpoints) {
+  const current = await freshTelemetry(cdp);
+  if (current?.zone === target && current.ready && !current.transition_pending && current.player?.can_control) return current;
+  if (current?.zone === "greyfen" && target === "vargan_approach"
+    && Math.abs(Number(current.player?.position?.x)) < 2
+    && Number(current.player?.position?.z) >= -3.9) {
+    const edge = worldSectors.greyfen.edges.east;
+    if (edge.target !== target || !edge.approach?.length) throw new Error("Authored Greyfen Castle approach is missing");
+    // Follow the existing central-road/bridge approach, not a coarse diagonal
+    // through the northern houses. Every step remains ordinary physical input.
+    for (const [x, , z] of edge.approach) {
+      const reached = await approachPointWithReplan(cdp, { x, z }, 15000, 0.35);
+      if (reached?.zone !== "greyfen" || Math.hypot(reached.player.position.x - x,
+        reached.player.position.z - z) > 0.5) throw new Error(`Authored Castle approach blocked at ${x},${z}`);
+    }
+    checkpoints.push({ event: "authored_castle_approach_walked", zone: "greyfen" });
+  }
   const state = await driveToGate(cdp, target, checkpoints);
   if (state?.zone === target) return state;
   return useGate(cdp, target, checkpoints);
 }
 
-async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
+function unfinishedRegionalInspection(requested, focused, state) {
+  const target = String(requested).split(":");
+  const actual = String(focused || "").split(":");
+  return target.length === 4 && actual.length === 4 && target[0].startsWith("saga_")
+    && target[2] === "inspect" && actual[2] === "inspect"
+    && target[0] === actual[0] && target[1] === actual[1] && /^\d+$/.test(actual[3])
+    && state.quests.active.includes(target[0]) && state.quests.objectives[target[0]] === target[1]
+    && !state.story.flags[`${target[0]}:${target[1]}:seen:${actual[3]}`];
+}
+
+async function driveToInteraction(cdp, id, checkpoints, timeout = 240000, movementAccepted = null) {
   const started = Date.now();
+  if (id === "crow_shrine_choice") {
+    const state = await freshTelemetry(cdp);
+    const player = state?.player?.position;
+    if (state?.zone === "greyfen" && player && player.x >= 11 && player.x < 15.3
+      && player.z >= 4.6 && player.z <= 11.8 && state.story.flags.bell_eater_defeated) {
+      // Match the native doorway approach. A clear point outside the facade
+      // can still leave the shrine occluded behind its north pier.
+      for (const point of [{ x: player.x, z: 8.29 }, { x: 15.35, z: 8.29 }]) {
+        const reached = await approachPointWithReplan(cdp, point, 8000, 0.10);
+        if (!reached?.player?.position || reached.player.dead || !reached.player.can_control
+          || Math.hypot(reached.player.position.x - point.x, reached.player.position.z - point.z) > 0.25) {
+          throw new Error("Shrine doorway alignment did not complete through physical movement");
+        }
+      }
+      const aligned = await freshTelemetry(cdp);
+      const shrine = findInteraction(aligned, id);
+      if (!shrine?.position) throw new Error("Shrine disappeared after doorway approach");
+      await turnCameraToward(cdp, Math.atan2(aligned.player.position.x - shrine.position.x,
+        aligned.player.position.z - shrine.position.z), aligned.camera?.yaw);
+      const focused = await waitFor(async () => {
+        const current = await freshTelemetry(cdp);
+        return current?.focus?.id === id ? current : null;
+      }, "shrine focus through the open doorway", 5000);
+      checkpoints.push({ event: "interaction_focus", id, zone: focused.zone,
+        distance: focused.focus.distance, authored_doorway: true });
+      return focused;
+    }
+  }
   let route = [];
   let routeIndex = 0;
   let interactionMissingSince = 0;
   let repositionedGroundProp = false;
+  let triedSpeakerFraming = false;
+  let physicalTolerance = null;
   while (Date.now() - started < timeout) {
     const state = await telemetry(cdp);
     if (!state?.ready || state.transition_pending || state.paused) {
@@ -2216,6 +2438,11 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
       continue;
     }
     if (state.player && !state.player.can_control) throw new Error(`Player lost control while routing to ${id}`);
+    if (movementAccepted && movementAccepted(state)) {
+      await releaseMovementKeys(cdp);
+      checkpoints.push({ event: "movement_condition_observed", toward: id, zone: state.zone, player: state.player.position });
+      return state;
+    }
     let interaction = findInteraction(state, id);
     if (!interaction) {
       // Deferred opening detail can rebuild the small telemetry catalog between
@@ -2245,13 +2472,17 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
     const requiresSpeakerApproach = interaction.type === "dialogue" && id !== "crow_shrine_choice";
     const atConversationApproach = !requiresSpeakerApproach || Boolean(approach
       && Math.hypot(approach.x - state.player.position.x, approach.z - state.player.position.z) <= 0.72);
-    if (state.focus?.id === id && atConversationApproach) {
-      checkpoints.push({ event: "interaction_focus", id, zone: state.zone, distance: interaction.distance });
+    if (!movementAccepted && (state.focus?.id === id || unfinishedRegionalInspection(id, state.focus?.id, state)) && atConversationApproach) {
+      checkpoints.push({ event: "interaction_focus", id: state.focus.id, requested_id: id,
+        zone: state.zone, distance: state.focus.distance });
       return state;
     }
     if (!route.length) {
       const routeResult = await routeToCatalogEntry(cdp, interaction);
-      route = authoredGreyfenInteractionDeparture(routeResult.points || [], state);
+      physicalTolerance = Number(routeResult.waypoint_tolerance) > 0
+        ? Number(routeResult.waypoint_tolerance) : null;
+      route = physicalTolerance ? routeResult.points || []
+        : authoredGreyfenInteractionDeparture(routeResult.points || [], state);
       if (!route.length) throw new Error(`No navigation route to ${id} in ${state.zone}`);
       routeIndex = route.length > 1 ? 1 : 0;
       checkpoints.push({ event: "interaction_route", id, zone: state.zone, points: route });
@@ -2262,9 +2493,9 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
     // points before steering, otherwise a completed leg causes backtracking.
     while (routeIndex < route.length - 1) {
       const previous = route[Math.max(0, routeIndex - 1)] || player;
-      const passedWaypoint = routeIndex > 0
+      const passedWaypoint = physicalTolerance == null && routeIndex > 0
         && ((player.x - waypoint.x) * (waypoint.x - previous.x) + (player.z - waypoint.z) * (waypoint.z - previous.z)) >= 0;
-      if (Math.hypot(waypoint.x - player.x, waypoint.z - player.z) >= 0.72 && !passedWaypoint) break;
+      if (Math.hypot(waypoint.x - player.x, waypoint.z - player.z) > (physicalTolerance ?? 0.72) && !passedWaypoint) break;
       routeIndex += 1;
       waypoint = route[routeIndex];
     }
@@ -2274,8 +2505,8 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
     if (!repositionedGroundProp && routeIndex === route.length - 1 && distance <= 0.38
       && ["clue", "herb"].includes(interaction.type) && state.focus?.position
       && state.focus.id !== id) {
-      // Standing on a ground prop can leave a nearby herb in the stronger
-      // view cone. Walk to its other side rather than overriding game focus.
+      // Standing on a small prop can leave a neighboring activity in the
+      // stronger view cone. Step back rather than overriding game focus.
       const awayX = interaction.position.x - state.focus.position.x;
       const awayZ = interaction.position.z - state.focus.position.z;
       const separation = Math.hypot(awayX, awayZ);
@@ -2283,11 +2514,15 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
         repositionedGroundProp = true;
         const standingPoint = { x: interaction.position.x + awayX / separation * 2.2,
           y: player.y, z: interaction.position.z + awayZ / separation * 2.2 };
-        route[route.length - 1] = standingPoint;
         const moved = await approachPointWithReplan(cdp, standingPoint, 5000, 0.20);
         if (!moved?.player?.position || moved.player.dead || !moved.player.can_control) {
           throw new Error(`Ground-prop approach failed for ${id}`);
         }
+        if (Math.hypot(moved.player.position.x - standingPoint.x, moved.player.position.z - standingPoint.z) > 0.35
+          && moved.focus?.id !== id && !unfinishedRegionalInspection(id, moved.focus?.id, moved)) {
+          throw new Error(`Physical standing approach did not reach its clear point for ${id}`);
+        }
+        route[route.length - 1] = standingPoint;
         await turnCameraToward(cdp, Math.atan2(moved.player.position.x - interaction.position.x,
           moved.player.position.z - interaction.position.z), moved.camera?.yaw);
         checkpoints.push({ event: "interaction_physical_standing_adjustment", id,
@@ -2295,22 +2530,44 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
         continue;
       }
     }
-    const lookPoint = routeIndex === route.length - 1 && distance <= 0.38
+    const serviceInReach = interaction.type === "vendor"
+      && Math.hypot(player.x - interaction.position.x, player.z - interaction.position.z) <= 2.8;
+    const lookPoint = serviceInReach || (routeIndex === route.length - 1 && distance <= 0.38)
       ? interaction.position : waypoint;
     const desiredYaw = Math.atan2(player.x - lookPoint.x, player.z - lookPoint.z);
     const cameraYaw = await turnCameraToward(cdp, desiredYaw, state.camera?.yaw);
-    if (distance > 0.38) {
-      // Keep interaction legs on the continuous held-input contract that has
-      // already crossed the bridge in native and browser evidence. The route
-      // yaw is passed explicitly so a stale coalesced camera sample cannot
-      // choose the opposite digital axis after a waypoint turn.
-      const progress = await holdTowardPoint(
+    if (((requiresSpeakerApproach && routeIndex === route.length - 1 && distance <= 0.38)
+      || serviceInReach) && !triedSpeakerFraming) {
+      triedSpeakerFraming = true;
+      // Nominal orbit yaw is not the collision-resolved shoulder camera's eye
+      // line. Frame the visible speaker through real camera input, never by
+      // overriding the focus resolver or clicking a different interaction.
+      let framedYaw = cameraYaw;
+      for (const offset of [0.35, -0.35, 0.70, -0.70]) {
+        framedYaw = await turnCameraToward(cdp, desiredYaw + offset, framedYaw);
+        const framed = await waitFor(async () => {
+          const current = await freshTelemetry(cdp);
+          return current.focus?.id === id ? current : null;
+        }, `${id} ordinary shoulder framing`, 650).catch(() => null);
+        if (framed) {
+          checkpoints.push({ event: "interaction_focus", id, zone: framed.zone,
+            distance: framed.focus.distance, camera_framing_offset: offset });
+          return framed;
+        }
+      }
+    }
+    if (distance > (physicalTolerance ?? 0.38)) {
+      // Use the existing braking/replanning mover already proven at the
+      // chapel. A long fixed-axis hold can overshoot a nearby prop between
+      // sparse observations and continue into another occupied frontage.
+      const progress = await approachPointWithReplan(
         cdp,
         waypoint,
         clamp((distance / 2.6) * 1000 + 4000, 5000, 12000),
-        "",
-        null,
-        cameraYaw,
+        0.20,
+        (position, current) => movementAccepted ? movementAccepted(current) : ((current.focus?.id === id
+          || unfinishedRegionalInspection(id, current.focus?.id, current))
+          && (!requiresSpeakerApproach || Math.hypot(route.at(-1).x - position.x, route.at(-1).z - position.z) <= 0.72)),
       );
       if (!progress?.player?.position) throw new Error(`No player telemetry while approaching ${id}`);
       // Releasing a held key can invalidate the cached focus until the next
@@ -2323,12 +2580,14 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
         const conversationSettled = !requiresSpeakerApproach || Boolean(finalApproach
           && settled?.player?.position && Math.hypot(finalApproach.x - settled.player.position.x,
             finalApproach.z - settled.player.position.z) <= 0.72);
-        return settled?.focus?.id === id && conversationSettled ? settled : null;
+        return settled && (settled.focus?.id === id || unfinishedRegionalInspection(id, settled.focus?.id, settled))
+          && conversationSettled ? settled : null;
       }, `${id} focus settle`, 420).catch(() => null);
-      if (settledFocus != null) {
+      if (!movementAccepted && settledFocus != null) {
         checkpoints.push({
           event: "interaction_focus",
-          id,
+          id: settledFocus.focus.id,
+          requested_id: id,
           zone: settledFocus.zone,
           distance: Number(settledFocus.focus?.distance ?? 0),
           settled_after_movement: true,
@@ -2350,14 +2609,29 @@ async function driveToInteraction(cdp, id, checkpoints, timeout = 240000) {
 }
 
 async function useInteraction(cdp, id, checkpoints, expectsDialogue = false, actionLabel = "", restoreGameplayPointer = true, interactionKey = ["KeyE", "e"]) {
-  const focused = await driveToInteraction(cdp, id, checkpoints);
-  const target = findInteraction(focused, id);
-  const player = focused?.player?.position;
-  if (target?.position && player) {
-    await turnCameraToward(cdp, Math.atan2(player.x - target.position.x,
-      player.z - target.position.z), focused.camera?.yaw);
+  if (["vargan_mile_marker", "vargan_supply_cart", "vargan_gate_notice", "vargan_iron_binding"].includes(id)) {
+    expectsDialogue = true;
+    actionLabel ||= "__close__";
   }
+  const focused = await driveToInteraction(cdp, id, checkpoints, id.startsWith("saga_") ? 60000 : 240000);
+  // Authored inspection groups are unordered. Use the required unfinished
+  // member already displayed, rather than walking away to force array order.
+  if (unfinishedRegionalInspection(id, focused.focus?.id, focused)) id = focused.focus.id;
+  await releaseMovementKeys(cdp);
   if (interactionKey[0] !== "KeyE") await focusGameCanvas(cdp);
+  // The route already acquired ordinary focus. Rotating again here can replace
+  // that displayed target with a nearby speaker before the Use edge arrives.
+  let focusTimestamp = -1;
+  await waitFor(async () => {
+    const current = await freshTelemetry(cdp);
+    const velocity = current?.player?.velocity;
+    if (current?.focus?.id !== id || !velocity || Math.hypot(velocity.x, velocity.z) > 0.10) {
+      focusTimestamp = -1;
+      return null;
+    }
+    if (focusTimestamp < 0) { focusTimestamp = Number(current.timestamp_ms); return null; }
+    return Number(current.timestamp_ms) > focusTimestamp ? current : null;
+  }, `${id} displayed target after braking`, 5000);
   await tapGameplayKey(cdp, interactionKey[0], interactionKey[1], 80);
   await sleep(220);
     if (expectsDialogue) {
@@ -2373,35 +2647,38 @@ async function useInteraction(cdp, id, checkpoints, expectsDialogue = false, act
         const opened = await freshDialogueState(cdp).catch(() => null);
         return opened?.visible ? { dialogue: opened } : null;
       }, `${id} dialogue open`, 5000);
-      const dialoguePages = Math.max(1, Number(openedDialogue?.dialogue?.pages || 1));
-      const firstDialoguePage = Math.max(0, Number(openedDialogue?.dialogue?.page || 0));
       checkpoints.push({ event: "dialogue_input_mode", id, mode: dialogueInput });
-      // The page count is captured before the paused UI starts receiving
-      // clicks. Advance the exact remaining number of authored pages without
-      // asking the paused Runtime domain for state between clicks.
-      for (let page = firstDialoguePage; page < dialoguePages; page += 1) {
+      let chosenRequestedAction = false;
+      let closed = false;
+      for (let step = 0; step < 48; step += 1) {
+        const current = await freshDialogueState(cdp);
+        if (!current?.visible) { closed = true; break; }
+        const page = Number(current.page);
+        const finalPage = page === Math.max(1, Number(current.pages)) - 1;
         await sleep(260);
-        if (actionLabel && page === dialoguePages - 1) {
+        if (finalPage && (actionLabel === "__close__" || (chosenRequestedAction
+          && !current.actions.includes("Continue")))) {
+          await clickDialogueAction(cdp, "Close", page);
+        } else if (actionLabel && finalPage && !chosenRequestedAction) {
           const chosen = await chooseDialogueAction(cdp, actionLabel, page);
+          chosenRequestedAction = true;
           checkpoints.push({ event: "dialogue_action_selected", id, label: chosen });
         } else {
           await advanceDialogueInput(cdp, page);
         }
         await sleep(400);
       }
+      if (!closed && (await freshDialogueState(cdp))?.visible) {
+        throw new Error(`${id} exceeded its bounded dialogue/follow-on pages`);
+      }
     // A Compatibility frame can deliver the final button press shortly after
     // the last keyup reaches the browser bridge. Wait for the ordinary closed
     // state instead of sampling during that handoff window.
     await waitFor(async () => {
       const dialogue = await freshDialogueState(cdp).catch(() => null);
-      // A delayed Compatibility click can close the surface just after the
-      // final page is rendered. Require the terminal page as well as the
-      // hidden/unpaused state so an old pre-dialogue snapshot cannot satisfy
-      // this assertion, then allow the bounded UI handoff to settle.
-      return dialogue?.visible === false
-        && Number(dialogue?.page ?? -1) >= dialoguePages - 1
-        ? { dialogue }
-        : null;
+      // Follow-on scenes can have a different terminal page. Each delivered
+      // click was confirmed above; now require their final closed surface.
+      return dialogue?.visible === false ? { dialogue } : null;
     }, `${id} dialogue close`, 8000);
     // Clear a release whose acknowledgement may have been lost when the
     // interaction keydown moved the game into paused-dialogue mode.
@@ -2417,8 +2694,8 @@ async function useInteraction(cdp, id, checkpoints, expectsDialogue = false, act
         await clickAttack(cdp, false);
       } catch (error) {
         if (error?.fatal || !String(error?.message || error).includes("timed out")) throw error;
-        await waitFor(() => {
-          const state = cdp.lastObservation;
+        await waitFor(async () => {
+          const state = await telemetry(cdp);
           return Number(state?.timestamp_ms) > beforePointer
             && state.dialogue?.visible === false && !state.paused
             && state.player?.can_control === true && state.mouse_mode === 2;
@@ -2459,20 +2736,9 @@ function movementKeyToward(player, target, cameraYaw) {
 }
 
 function movementKeyForCombat(player, target, cameraYaw) {
-  const movement = movementKeyToward(player, target, cameraYaw);
-  // Backpedaling intentionally preserves facing in the game controller. For
-  // a live enemy approach that would leave Kael looking away while the attack
-  // edge is armed, so use the nearer lateral axis to turn without asking the
-  // browser Runtime domain to rotate the camera.
-  if (movement.code !== "KeyS") return movement;
-  const dx = Number(target.position.x) - Number(player.position.x);
-  const dz = Number(target.position.z) - Number(player.position.z);
-  const cameraRightX = Math.cos(cameraYaw);
-  const cameraRightZ = -Math.sin(cameraYaw);
-  const rightAmount = dx * cameraRightX + dz * cameraRightZ;
-  return rightAmount >= 0
-    ? { code: "KeyD", key: "d" }
-    : { code: "KeyA", key: "a" };
+  // Kael now turns toward travel in all eight directions. Replacing reverse
+  // input with a lateral key steers away from an otherwise reachable enemy.
+  return movementKeyToward(player, target, cameraYaw);
 }
 
 async function attackLiveTarget(cdp, meleeInputDistance = 2.84, targetId = "") {
@@ -2486,7 +2752,7 @@ async function attackLiveTarget(cdp, meleeInputDistance = 2.84, targetId = "") {
   let target = selectActiveEnemy(state, targetId);
   let player = state?.player;
   if (!player || !target?.position) return null;
-  const contactDistance = ["ghoulkin", "wychwood_stalker", "bandit", "bog_wretch"].includes(target.id)
+  const contactDistance = ["ghoulkin", "wychwood_stalker", "bandit", "bog_wretch", "captain_senn"].includes(target.id)
     ? Math.min(meleeInputDistance, 1.1) : meleeInputDistance;
   if (Math.hypot(target.position.x - player.position.x, target.position.z - player.position.z) > contactDistance) {
     await approachMovingEnemy(cdp, contactDistance, 5000, target.id);
@@ -2494,6 +2760,12 @@ async function attackLiveTarget(cdp, meleeInputDistance = 2.84, targetId = "") {
     target = selectActiveEnemy(state, targetId);
     player = state?.player;
     if (!player || !target?.position) return null;
+  }
+  if (!state.camera?.locked_target_id) {
+    await tapGameplayKey(cdp, "KeyT", "t", 80);
+    await sleep(180);
+    state = await freshCombatState(cdp);
+    if (!state?.player) return null;
   }
   if (!state.camera?.locked_target_id) {
     const targetYaw = Math.atan2(player.position.x - target.position.x,
@@ -2739,8 +3011,16 @@ async function fightWychwoodPack(cdp, checkpoints, timeout = 150000) {
 }
 
 async function runOpeningCampaign(cdp, url, checkpoints, onStartupReady, reportInteraction = "sister_anwen") {
-  let state = await startNewGame(cdp, `${url}&scenario=opening-campaign-${Date.now()}`, onStartupReady);
+  if (resumeStage === "report") return resumeEarnedJourney(cdp, url, checkpoints);
+  let state = resumeStage === "opening"
+    ? await resumeEarnedJourney(cdp, url, checkpoints)
+    : await startNewGame(cdp, `${url}&scenario=opening-campaign-${Date.now()}`, onStartupReady);
   checkpoints.push({ event: "scenario_start", scenario: "opening-campaign", zone: state.zone });
+  if (fullCampaign && args["finish-line"]) {
+    const screenshot = reportPath.replace(/\.json$/i, "_first_control.png");
+    await capture(cdp, screenshot);
+    checkpoints.push({ event: "first_control_presentation", screenshot, visual: state.player?.visual });
+  }
   if (stopAfter === "startup") {
     if (repeatStartup) {
       // A repeat visit is warm only after the first visit's verified opening
@@ -2757,11 +3037,20 @@ async function runOpeningCampaign(cdp, url, checkpoints, onStartupReady, reportI
     }
     return state;
   }
-  await useInteraction(cdp, "sister_anwen", checkpoints, true);
+  if (!resumeStage) {
+    await useInteraction(cdp, "sister_anwen", checkpoints, true, "__close__");
+    state = await freshTelemetry(cdp);
+    if (!state.quests.objectives_done?.main_road_of_crows?.includes("speak_anwen")) {
+      await useInteraction(cdp, "sister_anwen", checkpoints, true, "__close__");
+      await requireObjective(cdp, "main_road_of_crows", "speak_anwen", "Anwen's actual road briefing");
+    }
+  }
   if (stopAfter === "anwen") return telemetry(cdp);
-  await traverse(cdp, "wychwood", checkpoints);
-  for (const clue of ["corpse", "black_feathers", "claw_marks"]) {
-    await useInteraction(cdp, clue, checkpoints, false);
+  if ((await freshTelemetry(cdp)).zone !== "wychwood") await traverse(cdp, "wychwood", checkpoints);
+  if (!(await freshTelemetry(cdp)).quests.evidence_ready) {
+    for (const clue of ["corpse", "black_feathers", "claw_marks"]) {
+      await useInteraction(cdp, clue, checkpoints, false);
+    }
   }
   await waitFor(
     async () => {
@@ -2790,6 +3079,67 @@ async function runOpeningCampaign(cdp, url, checkpoints, onStartupReady, reportI
   return finalState;
 }
 
+async function resumeEarnedJourney(cdp, url, checkpoints, allowRecovery = Boolean(args["recover-earned"])) {
+  if (cdp.earnedResumeState) return freshTelemetry(cdp);
+  const navigationStarted = Date.now();
+  cdp.startupTimings = { navigation_started_ms: navigationStarted,
+    observation_budget_ms: timeoutMs, kind: "earned_continue", diagnostic_only: false };
+  await cdp.send("Page.bringToFront");
+  await cdp.send("Page.navigate", { url });
+  await waitFor(async () => cdp.evaluate(
+    `location.href.startsWith(${JSON.stringify(url.split("?")[0])}) && document.readyState === "complete"`
+  ), "earned journey page load", timeoutMs);
+  if (await cdp.evaluate('Boolean(document.getElementById("start")) && !window.__ashenOathBoot?.engine_start_ms')) {
+    await activateBootShell(cdp);
+  }
+  await cdp.send("Page.bringToFront");
+  await cdp.send("Emulation.setFocusEmulationEnabled", { enabled: true }).catch(() => {});
+  const menu = await waitFor(async () => {
+    const state = await freshTelemetry(cdp).catch(() => null);
+    return state?.new_game_ready && state.ui?.active_menu === "main"
+      && state.ui.buttons.some(button => button.enabled && (button.text === "Continue"
+        || (allowRecovery && button.text.startsWith("Recovery: Autosave\n")))) ? state : null;
+  }, "earned journey menu and Continue", timeoutMs);
+  cdp.startupTimings.navigation_to_menu_ms = Date.now() - navigationStarted;
+  let action = "Continue";
+  if (!menu.ui.buttons.some(button => button.text === "Continue" && button.enabled)) {
+    const files = await readBrowserPersistence(cdp);
+    const pointer = files["ashen_oath_resume.json"];
+    const saved = files["ashen_oath_autosave.json"];
+    if (!saved?.journey_id || saved.journey_id !== pointer?.journey_id || saved.replay_session) {
+      throw new Error("Earned recovery must be the same recorded non-replay journey");
+    }
+    action = "Recovery: Autosave\n";
+    checkpoints.push({ event: "earned_recovery_explicitly_selected", journey_id: saved.journey_id,
+      source: "auto/primary", saved_at: saved.saved_at_utc, unavailable_pointer_at: pointer.summary?.saved_at });
+  }
+  const selectedFiles = await readBrowserPersistence(cdp);
+  const selectedPointer = selectedFiles?.["ashen_oath_resume.json"];
+  const selectedPath = { quick: "ashen_oath_save.json", auto: "ashen_oath_autosave.json",
+    checkpoint: "ashen_oath_checkpoint.json" }[selectedPointer?.slot_id];
+  cdp.earnedResumeSelection = { pointer: selectedPointer, saved: selectedFiles?.[selectedPath] };
+  const clicked = await chooseMenuButton(cdp, action);
+  const state = await waitFor(async () => {
+    const current = await freshTelemetry(cdp).catch(() => null);
+    return current?.player?.can_control && !current.paused && !current.transition_pending ? current : null;
+  }, "earned journey ordinary Continue", timeoutMs);
+  Object.assign(cdp.startupTimings, { click_started_ms: clicked, control_observed_ms: Date.now(),
+    click_to_control_ms: Date.now() - clicked, navigation_to_control_ms: Date.now() - navigationStarted });
+  const completed = { report: "main_road_of_crows", teeth: "main_teeth_in_rain", ash: "main_ash_at_the_mill",
+    soldier: "main_soldier_without_banner", last_witness: "main_last_witness" }[resumeStage];
+  if (completed && !state.quests.completed.includes(completed)) throw new Error(`Continue did not restore earned ${completed}`);
+  const remainingWaves = state.enemies.filter(enemy => ["ghoulkin", "wychwood_stalker",
+    "wychwood_raider", "wychwood_brute"].includes(enemy.id) && !enemy.dead);
+  if (resumeStage === "opening" && (state.zone !== "wychwood" || remainingWaves.length !== 1
+    || remainingWaves[0].id !== "wychwood_brute" || !remainingWaves[0].active)) {
+    throw new Error("Continue did not preserve the earned four-kill unfinished Wychwood wave");
+  }
+  cdp.earnedResumeState = state;
+  checkpoints.push({ event: "earned_checkpoint_continued", stage: resumeStage, zone: state.zone,
+    remaining_wave_ids: remainingWaves.map(enemy => enemy.id) });
+  return state;
+}
+
 async function runScenario(cdp, url, name, route, checkpoints, onStartupReady) {
   const state = await startNewGame(cdp, `${url}&scenario=${encodeURIComponent(name)}-${Date.now()}`, onStartupReady);
   checkpoints.push({ event: "scenario_start", scenario: name, zone: state.zone, player: state.player.position });
@@ -2799,7 +3149,246 @@ async function runScenario(cdp, url, name, route, checkpoints, onStartupReady) {
 }
 
 async function runFullCampaign(cdp, url, checkpoints, onStartupReady) {
-  return runOpeningThroughFinale(cdp, url, checkpoints, onStartupReady);
+  await runOpeningThroughFinale(cdp, url, checkpoints, onStartupReady);
+  await completeHomecoming(cdp, checkpoints);
+  if (args["finish-line"]) {
+    await runRegionalActivities(cdp, checkpoints);
+    await runEarnedAlternateEndings(cdp, url, checkpoints);
+  }
+  return freshTelemetry(cdp);
+}
+
+async function completeHomecoming(cdp, checkpoints) {
+  let earned = await freshTelemetry(cdp);
+  if (earned.story.flags.aftermath_names_returned && earned.story.flags.aftermath_work_promised
+    && earned.story.flags.aftermath_walk_completed && earned.story.flags.epilogue_presented) {
+    checkpoints.push({ event: "homecoming_restored", zone: earned.zone });
+    return earned;
+  }
+  if (earned.ui?.active_menu === "ending") {
+    await chooseMenuButton(cdp, "Walk the road home");
+  } else if (earned.zone !== "greyfen") {
+    await traverse(cdp, "greyfen", checkpoints);
+  }
+  await waitFor(async () => {
+    const state = await freshTelemetry(cdp);
+    return state?.zone === "greyfen" && state?.player?.can_control
+      && !state?.paused && !state?.transition_pending ? state : null;
+  }, "explicit road-home arrival", 20000);
+  for (const [id, flag] of [["aftermath_names", "aftermath_names_returned"],
+    ["aftermath_work", "aftermath_work_promised"], ["aftermath_road", "aftermath_walk_completed"]]) {
+    earned = await freshTelemetry(cdp);
+    if (earned.story.flags[flag]) continue;
+    await useInteraction(cdp, id, checkpoints, true, "", id !== "aftermath_road");
+  }
+  const state = await freshTelemetry(cdp);
+  if (!state?.story?.flags?.aftermath_names_returned || !state?.story?.flags?.aftermath_work_promised
+    || !state?.story?.flags?.aftermath_walk_completed || !state?.story?.flags?.epilogue_presented) {
+    throw new Error("Witness ending did not complete the earned Anwen/workbench/road homecoming");
+  }
+  checkpoints.push({ event: "complete_homecoming", zone: state.zone });
+  if (state.ui?.active_menu === "ending") {
+    await chooseMenuButton(cdp, "Walk the road home");
+    await waitFor(async () => (await freshTelemetry(cdp))?.player?.can_control,
+      "post-homecoming exploration", 20000);
+  }
+  return freshTelemetry(cdp);
+}
+
+async function runEarnedAlternateEndings(cdp, url, checkpoints) {
+    for (const choice of [
+      { label: "Mercy: release me, keep selected guilt", covenant: "mercy", ending: "free", combat: false },
+      { label: "Duty: bind the covenant to Kael", covenant: "duty", ending: "bind", combat: false },
+      { label: "Ash: destroy the witness", covenant: "ash", ending: "kill", combat: true },
+    ]) {
+      if (args["hart-branch"] && choice.covenant !== args["hart-branch"]) continue;
+      await continueSavedHart(cdp, url, checkpoints);
+      await resolveHartChoice(cdp, choice, checkpoints);
+    }
+}
+
+async function runRegionalActivities(cdp, checkpoints, selected = "all") {
+  const progress = (state, id) => JSON.stringify({
+    active: state.quests.active.includes(id), complete: state.quests.completed.includes(id),
+    objective: state.quests.objectives[id],
+    flags: Object.entries(state.story.flags).filter(([key]) => key.startsWith(`${id}:`) || key === `${id}_outcome`),
+  });
+  const quest = async (id) => {
+    checkpoints.push({ event: "regional_quest_started", id, zone: (await freshTelemetry(cdp)).zone });
+    for (let action = 0; action < 60; action += 1) {
+      const state = await freshTelemetry(cdp);
+      if (state.quests.completed.includes(id)) {
+        checkpoints.push({ event: "regional_quest_completed", id, outcome: state.story.flags[`${id}_outcome`] });
+        return;
+      }
+      const objective = state.quests.objectives[id];
+      const target = state.interactions.find(item => {
+        if (!objective) return item.id === `${id}:offer`;
+        if (item.id === `${id}:${objective}`) return true;
+        const inspection = `${id}:${objective}:inspect:`;
+        return item.id.startsWith(inspection)
+          && !state.story.flags[`${id}:${objective}:seen:${item.id.slice(inspection.length)}`];
+      });
+      if (!target) throw new Error(`Regional quest ${id} has no published action for ${objective || "offer"}`);
+      if (objective === "escort_to_shelter" || (id === "saga_roa_q05" && objective === "make_handover")) {
+        if (!state.story.flags[`${id}:escort_started`]) await useInteraction(cdp, target.id, checkpoints);
+        const started = Date.now();
+        while (Date.now() - started < 90000) {
+          const current = await freshTelemetry(cdp);
+          if (current.quests.objectives[id] !== objective || current.quests.completed.includes(id)) break;
+          const position = current.story.flags[`${id}:escort_position`];
+          if (Array.isArray(position)) {
+            await approachPointWithReplan(cdp, { x: position[0], z: position[2] }, 3000, 1.8);
+          }
+          await sleep(400);
+        }
+        const escorted = await freshTelemetry(cdp);
+        if (escorted.quests.objectives[id] === objective && !escorted.quests.completed.includes(id)) {
+          throw new Error(`${id} escort did not finish within its bounded walk`);
+        }
+        continue;
+      }
+      if ((id === "saga_har_q03" && objective === "confirm_signs")
+        || (id === "saga_roa_q04" && state.story.flags[`${id}:signal_mode_set`])) {
+        if (!state.story.flags[`${id}:left_work_area`]) {
+          const away = state.interactions.filter(item => item.position && !item.id.startsWith(id)
+            && Math.hypot(item.position.x - target.position.x, item.position.z - target.position.z) >= 9)
+            .sort((a, b) => a.distance - b.distance)[0];
+          if (!away) throw new Error(`${id} has no observed departure landmark`);
+          await driveToInteraction(cdp, away.id, checkpoints, 240000,
+            current => Boolean(current.story.flags[`${id}:left_work_area`]));
+        }
+        await driveToInteraction(cdp, target.id, checkpoints, 240000, id === "saga_roa_q04"
+          ? current => current.quests.completed.includes(id) || current.quests.objectives[id] !== objective : null);
+        const returned = await freshTelemetry(cdp);
+        if (returned.quests.objectives[id] !== objective || returned.quests.completed.includes(id)) continue;
+      }
+      const previous = progress(await freshTelemetry(cdp), id);
+      const choice = id === "saga_gre_q04" && objective === "offer_settlement"
+        ? "Void the wager and return the kettle" : "";
+      await useInteraction(cdp, target.id, checkpoints, true, choice, false);
+      await waitFor(async () => {
+        const current = await freshTelemetry(cdp).catch(() => null);
+        return current && progress(current, id) !== previous ? current : null;
+      }, `${id} earned work outcome`, 10000);
+    }
+    throw new Error(`${id} exceeded its authored action count`);
+  };
+  const visit = async (zone, quests = [], secrets = []) => {
+    if ((await freshTelemetry(cdp)).zone !== zone) await traverse(cdp, zone, checkpoints);
+    for (const id of quests) await quest(id);
+    for (const id of secrets) {
+      if ((await freshTelemetry(cdp)).story.flags[`saga_secret_${id}`]) {
+        checkpoints.push({ event: "regional_secret_restored", id, zone });
+        continue;
+      }
+      await useInteraction(cdp, `saga_secret:${id}`, checkpoints, true, "", false);
+      const state = await freshTelemetry(cdp);
+      if (!state.story.flags[`saga_secret_${id}`]) throw new Error(`${id} discovery was not recorded`);
+      checkpoints.push({ event: "regional_secret_earned", id, zone });
+    }
+  };
+  const claimReturn = async (prefix, home) => {
+    const rules = JSON.parse(readFileSync(new URL("../data/progression.json", import.meta.url), "utf8"));
+    const steps = Number(rules.level_cap) - 1;
+    const cap = steps * Number(rules.first_level_xp) + steps * (steps - 1) / 2 * Number(rules.level_step_xp);
+    const region = Object.entries(rules.regions).find(([, value]) => value.sectors.includes(home))?.[0];
+    const rewardId = `return:saga_${prefix}_settled`;
+    const before = (await readBrowserPersistence(cdp))?.["ashen_oath_autosave.json"];
+    if (!before?.progression || !region) throw new Error(`${prefix} return has no earned progression baseline`);
+    const restored = before.progression.claimed_rewards?.[rewardId];
+    const credit = restored ? Number(restored.xp) : Math.min(100, Math.max(0, cap - Number(before.progression.xp)));
+    if (!Number.isInteger(credit) || credit < 0 || credit > 100
+      || (restored && credit < 100 && Number(before.progression.xp) !== cap)) {
+      throw new Error(`${prefix} return has an invalid cap-adjusted reward`);
+    }
+    if (!restored) await useInteraction(cdp, `saga_return:${prefix}`, checkpoints);
+    await waitFor(async () => {
+      const files = await readBrowserPersistence(cdp);
+      const saved = files?.["ashen_oath_autosave.json"];
+      const reward = saved?.progression?.claimed_rewards?.[rewardId];
+      return saved?.journey_id === before.journey_id && reward?.xp === credit
+        && reward.kind === "return" && reward.region === region
+        && saved.progression.saga_return_departures?.[prefix] === true
+        && Number(saved.progression.xp) === Number(before.progression.xp) + (restored ? 0 : credit);
+    }, `${prefix} earned return persisted`, 10000);
+    const screenshot = reportPath.replace(/\.json$/i, `_${prefix}_regional.png`);
+    await capture(cdp, screenshot);
+    checkpoints.push({ event: "regional_return_observed", prefix, home, screenshot,
+      credited_xp: credit, capped: credit < 100, restored: Boolean(restored) });
+  };
+  const returned = async (prefix, home, neighbor) => {
+    await visit(neighbor);
+    await visit(home);
+    await claimReturn(prefix, home);
+  };
+  const ids = (prefix, numbers) => numbers.map(number => `saga_${prefix}_q${String(number).padStart(2, "0")}`);
+  if (selected === "har") {
+    const earned = await freshTelemetry(cdp);
+    if (earned.zone === "hart_glade" && ids("har", [1, 2, 3, 4, 5]).every(id => earned.quests.completed.includes(id))
+      && [1, 2, 3].every(number => earned.story.flags[`saga_secret_HAR-S0${number}`])) {
+      await claimReturn("har", "hart_glade");
+      checkpoints.push({ event: "regional_cells_restored", prefix: "har", quest_count: 5, secret_count: 3 });
+      return;
+    }
+  }
+  if (selected === "all" || selected === "gre") {
+  await visit("greyfen", ids("gre", [1, 2, 3, 4, 5]), ["GRE-S01", "GRE-S02", "GRE-S03"]);
+  await returned("gre", "greyfen", "wychwood");
+  if (selected === "gre") return;
+  }
+  if (selected === "all" || selected === "wyc") {
+  await visit("wychwood", ids("wyc", [1, 2, 3, 4, 5]), ["WYC-S01", "WYC-S02", "WYC-S03"]);
+  // Names has not opened Deep Woods yet; the earned Greyfen route is available.
+  await returned("wyc", "wychwood", "greyfen");
+  if (selected === "wyc") return;
+  }
+  if (selected === "all" || selected === "dep") {
+  if (selected === "all") {
+  await visit("deep_wood");
+  }
+  await visit("old_mill", ids("dep", [1, 5]), ["DEP-S02"]);
+  await visit("burned_farmstead", ids("dep", [2, 3, 4]), ["DEP-S01", "DEP-S03"]);
+  await visit("old_mill");
+  await claimReturn("dep", "old_mill");
+  if (selected === "dep") return;
+  await visit("burned_farmstead");
+  }
+  if (selected === "all" || selected === "roa") {
+  await visit("marsh_crossing", ids("roa", [2, 4]), ["ROA-S01"]);
+  await visit("bandit_road", ids("roa", [1, 3, 5]), ["ROA-S02", "ROA-S03"]);
+  await returned("roa", "bandit_road", "marsh_crossing");
+  if (selected === "roa") return;
+  }
+  if (selected === "all" || selected === "var") {
+  if (selected === "var") {
+    await visit("record_hall");
+    await visit("vargan_court");
+  }
+  await visit("vargan_approach", [], ["VAR-S01"]);
+  await visit("vargan_court", ids("var", [2, 3, 4]), ["VAR-S03"]);
+  await visit("record_hall", ids("var", [1, 5]), ["VAR-S02"]);
+  await returned("var", "record_hall", "vargan_court");
+  if (selected === "var") {
+    await visit("undercroft");
+    return;
+  }
+  }
+  if (selected === "har" && (await freshTelemetry(cdp)).zone === "ruins") {
+    await visit("ruins", ids("har", [1, 2, 4]), ["HAR-S01", "HAR-S02"]);
+  } else if (!(selected === "har" && (await freshTelemetry(cdp)).zone === "hart_glade")) {
+    await visit("undercroft");
+    await visit("assembly");
+  }
+  await visit("hart_glade", ids("har", [3, 5]), ["HAR-S03"]);
+  await visit("ruins", ids("har", [1, 2, 4]), ["HAR-S01", "HAR-S02"]);
+  await visit("hart_glade");
+  await claimReturn("har", "hart_glade");
+  const earned = await freshTelemetry(cdp);
+  checkpoints.push({ event: "regional_route_completed",
+    quest_count: earned.quests.completed.filter(id => /^saga_(gre|wyc|dep|roa|var|har)_q0[1-5]$/.test(id)).length,
+    secret_count: Object.entries(earned.story.flags).filter(([id, value]) => value
+      && /^saga_secret_(GRE|WYC|DEP|ROA|VAR|HAR)-S0[1-3]$/.test(id)).length });
 }
 
 async function fightCemeteryAmbush(cdp, checkpoints, timeout = 60000) {
@@ -2866,20 +3455,34 @@ async function runOpeningToShrine(cdp, url, checkpoints, onStartupReady, resumeA
   } else {
     throw new Error(`Unsupported shrine route checkpoint: ${resumeAt}`);
   }
-  await useInteraction(cdp, "sister_anwen", checkpoints, true);
+  if ((await freshTelemetry(cdp)).quests.completed.includes("main_bell_beneath_greyfen")) {
+    return freshTelemetry(cdp);
+  }
+  // Earned older checkpoints may still need the care introduction and initial
+  // briefing. Each conversation is real input; only the quest outcome advances us.
+  for (let visit = 0; visit < 3; visit += 1) {
+    if ((await freshTelemetry(cdp)).quests.objectives_done?.main_bell_beneath_greyfen?.includes("meet_anwen_gate")) break;
+    await useInteraction(cdp, "sister_anwen", checkpoints, true, "__close__");
+  }
   let state = await freshTelemetry(cdp);
   if (!state?.quests?.objectives_done?.main_bell_beneath_greyfen?.includes("meet_anwen_gate")) {
     throw new Error("Cemetery Anwen conversation did not complete meet_anwen_gate");
   }
   for (const grave of ["grave_harl", "grave_soldier"]) {
-    await useInteraction(cdp, grave, checkpoints);
+    if (!(await freshTelemetry(cdp)).quests.objectives_done?.main_bell_beneath_greyfen?.includes(grave)) {
+      await useInteraction(cdp, grave, checkpoints);
+    }
   }
   state = await freshTelemetry(cdp);
   if (!state?.quests?.objectives_done?.main_bell_beneath_greyfen?.includes("grave_truth")) {
     throw new Error("Two real grave inspections did not complete grave_truth");
   }
-  await fightCemeteryAmbush(cdp, checkpoints);
-  await useInteraction(cdp, "chapel_door", checkpoints);
+  if (!state.quests.objectives_done?.main_bell_beneath_greyfen?.includes("cemetery_ambush")) {
+    await fightCemeteryAmbush(cdp, checkpoints);
+  }
+  if (!(await freshTelemetry(cdp)).quests.objectives_done?.main_bell_beneath_greyfen?.includes("open_chapel")) {
+    await useInteraction(cdp, "chapel_door", checkpoints);
+  }
   state = await freshTelemetry(cdp);
   if (!state?.quests?.objectives_done?.main_bell_beneath_greyfen?.includes("open_chapel")) {
     throw new Error("Real chapel interaction did not open the chapel");
@@ -2892,22 +3495,14 @@ async function runOpeningToShrine(cdp, url, checkpoints, onStartupReady, resumeA
 }
 
 async function runOpeningAndCemetery(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
-  await runOpeningToShrine(cdp, url, checkpoints, onStartupReady, resumeAt);
-  await useInteraction(cdp, "crow_shrine_choice", checkpoints, true, "Cleanse the shrine");
-  const state = await freshTelemetry(cdp);
-  if (state?.story?.flags?.crow_shrine_state !== "cleansed"
-    || !state?.quests?.completed?.includes("main_bell_beneath_greyfen")) {
-    throw new Error("Real shrine choice did not persist the cleansed state");
-  }
-  checkpoints.push({ event: "cemetery_choice_complete", zone: state.zone, outcome: "cleansed" });
-  return state;
+  return runOpeningThroughBellEater(cdp, url, checkpoints, onStartupReady, resumeAt);
 }
 
 async function continueSavedShrine(cdp, url, checkpoints) {
   const resumeUrl = `${url}&shrine_resume=${Date.now()}`;
   await cdp.send("Page.navigate", { url: resumeUrl });
   await waitFor(async () => cdp.evaluate(
-    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && Boolean(document.getElementById("start") && document.querySelector("canvas"))`
+    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && document.readyState === "complete" && Boolean(document.querySelector("canvas"))`
   ), "Shrine checkpoint page reload", 10000);
   await activateBootShell(cdp);
   await waitFor(async () => {
@@ -2933,7 +3528,7 @@ async function continueSavedShrine(cdp, url, checkpoints) {
 }
 
 async function runOpeningShrineMatrix(cdp, url, checkpoints, onStartupReady) {
-  await runOpeningToShrine(cdp, url, checkpoints, onStartupReady);
+  await runOpeningThroughBellEater(cdp, url, checkpoints, onStartupReady, "new_game", false);
   await saveThroughPauseMenu(cdp, checkpoints);
   const choices = [
     { label: "Cleanse the shrine", state: "cleansed" },
@@ -3038,33 +3633,47 @@ async function fightBellEater(cdp, checkpoints, timeout = 90000) {
   }
 }
 
-async function runOpeningThroughBellEater(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
-  await runOpeningAndCemetery(cdp, url, checkpoints, onStartupReady, resumeAt);
+async function runOpeningThroughBellEater(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game", resolveShrine = true) {
+  await runOpeningToShrine(cdp, url, checkpoints, onStartupReady, resumeAt);
   const shrine = await freshTelemetry(cdp);
+  if (shrine.quests.completed.includes("main_bell_beneath_greyfen")) {
+    if (["gre", "to-deep", "to-road", "to-castle", "to-hart"].includes(args["regional-saga"])) {
+      await runRegionalActivities(cdp, checkpoints, "gre");
+    }
+    return freshTelemetry(cdp);
+  }
   const player = shrine?.player?.position;
   if (!player || shrine?.zone !== "greyfen") throw new Error("Shrine route did not leave Kael in Greyfen");
-  // The native route aligns this axis before walking west. Combining both
-  // axes cuts across the facade/bell post when shrine focus ends south of it.
-  const entrance = await approachPointWithReplan(cdp,
-    { x: player.x, y: Number(player.y || 0), z: 8.29 }, 4000, 0.12);
-  if (!entrance?.player?.position || Math.abs(entrance.player.position.z - 8.29) > 0.18) {
-    throw new Error("Physical chapel entrance alignment did not reach the clear aisle");
+  if (!shrine.story.flags.bell_eater_defeated) {
+    // Opening the clue can leave Kael south of the chapel's solid wall. Clear
+    // its southwest corner and grave rows before joining the native west aisle.
+    const approach = [];
+    if (player.x > 15.4 && player.z > 10.45) {
+      approach.push({ x: 15.05, z: player.z });
+    }
+    if (player.x > 13.45 && player.z > 8.54) {
+      approach.push({ x: 15.05, z: 10.25 }, { x: 13.2, z: 10.25 });
+    }
+    approach.push({ x: 13.2, z: 8.29 });
+    for (const point of approach) {
+      const reached = await approachPointWithReplan(cdp, point, 8000, 0.16,
+        (position, state) => {
+          const boss = selectActiveEnemy(state, "bell_eater");
+          return boss?.position && Math.hypot(boss.position.x - position.x, boss.position.z - position.z) <= 1.7;
+        });
+      if (!reached?.player?.position || reached.player.dead || !reached.player.can_control) {
+        throw new Error("Physical cemetery approach lost player control");
+      }
+      const boss = selectActiveEnemy(reached, "bell_eater");
+      if (boss?.position && Math.hypot(boss.position.x - reached.player.position.x,
+        boss.position.z - reached.player.position.z) <= 1.7) break;
+      if (Math.hypot(point.x - reached.player.position.x, point.z - reached.player.position.z) > 0.3) {
+        throw new Error(`Physical cemetery approach did not reach ${JSON.stringify(point)}`);
+      }
+    }
+    checkpoints.push({ event: "chapel_combat_approach_reached", player: (await freshTelemetry(cdp)).player.position });
+    await fightBellEater(cdp, checkpoints);
   }
-  // Prove the doorway with the actual capsule crossing, not a centimetre-
-  // precise staging coordinate that digital input can overshoot between frames.
-  await turnCameraToward(cdp, 0, entrance.camera?.yaw);
-  const doorway = await holdTowardPoint(cdp, { x: 13.2, y: Number(player.y || 0), z: 8.29 }, 8000,
-    "", (position, state) => {
-      const boss = selectActiveEnemy(state, "bell_eater");
-      return position.x < 13.7 || (position.x < 14.9 && boss?.position
-        && Math.hypot(boss.position.x - position.x, boss.position.z - position.z) <= 1.7);
-    }, 0);
-  if (!doorway?.player?.position || doorway.player.position.x >= 14.9
-    || doorway.player.dead || !doorway.player.can_control) {
-    throw new Error("Physical chapel doorway crossing did not reach the combat approach");
-  }
-  checkpoints.push({ event: "chapel_doorway_crossed", x: doorway.player.position.x, z: doorway.player.position.z });
-  await fightBellEater(cdp, checkpoints);
   await tapGameplayKey(cdp, "Digit1", "1", 80);
   await waitFor(async () => {
     const current = await freshCombatState(cdp).catch(() => null);
@@ -3108,7 +3717,16 @@ async function runOpeningThroughBellEater(cdp, url, checkpoints, onStartupReady,
     throw new Error("Bell-Eater summon remains alive after real combat input");
   }
   checkpoints.push({ event: "bell_eater_aftermath_complete", zone: finalState.zone });
-  return finalState;
+  if (!resolveShrine) return finalState;
+  await useInteraction(cdp, "crow_shrine_choice", checkpoints, true, "Cleanse the shrine");
+  const resolved = await freshTelemetry(cdp);
+  if (resolved?.story?.flags?.crow_shrine_state !== "cleansed"
+    || !resolved?.quests?.completed?.includes("main_bell_beneath_greyfen")) {
+    throw new Error("Real post-defeat shrine choice did not persist the cleansed state");
+  }
+  checkpoints.push({ event: "cemetery_choice_complete", zone: resolved.zone, outcome: "cleansed" });
+  if (["gre", "to-deep", "to-road", "to-castle", "to-hart"].includes(args["regional-saga"])) await runRegionalActivities(cdp, checkpoints, "gre");
+  return freshTelemetry(cdp);
 }
 
 async function fightBogWretch(cdp, checkpoints, timeout = 90000) {
@@ -3175,12 +3793,39 @@ async function fightBogWretch(cdp, checkpoints, timeout = 90000) {
 }
 
 async function runOpeningThroughTeeth(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
+  if (resumeStage === "teeth") {
+    await resumeEarnedJourney(cdp, url, checkpoints);
+    if (["wyc", "opening", "to-deep", "to-road", "to-castle", "to-hart"].includes(args["regional-saga"])) {
+      await runRegionalActivities(cdp, checkpoints, "wyc");
+    }
+    return freshTelemetry(cdp);
+  }
   await runOpeningThroughBellEater(cdp, url, checkpoints, onStartupReady, resumeAt);
+  if (args["regional-saga"] === "opening") await runRegionalActivities(cdp, checkpoints, "gre");
   let state = await freshTelemetry(cdp);
   if (!state?.quests?.active?.includes("main_teeth_in_rain")) throw new Error("Bell aftermath did not activate Teeth in the Rain");
-  await useInteraction(cdp, "mira", checkpoints, true, "I will read the chapel register");
+  const remappedUse = state.settings?.custom_bindings?.interact
+    ?.some(event => event.type === "key" && event.keycode === 4194340);
+  const needsMira = !state.quests.objectives_done?.main_teeth_in_rain?.includes("speak_mira");
+  if (needsMira) await useInteraction(cdp, "mira", checkpoints, true, "I will read the chapel register", true,
+    remappedUse ? ["F9", "F9"] : ["KeyE", "e"]);
   state = await freshTelemetry(cdp);
   if (!state?.quests?.objectives_done?.main_teeth_in_rain?.includes("speak_mira")) throw new Error("Mira briefing did not complete through dialogue input");
+  if (remappedUse) {
+    if (needsMira) checkpoints.push({ event: "browser_remapped_interaction", id: "mira", key: "F9" });
+    if (!args["restore-settings-report"]) throw new Error("Resumed F9 route needs its recorded original settings");
+    const previous = JSON.parse(readFileSync(resolve(String(args["restore-settings-report"])), "utf8"))
+      .browsers?.find(browser => resolve(browser.profile_dir || "") === retainedProfile)?.last_telemetry?.settings;
+    if (!previous || Object.keys(previous.custom_bindings || {}).length) throw new Error("Original profile/default binding baseline unavailable");
+    await exerciseBrowserSettings(cdp, checkpoints, previous);
+  }
+  await prepareCampaignHealing(cdp, checkpoints);
+  state = await freshTelemetry(cdp);
+  if (Number(state.player.health) < 75 && Number(state.inventory?.items?.redroot_potion || 0) > 0) {
+    await tapGameplayKey(cdp, "KeyR", "r", 80);
+    await waitFor(async () => Number((await freshTelemetry(cdp)).player.health) > Number(state.player.health),
+      "earned potion before Bog approach", 5000);
+  }
   await useInteraction(cdp, "chapel_names", checkpoints);
   state = await freshTelemetry(cdp);
   if (!state?.quests?.objectives_done?.main_teeth_in_rain?.includes("read_chapel_names")) throw new Error("Chapel names did not advance Teeth in the Rain");
@@ -3188,13 +3833,12 @@ async function runOpeningThroughTeeth(cdp, url, checkpoints, onStartupReady, res
   await useInteraction(cdp, "ritual_stones", checkpoints);
   state = await freshTelemetry(cdp);
   if (!state?.quests?.objectives_done?.main_teeth_in_rain?.includes("name_the_dead")) throw new Error("Ritual stones did not name the dead");
-  await traverse(cdp, "deep_wood", checkpoints);
-  state = await freshTelemetry(cdp);
-  if (state?.zone !== "deep_wood" || !state?.enemies?.some((enemy) => enemy.id === "bog_wretch" && !enemy.dead)) {
-    throw new Error("Deep Wood arrival omitted the quest-gated Bog Wretch");
-  }
-  const player = state.player?.position;
-  await holdTowardPoint(cdp, { x: 0, y: Number(player?.y || 0), z: -3.7 }, 12000);
+  await useInteraction(cdp, "saga_bog_challenge", checkpoints);
+  state = await waitFor(async () => {
+    const current = await freshTelemetry(cdp);
+    return current?.zone === "wychwood" && current?.enemies?.some((enemy) => enemy.id === "bog_wretch" && !enemy.dead)
+      ? current : null;
+  }, "earned northern Wychwood Bog encounter", 10000);
   await fightBogWretch(cdp, checkpoints);
   await useInteraction(cdp, "bog_core_choice", checkpoints, true, "Destroy the memory core");
   state = await freshTelemetry(cdp);
@@ -3204,7 +3848,8 @@ async function runOpeningThroughTeeth(cdp, url, checkpoints, onStartupReady, res
     throw new Error("Bog core input did not persist the choice and unlock Names They Burned");
   }
   checkpoints.push({ event: "teeth_complete", zone: state.zone, bog_core_fate: "destroyed" });
-  return state;
+  if (["wyc", "opening", "to-deep", "to-road", "to-castle", "to-hart"].includes(args["regional-saga"])) await runRegionalActivities(cdp, checkpoints, "wyc");
+  return freshTelemetry(cdp);
 }
 
 async function requireObjective(cdp, questId, objectiveId, label) {
@@ -3216,12 +3861,20 @@ async function requireObjective(cdp, questId, objectiveId, label) {
 }
 
 async function runOpeningThroughRegister(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
+  if (resumeStage === "teeth") {
+    const earned = await resumeEarnedJourney(cdp, url, checkpoints);
+    if (earned.quests.completed.includes("main_names_they_burned")
+      || earned.quests.objectives_done?.main_names_they_burned?.includes("reconstruct_register")) return earned;
+  }
   await runOpeningThroughTeeth(cdp, url, checkpoints, onStartupReady, resumeAt);
-  await traverse(cdp, "wychwood", checkpoints);
+  if ((await freshTelemetry(cdp))?.zone !== "wychwood") await traverse(cdp, "wychwood", checkpoints);
   await traverse(cdp, "greyfen", checkpoints);
   let state = await freshTelemetry(cdp);
   if (!state?.quests?.active?.includes("main_names_they_burned")) {
     throw new Error("Deep Wood return lost the active Names chapter");
+  }
+  if (fullCampaign || resumeStage === "teeth" || ["to-deep", "to-road", "to-castle", "to-hart"].includes(args["regional-saga"])) {
+    await checkEarnedOilPersistence(cdp, url, checkpoints);
   }
   for (const [id, objective] of [
     ["register_anwen", "fragment_anwen"],
@@ -3248,11 +3901,58 @@ async function runOpeningThroughRegister(cdp, url, checkpoints, onStartupReady, 
   return state;
 }
 
+async function checkEarnedOilPersistence(cdp, url, checkpoints) {
+  const before = await freshTelemetry(cdp);
+  const bottles = Number(before?.inventory?.items?.moon_oil || 0);
+  if (bottles < 1) throw new Error("The earned Bog resolution did not leave a Moon Oil bottle for its real preparation check");
+  await tapGameplayKey(cdp, "Tab", "Tab", 80);
+  await waitFor(async () => (await freshTelemetry(cdp))?.ui?.inventory_visible, "oil preparation menu", 5000);
+  await chooseMenuButton(cdp, "Preparation");
+  await chooseMenuButton(cdp, "Supplies");
+  await chooseMenuButton(cdp, "Moon Oil");
+  await chooseMenuButton(cdp, "Apply oil");
+  const applied = await waitFor(async () => {
+    const current = await freshTelemetry(cdp);
+    return current?.inventory?.active_oil === "moon_oil"
+      && Number(current.inventory.items.moon_oil) === bottles - 1 ? current : null;
+  }, "one-bottle oil application", 5000);
+  if (Math.abs(Number(applied.inventory.oil_remaining_seconds) - 300) > 0.01) {
+    throw new Error("Base Moon Oil did not start with five minutes of active-play duration");
+  }
+  await sleep(1000);
+  const paused = await freshTelemetry(cdp);
+  if (Math.abs(Number(paused.inventory.oil_remaining_seconds) - 300) > 0.01) {
+    throw new Error("Oil duration elapsed inside preparation");
+  }
+  await closeInventoryThroughInput(cdp);
+  await waitFor(async () => {
+    const current = await freshTelemetry(cdp);
+    return current?.player?.can_control && Number(current.inventory?.oil_remaining_seconds) < 299.5 ? current : null;
+  }, "active-play oil countdown", 10000);
+  await saveThroughPauseMenu(cdp, checkpoints, true);
+  const files = await readBrowserPersistence(cdp);
+  const savedOil = files?.["ashen_oath_save.json"]?.inventory;
+  await continueSavedOpening(cdp, url, checkpoints, "oil_active");
+  const resumed = await freshTelemetry(cdp);
+  const controlObservedMs = cdp.startupRuns?.at(-1)?.control_observed_ms || Date.now();
+  const activeObservationSeconds = (Date.now() - controlObservedMs) / 1000 + 1.5;
+  if (!savedOil || resumed?.inventory?.active_oil !== "moon_oil"
+    || Number(resumed.inventory.items.moon_oil) !== bottles - 1
+    || Number(resumed.inventory.oil_remaining_seconds) > Number(savedOil.oil_remaining_seconds) + 0.01
+    || Number(savedOil.oil_remaining_seconds) - Number(resumed.inventory.oil_remaining_seconds) > activeObservationSeconds) {
+    throw new Error("Normal Continue did not preserve the earned last-bottle coating and remaining time");
+  }
+  checkpoints.push({ event: "earned_oil_persistence", remaining_seconds: resumed.inventory.oil_remaining_seconds,
+    bottles_remaining: resumed.inventory.items.moon_oil });
+}
+
 async function prepareCampaignHealing(cdp, checkpoints) {
   let state = await freshTelemetry(cdp);
   if (state?.zone !== "greyfen") throw new Error("Campaign supply preparation requires a real Greyfen return");
+  const carriedRemedies = value => Number(value.inventory?.items?.redroot_potion || 0)
+    + Number(value.inventory?.items?.bitterleaf_tonic || 0);
   const before = Number(state.inventory?.items?.redroot_potion || 0);
-  if (before >= 3) return state;
+  if (carriedRemedies(state) >= 3) return state;
   if (Number(state.inventory?.ingredients?.redroot || 0) >= 2
     && Number(state.inventory?.ingredients?.bitterleaf || 0) >= 1) {
     await tapGameplayKey(cdp, "Tab", "Tab", 80);
@@ -3260,36 +3960,40 @@ async function prepareCampaignHealing(cdp, checkpoints) {
       const current = await freshTelemetry(cdp);
       return current?.ui?.inventory_visible ? current : null;
     }, "preparation menu for carried healing", 5000);
-    await chooseMenuButton(cdp, "Craft Redroot Potion");
+    await chooseMenuButton(cdp, "Preparation");
+    await chooseMenuButton(cdp, "Supplies");
+    await chooseMenuButton(cdp, "Redroot Potion");
+    await chooseMenuButton(cdp, "Craft 1");
     state = await waitFor(async () => {
       const current = await freshTelemetry(cdp);
       return Number(current?.inventory?.items?.redroot_potion) === before + 1 ? current : null;
     }, "actual Redroot crafting", 5000);
-    await chooseMenuButton(cdp, "Close");
+    await closeInventoryThroughInput(cdp);
     await waitFor(async () => {
       const current = await freshTelemetry(cdp);
       return !current?.ui?.inventory_visible && current?.player?.can_control ? current : null;
     }, "preparation menu close", 5000);
   }
-  if (Number(state.inventory?.items?.redroot_potion || 0) < 3) {
+  if (carriedRemedies(state) < 3) {
     await driveToInteraction(cdp, "mira_apothecary", checkpoints);
     await tapGameplayKey(cdp, "KeyE", "e", 80);
     state = await waitFor(async () => {
       const current = await freshTelemetry(cdp);
       return current?.ui?.inventory_visible ? current : null;
     }, "Mira's apothecary open", 5000);
-    while (Number(state.inventory?.items?.redroot_potion || 0) < 3) {
+    await chooseMenuButton(cdp, "Redroot Potion");
+    while (carriedRemedies(state) < 3) {
       const potions = Number(state.inventory.items.redroot_potion || 0);
       const coin = Number(state.inventory.coin || 0);
       if (coin < 6) throw new Error("Earned coin cannot fund the remaining campaign healing");
-      await chooseMenuButton(cdp, "Buy Redroot Potion");
+      await chooseMenuButton(cdp, "Buy 1");
       state = await waitFor(async () => {
         const current = await freshTelemetry(cdp);
         return Number(current?.inventory?.items?.redroot_potion) === potions + 1
           && Number(current?.inventory?.coin) === coin - 6 ? current : null;
       }, "Mira's paid potion purchase", 5000);
     }
-    await chooseMenuButton(cdp, "Close");
+    await closeInventoryThroughInput(cdp);
     state = await waitFor(async () => {
       const current = await freshTelemetry(cdp);
       return !current?.ui?.inventory_visible && current?.player?.can_control ? current : null;
@@ -3336,6 +4040,8 @@ async function fightRootbound(cdp, checkpoints, timeout = 90000) {
   let previousHealth = Infinity;
   let lastProgress = started;
   let lastPotion = 0;
+  let firedArrow = false;
+  let oathfireUsed = false;
   await tapGameplayKey(cdp, "Digit2", "2", 80);
   let state = await waitFor(async () => {
     const current = await freshCombatState(cdp).catch(() => null);
@@ -3380,8 +4086,24 @@ async function fightRootbound(cdp, checkpoints, timeout = 90000) {
       lastPotion = Date.now();
       continue;
     }
+    if (firedArrow && !oathfireUsed) {
+      await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased",
+        x: viewport.width * 0.5, y: viewport.height * 0.5, button: "right", buttons: 0, clickCount: 1 });
+      await tapGameplayKey(cdp, "KeyC", "c", 1700);
+      oathfireUsed = true;
+      checkpoints.push({ event: "rootbound_oathfire_input" });
+      await sleep(800);
+      await cdp.send("Input.dispatchMouseEvent", { type: "mousePressed",
+        x: viewport.width * 0.5, y: viewport.height * 0.5, button: "right", buttons: 2, clickCount: 1 });
+      continue;
+    }
     if (Number(state.inventory?.items?.standard_arrow || 0) <= 0) {
-      throw new Error(`Rootbound survived all carried standard arrows at ${boss.health} health`);
+      await cdp.send("Input.dispatchMouseEvent", { type: "mouseReleased",
+        x: viewport.width * 0.5, y: viewport.height * 0.5, button: "right", buttons: 0, clickCount: 1 });
+      if (state.player.weapon_mode !== "sword") await tapGameplayKey(cdp, "Digit1", "1", 80);
+      await approachMovingEnemy(cdp, 2.84, 5000, "rootbound_colossus");
+      await attackLiveTarget(cdp, 2.84, "rootbound_colossus");
+      continue;
     }
     const arrowsBefore = Number(state.inventory.items.standard_arrow);
     // Native holds aim across shots.1.35s includes0.24s recovery plus full draw;
@@ -3393,6 +4115,7 @@ async function fightRootbound(cdp, checkpoints, timeout = 90000) {
       return after?.story?.flags?.rootbound_colossus_defeated
         || Number(after?.inventory?.items?.standard_arrow ?? arrowsBefore) < arrowsBefore ? after : null;
     }, "Rootbound arrow consumption", 3000);
+    firedArrow = true;
   }
   throw new Error("Rootbound did not resolve through real bow input");
   } finally {
@@ -3405,10 +4128,18 @@ async function fightRootbound(cdp, checkpoints, timeout = 90000) {
 
 async function runOpeningThroughRootbound(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
   await runOpeningThroughRegister(cdp, url, checkpoints, onStartupReady, resumeAt);
-  await traverse(cdp, "deep_wood", checkpoints);
+  if ((await freshTelemetry(cdp)).story.flags.rootbound_colossus_defeated) return freshTelemetry(cdp);
+  if ((await freshTelemetry(cdp)).zone !== "deep_wood") await traverse(cdp, "deep_wood", checkpoints);
   const arrival = await freshTelemetry(cdp);
   if (arrival?.zone !== "deep_wood" || !arrival?.enemies?.some((enemy) => enemy.id === "rootbound_colossus" && !enemy.dead)) {
     throw new Error("Reconstructed register did not stage Rootbound on Deep Wood return");
+  }
+  if (!arrival.story.flags.root_testimony_protected) await useInteraction(cdp, "root_testimony", checkpoints);
+  if (!arrival.story.flags.rootbound_arena_entered) await useInteraction(cdp, "rootbound_challenge", checkpoints);
+  for (const index of [2, 0]) {
+    if (!(await freshTelemetry(cdp)).story.flags[`root_redirected_${index}`]) {
+      await useInteraction(cdp, `redirect_root_${index}`, checkpoints);
+    }
   }
   const finalState = await fightRootbound(cdp, checkpoints);
   if (!finalState?.story?.flags?.rootbound_colossus_defeated) {
@@ -3419,9 +4150,12 @@ async function runOpeningThroughRootbound(cdp, url, checkpoints, onStartupReady,
 
 async function runOpeningThroughNames(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
   await runOpeningThroughRootbound(cdp, url, checkpoints, onStartupReady, resumeAt);
+  const earned = await freshTelemetry(cdp);
+  if (earned.quests.completed.includes("main_names_they_burned")) return earned;
   await traverse(cdp, "wychwood", checkpoints);
   await traverse(cdp, "greyfen", checkpoints);
   const before = await freshTelemetry(cdp);
+  if (before.quests.completed.includes("main_names_they_burned")) return before;
   if (!before?.quests?.active?.includes("main_names_they_burned")
     || !before?.quests?.objectives_done?.main_names_they_burned?.includes("reconstruct_register")
     || before?.story?.flags?.names_policy) {
@@ -3438,30 +4172,51 @@ async function runOpeningThroughNames(cdp, url, checkpoints, onStartupReady, res
   return after;
 }
 
+async function closeInventoryThroughInput(cdp) {
+  for (let step = 0; step < 2; step += 1) {
+    const before = await freshTelemetry(cdp);
+    if (!before.ui?.inventory_visible) return;
+    await tapKey(cdp, "Escape", "Escape", 80, true);
+    const after = await waitFor(async () => {
+      const current = await freshTelemetry(cdp);
+      return current.timestamp_ms > before.timestamp_ms ? current : null;
+    }, "journal Back handoff", 5000);
+    if (!after.ui?.inventory_visible) return;
+  }
+  throw new Error("Ordinary journal Back did not close after its reader/entries surfaces");
+}
+
 async function chooseMenuButton(cdp, labelPrefix) {
   const selected = await waitFor(async () => {
     const current = await freshTelemetry(cdp).catch(() => null);
     const buttons = current?.ui?.buttons || [];
     const matches = buttons.map((button, index) => button.text?.startsWith(labelPrefix) ? index : -1)
       .filter((index) => index >= 0);
-    if (matches.length !== 1) return null;
+    if (matches.length !== 1 && !(["Back", "Resume", "Close"].includes(labelPrefix) && matches.length > 1
+      && matches.every(index => buttons[index].text === labelPrefix && buttons[index].enabled))) return null;
     const focused = buttons.findIndex((button) => button.focused);
-    return focused >= 0 ? { buttons, focused, target: matches[0] } : null;
+    const focusedName = focused >= 0 ? buttons[focused].name : current.ui.focused_control;
+    return focusedName ? { buttons, focusedName, target: matches[0], inventory: current.ui.inventory_visible } : null;
   }, `menu button ${labelPrefix}`, 5000);
   if (!selected.buttons[selected.target].enabled) throw new Error(`Menu button is disabled: ${labelPrefix}`);
-  let focused = selected.focused;
-  const count = selected.buttons.length;
-  for (let step = 0; focused !== selected.target && step < count; step += 1) {
-    const down = selected.target > focused;
-    await tapKey(cdp, down ? "ArrowDown" : "ArrowUp", down ? "ArrowDown" : "ArrowUp", 70);
+  let focusedName = selected.focusedName;
+  const targetName = selected.buttons[selected.target].name;
+  let down = true;
+  // Settings also contains sliders. They own real keyboard focus even though
+  // the read-only button list deliberately contains only buttons.
+  for (let step = 0; focusedName !== targetName && step < selected.buttons.length + 8; step += 1) {
+    const focused = selected.buttons.findIndex(button => button.name === focusedName);
+    if (focused >= 0) down = selected.target > focused;
+    const key = selected.inventory ? "Tab" : down ? "ArrowDown" : "ArrowUp";
+    await tapKey(cdp, key, key, 70);
     const changed = await waitFor(async () => {
       const current = await freshTelemetry(cdp).catch(() => null);
-      const index = (current?.ui?.buttons || []).findIndex((button) => button.focused);
-      return index >= 0 && index !== focused ? { index } : null;
+      const owner = current?.ui?.focused_control;
+      return owner && owner !== focusedName ? { name: owner } : null;
     }, `menu focus ${labelPrefix}`, 3000);
-    focused = changed.index;
+    focusedName = changed.name;
   }
-  if (focused !== selected.target) throw new Error(`Menu focus did not reach ${labelPrefix}`);
+  if (focusedName !== targetName) throw new Error(`Menu focus did not reach ${labelPrefix}`);
   const activationStartedMs = Date.now();
   await tapKey(cdp, "Enter", "Enter", 80, true);
   return activationStartedMs;
@@ -3481,7 +4236,8 @@ async function readBrowserPersistence(cdp) {
         transaction.onerror = () => { db.close(); reject(transaction.error); };
         const store = transaction.objectStore("FILE_DATA");
         store.getAllKeys().onsuccess = event => {
-          for (const name of ["ashen_oath_save.json", "ashen_oath_settings.json"]) {
+          for (const name of ["ashen_oath_save.json", "ashen_oath_settings.json",
+            "ashen_oath_resume.json", "ashen_oath_checkpoint.json", "ashen_oath_autosave.json"]) {
             const path = event.target.result.find(key => String(key).endsWith("/" + name));
             if (!path) continue;
             store.get(path).onsuccess = entry => {
@@ -3500,6 +4256,10 @@ async function readBrowserPersistence(cdp) {
 function persistedSaveMatches(files, state, savedAfterMs) {
   const saved = files?.["ashen_oath_save.json"];
   const preferences = files?.["ashen_oath_settings.json"];
+  const pointer = files?.["ashen_oath_resume.json"];
+  const selectedPath = { quick: "ashen_oath_save.json", checkpoint: "ashen_oath_checkpoint.json",
+    auto: "ashen_oath_autosave.json" }[pointer?.slot_id];
+  const selectedSave = selectedPath && files?.[selectedPath];
   const equal = (actual, expected) => {
     if (expected && typeof expected === "object") {
       return actual && Object.keys(expected).every(key => equal(actual[key], expected[key]))
@@ -3507,7 +4267,10 @@ function persistedSaveMatches(files, state, savedAfterMs) {
     }
     return actual === expected;
   };
-  return Boolean(saved && preferences
+  return Boolean(saved && preferences && pointer && selectedSave
+    && pointer.source === "primary" && pointer.journey_id === saved.journey_id
+    && selectedSave.journey_id === pointer.journey_id
+    && selectedSave.saved_at_utc === pointer.summary?.saved_at
     && typeof saved.saved_at_utc === "string"
     && Date.parse(saved.saved_at_utc.endsWith("Z") ? saved.saved_at_utc : saved.saved_at_utc + "Z") >= savedAfterMs - 1000
     && saved.zone === state.zone
@@ -3515,6 +4278,9 @@ function persistedSaveMatches(files, state, savedAfterMs) {
     && equal(saved.story_state?.flags, state.story?.flags)
     && equal(saved.inventory?.items, state.inventory?.items)
     && saved.inventory?.coin === state.inventory?.coin
+    && saved.inventory?.active_oil === state.inventory?.active_oil
+    && saved.inventory?.oil_version === state.inventory?.oil_version
+    && Math.abs(Number(saved.inventory?.oil_remaining_seconds) - Number(state.inventory?.oil_remaining_seconds)) < 0.05
     && equal(Object.keys(saved.quests?.active || {}).sort(), [...state.quests.active].sort())
     && equal(Object.keys(saved.quests?.completed || {}).sort(), [...state.quests.completed].sort()));
 }
@@ -3538,15 +4304,16 @@ async function saveThroughPauseMenu(cdp, checkpoints, allowExisting = false) {
   // existence alone is not proof that a refresh can restore the earned save.
   await waitFor(async () => persistedSaveMatches(await readBrowserPersistence(cdp), saved, savedAfterMs),
     "durable earned manual save and settings", 20000);
-  checkpoints.push({ event: allowExisting ? "manual_save_overwritten" : "manual_save_created", zone: saved.zone });
+  checkpoints.push({ event: before?.saves?.manual ? "manual_save_overwritten" : "manual_save_created", zone: saved.zone });
   await tapKey(cdp, "Escape", "Escape", 80, true);
   await waitFor(async () => {
     const current = await freshTelemetry(cdp).catch(() => null);
     return current?.player?.can_control && !current?.paused ? current : null;
   }, "post-save gameplay control", 5000);
+  return savedAfterMs;
 }
 
-async function continueSavedOpening(cdp, url, checkpoints, expectedStage = "reported") {
+async function continueSavedOpening(cdp, url, checkpoints, expectedStage = "reported", expectedZone = "greyfen") {
   const resumeUrl = `${url}&resume=${Date.now()}`;
   const navigationStartedMs = Date.now();
   await cdp.send("Page.navigate", { url: resumeUrl });
@@ -3567,7 +4334,7 @@ async function continueSavedOpening(cdp, url, checkpoints, expectedStage = "repo
   const clickStartedMs = await chooseMenuButton(cdp, "Continue");
   const resumed = await waitFor(async () => {
     const current = await freshTelemetry(cdp).catch(() => null);
-    return current?.zone === "greyfen" && current?.player?.can_control && !current?.transition_pending
+    return current?.zone === expectedZone && current?.player?.can_control && !current?.transition_pending
       ? current : null;
   }, "real Continue gameplay control", timeoutMs);
   const controlObservedMs = Date.now();
@@ -3633,6 +4400,12 @@ async function continueSavedOpening(cdp, url, checkpoints, expectedStage = "repo
       || !resumed?.story?.flags?.ash_measure_recovered
       || resumed?.story?.flags?.ash_measure_fate) {
       throw new Error("Continue lost the recovered, unresolved miller's measure checkpoint");
+    }
+  } else if (expectedStage === "oil_active") {
+    if (resumed?.inventory?.active_oil !== "moon_oil"
+      || !resumed?.quests?.completed?.includes("main_teeth_in_rain")
+      || !resumed?.quests?.active?.includes("main_names_they_burned")) {
+      throw new Error("Continue lost the earned Bog resolution, Names chapter or applied oil");
     }
   } else if (expectedStage === "startup") {
     if (!resumed.saves?.manual) throw new Error("Continue lost the earned startup manual save");
@@ -4014,9 +4787,56 @@ async function runOpeningSaveContinue(cdp, url, checkpoints, onStartupReady) {
   if (!original?.quests?.completed?.includes("main_road_of_crows")) {
     throw new Error("Opening route did not earn its save checkpoint");
   }
-  const changed = await exerciseBrowserSettings(cdp, checkpoints);
-  await saveThroughPauseMenu(cdp, checkpoints);
-  const resumed = await continueSavedOpening(cdp, url, checkpoints);
+  let changed;
+  if (args["settings-baseline-report"]) {
+    const baselinePath = resolve(String(args["settings-baseline-report"]));
+    const baseline = JSON.parse(readFileSync(baselinePath, "utf8"));
+    const previous = baseline.browsers?.find(browser => resolve(browser.profile_dir || "") === retainedProfile);
+    let state = await freshTelemetry(cdp);
+    if (!resumeStage || !previous?.last_telemetry?.settings
+      || Object.keys(previous.last_telemetry.settings.custom_bindings || {}).length) {
+      throw new Error("Settings resumption needs the same earned profile and original default bindings");
+    }
+    if (!state.settings?.custom_bindings?.interact?.some(event => event.type === "key" && event.keycode === 4194340)) {
+      await tapGameplayKey(cdp, "Escape", "Escape", 80);
+      await chooseMenuButton(cdp, "Controls");
+      await chooseMenuButton(cdp, "Customize Controls");
+      await chooseMenuButton(cdp, "Interact");
+      await tapKey(cdp, "F9", "F9", 80);
+      await waitFor(async () => {
+        const files = await readBrowserPersistence(cdp);
+        return files["ashen_oath_settings.json"]?.custom_bindings?.interact
+          ?.some(event => event.type === "key" && event.keycode === 4194340);
+      }, "durable F9 remap before save or reload", 20000);
+      checkpoints.push({ event: "browser_remap_durable_before_save", key: "F9" });
+      await chooseMenuButton(cdp, "Back");
+      await chooseMenuButton(cdp, "Back");
+      await chooseMenuButton(cdp, "Resume");
+      state = await waitFor(async () => {
+        const current = await freshTelemetry(cdp);
+        return current.player?.can_control && !current.paused ? current : null;
+      }, "remap-only resume", 5000);
+    }
+    const binding = state.settings.custom_bindings.interact;
+    changed = { original: previous.last_telemetry.settings, interactBinding: JSON.stringify(binding),
+      settings: Object.fromEntries(["master_volume", "subtitle_scale", "reduced_motion"].map(key => [key, state.settings[key]])) };
+    checkpoints.push({ event: "browser_settings_resumed", baseline: baselinePath, settings: changed.settings });
+  } else {
+    changed = await exerciseBrowserSettings(cdp, checkpoints);
+  }
+  const savedAfterMs = await saveThroughPauseMenu(cdp, checkpoints, Boolean(resumeStage));
+  const earned = await freshTelemetry(cdp);
+  const resumed = await continueSavedOpening(cdp, url, checkpoints, resumeStage ? "startup" : "reported");
+  const files = await readBrowserPersistence(cdp);
+  if (!persistedSaveMatches(files, resumed, savedAfterMs) || files["ashen_oath_resume.json"]?.slot_id !== "quick"
+    || Math.hypot(resumed.player.position.x - earned.player.position.x,
+      resumed.player.position.z - earned.player.position.z) > 0.15
+    || Math.abs(resumed.player.health - earned.player.health) > 0.01
+    || !isDeepStrictEqual(resumed.quests.objectives, earned.quests.objectives)) {
+    throw new Error("Normal Continue did not restore the exact durable earned Quick Save");
+  }
+  checkpoints.push({ event: "earned_quick_save_restored", journey_id: files["ashen_oath_resume.json"].journey_id,
+    slot: "quick", zone: resumed.zone, health: resumed.player.health });
   for (const key of ["master_volume", "subtitle_scale", "reduced_motion"]) {
     if (resumed.settings?.[key] !== changed.settings[key]) throw new Error(`Browser ${key} did not persist after Continue`);
   }
@@ -4026,13 +4846,124 @@ async function runOpeningSaveContinue(cdp, url, checkpoints, onStartupReady) {
     throw new Error("Browser remapping/audio settings did not persist after Continue");
   }
   checkpoints.push({ event: "browser_settings_persisted", settings: changed.settings });
-  await useInteraction(cdp, "sister_anwen", checkpoints, true, "", true, ["F9", "F9"]);
+  await useInteraction(cdp, "sister_anwen", checkpoints, true, "__close__", true, ["F9", "F9"]);
   checkpoints.push({ event: "browser_remapped_interaction", id: "sister_anwen", key: "F9" });
   await exerciseBrowserSettings(cdp, checkpoints, changed.original);
   return freshTelemetry(cdp);
 }
 
 async function runBrowserSmoke(cdp, url, checkpoints, onStartupReady) {
+  if (args["resume-quality"]) {
+    const earned = await resumeEarnedJourney(cdp, url, checkpoints);
+    const files = await readBrowserPersistence(cdp);
+    const quick = files["ashen_oath_save.json"];
+    const original = args["restore-quality"] || earned.settings.quality_preset;
+    await exerciseBrowserSettings(cdp, checkpoints, { quality_preset: "quality" }, true);
+    const restored = await resumeEarnedJourney(cdp, url, checkpoints, false);
+    if (restored.settings.quality_preset !== "quality"
+      || restored.runtime_packs?.quality_materials?.state !== "ready"
+      || !restored.player.visual?.ready || !restored.player.visual?.bindings_valid
+      || !isDeepStrictEqual(restored.inventory.items, earned.inventory.items)
+      || Math.abs(restored.player.health - earned.player.health) > 0.05) {
+      throw new Error("Persisted Quality did not restore its required pack, complete hero and earned supplies/health");
+    }
+    checkpoints.push({ event: "persisted_quality_normal_continue", zone: restored.zone,
+      quality_materials: restored.runtime_packs.quality_materials.state, bindings_valid: restored.player.visual.bindings_valid });
+    await exerciseBrowserSettings(cdp, checkpoints, { quality_preset: original }, true);
+    if (!isDeepStrictEqual((await readBrowserPersistence(cdp))["ashen_oath_save.json"], quick)) {
+      throw new Error("Quality comparison changed the genuine pre-ending Quick Save");
+    }
+    checkpoints.push({ event: "original_quality_restored_durable", preset: original, quick_save_unchanged: true });
+    return freshTelemetry(cdp);
+  }
+  if (args["resume-growth"]) {
+    await resumeEarnedJourney(cdp, url, checkpoints);
+    await driveToInteraction(cdp, "shrine_prayer", checkpoints);
+    await releaseMovementKeys(cdp);
+    const before = await freshTelemetry(cdp);
+    const initialFiles = await readBrowserPersistence(cdp);
+    const initial = initialFiles["ashen_oath_autosave.json"];
+    if (initial?.zone !== "greyfen" || !Number.isInteger(initial.progression?.marks) || initial.progression.marks < 2
+      || Object.values(initial.progression?.unlocked || {}).some(Boolean)) {
+      throw new Error("Growth recheck requires the earned unspent Greyfen progression; no practices will be reset implicitly");
+    }
+    const quick = initialFiles["ashen_oath_save.json"];
+    const original = initial.progression;
+    const waitForAutosave = async (unlocked, marks, started) => waitFor(async () => {
+      const files = await readBrowserPersistence(cdp);
+      const saved = files["ashen_oath_autosave.json"];
+      const pointer = files["ashen_oath_resume.json"];
+      const savedTime = typeof saved?.saved_at_utc === "string"
+        ? Date.parse(saved.saved_at_utc.endsWith("Z") ? saved.saved_at_utc : saved.saved_at_utc + "Z") : NaN;
+      if (!isDeepStrictEqual(files["ashen_oath_save.json"], quick)) {
+        throw new Error("The genuine pre-ending Quick Save changed during autosave-only actions");
+      }
+      if (!saved || saved.journey_id !== initial.journey_id || pointer?.slot_id !== "auto"
+        || pointer.source !== "primary" || pointer.journey_id !== saved.journey_id
+        || pointer.summary?.saved_at !== saved.saved_at_utc
+        || !Number.isFinite(savedTime) || savedTime < started - 1000
+        || !isDeepStrictEqual(Object.keys(saved.progression?.unlocked || {}).filter(id => saved.progression.unlocked[id]).sort(), [...unlocked].sort())
+        || saved.progression?.marks !== marks) return null;
+      if (saved.progression.xp !== original.xp || saved.progression.issued_marks !== original.issued_marks
+        || !isDeepStrictEqual(saved.progression.claimed_rewards, original.claimed_rewards)
+        || !isDeepStrictEqual(saved.progression.saga_entitlements, original.saga_entitlements)
+        || !isDeepStrictEqual(saved.inventory.items, before.inventory.items)
+        || Math.abs(saved.player_health.health - before.player.health) > 0.05) {
+        throw new Error("Practice purchase/respec altered earned XP, entitlements, supplies or health");
+      }
+      return saved;
+    }, "durable automatic save and matching Continue pointer", 20000);
+    const openGrowth = async () => {
+      await tapGameplayKey(cdp, "Tab", "Tab", 80);
+      await waitFor(async () => (await freshTelemetry(cdp))?.ui?.inventory_visible, "real journal", 5000);
+      await chooseMenuButton(cdp, "Growth");
+    };
+    await openGrowth();
+    for (const [index, [id, title]] of [["keen_edge", "Keen Edge"], ["measured_riposte", "Measured Riposte"]].entries()) {
+      await chooseMenuButton(cdp, title + " - 1 Mark");
+      const started = await chooseMenuButton(cdp, "Learn - 1 Oath Mark");
+      await waitForAutosave(index ? ["keen_edge", "measured_riposte"] : ["keen_edge"], original.marks - index - 1, started);
+      checkpoints.push({ event: "earned_practice_learned_durable", id, marks: original.marks - index - 1 });
+    }
+    await closeInventoryThroughInput(cdp);
+    await resumeEarnedJourney(cdp, url, checkpoints, false);
+    await openGrowth();
+    const learned = await freshTelemetry(cdp);
+    for (const title of ["Keen Edge", "Measured Riposte"]) {
+      if (!learned.ui.buttons.some(button => button.text === title + " - Learned")) {
+        throw new Error(`${title} was not restored by normal Continue`);
+      }
+    }
+    checkpoints.push({ event: "learned_prerequisite_chain_normal_continue", ids: ["keen_edge", "measured_riposte"] });
+    const redistributed = await chooseMenuButton(cdp, "Redistribute all practices - free");
+    await waitForAutosave([], original.marks, redistributed);
+    await closeInventoryThroughInput(cdp);
+    await resumeEarnedJourney(cdp, url, checkpoints, false);
+    const finalFiles = await readBrowserPersistence(cdp);
+    const final = finalFiles["ashen_oath_autosave.json"];
+    if (final?.journey_id !== initial.journey_id || final.progression?.marks !== original.marks
+      || Object.values(final.progression?.unlocked || {}).some(Boolean)
+      || !isDeepStrictEqual(finalFiles["ashen_oath_save.json"], quick)) {
+      throw new Error("Respec did not survive normal Continue with the exact earned journey/Quick Save");
+    }
+    checkpoints.push({ event: "earned_respec_durable_normal_continue", journey_id: final.journey_id,
+      marks: final.progression.marks, xp: final.progression.xp, quick_save_unchanged: true });
+    return freshTelemetry(cdp);
+  }
+  if (args["resume-controls"]) {
+    const earned = await resumeEarnedJourney(cdp, url, checkpoints);
+    if (!earned.settings.custom_bindings?.interact?.some(binding => binding.type === "key" && binding.keycode === 4194340)) {
+      throw new Error("Controls continuation did not restore its earned F9 binding");
+    }
+    await useInteraction(cdp, "sister_anwen", checkpoints, true, "", true, ["F9", "F9"]);
+    checkpoints.push({ event: "browser_remapped_interaction", id: "sister_anwen", key: "F9" });
+    // This isolated smoke profile was fresh before our four preference changes.
+    await exerciseBrowserSettings(cdp, checkpoints, {
+      master_volume: 0.85, subtitle_scale: 1, reduced_motion: false, quality_preset: "balanced",
+    });
+    checkpoints.push({ event: "browser_controls_targeted_resume_completed" });
+    return freshTelemetry(cdp);
+  }
   const initial = await startNewGame(cdp, `${url}&scenario=compatibility-smoke-${Date.now()}`, onStartupReady);
   checkpoints.push({ event: "scenario_start", scenario: "compatibility-smoke", zone: initial.zone });
   await tapGameplayKey(cdp, "KeyW", "w", 250);
@@ -4064,23 +4995,31 @@ async function runBrowserSmoke(cdp, url, checkpoints, onStartupReady) {
     }
     if (rotation < Math.PI * 2) throw new Error(`Camera orbit covered only ${rotation} radians`);
     await tapGameplayKey(cdp, "PageUp", "PageUp", 4000);
+    if (!(await freshTelemetry(cdp)).camera?.first_person) throw new Error("Zoom-in input did not reach first person");
     const capture = await cdp.send("Page.captureScreenshot", { format: "png" });
     const path = reportPath.replace(/\.json$/i, "_first_person.png");
     writeFileSync(path, Buffer.from(capture.data, "base64"));
     checkpoints.push({ event: "camera_orbit_and_zoom", radians: rotation, zoom_input: "PageUp held 4 seconds", screenshot: path });
     await tapGameplayKey(cdp, "PageDown", "PageDown", 2200);
+    const returned = await freshTelemetry(cdp);
+    if (returned.camera?.first_person || !returned.player.visual?.ready || !returned.player.visual?.bindings_valid
+      || !returned.player.visual.meshes?.some(mesh => mesh.visible && mesh.surfaces?.every(surface => surface.texture))) {
+      throw new Error("Zoom-out did not restore Kael's complete textured body");
+    }
+    checkpoints.push({ event: "camera_third_person_body_restored" });
   }
+  const changedSettings = args["settings-smoke"] ? await exerciseBrowserSettings(cdp, checkpoints) : null;
   await saveThroughPauseMenu(cdp, checkpoints);
   const earned = await freshTelemetry(cdp);
   const resumed = await continueSavedOpening(cdp, url, checkpoints, "startup");
   for (const key of ["settings", "inventory"]) {
-    if (JSON.stringify(resumed[key]) !== JSON.stringify(earned[key])) {
+    if (!isDeepStrictEqual(resumed[key], earned[key])) {
       throw new Error(`Continue changed earned ${key}`);
     }
   }
-  if (JSON.stringify(resumed.story?.flags) !== JSON.stringify(earned.story?.flags)
-    || JSON.stringify(resumed.quests?.active) !== JSON.stringify(earned.quests?.active)
-    || JSON.stringify(resumed.quests?.completed) !== JSON.stringify(earned.quests?.completed)
+  if (!isDeepStrictEqual(resumed.story?.flags, earned.story?.flags)
+    || !isDeepStrictEqual([...(resumed.quests?.active || [])].sort(), [...(earned.quests?.active || [])].sort())
+    || !isDeepStrictEqual([...(resumed.quests?.completed || [])].sort(), [...(earned.quests?.completed || [])].sort())
     || Math.hypot(resumed.player.position.x - earned.player.position.x,
       resumed.player.position.z - earned.player.position.z) > 0.15) {
     throw new Error("Continue changed the earned story or location");
@@ -4093,10 +5032,15 @@ async function runBrowserSmoke(cdp, url, checkpoints, onStartupReady) {
     throw new Error("Continue did not restore keyboard control");
   }
   checkpoints.push({ event: "browser_continue_input", zone: final.zone });
+  if (changedSettings) {
+    await useInteraction(cdp, "sister_anwen", checkpoints, true, "", true, ["F9", "F9"]);
+    checkpoints.push({ event: "browser_remapped_interaction", id: "sister_anwen", key: "F9" });
+    await exerciseBrowserSettings(cdp, checkpoints, changedSettings.original);
+  }
   return final;
 }
 
-async function exerciseBrowserSettings(cdp, checkpoints, restore = null) {
+async function exerciseBrowserSettings(cdp, checkpoints, restore = null, qualityOnly = false) {
   const before = await freshTelemetry(cdp);
   await tapGameplayKey(cdp, "Escape", "Escape", 80);
   const paused = await waitFor(async () => {
@@ -4115,9 +5059,10 @@ async function exerciseBrowserSettings(cdp, checkpoints, restore = null) {
     return state?.ui?.active_menu === "settings"
       && buttons.some(button => button.text === "Next Page")
       && buttons.some(button => button.text === "Previous Page")
-      && buttons.some(button => button.focused && button.text !== "Settings") ? state : null;
+      && state.ui.focused_control ? state : null;
   }, "settings controls published after pause", 5000);
   const cycleSetting = async (label, key, maximum) => {
+    await locateSetting(label);
     for (let count = 0; count < maximum; count += 1) {
       const previous = (await freshTelemetry(cdp)).settings[key];
       if (restore && previous === restore[key]) return;
@@ -4138,23 +5083,49 @@ async function exerciseBrowserSettings(cdp, checkpoints, restore = null) {
       const current = await freshTelemetry(cdp).catch(() => null);
       const buttons = current?.ui?.buttons || [];
       return current?.ui?.active_menu === "settings"
-        && new Set(buttons.map(button => button.text)).size === buttons.length
-        && buttons.some(button => button.focused)
+        && current.ui.focused_control
         && buttons.map(button => button.text).join("\n") !== previous ? current : null;
     }, `settings ${label} publication`, 5000);
   };
-  for (let page = 0; page < 3; page += 1) {
-    const state = await freshTelemetry(cdp);
-    if (state.ui.buttons.some(button => button.text.startsWith("Master Volume"))) break;
-    const next = state.ui.buttons.find(button => button.text === "Next Page");
-    await changeSettingsPage(state, next?.enabled ? "Next Page" : "Previous Page");
+  const locateSetting = async (label) => {
+    let state = await freshTelemetry(cdp);
+    const contains = () => state.ui.buttons.some(button => button.text.startsWith(label));
+    if (contains()) return;
+    for (let page = 0; page < 5; page += 1) {
+      if (!state.ui.buttons.some(button => button.text === "Previous Page" && button.enabled)) break;
+      state = await changeSettingsPage(state, "Previous Page");
+      if (contains()) return;
+    }
+    for (let page = 0; page < 5; page += 1) {
+      if (!state.ui.buttons.some(button => button.text === "Next Page" && button.enabled)) break;
+      state = await changeSettingsPage(state, "Next Page");
+      if (contains()) return;
+    }
+    throw new Error(`Settings has no reachable ${label} control`);
+  };
+  if (qualityOnly) {
+    await cycleSetting("Visual Preset", "quality_preset", 3);
+    const preset = restore.quality_preset;
+    await waitFor(async () => (await readBrowserPersistence(cdp))["ashen_oath_settings.json"]?.quality_preset === preset,
+      "durable selected visual preset", 20000);
+    await chooseMenuButton(cdp, "Back");
+    await chooseMenuButton(cdp, "Resume");
+    const result = await waitFor(async () => {
+      const state = await freshTelemetry(cdp).catch(() => null);
+      return state?.player?.can_control && !state.paused && state.settings.quality_preset === preset ? state : null;
+    }, "requested visual preset gameplay control", timeoutMs);
+    for (const key of ["master_volume", "subtitle_scale", "reduced_motion", "custom_bindings"]) {
+      if (!isDeepStrictEqual(result.settings[key], before.settings[key])) throw new Error(`Quality switch changed unrelated preference ${key}`);
+    }
+    checkpoints.push({ event: "visual_preset_ui_durable", preset });
+    return result;
   }
   await cycleSetting("Master Volume", "master_volume", 5);
-  await changeSettingsPage(await freshTelemetry(cdp), "Next Page");
-  await cycleSetting("Subtitle Size", "subtitle_scale", 3);
+  await cycleSetting("Subtitle Size", "subtitle_scale", 5);
   await cycleSetting("Reduced Motion", "reduced_motion", 2);
   if (!restore) {
-    for (const size of [{ width: 1920, height: 1080 }, { width: 1280, height: 720 }]) {
+    const requestedSize = { ...viewport };
+    for (const size of [{ width: 1920, height: 1080 }, requestedSize]) {
       Object.assign(viewport, size);
       await cdp.send("Emulation.setDeviceMetricsOverride", { ...size, deviceScaleFactor: 1, mobile: false });
       await sleep(180);
@@ -4186,6 +5157,18 @@ async function exerciseBrowserSettings(cdp, checkpoints, restore = null) {
     }, "browser F9 interaction binding", 5000);
   }
   await chooseMenuButton(cdp, "Back");
+  const controls = await waitFor(async () => {
+    const state = await freshTelemetry(cdp);
+    return state.ui?.active_menu === "controls" ? state : null;
+  }, "controls parent after remap", 5000);
+  const focused = controls.ui.buttons.find(button => button.focused);
+  const logical = controls.ui.viewport;
+  if (!focused || !logical || focused.position.y < 0
+    || focused.position.y + focused.size.y > logical.y + 1) {
+    throw new Error("Restored Controls keyboard focus is outside the visible menu");
+  }
+  checkpoints.push({ event: "browser_controls_focus_visible", focused: focused.text });
+  await chooseMenuButton(cdp, "Back");
   await chooseMenuButton(cdp, "Resume");
   const result = await waitFor(async () => {
     const state = await freshTelemetry(cdp).catch(() => null);
@@ -4207,6 +5190,9 @@ async function exerciseBrowserSettings(cdp, checkpoints, restore = null) {
 
 async function runOpeningThroughAshPreparation(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
   await runOpeningThroughNames(cdp, url, checkpoints, onStartupReady, resumeAt);
+  const earned = await freshTelemetry(cdp);
+  if (earned.zone === "old_mill"
+    && earned.quests.objectives_done?.main_ash_at_the_mill?.includes("reach_mill")) return earned;
   await prepareCampaignHealing(cdp, checkpoints);
   await driveToInteraction(cdp, "tor_forge", checkpoints);
   await tapGameplayKey(cdp, "KeyE", "e", 80);
@@ -4216,11 +5202,12 @@ async function runOpeningThroughAshPreparation(cdp, url, checkpoints, onStartupR
   }, "Tor's forge vendor open", 5000);
   const startingArrows = Number(opened.inventory?.items?.standard_arrow || 0);
   const startingCoin = Number(opened.inventory?.coin || 0);
-  if (startingArrows < 0 || startingArrows > 24 || startingCoin < 0) {
+  if (!Number.isInteger(startingArrows) || startingArrows < 0 || !Number.isInteger(startingCoin) || startingCoin < 0) {
     throw new Error("Tor's vendor opened with invalid carried arrow or coin bounds");
   }
   if (startingArrows < 5) {
-    await chooseMenuButton(cdp, "Claim Tor's free emergency arrows");
+    await chooseMenuButton(cdp, "Emergency arrows");
+    await chooseMenuButton(cdp, "Claim emergency reserve");
     await waitFor(async () => {
       const current = await freshTelemetry(cdp).catch(() => null);
       return Number(current?.inventory?.items?.standard_arrow) === 5
@@ -4228,17 +5215,17 @@ async function runOpeningThroughAshPreparation(cdp, url, checkpoints, onStartupR
     }, "Tor's free emergency refill", 5000);
   }
   const refilled = Math.max(5, startingArrows);
-  const purchases = Math.max(0, 20 - refilled);
-  if (startingCoin < purchases) throw new Error(`Campaign coin ${startingCoin} cannot fund ${purchases} standard arrows`);
+  const purchases = Math.min(startingCoin, Math.max(0, 20 - refilled));
+  if (purchases) await chooseMenuButton(cdp, "Standard Arrow");
   for (let purchased = 0; purchased < purchases; purchased += 1) {
-    await chooseMenuButton(cdp, "Buy Standard Arrow");
+    await chooseMenuButton(cdp, "Buy 1");
     await waitFor(async () => {
       const current = await freshTelemetry(cdp).catch(() => null);
       return Number(current?.inventory?.items?.standard_arrow) === refilled + purchased + 1
         && Number(current?.inventory?.coin) === startingCoin - purchased - 1 ? current : null;
     }, `Tor arrow purchase ${purchased + 1}`, 5000);
   }
-  await chooseMenuButton(cdp, "Close");
+  await closeInventoryThroughInput(cdp);
   const closed = await waitFor(async () => {
     const current = await freshTelemetry(cdp).catch(() => null);
     return !current?.ui?.inventory_visible && current?.player?.can_control ? current : null;
@@ -4291,13 +5278,6 @@ async function fightAshMillPack(cdp, checkpoints, timeout = 90000) {
       lastDamage = Date.now();
     }
     if (Date.now() - lastDamage > 22000) throw new Error(`Ash mill combat stalled at ${enemy.health} health`);
-    const locked = state.camera?.locked_target_position;
-    if (state.camera?.locked_target_id !== "ghoulkin" || !locked
-      || Math.hypot(locked.x - enemy.position.x, locked.z - enemy.position.z) > 0.6) {
-      await tapGameplayKey(cdp, "KeyT", "t", 80);
-      await sleep(280);
-      continue;
-    }
     if (Number(state.player.health) < 65 && Date.now() - lastPotion > 6000
       && Number(state.inventory?.items?.redroot_potion || 0) > 0) {
       await tapGameplayKey(cdp, "KeyR", "r", 80);
@@ -4316,11 +5296,15 @@ async function fightAshMillPack(cdp, checkpoints, timeout = 90000) {
 }
 
 async function fightAshwing(cdp, checkpoints, timeout = 90000) {
+  await tapGameplayKey(cdp, "Digit2", "2", 80);
+  await waitFor(async () => {
+    const equipped = await freshCombatState(cdp).catch(() => null);
+    return equipped?.player?.weapon_mode === "bow" ? equipped : null;
+  }, "Ashwing bow equip", 5000);
   const started = Date.now();
   let lastDamage = started;
   let lastHealth = Infinity;
   let lastPotion = 0;
-  let oathfireUsed = false;
   while (Date.now() - started < timeout) {
     const state = await combatTelemetry(cdp);
     if (state?.story?.flags?.ashwing_defeated) {
@@ -4335,21 +5319,17 @@ async function fightAshwing(cdp, checkpoints, timeout = 90000) {
       lastDamage = Date.now();
     }
     if (Date.now() - lastDamage > 25000) throw new Error(`Ashwing combat stalled at ${boss.health} health`);
-    if (state.camera?.locked_target_id !== "ashwing") {
-      await tapGameplayKey(cdp, "KeyT", "t", 80);
-      await sleep(300);
+    const distance = Math.hypot(boss.position.x - state.player.position.x,
+      boss.position.z - state.player.position.z);
+    if (distance > 6.0) {
+      await approachMovingEnemy(cdp, 6.0, 5000, "ashwing");
       continue;
     }
-    if (!oathfireUsed) {
-      await tapGameplayKey(cdp, "KeyC", "c", 1700);
-      oathfireUsed = true;
-      checkpoints.push({ event: "ashwing_oathfire_input" });
-      await sleep(350);
-      await tapGameplayKey(cdp, "Digit2", "2", 80);
-      await waitFor(async () => {
-        const equipped = await freshCombatState(cdp).catch(() => null);
-        return equipped?.player?.weapon_mode === "bow" ? equipped : null;
-      }, "Ashwing bow equip", 5000);
+    if (state.camera?.locked_target_id !== "ashwing") {
+      await turnCameraToward(cdp, Math.atan2(state.player.position.x - boss.position.x,
+        state.player.position.z - boss.position.z), state.camera?.yaw);
+      await tapGameplayKey(cdp, "KeyT", "t", 80);
+      await sleep(300);
       continue;
     }
     if (Number(state.player.health) < 70 && Date.now() - lastPotion > 2000
@@ -4374,10 +5354,19 @@ async function fightAshwing(cdp, checkpoints, timeout = 90000) {
 
 async function runOpeningToMiller(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
   await runOpeningThroughAshPreparation(cdp, url, checkpoints, onStartupReady, resumeAt);
-  await useInteraction(cdp, "millstones", checkpoints);
+  if (!(await freshTelemetry(cdp)).quests.objectives_done?.main_ash_at_the_mill?.includes("inspect_millstones")) {
+    await useInteraction(cdp, "millstones", checkpoints);
+  }
   await requireObjective(cdp, "main_ash_at_the_mill", "inspect_millstones", "Real millstone inspection");
-  await fightAshMillPack(cdp, checkpoints);
-  await fightAshwing(cdp, checkpoints);
+  if (!(await freshTelemetry(cdp)).quests.objectives_done?.main_ash_at_the_mill?.includes("mill_encounter")) {
+    await fightAshMillPack(cdp, checkpoints);
+  }
+  const prepared = await freshTelemetry(cdp);
+  if (!prepared.story.flags.ashwing_defeated && !prepared.story.flags.ashwing_perch_grounded) {
+    await useInteraction(cdp, "mill_ground_perch", checkpoints);
+  }
+  if (!(await freshTelemetry(cdp)).story.flags.ashwing_defeated) await fightAshwing(cdp, checkpoints);
+  await completeMillWorkerRescue(cdp, url, checkpoints);
   const state = await freshTelemetry(cdp);
   if (state?.zone !== "old_mill" || !state?.story?.flags?.ashwing_defeated
     || state?.story?.flags?.mill_fate
@@ -4387,7 +5376,67 @@ async function runOpeningToMiller(cdp, url, checkpoints, onStartupReady, resumeA
   return state;
 }
 
+async function completeMillWorkerRescue(cdp, url, checkpoints) {
+  for (const [id, flag] of [["mill_record_chest", "mill_records_saved"], ["mill_sluice", "mill_escape_route_open"]]) {
+    if (!(await freshTelemetry(cdp)).story.flags[flag]) await useInteraction(cdp, id, checkpoints);
+  }
+  let state = await freshTelemetry(cdp);
+  if (state.story.flags.mill_workers_rescued) return;
+  let interrupted = false;
+  if (cdp.earnedResumeState?.zone === "old_mill" && cdp.earnedResumeState.story.flags.mill_escort_started) {
+    // Freeze the selection before Continue; loading may legitimately autosave.
+    const { pointer, saved } = cdp.earnedResumeSelection || {};
+    const expected = Number(saved?.story_state?.flags?.mill_escort_progress);
+    const observed = Number(state.story.flags.mill_escort_progress || 0);
+    const activeSeconds = (Date.now() - cdp.startupTimings.control_observed_ms) / 1000 + 1.5;
+    if (pointer?.source !== "primary" || saved?.journey_id !== pointer?.journey_id
+      || saved?.saved_at_utc !== pointer?.summary?.saved_at
+      || !saved?.story_state?.flags?.mill_escort_started || !(expected > 0 && expected < 1)
+      || observed < expected - 0.01 || observed > expected + activeSeconds * 1.55 / 10.5) {
+      throw new Error("Earned Continue did not restore the selected unfinished worker escort");
+    }
+    interrupted = true;
+    checkpoints.push({ event: "mill_worker_escort_durable_continue", saved_progress: expected, observed_progress: observed });
+  }
+  if (!state.story.flags.mill_escort_started) await useInteraction(cdp, "mill_workers", checkpoints);
+  const started = Date.now();
+  while (Date.now() - started < 90000) {
+    state = await freshTelemetry(cdp);
+    if (state.story.flags.mill_workers_rescued) {
+      checkpoints.push({ event: "mill_workers_escorted", records_saved: Boolean(state.story.flags.mill_records_saved) });
+      return;
+    }
+    const progress = Number(state.story.flags.mill_escort_progress || 0);
+    if (!interrupted && progress > 0.08 && progress < 0.8) {
+      await saveThroughPauseMenu(cdp, checkpoints, true);
+      const files = await readBrowserPersistence(cdp);
+      const saved = files?.["ashen_oath_save.json"];
+      const savedProgress = Number(saved?.story_state?.flags?.mill_escort_progress);
+      if (!saved?.story_state?.flags?.mill_escort_started || !(savedProgress > 0 && savedProgress < 1)) {
+        throw new Error("Interrupted worker escort was not durably saved");
+      }
+      const resumed = await continueSavedOpening(cdp, url, checkpoints, "startup", "old_mill");
+      const observed = Number(resumed.story.flags.mill_escort_progress || 0);
+      const activeSeconds = (Date.now() - (cdp.startupRuns?.at(-1)?.control_observed_ms || Date.now())) / 1000 + 1.5;
+      if (resumed.zone !== "old_mill" || !resumed.story.flags.mill_escort_started
+        || resumed.story.flags.mill_workers_rescued || observed < savedProgress - 0.01
+        || observed > savedProgress + activeSeconds * 1.55 / 10.5) {
+        throw new Error("Normal Continue lost or completed the interrupted worker escort");
+      }
+      checkpoints.push({ event: "mill_worker_escort_durable_continue", saved_progress: savedProgress, observed_progress: observed });
+      interrupted = true;
+      continue;
+    }
+    // Observe the retained route's saved progress; never relocate the workers.
+    const point = { x: -4.4 + 2.9 * progress, z: -2.1 + 10.1 * progress };
+    await approachPointWithReplan(cdp, point, 1800, 1.8);
+    await sleep(150);
+  }
+  throw new Error("Workers did not reach the south yard through their ordinary escort");
+}
+
 async function runOpeningThroughAsh(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
+  if (resumeStage === "ash") return resumeEarnedJourney(cdp, url, checkpoints);
   await runOpeningToMiller(cdp, url, checkpoints, onStartupReady, resumeAt);
   await useInteraction(cdp, "miller_record", checkpoints, true, "Preserve the ledger");
   const state = await freshTelemetry(cdp);
@@ -4397,14 +5446,15 @@ async function runOpeningThroughAsh(cdp, url, checkpoints, onStartupReady, resum
     throw new Error("Real mill ledger choice did not preserve Ash and open Soldier Without a Banner");
   }
   checkpoints.push({ event: "ash_mill_completed", outcome: "preserved", next_chapter: "main_soldier_without_banner" });
-  return state;
+  if (["dep", "to-deep", "to-road", "to-castle", "to-hart"].includes(args["regional-saga"])) await runRegionalActivities(cdp, checkpoints, "dep");
+  return freshTelemetry(cdp);
 }
 
 async function continueSavedMiller(cdp, url, checkpoints) {
   const resumeUrl = `${url}&miller_resume=${Date.now()}`;
   await cdp.send("Page.navigate", { url: resumeUrl });
   await waitFor(async () => cdp.evaluate(
-    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && Boolean(document.getElementById("start") && document.querySelector("canvas"))`
+    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && document.readyState === "complete" && Boolean(document.querySelector("canvas"))`
   ), "Miller checkpoint page reload", 10000);
   await activateBootShell(cdp);
   await waitFor(async () => {
@@ -4485,13 +5535,6 @@ async function fightSennGuards(cdp, checkpoints, timeout = 90000) {
       lastDamage = Date.now();
     }
     if (Date.now() - lastDamage > 22000) throw new Error(`Senn guard combat stalled at ${enemy.health} health`);
-    const locked = state.camera?.locked_target_position;
-    if (state.camera?.locked_target_id !== "bandit" || !locked
-      || Math.hypot(locked.x - enemy.position.x, locked.z - enemy.position.z) > 0.6) {
-      await tapGameplayKey(cdp, "KeyT", "t", 80);
-      await sleep(280);
-      continue;
-    }
     if (Number(state.player.health) < 65 && Date.now() - lastPotion > 6000
       && Number(state.inventory?.items?.redroot_potion || 0) > 0) {
       await tapGameplayKey(cdp, "KeyR", "r", 80);
@@ -4511,7 +5554,10 @@ async function fightSennGuards(cdp, checkpoints, timeout = 90000) {
 
 async function runOpeningToSenn(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
   await runOpeningThroughAsh(cdp, url, checkpoints, onStartupReady, resumeAt);
-  for (const zone of ["burned_farmstead", "marsh_crossing", "bandit_road"]) {
+  const approach = ["old_mill", "burned_farmstead", "marsh_crossing", "bandit_road"];
+  const source = approach.indexOf((await freshTelemetry(cdp)).zone);
+  if (source < 0) throw new Error("Senn continuation is outside the earned road approach");
+  for (const zone of approach.slice(source + 1)) {
     await traverse(cdp, zone, checkpoints);
   }
   const arrival = await requireObjective(cdp, "main_soldier_without_banner", "reach_bandit_road", "Physical Bandit Road arrival");
@@ -4519,7 +5565,12 @@ async function runOpeningToSenn(cdp, url, checkpoints, onStartupReady, resumeAt 
   if (arrival?.zone !== "bandit_road" || guards.length !== 2 || arrival?.story?.flags?.mill_fate !== "preserved") {
     throw new Error("Bandit Road did not stage two living guards with the preserved ledger");
   }
-  await fightSennGuards(cdp, checkpoints);
+  await saveThroughPauseMenu(cdp, checkpoints, true);
+  checkpoints.push({ event: "senn_earned_pre_duel_checkpoint", zone: arrival.zone });
+  await useInteraction(cdp, "saga_senn_challenge", checkpoints);
+  await waitFor(async () => (await freshCombatState(cdp)).enemies
+    .some(enemy => enemy.id === "captain_senn" && !enemy.dead), "Senn's actual duel actor", 5000);
+  await fightSennDuel(cdp, checkpoints);
   const state = await freshTelemetry(cdp);
   if (state?.zone !== "bandit_road" || state?.story?.flags?.senn_fate
     || !state?.quests?.active?.includes("main_soldier_without_banner")
@@ -4529,7 +5580,51 @@ async function runOpeningToSenn(cdp, url, checkpoints, onStartupReady, resumeAt 
   return state;
 }
 
+async function fightSennDuel(cdp, checkpoints, timeout = 90000) {
+  await tapGameplayKey(cdp, "Digit1", "1", 80);
+  const started = Date.now();
+  let lastPotion = 0;
+  while (Date.now() - started < timeout) {
+    const state = await freshCombatState(cdp);
+    const captain = state.enemies.find(enemy => enemy.id === "captain_senn");
+    if (state.story.flags.saga_senn_guard_broken) {
+      if (!captain || captain.dead || captain.health <= 0 || state.story.flags.senn_fate
+        || !state.quests.objectives_done?.main_soldier_without_banner?.includes("senn_confrontation")) {
+        throw new Error("Senn's duel did not yield alive with fate still undecided");
+      }
+      checkpoints.push({ event: "senn_duel_yielded", health: captain.health,
+        resolution: captain.health > 40 ? "clean_parry" : "guard_break", elapsed_ms: Date.now() - started });
+      return state;
+    }
+    if (state.player.dead || state.player.health <= 0) throw new Error("Kael died in Senn's duel");
+    if (!captain || captain.dead) throw new Error("Senn disappeared before yielding");
+    if (state.player.health < 65 && Date.now() - lastPotion > 6000
+      && Number(state.inventory.items.redroot_potion || 0) > 0) {
+      await tapGameplayKey(cdp, "KeyR", "r", 80);
+      lastPotion = Date.now();
+      continue;
+    }
+    const distance = Math.hypot(captain.position.x - state.player.position.x,
+      captain.position.z - state.player.position.z);
+    if (distance > 1.1) {
+      await approachMovingEnemy(cdp, 1.1, 5000, "captain_senn");
+    } else if (captain.pending_attack_time > 0 && captain.pending_attack_time <= 0.30) {
+      await tapGameplayKey(cdp, "KeyQ", "q", 180);
+    } else {
+      await attackLiveTarget(cdp, 1.1, "captain_senn");
+    }
+  }
+  throw new Error("Senn did not yield through the ordinary duel");
+}
+
 async function runOpeningThroughSoldier(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
+  if (resumeStage === "soldier") {
+    await resumeEarnedJourney(cdp, url, checkpoints);
+    if (["roa", "to-road", "to-castle", "to-hart"].includes(args["regional-saga"])) {
+      await runRegionalActivities(cdp, checkpoints, "roa");
+    }
+    return freshTelemetry(cdp);
+  }
   await runOpeningToSenn(cdp, url, checkpoints, onStartupReady, resumeAt);
   await useInteraction(cdp, "captain_senn", checkpoints, true, "Testify in Greyfen");
   const state = await freshTelemetry(cdp);
@@ -4539,14 +5634,15 @@ async function runOpeningThroughSoldier(cdp, url, checkpoints, onStartupReady, r
     throw new Error("Senn's real testimony choice did not open Blood Under Stone");
   }
   checkpoints.push({ event: "soldier_completed", outcome: "testimony", next_chapter: "main_blood_under_stone" });
-  return state;
+  if (["roa", "to-road", "to-castle", "to-hart"].includes(args["regional-saga"])) await runRegionalActivities(cdp, checkpoints, "roa");
+  return freshTelemetry(cdp);
 }
 
 async function continueSavedSenn(cdp, url, checkpoints, expectedStage = "senn_unresolved") {
   const resumeUrl = `${url}&senn_resume=${Date.now()}`;
   await cdp.send("Page.navigate", { url: resumeUrl });
   await waitFor(async () => cdp.evaluate(
-    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && Boolean(document.getElementById("start") && document.querySelector("canvas"))`
+    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && document.readyState === "complete" && Boolean(document.querySelector("canvas"))`
   ), "Senn checkpoint page reload", 10000);
   await activateBootShell(cdp);
   await waitFor(async () => {
@@ -4653,16 +5749,27 @@ async function runOpeningThroughCastle(cdp, url, checkpoints, onStartupReady, re
   } else {
     await runOpeningThroughSoldier(cdp, url, checkpoints, onStartupReady, resumeAt);
   }
-  await traverse(cdp, "vargan_approach", checkpoints);
-  await requireObjective(cdp, "main_blood_under_stone", "reach_castle", "Physical Vargan approach arrival");
-  for (const clue of ["vargan_mile_marker", "vargan_supply_cart"]) {
-    await useInteraction(cdp, clue, checkpoints);
+  let earned = await freshTelemetry(cdp);
+  if (earned.quests.completed.includes("main_blood_under_stone")
+    || earned.quests.objectives_done?.main_blood_under_stone?.includes("locate_record_hall")) return earned;
+  if (!earned.quests.objectives_done?.main_blood_under_stone?.includes("enter_courtyard")) {
+    await traverse(cdp, "vargan_approach", checkpoints);
+    await requireObjective(cdp, "main_blood_under_stone", "reach_castle", "Physical Vargan approach arrival");
+    for (const [clue, objective] of [["vargan_mile_marker", "evidence_mile_marker"], ["vargan_supply_cart", "evidence_supply_cart"]]) {
+      if (!(await freshTelemetry(cdp)).quests.objectives_done?.main_blood_under_stone?.includes(objective)) {
+        await useInteraction(cdp, clue, checkpoints);
+      }
+    }
+    await traverse(cdp, "vargan_court", checkpoints);
   }
-  await traverse(cdp, "vargan_court", checkpoints);
   await requireObjective(cdp, "main_blood_under_stone", "enter_courtyard", "Physical Vargan courtyard entry");
-  await useInteraction(cdp, "vargan_gate_guard", checkpoints, true, "I carry testimony from the old road.");
+  if (!(await freshTelemetry(cdp)).quests.objectives_done?.main_blood_under_stone?.includes("speak_guard")) {
+    await useInteraction(cdp, "vargan_gate_guard", checkpoints, true, "I carry testimony from the old road.");
+  }
   await requireObjective(cdp, "main_blood_under_stone", "speak_guard", "Real Vargan guard conversation");
-  await useInteraction(cdp, "vargan_gate_notice", checkpoints);
+  if (!(await freshTelemetry(cdp)).quests.objectives_done?.main_blood_under_stone?.includes("evidence_gate_notice")) {
+    await useInteraction(cdp, "vargan_gate_notice", checkpoints);
+  }
   await requireObjective(cdp, "main_blood_under_stone", "castle_evidence_ready", "Three Castle evidence interactions");
   await traverse(cdp, "record_hall", checkpoints);
   const state = await requireObjective(cdp, "main_blood_under_stone", "locate_record_hall", "Physical Record Hall entry");
@@ -4677,7 +5784,7 @@ async function continueSavedLedger(cdp, url, checkpoints) {
   const resumeUrl = `${url}&ledger_resume=${Date.now()}`;
   await cdp.send("Page.navigate", { url: resumeUrl });
   await waitFor(async () => cdp.evaluate(
-    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && Boolean(document.getElementById("start") && document.querySelector("canvas"))`
+    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && document.readyState === "complete" && Boolean(document.querySelector("canvas"))`
   ), "Ledger checkpoint page reload", 10000);
   await activateBootShell(cdp);
   await waitFor(async () => {
@@ -4752,11 +5859,6 @@ async function fightRecordHaunting(cdp, checkpoints, timeout = 50000) {
       lastDamage = Date.now();
     }
     if (Date.now() - lastDamage > 18000) throw new Error(`Record Hall combat stalled at ${enemy.health} health`);
-    if (state.camera?.locked_target_id !== "wychwood_stalker") {
-      await tapGameplayKey(cdp, "KeyT", "t", 80);
-      await sleep(280);
-      continue;
-    }
     if (Number(state.player.health) < 65 && Date.now() - lastPotion > 5000
       && Number(state.inventory?.items?.redroot_potion || 0) > 0) {
       await tapGameplayKey(cdp, "KeyR", "r", 80);
@@ -4820,7 +5922,7 @@ async function continueSavedEdric(cdp, url, checkpoints) {
   const resumeUrl = `${url}&edric_resume=${Date.now()}`;
   await cdp.send("Page.navigate", { url: resumeUrl });
   await waitFor(async () => cdp.evaluate(
-    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && Boolean(document.getElementById("start") && document.querySelector("canvas"))`
+    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && document.readyState === "complete" && Boolean(document.querySelector("canvas"))`
   ), "Edric checkpoint page reload", 10000);
   await activateBootShell(cdp);
   await waitFor(async () => {
@@ -4901,6 +6003,7 @@ async function parryHalvernGuard(cdp, checkpoints, timeout = 18000) {
 }
 
 async function runOpeningThroughLastWitness(cdp, url, checkpoints, onStartupReady, resumeAt = "new_game") {
+  if (resumeStage === "last_witness") return resumeEarnedJourney(cdp, url, checkpoints);
   await runOpeningThroughRecordHall(cdp, url, checkpoints, onStartupReady, resumeAt);
   await traverse(cdp, "undercroft", checkpoints);
   const arrival = await requireObjective(cdp, "main_last_witness", "reach_undercroft", "Physical undercroft arrival");
@@ -4918,14 +6021,15 @@ async function runOpeningThroughLastWitness(cdp, url, checkpoints, onStartupRead
     throw new Error("Peaceful Halvern witness resolution did not grant reward and assembly chapter");
   }
   checkpoints.push({ event: "last_witness_completed", outcome: "witness" });
-  return state;
+  if (["var", "to-castle", "to-hart"].includes(args["regional-saga"])) await runRegionalActivities(cdp, checkpoints, "var");
+  return freshTelemetry(cdp);
 }
 
 async function continueSavedAssemblySideOutcome(cdp, url, checkpoints, quest, flag) {
   const resumeUrl = `${url}&assembly_side_resume=${Date.now()}`;
   await cdp.send("Page.navigate", { url: resumeUrl });
   await waitFor(async () => cdp.evaluate(
-    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && Boolean(document.getElementById("start") && document.querySelector("canvas"))`
+    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && document.readyState === "complete" && Boolean(document.querySelector("canvas"))`
   ), "assembly side-outcome page reload", 10000);
   await activateBootShell(cdp);
   await waitFor(async () => {
@@ -4949,6 +6053,21 @@ async function continueSavedAssemblySideOutcome(cdp, url, checkpoints, quest, fl
   return resumed;
 }
 
+async function hearAssemblyAccounts(cdp, checkpoints) {
+  for (const [id, actor] of [["witness_3", "anwen"], ["witness_-3", "rook"], ["witness_-7", "mira"]]) {
+    const state = await freshTelemetry(cdp);
+    const willing = state.story.flags[`witness_consent_${actor}`] === "voluntary";
+    const present = state.interactions.some(item => item.id === id);
+    if (present !== willing) throw new Error(`Assembly presence disagrees with ${actor}'s saved consent`);
+    if (present) await useInteraction(cdp, id, checkpoints, true);
+    else checkpoints.push({ event: "assembly_absent_witness", actor,
+      consent: state.story.flags[`witness_consent_${actor}`] || "not_given" });
+  }
+  // The authored written record is available even when nobody consented to
+  // appear. Reading it does not invent a speaker or confer their consent.
+  await useInteraction(cdp, "witness_7", checkpoints, true);
+}
+
 async function recordAssemblySideOutcome(cdp, url, checkpoints, onStartupReady, spec) {
   await runOpeningThroughLastWitness(cdp, url, checkpoints, onStartupReady, spec.resumeAt);
   const carried = await freshTelemetry(cdp);
@@ -4959,9 +6078,7 @@ async function recordAssemblySideOutcome(cdp, url, checkpoints, onStartupReady, 
   }
   await traverse(cdp, "assembly", checkpoints);
   await requireObjective(cdp, "main_crowns_without_mercy", "greyfen_assembly", "Physical assembly side-route arrival");
-  for (const witness of ["witness_3", "witness_-3", "witness_-7", "witness_7"]) {
-    await useInteraction(cdp, witness, checkpoints, true);
-  }
+  await hearAssemblyAccounts(cdp, checkpoints);
   await useInteraction(cdp, "witnesses_ready", checkpoints);
   await requireObjective(cdp, "main_crowns_without_mercy", "gather_witnesses", "Assembly witness record");
   await useInteraction(cdp, "assembly_choice", checkpoints, true, spec.label);
@@ -4977,11 +6094,11 @@ async function recordAssemblySideOutcome(cdp, url, checkpoints, onStartupReady, 
 
 async function runOpeningThroughAssembly(cdp, url, checkpoints, onStartupReady) {
   await runOpeningThroughLastWitness(cdp, url, checkpoints, onStartupReady);
+  const earned = await freshTelemetry(cdp);
+  if (earned.quests.completed.includes("main_crowns_without_mercy")) return earned;
   await traverse(cdp, "assembly", checkpoints);
   await requireObjective(cdp, "main_crowns_without_mercy", "greyfen_assembly", "Physical assembly arrival");
-  for (const witness of ["witness_3", "witness_-3", "witness_-7", "witness_7"]) {
-    await useInteraction(cdp, witness, checkpoints, true);
-  }
+  await hearAssemblyAccounts(cdp, checkpoints);
   await useInteraction(cdp, "witnesses_ready", checkpoints);
   await requireObjective(cdp, "main_crowns_without_mercy", "gather_witnesses", "Witness record interaction");
   await useInteraction(cdp, "assembly_choice", checkpoints, true, "Let every witness speak");
@@ -4996,40 +6113,93 @@ async function runOpeningThroughAssembly(cdp, url, checkpoints, onStartupReady) 
 }
 
 async function runOpeningThroughFinale(cdp, url, checkpoints, onStartupReady) {
-  await runOpeningThroughAssembly(cdp, url, checkpoints, onStartupReady);
-  await traverse(cdp, "hart_glade", checkpoints);
-  await requireObjective(cdp, "main_hart_remembers", "enter_glade", "Physical Hart Glade arrival");
-  await useInteraction(cdp, "white_hart", checkpoints, true, "Witness: name every dead", false);
-  const state = await waitFor(async () => {
-    const current = await freshTelemetry(cdp).catch(() => null);
-    return current?.story?.flags?.final_choice_completed ? current : null;
-  }, "White Hart witness ending", 10000);
-  if (state?.zone !== "hart_glade" || state?.story?.flags?.final_covenant !== "witness"
-    || state?.quests?.world_flags?.ending !== "expose"
-    || !state?.quests?.completed?.includes("main_hart_remembers")
-    || !Array.isArray(state?.story?.flags?.epilogue_cards)
-    || state.story.flags.epilogue_cards.length === 0
-    || !state?.ui?.buttons?.some((button) => button.text === "Return to Main Menu")) {
-    throw new Error("Real White Hart choice did not complete the Witness ending and epilogue");
+  if (resumeStage === "last_witness" && args["regional-saga"] === "gre") {
+    const earned = await resumeEarnedJourney(cdp, url, checkpoints);
+    if (!earned.story.flags.final_choice_completed || !earned.quests.completed.includes("main_hart_remembers")) {
+      throw new Error("Post-ending Greyfen continuation requires an earned ending");
+    }
+    await completeHomecoming(cdp, checkpoints);
+    if ((await freshTelemetry(cdp)).zone !== "greyfen") await traverse(cdp, "greyfen", checkpoints);
+    await runRegionalActivities(cdp, checkpoints, "gre");
+    return freshTelemetry(cdp);
   }
-  checkpoints.push({ event: "witness_ending_completed", ending: "expose", cards: state.story.flags.epilogue_cards.length });
-  return state;
+  if (args["hart-branch"]) {
+    await resumeEarnedJourney(cdp, url, checkpoints);
+    await runEarnedAlternateEndings(cdp, url, checkpoints);
+    return freshTelemetry(cdp);
+  }
+  await runOpeningThroughAssembly(cdp, url, checkpoints, onStartupReady);
+  const earned = await freshTelemetry(cdp);
+  if (earned.story.flags.final_choice_completed) {
+    if (earned.story.flags.final_covenant !== "witness" || earned.quests.world_flags.ending !== "expose"
+      || !earned.quests.completed.includes("main_hart_remembers")) throw new Error("Earned finale is not the recorded Witness continuation");
+    checkpoints.push({ event: "witness_ending_restored", zone: earned.zone });
+  } else {
+    await traverse(cdp, "hart_glade", checkpoints);
+    await requireObjective(cdp, "main_hart_remembers", "enter_glade", "Physical Hart Glade arrival");
+    if ((fullCampaign && args["finish-line"]) || args["regional-saga"] === "to-hart") {
+      await saveThroughPauseMenu(cdp, checkpoints, true);
+    }
+    await useInteraction(cdp, "white_hart", checkpoints, true, "Witness: name every dead", false);
+    await enactPeacefulCovenant(cdp, "expose", checkpoints);
+    const state = await waitFor(async () => {
+      const current = await freshTelemetry(cdp).catch(() => null);
+      return current?.story?.flags?.final_choice_completed ? current : null;
+    }, "White Hart witness ending", 10000);
+    if (state?.zone !== "hart_glade" || state?.story?.flags?.final_covenant !== "witness"
+      || state?.quests?.world_flags?.ending !== "expose"
+      || !state?.quests?.completed?.includes("main_hart_remembers")
+      || !Array.isArray(state?.story?.flags?.epilogue_cards)
+      || state.story.flags.epilogue_cards.length === 0
+      || !state?.ui?.buttons?.some((button) => button.text === "Return to Main Menu")) {
+      throw new Error("Real White Hart choice did not complete the Witness ending and epilogue");
+    }
+    checkpoints.push({ event: "witness_ending_completed", ending: "expose", cards: state.story.flags.epilogue_cards.length });
+  }
+  if (args["regional-saga"] === "to-hart") {
+    await completeHomecoming(cdp, checkpoints);
+    const here = (await freshTelemetry(cdp)).zone;
+    if (!["hart_glade", "ruins"].includes(here)) {
+      const road = ["greyfen", "vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade"];
+      const start = road.indexOf(here);
+      if (start < 0) throw new Error(`No earned homecoming-to-Hart route from ${here}`);
+      for (const zone of road.slice(start + 1)) await traverse(cdp, zone, checkpoints);
+    }
+    await runRegionalActivities(cdp, checkpoints, "har");
+    await runEarnedAlternateEndings(cdp, url, checkpoints);
+    return freshTelemetry(cdp);
+  }
+  return freshTelemetry(cdp);
 }
 
 async function continueSavedHart(cdp, url, checkpoints) {
-  const resumeUrl = `${url}&hart_resume=${Date.now()}`;
-  await cdp.send("Page.navigate", { url: resumeUrl });
-  await waitFor(async () => cdp.evaluate(
-    `location.href.startsWith(${JSON.stringify(resumeUrl)}) && Boolean(document.getElementById("start") && document.querySelector("canvas"))`
-  ), "Hart checkpoint page reload", 10000);
-  await activateBootShell(cdp);
-  await waitFor(async () => {
-    const current = await freshTelemetry(cdp).catch(() => null);
-    return current?.new_game_ready && current?.ui?.active_menu === "main"
-      && current?.ui?.buttons?.some((button) => button.text === "Continue" && button.enabled)
-      ? current : null;
-  }, "enabled Continue after Hart checkpoint reload", 45000);
-  await chooseMenuButton(cdp, "Continue");
+  const current = await freshTelemetry(cdp);
+  if (current.ui?.active_menu === "ending") {
+    await chooseMenuButton(cdp, "Return to Main Menu");
+  } else if (current.player?.can_control) {
+    await tapGameplayKey(cdp, "Escape", "Escape", 80);
+    await waitFor(async () => (await freshTelemetry(cdp)).ui?.active_menu === "pause",
+      "pause before earned Hart branch", 5000);
+  } else if (!["main", "pause"].includes(current.ui?.active_menu)) {
+    throw new Error("Earned Hart branch has no ordinary save-library entry");
+  }
+  // A branch selects its earned copy explicitly. Do not require the unrelated
+  // Continue pointer or replay a browser-reload persistence check here.
+  await chooseMenuButton(cdp, "Saved Journeys");
+  let selected = false;
+  for (let page = 0; page < 5; page += 1) {
+    const state = await freshTelemetry(cdp);
+    const copy = state.ui.buttons.find(button => button.text.split("\n").some(line => line.toLowerCase() === "quick save"));
+    if (copy) {
+      await chooseMenuButton(cdp, copy.text);
+      selected = true;
+      break;
+    }
+    if (!state.ui.buttons.some(button => button.text === "Next Page" && button.enabled)) break;
+    await chooseMenuButton(cdp, "Next Page");
+  }
+  if (!selected) throw new Error("Earned pre-covenant quick save is absent from Saved Journeys");
+  await chooseMenuButton(cdp, "Load This Journey");
   const resumed = await waitFor(async () => {
     const current = await freshTelemetry(cdp).catch(() => null);
     return current?.zone === "hart_glade" && current?.player?.can_control && !current?.transition_pending
@@ -5086,6 +6256,23 @@ async function fightHartEnding(cdp, covenant, timeout = 90000) {
   throw new Error(`${covenant} Hart combat exceeded its 90-second real-input deadline`);
 }
 
+async function enactPeacefulCovenant(cdp, ending, checkpoints) {
+  for (let step = 0; step < 3; step += 1) {
+    const state = await freshTelemetry(cdp);
+    if (state.story.flags.final_choice_completed) return;
+    if (!state.story.flags.covenant_ritual_started) {
+      throw new Error(`${ending} did not start its playable covenant ritual`);
+    }
+    if (Number(state.story.flags.covenant_ritual_step || 0) > step) continue;
+    await useInteraction(cdp, `covenant_${ending}_${step}`, checkpoints, true, "", false);
+    await waitFor(async () => {
+      const current = await freshTelemetry(cdp);
+      return Number(current.story.flags.covenant_ritual_step || 0) > step ? current : null;
+    }, `${ending} physical covenant step ${step + 1}`, 5000);
+    checkpoints.push({ event: "covenant_step_enacted", ending, step: step + 1 });
+  }
+}
+
 async function resolveHartChoice(cdp, choice, checkpoints) {
   await useInteraction(cdp, "white_hart", checkpoints, true, choice.label, choice.combat);
   if (choice.combat) {
@@ -5096,6 +6283,8 @@ async function resolveHartChoice(cdp, choice, checkpoints) {
       throw new Error(`${choice.covenant} choice did not stage the White Hart avatar`);
     }
     await fightHartEnding(cdp, choice.covenant);
+  } else {
+    await enactPeacefulCovenant(cdp, choice.ending, checkpoints);
   }
   const state = await waitFor(async () => {
     const current = await freshTelemetry(cdp).catch(() => null);
@@ -5122,7 +6311,7 @@ async function runOpeningEndingMatrix(cdp, url, checkpoints, onStartupReady) {
   const choices = [
     { label: "Witness: name every dead", covenant: "witness", ending: "expose", combat: false },
     { label: "Mercy: release me, keep selected guilt", covenant: "mercy", ending: "free", combat: false },
-    { label: "Duty: bind the covenant to Kael", covenant: "duty", ending: "bind", combat: true },
+    { label: "Duty: bind the covenant to Kael", covenant: "duty", ending: "bind", combat: false },
     { label: "Ash: destroy the witness", covenant: "ash", ending: "kill", combat: true },
   ];
   let lastState = null;
@@ -5160,7 +6349,7 @@ function readDevToolsPort(profile) {
 }
 
 async function testBrowser(name, executable) {
-  const profile = join(QA_TEMP_ROOT, `ashen-oath-${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}-${Date.now()}`);
+  const profile = retainedProfile || join(QA_TEMP_ROOT, `ashen-oath-${fullCampaign ? "web002" : "qa002"}-${name.toLowerCase()}-${Date.now()}`);
   mkdirSync(profile, { recursive: true });
   const diagnosticQuery = traceMovement ? "&diag=1" : "";
   const observationQuery = productionObserver ? "observe=1" : "qa=1";
@@ -5243,6 +6432,9 @@ async function testBrowser(name, executable) {
       cdp = new Cdp(page.webSocketDebuggerUrl);
       await cdp.open();
     }
+    // A fresh about:blank target can leave renderer-domain enable commands
+    // pending. Create its renderer before subscribing to those domains.
+    await cdp.send("Page.navigate", { url: "data:text/html,<body></body>" });
     await Promise.all([
       cdp.send("Page.enable"),
       cdp.send("Log.enable"),
@@ -5265,10 +6457,6 @@ async function testBrowser(name, executable) {
         platform: "Android",
       });
     }
-    // Establish a renderer before enabling Runtime. Chrome's initial
-    // about:blank target can accept navigation but never resolves Runtime
-    // domain commands in the managed runner.
-    await cdp.send("Page.navigate", { url: "data:text/html,<body></body>" });
     await cdp.send("Runtime.enable");
     await cdp.send("Runtime.addBinding", { name: OBSERVATION_BINDING });
     if (productionObserver && !(name === "Firefox" && browserSmoke)) {
@@ -5470,8 +6658,9 @@ async function testBrowser(name, executable) {
       performance_certified: !functionalCandidate && enforcePerformance,
       target_misses: targetMisses,
       listening_reviewed: false,
+      targeted_scope: args["resume-growth"] ? "earned_growth_auto_durability" : args["resume-quality"] ? "earned_quality_dependencies" : undefined,
       observation_mode: productionObserver ? "production_read_only" : "qa_diagnostic",
-      route_scope: browserSmoke ? "browser_compatibility_smoke" : fullCampaign ? "campaign_main_player_driven" : endingMatrix ? "ending_matrix_partial" : shrineMatrix ? "shrine_matrix_partial" : reportMatrix ? "report_matrix_partial" : widowMatrix ? "widow_matrix_partial" : ironMatrix ? "iron_matrix_partial" : returnedSoldierMatrix ? "returned_soldier_matrix_partial" : bitterRootsMatrix ? "bitter_roots_matrix_partial" : blackDogMatrix ? "black_dog_matrix_partial" : namedDeadMatrix ? "named_dead_route_partial" : rooksMapMatrix ? "rooks_map_matrix_partial" : millersMeasureMatrix ? "millers_measure_matrix_partial" : bannerlessMatrix ? "bannerless_matrix_partial" : openingSaveContinue ? "opening_save_continue_partial" : throughFinale ? "opening_finale_partial" : throughAssembly ? "opening_assembly_partial" : throughLastWitness ? "opening_last_witness_partial" : throughRecordHall ? "opening_record_hall_partial" : throughCastle ? "opening_castle_partial" : throughSoldier ? "opening_soldier_partial" : throughAsh ? "opening_ash_partial" : throughAshPreparation ? "opening_ash_prep_partial" : throughNames ? "opening_names_partial" : throughRootbound ? "opening_rootbound_partial" : throughRegister ? "opening_register_partial" : throughTeeth ? "opening_teeth_partial" : throughBellEater ? "opening_bell_eater_partial" : throughCemetery ? "opening_cemetery_partial" : openingOnly ? "opening_route" : "gate_circuit",
+      route_scope: args["resume-controls"] ? "browser_controls_targeted_resume" : browserSmoke ? "browser_compatibility_smoke" : fullCampaign ? "campaign_main_player_driven" : endingMatrix ? "ending_matrix_partial" : shrineMatrix ? "shrine_matrix_partial" : reportMatrix ? "report_matrix_partial" : widowMatrix ? "widow_matrix_partial" : ironMatrix ? "iron_matrix_partial" : returnedSoldierMatrix ? "returned_soldier_matrix_partial" : bitterRootsMatrix ? "bitter_roots_matrix_partial" : blackDogMatrix ? "black_dog_matrix_partial" : namedDeadMatrix ? "named_dead_route_partial" : rooksMapMatrix ? "rooks_map_matrix_partial" : millersMeasureMatrix ? "millers_measure_matrix_partial" : bannerlessMatrix ? "bannerless_matrix_partial" : openingSaveContinue ? "opening_save_continue_partial" : throughFinale ? "opening_finale_partial" : throughAssembly ? "opening_assembly_partial" : throughLastWitness ? "opening_last_witness_partial" : throughRecordHall ? "opening_record_hall_partial" : throughCastle ? "opening_castle_partial" : throughSoldier ? "opening_soldier_partial" : throughAsh ? "opening_ash_partial" : throughAshPreparation ? "opening_ash_prep_partial" : throughNames ? "opening_names_partial" : throughRootbound ? "opening_rootbound_partial" : throughRegister ? "opening_register_partial" : throughTeeth ? "opening_teeth_partial" : throughBellEater ? "opening_bell_eater_partial" : throughCemetery ? "opening_cemetery_partial" : openingOnly ? "opening_route" : "gate_circuit",
       failure: startupDiagnostic ? "Startup observation override is diagnostic evidence, not acceptance" : undefined,
       startup_timings: cdp.startupTimings,
       startup_runs: cdp.startupRuns || [],
@@ -5536,6 +6725,7 @@ async function testBrowser(name, executable) {
       console_messages: cdp ? consoleMessages(cdp).slice(-120) : [],
       audio_context_timeline: cdp ? await observedAudioContexts(cdp, name).catch(() => []) : [],
       failure_screenshot: failureScreenshot,
+      persisted_files: cdp && resumeStage ? await readBrowserPersistence(cdp).catch(() => null) : null,
       last_telemetry: cdp ? await telemetry(cdp).catch(() => null) : null,
       performance_by_zone: cdp?.zonePerformance.summary() || {},
       profile_dir: profile,
@@ -5545,6 +6735,7 @@ async function testBrowser(name, executable) {
     };
   } finally {
     if (cpuProfileStarted && cdp) await finishStartupProfile();
+    if (cdp && !firefoxBrowser) await cdp.send("Browser.close", {}, 3000).catch(() => {});
     if (cdp) cdp.close();
     if (firefoxBrowser) await firefoxBrowser.close().catch(() => {});
     if (browser || firefoxBrowser) {
@@ -5553,12 +6744,12 @@ async function testBrowser(name, executable) {
         if (!ownedProcess || ownedProcess.exitCode !== null || ownedProcess.signalCode !== null) done();
         else ownedProcess.once("exit", done);
       });
-      terminateIsolatedBrowser(ownedProcess, profile);
       await Promise.race([browserExit, sleep(1500)]);
+      terminateIsolatedBrowser(ownedProcess, profile);
     }
     if (!completedSuccessfully) {
       console.warn(`QA-002 BROWSER ${name}: failed-run profile and earned saves retained: ${profile}`);
-    } else if (!(await removeTemporaryProfile(profile))) {
+    } else if (!retainedProfile && !(await removeTemporaryProfile(profile))) {
       console.warn(`QA-002 BROWSER ${name}: temporary profile could not be removed: ${profile}`);
     }
   }
@@ -5599,8 +6790,10 @@ const report = {
   ticket: fullCampaign ? "WEB-002" : "QA-002",
   status: diagnosticPreparation ? "diagnostic" : "pass",
   observation_mode: productionObserver ? "production_read_only" : "qa_diagnostic",
-  route_scope: browserSmoke ? "browser_compatibility_smoke" : fullCampaign ? "campaign_main_player_driven" : endingMatrix ? "ending_matrix_partial" : shrineMatrix ? "shrine_matrix_partial" : reportMatrix ? "report_matrix_partial" : widowMatrix ? "widow_matrix_partial" : ironMatrix ? "iron_matrix_partial" : returnedSoldierMatrix ? "returned_soldier_matrix_partial" : bitterRootsMatrix ? "bitter_roots_matrix_partial" : blackDogMatrix ? "black_dog_matrix_partial" : namedDeadMatrix ? "named_dead_route_partial" : rooksMapMatrix ? "rooks_map_matrix_partial" : millersMeasureMatrix ? "millers_measure_matrix_partial" : bannerlessMatrix ? "bannerless_matrix_partial" : openingSaveContinue ? "opening_save_continue_partial" : throughFinale ? "opening_finale_partial" : throughAssembly ? "opening_assembly_partial" : throughLastWitness ? "opening_last_witness_partial" : throughRecordHall ? "opening_record_hall_partial" : throughCastle ? "opening_castle_partial" : throughSoldier ? "opening_soldier_partial" : throughAsh ? "opening_ash_partial" : throughAshPreparation ? "opening_ash_prep_partial" : throughNames ? "opening_names_partial" : throughRootbound ? "opening_rootbound_partial" : throughRegister ? "opening_register_partial" : throughTeeth ? "opening_teeth_partial" : throughBellEater ? "opening_bell_eater_partial" : throughCemetery ? "opening_cemetery_partial" : openingOnly ? "opening_route" : "gate_circuit",
+  movement_diagnostics: traceMovement,
+  route_scope: args["resume-controls"] ? "browser_controls_targeted_resume" : browserSmoke ? "browser_compatibility_smoke" : fullCampaign ? "campaign_main_player_driven" : endingMatrix ? "ending_matrix_partial" : shrineMatrix ? "shrine_matrix_partial" : reportMatrix ? "report_matrix_partial" : widowMatrix ? "widow_matrix_partial" : ironMatrix ? "iron_matrix_partial" : returnedSoldierMatrix ? "returned_soldier_matrix_partial" : bitterRootsMatrix ? "bitter_roots_matrix_partial" : blackDogMatrix ? "black_dog_matrix_partial" : namedDeadMatrix ? "named_dead_route_partial" : rooksMapMatrix ? "rooks_map_matrix_partial" : millersMeasureMatrix ? "millers_measure_matrix_partial" : bannerlessMatrix ? "bannerless_matrix_partial" : openingSaveContinue ? "opening_save_continue_partial" : throughFinale ? "opening_finale_partial" : throughAssembly ? "opening_assembly_partial" : throughLastWitness ? "opening_last_witness_partial" : throughRecordHall ? "opening_record_hall_partial" : throughCastle ? "opening_castle_partial" : throughSoldier ? "opening_soldier_partial" : throughAsh ? "opening_ash_partial" : throughAshPreparation ? "opening_ash_prep_partial" : throughNames ? "opening_names_partial" : throughRootbound ? "opening_rootbound_partial" : throughRegister ? "opening_register_partial" : throughTeeth ? "opening_teeth_partial" : throughBellEater ? "opening_bell_eater_partial" : throughCemetery ? "opening_cemetery_partial" : openingOnly ? "opening_route" : "gate_circuit",
   complete_qa_002_acceptance: false,
+  targeted_scope: args["resume-growth"] ? "earned_growth_auto_durability" : args["resume-quality"] ? "earned_quality_dependencies" : undefined,
   export_dir: exportDir,
   artifact: candidateIdentity,
   qa_temp_root: QA_TEMP_ROOT,
@@ -5610,8 +6803,13 @@ try {
   for (const [name, executable] of browsers) {
     const result = await testBrowser(name, executable);
     report.browsers.push(result);
-    if (result.status !== "pass") throw new Error(`${name}: ${result.failure}`);
-    console.log(`${fullCampaign && diagnosticPreparation ? "WEB-002 DIAGNOSTIC" : fullCampaign ? "WEB-002" : "QA-002"} ${name}: ${diagnosticPreparation ? "ROUTE OBSERVED" : "PASS"} - ${result.checkpoints.length} route checkpoints in ${result.elapsed_ms} ms; profile ${result.profile_dir} (cleaned)`);
+    if (result.status !== "pass") {
+      report.status = "fail";
+      report.failure ||= `${name}: ${result.failure}`;
+      console.error(`${name}: FAIL - ${result.failure}`);
+      continue;
+    }
+    console.log(`${fullCampaign && diagnosticPreparation ? "WEB-002 DIAGNOSTIC" : fullCampaign ? "WEB-002" : "QA-002"} ${name}: ${diagnosticPreparation ? "ROUTE OBSERVED" : "PASS"} - ${result.checkpoints.length} route checkpoints in ${result.elapsed_ms} ms; profile ${result.profile_dir} (${retainedProfile ? "retained" : "cleaned"})`);
   }
 } catch (error) {
   report.status = "fail";

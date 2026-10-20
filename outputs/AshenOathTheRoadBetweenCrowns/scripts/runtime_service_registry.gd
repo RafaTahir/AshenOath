@@ -147,6 +147,7 @@ func configure(owner: Node) -> void:
 	dialogue.load_conversation_topics("res://data/conversation_topics.json")
 	dialogue.setup(story_state, quests)
 	inventory.load_items("res://data/items.json")
+	inventory.set_progression(progression)
 	save_manager.set_summary_definitions(quests.quest_defs, inventory.item_defs)
 	vendor_service.load_vendors("res://data/vendors.json")
 	crafting.setup(inventory, quests, story_state)
@@ -251,6 +252,7 @@ func configure(owner: Node) -> void:
 			hud.post_notice(text, "inventory", 3.5, text)
 	)
 	inventory.changed.connect(Callable(owner, "_refresh_equipment_readout"))
+	inventory.oil_time_changed.connect(Callable(owner, "_refresh_equipment_readout"))
 	inventory.changed.connect(Callable(owner, "_reconcile_preparation_objective"))
 	vendor_service.message.connect(func(text: String):
 		if not bool(owner.get("preparation_action_in_progress")):

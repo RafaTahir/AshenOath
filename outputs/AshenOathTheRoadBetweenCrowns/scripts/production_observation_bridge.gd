@@ -100,7 +100,7 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 				break
 	if target == null:
 		return result
-	var points: Array[Vector3] = spatial.build_route(player.global_position, target.global_position, 0.55)
+	var points: Array[Vector3] = physical_route_for_points(player, spatial, spatial.build_route(player.global_position, target.global_position, 0.55))
 	if str(target.get("interaction_type")) != "zone":
 		var conversation := str(target.get("interaction_type")) == "dialogue"
 		var reach := 3.6 if conversation else 2.8
@@ -122,7 +122,7 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 					var candidate: Vector3 = target.global_position + toward_player.rotated(Vector3.UP, deg_to_rad(degrees)) * radius
 					if not spatial.is_walkable_position(candidate, 0.55, spatial.bank_for(target.global_position)):
 						continue
-					var approach: Array[Vector3] = spatial.build_route(player.global_position, candidate, 0.55)
+					var approach: Array[Vector3] = physical_route_for_points(player, spatial, spatial.build_route(player.global_position, candidate, 0.55))
 					var endpoint_distance: float = approach.back().distance_to(target.global_position) if not approach.is_empty() else INF
 					if endpoint_distance <= reach and (not conversation or endpoint_distance >= 1.8):
 						points = approach
@@ -131,7 +131,119 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 					break
 	for point in points:
 		result.points.append(_vector(point))
+	result["waypoint_tolerance"] = 0.25
 	result.ok = not result.points.is_empty()
+	return result
+
+func physical_route_for_points(player: CharacterBody3D, spatial: Node, points: Array[Vector3]) -> Array[Vector3]:
+	if points.size() < 2 or player == null or spatial == null:
+		return []
+	var capsule_node: CollisionShape3D
+	for child: Node in player.get_children():
+		if child is CollisionShape3D and child.shape is CapsuleShape3D and not child.disabled:
+			capsule_node = child
+			break
+	if capsule_node == null:
+		return []
+	var capsule := capsule_node.shape as CapsuleShape3D
+	var padded := capsule.duplicate() as CapsuleShape3D
+	padded.radius += 0.30
+	padded.height = maxf(padded.height, padded.radius * 2.0)
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.collision_mask = 1
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	query.exclude = [player.get_rid()]
+	query.margin = 0.01
+	var context := {"space": player.get_world_3d().direct_space_state, "spatial": spatial,
+		"query": query, "actual": capsule, "padded": padded,
+		"offset": capsule_node.global_position - player.global_position + Vector3.UP * 0.06}
+	var grounded: Array[Vector3] = points.duplicate()
+	for index in grounded.size():
+		var point: Vector3 = grounded[index]
+		if spatial.is_on_bridge(point):
+			point.y = maxf(point.y, preload("res://scripts/bridge_surface_contract.gd").DECK_COLLISION_TOP)
+			grounded[index] = point
+	var result: Array[Vector3] = [grounded[0]]
+	for index in range(1, grounded.size()):
+		var a: Vector3 = result.back()
+		var b: Vector3 = grounded[index]
+		if _physical_segment_clear(context, a, b):
+			result.append(b)
+			continue
+		var detour := _physical_detour(context, a, b)
+		if detour.is_empty():
+			return []
+		for step in range(1, detour.size()):
+			result.append(detour[step])
+	return result
+
+func _physical_point_clear(context: Dictionary, point: Vector3, padded: bool = false) -> bool:
+	var bounds: Vector2 = context.spatial.half_extents
+	if absf(point.x) > bounds.x - 0.55 or absf(point.z) > bounds.y - 0.55 \
+		or not context.spatial.validate_segment(point, point, 0.55):
+		return false
+	var query: PhysicsShapeQueryParameters3D = context.query
+	query.shape = context.padded if padded else context.actual
+	query.motion = Vector3.ZERO
+	query.transform = Transform3D(Basis.IDENTITY, point + context.offset)
+	return context.space.intersect_shape(query, 1).is_empty()
+
+func _physical_segment_clear(context: Dictionary, a: Vector3, b: Vector3) -> bool:
+	if not context.spatial.validate_segment(a, b, 0.55) \
+		or not _physical_point_clear(context, a) or not _physical_point_clear(context, b):
+		return false
+	var query: PhysicsShapeQueryParameters3D = context.query
+	query.transform = Transform3D(Basis.IDENTITY, a + context.offset)
+	query.motion = b - a
+	var fractions: PackedFloat32Array = context.space.cast_motion(query)
+	return fractions.size() == 2 and fractions[0] >= 0.9999
+
+func _physical_detour(context: Dictionary, a: Vector3, b: Vector3) -> Array[Vector3]:
+	var direction := Vector3(b.x - a.x, 0, b.z - a.z)
+	var length := direction.length()
+	if length < 0.01 or not _physical_point_clear(context, a) or not _physical_point_clear(context, b):
+		return []
+	direction /= length
+	var sideways := Vector3(-direction.z, 0, direction.x)
+	const CELL := 0.4
+	const HALF_WIDTH := 10
+	var columns := ceili(length / CELL) + HALF_WIDTH * 2 + 1
+	if columns * (HALF_WIDTH * 2 + 1) > 4096:
+		return []
+	var graph := AStar3D.new()
+	graph.add_point(0, a)
+	graph.add_point(1, b)
+	var ids: Dictionary = {}
+	for column in range(-HALF_WIDTH, columns - HALF_WIDTH):
+		for row in range(-HALF_WIDTH, HALF_WIDTH + 1):
+			var along := float(column) * CELL
+			var point := a + direction * along + sideways * float(row) * CELL
+			point.y = lerpf(a.y, b.y, clampf(along / length, 0.0, 1.0))
+			if not _physical_point_clear(context, point, true):
+				continue
+			var id := graph.get_available_point_id()
+			var key := Vector2i(column, row)
+			ids[key] = id
+			graph.add_point(id, point)
+			for neighbour in [key + Vector2i.LEFT, key + Vector2i.UP]:
+				if ids.has(neighbour):
+					graph.connect_points(id, int(ids[neighbour]))
+			for endpoint in [0, 1]:
+				var endpoint_position := a if endpoint == 0 else b
+				if point.distance_to(endpoint_position) <= 1.6 and _physical_segment_clear(context, endpoint_position, point):
+					graph.connect_points(endpoint, id)
+	var path := graph.get_point_path(0, 1)
+	if path.is_empty():
+		return []
+	var result: Array[Vector3] = [path[0]]
+	for index in range(1, path.size() - 1):
+		if (path[index] - result.back()).cross(path[index + 1] - path[index]).length_squared() > 0.000001:
+			result.append(path[index])
+	result.append(path[path.size() - 1])
+	for index in range(1, result.size()):
+		if not _physical_segment_clear(context, result[index - 1], result[index]):
+			return []
 	return result
 
 func _character_visual_state(player: Node3D, camera_rig: Node) -> Dictionary:
@@ -337,6 +449,8 @@ func snapshot_for_game(game: Node) -> Dictionary:
 			"items": (inventory.get("items") as Dictionary).duplicate(true),
 			"ingredients": (inventory.get("ingredients") as Dictionary).duplicate(true),
 			"active_oil": str(inventory.get("active_oil")),
+			"oil_remaining_seconds": float(inventory.get("oil_remaining_seconds")),
+			"oil_version": 1,
 		}
 	state.saves = {
 		"manual": FileAccess.file_exists("user://ashen_oath_save.json"),

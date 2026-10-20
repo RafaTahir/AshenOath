@@ -12,6 +12,16 @@ func _initialize() -> void:
 	var game = (load("res://scenes/main.tscn") as PackedScene).instantiate()
 	root.add_child(game)
 	await _frames(3)
+	var menu_deadline := Time.get_ticks_msec() + 120000
+	while game.hud.active_menu != "main" and Time.get_ticks_msec() < menu_deadline:
+		await process_frame
+	if game.hud.active_menu != "main":
+		_fail("Complete opening preparation did not reveal the menu")
+		game.prepare_resource_shutdown()
+		await _frames(3)
+		game.free()
+		_finish()
+		return
 	if await _activate("New Game"):
 		var deadline := Time.get_ticks_msec() + 60000
 		while Time.get_ticks_msec() < deadline and not (game.game_started and game.player != null and game.player.can_control and not game.zone_transition_pending):
@@ -68,13 +78,21 @@ func _verify_weapons(game: Node) -> void:
 	_joy_button(JOY_BUTTON_X, true)
 	await _frames(8)
 	_joy_button(JOY_BUTTON_X, false)
+	await _wait_for_equipment(game)
 	_check(game.player.weapon_mode == "sword", "X could not return from bow to sword")
 	await _frames(6)
 	_joy_button(JOY_BUTTON_X, true)
 	await _frames(8)
 	_joy_button(JOY_BUTTON_X, false)
-	_check(game.player.weapon_mode == "bow", "Second X press did not select bow")
+	await _wait_for_equipment(game)
+	_check(game.player.weapon_mode == "sword" and game.player.get_selected_blade_id() == "oathblade", "Second X press did not select the retained Oathblade")
+	_joy_button(JOY_BUTTON_X, true)
+	await _frames(8)
+	_joy_button(JOY_BUTTON_X, false)
+	await _wait_for_equipment(game)
+	_check(game.player.weapon_mode == "bow", "Third X press did not select bow")
 	await _tap(KEY_1)
+	await _wait_for_equipment(game)
 	_check(game.player.weapon_mode == "sword", "Keyboard sword selection failed after controller input")
 	print("REAL_INPUT actual_weapon_context=%s shots=%d ammo_before=%d ammo_after=%d" % ["PASS" if failures.is_empty() else "FAIL", shots.size(), arrows, int(game.inventory.items.get(arrow_id, 0))])
 
@@ -115,6 +133,14 @@ func _verify_remapping(game: Node) -> void:
 	await _tap(KEY_2)
 	_check(game.player.weapon_mode == "bow", "Reset Defaults did not restore keyboard 2")
 	print("REAL_INPUT remap_pages=6 visible_remap_and_reset=true logical_disconnect=true resume=%s" % ("PASS" if failures.is_empty() else "FAIL"))
+
+func _wait_for_equipment(game: Node) -> void:
+	# Commands activate on release and transfer equipment at authored contacts.
+	await physics_frame
+	var deadline := Time.get_ticks_msec() + 5000
+	while game.player.equipment_loadout.is_transitioning() and Time.get_ticks_msec() < deadline:
+		await process_frame
+	_check(not game.player.equipment_loadout.is_transitioning(), "Equipment transfer did not finish")
 
 func _activate(label: String, prefix: bool = false) -> bool:
 	for _index in range(48):

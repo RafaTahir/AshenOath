@@ -2,12 +2,25 @@ extends SceneTree
 
 const WorldSectorManifest = preload("res://scripts/world_sector_manifest.gd")
 
+class ArrivalHost extends Node:
+	var game_started := false
+	var requests := 0
+	func get_zone_half_extents(zone_id: String) -> Vector2:
+		return WorldSectorManifest.bounds(zone_id)
+	func request_seamless_boundary_transition(_zone: String, _arrival: Vector3, _edge: String) -> bool:
+		requests += 1
+		return true
+
 var failures: Array[String] = []
 
 func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	if "--arrival-contract-only" in OS.get_cmdline_user_args():
+		await _arrival_contract()
+		quit(0 if failures.is_empty() else 1)
+		return
 	var scene := load("res://scenes/main.tscn") as PackedScene
 	_check(scene != null, "main scene is missing")
 	if scene == null:
@@ -82,6 +95,51 @@ func _run() -> void:
 			push_error(failure)
 		print("SEAM-QA-001 VERIFIER: FAIL (%d)" % failures.size())
 	quit(0 if failures.is_empty() else 1)
+
+func _arrival_contract() -> void:
+	var count := 0
+	for source in WorldSectorManifest.all_ids():
+		for edge_id in WorldSectorManifest.open_edges(source):
+			var edge: Dictionary = WorldSectorManifest.open_edges(source)[edge_id]
+			var raw: Array = edge.arrival
+			var arrival := Vector3(float(raw[0]), float(raw[1]), float(raw[2]))
+			var target := str(edge.target)
+			_check(WorldSectorManifest.edge_for_position(target, arrival, WorldSectorManifest.bounds(target), 0.85).is_empty(),
+				"%s/%s arrival immediately exits %s" % [source, edge_id, target])
+			count += 1
+	var host := ArrivalHost.new()
+	var actor := Node3D.new()
+	var service := preload("res://scripts/seamless_world_service.gd").new()
+	root.add_child(host)
+	root.add_child(actor)
+	root.add_child(service)
+	service.configure(host, null)
+	for sign in [-1.0, 1.0]:
+		host.requests = 0
+		var old_arrival := Vector3(0, 0.9, 13 * sign)
+		_check(not WorldSectorManifest.edge_for_position("marsh_crossing", old_arrival,
+			WorldSectorManifest.bounds("marsh_crossing"), 0.85).is_empty(), "Old marsh bounce was not reproduced")
+		actor.position = Vector3(0, 0.9, 11 * sign)
+		service.on_zone_activated("marsh_crossing", actor.position)
+		_check(not service.update_player(actor, "marsh_crossing", 1.0), "Stationary arrival re-crossed after cooldown")
+		_check(host.requests == 0, "Arrival requested an unintended zone")
+		_check(not WorldSectorManifest.edge_for_position("marsh_crossing", Vector3(0, 0, 14 * sign),
+			WorldSectorManifest.bounds("marsh_crossing"), 0.85).is_empty(), "Legitimate marsh return exit was disabled")
+		actor.position = old_arrival
+		service.on_zone_activated("marsh_crossing", actor.position)
+		_check(not service.update_player(actor, "marsh_crossing", 1.0), "Legacy saved arrival bounced after cooldown")
+		actor.position = Vector3(0, 0.9, 11 * sign)
+		_check(not service.update_player(actor, "marsh_crossing", 0.1), "Leaving the entry trigger caused a transition")
+		actor.position = Vector3(0, 0.9, 14 * sign)
+		_check(service.update_player(actor, "marsh_crossing", 0.1) and host.requests == 1,
+			"Leaving and deliberately re-entering did not restore the return exit")
+	service.queue_free()
+	actor.queue_free()
+	host.queue_free()
+	await process_frame
+	for failure in failures:
+		push_error(failure)
+	print("SEAM ARRIVAL CONTRACT: %s (%d edges; both marsh arrivals and return exits)" % ["PASS" if failures.is_empty() else "FAIL", count])
 
 func _cross_boundary(game: Node, source: String, edge_id: String, target: String) -> void:
 	if game.current_zone_id != source:

@@ -8291,8 +8291,8 @@
       "context": "items.iron_trap"
     },
     "items.moon_oil.description": {
-      "source": "Silver-blue oil that bites deep into spirits.",
-      "text": "Silver-blue oil that bites deep into spirits.",
+      "source": "Silver-blue oil that bites deep into spirits. One bottle coats the blades for five minutes of active play; six with Ash-Tempered Blade Fitting.",
+      "text": "Silver-blue oil that bites deep into spirits. One bottle coats the blades for five minutes of active play; six with Ash-Tempered Blade Fitting.",
       "speaker": "",
       "context": "items.moon_oil"
     },
@@ -8327,8 +8327,8 @@
       "context": "items.redroot_potion"
     },
     "items.rot_oil.description": {
-      "source": "A rancid oil brewed for grave-things and restless dead.",
-      "text": "A rancid oil brewed for grave-things and restless dead.",
+      "source": "A rancid oil brewed for grave-things and restless dead. One bottle coats the blades for five minutes of active play; six with Ash-Tempered Blade Fitting.",
+      "text": "A rancid oil brewed for grave-things and restless dead. One bottle coats the blades for five minutes of active play; six with Ash-Tempered Blade Fitting.",
       "speaker": "",
       "context": "items.rot_oil"
     },
@@ -9581,8 +9581,8 @@
       "context": "preparation_notes.items.iron_trap.effects.reach"
     },
     "preparation_notes.items.moon_oil.body": {
-      "source": "Select a blade coating suited to spirit weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
-      "text": "Select a blade coating suited to spirit weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "source": "Apply one bottle to coat your blades against spirit weaknesses for five minutes of active play, or six with Ash-Tempered Blade Fitting. Menus, dialogue, loading and time outside the game do not spend the coating. Reapplying refreshes the duration; another oil replaces it.",
+      "text": "Apply one bottle to coat your blades against spirit weaknesses for five minutes of active play, or six with Ash-Tempered Blade Fitting. Menus, dialogue, loading and time outside the game do not spend the coating. Reapplying refreshes the duration; another oil replaces it.",
       "speaker": "",
       "context": "preparation_notes.items.moon_oil"
     },
@@ -9605,8 +9605,8 @@
       "context": "preparation_notes.items.redroot_potion"
     },
     "preparation_notes.items.rot_oil.body": {
-      "source": "Select a blade coating suited to undead weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
-      "text": "Select a blade coating suited to undead weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "source": "Apply one bottle to coat your blades against undead weaknesses for five minutes of active play, or six with Ash-Tempered Blade Fitting. Menus, dialogue, loading and time outside the game do not spend the coating. Reapplying refreshes the duration; another oil replaces it.",
+      "text": "Apply one bottle to coat your blades against undead weaknesses for five minutes of active play, or six with Ash-Tempered Blade Fitting. Menus, dialogue, loading and time outside the game do not spend the coating. Reapplying refreshes the duration; another oil replaces it.",
       "speaker": "",
       "context": "preparation_notes.items.rot_oil"
     },

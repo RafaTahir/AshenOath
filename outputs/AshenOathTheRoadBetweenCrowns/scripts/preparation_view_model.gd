@@ -26,6 +26,8 @@ static func knowledge_summary(inventory, quests, state, context: Dictionary) -> 
 	if destination != "":
 		lines.append("Where: " + destination)
 	lines.append("\nCARRIED SUPPLIES")
+	if str(inventory.active_oil) != "":
+		lines.append("Blade coating: %s, %s of active play remaining." % [inventory.get_item_name(inventory.active_oil), inventory.oil_time_text()])
 	for action: String in ["use_potion", "throw_bomb"]:
 		var item_id: String = inventory.quick_item(action)
 		lines.append("%s: %s x%d" % ["Remedy" if action == "use_potion" else "Field tool", inventory.get_item_name(item_id), int(inventory.items.get(item_id, 0))])
@@ -46,7 +48,7 @@ static func knowledge_summary(inventory, quests, state, context: Dictionary) -> 
 			var owned: int = int(inventory.items.get(item_id, 0))
 			var text: String = "%s: %d carried" % [inventory.get_item_name(item_id), owned]
 			if str(inventory.active_oil) == item_id:
-				text += "; already applied"
+				text += "; applied, %s remaining" % inventory.oil_time_text()
 			if owned == 0:
 				text += "; craftable now" if inventory.can_craft(item_id) else "; unavailable in your pack"
 			lines.append(text + ". Optional field preparation, not a required quest purchase.")
@@ -88,7 +90,7 @@ static func item_detail(item_id: String, inventory, progression = null, context:
 	if kind == "ammo":
 		comparison = _arrow_comparison(item_id, active_arrow, inventory)
 	elif kind == "oil":
-		comparison.append({"id": "coating", "label": "Blade coating", "current": str(inventory.get_item_name(active_oil)) if active_oil != "" else "No coating selected", "candidate": str(inventory.get_item_name(item_id)), "delta": "Already selected" if selected else "Replaces the selected coating"})
+		comparison.append({"id": "coating", "label": "Blade coating", "current": "%s (%s remaining)" % [inventory.get_item_name(active_oil), inventory.oil_time_text()] if active_oil != "" else "No coating selected", "candidate": str(inventory.get_item_name(item_id)), "delta": "Refresh duration; uses one bottle" if selected else "Replace coating; uses one bottle"})
 	var actions: Array[Dictionary] = []
 	var action: Dictionary = _item_action(item_id, kind, owned, selected, context)
 	if not action.is_empty():
@@ -151,6 +153,9 @@ static func _effect_rows(item_id: String, inventory, progression, context: Dicti
 		rows.append({"id": "stamina", "label": "Recovery", "text": text})
 	if effect.has("damage"):
 		rows.append({"id": "damage", "label": "Base damage", "text": "%d before the target's response." % int(effect.damage)})
+	if inventory.get_item_type(item_id) == "oil":
+		var duration: int = ceili(inventory.get_oil_duration_seconds(item_id))
+		rows.append({"id": "duration", "label": "Coating duration", "text": "%d:%02d of active play per bottle. Paused in menus, dialogue and loading; saved on Continue. The coating applies to blade contacts, not arrows or Oathfire." % [floori(float(duration) / 60.0), duration % 60]})
 	if inventory.get_item_type(item_id) == "blade_upgrade":
 		var definition: Dictionary = inventory.item_defs.get(item_id, {})
 		var bonus: float = minf(float(definition.get("effect", {}).get("blade_damage_bonus", 0)), inventory.MAX_BLADE_UPGRADE_BONUS)
@@ -165,7 +170,7 @@ static func _item_action(item_id: String, kind: String, owned: int, selected: bo
 		verb = "Select arrow"
 	elif kind == "oil":
 		id = "apply_oil"
-		verb = "Apply oil"
+		verb = "Refresh oil" if selected else "Apply oil"
 	elif kind == "potion":
 		id = "use"
 		verb = "Use remedy"
@@ -180,8 +185,8 @@ static func _item_action(item_id: String, kind: String, owned: int, selected: bo
 	var reason: String = ""
 	if owned <= 0:
 		reason = "You do not carry this item."
-	elif selected:
-		reason = "This arrow is already selected." if kind == "ammo" else "This coating is already selected."
+	elif selected and kind == "ammo":
+		reason = "This arrow is already selected."
 	elif item_id == "redroot_potion" and context.has("health") and context.has("max_health") and float(context.health) >= float(context.max_health):
 		reason = "Your health is full; keep the remedy for an injury."
 	elif item_id == "bitterleaf_tonic" and context.has("stamina") and context.has("max_stamina") and float(context.stamina) >= float(context.max_stamina):

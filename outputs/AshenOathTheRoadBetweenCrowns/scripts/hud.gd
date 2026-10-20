@@ -151,6 +151,7 @@ var last_weapon_name := "Steel"
 var last_remedy_id := "redroot_potion"
 var last_tool_id := "ash_bomb"
 var last_oil_name := ""
+var last_oil_seconds := -1
 var last_arrow_count := -1
 var last_arrow_type := "Standard"
 var toasts_suppressed := false
@@ -1146,10 +1147,12 @@ func _refresh_story_focus() -> void:
 		return
 	var formatted := _format_tracker_text(_tracker_source)
 	var lines: PackedStringArray = formatted.split("\n", false)
-	tracker_title_label.text = str(lines[0]).to_upper() if not lines.is_empty() else "THE ROAD AHEAD"
+	var story_title := str(lines[0]).to_upper() if not lines.is_empty() else "THE ROAD AHEAD"
 	var action := str(_navigation_model.get("action", ""))
 	if action == "":
 		action = str(lines[1]) if lines.size() > 1 else "Consult your journal for the next known lead."
+	var changed_reading_size := tracker_title_label.text != story_title or tracker_label.text != action
+	tracker_title_label.text = story_title
 	tracker_label.text = action
 	tracker_label.tooltip_text = action
 	tracker_caption_label.text = "Next step"
@@ -1177,10 +1180,11 @@ func _refresh_story_focus() -> void:
 	if primary != "":
 		compass_label.text = primary
 	tracker_back.visible = action != ""
+	if changed_reading_size:
+		_queue_responsive_layout()
 
 func _fit_tracker_height() -> void:
-	# The story card owns a reserved reading region; changing objectives never
-	# moves guidance or neighbouring controls.
+	# Preserve primary reading text; secondary guidance uses the remaining room.
 	_apply_hud_layout()
 
 func set_compass(text: String) -> void:
@@ -1300,8 +1304,8 @@ func show_status_cue(text: String, kind: String = "neutral") -> void:
 	_draw_resource_attention(3.0)
 	_refresh_touch_message_visibility()
 
-func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard", weapon_name: String = "Steel", remedy_id: String = "redroot_potion", tool_id: String = "ash_bomb") -> void:
-	var view_key: Array = [potions, bombs, oil_name, arrow_count, arrow_type, weapon_name, remedy_id, tool_id, input_device, _action_label("use_potion"), _action_label("throw_bomb"), _action_label("fire_bow"), _action_label("light_attack"), _action_label("block"), _action_label("dodge"), _action_label("open_inventory")]
+func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: int = -1, arrow_type: String = "Standard", weapon_name: String = "Steel", remedy_id: String = "redroot_potion", tool_id: String = "ash_bomb", oil_seconds: int = -1) -> void:
+	var view_key: Array = [potions, bombs, oil_name, arrow_count, arrow_type, weapon_name, remedy_id, tool_id, oil_seconds, input_device, _action_label("use_potion"), _action_label("throw_bomb"), _action_label("fire_bow"), _action_label("light_attack"), _action_label("block"), _action_label("dodge"), _action_label("open_inventory")]
 	if view_key == _equipment_view_key:
 		return
 	_equipment_view_key = view_key
@@ -1309,12 +1313,15 @@ func update_equipment(potions: int, bombs: int, oil_name: String, arrow_count: i
 	last_potions = potions
 	last_bombs = bombs
 	last_oil_name = oil_name
+	last_oil_seconds = oil_seconds
 	last_arrow_count = arrow_count
 	last_arrow_type = arrow_type
 	last_weapon_name = weapon_name
 	last_remedy_id = remedy_id
 	last_tool_id = tool_id
 	var oil_text = oil_name if oil_name != "" else "No oil"
+	if oil_name != "" and oil_seconds >= 0:
+		oil_text += " %d:%02d" % [floori(float(oil_seconds) / 60.0), oil_seconds % 60]
 	equipment_label.text = weapon_name + " | " + oil_text
 	equipment_label.tooltip_text = "Selected weapon: %s. Active blade oil: %s" % [weapon_name, oil_text]
 	if supply_labels.has("potions"):
@@ -2612,7 +2619,7 @@ func _build_hud() -> void:
 	_quest_marker = _hud_label(hud_root, "ObjectiveMarker", 16)
 	_quest_marker.text = "◆"
 	tracker_label = _hud_label(hud_root, "QuestTrackerObjective", 20)
-	tracker_label.max_lines_visible = 3
+	tracker_label.max_lines_visible = -1
 	tracker_route_label = _hud_label(hud_root, "StoryRouteHint", 16)
 	tracker_route_label.max_lines_visible = 2
 	tracker_work_label = _hud_label(hud_root, "NearbyStoryWork", 16)
@@ -2695,6 +2702,17 @@ func _hud_label(parent: Node, node_name: String, font_size: int) -> Label:
 	parent.add_child(label)
 	return label
 
+func _hud_text_height(label: Label, reserved_lines: int = -1) -> float:
+	var lines: int = label.get_line_count()
+	if reserved_lines > 0:
+		lines = reserved_lines
+	# Label's visible-line budget includes theme spacing and style padding.
+	var spacing: float = maxf(0.0, float(label.get_theme_constant("line_spacing")))
+	var paragraphs: float = maxf(0.0, float(label.get_theme_constant("paragraph_spacing")))
+	var style: StyleBox = label.get_theme_stylebox("normal")
+	var padding: float = style.get_minimum_size().y if style != null else 0.0
+	return ceilf(lines * label.get_line_height() + maxi(0, lines - 1) * (spacing + paragraphs) + padding)
+
 func set_display_metrics(metrics: Dictionary) -> void:
 	if metrics == _display_metrics:
 		return
@@ -2767,6 +2785,7 @@ func _restore_reflow_state(snapshot: Dictionary, generation: int, surface_key: S
 		return
 	var restored: bool = HudReflowState.restore(snapshot, self)
 	if restored:
+		_reveal_menu_focus()
 		return
 	if inventory_layer.visible:
 		if bool(_layout_policy.get("compact", false)) and str(_inventory_panes.get(_inventory_screen, "reader")) == "entries":
@@ -2777,6 +2796,14 @@ func _restore_reflow_state(snapshot: Dictionary, generation: int, surface_key: S
 		_focus_first_enabled(dialogue_actions)
 	elif menu_layer.visible and _rendered_screen != "":
 		navigation.restore(_rendered_screen, menu_layer)
+		_reveal_menu_focus()
+
+func _reveal_menu_focus() -> void:
+	if not is_instance_valid(_menu_scroll) or not _menu_scroll.is_visible_in_tree():
+		return
+	var focused: Control = get_viewport().gui_get_focus_owner()
+	if is_instance_valid(focused) and _menu_scroll.is_ancestor_of(focused):
+		_menu_scroll.ensure_control_visible(focused)
 
 func _apply_responsive_typography(node: Node, fonts: Dictionary, button_height: float, unit: float) -> void:
 	if node is Control:
@@ -3121,36 +3148,45 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	compass_back.visible = high_contrast and dial_visible
 	var quest_y: float = location_y + 34.0 * unit if dial_visible else top + (66.0 if touch else 56.0) * unit
 	var room_below: float = maxf(0.0, (safe.end.y - reserved_bottom - gap if touch else bottom - 136.0 * unit) - quest_y)
-	var title_height: float = (42.0 if not compact else 25.0) * unit
+	tracker_title_label.add_theme_font_size_override("font_size", int(fonts.body))
+	tracker_title_label.size.x = quest_width
+	var title_height: float = maxf((42.0 if not compact else 25.0) * unit, _hud_text_height(tracker_title_label, 2) + 2.0 * unit)
 	var show_title: bool = not compact or room_below >= 140.0 * unit
 	tracker_title_label.visible = show_title
 	tracker_title_label.position = Vector2(quest_x, quest_y)
 	tracker_title_label.size = Vector2(quest_width, title_height)
-	tracker_title_label.add_theme_font_size_override("font_size", int(fonts.body))
 	tracker_caption_label.visible = false
 	_quest_rule.visible = show_title
 	_quest_rule.position = Vector2(quest_x, quest_y + title_height + 2.0 * unit)
 	_quest_rule.size = Vector2(minf(90.0 * unit, quest_width), maxf(1.0, unit))
 	var action_y: float = quest_y + title_height + 13.0 * unit if show_title else quest_y
-	var action_height: float = minf((78.0 if not compact else 66.0) * unit, maxf(32.0 * unit, room_below - (action_y - quest_y)))
+	tracker_label.add_theme_font_size_override("font_size", int(fonts.body))
+	tracker_label.size.x = maxf(0.0, quest_width - 22.0 * unit)
+	var action_needed: float = _hud_text_height(tracker_label) + 2.0 * unit
+	var action_height: float = minf(maxf((78.0 if not compact else 66.0) * unit, action_needed), maxf(32.0 * unit, room_below - (action_y - quest_y)))
 	_quest_marker.position = Vector2(quest_x - 2.0 * unit, action_y + 2.0 * unit)
 	_quest_marker.size = Vector2(20.0 * unit, 24.0 * unit)
 	_quest_marker.add_theme_font_size_override("font_size", int(fonts.caption))
 	tracker_label.position = Vector2(quest_x + 22.0 * unit, action_y)
 	tracker_label.size = Vector2(maxf(0.0, quest_width - 22.0 * unit), action_height)
-	tracker_label.add_theme_font_size_override("font_size", int(fonts.body))
 	var route_y: float = action_y + action_height + 5.0 * unit
-	tracker_route_label.position = Vector2(quest_x + 22.0 * unit, route_y)
-	tracker_route_label.size = Vector2(quest_width - 22.0 * unit, 42.0 * unit)
-	tracker_route_label.visible = not compact and route_y + 42.0 * unit <= quest_y + room_below
-	tracker_work_label.position = Vector2(quest_x + 22.0 * unit, route_y + 44.0 * unit)
-	tracker_work_label.size = Vector2(quest_width - 22.0 * unit, 38.0 * unit)
-	tracker_work_label.visible = not compact and route_y + 82.0 * unit <= quest_y + room_below
-	tracker_footer_label.position = Vector2(quest_x + 22.0 * unit, route_y + 86.0 * unit)
-	tracker_footer_label.size = Vector2(quest_width - 22.0 * unit, 24.0 * unit)
-	tracker_footer_label.visible = not compact and not touch
 	for label: Label in [tracker_route_label, tracker_work_label, tracker_footer_label]:
 		label.add_theme_font_size_override("font_size", int(fonts.caption))
+	# Reserve complete caption lines, including the active font's metrics and spacing.
+	var route_height: float = maxf(42.0 * unit, _hud_text_height(tracker_route_label, 2) + 2.0 * unit)
+	var work_height: float = maxf(38.0 * unit, _hud_text_height(tracker_work_label, 2) + 2.0 * unit)
+	var work_y: float = route_y + route_height + 2.0 * unit
+	var footer_y: float = work_y + work_height + 4.0 * unit
+	var footer_height: float = maxf(24.0 * unit, _hud_text_height(tracker_footer_label, 1) + 2.0 * unit)
+	tracker_route_label.position = Vector2(quest_x + 22.0 * unit, route_y)
+	tracker_route_label.size = Vector2(quest_width - 22.0 * unit, route_height)
+	tracker_route_label.visible = not compact and route_y + route_height <= quest_y + room_below
+	tracker_work_label.position = Vector2(quest_x + 22.0 * unit, work_y)
+	tracker_work_label.size = Vector2(quest_width - 22.0 * unit, work_height)
+	tracker_work_label.visible = not compact and work_y + work_height <= quest_y + room_below
+	tracker_footer_label.position = Vector2(quest_x + 22.0 * unit, footer_y)
+	tracker_footer_label.size = Vector2(quest_width - 22.0 * unit, footer_height)
+	tracker_footer_label.visible = not compact and not touch and footer_y + footer_height <= quest_y + room_below
 	tracker_back.position = Vector2(quest_x - 8.0 * unit, quest_y - 6.0 * unit)
 	tracker_back.size = Vector2(quest_width + 16.0 * unit, minf(room_below, (258.0 if not compact else 118.0) * unit))
 	var slot_width: float = (86.0 if compact else 94.0) * unit
@@ -3201,18 +3237,20 @@ func _apply_responsive_gameplay(policy: Dictionary) -> void:
 	target_status_label.size = Vector2(enemy_width, 24.0 * unit)
 	target_status_label.add_theme_font_size_override("font_size", int(fonts.caption))
 	var prompt_width: float = minf(430.0 * unit, center_channel)
-	prompt_label.position = Vector2(center - prompt_width * 0.5, bottom - 69.0 * unit)
-	prompt_label.size = Vector2(prompt_width, 55.0 * unit)
 	prompt_label.add_theme_font_size_override("font_size", int(fonts.body))
+	var prompt_height: float = maxf(55.0 * unit, _hud_text_height(prompt_label, 2) + 2.0 * unit)
+	prompt_label.position = Vector2(center - prompt_width * 0.5, bottom - prompt_height - 14.0 * unit)
+	prompt_label.size = Vector2(prompt_width, prompt_height)
 	prompt_back.position = prompt_label.position - Vector2(6, 2) * unit
 	prompt_back.size = prompt_label.size + Vector2(12, 4) * unit
 	var status_width: float = minf(360.0 * unit, center_channel)
-	status_label.position = Vector2(center - status_width * 0.5, bottom - 106.0 * unit)
-	status_label.size = Vector2(status_width, 28.0 * unit)
 	status_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	var status_height: float = maxf(28.0 * unit, _hud_text_height(status_label, 1) + 2.0 * unit)
+	status_label.position = Vector2(center - status_width * 0.5, prompt_label.position.y - status_height - 9.0 * unit)
+	status_label.size = Vector2(status_width, status_height)
 	hint_label.position = Vector2(center - status_width * 0.5, target_y + 77.0 * unit)
-	hint_label.size = Vector2(status_width, 48.0 * unit)
 	hint_label.add_theme_font_size_override("font_size", int(fonts.caption))
+	hint_label.size = Vector2(status_width, maxf(48.0 * unit, _hud_text_height(hint_label, 2) + 2.0 * unit))
 	var notice_width: float = minf(330.0 * unit, center_channel if touch else safe.size.x - margin * 2.0)
 	var notice_x: float = center - notice_width * 0.5 if touch else left
 	var notice_y: float = bottom - 250.0 * unit if touch else supplies_grid.position.y - 166.0 * unit
@@ -3834,7 +3872,7 @@ func set_input_device(device: String) -> void:
 			set_prompt(raw_prompt)
 	if raw_hint != "":
 		hint_label.text = _format_input_text(raw_hint)
-	update_equipment(last_potions, last_bombs, last_oil_name, last_arrow_count, last_arrow_type, last_weapon_name, last_remedy_id, last_tool_id)
+	update_equipment(last_potions, last_bombs, last_oil_name, last_arrow_count, last_arrow_type, last_weapon_name, last_remedy_id, last_tool_id, last_oil_seconds)
 	_refresh_story_focus()
 
 func _action_label(action: String) -> String:
@@ -4422,6 +4460,7 @@ func _restore_menu_state(key: String, generation: int) -> void:
 		if reader != null and not navigation.screens.get(key, {}).has("scrolls"):
 			reader.get_v_scroll_bar().value = reader.get_v_scroll_bar().max_value
 	navigation.restore(key, menu_layer)
+	_reveal_menu_focus()
 
 func _register_field(control: Control, field_key: String, fallback: String) -> void:
 	control.set_meta("navigation_key", "field:" + field_key)

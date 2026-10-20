@@ -19,7 +19,8 @@ const PROMPT_VERBS := {
 	"Back to ": "Return to", "Travel ": "Travel", "Take ": "Take", "Set ": "Set",
 	"Recover ": "Recover", "Identify ": "Identify", "Examine ": "Examine",
 	"Keep ": "Keep", "Choose ": "Choose", "Report ": "Report", "Follow ": "Follow",
-	"Walk ": "Walk", "Name ": "Name", "Lay down ": "Lay down", "Confess ": "Confess"
+	"Walk ": "Walk", "Visit ": "Visit", "Name ": "Name", "Lay down ": "Lay down", "Confess ": "Confess",
+	"Sit at ": "Sit at", "Draw from ": "Draw from", "Buy ": "Buy"
 }
 
 var prompt = "Interact"

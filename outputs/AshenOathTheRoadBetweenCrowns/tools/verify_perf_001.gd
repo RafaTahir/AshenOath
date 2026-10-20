@@ -3,9 +3,15 @@ extends SceneTree
 const PROFILE_ZONES := [
 	["greyfen", Vector3(0, 1, 7)],
 	["wychwood", Vector3(0, 1, 8)],
+	["deep_wood", Vector3(0, 1, 8)],
+	["old_mill", Vector3(0, 1, 8)],
+	["bandit_road", Vector3(0, 1, 8)],
+	["marsh_crossing", Vector3(0, 1, 8)],
 	["vargan_court", Vector3(0, 1, 8)],
 	["record_hall", Vector3(0, 1, 8)],
+	["undercroft", Vector3(0, 1, 8)],
 	["hart_glade", Vector3(0, 1, 8)],
+	["ruins", Vector3(0, 1, 8)],
 ]
 const MIN_AVERAGE_FPS := 32.0
 const MIN_ONE_PERCENT_LOW_FPS := 30.0
@@ -36,7 +42,10 @@ func _initialize() -> void:
 		_fail("Unknown acceptance profile: " + acceptance_profile)
 		_finish()
 		return
-	if selected_zone != "" and selected_zone not in ["greyfen", "wychwood", "vargan_court", "record_hall", "hart_glade"]:
+	var supported_zones: Array[String] = []
+	for profile in PROFILE_ZONES:
+		supported_zones.append(str(profile[0]))
+	if selected_zone != "" and selected_zone not in supported_zones:
 		_fail("Unknown performance zone: " + selected_zone)
 		_finish()
 		return
@@ -68,10 +77,19 @@ func _initialize() -> void:
 	_check(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "%s is not using native 1.0 render scale" % profile_preset.capitalize())
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	game.call("_on_launch_accepted")
-	for _index in range(180):
+	var preparation_started := Time.get_ticks_msec()
+	var preparation_deadline := preparation_started + 120000
+	while Time.get_ticks_msec() < preparation_deadline:
 		await process_frame
-		if game.route_zone_cache.has("greyfen"):
+		if game.route_zone_cache.has("greyfen") and not game.greyfen_prewarm_started and game.hud.active_menu == "main":
 			break
+	report.transitions["complete_menu_preparation_ms"] = Time.get_ticks_msec() - preparation_started
+	if not game.route_zone_cache.has("greyfen") or game.greyfen_prewarm_started:
+		_fail("Complete opening preparation did not finish within the bounded native session")
+		_write_report()
+		await _shutdown_game(game)
+		_finish()
+		return
 	var new_game_start := Time.get_ticks_usec()
 	game.call("_new_game")
 	await _wait_for_playable(game)

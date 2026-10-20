@@ -28,11 +28,11 @@
       "effects": [{"id": "reach", "title": "Reach", "text": "Affects nearby enemies within 6 metres."}]
     },
     "moon_oil": {
-      "body": "Select a blade coating suited to spirit weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "body": "Apply one bottle to coat your blades against spirit weaknesses for five minutes of active play, or six with Ash-Tempered Blade Fitting. Menus, dialogue, loading and time outside the game do not spend the coating. Reapplying refreshes the duration; another oil replaces it.",
       "effects": [{"id": "coating", "title": "Blade coating", "text": "Gives blade contacts the spirit tag. Its effect depends on the target's weakness."}]
     },
     "rot_oil": {
-      "body": "Select a blade coating suited to undead weaknesses. The coating remains selected until replaced; applying it does not spend a bottle.",
+      "body": "Apply one bottle to coat your blades against undead weaknesses for five minutes of active play, or six with Ash-Tempered Blade Fitting. Menus, dialogue, loading and time outside the game do not spend the coating. Reapplying refreshes the duration; another oil replaces it.",
       "effects": [{"id": "coating", "title": "Blade coating", "text": "Gives blade contacts the undead tag. Its effect depends on the target's weakness."}]
     },
     "iron_trap": {

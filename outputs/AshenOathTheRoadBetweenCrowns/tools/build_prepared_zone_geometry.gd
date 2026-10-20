@@ -9,6 +9,10 @@ func _initialize() -> void:
 
 func _compile() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(ROOT))
+	if "--roads-only" in OS.get_cmdline_user_args():
+		_compile_roads(true)
+		quit(1 if failed else 0)
+		return
 	_compile_static_batches()
 	var packed := load("res://scenes/runtime/greyfen_gameplay_core.tscn") as PackedScene
 	var source := packed.instantiate() as Node3D
@@ -96,22 +100,27 @@ func _save_batch(id: String, transforms: Array[Transform3D]) -> void:
 	result.set_meta("bounds", bounds.grow(0.02))
 	_save(id, result)
 
-func _compile_roads() -> void:
+func _compile_roads(only_missing: bool = false) -> void:
 	var materials = load("res://scripts/world_material_library.gd")
 	var specs := [
 		["greyfen", Vector3(0,0.018,0), Vector3(4.2,0.04,30)],
 		["greyfen", Vector3(-5,0.02,9), Vector3(14,0.04,3)],
 		["greyfen", Vector3(15.2,0.022,0), Vector3(8.8,0.045,3.4)],
 		["wychwood", Vector3(-5,0.018,3), Vector3(24,0.04,4)],
+		["wychwood", Vector3(-15,0.018,5), Vector3(16,0.04,3.2)],
 		["campaign", Vector3(0,0.02,0), Vector3(4,0.04,28)],
 		["campaign", Vector3(0,0.02,1), Vector3(5.2,0.05,34)],
 		["campaign", Vector3(0,0.02,0), Vector3(8,0.05,32)],
+		["campaign", Vector3(15,0.025,9), Vector3(12,0.035,3)],
 	]
 	for origin in [Vector3.ZERO, Vector3(14,0,8.6)]:
 		specs.append(["greyfen", origin + Vector3(-4,0.024,-0.6), Vector3(8,0.045,2.6)])
 		specs.append(["greyfen", origin + Vector3(-0.3,0.025,-0.6), Vector3(6.8,0.045,7.4)])
 	for spec in specs:
-		_save("%s_road_%s" % [spec[0], preload("res://scripts/prepared_zone_geometry.gd").geometry_key(spec[2], spec[1])], materials.make_tiled_ground_patch(spec[2], spec[1]))
+		var id := "%s_road_%s" % [spec[0], preload("res://scripts/prepared_zone_geometry.gd").geometry_key(spec[2], spec[1])]
+		if only_missing and ResourceLoader.exists(ROOT + id + ".res"):
+			continue
+		_save(id, materials.make_tiled_ground_patch(spec[2], spec[1]))
 
 func _save(id: String, resource: Resource) -> void:
 	var error := ResourceSaver.save(resource, ROOT + id + ".res", ResourceSaver.FLAG_COMPRESS)

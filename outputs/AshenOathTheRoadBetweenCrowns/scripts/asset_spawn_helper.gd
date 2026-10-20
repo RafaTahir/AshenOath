@@ -48,6 +48,13 @@ func retain_zone_scopes(zone_ids: Array) -> void:
 			if variants.is_empty():
 				repaired_mesh_cache.erase(source)
 		_path_owners.erase(path)
+	# Retargeted libraries retain their source through Dictionary keys. Drop only
+	# helper-owned variants whose source is no longer held by an owned asset;
+	# live/cached AnimationPlayers keep their independent resource references.
+	var owned_resources: Array = resource_cache.values()
+	for source in prepared_animation_libraries.keys():
+		if source not in owned_resources:
+			prepared_animation_libraries.erase(source)
 
 var database
 var mesh_cache: Dictionary = {}

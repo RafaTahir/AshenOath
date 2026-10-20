@@ -1,5 +1,429 @@
 # Ashen Oath Project State
 
+## Direct Publication Authorization - 2026-10-20
+
+The user explicitly instructed "push and deploy. now." Publish the already-built
+finish-line-20261020-user-candidate unchanged through the existing workflow.
+This supersedes the prior hold for user acceptance; it does not turn untested
+behavior or the unresolved strict performance requirements into passes. No new
+build, agent gameplay, browser QA or benchmark is authorized or needed. Preserve
+the cumulative source repairs and disclose outstanding user acceptance separately.
+Publication commit/deployment receipt is recorded under .release-gate/living-road/.
+
+## Current Build-Only Candidate And User Handoff - 2026-10-20
+
+This section supersedes the historical next actions/agent testing allocations
+below. Latest instruction: finish source work and one production package without
+agent gameplay, browser QA, benchmarks, profiling, screenshots or new fixtures.
+Those prohibitions were respected. Formal explicit user acceptance remains 0/16;
+compilation is not acceptance. No commit, push, merge or deployment occurred.
+
+Implemented source repairs: opening preparation rejects stale deferred attempts,
+clears partial worlds before Retry and exposes resource failure details. Required
+navigation, complete Greyfen detail and final-camera preparation finish before
+the menu becomes ready; arrival finalization/runtime activation no longer happens
+after returned control. One focused resource audit replaces duplicate arrival
+audits. Helper-owned animation variants release references when their source
+resources are no longer owned; active actors retain their own bindings.
+
+Continue's version-1 selection record now optionally contains its exact payload
+and state token in the same atomic file. This repairs the source-level split-record
+hazard shown by the interrupted a50 autosave/pointer pair without guessing another
+journey or discarding copies. Old pointer-only records and save schema 13 remain
+supported; identity/version/size checks protect recovery. Web save messaging now
+discloses requested browser synchronization rather than claiming durable completion.
+The exact browser interruption/flush sequence remains unverified.
+
+Production candidate: finish-line-20261020-user-candidate.
+Location: D:/Projects/AshenOath/.release-gate/finish-line-20261020-user-candidate/export.
+Compilation and integral packaging/hash/size checks succeeded. Complete directory:
+104,689,261 bytes (<104,857,600; 168,339 bytes headroom). Root transport SHA-256:
+1c020eebb38d27f48cc5eafe8f394c61bc2817a938f1f5dcc7087a1246d77385.
+Decoded root SHA-256:
+a10b7be5e8536043745604ea41161a69a189e93c5a1fdf1c00ab06c2bd44407f.
+Source: dirty worktree at 2b1be253eb493991e5dc7d208d46694e6eb319d2. Four code-bearing
+packs/root rebuilt; unchanged character, monster, audio and Quality packs reused
+with their packaging identity checks. Logs are in the candidate's logs/ folder.
+Tracked web and live production still serve the earlier world-saga-20261019-final.
+User-only static preview: http://127.0.0.1:9081/, Python PID 13152. No browser/game
+or QA request was launched. Helper and logs are under
+D:/Temp/AshenOath/finish-line-20261020-user-preview/. It serves only the frozen
+package with manifest-declared transport headers, on localhost; it does not expose
+the repository, carry production saves or establish actual-phone coverage.
+
+Strict performance is NOT repaired/proven by these edits. The rejected dispatcher-
+only experiment remains removed. Prior valid native failures (Greyfen 15.71/11.27
+FPS, 828.54 MiB peak private memory) remain historical red evidence; no current
+candidate measurements exist. Sustained render/script cost and private-memory
+ownership remain unresolved. No content, population or quality was reduced.
+
+Precise next action: user tests this local candidate using
+../../plans/finish-line/USER_TESTING.md and returns mandatory functional, actual-phone
+and reference-PC results. Reuse unchanged scoped evidence. Repair named failures
+without treating untested conditions as passed or inventing more implementation.
+Once mandatory results pass and final delivery is approved, promote the exact
+accepted bytes once through the existing development/main/Vercel workflow and
+reconcile live artifact identity without an agent gameplay test. The user confirms
+production New Game/Continue. No automatic release or strict-target waiver.
+
+## Finish-Line Verification And Repairs - 2026-10-20
+
+Superseding FINISH-014 result: the explicitly authorized replacement native run
+completed (D:/Temp/AshenOath/finish-014-replacement-20261020/). No array-type SCRIPT
+ERROR remained, but strict performance and destination readiness failed. Greyfen
+26.27 average /15.87 1% low FPS; peak private commit 777.70 MiB; warm return
+4,225.02 ms. The dispatcher-only lazy-loading experiment was REJECTED because
+it worsened transitions and did not satisfy complete readiness. Removed ONLY
+the two agent-owned changes; zone_composition_router.gd and campaign_section.gd
+statically match their pre-experiment source. All pre-existing work is preserved.
+No further run, export, commit, push or deployment. No Godot process remains.
+Replacement test allocation consumed. FINISH-014 remains implementation-incomplete
+and strict red; 0/16 explicit user acceptances unchanged. A subsequent authorized
+performance slice must use the existing shared ownership/readiness/frame evidence,
+not repeat the rejected lazy-dispatch mechanism. Prompt-verbs bytes remain intact.
+
+Latest FINISH-014 continuation: focused repair and one native recheck authorized.
+Campaign dispatcher now demand-loads only the selected regional section; prefetch
+requests that section explicitly instead of eagerly loading every campaign
+section's resources. The recheck exited 1 with a new Array/Array[String] return
+error interrupting prefetch. Corrected with an explicitly typed path array and
+resource-free path lookup before Web pack readiness; check-only compilation
+passes. Runtime recheck of those corrections remains pending. The run's higher
+FPS/lower memory is NOT valid improvement/acceptance evidence. Raw logs and owned
+process memory: D:/Temp/AshenOath/finish-014-recheck-20261020/. Strict failures and
+0/16 explicit user acceptances remain. No export, commit, push or deployment.
+The packaged prompt-verbs candidate is preserved; it does not contain this new
+unverified source repair. Exact next action: one replacement native recheck only
+if authorized, not a new performance experiment or a replay of green checks.
+
+The user renewed one test/verification allocation per ticket, fixes afterward,
+and one publication only when the complete release is ready. Prior one-total-run
+limits/build-only instructions do not stop these newly authorized allocations.
+No historical evidence is reclassified as full acceptance.
+
+Technical progression/oil unit contracts and native stereo/mix/pause ownership
+passed. Real browsers exposed a durable-save/Continue pointer/sync defect, now
+repaired. Shared arrow/camera input suppression is repaired. Source/native zone
+inspection exposed and repaired the missing lazy wilderness builder property,
+the uncompiled Hartlands-to-Ruins road mesh, and post-ending ordinary resumes
+incorrectly triggering the homecoming transfer. Existing characters, content,
+settings, quality and saves remain; no population/visual reduction was applied.
+
+Strict native performance FAILED: Greyfen 15.71 average /11.27 1% low;
+Wychwood combat 21.89/6.30; owned-process peak private commit 828.54 MiB.
+Cold transition/startup misses remain blockers. Prepared handoff 704.18 ms and
+warm return 330.95 ms passed only their own gates. Browser startup/input/pause
+worked in Chrome/Edge/Firefox, but the obsolete settings driver stopped each
+usability run before persistence/remapping. Fixed drivers were not silently rerun.
+
+Latest source-aligned package: finish-line-20261020-prompt-verbs, compiled production Web,
+104,688,170 bytes; root transport SHA-256
+162406d07f20f8af365762bd37b6220d6cbfa78ce4f20cc082fbd0540d206c35.
+Current targeted objective is FINISH-002 exact durable Quick Save/Continue plus
+FINISH-005 settings/remap. Five new Greyfen quests and GRE-S01 were played;
+GRE-S02 driver convergence is parked, not accepted. a17 observed real settings,
+resize and remapping, then exposed incorrect driver parent navigation and
+offscreen restored Controls focus. Parent navigation is corrected; the HUD
+reveals its focused menu action after reflow. a18 then proved Continue overrides
+newer global preferences with an old journey snapshot. Current source preserves
+global preferences and retains embedded settings only as a legacy fallback.
+a19-save is the targeted recheck from the same earned profile/origin, not a new
+journey. Whole-ticket/user acceptance and strict performance remain pending.
+Latest active checkpoint supersedes those historical next actions: a23 passed
+Quick Save/durable IndexedDB/reload/normal Continue, earned health/position/story/
+inventory and changed scalar/F9 settings. a25 used F9 for Mira and restored the
+original preferences through UI; crafting, purchases and healing passed. a29
+completed Teeth, the sole Bog encounter/core and WYC-Q01. Names is now active.
+Its WYC-Q02 approach stopped on HARNESS routing through a retained rock. The
+read-only observer now refines physical route segments with actual capsule sweeps
+and bounded Godot A*; no game actor, scenery or collision is changed. The affected
+native house/well, rock, bridge and sealed-route checks passed. a30 passed all
+remaining Wychwood quests/secrets; a31 passed its genuine return/100-XP durability,
+last-bottle timed Moon Oil/reload/normal Continue and reconstructed register.
+a31 stopped at Rootbound with consumed arrows but no damage. GAME source defect:
+locked bow aim used Rootbound's visual-bounds centre outside its hurt capsule.
+The fix uses the existing capsule centre and the post-turn arrow origin. The
+native old-miss/new-hit proof passed from three sides without changing damage.
+The replacement bow-lock package compiled below the cap. a32 passed actual
+Rootbound bow/Oathfire defeat, environmental choices and Names publication.
+a33 passed affordable Tor purchases/mill arrival/inspection and one Ghoulkin;
+a34 passed the mill fight after correcting HARNESS lock-only acquisition. Its
+Ashwing acquisition was outside the actual 12-metre range; approach/frame ordering
+is corrected without changing the game. a35 passed the perch rope but requested
+bow during Oathfire's restoration lock. The driver now equips bow directly,
+reusing a32's ability proof instead of repeating optional C. a36 is in flight on
+identical bytes/profile/origin. a36 then defeated Ashwing (23,178 ms), secured
+records/opened the sluice and saved the real active worker escort. Its Continue
+restored Old Mill/control, but an opening-only HARNESS assertion waited for
+Greyfen. a37 then compared against a post-load autosave instead of the selected
+save. The driver now freezes the pre-click selection and accepts the expected
+destination, without another escort Save/reload loop. a38 passed that active-
+escort Continue, completed workers/mill choice, all five DEP quests, three secrets,
+fitting retention and the durable return claim. Its overall result still FAILED
+the existing browser memory gate at 517.1 MiB; no numerical waiver is applied.
+a39 found a GAME Marsh arrival/exit overlap causing automatic bounce-back. Both
+incoming arrivals are inset to +/-11; legacy positions inside an exit are latched
+until leaving, preserving deliberate returns. Native exact-service/all-19-edge
+checks passed. The source-aligned replacement compiled under the cap.
+a40 passed the Marsh join into Bandit Road, then
+exposed a GAME challenge-availability defect. Saga's no-combat guard rejected the
+displayed challenge while Senn's guards lived. Only this explicit encounter start
+is now exempted; ordinary work, range, visibility and load/transition guards stay.
+Native availability checks passed; senn-entry replacement compiled below the cap.
+a41 passed Senn's real guard-break duel (alive at 22 health), explicit testimony
+and ROA-Q02. HARNESS then required focus at a retired marker used only as the
+signal walk's departure landmark; the departure itself was recorded. Movement-
+only legs now finish on actual game-owned conditions, without weakening Use.
+a42 passed all five ROA quests, three secrets, first-traveler handover, the
+durable return and one retained Roadwarden's Baldric. Its overall run still
+FAILED the strict browser memory gate at 532.6 MiB; no console errors captured.
+a45-castle completed on identical senn-entry bytes/profile/origin using
+--resume-earned soldier --through-last-witness --regional-saga var. It observed
+ledger/haunting/Edric, two Q parry attempts and peaceful Halvern, all five VAR
+quests, three secrets, one Pommel and the durable 100-XP return. No captured
+console errors/warnings; overall FAIL at strict browser-private memory 648.3 MiB.
+Next: FINISH-012/015 earned Last Witness Continue, Assembly, Witness/homecoming,
+Hartlands activities and genuine saved ending branches, without replaying Castle.
+a46 reached Assembly and stopped on HARNESS requiring non-consenting witnesses.
+The source correctly omits them. a47 uses actual consent/presence and the written
+record, continuing the same journey/bytes; no consent or story state is injected.
+a47 completed Assembly, Witness and the full Anwen/workbench/road homecoming,
+including all ten main chapters and nine consequence cards. No console errors.
+Its post-ending Castle route query then failed before movement. a48 follows the
+source manifest's authored bridge/east-road approach with ordinary input and
+skips the completed ending/homecoming. Hartlands/other endings remain pending.
+a48 passed that Castle road, post-ending return, HAR-Q03/Q05 and HAR-S03, then
+entered Ruins. Its late road mesh was genuinely absent: the existing offline
+compiler now includes the exact authored recipe and generated the resource.
+Replacement finish-line-20261020-ruins-road packaging is in flight. The driver
+derives seamless crossings from the existing manifest and resumes in Ruins;
+completed ending/homecoming work is frozen. The observed "Use Visit" duplicate
+prompt is fixed in the same package. a48's resource errors remain failures.
+That replacement import/code-pack/production/lossless-manifest build completed
+successfully under the cap. a49 now resumes in Ruins on these source-aligned
+bytes, preserving earned Witness/homecoming/HAR-Q03/Q05/HAR-S03 evidence.
+a49 then completed the other three HAR quests, two secrets, bidirectional track
+and return interaction. No console errors; the road-resource defect is repaired.
+All 30 added quests are earned. The return claim is durable but credits zero at
+the actual level-30 cap (26,100 XP / 17 Marks); the HARNESS fixed-100 assertion was
+wrong, not storage. Its assertion is now cap-aware with exact identity/delta
+checks. a50-endings skips completed HAR work and continues Mercy/Duty/Ash from
+the original earned pre-choice save on unchanged ruins-road bytes. Greyfen's two
+remaining secrets, other acceptance gaps, strict performance and phone remain open.
+a50 confirmed the cap-aware durable return, then its extra branch reload exposed
+an unmatched auto pointer/payload timestamp pair. Continue was disabled, with
+Recovery/Saved Journeys available. FINISH-002 retains that unresolved persistence
+boundary; it is not relabelled a passing Continue. a51 uses explicit same-journey
+recovery if needed, then the actual Saved Journeys flow for the pre-covenant Quick
+Save and still-unplayed Mercy/Duty/Ash. No new artifact or manufactured state.
+a51 completed Mercy and Duty through their three physical ritual actions and
+nine-card epilogues. The genuine Quick Save was selected through Saved Journeys.
+Ash stopped before selection because its fourth action was offscreen. Current
+a52-ash rechecks only Ash; the driver navigates focus/scroll normally, requires
+the whole button visible and then clicks its fresh geometry. Same ruins-road
+bytes; no repeated Witness/homecoming/Mercy/Duty or synthetic choice state.
+a52 completed Ash through the actual three-phase Hart fight and nine-card
+epilogue, alive with one Inlay. No console errors/warnings; strict browser-memory
+FAIL 516.3 MiB. All four ending choices are observed. Current a53-greyfen follows
+the actual Ash homeward gate/homecoming and checks GRE-S02/S03 plus settled
+return, skipping completed quests/secret. No source/artifact change for that run.
+a53 completed Ash homecoming, GRE-S02/S03 and the settled leave/return, with the
+correct durable 75-XP partial-cap award. No console errors/warnings; strict
+browser-memory FAIL 578.9 MiB. Across earned checkpoints all 30 added quests/18
+secrets are observed. Current a54 rechecks the driver-blocked 960x540 Chrome
+controls/camera/settings/Save-Continue cells in a separate isolated QA profile;
+Edge/Firefox follow on the same bytes. The campaign profile remains preserved.
+a54 completed those Chrome cells, including 11.37312-radian orbit, actual first
+person, textured-body return, durable normal Continue and settings restoration.
+No console errors/warnings; strict browser-memory FAIL 606 MiB. Current a55 is
+Edge's same original blocked compatibility recheck on identical bytes; Firefox
+follows. Actual phone, strict native performance and other open cells are not waived.
+a55 Edge completed its functional scope (strict browser-memory FAIL 553.7 MiB).
+a56 Firefox passed start/input/pause/resize/settings/F9 persistence and normal
+durable Continue, but its camera waiter required a binding disabled in smoke
+mode. a57's attempt to enable callbacks/probes introduced realm-permission errors
+and is rejected. a58 restored the clean polling transport and ended after 73,921 ms
+without captured console errors, but still failed HARNESS camera convergence at
+yaw 2.976585307 versus -PI (player controllable at x=0,z=4.722781). All 36 input
+packets completed. The extra F9 Anwen/default-restoration cell is parked after two
+failed transport hypotheses; required Firefox startup/input/save compatibility
+from a56 is preserved. Its isolated QA profile/preferences remain intact.
+Existing a49/a53 images exposed objective/route-caption clipping. The focused
+graphical tracker check reproduced 2/4 visible objective lines at 720p and 1080p;
+caption assertions passed, overall check FAILED. The HUD repair now sizes primary
+text from wrapped font metrics, reserves complete caption lines and keeps the
+work/footer below them. It queues layout only when primary text changes.
+The first tracker-fit package is INVALID: a direct script load caught a duplicate
+local variable despite successful import/export. The variable is renamed; packaging
+now directly compiles HUD before export. A further component check showed the
+missing theme line-spacing/style-padding budget (3/4 visible lines). The shared
+text-height calculation now budgets those metrics for objectives, captions and
+interaction/status hints. Focused graphical recheck PASSED at 720p/1080p and text
+scales 1.0/1.5; the existing menu-anchor resize warning remains recorded, not hidden.
+Evidence: D:/Temp/AshenOath/finish-caption-20261020-spacing. Corrected tracker-lines
+direct HUD compilation/code packs/production export and lossless manifests passed
+below the cap. No campaign replay or performance claim follows.
+a59-growth passed FINISH-006's earned prerequisite/respec UI and FINISH-002's
+paired autosave durability on tracker-lines/profile/origin38495. Ordinary actions
+must produce a matching autosave/pointer in IndexedDB, then normal Continue (no
+recovery substitute). The genuine pre-covenant Quick Save must remain unchanged.
+No runtime observer/API, manufactured points or new journey is used. The earned
+chain spent 17 -> 16 -> 15 Marks, survived normal Continue, then respec/durable
+normal Continue restored 17. XP 26,100, health 62.9904, supplies, entitlements and
+the pre-covenant Quick Save stayed unchanged. No console errors/warnings; overall
+FAIL remains strict browser-private memory 566.1 MB. a50's arbitrary interrupted
+snapshot is not called resolved by this controlled paired-durability result.
+The same screenshot confirms complete HUD objective/route text and exposed a
+"Use Sit..." prompt. Static review of all authored village-place labels found
+three missing prefixes (Sit at/Draw from/Buy), now repaired as one bounded batch.
+Prompt-verbs compilation/export/integrity passed under the cap. a60-quality stopped
+before navigation on a HARNESS port-discovery fault: OS-selected DevTools port 4045
+is rejected by Node Fetch (confirmed "bad port"). Both loopback HTTP discovery and
+CDP WebSocket now avoid Fetch's port restriction, using node:http and the existing
+locked ws 8.22.0 client. No browser security setting or game bytes changed. a61
+actually selected Quality; its five-second acknowledgement waiter expired during
+pack loading, so a62 resumed the preserved preference rather than replaying input.
+a62 PASSED persisted Quality/required material pack/complete Kael bindings, normal
+Continue and durable restoration of Balanced, with unrelated preferences and the
+pre-covenant Quick Save unchanged. No console errors/warnings; overall FAIL remains
+strict browser-private memory 515.5 MB. Existing capture confirms full objective/
+route text and the corrected Sit at prompt. No Retry/phone/listening/numerical or
+whole-ticket acceptance is inferred. Reports: finish-targeted-20261020-a60-quality,
+a61-quality and a62-quality under D:/Temp/AshenOath.
+Exact next action after the pending FINISH-014 authorization decision: bounded
+source/evidence-led performance repair and only the approved native follow-up.
+Freeze passed campaign/quality/growth cells; do not re-export unchanged bytes or
+publish a red candidate. Recovery/legacy, preparation-cancellation/Retry, actual
+phone/listening and user verdicts remain open. Current operations are complete;
+no owned test/build process remains. All work/profiles/evidence are retained.
+Focused native performance repair/recheck authorization is pending;
+no new native experiment, engine patch, push, merge or deployment has occurred.
+Previously
+observed regional cells are skipped, not replayed or promoted to user acceptance.
+a43/a44 retained the mile-marker/cart evidence, then stopped on HARNESS written-
+record closing. The driver now selects the actually focused Close when a single
+non-branching record has both header and action Close controls. a45 has physically
+entered the court/Record Hall and completed the guard/three-record evidence gates.
+Green cells stay frozen;
+strict performance/phone/campaign conditions remain open and publication is held.
+No full ticket/user acceptance is inferred.
+Formal user acceptance remains 0/16. Strict performance and phone requirements
+are unresolved; no publication is authorized before the full release is ready.
+Failed-run cleanup
+now asks Chrome to close normally before bounded forced cleanup; prior forced
+termination left an interrupted auto pointer, explicitly recovered in a23 from
+the same earned Autosave. No engine patch, save injection or silent fallback.
+Import, all four code-bearing pack exports, production export and lossless Web
+packaging completed successfully. The manifest builder's integrity check passed.
+Unchanged asset packs were hash-checked/reused. The completed initial browser allocations used the preceding
+finish-line-20261020-final package (104,678,748 bytes).
+All allocated ticket runs have ended. The final 012 continuation stopped before
+the cemetery fight on the driver's assumption that one Anwen conversation must
+complete the gate meeting. Source inspection refined that classification: the
+game's session-only anwen_talked flag took precedence over the saved, completed
+Road quest after Continue. The game now skips that obsolete first-talk branch
+once Road is completed. Replacement production package
+finish-line-20261020-anwen compiled for this actual GAME repair, not a
+driver-only export. The bounded care/briefing/gate driver correction was syntax-
+checked, not rerun. Original reports remain failed, not inferred passes.
+Normal Continue restored the earned journey; 010 defeated the remaining saved
+brute, crossed back to Greyfen and completed the private report. No later regional
+quest, ending/homecoming or timed-oil browser reload acceptance was reached.
+016's read-only package inspection passed the 16 artifact records, transport/
+decoded hashes, pack/release identity and complete-directory budget. The existing
+publisher now accepts FINISH IDs; it was syntax-parsed, not executed.
+All owned run processes are retired. The earned profile remains at
+D:/Temp/AshenOath/ashen-oath-web002-chrome-1792429256334, original origin port38495.
+The user explicitly authorized targeted rechecks from the preserved earned save.
+a1 verified Anwen's repaired meeting, grave inspections, actual cemetery ambush
+and chapel unlock. It then stopped on a HARNESS route through the chapel's solid
+south wall; the approach now uses the authored southwest corner/west aisle.
+Regional retired-point selection and passed-objective resume guards were repaired
+in the same driver-only batch. a2 then exposed a genuine GAME saved-encounter pack
+failure: Bell-Eater's model was requested before monsters/characters mounted on
+Greyfen Continue. The existing zone-pack handoff now accepts encounter-specific
+requirements and waits for them consistently. Fresh Greyfen startup remains
+opening-only. Candidate finish-line-20261020-encounter compiled/package-checked:
+104,682,227 bytes; root transport SHA-256
+c8a7c3cbf61eca3bd895814622de607c934526dd6fc18dd1a42d2f7b16866ba6. Existing
+query-gated collision diagnostics are extended in one batch so the next run can
+identify the exact obstructing shape rather than repeat waypoint guesses.
+Reports: D:/Temp/AshenOath/finish-targeted-20261020-a1/browser.json and a2 sibling.
+Targeted a3 finished on those exact bytes. Saved Bell-Eater restoration passed
+without runtime/resource/network errors. Actual untruncated collision data exposed
+a GAME clearance pinch: chapel wall/headstone gap 0.55 m versus capsule diameter
+0.64 m. The southeast decorative grave moves 1.2 m east with its collision and
+authored soil; all graves/clues remain. The actual-shape offline reproduction
+changes from blocked to clear for the westward departure, not a runtime pass.
+Only the grave-earth mesh was rebuilt (4,645 bytes), its manifest hash updated,
+and the answered temporary probe removed. The source-aligned replacement above
+compiled/package-checked successfully. Targeted a4 passed the passage, actual
+Bell defeat (27,575 ms), rewards and summon retirement. a5 passed the native
+doorway/focus approach; a6 passed the real shrine choice and saved its cleansed
+outcome. a7 passed GRE-Q01 acceptance and its first account objective after a
+post-focus camera turn was removed from the driver. These are scoped observations,
+not full-ticket acceptance. All used the same candidate; no driver-only rebuilds.
+Current a8 resumes the first measure inspection, using the existing physical
+close-prop standing adjustment for regional activities as well as clues/herbs.
+Reports: D:/Temp/AshenOath/finish-targeted-20261020-a4 through a8/browser.json.
+The master owns current details, including batched current-label/peaceful-ending
+driver alignment. a12 completed GRE-Q01/02 and GRE-Q03's inspections/repair
+choice. a13's image/source exposed its support pickup among Draughts-table
+interactions (0.82 m from the board). That single work site moves 2 m south;
+finish-line-20261020-work-clearance compiled/package-checked for this GAME repair. The
+unproven a13 driver standoff policy is removed; proven braking/inspection fixes
+are retained. Targeted a14 is now in flight from the earned support-pickup check:
+D:/Temp/AshenOath/finish-targeted-20261020-a14/browser.json. Next: observe that
+owned run and continue the still-unplayed conditions, not a New Game.
+No input/story mutation or diagnostic route bypass is used.
+Report: D:/Temp/AshenOath/finish-targeted-20261020-a3/browser.json.
+No New Game or further
+export is needed for driver-only fixes. Strict performance improvement and actual-phone observations
+remain required; neither is waived or claimed complete.
+Intermediate routes transport generation exited120; it is not a release candidate.
+No commit, push or deployment; production/tracked Web are the published baseline.
+Authoritative current counts, allocated runs, evidence and limitations:
+[FINISH-000](../../plans/finish-line/FINISH-000.md).
+
+## Finish-Line Execution / Approved Timed Oils - 2026-10-19
+
+The user approved five-minute active-play oils, six minutes with Ash-Tempered
+Blade Fitting; one bottle per application/refresh, no stacking, replacement by
+another oil, pause outside live gameplay and persisted remaining time. Legacy
+selected oils get a full duration without charging another bottle. Save version
+13 records additive inventory timer fields. Source changes use existing inventory,
+progression, preparation/HUD, save and journey owners; no new runtime framework.
+
+Implementation and minimum production compilation/package are complete. Candidate
+finish-line-20261019-oils has 104,677,679 complete Web bytes; root PCK SHA-256
+a6133aa0ebbf3f7405dd13540dae6e6185bebba18e790e86b3dc493c3edad29b.
+The first authorized attempt failed before engine startup because the local QA
+server omitted gzip encoding for the compressed engine script (HARNESS). The
+server is corrected without changing candidate bytes. The user authorized one
+replacement hardware Chrome/main-plus-homecoming run, now finished, using
+ordinary input/read-only observation and earned-oil Save/Continue checks. Reports
+are under D:/Temp/AshenOath/finish-line-20261019-one-run and
+D:/Temp/AshenOath/finish-line-20261019-replacement-run respectively.
+The replacement failed at Anwen's return-report choice activation (HARNESS
+classification), after real New Game, Wychwood clues/five-enemy combat and the
+Greyfen return; no game-console/network errors were recorded in that portion.
+The driver correction handles deferred geometry, Commit prefixes and page outcome
+confirmation, but was syntax-checked only, not rerun. Candidate bytes are unchanged.
+Menu/control were observed at 45.7/47.5 seconds from navigation; click-to-control
+was 1.226 seconds. These are partial local Chrome observations, not strict native
+or controlled cold/warm acceptance. The oil/durable Continue check was NOT reached.
+The user explicitly holds publication for the full finish-line
+release. Existing 16 finishing tickets are not all implemented/accepted merely
+because their cards exist; their mandatory acceptance count remains 0/16.
+Strict PC performance and actual-phone checks are unchanged. No interim game run,
+separate benchmark, push or deployment has occurred. Current execution/acceptance records:
+[FINISH-000](../../plans/finish-line/FINISH-000.md) and
+[FINISH-017](../../plans/finish-line/FINISH-017.md).
+The approved replacement allocation is consumed. Precise next action: renewed
+runtime authorization or user observations for corrected Anwen report activation,
+earned-oil persistence and the remaining full-release conditions. No further
+agent runtime test or export follows this checkpoint without authorization.
+
 ## Six-World Runtime Implementation - 2026-10-19
 
 WORLD-SAGA-000/101-106 now have build-only runtime implementation: 30 additive

@@ -39,11 +39,12 @@ Save supports, piece count, records placed and `saga_dep_q05_outcome` from the
 three named values. Reward: 500 XP once; no construction purchase or weather timer.
 The 100-XP settled return is a later visit to this changed station. Ashwing XP
 and fitting entitlement stay with the old encounter, not this construction job.
-The fitting's duration perk remains explicitly blocked by the user's oil-system
-deferral; this quest neither invents a timer nor substitutes another effect.
+The fitting's original deferral is superseded by the approved timed-oil follow-up
+in [FINISH-017](../../finish-line/FINISH-017.md): six rather than five active-play
+minutes per bottle. This construction quest never grants a duplicate fitting.
 Advanced saves can start from resolved Ashwing; absent Dain uses his work plan.
 
 ## User Manual Checklist
 
 Use all old mill operations and compatible shelter choices, reload mid-frame,
-verify original rescue flags unchanged and inspect the separate blocked-perk status.
+verify original rescue flags unchanged and credit fitting checks to FINISH-017.
