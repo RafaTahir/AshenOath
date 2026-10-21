@@ -99,6 +99,7 @@ var locomotion_phase_distance := 0.0
 var locomotion_step_index := 0
 var story_gesture_remaining := 0.0
 var story_dialogue_active := false
+var life_modifier
 static var _resolved_bindings: Dictionary = {}
 
 func _ready() -> void:
@@ -393,6 +394,7 @@ func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time
 	var clip := _clip_for(action_name)
 	if clip == StringName():
 		return false
+	clear_life_activity()
 	presentation_state = ""
 	action_active = true
 	current_state = action_name
@@ -426,6 +428,7 @@ func set_dialogue_pose(active: bool) -> void:
 	if dead or not is_valid():
 		return
 	if active:
+		clear_life_activity()
 		if presentation_state == "dialogue":
 			return
 		action_active = false
@@ -471,6 +474,9 @@ func set_story_listening(listening: bool) -> void:
 func set_working(active: bool) -> void:
 	if dead or not is_valid():
 		return
+	if active and (action_active or story_dialogue_active):
+		return
+	clear_life_activity()
 	if active:
 		if presentation_state == "work":
 			return
@@ -489,6 +495,7 @@ func set_dead() -> void:
 	if dead:
 		return
 	dead = true
+	clear_life_activity()
 	current_state = "death"
 	action_active = true
 	presentation_state = ""
@@ -499,6 +506,34 @@ func set_dead() -> void:
 	var clip := _clip_for("death")
 	if clip != StringName():
 		_play_clip_all(clip, 0.08)
+
+func set_life_activity(kind: String) -> void:
+	if kind == "":
+		clear_life_activity()
+		return
+	if dead or not is_valid() or action_active or story_dialogue_active:
+		return
+	if presentation_state == "life:" + kind:
+		return
+	if life_modifier == null:
+		life_modifier = load("res://scripts/character_life_modifier.gd").new()
+		life_modifier.name = "CharacterLifePose"
+		skeleton.add_child(life_modifier)
+		life_modifier.configure(character_root, self)
+	life_modifier.activity = kind
+	presentation_state = "life:" + kind
+	current_state = ""
+	target_playback_scale = 1.0
+	_play_state("idle", 0.18)
+
+func clear_life_activity() -> void:
+	if life_modifier != null:
+		life_modifier.activity = ""
+	if presentation_state.begins_with("life:"):
+		presentation_state = ""
+		current_state = ""
+		if is_valid() and not dead:
+			_play_state("idle", 0.18)
 
 func get_skeleton() -> Skeleton3D:
 	return skeleton

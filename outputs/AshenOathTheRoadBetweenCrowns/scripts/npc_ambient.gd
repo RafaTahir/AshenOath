@@ -1,5 +1,8 @@
 extends Node
 
+const Presence = preload("res://scripts/character_presence.gd")
+const CastProfile = preload("res://scripts/story_cast_profile.gd")
+
 var base_y = 0.0
 var base_yaw = 0.0
 var phase = 0.0
@@ -21,13 +24,21 @@ var previous_position := Vector3.ZERO
 var externally_moving := false
 var ambient_suspended := false
 var animation_update_hz := -1.0
+var context: Node
+var cast_profile: Dictionary = {}
+var reaction_refresh := 0.0
+var reaction_until := 0.0
+var reaction := ""
+var reaction_cooldown := 0.0
 
 const ATTENTION_ARC := 48.0
 const ATTENTION_TURN_RATE := 1.1
 
-func setup(id: String, target: Node3D = null) -> void:
+func setup(id: String, target: Node3D = null, game: Node = null) -> void:
 	role_id = id
 	focus_target = target
+	context = game
+	cast_profile = CastProfile.presence_profile(id)
 	if role_id == "sister_anwen":
 		focus_radius = 8.0
 		turn_speed = 3.2
@@ -60,6 +71,10 @@ func _ready() -> void:
 	planted_yaw_offset = randf_range(-7.0, 7.0)
 	animation_driver = parent_3d.find_child("CharacterAnimationDriver", true, false)
 	face_driver = parent_3d.find_child("CharacterFaceDriver", true, false)
+	parent_3d.set_meta("cast_presence_profile", cast_profile)
+	parent_3d.set_meta("cast_eye_height", Presence.eye_height(parent_3d))
+	if animation_driver != null and is_instance_valid(focus_target):
+		animation_driver.character_root.set_meta("cast_viewer", focus_target)
 	if animation_driver != null:
 		animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
@@ -81,7 +96,7 @@ func _process(delta: float) -> void:
 		externally_moving = false
 		base_yaw = parent_3d.rotation_degrees.y
 		desired_yaw = parent_3d.rotation.y
-	if bool(parent_3d.get_meta("dialogue_facing_lock", false)):
+	if Presence.protected(parent_3d):
 		_set_animation_suspended(false)
 		_set_animation_update_rate(30.0)
 		desired_yaw = parent_3d.rotation.y
@@ -124,6 +139,8 @@ func _update_attention(parent_3d: Node3D, delta: float) -> void:
 		_set_animation_suspended(false)
 	var focus_distance: float = parent_3d.global_position.distance_to(focus_target.global_position) if focus_target != null else INF
 	_set_animation_update_rate(30.0 if focus_distance <= focus_radius else 15.0)
+	if is_instance_valid(context) and str(context.get("current_zone_id")) == "greyfen" and bool(context.get("game_started")):
+		_update_presence(parent_3d, delta, focus_distance)
 	phase += delta * (0.48 if role_id == "sister_anwen" else 0.62)
 	var home_yaw: float = deg_to_rad(base_yaw)
 	var target_yaw: float = home_yaw + deg_to_rad(planted_yaw_offset)
@@ -146,6 +163,29 @@ func _update_attention(parent_3d: Node3D, delta: float) -> void:
 			target_yaw = desired_yaw
 	attention_hold = max(attention_hold - delta, 0.0)
 	desired_yaw = target_yaw
+
+func _update_presence(actor: Node3D, delta: float, distance: float) -> void:
+	reaction_until = maxf(reaction_until - delta, 0.0)
+	reaction_cooldown = maxf(reaction_cooldown - delta, 0.0)
+	reaction_refresh -= delta
+	if reaction_refresh <= 0.0:
+		reaction_refresh = 0.30 + float(absi(role_id.hash()) % 7) * 0.015
+		var seen := Presence.can_see(actor, focus_target, focus_radius)
+		var threat := Presence.player_threat(focus_target) if seen else ""
+		if threat != "" and reaction_cooldown <= 0.0:
+			reaction = "fear" if threat == "danger" else "suspicion"
+			reaction_until = 3.0 if threat == "danger" else 1.8
+			reaction_cooldown = 8.0
+		elif seen and distance < 2.5 and reaction_until <= 0.0:
+			reaction = CastProfile.expression_for(cast_profile, context.get("story_state"))
+	if is_instance_valid(face_driver):
+		face_driver.set_expression(reaction if reaction_until > 0.0 else CastProfile.expression_for(cast_profile, context.get("story_state")))
+		face_driver.set_focus_target(focus_target if distance < focus_radius else null)
+	if is_instance_valid(animation_driver) and animation_driver.has_method("set_life_activity"):
+		var activity := str(cast_profile.get("activity", "idle"))
+		if reaction_until > 0.0:
+			activity = "fear" if reaction == "fear" else "watch"
+		animation_driver.set_life_activity(activity if distance <= 7.0 else "")
 
 func _animation_distance() -> float:
 	if role_id == "sister_anwen":

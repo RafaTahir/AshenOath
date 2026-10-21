@@ -5,6 +5,7 @@ const CharacterIdentityProfile = preload("res://scripts/character_identity_profi
 const StoryWardrobe = preload("res://scripts/story_wardrobe.gd")
 const CLERIC_STAFF_PATH := "res://assets_external/characters/Cleric_Staff.fbx"
 const CLERIC_STAFF_TEXTURE_PATH := "res://assets_external/characters/Cleric_Staff_Texture.png"
+const FORGE_HAMMER_PATH := "res://assets/characters/forge_hammer.tscn"
 const OPENING_OCCUPATION_PROP_PATHS := [
 	"res://assets_external/environment/props/Bucket_Wooden_1.fbx",
 	"res://assets_external/environment/props/Book_Simplified_Single.fbx",
@@ -98,9 +99,14 @@ static func _add_occupation_equipment(owner: Node3D, role: String) -> void:
 			"position": Vector3(0.18, -0.28, 0.02), "rotation": Vector3(180.0, 0.0, 0.0),
 		},
 		"forge_helper": {
-			"path": OPENING_OCCUPATION_PROP_PATHS[3],
-			"hand": "right", "scale": 0.68,
-			"position": Vector3(0.08, -0.06, 0.04), "rotation": Vector3(0.0, 0.0, 90.0),
+			"path": FORGE_HAMMER_PATH,
+			"hand": "right", "scale": 1.0,
+			"position": Vector3(0.02, -0.03, 0.0), "rotation": Vector3(0.0, 0.0, 90.0),
+		},
+		"blacksmith_tor": {
+			"path": FORGE_HAMMER_PATH,
+			"hand": "right", "scale": 1.0,
+			"position": Vector3(0.02, -0.03, 0.0), "rotation": Vector3(0.0, 0.0, 90.0),
 		},
 	}
 	var definition: Dictionary = definitions.get(role, {})

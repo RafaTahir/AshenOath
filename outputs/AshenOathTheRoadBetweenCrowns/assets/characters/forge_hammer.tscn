@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Wood"]
+albedo_color = Color(0.22, 0.12, 0.065, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="Iron"]
+albedo_color = Color(0.25, 0.26, 0.27, 1)
+metallic = 0.65
+roughness = 0.7
+
+[sub_resource type="CylinderMesh" id="Handle"]
+material = SubResource("Wood")
+top_radius = 0.016
+bottom_radius = 0.019
+height = 0.34
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="Head"]
+material = SubResource("Iron")
+size = Vector3(0.17, 0.07, 0.065)
+
+[node name="ForgeHammer" type="Node3D"]
+
+[node name="Handle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.07, 0)
+mesh = SubResource("Handle")
+
+[node name="ForgedHead" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.23, 0)
+mesh = SubResource("Head")

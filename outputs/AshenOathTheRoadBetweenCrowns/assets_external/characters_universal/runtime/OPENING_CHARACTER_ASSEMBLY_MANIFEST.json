@@ -24,9 +24,9 @@
     "anwen": {
       "role": "anwen",
       "runtime": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
-      "runtime_sha256": "bc18388f80f73a739c996efa963565dc283d1491d1006643cc3ee0f3bf05587c",
+      "runtime_sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb",
       "binary": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
-      "binary_sha256": "b4e8b543a3dd8510d097f6c63af461c6b61f2a3ed62f64748e09a7f556d989f9",
+      "binary_sha256": "1d5c8314084cab3ea95f1efde3daa9ee22bc8ee95a4697801405bbe4f35729db",
       "atlas": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
       "atlas_sha256": "36a470db2bda34b853ebfd57307ecc86af0ba198067a9285fc1b33e95b29632d",
       "sources": [
@@ -34,17 +34,34 @@
         "Female_Head.gltf",
         "Hair_Buns.gltf"
       ],
+      "source_license_files": [
+        "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+      ],
       "material_count": 1,
       "mesh_count": 1,
       "primitive_count": 1,
-      "skin_count": 1
+      "skin_count": 1,
+      "facial_rig": "living_face_v1",
+      "facial_controls": {
+        "Face_Eye_L": 278,
+        "Face_Eye_R": 278,
+        "Face_LidUpper_L": 43,
+        "Face_LidUpper_R": 43,
+        "Face_LidLower_L": 46,
+        "Face_LidLower_R": 46,
+        "Face_Brow_L": 472,
+        "Face_Brow_R": 472,
+        "Face_Mouth_L": 137,
+        "Face_Mouth_R": 150,
+        "Face_Jaw": 294
+      }
     },
     "villager_male": {
       "role": "villager_male",
       "runtime": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
-      "runtime_sha256": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544",
+      "runtime_sha256": "4e570daddc32d5d65512913249478b01afa2c0df193f485d3f474b3145c9e81e",
       "binary": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
-      "binary_sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926",
+      "binary_sha256": "3bdc20f6ddf3861f984408ff42af64ccf2e9c8993700c783859aea2e14a743a1",
       "atlas": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
       "atlas_sha256": "608c6c6acc4987dcfe92c01589131d9981e2e9711e78e093295640fb1e17518d",
       "sources": [
@@ -52,10 +69,27 @@
         "Male_Head.gltf",
         "Hair_SimpleParted.gltf"
       ],
+      "source_license_files": [
+        "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+      ],
       "material_count": 1,
       "mesh_count": 1,
       "primitive_count": 1,
-      "skin_count": 1
+      "skin_count": 1,
+      "facial_rig": "living_face_v1",
+      "facial_controls": {
+        "Face_Eye_L": 278,
+        "Face_Eye_R": 278,
+        "Face_LidUpper_L": 44,
+        "Face_LidUpper_R": 44,
+        "Face_LidLower_L": 46,
+        "Face_LidLower_R": 46,
+        "Face_Brow_L": 337,
+        "Face_Brow_R": 337,
+        "Face_Mouth_L": 119,
+        "Face_Mouth_R": 130,
+        "Face_Jaw": 282
+      }
     },
     "villager_female": {
       "role": "villager_female",
@@ -78,9 +112,9 @@
     "villager_worker": {
       "role": "villager_worker",
       "runtime": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
-      "runtime_sha256": "c98bfbee092140937e2907535a8beb2d3aa1e5185f9313f9b5a880a1f1291afe",
+      "runtime_sha256": "f221a14a0dcea56db70e1822eb4f06f3ecff581c49e5ef145aee0b9642392ceb",
       "binary": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
-      "binary_sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d",
+      "binary_sha256": "c8ef3367e3e9d628458e00c9b84620e93a68c22e5950d7cccdf91450bd055d00",
       "atlas": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
       "atlas_sha256": "920aaef0d1ee27e63c15bedb68a307c893fc417ab6494e90b854e58cbd7f79d7",
       "sources": [
@@ -88,10 +122,27 @@
         "Male_Head.gltf",
         "Hair_Buzzed.gltf"
       ],
+      "source_license_files": [
+        "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+      ],
       "material_count": 1,
       "mesh_count": 1,
       "primitive_count": 1,
-      "skin_count": 1
+      "skin_count": 1,
+      "facial_rig": "living_face_v1",
+      "facial_controls": {
+        "Face_Eye_L": 278,
+        "Face_Eye_R": 278,
+        "Face_LidUpper_L": 44,
+        "Face_LidUpper_R": 44,
+        "Face_LidLower_L": 46,
+        "Face_LidLower_R": 46,
+        "Face_Brow_L": 337,
+        "Face_Brow_R": 337,
+        "Face_Mouth_L": 119,
+        "Face_Mouth_R": 130,
+        "Face_Jaw": 282
+      }
     },
     "villager_hooded": {
       "role": "villager_hooded",

@@ -225,6 +225,12 @@ func _add_person(area: Node3D, person: Dictionary, id: String) -> void:
 	host._configure_npc_animation(visual, id)
 	area.set_meta("saga_person", id)
 	area.set_meta("protected_optional_speaker", true)
+	if zone == "greyfen":
+		load("res://scripts/character_presentation.gd").apply_npc(visual, id, false)
+		var ambient = load("res://scripts/npc_ambient.gd").new()
+		ambient.name = "NpcAmbient"
+		ambient.setup(id, host.player, host)
+		area.add_child(ambient)
 
 func _add_work_prop(area: Node3D, kind: String) -> void:
 	var visual: Node3D

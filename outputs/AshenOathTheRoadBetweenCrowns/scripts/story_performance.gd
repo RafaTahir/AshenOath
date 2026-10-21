@@ -98,6 +98,8 @@ func start(target: Node3D, player: Node3D, state) -> void:
 	actor = target
 	listener = player
 	profile = CastProfile.get_profile(str(actor.get_meta("character_identity_profile", "")), str(actor.name))
+	if profile.is_empty():
+		profile = CastProfile.presence_profile(str(actor.get_meta("character_identity_profile", "")), str(actor.name))
 	if actor.has_method("face_target"):
 		profile = CastProfile.get_profile("player")
 	driver = actor.find_child("CharacterAnimationDriver", true, false)
@@ -106,6 +108,7 @@ func start(target: Node3D, player: Node3D, state) -> void:
 		return
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	active = true
+	actor.set_meta("cast_dialogue_owner", true)
 	speaking = true
 	elapsed = 0.0
 	next_beat = 2.8
@@ -157,6 +160,8 @@ func stop() -> void:
 	if not active:
 		return
 	active = false
+	if is_instance_valid(actor):
+		actor.remove_meta("cast_dialogue_owner")
 	pending_gesture = ""
 	set_process(false)
 	if is_instance_valid(driver):
@@ -174,3 +179,6 @@ func stop() -> void:
 		if is_instance_valid(node):
 			node.process_mode = saved_modes[node]
 	saved_modes.clear()
+
+func _exit_tree() -> void:
+	stop()

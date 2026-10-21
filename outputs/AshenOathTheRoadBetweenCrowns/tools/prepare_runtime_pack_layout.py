@@ -14,6 +14,7 @@ PROJECT = Path(__file__).resolve().parent.parent
 ROOT_NAMES = {"Web Browser", "Web QA Browser", "Runtime Pack Base"}
 SAGA_OPENING_RECORD = "assets_external/environment/props/CampaignRecord_register_mira_Authored.res"
 CHAPTER_ART = "assets/ui/story_chapters_atlas.png"
+FORGE_HAMMER = "assets/characters/forge_hammer.tscn"
 CAMPAIGN_PREFIXES = (
     "assets_external/environment/forest/Campaign_",
     "assets_external/environment/forest/Hart",
@@ -69,6 +70,7 @@ def compile_layout():
         files[name].discard("res://" + CHAPTER_ART)
     includes["Runtime Pack Campaign"].add(CHAPTER_ART)
     includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
+    files["Runtime Pack Opening"].add("res://" + FORGE_HAMMER)
     # Regional written requests begin in Greyfen, before campaign packs mount.
     # Transfer the retained mesh instead of duplicating it or loading a late
     # resource opportunistically during opening preparation.
@@ -113,6 +115,8 @@ def compile_layout():
                 includes[name].update(p.relative_to(PROJECT).as_posix() for p in PROJECT.glob(pattern))
 
     def owner(relative):
+        if relative == FORGE_HAMMER:
+            return "Runtime Pack Opening"
         if relative == SAGA_OPENING_RECORD:
             return "Runtime Pack Opening"
         if relative.startswith(CAMPAIGN_PREFIXES):
@@ -187,8 +191,10 @@ def compile_layout():
             exclusions.add(CHAPTER_ART)
         if name == "Runtime Pack Opening":
             exclusions.discard(SAGA_OPENING_RECORD)
+            exclusions.discard(FORGE_HAMMER)
         else:
             exclusions.add(SAGA_OPENING_RECORD)
+            exclusions.add(FORGE_HAMMER)
         # Imported GLTF scenes already contain these vertex/skin buffers. Godot
         # loads the imported scene at runtime, never the source GLTF .bin files.
         # Keep originals in the repository, not duplicated in delivery packs.

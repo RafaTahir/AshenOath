@@ -2,9 +2,8 @@ extends Node
 
 const StoryHeadModifier = preload("res://scripts/story_head_modifier.gd")
 
-## Lightweight native-face presentation layer.
-## It only animates imported eye meshes that already belong to the character
-## asset. It never creates face cards, eye boxes, hair meshes, or other anatomy.
+## Attention and emotional delivery on declared, imported facial controls.
+## Unrigged actors retain head attention without claiming eyelid animation.
 
 var character_root: Node3D
 var role_id := ""
@@ -32,7 +31,10 @@ var attention_elapsed := 0.0
 func set_conversation_active(value: bool) -> void:
 	conversation_active = value
 	if update_timer != null:
-		update_timer.wait_time = 1.0 / 30.0 if value else update_interval
+		update_timer.wait_time = _tick_interval()
+
+func _tick_interval() -> float:
+	return 1.0 / 30.0 if conversation_active or head_modifier != null and head_modifier.has_living_face() else update_interval
 
 func set_speech_amount(value: float) -> void:
 	if head_modifier != null:
@@ -53,6 +55,12 @@ const NATIVE_MONSTER_ROLES := [
 ]
 
 func configure(root: Node3D, role: String) -> bool:
+	if update_timer != null:
+		update_timer.stop()
+	if is_instance_valid(head_modifier):
+		head_modifier.blink_closure = 0.0
+		head_modifier.speech_amount = 0.0
+	head_modifier = null
 	character_root = root
 	role_id = role
 	eye_meshes.clear()
@@ -92,7 +100,7 @@ func configure(root: Node3D, role: String) -> bool:
 		for candidate in root.find_children("*", "Skeleton3D", true, false):
 			skeleton = candidate as Skeleton3D
 			break
-	if skeleton != null and role_id not in NATIVE_MONSTER_ROLES:
+	if skeleton != null and (role_id not in NATIVE_MONSTER_ROLES or role_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]):
 		head_modifier = skeleton.get_node_or_null("StoryHeadModifier") as StoryHeadModifier
 		if head_modifier == null:
 			head_modifier = StoryHeadModifier.new()
@@ -109,7 +117,7 @@ func configure(root: Node3D, role: String) -> bool:
 		update_timer.process_callback = Timer.TIMER_PROCESS_IDLE
 		update_timer.timeout.connect(_on_update_timer_timeout)
 		add_child(update_timer)
-	update_timer.wait_time = update_interval
+	update_timer.wait_time = _tick_interval()
 	if valid:
 		var phase_delay := float(absi((role_id + str(root.get_instance_id())).hash()) % 1000) / 1000.0 * update_interval
 		if is_inside_tree():
@@ -123,27 +131,33 @@ func _start_update_timer(delay: float) -> void:
 		update_timer.start(delay)
 
 func _on_update_timer_timeout() -> void:
-	if not valid or character_root == null:
+	if not valid or not is_instance_valid(character_root):
 		return
 	if distance_suspended:
 		return
 	var step := update_timer.wait_time if update_timer != null else update_interval
+	update_timer.wait_time = _tick_interval()
 	attention_elapsed += step
-	if focus_target == null or not is_instance_valid(focus_target):
+	if (focus_target == null or not is_instance_valid(focus_target)) and role_id not in NATIVE_MONSTER_ROLES:
 		focus_refresh_remaining -= step
 		if focus_refresh_remaining <= 0.0:
 			focus_refresh_remaining = 0.75
 			var player_node := get_tree().get_first_node_in_group("player") as Node3D
 			focus_target = player_node
 	var wanted_look := 0.0
+	if head_modifier != null:
+		head_modifier.look_pitch = 0.0
 	if is_instance_valid(focus_target):
-		var to_target := focus_target.global_position + Vector3.UP * 1.18 - character_root.global_position - Vector3.UP * 1.35
-		to_target.y = 0.0
+		var target_height := float(focus_target.get_meta("cast_eye_height", 1.55))
+		var own_height := float(character_root.get_meta("cast_eye_height", 1.55))
+		var to_target := focus_target.global_position + Vector3.UP * target_height - character_root.global_position - Vector3.UP * own_height
 		if to_target.length_squared() > 0.04 and to_target.length() < 10.0:
 			var local_target := character_root.global_transform.basis.inverse() * to_target.normalized()
 			var front := local_target.z if bool(character_root.get_meta("source_forward_positive_z", false)) else -local_target.z
 			if front > -0.15:
 				wanted_look = clampf(local_target.x, -0.85, 0.85)
+				if head_modifier != null:
+					head_modifier.look_pitch = -clampf(atan2(to_target.y, maxf(Vector2(to_target.x, to_target.z).length(), 0.1)), -0.15, 0.15)
 	# Brief, staggered breaks in eye contact rather than a permanent player stare.
 	var attention_phase := fmod(attention_elapsed + float(absi(role_id.hash()) % 37) * 0.1, 6.8)
 	if attention_phase > 5.6:
@@ -172,22 +186,10 @@ func set_distance_suspended(suspended: bool) -> void:
 func _apply_eye_look() -> void:
 	if head_modifier != null:
 		head_modifier.look_yaw = -look_offset * 0.24
-	for mesh in eye_meshes:
-		if not is_instance_valid(mesh):
-			continue
-		var base: Vector3 = base_eye_positions.get(mesh, mesh.position)
-		var position := base + Vector3.RIGHT * look_offset * 0.006
-		if mesh.position != position:
-			mesh.position = position
 
 func _apply_blink(closure: float) -> void:
-	for mesh in eye_meshes:
-		if not is_instance_valid(mesh):
-			continue
-		var base: Vector3 = base_eye_scales.get(mesh, mesh.scale)
-		var scale_value := Vector3(base.x, lerpf(base.y, maxf(base.y * 0.12, 0.001), closure), base.z)
-		if mesh.scale != scale_value:
-			mesh.scale = scale_value
+	if head_modifier != null:
+		head_modifier.blink_closure = clampf(closure, 0.0, 1.0)
 
 func get_contract_report() -> Dictionary:
 	return {
@@ -198,8 +200,10 @@ func get_contract_report() -> Dictionary:
 		"native_eye_mesh_count": eye_meshes.size(),
 		"native_brow_mesh_count": brow_meshes.size(),
 		"synthetic_geometry_created": false,
-		"blink_enabled": not eye_meshes.is_empty(),
-		"eye_focus_enabled": not eye_meshes.is_empty(),
+		"facial_rig": "living_face_v1" if head_modifier != null and head_modifier.has_living_face() else "head_attention_only",
+		"blink_enabled": head_modifier != null and head_modifier.has_living_face(),
+		"eye_focus_enabled": head_modifier != null and head_modifier.has_living_face(),
+		"expression_controls": head_modifier.facial_bones.keys() if head_modifier != null else [],
 	}
 
 func set_focus_target(target: Node3D) -> void:
@@ -207,6 +211,8 @@ func set_focus_target(target: Node3D) -> void:
 	focus_refresh_remaining = 0.75
 
 func set_expression(value: String) -> void:
+	if expression == value and head_modifier != null and head_modifier.emotion == value:
+		return
 	expression = value
 	if head_modifier != null:
 		head_modifier.set_expression(value)

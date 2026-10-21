@@ -6246,7 +6246,7 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		area.add_child(label)
 	if type == "dialogue" and id != "notice_board" and has_character_role:
 		var ambient = NpcAmbient.new()
-		ambient.setup(presentation_id, player)
+		ambient.setup(presentation_id, player, self)
 		area.add_child(ambient)
 	_connect_interactable(area)
 	return area
@@ -6522,7 +6522,7 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 		deferred_opponent.add_child(deferred_gesture)
 		deferred_gesture.configure(player, null)
 		var deferred_ambient = NpcAmbient.new()
-		deferred_ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player)
+		deferred_ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player, self)
 		deferred_opponent.add_child(deferred_ambient)
 		return
 	var opponent := _make_role_visual(opponent_role, "characters", Vector3.ONE)
@@ -6539,7 +6539,7 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 	opponent.add_child(gesture_controller)
 	gesture_controller.configure(player, opponent.find_child("CharacterAnimationDriver", true, false))
 	var ambient = NpcAmbient.new()
-	ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player)
+	ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player, self)
 	opponent.add_child(ambient)
 
 func _make_board_game_chair(area: Node3D, position: Vector3, yaw: float, batch: MultiMeshInstance3D, first_index: int) -> void:

@@ -91,6 +91,13 @@ var base_damage := 10.0
 var boss_visual_time := 0.0
 var boss_identity_base_scale := Vector3.ONE
 var encounter_peers: Array = []
+var ambient_state := "resting"
+var ambient_elapsed := 0.0
+var ambient_remaining := 0.0
+var ambient_target := Vector3.INF
+var ambient_cycle := 0
+var had_player_contact := false
+var native_face: Node
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -210,6 +217,18 @@ func _physics_process(delta: float) -> void:
 	var to_player: Vector3 = player.global_position - global_position
 	var distance: float = to_player.length()
 	_update_perception(delta, distance)
+	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+		if not is_instance_valid(native_face) and visual_root != null:
+			native_face = visual_root.find_child("CharacterFaceDriver", true, false)
+		if is_instance_valid(native_face):
+			native_face.set_focus_target(player if can_see_player else null)
+	if can_see_player:
+		had_player_contact = true
+		ambient_state = "engaged"
+		ambient_remaining = 0.0
+		ambient_target = Vector3.INF
+		if animation_driver != null:
+			animation_driver.clear_life_activity()
 	var pursuit_position: Vector3 = player.global_position if can_see_player else last_known_player_position
 	var pursuit_distance := global_position.distance_to(pursuit_position) if pursuit_position != Vector3.INF else INF
 	var home_distance: float = global_position.distance_to(home_position)
@@ -240,8 +259,11 @@ func _physics_process(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0.0, 8.0 * delta)
 			velocity.z = move_toward(velocity.z, 0.0, 8.0 * delta)
 	elif perception_memory_time <= 0.0 and not can_see_player:
-		velocity.x = move_toward(velocity.x, 0.0, 6.0 * delta)
-		velocity.z = move_toward(velocity.z, 0.0, 6.0 * delta)
+		if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"] and encounter_active:
+			_update_ambient_life(delta)
+		else:
+			velocity.x = move_toward(velocity.x, 0.0, 6.0 * delta)
+			velocity.z = move_toward(velocity.z, 0.0, 6.0 * delta)
 	elif attack_recovery_time > 0.0:
 		var retreat := -to_player.normalized()
 		var tangent := Vector3(-retreat.z, 0.0, retreat.x) * flank_sign
@@ -307,6 +329,8 @@ func _physics_process(delta: float) -> void:
 	if encounter_spatial_index != null:
 		encounter_spatial_index.update(self)
 	if animation_driver != null:
+		if Vector2(velocity.x, velocity.z).length_squared() > 0.01:
+			animation_driver.clear_life_activity()
 		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(move_speed, 0.1), velocity, is_on_floor())
 	_animate_visuals(delta)
 
@@ -647,6 +671,52 @@ func _update_perception(delta: float, player_distance: float) -> void:
 	if can_see_player:
 		last_known_player_position = player.global_position
 		perception_memory_time = perception_memory_duration
+
+func _update_ambient_life(delta: float) -> void:
+	# This sample preserves engagement, damage and attack timers. Ambient intent
+	# runs only after existing perception loses its target, inside the home leash.
+	ambient_elapsed += delta
+	ambient_remaining = maxf(ambient_remaining - delta, 0.0)
+	if ambient_remaining <= 0.0:
+		ambient_cycle += 1
+		var phase := float(absi((enemy_id + str(encounter_slot)).hash()) % 628) * 0.01
+		if had_player_contact and last_known_player_position != Vector3.INF and last_known_player_position.distance_to(home_position) < minf(leash_radius - 1.0, 8.0):
+			ambient_state = "searching"
+			ambient_target = last_known_player_position
+			ambient_remaining = 2.4
+			had_player_contact = false
+		elif global_position.distance_to(home_position) > 3.2:
+			ambient_state = "returning"
+			ambient_target = home_position
+			ambient_remaining = 5.0
+		elif ambient_cycle % 3 == 0:
+			ambient_state = "scavenging" if behavior_profile != "brute" else "watching"
+			ambient_target = Vector3.INF
+			ambient_remaining = 3.0 + phase * 0.25
+		else:
+			ambient_state = "patrolling" if behavior_profile != "flanker" else "stalking"
+			var angle := phase + float(ambient_cycle) * 1.7
+			var radius := 1.35 if behavior_profile == "brute" else 2.5
+			var candidate := home_position + Vector3(cos(angle), 0, sin(angle)) * minf(radius, maxf(0.5, leash_radius - 1.0))
+			ambient_target = candidate if spatial_service != null and spatial_service.validate_runtime_segment(home_position, candidate, 0.55) else home_position
+			ambient_remaining = 4.0 + phase * 0.2
+		navigation_target = Vector3.INF
+		navigation_refresh_time = 0.0
+		if not is_instance_valid(native_face) and visual_root != null:
+			native_face = visual_root.find_child("CharacterFaceDriver", true, false)
+	var direction := Vector3.ZERO
+	if ambient_target != Vector3.INF and global_position.distance_to(ambient_target) > 0.30:
+		direction = _navigation_direction(ambient_target)
+		direction = _validated_step_direction(direction, ambient_target, move_speed * 0.4 * delta)
+	var pace := 0.34 if behavior_profile == "flanker" else 0.43
+	velocity.x = move_toward(velocity.x, direction.x * move_speed * pace, delta * 4.0)
+	velocity.z = move_toward(velocity.z, direction.z * move_speed * pace, delta * 4.0)
+	if direction.length_squared() > 0.01:
+		look_at(global_position + direction, Vector3.UP)
+	elif animation_driver != null:
+		animation_driver.set_life_activity("scavenge" if ambient_state == "scavenging" else "watch")
+		if is_instance_valid(native_face) and ambient_state == "scavenging" and fmod(ambient_elapsed, 2.8) < delta:
+			native_face.play_story_gesture("remember")
 
 func _has_perception_line() -> bool:
 	if not is_inside_tree() or player == null or not player.is_inside_tree():

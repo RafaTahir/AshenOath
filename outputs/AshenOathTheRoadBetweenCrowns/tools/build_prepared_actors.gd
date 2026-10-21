@@ -11,6 +11,7 @@ var entries: Dictionary = {}
 var templates: Dictionary = {}
 var template_materials: Dictionary = {}
 var failed := false
+const FACIAL_SAMPLES := ["Anwen_A_Set_Atlas.gltf", "Villager_Male_Atlas.gltf", "Villager_Worker_Atlas.gltf"]
 
 func _initialize() -> void:
 	call_deferred("_compile")
@@ -59,9 +60,14 @@ func _compile() -> void:
 			_failed("Required actor material/texture failed: %s: %s" % [key, str(visual.get_meta("character_material_errors", []))])
 			visual.free()
 			continue
+		var facial_controls := _compile_face_bindings(visual, source)
+		if failed:
+			visual.free()
+			continue
 		_save_libraries()
 		visual.set_meta("prepared_actor_source", source)
 		visual.set_meta("prepared_actor_role", role)
+		visual.set_meta("prepared_facial_controls", facial_controls)
 		visual.set_meta("prepared_source_transform", source_transform)
 		visual.set_meta("prepared_source_bounds", source_bounds)
 		NodeManifest.compile(visual)
@@ -80,6 +86,11 @@ func _compile() -> void:
 		template_materials[assembly_key] = MaterialBindings.descriptors(visual)
 		entries[key] = {"path": path, "source": source, "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
 		visual.free()
+	if failed:
+		helper.clear_runtime_caches()
+		helper.free()
+		quit(1)
+		return
 	var file := FileAccess.open("res://data/prepared_actors.json", FileAccess.WRITE)
 	if file == null:
 		_failed("Cannot write prepared actor catalog")
@@ -110,6 +121,18 @@ func _save_libraries() -> void:
 			var path := directory + (source.resource_path + "|" + str(binding)).sha256_text().substr(0, 24) + ".res"
 			if ResourceSaver.save(library, path, ResourceSaver.FLAG_COMPRESS | ResourceSaver.FLAG_CHANGE_PATH) != OK:
 				_failed("Cannot save animation binding: %s" % path)
+
+func _compile_face_bindings(visual: Node3D, source: String) -> Dictionary:
+	var result: Dictionary = {}
+	for node in visual.find_children("*", "Skeleton3D", true, false):
+		var skeleton := node as Skeleton3D
+		for bone in range(skeleton.get_bone_count()):
+			var name := skeleton.get_bone_name(bone)
+			if name.begins_with("Face_"):
+				result[name] = {"skeleton":str(visual.get_path_to(skeleton)), "bone":name}
+	if source.get_file() in FACIAL_SAMPLES and result.size() != 11:
+		_failed("Required CAST facial rig missing: %s; controls=%s" % [source, str(result.keys())])
+	return result
 
 func _own(node: Node, scene: Node) -> void:
 	node.scene_file_path = ""

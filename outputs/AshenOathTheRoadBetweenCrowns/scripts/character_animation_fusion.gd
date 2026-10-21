@@ -53,9 +53,23 @@ static func attach_shared_library(root: Node3D, source_resource: Resource = null
 			# skeleton reference is retained by this helper-owned resource cache.
 			var skeleton_path := _relative_path(rig_root, target_skeleton) if target_skeleton != null else ""
 			var bone_signature: Array = []
+			var binds_face := _has_face_tracks(source_library)
 			if target_skeleton != null:
+				var included: Array[int] = []
+				var canonical_indices: Dictionary = {}
 				for index in target_skeleton.get_bone_count():
-					bone_signature.append([target_skeleton.get_bone_name(index), target_skeleton.get_bone_parent(index)])
+					var bone_name := target_skeleton.get_bone_name(index)
+					# Added expression joints do not change an unmodified locomotion
+					# binding. Share those clips rather than exporting a second copy.
+					if bone_name.begins_with("Face_") and not binds_face:
+						continue
+					canonical_indices[index] = included.size()
+					included.append(index)
+				for index in included:
+					# Importers can insert new child joints before a later limb.
+					# Express parent indices in the same retained-bone ordering.
+					var parent := target_skeleton.get_bone_parent(index)
+					bone_signature.append([target_skeleton.get_bone_name(index), int(canonical_indices.get(parent, -1))])
 			var binding_key := skeleton_path + "|" + var_to_str(bone_signature)
 			var source_variants: Dictionary = prepared_libraries.get(source_library, {})
 			var retargeted_library: AnimationLibrary = source_variants.get(binding_key)
@@ -70,6 +84,14 @@ static func attach_shared_library(root: Node3D, source_resource: Resource = null
 	if source_scene != null:
 		source_scene.free()
 	return first_target
+
+static func _has_face_tracks(library: AnimationLibrary) -> bool:
+	for name in library.get_animation_list():
+		var animation := library.get_animation(name)
+		for track in range(animation.get_track_count()):
+			if str(animation.track_get_path(track)).contains(":Face_"):
+				return true
+	return false
 
 static func is_shared_body(path: String) -> bool:
 	var normalized := path.replace("\\", "/").to_lower()
