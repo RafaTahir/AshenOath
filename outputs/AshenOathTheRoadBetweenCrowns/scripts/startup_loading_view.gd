@@ -84,7 +84,7 @@ func _ready() -> void:
 	_retry.hide()
 	_content.add_child(_retry)
 	# The already-exported journal atlas is optional decoration, never a gate.
-	_atlas_requested = ResourceLoader.load_threaded_request(ATLAS_PATH, "Texture2D") == OK
+	_atlas_requested = ResourceLoader.exists(ATLAS_PATH) and ResourceLoader.load_threaded_request(ATLAS_PATH, "Texture2D") == OK
 	resized.connect(_layout)
 	_layout()
 

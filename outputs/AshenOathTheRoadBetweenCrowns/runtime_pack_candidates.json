@@ -1,106 +1,104 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-20T13:46:54.3230125Z",
-  "build_id": "finish-line-20261020-user-candidate",
-  "generated_from_commit": "2b1be253eb493991e5dc7d208d46694e6eb319d2",
+  "ticket": "PACK-003",
+  "generated_at_utc": "2026-10-21T10:26:54.7524777Z",
+  "build_id": "startup-menu-20261021",
+  "generated_from_commit": "9d4609bd9e312cd63360f70d0a409f2abe082105",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-user-candidate\\runtime-packs",
+  "project": "Ashen Oath",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\startup-menu-20261021\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 100631788,
+  "total_bytes": 100636316,
   "packs": [
     {
       "id": "base",
-      "version": "finish-line-20261020-user-candidate",
+      "version": "startup-menu-20261021",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 6405008,
-      "sha256": "27531e5123f57e524a9f449f329caf1cc92a16b9a3e7e7462e845f7d6b5d765d",
+      "bytes": 4006580,
+      "sha256": "79e47b1d3067d9ce6166318b0b45c88841af78cdcec1f54368b7483860dfd312",
       "status": "candidate_external",
-      "log": "logs/pack-base.stdout.log"
+      "log": "base.log"
     },
     {
       "id": "opening",
-      "version": "finish-line-20261020-user-candidate",
+      "version": "startup-menu-20261021",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35474180,
-      "sha256": "c90742d36aac1246a961f0c062b26eb8bdadb4a000b26eea103407e3a3efa363",
+      "sha256": "3ead7d465cc69556be908cd9f77da7c718cf18e4b11dae6b84b42469dcfca6ce",
       "status": "candidate_external",
-      "log": "logs/pack-opening.stdout.log"
+      "log": "opening.log"
     },
     {
       "id": "adjacent",
-      "version": "finish-line-20261020-user-candidate",
+      "version": "startup-menu-20261021",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 1404944,
-      "sha256": "7c02367f46a0f3739dcd1c47c5d533e85b1e2007a047045887b3f578cc1a0a94",
+      "sha256": "39e454c2954f922352d31a4bf68208cc94905778347006d6a177e4bb5813aee5",
       "status": "candidate_external",
-      "log": "logs/pack-adjacent.stdout.log"
+      "log": "adjacent.log"
     },
     {
       "id": "campaign",
-      "version": "finish-line-20261020-user-candidate",
+      "version": "startup-menu-20261021",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 6323016,
-      "sha256": "663a0216fb3f00d502babb778786312e3e2b56caeed767363927a236ea4e23fd",
+      "bytes": 8725972,
+      "sha256": "64801f6678062f41ec9b4d82cc3066c12008442c6bc51b9c59758ef2899234f5",
       "status": "candidate_external",
-      "log": "logs/pack-campaign.stdout.log"
+      "log": "campaign.log"
     },
     {
       "id": "characters",
-      "version": "finish-line-20261020-user-candidate",
+      "version": "startup-menu-20261021",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9657120,
       "sha256": "d91e949a1da24d91ee625433371178f48dc420cb66aac5d1e09afbf70aaefad7",
       "status": "candidate_external",
-      "log": "logs/pack-characters.stdout.log",
-      "reused_from": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-prompt-verbs\\runtime-packs\\characters.pck"
+      "log": "characters.log"
     },
     {
       "id": "monsters",
-      "version": "finish-line-20261020-user-candidate",
+      "version": "startup-menu-20261021",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14697432,
       "sha256": "dcc096f1bd4476954b25adeae8c51414ee05d6206dbab48f824bd8ca5d6b6159",
       "status": "candidate_external",
-      "log": "logs/pack-monsters.stdout.log",
-      "reused_from": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-prompt-verbs\\runtime-packs\\monsters.pck"
+      "log": "monsters.log"
     },
     {
       "id": "audio",
-      "version": "finish-line-20261020-user-candidate",
+      "version": "startup-menu-20261021",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19291260,
       "sha256": "3ade091beb5c917fb8a067793b059cb84a1d4057113b86f90c8439a2fa08a07d",
       "status": "candidate_external",
-      "log": "logs/pack-audio.stdout.log",
-      "reused_from": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-prompt-verbs\\runtime-packs\\audio.pck"
+      "log": "audio.log"
     },
     {
       "id": "quality_materials",
-      "version": "finish-line-20261020-user-candidate",
+      "version": "startup-menu-20261021",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7378828,
       "sha256": "f2222d9048b239f892e1d5f002a826d0890867785b6f8512e3981338dcd28619",
       "status": "candidate_external",
-      "log": "logs/pack-quality_materials.stdout.log",
-      "reused_from": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-prompt-verbs\\runtime-packs\\quality_materials.pck"
+      "log": "quality_materials.log"
     }
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "finish-line-20261020-user-candidate",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\finish-line-20261020-user-candidate\\export",
-    "generated_from_commit": "2b1be253eb493991e5dc7d208d46694e6eb319d2",
-    "artifacts_total_bytes": 104681203,
-    "root_pck_sha256": "1c020eebb38d27f48cc5eafe8f394c61bc2817a938f1f5dcc7087a1246d77385",
-    "note": "Gzip delivery; native pack records describe decoded artifacts."
+    "build_id": "startup-menu-20261021",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\startup-menu-20261021\\export",
+    "generated_from_commit": "9d4609bd9e312cd63360f70d0a409f2abe082105",
+    "artifacts_total_bytes": 104683919,
+    "root_pck_sha256": "f8a2e1b5fc32b897a9cf11a946408f9b0c12dae01f4e21831cba063a9732ac41",
+    "note": "Source-aligned build-only candidate. Runtime timing and functionality require user testing."
   }
 }

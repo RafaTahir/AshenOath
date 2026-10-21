@@ -39,6 +39,10 @@ func request(game, prepared: Dictionary) -> void:
 		game.save_manager.finish_load(game, request_id, false, "The selected journey could not be prepared.")
 		return
 	game.new_game_start_pending = false
+	game.new_game_requested_while_preparing = false
+	if not game.game_started:
+		# Invalidate covered Greyfen work before waiting on the selected save.
+		game._discard_menu_opening()
 	game._begin_gameplay_handoff("prepare_journey")
 	game.get_tree().paused = true
 	game.audio.set_game_paused(true)
@@ -51,8 +55,9 @@ func request(game, prepared: Dictionary) -> void:
 			cancel(game, "The destination's content is unavailable. Your current session remains in place.")
 			return
 		game.runtime_packs.quality_preset = str(game.settings.settings.get("quality_preset", "balanced"))
+		game.runtime_packs.prioritize_zone(target)
 		if not game.runtime_packs.zone_packs_ready(target):
-			var queued: bool = game.runtime_packs.request_zone_packs(target)
+			var queued: bool = game.runtime_packs.request_zone_packs(target, [], true)
 			if not queued:
 				cancel(game, "The destination could not be downloaded. Your current session remains in place; select the journey to retry.")
 				return
@@ -63,6 +68,7 @@ func request(game, prepared: Dictionary) -> void:
 					return
 				if game.runtime_packs.zone_packs_ready(target):
 					break
+				game.hud.update_journey_load_progress(target, game.runtime_packs.zone_pack_progress(target))
 				if not game.runtime_packs.zone_pack_failures(target).is_empty():
 					cancel(game, "The destination download stopped. Your current session remains in place; select the journey to retry.")
 					return
@@ -70,6 +76,21 @@ func request(game, prepared: Dictionary) -> void:
 				cancel(game, "The destination took too long to prepare. Your current session remains in place; select the journey to retry.")
 				return
 	if not _is_current(game, generation):
+		return
+	# Services load once, after their destination's packs and before any mutation.
+	game.hud.update_journey_load_progress(target, -1.0, "Preparing the recorded journey...")
+	await game.get_tree().process_frame
+	if not _is_current(game, generation):
+		return
+	var services_ready: bool = await game.runtime_services.prepare_gameplay_services(func(): return _is_current(game, generation))
+	if not _is_current(game, generation):
+		return
+	if not services_ready:
+		cancel(game, "Journey services could not be prepared. Select the saved journey to retry.")
+		return
+	game._ensure_gameplay_runtime()
+	if not game.gameplay_runtime_ready:
+		cancel(game, "Journey services could not be prepared. Select the saved journey to retry.")
 		return
 	if not bool(source.get("direct_data", false)):
 		var accepted: Dictionary = game.save_manager.accept_prepared_load(request_id)
@@ -132,6 +153,8 @@ func cancel(game, reason: String = "Journey loading cancelled.", present: bool =
 	game._invalidate_interaction_prompt()
 	game._refresh_journey_models()
 	game.call_deferred("_persist_story_action")
+	if not game.game_started:
+		game.call_deferred("_on_launch_accepted")
 
 func begin_arrival(game, reason: String, target: String) -> void:
 	if pending(game):

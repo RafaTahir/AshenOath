@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 signal new_game_requested
+signal new_game_cancel_requested
 signal continue_requested
 signal save_requested
 signal load_requested
@@ -161,6 +162,10 @@ var story_text_scale := 1.0
 var new_game_ready := false
 var new_game_status := "Greyfen is ready."
 var new_game_status_label: Label
+var _opening_progress: ProgressBar
+var _opening_retry: Button
+var _opening_cancel: Button
+var _opening_preparation: Dictionary = {"state": "preparing", "message": "Preparing Greyfen...", "progress": -1.0, "requested": false}
 var hud_root: Control
 var tracker_back: Control
 var compass_back: Control
@@ -499,6 +504,12 @@ func set_journey_load_applying() -> void:
 	_journey_cancel_button.visible = false
 	loading_message.text = "Returning to the recorded journey…\nPlacing Kael on the road."
 
+func update_journey_load_progress(zone_id: String, fraction: float, phase: String = "Loading destination content...") -> void:
+	if not _journey_load_active or _journey_load_applying:
+		return
+	var progress := " %d%%" % mini(99, int(fraction * 100.0)) if fraction >= 0.0 else ""
+	loading_message.text = phase + progress + "\n" + zone_id.replace("_", " ").capitalize() + "\nYour selected journey is unchanged until preparation finishes."
+
 func present_journey_return(model: Dictionary) -> void:
 	var id: String = str(model.get("id", ""))
 	if id == "" or id == _journey_return_last_id:
@@ -551,9 +562,6 @@ func clear_journey_transients(new_timeline: bool) -> void:
 	_present_notice()
 	_update_process_policy()
 func show_main_menu() -> void:
-	if not new_game_ready:
-		show_startup_loading()
-		return
 	active_menu = "main"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	_set_ui_pointer("menu")
@@ -566,6 +574,7 @@ func show_main_menu() -> void:
 	_journey_primary_button = _add_journey_load_button(box, JourneyMenuPanel.load_label(model), model, "continue")
 	_journey_primary_button.set_meta("journey_model_kind", "continue")
 	_add_journey_recovery_options(box, model)
+	_add_opening_progress(box)
 	_add_menu_button(box, "Saved Journeys", func(): show_save_library("main"), false, "saved_journeys")
 	_add_menu_button(box, "Controls", func(): show_controls_menu("main"))
 	_add_menu_button(box, "Settings", func(): show_settings_menu("main"))
@@ -601,6 +610,40 @@ func set_new_game_status(text: String) -> void:
 		new_game_status = "Greyfen is ready."
 	if active_menu == "main" and is_instance_valid(new_game_status_label):
 		new_game_status_label.text = new_game_status
+
+func set_opening_preparation(state: String, message: String, progress: float = -1.0, requested: bool = false) -> void:
+	_opening_preparation = {"state": state, "message": message, "progress": progress, "requested": requested}
+	set_new_game_status(message)
+	if not is_instance_valid(_opening_progress):
+		return
+	_opening_progress.visible = state not in ["ready", "failed", "idle"]
+	_opening_progress.indeterminate = progress < 0.0 and not reduced_motion
+	_opening_progress.value = clampf(progress * 100.0, 0.0, 99.0)
+	_opening_retry.visible = state == "failed"
+	_opening_cancel.visible = requested
+
+func _add_opening_progress(box: VBoxContainer) -> void:
+	new_game_status_label = Label.new()
+	new_game_status_label.name = "OpeningPreparationStatus"
+	new_game_status_label.set_meta("layout_font_role", "caption")
+	new_game_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	new_game_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(new_game_status_label)
+	_opening_progress = ProgressBar.new()
+	_opening_progress.name = "OpeningPreparationProgress"
+	_opening_progress.custom_minimum_size.y = 4.0
+	_opening_progress.show_percentage = false
+	_opening_progress.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color(0.8, 0.8, 0.8, 0.2)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = HudVisualStyle.GOLD
+	_opening_progress.add_theme_stylebox_override("background", track)
+	_opening_progress.add_theme_stylebox_override("fill", fill)
+	box.add_child(_opening_progress)
+	_opening_retry = _add_menu_button(box, "Retry preparation", func(): launch_accepted.emit(), false, "opening_retry")
+	_opening_cancel = _add_menu_button(box, "Cancel New Game", func(): new_game_cancel_requested.emit(), false, "opening_cancel")
+	set_opening_preparation(str(_opening_preparation.state), str(_opening_preparation.message), float(_opening_preparation.progress), bool(_opening_preparation.requested))
 
 func set_boot_shell_cover_active(_active: bool) -> void:
 	# Compatibility for historical callers; startup no longer has an external cover.
@@ -3515,6 +3558,9 @@ func _clear_menu() -> void:
 	_journey_primary_button = null
 	_save_slot_notice = null
 	new_game_status_label = null
+	_opening_progress = null
+	_opening_retry = null
+	_opening_cancel = null
 	for child in menu_layer.get_children():
 		menu_layer.remove_child(child)
 		child.queue_free()
@@ -3793,6 +3839,8 @@ func _set_gameplay_pointer() -> void:
 
 func apply_accessibility(current: Dictionary) -> void:
 	reduced_motion = bool(current.get("reduced_motion", false))
+	if is_instance_valid(_opening_progress):
+		_opening_progress.indeterminate = float(_opening_preparation.progress) < 0.0 and not reduced_motion
 	flash_reduction = bool(current.get("flash_reduction", false))
 	subtitle_speaker_names = bool(current.get("subtitle_speaker_names", true))
 	high_contrast = bool(current.get("high_contrast", false))

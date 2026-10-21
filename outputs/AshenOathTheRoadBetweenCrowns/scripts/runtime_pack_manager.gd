@@ -39,6 +39,7 @@ var quality_preset := "balanced"
 var web_preload_wait_started := 0
 var shell_poll_elapsed := 0.0
 var download_limit := MAX_CONCURRENT_DOWNLOADS
+var foreground_pack_ids: Array[String] = []
 
 func required_startup_packs() -> Array[String]:
 	var ids: Array[String] = STARTUP_PACK_IDS.duplicate()
@@ -191,9 +192,15 @@ func required_zone_packs(zone_id: String, encounter_packs: Array[String] = []) -
 			result.append(id)
 	return result
 
-func request_zone_packs(zone_id: String, encounter_packs: Array[String] = []) -> bool:
+func request_zone_packs(zone_id: String, encounter_packs: Array[String] = [], retry_failed: bool = false) -> bool:
 	var accepted := true
 	for id in required_zone_packs(zone_id, encounter_packs):
+		if retry_failed:
+			var dependencies: Array[String] = []
+			if _dependency_order(id, {}, dependencies).is_empty():
+				for dependency in dependencies:
+					if get_state(dependency) == "failed":
+						requests.erase(dependency)
 		if not request_pack(id, 0):
 			accepted = false
 	return accepted
@@ -203,6 +210,33 @@ func zone_packs_ready(zone_id: String, encounter_packs: Array[String] = []) -> b
 		if not is_ready(id):
 			return false
 	return true
+
+func zone_pack_progress(zone_id: String, encounter_packs: Array[String] = []) -> float:
+	var total_bytes := 0.0
+	var completed_bytes := 0.0
+	for id in required_zone_packs(zone_id, encounter_packs):
+		var weight := maxf(float(get_pack(id).get("bytes", 0)), 1.0)
+		total_bytes += weight
+		completed_bytes += weight * (1.0 if is_ready(id) else get_progress(id))
+	return completed_bytes / maxf(total_bytes, 1.0)
+
+func prioritize_zone(zone_id: String, encounter_packs: Array[String] = []) -> void:
+	foreground_pack_ids.clear()
+	var marks: Dictionary = {}
+	for id in required_zone_packs(zone_id, encounter_packs):
+		_dependency_order(id, marks, foreground_pack_ids)
+	var was_scheduling := scheduling_downloads
+	scheduling_downloads = true
+	for id in requests:
+		if is_ready(id):
+			continue
+		requests[id]["priority"] = 0 if id in foreground_pack_ids else 1000
+	# Keep useful in-flight dependencies. Only unrelated requests yield bandwidth.
+	for id in active_downloads.keys():
+		if id not in foreground_pack_ids:
+			cancel_request(str(id))
+			requests[id]["state"] = "queued"
+	scheduling_downloads = was_scheduling
 
 func zone_pack_failures(zone_id: String, encounter_packs: Array[String] = []) -> Array[String]:
 	var failures: Array[String] = []
@@ -225,10 +259,7 @@ func startup_pack_failures() -> Array[String]:
 	return failures
 
 func startup_pack_progress() -> float:
-	var total := 0.0
-	for id in required_startup_packs():
-		total += get_progress(id)
-	return total / float(required_startup_packs().size())
+	return zone_pack_progress("greyfen")
 
 func set_pack_source(pack_id: String, url: String) -> void:
 	var id := _normalise_id(pack_id)
@@ -394,6 +425,7 @@ func clear_requests() -> void:
 	active_download_id = ""
 	startup_requested = false
 	background_requested = false
+	foreground_pack_ids.clear()
 	scheduling_downloads = was_scheduling
 
 func retire_unneeded_packs(keep_ids: Array[String]) -> void:
@@ -424,6 +456,11 @@ func _start_pending_downloads() -> void:
 	scheduling_downloads = true
 	while true:
 		var started := false
+		var foreground_pending := false
+		for id in foreground_pack_ids:
+			if not is_ready(id):
+				foreground_pending = true
+				break
 		var ordered_ids: Array = requests.keys()
 		ordered_ids.sort_custom(func(a, b):
 			var priority_a := int(requests[a].get("priority", 100))
@@ -434,6 +471,8 @@ func _start_pending_downloads() -> void:
 		)
 		for value in ordered_ids:
 			var id := str(value)
+			if foreground_pending and id not in foreground_pack_ids:
+				continue
 			if get_state(id) in ["queued", "verified"]:
 				var failed_dependency := ""
 				for dependency in get_pack(id).get("dependencies", []):
@@ -791,7 +830,12 @@ func _process(delta: float) -> void:
 			elif state in ["failed", "cancelled"]:
 				active_downloads.erase(id)
 				_fail(id, "Browser pack download failed; retry this journey")
-			elif Time.get_ticks_msec() - int(requests[id].get("started_msec", 0)) > 120000:
+			else:
+				var raw := str(JavaScriptBridge.eval("JSON.stringify((window.__ashenOathPreloadedPacks || {})[%s] || {})" % JSON.stringify(id), true))
+				var metadata: Variant = JSON.parse_string(raw)
+				if metadata is Dictionary:
+					requests[id]["progress"] = clampf(float(metadata.get("progress", 0.0)), 0.0, 0.99)
+			if get_state(id) == "shell_loading" and Time.get_ticks_msec() - int(requests[id].get("started_msec", 0)) > 120000:
 				cancel_request(id)
 				_fail(id, "Pack download timed out; retry this journey")
 		_start_pending_downloads()

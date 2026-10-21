@@ -74,6 +74,9 @@ const CROWD_IDENTITIES := [
 	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
 	"mira_herbalist", "rook_smuggler", "blacksmith_tor", "generic_villager_03"
 ]
+const CROWD_VISUAL_ROLES := [
+	"villager_human", "villager_female_human", "villager_worker_human", "villager_hooded_human"
+]
 
 func _simulation_hz() -> float:
 	# Story, distance and hydration decisions are cheap background ticks. Visible
@@ -625,13 +628,7 @@ func _face(node: Node3D, target: Vector3, delta: float, walking: bool = false) -
 	node.rotation.y += clampf(turn_error, -turn_limit, turn_limit)
 
 func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_value: float):
-	var role_cycle := [
-		"villager_human",
-		"villager_female_human",
-		"villager_worker_human",
-		"villager_hooded_human",
-	]
-	var role := str(role_cycle[index % role_cycle.size()])
+	var role := str(CROWD_VISUAL_ROLES[index % CROWD_VISUAL_ROLES.size()])
 	# The imported role is already normalized to its CharacterRoleSpec height.
 	# Apply only a bounded adult variation; the old 0.82 young scale produced
 	# visibly tiny actors and multiplied normalization a second time.

@@ -117,8 +117,22 @@
         performance.mark('ashen-oath-menu-ready');
         setBootState('menu_ready', { menu_ready_ms: performance.now() });
       });
+      window.addEventListener('ashen-oath-first-control', () => {
+        if (!bootMetrics.first_control_ms) bootMetrics.first_control_ms = performance.now();
+      });
       window.addEventListener('ashen-oath-opening-progress', event => {
         const state = event.detail || {};
+        const now = performance.now();
+        if (state.state !== bootMetrics.opening_phase) {
+          const durations = bootMetrics.opening_phase_timings || (bootMetrics.opening_phase_timings = {});
+          if (bootMetrics.opening_phase) {
+            durations[bootMetrics.opening_phase] = (durations[bootMetrics.opening_phase] || 0) + now - bootMetrics.opening_phase_started_ms;
+          }
+          bootMetrics.opening_phase_started_ms = now;
+          bootMetrics.opening_phase = state.state;
+        }
+        bootMetrics.opening_progress = state.progress;
+        if (state.state === 'ready') bootMetrics.opening_ready_ms = now;
         if (state.state === 'failed') setBootState('opening_failed', { opening_error: state.message });
         else if (!bootMetrics.menu_ready_ms) setBootState('opening_' + state.state);
       });
@@ -204,6 +218,32 @@
         if (!manifestPromise) manifestPromise = readPackManifest().catch(error => { manifestPromise = null; throw error; });
         return manifestPromise;
       }
+      async function readPackBody(response, id, operation, bytes) {
+        if (!response.body?.getReader) return response.arrayBuffer();
+        const payload = new Uint8Array(bytes);
+        const reader = response.body.getReader();
+        let received = 0;
+        try {
+          while (true) {
+            if (operation.controller.signal.aborted) throw new Error('Pack operation cancelled');
+            const { done, value } = await reader.read();
+            if (done) break;
+            if (received + value.byteLength > bytes) throw new Error(`${id} pack exceeds declared size`);
+            payload.set(value, received);
+            received += value.byteLength;
+            if (packOperations.get(id) === operation) {
+              window.__ashenOathPreloadedPacks[id] = { state: 'loading', received_bytes: received, total_bytes: bytes, progress: received / bytes * 0.9 };
+            }
+          }
+        } catch (error) {
+          await reader.cancel().catch(() => {});
+          throw error;
+        } finally {
+          reader.releaseLock();
+        }
+        if (received !== bytes) throw new Error(`${id} pack byte count mismatch`);
+        return payload.buffer;
+      }
       // Fetch operations share only metadata/promises, never retained PCK bodies.
       async function fetchPack(id, operation, expected) {
         const { controller } = operation;
@@ -213,6 +253,7 @@
           const manifest = await getPackManifest();
           const pack = manifest?.packs?.[id];
           if (!pack?.url || !/^[a-f0-9]{64}$/.test(pack.sha256)) throw new Error(`Missing pack identity: ${id}`);
+          if (!Number.isSafeInteger(pack.bytes) || pack.bytes <= 0 || pack.bytes >= 104857600) throw new Error(`Invalid pack size: ${id}`);
           if (expected && (expected.sha256 !== pack.sha256 || expected.bytes !== pack.bytes || expected.version !== pack.version)) throw new Error(`Pack contract mismatch: ${id}`);
           const url = new URL(pack.url, window.location.href);
           if (url.origin !== window.location.origin) throw new Error('External pack origin rejected');
@@ -227,11 +268,11 @@
           const fromCache = Boolean(response);
           if (!response) response = await fetch(packUrl, { cache: operation.reload ? 'reload' : 'force-cache', signal: controller.signal });
           if (!response.ok) throw new Error(`${id} pack HTTP ${response.status}`);
-          const payload = await response.arrayBuffer();
+          const payload = await readPackBody(response, id, operation, pack.bytes);
           if (payload.byteLength !== pack.bytes) throw new Error(`${id} pack byte count mismatch`);
           const digest = await sha256Hex(payload);
           if (digest !== pack.sha256) throw new Error(`${id} pack hash mismatch`);
-          const metadata = { state: 'verified', path: `/${id}-${digest.slice(0, 20)}.pck`, url: packUrl, version: pack.version, bytes: payload.byteLength, sha256: digest };
+          const metadata = { state: 'verified', progress: 0.95, path: `/${id}-${digest.slice(0, 20)}.pck`, url: packUrl, version: pack.version, bytes: payload.byteLength, sha256: digest };
           if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
           window.__ashenOathPreloadedPacks[id] = metadata;
           if (id === 'opening') bootMetrics.opening_prefetch_state = 'verified';
@@ -248,7 +289,7 @@
           }
           if (controller.signal.aborted || failed || packOperations.get(id) !== operation) return null;
           engine.copyToFS(metadata.path, payload);
-          const detail = { ...metadata, state: 'preloaded' };
+          const detail = { ...metadata, state: 'preloaded', progress: 1 };
           window.__ashenOathPreloadedPacks[id] = detail;
           if (id === 'opening') {
             bootMetrics.opening_prefetch_state = 'preloaded';
@@ -268,7 +309,7 @@
           }
           return detail;
         } catch (error) {
-          if (packCache && packUrl) await packCache.delete(packUrl).catch(() => {});
+          if (packCache && packUrl && !controller.signal.aborted && packOperations.get(id) === operation) await packCache.delete(packUrl).catch(() => {});
           if (packOperations.get(id) === operation) {
             window.__ashenOathPreloadedPacks[id] = { state: controller.signal.aborted ? 'cancelled' : 'failed', error: String(error) };
             if (id === 'opening') {

@@ -12,6 +12,35 @@ mandatory tickets are not already implemented/accepted merely because their card
 exist. Strict performance and actual-device requirements are unchanged; missing
 proof cannot be converted to a pass by this testing authorization.
 
+## Current Startup Candidate - 2026-10-21
+
+The approved Faster Menu and Shorter Time to Play repair is implemented in the
+preserved D: worktree. Current local candidate: startup-menu-20261021 at
+D:/Projects/AshenOath/.release-gate/startup-menu-20261021/export. Menu handlers and
+save summaries become usable before Greyfen preparation; the full world and real
+camera draw still gate control. Selected Continue cancels unused Greyfen work.
+See [FINISH-001](FINISH-001.md) for the focused implementation and user checklist.
+
+Import/compilation, eight runtime-pack exports and the production Web export
+completed. Complete directory including release_manifest.json: 104,691,963 bytes,
+165,637 below 104,857,600. Root transport: 4,175,575 bytes (previously 6,579,567);
+SHA-256 f8a2e1b5fc32b897a9cf11a946408f9b0c12dae01f4e21831cba063a9732ac41.
+Source state: dirty worktree based on 9d4609b. Content/population/quality remain;
+optional chapter artwork is retained in the campaign pack. No game/browser run,
+benchmark, profiling or screenshots. Timing gains and runtime acceptance remain
+unverified. No ticket is newly accepted; user acceptance remains 0/16.
+
+User-only static preview: http://127.0.0.1:5466/ (Python PID 6644), serving this
+candidate with its declared gzip headers. Logs:
+D:/Temp/AshenOath/startup-menu-20261021/preview.*.log. No browser was launched or
+HTTP/gameplay request made. This local origin has separate storage from production.
+Publication is now explicitly authorized by the user's 2026-10-21 "push and
+deploy" instruction. Publish these existing bytes through publish_living_road.ps1
+under FINISH-001, without another build or runtime test. The publication receipt
+under .release-gate/living-road records the resulting commit and deployment.
+Runtime/user acceptance remains pending. Older authorization and delivery notes
+below are history; they do not describe this new candidate's runtime acceptance.
+
 ## Active Execution Authorization - 2026-10-20
 
 Latest delivery instruction: "push and deploy. now." Publication of the frozen

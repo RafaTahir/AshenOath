@@ -1,9 +1,9 @@
 # FINISH-001 - Reliable Launch And Menu
 
 Parent: [FINISH-000](FINISH-000.md). Dependencies: current baseline.
-Implementation: existing startup/menu repairs present; no new repair made here.
-Compilation: baseline production build recorded; not rerun.
-User acceptance: Pending. Publication: baseline only, not finishing acceptance.
+Implementation: early usable menu and selected-destination preparation implemented 2026-10-21.
+Compilation: startup-menu-20261021 production import, eight packs and Web export completed.
+User acceptance: Pending. Publication: explicitly authorized 2026-10-21; see FINISH-001 publication receipt.
 
 ## Player Outcome
 
@@ -23,8 +23,9 @@ are historical scoped evidence. Use the
 ## Remaining Conditions And Bounded Repair
 
 - Cold and warm launch remain at the main menu until an explicit journey action.
-- Menu actions work on first activation after reveal; preparation includes the
-  required complete Greyfen, handlers, save summaries and gameplay-camera readiness.
+- Menu reveal requires working handlers and save summaries, independently of
+  world preparation. Complete scenery, population, collision and the actual
+  gameplay-camera render remain mandatory before first control.
 - New Game uses one prepared world. Selected Continue loads that selected save's
   destination, not a different journey or a mandatory Greyfen detour.
 - Persisted Quality and quality changes during preparation load the required packs;
@@ -41,7 +42,8 @@ this ticket supplies its functional start/end boundaries, not a speed claim.
 
 ## User Manual Checklist
 
-1. Fresh and warm launch: wait, then activate New Game once by mouse or touch;
+1. Fresh and warm launch: use Settings, Controls and saved-journey selection as
+   soon as the menu appears. Queue and cancel New Game, then request it once;
    confirm complete Greyfen, visible Kael and functioning movement at first control.
 2. Reload and explicitly Continue a named earned save; confirm its world/location.
 3. Open settings, select each retained quality preset and return; interrupt one
@@ -51,6 +53,32 @@ this ticket supplies its functional start/end boundaries, not a speed claim.
 5. Switch away/back and use pause/resume; confirm the menu never dismisses itself.
 
 ## Delivery Record
+
+2026-10-21 build-only candidate: startup-menu-20261021. Menu visibility no longer
+depends on completed Greyfen preparation. New Game queues visibly and can be
+cancelled; Retry and byte-based pack progress remain inside the menu. Continue
+invalidates obsolete Greyfen work before downloading its selected destination.
+Gameplay service creation is sliced and services stay inactive until configured;
+required gameplay initialization still completes before control. Prepared actor
+requests use the actual crowd visual-role/variant policy, retaining authored
+recovery bodies and texture validation. Obsolete callbacks cannot publish a world.
+The complete first-camera render is reused without a second completion draw or
+rebuilding the menu when preparation ends, so Settings/save browsing keeps focus.
+
+Optional chapter artwork moved from root to campaign; all artwork/content remains.
+Root transport: 6,579,567 -> 4,175,575 bytes (36.5% smaller). Opening transport:
+32,503,408 -> 32,503,403 bytes; its native PCK is unchanged at 35,474,180 bytes.
+Engine transport is unchanged. Complete export including release_manifest.json:
+104,691,963 bytes, 165,637 below the strict 104,857,600-byte cap. Root SHA-256:
+f8a2e1b5fc32b897a9cf11a946408f9b0c12dae01f4e21831cba063a9732ac41.
+Package: D:/Projects/AshenOath/.release-gate/startup-menu-20261021/export.
+Source: cumulative worktree based on 9d4609b. Publication of these existing bytes
+was explicitly authorized on 2026-10-21; the FINISH-001 publication receipt owns
+the resulting commit/deployment identity. Static diff
+review and production compilation/package generation completed. No gameplay,
+browser QA, benchmark, profiling or screenshots were run. Startup gains, Retry,
+selected Continue and actual phone behavior require user testing. No acceptance
+cell or historical performance failure is promoted to passed by this build.
 
 2026-10-20 build-only repair (user-candidate): the deferred pack-ready callback
 carries the preparation generation and requires an active wait; failed/cancelled

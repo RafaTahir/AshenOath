@@ -1,20 +1,23 @@
 # Finish-Line Candidate: User Testing And Release Handoff
 
-Candidate: `finish-line-20261020-user-candidate` (2026-10-20).
-Package: `D:/Projects/AshenOath/.release-gate/finish-line-20261020-user-candidate/export`.
-This is a local candidate, NOT a new production deployment. Do not compare the
-unchanged production URL and assume it contains these repairs.
+Candidate: `startup-menu-20261021` (2026-10-21).
+Package: `D:/Projects/AshenOath/.release-gate/startup-menu-20261021/export`.
+Publication of these exact bytes was explicitly authorized on 2026-10-21.
+The FINISH-001 publication receipt records the resulting commit/deployment.
+Runtime acceptance remains user-owned; publication does not establish a pass.
 
 Production compilation/package generation succeeded. Complete package:
-104,689,261 bytes (168,339 bytes below 100 MiB). Root transport SHA-256:
-`1c020eebb38d27f48cc5eafe8f394c61bc2817a938f1f5dcc7087a1246d77385`.
-Manifest/source state: dirty worktree based on `2b1be253`; not a new commit.
+104,691,963 bytes including the manifest (165,637 bytes below 100 MiB).
+Root transport SHA-256:
+`f8a2e1b5fc32b897a9cf11a946408f9b0c12dae01f4e21831cba063a9732ac41`.
+The manifest records its build-time dirty source based on `9d4609b`. The publication
+receipt records the commit that includes this implementation and exact package.
 Agent runtime testing of this candidate: NOT PERFORMED. User acceptance: 0/16.
 
-Desktop preview: http://127.0.0.1:9081/ (local machine only, while the preview
+Desktop preview: http://127.0.0.1:5466/ (local machine only, while the preview
 process is running). This serves the frozen export with its declared gzip headers;
 do not open index.html directly or use a plain server without those headers.
-Preview helper/logs: D:/Temp/AshenOath/finish-line-20261020-user-preview/.
+Preview logs: D:/Temp/AshenOath/startup-menu-20261021/preview.*.log (PID 6644).
 It serves files only; no browser, game or automatic QA has been launched.
 The preview has its own origin/storage, not the production origin's saves. Keep
 production saves intact; use normal new saves here or explicitly import a copy.
@@ -22,6 +25,15 @@ This desktop-only address does not establish actual-phone or production coverage
 
 ## What Changed
 
+- The usable menu no longer waits for all of Greyfen. New Game queues visibly
+  with inline progress/Retry/Cancel; selected Continue supersedes unused Greyfen
+  work. Gameplay services prepare in slices and activate before control.
+- Startup preloads resolve the actual prepared actor/crowd resources. A completed
+  Greyfen is retained through handoff without another completion draw or forced
+  menu rebuild. Settings/save browsing keeps its surface and focus.
+- Optional chapter art moved to the campaign pack, reducing the initial game
+  transport from 6,579,567 to 4,175,575 bytes. Opening, engine, character and
+  environment content remain; no measured loading-speed improvement is claimed.
 - Stale preparation callbacks cannot resurrect cancelled/failed attempts; Retry
   discards partial worlds while keeping loaded resources, saves and preferences.
 - Greyfen's complete scenery/navigation and actual camera are prepared before
@@ -35,8 +47,10 @@ This desktop-only address does not establish actual-phone or production coverage
 
 ## Consolidated Checklist
 
-1. **Launch and Retry (001):** cold/warm launch reaches the menu, never starts a
-   journey automatically; one New Game activation opens complete Greyfen. Check
+1. **Launch and Retry (001):** cold/warm launch reaches a usable menu before the
+   world finishes; check Settings/Controls immediately. Queue/cancel New Game,
+   then request it once and confirm complete Greyfen. It never starts a journey
+   without that request. Check
    Balanced/Quality and changing quality. Interrupt a download, restore connection
    and Retry. A cancelled preparation must not replace a selected Continue world.
 2. **Saves (002/017):** note location, health, supplies, XP, Marks, learned practice,

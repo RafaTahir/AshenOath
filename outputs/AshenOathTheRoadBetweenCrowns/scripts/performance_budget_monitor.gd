@@ -223,7 +223,7 @@ func _update_display() -> void:
 		var timings = JavaScriptBridge.eval("JSON.stringify(window.__ashenOathBoot || {})")
 		var boot = JSON.parse_string(str(timings))
 		if boot is Dictionary:
-			for key in ["menu_ready_ms", "engine_ready_ms"]:
+			for key in ["menu_ready_ms", "engine_ready_ms", "opening_ready_ms", "first_control_ms"]:
 				if float(boot.get(key, 0.0)) > 0:
 					lines.append("%s: %.0f ms" % [key, float(boot[key])])
 	if transition_ms >= 0:

@@ -1,17 +1,23 @@
 extends Node3D
 
-const GreyfenSocialPresentation = preload("res://scripts/greyfen_social_presentation.gd")
-const CemeteryEvidencePresentation = preload("res://scripts/cemetery_evidence_presentation.gd")
-const WychwoodEvidencePresentation = preload("res://scripts/wychwood_evidence_presentation.gd")
+var GreyfenSocialPresentation: Script:
+	get: return _gameplay_script("greyfen_social_presentation")
+var CemeteryEvidencePresentation: Script:
+	get: return _gameplay_script("cemetery_evidence_presentation")
+var WychwoodEvidencePresentation: Script:
+	get: return _gameplay_script("wychwood_evidence_presentation")
 var CampaignRecordPresentation: Script:
 	get: return _gameplay_script("campaign_record_presentation")
 var CampaignWildernessSection: Script:
 	get: return _gameplay_script("zones/campaign_wilderness_section")
-const WychwoodTerrainPresentation = preload("res://scripts/wychwood_terrain_presentation.gd")
-const StoryActorPresence = preload("res://scripts/story_actor_presence.gd")
+var WychwoodTerrainPresentation: Script:
+	get: return _gameplay_script("wychwood_terrain_presentation")
+var StoryActorPresence: Script:
+	get: return _gameplay_script("story_actor_presence")
 var StoryDecisionCoordinator: Script:
 	get: return _gameplay_script("story_decision_coordinator")
-const StoryWorldDirector = preload("res://scripts/story_world_director.gd")
+var StoryWorldDirector: Script:
+	get: return _gameplay_script("story_world_director")
 var CovenantResolution: Script:
 	get: return _gameplay_script("covenant_resolution")
 
@@ -20,25 +26,34 @@ const SpatialSurfaceContract = preload("res://scripts/spatial_surface_contract.g
 var EnemyAI: Script:
 	get: return _gameplay_script("enemy_ai")
 const Interactable = preload("res://scripts/interactable.gd")
-const VisualDirector = preload("res://scripts/visual_director.gd")
-const NpcAmbient = preload("res://scripts/npc_ambient.gd")
-const CharacterPresentation = preload("res://scripts/character_presentation.gd")
+var VisualDirector: Script:
+	get: return _gameplay_script("visual_director")
+var NpcAmbient: Script:
+	get: return _gameplay_script("npc_ambient")
+var CharacterPresentation: Script:
+	get: return _gameplay_script("character_presentation")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
-const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
+var CharacterAnimationDriver: Script:
+	get: return _gameplay_script("character_animation_driver")
 var BoardGameOpponent: Script:
 	get: return _gameplay_script("board_game_opponent")
-const WorldVisualUpgrade = preload("res://scripts/world_visual_upgrade.gd")
-const WorldMotionController = preload("res://scripts/world_motion_controller.gd")
+var WorldVisualUpgrade: Script:
+	get: return _gameplay_script("world_visual_upgrade")
+var WorldMotionController: Script:
+	get: return _gameplay_script("world_motion_controller")
 const WorldPropController = preload("res://scripts/world_prop_controller.gd")
 const InteractiveWorldProp = preload("res://scripts/interactive_world_prop.gd")
 const OpeningSoundscape = preload("res://scripts/opening_soundscape.gd")
-const SurfaceFeedbackManager = preload("res://scripts/surface_feedback_manager.gd")
-const WorldVFXController = preload("res://scripts/world_vfx_controller.gd")
+var SurfaceFeedbackManager: Script:
+	get: return _gameplay_script("surface_feedback_manager")
+var WorldVFXController: Script:
+	get: return _gameplay_script("world_vfx_controller")
 var EpilogueResolver: Script:
 	get: return _gameplay_script("epilogue_resolver")
 const ZoneSpatialService = preload("res://scripts/zone_spatial_service.gd")
 const RuntimeServiceRegistry = preload("res://scripts/runtime_service_registry.gd")
-const RuntimeActorFactory = preload("res://scripts/runtime_actor_factory.gd")
+var RuntimeActorFactory: Script:
+	get: return _gameplay_script("runtime_actor_factory")
 const ZoneCompositionRouter = preload("res://scripts/zone_composition_router.gd")
 const ZoneRuntimeCoordinator = preload("res://scripts/zone_runtime_coordinator.gd")
 const ZoneResidencyService = preload("res://scripts/zone_residency_service.gd")
@@ -202,6 +217,8 @@ var campaign_pack_waiting := false
 var opening_pack_waiting := false
 var greyfen_prewarm_started := false
 var opening_prepare_generation := 0
+var opening_phase_started_usec := 0
+var opening_startup_metrics: Dictionary = {}
 const OPENING_BUILD_SLICE_USEC := 8000
 var startup_packs_waiting := false
 var startup_prepare_failed := false
@@ -393,7 +410,8 @@ func _ready() -> void:
 	add_child(production_observation_bridge)
 	production_observation_bridge.setup(self)
 	var services_ms := Time.get_ticks_msec() - phase_started
-	hud.show_startup_loading()
+	_refresh_journey_models()
+	hud.show_main_menu()
 	audio.set_music_state("main_menu")
 	get_tree().paused = true
 	call_deferred("_prepare_opening_after_menu_render")
@@ -408,7 +426,11 @@ func _prepare_opening_after_menu_render() -> void:
 		return
 	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-ui-ready'));", false)
-	print("LOADING: startup_presentation_rendered")
+	opening_startup_metrics["menu_ready_ms"] = Time.get_ticks_msec()
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
+	print("LOADING: usable_menu_ready ms=%d" % Time.get_ticks_msec())
+	await get_tree().process_frame
 	if not game_started and not _journey_load_pending():
 		_on_launch_accepted()
 
@@ -625,6 +647,8 @@ func _ensure_gameplay_runtime() -> void:
 	if gameplay_runtime_ready:
 		return
 	_bind_runtime_services(runtime_services.create_gameplay_services())
+	if not runtime_services.is_complete():
+		return
 	gameplay_runtime_ready = true
 	quest_hud_coordinator.configure(quest_presentation, quests)
 	_build_global_environment()
@@ -648,7 +672,6 @@ func _ensure_gameplay_runtime() -> void:
 func _new_game() -> void:
 	if game_started or zone_transition_pending or zone_load_request_pending or _journey_load_pending():
 		return
-	_ensure_gameplay_runtime()
 	zone_pack_request_serial += 1
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
@@ -661,6 +684,11 @@ func _new_game() -> void:
 		loading_started_usec = Time.get_ticks_usec()
 	if new_game_started_usec <= 0:
 		new_game_started_usec = loading_started_usec
+	new_game_start_pending = true
+	if runtime_packs != null:
+		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
+		if OS.has_feature("web"):
+			runtime_packs.prioritize_zone("greyfen")
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("startup_packs_ready"):
 		if not runtime_packs.startup_packs_ready():
 			new_game_start_pending = true
@@ -669,7 +697,7 @@ func _new_game() -> void:
 				_on_launch_accepted()
 			if hud != null:
 				hud.set_new_game_status("Greyfen is waking. Your New Game request will open as soon as it is ready.")
-				hud.toast("Greyfen is still being prepared. New Game will open shortly.")
+				_publish_web_opening_state("downloading", "Loading Greyfen for your New Game...", runtime_packs.startup_pack_progress())
 			return
 	# Opening readiness and Greyfen prewarm are separate states on every
 	# platform. A fast click must wait for the covered cache, not trigger a cold
@@ -681,6 +709,7 @@ func _new_game() -> void:
 			_on_launch_accepted()
 		if hud != null:
 			hud.set_new_game_status("Greyfen is opening. Your New Game request is queued.")
+			_publish_web_opening_state("preparing", "Preparing Greyfen for your New Game...")
 		return
 	new_game_start_pending = true
 	new_game_requested_while_preparing = false
@@ -699,6 +728,18 @@ func _new_game() -> void:
 		hud.arm_loading("Opening Greyfen...")
 	get_tree().paused = false
 	_start_new_game_world()
+
+func _cancel_new_game_request() -> void:
+	if game_started or _journey_load_pending():
+		return
+	new_game_start_pending = false
+	new_game_requested_while_preparing = false
+	new_game_started_usec = 0
+	loading_started_usec = 0
+	if startup_prepare_failed:
+		_publish_web_opening_state("failed", hud.new_game_status)
+	else:
+		_publish_web_opening_state("ready" if route_zone_cache.has("greyfen") else str(opening_startup_metrics.get("phase", "preparing")), "Greyfen is ready." if route_zone_cache.has("greyfen") else "Preparing Greyfen in the background...")
 
 func _handle_quit_request() -> void:
 	if OS.has_feature("web"):
@@ -1149,7 +1190,6 @@ func _refresh_journey_models() -> void:
 	hud.set_journey_models({"continue": save_manager.continue_model(), "recovery": save_manager.checkpoint_model(), "current": current})
 
 func _request_journey_load(selection: Dictionary) -> void:
-	_ensure_gameplay_runtime()
 	audio.play_event("ui")
 	save_manager.request_load(selection)
 
@@ -1599,6 +1639,10 @@ func _skinned_resource_fingerprint(branch: Node) -> String:
 
 func _record_loading_metrics(metrics: Dictionary) -> void:
 	last_loading_metrics = metrics
+	if game_started and not opening_startup_metrics.has("first_control_ms"):
+		opening_startup_metrics["first_control_ms"] = Time.get_ticks_msec()
+		if OS.has_feature("web"):
+			JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-first-control'));", false)
 	transition_history.append(metrics.duplicate(true))
 	while transition_history.size() > MAX_TRANSITION_HISTORY:
 		transition_history.pop_front()
@@ -2663,19 +2707,18 @@ func _story_choice_prerequisites_done(quest_id: String, choice_id: String) -> bo
 	return found_choice
 
 func _on_launch_accepted() -> void:
-	if startup_packs_waiting or greyfen_prewarm_started or game_started:
+	if startup_packs_waiting or greyfen_prewarm_started or game_started or _journey_load_pending() or route_zone_cache.has("greyfen"):
 		return
-	_ensure_gameplay_runtime()
 	opening_prepare_generation += 1
 	if runtime_packs != null:
 		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
-	audio.play_event("ui", 0.0)
 	var retry_failed := startup_prepare_failed
 	startup_prepare_failed = false
 	_publish_web_opening_state("preparing", "Loading opening content...")
 	if hud != null and hud.has_method("set_new_game_ready") and not route_zone_cache.has("greyfen"):
 		hud.set_new_game_ready(false)
 	if OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("request_startup_packs"):
+		runtime_packs.prioritize_zone("greyfen")
 		if runtime_packs.startup_packs_ready():
 			print("LOADING: startup_pack_ready source=launch")
 			_begin_opening_prewarm()
@@ -2742,11 +2785,31 @@ func _wait_for_startup_packs_then_prewarm(generation: int) -> void:
 	_opening_prepare_failed("Opening content took too long to prepare. Select New Game to retry.")
 
 func _begin_opening_prewarm() -> void:
-	if game_started or greyfen_prewarm_started or route_zone_cache.has("greyfen"):
+	if game_started or greyfen_prewarm_started or _journey_load_pending() or route_zone_cache.has("greyfen"):
 		return
 	# Prepare New Game while the menu is open even when Continue is available.
 	# Loading a save cancels this attempt through _discard_menu_opening().
 	greyfen_prewarm_started = true
+	call_deferred("_prepare_opening_services", opening_prepare_generation)
+
+func _prepare_opening_services(generation: int) -> void:
+	await _wait_for_opening_build_slot(generation)
+	if not _opening_attempt_current(generation):
+		return
+	_publish_web_opening_state("services", "Preparing the journey...")
+	await get_tree().process_frame
+	if not _opening_attempt_current(generation):
+		return
+	var services_ready: bool = await runtime_services.prepare_gameplay_services(_opening_attempt_current.bind(generation))
+	if not _opening_attempt_current(generation):
+		return
+	if not services_ready:
+		_opening_prepare_failed("Journey services could not be prepared. Select Retry to try again.")
+		return
+	_ensure_gameplay_runtime()
+	if not gameplay_runtime_ready:
+		_opening_prepare_failed("Journey services could not be prepared. Select Retry to try again.")
+		return
 	_publish_web_opening_state("resources", "Preparing characters and materials...")
 	world_materials.begin_prewarm_attempt()
 	asset_helper.begin_resource_attempt()
@@ -2758,29 +2821,33 @@ func _begin_opening_prewarm() -> void:
 			_opening_prepare_failed("Greyfen's opening props could not be prepared. Select New Game to retry.")
 			return
 	if DisplayServer.get_name().to_lower() != "headless":
-		var named_roles: Array[String] = []
+		var named_roles: Array[String] = ["player_kael", "sister_anwen"]
 		for actor_id in OPENING_NAMED_ACTOR_IDS:
 			named_roles.append(_role_for_interactable(actor_id))
 		var actors_status: Error = asset_helper.request_role_resources(named_roles)
 		if actors_status != OK:
 			_opening_prepare_failed("Greyfen's opening characters could not be prepared. Select New Game to retry.")
 			return
-		var bodies_status: Error = asset_helper.request_resource_paths([
-			"res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
-			"res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
-			"res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
-		])
-		if bodies_status != OK:
-			_opening_prepare_failed("Greyfen's village bodies could not be prepared. Select New Game to retry.")
+		# Resolve the same variant-safe resources the crowd will actually spawn.
+		# Raw authored bodies remain requested only for roles without a prepared recipe.
+		var population_script: Script = _gameplay_script("greyfen_life_controller")
+		var population_status: Error = asset_helper.request_role_resources(population_script.CROWD_VISUAL_ROLES, true, "opening_population")
+		if population_status != OK:
+			_opening_prepare_failed("Greyfen's village bodies could not be prepared. Select Retry to try again.")
 			return
 	# Opening resources have mounted before this point on Web. Later character,
 	# monster and campaign packs remain independent of menu readiness.
 	print("LOADING: Greyfen prewarm begin")
-	call_deferred("_prepare_opening_resources", opening_prepare_generation)
+	call_deferred("_prepare_opening_resources", generation)
+
+func _wait_for_opening_build_slot(generation: int) -> void:
+	# Settings/save browsing gets the main thread; an explicit New Game owns it.
+	while _opening_attempt_current(generation) and not new_game_start_pending and hud.active_menu != "main":
+		await get_tree().process_frame
 
 func _opening_attempt_current(generation: int) -> bool:
 	return generation == opening_prepare_generation and not resource_shutdown_prepared \
-		and not game_started and not startup_prepare_failed
+		and not game_started and not startup_prepare_failed and not _journey_load_pending()
 
 func _prepare_opening_resources(generation: int) -> void:
 	if not _opening_attempt_current(generation):
@@ -2801,6 +2868,8 @@ func _prepare_opening_resources(generation: int) -> void:
 				return
 			await get_tree().process_frame
 	if _opening_attempt_current(generation):
+		await _wait_for_opening_build_slot(generation)
+	if _opening_attempt_current(generation):
 		_prewarm_greyfen_after_menu_frame(generation)
 
 func _discard_menu_opening() -> void:
@@ -2810,14 +2879,15 @@ func _discard_menu_opening() -> void:
 	startup_packs_waiting = false
 	greyfen_prewarm_started = false
 	startup_prepare_failed = false
+	get_viewport().disable_3d = true
 
 func _restart_menu_opening() -> void:
-	if game_started:
+	if game_started or _journey_load_pending():
 		return
 	_discard_menu_opening()
 	if hud != null:
 		hud.set_new_game_ready(false)
-		hud.show_startup_loading("Preparing the selected visual quality...")
+		_publish_web_opening_state("preparing", "Preparing the selected visual quality...")
 	var generation := opening_prepare_generation
 	await get_tree().process_frame
 	if _opening_attempt_current(generation):
@@ -2865,8 +2935,15 @@ func _abort_opening_prewarm(prewarm_root: Node3D, prewarm_service: Node, message
 		_opening_prepare_failed(message)
 
 func _publish_web_opening_state(state: String, message: String = "", progress: float = -1.0) -> void:
-	if hud != null and state != "ready" and not game_started:
-		hud.show_startup_loading(message, progress, state == "failed")
+	var now := Time.get_ticks_usec()
+	var previous := str(opening_startup_metrics.get("phase", ""))
+	if state != previous:
+		if opening_phase_started_usec > 0:
+			opening_startup_metrics[previous + "_ms"] = float(opening_startup_metrics.get(previous + "_ms", 0.0)) + float(now - opening_phase_started_usec) / 1000.0
+		opening_phase_started_usec = now
+		opening_startup_metrics["phase"] = state
+	if hud != null and not game_started:
+		hud.set_opening_preparation(state, message, progress, new_game_start_pending)
 	if not OS.has_feature("web"):
 		return
 	var payload := JSON.stringify({
@@ -2874,6 +2951,7 @@ func _publish_web_opening_state(state: String, message: String = "", progress: f
 		"message": message,
 		"timestamp_ms": Time.get_ticks_msec(),
 		"progress": progress,
+		"timings": opening_startup_metrics.duplicate(),
 	})
 	JavaScriptBridge.eval("window.__ashenOathOpeningState = %s; window.dispatchEvent(new CustomEvent('ashen-oath-opening-progress', {detail:window.__ashenOathOpeningState}));" % payload, false)
 
@@ -2882,15 +2960,10 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		generation = opening_prepare_generation
 	if not _opening_attempt_current(generation):
 		return
-	# Start immediately after the launch shell is accepted. Deferring the first
-	# build frame allowed a fast test click (and a fast human click) to race the
-	# prewarm and fall back to a cold Greyfen build. The launch/menu presentation
-	# is already covering the viewport, so doing the construction here makes the
-	# later New Game action deterministic without adding a second loading stall.
+	# Only this attempt may publish a prepared world. Early clicks queue a handoff.
 	if game_started or zone_root != null or route_zone_cache.has("greyfen"):
 		return
-	# Prepare required scenery under the cover on both platforms. Only small
-	# dressing and additional population stages remain after the handoff.
+	# Every required scenery/population stage finishes before control on both platforms.
 	var prewarm_started := Time.get_ticks_msec()
 	_publish_web_opening_state("building", "Building Greyfen's roads and scenery...")
 	print("LOADING: Greyfen prewarm build_begin")
@@ -2899,6 +2972,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	prewarm_service.name = "GreyfenPrewarmSpatialService"
 	add_child(prewarm_service)
 	prewarm_service.configure("greyfen", _river_center("greyfen"), _zone_half_extents("greyfen"))
+	greyfen_prewarm_spatial_service = prewarm_service
 	spatial_service = prewarm_service
 	zone_root = Node3D.new()
 	zone_root.name = "greyfen"
@@ -2935,10 +3009,21 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		_opening_prepare_failed("Greyfen could not be prepared. Select New Game to retry.")
 		return
 	var prewarm_root: Node3D = zone_root
+	await get_tree().process_frame
+	await _wait_for_opening_build_slot(generation)
+	if not _opening_attempt_current(generation):
+		return
 	phase_started = Time.get_ticks_msec()
+	var slice_started := Time.get_ticks_usec()
 	for visual_bucket in range(OPENING_GAMEPLAY_VISUAL_BUCKETS):
 		ZoneCompositionRouter.build_core_detail_stage(self, "greyfen", "gameplay_visual_%d" % visual_bucket)
 		_record_opening_stage(zone_root, "gameplay_visual_%d" % visual_bucket)
+		if Time.get_ticks_usec() - slice_started >= OPENING_BUILD_SLICE_USEC:
+			await get_tree().process_frame
+			await _wait_for_opening_build_slot(generation)
+			if not _opening_attempt_current(generation):
+				return
+			slice_started = Time.get_ticks_usec()
 	_flush_environment_batches()
 	_add_visual_100_layer("greyfen")
 	_apply_first_route_materials(zone_root)
@@ -2948,6 +3033,10 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	_clear_environment_batch_buffers()
 	var world_finalize_ms := Time.get_ticks_msec() - phase_started
 	greyfen_prewarm_spatial_service = prewarm_service
+	await get_tree().process_frame
+	await _wait_for_opening_build_slot(generation)
+	if not _opening_attempt_current(generation):
+		return
 	# Kael's rig and camera are also expensive to instantiate in WebGL. Prepare
 	# them while the launch/menu presentation is already covering the viewport.
 	phase_started = Time.get_ticks_msec()
@@ -2982,7 +3071,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		get_tree().paused = was_paused
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's authored well could not be prepared. Select New Game to retry.")
 		return
-	var slice_started := Time.get_ticks_usec()
+	slice_started = Time.get_ticks_usec()
 	for covered_stage in OPENING_DETAIL_STAGES:
 		if bool(prewarm_root.get_meta("opening_completed_stages", {}).get(covered_stage, false)):
 			continue
@@ -3002,6 +3091,9 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		_record_opening_stage(prewarm_root, covered_stage)
 		if Time.get_ticks_usec() - slice_started >= OPENING_BUILD_SLICE_USEC:
 			await get_tree().process_frame
+			await _wait_for_opening_build_slot(generation)
+			if not _opening_attempt_current(generation):
+				return
 			slice_started = Time.get_ticks_usec()
 	if not _opening_attempt_current(generation):
 		return
@@ -3009,7 +3101,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		get_tree().paused = was_paused
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's scenery is incomplete. Select New Game to retry.")
 		return
-	_publish_web_opening_state("resources", "Finishing Greyfen's routes and characters...")
+	_publish_web_opening_state("finalizing", "Finishing Greyfen's routes and characters...")
 	prewarm_service.build_navigation(prewarm_root)
 	prewarm_root.set_meta("prewarm_navigation_pending", false)
 	_validate_zone_render_resources(prewarm_root)
@@ -3056,36 +3148,19 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		audio.prewarm_opening_audio()
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is ready.")
-	# Commit the completed cache after its final render, then satisfy queued starts.
-	await RenderingServer.frame_post_draw
-	if not _opening_attempt_current(generation):
-		return
-	await get_tree().process_frame
-	if not _opening_attempt_current(generation):
-		return
+	# The actual gameplay-camera frame above is the render readiness boundary.
 	greyfen_prewarm_started = false
 	_publish_web_opening_state("ready", "Greyfen is ready.")
 	_refresh_journey_models()
-	if input_router != null:
-		input_router.reset_transient_input("menu_ready")
 	if hud != null:
 		hud.set_new_game_ready(true)
-		hud.show_main_menu()
-	call_deferred("_publish_ready_menu", generation)
-	print("LOADING: opening_menu_render_ready")
+	print("LOADING: opening_world_render_ready")
 	print("LOADING: Greyfen prewarmed total=%dms build=%dms world=%dms player=%dms" % [
 		Time.get_ticks_msec() - prewarm_started, build_ms, world_finalize_ms, player_ms,
 	])
 	if new_game_start_pending:
 		get_tree().paused = false
 		_start_new_game_world()
-
-func _publish_ready_menu(generation: int) -> void:
-	await get_tree().process_frame
-	if DisplayServer.get_name().to_lower() != "headless":
-		await RenderingServer.frame_post_draw
-	if _opening_attempt_current(generation) and OS.has_feature("web"):
-		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
 
 func _apply_web_opening_boot_material_budget(world_root: Node, player_root: Node, force_for_test := false) -> void:
 	opening_boot_material_restore_generation += 1
@@ -6446,7 +6521,7 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 		deferred_gesture.name = "BoardGameOpponentController"
 		deferred_opponent.add_child(deferred_gesture)
 		deferred_gesture.configure(player, null)
-		var deferred_ambient := NpcAmbient.new()
+		var deferred_ambient = NpcAmbient.new()
 		deferred_ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player)
 		deferred_opponent.add_child(deferred_ambient)
 		return
@@ -6463,7 +6538,7 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 	gesture_controller.name = "BoardGameOpponentController"
 	opponent.add_child(gesture_controller)
 	gesture_controller.configure(player, opponent.find_child("CharacterAnimationDriver", true, false))
-	var ambient := NpcAmbient.new()
+	var ambient = NpcAmbient.new()
 	ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player)
 	opponent.add_child(ambient)
 

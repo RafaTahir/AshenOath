@@ -24,6 +24,7 @@ var services: Dictionary = {}
 var configured := false
 var menu_configured := false
 var campaign_configured := false
+var prepared_service_modes: Dictionary = {}
 const MENU_SERVICES := ["save_manager", "settings", "audio", "hud", "input_router", "mobile_touch", "runtime_packs", "display_metrics"]
 
 func create_services(menu_only := false) -> Dictionary:
@@ -32,6 +33,19 @@ func create_services(menu_only := false) -> Dictionary:
 
 func create_gameplay_services() -> Dictionary:
 	return _create_missing_services(REQUIRED_SERVICES)
+
+func prepare_gameplay_services(keep_preparing: Callable) -> bool:
+	var slice_started := Time.get_ticks_usec()
+	for id in REQUIRED_SERVICES:
+		if not keep_preparing.call():
+			return false
+		_create_missing_services([id])
+		if not services.has(id):
+			return false
+		if Time.get_ticks_usec() - slice_started >= 8000:
+			await get_tree().process_frame
+			slice_started = Time.get_ticks_usec()
+	return bool(keep_preparing.call()) and is_complete()
 
 func _create_missing_services(ids: Array) -> Dictionary:
 	for id in ids:
@@ -47,6 +61,9 @@ func _create_missing_services(ids: Array) -> Dictionary:
 		services[id] = service
 		service.name = _service_node_name(id)
 		add_child(service)
+		if id not in MENU_SERVICES and not configured:
+			prepared_service_modes[id] = service.process_mode
+			service.process_mode = Node.PROCESS_MODE_DISABLED
 	return services
 
 func configure_menu(owner: Node) -> void:
@@ -84,6 +101,7 @@ func configure_menu(owner: Node) -> void:
 	hud.pause_requested.connect(Callable(owner, "_pause_game"))
 	hud.resume_requested.connect(Callable(owner, "_resume_game"))
 	hud.new_game_requested.connect(Callable(owner, "_new_game"))
+	hud.new_game_cancel_requested.connect(Callable(owner, "_cancel_new_game_request"))
 	hud.quit_requested.connect(Callable(owner, "_handle_quit_request"))
 	hud.settings_requested.connect(Callable(owner, "_handle_setting"))
 	hud.launch_accepted.connect(Callable(owner, "_on_launch_accepted"))
@@ -277,6 +295,9 @@ func configure(owner: Node) -> void:
 	minigames.closed.connect(func(): hud.toast("The village carries on."))
 	settings.apply()
 	owner.call("_apply_runtime_settings", settings.settings)
+	for id in prepared_service_modes:
+		services[id].process_mode = int(prepared_service_modes[id])
+	prepared_service_modes.clear()
 
 func get_service(id: String):
 	return services.get(id)

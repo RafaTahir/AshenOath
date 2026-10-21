@@ -81,13 +81,16 @@ func begin_resource_attempt() -> void:
 			resource_requests.release(path, self)
 			pending_role_resources.erase(path)
 
-func request_role_resources(role_names: Array) -> Error:
+func request_role_resources(role_names: Array, visual_roles: bool = false, variant_seed: String = "") -> Error:
 	_ensure_database()
 	var paths: Array[String] = []
 	for role in role_names:
-		var entry: Dictionary = database.get_asset_for_role(str(role))
+		var entry: Dictionary = database.get_visual_asset_for_role(str(role)) if visual_roles else database.get_asset_for_role(str(role))
 		var path := str(entry.get("path", ""))
-		var prepared := PreparedActorCatalog.entry(str(role), path) if not building_prepared_assets else {}
+		if path.is_empty():
+			resource_prewarm_error = "Required actor role has no resource: %s" % role
+			return ERR_FILE_NOT_FOUND
+		var prepared := PreparedActorCatalog.entry(str(role), path, variant_seed) if not building_prepared_assets else {}
 		path = str(prepared.get("path", path))
 		paths.append(path)
 	return request_resource_paths(paths)
