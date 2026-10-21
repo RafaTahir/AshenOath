@@ -139,7 +139,7 @@ func _update_attention(parent_3d: Node3D, delta: float) -> void:
 		_set_animation_suspended(false)
 	var focus_distance: float = parent_3d.global_position.distance_to(focus_target.global_position) if focus_target != null else INF
 	_set_animation_update_rate(30.0 if focus_distance <= focus_radius else 15.0)
-	if is_instance_valid(context) and str(context.get("current_zone_id")) == "greyfen" and bool(context.get("game_started")):
+	if is_instance_valid(context) and bool(context.get("game_started")):
 		_update_presence(parent_3d, delta, focus_distance)
 	phase += delta * (0.48 if role_id == "sister_anwen" else 0.62)
 	var home_yaw: float = deg_to_rad(base_yaw)
@@ -183,6 +183,8 @@ func _update_presence(actor: Node3D, delta: float, distance: float) -> void:
 		face_driver.set_focus_target(focus_target if distance < focus_radius else null)
 	if is_instance_valid(animation_driver) and animation_driver.has_method("set_life_activity"):
 		var activity := str(cast_profile.get("activity", "idle"))
+		if animation_driver.character_root != null and animation_driver.character_root.has_meta("cast_activity_override"):
+			activity = str(animation_driver.character_root.get_meta("cast_activity_override"))
 		if reaction_until > 0.0:
 			activity = "fear" if reaction == "fear" else "watch"
 		animation_driver.set_life_activity(activity if distance <= 7.0 else "")

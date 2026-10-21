@@ -20,6 +20,9 @@ var _escort_path: Array[Vector3] = []
 var _escort_index := 0
 var _used_positions: Array[Vector3] = []
 var _site_positions: Dictionary = {}
+var _assemblies: Dictionary = {}
+var _carried: Node3D
+var _carried_key := ""
 
 static func install(game, director: Node, zone_id: String) -> void:
 	var owner := director.get_node_or_null("SixWorldStories")
@@ -57,6 +60,7 @@ func refresh() -> void:
 					area.global_position = worker.global_position
 					worker.set_meta("story_actor_alias", "saga_dain")
 					area.set_meta("saga_alias_present", true)
+					area.set_meta("saga_actor_instance", worker.get_instance_id())
 				else:
 					area.set_meta("saga_alias_present", false)
 					if area.get_node_or_null("WorkProp") == null:
@@ -89,15 +93,20 @@ func refresh() -> void:
 		if step.is_empty():
 			continue
 		var objective := str(step[0])
-		var site := str(step[2])
 		var part := _part(id, objective)
+		var site := Catalog.part_site(id, step, part, host.story_state)
 		var mode := str(step[3])
 		var prompt := str(step[1])
+		_ensure_assembly(id)
+		if mode == "signal" and _flag(id + ":signal_mode_set"):
+			var returning := _flag(id + ":left_work_area")
+			_point(id + ":" + objective + (":near" if returning else ":far"), "Return to the near marker" if returning else "Walk to the far marker", "posts" if returning else "line", "record")
+			continue
 		if mode == "inspect" and step[4].size() > 1:
 			for index in range(step[4].size()):
 				if _flag(id + ":" + objective + ":seen:" + str(index)):
 					continue
-				var inspected := _point(id + ":" + objective + ":inspect:" + str(index), "Inspect " + str(step[4][index]), site, "record")
+				var inspected := _point(id + ":" + objective + ":inspect:" + str(index), "Inspect " + str(step[4][index]), Catalog.part_site(id, step, index, host.story_state), "record")
 				if inspected != null:
 					inspected.set_meta("saga_inspect_index", index)
 			continue
@@ -105,10 +114,11 @@ func refresh() -> void:
 			var stages: Array = step[4]
 			if part < stages.size():
 				if part % 2 == 1:
-					site = str(stages[part])
 					prompt = "Place " + str(stages[part - 1])
 				else:
 					prompt = "Take " + str(stages[part])
+					if Catalog.BUNDLED_CARRIES.has(id + ":" + objective):
+						prompt = "Collect " + str(Catalog.BUNDLED_CARRIES[id + ":" + objective]) + " together"
 		elif step[4] is Array and not step[4].is_empty():
 			prompt = str(step[4][mini(part, step[4].size() - 1)])
 		var area := _point(id + ":" + objective, prompt, site, _prop_kind(mode, prompt))
@@ -121,11 +131,12 @@ func refresh() -> void:
 			if str(area.get_meta("saga_site", "")) != site:
 				area.position = _site_position(site, str(area.interaction_id))
 				area.set_meta("saga_site", site)
-			if mode in ["work", "bell", "door"] and area.get_node_or_null("RegionalWork") == null:
+			if mode in ["work", "bell", "door"]:
 				var old_prop := area.get_node_or_null("WorkProp")
 				if old_prop != null:
-					old_prop.visible = false
-				WorkPresentation.build(host, area, id, false, str(host.story_state.get_flag(id + "_outcome", "")))
+					old_prop.visible = site != str(Catalog.PRESENTATION_SITES.get(id, quest.site)) and mode == "work"
+				if site == str(Catalog.PRESENTATION_SITES.get(id, quest.site)):
+					area.global_position = _assemblies[id].global_position
 			if mode == "escort":
 				_restore_escort(id, step, area)
 	for id: String in Catalog.SECRETS:
@@ -145,11 +156,10 @@ func refresh() -> void:
 		point.set_interaction_enabled(wanted)
 		if not wanted:
 			host._remove_interaction_candidate(point)
-			# Keep the completed physical work in the world without leaving an
-			# obsolete Use target. Its local geometry is projected at the same spot.
-			var work := point.get_node_or_null("RegionalWork")
-			if work != null and point.has_meta("saga_quest") and host.quests.is_objective_done(str(point.get_meta("saga_quest")), str(point.get_meta("saga_objective"))):
-				point.visible = true
+	_sync_carried_work()
+	var companion: Node = host.zone_root.get_node_or_null("Bracken")
+	if companion != null and companion.has_method("refresh_regional_scents"):
+		companion.refresh_regional_scents(self)
 	host.interaction_focus_dirty = true
 	_refreshing = false
 
@@ -176,7 +186,10 @@ func _point(id: String, prompt: String, site: String, kind: String) -> Node3D:
 		label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		point.add_child(label)
 		if kind != "person":
-			_add_work_prop(point, kind)
+			if not id.contains(":inspect:") or not WorkPresentation.clue_visual(host, point, prompt):
+				_add_work_prop(point, kind)
+		if id.contains(":inspect:") and (prompt.to_lower().contains("track") or prompt.to_lower().contains("hoofprint") or prompt.to_lower().contains("scar")):
+			point.set_meta("saga_scent", true)
 		host._connect_interactable(point)
 	point.prompt = prompt
 	point.display_name = prompt
@@ -225,12 +238,12 @@ func _add_person(area: Node3D, person: Dictionary, id: String) -> void:
 	host._configure_npc_animation(visual, id)
 	area.set_meta("saga_person", id)
 	area.set_meta("protected_optional_speaker", true)
-	if zone == "greyfen":
-		load("res://scripts/character_presentation.gd").apply_npc(visual, id, false)
-		var ambient = load("res://scripts/npc_ambient.gd").new()
-		ambient.name = "NpcAmbient"
-		ambient.setup(id, host.player, host)
-		area.add_child(ambient)
+	load("res://scripts/character_presentation.gd").apply_npc(visual, id, false)
+	area.set_meta("cast_presence_profile", load("res://scripts/story_cast_profile.gd").presence_profile(id))
+	var ambient = load("res://scripts/npc_ambient.gd").new()
+	ambient.name = "NpcAmbient"
+	ambient.setup(id, host.player, host)
+	area.add_child(ambient)
 
 func _add_work_prop(area: Node3D, kind: String) -> void:
 	var visual: Node3D
@@ -295,8 +308,8 @@ func activate(id: String) -> void:
 		return
 	if id.begins_with("saga_return:"):
 		var prefix := id.trim_prefix("saga_return:")
-		if not host.progression.claim_saga_return(prefix, host.quests):
-			host.hud.toast("The work remains. A meaningful return is recorded once after leaving this place.")
+		host.progression.claim_saga_return(prefix, host.quests)
+		_open(area, str(Catalog.WORLDS[prefix].name), _aftermath_text("saga_" + prefix + "_q05"), [])
 		_persist()
 		return
 	if Catalog.PEOPLE.has(id):
@@ -310,7 +323,7 @@ func activate(id: String) -> void:
 		return
 	var quest: Dictionary = Catalog.QUESTS[quest_id]
 	if id.ends_with(":offer"):
-		_open(area, str(quest.title), str(quest.hook), [_action(area, "accept", quest_id, "Offer a hand")])
+		_open(area, str(quest.title), Catalog.opening(quest_id), [_action(area, "accept", quest_id, "Offer a hand")])
 		return
 	if id.ends_with(":after"):
 		_collect_delivery(quest_id)
@@ -320,6 +333,9 @@ func activate(id: String) -> void:
 	if step.is_empty() or str(step[0]) != id.get_slice(":", 1):
 		return
 	var mode := str(step[3])
+	if mode == "signal" and (id.ends_with(":far") or id.ends_with(":near")):
+		host.hud.toast("Check the far marker on foot, then return to the near post.")
+		return
 	if mode in ["choice", "signal"]:
 		var actions: Array = []
 		for outcome: String in step[4]:
@@ -330,19 +346,26 @@ func activate(id: String) -> void:
 		_open(area, str(quest.title), str(step[1]), actions)
 	elif mode == "escort":
 		_start_escort(quest_id, step, area)
+	elif mode in ["work", "carry", "door", "bell"]:
+		if quest_id == "saga_gre_q04" and str(step[0]) == "return_kettle" and str(host.story_state.get_flag(quest_id + "_outcome", "")) == "replayed" and not _flag("saga_gre_q04:round_played"):
+			host.hud.toast("Play one ordinary Three Marks round at the common table. Winning is not required.")
+		else:
+			_begin_work(quest_id, step, area)
 	elif mode == "return" and not _flag(quest_id + ":left_work_area"):
 		host.hud.toast("Leave the quiet work area before returning to inspect fresh signs.")
 	elif quest_id == "saga_gre_q04" and str(step[0]) == "return_kettle" and str(host.story_state.get_flag(quest_id + "_outcome", "")) == "replayed" and not _flag("saga_gre_q04:round_played"):
 		host.hud.toast("Play one ordinary Three Marks round at the common table. Winning is not required.")
 	else:
 		var part := _part(quest_id, str(step[0]))
-		var account := str(step[5])
+		var account := Catalog.account(quest_id, step)
 		if step[4] is Array and step[4].size() > 1:
 			account = str(area.prompt) + ".\n\n" + account
 		var action := _action(area, "work" if mode in ["work", "carry", "door", "bell"] else "advance", quest_id, str(area.prompt), part)
 		if area.has_meta("saga_inspect_index"):
-			action["inspect_index"] = int(area.get_meta("saga_inspect_index"))
-		_open(area, str(quest.title), account, [action])
+			var index := int(area.get_meta("saga_inspect_index"))
+			action["inspect_index"] = index
+			account = Catalog.observation(quest_id, step, index)
+		_open(area, str(quest.title), account, [action], _nearby_speaker(quest_id) if mode == "talk" else "narrator")
 
 func _open_person(area: Node3D, id: String) -> void:
 	if not _flag(id + "_met"):
@@ -351,31 +374,51 @@ func _open_person(area: Node3D, id: String) -> void:
 	var person: Dictionary = Catalog.PEOPLE[id]
 	var actions: Array = []
 	var finished := false
+	var remembered := ""
 	for quest_id: String in Catalog.QUESTS:
 		var quest: Dictionary = Catalog.QUESTS[quest_id]
 		if str(quest.get("actor", "")) != id or str(quest.zone) != zone or not _available(quest):
 			continue
 		finished = finished or host.quests.is_completed(quest_id)
+		if host.quests.is_completed(quest_id):
+			remembered = Catalog.aftermath(quest_id, str(host.story_state.get_flag(quest_id + "_outcome", "")))
 		if not host.quests.is_active(quest_id) and not host.quests.is_completed(quest_id):
 			actions.append(_action(area, "offer", quest_id, str(quest.title)))
 		elif host.quests.is_active(quest_id):
 			actions.append(_action(area, "directions", quest_id, "About " + str(quest.title)))
 	var written: bool = (bool(person.get("alias", false)) and not bool(area.get_meta("saga_alias_present", false))) or (id == "saga_odran" and host.quests.is_completed("saga_var_q03") and str(host.story_state.get_flag("saga_var_q03_outcome", "")) == "departed")
-	var words := str(person.get("return" if finished else "line", ""))
+	var words := str(Catalog.GREETINGS.get(id, person.line)) if finished else str(person.line)
 	if written:
 		words = "Previously authorized note from " + str(person.name) + ":\n" + ("My tools and traveling tray were returned. I have left by my own choice. The offered seed labels remain available to inspect." if id == "saga_odran" else words)
-	_open(area, str(person.name) + (" - recorded note" if written else ""), words, actions, "narrator" if written else id)
+	_open(area, str(person.name) + (" - recorded note" if written else ""), words, actions, "narrator" if written else id, remembered)
 
 func _action(area: Node3D, operation: String, quest_id: String, label: String, part: int = -1) -> Dictionary:
 	var step := _step(quest_id)
 	return {"type":"saga_action", "label":label, "operation":operation, "quest":quest_id, "area":area.get_instance_id(), "objective":str(step[0]) if not step.is_empty() else "", "part":part if part >= 0 else (_part(quest_id, str(step[0])) if not step.is_empty() else 0)}
 
-func _open(area: Node3D, title: String, text: String, actions: Array, speaker_id: String = "narrator") -> void:
+func _nearby_speaker(id: String) -> String:
+	var speaker := str(Catalog.QUESTS.get(id, {}).get("actor", ""))
+	var person: Node3D = points.get(speaker)
+	if not is_instance_valid(person) or (person.get_node_or_null("Person") == null and not bool(person.get_meta("saga_alias_present", false))) or not person.is_visible_in_tree() or person.global_position.distance_to(host.player.global_position) > 5.0:
+		return "narrator"
+	return speaker
+
+func _open(area: Node3D, title: String, text: String, actions: Array, speaker_id: String = "narrator", recall: String = "") -> void:
+	_cancel_work()
+	var content := {"name":title, "pages":[{"speaker":str(Catalog.PEOPLE.get(speaker_id, {}).get("name", title)), "speaker_id":speaker_id, "text":text, "performance":load("res://scripts/story_scene_direction.gd").for_regional(speaker_id)}], "actions":actions}
+	if recall != "":
+		content.pages.append({"speaker":"Work you completed", "speaker_id":"narrator", "text":recall, "performance":{"framing":"two_shot"}})
 	if speaker_id != "narrator":
-		host._stage_dialogue_moment(area)
+		var speaker: Node3D = points.get(speaker_id, area)
+		var aliased := instance_from_id(int(speaker.get_meta("saga_actor_instance", 0))) as Node3D
+		if is_instance_valid(aliased) and host.zone_root.is_ancestor_of(aliased) and aliased.is_visible_in_tree():
+			speaker = aliased
+			content.pages[0]["speaker_actor_id"] = aliased.get_instance_id()
+		host._stage_dialogue_moment(speaker)
+		load("res://scripts/story_performance.gd").begin(speaker, host.player, content, host.story_state)
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
-	host.hud.show_dialogue({"name":title, "pages":[{"speaker":title, "speaker_id":speaker_id, "text":text}], "actions":actions})
+	host.hud.show_dialogue(host._prepare_dialogue_presence(content))
 
 func choose(action: Dictionary) -> void:
 	var area := instance_from_id(int(action.get("area", 0))) as Node3D
@@ -395,7 +438,7 @@ func choose(action: Dictionary) -> void:
 		host._resume_game()
 		return
 	if operation == "offer":
-		_open(area, str(quest.title), str(quest.hook), [_action(area, "accept", id, "Offer a hand")])
+		_open(area, str(quest.title), Catalog.opening(id), [_action(area, "accept", id, "Offer a hand")])
 		return
 	if operation == "directions":
 		var step := _step(id)
@@ -424,9 +467,7 @@ func choose(action: Dictionary) -> void:
 			return
 		_complete_step(id, step, outcome)
 	elif operation == "work":
-		_work = {"id":id, "step":step, "area":weakref(area), "start":host.player.global_position, "part":int(action.part)}
-		_elapsed = 0.0
-		host.player._request_equipment(host.player.weapon_mode, host.player.get_selected_blade_id(), false)
+		_begin_work(id, step, area)
 	else:
 		if action.has("inspect_index"):
 			var index := int(action.inspect_index)
@@ -442,8 +483,18 @@ func _choice_allowed(id: String, outcome: String) -> bool:
 	return outcome == "workshop" or (outcome == "relief_store" and operation == "closed") or (outcome == "checking_station" and operation not in ["", "closed"])
 
 func _advance_part(id: String, step: Array) -> void:
-	var next := _part(id, str(step[0])) + 1
+	var part := _part(id, str(step[0]))
+	var next := part + 1
 	var total: int = step[4].size() if step[4] is Array and not step[4].is_empty() else 1
+	var key := id + ":" + str(step[0])
+	# Only an actual new pickup earns a bundled delivery. An old save holding a
+	# single piece still places that piece before collecting the remaining load.
+	if str(step[3]) == "carry" and Catalog.BUNDLED_CARRIES.has(key):
+		if part % 2 == 0:
+			host.story_state.set_flag(key + ":bundle_pickup", next)
+		elif int(host.story_state.get_flag(key + ":bundle_pickup", -1)) == part:
+			next = total
+			host.story_state.set_flag(key + ":bundle_pickup", -1)
 	host.story_state.set_flag(id + ":" + str(step[0]) + ":part", next)
 	if next >= total:
 		_complete_step(id, step)
@@ -457,7 +508,7 @@ func _complete_step(id: String, step: Array, chosen_outcome: String = "") -> voi
 		host.story_state.set_flag(id + "_outcome", chosen_outcome)
 	if str(step[3]) in ["choice", "signal"]:
 		var outcome := str(host.story_state.get_flag(id + "_outcome", ""))
-		host.story_state.record_decision(id + ":" + str(step[0]), {"label":str(step[4].get(outcome, outcome)), "result":str(step[5]), "sets_flags":{id + "_outcome":outcome}})
+		host.story_state.record_decision(id + ":" + str(step[0]), {"label":str(step[4].get(outcome, outcome)), "result":Catalog.account(id, step), "sets_flags":{id + "_outcome":outcome}})
 	var quest: Dictionary = Catalog.QUESTS[id]
 	if str(step[0]) == str(quest.steps.back()[0]):
 		if str(host.story_state.get_flag(id + "_outcome", "")) == "":
@@ -468,14 +519,18 @@ func _complete_step(id: String, step: Array, chosen_outcome: String = "") -> voi
 		_collect_delivery(id)
 		if str(quest.get("lore", "")) != "":
 			host.story_state.record_evidence(id + "_lore", {"zone":zone, "kind":"account", "title":quest.title, "text":quest.lore})
+		var person := str(quest.get("actor", ""))
+		if person != "":
+			host.story_state.record_relationship_event({"id":"lr.saga." + id, "actor":person.trim_prefix("saga_"), "kind":"help", "text":str(quest.title) + ": " + Catalog.aftermath(id, str(host.story_state.get_flag(id + "_outcome", ""))), "acknowledgement":str(Catalog.GREETINGS.get(person, "Thank you for staying to see it through."))})
 	if host.quests.is_choice_objective(id, str(step[0])):
 		host.quests.complete_choice(id, str(step[0]))
 	else:
 		host.quests.complete_objective(id, str(step[0]))
-	host.story_state.set_flag(id + ":last_account", str(step[5]))
+	var account := Catalog.account(id, step)
+	host.story_state.set_flag(id + ":last_account", account)
 	host.story_state.end_change()
 	host.quests.end_change()
-	host.hud.toast(str(step[5]))
+	host.hud.toast(account)
 	_commit()
 
 func _collect_delivery(id: String) -> void:
@@ -539,16 +594,86 @@ func _outcome_name(id: String) -> String:
 	return str(host.story_state.get_flag(id + "_outcome", "recorded")).replace("_", " ")
 
 func _aftermath_text(id: String) -> String:
-	var text := str(Catalog.QUESTS[id].steps.back()[5]) + "\n\nRecorded arrangement: " + _outcome_name(id) + "."
+	var text := Catalog.aftermath(id, str(host.story_state.get_flag(id + "_outcome", "")))
 	if id == "saga_har_q05":
 		text += "\nCovenant: " + str(host.story_state.get_flag("final_covenant", "")) + ". The original journey home remains separate."
 	return text
 
 func _dress_aftermath(area: Node3D, id: String) -> void:
-	if area.has_meta("saga_dressed"):
+	_ensure_assembly(id)
+	var old_prop := area.get_node_or_null("WorkProp")
+	if old_prop != null:
+		old_prop.visible = false
+
+func _ensure_assembly(id: String) -> void:
+	var assembly: Node3D = _assemblies.get(id)
+	var complete: bool = host.quests.is_completed(id)
+	var outcome := str(host.story_state.get_flag(id + "_outcome", ""))
+	if is_instance_valid(assembly) and str(assembly.get_meta("recorded_outcome", "")) != outcome:
+		assembly.get_parent().queue_free()
+		assembly = null
+	if not is_instance_valid(assembly):
+		var anchor := Node3D.new()
+		anchor.name = id + "_workplace"
+		anchor.position = _site_position(str(Catalog.PRESENTATION_SITES.get(id, Catalog.QUESTS[id].site)), id + "_workplace")
+		add_child(anchor)
+		assembly = WorkPresentation.build(host, anchor, id, complete, outcome)
+		_assemblies[id] = assembly
+	WorkPresentation.sync_progress(assembly, host, id)
+
+func _begin_work(id: String, step: Array, area: Node3D) -> void:
+	if not _within_reach(area) or not host.player.can_control or host.player.transition_locked:
 		return
-	area.set_meta("saga_dressed", true)
-	WorkPresentation.build(host, area, id, true, str(host.story_state.get_flag(id + "_outcome", "")))
+	_cancel_work()
+	_work = {"id":id, "step":step, "area":weakref(area), "start":host.player.global_position, "part":_part(id, str(step[0]))}
+	_elapsed = 0.0
+	host.player.face_target(area.global_position)
+	host.player._request_equipment(host.player.weapon_mode, host.player.get_selected_blade_id(), false)
+	host.hud.toast(str(area.prompt))
+
+func _cancel_work() -> void:
+	if not _work.is_empty() and not bool(_work.get("escort", false)) and host != null and is_instance_valid(host.player):
+		host.player.remove_meta("cast_work_owner")
+		if host.player.animation_driver != null:
+			host.player.animation_driver.clear_life_activity()
+	if bool(_work.get("escort", false)):
+		for driver: Node in _escort_drivers:
+			if is_instance_valid(driver):
+				driver.set_locomotion_motion(Vector3.ZERO, true)
+	_work.clear()
+	_elapsed = 0.0
+
+func _sync_carried_work() -> void:
+	var key := ""
+	var label := ""
+	for id: String in Catalog.QUESTS:
+		if str(Catalog.QUESTS[id].zone) != zone or not host.quests.is_active(id):
+			continue
+		var step := _step(id)
+		if step.is_empty() or str(step[3]) != "carry":
+			continue
+		var part := _part(id, str(step[0]))
+		if part % 2 == 1 and part < step[4].size():
+			key = id + ":" + str(step[0]) + ":" + str(part)
+			label = str(step[4][part - 1])
+			if int(host.story_state.get_flag(id + ":" + str(step[0]) + ":bundle_pickup", -1)) == part:
+				label = str(Catalog.BUNDLED_CARRIES.get(id + ":" + str(step[0]), label))
+			break
+	if key == _carried_key:
+		return
+	if is_instance_valid(_carried):
+		_carried.queue_free()
+	_carried = null
+	_carried_key = key
+	if key != "":
+		_carried = WorkPresentation.carried_item(host, label)
+
+func scent_candidates() -> Array[Node3D]:
+	var candidates: Array[Node3D] = []
+	for point: Node3D in points.values():
+		if bool(point.get_meta("saga_scent", false)) and point.is_visible_in_tree() and point.is_interaction_enabled():
+			candidates.append(point)
+	return candidates
 
 func _within_reach(area: Node3D) -> bool:
 	if not is_instance_valid(area) or not is_instance_valid(host.player) or not is_ancestor_of(area) \
@@ -610,6 +735,8 @@ func _start_escort(id: String, step: Array, area: Node3D) -> void:
 func _physics_process(delta: float) -> void:
 	if host == null or str(host.current_zone_id) != zone or not is_instance_valid(host.player):
 		return
+	if is_instance_valid(_carried):
+		_carried.visible = host.player.sword_sheathed and not host.player.bow_aiming and str(host.player.beam_cast_state) == ""
 	_tick_return_steps()
 	if _work.is_empty():
 		return
@@ -617,24 +744,26 @@ func _physics_process(delta: float) -> void:
 		_tick_escort(delta)
 		return
 	var area: Node3D = _work.area.get_ref()
-	if not _within_reach(area) or host.player.global_position.distance_to(_work.start) > 0.35 or not host.player.can_control:
-		_work.clear()
-		_elapsed = 0
+	if not _within_reach(area) or host.player.global_position.distance_to(_work.start) > 0.35 or not host.player.can_control or host.player.transition_locked or float(host.player.attack_anim_time) > 0.0 or str(host.player.beam_cast_state) != "" or float(host.player.hurt_react_time) > 0.0:
+		_cancel_work()
 		return
 	if host.player.equipment_loadout.is_transitioning():
 		return
+	if host.player.equipment_loadout.is_drawn():
+		_cancel_work()
+		return
+	host.player.set_meta("cast_work_owner", str(_work.id))
+	if host.player.animation_driver != null:
+		host.player.animation_driver.set_life_activity(str(Catalog.performance(str(_work.id)).get("activity", "repair")))
 	_elapsed += delta
+	WorkPresentation.animate_work(_assemblies.get(str(_work.id)), str(_work.step[3]), int(_work.part), minf(_elapsed / 1.25, 1.0))
 	if _elapsed >= 1.25:
 		var id := str(_work.id)
 		var step: Array = _work.step
-		_work.clear()
-		_elapsed = 0
-		if str(step[3]) == "door":
-			var hinge := area.find_child("DoorHinge", true, false) as Node3D
-			if hinge != null:
-				hinge.rotation.y = -PI * 0.5 if _part(id, str(step[0])) == 0 else 0.0
-		if str(step[3]) == "bell" and host.audio != null:
-			host.audio.play_event("ui", 0.02)
+		var part := int(_work.part)
+		_cancel_work()
+		if str(step[3]) == "bell" and part == 0 and host.audio != null:
+			host.audio.play_event("shrine_bell", 0.02)
 		_advance_part(id, step)
 
 func _tick_return_steps() -> void:
@@ -646,9 +775,13 @@ func _tick_return_steps() -> void:
 			continue
 		var key := id + ":left_work_area"
 		var anchor: Vector3 = Catalog.SITES[zone][step[2]]
-		if host.player.global_position.distance_to(anchor) >= 7.0 and (str(step[3]) != "signal" or _flag(id + ":signal_mode_set")):
+		var far_enough: bool = host.player.global_position.distance_to(anchor) >= 7.0
+		if str(step[3]) == "signal":
+			far_enough = _flag(id + ":signal_mode_set") and host.player.global_position.distance_to(Catalog.SITES[zone].line) < 2.0
+		if far_enough:
 			if not _flag(key):
 				host.story_state.set_flag(key, true)
+				_commit()
 		elif _flag(key) and host.player.global_position.distance_to(anchor) < 2.8 and str(step[3]) == "signal":
 			_complete_step(id, step)
 
@@ -687,5 +820,9 @@ func _tick_escort(delta: float) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		if not bool(_work.get("escort", false)):
-			_work.clear()
-		_elapsed = 0
+			_cancel_work()
+
+func _exit_tree() -> void:
+	_cancel_work()
+	if is_instance_valid(_carried):
+		_carried.queue_free()

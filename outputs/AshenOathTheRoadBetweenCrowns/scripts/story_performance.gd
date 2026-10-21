@@ -97,9 +97,10 @@ func start(target: Node3D, player: Node3D, state) -> void:
 		stop()
 	actor = target
 	listener = player
-	profile = CastProfile.get_profile(str(actor.get_meta("character_identity_profile", "")), str(actor.name))
+	var role := str(actor.get_meta("story_actor_alias", actor.get_meta("character_identity_profile", "")))
+	profile = CastProfile.get_profile(role, str(actor.name))
 	if profile.is_empty():
-		profile = CastProfile.presence_profile(str(actor.get_meta("character_identity_profile", "")), str(actor.name))
+		profile = CastProfile.presence_profile(role, str(actor.name))
 	if actor.has_method("face_target"):
 		profile = CastProfile.get_profile("player")
 	driver = actor.find_child("CharacterAnimationDriver", true, false)

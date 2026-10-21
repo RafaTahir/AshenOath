@@ -5,6 +5,12 @@ Branch: `codex/masterpiece-rebuild`. Source base: `d0a735f` plus the preserved w
 
 ## Current Delivery
 
+2026-10-22: the coordinated [A World Worth Caring About implementation](../living-road/WORLD_WORTH_CARING_IMPLEMENTATION.md)
+adds authored accounts for all 30 regional quests, distinct clue/work placement,
+physical saved-state projections and personal returns. Original objective,
+choice and reward IDs remain. The new candidate is build-only and pending user
+acceptance; the historical publication below remains a separate baseline.
+
 Follow-up 2026-10-19: the user approved finite oils and the fitting's 20% duration
 effect. Source implementation now exists under [FINISH-017](../finish-line/FINISH-017.md);
 its new compilation/verification are pending. The published world-saga baseline

@@ -6598,6 +6598,7 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 		clips["idle"] = "Sitting_Idle"
 		clips["dialogue"] = "Sitting_Talking"
 		clips["work"] = "Sitting_Talking"
+		mapped.set_meta("cast_activity_override", "")
 	var driver = CharacterAnimationDriver.new()
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
@@ -6621,7 +6622,10 @@ func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
 		var id := str(page.get("speaker_id", "narrator"))
 		if id in ["player", "kael", "narrator", ""]:
 			continue
-		var actor: Node3D = zone_root.find_child(str(aliases.get(id, id)), true, false) as Node3D if zone_root != null else null
+		var supplied := instance_from_id(int(page.get("speaker_actor_id", 0))) as Node3D
+		var actor: Node3D = supplied if is_instance_valid(supplied) and is_instance_valid(zone_root) and zone_root.is_ancestor_of(supplied) else null
+		if actor == null:
+			actor = zone_root.find_child(str(aliases.get(id, id)), true, false) as Node3D if zone_root != null else null
 		if actor == null and zone_root != null:
 			var witness: String = {"mira":"witness_-7", "rook":"witness_-3", "anwen":"witness_3"}.get(id, "")
 			if witness != "":

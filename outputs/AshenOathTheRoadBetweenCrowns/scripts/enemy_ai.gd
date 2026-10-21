@@ -98,6 +98,8 @@ var ambient_target := Vector3.INF
 var ambient_cycle := 0
 var had_player_contact := false
 var native_face: Node
+var presence_home_yaw := 0.0
+var presence_clock := 0.0
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -119,6 +121,7 @@ func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	# it to the active scene. Reading global_position in that state emits an
 	# engine error and can poison an otherwise valid runtime check.
 	home_position = global_position if is_inside_tree() else position
+	presence_home_yaw = rotation.y
 	health_component = HealthComponent.new()
 	add_child(health_component)
 	health_component.configure(float(definition.get("health", 60.0)))
@@ -217,7 +220,7 @@ func _physics_process(delta: float) -> void:
 	var to_player: Vector3 = player.global_position - global_position
 	var distance: float = to_player.length()
 	_update_perception(delta, distance)
-	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
+	if is_boss or enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bandit"]:
 		if not is_instance_valid(native_face) and visual_root != null:
 			native_face = visual_root.find_child("CharacterFaceDriver", true, false)
 		if is_instance_valid(native_face):
@@ -259,7 +262,9 @@ func _physics_process(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0.0, 8.0 * delta)
 			velocity.z = move_toward(velocity.z, 0.0, 8.0 * delta)
 	elif perception_memory_time <= 0.0 and not can_see_player:
-		if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"] and encounter_active:
+		if is_boss and encounter_active:
+			_update_boss_presence(delta)
+		elif enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bandit"] and encounter_active:
 			_update_ambient_life(delta)
 		else:
 			velocity.x = move_toward(velocity.x, 0.0, 6.0 * delta)
@@ -673,8 +678,7 @@ func _update_perception(delta: float, player_distance: float) -> void:
 		perception_memory_time = perception_memory_duration
 
 func _update_ambient_life(delta: float) -> void:
-	# This sample preserves engagement, damage and attack timers. Ambient intent
-	# runs only after existing perception loses its target, inside the home leash.
+	# Existing perception and attack reservations take precedence over all habits.
 	ambient_elapsed += delta
 	ambient_remaining = maxf(ambient_remaining - delta, 0.0)
 	if ambient_remaining <= 0.0:
@@ -690,11 +694,11 @@ func _update_ambient_life(delta: float) -> void:
 			ambient_target = home_position
 			ambient_remaining = 5.0
 		elif ambient_cycle % 3 == 0:
-			ambient_state = "scavenging" if behavior_profile != "brute" else "watching"
+			ambient_state = "scavenging" if behavior_profile not in ["brute", "duelist"] and tag not in ["human", "undead"] else "watching"
 			ambient_target = Vector3.INF
 			ambient_remaining = 3.0 + phase * 0.25
 		else:
-			ambient_state = "patrolling" if behavior_profile != "flanker" else "stalking"
+			ambient_state = "territorial" if enemy_id == "bog_wretch" else ("patrolling" if behavior_profile != "flanker" else "stalking")
 			var angle := phase + float(ambient_cycle) * 1.7
 			var radius := 1.35 if behavior_profile == "brute" else 2.5
 			var candidate := home_position + Vector3(cos(angle), 0, sin(angle)) * minf(radius, maxf(0.5, leash_radius - 1.0))
@@ -717,6 +721,38 @@ func _update_ambient_life(delta: float) -> void:
 		animation_driver.set_life_activity("scavenge" if ambient_state == "scavenging" else "watch")
 		if is_instance_valid(native_face) and ambient_state == "scavenging" and fmod(ambient_elapsed, 2.8) < delta:
 			native_face.play_story_gesture("remember")
+
+func _update_boss_presence(delta: float) -> void:
+	presence_clock += delta
+	velocity.x = move_toward(velocity.x, 0.0, delta*5.0)
+	velocity.z = move_toward(velocity.z, 0.0, delta*5.0)
+	var sweep := 0.0
+	match enemy_id:
+		"bell_eater":
+			ambient_state = "listening"
+			sweep = sin(presence_clock*0.40)*0.14
+		"bog_wretch":
+			ambient_state = "territorial"
+			var target := home_position + Vector3(cos(presence_clock*0.12),0,sin(presence_clock*0.12))*1.2
+			if spatial_service != null and spatial_service.bank_for(target) == spatial_service.bank_for(home_position) and spatial_service.validate_runtime_segment(global_position, target, contact_radius, self):
+				var direction := _navigation_direction(target)
+				velocity.x = direction.x*move_speed*0.25
+				velocity.z = direction.z*move_speed*0.25
+		"rootbound_colossus":
+			ambient_state = "warding"
+			sweep = sin(presence_clock*0.22)*0.04
+		"ashwing":
+			ambient_state = "watching"
+			sweep = sin(presence_clock*0.28)*0.08
+		"halvern_boss":
+			ambient_state = "keeping_watch"
+			sweep = sin(presence_clock*0.18)*0.025
+		"white_hart_avatar":
+			ambient_state = "attentive"
+			sweep = sin(presence_clock*0.20)*0.035
+	rotation.y = lerp_angle(rotation.y, presence_home_yaw+sweep, minf(delta*1.2,1.0))
+	if animation_driver != null and Vector2(velocity.x,velocity.z).length_squared() < 0.01:
+		animation_driver.set_life_activity("watch")
 
 func _has_perception_line() -> bool:
 	if not is_inside_tree() or player == null or not player.is_inside_tree():

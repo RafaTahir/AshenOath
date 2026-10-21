@@ -149,14 +149,14 @@
       "context": "campaign_dialogue.assembly_choice.lines"
     },
     "campaign_dialogue.assembly_choice.lines.3": {
-      "source": "Kael: I will not. The copies establish what happened. Each of you decides whether to offer more.",
-      "text": "Kael: I will not. The copies establish what happened. Each of you decides whether to offer more.",
+      "source": "Kael: I will not. The copies are here. Read them. Ask me what I did. You need not put your names beneath mine.",
+      "text": "Kael: I will not. The copies are here. Read them. Ask me what I did. You need not put your names beneath mine.",
       "speaker": "",
       "context": "campaign_dialogue.assembly_choice.lines"
     },
     "campaign_dialogue.assembly_choice.lines.4": {
-      "source": "Anwen: Break the grain condition before you touch the seal. Otherwise the rite only learns a new way to threaten us.",
-      "text": "Anwen: Break the grain condition before you touch the seal. Otherwise the rite only learns a new way to threaten us.",
+      "source": "Anwen: Open the grain list first. Let the people at the back eat before anyone asks them to come forward.",
+      "text": "Anwen: Open the grain list first. Let the people at the back eat before anyone asks them to come forward.",
       "speaker": "",
       "context": "campaign_dialogue.assembly_choice.lines"
     },
@@ -461,8 +461,8 @@
       "context": "campaign_dialogue.captain_senn"
     },
     "campaign_dialogue.captain_senn.lines.0": {
-      "source": "Senn: I was on that road in the war. Young enough to call an order the whole explanation.",
-      "text": "Senn: I was on that road in the war. Young enough to call an order the whole explanation.",
+      "source": "Senn: I was on that road. The first winter I wore a captain's coat, I could still smell the man who wore it before me.",
+      "text": "Senn: I was on that road. The first winter I wore a captain's coat, I could still smell the man who wore it before me.",
       "speaker": "",
       "context": "campaign_dialogue.captain_senn.lines"
     },
@@ -479,14 +479,14 @@
       "context": "campaign_dialogue.captain_senn.lines"
     },
     "campaign_dialogue.captain_senn.lines.3": {
-      "source": "Senn: I said their houses owed ours. It became an excuse before I stopped needing it.",
-      "text": "Senn: I said their houses owed ours. It became an excuse before I stopped needing it.",
+      "source": "Senn: I told the men those houses owed us. Then a boy came through carrying flour for his mother. I took that too.",
+      "text": "Senn: I told the men those houses owed us. Then a boy came through carrying flour for his mother. I took that too.",
       "speaker": "",
       "context": "campaign_dialogue.captain_senn.lines"
     },
     "campaign_dialogue.captain_senn.lines.4": {
-      "source": "Kael: You can give testimony. You still answer for the people hurt this week.",
-      "text": "Kael: You can give testimony. You still answer for the people hurt this week.",
+      "source": "Kael: Tell me about the order. Then we deal with what you did this week.",
+      "text": "Kael: Tell me about the order. Then we deal with what you did this week.",
       "speaker": "",
       "context": "campaign_dialogue.captain_senn.lines"
     },
@@ -731,8 +731,8 @@
       "context": "campaign_dialogue.edric_campaign.lines"
     },
     "campaign_dialogue.edric_campaign.lines.2": {
-      "source": "Edric: Yes. The renewal is my choice too. I need households to witness the seal before the grain moves.",
-      "text": "Edric: Yes. The renewal is my choice too. I need households to witness the seal before the grain moves.",
+      "source": "Edric: Yes. And now those carts need guards who will stand when the road calls their dead by name. The renewal is the answer I have. I need the households to witness it before the grain moves.",
+      "text": "Edric: Yes. And now those carts need guards who will stand when the road calls their dead by name. The renewal is the answer I have. I need the households to witness it before the grain moves.",
       "speaker": "",
       "context": "campaign_dialogue.edric_campaign.lines"
     },
@@ -743,8 +743,8 @@
       "context": "campaign_dialogue.edric_campaign.lines"
     },
     "campaign_dialogue.edric_campaign.lines.4": {
-      "source": "Edric: Then give me another way to get those carts through. Do not give me a principle and leave before winter.",
-      "text": "Edric: Then give me another way to get those carts through. Do not give me a principle and leave before winter.",
+      "source": "Edric: Then show me another way. Stand at the granary when the first cart fails to come. Do not leave me explaining principles to an empty bread queue.",
+      "text": "Edric: Then show me another way. Stand at the granary when the first cart fails to come. Do not leave me explaining principles to an empty bread queue.",
       "speaker": "",
       "context": "campaign_dialogue.edric_campaign.lines"
     },
@@ -1175,8 +1175,8 @@
       "context": "campaign_dialogue.halvern.lines"
     },
     "campaign_dialogue.halvern.lines.3": {
-      "source": "Kael: You cannot tell me about Edric. Your memory ends here.",
-      "text": "Kael: You cannot tell me about Edric. Your memory ends here.",
+      "source": "Kael: Dawn. That is where you end. You have never seen Edric's winter.",
+      "text": "Kael: Dawn. That is where you end. You have never seen Edric's winter.",
       "speaker": "",
       "context": "campaign_dialogue.halvern.lines"
     },
@@ -1187,8 +1187,8 @@
       "context": "campaign_dialogue.halvern.lines"
     },
     "campaign_dialogue.halvern.lines.5": {
-      "source": "Kael: I wrote that we could not hold. I left out that I never went back.",
-      "text": "Kael: I wrote that we could not hold. I left out that I never went back.",
+      "source": "Kael: The report said we could not hold. It did not say how long I kept walking before I looked behind me. I never went back.",
+      "text": "Kael: The report said we could not hold. It did not say how long I kept walking before I looked behind me. I never went back.",
       "speaker": "",
       "context": "campaign_dialogue.halvern.lines"
     },
@@ -1355,14 +1355,14 @@
       "context": "campaign_dialogue.miller_record.lines"
     },
     "campaign_dialogue.miller_record.lines.2": {
-      "source": "Kael: The record leaves with us whatever we do to the machinery.",
-      "text": "Kael: The record leaves with us whatever we do to the machinery.",
+      "source": "Kael: Keep the ledger dry. We take a copy whatever happens to the wheel.",
+      "text": "Kael: Keep the ledger dry. We take a copy whatever happens to the wheel.",
       "speaker": "",
       "context": "campaign_dialogue.miller_record.lines"
     },
     "campaign_dialogue.miller_record.lines.3": {
-      "source": "Mira: Good. Now decide how we feed the people who did not choose what was ground here.",
-      "text": "Mira: Good. Now decide how we feed the people who did not choose what was ground here.",
+      "source": "Mira: Then look at the sacks. Those are tomorrow's loaves. Closing a channel does not fill them.",
+      "text": "Mira: Then look at the sacks. Those are tomorrow's loaves. Closing a channel does not fill them.",
       "speaker": "",
       "context": "campaign_dialogue.miller_record.lines"
     },
@@ -1907,8 +1907,8 @@
       "context": "campaign_dialogue.vargan_record_keeper.lines"
     },
     "campaign_dialogue.vargan_record_keeper.lines.2": {
-      "source": "Vale: I kept them and let the steward keep people from reading them. I will sign that fact.",
-      "text": "Vale: I kept them and let the steward keep people from reading them. I will sign that fact.",
+      "source": "Vale: In the same drawer. I dusted it every week and told people there was nothing to find. Put my name beside that.",
+      "text": "Vale: In the same drawer. I dusted it every week and told people there was nothing to find. Put my name beside that.",
       "speaker": "",
       "context": "campaign_dialogue.vargan_record_keeper.lines"
     },
@@ -1955,8 +1955,8 @@
       "context": "campaign_dialogue.vargan_steward.lines"
     },
     "campaign_dialogue.vargan_steward.lines.2": {
-      "source": "Kael: Terms offered to someone hungry do not make a free promise.",
-      "text": "Kael: Terms offered to someone hungry do not make a free promise.",
+      "source": "Kael: And the household that will not sign? Does its sack stay on your left?",
+      "text": "Kael: And the household that will not sign? Does its sack stay on your left?",
       "speaker": "",
       "context": "campaign_dialogue.vargan_steward.lines"
     },
@@ -1973,8 +1973,8 @@
       "context": "campaign_dialogue.village_stories"
     },
     "campaign_dialogue.village_stories.lines.0": {
-      "source": "Kael: What matters is whether I returned after asking them to change.",
-      "text": "Kael: What matters is whether I returned after asking them to change.",
+      "source": "Kael: Tor's hinge. Mira's jars. Somebody kept doing the work while I was away.",
+      "text": "Kael: Tor's hinge. Mira's jars. Somebody kept doing the work while I was away.",
       "speaker": "",
       "context": "campaign_dialogue.village_stories.lines"
     },
@@ -2075,14 +2075,14 @@
       "context": "campaign_dialogue.white_hart.lines"
     },
     "campaign_dialogue.white_hart.lines.2": {
-      "source": "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
-      "text": "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
+      "source": "Kael: The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
+      "text": "Kael: The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
       "speaker": "",
       "context": "campaign_dialogue.white_hart.lines"
     },
     "campaign_dialogue.white_hart.lines.3": {
-      "source": "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
-      "text": "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
+      "source": "The White Hart: Then begin with your own hands. Do not fill the empty places with another person's vow.",
+      "text": "The White Hart: Then begin with your own hands. Do not fill the empty places with another person's vow.",
       "speaker": "",
       "context": "campaign_dialogue.white_hart.lines"
     },
@@ -2099,8 +2099,8 @@
       "context": "campaign_dialogue.white_hart.lines"
     },
     "campaign_dialogue.white_hart.lines.6": {
-      "source": "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
-      "text": "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
+      "source": "Kael: Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
+      "text": "Kael: Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
       "speaker": "",
       "context": "campaign_dialogue.white_hart.lines"
     },

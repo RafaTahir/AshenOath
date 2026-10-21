@@ -8,6 +8,13 @@ const SCENES := {
 	"captain_senn":{"emotion":"guarded", "listener":"stern", "gesture":"remember"},
 	"white_hart":{"emotion":"resolute", "listener":"grieving", "gesture":"acknowledge"},
 	"report_decision":{"emotion":"grieving", "listener":"concerned", "gesture":"remember"},
+	"rook":{"emotion":"wry", "listener":"warmth", "gesture":"explain"},
+	"blacksmith_tor":{"emotion":"neutral", "listener":"concerned", "gesture":"explain"},
+	"mira":{"emotion":"warmth", "listener":"concerned", "gesture":"offer"},
+	"widow_elna":{"emotion":"grief", "listener":"concerned", "gesture":"remember"},
+	"farmer_toma":{"emotion":"concern", "listener":"concerned", "gesture":"explain"},
+	"vargan_steward":{"emotion":"guarded", "listener":"neutral", "gesture":"explain"},
+	"vargan_record_keeper":{"emotion":"neutral", "listener":"concerned", "gesture":"remember"},
 }
 
 const TOPICS := {
@@ -22,6 +29,12 @@ const TOPICS := {
 	"senn_reading_refusal":{"emotion":"concerned", "gesture":"remember"},
 	"halvern_preserved_words":{"emotion":"grieving", "gesture":"remember"}
 }
+
+static func for_regional(speaker_id: String) -> Dictionary:
+	var profile := preload("res://scripts/story_cast_profile.gd").presence_profile(speaker_id)
+	var activity := str(profile.get("activity", "idle"))
+	var emotion := "warmth" if activity in ["bake", "sort_seeds", "tend"] else "concern"
+	return {"emotion":emotion, "listener_emotion":"neutral", "gesture":"explain" if activity in ["repair", "check_rope", "read"] else "offer", "listener_gesture":"acknowledge", "framing":"two_shot", "reaction_delay":0.32}
 
 static func for_topic(topic_id: String, variant: String, page: Dictionary, index: int, count: int) -> Dictionary:
 	var profile: Dictionary = TOPICS.get(topic_id, {"emotion":"neutral", "gesture":"acknowledge"})

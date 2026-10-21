@@ -62,7 +62,7 @@ static func open_invitation(host) -> void:
 static func conversation(host, actor_id: String) -> Dictionary:
 	var words := ""
 	match actor_id:
-		"rook": words = "Three marks. Not three promises. I thought we could both do with knowing the rules before we started."
+		"rook": words = "I have inspected this table thoroughly. No loose leg, no hidden mark. If I lose tonight, I shall have to accuse the cups."
 		"blacksmith_tor": words = "I closed the forge for a cup, not the shop. If you need arrows, say so. If you want to lose a board game, sit down."
 		"sister_anwen": words = "Someone laughed just now. I had forgotten how far the sound travels when no one is afraid of it."
 		"mira": words = "There are still people waiting for medicine. I can give you a little time, though. A little is not nothing."
@@ -73,6 +73,12 @@ static func conversation(host, actor_id: String) -> Dictionary:
 		words += " Save the place beside you. I will come back when I can."
 	if actor_id == "rook" and str(host.story_state.get_flag("lr_friend_rook_stool", "")) == "completed":
 		words += " Your stool is still level. My excuses are suffering."
+	if actor_id == "rook" and host.quests.is_completed("saga_gre_q04"):
+		words += " Nessa has her kettle back. Do not let her tell you I was not gracious about it."
+	if actor_id == "blacksmith_tor" and host.quests.is_completed("saga_gre_q03"):
+		words += " Elna's latch shuts now. Quieter than her opinion of the old one."
+	if actor_id == "sister_anwen" and host.quests.is_completed("saga_gre_q02"):
+		words += " The warning rope works. You and Jory checked it; I can stop listening for the wrong bell for a little while."
 	return {"name":str(VOICES.get(actor_id, "Greyfen")), "pages":[{"speaker":str(VOICES.get(actor_id, "Greyfen")), "speaker_id":"narrator" if actor_id == "bracken" else actor_id, "text":words}], "actions":[{"type":"close", "label":"Share the moment"}]}
 
 func _process(delta: float) -> void:

@@ -1,0 +1,200 @@
+{
+  "version": 1,
+  "quests": {
+    "saga_gre_q01": {
+      "opening": "Nessa has cut the morning loaves thinner. Before the next cart arrives, compare her sack with the delivery scale. She wants the missing flour found, not a hungry neighbor dragged through the square.",
+      "activity": "check_supplies",
+      "clues": {"compare_measures":["The old sack seam is intact. Its flour mark sits below yesterday's crease.","A bright replacement pin stops the scale arm before Tor's old weight comes level."],"trace_diversion":["Spilled grain catches in the dry store's threshold.","The dated ration slip lists a collector's fee and an extra household share as separate deductions."]},
+      "beats": {
+        "hear_shortfall": "Nessa brushes flour off the counter. 'Yesterday that sack made twelve. Today it made nine. Same seam, same oven. Tell me which of those has learned to lie.'",
+        "compare_measures": "The old seam matches Tor's weight. The replacement pin stops the scale short. Nessa was sent less flour than the receipt claims.",
+        "trace_diversion": "Grain has caught in the dry store's threshold. The slip records a collector's fee; the extra household share is a different shortage. One accusation will not explain both.",
+        "weigh_next_batch": "The beam settles level. Nessa marks the actual weight, then puts a heel of bread beside the receipt. 'There. Something you can eat and something you can argue with.'"
+      },
+      "outcomes": {"public":"A corrected weight hangs beside the scale, without household addresses. Nessa challenges the collector in front of the next delivery; the returned surplus goes back into the bread pile.","private":"Nessa checks the next delivery with the household present. Repayment goes into the bread pile, and each party keeps a receipt. The scale is fixed, though the wider square has not heard the dispute."}
+    },
+    "saga_gre_q02": {
+      "opening": "Jory is pulling a rope that answers late. Find the worn part, seat the counterweight and try the village warning with the watch. This is an ordinary warning bell, not the cemetery's binding.",
+      "activity": "check_rope",
+      "clues": {"inspect_mechanism":["The rope is frayed where the weight drags it across the brake.","The middle notch is worn bright. A pin-sized gap sits beside it."]},
+      "beats": {"inspect_mechanism":"The middle notch is polished by a loose weight. Jory grips the rope with both hands. 'I can pull harder. I'd rather it worked when somebody smaller pulls.'","seat_counterweight":"Brake first, pin second, release last. The repaired weight stops at the notch instead of dragging past it.","sound_trial":"The little bell swings. From the watch, a raised hand answers Jory's. He lets out the breath he had been holding. 'Again tomorrow. Just once. So we know.'"},
+      "outcomes": {"posted":"Jory's rhythm guide hangs by the rope, with words and marks for anyone who cannot hear the bell. The watch answers the same signal.","demonstrated":"Jory and the watch demonstrate the signal and leave its written rhythm beside the rope. What was practiced can be repeated without relying on perfect hearing."}
+    },
+    "saga_gre_q03": {
+      "opening": "Elna lifts her door by the handle to shut it. Repair the wet frame without losing its carved strip, then operate the latch rather than merely calling the job finished.",
+      "activity": "repair",
+      "beats": {"survey_frame":"Rain has swollen the sill. The carved strip is sound; the timber beneath it is not. Elna's note has one underlined instruction: 'Keep the birds.'","fit_support":"The supplied timber seats below the retained carving. There is room to step through without catching a boot.","check_clearance":"Open, close, then test the latch. Elna tries it herself. 'It shuts without lifting it. I shall have to find something else to swear at.'"},
+      "outcomes": {"renewed":"A new sill carries the old carved birds. Elna closes the door one-handed; the old timber waits with the other repair salvage.","braced":"The retained sill is braced and its drain cleared. The carving stays where Elna wanted it, and the latch closes without lifting the door."}
+    },
+    "saga_gre_q04": {
+      "opening": "A borrowed kettle has become a village argument. Hear Nessa and Rook separately, look at the tally, then settle the wager or play a rematch. You never have to win.",
+      "activity": "read",
+      "beats": {"hear_accounts":"Nessa calls it a loan. Rook calls it security. Both call it a very good kettle. The game tally has been rubbed through where the last mark should be.","return_kettle":"The kettle is back on the kitchen hook. Rook tests the handle. 'Still holds water. We shall have to conduct the rest of this dispute somewhere drier.'"},
+      "outcomes": {"voided":"The wager is voided and the kettle returns without another game. Nessa pours; Rook accepts a cup and stops calling the pot his winnings.","replayed":"An ordinary Three Marks round settles the wager, regardless of who won. The kettle returns to the kitchen; the argument becomes a story told over the next cup."}
+    },
+    "saga_gre_q05": {
+      "opening": "The cemetery danger is settled, but arriving travelers still need a dry place. Prepare their chosen shelter and walk with them through the village. A defeated monster has not carried their bundles home.",
+      "activity": "care",
+      "beats": {"post_terms":"Nessa counts blankets, not promises. Jory leaves the warning marks where a stranger can read them. The travelers have somewhere to sit before anyone asks for their story."},
+      "outcomes": {"store":"The travelers settle beside the kitchen store. Bread and blankets are within reach; the passage remains clear for the next arrival.","courtyard":"The travelers settle under the courtyard cover. The warning guide faces the entrance and nobody must enter the cemetery to find shelter."}
+    },
+    "saga_wyc_q01": {
+      "opening": "Iven's crew has stopped cutting. Edda says a boundary stake moved; Iven wants to hear the wood before calling it cursed. Compare the three stumps and the old line, then mark a workable limit.",
+      "activity": "tend",
+      "clues": {"compare_stumps":["The first stump crumbles round an old pocket of rot.","A clean saw cut crosses green wood on the second stump.","Living growth has closed round a worked boundary tag. The iron is older than the cut line."],"find_old_boundary":["Fresh tool marks surround a stake set in recently disturbed soil.","The retained stone carries the same old boundary mark, farther from the working grove."]},
+      "beats": {"hear_stoppage":"Iven puts his saw down. 'Rot speaks through the teeth. Green wood catches. That third stump did neither. Have a look before the crew invents something worse.'","compare_stumps":"One stump is rotten, one bears a recent saw cut, and living growth surrounds an old worked tag. The marks have different causes.","return_tag":"Three working marks are set. Iven ties the recovered tag to the work book. Edda checks the line from the far end rather than taking his word for it."},
+      "outcomes": {"fallen":"The crew takes sound fallen wood. The stack is smaller and slower to fill; living growth remains outside the work line.","limited":"A limited live stand is marked. Edda can check where cutting stops, and the old boundary stays outside the crew's allotment."}
+    },
+    "saga_wyc_q02": {
+      "opening": "A loose anchor moves beside an abandoned snare. Release the tension before following its owner's cord back to the shelter. The forest is dangerous enough without forgotten human work.",
+      "activity": "tend",
+      "clues": {"read_snare":["A tight loop pulls against an anchor that has worked loose.","Fresh tracks stop at the loop; small movements disturb the leaves beside it."]},
+      "beats": {"read_snare":"Fresh tracks stop at a taut loop. The anchor rocks when the trapped limb moves. Ease the tension before lifting the wire.","release_line":"The loops fall slack. The injured animal slips into cover; the empty snares can no longer catch the next one.","trace_owner":"Edda unrolls matching cord. 'Mine. I left when the road closed. Every morning I found a reason not to come back.'","clear_remaining":"Loose wire is gathered into the bin. The last anchor lies flat instead of holding an invisible loop across the run."},
+      "outcomes": {"regulated":"The surviving line has seasonal limits and a named check rota. Edda has a route to walk, not an unattended promise to remember.","retired":"The old loops are retired. An exchange basket stands at the shelter, and the wildlife run is clear of wire."}
+    },
+    "saga_wyc_q03": {
+      "opening": "Edda has a tune and nowhere sound to sit. Mend the seat from fallen wood, then share a quiet call and reply. This one need not lead to a fight or a revelation.",
+      "activity": "repair",
+      "beats": {"hear_invitation":"Edda hums a phrase, then stops. 'Used to tell us there was someone on the other side of the smoke. Not a spirit. Just someone with a shovel.'","restore_seat":"The peg seats and the plank stops rocking. Edda puts down her shovel and leaves a little room.","share_call":"'Let the last coal rest.' The answer can be silence, or a voice beside hers. Neither needs an audience."},
+      "outcomes": {"listened":"Edda finishes the tune while Kael listens. The repaired seat remains a place to rest between the shelter and the working wood.","joined":"Kael answers the last line. Edda corrects his timing, smiling: 'Not a march, hunter.' The little seat stays by the shelter."}
+    },
+    "saga_wyc_q04": {
+      "opening": "A split-feather cut by the deadfall points along dry ground. Follow the actual scars to the old blind, open its screen and decide where the keeper's tools will remain useful.",
+      "activity": "check_supplies",
+      "clues": {"follow_three_marks":["A low branch carries a shallow cut facing the old boundary.","At the fork, a second cut turns toward the lookout shoulder.","The last scar faces a loose screen beside the ground-level blind."]},
+      "beats": {"read_first_mark":"The cut below the feather points along the dry shoulder, not over the water.","follow_three_marks":"A low scar leads to a fork; the last cut faces the loose screen. Each mark can be read from the approach before the next is reached.","open_blind":"The screen swings clear. The keeper's diary describes replacement pegs and a leaking roof, not a legendary treasure."},
+      "outcomes": {"returned":"Iven's maintained table receives the labeled deposit. The blind is left open and its upkeep instructions stay inside.","preserved":"The tools remain dry inside the blind under a recorded custodian. Finding the place does not empty its reserve a second time."}
+    },
+    "saga_wyc_q05": {
+      "opening": "The Bog Wretch is resolved. Walk the inlet, screen and collection point, then restore the chosen flow with a reused gate and clean pots. Water still needs somewhere to go.",
+      "activity": "check_rope",
+      "beats": {"survey_watercourse":"Silt catches at the screen before the collection pots. The obstruction is ordinary debris, whatever memory the guardian carried.","clear_and_set":"Debris lifts into the basket. The screen seats in its frame and the gate leaves room for the river.","place_clean_pots":"The two pots sit below the clearer outflow. Iven rinses his hands. 'That is something I can ask the crew to trust.'"},
+      "outcomes": {"side_channel":"A contained side channel feeds the workers' collection. The screen is reachable for cleaning and the bridge span stays clear.","natural_run":"The natural run is clear; the collection stand has moved to suit it. The restored bank is not another route across the river."}
+    },
+    "saga_dep_q01": {
+      "opening": "Dain's outgoing load weighs less than its dispatch sheet. Compare the actual sacks and today's counterfoils. These missing supplies are a present problem, separate from the old wage evidence.",
+      "activity": "check_supplies",
+      "beats": {"read_dispatch":"Dain's dispatch note reads: 'I can tell you where the wagon went. I cannot make the missing weight fall out of it by reading that number louder.'","mark_next_load":"Dain checks the new tag against the load. 'There. The next worker can argue with a number, instead of a man with a sword.'"},
+      "outcomes": {"public":"Redacted current figures are posted at dispatch. Dain checks the next load against them; the old wage records remain untouched.","witnessed":"Workers keep duplicate witnessed copies of the corrected load. They can challenge the next charge without surrendering the old evidence."}
+    },
+    "saga_dep_q02": {
+      "opening": "Ressa wants to plant something where the runoff will not reach it. Compare the ground, choose the bed and carry the supplied fill to a real, edged trial plot.",
+      "activity": "tend",
+      "clues": {"survey_plot":["The cleared patch is dry enough to hold a contained bed.","Ash has collected along the old runoff edge, outside the proposed growing patch."],"source_clean_fill":["Ressa's public compost pile is separated from the burned ground.","The ash sample leaves a dark film in the water. It belongs outside the trial bed."]},
+      "beats": {"plant_trial":"Ressa presses the soil round the little tray. 'Do not call it a harvest yet. You will frighten it.' The origin label stays where the next worker can read it."},
+      "outcomes": {"raised":"A raised bed stands clear of the runoff. Ressa has planted a trial, not declared the whole field clean.","terrace":"A screened, drained trial terrace keeps new soil apart from the ash. The first planting can be checked before anybody spends the next season on it."}
+    },
+    "saga_dep_q03": {
+      "opening": "Warm air still moves under the burned house. Follow it from the flue to the cellar, lift the loose boards and find out what survived before assuming another haunting.",
+      "activity": "repair",
+      "clues": {"inspect_air":["Sunlight has warmed the exposed flue bricks.","Clean animal prints pass across dry dust below the house.","A draft moves through the grate toward the old flue."],"identify_store":["The dry shelf marks stop below the soot line.","Ressa's old mark is scratched into the bread crock's foot."]},
+      "beats": {"inspect_air":"Sun-warmed brick, clean animal tracks and air through the grate explain the dry shelves. The little warmth is real without being supernatural.","identify_store":"Ressa's mark remains on the bread crock. Soot stops at the upper shelf.","secure_air":"The vent is open and the grate fastened. Ressa touches the brick. 'My mother kept the starter there. Always said the house knew when it was cold.'"},
+      "outcomes": {"returned":"Ressa's crock rests on her new work table. The cellar stays ventilated for useful storage rather than becoming a shrine to the lost house.","stored":"The marked crock stays on the dry shelf at Ressa's request. The entry and vent are secured so it can be used again."}
+    },
+    "saga_dep_q04": {
+      "opening": "Dain needs repair timber; Ressa wants living stock left for next year. Compare the graft, hollow trunk and fallen wood, then fit protection around the agreed nursery.",
+      "activity": "tend",
+      "beats": {"hear_uses":"Dain's signed need is for sound timber, not a particular tree. Ressa's graft still has green beneath the bark. There is fallen wood worth checking first.","protect_graft":"The frame takes the strain, not the growing stem. A wrap holds against the wind without cutting the bark."},
+      "outcomes": {"standing":"The living stock stays standing; repair timber comes from sound fallen salvage. Ressa checks the protected graft on her next round.","nursery":"Sound salvage goes to repairs and a new nursery graft is protected. The labeled piles tell the next worker which wood is still growing."}
+    },
+    "saga_dep_q05": {
+      "opening": "Ashwing is gone, but the workers' next shift still begins under a torn cover. Repair the separate yard frame and establish a workplace suited to the mill's recorded fate.",
+      "activity": "repair",
+      "beats": {"open_workplace":"Dain ducks under the cover and looks up for daylight through the joins. 'Dry enough. Now we need a place for the things people keep putting on my bench.'"},
+      "outcomes": {"relief_store":"The closed mill's yard becomes a dry relief store. Household supplies remain accessible without restarting the tainted channels.","checking_station":"A checking station receives working loads under a sound cover. Current weights and dispatch copies can be compared before the next wagon leaves.","workshop":"An independent workers' workshop occupies the repaired yard frame. Its tools and current rota remain separate from the mill's old claims."}
+    },
+    "saga_roa_q01": {
+      "opening": "A traveler has paid twice for the same crossing and still has no bundles. Compare both receipts with the rates, identify the held goods and return them through the camp account.",
+      "activity": "check_supplies",
+      "beats": {"hear_double_toll":"Tavin flattens the two receipts. 'Same bootprints, same day, two men with their hands out. The second stamp does not make it a second journey.'","return_claimed_goods":"Both bundles reach the collection stand. Their claimants collect what was theirs before anyone offers them another favor."},
+      "outcomes": {"public":"The doubled rate is challenged openly, without household addresses. The goods are returned and the next traveler can compare the posted charge.","recorded":"Both claimants keep receipts and protected copies support their challenge. Their bundles are returned without publishing their household details."}
+    },
+    "saga_roa_q02": {
+      "opening": "Nera left a cut rescue cord out of her closure log. Inspect the mooring and later rescue record, hear what she knows, then leave a warning and an emergency line fit for use.",
+      "activity": "check_rope",
+      "clues": {"inspect_last_marks":["The old post is split toward the water.","The rescue cord ends in a clean knife cut, not a worn break.","The dated mark places the closure before the later rescue entry."]},
+      "beats": {"hear_closure":"Nera keeps her eyes on the post. 'I cut it. The rope was pulling me in. I wrote that the crossing failed. I did not write about my knife.'","inspect_last_marks":"The cut cord and dated mark support the closure. They do not tell you who reached the far bank.","set_rescue_terms":"The new rope is coiled clear of the walking lane. Nera checks the knot twice. This time the daylight warning faces the approach."},
+      "outcomes": {"open_log":"Nera's admission stays in the open log beside the rescue record. The warning and emergency rope are ready for the next crossing.","protected":"Protected duplicates preserve Nera's admission without naming households. The same practical warning and rescue line remain at the post."}
+    },
+    "saga_roa_q03": {
+      "opening": "Tavin has kept a borrowed coat, a borrowed name and an unopened letter. Verify the ownership marks, prepare the effects and return them without opening somebody else's correspondence.",
+      "activity": "check_supplies",
+      "beats": {"hear_borrowed_name":"Tavin pulls at a sleeve that is too short. 'He was taller. They still believed the coat before they believed me. I let them.'","prepare_parcel":"The coat is folded round the sealed letter. The return label identifies the property without making the household an exhibit.","confirm_receipt":"A dated acknowledgement returns to the collection stand. Tavin reads it once and puts his own name beneath it."},
+      "outcomes": {"private":"The effects arrive through a neutral collection receipt. The letter stays sealed and Tavin stops using the borrowed name.","signed":"Tavin signs his own account with the returned effects. The household receives its coat and unopened letter, not a demand to forgive him."}
+    },
+    "saga_roa_q04": {
+      "opening": "Three signal posts have lost their line. Read the notch code, repair the markers and walk to the far end and back. The route must make sense in sunlight as well as by lamplight.",
+      "activity": "check_rope",
+      "beats": {"survey_line":"The bases lie on existing firm ground. Each notch should face the next post; none asks a traveler to wade.","walk_check":"Nera waits while you check the line from both ends. 'Looks clear from here' is not the same as looking from there."},
+      "outcomes": {"fixed_posts":"Notched daylight posts face along the firm route. Their shapes remain legible when lamps are out.","hooded_lamps":"Hooded lamps face the next post and the same notches remain beneath them. Daylight and darkness share one route."}
+    },
+    "saga_roa_q05": {
+      "opening": "Senn's fate is settled. His old toll beam and command terms are still here. Retire the demand, arrange the repairs and accompany the first traveler through without another signature.",
+      "activity": "repair",
+      "beats": {"hear_maintenance":"Nera's rota names a short shift. Tavin's plan lists rope, planks and a place to keep them. Neither requires owning the road.","make_handover":"The traveler passes the old command table without stopping to sign. Tavin reaches for the tally, catches himself, then writes down a broken plank instead."},
+      "outcomes": {"shared_rota":"A voluntary repair rota replaces the passage demand. The toll beam is retired and the first traveler has passed without pledging anything.","open_keeper":"An accountable keeper maintains open repair records. The road remains open; keeping its planks sound does not make it the keeper's property."}
+    },
+    "saga_var_q01": {
+      "opening": "Lysa has three versions of one order. Compare the changes and countersigns, then file a comparison with its sources. Essential command proof remains available elsewhere.",
+      "activity": "read",
+      "clues": {"compare_copies":["The original margin directs a delivery without an assent condition.","The working sheet adds an assent requirement in a different hand.","The outgoing copy retains the added words."],"attribute_hands":["The author's date precedes the alteration.","The copyist's mark identifies the outgoing hand, not the approving officer.","A separate countersign approves the altered version."]},
+      "beats": {"hear_alteration":"Lysa holds the sheets to the same edge. 'This one says deliver. This one says deliver after assent. Somebody found room for four words.'","attribute_hands":"The writer, copyist and approving hand leave different dated marks. The comparison can distinguish their acts without claiming to know their private reasons.","file_comparison":"The source sheets remain beside the comparison. Lysa leaves the altered words uncovered. 'A neat copy is very good at looking innocent.'"},
+      "outcomes": {"archive":"Redacted comparison copies remain in Vale's archive beside their source references. The original command proof is not moved or replaced.","protected":"Named custodians keep protected duplicates with source references. The comparison survives without publishing household details."}
+    },
+    "saga_var_q02": {
+      "opening": "A servant has left a private note and a family pass tied to silence. Compare the terms, arrange departure and deliver the complaint separately. A signed note is an account, not an invisible person speaking beside you.",
+      "activity": "read",
+      "beats": {"hear_offer":"The offered note reads: 'The little one has his boots on already. They say we can leave if I saw nothing. Please do not bring him here to ask me.'","confirm_departure":"The dated acknowledgement records the family passing the gate. The complaint remains in its separate tray, not attached to the child's boots."},
+      "outcomes": {"unconditional_pass":"The family leaves with an unconditional pass on record. The protected complaint remains available without making safety depend on testimony.","documented_passage":"Neutral documented passage gets the family through. Separate protected copies preserve the complaint without exposing the household."}
+    },
+    "saga_var_q03": {
+      "opening": "Odran has a release order but his tools remain impounded. Recover the marked property and help him pack or take paid work, according to his own answer.",
+      "activity": "tend",
+      "beats": {"recover_tools":"The date on the order matches the tool tag. The locker must release Odran's property; it is not a reward for another shift.","choose_garden":"Odran turns a pot toward the light. 'I know where they like to stand. That does not mean I have to stand here with them.'","acknowledge_choice":"Odran's answer remains with the released tools. There is a date and a stopping point, not another indefinite sentence."},
+      "outcomes": {"departed":"Odran leaves with his tools and traveling tray. His offered labels remain as an attributed account, not a live conversation with an absent gardener.","voluntary_work":"Odran stays for voluntary paid gardening with the right to leave. The tools are his and the garden is work, not confinement."}
+    },
+    "saga_var_q04": {
+      "opening": "The supply office has parcels ready and a form that demands assent. Compare its authority, remove that condition and issue one actual delivery with a matching receipt.",
+      "activity": "check_supplies",
+      "beats": {"compare_warrants":"There is a full supply parcel beneath a blank warrant. The ration condition asks for more than a receipt for its contents.","prepare_clean_forms":"The assent clause is struck out on both copies. Weight, destination and the officer responsible remain.","issue_trial":"Parcel and receipt reach the intake tray together. One household can eat without consenting to be governed in exchange."},
+      "outcomes": {"public_totals":"Aggregate allocations and responsible officers are posted. Household details stay private; the trial parcel has actually been issued.","private_receipts":"Households keep individual receipts and can challenge the preserved totals. The trial delivery is complete without another assent signature."}
+    },
+    "saga_var_q05": {
+      "opening": "Halvern's disposition is recorded. Lysa has supported names, missing names and a side alcove. Prepare a place that preserves the difference and leaves room for a living reply.",
+      "activity": "repair",
+      "beats": {"compare_named_records":"The copied proof supports some names. Other lines are empty. A heading identifies Halvern's words as a bounded account, not a new speaker in the hall.","leave_response_space":"Lysa sets out a blank reply tray. 'There. If someone knows better than we do, there is somewhere to put it.'"},
+      "outcomes": {"public_panel":"An attributed panel preserves supported names without household addresses. The side alcove and reply tray remain reachable.","quiet_repository":"Protected copies rest in an accessible quiet repository. Blank spaces and a reply tray leave room for information that is not yet known."}
+    },
+    "saga_har_q01": {
+      "opening": "Oris has a list and a small stack of supplied work stones. Compare the sources, carry the stones to a chosen place and leave the unknown line visibly unfinished.",
+      "activity": "repair",
+      "beats": {"read_request":"Oris shows the failed practice cut on the underside. 'That one was my mistake. The blank on top is not. I have no name to put there.'","set_stones":"Each light stone reaches its prepared place by the existing path. The route stays clear for the next visitor.","leave_space":"The last marker stays unnamed. Oris puts down the chisel without covering the empty line."},
+      "outcomes": {"named_walk":"A modest attributed walk preserves the supported names and an explicitly unnamed place. It does not replace the Hart's account.","quiet_place":"Private copies and a small quiet repository preserve the known names. The unnamed marker remains open to future information."}
+    },
+    "saga_har_q02": {
+      "opening": "Oris promised a stone for everyone and has stopped sleeping. Hear him, inspect the work already cut and help him choose a finite end to the commission.",
+      "activity": "read",
+      "beats": {"hear_promise":"Oris rubs stone dust from his thumb. 'Every time I stopped, I thought of somebody without a marker. Then I started making mistakes in the names.'","finish_finite_work":"The finished plaques fit the dry rack. The tools have somewhere to rest with no unfinished blade leaning over the next name.","record_his_answer":"Oris signs his answer. 'I would like to go home before the light goes. You can put that down too.'"},
+      "outcomes": {"released":"Oris is released without a replacement vow. The already-cut work is protected and he can put down his tools.","bounded":"Oris chooses a finite commission with a named stopping point. The finished plaques are stacked, and his working day can end."}
+    },
+    "saga_har_q03": {
+      "opening": "Ordinary hoofprints stop beside abandoned cord. Clear the hazards, mark a quiet edge and leave the immediate area before returning to inspect fresh signs. This does not summon another Hart.",
+      "activity": "tend",
+      "clues": {"read_tracks":["Small ordinary hoofprints stop short of the work area.","The rubbed trunk lies beside a narrow sheltered passage.","Abandoned cord still holds three loops across that passage."]},
+      "beats": {"read_tracks":"The prints and rubbed bark belong to ordinary wildlife. The cord loops are human work left behind.","clear_hazards":"Three cord points lie slack and the fallen screen is braced away from the passage.","confirm_signs":"Fresh hoofprints cross the cleared ground. Whatever the covenant changed, something living has used the quiet you left."},
+      "outcomes": {"outer":"A quiet outer shoulder is clear of cord and marked for workers. Fresh ordinary tracks use it after the work party leaves.","inner":"The sheltered inner shoulder is clear and discreetly marked. Fresh ordinary tracks confirm that the passage is being used."}
+    },
+    "saga_har_q04": {
+      "opening": "Maelin has a limited seed reserve and two possible growing places. Compare the sites, carry the supplied trial cups and keep the untouched reserve dry.",
+      "activity": "sort_seeds",
+      "beats": {"inspect_reserve":"Maelin shakes the envelope once. 'That is the sound of next year, if we are careful. It is not very loud.'","set_trial":"The supplied cups reach the chosen trial positions. Their labels record the actual arrangement, not a promise that both will grow.","store_reserve":"Maelin closes the reserve box herself. 'Now if we get it wrong, we can have an argument and try again.'"},
+      "outcomes": {"split_trial":"A small trial is divided between the drained and sheltered positions. The remaining seed reserve is dry and untouched.","reserve_first":"One sheltered trial uses less of the offered seed. A larger reserve remains in the dry box for another attempt."}
+    },
+    "saga_har_q05": {
+      "opening": "The covenant has changed the glade. Inspect what actually remains, then make a small nursery or resting shelter beside it and leave the tools for willing hands.",
+      "activity": "tend",
+      "beats": {"survey_aftermath":"The covenant garden bears the chosen ending. The adjacent practical plot is separate; tending it cannot undo the cost.","make_handover":"The tools lie within reach and the handover has a named task, not a life sentence. The road home is still there, with Anwen and an ordinary workbench at its end."},
+      "outcomes": {"nursery":"A shared nursery stands beside the changed covenant garden. Its voluntary handover leaves room for somebody to tend it tomorrow, after Kael has gone home.","resting_shelter":"A modest resting shelter stands beside the changed garden. A visitor can put down a pack without becoming the next keeper of the Hart's burden."}
+    }
+  }
+}

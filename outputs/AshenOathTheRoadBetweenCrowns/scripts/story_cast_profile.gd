@@ -89,7 +89,7 @@ static func expression_for(profile: Dictionary, state) -> String:
 				var kind := str(events.back().get("kind", ""))
 				if kind in ["broken", "boundary"]:
 					return "guarded"
-				if kind in ["kept", "friendship", "commitment"]:
+				if kind in ["kept", "friendship", "commitment", "help"]:
 					return "warmth"
 		if id == "kael" and bool(state.get_flag("kael_confessed", false)):
 			return "resolute"

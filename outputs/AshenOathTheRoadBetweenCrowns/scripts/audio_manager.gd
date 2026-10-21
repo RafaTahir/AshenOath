@@ -445,16 +445,22 @@ func set_narrative_revision(revision: String) -> void:
 func set_story_context(state, zone_id: String) -> void:
 	if state == null:
 		return
+	var previous := story_music_override
 	story_music_override = _story_music_state(state, zone_id)
+	# Updating a relationship or quest must not replace an active combat cue.
+	if music_state.begins_with("boss_") or music_state == "ghoulkin_combat":
+		return
 	if not story_music_override.is_empty():
 		set_music_state(story_music_override)
+	elif previous != "":
+		set_music_state(music_state_for_zone(zone_id))
 
 func _story_music_state(state: Node, zone_id: String) -> String:
 	if state == null:
 		return ""
 	var ending := str(state.get_flag("final_covenant", ""))
 	ending = str({"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending, ending))
-	if bool(state.get_flag("final_choice_completed", false)) and ending in ["witness", "mercy", "duty", "ash"]:
+	if zone_id in ["greyfen", "assembly", "hart_glade"] and bool(state.get_flag("final_choice_completed", false)) and ending in ["witness", "mercy", "duty", "ash"]:
 		return "ending_" + ending
 	elif zone_id == "greyfen" and bool(state.get_flag("renewal_announced", false)):
 		return "story_road" if bool(state.get_flag("renewal_stopped", false)) else "story_renewal"
@@ -756,6 +762,31 @@ func _opening_soundscape_profile(zone_id: String) -> Array:
 				{"event":"stone_room", "source":"listener", "range":12.0, "cooldown":9.0, "pitch":0.025},
 				{"event":"forest_breath", "source":"listener", "range":10.0, "cooldown":11.0, "pitch":0.025}
 			]
+		"deep_wood", "burned_farmstead":
+			return [
+				{"event":"forest_breath", "source":"forest", "range":16.0, "cooldown":9.0, "pitch":0.035},
+				{"event":"cloth_wind", "source":"listener", "range":10.0, "cooldown":12.0, "pitch":0.025}
+			]
+		"old_mill":
+			return [
+				{"event":"river_current", "source":"river", "range":15.0, "cooldown":8.0, "pitch":0.025},
+				{"event":"cloth_wind", "source":"listener", "range":10.0, "cooldown":11.0, "pitch":0.025}
+			]
+		"marsh_crossing":
+			return [
+				{"event":"river_current", "source":"river", "range":15.0, "cooldown":9.0, "pitch":0.035},
+				{"event":"wychwood_drop", "source":"forest", "range":12.0, "cooldown":13.0, "pitch":0.03}
+			]
+		"bandit_road":
+			return [
+				{"event":"cloth_wind", "source":"listener", "range":12.0, "cooldown":10.0, "pitch":0.035},
+				{"event":"forest_breath", "source":"forest", "range":14.0, "cooldown":13.0, "pitch":0.025}
+			]
+		"ruins":
+			return [
+				{"event":"forest_breath", "source":"forest", "range":15.0, "cooldown":10.0, "pitch":0.025},
+				{"event":"cloth_wind", "source":"listener", "range":10.0, "cooldown":14.0, "pitch":0.02}
+			]
 		"hart_glade":
 			return [
 				{"event":"shrine_hum", "source":"shrine", "range":16.0, "cooldown":8.0, "pitch":0.02},
@@ -998,6 +1029,7 @@ func music_state_for_zone(zone_id: String) -> String:
 		"undercroft": "undercroft",
 		"assembly": "assembly",
 		"hart_glade": "hart_glade",
+		"ruins": "hart_glade",
 	}
 	return str(states.get(zone_id, "greyfen_explore"))
 

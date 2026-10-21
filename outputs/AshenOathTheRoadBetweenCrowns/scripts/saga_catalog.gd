@@ -1,5 +1,84 @@
 extends RefCounted
 
+const PERFORMANCE_PATH := "res://data/regional_performances.json"
+static var _performances: Dictionary = {}
+
+static func performance(id: String) -> Dictionary:
+	if _performances.is_empty():
+		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(PERFORMANCE_PATH))
+		if data is Dictionary and int(data.get("version", 0)) == 1:
+			_performances = data.get("quests", {})
+	return _performances.get(id, {})
+
+static func opening(id: String) -> String:
+	return str(performance(id).get("opening", QUESTS.get(id, {}).get("hook", "")))
+
+static func account(id: String, step: Array) -> String:
+	return str(performance(id).get("beats", {}).get(str(step[0]), step[5]))
+
+static func observation(id: String, step: Array, index: int) -> String:
+	var clues: Array = performance(id).get("clues", {}).get(str(step[0]), [])
+	if index >= 0 and index < clues.size():
+		return str(clues[index])
+	return str(step[4][index]) + ". Compare this with the other marked evidence before drawing a conclusion."
+
+static func aftermath(id: String, outcome: String) -> String:
+	return str(performance(id).get("outcomes", {}).get(outcome, QUESTS[id].steps.back()[5]))
+
+## Existing objective/part IDs survive; only their authored physical stations move.
+const PART_SITES := {
+	"saga_wyc_q01:compare_stumps":["grove", "grove", "boundary"],
+	"saga_wyc_q01:return_tag":["grove", "boundary", "grove", "workers"],
+	"saga_wyc_q04:follow_three_marks":["deadfall", "boundary", "blind"],
+	"saga_wyc_q05:survey_watercourse":["water", "water", "pots"],
+	"saga_dep_q02:survey_plot":["garden", "runoff"],
+	"saga_dep_q03:inspect_air":["flue", "cellar", "flue"],
+	"saga_dep_q04:inspect_stock":["graft", "orchard", "fallen"],
+	"saga_roa_q01:compare_terms":["rates", "command"],
+	"saga_roa_q04:survey_line":["posts", "line", "causeway"],
+	"saga_roa_q04:set_markers":["posts", "line", "causeway"],
+	"saga_var_q04:trace_authority":["intake", "store"],
+	"saga_var_q02:deliver_copy":["intake", "service"],
+	"saga_har_q03:read_tracks":["tracks", "edge", "cord"],
+	"saga_har_q03:mark_quiet_edge":["edge", "tracks"]
+}
+
+const PRESENTATION_SITES := {"saga_wyc_q04":"blind", "saga_dep_q03":"cellar", "saga_dep_q04":"graft", "saga_gre_q04":"kitchen"}
+
+const BUNDLED_CARRIES := {
+	"saga_dep_q02:prepare_bed":"supplied clean fill",
+	"saga_dep_q05:fit_cover":"remaining roof-cover pieces",
+	"saga_roa_q01:return_claimed_goods":"remaining claimants' bundles",
+	"saga_har_q05:prepare_plot":"supplied plot pieces"
+}
+
+const GREETINGS := {
+	"saga_nessa":"There you are. Sit down a moment; I can talk without stopping the bread.",
+	"saga_jory":"I checked the rope again. Couldn't help myself. How was the road?",
+	"saga_iven":"Back along the same path? Good. Tell me if the markers need seeing to.",
+	"saga_edda":"You can put that pack down. I am not going to put you straight back to work.",
+	"saga_dain":"Mind your boot by the bench. I keep saying I will sort that pile. You have seen how well saying it works.",
+	"saga_ressa":"Have a look, if you like. Things take their time here.",
+	"saga_nera":"Firm ground this side. Catch your breath before you tell me what happened.",
+	"saga_tavin":"I know that step now. I was getting tired of wondering who was coming up the road.",
+	"saga_lysa":"I kept the source references where you can find them. There is room at the end of the table.",
+	"saga_odran":"The plants have managed without your supervision, hunter. I expect we will too.",
+	"saga_maelin":"Still enough light to look at the beds. No need to decide anything tonight.",
+	"saga_oris":"I put the chisel down for a little while. A surprisingly difficult piece of work."
+}
+
+static func part_site(id: String, step: Array, part: int, state = null) -> String:
+	var site := str(step[2])
+	var stations: Array = PART_SITES.get(id + ":" + str(step[0]), [])
+	if part >= 0 and part < stations.size():
+		return str(stations[part])
+	if str(step[3]) == "carry" and part % 2 == 1 and part < step[4].size():
+		site = str(step[4][part])
+	if id == "saga_har_q04" and str(step[0]) == "set_trial" and part == 3 and state != null \
+		and str(state.get_flag(id + "_outcome", "")) == "split_trial":
+		site = "seeds"
+	return site
+
 ## Authored optional content; QuestManager and StoryState own all progress.
 ## Steps: objective ID, instruction, site, verb, work parts/choices, account.
 const WORLDS := {
@@ -115,7 +194,7 @@ const QUESTS := {
 		["survey_plot","Inspect the cleared bed and old runoff edge","garden","inspect",["Cleared bed","Old runoff"],"The runoff carries ash. A contained bed or screened terrace can keep the trial separate."],
 		["source_clean_fill","Compare clean compost and contaminated ash","fill","inspect",["Public clean compost","Contaminated ash sample"],"Ressa supplies the fill. Neither ordinary supplies nor anyone's food is consumed."],
 		["choose_layout","Choose a clean growing trial","garden","choice",{"raised":"Build a contained raised bed","terrace":"Screen and drain a small terrace"},"Ressa marks the trial. There is no promise that a new crop appears tonight."],
-		["prepare_bed","Carry two loads and fit their edging","fill","carry",["Clean fill load one","garden","Clean fill load two","garden"],"The agreed bed is filled and raked, separate from the old ash."],
+		["prepare_bed","Bring the supplied fill together and fit its edging","fill","carry",["Clean fill load one","garden","Clean fill load two","garden"],"The agreed bed is filled and raked, separate from the old ash."],
 		["plant_trial","Set the supplied seed tray and origin label","garden","work",["Set Ressa's seed tray","Label the seed origin"],"Ressa: 'Not a field yet. A place where we can find out.'"]]},
 	"saga_dep_q03":{"title":"The House That Kept Its Heat", "zone":"burned_farmstead", "actor":"saga_ressa", "site":"cellar", "hook":"Dry shelves survived beneath a sun-facing flue. Find the ordinary reason, and leave the store usable.", "lore":"The surviving cellar: sun-warmed brick, air through a dry flue, and Ressa's marked bread crock.", "steps":[
 		["inspect_air","Compare the flue, tracks and cellar grate","flue","inspect",["Sun-facing flue","Clean animal tracks","Cellar grate"],"Warm brick and moving air explain the dry space. No hidden fire spirit is needed."],
@@ -261,7 +340,7 @@ static func quest_definitions() -> Dictionary:
 		var objectives: Array = []
 		for step: Array in quest.steps:
 			objectives.append({"id":step[0], "text":step[1], "kind":"choice" if str(step[3]) == "choice" else "work"})
-		result[id] = {"title":quest.title, "type":"side", "description":quest.hook, "objectives":objectives, "story_depth":"regional", "saga_zone":quest.zone}
+		result[id] = {"title":quest.title, "type":"side", "description":opening(id), "objectives":objectives, "story_depth":"regional", "saga_zone":quest.zone}
 	return result
 
 static func route(quest_id: String, objective_id: String, state) -> Dictionary:
@@ -269,17 +348,18 @@ static func route(quest_id: String, objective_id: String, state) -> Dictionary:
 	for step: Array in quest.get("steps", []):
 		if str(step[0]) != objective_id:
 			continue
-		var site := str(step[2])
-		if str(step[3]) == "carry" and state != null:
-			var index := int(state.get_flag(quest_id + ":" + objective_id + ":part", 0))
-			if index % 2 == 1:
-				site = str(step[4][index])
+		var part := maxi(0, int(state.get_flag(quest_id + ":" + objective_id + ":part", 0))) if state != null else 0
+		var site := part_site(quest_id, step, part, state)
 		var target := quest_id + ":" + objective_id
+		if str(step[3]) == "signal" and state != null and bool(state.get_flag(quest_id + ":signal_mode_set", false)):
+			var returning := bool(state.get_flag(quest_id + ":left_work_area", false))
+			site = "posts" if returning else "line"
+			target += ":near" if returning else ":far"
 		var targets: Array[String] = [target]
 		if str(step[3]) == "inspect" and step[4].size() > 1:
 			targets.clear()
 			for index in range(step[4].size()):
 				if state == null or not bool(state.get_flag(target + ":seen:" + str(index), false)):
 					targets.append(target + ":inspect:" + str(index))
-		return {"destination_zone":quest.zone, "destination_name":str(quest.zone).replace("_"," ").capitalize(), "target_ids":targets, "route_hint":str(step[1]) + " - " + site.replace("_"," "), "purpose":quest.hook, "next_action":step[1], "pinpoint":true}
+		return {"destination_zone":quest.zone, "destination_name":str(quest.zone).replace("_"," ").capitalize(), "target_ids":targets, "route_hint":str(step[1]) + " - " + site.replace("_"," "), "purpose":opening(quest_id), "next_action":step[1], "pinpoint":true}
 	return {}

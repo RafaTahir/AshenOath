@@ -509,13 +509,24 @@ func _open_waypost() -> void:
 
 func _scene(id: String) -> void:
 	var content: Dictionary = host.dialogue.get_dialogue(id)
+	if id.begins_with("aftermath_") and _flag("final_choice_completed"):
+		content = content.duplicate(true)
+		var pages: Array = content.get("pages", [])
+		var remembered: Array[String] = []
+		for prefix: String in preload("res://scripts/saga_catalog.gd").WORLDS:
+			var quest_id := "saga_" + prefix + "_q05"
+			if host.quests.is_completed(quest_id):
+				remembered.append(preload("res://scripts/saga_catalog.gd").aftermath(quest_id, str(host.story_state.get_flag(quest_id + "_outcome", ""))))
+		if not remembered.is_empty():
+			pages.append({"speaker":"The places you returned to", "speaker_id":"narrator", "text":"\n\n".join(remembered), "performance":{"framing":"two_shot", "emotion":"neutral"}})
+		content["pages"] = pages
 	var actor_id := "sister_anwen" if id.begins_with("aftermath_names_") else "blacksmith_tor" if id.begins_with("aftermath_work_") or id.begins_with("work_road_") else "mira" if id.begins_with("work_relief_") else "captain_senn" if id == "soldiers_stand_down" else "rook"
 	var scene_actor = host.zone_root.find_child(actor_id, true, false)
 	if scene_actor != null:
 		host._stage_dialogue_moment(scene_actor)
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
-	host.hud.show_dialogue(content)
+	host.hud.show_dialogue(host._prepare_dialogue_presence(content))
 
 func _commit(flags: Dictionary, cue: String) -> void:
 	host.story_state.begin_change()

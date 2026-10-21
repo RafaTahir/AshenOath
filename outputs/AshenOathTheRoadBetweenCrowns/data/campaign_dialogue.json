@@ -5,8 +5,8 @@
     "lines": [
       "Kael: The ledger counts ash as fertilizer. The wagon totals match the refugee register.",
       "Mira: Closing the mill stops the tainted channels. It also stops the flour coming through them.",
-      "Kael: The record leaves with us whatever we do to the machinery.",
-      "Mira: Good. Now decide how we feed the people who did not choose what was ground here."
+      "Kael: Keep the ledger dry. We take a copy whatever happens to the wheel.",
+      "Mira: Then look at the sacks. Those are tomorrow's loaves. Closing a channel does not fill them."
     ],
     "actions": [
       {
@@ -70,11 +70,11 @@
     "name": "Captain Senn",
     "greeting": "Put the sword down far enough that my men can see what surrender looks like.",
     "lines": [
-      "Senn: I was on that road in the war. Young enough to call an order the whole explanation.",
+      "Senn: I was on that road. The first winter I wore a captain's coat, I could still smell the man who wore it before me.",
       "Senn: Halvern refused to close the retreat. They hanged him. I closed it after him.",
       "Kael: Now you take grain from travelers and call it repayment.",
-      "Senn: I said their houses owed ours. It became an excuse before I stopped needing it.",
-      "Kael: You can give testimony. You still answer for the people hurt this week."
+      "Senn: I told the men those houses owed us. Then a boy came through carrying flour for his mother. I took that too.",
+      "Kael: Tell me about the order. Then we deal with what you did this week."
     ],
     "voice_direction": "Controlled until the final admission.",
     "presentation": {
@@ -238,9 +238,9 @@
       "Halvern: Sanctuary under the Vargan seal. Those were the words. They came because of the words.",
       "Kael: What happened after you refused?",
       "Halvern: Rope. The yard. Dawn. Do not close it.",
-      "Kael: You cannot tell me about Edric. Your memory ends here.",
+      "Kael: Dawn. That is where you end. You have never seen Edric's winter.",
       "Kael: I was ordered to retreat from another road. There were people we had promised to escort. I went.",
-      "Kael: I wrote that we could not hold. I left out that I never went back.",
+      "Kael: The report said we could not hold. It did not say how long I kept walking before I looked behind me. I never went back.",
       "Halvern: There are still people on the road."
     ],
     "voice_direction": "Old exhaustion, not spectral menace.",
@@ -314,8 +314,8 @@
       "Anwen: The wax will not hold. They agreed to eat, Edric. They did not agree to carry the road.",
       "Kael: I left civilians on a road after promising escort. I called it a retreat in my report. That part of my report was a lie.",
       "Rook: Then do not ask us to sign yours because you finally stayed.",
-      "Kael: I will not. The copies establish what happened. Each of you decides whether to offer more.",
-      "Anwen: Break the grain condition before you touch the seal. Otherwise the rite only learns a new way to threaten us."
+      "Kael: I will not. The copies are here. Read them. Ask me what I did. You need not put your names beneath mine.",
+      "Anwen: Open the grain list first. Let the people at the back eat before anyone asks them to come forward."
     ],
     "actions": [
       {
@@ -518,9 +518,9 @@
     "lines": [
       "Edric: I found the command ledger six years ago. I sealed it. I was afraid of what the houses here would become without Vargan protection.",
       "Kael: You inherited the crime. Keeping its proof hidden was your choice.",
-      "Edric: Yes. The renewal is my choice too. I need households to witness the seal before the grain moves.",
+      "Edric: Yes. And now those carts need guards who will stand when the road calls their dead by name. The renewal is the answer I have. I need the households to witness it before the grain moves.",
       "Kael: People who must sign to feed their children cannot give you a free oath.",
-      "Edric: Then give me another way to get those carts through. Do not give me a principle and leave before winter."
+      "Edric: Then show me another way. Stand at the granary when the first cart fails to come. Do not leave me explaining principles to an empty bread queue."
     ],
     "voice_direction": "Measured courtesy cracking into shame.",
     "presentation": {
@@ -619,11 +619,11 @@
     "lines": [
       "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
       "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
-      "Kael: The copies survive. I will freely keep what we have recovered. I cannot swear for the people who refused.",
-      "The White Hart: One willing keeper of an account is enough to begin. Others may share that work. None may be given it by force.",
+      "Kael: The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
+      "The White Hart: Then begin with your own hands. Do not fill the empty places with another person's vow.",
       "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
       "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
-      "Kael: Releasing you does not erase the house's crime. Protecting a family does not protect Edric from the record.",
+      "Kael: Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
       "The White Hart: Then choose whose work begins when mine ends."
     ],
     "voice_direction": "Ancient and patient, never theatrical.",
@@ -926,7 +926,7 @@
     "name": "The Lives Beside the Road",
     "greeting": "A bell on a windowsill. New nails beside an old hinge. Roots laid out beneath labeled jars.",
     "lines": [
-      "Kael: What matters is whether I returned after asking them to change."
+      "Kael: Tor's hinge. Mira's jars. Somebody kept doing the work while I was away."
     ],
     "actions": [],
     "voice": [],
@@ -1030,7 +1030,7 @@
     "lines": [
       "Kael: Why are household signatures beside grain allotments?",
       "Merrow: A supported household witnesses the renewal. Those are the terms.",
-      "Kael: Terms offered to someone hungry do not make a free promise."
+      "Kael: And the household that will not sign? Does its sack stay on your left?"
     ],
     "variants": [],
     "actions": [],
@@ -1066,7 +1066,7 @@
     "lines": [
       "Vale: Sanctuary was promised under the Vargan seal. The closure order followed on the same day.",
       "Kael: You kept both?",
-      "Vale: I kept them and let the steward keep people from reading them. I will sign that fact."
+      "Vale: In the same drawer. I dusted it every week and told people there was nothing to find. Put my name beside that."
     ],
     "actions": [],
     "voice": [],

@@ -556,10 +556,27 @@ func _refresh_scent_targets() -> void:
 		var area: Node = game.zone_root.find_child(id, true, false)
 		if area is Area3D:
 			scent_targets.append(weakref(area))
+	var regional: Node = game.zone_root.find_child("SixWorldStories", true, false)
+	if regional != null:
+		refresh_regional_scents(regional)
+
+func refresh_regional_scents(regional: Node) -> void:
+	if not adopted or command != "follow" or not is_instance_valid(regional) or not regional.has_method("scent_candidates"):
+		return
+	for area: Node3D in regional.scent_candidates():
+		var registered := false
+		for candidate: WeakRef in scent_targets:
+			if candidate.get_ref() == area:
+				registered = true
+				break
+		if not registered:
+			scent_targets.append(weakref(area))
 
 func _scent_available(area: Node) -> bool:
 	if not is_instance_valid(area) or area.is_queued_for_deletion() or not game.zone_root.is_ancestor_of(area):
 		return false
+	if bool(area.get_meta("saga_scent", false)):
+		return area.is_visible_in_tree() and area.is_interaction_enabled() and str(area.interaction_type) == "story_activity"
 	if not area.is_interaction_enabled() or str(area.interaction_type) != "clue" or str(area.quest_id) != "main_road_of_crows":
 		return false
 	return game.quests.is_active(str(area.quest_id)) and not game.quests.is_objective_done(str(area.quest_id), str(area.objective_id))
@@ -604,7 +621,7 @@ func _scent_reaction(delta: float) -> bool:
 		velocity.z = 0.0
 		if care_pose != null:
 			care_pose.pose("sniff", scent_remaining)
-		game.hud.toast(str(SCENT_TRAILS[zone_id][str(area.interaction_id)]), 4.0)
+		game.hud.toast("Bracken stops beside the marks and looks back. They are close enough to inspect." if bool(area.get_meta("saga_scent", false)) else str(SCENT_TRAILS[zone_id][str(area.interaction_id)]), 4.0)
 		# This records only a reaction already shown. It never collects the clue,
 		# earns evidence, reveals a quest target or substitutes for player input.
 		seen[str(area.interaction_id)] = true

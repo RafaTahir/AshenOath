@@ -1,5 +1,19 @@
 {
   "schema": 1,
+  "encounter_zones": {
+    "ghoulkin": ["wychwood", "deep_wood", "cemetery"],
+    "wychwood_stalker": ["wychwood", "deep_wood"],
+    "wychwood_raider": ["wychwood", "deep_wood"],
+    "wychwood_brute": ["wychwood", "deep_wood"],
+    "bog_wretch": ["wychwood", "deep_wood"],
+    "gravebound_knight": ["cemetery", "chapel", "undercroft", "ruins"],
+    "bell_eater": ["cemetery", "chapel"],
+    "rootbound_colossus": ["deep_wood", "burned_farmstead"],
+    "ashwing": ["old_mill"],
+    "halvern_boss": ["undercroft"],
+    "white_hart_avatar": ["hart_glade"],
+    "bandit": ["bandit_road", "marsh_crossing"]
+  },
   "creatures": {
     "ghoulkin": {"evidence": ["drag_marks", "oren", "crisis_cause"], "known_gate": {"quest":"main_road_of_crows", "objective":"fight_ghoulkin"}, "approach":"Keep room to step away from a lunge. Their bodies remain vulnerable to ordinary steel; a terrible origin does not make them untouchable."},
     "wychwood_stalker": {"evidence": ["drag_marks", "crisis_cause"], "approach":"Watch the flank, not only the creature in front. An Iron Trap can interrupt a nearby approach, but it is spent when set."},

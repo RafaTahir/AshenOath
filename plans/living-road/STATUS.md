@@ -1,5 +1,11 @@
 # Living Road Status
 
+2026-10-22 extension: [A World Worth Caring About](WORLD_WORTH_CARING_IMPLEMENTATION.md)
+implements coordinated regional writing, physical work, remembered responses,
+preparation and performance changes under the existing owners. Its combined
+publication is recorded separately; it is not user-accepted. The history below is retained,
+not evidence that the changed scenes have been played.
+
 Updated: 2026-10-08. Implementation and user acceptance are separate.
 User-accepted tickets: **0/28**. Published tickets: **28/28**. Implemented:
 **28/28**. LR-009 through LR-028 were published together at the final LR-028

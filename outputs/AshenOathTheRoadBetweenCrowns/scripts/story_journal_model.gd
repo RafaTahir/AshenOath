@@ -170,7 +170,7 @@ static func _people_entries(campaign: Dictionary, quests, state) -> Array[Dictio
 		for quest_id: String in preload("res://scripts/saga_catalog.gd").QUESTS:
 			var quest: Dictionary = preload("res://scripts/saga_catalog.gd").QUESTS[quest_id]
 			if str(quest.get("actor", "")) == id and quests != null and quests.is_completed(quest_id):
-				account += "\n\n" + str(quest.title) + ": " + _flag_text(state, quest_id + "_outcome").replace("_", " ") + ".\n" + str(quest.steps.back()[5])
+				account += "\n\n" + str(quest.title) + ":\n" + preload("res://scripts/saga_catalog.gd").aftermath(quest_id, _flag_text(state, quest_id + "_outcome"))
 		entries.append({"id":"person:" + id, "title":person.name, "body":account, "identified":true})
 	var covered_flags: Dictionary = {}
 	if _flag_bool(state, "lr_vale_letter_read"):
@@ -562,7 +562,7 @@ static func creature_entries(campaign: Dictionary, quests, state) -> Array[Dicti
 		var weakness: String = str(definition.get("weakness", ""))
 		if weakness in ["iron_trap", "ash_bomb"]:
 			suggested.append(weakness)
-		entries.append({"id":"creature:" + id, "title":str(definition.get("name", id)), "body":body, "links":links, "suggested_items":suggested, "resolved":resolved})
+		entries.append({"id":"creature:" + id, "title":str(definition.get("name", id)), "body":body, "links":links, "suggested_items":suggested, "resolved":resolved, "approach":str(note.get("approach", "")), "preferred_blade":blade, "zones":_preparation_data.get("encounter_zones", {}).get(id, [])})
 	return entries
 
 static func _consent_text(value: String) -> String:

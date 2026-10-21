@@ -32,14 +32,24 @@ static func knowledge_summary(inventory, quests, state, context: Dictionary) -> 
 		var item_id: String = inventory.quick_item(action)
 		lines.append("%s: %s x%d" % ["Remedy" if action == "use_potion" else "Field tool", inventory.get_item_name(item_id), int(inventory.items.get(item_id, 0))])
 	var creatures: Array[Dictionary] = StoryJournal.creature_entries(quests, state)
-	if creatures.is_empty():
-		lines.append("\nUnavailable: no creature account has been discovered. Ordinary equipment is still usable; no purchase is required to investigate.")
-	var sources: Dictionary = context.get("supply_sources", {})
+	var destination_zone := str(objective.get("destination_zone", context.get("zone_id", "")))
+	if destination_zone == "":
+		destination_zone = str(context.get("zone_id", ""))
+	var relevant: Array[Dictionary] = []
 	for creature: Dictionary in creatures:
-		if bool(creature.get("resolved", false)):
-			lines.append("\n%s: a resolution is recorded. No further combat preparation is required for that outcome." % str(creature.title))
-			continue
+		if not bool(creature.get("resolved", false)) and destination_zone in creature.get("zones", []):
+			relevant.append(creature)
+	if relevant.is_empty():
+		lines.append("\nNo unresolved creature account is known for the next destination. Ordinary equipment remains usable. Other discovered accounts remain in Known Creatures.")
+	var sources: Dictionary = context.get("supply_sources", {})
+	for creature: Dictionary in relevant:
 		lines.append("\n" + str(creature.title).to_upper())
+		var blade := str(creature.get("preferred_blade", ""))
+		if blade != "":
+			lines.append("%s: affinity advantage; your other blade remains usable." % ("Steel" if blade == "steel" else "Oathblade"))
+		var approach := str(creature.get("approach", ""))
+		if approach != "":
+			lines.append(approach)
 		var suggested: Array = creature.get("suggested_items", [])
 		if suggested.is_empty():
 			lines.append("Known: your carried blades remain usable. Leave stamina for a retreat.")

@@ -9,7 +9,7 @@ static func protected(actor: Node3D) -> bool:
 	for depth in range(5):
 		if cursor == null:
 			break
-		if bool(cursor.get_meta("dialogue_facing_lock", false)) or bool(cursor.get_meta("cast_dialogue_owner", false)) or bool(cursor.get_meta("bell_eater_evacuated", false)):
+		if bool(cursor.get_meta("dialogue_facing_lock", false)) or bool(cursor.get_meta("cast_dialogue_owner", false)) or str(cursor.get_meta("cast_work_owner", "")) != "" or bool(cursor.get_meta("bell_eater_evacuated", false)):
 			return true
 		cursor = cursor.get_parent()
 	return false

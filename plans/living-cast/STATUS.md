@@ -2,7 +2,14 @@
 
 Stage: Greyfen reference implemented and packaged; authorized reference publication.
 Formal user acceptance: **0/10**. No runtime or visual pass has been claimed.
-Wider visual/boss/six-world rollout awaits the planned user reference review.
+Wider facial-rig rollout awaits the planned user reference review.
+
+2026-10-22: [A World Worth Caring About](../living-road/WORLD_WORTH_CARING_IMPLEMENTATION.md)
+extends existing regional occupational/reaction presentation, remembered help,
+dialogue ownership and bounded monster/boss habits without changing more rigs.
+These source changes are not user-accepted; their combined package/publication
+is recorded in that delivery note and its publication receipt. The facial reference
+approval remains pending; the historical sample package below is unchanged.
 
 ## Implemented Reference
 
