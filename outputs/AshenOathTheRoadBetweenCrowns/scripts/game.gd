@@ -6964,6 +6964,7 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	enemy.visible = true
 	enemy.encounter_slot = active_enemies.size()
 	enemy.setup_navigation(spatial_service)
+	enemy.listen_to_world(audio)
 	if current_zone_id == "wychwood" and id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
 		enemy.set_meta("progression_opening_wave", not quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"))
 		enemy.set_encounter_active(false)

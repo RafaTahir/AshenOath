@@ -1,15 +1,22 @@
 # Living Cast - Current Checkpoint
 
-Stage: Greyfen reference implemented and packaged; authorized reference publication.
+Stage: Remaining Living Cast source/asset rollout implemented and compiled; authorized combined publication.
 Formal user acceptance: **0/10**. No runtime or visual pass has been claimed.
-Wider facial-rig rollout awaits the planned user reference review.
+Latest instruction authorizes remaining implementation, not visual acceptance.
+Current implementation and user checklist: [rollout](ROLLOUT_IMPLEMENTATION.md).
+Current candidate: `cast-complete-20261022`; **104832999 bytes**, 17 files,
+24601 bytes below the cap. Root PCK SHA-256:
+`07b7f2f6e4d5fc51ce1cd25a7f30ffdba69910af5843d629d40664dfb3bb3ffe`.
+Publication ownership: current CAST-010 receipt under `.release-gate/living-road/`.
+The receipt records actual commit/push/deployment completion, not acceptance.
+Strict performance is not established by this work.
 
 2026-10-22: [A World Worth Caring About](../living-road/WORLD_WORTH_CARING_IMPLEMENTATION.md)
 extends existing regional occupational/reaction presentation, remembered help,
 dialogue ownership and bounded monster/boss habits without changing more rigs.
-These source changes are not user-accepted; their combined package/publication
-is recorded in that delivery note and its publication receipt. The facial reference
-approval remains pending; the historical sample package below is unchanged.
+Those source changes are not user-accepted; their published baseline remains
+recorded in that delivery note and receipt. The historical sample below is retained
+as history; its old next-action instruction is superseded by the current rollout.
 
 ## Implemented Reference
 
@@ -68,8 +75,7 @@ are retained under .release-gate/cast-greyfen-v1-20261021/.
 
 ## Exact Next Action
 
-Deliver the built reference for the user's visual and behavioral review. Apply
-named sample defects, or use the approved standard
-for CAST-008/009 and remaining body archetypes. Do not silently approve the sample
-or describe the complete overhaul as accepted.
+Publish the compiled, under-budget candidate once through the existing workflow.
+Then obtain the user's visual/behavioral review; no acceptance is implied by
+source completion, successful compilation or publication.
 

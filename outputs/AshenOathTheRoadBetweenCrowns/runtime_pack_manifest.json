@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "world-worth-caring-20261022",
+  "release_id": "cast-complete-20261022",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "world-worth-caring-20261022",
+      "version": "cast-complete-20261022",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4039932,
-      "candidate_sha256": "1ef455311d46ad2be59e4910c4d9d78891c69575922dc9694d37c3922070a6ff",
+      "candidate_bytes": 4048824,
+      "candidate_sha256": "6ecda9cdd1cfe0c13a1b5647fc5a95d4702bfffeabf9b44821325817cb8fe2d1",
       "contents": [
         "menu",
         "managers",
@@ -35,15 +35,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4039932,
-      "embedded_source_sha256": "1ef455311d46ad2be59e4910c4d9d78891c69575922dc9694d37c3922070a6ff",
+      "embedded_source_bytes": 4048824,
+      "embedded_source_sha256": "6ecda9cdd1cfe0c13a1b5647fc5a95d4702bfffeabf9b44821325817cb8fe2d1",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "world-worth-caring-20261022",
-      "url": "packs/opening.pck?sha256=45428577f11e50871e1bc8001f45a11595f67b1c62966548317252a1185fcf6b",
-      "sha256": "45428577f11e50871e1bc8001f45a11595f67b1c62966548317252a1185fcf6b",
-      "bytes": 35505172,
+      "version": "cast-complete-20261022",
+      "url": "packs/opening.pck?sha256=a3715944a4b38e3bc35c74d714d9c1d17d454aee893e9d3d3b90a1b32cc8e447",
+      "sha256": "a3715944a4b38e3bc35c74d714d9c1d17d454aee893e9d3d3b90a1b32cc8e447",
+      "bytes": 35530324,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -51,20 +51,20 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 35505172,
-      "candidate_sha256": "45428577f11e50871e1bc8001f45a11595f67b1c62966548317252a1185fcf6b",
+      "candidate_bytes": 35530324,
+      "candidate_sha256": "a3715944a4b38e3bc35c74d714d9c1d17d454aee893e9d3d3b90a1b32cc8e447",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "45428577f11e50871e1bc8001f45a11595f67b1c62966548317252a1185fcf6b"
+      "cache_key": "a3715944a4b38e3bc35c74d714d9c1d17d454aee893e9d3d3b90a1b32cc8e447"
     },
     "campaign": {
-      "version": "world-worth-caring-20261022",
-      "url": "packs/campaign.pck?sha256=5bafee8aa8f576e6d7a84f0b0ac9b2a36e2fe152598d8873126bf9f636c15ecb",
-      "sha256": "5bafee8aa8f576e6d7a84f0b0ac9b2a36e2fe152598d8873126bf9f636c15ecb",
-      "bytes": 8726068,
+      "version": "cast-complete-20261022",
+      "url": "packs/campaign.pck?sha256=4cd550162d0d9597da4a5e3ec70c12998e305a37e7ead435bdae38a06a9bed38",
+      "sha256": "4cd550162d0d9597da4a5e3ec70c12998e305a37e7ead435bdae38a06a9bed38",
+      "bytes": 8726132,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,21 +73,21 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 8726068,
-      "candidate_sha256": "5bafee8aa8f576e6d7a84f0b0ac9b2a36e2fe152598d8873126bf9f636c15ecb",
+      "candidate_bytes": 8726132,
+      "candidate_sha256": "4cd550162d0d9597da4a5e3ec70c12998e305a37e7ead435bdae38a06a9bed38",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "5bafee8aa8f576e6d7a84f0b0ac9b2a36e2fe152598d8873126bf9f636c15ecb"
+      "cache_key": "4cd550162d0d9597da4a5e3ec70c12998e305a37e7ead435bdae38a06a9bed38"
     },
     "characters": {
-      "version": "world-worth-caring-20261022",
-      "url": "packs/characters.pck?sha256=efc85dfc034eafc56a9b671c9f8682891e38c55ed6a33d94cc11639061db6ba1",
-      "sha256": "efc85dfc034eafc56a9b671c9f8682891e38c55ed6a33d94cc11639061db6ba1",
-      "bytes": 9657248,
+      "version": "cast-complete-20261022",
+      "url": "packs/characters.pck?sha256=94d82f5bea73940026dd95ec3dcdba218fdd7c9646ca6980e470881034561edf",
+      "sha256": "94d82f5bea73940026dd95ec3dcdba218fdd7c9646ca6980e470881034561edf",
+      "bytes": 9658256,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -96,19 +96,19 @@
       "preload_priority": 30,
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 9657248,
-      "candidate_sha256": "efc85dfc034eafc56a9b671c9f8682891e38c55ed6a33d94cc11639061db6ba1",
+      "candidate_bytes": 9658256,
+      "candidate_sha256": "94d82f5bea73940026dd95ec3dcdba218fdd7c9646ca6980e470881034561edf",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "efc85dfc034eafc56a9b671c9f8682891e38c55ed6a33d94cc11639061db6ba1"
+      "cache_key": "94d82f5bea73940026dd95ec3dcdba218fdd7c9646ca6980e470881034561edf"
     },
     "monsters": {
-      "version": "world-worth-caring-20261022",
-      "url": "packs/monsters.pck?sha256=100f21ae23a31eea42755e69258ccf1a03c697ab0bf9b65c3eebd936386ba831",
-      "sha256": "100f21ae23a31eea42755e69258ccf1a03c697ab0bf9b65c3eebd936386ba831",
-      "bytes": 14697672,
+      "version": "cast-complete-20261022",
+      "url": "packs/monsters.pck?sha256=b862485a7b882fd6e9f169a2de34d66454929a374f3bdc4629039b7229912e60",
+      "sha256": "b862485a7b882fd6e9f169a2de34d66454929a374f3bdc4629039b7229912e60",
+      "bytes": 14710008,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -117,20 +117,20 @@
       "preload_priority": 40,
       "status": "streamed_web_candidate",
       "candidate_artifact": "monsters.pck",
-      "candidate_bytes": 14697672,
-      "candidate_sha256": "100f21ae23a31eea42755e69258ccf1a03c697ab0bf9b65c3eebd936386ba831",
+      "candidate_bytes": 14710008,
+      "candidate_sha256": "b862485a7b882fd6e9f169a2de34d66454929a374f3bdc4629039b7229912e60",
       "contents": [
         "monster_families",
         "bosses",
         "animals"
       ],
-      "cache_key": "100f21ae23a31eea42755e69258ccf1a03c697ab0bf9b65c3eebd936386ba831"
+      "cache_key": "b862485a7b882fd6e9f169a2de34d66454929a374f3bdc4629039b7229912e60"
     },
     "audio": {
-      "version": "world-worth-caring-20261022",
-      "url": "packs/audio.pck?sha256=db1099914cef11656c3525bf21b3884d5e5f2492803734f7572f84bdb79be270",
-      "sha256": "db1099914cef11656c3525bf21b3884d5e5f2492803734f7572f84bdb79be270",
-      "bytes": 19291356,
+      "version": "cast-complete-20261022",
+      "url": "packs/audio.pck?sha256=9b7d8ffc921e97728f7a6443d021bba66f7b2445c421f8af0853843edbc7cc75",
+      "sha256": "9b7d8ffc921e97728f7a6443d021bba66f7b2445c421f8af0853843edbc7cc75",
+      "bytes": 19291420,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -138,20 +138,20 @@
       "preload_priority": 50,
       "status": "streamed_web_candidate",
       "candidate_artifact": "audio.pck",
-      "candidate_bytes": 19291356,
-      "candidate_sha256": "db1099914cef11656c3525bf21b3884d5e5f2492803734f7572f84bdb79be270",
+      "candidate_bytes": 19291420,
+      "candidate_sha256": "9b7d8ffc921e97728f7a6443d021bba66f7b2445c421f8af0853843edbc7cc75",
       "contents": [
         "ambience",
         "combat_cues",
         "voice_fallbacks"
       ],
-      "cache_key": "db1099914cef11656c3525bf21b3884d5e5f2492803734f7572f84bdb79be270"
+      "cache_key": "9b7d8ffc921e97728f7a6443d021bba66f7b2445c421f8af0853843edbc7cc75"
     },
     "quality_materials": {
-      "version": "world-worth-caring-20261022",
-      "url": "packs/quality_materials.pck?sha256=993186bd06b4502c5b588fa156ce23ebb28a5265caa2b96eca578ae3ebe7fc05",
-      "sha256": "993186bd06b4502c5b588fa156ce23ebb28a5265caa2b96eca578ae3ebe7fc05",
-      "bytes": 7378924,
+      "version": "cast-complete-20261022",
+      "url": "packs/quality_materials.pck?sha256=7a87f9e67709fec2aa8f5e09e7c47e967b2df1a6d87e30dee60b480b168e9548",
+      "sha256": "7a87f9e67709fec2aa8f5e09e7c47e967b2df1a6d87e30dee60b480b168e9548",
+      "bytes": 7378988,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -160,19 +160,19 @@
       "preload_priority": 60,
       "status": "streamed_web_candidate",
       "candidate_artifact": "quality_materials.pck",
-      "candidate_bytes": 7378924,
-      "candidate_sha256": "993186bd06b4502c5b588fa156ce23ebb28a5265caa2b96eca578ae3ebe7fc05",
+      "candidate_bytes": 7378988,
+      "candidate_sha256": "7a87f9e67709fec2aa8f5e09e7c47e967b2df1a6d87e30dee60b480b168e9548",
       "contents": [
         "opening_normal_maps",
         "opening_orm_maps"
       ],
-      "cache_key": "993186bd06b4502c5b588fa156ce23ebb28a5265caa2b96eca578ae3ebe7fc05"
+      "cache_key": "7a87f9e67709fec2aa8f5e09e7c47e967b2df1a6d87e30dee60b480b168e9548"
     },
     "adjacent": {
-      "version": "world-worth-caring-20261022",
-      "url": "packs/adjacent.pck?sha256=ea3bde2d1919d1bf1c422baf182f0aa71b3654b9deff462475392b9b2c3e0b67",
-      "sha256": "ea3bde2d1919d1bf1c422baf182f0aa71b3654b9deff462475392b9b2c3e0b67",
-      "bytes": 1405040,
+      "version": "cast-complete-20261022",
+      "url": "packs/adjacent.pck?sha256=7e91f5d0b3aa1fca6e4e6ac6fd779cb8577e22ba5002674b802a597f380926ad",
+      "sha256": "7e91f5d0b3aa1fca6e4e6ac6fd779cb8577e22ba5002674b802a597f380926ad",
+      "bytes": 1405104,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -186,14 +186,14 @@
         "ruins"
       ],
       "candidate_artifact": "adjacent.pck",
-      "candidate_bytes": 1405040,
-      "candidate_sha256": "ea3bde2d1919d1bf1c422baf182f0aa71b3654b9deff462475392b9b2c3e0b67",
-      "cache_key": "ea3bde2d1919d1bf1c422baf182f0aa71b3654b9deff462475392b9b2c3e0b67"
+      "candidate_bytes": 1405104,
+      "candidate_sha256": "7e91f5d0b3aa1fca6e4e6ac6fd779cb8577e22ba5002674b802a597f380926ad",
+      "cache_key": "7e91f5d0b3aa1fca6e4e6ac6fd779cb8577e22ba5002674b802a597f380926ad"
     }
   },
-  "build_id": "world-worth-caring-20261022",
-  "generated_from_commit": "9d7a29ec6232d70515b2f35e3551c97ae66115fb",
-  "generated_at_utc": "2026-10-21T19:06:54.642616Z",
-  "total_bytes": 96661480,
+  "build_id": "cast-complete-20261022",
+  "generated_from_commit": "e8d92627bec50fa7bd8121f892ce4af212fcca2c",
+  "generated_at_utc": "2026-10-22T03:14:49.772218Z",
+  "total_bytes": 96700232,
   "source_dirty": true
 }

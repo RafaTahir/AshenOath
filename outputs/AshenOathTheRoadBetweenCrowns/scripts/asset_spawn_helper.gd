@@ -334,6 +334,8 @@ func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: S
 			ranger_hood.visible = false
 		var ranger_head := _instantiate_resource(_load_cached_resource("res://assets_external/characters_universal/Male_Head.gltf"))
 		var ranger_hair := _instantiate_resource(_load_cached_resource("res://assets_external/characters_universal/Hair_SimpleParted.gltf"))
+		if ranger_head != null:
+			ranger_head.set_meta("cast_head_layer", true)
 		var merged_ranger_face := _merge_shared_rig_layers(outfit_root, [ranger_head, ranger_hair])
 		if not merged_ranger_face:
 			if ranger_hood != null:
@@ -457,6 +459,8 @@ func _merge_shared_rig_layers(outfit_root: Node3D, layers: Array) -> bool:
 		var meshes: Array[Node] = layer_node.find_children("*", "MeshInstance3D", true, false)
 		for raw_mesh in meshes:
 			var mesh := raw_mesh as MeshInstance3D
+			if bool(layer_node.get_meta("cast_head_layer", false)):
+				mesh.set_meta("cast_head_layer", true)
 			var mesh_pose := _composed_local_transform(mesh)
 			var skeleton_pose := _composed_local_transform(shared_skeleton)
 			mesh.owner = null

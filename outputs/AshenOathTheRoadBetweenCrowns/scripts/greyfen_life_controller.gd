@@ -73,6 +73,9 @@ var story_dirty := true
 var story_source: Node
 var activity_reservations: Dictionary = {}
 var social_cooldown := 9.0
+var regional_only := false
+var routine_phase := ""
+var cast_revision := 0
 
 const CROWD_IDENTITIES := [
 	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
@@ -87,25 +90,79 @@ func _simulation_hz() -> float:
 	# bodies move each frame independently of this decision frequency.
 	return 15.0 if quality == "quality" else 8.0
 
-func configure(game: Node, quality_preset: String) -> void:
+func configure(game: Node, quality_preset: String, only_registered: bool = false) -> void:
 	if story_source != null and is_instance_valid(story_source) and story_source.changed.is_connected(_on_story_changed):
 		story_source.changed.disconnect(_on_story_changed)
 	host = game
+	regional_only = only_registered
 	story_source = game.story_state
 	if story_source != null:
 		story_source.changed.connect(_on_story_changed)
 	story_dirty = true
 	player = game.player
 	quality = quality_preset
+	if game.quests != null and not game.quests.changed.is_connected(_on_story_changed):
+		game.quests.changed.connect(_on_story_changed)
+	if game.day_night != null:
+		routine_phase = str(game.day_night.current_phase)
+		if not game.day_night.phase_changed.is_connected(_on_phase_changed):
+			game.day_night.phase_changed.connect(_on_phase_changed)
+	if game.audio != null and not game.audio.perception_cue.is_connected(_on_perception_cue):
+		game.audio.perception_cue.connect(_on_perception_cue)
 	rng.seed = 44017
 	# Share the game's imported-resource and retargeted-animation cache. A
 	# controller-local helper repeated that work when the first villager spawned.
 	asset_helper = game.asset_helper
 	set_spatial_service(game.spatial_service)
-	if not bool(get_meta("staged_population", false)):
+	if not regional_only and not bool(get_meta("staged_population", false)):
 		_build_population()
-	_enroll_named_npcs()
+	if not regional_only:
+		_enroll_named_npcs()
 	_sync_story_state(true)
+
+func enroll_region() -> void:
+	var zone_id := str(host.current_zone_id)
+	for id: String in CastProfile.life_data().get("zones", {}).get(zone_id, {}):
+		var existing: Dictionary = {}
+		for candidate: Dictionary in actors:
+			if str(candidate.id) == id:
+				existing = candidate
+				break
+		if bool(existing.get("regional", false)):
+			continue
+		var definition: Dictionary = CastProfile.life_data().zones[zone_id][id]
+		var node := host.zone_root.find_child(str(definition.get("actor", id)), true, false) as Node3D
+		if not is_instance_valid(node) or not node.visible:
+			continue
+		var owned := str(node.get_meta("locomotion_owner", ""))
+		if owned != "" and owned != "greyfen_life":
+			continue
+		var body := node.get_node_or_null("Person") as Node3D
+		if body != null and not body.visible:
+			continue
+		var driver := node.find_child("CharacterAnimationDriver", true, false)
+		if driver == null:
+			continue
+		var routine := CastProfile.routine(id, zone_id, host.story_state, host.quests, routine_phase)
+		var path: Array = []
+		for point: Vector3 in routine.path:
+			path.append(host.validate_walkable_position(point))
+		var entry := _make_entry(id, node, path, 0.62, driver, true) if existing.is_empty() else existing
+		entry["regional"] = true
+		entry["routine_zone"] = zone_id
+		entry["profile"] = routine
+		entry["path"] = path
+		entry["consequence_line"] = str(routine.line)
+		entry["target"] = 0
+		entry["alias_anchor"] = host.zone_root.find_child(id, true, false) if definition.has("actor") else null
+		var ambient := node.find_child("NpcAmbient", true, false)
+		if ambient != null:
+			ambient.process_mode = Node.PROCESS_MODE_DISABLED
+		if existing.is_empty():
+			actors.append(entry)
+		_configure_agent(entry)
+		driver.set_distance_suspended(false)
+	story_dirty = true
 
 func set_spatial_service(service) -> void:
 	spatial_service = service
@@ -243,9 +300,14 @@ func _enroll_named_npcs() -> void:
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
+	if not node.is_visible_in_tree() or node.get_node_or_null("Person") != null and not node.get_node("Person").visible:
+		_release_activity(entry)
+		return
 	entry.bark_cooldown = maxf(float(entry.get("bark_cooldown", 0.0)) - delta, 0.0)
 	if Presence.protected(node):
 		_release_activity(entry)
+		entry.social_time = 0.0
+		node.remove_meta("cast_social_owner")
 		entry.motion_speed = 0.0
 		entry.travel_direction = Vector3.ZERO
 		return
@@ -266,6 +328,10 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		if entry.driver != null:
 			entry.driver.set_life_activity("watch")
 		return
+	if node.has_meta("cast_social_owner"):
+		node.remove_meta("cast_social_owner")
+		if is_instance_valid(entry.get("face")):
+			entry.face.set_focus_target(null)
 	# Major encounters temporarily own their arena. The game restores this
 	# marker after the encounter so named villagers do not walk through a boss
 	# fight or re-enter its collision space while the player is engaged.
@@ -284,7 +350,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		_brake_actor(entry, delta)
 		if float(entry.motion_speed) < 0.05:
 			_face(node, player.global_position, delta)
-		if line_cooldown <= 0.0 and not bool(entry.named) and not bool(entry.get("greeted_on_approach", false)) and float(entry.bark_cooldown) <= 0.0 and float(entry.motion_speed) < 0.05:
+		if line_cooldown <= 0.0 and (not bool(entry.named) or bool(entry.get("regional", false))) and not bool(entry.get("greeted_on_approach", false)) and float(entry.bark_cooldown) <= 0.0 and float(entry.motion_speed) < 0.05:
 			line_cooldown = 15.0
 			entry.bark_cooldown = 75.0
 			entry.greeted_on_approach = true
@@ -334,11 +400,12 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 			_set_agent_target(entry)
 			return
 		entry.route = []
+		entry.arrived_target = int(entry.target)
 		entry.target = (int(entry.target) + 1) % entry.path.size()
 		_begin_activity(entry)
 		return
 	var direction: Vector3 = offset.normalized()
-	var wanted_yaw: float = atan2(-direction.x, -direction.z)
+	var wanted_yaw: float = _wanted_yaw(node, direction)
 	var turn_error: float = absf(wrapf(wanted_yaw - node.rotation.y, -PI, PI))
 	# Arrive and plant the feet before a sharp corner. Translating sideways
 	# while spinning through a half-turn would defeat the facing improvement.
@@ -356,7 +423,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	entry.motion_speed = move_toward(current_speed, desired_speed, rate * delta)
 	# Translation follows the chest. Turn first, then walk into the curve;
 	# don't slide diagonally toward a waypoint while the body is still turning.
-	var heading: Vector3 = -node.global_basis.z
+	var heading: Vector3 = entry.driver.get_visible_forward() if is_instance_valid(entry.driver) else -node.global_basis.z
 	heading.y = 0.0
 	heading = heading.normalized()
 	entry.travel_direction = heading
@@ -410,6 +477,9 @@ func _move_actor(entry: Dictionary, direction: Vector3, speed: float, delta: flo
 		_set_motion(entry, 0.0)
 		return
 	node.global_position = destination
+	var alias: Node3D = entry.get("alias_anchor")
+	if is_instance_valid(alias):
+		alias.global_position = node.global_position
 	var achieved_velocity: Vector3 = (node.global_position - start) / maxf(delta, 0.001)
 	achieved_velocity.y = 0.0
 	_set_motion(entry, achieved_velocity.length(), achieved_velocity.normalized())
@@ -435,11 +505,19 @@ func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: No
 	node.set_meta("life_story_reaction", "baseline")
 	node.set_meta("cast_presence_profile", CastProfile.presence_profile(id))
 	node.set_meta("cast_eye_height", Presence.eye_height(node))
+	if is_instance_valid(driver):
+		var visible: Vector3 = driver.get_visible_forward()
+		var local := node.global_basis.inverse()*visible
+		node.set_meta("cast_forward_axis", local.normalized())
+		node.set_meta("cast_forward_offset", atan2(-local.x,-local.z))
 	return entry
 
 func _begin_activity(entry: Dictionary) -> void:
 	var node: Node3D = entry.node
 	var profile: Dictionary = entry.profile
+	if bool(entry.get("regional", false)):
+		var index := int(entry.get("arrived_target", 0))
+		entry.profile.activity = str(entry.profile.activities[mini(index, entry.profile.activities.size()-1)])
 	var anchor := _activity_anchor(entry)
 	if anchor != Vector3.ZERO and node.global_position.distance_squared_to(anchor) > 1.44:
 		entry.pause = 0.6
@@ -493,6 +571,8 @@ func _release_activity(entry: Dictionary) -> void:
 		_set_activity_pose(entry, false)
 	if was_active and entry.driver != null and entry.driver.has_method("clear_life_activity"):
 		entry.driver.clear_life_activity()
+	if is_instance_valid(entry.driver) and entry.driver.has_method("set_carried_activity"):
+		entry.driver.set_carried_activity("")
 
 func _apply_pending_routine(entry: Dictionary) -> void:
 	var pending: Dictionary = entry.get("pending_routine", {})
@@ -501,12 +581,13 @@ func _apply_pending_routine(entry: Dictionary) -> void:
 	entry.profile = pending.profile
 	entry.consequence_line = str(pending.get("line", ""))
 	entry.node.set_meta("life_occupation", str(entry.profile.get("occupation", "villager")))
-	if bool(entry.named): return
+	if bool(entry.named) and not bool(entry.get("regional", false)): return
 	var next_path: Array = pending.path
 	if next_path == entry.path: return
-	entry.path = host.river_safe_path(next_path, 0.9)
+	entry.path = next_path.duplicate() if bool(entry.get("regional", false)) else host.river_safe_path(next_path, 0.9)
 	entry.target = 0
-	_precompute_routes(entry)
+	if not bool(entry.get("regional", false)):
+		_precompute_routes(entry)
 	# The first leg begins where the person actually stopped, not where the
 	# new loop's last anchor happens to be. No teleport or stale route splice.
 	var destination: Vector3 = host.validate_walkable_position(entry.path[0])
@@ -539,6 +620,8 @@ func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 			driver.set_dialogue_pose(false)
 
 func _activity_anchor(entry: Dictionary) -> Vector3:
+	if bool(entry.get("regional", false)) and not entry.path.is_empty():
+		return entry.path[clampi(int(entry.get("arrived_target", 0)), 0, entry.path.size()-1)]
 	if bool(entry.named) and not entry.path.is_empty():
 		return entry.path.back()
 	var activity := str(entry.profile.get("activity", ""))
@@ -561,6 +644,11 @@ func _activity_anchor(entry: Dictionary) -> Vector3:
 	return anchors.get(activity, Vector3.ZERO)
 
 func _on_story_changed() -> void:
+	cast_revision += 1
+	story_dirty = true
+
+func _on_phase_changed(phase: String) -> void:
+	routine_phase = phase
 	story_dirty = true
 
 func _sync_story_state(force: bool) -> void:
@@ -570,7 +658,7 @@ func _sync_story_state(force: bool) -> void:
 	var state = host.get("story_state")
 	var report := str(state.get_flag("evidence_report", "")) if state != null and state.has_method("get_flag") else ""
 	var bell := bool(state.get_flag("cemetery_bell_rung", false)) if state != null and state.has_method("get_flag") else false
-	var signature := "%s|%s|%s" % [report, str(bell), ConsequenceRoutines.signature(state)]
+	var signature := "%s|%s|%s|%s|%s" % [report, str(bell), ConsequenceRoutines.signature(state), routine_phase, cast_revision]
 	if not force and signature == story_signature:
 		return
 	story_signature = signature
@@ -580,6 +668,13 @@ func _sync_story_state(force: bool) -> void:
 	if bell:
 		reaction += "_bell_rung"
 	for entry in actors:
+		if bool(entry.get("regional", false)):
+			var routine := CastProfile.routine(str(entry.id), str(entry.routine_zone), state, host.quests, routine_phase)
+			var path: Array = []
+			for point: Vector3 in routine.path:
+				path.append(host.validate_walkable_position(point))
+			entry.pending_routine = {"profile":routine, "path":path, "line":routine.line}
+			continue
 		entry.story_reaction = reaction
 		# Named characters retain their reserved routes. Ambient workers change
 		# assignments only after planting their feet or finishing an activity.
@@ -600,6 +695,11 @@ func _sync_story_state(force: bool) -> void:
 				_set_activity_pose(entry, true)
 
 func _line_for_actor(entry: Dictionary) -> String:
+	if bool(entry.get("regional", false)):
+		var identity := str(entry.profile.get("identity", ""))
+		var events: Array = host.story_state.relationship_events(identity)
+		if not events.is_empty() and str(events.back().get("acknowledgement", "")) != "":
+			return str(events.back().acknowledgement)
 	var consequence_line := str(entry.get("consequence_line", ""))
 	if consequence_line != "": return consequence_line
 	var reaction := str(entry.get("story_reaction", "baseline"))
@@ -633,7 +733,8 @@ func _update_reaction(entry: Dictionary, delta: float) -> void:
 		if not was_reacting:
 			entry.route = []
 			entry.safety_route = []
-		entry.reaction = "fear" if threat == "danger" else "suspicion"
+		var response := str(CastProfile.presence_profile(str(entry.id)).get("danger_response", "shelter"))
+		entry.reaction = ("anger" if response == "guard" else "fear") if threat == "danger" else "suspicion"
 		entry.reaction_time = 2.5
 		entry.threat_position = threat_position
 		if face != null:
@@ -656,7 +757,7 @@ func _update_reaction(entry: Dictionary, delta: float) -> void:
 	_try_social_exchange(entry)
 
 func _seek_safety(entry: Dictionary, threat: Vector3, delta: float) -> bool:
-	if bool(entry.named) or str(entry.get("reaction", "")) != "fear" or spatial_service == null:
+	if (bool(entry.named) and not bool(entry.get("regional", false))) or str(entry.get("reaction", "")) != "fear" or spatial_service == null:
 		return false
 	var route: Array = entry.get("safety_route", [])
 	if route.is_empty():
@@ -683,7 +784,7 @@ func _seek_safety(entry: Dictionary, threat: Vector3, delta: float) -> bool:
 		return true
 	var direction := offset.normalized()
 	_face(entry.node, route[index], delta, true)
-	var facing_error := absf(wrapf(atan2(-direction.x, -direction.z) - entry.node.rotation.y, -PI, PI))
+	var facing_error := absf(wrapf(_wanted_yaw(entry.node, direction) - entry.node.rotation.y, -PI, PI))
 	if facing_error > 0.70:
 		_brake_actor(entry, delta)
 		return true
@@ -696,6 +797,23 @@ func _try_social_exchange(entry: Dictionary) -> void:
 		return
 	if entry.node.global_position.distance_squared_to(player.global_position) > 36.0:
 		return
+	for exchange: Dictionary in CastProfile.life_data().get("exchanges", []):
+		if str(exchange.zone) != str(host.current_zone_id) or str(exchange.a) != str(entry.id):
+			continue
+		if exchange.has("requires_flag") and str(host.story_state.get_flag(str(exchange.requires_flag), "")) != str(exchange.get("requires_value", "")):
+			continue
+		for other: Dictionary in _crowd_index.nearby(entry.node.global_position, 4.0):
+			if str(other.id) != str(exchange.b) or not other.node.is_visible_in_tree() or Presence.protected(other.node) or float(other.get("reaction_time", 0.0)) > 0.0 or float(other.get("motion_speed", 0.0)) > 0.05:
+				continue
+			if other.node.get_node_or_null("Person") != null and not other.node.get_node("Person").visible:
+				continue
+			if not Presence.can_see(entry.node, other.node, 4.0):
+				continue
+			var words := str(exchange.lines)
+			if exchange.has("quest") and host.quests.is_completed(str(exchange.quest)):
+				words = str(exchange.get("after", words))
+			_social_pair(entry, other, words)
+			return
 	# One authored exchange establishes the sample standard. Do not make every
 	# stranger repeat the same conversation or invent a shared relationship.
 	if str(entry.id) != "blacksmith_tor":
@@ -721,12 +839,46 @@ func _try_social_exchange(entry: Dictionary) -> void:
 		host.hud.toast(exchange, 5.0)
 		return
 
+func _social_pair(first: Dictionary, second: Dictionary, words: String) -> void:
+	social_cooldown = 65.0
+	line_cooldown = 12.0
+	for pair: Array in [[first,second], [second,first]]:
+		var entry: Dictionary = pair[0]
+		var other: Dictionary = pair[1]
+		_release_activity(entry)
+		entry.social_time = 5.0
+		entry.node.set_meta("cast_social_owner", get_instance_id())
+		if is_instance_valid(entry.get("face")):
+			entry.face.set_focus_target(other.node)
+			entry.face.set_expression("warmth")
+	host.hud.toast(words, 5.0)
+
+func _on_perception_cue(position: Vector3, radius: float, danger: bool) -> void:
+	if not is_instance_valid(host) or not bool(host.game_started) or get_tree().paused:
+		return
+	for entry: Dictionary in _crowd_index.nearby(position, radius):
+		if not is_instance_valid(entry.node) or Presence.protected(entry.node) or not entry.node.is_visible_in_tree():
+			continue
+		var guard := str(CastProfile.presence_profile(str(entry.id)).get("danger_response", "")) == "guard"
+		entry.reaction = ("anger" if guard else "fear") if danger else "attention"
+		entry.reaction_time = maxf(float(entry.get("reaction_time", 0.0)), 2.5)
+		entry.threat_position = position
+		if is_instance_valid(entry.get("face")):
+			entry.face.set_expression(str(entry.reaction) if danger else "concern")
+
 func _exit_tree() -> void:
 	for entry: Dictionary in actors:
 		_release_activity(entry)
 	activity_reservations.clear()
 	if is_instance_valid(story_source) and story_source.changed.is_connected(_on_story_changed):
 		story_source.changed.disconnect(_on_story_changed)
+	if is_instance_valid(host):
+		if is_instance_valid(host.quests) and host.quests.changed.is_connected(_on_story_changed):
+			host.quests.changed.disconnect(_on_story_changed)
+		if is_instance_valid(host.day_night) and host.day_night.phase_changed.is_connected(_on_phase_changed):
+			host.day_night.phase_changed.disconnect(_on_phase_changed)
+		if is_instance_valid(host.audio) and host.audio.perception_cue.is_connected(_on_perception_cue):
+			host.audio.perception_cue.disconnect(_on_perception_cue)
 
 func get_routine_snapshot() -> Array:
 	var snapshot: Array = []
@@ -797,16 +949,21 @@ func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.Z
 				driver.set_locomotion_motion(direction * speed, true)
 			else:
 				driver.set_locomotion(clampf(speed / 2.0,0.0,0.70),direction,true)
+		if bool(entry.get("regional", false)):
+			driver.set_carried_activity("carry" if speed > 0.05 and int(entry.target) == 1 and routine_phase != "night" else "")
 	entry.phase = float(entry.phase) + get_process_delta_time() * (0.8 + speed * 1.7)
 
 func _face(node: Node3D, target: Vector3, delta: float, walking: bool = false) -> void:
 	var offset := target - node.global_position
 	offset.y = 0.0
 	if offset.length() < 0.05: return
-	var wanted := atan2(-offset.x,-offset.z)
+	var wanted := _wanted_yaw(node, offset)
 	var turn_error: float = wrapf(wanted - node.rotation.y, -PI, PI)
 	var turn_limit: float = (ROUTE_TURN_RATE if walking else ATTENTION_TURN_RATE) * delta
 	node.rotation.y += clampf(turn_error, -turn_limit, turn_limit)
+
+func _wanted_yaw(node: Node3D, direction: Vector3) -> float:
+	return atan2(-direction.x, -direction.z)-float(node.get_meta("cast_forward_offset", 0.0))
 
 func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_value: float):
 	var role := str(CROWD_VISUAL_ROLES[index % CROWD_VISUAL_ROLES.size()])

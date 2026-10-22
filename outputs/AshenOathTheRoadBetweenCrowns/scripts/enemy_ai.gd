@@ -100,6 +100,25 @@ var had_player_contact := false
 var native_face: Node
 var presence_home_yaw := 0.0
 var presence_clock := 0.0
+var heard_cue_deadline := 0
+
+func listen_to_world(audio: Node) -> void:
+	if audio != null and not audio.perception_cue.is_connected(_on_world_sound):
+		audio.perception_cue.connect(_on_world_sound)
+
+func _on_world_sound(position: Vector3, radius: float, _danger: bool) -> void:
+	if dead or is_boss or not encounter_active or can_see_player or Time.get_ticks_msec() < heard_cue_deadline:
+		return
+	if global_position.distance_squared_to(position) > radius*radius or position.distance_to(home_position) > leash_radius-1.0 or global_position.distance_squared_to(position) < 0.25:
+		return
+	if spatial_service == null or not spatial_service.validate_segment(home_position, position, contact_radius):
+		return
+	heard_cue_deadline = Time.get_ticks_msec()+5000
+	ambient_state = "investigating"
+	ambient_target = position
+	ambient_remaining = 4.0
+	navigation_target = Vector3.INF
+	navigation_refresh_time = 0.0
 
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
@@ -702,7 +721,7 @@ func _update_ambient_life(delta: float) -> void:
 			var angle := phase + float(ambient_cycle) * 1.7
 			var radius := 1.35 if behavior_profile == "brute" else 2.5
 			var candidate := home_position + Vector3(cos(angle), 0, sin(angle)) * minf(radius, maxf(0.5, leash_radius - 1.0))
-			ambient_target = candidate if spatial_service != null and spatial_service.validate_runtime_segment(home_position, candidate, 0.55) else home_position
+			ambient_target = candidate if spatial_service != null and spatial_service.validate_runtime_segment(home_position, candidate, 0.55, self) else home_position
 			ambient_remaining = 4.0 + phase * 0.2
 		navigation_target = Vector3.INF
 		navigation_refresh_time = 0.0
@@ -1828,6 +1847,11 @@ func _animate_visuals(delta: float) -> void:
 	var moving_speed = Vector2(velocity.x, velocity.z).length()
 	var movement_weight = clamp(moving_speed / max(move_speed, 0.1), 0.0, 1.0)
 	if animation_driver != null and animation_driver.is_valid():
+		if is_boss:
+			if not animation_driver.character_root.has_meta("cast_viewer"):
+				animation_driver.character_root.set_meta("cast_viewer", player)
+			var presence := "recovery" if attack_recovery_time > 0.0 else ("listening" if enemy_id == "bell_eater" else ambient_state)
+			animation_driver.set_creature_presence(enemy_id, presence, 0.8 if movement_weight < 0.1 else 0.2)
 		_update_feedback_material()
 		_animate_boss_identity(delta)
 		if windup_marker != null:

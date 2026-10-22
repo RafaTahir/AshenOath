@@ -2,14 +2,19 @@
 
 Parent: [CAST-000](CAST-000.md).
 Dependencies: CAST-001.
-Implementation: Ghoulkin-family reference behavior implemented; other families pending review.
+Implementation: Existing family habits extended with bounded audible-cue investigation; runtime/user acceptance pending.
 Compilation: see [STATUS](STATUS.md).
 User acceptance: Pending.
 Publication: see STATUS; independent of acceptance.
 
 ## Implementation And Ownership
 
-Use existing enemy perception, navigation, leash, encounter activation and attack ownership. Ghoulkin stalkers, raiders and brutes patrol, watch/scavenge, search the last perceived location and return home between fights. Combat starts through the existing perception contract with unchanged health/damage/cooldowns. No duplicate populations or off-camera kills.
+Use existing enemy perception, navigation, leash, encounter activation and attack
+ownership. Ghoulkin variants, gravebound and hostile road humans retain their
+existing family habits. A heard local cue can select an investigation point,
+but cannot manufacture player knowledge or start an attack without perception.
+Patrol sweeps ignore the querying body's own collider. Health, damage, attack
+cooldowns, population and encounter gates remain unchanged.
 
 ## User Acceptance
 
@@ -21,6 +26,6 @@ Use existing enemy perception, navigation, leash, encounter activation and attac
 
 Use the master ownership, compatibility and build-only contract. Keep existing
 actor/quest/save IDs and contents. No agent runtime tests, browser QA, benchmarks
-or automatic acceptance. The user reviews the Greyfen reference standard before
-wider character/boss/regional authoring.
+or automatic acceptance. Wider implementation is now authorized; visual and
+behavioral acceptance remains the user's separate review.
 

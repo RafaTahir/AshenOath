@@ -160,6 +160,16 @@ func refresh() -> void:
 	var companion: Node = host.zone_root.get_node_or_null("Bracken")
 	if companion != null and companion.has_method("refresh_regional_scents"):
 		companion.refresh_regional_scents(self)
+	var life: Node = host.zone_root.get_node_or_null("GreyfenLifeController")
+	if life == null:
+		life = host.zone_root.get_node_or_null("RegionalLifeController")
+	if life == null and not preload("res://scripts/story_cast_profile.gd").life_data().get("zones", {}).get(zone, {}).is_empty():
+		life = load("res://scripts/greyfen_life_controller.gd").new()
+		life.name = "RegionalLifeController"
+		host.zone_root.add_child(life)
+		life.configure(host, str(host.settings.settings.get("quality_preset", "balanced")), true)
+	if life != null:
+		life.enroll_region()
 	host.interaction_focus_dirty = true
 	_refreshing = false
 

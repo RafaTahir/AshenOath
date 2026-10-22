@@ -538,6 +538,27 @@ func clear_life_activity() -> void:
 func get_skeleton() -> Skeleton3D:
 	return skeleton
 
+func set_carried_activity(kind: String) -> void:
+	if kind == "" and life_modifier == null:
+		return
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.carried_activity = kind
+
+func set_creature_presence(id: String, intent: String, amount: float) -> void:
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.creature_id = id
+		life_modifier.creature_intent = intent
+		life_modifier.creature_amount = clampf(amount, 0.0, 1.0)
+
+func _ensure_life_modifier() -> void:
+	if life_modifier == null and is_valid() and skeleton != null:
+		life_modifier = load("res://scripts/character_life_modifier.gd").new()
+		life_modifier.name = "CharacterLifePose"
+		skeleton.add_child(life_modifier)
+		life_modifier.configure(character_root, self)
+
 func get_animation_player() -> AnimationPlayer:
 	return animation_player
 

@@ -2,7 +2,7 @@
 
 Parent: [CAST-000](CAST-000.md).
 Dependencies: CAST-001, CAST-003, CAST-005.
-Implementation: Existing relationship memory connected to mood; Greyfen social sample implemented; full scene authoring pending review.
+Implementation: Existing memory acknowledgements and eight regional social exchanges implemented; runtime/user acceptance pending.
 Compilation: see [STATUS](STATUS.md).
 User acceptance: Pending.
 Publication: see STATUS; independent of acceptance.
@@ -15,12 +15,12 @@ Read existing witnessed relationship events for distrust, warmth and acknowledge
 
 1. Compare a legitimate promise kept/broken and Continue without duplicate relationship rewards.
 2. Check private reports do not become public village gossip.
-3. After sample approval, author cast-specific exchanges from actual relationships and regional public outcomes; do not give absent people omniscient knowledge.
+3. Observe cast-specific exchanges between actually nearby people, including Senn only after testimony; absent people must not speak or learn private choices.
 
 ## Boundaries
 
 Use the master ownership, compatibility and build-only contract. Keep existing
 actor/quest/save IDs and contents. No agent runtime tests, browser QA, benchmarks
-or automatic acceptance. The user reviews the Greyfen reference standard before
-wider character/boss/regional authoring.
+or automatic acceptance. Wider implementation is now authorized; visual and
+behavioral acceptance remains the user's separate review.
 

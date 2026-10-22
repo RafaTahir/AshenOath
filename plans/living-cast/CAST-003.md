@@ -2,7 +2,7 @@
 
 Parent: [CAST-000](CAST-000.md).
 Dependencies: CAST-001, CAST-002.
-Implementation: Reference performance implemented; runtime/user acceptance pending.
+Implementation: Shared performance extended to retained rigs and additive work/carry/boss poses; runtime/user acceptance pending.
 Compilation: see [STATUS](STATUS.md).
 User acceptance: Pending.
 Publication: see STATUS; independent of acceptance.
@@ -21,6 +21,6 @@ Use the shared head modifier for blended facial emotion, bounded eye/head focus 
 
 Use the master ownership, compatibility and build-only contract. Keep existing
 actor/quest/save IDs and contents. No agent runtime tests, browser QA, benchmarks
-or automatic acceptance. The user reviews the Greyfen reference standard before
-wider character/boss/regional authoring.
+or automatic acceptance. Wider implementation is now authorized; visual and
+behavioral acceptance remains the user's separate review.
 

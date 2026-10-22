@@ -100,7 +100,7 @@ func configure(root: Node3D, role: String) -> bool:
 		for candidate in root.find_children("*", "Skeleton3D", true, false):
 			skeleton = candidate as Skeleton3D
 			break
-	if skeleton != null and (role_id not in NATIVE_MONSTER_ROLES or role_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]):
+	if skeleton != null:
 		head_modifier = skeleton.get_node_or_null("StoryHeadModifier") as StoryHeadModifier
 		if head_modifier == null:
 			head_modifier = StoryHeadModifier.new()

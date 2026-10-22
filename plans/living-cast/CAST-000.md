@@ -8,9 +8,11 @@ Baseline: a69c342, startup-menu-20261021. Keep the complete existing game.
 
 Build a complete Greyfen reference (Anwen, Tor, an ordinary villager, work,
 attention, interruption, conversation, and the first Ghoulkin family encounter).
-The user reviews this standard before wider visual, boss and regional rollout.
-Compilation is allowed; agent gameplay, browsers, screenshots and benchmarks
-are not authorized. A reference build is not full ten-ticket acceptance.
+The later instruction, "Implement all that haven't been implemented in the
+pipeline," authorizes the remaining source/asset rollout. It does not approve
+the reference's appearance or behavior. Compilation is allowed; agent gameplay,
+browsers, screenshots and benchmarks remain unauthorized. Implementation and
+publication are not ten-ticket user acceptance. See [current delivery](ROLLOUT_IMPLEMENTATION.md).
 
 ## Ordered Tickets
 

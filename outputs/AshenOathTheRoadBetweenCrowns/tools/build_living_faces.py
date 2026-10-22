@@ -1,4 +1,4 @@
-"""Compile the CAST Greyfen facial sample into retained, skinned assemblies.
+"""Compile shared facial controls into the retained, skinned human assemblies.
 
 The source atlas and mesh topology are retained. New facial joints deform the
 existing skin, brows and eyes; no detached face geometry or runtime mesh work.
@@ -15,7 +15,7 @@ import build_opening_character_assemblies as assembly
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = assembly.OUTPUT
-SAMPLE_ROLES = ("anwen", "villager_male", "villager_worker")
+FACE_ROLES = tuple(assembly.ROLES)
 CONTROLS = (
     "Face_Eye_L", "Face_Eye_R", "Face_LidUpper_L", "Face_LidUpper_R",
     "Face_LidLower_L", "Face_LidLower_R", "Face_Brow_L", "Face_Brow_R",
@@ -78,7 +78,11 @@ def compile_role(role_name: str) -> dict:
     regions: list[tuple[int, int, str]] = []
     offset = 0
     for name in assembly.ROLES[role_name]["sources"]:
-        source = json.loads((assembly.SOURCE / name).read_text())
+        source_root = assembly.RANGER_SOURCE if name == "Male_Ranger_Runtime.gltf" else assembly.SOURCE
+        source = json.loads((source_root / name).read_text())
+        selected = assembly.ROLES[role_name].get("meshes", {}).get(name)
+        if selected is not None:
+            assembly.select_meshes(source, selected, name)
         for mesh in source["meshes"]:
             for part in mesh["primitives"]:
                 count = source["accessors"][part["attributes"]["POSITION"]]["count"]
@@ -177,7 +181,7 @@ def compile_role(role_name: str) -> dict:
 def main() -> None:
     manifest_path = OUTPUT / "OPENING_CHARACTER_ASSEMBLY_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text())
-    for role in SAMPLE_ROLES:
+    for role in FACE_ROLES:
         manifest["roles"][role] = compile_role(role)
         print(f"CAST FACE COMPILED {role}: {len(CONTROLS)} weighted controls")
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

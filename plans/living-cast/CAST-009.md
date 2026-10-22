@@ -1,8 +1,8 @@
 # CAST-009 - Six-World Integration
 
 Parent: [CAST-000](CAST-000.md).
-Dependencies: CAST-002 through CAST-008 and sample approval.
-Implementation: Regional rollout not started; existing game content preserved.
+Dependencies: CAST-002 through CAST-008; wider implementation authorized by the latest pipeline instruction.
+Implementation: Regional routines, public-outcome work and co-present exchanges implemented; runtime/user acceptance pending.
 Compilation: see [STATUS](STATUS.md).
 User acceptance: Pending.
 Publication: see STATUS; independent of acceptance.
@@ -21,6 +21,6 @@ Greyfen: Nessa/Jory/Tor/Anwen and village aftermath. Wychwood: Iven/Edda and wat
 
 Use the master ownership, compatibility and build-only contract. Keep existing
 actor/quest/save IDs and contents. No agent runtime tests, browser QA, benchmarks
-or automatic acceptance. The user reviews the Greyfen reference standard before
-wider character/boss/regional authoring.
+or automatic acceptance. Wider implementation is now authorized; visual and
+behavioral acceptance remains the user's separate review.
 

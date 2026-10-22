@@ -358,7 +358,16 @@ func refresh() -> void:
 		if not enabled:
 			host._remove_interaction_candidate(area)
 	if worker_group != null:
-		worker_group.visible = not _flag("mill_workers_rescued")
+		var returned_to_work := _flag("mill_workers_rescued") and _flag("ashwing_defeated")
+		worker_group.visible = not _flag("mill_workers_rescued") or returned_to_work
+		if returned_to_work:
+			for body: Node3D in worker_bodies:
+				if str(body.get_meta("locomotion_owner", "")) == "mill_escort":
+					body.remove_meta("locomotion_owner")
+					for child: Node in body.get_children():
+						child.remove_meta("locomotion_owner")
+			for label: Node in worker_group.find_children("*", "Label3D", true, false):
+				label.visible = false
 	host.interaction_focus_dirty = true
 	var saga := get_node_or_null("SixWorldStories")
 	if saga != null:
@@ -807,7 +816,7 @@ func _build_workers(root: Node3D) -> void:
 	worker_group.name = "MillWorkersOnTheEscapeRoute"
 	root.add_child(worker_group)
 	var start := Vector3(-4.4, 0, -2.1)
-	worker_group.position = start.lerp(escort_target, clampf(float(host.story_state.get_flag("mill_escort_progress", 0.0)), 0.0, 1.0))
+	worker_group.position = start.lerp(escort_target, 1.0 if _flag("mill_workers_rescued") else clampf(float(host.story_state.get_flag("mill_escort_progress", 0.0)), 0.0, 1.0))
 	for index in range(2):
 		var worker = host._make_role_visual("generic_villager_01" if index == 0 else "vargan_servant", "characters", Vector3.ONE)
 		if worker != null:
@@ -833,6 +842,8 @@ func _build_workers(root: Node3D) -> void:
 	_label(worker_group, "MILL WORKERS\nStay nearby to lead them to clean air", Vector3(0.35, 2.05, 0))
 
 func _worker_motion(world_velocity: Vector3, delta: float = 0.016667) -> void:
+	if _flag("mill_workers_rescued") and _flag("ashwing_defeated"):
+		return
 	if world_velocity.length_squared() > 0.001:
 		var wanted_yaw: float = atan2(-world_velocity.x, -world_velocity.z)
 		for body: Node3D in worker_bodies:

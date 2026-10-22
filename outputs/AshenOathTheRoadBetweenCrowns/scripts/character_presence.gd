@@ -25,6 +25,8 @@ static func can_see(actor: Node3D, target: Node3D, radius: float) -> bool:
 		return false
 	var offset := target.global_position - actor.global_position
 	var forward := actor.global_basis.z if bool(actor.get_meta("source_forward_positive_z", false)) else -actor.global_basis.z
+	if actor.has_meta("cast_forward_axis"):
+		forward = (actor.global_basis*(actor.get_meta("cast_forward_axis") as Vector3)).normalized()
 	if offset.length_squared() > 1.0 and forward.dot(offset.normalized()) < -0.15:
 		return false
 	var query := PhysicsRayQueryParameters3D.create(actor.global_position + Vector3.UP * eye_height(actor), target.global_position + Vector3.UP * eye_height(target), 1)

@@ -6,9 +6,9 @@
     "kael": {
       "role": "kael",
       "runtime": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
-      "runtime_sha256": "76b9abd7664a1a230f74501d03e6388553ab933732d4e1ab66c399a34286f276",
+      "runtime_sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77",
       "binary": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
-      "binary_sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926",
+      "binary_sha256": "3bdc20f6ddf3861f984408ff42af64ccf2e9c8993700c783859aea2e14a743a1",
       "atlas": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
       "atlas_sha256": "c9494c06134cc2e7dff2558307efe49e677b9a35127dfbdd70f5315ae9ea3101",
       "sources": [
@@ -16,10 +16,27 @@
         "Male_Head.gltf",
         "Hair_SimpleParted.gltf"
       ],
+      "source_license_files": [
+        "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+      ],
       "material_count": 1,
       "mesh_count": 1,
       "primitive_count": 1,
-      "skin_count": 1
+      "skin_count": 1,
+      "facial_rig": "living_face_v1",
+      "facial_controls": {
+        "Face_Eye_L": 278,
+        "Face_Eye_R": 278,
+        "Face_LidUpper_L": 44,
+        "Face_LidUpper_R": 44,
+        "Face_LidLower_L": 46,
+        "Face_LidLower_R": 46,
+        "Face_Brow_L": 337,
+        "Face_Brow_R": 337,
+        "Face_Mouth_L": 119,
+        "Face_Mouth_R": 130,
+        "Face_Jaw": 282
+      }
     },
     "anwen": {
       "role": "anwen",
@@ -94,9 +111,9 @@
     "villager_female": {
       "role": "villager_female",
       "runtime": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
-      "runtime_sha256": "6ccee1bf02f48738cccb95774a686e4ba85efb78b425196d499a469efb921153",
+      "runtime_sha256": "d0a71a6756cc090f51adb1113019c07c2af90aae25a55d7661537f597f38cd28",
       "binary": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.bin",
-      "binary_sha256": "b4e8b543a3dd8510d097f6c63af461c6b61f2a3ed62f64748e09a7f556d989f9",
+      "binary_sha256": "1d5c8314084cab3ea95f1efde3daa9ee22bc8ee95a4697801405bbe4f35729db",
       "atlas": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.png",
       "atlas_sha256": "a7f0f8fd3b8fc57974c2d93b44e1149aba6a7ae87d3a4bf087041ad3381f0ddb",
       "sources": [
@@ -104,10 +121,27 @@
         "Female_Head.gltf",
         "Hair_Buns.gltf"
       ],
+      "source_license_files": [
+        "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+      ],
       "material_count": 1,
       "mesh_count": 1,
       "primitive_count": 1,
-      "skin_count": 1
+      "skin_count": 1,
+      "facial_rig": "living_face_v1",
+      "facial_controls": {
+        "Face_Eye_L": 278,
+        "Face_Eye_R": 278,
+        "Face_LidUpper_L": 43,
+        "Face_LidUpper_R": 43,
+        "Face_LidLower_L": 46,
+        "Face_LidLower_R": 46,
+        "Face_Brow_L": 472,
+        "Face_Brow_R": 472,
+        "Face_Mouth_L": 137,
+        "Face_Mouth_R": 150,
+        "Face_Jaw": 294
+      }
     },
     "villager_worker": {
       "role": "villager_worker",
@@ -147,9 +181,9 @@
     "villager_hooded": {
       "role": "villager_hooded",
       "runtime": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
-      "runtime_sha256": "34fc435ac57da9bbeaa59854340bd298e74b821eb13157694c7cf38c0149d815",
+      "runtime_sha256": "54739fadbd5e4f3f398a07c78094adae7ddb9ad3a28b8b67e785fdd6c0ddf6f8",
       "binary": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.bin",
-      "binary_sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d",
+      "binary_sha256": "c8ef3367e3e9d628458e00c9b84620e93a68c22e5950d7cccdf91450bd055d00",
       "atlas": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png",
       "atlas_sha256": "06641f7bfa0ab6fb90e0aa07e64da1899d7d185b3859f255759c80102c85f80c",
       "sources": [
@@ -157,17 +191,34 @@
         "Male_Head.gltf",
         "Hair_Buzzed.gltf"
       ],
+      "source_license_files": [
+        "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt"
+      ],
       "material_count": 1,
       "mesh_count": 1,
       "primitive_count": 1,
-      "skin_count": 1
+      "skin_count": 1,
+      "facial_rig": "living_face_v1",
+      "facial_controls": {
+        "Face_Eye_L": 278,
+        "Face_Eye_R": 278,
+        "Face_LidUpper_L": 44,
+        "Face_LidUpper_R": 44,
+        "Face_LidLower_L": 46,
+        "Face_LidLower_R": 46,
+        "Face_Brow_L": 337,
+        "Face_Brow_R": 337,
+        "Face_Mouth_L": 119,
+        "Face_Mouth_R": 130,
+        "Face_Jaw": 282
+      }
     },
     "bandit_deserter": {
       "role": "bandit_deserter",
       "runtime": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
-      "runtime_sha256": "93869760db4a8568c4a221806aa86be1bd159c8fb830f076904b502f3010d1ec",
+      "runtime_sha256": "8be821b71152120f4a9516e732690318b68d5342cbd114847b67da5ef1baca64",
       "binary": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.bin",
-      "binary_sha256": "015173382bfbff2178c9d15f0c3e1d2a704b7039a38bbb0be0113683e9561e5d",
+      "binary_sha256": "985ab2e38a0d59fbf318788b1d154b9568e414cb9c7a6827c243b9c7b8dd1639",
       "atlas": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png",
       "atlas_sha256": "f22a8f798bb7232386805add6ac58db0cf506702eac6a61ab4cdfa1c202ce686",
       "sources": [
@@ -182,14 +233,28 @@
       "material_count": 1,
       "mesh_count": 1,
       "primitive_count": 1,
-      "skin_count": 1
+      "skin_count": 1,
+      "facial_rig": "living_face_v1",
+      "facial_controls": {
+        "Face_Eye_L": 278,
+        "Face_Eye_R": 278,
+        "Face_LidUpper_L": 44,
+        "Face_LidUpper_R": 44,
+        "Face_LidLower_L": 46,
+        "Face_LidLower_R": 46,
+        "Face_Brow_L": 337,
+        "Face_Brow_R": 337,
+        "Face_Mouth_L": 119,
+        "Face_Mouth_R": 130,
+        "Face_Jaw": 282
+      }
     },
     "bandit_tracker": {
       "role": "bandit_tracker",
       "runtime": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
-      "runtime_sha256": "0e3f198c5cec76838ed0bcb2b65482d246762e767e392b2447a99ad1b325b681",
+      "runtime_sha256": "a0baa9fc1b778ad116dedfd730bd269a9367d0df1a4e6094c4a1b425a1ead76b",
       "binary": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.bin",
-      "binary_sha256": "f8814d0ac031aa1eb8ec95d69661bd663485c05d0a14b48cfcbf86404a74c80b",
+      "binary_sha256": "eb21c8c182c81a11f18fc0f1c0b3a0d8890a4b2bea3177d668683d6d20877dbf",
       "atlas": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png",
       "atlas_sha256": "17760978251d0b979c6b0c543ba956ae69d77eb8da39a7c8cc0c5a6acd1bc8c7",
       "sources": [
@@ -205,7 +270,21 @@
       "material_count": 1,
       "mesh_count": 1,
       "primitive_count": 1,
-      "skin_count": 1
+      "skin_count": 1,
+      "facial_rig": "living_face_v1",
+      "facial_controls": {
+        "Face_Eye_L": 278,
+        "Face_Eye_R": 278,
+        "Face_LidUpper_L": 44,
+        "Face_LidUpper_R": 44,
+        "Face_LidLower_L": 46,
+        "Face_LidLower_R": 46,
+        "Face_Brow_L": 337,
+        "Face_Brow_R": 337,
+        "Face_Mouth_L": 119,
+        "Face_Mouth_R": 130,
+        "Face_Jaw": 282
+      }
     }
   }
 }

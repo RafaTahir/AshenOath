@@ -2,14 +2,19 @@
 
 Parent: [CAST-000](CAST-000.md).
 Dependencies: CAST-001, CAST-004.
-Implementation: Greyfen reactive sample implemented; regional rollout pending sample review.
+Implementation: Local sight/sound reactions and regional safe-route responses implemented; runtime/user acceptance pending.
 Compilation: see [STATUS](STATUS.md).
 User acceptance: Pending.
 Publication: see STATUS; independent of acceptance.
 
 ## Implementation And Ownership
 
-Use bounded local sight queries and the game's registered active-enemy list. React to nearby drawn weapons, attacks and casting; nearby moving villagers can seek a farther clear point on their existing safe route. Essential named speakers remain reachable and can warn/brace. Cooldowns prevent repeated notices. No crime system or changes to civilian death rules.
+Use bounded local sight queries and the game's registered active-enemy list.
+Spatial audio emits location/radius cues only for selected audible events.
+Nearby civilians investigate/brace or seek a clear point on their existing
+safe route; guard-role actors watch rather than acquire civilian fear behavior.
+Protected interactions take precedence and quest speakers stay usable.
+Cooldowns prevent repeated notices. No crime system or civilian death changes.
 
 ## User Acceptance
 
@@ -21,6 +26,6 @@ Use bounded local sight queries and the game's registered active-enemy list. Rea
 
 Use the master ownership, compatibility and build-only contract. Keep existing
 actor/quest/save IDs and contents. No agent runtime tests, browser QA, benchmarks
-or automatic acceptance. The user reviews the Greyfen reference standard before
-wider character/boss/regional authoring.
+or automatic acceptance. Wider implementation is now authorized; visual and
+behavioral acceptance remains the user's separate review.
 

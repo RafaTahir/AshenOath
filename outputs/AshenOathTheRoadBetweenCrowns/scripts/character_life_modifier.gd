@@ -9,14 +9,31 @@ var elapsed := 0.0
 var pose_weight := 0.0
 var arms: Array[Dictionary] = []
 var spine := -1
+var head := -1
+var wings: Array[int] = []
+var carried_activity := ""
+var creature_id := ""
+var creature_intent := ""
+var creature_amount := 0.0
+var creature_weight := 0.0
+var tool: Node3D
+var tool_kind := ""
 
 func configure(body: Node3D, motion: Node) -> void:
 	actor = body
 	driver = motion
 	var skeleton := get_skeleton()
+	for alias: String in ["Head", "head", "head_01", "DEF-head"]:
+		head = skeleton.find_bone(alias)
+		if head >= 0:
+			break
+	for alias: String in ["Wing1_L", "Wing1_R"]:
+		var bone := skeleton.find_bone(alias)
+		if bone >= 0:
+			wings.append(bone)
 	spine = skeleton.find_bone("spine_03")
 	if spine < 0:
-		for alias: String in ["Chest", "chest", "Spine", "spine_02"]:
+		for alias: String in ["Chest", "chest", "Spine", "spine_02", "Body"]:
 			spine = skeleton.find_bone(alias)
 			if spine >= 0:
 				break
@@ -34,6 +51,8 @@ func _process_modification() -> void:
 		return
 	if bool(driver.dead) or bool(driver.distance_suspended) or driver.has_active_action():
 		pose_weight = 0.0
+		if is_instance_valid(tool):
+			tool.visible = false
 		return
 	var delta := minf(get_process_delta_time(), 0.05)
 	elapsed += delta
@@ -41,15 +60,20 @@ func _process_modification() -> void:
 	var viewer: Node3D = actor.get_meta("cast_viewer", null)
 	if is_instance_valid(viewer):
 		near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
-	var requested := activity != "" and near and not bool(driver.story_dialogue_active)
+	var effective := activity if activity != "" else carried_activity
+	var requested := effective != "" and near and not bool(driver.story_dialogue_active)
+	_update_tool(effective, requested)
+	creature_weight = move_toward(creature_weight, creature_amount if near and not bool(driver.story_dialogue_active) else 0.0, delta*3.0)
+	if creature_weight > 0.001:
+		_creature_pose(skeleton)
 	pose_weight = move_toward(pose_weight, 1.0 if requested else 0.0, delta * 4.5)
 	if pose_weight <= 0.001:
 		return
 	if spine >= 0:
 		var base := skeleton.get_bone_pose_rotation(spine)
-		var bend := 0.12 if activity == "scavenge" else 0.0
+		var bend := 0.12 if effective == "scavenge" else 0.0
 		skeleton.set_bone_pose_rotation(spine, base * Quaternion(Vector3.RIGHT, (bend + sin(elapsed * 1.4) * 0.007) * pose_weight))
-	if activity in ["watch", "lookout", "idle", "remember"]:
+	if effective in ["watch", "lookout", "idle", "remember", "rest"]:
 		return
 	var forward: Vector3 = driver.get_visible_forward()
 	var right := forward.cross(Vector3.UP).normalized()
@@ -61,7 +85,7 @@ func _process_modification() -> void:
 		var across := -0.12 * float(arm.side)
 		var depth := 0.36
 		var drop := 0.58
-		match activity:
+		match effective:
 			"forge", "repair":
 				depth = 0.55
 				drop = 0.48 - (maxf(0.0, sin(elapsed * 3.1)) * 0.42 if float(arm.side) > 0 else 0.0)
@@ -87,8 +111,51 @@ func _process_modification() -> void:
 			"care":
 				depth = 0.42 if float(arm.side) > 0 else 0.15
 				drop = 0.42
+			"carry", "check_supplies", "sort_supplies":
+				across = -0.18*float(arm.side)
+				depth = 0.26
+				drop = 0.57
 		var goal := shoulder + (forward * depth + right * across - Vector3.UP * drop) * reach
 		_solve_arm(skeleton, arm, hand.lerp(goal, pose_weight))
+
+func _update_tool(kind: String, visible_now: bool) -> void:
+	var style := str({"repair":"hammer", "forge":"hammer", "read":"book", "notice_board":"book", "check_rope":"rope", "well":"rope", "bake":"bread", "kitchen":"bread", "care":"cloth", "carry":"supply", "check_supplies":"supply", "sort_supplies":"supply", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "herb_stall":"bowl"}.get(kind, ""))
+	if style != "" and style != tool_kind:
+		if is_instance_valid(tool):
+			tool.queue_free()
+		tool = preload("res://scripts/character_presentation.gd").attach_activity_tool(actor, style)
+		tool_kind = style
+	if is_instance_valid(tool):
+		tool.visible = visible_now and style == tool_kind
+
+func _creature_pose(skeleton: Skeleton3D) -> void:
+	var recovery := creature_intent == "recovery"
+	var lean := 0.0
+	var tilt := 0.0
+	match creature_id:
+		"bell_eater":
+			tilt = sin(elapsed*0.75)*0.09 if not recovery else 0.05
+			lean = 0.04 if recovery else 0.015
+		"bog_wretch":
+			lean = 0.08 if recovery else 0.035
+			tilt = sin(elapsed*0.45)*0.04
+		"rootbound_colossus":
+			lean = 0.07 if recovery else -0.035
+		"ashwing":
+			for index in wings.size():
+				var bone := wings[index]
+				var fold := (0.10 if recovery else 0.025)*(-1.0 if index == 0 else 1.0)*creature_weight
+				skeleton.set_bone_pose_rotation(bone, skeleton.get_bone_pose_rotation(bone)*Quaternion(Vector3.FORWARD, fold))
+			lean = 0.04 if recovery else 0.0
+		"halvern_boss":
+			lean = 0.025 if recovery else -0.015
+		"white_hart_avatar":
+			tilt = sin(elapsed*0.32)*0.025
+			lean = 0.035 if recovery else 0.0
+	if spine >= 0:
+		skeleton.set_bone_pose_rotation(spine, skeleton.get_bone_pose_rotation(spine)*Quaternion(Vector3.RIGHT, lean*creature_weight))
+	if head >= 0:
+		skeleton.set_bone_pose_rotation(head, skeleton.get_bone_pose_rotation(head)*Quaternion(Vector3.FORWARD, tilt*creature_weight))
 
 func _world(skeleton: Skeleton3D, bone: int) -> Vector3:
 	return (skeleton.global_transform * skeleton.get_bone_global_pose(bone)).origin

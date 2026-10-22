@@ -11,7 +11,8 @@ var entries: Dictionary = {}
 var templates: Dictionary = {}
 var template_materials: Dictionary = {}
 var failed := false
-const FACIAL_SAMPLES := ["Anwen_A_Set_Atlas.gltf", "Villager_Male_Atlas.gltf", "Villager_Worker_Atlas.gltf"]
+const NativeFace = preload("res://tools/build_native_facial_bindings.gd")
+const FACIAL_ASSEMBLIES := ["Kael_A_Set_Atlas.gltf", "Anwen_A_Set_Atlas.gltf", "Villager_Male_Atlas.gltf", "Villager_Female_Atlas.gltf", "Villager_Worker_Atlas.gltf", "Villager_Hooded_Atlas.gltf", "Bandit_Deserter_Atlas.gltf", "Bandit_Tracker_Atlas.gltf", "Male_Ranger_Runtime.gltf"]
 
 func _initialize() -> void:
 	call_deferred("_compile")
@@ -52,6 +53,10 @@ func _compile() -> void:
 			continue
 		var visual := source_resource.instantiate() as Node3D
 		visual = helper._compose_player_body(visual, source, role)
+		if source.get_file() == "Male_Ranger_Runtime.gltf" and not NativeFace.compile(visual):
+			_failed("Required Ranger facial anatomy cannot be compiled: %s" % key)
+			visual.free()
+			continue
 		visual.name = role
 		var source_transform := visual.transform
 		var source_bounds: AABB = helper._calculate_node_bounds(visual)
@@ -130,7 +135,7 @@ func _compile_face_bindings(visual: Node3D, source: String) -> Dictionary:
 			var name := skeleton.get_bone_name(bone)
 			if name.begins_with("Face_"):
 				result[name] = {"skeleton":str(visual.get_path_to(skeleton)), "bone":name}
-	if source.get_file() in FACIAL_SAMPLES and result.size() != 11:
+	if source.get_file() in FACIAL_ASSEMBLIES and result.size() != 11:
 		_failed("Required CAST facial rig missing: %s; controls=%s" % [source, str(result.keys())])
 	return result
 

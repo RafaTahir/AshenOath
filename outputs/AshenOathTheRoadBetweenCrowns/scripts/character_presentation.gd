@@ -12,6 +12,69 @@ const OPENING_OCCUPATION_PROP_PATHS := [
 	CLERIC_STAFF_PATH,
 	"res://assets_external/environment/props/Axe_Bronze.fbx",
 ]
+static var _activity_meshes: Dictionary = {}
+static var _activity_materials: Dictionary = {}
+
+static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
+	var existing := owner.find_child("OccupationEquipment", true, false) as Node3D
+	if existing != null:
+		var hammer := existing.find_child("OccupationProp_blacksmith_tor", true, false) != null or existing.find_child("OccupationProp_forge_helper", true, false) != null
+		var book := existing.find_child("OccupationProp_walker_board", true, false) != null
+		if (style == "hammer" and hammer) or (style == "book" and book):
+			return existing
+	var skeleton := _find_skeleton(owner)
+	if skeleton == null:
+		return null
+	var bone := _find_bone_index(skeleton, ["hand_r", "RightHand", "Hand.R", "right_hand"])
+	if bone < 0:
+		return null
+	var hand := BoneAttachment3D.new()
+	hand.name = "CastActivityTool"
+	hand.bone_name = skeleton.get_bone_name(bone)
+	hand.bone_idx = bone
+	skeleton.add_child(hand)
+	var grip := Node3D.new()
+	hand.add_child(grip)
+	var inherited := skeleton.global_basis.get_scale().abs()
+	grip.scale = Vector3(1.0/maxf(inherited.x,0.001),1.0/maxf(inherited.y,0.001),1.0/maxf(inherited.z,0.001))
+	if style in ["hammer", "book"]:
+		var prop := _instantiate_prop(FORGE_HAMMER_PATH if style == "hammer" else OPENING_OCCUPATION_PROP_PATHS[1])
+		if prop != null:
+			grip.add_child(prop)
+			prop.rotation_degrees.z = 90.0 if style == "hammer" else 0.0
+			prop.scale *= 0.65 if style == "book" else 1.0
+		return hand
+	if not _activity_meshes.has(style):
+		var mesh: Mesh
+		if style == "rope":
+			var coil := TorusMesh.new()
+			coil.inner_radius = 0.07
+			coil.outer_radius = 0.105
+			coil.rings = 12
+			coil.ring_segments = 5
+			mesh = coil
+		elif style == "bread":
+			var board := BoxMesh.new()
+			board.size = Vector3(0.20,0.025,0.32)
+			mesh = board
+		else:
+			var vessel := CylinderMesh.new()
+			vessel.top_radius = 0.10 if style == "bowl" else 0.055
+			vessel.bottom_radius = 0.065 if style == "bowl" else 0.11
+			vessel.height = 0.10 if style == "bowl" else 0.23
+			vessel.radial_segments = 12
+			mesh = vessel
+		_activity_meshes[style] = mesh
+		var material := StandardMaterial3D.new()
+		material.albedo_color = Color(0.55,0.58,0.53) if style == "cloth" else Color(0.36,0.25,0.14)
+		material.roughness = 0.95
+		_activity_materials[style] = material
+	var visual := MeshInstance3D.new()
+	visual.mesh = _activity_meshes[style]
+	visual.material_override = _activity_materials[style]
+	visual.position.y = -0.08
+	grip.add_child(visual)
+	return hand
 
 class WorldOrientedEquipment extends Node3D:
 	var actor: Node3D

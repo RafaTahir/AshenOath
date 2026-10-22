@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "zones": {
+    "greyfen": {
+      "blacksmith_tor": {"work":[9.3,0,-0.2],"errand":[10.5,0,1],"rest":[9.5,0,3],"line":"Mind the end of that. It stays hot after it stops glowing.","after_quest":"saga_gre_q03","after_line":"A door that closes properly. That is useful work."},
+      "mira": {"work":[-7,0,-2],"errand":[-8.5,0,-1.2],"rest":[-7.7,0,-4.1],"line":"Those jars have labels for a reason. Let me finish this handful."},
+      "rook": {"work":[-7.8,0,8.5],"errand":[-6.2,0,6.8],"rest":[-3.8,0,8.6],"social":[-5.6,0,10.2],"line":"A trader is allowed to sit down. I checked.","after_quest":"saga_gre_q04","after_line":"Nessa has her kettle. My reputation may take a little longer."},
+      "saga_nessa": {"work":[-3.7,0,7.4],"errand":[-5.6,0,10.3],"rest":[-6,0,11.1],"social":[-6.8,0,10.2],"after_quest":"saga_gre_q05","after_work":[4,0,10],"after_activity":"care","line":"The next batch needs water. Bread takes its time, however loudly people ask for it."},
+      "saga_jory": {"work":[-11,0,-7],"errand":[-9,0,-6],"rest":[-9.8,0,-5.7],"social":[0.5,0,-5.8],"line":"Brake, pin, release. I say it aloud when nobody is here to hear it.","after_quest":"saga_gre_q02","after_line":"The pin is seated. I check the rope before the watch needs it."},
+      "sister_anwen": {"work":[3.5,0,-6.4],"errand":[2,0,-5.8],"rest":[3.9,0,-4.9],"social":[1.7,0,-5.8],"line":"I can give you a moment. Let me set this down first.","after_quest":"saga_gre_q05","after_line":"They have somewhere dry to rest. I can leave the blankets alone for a little while."},
+      "widow_elna": {"work":[9,0,8.8],"errand":[8,0,10.4],"rest":[8.2,0,9.4],"line":"There is no need to whisper. I still have perfectly good ears.","after_quest":"saga_gre_q03","after_line":"I shut it with one hand this morning. Stood there and did it twice."},
+      "farmer_toma": {"work":[-10,0,7.8],"errand":[-9,0,10.3],"rest":[-10.8,0,9],"line":"A sack is lighter on the way home. That is supposed to be a good thing.","after_quest":"saga_gre_q01","after_line":"Nessa has a proper weight to check now. One less argument at unloading."}
+    },
+    "wychwood": {
+      "saga_iven": {"work":[-5.8,0,10.2],"errand":[-8.2,0,8],"rest":[-5,0,12],"social":[-4.5,0,10.5],"after_quest":"saga_wyc_q05","after_work":[7.7,0,-5.8],"after_activity":"check_rope","line":"Watch the crown before the cut. The trunk tells only half of it.","after_line":"The screen needs clearing even when the water looks kind."},
+      "saga_edda": {"work":[6,0,10],"errand":[8,0,7.8],"rest":[5.5,0,11.4],"social":[-3.4,0,10.5],"after_quest":"saga_wyc_q02","after_activity":"sort_supplies","line":"Not every noise in here wants something from you.","after_line":"The wire is accounted for. There is still charcoal to sort."}
+    },
+    "old_mill": {
+      "saga_dain": {"actor":"MillWorkerBody0","work":[-3.6,0,7.5],"errand":[-6,0,8.3],"rest":[-4.5,0,11],"after_quest":"saga_dep_q05","after_work":[-4.5,0,11],"line":"Leave the sound pieces on the left. We should not have to test the same board twice.","after_line":"Dry tools at the start of a shift. I could get used to that."},
+      "mill_second_worker": {"actor":"MillWorkerBody1","profile":"mill_worker","work":[-5.4,0,8.4],"errand":[-7.3,0,10],"rest":[-5.6,0,11],"line":"I marked that load already. Check the tag before you move it."}
+    },
+    "burned_farmstead": {
+      "saga_ressa": {"work":[3.5,0,8],"errand":[1.7,0,10.5],"rest":[2.8,0,9.4],"after_quest":"saga_dep_q04","after_work":[-7.2,0,7.8],"line":"Small roots first. Pulling harder will not make them grow faster.","after_line":"The frame should take the wind. The stem has enough to do."}
+    },
+    "marsh_crossing": {
+      "saga_nera": {"work":[-4.4,0,9],"errand":[-5,0,6],"rest":[-5.8,0,8.8],"night_work":true,"after_quest":"saga_roa_q04","after_work":[4.5,0,9],"line":"Stop where it is firm. You can ask me from there.","after_line":"A notch for daylight, a hood for night. Neither replaces looking where you step."}
+    },
+    "bandit_road": {
+      "saga_tavin": {"work":[-5,0,6.6],"errand":[-6.3,0,4.1],"rest":[-3.6,0,9.4],"social":[5.5,0,3.4],"after_quest":"saga_roa_q05","after_work":[-3.6,0,9.4],"line":"Coils on the dry side. Wet rope is heavier than it has any right to be.","after_line":"I am counting repair pieces. Not travelers."},
+      "captain_senn": {"work":[6.7,0,2.8],"errand":[6.7,0,2.8],"rest":[6.7,0,2.8],"stationary":true,"line":"Keep the lane clear. Whatever you came to ask me."}
+    },
+    "record_hall": {
+      "saga_lysa": {"work":[-5,0,7.8],"errand":[-7.2,0,7.6],"rest":[-4.6,0,8.8],"social":[-3.8,0,7.8],"after_quest":"saga_var_q05","after_work":[7.4,0,4.8],"line":"Set it beside the source. Not on top of it.","after_line":"The reply tray is empty. That is not permission to fill in the missing names."},
+      "vargan_record_keeper": {"profile":"vale","work":[-2.3,0,7.8],"errand":[-3,0,8.2],"rest":[-2.6,0,8.8],"social":[-2.6,0,7.8],"line":"An alteration is not the same as an approval. Keep both dates."}
+    },
+    "vargan_court": {
+      "saga_odran": {"work":[-6.3,0,7.3],"errand":[-4.6,0,5.4],"rest":[-5.5,0,8.1],"line":"Water the earth, not the leaf. It will find its own way up.","after_quest":"saga_var_q03","after_line":"My tools, my shift. I still have to remember when to put them down."},
+      "vargan_servant": {"work":[5.8,0,8],"errand":[3.5,0,9.5],"rest":[5.1,0,8.7],"profile":"servant","line":"Leave room for the tray. People still have to eat while the great hall talks."},
+      "vargan_steward": {"profile":"merrow","work":[3.5,0,9.5],"errand":[7.6,0,5.8],"rest":[4.1,0,10.3],"after_quest":"saga_var_q04","after_activity":"read","line":"The total and the delivery are different columns.","after_line":"Receipt first. No household assent belongs on this sheet."}
+    },
+    "ruins": {
+      "saga_maelin": {"work":[5,0,5.3],"errand":[7.4,0,4.8],"rest":[4.6,0,6.6],"social":[-1.2,0,4.8],"after_quest":"saga_har_q04","after_activity":"tend","line":"Keep the dry seed dry. The rest of the bed can wait for morning.","after_line":"Some for the trial, some kept back. We have more than one season to think about."},
+      "saga_oris": {"work":[-5,0,4.8],"errand":[-2.6,0,4.4],"rest":[-5.6,0,5.9],"social":[-2.4,0,4.8],"after_quest":"saga_har_q02","after_activity":"repair","line":"The quiet ones are harder to carve. You notice every mark.","after_line":"There is an end to the rack. That is a better promise than another stone."}
+    }
+  },
+  "exchanges": [
+    {"zone":"greyfen","a":"saga_nessa","b":"rook","lines":"Nessa: If that is another wager, carry the water first.\nRook: A cruel opening move.","quest":"saga_gre_q04","after":"Nessa: The kettle stays here this time.\nRook: I would never dream of moving a settled argument."},
+    {"zone":"greyfen","a":"sister_anwen","b":"saga_jory","lines":"Anwen: Leave the rope alone for a moment. You have checked it.\nJory: Once more is not a moment, is it?","quest":"saga_gre_q02","after":"Jory: The watch answered.\nAnwen: Then you can let your hands rest."},
+    {"zone":"wychwood","a":"saga_iven","b":"saga_edda","lines":"Iven: That stack will need another day.\nEdda: Then the wood and I agree about something.","quest":"saga_wyc_q05","after":"Edda: Clear enough to see the bottom.\nIven: And clear enough to see when it needs cleaning."},
+    {"zone":"old_mill","a":"saga_dain","b":"mill_second_worker","lines":"Dain: Sound pieces on the left.\nWorker: Your left or the wagon's?","quest":"saga_dep_q05","after":"Worker: No daylight through the cover.\nDain: A roof with the decency to stay a roof."},
+    {"zone":"bandit_road","a":"captain_senn","b":"saga_tavin","requires_flag":"senn_fate","requires_value":"testimony","lines":"Tavin: Rope, planks, two short shifts. That is the repair list.\nSenn: No names beside the passage count. Leave it that way."},
+    {"zone":"record_hall","a":"saga_lysa","b":"vargan_record_keeper","lines":"Lysa: A tidy copy makes it look settled.\nVale: That is why you leave the sources beside it.","quest":"saga_var_q01","after":"Vale: You left the altered words uncovered.\nLysa: I thought they had been hidden long enough."},
+    {"zone":"vargan_court","a":"saga_odran","b":"vargan_servant","lines":"Odran: The pot is not in your way?\nServant: Only when you are standing beside it.","quest":"saga_var_q03","after":"Odran: I finish at the bell.\nServant: Then finish. The plants will still be here."},
+    {"zone":"ruins","a":"saga_maelin","b":"saga_oris","lines":"Maelin: Put the chisel down. The bed does not need a stone tonight.\nOris: I had almost convinced myself it did.","quest":"saga_har_q02","after":"Oris: I stopped when I said I would.\nMaelin: There. A promise that left you time for supper."}
+  ]
+}

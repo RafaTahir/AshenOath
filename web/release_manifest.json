@@ -7,27 +7,27 @@
     "script_encoding": "gzip"
   },
   "project": "Ashen Oath",
-  "build_id": "world-worth-caring-20261022",
+  "build_id": "cast-complete-20261022",
   "source": {
-    "git_commit": "9d7a29ec6232d70515b2f35e3551c97ae66115fb",
+    "git_commit": "e8d92627bec50fa7bd8121f892ce4af212fcca2c",
     "dirty": true
   },
-  "generated_at_utc": "2026-10-21T19:08:04.010931Z",
-  "compatibility_key": "c29ff17a6f7eb1b1b67d27d88040ded0ceee01f3a261090bcc7a17b5ef41d4bb",
+  "generated_at_utc": "2026-10-22T03:16:59.507439Z",
+  "compatibility_key": "1e5c8891d25e799e8c1df00f01c1d12f00ea4749ed7d36c0b1b93d25825e5ccd",
   "runtime_pack_manifest": {
     "path": "runtime_pack_manifest.json",
-    "bytes": 7486,
-    "sha256": "f7d7e9bb944ab75574b735e054f8c95188c69169fb0e6abc2bcafd5e9a7b1004"
+    "bytes": 7436,
+    "sha256": "e163359046d0e016fc141ad27b0e64b0b692e629e35ff0b9f3fb991577fd18f0"
   },
   "root_pck": {
     "path": "index.pck",
-    "bytes": 4232130,
-    "sha256": "1fb2284e48f9020709479a80f091b46741a62f90f3983894035ecbb56d878968",
+    "bytes": 4249947,
+    "sha256": "07b7f2f6e4d5fc51ce1cd25a7f30ffdba69910af5843d629d40664dfb3bb3ffe",
     "content_encoding": "gzip",
-    "decoded_bytes": 6829648,
-    "decoded_sha256": "55806aa7c1245f57a8621cdfaa8a5eef11ef74170e9fa295a07eae9f6d943bf6"
+    "decoded_bytes": 6853340,
+    "decoded_sha256": "0c94c7ef5ebf04aebe77150a5885edb7f90694ddfbf6b5cda95e4720bf2d45b3"
   },
-  "artifacts_total_bytes": 104768810,
+  "artifacts_total_bytes": 104824954,
   "artifacts": [
     {
       "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
@@ -57,16 +57,16 @@
     },
     {
       "path": "index.html",
-      "bytes": 23451,
-      "sha256": "5c15350e162197a37f8da2dee60694d0f521b3a2cab0a120fa06925d00663d4c"
+      "bytes": 23441,
+      "sha256": "1f0b90e0854549c95b75ceaf081c202311cbc3761416328bd8f538d9f3ef8142"
     },
     {
       "path": "index.pck",
-      "bytes": 4232130,
-      "sha256": "1fb2284e48f9020709479a80f091b46741a62f90f3983894035ecbb56d878968",
+      "bytes": 4249947,
+      "sha256": "07b7f2f6e4d5fc51ce1cd25a7f30ffdba69910af5843d629d40664dfb3bb3ffe",
       "content_encoding": "gzip",
-      "decoded_bytes": 6829648,
-      "decoded_sha256": "55806aa7c1245f57a8621cdfaa8a5eef11ef74170e9fa295a07eae9f6d943bf6"
+      "decoded_bytes": 6853340,
+      "decoded_sha256": "0c94c7ef5ebf04aebe77150a5885edb7f90694ddfbf6b5cda95e4720bf2d45b3"
     },
     {
       "path": "index.png",
@@ -80,64 +80,64 @@
     },
     {
       "path": "packs/adjacent.pck",
-      "bytes": 1159614,
-      "sha256": "e8f326d8c55681c0fc9e6a798d161f59fa2e408f890b9c426841fc01f9aaa92e",
+      "bytes": 1159642,
+      "sha256": "910fdb2d3823e472be29d12fbae17b5a7d5e97d29f5dce3137b87fec24d0136e",
       "content_encoding": "gzip",
-      "decoded_bytes": 1405040,
-      "decoded_sha256": "ea3bde2d1919d1bf1c422baf182f0aa71b3654b9deff462475392b9b2c3e0b67"
+      "decoded_bytes": 1405104,
+      "decoded_sha256": "7e91f5d0b3aa1fca6e4e6ac6fd779cb8577e22ba5002674b802a597f380926ad"
     },
     {
       "path": "packs/audio.pck",
-      "bytes": 16389845,
-      "sha256": "a3d4e1fb250abad6149c36c5f80db16b3aa00ff7d9209751485fba8f48760355",
+      "bytes": 16389868,
+      "sha256": "a710cbabd0e574c81350843d091d0a4259d847948d1f40bc8e34de2e6c6c86d3",
       "content_encoding": "gzip",
-      "decoded_bytes": 19291356,
-      "decoded_sha256": "db1099914cef11656c3525bf21b3884d5e5f2492803734f7572f84bdb79be270"
+      "decoded_bytes": 19291420,
+      "decoded_sha256": "9b7d8ffc921e97728f7a6443d021bba66f7b2445c421f8af0853843edbc7cc75"
     },
     {
       "path": "packs/campaign.pck",
-      "bytes": 8231533,
-      "sha256": "a9f51cc3d552f64c81fe9be2608ee63380550050a62ac4723d1c7e093d9c09de",
+      "bytes": 8231555,
+      "sha256": "5c038a71233095505f23305c0db0bc203b401259b44862f822629fc509c52109",
       "content_encoding": "gzip",
-      "decoded_bytes": 8726068,
-      "decoded_sha256": "5bafee8aa8f576e6d7a84f0b0ac9b2a36e2fe152598d8873126bf9f636c15ecb"
+      "decoded_bytes": 8726132,
+      "decoded_sha256": "4cd550162d0d9597da4a5e3ec70c12998e305a37e7ead435bdae38a06a9bed38"
     },
     {
       "path": "packs/characters.pck",
-      "bytes": 9359001,
-      "sha256": "6310ab0bd802982736dbd32fb7313f89cf90a03d430c7f775b8ee1cd5fd498c8",
+      "bytes": 9361877,
+      "sha256": "0cd4ba7391e445d778312849bf69f4a664f633703bc3a38e68a252c5253a2c25",
       "content_encoding": "gzip",
-      "decoded_bytes": 9657248,
-      "decoded_sha256": "efc85dfc034eafc56a9b671c9f8682891e38c55ed6a33d94cc11639061db6ba1"
+      "decoded_bytes": 9658256,
+      "decoded_sha256": "94d82f5bea73940026dd95ec3dcdba218fdd7c9646ca6980e470881034561edf"
     },
     {
       "path": "packs/monsters.pck",
-      "bytes": 14405345,
-      "sha256": "c69c95d78693168163dabb84e9e79b573deebe8881caed1eb4e8d6e59817e13f",
+      "bytes": 14417102,
+      "sha256": "cc4c9fb7264d07d356ce3ab09419e93d8be9b21dd04f6d3e59b1b4ce49db0656",
       "content_encoding": "gzip",
-      "decoded_bytes": 14697672,
-      "decoded_sha256": "100f21ae23a31eea42755e69258ccf1a03c697ab0bf9b65c3eebd936386ba831"
+      "decoded_bytes": 14710008,
+      "decoded_sha256": "b862485a7b882fd6e9f169a2de34d66454929a374f3bdc4629039b7229912e60"
     },
     {
       "path": "packs/opening.pck",
-      "bytes": 32531244,
-      "sha256": "ee7333d8da79d51bf1440c9688057834251e6b6f470a8253ca7686efeb4a5e90",
+      "bytes": 32554900,
+      "sha256": "f77393c91ccc72dd2e5b82d2ad72cdac7449778fb3e7f684b569b476a498bd73",
       "content_encoding": "gzip",
-      "decoded_bytes": 35505172,
-      "decoded_sha256": "45428577f11e50871e1bc8001f45a11595f67b1c62966548317252a1185fcf6b"
+      "decoded_bytes": 35530324,
+      "decoded_sha256": "a3715944a4b38e3bc35c74d714d9c1d17d454aee893e9d3d3b90a1b32cc8e447"
     },
     {
       "path": "packs/quality_materials.pck",
-      "bytes": 7218382,
-      "sha256": "be0172fe4c8f6a7f815ecb1ace133b4ebb55712e691179146af485c2f2460037",
+      "bytes": 7218407,
+      "sha256": "86962f6bfda3214ea68886c905febb96dcaf9cbb25317bc379e807cb2d0d53c6",
       "content_encoding": "gzip",
-      "decoded_bytes": 7378924,
-      "decoded_sha256": "993186bd06b4502c5b588fa156ce23ebb28a5265caa2b96eca578ae3ebe7fc05"
+      "decoded_bytes": 7378988,
+      "decoded_sha256": "7a87f9e67709fec2aa8f5e09e7c47e967b2df1a6d87e30dee60b480b168e9548"
     },
     {
       "path": "runtime_pack_manifest.json",
-      "bytes": 7486,
-      "sha256": "f7d7e9bb944ab75574b735e054f8c95188c69169fb0e6abc2bcafd5e9a7b1004"
+      "bytes": 7436,
+      "sha256": "e163359046d0e016fc141ad27b0e64b0b692e629e35ff0b9f3fb991577fd18f0"
     }
   ],
   "packs": [
@@ -151,9 +151,9 @@
     },
     {
       "id": "opening",
-      "url": "packs/opening.pck?sha256=45428577f11e50871e1bc8001f45a11595f67b1c62966548317252a1185fcf6b",
-      "bytes": 35505172,
-      "sha256": "45428577f11e50871e1bc8001f45a11595f67b1c62966548317252a1185fcf6b",
+      "url": "packs/opening.pck?sha256=a3715944a4b38e3bc35c74d714d9c1d17d454aee893e9d3d3b90a1b32cc8e447",
+      "bytes": 35530324,
+      "sha256": "a3715944a4b38e3bc35c74d714d9c1d17d454aee893e9d3d3b90a1b32cc8e447",
       "dependencies": [
         "base"
       ],
@@ -161,9 +161,9 @@
     },
     {
       "id": "campaign",
-      "url": "packs/campaign.pck?sha256=5bafee8aa8f576e6d7a84f0b0ac9b2a36e2fe152598d8873126bf9f636c15ecb",
-      "bytes": 8726068,
-      "sha256": "5bafee8aa8f576e6d7a84f0b0ac9b2a36e2fe152598d8873126bf9f636c15ecb",
+      "url": "packs/campaign.pck?sha256=4cd550162d0d9597da4a5e3ec70c12998e305a37e7ead435bdae38a06a9bed38",
+      "bytes": 8726132,
+      "sha256": "4cd550162d0d9597da4a5e3ec70c12998e305a37e7ead435bdae38a06a9bed38",
       "dependencies": [
         "base",
         "opening"
@@ -172,9 +172,9 @@
     },
     {
       "id": "characters",
-      "url": "packs/characters.pck?sha256=efc85dfc034eafc56a9b671c9f8682891e38c55ed6a33d94cc11639061db6ba1",
-      "bytes": 9657248,
-      "sha256": "efc85dfc034eafc56a9b671c9f8682891e38c55ed6a33d94cc11639061db6ba1",
+      "url": "packs/characters.pck?sha256=94d82f5bea73940026dd95ec3dcdba218fdd7c9646ca6980e470881034561edf",
+      "bytes": 9658256,
+      "sha256": "94d82f5bea73940026dd95ec3dcdba218fdd7c9646ca6980e470881034561edf",
       "dependencies": [
         "base",
         "opening"
@@ -183,9 +183,9 @@
     },
     {
       "id": "monsters",
-      "url": "packs/monsters.pck?sha256=100f21ae23a31eea42755e69258ccf1a03c697ab0bf9b65c3eebd936386ba831",
-      "bytes": 14697672,
-      "sha256": "100f21ae23a31eea42755e69258ccf1a03c697ab0bf9b65c3eebd936386ba831",
+      "url": "packs/monsters.pck?sha256=b862485a7b882fd6e9f169a2de34d66454929a374f3bdc4629039b7229912e60",
+      "bytes": 14710008,
+      "sha256": "b862485a7b882fd6e9f169a2de34d66454929a374f3bdc4629039b7229912e60",
       "dependencies": [
         "base",
         "characters"
@@ -194,9 +194,9 @@
     },
     {
       "id": "audio",
-      "url": "packs/audio.pck?sha256=db1099914cef11656c3525bf21b3884d5e5f2492803734f7572f84bdb79be270",
-      "bytes": 19291356,
-      "sha256": "db1099914cef11656c3525bf21b3884d5e5f2492803734f7572f84bdb79be270",
+      "url": "packs/audio.pck?sha256=9b7d8ffc921e97728f7a6443d021bba66f7b2445c421f8af0853843edbc7cc75",
+      "bytes": 19291420,
+      "sha256": "9b7d8ffc921e97728f7a6443d021bba66f7b2445c421f8af0853843edbc7cc75",
       "dependencies": [
         "base"
       ],
@@ -204,9 +204,9 @@
     },
     {
       "id": "quality_materials",
-      "url": "packs/quality_materials.pck?sha256=993186bd06b4502c5b588fa156ce23ebb28a5265caa2b96eca578ae3ebe7fc05",
-      "bytes": 7378924,
-      "sha256": "993186bd06b4502c5b588fa156ce23ebb28a5265caa2b96eca578ae3ebe7fc05",
+      "url": "packs/quality_materials.pck?sha256=7a87f9e67709fec2aa8f5e09e7c47e967b2df1a6d87e30dee60b480b168e9548",
+      "bytes": 7378988,
+      "sha256": "7a87f9e67709fec2aa8f5e09e7c47e967b2df1a6d87e30dee60b480b168e9548",
       "dependencies": [
         "base",
         "opening"
@@ -215,9 +215,9 @@
     },
     {
       "id": "adjacent",
-      "url": "packs/adjacent.pck?sha256=ea3bde2d1919d1bf1c422baf182f0aa71b3654b9deff462475392b9b2c3e0b67",
-      "bytes": 1405040,
-      "sha256": "ea3bde2d1919d1bf1c422baf182f0aa71b3654b9deff462475392b9b2c3e0b67",
+      "url": "packs/adjacent.pck?sha256=7e91f5d0b3aa1fca6e4e6ac6fd779cb8577e22ba5002674b802a597f380926ad",
+      "bytes": 1405104,
+      "sha256": "7e91f5d0b3aa1fca6e4e6ac6fd779cb8577e22ba5002674b802a597f380926ad",
       "dependencies": [
         "base",
         "opening"

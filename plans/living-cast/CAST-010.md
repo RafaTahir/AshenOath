@@ -1,8 +1,8 @@
 # CAST-010 - Packaging and Delivery
 
 Parent: [CAST-000](CAST-000.md).
-Dependencies: Applicable sample or final implementation and explicit sample review boundary.
-Implementation: Reference package complete; compilation/publication/user acceptance recorded separately.
+Dependencies: Applicable final implementation; runtime/visual review remains pending.
+Implementation: Combined source/asset package complete; compilation/publication/user acceptance recorded separately.
 Compilation: see [STATUS](STATUS.md).
 User acceptance: Pending.
 Publication: see STATUS; independent of acceptance.
@@ -21,6 +21,6 @@ Compile prepared actors and shared animation/material bindings, preserving requi
 
 Use the master ownership, compatibility and build-only contract. Keep existing
 actor/quest/save IDs and contents. No agent runtime tests, browser QA, benchmarks
-or automatic acceptance. The user reviews the Greyfen reference standard before
-wider character/boss/regional authoring.
+or automatic acceptance. Wider implementation is now authorized; visual and
+behavioral acceptance remains the user's separate review.
 

@@ -42,7 +42,7 @@ function Invoke-BuildProcess([string]$Executable, [string[]]$Arguments, [string]
     if ($Executable -eq $GodotPath) {
         # Godot may return zero after reporting an unsuccessful script import.
         # These are compiler diagnostics from this build process, not a QA run.
-        $compilerDiagnostics = @(Select-String -LiteralPath @($stdout, $stderr) -Pattern '(?i)SCRIPT ERROR:|Failed to load script|Error parsing script')
+        $compilerDiagnostics = @(Select-String -LiteralPath @($stdout, $stderr) -Pattern '(?i)^ERROR:|SCRIPT ERROR:|Failed to load script|Error parsing script')
         if ($compilerDiagnostics.Count -gt 0) {
             foreach ($diagnostic in $compilerDiagnostics) { Write-Host $diagnostic.Line -ForegroundColor Red }
             throw "$LogName compilation failed. Build logs: $stdout ; $stderr"
@@ -91,6 +91,7 @@ Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_dialogue.py")) "runtime-dialogue"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "pack-layout"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_living_faces.py")) "living-faces"
 if ($BuildVoices) {
     $VoiceArguments = @((Join-Path $PSScriptRoot "build_story_voices.py"), "--all-scenes")
     if ($FinalizeExistingVoices) { $VoiceArguments += "--finalize-existing" }

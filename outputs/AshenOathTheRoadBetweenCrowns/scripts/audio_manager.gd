@@ -1,4 +1,5 @@
 extends Node
+signal perception_cue(position: Vector3, radius: float, danger: bool)
 
 const PreparedAudioCatalog = preload("res://scripts/prepared_audio_catalog.gd")
 var prepared_audio = PreparedAudioCatalog.new()
@@ -636,6 +637,8 @@ func play_spatial_event(event_name: String, source_position: Vector3, listener_p
 	player.pitch_scale = 1.0 + randf_range(-pitch_variation, pitch_variation)
 	player.play()
 	_track_cue(player)
+	if event_name in ["enemy_windup", "ghoulkin_lunge", "heavy_hit", "light_hit", "shrine_bell", "wychwood_drop"]:
+		perception_cue.emit(source_position, minf(max_distance, 9.0), event_name in ["ghoulkin_lunge", "heavy_hit", "light_hit"])
 
 func enemy_event_name(enemy_id: String, phase: String) -> String:
 	if enemy_id in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bell_eater"]:

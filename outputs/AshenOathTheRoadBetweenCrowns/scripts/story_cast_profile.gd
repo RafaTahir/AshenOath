@@ -46,6 +46,43 @@ const PRESENCE := {
 }
 
 const PRESENCE_ALIASES := {"sister_anwen":"anwen", "sister_anwen_human":"anwen", "blacksmith_tor":"tor", "widow_elna":"elna", "farmer_toma":"toma", "captain_senn":"senn", "returned_soldier":"len", "vargan_record_keeper":"vale", "record_keeper_vale":"vale", "vargan_steward":"merrow", "steward_merrow":"merrow", "mill_worker":"dain"}
+static var _life_data: Dictionary = {}
+
+static func life_data() -> Dictionary:
+	if _life_data.is_empty():
+		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/cast_life.json"))
+		if data is Dictionary and int(data.get("version", 0)) == 1:
+			_life_data = data
+	return _life_data
+
+static func routine(id: String, zone: String, state, quests, phase: String) -> Dictionary:
+	var definition: Dictionary = life_data().get("zones", {}).get(zone, {}).get(id, {})
+	if definition.is_empty():
+		return {}
+	var profile := presence_profile(str(definition.get("profile", id)))
+	var work: Array = definition.work
+	var activity := str(profile.activity)
+	var line := str(definition.get("line", ""))
+	var resolved: bool = quests != null and str(definition.get("after_quest", "")) != "" and quests.is_completed(str(definition.after_quest))
+	if resolved:
+		work = definition.get("after_work", work)
+		activity = str(definition.get("after_activity", activity))
+		line = str(definition.get("after_line", line))
+	var rest: Array = definition.get("rest", work)
+	var errand: Array = definition.get("errand", work)
+	var path: Array = [Vector3(work[0],work[1],work[2]), Vector3(errand[0],errand[1],errand[2])]
+	var activities: Array[String] = [activity, "check_supplies"]
+	if bool(definition.get("stationary", false)):
+		path.resize(1)
+		activities = [activity]
+	elif phase == "night" and not bool(definition.get("night_work", false)):
+		path = [Vector3(rest[0],rest[1],rest[2])]
+		activities = ["rest"]
+	elif phase == "dusk" and definition.has("social"):
+		var social: Array = definition.social
+		path = [Vector3(social[0],social[1],social[2]), Vector3(work[0],work[1],work[2])]
+		activities = ["rest", activity]
+	return {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "revision":str([phase,resolved,state.get_flag("final_covenant", "") if state != null else ""])}
 
 static func presence_profile(role: String, seed: String = "") -> Dictionary:
 	var words := " " + (role + " " + seed).to_lower().replace("_", " ").replace("-", " ") + " "
