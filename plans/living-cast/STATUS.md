@@ -1,5 +1,19 @@
 # Living Cast - Current Checkpoint
 
+2026-10-24 current work: **People, Place And Honor** implemented and compiled;
+the combined production package is synchronized to `web/`. User acceptance is
+still **0/10**; no new runtime test is authorized or claimed.
+Current scope, scene map, Honor rules and user checklist:
+[People, Place And Honor](../living-road/PEOPLE_PLACE_HONOR_IMPLEMENTATION.md).
+The bow and actor-presence baseline below is preserved history, not the current
+next-action instruction. New candidate: `people-place-honor-20261024`.
+Complete package: **104808755 bytes**, 17 files, **48845 bytes below** the cap.
+Root PCK: `b1a85adb63345dd5f60d218a246d0a1c6db1a28cee3364b086a83edf0ee1de6e`.
+Publication completion/commit/live identity belong to the current CAST-010
+receipt under `.release-gate/living-road/`, not to a runtime acceptance claim.
+
+## Previous Published Baseline
+
 Stage: bow experience implemented, compiled and packaged; CAST-010 publication.
 Formal user acceptance: **0/10**. Bow runtime appearance/input is unverified;
 no gameplay/browser check was run for this change. The prior actor-presence

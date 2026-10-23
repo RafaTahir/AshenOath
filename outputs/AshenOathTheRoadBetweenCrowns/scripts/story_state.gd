@@ -1,6 +1,9 @@
 extends Node
 
 signal changed
+signal honor_changed(entry: Dictionary)
+
+const Honor = preload("res://scripts/story_honor.gd")
 
 const VERSION := 2
 const VALUE_LIMITS := {
@@ -50,12 +53,68 @@ func set_flag(id: String, value: Variant) -> void:
 	flags[id] = value
 	if previous != value:
 		_capture_relationship_flag(id, value)
+		_capture_honor_flags(id)
 	_notify_change()
 	end_change()
 
 func get_flag(id: String, fallback: Variant = null) -> Variant:
 	world_reads.read("flags", id)
 	return _flags.get(id, fallback)
+
+func record_honor_event(id: String, announce: bool = true) -> bool:
+	if not Honor.DEEDS.has(id) or not Honor.satisfied(self, Honor.DEEDS[id]):
+		return false
+	var rule: Dictionary = Honor.DEEDS[id]
+	var raw: Variant = flags.get("honor_ledger", {})
+	var ledger: Dictionary = raw.duplicate(true) if raw is Dictionary else {}
+	var group := str(rule.get("group", id))
+	if int(rule.weight) > 0:
+		for other_id: String in Honor.DEEDS:
+			var other: Dictionary = Honor.DEEDS[other_id]
+			if str(other.get("group", other_id)) == group and int(other.weight) < 0 and Honor.satisfied(self, other):
+				return false
+	var previous: Dictionary = ledger.get(group, {})
+	# A harmful method supersedes its generic help; a later refresh cannot wash it away.
+	if str(previous.get("id", "")) == id or (not previous.is_empty() and int(previous.get("weight", 0)) < 0):
+		return false
+	var before := int(honor_view().score)
+	var entry: Dictionary = rule.duplicate(true)
+	entry["id"] = id
+	entry["sequence"] = int(previous.get("sequence", ledger.size() + 1))
+	ledger[group] = entry
+	flags["honor_ledger"] = ledger
+	_notify_change()
+	if announce:
+		var notification := entry.duplicate(true)
+		notification["delta"] = int(honor_view().score) - before
+		honor_changed.emit(notification)
+	return true
+
+func _capture_honor_flags(changed_flag: String = "", announce: bool = true) -> void:
+	for id: String in Honor.DEEDS:
+		var rule: Dictionary = Honor.DEEDS[id]
+		if changed_flag == "" or str(rule.flag) == changed_flag or rule.get("requires", {}).has(changed_flag):
+			record_honor_event(id, announce)
+
+func honor_view(actor_id: String = "") -> Dictionary:
+	var score := 0
+	var deeds: Array[Dictionary] = []
+	var grievance := false
+	var actor := Honor.actor_key(actor_id)
+	var raw: Variant = flags.get("honor_ledger", {})
+	if raw is Dictionary:
+		for entry: Variant in raw.values():
+			if not entry is Dictionary or not Honor.DEEDS.has(str(entry.get("id", ""))):
+				continue
+			var canonical: Dictionary = Honor.DEEDS[str(entry.id)]
+			if actor != "" and actor not in canonical.get("known", []):
+				continue
+			score += int(canonical.weight)
+			grievance = grievance or actor in canonical.get("grievance", [])
+			deeds.append({"id":str(entry.id), "text":str(canonical.text), "weight":int(canonical.weight), "sequence":int(entry.get("sequence", 0))})
+	deeds.sort_custom(func(a: Dictionary, b: Dictionary): return int(a.sequence) < int(b.sequence))
+	score = clampi(score, -100, 100)
+	return {"score":score, "band":Honor.band(score), "deeds":deeds, "known":not deeds.is_empty(), "grievance":grievance, "reaction":"I remember what you did to us. Good work elsewhere does not settle that." if grievance else ("I have seen you keep your word. I will hear you out; the answer is still mine." if score >= 10 else ("I will check the account myself before I agree to anything." if score <= -10 else "I can speak to what I have seen, not everything said about you."))}
 
 func world_signature_state(zone_id: String) -> Dictionary:
 	var state: Dictionary = world_reads.snapshot(zone_id, {"flags": _flags})
@@ -263,4 +322,9 @@ func load_state(data: Dictionary) -> void:
 			continue
 		var limit: Vector2i = VALUE_LIMITS.get(id, Vector2i(-999, 999))
 		values[id] = clampi(int(loaded[id]), limit.x, limit.y)
+	# Only explicit recorded deeds migrate. Refusal, endings and missing work are neutral.
+	begin_change()
+	_capture_honor_flags("", false)
+	_change_pending = false
+	end_change()
 	changed.emit()

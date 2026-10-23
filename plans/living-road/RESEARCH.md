@@ -74,3 +74,39 @@ activity/directing services, save version 10, Three Marks and Greyfen Draughts
 already exist. Implement extensions at those ownership boundaries. Preserve the
 ten-chapter campaign and four covenant endings. This roadmap is not an asset
 replacement project or another engine/QA reconstruction.
+
+## People, Place And Honor: RDR2 Adaptation (2026-10-24)
+
+This is a sourced design adaptation, not a claim to have played or reproduced
+RDR2, watched inaccessible conference talks, or achieved Rockstar's production
+scale. Developer and performer accounts inform the following original choices.
+
+- [Rob Nelson, GamesBeat, part one](https://gamesbeat.com/red-dead-redemption-a-deep-dive-into-rockstars-game-design/)
+  and [part two](https://gamesbeat.com/red-dead-redemption-a-deep-dive-into-rockstars-game-design/2/)
+  discuss character specificity, optional shared experiences and emotional
+  contrast. Ashen Oath uses a finite collection of authored work, company and
+  return scenes. It does not generate interchangeable companion missions.
+- [Houser and Nelson, GQ](https://www.gq-magazine.co.uk/article/red-dead-redemption-2-interview)
+  describe a protagonist with convictions and a detailed, responsive world.
+  Kael remains competent; material protection and accountability challenge his
+  assumptions. Useful bread, dry tools and safe passage must exist alongside
+  the covenant argument, rather than becoming more speeches about it.
+- [Benjamin Byron Davis, GQ](https://www.gq-magazine.co.uk/article/red-dead-redemption-dutch-interview-benjamin-byron-davis)
+  discusses embodied performance and escalation. Use gaze, restrained gesture,
+  work points and listeners. Subtitle-only writing is not fabricated lip-sync.
+- [Woody Jackson interview, Nerdist](https://nerdist.com/article/red-dead-redemption-2-soundtrack-music-red-bull-concert-woody-jackson/)
+  informs deliberate quiet and player-paced transitions. Reuse existing buses,
+  music and ducking, leaving room for environmental and gameplay cues. No new
+  soundtrack or voice service is necessary.
+- [PlayStation's firsthand account](https://blog.playstation.com/2018/10/01/22-things-you-need-to-know-about-red-dead-redemption-2/)
+  provides supplementary observation of everyday interaction. This is not a
+  primary technical specification for Ashen Oath's runtime.
+
+Honor is an explicit Ashen Oath design decision: one StoryState deed ledger,
+bounded individual knowledge, no prices, ending gates or new currency. Refusing
+romance, refusing an oath, omitting optional work and morally complex covenant
+outcomes are neutral. A favorable score never buys consent or forgiveness.
+Twenty anchor scenes and twelve short exchanges reuse WORLD-SAGA activities,
+CAST routines/performance, existing navigation and the journal. Six optional
+walks stop safely on separation. No camp, horse, survival tax, crime simulation,
+new quest count or copied plot is introduced.

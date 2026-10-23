@@ -6,6 +6,7 @@ const CharacterAnimationDriver = preload("res://scripts/character_animation_driv
 const ConsequenceRoutines = preload("res://scripts/village_consequence_routines.gd")
 const Presence = preload("res://scripts/character_presence.gd")
 const CastProfile = preload("res://scripts/story_cast_profile.gd")
+const WorldScenes = preload("res://scripts/story_world_scenes.gd")
 
 const WALK_ACCELERATION := 1.65
 const WALK_BRAKING := 2.8
@@ -77,6 +78,9 @@ var regional_only := false
 var routine_phase := ""
 var cast_revision := 0
 var social_scene: Dictionary = {}
+var world_scene_clock := 0.0
+var gathering_staged := false
+var world_retry_after: Dictionary = {}
 
 const CROWD_IDENTITIES := [
 	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
@@ -92,6 +96,8 @@ func _simulation_hz() -> float:
 	return 15.0 if quality == "quality" else 8.0
 
 func configure(game: Node, quality_preset: String, only_registered: bool = false) -> void:
+	# Pause cancels presentation immediately, without simulating routine movement.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	if story_source != null and is_instance_valid(story_source) and story_source.changed.is_connected(_on_story_changed):
 		story_source.changed.disconnect(_on_story_changed)
 	host = game
@@ -188,6 +194,7 @@ func _process(delta: float) -> void:
 		_end_social_exchange()
 		return
 	if get_tree().paused:
+		_end_social_exchange()
 		return
 	simulation_tick_accumulator += delta
 	var decision_tick: bool = simulation_tick_accumulator >= 1.0 / _simulation_hz()
@@ -197,6 +204,11 @@ func _process(delta: float) -> void:
 	social_cooldown = maxf(social_cooldown - delta, 0.0)
 	if decision_tick and story_dirty:
 		_sync_story_state(false)
+	world_scene_clock -= delta
+	if world_scene_clock <= 0.0:
+		world_scene_clock = 1.0
+		_update_gathering_routines()
+		_try_world_scene()
 	_tick_social_exchange(delta)
 	var now := Time.get_ticks_msec()
 	var decision_period := maxi(1, ceili(1000.0 / _simulation_hz()))
@@ -358,7 +370,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		_brake_actor(entry, delta)
 		if float(entry.motion_speed) < 0.05:
 			_face(node, player.global_position, delta)
-		if line_cooldown <= 0.0 and (not bool(entry.named) or bool(entry.get("regional", false))) and not bool(entry.get("greeted_on_approach", false)) and float(entry.bark_cooldown) <= 0.0 and float(entry.motion_speed) < 0.05:
+		if social_scene.is_empty() and host.hud.ambient_subtitle_available(get_instance_id()) and line_cooldown <= 0.0 and (not bool(entry.named) or bool(entry.get("regional", false))) and not bool(entry.get("greeted_on_approach", false)) and float(entry.bark_cooldown) <= 0.0 and float(entry.motion_speed) < 0.05:
 			line_cooldown = 15.0
 			entry.bark_cooldown = 75.0
 			entry.greeted_on_approach = true
@@ -367,7 +379,8 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 			if host.audio != null:
 				speech_duration = float(host.audio.play_nearby_speech(str(entry.id), remark, node))
 			line_cooldown = maxf(line_cooldown, speech_duration + 4.0)
-			host.hud.toast("%s: %s" % [str(entry.profile.get("occupation", "Villager")).capitalize(), remark], maxf(5.5, speech_duration + 0.3))
+			if social_scene.is_empty():
+				host.hud.show_ambient_subtitle(get_instance_id(), str(entry.profile.get("occupation", "Villager")).capitalize(), remark, maxf(5.5, speech_duration + 0.3))
 		return
 	if bool(entry.get("activity_active", false)):
 		_update_activity(entry, delta)
@@ -634,6 +647,10 @@ func _on_activity_contact(event: String, point: Vector3, source: WeakRef) -> voi
 func _apply_pending_routine(entry: Dictionary) -> void:
 	var pending: Dictionary = entry.get("pending_routine", {})
 	if pending.is_empty(): return
+	if gathering_staged and entry.has("gathering_restore") and not bool(pending.get("gathering", false)):
+		entry.gathering_restore = pending.duplicate(true)
+		entry.pending_routine = {}
+		return
 	entry.pending_routine = {}
 	entry.profile = pending.profile
 	entry.consequence_line = str(pending.get("line", ""))
@@ -753,6 +770,9 @@ func _sync_story_state(force: bool) -> void:
 				_set_activity_pose(entry, true)
 
 func _line_for_actor(entry: Dictionary) -> String:
+	var standing: Dictionary = host.story_state.honor_view(str(entry.id))
+	if bool(standing.grievance) or str(standing.band) in ["Distrusted", "Respected"]:
+		return str(standing.reaction)
 	if bool(entry.get("regional", false)):
 		var identity := str(entry.profile.get("identity", ""))
 		var acknowledgement := str(host.story_state.consume_relationship_greeting(identity))
@@ -851,36 +871,8 @@ func _seek_safety(entry: Dictionary, threat: Vector3, delta: float) -> bool:
 	return true
 
 func _try_social_exchange(entry: Dictionary) -> void:
-	if not social_scene.is_empty() or social_cooldown > 0.0 or line_cooldown > 0.0 or float(entry.get("reaction_time", 0.0)) > 0.0 or not bool(entry.get("activity_active", false)):
-		return
-	if entry.node.global_position.distance_squared_to(player.global_position) > 36.0:
-		return
-	for exchange: Dictionary in CastProfile.life_data().get("exchanges", []):
-		if str(exchange.zone) != str(host.current_zone_id) or str(exchange.a) != str(entry.id):
-			continue
-		if exchange.has("requires_flag") and str(host.story_state.get_flag(str(exchange.requires_flag), "")) != str(exchange.get("requires_value", "")):
-			continue
-		for other: Dictionary in _crowd_index.nearby(entry.node.global_position, 4.0):
-			if str(other.id) != str(exchange.b) or not _social_actor_available(other):
-				continue
-			if not Presence.can_see(entry.node, other.node, 4.0):
-				continue
-			var turns: Array = exchange.get("turns", [])
-			if exchange.has("quest") and host.quests.is_completed(str(exchange.quest)):
-				turns = exchange.get("after_turns", turns)
-			_social_pair(entry, other, turns)
-			return
-	if str(entry.id) != "blacksmith_tor":
-		return
-	for other: Dictionary in _crowd_index.nearby(entry.node.global_position, 4.0):
-		if str(other.id) != "forge_helper" or not _social_actor_available(other) or not Presence.can_see(entry.node, other.node, 4.0):
-			continue
-		var after := bool(host.story_state.get_flag("bell_eater_defeated", false))
-		_social_pair(entry, other, [
-			{"speaker":"blacksmith_tor", "name":"Tor", "text":"Bell's quiet. I can hear that axle again." if after else "Let it cool before you lift it."},
-			{"speaker":"forge_helper", "name":"Forge helper", "text":"One thing at a time, then." if after else "Aye. You said that last time, too."},
-		])
-		return
+	# The former repeatable exchanges are reauthored in the finite scene catalog.
+	pass
 
 func _social_actor_available(entry: Dictionary) -> bool:
 	if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or Presence.protected(entry.node):
@@ -914,6 +906,9 @@ func _social_pair(first: Dictionary, second: Dictionary, turns: Array) -> void:
 
 func _tick_social_exchange(delta: float) -> void:
 	if social_scene.is_empty():
+		return
+	if social_scene.has("world"):
+		_tick_world_scene(delta)
 		return
 	social_scene.elapsed = float(social_scene.elapsed) + delta
 	var saved: Array = social_scene.actors
@@ -961,6 +956,10 @@ func _tick_social_exchange(delta: float) -> void:
 func _end_social_exchange() -> void:
 	if social_scene.is_empty():
 		return
+	if is_instance_valid(host.hud):
+		host.hud.clear_ambient_subtitle(get_instance_id())
+	if is_instance_valid(host.audio):
+		host.audio.set_ambient_conversation(false)
 	for record: Dictionary in social_scene.actors:
 		var entry: Dictionary = record.entry
 		if not is_instance_valid(entry.node):
@@ -969,17 +968,258 @@ func _end_social_exchange() -> void:
 		if is_instance_valid(host) and is_instance_valid(host.audio):
 			host.audio.stop_nearby_speech(entry.node)
 		entry.social_time = 0.0
+		entry.route = []
+		entry.motion_speed = 0.0
 		entry.pause = 0.8
 		if Presence.has_protected_owner(entry.node):
 			continue
 		if is_instance_valid(entry.driver):
 			entry.driver.stop_story_gesture()
+			entry.driver.set_dialogue_pose(false)
+			entry.driver.clear_life_activity()
 		if is_instance_valid(entry.get("face")):
 			entry.face.set_conversation_active(false)
 			entry.face.set_speech_amount(0.0)
 			entry.face.set_focus_target(record.focus if is_instance_valid(record.focus) else null)
 			entry.face.set_expression(str(record.expression))
 	social_scene = {}
+
+func _world_actor(id: String) -> Dictionary:
+	for entry: Dictionary in actors:
+		if str(entry.id) == id and is_instance_valid(entry.node):
+			return entry
+	if id == "player": return {}
+	var names: Array = ["edric_campaign", "edric_castle"] if id == "edric" else [id]
+	for actor_name: String in names:
+		var node := host.zone_root.find_child(actor_name, true, false) as Node3D
+		if not is_instance_valid(node) or not node.is_visible_in_tree() or str(node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]: continue
+		var driver := node.find_child("CharacterAnimationDriver", true, false)
+		if driver == null: continue
+		var entry := _make_entry(id, node, [node.global_position], 0.62, driver, true)
+		var ambient := node.find_child("NpcAmbient", true, false)
+		if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
+		entry.profile = {"occupation":id.capitalize(), "activity":"idle", "activity_seconds":8.0, "line":""}
+		actors.append(entry)
+		_configure_agent(entry)
+		return entry
+	return {}
+
+func _try_world_scene() -> void:
+	if not bool(player.can_control): return
+	if not social_scene.is_empty() or social_cooldown > 0.0 or not host.hud.ambient_subtitle_available(get_instance_id()) or host._story_has_active_combat() or host.zone_transition_pending or Presence.player_threat(player) != "": return
+	var heard: Dictionary = host.story_state.get_flag("world_scenes_heard", {})
+	for scene: Dictionary in WorldScenes.data().get("scenes", []):
+		if Time.get_ticks_msec() < int(world_retry_after.get(str(scene.id), 0)): continue
+		if bool(heard.get(str(scene.id), false)) or not WorldScenes.eligible(scene, host): continue
+		var selected: Array[Dictionary] = []
+		var near := false
+		var ready := true
+		for id: String in scene.actors:
+			if id == "player": continue
+			var entry := _world_actor(id)
+			if entry.is_empty() or Presence.protected(entry.node) or not entry.node.is_visible_in_tree() or float(entry.get("reaction_time", 0.0)) > 0.0:
+				ready = false
+				break
+			var distance: float = entry.node.global_position.distance_to(player.global_position)
+			near = near or (distance < 5.5 and Presence.can_see(entry.node, player, 6.0))
+			if distance > 24.0: ready = false
+			selected.append(entry)
+		if scene.has("near"):
+			var point: Array = scene.near
+			near = player.global_position.distance_to(Vector3(point[0],point[1],point[2])) < 4.0
+		if not ready or not near: continue
+		_start_world_scene(scene, selected)
+		return
+
+func _start_world_scene(scene: Dictionary, selected: Array[Dictionary]) -> void:
+	var saved: Array[Dictionary] = []
+	for entry: Dictionary in selected:
+		if not Presence.claim(entry.node, "social", get_instance_id()):
+			for claimed: Dictionary in saved: Presence.release(claimed.entry.node, "social", get_instance_id())
+			return
+		var face: Node = entry.get("face")
+		saved.append({"entry":entry, "focus":face.focus_target if is_instance_valid(face) else null, "expression":str(face.expression) if is_instance_valid(face) else "neutral"})
+		entry.node.set_meta("cast_social_cancel", _end_social_exchange)
+		_release_activity(entry)
+		entry.social_time = 2.0
+		entry.motion_speed = 0.0
+		entry.route = []
+	var progress: Dictionary = host.story_state.get_flag("world_scene_progress", {})
+	var turns: Array = WorldScenes.turns(scene, host)
+	var signature := JSON.stringify(turns).sha256_text()
+	var checkpoint: Variant = progress.get(str(scene.id), {})
+	var matching := checkpoint is Dictionary and str(checkpoint.get("signature", "")) == signature
+	var index := clampi(int(checkpoint.get("index", 0)), 0, turns.size()) if matching else 0
+	var walk_index := clampi(int(checkpoint.get("walk_index", 0)), 0, scene.get("walk", []).size()) if matching else 0
+	social_scene = {"world":scene, "actors":saved, "turns":turns, "signature":signature, "index":index, "remaining":0.0, "speaking":false, "walk_index":walk_index, "staged":false, "waiting":0.0}
+	social_cooldown = 8.0
+
+func _tick_world_scene(delta: float) -> void:
+	var scene: Dictionary = social_scene.world
+	if not bool(player.can_control):
+		_end_social_exchange()
+		return
+	if float(social_scene.waiting) > 20.0:
+		world_retry_after[str(scene.id)] = Time.get_ticks_msec() + 30000
+		_end_social_exchange()
+		return
+	if not WorldScenes.eligible(scene, host) or host._story_has_active_combat() or host.zone_transition_pending or not host.hud.ambient_subtitle_available(get_instance_id()) or Presence.player_threat(player) != "":
+		_end_social_exchange()
+		return
+	for record: Dictionary in social_scene.actors:
+		var entry: Dictionary = record.entry
+		if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or Presence.protected(entry.node) or float(entry.get("reaction_time", 0.0)) > 0:
+			_end_social_exchange()
+			return
+		entry.social_time = 2.0
+		# Separation waits at the last completed beat, never leashes the player.
+		if entry.node.global_position.distance_to(player.global_position) > (26.0 if not bool(social_scene.staged) else 9.0):
+			_end_social_exchange()
+			return
+	if not bool(social_scene.staged):
+		social_scene.waiting = float(social_scene.waiting) + delta
+		var arrived := true
+		for record: Dictionary in social_scene.actors:
+			var entry: Dictionary = record.entry
+			var raw: Array = scene.get("stage", {}).get(str(entry.id), [])
+			if raw.size() == 3:
+				arrived = _world_walk_to(entry, Vector3(raw[0],raw[1],raw[2]), minf(delta,0.05)) and arrived
+		if not arrived: return
+		social_scene.staged = true
+		social_scene.waiting = 0.0
+	# Walk only while the player is nearby. Finish each safe route before speaking.
+	if scene.has("walk") and int(social_scene.index) == 1 and not bool(social_scene.speaking):
+		var route: Array = scene.walk
+		var step := int(social_scene.walk_index)
+		if step < route.size() and not social_scene.actors.is_empty():
+			social_scene.waiting = float(social_scene.waiting) + delta
+			var entry: Dictionary = social_scene.actors[0].entry
+			if entry.node.global_position.distance_to(player.global_position) > 5.5:
+				_set_motion(entry, 0.0)
+				return
+			var raw: Array = route[step]
+			if _world_walk_to(entry, Vector3(raw[0],raw[1],raw[2]), minf(delta,0.05)):
+				social_scene.walk_index = step + 1
+				social_scene.waiting = 0.0
+				_remember_world_scene_progress()
+			return
+	if float(social_scene.remaining) > 0.0:
+		var current: Array = social_scene.turns[int(social_scene.index)]
+		var speaker: Node3D = player
+		for record: Dictionary in social_scene.actors:
+			if str(record.entry.id) == str(current[0]): speaker = record.entry.node
+		for record: Dictionary in social_scene.actors:
+			var actor: Node3D = record.entry.node
+			var focus: Node3D = speaker if actor != speaker else player
+			if actor == speaker and str(scene.kind) == "exchange":
+				for listener: Dictionary in social_scene.actors:
+					if listener.entry.node != actor:
+						focus = listener.entry.node
+						break
+			_face(actor, focus.global_position, delta)
+			if is_instance_valid(record.entry.get("face")): record.entry.face.set_focus_target(focus)
+		social_scene.remaining = maxf(0.0, float(social_scene.remaining) - delta)
+		return
+	if bool(social_scene.speaking):
+		social_scene.index = int(social_scene.index) + 1
+		social_scene.speaking = false
+		_remember_world_scene_progress()
+		if scene.has("walk") and int(social_scene.index) == 1:
+			return
+	if int(social_scene.index) >= social_scene.turns.size():
+		var heard: Dictionary = host.story_state.get_flag("world_scenes_heard", {}).duplicate()
+		heard[str(scene.id)] = true
+		host.story_state.set_flag("world_scenes_heard", heard)
+		host.story_save_pending = true
+		host.call_deferred("_persist_story_action")
+		_end_social_exchange()
+		social_cooldown = 12.0
+		return
+	var turn: Array = social_scene.turns[int(social_scene.index)]
+	var duration := clampf(str(turn[2]).split(" ", false).size() * 0.32 + 1.5, 3.0, 11.0)
+	for record: Dictionary in social_scene.actors:
+		var entry: Dictionary = record.entry
+		_set_motion(entry, 0.0)
+		_face(entry.node, player.global_position, delta)
+		var speaking := str(entry.id) == str(turn[0])
+		if is_instance_valid(entry.driver):
+			entry.driver.set_life_activity(str(scene.get("action", "idle")))
+			var station: Dictionary = entry.profile.get("workstation", {})
+			if not station.is_empty() and entry.node.global_position.distance_to(station.get("stand", entry.node.global_position)) < 1.3:
+				entry.driver.set_life_workstation(station)
+			if speaking: entry.driver.play_story_gesture("explain")
+		if is_instance_valid(entry.get("face")):
+			entry.face.set_conversation_active(true)
+			entry.face.set_focus_target(player)
+			entry.face.set_expression(CastProfile.expression_for(CastProfile.presence_profile(str(entry.id)), host.story_state))
+			entry.face.set_speech_amount(0.0)
+			entry.face.play_story_gesture("explain" if speaking else "acknowledge")
+		if speaking:
+			duration = maxf(duration, float(host.audio.play_nearby_speech(str(entry.id), str(turn[2]), entry.node)) + 0.3)
+	host.audio.set_ambient_conversation(true)
+	host.hud.show_ambient_subtitle(get_instance_id(), str(turn[1]), str(turn[2]), duration)
+	social_scene.remaining = duration
+	social_scene.speaking = true
+
+func _remember_world_scene_progress() -> void:
+	var progress: Dictionary = host.story_state.get_flag("world_scene_progress", {}).duplicate()
+	progress[str(social_scene.world.id)] = {"index":int(social_scene.index), "walk_index":int(social_scene.walk_index), "signature":str(social_scene.signature)}
+	host.story_state.set_flag("world_scene_progress", progress)
+	host.story_save_pending = true
+	host.call_deferred("_persist_story_action")
+
+func _world_walk_to(entry: Dictionary, target: Vector3, delta: float) -> bool:
+	var offset: Vector3 = target - entry.node.global_position
+	offset.y = 0
+	if offset.length() < 0.2:
+		entry.route = []
+		entry.motion_speed = 0.0
+		_set_motion(entry, 0.0)
+		return true
+	if entry.route.is_empty():
+		if Time.get_ticks_msec() < int(entry.get("world_route_due", 0)): return false
+		entry.world_route_due = Time.get_ticks_msec() + 750
+		entry.route = spatial_service.build_route(entry.node.global_position, target, 0.72) if spatial_service != null else []
+		entry.route_index = 1 if entry.route.size() > 1 else 0
+	if entry.route.is_empty(): return false
+	var point: Vector3 = entry.route[int(entry.route_index)]
+	offset = point - entry.node.global_position
+	offset.y = 0
+	if offset.length() < 0.2:
+		entry.route_index = int(entry.route_index) + 1
+		if int(entry.route_index) >= entry.route.size(): entry.route = []
+		return false
+	_face(entry.node, point, delta, true)
+	var facing := absf(wrapf(_wanted_yaw(entry.node, offset) - entry.node.rotation.y, -PI, PI))
+	if facing > 0.5:
+		_brake_actor(entry, delta)
+		return false
+	entry.motion_speed = move_toward(float(entry.motion_speed), minf(0.7, sqrt(2.0 * WALK_BRAKING * offset.length())), delta * WALK_ACCELERATION)
+	_move_actor(entry, offset.normalized(), float(entry.motion_speed), delta, offset.length())
+	return false
+
+func _update_gathering_routines() -> void:
+	if host.current_zone_id != "greyfen": return
+	var active := preload("res://scripts/greyfen_gathering.gd").active(host)
+	if active == gathering_staged: return
+	gathering_staged = active
+	var positions := {"rook":Vector3(-5.6,0,10.2), "blacksmith_tor":Vector3(-4.4,0,10.4), "sister_anwen":Vector3(-4.2,0,11.7), "mira":Vector3(-6.7,0,11.7), "saga_nessa":Vector3(-6.8,0,10.2)}
+	for id: String in positions:
+		var entry := _world_actor(id)
+		if entry.is_empty(): continue
+		if active:
+			entry["gathering_restore"] = {"profile":entry.profile.duplicate(true), "path":entry.path.duplicate()}
+			var profile: Dictionary = entry.profile.duplicate(true)
+			profile["activity"] = "rest"
+			profile["activities"] = ["rest"]
+			profile["workstation"] = {}
+			entry.pending_routine = {"profile":profile, "path":[positions[id]], "line":"There is room here. Nothing requires you to stay.", "gathering":true}
+		elif entry.has("gathering_restore"):
+			entry.pending_routine = entry.gathering_restore
+			entry.erase("gathering_restore")
+		_release_activity(entry)
+		entry.route = []
+		_apply_pending_routine(entry)
 
 func _on_perception_cue(position: Vector3, radius: float, danger: bool) -> void:
 	if not is_instance_valid(host) or not bool(host.game_started) or get_tree().paused:

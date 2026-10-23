@@ -102,6 +102,9 @@ Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor
 # EnemyAI is demand-loaded after the menu, so editor import alone can miss a
 # parser failure that disables every encounter. Compile it without running it.
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--check-only", "--script", "res://scripts/enemy_ai.gd") "enemy-runtime-compile"
+foreach ($script in @("greyfen_life_controller", "story_state", "hud")) {
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--check-only", "--script", "res://scripts/$script.gd") ("compile-" + $script)
+}
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "split_prepared_audio.gd")) "prepared-audio-split"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd")) "prepared-zone-geometry"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"

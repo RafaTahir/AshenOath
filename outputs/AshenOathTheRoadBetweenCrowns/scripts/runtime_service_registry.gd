@@ -156,6 +156,7 @@ func configure(owner: Node) -> void:
 	var runtime_packs = services["runtime_packs"]
 
 	quests.load_quests("res://data/quests.json")
+	hud.set_runtime_services(owner, save_manager)
 	quest_presentation.setup(quests, quest_beats, story_state)
 	quest_beats.setup(quests, story_state)
 	dialogue.load_dialogue("res://data/dialogue.json")

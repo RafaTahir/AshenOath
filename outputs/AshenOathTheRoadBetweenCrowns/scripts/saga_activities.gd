@@ -164,7 +164,7 @@ func refresh() -> void:
 	var life: Node = host.zone_root.get_node_or_null("GreyfenLifeController")
 	if life == null:
 		life = host.zone_root.get_node_or_null("RegionalLifeController")
-	if life == null and not preload("res://scripts/story_cast_profile.gd").life_data().get("zones", {}).get(zone, {}).is_empty():
+	if life == null and (not preload("res://scripts/story_cast_profile.gd").life_data().get("zones", {}).get(zone, {}).is_empty() or preload("res://scripts/story_world_scenes.gd").has_zone(zone)):
 		life = load("res://scripts/greyfen_life_controller.gd").new()
 		life.name = "RegionalLifeController"
 		host.zone_root.add_child(life)
@@ -304,8 +304,34 @@ func _secret_available(secret: Array) -> bool:
 func _step(id: String) -> Array:
 	for step: Array in Catalog.QUESTS.get(id, {}).get("steps", []):
 		if not host.quests.is_objective_done(id, str(step[0])):
-			return step
+			return _method_step(id, step)
 	return []
+
+func _method_step(id: String, original: Array) -> Array:
+	var step := original.duplicate(true)
+	var outcome := str(host.story_state.get_flag(id + "_outcome", ""))
+	if id == "saga_gre_q01" and outcome == "coerced":
+		step[5] = "Nessa accepts the corrected measure, not the threat. The household repays under fear of its address being exposed; this was not voluntary help."
+	if id == "saga_dep_q01" and outcome == "falsified":
+		step[5] = "Dain: 'You have marked the current fee paid when we both know it was taken twice. That is your entry, not my agreement.' The old command evidence is untouched."
+		if str(step[0]) == "settle_account":
+			step[5] = "Kael chose to falsify this current dispatch. The next load still needs the physical tag and false copy; no old command evidence changes."
+		if str(step[0]) == "mark_next_load":
+			step[1] = "Re-tag the next load and place the knowingly false current dispatch"
+			step[4] = ["Re-tag the next load", "Place the false paid dispatch copy"]
+	if id == "saga_var_q02" and outcome == "conditional_pass":
+		step[5] = "The family has its real pass. The optional complaint is withheld under Merrow's bargain, not withdrawn freely. No guaranteed campaign evidence has been removed."
+		if str(step[0]) == "choose_protection":
+			step[5] = "Kael accepted Merrow's conditional bargain. Withholding the optional complaint and delivering the actual pass remain to be done. Guaranteed campaign proof is unaffected."
+		if str(step[0]) == "deliver_copy":
+			step[1] = "Withhold the optional complaint and deliver the household's pass"
+			step[4] = ["Seal the optional complaint in Merrow's withheld tray", "Place the household's conditional pass copy"]
+	return step
+
+func _account(id: String, step: Array) -> String:
+	if str(host.story_state.get_flag(id + "_outcome", "")) in ["coerced", "falsified", "conditional_pass"]:
+		return str(_method_step(id, step)[5])
+	return Catalog.account(id, step)
 
 func _part(id: String, objective: String) -> int:
 	return maxi(0, int(host.story_state.get_flag(id + ":" + objective + ":part", 0)))
@@ -368,7 +394,7 @@ func activate(id: String) -> void:
 		host.hud.toast("Play one ordinary Three Marks round at the common table. Winning is not required.")
 	else:
 		var part := _part(quest_id, str(step[0]))
-		var account := Catalog.account(quest_id, step)
+		var account := _account(quest_id, step)
 		if step[4] is Array and step[4].size() > 1:
 			account = str(area.prompt) + ".\n\n" + account
 		var action := _action(area, "work" if mode in ["work", "carry", "door", "bell"] else "advance", quest_id, str(area.prompt), part)
@@ -392,13 +418,17 @@ func _open_person(area: Node3D, id: String) -> void:
 			continue
 		finished = finished or host.quests.is_completed(quest_id)
 		if host.quests.is_completed(quest_id):
-			remembered = Catalog.aftermath(quest_id, str(host.story_state.get_flag(quest_id + "_outcome", "")))
+			remembered = _aftermath_text(quest_id)
 		if not host.quests.is_active(quest_id) and not host.quests.is_completed(quest_id):
 			actions.append(_action(area, "offer", quest_id, str(quest.title)))
 		elif host.quests.is_active(quest_id):
 			actions.append(_action(area, "directions", quest_id, "About " + str(quest.title)))
 	var written: bool = (bool(person.get("alias", false)) and not bool(area.get_meta("saga_alias_present", false))) or (id == "saga_odran" and host.quests.is_completed("saga_var_q03") and str(host.story_state.get_flag("saga_var_q03_outcome", "")) == "departed")
+	if not written and bool(host.story_state.honor_view(id).known):
+		actions.append(_action(area, "honor", "", "How do things stand between us?"))
 	var words := str(Catalog.GREETINGS.get(id, person.line)) if finished else str(person.line)
+	if not written and bool(host.story_state.honor_view(id).grievance):
+		words = str(host.story_state.honor_view(id).reaction)
 	if written:
 		words = "Previously authorized note from " + str(person.name) + ":\n" + ("My tools and traveling tray were returned. I have left by my own choice. The offered seed labels remain available to inspect." if id == "saga_odran" else words)
 	_open(area, str(person.name) + (" - recorded note" if written else ""), words, actions, "narrator" if written else id, remembered)
@@ -437,6 +467,10 @@ func choose(action: Dictionary) -> void:
 		host._resume_game()
 		return
 	var operation := str(action.get("operation", ""))
+	if operation == "honor" and Catalog.PEOPLE.has(str(area.get("interaction_id"))):
+		var person_id := str(area.get("interaction_id"))
+		_open(area, str(Catalog.PEOPLE[person_id].name), str(host.story_state.honor_view(person_id).reaction), [], person_id)
+		return
 	if operation == "secret":
 		if str(area.interaction_id) != "saga_secret:" + str(action.get("secret", "")):
 			return
@@ -519,7 +553,7 @@ func _complete_step(id: String, step: Array, chosen_outcome: String = "") -> voi
 		host.story_state.set_flag(id + "_outcome", chosen_outcome)
 	if str(step[3]) in ["choice", "signal"]:
 		var outcome := str(host.story_state.get_flag(id + "_outcome", ""))
-		host.story_state.record_decision(id + ":" + str(step[0]), {"label":str(step[4].get(outcome, outcome)), "result":Catalog.account(id, step), "sets_flags":{id + "_outcome":outcome}})
+		host.story_state.record_decision(id + ":" + str(step[0]), {"label":str(step[4].get(outcome, outcome)), "result":_account(id, step), "sets_flags":{id + "_outcome":outcome}})
 	var quest: Dictionary = Catalog.QUESTS[id]
 	if str(step[0]) == str(quest.steps.back()[0]):
 		if str(host.story_state.get_flag(id + "_outcome", "")) == "":
@@ -532,12 +566,13 @@ func _complete_step(id: String, step: Array, chosen_outcome: String = "") -> voi
 			host.story_state.record_evidence(id + "_lore", {"zone":zone, "kind":"account", "title":quest.title, "text":quest.lore})
 		var person := str(quest.get("actor", ""))
 		if person != "":
-			host.story_state.record_relationship_event({"id":"lr.saga." + id, "actor":person.trim_prefix("saga_"), "kind":"help", "text":str(quest.title) + ": " + Catalog.aftermath(id, str(host.story_state.get_flag(id + "_outcome", ""))), "acknowledgement":str(Catalog.GREETINGS.get(person, "Thank you for staying to see it through."))})
+			var harmful := str(host.story_state.get_flag(id + "_outcome", "")) in ["coerced", "falsified", "conditional_pass"]
+			host.story_state.record_relationship_event({"id":"lr.saga." + id, "actor":person.trim_prefix("saga_"), "kind":"broken" if harmful else "help", "text":str(quest.title) + ": " + _aftermath_text(id), "acknowledgement":_account(id, step) if harmful else str(Catalog.GREETINGS.get(person, "Thank you for staying to see it through."))})
 	if host.quests.is_choice_objective(id, str(step[0])):
 		host.quests.complete_choice(id, str(step[0]))
 	else:
 		host.quests.complete_objective(id, str(step[0]))
-	var account := Catalog.account(id, step)
+	var account := _account(id, step)
 	host.story_state.set_flag(id + ":last_account", account)
 	host.story_state.end_change()
 	host.quests.end_change()
@@ -606,6 +641,8 @@ func _outcome_name(id: String) -> String:
 
 func _aftermath_text(id: String) -> String:
 	var text := Catalog.aftermath(id, str(host.story_state.get_flag(id + "_outcome", "")))
+	if str(host.story_state.get_flag(id + "_outcome", "")) in ["coerced", "falsified", "conditional_pass"]:
+		text = str(_method_step(id, Catalog.QUESTS[id].steps.back())[5])
 	if id == "saga_har_q05":
 		text += "\nCovenant: " + str(host.story_state.get_flag("final_covenant", "")) + ". The original journey home remains separate."
 	return text

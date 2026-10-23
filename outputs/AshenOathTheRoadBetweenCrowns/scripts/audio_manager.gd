@@ -95,6 +95,7 @@ var owned_timers: Array[Timer] = []
 var dialogue_active := false
 var dialogue_review_paused := false
 var dialogue_duck := 0.0
+var ambient_conversation := false
 var revised_voice_entries: Dictionary = {}
 var dialogue_voice_keys: Dictionary = {}
 var generated_current_recordings_allowed := false
@@ -111,7 +112,7 @@ func _process(delta: float) -> void:
 			pending_dialogue_voice = ""
 			_play_voice_now(voice_id)
 	_update_nearby_voice()
-	var duck_target := 1.0 if dialogue_active or (voice_player != null and voice_player.playing) else (0.45 if is_instance_valid(nearby_voice_player) else 0.0)
+	var duck_target := 1.0 if dialogue_active or (voice_player != null and voice_player.playing) else (0.45 if ambient_conversation or is_instance_valid(nearby_voice_player) else 0.0)
 	var previous_duck := dialogue_duck
 	dialogue_duck = move_toward(dialogue_duck, duck_target, delta * (6.0 if duck_target > dialogue_duck else 1.8))
 	if not is_equal_approx(previous_duck, dialogue_duck):
@@ -413,6 +414,9 @@ func play_nearby_speech(speaker: String, text: String, actor: Node3D) -> float:
 	nearby_voice_player.global_position = actor.global_position + Vector3.UP * 1.5
 	nearby_voice_player.play()
 	return float(nearby_voice_entry.get("duration_seconds", 0.0))
+
+func set_ambient_conversation(active: bool) -> void:
+	ambient_conversation = active
 
 func _update_nearby_voice() -> void:
 	if not is_instance_valid(nearby_voice_player): return

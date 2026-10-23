@@ -153,7 +153,7 @@
         "conditions": {
           "witness_consent_anwen": "refused"
         },
-        "greeting": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
+        "greeting": "I will give you the register. You said you would not demand my oath. I am still not agreeing to stand in the rite.",
         "lines": [
           "Kael: The record can speak to facts. It cannot make your promise for you.",
           "Anwen: Then you do understand the difference."

@@ -22,6 +22,25 @@ RELEASE_MANIFEST = "release_manifest.json"
 MAX_TOTAL_BYTES = 104_857_600
 
 
+def lossless_gzip(payload: bytes) -> bytes:
+    """Spend packaging CPU, never image/audio quality, on compact code packs."""
+    packed = gzip.compress(payload, compresslevel=9, mtime=0)
+    # Optional build dependency; runtime clients still receive standard gzip.
+    # Large already-compressed art packs do not benefit from this slow pass.
+    if len(payload) <= 8 * 1024 * 1024:
+        try:
+            import zopfli.gzip
+        except ImportError:
+            pass
+        else:
+            candidate = zopfli.gzip.compress(payload, numiterations=5)
+            if len(candidate) < len(packed):
+                packed = candidate
+    if gzip.decompress(packed) != payload:
+        raise ValueError("Lossless gzip packaging changed decoded content")
+    return packed
+
+
 def optimize_menu_png(export_dir: Path) -> None:
     """Recompress image data without changing pixels, colour metadata or format."""
     from PIL import Image
@@ -122,7 +141,7 @@ def compress_wasm(path: Path) -> None:
         payload = gzip.decompress(payload)
     if not payload.startswith(b"\x00asm"):
         raise ValueError("Cannot package a non-WebAssembly engine")
-    packed = gzip.compress(payload, compresslevel=9, mtime=0)
+    packed = lossless_gzip(payload)
     if gzip.decompress(packed) != payload:
         raise ValueError("WebAssembly lossless transport round trip failed")
     path.write_bytes(packed)
@@ -133,6 +152,7 @@ def compress_engine_script(path: Path) -> None:
     if payload.startswith(b"\x1f\x8b"):
         payload = gzip.decompress(payload)
     payload.decode("utf-8")
+    # Keep unchanged engine URLs/cache identity stable across story-only builds.
     packed = gzip.compress(payload, compresslevel=9, mtime=0)
     if gzip.decompress(packed) != payload:
         raise ValueError("Engine JavaScript lossless transport round trip failed")
@@ -156,7 +176,7 @@ def compress_pck_transport(export_dir: Path) -> None:
             raise ValueError(f"{path.name} is not a valid Godot PCK payload")
         if payload.startswith(b"\x1f\x8b"):
             continue
-        packed = gzip.compress(decoded, compresslevel=9, mtime=0)
+        packed = lossless_gzip(decoded)
         if gzip.decompress(packed) != decoded:
             raise ValueError(f"{path.name} gzip transport failed its lossless round trip")
         temporary = path.with_name(path.name + ".tmp")

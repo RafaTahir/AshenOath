@@ -273,15 +273,26 @@ var _pointer_pause_button: Button
 var _compact_menu_title: Label
 var _game_owner: Node
 var _save_manager: Node
+var _ambient_panel: PanelContainer
+var _ambient_words: Label
+var _ambient_owner := 0
+var _ambient_remaining := 0.0
+var _honor_source: Node
 
 func set_runtime_services(owner: Node, saves: Node) -> void:
 	_game_owner = owner
 	_save_manager = saves
 	_save_service()
+	if is_instance_valid(_honor_source) and _honor_source.honor_changed.is_connected(_on_honor_changed):
+		_honor_source.honor_changed.disconnect(_on_honor_changed)
+	_honor_source = owner.get("story_state") if is_instance_valid(owner) else null
+	if is_instance_valid(_honor_source) and not _honor_source.honor_changed.is_connected(_on_honor_changed):
+		_honor_source.honor_changed.connect(_on_honor_changed)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_hud()
+	_build_ambient_subtitles()
 	var bow_sight := preload("res://scripts/bow_reticle.gd").new()
 	bow_sight.hud = self
 	hud_root.add_child(bow_sight)
@@ -303,6 +314,10 @@ func _process(delta: float) -> void:
 	if health_bar == null:
 		return
 	_advance_notices(delta)
+	if _ambient_remaining > 0.0:
+		_ambient_remaining = maxf(0.0, _ambient_remaining - delta)
+		if _ambient_remaining <= 0.0 or _gameplay_surface_blocked() or get_tree().paused:
+			clear_ambient_subtitle(_ambient_owner)
 	if loading_armed and loading_layer != null and not loading_layer.visible:
 		loading_elapsed += delta
 		if loading_elapsed >= 0.75:
@@ -328,7 +343,55 @@ func _update_process_policy() -> void:
 	if health_bar == null:
 		return
 	var loading_delay_active := loading_armed and loading_layer != null and not loading_layer.visible
-	set_process(loading_delay_active or notices.has_pending() or not _notice_active.is_empty() or _attention_remaining > 0.0 or _hint_remaining > 0.0 or _status_remaining > 0.0)
+	set_process(_ambient_remaining > 0.0 or loading_delay_active or notices.has_pending() or not _notice_active.is_empty() or _attention_remaining > 0.0 or _hint_remaining > 0.0 or _status_remaining > 0.0)
+
+func _build_ambient_subtitles() -> void:
+	_ambient_panel = PanelContainer.new()
+	_ambient_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hud_root.add_child(_ambient_panel)
+	_ambient_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+	_ambient_panel.anchor_left = 0.16
+	_ambient_panel.anchor_right = 0.84
+	_ambient_panel.offset_left = 0
+	_ambient_panel.offset_right = 0
+	_ambient_panel.offset_top = -156
+	_ambient_panel.offset_bottom = -74
+	_ambient_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_ambient_words = Label.new()
+	_ambient_words.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_ambient_words.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_ambient_words.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_ambient_words.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_ambient_panel.add_child(_ambient_words)
+	_ambient_panel.hide()
+
+func ambient_subtitle_available(owner_id: int) -> bool:
+	return not _gameplay_surface_blocked() and not get_tree().paused and (_ambient_owner == 0 or _ambient_owner == owner_id)
+
+func show_ambient_subtitle(owner_id: int, speaker: String, words: String, duration: float) -> bool:
+	if not is_instance_valid(_ambient_panel) or not ambient_subtitle_available(owner_id):
+		return false
+	var current := _current_settings()
+	_ambient_owner = owner_id
+	_ambient_remaining = maxf(1.0, duration)
+	_ambient_words.text = (speaker + ": " if bool(current.get("subtitle_speaker_names", true)) else "") + words
+	_ambient_words.add_theme_font_size_override("font_size", int(20 * clampf(float(current.get("subtitle_scale", 1.0)), 0.9, 1.5)))
+	_ambient_panel.add_theme_stylebox_override("panel", HudVisualStyle.dialogue_panel(bool(current.get("high_contrast", false)), clampf(float(current.get("subtitle_background_opacity", 0.55)), 0, 1)))
+	_ambient_panel.show()
+	_update_process_policy()
+	return true
+
+func clear_ambient_subtitle(owner_id: int) -> void:
+	if _ambient_owner != owner_id:
+		return
+	_ambient_remaining = 0.0
+	_ambient_owner = 0
+	if is_instance_valid(_ambient_panel):
+		_ambient_panel.hide()
+	_update_process_policy()
+
+func _on_honor_changed(entry: Dictionary) -> void:
+	toast("Honor %s%d: %s" % ["+" if int(entry.delta) >= 0 else "", int(entry.delta), str(entry.text)], 5.0)
 
 func _gameplay_surface_blocked() -> bool:
 	return loading_armed or _dialogue_review_open or (menu_layer != null and menu_layer.visible) or (dialogue_layer != null and dialogue_layer.visible) or (inventory_layer != null and inventory_layer.visible)
@@ -341,6 +404,7 @@ func _on_hud_surface_visibility_changed() -> void:
 	if not blocked:
 		call_deferred("_present_pending_journey_return")
 	if blocked:
+		clear_ambient_subtitle(_ambient_owner)
 		raw_hint = ""
 		_hint_remaining = 0.0
 		_status_remaining = 0.0
@@ -1904,6 +1968,15 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	elif not evidence:
 		inventory_text.text = reading
 	_add_preparation_heading("JOURNAL")
+	if current_section.has("meter"):
+		var honor_meter := ProgressBar.new()
+		honor_meter.min_value = -100
+		honor_meter.max_value = 100
+		honor_meter.value = int(current_section.meter)
+		honor_meter.show_percentage = false
+		honor_meter.custom_minimum_size.y = 12
+		honor_meter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		craft_buttons.add_child(honor_meter)
 	var section_parent: Container = craft_buttons
 	if evidence or linked:
 		var section_grid: GridContainer = GridContainer.new()

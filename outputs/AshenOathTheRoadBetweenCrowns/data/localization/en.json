@@ -5249,8 +5249,8 @@
       "context": "dialogue.sister_anwen.variants.1.lines"
     },
     "dialogue.sister_anwen.variants.2.greeting": {
-      "source": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
-      "text": "I will give you the register. I am not agreeing to stand in a rite you threatened me into.",
+      "source": "I will give you the register. You said you would not demand my oath. I am still not agreeing to stand in the rite.",
+      "text": "I will give you the register. You said you would not demand my oath. I am still not agreeing to stand in the rite.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.2"
     },

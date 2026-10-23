@@ -129,6 +129,9 @@ static func get_profile(role: String, seed: String = "") -> Dictionary:
 static func expression_for(profile: Dictionary, state) -> String:
 	var id := str(profile.get("id", ""))
 	if state != null:
+		var standing: Dictionary = state.honor_view(id) if id != "" else {}
+		if bool(standing.get("grievance", false)):
+			return "guarded"
 		# Emotions follow the person's own recorded experience. An ending does
 		# not make every person, including absent witnesses, feel the same way.
 		if id != "" and state.has_method("relationship_events"):
@@ -145,4 +148,8 @@ static func expression_for(profile: Dictionary, state) -> String:
 			return "guarded"
 		if id == "mira" and str(state.get_flag("mira_truth", "")) != "":
 			return "relieved"
+		if bool(standing.get("known", false)) and str(standing.get("band", "")) == "Distrusted":
+			return "guarded"
+		if bool(standing.get("known", false)) and str(standing.get("band", "")) == "Respected":
+			return "warmth"
 	return str(profile.get("expression", "neutral"))
