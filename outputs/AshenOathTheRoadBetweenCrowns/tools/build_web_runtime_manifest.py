@@ -422,7 +422,8 @@ def main() -> int:
         print(f"WEB RELEASE MANIFEST: FAIL - {error}", file=sys.stderr)
         return 1
     output = (args.output or (export_dir / RELEASE_MANIFEST)).resolve()
-    output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    # The manifest ships too. Compact metadata retains every field and hash.
+    output.write_text(json.dumps(manifest, separators=(",", ":")) + "\n", encoding="utf-8")
     if output == export_dir / RELEASE_MANIFEST:
         try:
             inspect_packaged_export(export_dir)

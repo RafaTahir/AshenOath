@@ -7,6 +7,7 @@ var _visibility_results: Dictionary = {}
 var target: Node3D
 var input_source: Node
 var yaw = 0.0
+var _bow_camera_weight := 0.0
 var _manual_look_yaw := 0.0
 var pitch = -0.19
 var sensitivity = 0.003
@@ -158,7 +159,7 @@ func _apply_mouse_motion(relative: Vector2) -> void:
 
 func _bow_aim_sensitivity() -> float:
 	if is_instance_valid(target) and target.get("bow_aiming") == true and target.has_method("get_bow_aim_sensitivity"):
-		return float(target.call("get_bow_aim_sensitivity"))
+		return 0.65 * float(target.call("get_bow_aim_sensitivity"))
 	return 1.0
 
 func _process(delta: float) -> void:
@@ -202,6 +203,8 @@ func _update_view(delta: float) -> void:
 	var velocity = _target_velocity()
 	var flat_speed = Vector2(velocity.x, velocity.z).length()
 	var sprinting := _action_pressed("run") and flat_speed > 3.5
+	var bow_aim: bool = target.get("bow_aiming") == true and target.get("can_control") == true
+	_bow_camera_weight = move_toward(_bow_camera_weight, 1.0 if bow_aim else 0.0, delta * 5.5)
 	_combat_focus_refresh -= delta
 	if _combat_focus_refresh <= 0.0 or not is_instance_valid(_cached_combat_focus):
 		_combat_focus_refresh = 0.10
@@ -221,7 +224,7 @@ func _update_view(delta: float) -> void:
 	var framing_subject := combat_focus
 	if framing_subject == null and _large_subject_linger > 0.0 and is_instance_valid(_last_large_subject) and bool(_last_large_subject.get("dead")):
 		framing_subject = _last_large_subject
-	if _manual_orbit or close_weight > 0.0:
+	if _manual_orbit or close_weight > 0.0 or _bow_camera_weight > 0.0:
 		framing_subject = null
 	if current_zone_id == "wychwood":
 		if followed_position.z > 4.5:
@@ -232,6 +235,12 @@ func _update_view(delta: float) -> void:
 	if sprinting:
 		target_fov = max(target_fov, 66.5)
 	var eye_height := float(target.get_camera_eye_height()) if target.has_method("get_camera_eye_height") else 1.62
+	# Precision shoulder view and eye-level sighting share the same orbit. Keep
+	# the user's zoom distance so releasing aim restores their chosen framing.
+	target_distance = lerpf(target_distance, minf(distance, 3.25), _bow_camera_weight)
+	target_height = lerpf(target_height, eye_height + 0.06, _bow_camera_weight)
+	shoulder = lerpf(shoulder, 0.55, _bow_camera_weight)
+	target_fov = lerpf(target_fov, 52.0, _bow_camera_weight)
 	target_height = lerpf(target_height, eye_height, close_weight)
 	shoulder *= 1.0 - close_weight
 	var target_pos = followed_position + Vector3(0, target_height, 0)
@@ -252,9 +261,10 @@ func _update_view(delta: float) -> void:
 	desired.y = maxf(desired.y, followed_position.y + 0.55)
 	var natural_look = target_pos + Basis(Vector3.UP, yaw) * Vector3(0.55, -0.08, -look_ahead)
 	var focus = _environment_focus(combat_focus)
-	if focus.weight > 0.0 and not _manual_orbit and close_weight <= 0.0:
+	if focus.weight > 0.0 and not _manual_orbit and close_weight <= 0.0 and _bow_camera_weight <= 0.0:
 		natural_look = natural_look.lerp(focus.point, focus.weight)
 	natural_look = natural_look.lerp(desired - orbit.z * 5.0, close_weight)
+	natural_look = natural_look.lerp(desired - orbit.z * 30.0, _bow_camera_weight)
 	if _combat_subject_height(framing_subject) > 2.6:
 		var encounter_frame := _large_encounter_frame(desired, framing_subject)
 		natural_look = encounter_frame.point
@@ -295,7 +305,7 @@ func _update_view(delta: float) -> void:
 		camera.fov = maxf(camera.fov, target_fov)
 	_idle_time += delta
 	var idle_breath = Vector3.ZERO
-	if flat_speed < 0.25 and combat_focus == null and not is_first_person():
+	if flat_speed < 0.25 and combat_focus == null and not is_first_person() and _bow_camera_weight <= 0.0:
 		idle_breath.y = sin(_idle_time * 1.35) * 0.018
 	camera.look_at(_smoothed_look + idle_breath, Vector3.UP)
 	camera.fov = lerp(camera.fov, target_fov + _fov_kick, _smooth_weight(delta, 5.0))
@@ -574,17 +584,41 @@ func restore_activity_view(saved: Dictionary) -> void:
 		target.set_camera_close_view(is_first_person())
 
 func training_aim_direction(origin: Vector3) -> Vector3:
+	return bow_aim_solution(origin, 30.0).direction
+
+func bow_aim_solution(origin: Vector3, reach: float) -> Dictionary:
 	if not is_instance_valid(camera):
-		return get_flat_forward()
+		return {"direction": get_flat_forward(), "point": origin + get_flat_forward() * reach, "blocked": false}
 	var screen := camera.get_viewport().get_visible_rect().size * 0.5
 	var ray_origin := camera.project_ray_origin(screen)
-	var endpoint := ray_origin + camera.project_ray_normal(screen) * 30.0
+	var view_direction := camera.project_ray_normal(screen)
+	var endpoint := ray_origin + view_direction * (reach + ray_origin.distance_to(origin))
 	var query: PhysicsRayQueryParameters3D = _query_scratch.ray(ray_origin, endpoint, 1 | 128)
 	if target is CollisionObject3D:
 		query.exclude = [(target as CollisionObject3D).get_rid()]
 	query.collide_with_areas = false
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	return ((hit.position if not hit.is_empty() else endpoint) - origin).normalized()
+	if not hit.is_empty(): endpoint = hit.position
+	var offset := endpoint - origin
+	var blocked := offset.dot(view_direction) <= 0.01
+	var direction := offset.normalized() if offset.length_squared() > 0.0001 else view_direction
+	endpoint = origin + direction * minf(offset.length(), reach)
+	# The camera sees around a shoulder; the arrow still leaves the real bow.
+	query.from = origin
+	query.to = endpoint
+	var muzzle_hit := get_world_3d().direct_space_state.intersect_ray(query)
+	var obstructed := false
+	if not muzzle_hit.is_empty():
+		obstructed = origin.distance_to(muzzle_hit.position) + 0.10 < origin.distance_to(endpoint)
+		endpoint = muzzle_hit.position
+		var collider: CollisionObject3D = muzzle_hit.get("collider") as CollisionObject3D
+		blocked = blocked or (origin.distance_to(endpoint) < 0.55 and collider != null and (collider.collision_layer & 1) != 0)
+	var eye: Vector3 = target.global_position + Vector3.UP * target.get_camera_eye_height() if is_instance_valid(target) and target.has_method("get_camera_eye_height") else ray_origin
+	query.from = eye
+	query.to = origin
+	query.collision_mask = 1
+	blocked = blocked or not get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+	return {"direction": direction, "point": endpoint, "blocked": blocked, "obstructed": obstructed}
 
 var _reduced_story_motion := false
 

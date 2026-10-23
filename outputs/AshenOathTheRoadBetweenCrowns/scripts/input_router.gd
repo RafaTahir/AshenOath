@@ -834,7 +834,7 @@ func action_axis(negative: StringName, positive: StringName) -> float:
 func describe_action(action: String) -> Dictionary:
 	var mode := _action_mode(action)
 	var binding := action_label(action)
-	var name := str({"block":"guard", "run":"sprint", "aim_bow":"aim", "oathfire_beam":"charge Oathfire"}.get(action, action.replace("_", " ")))
+	var name := str({"block":"guard", "run":"sprint", "aim_bow":"aim", "fire_bow":"draw; release to loose", "oathfire_beam":"charge Oathfire"}.get(action, action.replace("_", " ")))
 	var instruction := "Press %s to %s" % [binding, name]
 	if mode == "hold":
 		instruction = "Hold %s to %s" % [binding, name]
@@ -846,7 +846,7 @@ func describe_action(action: String) -> Dictionary:
 func _action_mode(action: String) -> String:
 	if action == "aim_bow" and active_device == DEVICE_TOUCH:
 		return str(settings_ref.get("touch_aim_mode", "toggle"))
-	return str(_toggle_modes.get(action, "hold" if action in ["aim_bow", "oathfire_beam"] else "press"))
+	return str(_toggle_modes.get(action, "hold" if action in ["aim_bow", "fire_bow", "oathfire_beam"] else "press"))
 
 func action_label(action: String) -> String:
 	if active_device == DEVICE_GAMEPAD:
@@ -983,6 +983,9 @@ func set_virtual_action(action: StringName, pressed: bool) -> void:
 
 func cancel_virtual_action(action: StringName) -> void:
 	set_virtual_action(action, false)
+	# Sliding off Draw cancels it; only lifting a valid held finger looses.
+	if action == &"fire_bow":
+		_pending_released.erase(str(action))
 	_toggle_actions.erase(str(action))
 	_pending_pressed.erase(str(action))
 

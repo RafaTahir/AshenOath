@@ -1,14 +1,16 @@
 # Living Cast - Current Checkpoint
 
-Stage: targeted actor-presence repair implemented and compiled; CAST-010 publication.
-Formal user acceptance: **0/10**. One authorized runtime check identified the
-shared enemy parser failure; post-fix runtime appearance is not verified.
-Current repair, evidence and manual checks: [actor presence](ACTOR_PRESENCE_REPAIR.md).
+Stage: bow experience implemented, compiled and packaged; CAST-010 publication.
+Formal user acceptance: **0/10**. Bow runtime appearance/input is unverified;
+no gameplay/browser check was run for this change. The prior actor-presence
+check identified the shared enemy parser failure, not a post-fix runtime pass.
+Current change and manual checks: [bow experience](BOW_EXPERIENCE.md).
+Retained repair/evidence: [actor presence](ACTOR_PRESENCE_REPAIR.md).
 Current implementation and checklist: [interaction/resource efficiency](INTERACTION_EFFICIENCY_IMPLEMENTATION.md).
 Retained six-world rollout: [rollout](ROLLOUT_IMPLEMENTATION.md).
-Current candidate: `actor-presence-20261023`; **104842306 bytes**, 17 files,
-15294 bytes below the cap. Root PCK SHA-256:
-`bc5a2fdfa849eda86194e69734ae0442295b586add6f73e5bcc207cea9c7742c`.
+Current candidate: `bow-experience-20261023`; **104855895 bytes**, 17 files,
+1705 bytes below the cap. Root PCK SHA-256:
+`68afa4234867988914ba0ff3c68077ac42acb806d02eb8c7fad4e51b47503c5f`.
 Production packaging and demand-loaded enemy compilation succeeded. Runtime
 check: partial/failed on the original parser error, not a post-fix pass.
 Publication ownership: current CAST-010 receipt under `.release-gate/living-road/`.
@@ -80,5 +82,6 @@ are retained under .release-gate/cast-greyfen-v1-20261021/.
 ## Exact Next Action
 
 Complete publication through the existing CAST-010 receipt, then obtain the
-user's Wychwood/NPC/Hart review. No additional agent runtime test is authorized.
+user's third-/first-person bow review and retained Wychwood/NPC/Hart review.
+No additional agent runtime test is authorized.
 

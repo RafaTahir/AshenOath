@@ -282,6 +282,9 @@ func set_runtime_services(owner: Node, saves: Node) -> void:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_hud()
+	var bow_sight := preload("res://scripts/bow_reticle.gd").new()
+	bow_sight.hud = self
+	hud_root.add_child(bow_sight)
 	_build_menu_layer()
 	_build_dialogue()
 	_build_inventory()
@@ -849,11 +852,11 @@ func show_controls_menu(back_target: String = "main") -> void:
 		instructions.append("%s: tap to cycle weapons; hold to draw or sheath" % input_source.action_label("weapon_cycle"))
 		_add_menu_text(box, "Move with the movement keys, left stick or touch pad; look with the mouse, right stick or touch look area.\n\n" + "\n".join(instructions))
 	elif input_device == "gamepad":
-		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | Tap X cycle weapons | Hold X draw/sheath\nRB light attack | RT heavy attack / fire bow | LT aim bow\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
+		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | Tap X cycle weapons | Hold X draw/sheath\nRB light attack | RT heavy attack | LT aim bow\nBow: aim, hold RT to draw, release RT to loose; lower aim to cancel\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
 	elif input_device == "touch":
-		_add_menu_text(box, "Left thumb move | Drag right side to look\nSword: Strike, Heavy, Guard, Dodge, Jump, Oath\nBow: Aim, Fire, Lock, Arrows, Dodge, Jump\nUse the displayed object with Use\nMore: weapons, draw/sheath, supplies, targets, camera, Bracken\nPause and Book open their menus\nLandscape orientation is required during gameplay")
+		_add_menu_text(box, "Left thumb move | Drag right side to look\nSword: Strike, Heavy, Guard, Dodge, Jump, Oath\nBow: Aim, hold Draw, lift to loose; lower Aim to cancel\nLock, Arrows, Dodge, Jump remain available\nUse the displayed object with Use\nMore: weapons, draw/sheath, supplies, targets, camera, Bracken\nPause and Book open their menus\nLandscape orientation is required during gameplay")
 	else:
-		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 Steel | 2 Bow | 3 Oathblade | H draw/sheath\nLeft mouse light attack / fire bow | Right mouse heavy / aim bow\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
+		_add_menu_text(box, "WASD move | Mouse look | Wheel zoom | Page Up/Down zoom\nShift run | Space dodge | X jump | 1 Steel | 2 Bow | 3 Oathblade | H draw/sheath\nLeft mouse light attack | Right mouse heavy / aim bow\nBow: aim, hold left mouse to draw, release to loose; lower aim to cancel\nHold C Oathfire Beam | Tap Q parry | Hold Q block | E interact\nZ cycle arrows | R potion | F bomb | Tab inventory | Esc pause")
 	_add_menu_button(box, "Customize Controls", func(): show_remap_menu(back_target))
 	_add_menu_button(box, "Back", _return_from_controls)
 

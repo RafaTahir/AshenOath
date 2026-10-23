@@ -187,7 +187,7 @@ func _creature_pose(skeleton: Skeleton3D) -> void:
 func _world(skeleton: Skeleton3D, bone: int) -> Vector3:
 	return (skeleton.global_transform * skeleton.get_bone_global_pose(bone)).origin
 
-func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_target: Variant = null) -> void:
+func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_target: Variant = null, elbow_direction: Vector3 = Vector3.ZERO) -> void:
 	var shoulder := _world(skeleton, int(arm.upper))
 	var elbow := _world(skeleton, int(arm.lower))
 	var hand := _world(skeleton, int(arm.hand))
@@ -199,6 +199,8 @@ func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_targ
 	var distance := clampf(shoulder.distance_to(goal), absf(upper - lower) + 0.005, upper + lower - 0.005)
 	var along := (upper * upper + distance * distance - lower * lower) / (2.0 * distance)
 	var bend := elbow - shoulder - axis * (elbow - shoulder).dot(axis)
+	if elbow_direction.length_squared() > 0.0001:
+		bend = elbow_direction - axis * elbow_direction.dot(axis)
 	if bend.length_squared() < 0.0001:
 		bend = actor.global_basis.x * float(arm.side)
 		bend -= axis * bend.dot(axis)

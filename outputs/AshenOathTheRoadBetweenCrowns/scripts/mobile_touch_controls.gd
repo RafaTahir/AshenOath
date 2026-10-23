@@ -408,6 +408,7 @@ func _draw() -> void:
 		draw_circle(center, radius, Color(0.40, 0.12, 0.08, 0.84) if pressed else Color(0.04, 0.045, 0.05, 0.64))
 		draw_arc(center, radius, 0.0, TAU, 40, Color(0.86, 0.70, 0.44, 0.90 if enabled else 0.28), 2.0 * unit)
 		var caption: String = str(row.get("label", action))
+		if action == "fire_bow": caption = "LOOSE" if pressed else "DRAW"
 		var toggled_on: bool = toggle and bool(descriptor.get("active", false))
 		_draw_centered_label(center - Vector2(0, 5.0 * unit) if toggled_on else center, caption, maxi(10, int((12.0 if action != "pause" else 19.0) * unit)), enabled)
 		if toggled_on:

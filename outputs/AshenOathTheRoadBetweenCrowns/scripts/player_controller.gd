@@ -152,6 +152,14 @@ var weapon_mode: String:
 var bow_aiming := false
 var bow_draw_time := 0.0
 var bow_recovery := 0.0
+var bow_drawing := false
+var bow_requires_fire_release := false
+var bow_pose_aim := 0.0
+var bow_pose_direction := Vector3.FORWARD
+var bow_pose_local_origin := Vector3.ZERO
+var bow_pose_valid := false
+var bow_aim_solution: Dictionary = {}
+var bow_presentation: SkeletonModifier3D
 var training_range: WeakRef
 var selected_arrow_id := "standard_arrow"
 var bow_visual: Node3D
@@ -212,6 +220,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if input_source != null and input_source.has_method("is_gameplay_context") and not input_source.is_gameplay_context():
 		_movement_frame_active = false
+		_cancel_bow()
 		if equipment_loadout.is_transitioning() or weapon_cycle_armed or equipment_pending_attack != "":
 			_cancel_equipment_action()
 		velocity.x = 0.0
@@ -239,6 +248,7 @@ func _physics_process(delta: float) -> void:
 		_update_blade_contact()
 		return
 	if not can_control:
+		_cancel_bow()
 		_movement_frame_active = false
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
@@ -255,6 +265,7 @@ func _physics_process(delta: float) -> void:
 func set_transition_locked(locked: bool) -> void:
 	if locked:
 		_cancel_equipment_action()
+		_cancel_bow()
 	if locked and beam_cast_state != BEAM_STATE_IDLE:
 		cancel_beam_charge("transition")
 	transition_locked = locked
@@ -276,8 +287,7 @@ func cancel_buffered_input(reason: String = "context") -> void:
 	attack_contact_emitted = true
 	attack_anim_time = 0.0
 	parry_window = 0.0
-	bow_aiming = false
-	bow_draw_time = 0.0
+	_cancel_bow()
 	dodge_time = 0.0
 	velocity.x = 0.0
 	velocity.z = 0.0
@@ -323,7 +333,7 @@ func _cache_camera_body(node: Node) -> void:
 		return
 	# Keep hand equipment and effects without drawing the inside of the head,
 	# hair, clothing, scabbard or quiver over the camera. Shadows still render.
-	if node == rig_sword_visual or node == weapon_root or node == bow_visual or node == slash_arc_root or node == beam_left_hand_glow or node == beam_right_hand_glow:
+	if node.get_meta("bow_view_arms", false) or node == rig_sword_visual or node == weapon_root or node == bow_visual or node == slash_arc_root or node == beam_left_hand_glow or node == beam_right_hand_glow:
 		return
 	if node is GeometryInstance3D:
 		_camera_body_shadows[node] = node.cast_shadow
@@ -340,6 +350,9 @@ func select_arrow(item_id: String) -> bool:
 	if inventory_ref == null or inventory_ref.get_item_type(item_id) != "ammo" or int(inventory_ref.items.get(item_id, 0)) <= 0:
 		return false
 	selected_arrow_id = item_id
+	bow_draw_time = 0.0
+	bow_drawing = false
+	bow_requires_fire_release = _action_pressed("fire_bow")
 	if equipment_loadout != null:
 		equipment_loadout.set_selected_arrow(item_id)
 	return true
@@ -351,8 +364,7 @@ func _set_weapon_mode(next_mode: String) -> void:
 	var normalized := "bow" if next_mode == "bow" else "sword"
 	if weapon_mode == normalized:
 		return
-	bow_aiming = false
-	bow_draw_time = 0.0
+	_cancel_bow()
 	weapon_mode = normalized
 	_set_sword_sheathed(true)
 
@@ -360,8 +372,7 @@ func _select_blade(blade_id: String) -> void:
 	_request_equipment("sword", blade_id, true)
 
 func _request_equipment(mode: String, blade_id: String, drawn: bool) -> void:
-	bow_aiming = false
-	bow_draw_time = 0.0
+	_cancel_bow()
 	equipment_pending_attack = ""
 	buffered_attack = ""
 	attack_buffer_time = 0.0
@@ -592,6 +603,7 @@ func _handle_movement(delta: float) -> void:
 			try_jump()
 		if _action_just_pressed("dodge") and not beam_charging:
 			if stamina_component.spend(get_dodge_stamina_cost()):
+				_cancel_bow()
 				_cancel_equipment_action()
 				dodge_dir = move_dir if move_dir.length() > 0.1 else -global_transform.basis.z
 				dodge_time = 0.30
@@ -817,31 +829,68 @@ func _handle_bow_input() -> void:
 			equipment_loadout.request_loadout("bow", get_selected_blade_id(), true)
 		return
 	if _action_just_pressed("cycle_arrow"):
+		_cancel_bow()
 		_cycle_arrow_type()
-	if bow_recovery > 0.0:
-		return
 	var aiming_now := _action_pressed("aim_bow")
-	if aiming_now:
-		bow_aiming = true
-		if equipment_loadout != null:
-			equipment_loadout.set_bow_aiming(true)
+	if not _action_pressed("fire_bow"):
+		bow_requires_fire_release = false
+	if not aiming_now or dodge_time > 0.0 or hurt_react_time > 0.0:
+		_cancel_bow()
+		return
+	bow_aiming = true
+	equipment_loadout.set_bow_aiming(true)
+	if bow_recovery > 0.0 or bow_requires_fire_release:
+		return
+	if _action_pressed("fire_bow"):
+		if not bow_has_arrow() and _action_just_pressed("fire_bow"): _cycle_arrow_type()
+		if not bow_has_arrow():
+			if _action_just_pressed("fire_bow"): arrow_unavailable.emit()
+			return
+		bow_drawing = true
+		var previous := bow_draw_time
 		bow_draw_time = minf(bow_draw_time + get_physics_process_delta_time(), get_bow_draw_duration())
-		if animation_driver != null and bow_draw_time <= get_physics_process_delta_time() * 1.5:
-			animation_driver.trigger_action("bow_aim", 1.0, 0.10)
-		if _action_just_pressed("fire_bow"):
-			_release_bow()
-		return
-	if bow_aiming and _action_just_released("aim_bow"):
-		bow_aiming = false
-		if equipment_loadout != null:
-			equipment_loadout.set_bow_aiming(false)
-		bow_draw_time = 0.0
-	if bow_aiming and _action_just_pressed("fire_bow"):
+		if previous < get_bow_draw_duration() and bow_draw_time >= get_bow_draw_duration() and input_source != null:
+			input_source.rumble(0.12, 0.08, 0.05)
+	elif bow_drawing and _action_just_released("fire_bow"):
+		bow_drawing = false
+		if bow_draw_time < 0.08:
+			bow_draw_time = 0.0
+			return
 		_release_bow()
-	elif _action_just_pressed("fire_bow"):
-		# A fire press without aim is intentionally ignored. This prevents an
-		# accidental sword-style click from consuming an arrow.
+	elif not _action_pressed("fire_bow"):
+		bow_drawing = false
+		bow_draw_time = 0.0
+
+func _cancel_bow() -> void:
+	bow_aiming = false
+	bow_drawing = false
+	bow_draw_time = 0.0
+	bow_requires_fire_release = _action_pressed("fire_bow")
+	equipment_loadout.set_bow_aiming(false)
+
+func bow_has_arrow() -> bool:
+	return (training_range != null and is_instance_valid(training_range.get_ref())) or get_selected_arrow_count() > 0
+
+func is_bow_pose_active() -> bool:
+	if input_source != null and not input_source.is_gameplay_context(): return false
+	return can_control and not transition_locked and weapon_mode == "bow" and equipment_loadout.bow_drawn and not equipment_loadout.is_transitioning() and beam_cast_state == BEAM_STATE_IDLE and dodge_time <= 0.0 and hurt_react_time <= 0.0
+
+func _update_bow_presentation(delta: float) -> void:
+	var aiming := is_bow_pose_active() and bow_aiming
+	bow_pose_aim = move_toward(bow_pose_aim, 1.0 if aiming else 0.0, delta * 7.0)
+	if bow_pose_aim <= 0.0 and not aiming:
+		bow_pose_direction = -global_basis.z
+		bow_aim_solution.clear()
 		return
+	var origin := get_arrow_origin()
+	if camera_controller != null and camera_controller.has_method("bow_aim_solution"):
+		bow_aim_solution = camera_controller.bow_aim_solution(origin, BOW_RANGE)
+		bow_pose_direction = bow_aim_solution.get("direction", -global_basis.z)
+	else:
+		bow_pose_direction = -global_basis.z
+		bow_aim_solution = {"point": origin + bow_pose_direction * BOW_RANGE, "direction": bow_pose_direction}
+	bow_aim_solution["draw"] = clampf(bow_draw_time / get_bow_draw_duration(), 0.0, 1.0)
+	bow_aim_solution["ammo"] = bow_has_arrow()
 
 func _release_bow() -> void:
 	var range_owner: Node = training_range.get_ref() if training_range != null else null
@@ -857,26 +906,13 @@ func _release_bow() -> void:
 	if not training and int(inventory_ref.items.get(selected_arrow_id, 0)) <= 0:
 		arrow_unavailable.emit()
 		return
-	var direction := -global_transform.basis.z
-	var locked_aim_point := Vector3.ZERO
-	var has_locked_aim := false
-	if camera_controller != null:
-		var locked_target: Node3D = camera_controller.get_locked_combat_target() if camera_controller.has_method("get_locked_combat_target") else null
-		if locked_target != null and is_instance_valid(locked_target):
-			locked_aim_point = locked_bow_aim_point(locked_target)
-			has_locked_aim = true
-			direction = (locked_aim_point - get_arrow_origin()).normalized()
-		else:
-			direction = camera_controller.training_aim_direction(get_arrow_origin())
-	if direction.length_squared() < 0.5:
-		direction = -global_transform.basis.z
-	direction = direction.normalized()
-	face_target(global_position + Vector3(direction.x, 0, direction.z) * 4.0)
+	_update_bow_presentation(0.0)
+	if bool(bow_aim_solution.get("blocked", false)):
+		bow_draw_time = 0.0
+		ability_hint.emit("The bow needs clearance.")
+		return
 	var arrow_origin := get_arrow_origin()
-	if has_locked_aim and not training:
-		direction = (locked_aim_point - arrow_origin).normalized()
-	elif training and camera_controller != null:
-		direction = camera_controller.training_aim_direction(arrow_origin)
+	var direction: Vector3 = bow_aim_solution.get("direction", -global_basis.z)
 	if not training:
 		inventory_ref.consume(selected_arrow_id)
 	arrow_requested.emit({
@@ -889,13 +925,10 @@ func _release_bow() -> void:
 		"range": BOW_RANGE,
 		"width": 0.34,
 	})
-	bow_aiming = false
-	if equipment_loadout != null:
-		equipment_loadout.set_bow_aiming(false)
+	if bow_presentation != null: bow_presentation.on_release(clampf(bow_draw_time / get_bow_draw_duration(), 0.0, 1.0))
 	bow_draw_time = 0.0
 	bow_recovery = maxf(0.10, 0.24 * _progression_value("bow_recovery_multiplier", 1.0) - _progression_value("saga_bow_recovery_reduction", 0.0))
-	if animation_driver != null:
-		animation_driver.trigger_action("attack_light", 1.0, 0.08)
+	if input_source != null: input_source.rumble(0.16, 0.10, 0.07)
 
 static func locked_bow_aim_point(actor: Node3D) -> Vector3:
 	# Presentation bounds may include limbs behind the actual damage capsule.
@@ -906,8 +939,13 @@ static func locked_bow_aim_point(actor: Node3D) -> Vector3:
 	return actor.global_transform * bounds.get_center()
 
 func get_arrow_origin() -> Vector3:
+	# SkeletonModifier poses are restored after publication. Keep the rendered
+	# arrow rest in actor-local space so physics uses it, including after relocation.
+	if bow_pose_valid and is_bow_pose_active():
+		return global_transform * bow_pose_local_origin
 	if bow_attachment != null and is_instance_valid(bow_attachment):
-		return bow_attachment.global_position + Vector3.UP * 0.04 - global_transform.basis.z.normalized() * 0.18
+		var frame := _equipment_anchor_world(bow_visual)
+		return frame.origin + frame.basis.y.normalized() * 0.045 + frame.basis.x.normalized() * 0.012
 	var forward := -global_transform.basis.z.normalized()
 	return global_position + Vector3.UP * 1.30 + forward * 0.48
 
@@ -1070,8 +1108,7 @@ func _begin_oathfire_cast() -> bool:
 		return false
 	beam_restore_equipment = equipment_loadout.save_state()
 	_cancel_equipment_action()
-	bow_aiming = false
-	bow_draw_time = 0.0
+	_cancel_bow()
 	parry_window = 0.0
 	_set_beam_state(BEAM_STATE_SHEATHING, 0.24)
 	beam_charging = true
@@ -1258,6 +1295,7 @@ func take_damage(amount: float) -> bool:
 		parried.emit()
 		return true
 	var guarded := is_blocking()
+	_cancel_bow()
 	_cancel_equipment_action()
 	if beam_cast_state != BEAM_STATE_IDLE:
 		cancel_beam_charge("hit")
@@ -1290,6 +1328,7 @@ func _apply_gravity(delta: float) -> void:
 		velocity.y = -0.1
 
 func _on_died() -> void:
+	_cancel_bow()
 	_cancel_equipment_action()
 	cancel_beam_charge("death")
 	equipment_loadout.stow_all()
@@ -1519,9 +1558,12 @@ func _build_bow_visual() -> void:
 		quiver_parent.add_child(bow_back_visual)
 		var stowed_bow := _instantiate_modeled_prop(MODELED_BOW_PATH)
 		if stowed_bow != null:
-			stowed_bow.scale = Vector3.ONE * 0.30
-			stowed_bow.position = Vector3(0.04, -0.01, 0.04)
+			stowed_bow.scale = Vector3.ONE * (0.44 / 0.82)
+			stowed_bow.rotation = Vector3(0, -PI * 0.5, 0)
+			stowed_bow.position = Vector3(0, 0, 0.094 / 0.82)
 			_prepare_modeled_prop(stowed_bow, Color(0.24, 0.12, 0.055))
+			for packed_prop in stowed_bow.find_children("*", "MeshInstance3D", true, false):
+				if str(packed_prop.name).to_lower().contains("arrow"): packed_prop.visible = false
 			bow_back_visual.add_child(stowed_bow)
 	if skeleton != null:
 		equipment_left_arm_ik = _make_arm_pose_ik(skeleton, "BowEquipmentReach", &"upperarm_l", &"hand_l")
@@ -1551,6 +1593,13 @@ func _build_bow_visual() -> void:
 	else:
 		bow_quiver_visual.set_meta("equipment_visual_failure", MODELED_ARROW_PATH)
 		push_error("Modeled arrow source could not be loaded: %s" % MODELED_ARROW_PATH)
+	if skeleton != null and modeled_bow != null:
+		bow_presentation = preload("res://scripts/bow_presentation.gd").new()
+		bow_presentation.name = "KaelArcheryPose"
+		skeleton.add_child(bow_presentation)
+		var nocked_arrow := _instantiate_modeled_prop(MODELED_ARROW_PATH)
+		if nocked_arrow != null: _prepare_modeled_prop(nocked_arrow, Color(0.58, 0.42, 0.24))
+		bow_presentation.setup(self, bow_visual, modeled_bow, nocked_arrow)
 
 func _instantiate_modeled_prop(path: String) -> Node3D:
 	if path.is_empty() or not ResourceLoader.exists(path):
@@ -2456,6 +2505,7 @@ func _animate_visuals(delta: float) -> void:
 			slash_arc_root.visible = false
 	_update_oathfire_arm_pose()
 	_update_companion_gesture(delta)
+	_update_bow_presentation(delta)
 	# Arm IK changes the hand pose after the regular beam-state tick. Refresh the
 	# charge from the live bones now so the sphere, eventual beam origin, and
 	# rendered hands cannot diverge by one animation frame.

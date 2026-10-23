@@ -3595,7 +3595,7 @@ func _on_player_arrow(request: Dictionary) -> void:
 		"damage": damage,
 		"source_tag": "arrow_%s" % arrow_id,
 	})
-	_make_arrow_trail(origin, endpoint, Color(0.92, 0.70, 0.34) if arrow_id == "standard_arrow" else (Color(0.72, 0.86, 0.96) if arrow_id == "bodkin_arrow" else Color(1.0, 0.30, 0.12)))
+	_make_arrow_trail(origin, result.get("point", endpoint) if bool(result.get("hit", false)) else endpoint, Color(0.92, 0.70, 0.34) if arrow_id == "standard_arrow" else (Color(0.72, 0.86, 0.96) if arrow_id == "bodkin_arrow" else Color(1.0, 0.30, 0.12)))
 	if bool(result.get("hit", false)):
 		audio.play_event("light_hit", 0.03)
 		hud.show_status_cue("Arrow hit: %d" % int(damage), "item")

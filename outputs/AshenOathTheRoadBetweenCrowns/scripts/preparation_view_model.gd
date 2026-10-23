@@ -120,7 +120,7 @@ static func equipment_text(id: String, inventory, context: Dictionary) -> String
 	if id == "bow":
 		var arrow_id: String = str(equipment.get("selected_arrow_id", "standard_arrow"))
 		var arrow: Dictionary = inventory.item_defs.get(arrow_id, {})
-		lines.append("\nA hunting bow for aimed, drawn shots. Arrows determine the impact; drawing fully increases their reach and force.")
+		lines.append("\nA hunting bow for aimed, drawn shots. Arrows determine the impact; a full draw activates any learned full-draw bonuses.")
 		lines.append("Selected bundle: %s\nCarrying %d / %d\nBase impact: %d before draw strength and the target's response." % [inventory.get_item_name(arrow_id), inventory.get_ammo_count(arrow_id), inventory.get_ammo_cap(arrow_id), int(arrow.get("effect", {}).get("damage", 0))])
 		lines.append("\nThe bow uses ammunition instead of blade affinity. It is not a direct sword-damage upgrade.")
 	else:

@@ -25,7 +25,6 @@ var ring_target: AnimatableBody3D
 var shots_root: Node3D
 var overlay: CanvasLayer
 var readout: Label
-var reticle: Label
 
 static func install(host) -> void:
 	if str(host.current_zone_id) != "greyfen" or host.zone_root.get_node_or_null(RANGE_NAME) != null:
@@ -105,16 +104,6 @@ func _build() -> void:
 	readout.add_theme_constant_override("shadow_offset_y", 1)
 	readout.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	overlay.add_child(readout)
-	reticle = Label.new()
-	reticle.text = "+"
-	reticle.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	reticle.offset_left = -8
-	reticle.offset_top = -12
-	reticle.offset_right = 8
-	reticle.offset_bottom = 12
-	reticle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	reticle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	overlay.add_child(reticle)
 	overlay.hide()
 
 func _target(point: Vector3, index: int) -> void:
