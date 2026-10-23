@@ -76,6 +76,7 @@ func configure_menu(owner: Node) -> void:
 	var input_router = services["input_router"]
 	var mobile_touch = services["mobile_touch"]
 	var audio = services["audio"]
+	audio.bind_runtime_packs(services["runtime_packs"])
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	hud.set_runtime_services(owner, save_manager)
 	var summary_quests: Dictionary = owner.call("_read_json", "res://data/quests.json")
@@ -182,11 +183,6 @@ func configure(owner: Node) -> void:
 	# opening downloads immediately so the menu and Crow Flight can cover the
 	# only unavoidable cold-cache wait. Desktop keeps the full project local.
 	if runtime_packs.has_method("request_pack"):
-		if runtime_packs.has_signal("pack_mounted") and audio.has_method("set_runtime_file_assets_available"):
-			runtime_packs.pack_mounted.connect(func(pack_id: String, _path: String):
-				if pack_id == "audio":
-					audio.set_runtime_file_assets_available(true)
-			)
 		# Startup readiness belongs to the launch transition. Requesting Web packs
 		# while services are being constructed races the menu and duplicates the
 		# base-pack progress path owned by Game._on_launch_accepted().

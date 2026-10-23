@@ -1,5 +1,36 @@
 # Living Cast - Current Checkpoint
 
+2026-10-24 audio-startup repair: implemented, compiled and packaged as
+`audio-recovery-20261024`. No runtime/listening test is authorized or claimed.
+The synchronized production package contains 17 files, **104817107 bytes**,
+**40493 bytes below** the cap. Root PCK SHA-256:
+`aa048d0dff392ccc4008ee024520e691429a4f8a6cd2bbfeee017cf33ac04a10`.
+Build logs: `.release-gate/audio-recovery-20261024/logs/`. Actual commit, push and
+deployment completion are owned by the current CAST-010 publication receipt
+under `.release-gate/living-road/`, not by a runtime acceptance claim.
+The user reports all desktop-browser sound absent despite enabled volumes and
+an unmuted site. Static inspection confirms the current PCK directories contain
+menu music/UI and opening footsteps/combat streams; it does not prove playback.
+
+- Observe the actual Godot WebAudio context during initialization only. Trusted
+  game input resumes a suspended context; a conditional Enable sound/Retry sound
+  control reports suspension or required resource failures without a launch gate.
+- Bind audio pack availability during menu service configuration and reconcile
+  already-mounted packs, instead of relying on a later gameplay-only signal.
+- Retain failed music requests for recovery; retry null ambience after packs
+  arrive. Preserve loaded resources, active voices, pause ownership and saved mix.
+- Report the exact missing/unloadable prepared sound once per fault, permit retry,
+  and expose current context/error/mute state in the existing browser shell.
+
+The specific cause in the user's session remains unverified. These changes repair
+source-level recovery gaps; they are not a claim that audible playback passed.
+User checklist: cold launch and a real click/key; hear menu cues/music and gameplay
+steps/combat; Enable sound if shown; switch tabs then Resume; mute/unmute saved
+volumes; Continue/zone return without missing ambience or interrupted speech.
+Formal Living Cast acceptance remains **0/10**.
+
+## Previous Published Candidate
+
 2026-10-24 current work: **People, Place And Honor** implemented and compiled;
 the combined production package is synchronized to `web/`. User acceptance is
 still **0/10**; no new runtime test is authorized or claimed.

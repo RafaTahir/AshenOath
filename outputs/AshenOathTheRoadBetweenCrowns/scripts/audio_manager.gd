@@ -50,8 +50,13 @@ var nearby_voice_entry: Dictionary = {}
 var browser_voice_fallback_enabled := false
 var development_voice_stubs_enabled := false
 var current_ambient_zone = ""
+var requested_ambient_zone := ""
 var ambient_accent_time = 0.0
 var music_state = ""
+var requested_music_state := ""
+var browser_audio_recover_callback: JavaScriptObject
+var last_browser_audio_status := ""
+var audio_recovery_pending := false
 var _voice_queue: Array = []
 var pending_dialogue_voice := ""
 var pending_dialogue_delay := 0.0
@@ -133,6 +138,10 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	prepared_audio.failures_changed.connect(_publish_audio_status)
+	if OS.has_feature("web"):
+		browser_audio_recover_callback = JavaScriptBridge.create_callback(_on_browser_audio_recover)
+		JavaScriptBridge.get_interface("window").__ashenOathRecoverAudio = browser_audio_recover_callback
 	# The production Web PCK deliberately excludes the recorded audio library.
 	# Keep the menu on generated cues until RuntimePackManager mounts audio.pck;
 	# probing those paths before the mount produces real browser resource errors.
@@ -162,6 +171,64 @@ func _ready() -> void:
 		transient_players.append(pooled)
 	set_master_volume(master_volume_linear)
 	call_deferred("_bootstrap_audio_after_menu")
+	_publish_audio_status()
+
+func bind_runtime_packs(packs: Node) -> void:
+	if not packs.is_connected("pack_mounted", _on_audio_pack_mounted):
+		packs.connect("pack_mounted", _on_audio_pack_mounted)
+	# A resumed/embedded pack may already be ready before services are wired.
+	for id in ["opening", "campaign", "audio"]:
+		if bool(packs.call("is_ready", id)):
+			_on_audio_pack_mounted(id, "")
+
+func _on_audio_pack_mounted(pack_id: String, _path: String) -> void:
+	if pack_id not in ["opening", "campaign", "audio"]:
+		return
+	prepared_audio.mark_pack_available(pack_id)
+	if pack_id == "audio":
+		set_runtime_file_assets_available(true)
+	_queue_audio_recovery()
+
+func _on_browser_audio_recover(_arguments: Array) -> void:
+	_queue_audio_recovery()
+
+func _queue_audio_recovery() -> void:
+	if audio_recovery_pending:
+		return
+	audio_recovery_pending = true
+	call_deferred("_recover_audio_resources")
+
+func _recover_audio_resources() -> void:
+	audio_recovery_pending = false
+	if not is_inside_tree():
+		return
+	prepared_audio.recover_catalog()
+	for failure: Dictionary in prepared_audio.failures.values():
+		prepared_audio.stream(str(failure.category), str(failure.id))
+	_build_menu_library()
+	if requested_music_state != "":
+		set_music_state(requested_music_state)
+	if requested_ambient_zone != "":
+		var stream := _ambient_stream(requested_ambient_zone)
+		if stream != null and (not is_instance_valid(ambient_player) or ambient_player.stream != stream):
+			_crossfade_ambient(requested_ambient_zone, stream)
+	# Restore the saved mix, never force a deliberately muted channel on.
+	set_master_volume(master_volume_linear)
+	apply_mix_settings({})
+	_publish_audio_status()
+
+func _publish_audio_status() -> void:
+	if not OS.has_feature("web") or not is_inside_tree():
+		return
+	var status := JSON.stringify({
+		"master_muted": master_volume_linear <= 0.001,
+		"game_paused": game_paused,
+		"resource_errors": prepared_audio.failures.values(),
+	})
+	if status == last_browser_audio_status:
+		return
+	last_browser_audio_status = status
+	JavaScriptBridge.eval("window.__ashenOathAudioReport && window.__ashenOathAudioReport(%s);" % status, true)
 
 func _bootstrap_audio_after_menu() -> void:
 	if audio_bootstrap_started:
@@ -256,6 +323,9 @@ func _build_menu_library() -> void:
 	sounds["menu_click"] = _tone_mix([196.0, 392.0, 587.0], 0.110, 0.105, 24.0, 0.010)
 
 func _exit_tree() -> void:
+	if browser_audio_recover_callback != null:
+		JavaScriptBridge.get_interface("window").__ashenOathRecoverAudio = null
+		browser_audio_recover_callback = null
 	# Release generated streams before Godot tears down the audio server. This
 	# keeps short headless/Web startup checks from retaining the menu stream.
 	_cancel_owned_timers()
@@ -326,6 +396,7 @@ func apply_mix_settings(current: Dictionary) -> void:
 			AudioServer.set_bus_mute(index, level <= 0.001)
 			AudioServer.set_bus_volume_db(index, linear_to_db(maxf(level, 0.001)))
 	_update_dialogue_mix()
+	_publish_audio_status()
 
 func _update_dialogue_mix() -> void:
 	# Dialogue owns the foreground, including subtitle-only passages. Mix
@@ -534,6 +605,7 @@ func set_master_volume(linear_volume: float) -> void:
 	else:
 		AudioServer.set_bus_mute(bus_index, false)
 		AudioServer.set_bus_volume_db(bus_index, linear_to_db(master_volume_linear))
+	_publish_audio_status()
 
 func set_ambient_accents_enabled(enabled: bool) -> void:
 	ambient_accents_enabled = enabled
@@ -551,8 +623,10 @@ func set_game_paused(paused: bool) -> void:
 	for player in get_tree().get_nodes_in_group(MUSIC_GROUP):
 		if is_instance_valid(player) and player.get_parent() == self:
 			player.stream_paused = paused and not dialogue_active
+	_publish_audio_status()
 
 func prewarm_opening_audio() -> void:
+	prepared_audio.mark_pack_available("opening")
 	refresh_runtime_assets()
 	# Opening/shared cues are prepared at the existing locked arrival boundary.
 	# Campaign music and regional recordings remain demand-owned.
@@ -970,8 +1044,11 @@ func set_music_state(state_id: String) -> void:
 		_prepare_event("record_page")
 	if story_music_override != "" and state_id in ["greyfen_explore", "shrine_anwen", "return_report", "castle_silence", "record_hall", "assembly", "hart_glade"]:
 		state_id = story_music_override
-	if state_id == music_state and music_player != null and is_instance_valid(music_player):
+	requested_music_state = state_id
+	if state_id == music_state and is_instance_valid(music_player) and music_player.stream != null:
 		return
+	if music.has(state_id) and music[state_id] == null:
+		music.erase(state_id)
 	if not music.has(state_id):
 		_build_music_state(state_id)
 	if not music.has(state_id):
@@ -1066,8 +1143,12 @@ func play_footstep(zone_id: String, on_road: bool, surface: String = "") -> void
 	play_event_limited(event_name, 0.055, 0.11)
 
 func play_ambient(zone_id: String) -> void:
+	requested_ambient_zone = zone_id
 	var stream := _ambient_stream(zone_id)
-	if current_ambient_zone == zone_id and ambient_player != null and ambient_player.stream == stream:
+	if stream == null:
+		# Remember the requested region, but do not publish a null-stream player.
+		return
+	if current_ambient_zone == zone_id and is_instance_valid(ambient_player) and ambient_player.stream == stream:
 		return
 	_stop_transient_cues()
 	stop_voice()
@@ -1118,6 +1199,7 @@ func stop_zone_audio() -> void:
 	ambient_players.clear()
 	ambient_player = null
 	current_ambient_zone = ""
+	requested_ambient_zone = ""
 	prepared_audio_zone = ""
 	prepared_music_states.clear()
 	prepared_encounter_state = ""
@@ -1404,7 +1486,7 @@ func _build_music_state(state_id: String) -> void:
 		"boss_white_hart_avatar": music[state_id] = _music_loop([55.0, 82.0, 110.0, 165.0], 5.0, 0.082, 0.020)
 
 func _ambient_stream(zone_id: String) -> AudioStream:
-	if not ambient_streams.has(zone_id):
+	if not ambient_streams.has(zone_id) or ambient_streams[zone_id] == null:
 		var stream: AudioStream = null
 		if runtime_file_assets_available and AUTHORED_AMBIENCE.has(zone_id):
 			stream = _load_audio_stream("res://assets_external/audio/authored/" + str(AUTHORED_AMBIENCE[zone_id]))
