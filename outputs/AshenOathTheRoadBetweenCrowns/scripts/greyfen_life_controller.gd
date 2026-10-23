@@ -76,6 +76,7 @@ var social_cooldown := 9.0
 var regional_only := false
 var routine_phase := ""
 var cast_revision := 0
+var social_scene: Dictionary = {}
 
 const CROWD_IDENTITIES := [
 	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
@@ -147,6 +148,7 @@ func enroll_region() -> void:
 		var path: Array = []
 		for point: Vector3 in routine.path:
 			path.append(host.validate_walkable_position(point))
+		_bind_workstation(routine, path)
 		var entry := _make_entry(id, node, path, 0.62, driver, true) if existing.is_empty() else existing
 		entry["regional"] = true
 		entry["routine_zone"] = zone_id
@@ -162,6 +164,7 @@ func enroll_region() -> void:
 			actors.append(entry)
 		_configure_agent(entry)
 		driver.set_distance_suspended(false)
+		_connect_activity_contact(entry)
 	story_dirty = true
 
 func set_spatial_service(service) -> void:
@@ -179,7 +182,13 @@ func routine_ids() -> Array:
 var _crowd_index = preload("res://scripts/actor_spatial_index.gd").new()
 
 func _process(delta: float) -> void:
-	if host == null or player == null or get_parent() != host.zone_root or get_tree().paused or not bool(host.get("game_started")): return
+	if not is_instance_valid(host) or not is_instance_valid(player):
+		return
+	if get_parent() != host.zone_root or not bool(host.game_started):
+		_end_social_exchange()
+		return
+	if get_tree().paused:
+		return
 	simulation_tick_accumulator += delta
 	var decision_tick: bool = simulation_tick_accumulator >= 1.0 / _simulation_hz()
 	if decision_tick:
@@ -188,6 +197,7 @@ func _process(delta: float) -> void:
 	social_cooldown = maxf(social_cooldown - delta, 0.0)
 	if decision_tick and story_dirty:
 		_sync_story_state(false)
+	_tick_social_exchange(delta)
 	var now := Time.get_ticks_msec()
 	var decision_period := maxi(1, ceili(1000.0 / _simulation_hz()))
 	# One registration pass observes routine relocations before local queries.
@@ -307,7 +317,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	if Presence.protected(node):
 		_release_activity(entry)
 		entry.social_time = 0.0
-		node.remove_meta("cast_social_owner")
+		Presence.release(node, "social", get_instance_id())
 		entry.motion_speed = 0.0
 		entry.travel_direction = Vector3.ZERO
 		return
@@ -325,11 +335,9 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		return
 	entry.social_time = maxf(float(entry.get("social_time", 0.0)) - delta, 0.0)
 	if float(entry.social_time) > 0.0:
-		if entry.driver != null:
-			entry.driver.set_life_activity("watch")
 		return
 	if node.has_meta("cast_social_owner"):
-		node.remove_meta("cast_social_owner")
+		Presence.release(node, "social", get_instance_id())
 		if is_instance_valid(entry.get("face")):
 			entry.face.set_focus_target(null)
 	# Major encounters temporarily own their arena. The game restores this
@@ -537,12 +545,17 @@ func _begin_activity(entry: Dictionary) -> void:
 	entry.life_state = "working:%s" % str(profile.get("activity", "idle"))
 	node.set_meta("life_state", entry.life_state)
 	_set_activity_pose(entry, true)
+	if is_instance_valid(entry.driver):
+		entry.driver.set_life_workstation(entry.profile.get("workstation", {}))
 
 func _update_activity(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	var profile: Dictionary = entry.profile
 	entry.activity_elapsed = float(entry.activity_elapsed) + delta
 	var anchor := _activity_anchor(entry)
+	var station: Dictionary = entry.profile.get("workstation", {})
+	if str(profile.get("activity", "")) == str(station.get("activity", "")):
+		anchor = station.get("point", anchor)
 	if anchor != Vector3.ZERO:
 		_face(node, anchor, delta)
 	_set_activity_pose(entry, true)
@@ -573,6 +586,50 @@ func _release_activity(entry: Dictionary) -> void:
 		entry.driver.clear_life_activity()
 	if is_instance_valid(entry.driver) and entry.driver.has_method("set_carried_activity"):
 		entry.driver.set_carried_activity("")
+	if is_instance_valid(entry.driver):
+		entry.driver.set_life_workstation({})
+
+func _bind_workstation(profile: Dictionary, path: Array) -> void:
+	profile["workstation"] = {}
+	var definition: Dictionary = profile.get("station", {})
+	if definition.is_empty():
+		return
+	var station: Node3D
+	if definition.has("node"):
+		station = host.zone_root.find_child(str(definition.node), true, false) as Node3D
+	else:
+		for candidate in host.zone_root.find_children("RegionalWork", "Node3D", true, false):
+			if str(candidate.get_meta("quest", "")) == str(definition.get("quest", "")):
+				station = candidate as Node3D
+				break
+	if not is_instance_valid(station):
+		return
+	var standing: Vector3 = station.to_global(definition.stand)
+	var safe: Vector3 = host.validate_walkable_position(standing)
+	if safe.distance_squared_to(standing) > 0.04:
+		return
+	for index in path.size():
+		if str(profile.activities[index]) != str(definition.activity) or path[index].distance_squared_to(standing) > 9.0:
+			continue
+		var resolved := definition.duplicate()
+		for key: String in ["point", "left", "right"]:
+			resolved[key] = station.to_global(definition[key])
+		profile.workstation = resolved
+		path[index] = safe
+
+func _connect_activity_contact(entry: Dictionary) -> void:
+	if not is_instance_valid(entry.driver):
+		return
+	var callback := _on_activity_contact.bind(weakref(entry.node))
+	if not entry.driver.activity_contact.is_connected(callback):
+		entry.driver.activity_contact.connect(callback)
+
+func _on_activity_contact(event: String, point: Vector3, source: WeakRef) -> void:
+	var actor := source.get_ref() as Node3D
+	if not is_instance_valid(host) or not is_instance_valid(actor) or not bool(host.game_started) or get_tree().paused or Presence.protected(actor):
+		return
+	if is_instance_valid(host.audio) and is_instance_valid(player):
+		host.audio.play_spatial_event(event, point, player.global_position, 11.0, 0.25, 0.025)
 
 func _apply_pending_routine(entry: Dictionary) -> void:
 	var pending: Dictionary = entry.get("pending_routine", {})
@@ -673,6 +730,7 @@ func _sync_story_state(force: bool) -> void:
 			var path: Array = []
 			for point: Vector3 in routine.path:
 				path.append(host.validate_walkable_position(point))
+			_bind_workstation(routine, path)
 			entry.pending_routine = {"profile":routine, "path":path, "line":routine.line}
 			continue
 		entry.story_reaction = reaction
@@ -697,9 +755,9 @@ func _sync_story_state(force: bool) -> void:
 func _line_for_actor(entry: Dictionary) -> String:
 	if bool(entry.get("regional", false)):
 		var identity := str(entry.profile.get("identity", ""))
-		var events: Array = host.story_state.relationship_events(identity)
-		if not events.is_empty() and str(events.back().get("acknowledgement", "")) != "":
-			return str(events.back().acknowledgement)
+		var acknowledgement := str(host.story_state.consume_relationship_greeting(identity))
+		if acknowledgement != "":
+			return acknowledgement
 	var consequence_line := str(entry.get("consequence_line", ""))
 	if consequence_line != "": return consequence_line
 	var reaction := str(entry.get("story_reaction", "baseline"))
@@ -724,7 +782,7 @@ func _update_reaction(entry: Dictionary, delta: float) -> void:
 	var threat_position: Vector3 = player.global_position
 	if Presence.can_see(entry.node, player, 5.0):
 		threat = Presence.player_threat(player)
-	for enemy: Node3D in host.active_enemies:
+	for enemy: Node3D in host.encounter_spatial_index.nearby(entry.node.global_position, 7.0):
 		if is_instance_valid(enemy) and not bool(enemy.get("dead")) and bool(enemy.get("encounter_active")) and Presence.can_see(entry.node, enemy, 7.0):
 			threat = "danger"
 			threat_position = enemy.global_position
@@ -793,7 +851,7 @@ func _seek_safety(entry: Dictionary, threat: Vector3, delta: float) -> bool:
 	return true
 
 func _try_social_exchange(entry: Dictionary) -> void:
-	if social_cooldown > 0.0 or line_cooldown > 0.0 or float(entry.get("reaction_time", 0.0)) > 0.0 or not bool(entry.get("activity_active", false)):
+	if not social_scene.is_empty() or social_cooldown > 0.0 or line_cooldown > 0.0 or float(entry.get("reaction_time", 0.0)) > 0.0 or not bool(entry.get("activity_active", false)):
 		return
 	if entry.node.global_position.distance_squared_to(player.global_position) > 36.0:
 		return
@@ -803,55 +861,125 @@ func _try_social_exchange(entry: Dictionary) -> void:
 		if exchange.has("requires_flag") and str(host.story_state.get_flag(str(exchange.requires_flag), "")) != str(exchange.get("requires_value", "")):
 			continue
 		for other: Dictionary in _crowd_index.nearby(entry.node.global_position, 4.0):
-			if str(other.id) != str(exchange.b) or not other.node.is_visible_in_tree() or Presence.protected(other.node) or float(other.get("reaction_time", 0.0)) > 0.0 or float(other.get("motion_speed", 0.0)) > 0.05:
-				continue
-			if other.node.get_node_or_null("Person") != null and not other.node.get_node("Person").visible:
+			if str(other.id) != str(exchange.b) or not _social_actor_available(other):
 				continue
 			if not Presence.can_see(entry.node, other.node, 4.0):
 				continue
-			var words := str(exchange.lines)
+			var turns: Array = exchange.get("turns", [])
 			if exchange.has("quest") and host.quests.is_completed(str(exchange.quest)):
-				words = str(exchange.get("after", words))
-			_social_pair(entry, other, words)
+				turns = exchange.get("after_turns", turns)
+			_social_pair(entry, other, turns)
 			return
-	# One authored exchange establishes the sample standard. Do not make every
-	# stranger repeat the same conversation or invent a shared relationship.
 	if str(entry.id) != "blacksmith_tor":
 		return
 	for other: Dictionary in _crowd_index.nearby(entry.node.global_position, 4.0):
-		if str(other.id) != "forge_helper" or not is_instance_valid(other.node) or float(other.get("motion_speed", 0.0)) > 0.05 or Presence.protected(other.node):
+		if str(other.id) != "forge_helper" or not _social_actor_available(other) or not Presence.can_see(entry.node, other.node, 4.0):
 			continue
-		if not Presence.can_see(entry.node, other.node, 4.0):
-			continue
-		social_cooldown = 55.0
-		line_cooldown = 10.0
-		entry.social_time = 4.5
-		other.social_time = 4.5
-		if is_instance_valid(entry.get("face")):
-			entry.face.set_focus_target(other.node)
-			entry.face.set_expression("warmth")
-		if is_instance_valid(other.get("face")):
-			other.face.set_focus_target(entry.node)
-			other.face.set_expression("warmth")
-		var exchange := "Tor: Let it cool before you lift it.\nForge helper: Aye. You said that last time, too."
-		if bool(host.story_state.get_flag("bell_eater_defeated", false)):
-			exchange = "Tor: Bell's quiet. I can hear that axle again.\nForge helper: One thing at a time, then."
-		host.hud.toast(exchange, 5.0)
+		var after := bool(host.story_state.get_flag("bell_eater_defeated", false))
+		_social_pair(entry, other, [
+			{"speaker":"blacksmith_tor", "name":"Tor", "text":"Bell's quiet. I can hear that axle again." if after else "Let it cool before you lift it."},
+			{"speaker":"forge_helper", "name":"Forge helper", "text":"One thing at a time, then." if after else "Aye. You said that last time, too."},
+		])
 		return
 
-func _social_pair(first: Dictionary, second: Dictionary, words: String) -> void:
+func _social_actor_available(entry: Dictionary) -> bool:
+	if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or Presence.protected(entry.node):
+		return false
+	if float(entry.get("reaction_time", 0.0)) > 0.0 or float(entry.get("motion_speed", 0.0)) > 0.05:
+		return false
+	var body := entry.node.get_node_or_null("Person") as Node3D
+	return body == null or body.visible
+
+func _social_pair(first: Dictionary, second: Dictionary, turns: Array) -> void:
+	if turns.is_empty() or not Presence.claim(first.node, "social", get_instance_id()):
+		return
+	if not Presence.claim(second.node, "social", get_instance_id()):
+		Presence.release(first.node, "social", get_instance_id())
+		return
 	social_cooldown = 65.0
 	line_cooldown = 12.0
-	for pair: Array in [[first,second], [second,first]]:
-		var entry: Dictionary = pair[0]
-		var other: Dictionary = pair[1]
+	var saved: Array[Dictionary] = []
+	for entry: Dictionary in [first, second]:
+		entry.node.set_meta("cast_social_cancel", _end_social_exchange)
 		_release_activity(entry)
-		entry.social_time = 5.0
-		entry.node.set_meta("cast_social_owner", get_instance_id())
+		entry.social_time = 30.0
+		entry.motion_speed = 0.0
+		var face: Node = entry.get("face")
+		saved.append({"entry":entry, "focus":face.focus_target if is_instance_valid(face) else null, "expression":str(face.expression) if is_instance_valid(face) else "neutral"})
+		if is_instance_valid(entry.driver):
+			entry.driver.set_dialogue_pose(true)
+		if is_instance_valid(face):
+			face.set_conversation_active(true)
+	social_scene = {"actors":saved, "turns":turns, "index":0, "remaining":0.0, "elapsed":0.0}
+
+func _tick_social_exchange(delta: float) -> void:
+	if social_scene.is_empty():
+		return
+	social_scene.elapsed = float(social_scene.elapsed) + delta
+	var saved: Array = social_scene.actors
+	for record: Dictionary in saved:
+		var entry: Dictionary = record.entry
+		if not _social_actor_available(entry) or entry.node.global_position.distance_squared_to(player.global_position) > 81.0 or entry.node.global_position.distance_squared_to(player.global_position) < 4.41 or float(social_scene.elapsed) > 29.0:
+			_end_social_exchange()
+			return
+	if saved[0].entry.node.global_position.distance_squared_to(saved[1].entry.node.global_position) > 16.0:
+		_end_social_exchange()
+		return
+	for index in saved.size():
+		_face(saved[index].entry.node, saved[1-index].entry.node.global_position, delta)
+	social_scene.remaining = float(social_scene.remaining) - delta
+	if float(social_scene.remaining) > 0.0:
+		return
+	var index := int(social_scene.index)
+	var turns: Array = social_scene.turns
+	if index >= turns.size():
+		_end_social_exchange()
+		return
+	var turn: Dictionary = turns[index]
+	var words := str(turn.get("text", ""))
+	var speaker := str(turn.get("speaker", ""))
+	var duration := clampf(float(words.split(" ", false).size()) * 0.28 + 1.0, 2.5, 7.0)
+	for record: Dictionary in saved:
+		var entry: Dictionary = record.entry
+		var speaking := str(entry.id) == speaker
+		var other: Dictionary = saved[1].entry if str(saved[0].entry.id) == str(entry.id) else saved[0].entry
 		if is_instance_valid(entry.get("face")):
 			entry.face.set_focus_target(other.node)
-			entry.face.set_expression("warmth")
-	host.hud.toast(words, 5.0)
+			entry.face.set_expression("wry" if str(entry.id) == "rook" else "warmth")
+			entry.face.set_speech_amount(0.0)
+			entry.face.play_story_gesture("explain" if speaking else "acknowledge")
+		if is_instance_valid(entry.driver):
+			entry.driver.set_story_listening(not speaking)
+			if speaking:
+				entry.driver.play_story_gesture("explain")
+		if speaking and is_instance_valid(host.audio):
+			duration = maxf(duration, float(host.audio.play_nearby_speech(str(entry.id), words, entry.node)) + 0.25)
+	host.hud.toast("%s: %s" % [str(turn.get("name", speaker)), words], duration)
+	social_scene.index = index + 1
+	social_scene.remaining = minf(duration + 0.25, 12.0)
+
+func _end_social_exchange() -> void:
+	if social_scene.is_empty():
+		return
+	for record: Dictionary in social_scene.actors:
+		var entry: Dictionary = record.entry
+		if not is_instance_valid(entry.node):
+			continue
+		Presence.release(entry.node, "social", get_instance_id())
+		if is_instance_valid(host) and is_instance_valid(host.audio):
+			host.audio.stop_nearby_speech(entry.node)
+		entry.social_time = 0.0
+		entry.pause = 0.8
+		if Presence.has_protected_owner(entry.node):
+			continue
+		if is_instance_valid(entry.driver):
+			entry.driver.stop_story_gesture()
+		if is_instance_valid(entry.get("face")):
+			entry.face.set_conversation_active(false)
+			entry.face.set_speech_amount(0.0)
+			entry.face.set_focus_target(record.focus if is_instance_valid(record.focus) else null)
+			entry.face.set_expression(str(record.expression))
+	social_scene = {}
 
 func _on_perception_cue(position: Vector3, radius: float, danger: bool) -> void:
 	if not is_instance_valid(host) or not bool(host.game_started) or get_tree().paused:
@@ -867,6 +995,7 @@ func _on_perception_cue(position: Vector3, radius: float, danger: bool) -> void:
 			entry.face.set_expression(str(entry.reaction) if danger else "concern")
 
 func _exit_tree() -> void:
+	_end_social_exchange()
 	for entry: Dictionary in actors:
 		_release_activity(entry)
 	activity_reservations.clear()

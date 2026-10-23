@@ -1,12 +1,14 @@
 # Living Cast - Current Checkpoint
 
-Stage: Remaining Living Cast source/asset rollout implemented and compiled; authorized combined publication.
+Stage: Living Cast interaction/resource improvements implemented and compiled;
+authorized combined publication through CAST-010.
 Formal user acceptance: **0/10**. No runtime or visual pass has been claimed.
 Latest instruction authorizes remaining implementation, not visual acceptance.
-Current implementation and user checklist: [rollout](ROLLOUT_IMPLEMENTATION.md).
-Current candidate: `cast-complete-20261022`; **104832999 bytes**, 17 files,
-24601 bytes below the cap. Root PCK SHA-256:
-`07b7f2f6e4d5fc51ce1cd25a7f30ffdba69910af5843d629d40664dfb3bb3ffe`.
+Current implementation and checklist: [interaction/resource efficiency](INTERACTION_EFFICIENCY_IMPLEMENTATION.md).
+Retained six-world rollout: [rollout](ROLLOUT_IMPLEMENTATION.md).
+Current candidate: `cast-efficiency-20261023`; **104841634 bytes**, 17 files,
+15966 bytes below the cap. Root PCK SHA-256:
+`b32c4fa85caa90c734733e67243d845bffbc6d05c27289312b870fc40bc1ed90`.
 Publication ownership: current CAST-010 receipt under `.release-gate/living-road/`.
 The receipt records actual commit/push/deployment completion, not acceptance.
 Strict performance is not established by this work.

@@ -155,6 +155,22 @@ func commitment_partner() -> String:
 	var partner := str(get_flag("lr_commitment_partner", ""))
 	return partner if partner in ["mira", "vale"] else ""
 
+func consume_relationship_greeting(actor_id: String) -> String:
+	var events := relationship_events(actor_id)
+	if events.is_empty():
+		return ""
+	var event: Dictionary = events.back()
+	var words := str(event.get("acknowledgement", ""))
+	var heard: Variant = flags.get("living_road_greetings", {})
+	var id := str(event.get("id", ""))
+	if words == "" or heard is Dictionary and str(heard.get(actor_id, "")) == id:
+		return ""
+	var updated: Dictionary = heard.duplicate() if heard is Dictionary else {}
+	updated[actor_id] = id
+	flags["living_road_greetings"] = updated
+	_notify_change()
+	return words
+
 func commitment_allows(action: Dictionary) -> bool:
 	var change := str(action.get("relationship_change", ""))
 	if change == "":

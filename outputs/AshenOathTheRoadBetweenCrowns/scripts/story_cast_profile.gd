@@ -48,6 +48,17 @@ const PRESENCE := {
 const PRESENCE_ALIASES := {"sister_anwen":"anwen", "sister_anwen_human":"anwen", "blacksmith_tor":"tor", "widow_elna":"elna", "farmer_toma":"toma", "captain_senn":"senn", "returned_soldier":"len", "vargan_record_keeper":"vale", "record_keeper_vale":"vale", "vargan_steward":"merrow", "steward_merrow":"merrow", "mill_worker":"dain"}
 static var _life_data: Dictionary = {}
 
+# Contact points are local to retained work geometry, not actor shoulders.
+const WORKSTATIONS := {
+	"blacksmith_tor":{"node":"BlacksmithFittedWork", "point":Vector3(-1.18,0.92,-0.35), "stand":Vector3(-1.18,0,0.35), "left":Vector3(-1.30,1.01,-0.25), "right":Vector3(-1.06,1.01,-0.25), "activity":"forge", "sound":"forge_hammer", "period":2.0, "lift":0.36},
+	"saga_nessa":{"quest":"saga_gre_q01", "point":Vector3(0,0.48,0), "stand":Vector3(0,0,0.65), "left":Vector3(-0.12,0.54,0.10), "right":Vector3(0.12,0.54,0.10), "activity":"bake", "period":2.5},
+	"saga_jory":{"quest":"saga_gre_q02", "point":Vector3(0.30,1.05,0), "stand":Vector3(0.30,0,0.65), "left":Vector3(0.30,0.95,0), "right":Vector3(0.30,1.13,0), "activity":"check_rope", "period":2.4, "lift":0.08},
+	"saga_lysa":{"quest":"saga_var_q01", "point":Vector3(0,0.5,0), "stand":Vector3(0,0,0.65), "left":Vector3(-0.12,0.58,0.10), "right":Vector3(0.12,0.58,0.10), "activity":"read", "sound":"record_page", "period":6.0},
+	"saga_ressa":{"quest":"saga_dep_q02", "point":Vector3(0,0.15,0), "stand":Vector3(0,0,0.70), "left":Vector3(-0.12,0.24,0.15), "right":Vector3(0.12,0.24,0.15), "activity":"tend", "period":3.0},
+	"saga_odran":{"quest":"saga_var_q03", "point":Vector3(0,0.15,0), "stand":Vector3(0,0,0.70), "left":Vector3(-0.12,0.24,0.15), "right":Vector3(0.12,0.24,0.15), "activity":"tend", "period":3.2},
+	"saga_maelin":{"quest":"saga_har_q04", "point":Vector3(0,0.15,0), "stand":Vector3(0,0,0.70), "left":Vector3(-0.12,0.24,0.15), "right":Vector3(0.12,0.24,0.15), "activity":"sort_seeds", "period":3.0},
+}
+
 static func life_data() -> Dictionary:
 	if _life_data.is_empty():
 		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/cast_life.json"))
@@ -82,7 +93,7 @@ static func routine(id: String, zone: String, state, quests, phase: String) -> D
 		var social: Array = definition.social
 		path = [Vector3(social[0],social[1],social[2]), Vector3(work[0],work[1],work[2])]
 		activities = ["rest", activity]
-	return {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "revision":str([phase,resolved,state.get_flag("final_covenant", "") if state != null else ""])}
+	return {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "station":WORKSTATIONS.get(id, {}), "revision":str([phase,resolved,state.get_flag("final_covenant", "") if state != null else ""])}
 
 static func presence_profile(role: String, seed: String = "") -> Dictionary:
 	var words := " " + (role + " " + seed).to_lower().replace("_", " ").replace("-", " ") + " "

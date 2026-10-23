@@ -4,6 +4,7 @@ signal action_started(action_name: String)
 signal action_finished(action_name: String)
 signal contract_failed(reason: String)
 signal locomotion_step(side: StringName)
+signal activity_contact(event: String, position: Vector3)
 
 const STATE_ALIASES := {
 	"idle": ["idle", "idlesword", "idleweapon", "attackingidle"],
@@ -529,6 +530,7 @@ func set_life_activity(kind: String) -> void:
 func clear_life_activity() -> void:
 	if life_modifier != null:
 		life_modifier.activity = ""
+		life_modifier.station = {}
 	if presentation_state.begins_with("life:"):
 		presentation_state = ""
 		current_state = ""
@@ -537,6 +539,13 @@ func clear_life_activity() -> void:
 
 func get_skeleton() -> Skeleton3D:
 	return skeleton
+
+func set_life_workstation(value: Dictionary) -> void:
+	if value.is_empty() and life_modifier == null:
+		return
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.station = value
 
 func set_carried_activity(kind: String) -> void:
 	if kind == "" and life_modifier == null:

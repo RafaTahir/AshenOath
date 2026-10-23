@@ -18,6 +18,9 @@ var creature_amount := 0.0
 var creature_weight := 0.0
 var tool: Node3D
 var tool_kind := ""
+var station: Dictionary = {}
+var last_contact_cycle := -1
+var tool_contact: Node3D
 
 func configure(body: Node3D, motion: Node) -> void:
 	actor = body
@@ -77,6 +80,10 @@ func _process_modification() -> void:
 		return
 	var forward: Vector3 = driver.get_visible_forward()
 	var right := forward.cross(Vector3.UP).normalized()
+	var period := float(station.get("period", 2.0))
+	var cycle := floori(elapsed / period)
+	var phase := fmod(elapsed, period) / period
+	var contact := not station.is_empty() and effective == str(station.get("activity", ""))
 	for arm: Dictionary in arms:
 		var shoulder := _world(skeleton, int(arm.upper))
 		var elbow := _world(skeleton, int(arm.lower))
@@ -116,7 +123,26 @@ func _process_modification() -> void:
 				depth = 0.26
 				drop = 0.57
 		var goal := shoulder + (forward * depth + right * across - Vector3.UP * drop) * reach
-		_solve_arm(skeleton, arm, hand.lerp(goal, pose_weight))
+		var wrist_target: Variant = null
+		if contact:
+			goal = station.get("right" if float(arm.side) > 0 else "left", goal)
+			var lift := float(station.get("lift", 0.0))
+			if float(arm.side) > 0:
+				if effective == "forge" and is_instance_valid(tool_contact):
+					var tip_offset := tool_contact.global_position - hand
+					if tip_offset.length_squared() > 0.0001:
+						var hand_basis := (skeleton.global_basis * skeleton.get_bone_global_pose(int(arm.hand)).basis).orthonormalized()
+						wrist_target = Basis(Quaternion(tip_offset.normalized(), Vector3.DOWN)) * hand_basis
+						goal = (station.point as Vector3) + Vector3.UP * (0.035 + tip_offset.length())
+				goal += Vector3.UP * lift * pow(sin(phase * PI), 2.0)
+			elif effective in ["bake", "sort_herbs", "sort_seeds", "tend"]:
+				goal += right * sin(phase * TAU) * 0.04
+		_solve_arm(skeleton, arm, hand.lerp(goal, pose_weight), wrist_target)
+	if contact and cycle != last_contact_cycle and phase < 0.15 and pose_weight > 0.95:
+		last_contact_cycle = cycle
+		var event := str(station.get("sound", ""))
+		if event != "":
+			driver.activity_contact.emit(event, station.get("point", actor.global_position))
 
 func _update_tool(kind: String, visible_now: bool) -> void:
 	var style := str({"repair":"hammer", "forge":"hammer", "read":"book", "notice_board":"book", "check_rope":"rope", "well":"rope", "bake":"bread", "kitchen":"bread", "care":"cloth", "carry":"supply", "check_supplies":"supply", "sort_supplies":"supply", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "herb_stall":"bowl"}.get(kind, ""))
@@ -125,6 +151,7 @@ func _update_tool(kind: String, visible_now: bool) -> void:
 			tool.queue_free()
 		tool = preload("res://scripts/character_presentation.gd").attach_activity_tool(actor, style)
 		tool_kind = style
+		tool_contact = tool.find_child("ForgedHead", true, false) as Node3D if is_instance_valid(tool) and style == "hammer" else null
 	if is_instance_valid(tool):
 		tool.visible = visible_now and style == tool_kind
 
@@ -160,7 +187,7 @@ func _creature_pose(skeleton: Skeleton3D) -> void:
 func _world(skeleton: Skeleton3D, bone: int) -> Vector3:
 	return (skeleton.global_transform * skeleton.get_bone_global_pose(bone)).origin
 
-func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3) -> void:
+func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_target: Variant = null) -> void:
 	var shoulder := _world(skeleton, int(arm.upper))
 	var elbow := _world(skeleton, int(arm.lower))
 	var hand := _world(skeleton, int(arm.hand))
@@ -178,19 +205,26 @@ func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3) -> void:
 	if bend.length_squared() < 0.0001:
 		return
 	var desired_elbow := shoulder + axis * along + bend.normalized() * sqrt(maxf(upper * upper - along * along, 0.0))
-	_turn(skeleton, int(arm.upper), elbow - shoulder, desired_elbow - shoulder)
-	skeleton.force_update_all_bone_transforms()
-	elbow = _world(skeleton, int(arm.lower))
-	hand = _world(skeleton, int(arm.hand))
-	_turn(skeleton, int(arm.lower), hand - elbow, goal - elbow)
-	skeleton.force_update_all_bone_transforms()
-
-func _turn(skeleton: Skeleton3D, bone: int, before: Vector3, after: Vector3) -> void:
-	if before.length_squared() < 0.00001 or after.length_squared() < 0.00001:
-		return
-	var turn := Basis(Quaternion(before.normalized(), after.normalized()))
+	# Propagate the upper-arm rotation analytically into the lower arm. Both
+	# joints use one pose snapshot rather than forcing four whole-rig refreshes.
 	var frame := skeleton.global_basis.orthonormalized()
-	var parent := skeleton.get_bone_parent(bone)
-	var parent_basis := skeleton.get_bone_global_pose(parent).basis.orthonormalized() if parent >= 0 else Basis.IDENTITY
-	var pose := skeleton.get_bone_global_pose(bone).basis.orthonormalized()
-	skeleton.set_bone_pose_rotation(bone, (parent_basis.inverse() * frame.inverse() * turn * frame * pose).orthonormalized().get_rotation_quaternion())
+	var upper_parent := skeleton.get_bone_parent(int(arm.upper))
+	var lower_parent := skeleton.get_bone_parent(int(arm.lower))
+	var upper_parent_basis := skeleton.get_bone_global_pose(upper_parent).basis.orthonormalized() if upper_parent >= 0 else Basis.IDENTITY
+	var lower_parent_basis := skeleton.get_bone_global_pose(lower_parent).basis.orthonormalized() if lower_parent >= 0 else Basis.IDENTITY
+	var hand_parent := skeleton.get_bone_parent(int(arm.hand))
+	var hand_parent_basis := skeleton.get_bone_global_pose(hand_parent).basis.orthonormalized() if hand_parent >= 0 else Basis.IDENTITY
+	var upper_basis := skeleton.get_bone_global_pose(int(arm.upper)).basis.orthonormalized()
+	var lower_basis := skeleton.get_bone_global_pose(int(arm.lower)).basis.orthonormalized()
+	var upper_turn := Basis(Quaternion((elbow - shoulder).normalized(), (desired_elbow - shoulder).normalized()))
+	var local_turn := frame.inverse() * upper_turn * frame
+	skeleton.set_bone_pose_rotation(int(arm.upper), (upper_parent_basis.inverse() * local_turn * upper_basis).orthonormalized().get_rotation_quaternion())
+	var moved_elbow := shoulder + upper_turn * (elbow - shoulder)
+	var moved_hand := shoulder + upper_turn * (hand - shoulder)
+	if moved_hand.distance_squared_to(moved_elbow) < 0.00001 or goal.distance_squared_to(moved_elbow) < 0.00001:
+		return
+	var lower_turn := frame.inverse() * Basis(Quaternion((moved_hand - moved_elbow).normalized(), (goal - moved_elbow).normalized())) * frame
+	skeleton.set_bone_pose_rotation(int(arm.lower), ((local_turn * lower_parent_basis).inverse() * lower_turn * local_turn * lower_basis).orthonormalized().get_rotation_quaternion())
+	if wrist_target is Basis:
+		var desired := ((lower_turn * local_turn * hand_parent_basis).inverse() * frame.inverse() * (wrist_target as Basis)).orthonormalized().get_rotation_quaternion()
+		skeleton.set_bone_pose_rotation(int(arm.hand), skeleton.get_bone_pose_rotation(int(arm.hand)).slerp(desired, pose_weight))

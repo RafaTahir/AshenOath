@@ -27,14 +27,36 @@ var head_modifier: StoryHeadModifier
 var base_brow_rotations: Dictionary = {}
 var conversation_active := false
 var attention_elapsed := 0.0
+var screen_refresh_remaining := 0.0
+var screen_interval := 1.0 / 15.0
+var face_on_screen := true
 
 func set_conversation_active(value: bool) -> void:
 	conversation_active = value
+	screen_refresh_remaining = 0.0
+	if value and head_modifier != null:
+		head_modifier.active = not distance_suspended
 	if update_timer != null:
 		update_timer.wait_time = _tick_interval()
 
 func _tick_interval() -> float:
-	return 1.0 / 30.0 if conversation_active or head_modifier != null and head_modifier.has_living_face() else update_interval
+	return 1.0 / 30.0 if conversation_active else maxf(screen_interval, 1.0 / 30.0)
+
+func _refresh_screen_budget(step: float) -> void:
+	screen_refresh_remaining -= step
+	if screen_refresh_remaining > 0.0 and not conversation_active:
+		return
+	screen_refresh_remaining = 0.25
+	var camera := character_root.get_viewport().get_camera_3d()
+	face_on_screen = conversation_active or camera == null
+	var distance := 0.0
+	if camera != null:
+		var eye := character_root.global_position + Vector3.UP * float(character_root.get_meta("cast_eye_height", 1.55))
+		face_on_screen = conversation_active or camera.is_position_in_frustum(eye)
+		distance = camera.global_position.distance_to(eye)
+	screen_interval = 0.25 if not face_on_screen else (1.0 / 30.0 if distance < 4.0 else (1.0 / 15.0 if distance < 8.0 else 0.125))
+	if head_modifier != null:
+		head_modifier.active = not distance_suspended and face_on_screen
 
 func set_speech_amount(value: float) -> void:
 	if head_modifier != null:
@@ -70,6 +92,7 @@ func configure(root: Node3D, role: String) -> bool:
 	base_brow_rotations.clear()
 	native_face_surface_count = 0
 	focus_refresh_remaining = 0.0
+	screen_refresh_remaining = 0.0
 	var approved_complete_family := (
 		str(root.get_meta("character_asset_family", "")) in ["quaternius_animated_humanoid", "quaternius_ranger"]
 		or role_id in NATIVE_MONSTER_ROLES
@@ -136,8 +159,11 @@ func _on_update_timer_timeout() -> void:
 	if distance_suspended:
 		return
 	var step := update_timer.wait_time if update_timer != null else update_interval
+	_refresh_screen_budget(step)
 	update_timer.wait_time = _tick_interval()
 	attention_elapsed += step
+	if not face_on_screen:
+		return
 	if (focus_target == null or not is_instance_valid(focus_target)) and role_id not in NATIVE_MONSTER_ROLES:
 		focus_refresh_remaining -= step
 		if focus_refresh_remaining <= 0.0:
@@ -177,11 +203,15 @@ func _on_update_timer_timeout() -> void:
 			next_blink = 2.2 + float(absi((role_id + str(Time.get_ticks_msec())).hash()) % 220) / 100.0
 
 func set_distance_suspended(suspended: bool) -> void:
+	if distance_suspended == suspended:
+		return
 	distance_suspended = suspended
 	if head_modifier != null:
-		head_modifier.active = not suspended
+		head_modifier.active = not suspended and (face_on_screen or conversation_active)
 	if update_timer != null:
 		update_timer.paused = suspended
+	if not suspended:
+		screen_refresh_remaining = 0.0
 
 func _apply_eye_look() -> void:
 	if head_modifier != null:

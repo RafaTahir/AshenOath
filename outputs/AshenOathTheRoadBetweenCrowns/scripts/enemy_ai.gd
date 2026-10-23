@@ -717,11 +717,8 @@ func _update_ambient_life(delta: float) -> void:
 			ambient_target = Vector3.INF
 			ambient_remaining = 3.0 + phase * 0.25
 		else:
-			ambient_state = "territorial" if enemy_id == "bog_wretch" else ("patrolling" if behavior_profile != "flanker" else "stalking")
-			var angle := phase + float(ambient_cycle) * 1.7
-			var radius := 1.35 if behavior_profile == "brute" else 2.5
-			var candidate := home_position + Vector3(cos(angle), 0, sin(angle)) * minf(radius, maxf(0.5, leash_radius - 1.0))
-			ambient_target = candidate if spatial_service != null and spatial_service.validate_runtime_segment(home_position, candidate, 0.55, self) else home_position
+			ambient_target = _ambient_landmark_destination()
+			ambient_state = ("stalking" if behavior_profile == "flanker" else "patrolling") if ambient_target != home_position else "watching"
 			ambient_remaining = 4.0 + phase * 0.2
 		navigation_target = Vector3.INF
 		navigation_refresh_time = 0.0
@@ -740,6 +737,20 @@ func _update_ambient_life(delta: float) -> void:
 		animation_driver.set_life_activity("scavenge" if ambient_state == "scavenging" else "watch")
 		if is_instance_valid(native_face) and ambient_state == "scavenging" and fmod(ambient_elapsed, 2.8) < delta:
 			native_face.play_story_gesture("remember")
+
+func _ambient_landmark_destination() -> Vector3:
+	if spatial_service == null:
+		return home_position
+	var radius := minf(1.35 if behavior_profile == "brute" else 2.5, maxf(0.5, leash_radius - 1.0))
+	var kinds: Array[String] = []
+	kinds.assign(["camp", "watch", "shelter"] if tag == "human" else (["shelter", "scavenge"] if behavior_profile == "flanker" else ["scavenge", "shelter", "watch"]))
+	for kind: String in kinds:
+		var points: Array[Vector3] = spatial_service.presence_destinations(kind, home_position, radius, 0.55)
+		for offset in points.size():
+			var candidate: Vector3 = points[(encounter_slot + ambient_cycle + offset) % points.size()]
+			if spatial_service.validate_runtime_segment(global_position, candidate, 0.55, self):
+				return candidate
+	return home_position
 
 func _update_boss_presence(delta: float) -> void:
 	presence_clock += delta

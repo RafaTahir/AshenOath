@@ -425,6 +425,10 @@ func _update_nearby_voice() -> void:
 	if is_instance_valid(nearby_voice_face):
 		nearby_voice_face.set_speech_amount(0.0 if game_paused else _speech_amplitude(nearby_voice_entry, nearby_voice_player.get_playback_position()))
 
+func stop_nearby_speech(actor: Node3D) -> void:
+	if nearby_voice_actor != null and nearby_voice_actor.get_ref() == actor:
+		_stop_nearby_voice()
+
 func _stop_nearby_voice() -> void:
 	if is_instance_valid(nearby_voice_face): nearby_voice_face.set_speech_amount(0.0)
 	nearby_voice_face = null
@@ -738,7 +742,6 @@ func _opening_soundscape_profile(zone_id: String) -> Array:
 				{"event":"village_life", "source":"village", "range":16.0, "cooldown":7.0, "pitch":0.05},
 				{"event":"village_crow", "source":"village", "range":18.0, "cooldown":9.0, "pitch":0.08},
 				{"event":"shrine_candle", "source":"shrine", "range":9.0, "cooldown":6.0, "pitch":0.04},
-				{"event":"forge_hammer", "source":"forge", "range":11.0, "cooldown":4.5, "pitch":0.035},
 				{"event":"river_current", "source":"river", "range":18.0, "cooldown":6.0, "pitch":0.04},
 				{"event":"cloth_wind", "source":"listener", "range":12.0, "cooldown":8.0, "pitch":0.04}
 			]

@@ -7,6 +7,7 @@ const Interactable = preload("res://scripts/interactable.gd")
 const Records = preload("res://scripts/campaign_record_presentation.gd")
 const Encounters = preload("res://scripts/saga_encounters.gd")
 const WorkPresentation = preload("res://scripts/saga_work_presentation.gd")
+const Presence = preload("res://scripts/character_presence.gd")
 var host
 var zone := ""
 var points: Dictionary = {}
@@ -643,7 +644,7 @@ func _begin_work(id: String, step: Array, area: Node3D) -> void:
 
 func _cancel_work() -> void:
 	if not _work.is_empty() and not bool(_work.get("escort", false)) and host != null and is_instance_valid(host.player):
-		host.player.remove_meta("cast_work_owner")
+		Presence.release(host.player, "work", get_instance_id())
 		if host.player.animation_driver != null:
 			host.player.animation_driver.clear_life_activity()
 	if bool(_work.get("escort", false)):
@@ -762,7 +763,10 @@ func _physics_process(delta: float) -> void:
 	if host.player.equipment_loadout.is_drawn():
 		_cancel_work()
 		return
-	host.player.set_meta("cast_work_owner", str(_work.id))
+	if not Presence.claim(host.player, "work", get_instance_id()):
+		_cancel_work()
+		return
+	host.player.set_meta("cast_work_cancel", _cancel_work)
 	if host.player.animation_driver != null:
 		host.player.animation_driver.set_life_activity(str(Catalog.performance(str(_work.id)).get("activity", "repair")))
 	_elapsed += delta

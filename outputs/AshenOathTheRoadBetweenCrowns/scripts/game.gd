@@ -1604,6 +1604,7 @@ func _zone_state_signature(zone_id: String = current_zone_id) -> int:
 	])
 
 func _begin_zone_world_reads(zone_id: String, reset: bool = true) -> void:
+	preload("res://scripts/prepared_zone_geometry.gd").set_zone_scope(zone_id)
 	if asset_helper != null:
 		asset_helper.set_zone_scope(zone_id)
 	story_state.world_reads.begin(zone_id, reset)
@@ -1716,6 +1717,7 @@ func _remove_root_from_route_cache(root: Node) -> void:
 
 func _trim_route_zone_cache(preferred_ids: Array) -> void:
 	zone_residency._trim_route_zone_cache(preferred_ids)
+	preload("res://scripts/prepared_zone_geometry.gd").retain_zone_scopes([current_zone_id] + route_zone_cache.keys())
 	if asset_helper != null:
 		asset_helper.retain_zone_scopes([current_zone_id] + route_zone_cache.keys())
 
@@ -6726,6 +6728,8 @@ func _make_clue(id: String, prompt: String, pos: Vector3, quest_id: String, obje
 		return null
 	area.quest_id = quest_id
 	area.objective_id = objective_id
+	if spatial_service != null and id in ["corpse", "bandit_camp"]:
+		spatial_service.add_presence_landmark("scavenge" if id == "corpse" else "camp", area.position, 0.6)
 	return area
 
 func _present_castle_clue(id: String, title: String) -> void:
@@ -7409,6 +7413,8 @@ func _make_tree(pos: Vector3) -> void:
 			if Vector2(pos.x, pos.z).distance_to(Vector2(house_position.x, house_position.z)) < 5.5:
 				return
 	var radius := randf_range(1.0, 1.35)
+	if spatial_service != null:
+		spatial_service.add_presence_landmark("shelter", pos, 0.7)
 	var height := randf_range(2.0, 2.7)
 	var yaw := randf_range(0.0, TAU)
 	var tree_role := "forest_tree"
@@ -7449,6 +7455,8 @@ func _make_tree_wall(axis_extent: float, fixed_pos: float, count: int, along_x: 
 func _make_deadfall(pos: Vector3) -> void:
 	if _is_river_excluded(pos,1.8):
 		return
+	if spatial_service != null:
+		spatial_service.add_presence_landmark("scavenge", pos, 1.0)
 	var rotation := Vector3(deg_to_rad(88.0), deg_to_rad(randf_range(-20.0, 20.0)), deg_to_rad(randf_range(-8.0, 8.0)))
 	deadfall_batch_data.append(Transform3D(Basis.from_euler(rotation), pos + Vector3(0, 0.35, 0)))
 
@@ -7969,6 +7977,8 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, ren
 		return
 	var lower := name.to_lower()
 	var separate_body := name in ["NorthBerm","SouthBerm","WestBerm","EastBerm"]
+	if spatial_service != null and (lower.contains("crate") or lower.contains("barrel") or lower.contains("camp")):
+		spatial_service.add_presence_landmark("camp", Vector3(pos.x, 0, pos.z), maxf(size.x, size.z) * 0.5)
 	# Thin seams, ledges, trim, and surface dressing are visual detail rather
 	# than walkable blockers. Avoid creating hundreds of tiny physics shapes for
 	# them; major walls, buildings, fences, and route props retain authoritative

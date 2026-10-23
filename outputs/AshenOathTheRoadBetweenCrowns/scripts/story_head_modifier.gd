@@ -117,5 +117,9 @@ func _process_modification() -> void:
 func _face_pose(skeleton: Skeleton3D, control: String, offset: Vector3, angles := Vector3.ZERO) -> void:
 	var bone: int = facial_bones[control]
 	var rest: Transform3D = facial_rest[control]
-	skeleton.set_bone_pose_position(bone, rest.origin + rest.basis * offset)
-	skeleton.set_bone_pose_rotation(bone, (rest.basis * Basis.from_euler(angles)).get_rotation_quaternion())
+	var position := rest.origin + rest.basis * offset
+	var rotation := (rest.basis * Basis.from_euler(angles)).get_rotation_quaternion()
+	if not skeleton.get_bone_pose_position(bone).is_equal_approx(position):
+		skeleton.set_bone_pose_position(bone, position)
+	if not skeleton.get_bone_pose_rotation(bone).is_equal_approx(rotation):
+		skeleton.set_bone_pose_rotation(bone, rotation)

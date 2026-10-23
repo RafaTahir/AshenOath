@@ -2,13 +2,48 @@ extends RefCounted
 
 ## Presentation ownership shared by routine, attention and dialogue callers.
 ## Existing gameplay state is authoritative; this helper never commits choices.
+const PRIORITY := {"social": 1, "work": 2, "dialogue": 3}
+
+static func claim(actor: Node3D, kind: String, owner: Variant) -> bool:
+	if not is_instance_valid(actor) or not PRIORITY.has(kind):
+		return false
+	var key := "cast_" + kind + "_owner"
+	if actor.has_meta(key) and actor.get_meta(key) != owner:
+		return false
+	var interruptions: Array[Callable] = []
+	var cursor: Node = actor
+	while cursor != null:
+		for other: String in PRIORITY:
+			if not cursor.has_meta("cast_" + other + "_owner"):
+				continue
+			if int(PRIORITY[other]) > int(PRIORITY[kind]) or other == kind and cursor.get_meta(key) != owner:
+				return false
+			if int(PRIORITY[other]) < int(PRIORITY[kind]):
+				var cancel: Callable = cursor.get_meta("cast_" + other + "_cancel", Callable())
+				if cancel.is_valid() and cancel not in interruptions:
+					interruptions.append(cancel)
+		cursor = cursor.get_parent()
+	for cancel: Callable in interruptions:
+		cancel.call()
+	actor.set_meta(key, owner)
+	return true
+
+static func release(actor: Node3D, kind: String, owner: Variant) -> void:
+	var key := "cast_" + kind + "_owner"
+	if not is_instance_valid(actor) or not actor.has_meta(key) or actor.get_meta(key) != owner:
+		return
+	actor.remove_meta(key)
+	if actor.has_meta("cast_" + kind + "_cancel"):
+		actor.remove_meta("cast_" + kind + "_cancel")
+
 static func protected(actor: Node3D) -> bool:
 	if not is_instance_valid(actor) or not actor.is_inside_tree() or actor.get_tree().paused:
 		return true
+	return has_protected_owner(actor)
+
+static func has_protected_owner(actor: Node3D) -> bool:
 	var cursor: Node = actor
-	for depth in range(5):
-		if cursor == null:
-			break
+	while cursor != null:
 		if bool(cursor.get_meta("dialogue_facing_lock", false)) or bool(cursor.get_meta("cast_dialogue_owner", false)) or str(cursor.get_meta("cast_work_owner", "")) != "" or bool(cursor.get_meta("bell_eater_evacuated", false)):
 			return true
 		cursor = cursor.get_parent()

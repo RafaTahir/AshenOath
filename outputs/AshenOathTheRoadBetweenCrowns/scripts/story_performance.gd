@@ -1,6 +1,7 @@
 extends Node
 
 const CastProfile = preload("res://scripts/story_cast_profile.gd")
+const Presence = preload("res://scripts/character_presence.gd")
 var actor: Node3D
 var listener: Node3D
 var driver: Node
@@ -95,6 +96,8 @@ func present_page(entry: Dictionary) -> void:
 func start(target: Node3D, player: Node3D, state) -> void:
 	if active:
 		stop()
+	if not Presence.claim(target, "dialogue", get_instance_id()):
+		return
 	actor = target
 	listener = player
 	var role := str(actor.get_meta("story_actor_alias", actor.get_meta("character_identity_profile", "")))
@@ -106,10 +109,10 @@ func start(target: Node3D, player: Node3D, state) -> void:
 	driver = actor.find_child("CharacterAnimationDriver", true, false)
 	face = actor.find_child("CharacterFaceDriver", true, false)
 	if driver == null and face == null:
+		Presence.release(target, "dialogue", get_instance_id())
 		return
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	active = true
-	actor.set_meta("cast_dialogue_owner", true)
 	speaking = true
 	elapsed = 0.0
 	next_beat = 2.8
@@ -162,7 +165,7 @@ func stop() -> void:
 		return
 	active = false
 	if is_instance_valid(actor):
-		actor.remove_meta("cast_dialogue_owner")
+		Presence.release(actor, "dialogue", get_instance_id())
 	pending_gesture = ""
 	set_process(false)
 	if is_instance_valid(driver):

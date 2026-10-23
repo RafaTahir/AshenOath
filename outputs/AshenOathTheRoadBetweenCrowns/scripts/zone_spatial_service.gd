@@ -26,6 +26,7 @@ var _route_cache: Dictionary = {}
 var _segment_cache: Dictionary = {}
 var _segment_cache_step := -1
 var data_revision := 0
+var _presence_index = preload("res://scripts/spatial_bounds_index.gd").new()
 
 func _exit_tree() -> void:
 	if navigation_map.is_valid():
@@ -48,6 +49,7 @@ func configure(id: String, river_z: float, extents: Vector2) -> void:
 	_exclusion_index.clear()
 	_corridor_index.clear()
 	_bridge_index.clear()
+	_presence_index.clear()
 	_invalidate_routes()
 	_register_zone_defaults()
 
@@ -72,8 +74,28 @@ func register_bridge(id: String, bank_a: Vector3, bank_b: Vector3, half_width: f
 
 func register_gate(id: String, center: Vector3, arrival: Vector3, half_size: Vector2) -> void:
 	gates[id] = {"center": center, "arrival": arrival, "half_size": half_size}
+	add_presence_landmark("watch", center, maxf(half_size.x, half_size.y))
 	reserve_corridor(id, center, half_size)
 	add_safe_spawn(arrival)
+
+func add_presence_landmark(kind: String, point: Vector3, radius: float = 0.5) -> void:
+	var id := kind + ":" + str(point)
+	_presence_index.add(id, point, Vector2.ONE * radius, {"kind":kind, "point":point, "radius":radius})
+
+func presence_destinations(kind: String, home: Vector3, radius: float, clearance: float) -> Array[Vector3]:
+	var result: Array[Vector3] = []
+	for entry: Dictionary in _presence_index.candidates(home, radius):
+		if str(entry.kind) != kind:
+			continue
+		var toward_home: Vector3 = home - entry.point
+		toward_home.y = 0.0
+		if toward_home.length_squared() < 0.01:
+			continue
+		var point: Vector3 = entry.point + toward_home.normalized() * (float(entry.radius) + clearance + 0.2)
+		point.y = home.y
+		if point.distance_squared_to(home) <= radius * radius and validate_segment(home, point, clearance):
+			result.append(point)
+	return result
 
 func reserve_exclusion(id: String, center: Vector3, half_size: Vector2) -> void:
 	var entry := {"id": id, "center": center, "half_size": half_size}
@@ -214,13 +236,22 @@ func validate_runtime_segment(start: Vector3, destination: Vector3, clearance: f
 		return false
 	if not is_inside_tree() or get_world_3d() == null:
 		return true
-	var distance := start.distance_to(destination)
-	var samples := maxi(2, ceili(distance / 0.28))
-	for index in range(samples + 1):
-		var point := start.lerp(destination, float(index) / float(samples))
-		if _is_position_occupied_with_ignore(point, maxf(clearance * 0.52, 0.28), 1.65, ignore_body):
-			return false
-	return true
+	var radius := maxf(clearance * 0.52, 0.28)
+	# cast_motion ignores existing overlaps; keep the initial occupancy check.
+	if _is_position_occupied_with_ignore(start, radius, 1.65, ignore_body):
+		return false
+	var shape := _get_probe_shape(radius, 1.65)
+	var query: PhysicsShapeQueryParameters3D = _query_scratch.shape_query(shape)
+	query.transform = Transform3D(Basis.IDENTITY, Vector3(start.x, maxf(start.y, 0.0) + 0.14 + shape.height * 0.5 + radius, start.z))
+	query.motion = Vector3(destination.x, maxf(destination.y, 0.0), destination.z) - Vector3(start.x, maxf(start.y, 0.0), start.z)
+	var excluded: Array[RID] = []
+	if is_instance_valid(player_body):
+		excluded.append(player_body.get_rid())
+	if is_instance_valid(ignore_body) and not excluded.has(ignore_body.get_rid()):
+		excluded.append(ignore_body.get_rid())
+	query.exclude = excluded
+	var fractions := get_world_3d().direct_space_state.cast_motion(query)
+	return fractions.size() == 2 and fractions[0] >= 1.0
 
 func build_route(start: Vector3, destination: Vector3, clearance: float = 0.9) -> Array[Vector3]:
 	var source := validate_position(start, clearance, bank_for(start))
