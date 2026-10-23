@@ -151,7 +151,7 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 	var covenant := str(context.get_story_flag("final_covenant", ""))
 	if covenant == "":
 		_make_hart_grove(context)
-		_make_hart_witness(context)
+		make_hart_witness(context)
 		context.make_light("HartWitnessLight", Vector3(0, 6, -9), Color(0.62, 0.86, 0.75), 4.2)
 		context.make_named_interactable("white_hart", "dialogue", "Stand before the White Hart", Vector3(0, 0, -9), Color(0.78, 0.80, 0.68), Vector3(0.42, 0.72, 0.42))
 	elif covenant == "ash" and not bool(context.get_story_flag("final_choice_completed", false)):
@@ -162,7 +162,7 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 			boss.leash_radius = 10.0
 	elif not bool(context.get_story_flag("final_choice_completed", false)):
 		_make_hart_grove(context)
-		_make_hart_witness(context)
+		make_hart_witness(context)
 	else:
 		_make_hart_aftermath(context, covenant)
 	context.make_zone_gate("Return to Greyfen's assembly", Vector3(-7, 0, 16), "assembly", Vector3(0, 1, -12))
@@ -246,21 +246,11 @@ func _make_hart_grove(context: ZoneBuildContext) -> void:
 		if stone != null:
 			stone.name = "HartGroveMarker_%02d" % index
 
-func _make_hart_witness(context: ZoneBuildContext) -> void:
-	# The witness shares the encounter's native stag anatomy and palette.
-	# The witness display uses the same focal role as the encounter. Its 3.60 m
-	# normalized height keeps the final creature readable at gameplay distance;
-	# the small multiplier is only a restrained spectral presence, not a second
-	# source normalization pass.
-	var world_yaw := 180.0 + CharacterRoleSpec.facing_degrees("white_hart_boss")
-	var root: Node3D = context.make_visual_role("white_hart_boss", "enemies", Vector3(0, 0, -9), Vector3.ONE * 1.08, world_yaw) as Node3D
-	if root == null:
-		return
-	root.position.y += CharacterRoleSpec.ground_offset("white_hart_boss")
-	root.name = "WhiteHartWitnessDisplay"
-	root.set_meta("focal_creature", true)
-	# Native stag antlers and authored materials are shared with the encounter.
-	configure_witness_animation(root)
+func make_hart_witness(context: ZoneBuildContext, position: Vector3 = Vector3(0, 0, -9)) -> Node3D:
+	var root: Node3D = context._host.CharacterPresentation.make_hart_witness(context._host.asset_helper, position)
+	if root != null:
+		context.add_node(root)
+	return root
 
 func configure_witness_animation(root: Node3D) -> void:
 	var driver := CharacterAnimationDriver.new()

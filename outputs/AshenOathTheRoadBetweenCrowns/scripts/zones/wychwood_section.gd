@@ -503,6 +503,10 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 			var enemy = context.spawn_enemy(ids[wave], positions[wave])
 			if enemy != null:
 				enemy.set_meta("wychwood_wave", wave)
+				# Presence belongs to the encounter, not the tutorial prompt loop.
+				# Future waves stay dormant; the earned next wave is already visible
+				# on arrival, including Continue before the clearing trigger.
+				enemy.set_encounter_active(wave == context.wychwood_wave_progress())
 	if context.is_quest_active("side_black_dog") and not context.is_objective_done("side_black_dog", "find_dog") and not bool(context.get_story_flag("black_dog_bandits_defeated", false)):
 		context.spawn_enemy("bandit", Vector3(-14, 0.8, -14))
 		context.spawn_enemy("bandit", Vector3(-12, 0.8, -15))

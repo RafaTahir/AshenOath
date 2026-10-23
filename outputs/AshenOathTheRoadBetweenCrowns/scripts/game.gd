@@ -1367,20 +1367,10 @@ func should_defer_visual_role(role: String, category: String) -> bool:
 		return true
 	return not bool(asset_helper.is_role_warmed(role))
 
-func should_defer_character_role(role: String, actor_id: String) -> bool:
-	# Castle NPC bodies are presentation work, while their Area3D, interaction,
-	# prompt, and patrol ownership are required immediately. Keeping only this
-	# small named-cast slice deferred removes a cold transition hitch without
-	# making the opening actors appear late.
-	if role == "" or actor_id == "":
-		return false
-	var preparing_greyfen := zone_root != null and zone_root.name == "greyfen"
-	if OS.has_feature("web") and (current_zone_id == "greyfen" or preparing_greyfen) and role != "sister_anwen_human":
-		# Opening bodies are owned by base/opening, which mount before construction.
-		return false
-	if not game_started:
-		return false
-	return current_zone_id in ["vargan_court", "record_hall"]
+func should_defer_character_role(_role: String, _actor_id: String) -> bool:
+	# Destination packs already gate construction. Required people must have a
+	# body before their interaction is published, not a delayed visual marker.
+	return false
 
 func _schedule_deferred_visual_roles(root: Node3D) -> void:
 	if root == null or not is_instance_valid(root):
@@ -6177,7 +6167,14 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		# areas own dialogue/focus, not a second capsule-shaped prop.
 		area.set_meta("external_world_prop", "notice_board")
 	elif id == "white_hart":
-		# The finale builder owns the visible witness; this area owns interaction only.
+		# Legacy encounter callbacks can also publish this interaction. They must
+		# supply the same stag, never an invisible speaker anchor.
+		if zone_root.find_child("WhiteHartWitnessDisplay", true, false) == null:
+			var witness: Node3D = CharacterPresentation.make_hart_witness(asset_helper, pos)
+			if witness == null:
+				area.queue_free()
+				return null
+			zone_root.add_child(witness)
 		area.set_meta("external_character_visual", "WhiteHartWitnessDisplay")
 	elif id.begins_with("covenant_"):
 		area.set_meta("external_story_visual", "covenant_record")

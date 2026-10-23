@@ -1,14 +1,16 @@
 # Living Cast - Current Checkpoint
 
-Stage: Living Cast interaction/resource improvements implemented and compiled;
-authorized combined publication through CAST-010.
-Formal user acceptance: **0/10**. No runtime or visual pass has been claimed.
-Latest instruction authorizes remaining implementation, not visual acceptance.
+Stage: targeted actor-presence repair implemented and compiled; CAST-010 publication.
+Formal user acceptance: **0/10**. One authorized runtime check identified the
+shared enemy parser failure; post-fix runtime appearance is not verified.
+Current repair, evidence and manual checks: [actor presence](ACTOR_PRESENCE_REPAIR.md).
 Current implementation and checklist: [interaction/resource efficiency](INTERACTION_EFFICIENCY_IMPLEMENTATION.md).
 Retained six-world rollout: [rollout](ROLLOUT_IMPLEMENTATION.md).
-Current candidate: `cast-efficiency-20261023`; **104841634 bytes**, 17 files,
-15966 bytes below the cap. Root PCK SHA-256:
-`b32c4fa85caa90c734733e67243d845bffbc6d05c27289312b870fc40bc1ed90`.
+Current candidate: `actor-presence-20261023`; **104842306 bytes**, 17 files,
+15294 bytes below the cap. Root PCK SHA-256:
+`bc5a2fdfa849eda86194e69734ae0442295b586add6f73e5bcc207cea9c7742c`.
+Production packaging and demand-loaded enemy compilation succeeded. Runtime
+check: partial/failed on the original parser error, not a post-fix pass.
 Publication ownership: current CAST-010 receipt under `.release-gate/living-road/`.
 The receipt records actual commit/push/deployment completion, not acceptance.
 Strict performance is not established by this work.
@@ -77,7 +79,6 @@ are retained under .release-gate/cast-greyfen-v1-20261021/.
 
 ## Exact Next Action
 
-Publish the compiled, under-budget candidate once through the existing workflow.
-Then obtain the user's visual/behavioral review; no acceptance is implied by
-source completion, successful compilation or publication.
+Complete publication through the existing CAST-010 receipt, then obtain the
+user's Wychwood/NPC/Hart review. No additional agent runtime test is authorized.
 

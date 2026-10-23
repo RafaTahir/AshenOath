@@ -15,6 +15,27 @@ const OPENING_OCCUPATION_PROP_PATHS := [
 static var _activity_meshes: Dictionary = {}
 static var _activity_materials: Dictionary = {}
 
+static func make_hart_witness(helper: Node, position: Vector3) -> Node3D:
+	var visual: Node3D = helper.spawn_visual_role("white_hart_boss", "enemies")
+	if visual == null:
+		push_error("Required White Hart witness could not be loaded")
+		return null
+	helper.apply_normalized_scale(visual, 1.08)
+	# The wrapper owns placement; the child retains imported grounding/centering.
+	var root := Node3D.new()
+	root.name = "WhiteHartWitnessDisplay"
+	root.position = position + Vector3.UP * preload("res://scripts/character_role_spec.gd").ground_offset("white_hart_boss")
+	root.rotation_degrees.y = 180.0
+	root.set_meta("focal_creature", true)
+	root.add_child(visual)
+	var driver = load("res://scripts/character_animation_driver.gd").new()
+	driver.name = "HartWitnessAnimation"
+	visual.add_child(driver)
+	if not driver.configure(visual, {"idle":"Idle", "dialogue":"Idle_2"}):
+		push_error("White Hart witness requires native idle animation")
+	driver.set_update_rate_hz(12.0)
+	return root
+
 static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
 	var existing := owner.find_child("OccupationEquipment", true, false) as Node3D
 	if existing != null:

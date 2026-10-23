@@ -763,7 +763,7 @@ func _update_boss_presence(delta: float) -> void:
 			sweep = sin(presence_clock*0.40)*0.14
 		"bog_wretch":
 			ambient_state = "territorial"
-			var target := home_position + Vector3(cos(presence_clock*0.12),0,sin(presence_clock*0.12))*1.2
+			var target: Vector3 = home_position + Vector3(cos(presence_clock*0.12),0,sin(presence_clock*0.12))*1.2
 			if spatial_service != null and spatial_service.bank_for(target) == spatial_service.bank_for(home_position) and spatial_service.validate_runtime_segment(global_position, target, contact_radius, self):
 				var direction := _navigation_direction(target)
 				velocity.x = direction.x*move_speed*0.25
