@@ -3,30 +3,40 @@ extends RefCounted
 const RiverSection = preload("res://scripts/zones/river_section.gd")
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 const LandscapePresentation = preload("res://scripts/world_landscape_presentation.gd")
+const BUILD_STEPS := 11
 
 func build(context: ZoneBuildContext) -> void:
-	seed(78233)
+	var previous := context.use_scene_rng(78233)
+	for step in range(BUILD_STEPS): build_step(context,step)
+	context.restore_scene_rng(previous)
+
+func build_step(context: ZoneBuildContext, step: int) -> void:
+	match step:
+		0: _begin(context)
+		1:
+			context.make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07), BridgeSurfaceContract.DECK_WIDTH, BridgeSurfaceContract.bridge_length(3.4), BridgeSurfaceContract.APPROACH_LENGTH)
+			RiverSection.new().build(context, 0.0, 44.0, 3.4)
+		2:
+			context.make_wychwood_terrain_layers()
+			context.make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
+			context.make_wychwood_path_edges()
+		3:
+			_build_light_composition(context)
+			_build_gate_threshold(context)
+		4: _build_authored_presentation(context)
+		5: _build_forest_frame(context)
+		6: _build_investigation_route(context)
+		7: _build_combat_clearing(context)
+		8: context.make_quality_wychwood_overhaul()
+		9: _build_gameplay_content(context)
+		10: context.make_narrative_aftermath()
+
+func _begin(context: ZoneBuildContext) -> void:
 	var root := Node3D.new()
 	root.name = "AuthoredWychwoodSection"
 	root.set_meta("ticket", "WORLD-002")
 	root.set_meta("main_route_half_width", 2.6)
 	context.add_node(root)
-
-	context.make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07), BridgeSurfaceContract.DECK_WIDTH, BridgeSurfaceContract.bridge_length(3.4), BridgeSurfaceContract.APPROACH_LENGTH)
-	RiverSection.new().build(context, 0.0, 44.0, 3.4)
-	context.make_wychwood_terrain_layers()
-	context.make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
-	context.make_wychwood_path_edges()
-
-	_build_light_composition(context)
-	_build_gate_threshold(context)
-	_build_authored_presentation(context)
-	_build_forest_frame(context)
-	_build_investigation_route(context)
-	_build_combat_clearing(context)
-	context.make_quality_wychwood_overhaul()
-	_build_gameplay_content(context)
-	context.make_narrative_aftermath()
 
 func _build_authored_presentation(context: ZoneBuildContext) -> void:
 	var presentation := Node3D.new()

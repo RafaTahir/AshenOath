@@ -44,3 +44,14 @@ flowchart TD
 
 Current atlas distinguishes roads from retained journey transfers. This record
 does not mark the physical adjacency/residency implementation complete.
+
+## Owned-Context Progress (2026-10-25)
+
+The first pair now has complete-scene preparation/reuse under ZoneBuildContext
+and ZoneResidencyService: isolated construction, one prepared neighbor, suspended
+controllers, source/quality invalidation and a cancellable cold-travel fallback.
+The retained destination hierarchy changes World3D ownership without tree exit.
+This removes the mutable-host construction prerequisite; it does not complete
+matched visible thresholds, continuous camera/motion or authored connecting ground.
+Those remain the next physical-join work. Build/publication and user runtime
+acceptance are separate in `COHESIVE_GAME_IMPLEMENTATION.md`.

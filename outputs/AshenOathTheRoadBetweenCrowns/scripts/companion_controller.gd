@@ -84,6 +84,7 @@ func _trial_cue(delta: float) -> bool:
 	return true
 
 static func install(host: Node, zone_root: Node3D, active_zone: String, unseen_arrival: bool = false) -> void:
+	if host.neighbor_building: return
 	if zone_root != host.zone_root:
 		return
 	var recruited: bool = str(host.story_state.get_flag("bracken_home", "")) == "adopted"

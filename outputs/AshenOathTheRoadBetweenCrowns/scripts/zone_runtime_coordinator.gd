@@ -207,6 +207,7 @@ func _node_count(root: Node) -> int:
 	return count
 
 func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	if host.seamless_world != null: host.seamless_world.publish_prepared(zone_id)
 	if host.new_game_start_pending and not host.game_started:
 		host.new_game_start_pending = false
 	zone_id = zone_id.strip_edges().to_lower()
@@ -383,6 +384,14 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if host.zone_root != null:
 		host.zone_root.set_meta("zone_resource_owner", "active")
 		host.zone_root.set_meta("zone_resource_id", zone_id)
+		for flag_id: String in host.zone_root.get_meta("prepared_story_flags",{}):
+			host.story_state.set_flag(flag_id,host.zone_root.get_meta("prepared_story_flags")[flag_id])
+		host.zone_root.remove_meta("prepared_story_flags")
+		if reused_zone:
+			host.runtime_light_count = int(host.zone_root.get_meta("runtime_light_count",0))
+		else:
+			host.zone_root.set_meta("runtime_light_count",host.runtime_light_count)
+		host.world_vfx = host.zone_root.get_node_or_null("WorldVFXController")
 		if zone_id == "deep_wood":
 			host.CampaignWildernessSection.new().publish_rooks_false_road(ZoneBuildContext.new(host, zone_id))
 		elif zone_id == "old_mill":

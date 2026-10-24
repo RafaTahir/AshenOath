@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "leisure-atlas-responsive-20261025",
+  "release_id": "neighbor-ownership-20261025",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4093072,
-      "candidate_sha256": "caf822880deca80a95793a50ac821d459a450fc7ae3e5f50e09d5c398e853e21",
+      "candidate_bytes": 4094176,
+      "candidate_sha256": "67e3ef8cfb877f5415ba351d2fb035513eb0da14716ef680d14782af6f20c0a0",
       "contents": [
         "menu",
         "managers",
@@ -35,15 +35,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4093072,
-      "embedded_source_sha256": "caf822880deca80a95793a50ac821d459a450fc7ae3e5f50e09d5c398e853e21",
+      "embedded_source_bytes": 4094176,
+      "embedded_source_sha256": "67e3ef8cfb877f5415ba351d2fb035513eb0da14716ef680d14782af6f20c0a0",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "leisure-atlas-responsive-20261025",
-      "url": "packs/opening.pck?sha256=70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6",
-      "sha256": "70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6",
-      "bytes": 35791816,
+      "version": "neighbor-ownership-20261025",
+      "url": "packs/opening.pck?sha256=b49a449eb0094d952a982eadab71305ce6e08106d9b627253e1da5c1000b2b04",
+      "sha256": "b49a449eb0094d952a982eadab71305ce6e08106d9b627253e1da5c1000b2b04",
+      "bytes": 35792136,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -51,17 +51,17 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 35791816,
-      "candidate_sha256": "70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6",
+      "candidate_bytes": 35792136,
+      "candidate_sha256": "b49a449eb0094d952a982eadab71305ce6e08106d9b627253e1da5c1000b2b04",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6"
+      "cache_key": "b49a449eb0094d952a982eadab71305ce6e08106d9b627253e1da5c1000b2b04"
     },
     "campaign": {
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "url": "packs/campaign.pck?sha256=3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "bytes": 8726164,
@@ -84,7 +84,7 @@
       "cache_key": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1"
     },
     "characters": {
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "url": "packs/characters.pck?sha256=cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "bytes": 9658576,
@@ -105,7 +105,7 @@
       "cache_key": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3"
     },
     "monsters": {
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "url": "packs/monsters.pck?sha256=d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "bytes": 14710328,
@@ -127,7 +127,7 @@
       "cache_key": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22"
     },
     "audio": {
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "url": "packs/audio.pck?sha256=bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a",
       "sha256": "bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a",
       "bytes": 19308388,
@@ -148,7 +148,7 @@
       "cache_key": "bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a"
     },
     "quality_materials": {
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "url": "packs/quality_materials.pck?sha256=a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "bytes": 7379308,
@@ -169,10 +169,10 @@
       "cache_key": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8"
     },
     "adjacent": {
-      "version": "leisure-atlas-responsive-20261025",
-      "url": "packs/adjacent.pck?sha256=12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
-      "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
-      "bytes": 1405472,
+      "version": "neighbor-ownership-20261025",
+      "url": "packs/adjacent.pck?sha256=aa785642c11597199017b7a633fbe78e6fe3ca73f388af7ba6d6e448fbd1287d",
+      "sha256": "aa785642c11597199017b7a633fbe78e6fe3ca73f388af7ba6d6e448fbd1287d",
+      "bytes": 1406800,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -186,14 +186,14 @@
         "ruins"
       ],
       "candidate_artifact": "adjacent.pck",
-      "candidate_bytes": 1405472,
-      "candidate_sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
-      "cache_key": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918"
+      "candidate_bytes": 1406800,
+      "candidate_sha256": "aa785642c11597199017b7a633fbe78e6fe3ca73f388af7ba6d6e448fbd1287d",
+      "cache_key": "aa785642c11597199017b7a633fbe78e6fe3ca73f388af7ba6d6e448fbd1287d"
     }
   },
-  "build_id": "leisure-atlas-responsive-20261025",
-  "generated_from_commit": "ef924755bbae71749db4dfe58a2f7c80f1c80917",
-  "generated_at_utc": "2026-10-24T20:17:59.516037Z",
-  "total_bytes": 96980052,
+  "build_id": "neighbor-ownership-20261025",
+  "generated_from_commit": "763da7394db72f4deb3b5bf37cd502e5432f3fb7",
+  "generated_at_utc": "2026-10-24T22:42:37.751938Z",
+  "total_bytes": 96981700,
   "source_dirty": true
 }

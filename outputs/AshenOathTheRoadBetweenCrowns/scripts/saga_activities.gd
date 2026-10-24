@@ -54,7 +54,7 @@ func refresh() -> void:
 	if _refreshing or host == null or not is_instance_valid(host.zone_root) or not host.zone_root.is_ancestor_of(self) or zone != str(host.current_zone_id):
 		return
 	_refreshing = true
-	_reconcile_rewards()
+	if not host.neighbor_building: _reconcile_rewards()
 	for point: Node3D in points.values():
 		point.set_meta("saga_wanted", false)
 	for id: String in Catalog.PEOPLE:

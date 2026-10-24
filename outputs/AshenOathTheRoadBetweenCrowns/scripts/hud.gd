@@ -587,13 +587,13 @@ func _cancel_journey_load() -> void:
 	_journey_cancel_button.disabled = true
 	journey_load_cancel_requested.emit()
 
-func set_journey_load_applying() -> void:
+func set_journey_load_applying(message: String = "Returning to the recorded journey…\nPlacing Kael on the road.") -> void:
 	if not _journey_load_active:
 		return
 	_journey_load_applying = true
 	_journey_cancel_button.disabled = true
 	_journey_cancel_button.visible = false
-	loading_message.text = "Returning to the recorded journey…\nPlacing Kael on the road."
+	loading_message.text = message
 
 func update_journey_load_progress(zone_id: String, fraction: float, phase: String = "Loading destination content...") -> void:
 	if not _journey_load_active or _journey_load_applying:

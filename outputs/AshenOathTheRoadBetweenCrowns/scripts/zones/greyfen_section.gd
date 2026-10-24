@@ -16,7 +16,11 @@ const VILLAGE_HOUSES := [
 ]
 
 func build(context: ZoneBuildContext) -> void:
-	seed(41021)
+	var previous := context.use_scene_rng(41021)
+	_build(context)
+	context.restore_scene_rng(previous)
+
+func _build(context: ZoneBuildContext) -> void:
 	var opening_fast := context.is_opening_fast()
 	var opening_boot := context.is_opening_boot()
 	var root := Node3D.new()
@@ -68,6 +72,11 @@ func build(context: ZoneBuildContext) -> void:
 		context.make_narrative_aftermath()
 
 func build_detail_stage(context: ZoneBuildContext, stage: String) -> void:
+	var previous := context.use_scene_rng(41021)
+	_build_detail_stage(context,stage)
+	context.restore_scene_rng(previous)
+
+func _build_detail_stage(context: ZoneBuildContext, stage: String) -> void:
 	if stage.begins_with("gameplay_visual_"):
 		_reveal_gameplay_visual_bucket(context, int(stage.trim_prefix("gameplay_visual_")))
 		return
@@ -87,7 +96,6 @@ func build_detail_stage(context: ZoneBuildContext, stage: String) -> void:
 	# Opening prewarm publishes the playable road, actors, gates, and compact
 	# landmark layer first. Deferred stages add noncritical village dressing in
 	# bounded chunks so WebGL never compiles the whole zone in one frame.
-	seed(41021)
 	if stage.begins_with("boundary_"):
 		_build_boundary_stage(context, stage.trim_prefix("boundary_"))
 		return

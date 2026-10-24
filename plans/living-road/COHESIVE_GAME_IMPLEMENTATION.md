@@ -194,18 +194,54 @@ from the score-preserved candidate and reused at checked identity. Publication
 receipt under WORLD-SAGA-000 owns the commit/deployment result. Runtime user
 acceptance, mobile-device observations and numerical performance remain unverified.
 
+## Delivery 6: Owned Neighbor Construction
+
+Implementation present; compilation/package/publication are recorded separately.
+This is a prerequisite for physical joins, not a completed stitched world.
+- Extend the existing ZoneBuildContext with one owned root, spatial service,
+  enemy/interaction sets, batch buffers and scene RNG. Legacy construction helpers
+  receive those fields only inside a non-yielding scope; restore the active world
+  before returning to gameplay or the next construction step.
+- Prepare only the Greyfen/Wychwood neighbor, after complete opening readiness,
+  while idle near its approach. Pause staging during movement, bow aim, combat,
+  dialogue, menus and travel. Reuse valid cached scenes; never construct a duplicate
+  active population or change current camera peers, companion state or rewards.
+- Reuse the existing Greyfen stage list and divide the retained Wychwood builder
+  along its authored construction phases. Include every existing layer, body,
+  interaction, material, collision and navigation owner before publication.
+- Keep preparation in an isolated, non-rendering World3D. Publication switches
+  world ownership without removing/re-adding the hierarchy: tree-exit callbacks
+  would otherwise destroy its navigation map and controller subscriptions. Its
+  retained viewport does not render; a camera mirror supports actor visibility
+  queries. Retirement frees this wrapper with its root.
+- Suspend explicit ALWAYS/PAUSABLE descendants as well as the cached parent;
+  a disabled parent alone does not suspend these modes. Restore exact modes on
+  activation, leaving authored-disabled future waves disabled.
+- Invalidate obsolete quality/story/quest contexts. Commit queued construction
+  flags only on real activation. Reaching the exit finishes the same context with
+  cancellable progress; failure/cancel retains the current world and journey.
+
+No agent gameplay, browser run, screenshot, benchmark or profiling is authorized.
+No numerical loading/FPS/memory improvement or physical continuity is certified.
+Manual pair checks: cross north and return with/without an idle pause; cancel and
+retry cold travel; change quality/state mid-preparation; Continue an unfinished
+Wychwood wave; check complete actors, interactions, navigation, scenery, rewards,
+camera and audio on arrival. Measure frame pacing and memory separately.
+
+Candidate `neighbor-ownership-20261025`: opening, adjacent, base and production
+exports compiled without parser/compiler errors. The already-completed opening
+export was reused when the packaging dependency check identified the changed
+Wychwood builder's adjacent-pack ownership. All other packs and engine bytes
+retain checked identity. Complete deployment: **104,824,661 bytes**, 16 files,
+**32,939 bytes below** the cap. The WORLD-SAGA-000 publication receipt records
+the commit/deployment outcome. User runtime acceptance remains pending.
+
 ## Remaining Approved Work
 
-Next implementation is physical neighboring-space/room streaming under existing
-WORLD-SAGA ownership. The atlas does not complete that implementation. Requirements
-and the actual-vs-planned distinction are in `WORLD_CONNECTIONS.md`. The remaining
-streaming blocker is source ownership: builders/controllers read the mutable
-host root, sector, enemy and spatial-service fields. Resource prefetch cannot
-safely construct a second gameplay context under that contract. Do not replace
-this work with hidden loading, frozen duplicate actors or all-world residency.
-The next source change must establish one explicit owned zone-construction
-context, then implement the Greyfen/Wychwood pair with matched threshold frames,
-one bounded prepared neighbor, cancellation/signature invalidation and complete
-collision/population before crossing. Pair review precedes broader rollout.
-Retain every explicit legacy-state/reward mapping and the pending facial-sample
-approval boundary. None of that remaining work is marked implemented here.
+Implement matched, authored exit/entry transforms and visible route composition
+for this pair before claiming physically continuous traversal. Current activation
+still uses the retained arrival handoff, not a contiguous continent. Then review
+the pair before broader neighboring-space/room rollout. Requirements and current
+versus planned connections remain in `WORLD_CONNECTIONS.md`; keep shortcuts and
+Assembly transfers honestly distinguished. Preserve local saves, all explicit
+legacy-state/reward mappings and the pending facial-sample approval boundary.

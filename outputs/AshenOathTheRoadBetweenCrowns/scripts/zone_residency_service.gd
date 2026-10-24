@@ -52,7 +52,10 @@ func _deferred_free_zone(retired_root: Node) -> void:
 		# alive when a retired procedural zone is torn down.
 		_release_zone_render_resources(retired_root)
 		retired_zone_roots.erase(retired_root)
+		var scene_owner := retired_root.get_parent()
 		retired_root.free()
+		if is_instance_valid(scene_owner) and scene_owner.has_meta("prepared_zone_view"):
+			scene_owner.queue_free()
 	else:
 		retired_zone_roots.erase(retired_root)
 	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
@@ -116,6 +119,7 @@ func _retire_zone_root(retired_root: Node) -> void:
 	_anchor_retired_materials(retired_root)
 	_anchor_shared_skinned_resources(retired_root)
 	_quiesce_zone_runtime(retired_root)
+	suspend_runtime(retired_root)
 	validate_resources.call(retired_root)
 	_bind_retirement_material(retired_root)
 	_set_zone_collision_enabled(retired_root, false)
@@ -230,6 +234,7 @@ func _cache_route_zone(zone_id: String, root: Node3D, enemies: Array, signature:
 		_release_route_spatial_service(zone_id)
 		_retire_zone_root(existing)
 	_remove_root_from_route_cache(root)
+	if disable_process: suspend_runtime(root)
 	root.visible = keep_visible
 	root.process_mode = Node.PROCESS_MODE_DISABLED if disable_process else Node.PROCESS_MODE_PAUSABLE
 	root.position = Vector3.ZERO if keep_visible else Vector3(0, -1000, 0)
@@ -280,7 +285,28 @@ func _activate_cached_zone(zone_id: String) -> Node3D:
 		_set_zone_collision_enabled(cached_root, true)
 	cached_root.set_meta("cached_collision_disabled", false)
 	cached_root.visible = true
+	restore_runtime(cached_root)
 	return cached_root as Node3D
+
+func suspend_runtime(root: Node) -> void:
+	for child: Node in root.find_children("*","",true,false): suspend_node(root,child)
+
+func suspend_node(root: Node, node: Node) -> void:
+	# Explicit modes bypass a disabled parent; dormant waves stay disabled.
+	if node.process_mode in [Node.PROCESS_MODE_INHERIT,Node.PROCESS_MODE_DISABLED]: return
+	if not node.has_meta("resident_process_mode"):
+		node.set_meta("resident_process_mode",node.process_mode)
+		var nodes: Array = root.get_meta("resident_suspended_nodes",[])
+		nodes.append(weakref(node)); root.set_meta("resident_suspended_nodes",nodes)
+	node.process_mode = Node.PROCESS_MODE_DISABLED
+
+func restore_runtime(root: Node) -> void:
+	for reference: WeakRef in root.get_meta("resident_suspended_nodes",[]):
+		var node: Node = reference.get_ref()
+		if is_instance_valid(node) and node.has_meta("resident_process_mode"):
+			node.process_mode = int(node.get_meta("resident_process_mode"))
+			node.remove_meta("resident_process_mode")
+	root.remove_meta("resident_suspended_nodes")
 
 func _remove_root_from_route_cache(root: Node) -> void:
 	for raw_id in route_zone_cache.keys().duplicate():

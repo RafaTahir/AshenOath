@@ -1,93 +1,91 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-24T20:17:59.516037Z",
-  "build_id": "leisure-atlas-responsive-20261025",
-  "generated_from_commit": "ef924755bbae71749db4dfe58a2f7c80f1c80917",
+  "generated_at_utc": "2026-10-24T22:42:37.751938Z",
+  "build_id": "neighbor-ownership-20261025",
+  "generated_from_commit": "763da7394db72f4deb3b5bf37cd502e5432f3fb7",
   "source_dirty": true,
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 101073124,
+  "total_bytes": 101075876,
   "packs": [
     {
       "id": "base",
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4093072,
-      "sha256": "caf822880deca80a95793a50ac821d459a450fc7ae3e5f50e09d5c398e853e21",
+      "bytes": 4094176,
+      "sha256": "67e3ef8cfb877f5415ba351d2fb035513eb0da14716ef680d14782af6f20c0a0",
       "status": "candidate_external",
       "log": "base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 35791816,
-      "sha256": "70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6",
-      "status": "candidate_external",
-      "reused_from_build": "road-atlas-score-preserved-20261025"
+      "bytes": 35792136,
+      "sha256": "b49a449eb0094d952a982eadab71305ce6e08106d9b627253e1da5c1000b2b04",
+      "status": "candidate_external"
     },
     {
       "id": "adjacent",
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
-      "bytes": 1405472,
-      "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
-      "status": "candidate_external",
-      "reused_from_build": "road-atlas-score-preserved-20261025"
+      "bytes": 1406800,
+      "sha256": "aa785642c11597199017b7a633fbe78e6fe3ca73f388af7ba6d6e448fbd1287d",
+      "status": "candidate_external"
     },
     {
       "id": "campaign",
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8726164,
       "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "status": "candidate_external",
-      "reused_from_build": "road-atlas-score-preserved-20261025"
+      "reused_from_build": "leisure-atlas-responsive-20261025"
     },
     {
       "id": "characters",
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9658576,
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "status": "candidate_external",
-      "reused_from_build": "road-atlas-score-preserved-20261025"
+      "reused_from_build": "leisure-atlas-responsive-20261025"
     },
     {
       "id": "monsters",
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14710328,
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "status": "candidate_external",
-      "reused_from_build": "road-atlas-score-preserved-20261025"
+      "reused_from_build": "leisure-atlas-responsive-20261025"
     },
     {
       "id": "audio",
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19308388,
       "sha256": "bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a",
       "status": "candidate_external",
-      "reused_from_build": "road-atlas-score-preserved-20261025"
+      "reused_from_build": "leisure-atlas-responsive-20261025"
     },
     {
       "id": "quality_materials",
-      "version": "leisure-atlas-responsive-20261025",
+      "version": "neighbor-ownership-20261025",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7379308,
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "status": "candidate_external",
-      "reused_from_build": "road-atlas-score-preserved-20261025"
+      "reused_from_build": "leisure-atlas-responsive-20261025"
     }
   ],
   "errors": []

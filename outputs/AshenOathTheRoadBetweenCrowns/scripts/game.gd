@@ -113,6 +113,11 @@ var seamless_world: SeamlessWorldService
 var runtime_packs
 var qa_adapter
 var zone_root: Node3D
+var neighbor_building := false
+var neighbor_crossing_pending := false
+var neighbor_arrival_pending := false
+var neighbor_crossing_was_paused := false
+var scene_rng: RandomNumberGenerator
 var active_interactable
 var dialogue_runtime_coordinator := DialogueRuntimeCoordinator.new()
 var combat_vfx_coordinator := CombatVfxCoordinator.new()
@@ -570,6 +575,9 @@ func _begin_gameplay_handoff(reason: String) -> void:
 	_invalidate_interaction_prompt()
 
 func _finish_gameplay_handoff() -> void:
+	if neighbor_arrival_pending and not zone_transition_pending and not zone_load_request_pending and not opening_pack_waiting and not campaign_pack_waiting:
+		neighbor_arrival_pending = false
+		hud.end_journey_load(true)
 	journey_loading.try_finish(self)
 	if input_router == null or input_router.get_context() != "transition":
 		_publish_journey_arrival()
@@ -800,9 +808,8 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 	loading_started_usec = Time.get_ticks_usec()
 	zone_load_request_pending = false
 	player.set_transition_locked(true)
-	# Boundary travel keeps the previous rendered frame and never arms the
-	# full-screen loading layer. The destination is prewarmed by
-	# SeamlessWorldService before this call.
+	# A complete neighbor is reused; a cold destination keeps its honest,
+	# cancellable preparation presentation instead of freezing an old frame.
 	_perform_direct_zone_load(target, spawn_pos)
 	return true
 
@@ -898,6 +905,9 @@ func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial:
 	_recover_failed_pack_load("The opening pack could not be prepared. Your current location remains open; use the crossing to retry.")
 
 func _recover_failed_pack_load(reason: String = "The destination could not load. Please retry.") -> void:
+	neighbor_crossing_pending = false
+	neighbor_arrival_pending = false
+	if seamless_world != null: seamless_world.cancel_preparation()
 	# No destination was constructed: the current world must remain resident.
 	zone_pack_request_serial += 1
 	journey_arrival_generation = 0
@@ -1184,12 +1194,21 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 	call_deferred("_finish_gameplay_handoff")
 
 func _journey_load_pending() -> bool:
-	return journey_loading.pending(self)
+	return neighbor_crossing_pending or journey_loading.pending(self)
 
 func _on_prepared_journey_load(prepared: Dictionary) -> void:
 	journey_loading.request(self, prepared)
 
 func _cancel_journey_load() -> void:
+	if neighbor_crossing_pending:
+		neighbor_crossing_pending = false
+		zone_pack_request_serial += 1
+		seamless_world.cancel_preparation()
+		hud.end_journey_load(false)
+		get_tree().paused = neighbor_crossing_was_paused
+		audio.set_game_paused(neighbor_crossing_was_paused)
+		_recover_failed_pack_load("Crossing cancelled. Your current location and journey are unchanged.")
+		return
 	journey_loading.cancel(self)
 
 func _publish_journey_arrival() -> void:
@@ -1273,6 +1292,7 @@ func _spawn_player(pos: Vector3) -> void:
 var encounter_spatial_index = preload("res://scripts/actor_spatial_index.gd").new()
 
 func _sync_camera_enemy_cache() -> void:
+	if neighbor_building: return
 	# Keep restored encounter actors on the same owned peer list as the camera.
 	# Cached-zone activation replaces active_enemies with a fresh filtered Array;
 	# rebinding here keeps spacing and attack-lane checks on the restored list;
@@ -1299,6 +1319,25 @@ func _bind_spatial_player_body() -> void:
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	_begin_gameplay_handoff("zone_activation")
+	var paired_crossing := game_started and current_zone_id != zone_id and current_zone_id in ["greyfen","wychwood"] and zone_id in ["greyfen","wychwood"] and not journey_loading.pending(self)
+	if paired_crossing and seamless_world != null and is_instance_valid(zone_root) and is_instance_valid(player) and not seamless_world.has_prepared(zone_id):
+		neighbor_crossing_pending = true
+		neighbor_crossing_was_paused = get_tree().paused
+		get_tree().paused = true
+		audio.set_game_paused(true)
+		var serial := zone_pack_request_serial
+		hud.begin_journey_load({"summary":{"title":"the road into " + _zone_display_name(zone_id)}})
+		var ready: bool = await seamless_world.finish_preparation(zone_id,func(): return neighbor_crossing_pending and serial == zone_pack_request_serial and not resource_shutdown_prepared)
+		if not neighbor_crossing_pending or serial != zone_pack_request_serial: return
+		neighbor_crossing_pending = false
+		get_tree().paused = neighbor_crossing_was_paused
+		audio.set_game_paused(neighbor_crossing_was_paused)
+		if not ready:
+			hud.end_journey_load(false)
+			_recover_failed_pack_load("The destination could not be prepared. Your current location remains available; use the crossing to retry.")
+			return
+		neighbor_arrival_pending = true
+		hud.set_journey_load_applying("Entering " + _zone_display_name(zone_id) + "...")
 	zone_runtime_coordinator.load_zone(zone_id, spawn_pos)
 	_finish_gameplay_handoff()
 
@@ -1612,6 +1651,7 @@ func _zone_state_signature(zone_id: String = current_zone_id) -> int:
 		story_world_state,
 		quest_world_state,
 		removed_interactions,
+		str(settings.settings.get("quality_preset","balanced")) if settings != null else "balanced",
 	])
 
 func _begin_zone_world_reads(zone_id: String, reset: bool = true) -> void:
@@ -1752,6 +1792,7 @@ func _schedule_zone_autosave() -> void:
 	)
 
 func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
+	if seamless_world != null: seamless_world.cancel_preparation()
 	if zone_root != null and is_instance_valid(zone_root):
 		_retire_zone_root(zone_root)
 	zone_root = null
@@ -1773,6 +1814,8 @@ func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
 	resource_shutdown_prepared = true
+	neighbor_crossing_pending = false
+	if seamless_world != null: seamless_world.cancel_preparation()
 	if is_instance_valid(runtime_services):
 		var display_bridge: Node = runtime_services.get_service("display_metrics")
 		if is_instance_valid(display_bridge):
@@ -5100,8 +5143,8 @@ func _make_greyfen_path_edges() -> void:
 	marker.name = "GreyfenPathEdgeComposition"
 	zone_root.add_child(marker)
 	for z in [-12, -4, 4, 12]:
-		_make_path_stone(Vector3(-2.35 + randf_range(-0.12, 0.12), 0, z + randf_range(-0.35, 0.35)), 0.35)
-		_make_path_stone(Vector3(2.35 + randf_range(-0.12, 0.12), 0, z + randf_range(-0.35, 0.35)), 0.32)
+		_make_path_stone(Vector3(-2.35 + _scene_randf_range(-0.12, 0.12), 0, z + _scene_randf_range(-0.35, 0.35)), 0.35)
+		_make_path_stone(Vector3(2.35 + _scene_randf_range(-0.12, 0.12), 0, z + _scene_randf_range(-0.35, 0.35)), 0.32)
 
 func _make_wychwood_path_edges() -> void:
 	var marker = Node3D.new()
@@ -5131,7 +5174,7 @@ func _make_terrain_patch_raw(name: String, pos: Vector3, size: Vector3, color: C
 	var mesh = MeshInstance3D.new()
 	mesh.name = name
 	mesh.position = pos
-	mesh.rotation_degrees.y = 0.0 if current_zone_id == "wychwood" else randf_range(-2.0, 2.0)
+	mesh.rotation_degrees.y = 0.0 if current_zone_id == "wychwood" else _scene_randf_range(-2.0, 2.0)
 	zone_root.add_child(mesh)
 	terrain_patch_batch_data.append({"node":mesh,"size":size,"color":color,"material":_terrain_material(name,color)})
 
@@ -5178,11 +5221,11 @@ func _make_grass_tufts(points: Array, color: Color) -> void:
 	for raw_pos in safe_points:
 		var pos: Vector3 = raw_pos
 		for i: int in range(3):
-			var height: float = randf_range(0.34, 0.72)
+			var height: float = _scene_randf_range(0.34, 0.72)
 			var basis = Basis()
-			basis = basis.rotated(Vector3.UP, float(i) * PI / 3.0 + randf_range(-0.12, 0.12))
-			basis = basis.scaled(Vector3(randf_range(0.82, 1.16), height, 1.0))
-			var offset = Vector3(randf_range(-0.16, 0.16), height * 0.5, randf_range(-0.16, 0.16))
+			basis = basis.rotated(Vector3.UP, float(i) * PI / 3.0 + _scene_randf_range(-0.12, 0.12))
+			basis = basis.scaled(Vector3(_scene_randf_range(0.82, 1.16), height, 1.0))
+			var offset = Vector3(_scene_randf_range(-0.16, 0.16), height * 0.5, _scene_randf_range(-0.16, 0.16))
 			multimesh.set_instance_transform(instance_index, Transform3D(basis, pos + offset))
 			instance_index += 1
 	batch.multimesh = multimesh
@@ -5238,14 +5281,14 @@ func _make_quality_greyfen_overhaul() -> void:
 	marker.name = "QualityGreyfenVisualOverhaul"
 	zone_root.add_child(marker)
 	for z in [-13.0, -10.5, -8.0, -5.5, -3.0, -0.5, 2.0, 4.5, 7.0, 9.5, 12.0]:
-		_make_visual_box("QualityWetRoadSheen", Vector3(randf_range(-0.45, 0.45), 0.058, z), Vector3(randf_range(0.55, 1.35), 0.012, randf_range(0.42, 1.15)), Color(0.045, 0.037, 0.030))
-		_make_visual_box("QualityRoadLeafLitter", Vector3(randf_range(-1.9, 1.9), 0.066, z + randf_range(-0.75, 0.75)), Vector3(randf_range(0.18, 0.55), 0.012, randf_range(0.08, 0.20)), Color(0.12, 0.060, 0.030))
+		_make_visual_box("QualityWetRoadSheen", Vector3(_scene_randf_range(-0.45, 0.45), 0.058, z), Vector3(_scene_randf_range(0.55, 1.35), 0.012, _scene_randf_range(0.42, 1.15)), Color(0.045, 0.037, 0.030))
+		_make_visual_box("QualityRoadLeafLitter", Vector3(_scene_randf_range(-1.9, 1.9), 0.066, z + _scene_randf_range(-0.75, 0.75)), Vector3(_scene_randf_range(0.18, 0.55), 0.012, _scene_randf_range(0.08, 0.20)), Color(0.12, 0.060, 0.030))
 	for pos in [Vector3(-5.8,0,2.5), Vector3(-7.0,0,-3.2), Vector3(7.2,0,-0.2), Vector3(9.8,0,1.8), Vector3(-10.0,0,8.8), Vector3(11.2,0,-7.4)]:
 		_make_quality_survival_cluster(pos)
 	for pos in [Vector3(4.0,0,-6.0), Vector3(5.2,0,-4.5), Vector3(7.5,0,-7.2), Vector3(6.8,0,-5.8)]:
 		_make_fake_light_pool("QualityShrineCandlePool", pos + Vector3(0, 0.038, 0), Vector3(1.05, 0.016, 0.64), Color(0.34, 0.19, 0.07))
 	for pos in [Vector3(-3.2,0,-12.5), Vector3(3.4,0,-11.6), Vector3(-3.6,0,-9.2), Vector3(3.2,0,-7.8), Vector3(-3.1,0,-4.8), Vector3(3.5,0,-2.0)]:
-		_make_visual_box("QualityRoadEdgeWeeds", pos + Vector3(0, 0.15, 0), Vector3(0.12, randf_range(0.26, 0.46), 0.08), Color(0.060, 0.120, 0.055))
+		_make_visual_box("QualityRoadEdgeWeeds", pos + Vector3(0, 0.15, 0), Vector3(0.12, _scene_randf_range(0.26, 0.46), 0.08), Color(0.060, 0.120, 0.055))
 	_make_light("QualityShrineWarmth", Vector3(5.5, 2.7, -5.9), Color(1.0, 0.50, 0.20), 1.2)
 	_make_light("QualityVillageColdEdge", Vector3(-10.0, 3.8, -8.0), Color(0.22, 0.32, 0.46), 1.1)
 
@@ -5613,9 +5656,9 @@ func _make_narrative_aftermath(zone_id: String) -> void:
 
 func _make_black_feather_scatter(base_name: String, center: Vector3, count: int, spread: float) -> void:
 	for i in range(count):
-		var offset = Vector3(randf_range(-spread, spread), 0.0, randf_range(-spread * 0.55, spread * 0.55))
-		var feather = _make_visual_box(base_name, center + offset, Vector3(randf_range(0.24, 0.42), 0.022, 0.070), Color(0.010, 0.010, 0.012))
-		feather.rotation_degrees.y = randf_range(-35.0, 35.0)
+		var offset = Vector3(_scene_randf_range(-spread, spread), 0.0, _scene_randf_range(-spread * 0.55, spread * 0.55))
+		var feather = _make_visual_box(base_name, center + offset, Vector3(_scene_randf_range(0.24, 0.42), 0.022, 0.070), Color(0.010, 0.010, 0.012))
+		feather.rotation_degrees.y = _scene_randf_range(-35.0, 35.0)
 
 func _make_broken_charm(name: String, pos: Vector3, yaw: float) -> void:
 	var root = Node3D.new()
@@ -5638,7 +5681,7 @@ func _make_dark_track(name: String, pos: Vector3, size: Vector3, color: Color) -
 		zone_root.add_child(trace)
 		return
 	var track = _make_visual_box(name, pos, size, color)
-	track.rotation_degrees.y = randf_range(-8.0, 8.0)
+	track.rotation_degrees.y = _scene_randf_range(-8.0, 8.0)
 
 func _make_claw_marks(name: String, pos: Vector3, vertical: bool) -> void:
 	for i in range(3):
@@ -5653,8 +5696,8 @@ func _make_wychwood_corridor() -> void:
 	marker.position = Vector3(0, 0, 4)
 	zone_root.add_child(marker)
 	for z in [11.0, 7.5, 4.0, 0.5, -3.0]:
-		_make_tree(Vector3(-9.2 + randf_range(-0.25, 0.25), 0, z))
-		_make_tree(Vector3(9.2 + randf_range(-0.25, 0.25), 0, z + randf_range(-0.25, 0.25)))
+		_make_tree(Vector3(-9.2 + _scene_randf_range(-0.25, 0.25), 0, z))
+		_make_tree(Vector3(9.2 + _scene_randf_range(-0.25, 0.25), 0, z + _scene_randf_range(-0.25, 0.25)))
 		_make_fog_sheet(Vector3(0, 0.75, z - 0.8), Vector3(7.5, 0.72, 1.5), Color(0.12, 0.18, 0.16, 0.11))
 
 func _make_stylized_house(pos: Vector3) -> void:
@@ -5986,13 +6029,13 @@ func _make_quality_wychwood_overhaul() -> void:
 	marker.name = "QualityWychwoodVisualOverhaul"
 	zone_root.add_child(marker)
 	for z in [12.0, 9.5, 7.0, 4.5, 2.0, -0.5, -3.0, -5.5, -8.0]:
-		_make_visual_box("QualityWychwoodWetMud", Vector3(randf_range(-0.55, 0.55), 0.060, z), Vector3(randf_range(0.70, 1.55), 0.012, randf_range(0.42, 1.05)), Color(0.018, 0.027, 0.024))
-		_make_visual_box("QualityWychwoodRootCrossing", Vector3(randf_range(-2.3, 2.3), 0.145, z + randf_range(-0.6, 0.6)), Vector3(randf_range(0.95, 1.8), 0.11, 0.13), Color(0.070, 0.038, 0.022))
+		_make_visual_box("QualityWychwoodWetMud", Vector3(_scene_randf_range(-0.55, 0.55), 0.060, z), Vector3(_scene_randf_range(0.70, 1.55), 0.012, _scene_randf_range(0.42, 1.05)), Color(0.018, 0.027, 0.024))
+		_make_visual_box("QualityWychwoodRootCrossing", Vector3(_scene_randf_range(-2.3, 2.3), 0.145, z + _scene_randf_range(-0.6, 0.6)), Vector3(_scene_randf_range(0.95, 1.8), 0.11, 0.13), Color(0.070, 0.038, 0.022))
 	for z in [10.5, 7.5, 4.5, 1.5, -1.5, -4.5, -7.5]:
-		_make_deadfall(Vector3(-5.8 + randf_range(-0.4, 0.2), 0, z))
-		_make_deadfall(Vector3(5.8 + randf_range(-0.2, 0.4), 0, z + randf_range(-0.3, 0.3)))
-		_make_tree(Vector3(-10.4, 0, z + randf_range(-0.5, 0.5)))
-		_make_tree(Vector3(10.4, 0, z + randf_range(-0.5, 0.5)))
+		_make_deadfall(Vector3(-5.8 + _scene_randf_range(-0.4, 0.2), 0, z))
+		_make_deadfall(Vector3(5.8 + _scene_randf_range(-0.2, 0.4), 0, z + _scene_randf_range(-0.3, 0.3)))
+		_make_tree(Vector3(-10.4, 0, z + _scene_randf_range(-0.5, 0.5)))
+		_make_tree(Vector3(10.4, 0, z + _scene_randf_range(-0.5, 0.5)))
 	for pos in [Vector3(-2.2,0,6.7), Vector3(2.6,0,4.6), Vector3(-2.8,0,1.2), Vector3(2.9,0,-1.8)]:
 		_make_visual_box("QualityClueGroundDarkening", pos + Vector3(0, 0.065, 0), Vector3(1.15, 0.014, 0.56), Color(0.027, 0.022, 0.018))
 	for pos in [Vector3(-4.8,0,-5.8), Vector3(4.6,0,-6.4), Vector3(-2.6,0,-8.8), Vector3(2.8,0,-8.3), Vector3(0.0,0,-6.2)]:
@@ -7025,7 +7068,7 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	enemy.attack_gate = _enemy_attack_token
 	if id == "ghoulkin":
 		enemy.rotation_degrees.y = 180.0
-		if audio != null and current_zone_id == "wychwood" and not bool(tutorial_flags.get("ghoulkin_spawn_audio", false)):
+		if not neighbor_building and audio != null and current_zone_id == "wychwood" and not bool(tutorial_flags.get("ghoulkin_spawn_audio", false)):
 			tutorial_flags["ghoulkin_spawn_audio"] = true
 			audio.play_event("ghoulkin_idle", 0.025)
 	enemy.died.connect(_on_enemy_died)
@@ -7437,6 +7480,12 @@ func _make_hut(pos: Vector3) -> void:
 	_make_prop_box("Door", pos + Vector3(0, 0.65, -1.54), Vector3(0.75, 1.25, 0.08), Color(0.10, 0.07, 0.045))
 	_make_prop_box("Chimney", pos + Vector3(1.1, 2.95, 0.4), Vector3(0.38, 0.9, 0.38), Color(0.12, 0.11, 0.10))
 
+func _scene_randf() -> float:
+	return scene_rng.randf() if scene_rng != null else randf()
+
+func _scene_randf_range(from: float, to: float) -> float:
+	return scene_rng.randf_range(from,to) if scene_rng != null else randf_range(from,to)
+
 func _make_tree(pos: Vector3) -> void:
 	# Gate and bridge corridors are reserved before scenery is authored. Keep the
 	# original request out of those volumes instead of nudging it back into the
@@ -7462,11 +7511,11 @@ func _make_tree(pos: Vector3) -> void:
 			var house_position: Vector3 = zone_root.to_local((house as Node3D).global_position)
 			if Vector2(pos.x, pos.z).distance_to(Vector2(house_position.x, house_position.z)) < 5.5:
 				return
-	var radius := randf_range(1.0, 1.35)
+	var radius := _scene_randf_range(1.0, 1.35)
 	if spatial_service != null:
 		spatial_service.add_presence_landmark("shelter", pos, 0.7)
-	var height := randf_range(2.0, 2.7)
-	var yaw := randf_range(0.0, TAU)
+	var height := _scene_randf_range(2.0, 2.7)
+	var yaw := _scene_randf_range(0.0, TAU)
 	var tree_role := "forest_tree"
 	# Keep most trees on the primary source, but reserve a small deterministic
 	# share for a second silhouette so the forest reads as varied rather than
@@ -7483,7 +7532,7 @@ func _make_tree(pos: Vector3) -> void:
 		"asset_scale": Vector3(radius * 0.88, height * 0.38, radius * 0.88),
 		"asset_yaw": yaw,
 		"asset_role": tree_role,
-		"color": Color(0.055, 0.18, 0.085).lerp(Color(0.13, 0.24, 0.11), randf())
+		"color": Color(0.055, 0.18, 0.085).lerp(Color(0.13, 0.24, 0.11), _scene_randf())
 	})
 	if tree_collision_body == null:
 		tree_collision_body = StaticBody3D.new()
@@ -7500,14 +7549,14 @@ func _make_tree_wall(axis_extent: float, fixed_pos: float, count: int, along_x: 
 		var t: float = 0.0 if count <= 1 else float(i) / float(count - 1)
 		var offset: float = lerp(-axis_extent, axis_extent, t)
 		var pos = Vector3(offset, 0, fixed_pos) if along_x else Vector3(fixed_pos, 0, offset)
-		_make_tree(pos + Vector3(randf_range(-0.8, 0.8), 0, randf_range(-0.5, 0.5)))
+		_make_tree(pos + Vector3(_scene_randf_range(-0.8, 0.8), 0, _scene_randf_range(-0.5, 0.5)))
 
 func _make_deadfall(pos: Vector3) -> void:
 	if _is_river_excluded(pos,1.8):
 		return
 	if spatial_service != null:
 		spatial_service.add_presence_landmark("scavenge", pos, 1.0)
-	var rotation := Vector3(deg_to_rad(88.0), deg_to_rad(randf_range(-20.0, 20.0)), deg_to_rad(randf_range(-8.0, 8.0)))
+	var rotation := Vector3(deg_to_rad(88.0), deg_to_rad(_scene_randf_range(-20.0, 20.0)), deg_to_rad(_scene_randf_range(-8.0, 8.0)))
 	deadfall_batch_data.append(Transform3D(Basis.from_euler(rotation), pos + Vector3(0, 0.35, 0)))
 
 func _clear_environment_batch_buffers() -> void:
@@ -7955,8 +8004,8 @@ func _make_rubble(pos: Vector3) -> void:
 	if _is_first_route_clearance(pos, 0.95):
 		return
 	for i in range(2):
-		var offset = Vector3(randf_range(-0.18, 0.18), 0, randf_range(-0.16, 0.16))
-		_make_prop_box("Rubble", pos + offset + Vector3(0, 0.16, 0), Vector3(randf_range(0.45, 0.95), randf_range(0.20, 0.42), randf_range(0.35, 0.82)), Color(0.18, 0.18, 0.165).lerp(Color(0.08, 0.13, 0.08), randf() * 0.35))
+		var offset = Vector3(_scene_randf_range(-0.18, 0.18), 0, _scene_randf_range(-0.16, 0.16))
+		_make_prop_box("Rubble", pos + offset + Vector3(0, 0.16, 0), Vector3(_scene_randf_range(0.45, 0.95), _scene_randf_range(0.20, 0.42), _scene_randf_range(0.35, 0.82)), Color(0.18, 0.18, 0.165).lerp(Color(0.08, 0.13, 0.08), _scene_randf() * 0.35))
 
 func _make_torch(pos: Vector3) -> void:
 	_make_prop_box("TorchPost", pos + Vector3(0, 0.85, 0), Vector3(0.13, 1.7, 0.13), Color(0.10, 0.06, 0.035))
@@ -7995,7 +8044,7 @@ func _make_fog_sheet(pos: Vector3, scale_value: Vector3, color: Color) -> void:
 		return
 	if _performance_mode() and current_zone_id == "greyfen":
 		return
-	if _performance_mode() and randf() < 0.45:
+	if _performance_mode() and _scene_randf() < 0.45:
 		return
 	var fog = MeshInstance3D.new()
 	fog.mesh = PlaneMesh.new()
@@ -8139,7 +8188,7 @@ func _route_safe_position(pos: Vector3, target_x: float) -> Vector3:
 		return pos
 	var side = -1.0 if pos.x < 0.0 else 1.0
 	if abs(pos.x) < 0.2:
-		side = -1.0 if randf() < 0.5 else 1.0
+		side = -1.0 if _scene_randf() < 0.5 else 1.0
 	pos.x = side * target_x
 	return pos
 
