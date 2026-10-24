@@ -1,0 +1,13 @@
+{
+  "source": "tools/build_story_score.py",
+  "production_replacement": "three opening music states only",
+  "listening_approval": "direction approved by user on 2026-10-25",
+  "final_mix_runtime_acceptance": "pending user review",
+  "composition": "original D-A-C-E motif variations",
+  "recording": "procedural synthesis; not live instrumental performance",
+  "tracks": [
+    "greyfen_belonging",
+    "road_uncertainty",
+    "hold_the_road"
+  ]
+}

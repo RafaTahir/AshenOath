@@ -57,10 +57,49 @@ in the rebuilt root. No character, scenery, audio asset or quality preset was cu
 
 ## Preserved Next Scope
 
-Continue with Greyfen's optional/skippable in-engine relief arrival, explicit
-New Game only; never replay on Continue or award skipped actions. Extend existing
-scene/performance ownership and preserve complete readiness. Improve the existing
-river and author three original music samples for listening approval before
-regional score rollout. Then implement shared reactions/economy/leisure,
-bounded neighboring-space streaming and atlas, and regional story consolidation
-with explicit legacy-state/reward preservation. None is marked implemented here.
+Delivery 1 published as commit `7f84ec431f851da20c9eb6b4fab4200d7091262a`
+to development and main. Vercel `dpl_Fgf8ZXXEZckvY9hh8N29Hk87tZaJ` is READY;
+all 16 live artifact hashes and lengths matched the exact package. The local
+identity receipt is `.release-gate/cohesion-bow-camera-20261025/live-identity.json`.
+
+## Delivery 2: Current Source Work
+
+Implemented and compiled; user acceptance remains pending:
+- Optional 45-second in-engine Anwen/Tor/Maren opening, explicit New Game only.
+  Existing cast/routine owner stages it; skip, Escape, pause/retirement cleanup,
+  factual purpose reminder, no quest/reward completion and no Continue replay.
+- Existing river surface/debris share a 0.62 m/s current and wave clock. Improve
+  ripple contrast, replace rigid ripple boxes with planes, keep leaves at the
+  actual wave height. Existing counts, routes and bridge collision remain.
+- 28 journal-level stories group the existing 57 authoritative quest/chapter
+  states. No state/reward migration or replay; unknown chapters stay concealed.
+- Nearby registered civilians receive nonlethal sword/arrow reactions, pain,
+  withdrawal and persistent personal boundaries. No civilian health, death,
+  XP, crime authority or new ending gate. All six-world routine owners participate.
+- One combat contact result drives material feedback. Scenery retains static
+  batches and collision; pooled blood/chips are capped at three 12-particle bursts.
+  Blood has a saved settings toggle; spirit contact does not bleed.
+- Two brief layered foley assets use the already licensed/verified CC0 archive,
+  not footstep aliases for flesh. Authored clips and five material cues are
+  compiled into the existing opening audio catalog before gameplay.
+- User approved the three original music sketches' direction on 2026-10-25.
+  Opening exploration, threat and combat use those longer phrases. Other score
+  states remain unchanged; this is not final-mix or runtime acceptance.
+- Resource-prefetch neighbors now come from `WorldSectorManifest`, the same
+  owner as traversal. This does NOT yet implement full adjacent-world residency.
+
+Compilation-only checks completed for game, life and effect owners. No new
+gameplay, browser run, benchmark or listening certification was performed for
+Delivery 2. Candidate `greyfen-living-reference-20261025` rebuilt the opening,
+audio and base packs and root production export. Remaining packs/engine were
+reused at checked byte identity. Complete package: **104,672,024 bytes**, 16
+files, **185,576 bytes below** the cap. Current publication uses WORLD-SAGA-101;
+the existing delivery receipt records the actual commit/deployment outcome.
+
+## Remaining Approved Work
+
+Finish packaging this source delivery, then economy/leisure (including chess
+and removal of duplicate board stand-ins), bounded neighboring-space/room
+streaming and atlas, and the remaining regional writing/staging/homecoming.
+Retain every explicit legacy-state/reward mapping and the pending facial-sample
+approval boundary. None of that remaining work is marked implemented here.

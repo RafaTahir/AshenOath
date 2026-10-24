@@ -49,6 +49,13 @@ func nearby(position: Vector3, active_root: Node3D) -> Array:
 			result.append(area)
 	return result
 
+func registered_nearby(position: Vector3, active_root: Node3D, radius: float) -> Array:
+	var result: Array = []
+	for area in _index.nearby(position, radius):
+		if is_instance_valid(area) and is_instance_valid(active_root) and active_root.is_ancestor_of(area) and area.is_visible_in_tree():
+			result.append(area)
+	return result
+
 func reset() -> void:
 	last_focus = null
 	pending_focus = null

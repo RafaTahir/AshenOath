@@ -29,6 +29,9 @@ func _physics_process(delta: float) -> void:
 			var actor: Node = ref.get_ref()
 			if is_instance_valid(actor): candidates.append(actor)
 		result = resolver.resolve_arrow_shot(candidates, segment)
+		if not bool(result.get("hit", false)) and not wall.is_empty():
+			result = resolver.environment_contact(wall)
+			result["direction"] = direction
 	global_position = result.get("point", endpoint) if bool(result.get("hit", false)) else endpoint
 	remaining -= origin.distance_to(endpoint)
 	if bool(result.get("hit", false)) or not wall.is_empty() or remaining <= 0.001:

@@ -390,6 +390,28 @@ func clear_ambient_subtitle(owner_id: int) -> void:
 		_ambient_panel.hide()
 	_update_process_policy()
 
+func show_opening_scene_skip(skip: Callable) -> void:
+	hide_opening_scene_skip()
+	var button := Button.new()
+	button.name = "OpeningSceneSkip"
+	button.text = "Skip introduction"
+	button.custom_minimum_size = Vector2(176, 48)
+	button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	button.offset_left = -204
+	button.offset_right = -24
+	button.offset_top = 24
+	button.offset_bottom = 80
+	button.pressed.connect(skip)
+	hud_root.add_child(button)
+	button.grab_focus()
+
+func hide_opening_scene_skip() -> void:
+	if not is_instance_valid(hud_root): return
+	var button := hud_root.get_node_or_null("OpeningSceneSkip")
+	if button != null:
+		hud_root.remove_child(button)
+		button.queue_free()
+
 func _on_honor_changed(entry: Dictionary) -> void:
 	toast("Honor %s%d: %s" % ["+" if int(entry.delta) >= 0 else "", int(entry.delta), str(entry.text)], 5.0)
 
@@ -895,6 +917,7 @@ func _settings_entries(s: Dictionary) -> Array:
 		{"label": "Sprint            %s" % str(s.get("sprint_mode", "hold")).capitalize(), "action": "sprint_mode"},
 		{"label": "Target Assistance %s" % _on_off(bool(s.get("targeting_assist", true))), "action": "targeting_assist"},
 		{"label": "Reduce Flashes    %s" % _on_off(bool(s.get("flash_reduction", false))), "action": "flash_reduction"},
+		{"label": "Blood Effects     %s" % _on_off(bool(s.get("blood_effects", true))), "action": "blood_effects"},
 		{"label": "Camera Shake      %d%%" % int(round(float(s.get("camera_shake", 1.0)) * 100.0)), "action": "camera_shake"},
 		{"label": "Reduced Motion    %s" % _on_off(bool(s.get("reduced_motion", false))), "action": "reduced_motion"},
 		{"label": "High Contrast     %s" % _on_off(bool(s.get("high_contrast", false))), "action": "high_contrast"},

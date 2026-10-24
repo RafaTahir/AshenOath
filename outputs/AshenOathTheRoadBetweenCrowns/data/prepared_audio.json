@@ -14,12 +14,15 @@
 		"wychwood": "res://assets/audio/prepared/opening/ambience_wychwood.res"
 	},
 	"cues": {
+		"arrow_contact": "res://assets/audio/prepared/opening/cues_arrow_contact.res",
 		"block": "res://assets/audio/prepared/opening/cues_block.res",
 		"bomb": "res://assets/audio/prepared/opening/cues_bomb.res",
 		"boss": "res://assets/audio/prepared/opening/cues_boss.res",
 		"cloth_wind": "res://assets/audio/prepared/opening/cues_cloth_wind.res",
 		"death": "res://assets/audio/prepared/opening/cues_death.res",
 		"enemy_windup": "res://assets/audio/prepared/opening/cues_enemy_windup.res",
+		"flesh_contact": "res://assets/audio/prepared/opening/cues_flesh_contact.res",
+		"foliage_contact": "res://assets/audio/prepared/opening/cues_foliage_contact.res",
 		"forest_breath": "res://assets/audio/prepared/opening/cues_forest_breath.res",
 		"forge_hammer": "res://assets/audio/prepared/opening/cues_forge_hammer.res",
 		"ghoulkin_idle": "res://assets/audio/prepared/opening/cues_ghoulkin_idle.res",
@@ -54,6 +57,7 @@
 		"step_road": "res://assets/audio/prepared/opening/cues_step_road.res",
 		"step_stone": "res://assets/audio/prepared/opening/cues_step_stone.res",
 		"step_wood": "res://assets/audio/prepared/opening/cues_step_wood.res",
+		"stone_contact": "res://assets/audio/prepared/opening/cues_stone_contact.res",
 		"stone_room": "res://assets/audio/prepared/opening/cues_stone_room.res",
 		"swing": "res://assets/audio/prepared/opening/cues_swing.res",
 		"tracks_found": "res://assets/audio/prepared/opening/cues_tracks_found.res",
@@ -62,6 +66,7 @@
 		"victory_return_cue": "res://assets/audio/prepared/opening/cues_victory_return_cue.res",
 		"village_crow": "res://assets/audio/prepared/opening/cues_village_crow.res",
 		"village_life": "res://assets/audio/prepared/opening/cues_village_life.res",
+		"wood_contact": "res://assets/audio/prepared/opening/cues_wood_contact.res",
 		"wychwood_drop": "res://assets/audio/prepared/opening/cues_wychwood_drop.res",
 		"wychwood_tension": "res://assets/audio/prepared/opening/cues_wychwood_tension.res"
 	},
@@ -87,5 +92,5 @@
 		"undercroft": "res://assets/audio/prepared/campaign/music_undercroft.res",
 		"wychwood_tension": "res://assets/audio/prepared/opening/music_wychwood_tension.res"
 	},
-	"schema_version": 1
+	"schema_version": 1.0
 }

@@ -128,7 +128,7 @@ func _build_objective_view_model() -> Dictionary:
 		view.objective_id = get_active_objective_id(view.quest_id)
 		if view.quest_id != "":
 			view.objective_text = get_active_objective_text(view.quest_id, view.objective_id)
-			view.quest_title = str(quest_manager.quest_defs.get(view.quest_id, {}).get("title", view.quest_id))
+			view.quest_title = str(quest_manager.story_identity(view.quest_id)[1])
 		if quest_beats != null and quest_beats.has_method("get_current_beat"):
 			var beat: Dictionary = quest_beats.get_current_beat()
 			if str(beat.get("quest_id", "")) == view.quest_id and str(beat.get("objective_id", "")) == view.objective_id:

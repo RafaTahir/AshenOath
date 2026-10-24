@@ -135,6 +135,9 @@ static func get_profile(role: String, seed: String = "") -> Dictionary:
 	return result
 
 static func expression_for(profile: Dictionary, state) -> String:
+	if state != null and str(profile.get("id", "")) != "":
+		for memory: Dictionary in state.relationship_events(str(profile.get("id", ""))):
+			if str(memory.id).ends_with(".weapon_contact"): return "guarded"
 	var id := str(profile.get("id", ""))
 	if state != null:
 		if id == "maren":

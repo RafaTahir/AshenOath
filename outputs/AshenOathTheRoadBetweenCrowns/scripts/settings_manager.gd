@@ -37,6 +37,7 @@ const DEFAULT_SETTINGS := {
 	"subtitle_background_opacity": 0.55,
 	"subtitle_speaker_names": true,
 	"flash_reduction": false,
+	"blood_effects": true,
 	"targeting_assist": true,
 	"block_mode": "hold",
 	"sprint_mode": "hold",
@@ -165,6 +166,7 @@ func restore_settings(stored: Dictionary) -> void:
 		settings["touch_aim_mode"] = "toggle"
 	settings["text_locale"] = "en"
 	settings["camera_shake"] = clampf(float(settings["camera_shake"]), 0.0, 1.0)
+	settings["blood_effects"] = bool(settings.get("blood_effects", true))
 	settings["shadow_quality"] = clampi(int(settings["shadow_quality"]), 0, 2)
 	settings["potato_mode"] = settings["quality_preset"] == "potato"
 	settings["control_preset"] = str(settings.get("control_preset", "standard"))
@@ -394,6 +396,10 @@ func cycle_camera_shake() -> void:
 
 func toggle_reduced_motion() -> void:
 	settings["reduced_motion"] = not bool(settings["reduced_motion"])
+	apply()
+
+func toggle_blood_effects() -> void:
+	settings["blood_effects"] = not bool(settings.get("blood_effects", true))
 	apply()
 
 func toggle_high_contrast() -> void:

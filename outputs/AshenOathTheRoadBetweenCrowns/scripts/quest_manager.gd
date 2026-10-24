@@ -37,6 +37,14 @@ var world_flags = {}
 var tracked_quest_id := ""
 var tracked_quest_is_manual := false
 var tracker_context_zone := ""
+const REGIONAL_STORIES := {
+	"gre":["story_greyfen", "A Village Before Winter"],
+	"wyc":["story_wychwood", "What the Wood Keeps"],
+	"dep":["story_deep_woods", "The Mill and Its Debts"],
+	"roa":["story_long_road", "A Road Without an Owner"],
+	"var":["story_vargan", "The People Behind the Seal"],
+	"har":["story_hartlands", "What We Leave Growing"],
+}
 const IMPLEMENTED_SIDE_QUESTS := {
 	"side_bracken_rescue": true,
 	"side_widows_bell": true,
@@ -340,18 +348,46 @@ func set_tracked_quest_for_zone(zone_id: String) -> void:
 	_emit_changed()
 
 func get_journal_text() -> String:
-	var text = "ACTIVE QUESTS\n"
-	for id in active.keys():
-		if not quest_defs.has(id):
-			continue
-		text += "\n%s\n" % quest_defs[id].get("title", id)
-		for objective in active[id]["objectives"]:
-			text += "%s %s\n" % ["[x]" if bool(objective.get("done", false)) else "[ ]", objective["text"]]
-	text += "\nCOMPLETED\n"
-	for id in completed.keys():
-		if quest_defs.has(id):
-			text += "- %s\n" % quest_defs[id].get("title", id)
+	var text := "STORIES\n"
+	for story: Dictionary in journal_stories():
+		text += "\n%s\n%s\n" % [story.title, story.body]
 	return text
+
+func story_identity(quest_id: String) -> Array:
+	if quest_id.begins_with("side_escort_"):
+		return ["story_escort", "The Road He Left"]
+	if quest_id.begins_with("saga_"):
+		var parts := quest_id.split("_")
+		if parts.size() >= 3 and REGIONAL_STORIES.has(parts[1]): return REGIONAL_STORIES[parts[1]]
+	return [quest_id, str(quest_defs.get(quest_id, {}).get("title", quest_id))]
+
+func journal_stories() -> Array[Dictionary]:
+	# Group the 57 retained state/reward owners into 28 journal stories. No save
+	# migration, automatic chapter completion or reward replay is necessary.
+	var groups: Dictionary = {}
+	for id: String in quest_defs:
+		var identity := story_identity(id)
+		var key := str(identity[0])
+		if not groups.has(key):
+			groups[key] = {"id":key,"title":identity[1],"known":[],"total":0,"done":0}
+		var group: Dictionary = groups[key]
+		group.total += 1
+		if not active.has(id) and not completed.has(id): continue
+		var done := bool(completed.get(id, false))
+		if done: group.done += 1
+		var chapter := str(quest_defs[id].get("title", id))
+		var body := "[x] " if done else "[ ] "
+		body += chapter
+		if active.has(id):
+			for objective: Dictionary in active[id].get("objectives", []):
+				body += "\n    %s %s" % ["[x]" if bool(objective.get("done", false)) else "[ ]", str(objective.text)]
+		group.known.append(body)
+	var result: Array[Dictionary] = []
+	for group: Dictionary in groups.values():
+		if group.known.is_empty(): continue
+		var progress := "%d / %d chapters complete\n\n" % [int(group.done), int(group.total)] if int(group.total) > 1 else ""
+		result.append({"id":group.id,"title":group.title,"body":progress + "\n\n".join(group.known),"status":"completed" if group.done == group.total else "active"})
+	return result
 
 func _try_complete_quest(id: String) -> void:
 	for objective in active[id]["objectives"]:

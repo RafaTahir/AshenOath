@@ -74,6 +74,7 @@ static func sections(campaign: Dictionary, quests, state, zone_id: String) -> Ar
 		returns.append(reflection)
 	return [
 		{"id": "return", "title": "On Return", "body": str(recap.heading), "entries": returns},
+		{"id":"stories", "title":"Stories", "body":"People and places, with the chapters Kael has actually begun. Earlier work and its rewards remain recorded; undiscovered chapters are not revealed.", "entries":quests.journal_stories() if quests != null else []},
 		{"id":"honor", "title":"Honor", "body":"%s | %d / 100\nDistrusted: -100 to -10. Unproven: -9 to 9. Respected: 10 to 100.\nOnly recorded deeds count, once each. People respond to what they actually know. Honor cannot buy consent or change prices, rewards or endings." % [str(honor.band), int(honor.score)], "meter":int(honor.score), "entries":honor_entries},
 		{"id": "people", "title": "People & Promises", "body": "These are the people whose names or accounts Kael has encountered. A remembered account and a freely given promise are different things." if not people.is_empty() else "No named account has been recorded yet.", "entries": people},
 		{"id": "evidence", "title": "Evidence", "body": "Observation, testimony and inference are kept separate. Only recovered information appears here; there is no checklist of undiscovered secrets." if not evidence.is_empty() else "No evidence has been recorded. Inspect what the road leaves behind and hear the people who know it.", "entries": evidence},

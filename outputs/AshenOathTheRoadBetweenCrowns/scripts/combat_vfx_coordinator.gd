@@ -2,6 +2,27 @@ class_name CombatVfxCoordinator
 extends RefCounted
 
 var _beam_effects: Array[WeakRef] = []
+var _contact_effects: Array[WeakRef] = []
+
+func surface_contact(parent: Node3D, result: Dictionary, blood: bool, reduce_flashes: bool) -> void:
+	var surface := str(result.get("surface", "stone"))
+	if surface == "spirit" or surface == "flesh" and not blood: return
+	var free_effect: Node3D
+	var live: Array[WeakRef] = []
+	for ref: WeakRef in _contact_effects:
+		var effect := ref.get_ref() as Node3D
+		if not is_instance_valid(effect) or effect.get_parent() != parent: continue
+		live.append(ref)
+		if not effect.visible: free_effect = effect
+	_contact_effects = live
+	if free_effect == null:
+		if live.size() >= 3: return
+		free_effect = preload("res://scripts/impact_particles.gd").new()
+		free_effect.name = "SurfaceContactBurst"
+		parent.add_child(free_effect)
+		_contact_effects.append(weakref(free_effect))
+	var direction: Vector3 = result.get("direction",Vector3.FORWARD)
+	free_effect.restart(result.get("point",Vector3.ZERO),result.get("normal",-direction),direction,surface,reduce_flashes)
 
 func launch_arrow(parent: Node3D, origin: Vector3, direction: Vector3, distance: float, enemies: Array, combat: Node, excluded: Array[RID], shot: Dictionary, completed: Callable) -> void:
 	var arrow := preload("res://scripts/arrow_projectile.gd").new()

@@ -59,7 +59,7 @@ func hydrate_visuals(root: Node3D, center_z: float, width: float, span: float) -
 	var motion := RiverMotionController.new()
 	motion.name = "RiverMotionController"
 	motion.set_meta("ticket", "WATER-002")
-	motion.configure(center_z, width, span)
+	motion.configure(center_z, width, span, root.get_node("FlowingRiverWater").material_override)
 	root.add_child(motion)
 	_make_river_audio(root, center_z)
 	_make_bridge(root, center_z, span)
@@ -84,36 +84,39 @@ func _make_water(root: Node3D, center_z: float, width: float, span: float) -> vo
 	shader.code = """
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back;
-uniform vec4 deep_color : source_color = vec4(0.010, 0.040, 0.065, 0.96);
-uniform vec4 shallow_color : source_color = vec4(0.028, 0.145, 0.180, 0.92);
+uniform vec4 deep_color : source_color = vec4(0.018, 0.075, 0.100, 0.96);
+uniform vec4 shallow_color : source_color = vec4(0.045, 0.180, 0.215, 0.92);
 uniform vec4 foam_color : source_color = vec4(0.32, 0.58, 0.52, 0.64);
-uniform float flow_speed = 1.0;
+uniform float flow_speed = 0.62;
+uniform float river_time = 0.0;
+varying vec2 river_position;
 
 void vertex() {
-	float flow = TIME * flow_speed;
-	float wave_a = sin(VERTEX.x * 0.44 - flow * 0.95 + sin(VERTEX.z * 3.2) * 0.7);
-	float wave_b = sin(VERTEX.x * 1.08 - flow * 1.34 + VERTEX.z * 4.0);
+	river_position = VERTEX.xz;
+	float flow = river_time * flow_speed;
+	float wave_a = sin((VERTEX.x - flow) * 0.44 + sin(VERTEX.z * 3.2) * 0.7);
+	float wave_b = sin((VERTEX.x - flow) * 1.08 + VERTEX.z * 4.0);
 	VERTEX.y += wave_a * 0.020 + wave_b * 0.009;
 }
 
 void fragment() {
-	vec2 flow_uv = UV + vec2(-TIME * 0.035 * flow_speed, sin(UV.x * 17.0 + TIME * 0.3) * 0.008);
+	vec2 flow_uv = river_position - vec2(river_time * flow_speed, 0.0);
 	float bank_distance = min(UV.y, 1.0 - UV.y);
 	float shore = 1.0 - smoothstep(0.0, 0.22, bank_distance);
 	float depth = smoothstep(0.0, 0.48, bank_distance);
-	float current_a = sin(flow_uv.x * 24.0 + sin(flow_uv.y * 17.0 + TIME * 0.45) * 2.1) * 0.5 + 0.5;
-	float current_b = sin(flow_uv.x * 51.0 + flow_uv.y * 29.0 + sin(flow_uv.y * 13.0) * 2.8) * 0.5 + 0.5;
+	float current_a = sin(flow_uv.x * 3.2 + sin(flow_uv.y * 4.0) * 0.8) * 0.5 + 0.5;
+	float current_b = sin(flow_uv.x * 7.4 + flow_uv.y * 6.0 + sin(flow_uv.y * 2.5) * 1.4) * 0.5 + 0.5;
 	float current = mix(current_a, current_b, 0.32);
-	float broken_ripple = sin(flow_uv.x * 43.0 + flow_uv.y * 37.0 + sin(flow_uv.x * 13.0 + flow_uv.y * 21.0) * 3.0);
+	float broken_ripple = sin(flow_uv.x * 5.8 + flow_uv.y * 7.0 + sin(flow_uv.x * 1.7 + flow_uv.y * 4.0) * 2.0);
 	float ripple = smoothstep(0.78, 0.98, broken_ripple * 0.5 + 0.5);
 	float foam = shore * smoothstep(0.62, 0.90, current);
 	vec3 water = mix(shallow_color.rgb, deep_color.rgb, depth * 0.88);
-	water += current * vec3(0.010, 0.025, 0.023) + ripple * vec3(0.007, 0.019, 0.018);
+	water += current * vec3(0.018, 0.040, 0.038) + ripple * vec3(0.025, 0.052, 0.048);
 	ALBEDO = mix(water, foam_color.rgb, foam * 0.32);
 	ROUGHNESS = mix(0.44, 0.26, depth);
 	METALLIC = 0.02;
 	ALPHA = mix(shallow_color.a, deep_color.a, depth);
-	vec3 ripple_normal = normalize(vec3((current_a - 0.5) * 0.11, (current_b - 0.5) * 0.09, 1.0));
+	vec3 ripple_normal = normalize(vec3((current_a - 0.5) * 0.24, (current_b - 0.5) * 0.18, 1.0));
 	NORMAL_MAP = ripple_normal * 0.5 + 0.5;
 }
 """

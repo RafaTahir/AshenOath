@@ -400,6 +400,21 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	_transition_dialogue_camera(desired, focus, 51.0 if framing == "close" else 58.0)
 	_cached_collision_position = desired
 
+func frame_story_action(actor: Node3D) -> void:
+	if not is_instance_valid(actor) or camera == null or not is_instance_valid(target): return
+	if target.has_method("set_camera_close_view"): target.set_camera_close_view(false)
+	if _dialogue_return.is_empty():
+		_dialogue_return = {"yaw":yaw,"pitch":pitch,"distance":distance,"manual_orbit":_manual_orbit}
+	_dialogue_exit.clear()
+	_dialogue_actor = weakref(actor)
+	var bounds := _dialogue_actor_bounds(actor)
+	var focus := bounds.position + bounds.size * Vector3(0.5, 0.60, 0.5)
+	var forward := actor.global_basis.z if bool(actor.get_meta("source_forward_positive_z", false)) else -actor.global_basis.z
+	var desired := focus + forward.normalized() * 3.2 + actor.global_basis.x.normalized() * 1.1 + Vector3.UP * 0.35
+	_dialogue_focus = focus
+	desired = _resolve_dialogue_camera(focus, desired, actor)
+	_transition_dialogue_camera(desired, focus, 58.0)
+
 func _transition_dialogue_camera(position: Vector3, focus: Vector3, fov: float) -> void:
 	if _dialogue_tween != null: _dialogue_tween.kill()
 	if _reduced_story_motion:

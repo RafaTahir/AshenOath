@@ -13,7 +13,7 @@ var _blade_owner_id := 0
 var _blade_attack_id := -1
 var _blade_hit_ids: Dictionary = {}
 
-func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dictionary, active_oil: String) -> Dictionary:
+func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dictionary, active_oil: String, civilians: Array = []) -> Dictionary:
 	if not is_instance_valid(player) or not player.has_method("is_blade_ready") or not player.is_blade_ready():
 		return {"hit": false, "reason": "blade_not_ready"}
 	var attack_id := int(contact.get("attack_id", -1))
@@ -41,8 +41,8 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	var sweep_length := maxf(previous_tip.distance_to(blade_tip), previous_base.distance_to(blade_base))
 	var blade_direction := (blade_tip - blade_base).normalized() if blade_tip.distance_to(blade_base) > 0.001 else Vector3.ZERO
 	var candidates: Array = []
-	for enemy in enemies:
-		if not is_instance_valid(enemy) or enemy.dead or _blade_hit_ids.has(enemy.get_instance_id()) or bool(enemy.get_meta("story_surrender_protected", false)) or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+	for enemy in enemies + civilians:
+		if not is_instance_valid(enemy) or enemy.get("dead") == true or _blade_hit_ids.has(enemy.get_instance_id()) or bool(enemy.get_meta("story_surrender_protected", false)) or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
 		var target: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
 		if target.distance_to(player.global_position + Vector3(0, 0.9, 0)) > reach + 0.85:
@@ -60,6 +60,8 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 			candidates.append({"enemy": enemy, "point": closest, "contact_distance": contact_distance, "score": contact_distance + player.global_position.distance_to(target) * 0.08})
 	candidates.sort_custom(func(a, b): return float(a.score) < float(b.score))
 	if candidates.is_empty():
+		var environment := _resolve_environment_contact(player, contact, enemies + civilians)
+		if not environment.is_empty(): return environment
 		var miss := {
 			"hit": false,
 			"point": blade_tip,
@@ -83,20 +85,26 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 		return miss
 	var resolved: Dictionary = candidates[0]
 	var struck_enemy: Node = resolved.enemy
+	var civilian: bool = struck_enemy.has_meta("civilian_contact")
 	var source_tag := ""
 	if active_oil == "moon_oil":
 		source_tag = "spirit"
 	elif active_oil == "rot_oil":
 		source_tag = "undead"
-	var affinity := EquipmentLoadout.blade_damage_multiplier(blade_id, str(struck_enemy.get("tag")))
+	var affinity := 1.0 if civilian else EquipmentLoadout.blade_damage_multiplier(blade_id, str(struck_enemy.get("tag")))
 	damage *= affinity
 	# Reserve before damage: death/phase signals can re-enter the resolver.
 	_blade_hit_ids[struck_enemy.get_instance_id()] = true
-	struck_enemy.apply_damage(damage, source_tag)
-	enemy_hit.emit(struck_enemy.display_name, damage)
+	if not civilian:
+		struck_enemy.apply_damage(damage, source_tag)
+		enemy_hit.emit(struck_enemy.display_name, damage)
 	var hit_result := {
 		"hit": true,
-		"enemy": struck_enemy,
+		"enemy": null if civilian else struck_enemy,
+		"actor": struck_enemy,
+		"kind": "civilian" if civilian else "enemy",
+		"surface": _actor_surface(struck_enemy),
+		"direction": (blade_tip - previous_tip).normalized(),
 		"point": resolved.point,
 		"contact_point": resolved.point,
 		"blade_base": blade_base,
@@ -115,6 +123,9 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 		"sweep_length": sweep_length,
 		"blade_direction": blade_direction,
 	}
+	if civilian:
+		var reaction: Callable = struck_enemy.get_meta("civilian_contact")
+		if reaction.is_valid(): reaction.call(hit_result)
 	contact_resolved.emit(hit_result)
 	return hit_result
 
@@ -147,7 +158,7 @@ func _has_contact_line(player: Node3D, enemy: Node3D, contact_point: Vector3) ->
 	query.exclude = [player.get_rid()]
 	query.collide_with_areas = false
 	var hit: Dictionary = player.get_world_3d().direct_space_state.intersect_ray(query)
-	return hit.is_empty() or hit.get("collider") == enemy
+	return hit.is_empty() or hit.get("collider") == enemy or enemy.is_ancestor_of(hit.get("collider"))
 
 func throw_bomb(player: Node3D, enemies: Array, damage: float) -> bool:
 	var hit = false
@@ -230,7 +241,7 @@ func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
 	if length <= 0.05 or forward.length_squared() < 0.5:
 		return {"hit": false, "endpoint": endpoint, "enemy": null, "point": endpoint}
 	for enemy in enemies:
-		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
+		if not is_instance_valid(enemy) or enemy.get("dead") == true or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
 		var body := _body_segment(enemy)
 		var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
@@ -249,10 +260,67 @@ func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
 		if bool(cast.get("report_miss", true)):
 			message.emit("The arrow disappears into the dark.")
 		return {"hit": false, "endpoint": endpoint, "enemy": null, "point": endpoint}
-	best_enemy.apply_damage(damage, str(cast.get("source_tag", "arrow")))
-	enemy_hit.emit(best_enemy.display_name, damage)
-	impact.emit(best_point, false)
-	return {"hit": true, "endpoint": endpoint, "enemy": best_enemy, "point": best_point, "damage": damage}
+	var civilian := best_enemy.has_meta("civilian_contact")
+	var result := {"hit":true,"endpoint":endpoint,"enemy":null if civilian else best_enemy,"actor":best_enemy,"point":best_point,"damage":damage,"surface":_actor_surface(best_enemy),"kind":"civilian" if civilian else "enemy","direction":forward,"source_tag":str(cast.get("source_tag", "arrow"))}
+	if civilian:
+		var reaction: Callable = best_enemy.get_meta("civilian_contact")
+		if reaction.is_valid(): reaction.call(result)
+	else:
+		best_enemy.apply_damage(damage, str(cast.get("source_tag", "arrow")))
+		enemy_hit.emit(best_enemy.display_name, damage)
+	return result
+
+func _actor_surface(actor: Node) -> String:
+	if actor.has_meta("civilian_contact"): return "flesh"
+	if str(actor.get("enemy_id")) == "rootbound_colossus": return "wood"
+	return "spirit" if str(actor.get("tag")) == "spirit" else "flesh"
+
+func environment_contact(hit: Dictionary) -> Dictionary:
+	var collider: Node = hit.get("collider") as Node
+	var surface := "stone"
+	var cursor := collider
+	while is_instance_valid(cursor):
+		var explicit := str(cursor.get_meta("impact_surface", ""))
+		if explicit in ["wood", "foliage", "metal", "stone"]:
+			surface = explicit
+			break
+		var label := str(cursor.name).to_lower()
+		if ["tree", "trunk", "timber", "door", "fence", "wood"].any(func(word): return label.contains(word)):
+			surface = "wood"
+		elif ["anvil", "metal", "iron"].any(func(word): return label.contains(word)):
+			surface = "metal"
+		elif ["bush", "leaf", "foliage"].any(func(word): return label.contains(word)):
+			surface = "foliage"
+		cursor = cursor.get_parent()
+	return {"hit":true,"kind":"scenery","enemy":null,"surface":surface,"point":hit.get("position",Vector3.ZERO),"contact_point":hit.get("position",Vector3.ZERO),"normal":hit.get("normal",Vector3.UP)}
+
+func _resolve_environment_contact(player: Node3D, contact: Dictionary, actors: Array) -> Dictionary:
+	var base: Vector3 = contact.get("base", player.global_position)
+	var tip: Vector3 = contact.get("tip", base)
+	var previous: Vector3 = contact.get("previous_tip", tip)
+	for segment: Array in [[previous, tip], [base, tip]]:
+		if (segment[1] as Vector3).distance_squared_to(segment[0]) < 0.0001: continue
+		var query := PhysicsRayQueryParameters3D.create(segment[0], segment[1], 1)
+		query.exclude = [player.get_rid()]
+		query.collide_with_areas = false
+		var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
+		if hit.is_empty(): continue
+		var collider: Node = hit.get("collider") as Node
+		if collider == null: continue
+		var actor_hit := false
+		for actor in actors:
+			if is_instance_valid(actor) and (collider == actor or actor.is_ancestor_of(collider)):
+				actor_hit = true
+				break
+		if actor_hit: continue
+		var key := "surface:" + str(collider.get_instance_id())
+		if _blade_hit_ids.has(key): continue
+		_blade_hit_ids[key] = true
+		var result := environment_contact(hit)
+		result.merge({"blade_base":base,"blade_tip":tip,"previous_base":contact.get("previous_base",base),"previous_tip":previous,"heavy":bool(contact.get("heavy",false)),"attack_id":contact.get("attack_id",-1),"direction":(tip-previous).normalized()},true)
+		contact_resolved.emit(result)
+		return result
+	return {}
 
 func _body_segment(enemy: Node3D) -> Dictionary:
 	for raw in enemy.get_children():

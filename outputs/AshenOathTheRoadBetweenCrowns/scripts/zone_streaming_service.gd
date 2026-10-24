@@ -8,7 +8,6 @@ signal zone_ready(zone_id: String, resource: Resource)
 signal zone_failed(zone_id: String, reason: String)
 signal zone_activation_requested(zone_id: String, arrival_id: String)
 
-const TOPOLOGY_PATH := "res://zone_streaming_topology.json"
 const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
 const SceneCatalog = preload("res://scripts/zone_scene_catalog.gd")
 const CompositionRouter = preload("res://scripts/zone_composition_router.gd")
@@ -42,11 +41,7 @@ func setup(owner: Node) -> void:
 		_load_topology()
 
 func neighbors(zone_id: String) -> Array[String]:
-	var result: Array[String] = []
-	var normalized := zone_id.strip_edges().to_lower()
-	for value in topology.get(normalized, []):
-		result.append(str(value))
-	return result
+	return WorldSectorManifest.neighbors(zone_id)
 
 func prewarm_neighbors(zone_id: String) -> void:
 	for neighbor in neighbors(zone_id):
@@ -212,8 +207,7 @@ func _exit_tree() -> void:
 	clear_requests()
 
 func _load_topology() -> void:
-	if not FileAccess.file_exists(TOPOLOGY_PATH):
-		topology = {}
-		return
-	var parsed = JSON.parse_string(FileAccess.get_file_as_string(TOPOLOGY_PATH))
-	topology = parsed.get("topology", {}) if typeof(parsed) == TYPE_DICTIONARY else {}
+	# Resource prefetch, traversal and the atlas share the same connection owner.
+	topology.clear()
+	for id: String in WorldSectorManifest.all_ids():
+		topology[id] = WorldSectorManifest.neighbors(id)

@@ -1,6 +1,7 @@
 param(
     [string]$RawRoot = 'D:\Temp\AshenOath\audio001',
-    [string]$Ffmpeg = 'D:\Temp\AshenOath\audio001\python\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe'
+    [string]$Ffmpeg = 'D:\Temp\AshenOath\audio001\python\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe',
+    [string[]]$Only = @()
 )
 $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $PSScriptRoot
@@ -17,6 +18,8 @@ foreach ($archive in $archives.Keys) {
 $monster = 'monster_sfx\monster_sfx_pack'
 $sfx = 'sfx-cc0'
 $recipes = @(
+    @{file='flesh_cut'; source="$sfx\quiver-leather-squeeze-01.wav"; layer="$sfx\water-drop-03.wav"; seconds=0.26; gain=-6; events=@('flesh_contact')},
+    @{file='arrow_pierce'; source="$sfx\cover-paper-tear-02.wav"; layer="$sfx\quiver-leather-squeeze-02.wav"; seconds=0.20; gain=-7; events=@('arrow_contact')},
     @{file='ghoul_breath'; source="$monster\monster-1.wav"; seconds=0.65; gain=-6; events=@('ghoulkin_idle','enemy_windup')},
     @{file='ghoul_attack'; source="$monster\monster-2.wav"; seconds=0.38; gain=-6; events=@('ghoulkin_lunge')},
     @{file='ghoul_hit'; source="$monster\monster-3.wav"; seconds=0.35; gain=-6; events=@('stagger')},
@@ -29,14 +32,21 @@ $recipes = @(
 )
 $entries = @()
 foreach ($recipe in $recipes) {
+    if ($Only.Count -and $recipe.file -notin $Only) { continue }
     $source = Join-Path $RawRoot $recipe.source
     $destination = Join-Path $output ($recipe.file + '.ogg')
     $duration = ([double]$recipe.seconds).ToString('0.000', [Globalization.CultureInfo]::InvariantCulture)
     $fade = ([double]$recipe.seconds - 0.025).ToString('0.000', [Globalization.CultureInfo]::InvariantCulture)
-    & $Ffmpeg -hide_banner -loglevel error -y -i $source -vn -map_metadata -1 -fflags +bitexact -flags:a +bitexact -ac 1 -ar 48000 -af "apad=whole_dur=$duration,atrim=duration=$duration,afade=t=in:d=0.005,afade=t=out:st=$fade`:d=0.025,volume=$($recipe.gain)dB" -c:a libvorbis -q:a 3 $destination
+    if ($recipe.layer) {
+        $layer = Join-Path $RawRoot $recipe.layer
+        $filter = "[0:a]atrim=duration=$duration,asetpts=PTS-STARTPTS,highpass=f=100,lowpass=f=5000[a];[1:a]atrim=duration=$duration,asetpts=PTS-STARTPTS,volume=0.45[b];[a][b]amix=inputs=2:normalize=0,apad=whole_dur=$duration,atrim=duration=$duration,afade=t=in:d=0.003,afade=t=out:st=$fade`:d=0.025,volume=$($recipe.gain)dB[out]"
+        & $Ffmpeg -hide_banner -loglevel error -y -i $source -i $layer -filter_complex $filter -map '[out]' -map_metadata -1 -fflags +bitexact -flags:a +bitexact -ac 1 -ar 48000 -c:a libvorbis -q:a 3 $destination
+    } else {
+        & $Ffmpeg -hide_banner -loglevel error -y -i $source -vn -map_metadata -1 -fflags +bitexact -flags:a +bitexact -ac 1 -ar 48000 -af "apad=whole_dur=$duration,atrim=duration=$duration,afade=t=in:d=0.005,afade=t=out:st=$fade`:d=0.025,volume=$($recipe.gain)dB" -c:a libvorbis -q:a 3 $destination
+    }
     if ($LASTEXITCODE -ne 0) { throw "Event conversion failed: $($recipe.file)" }
     $isMonster = $recipe.source.StartsWith($monster)
-    $entries += [ordered]@{
+    $entry = [ordered]@{
         id=$recipe.file; events=$recipe.events; path=('res://assets_external/audio/authored/' + $recipe.file + '.ogg')
         bytes=(Get-Item -LiteralPath $destination).Length
         sha256=(Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -46,6 +56,15 @@ foreach ($recipe in $recipes) {
         license='CC0-1.0'; seconds=$recipe.seconds; gain_db=$recipe.gain; sample_rate=48000; channels=1
         pack_owner='audio'; status='native_recording_candidate_not_listening_approved'
     }
+    if ($recipe.layer) {
+        $entry.layers = @([ordered]@{source=$recipe.layer; sha256=(Get-FileHash -LiteralPath (Join-Path $RawRoot $recipe.layer) -Algorithm SHA256).Hash.ToLowerInvariant(); license='CC0-1.0'})
+        $entry.production_mode = 'original_layered_foley_from_retained_licensed_recordings'
+    }
+    $entries += $entry
+}
+if ($Only.Count -and (Test-Path -LiteralPath (Join-Path $output 'event_manifest.json'))) {
+    $previous = Get-Content -LiteralPath (Join-Path $output 'event_manifest.json') -Raw | ConvertFrom-Json
+    $entries = @($previous.entries | Where-Object { $_.id -notin $Only }) + $entries
 }
 $manifest = [ordered]@{schema_version=1; build_tool='tools/build_authored_event_audio.ps1'; source_archives=$archives; entries=$entries}
 [IO.File]::WriteAllText((Join-Path $output 'event_manifest.json'), ($manifest | ConvertTo-Json -Depth 8), [Text.UTF8Encoding]::new($false))

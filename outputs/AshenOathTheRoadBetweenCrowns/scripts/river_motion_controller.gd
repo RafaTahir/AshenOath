@@ -21,11 +21,14 @@ var leaf_origins: Array[Vector3] = []
 var ripple_origins: Array[Vector3] = []
 var update_accumulator := 0.0
 const UPDATE_INTERVAL := 1.0 / 30.0
+const FLOW_SPEED := 0.62
+var water_material: ShaderMaterial
 
-func configure(center: float, river_width: float, river_span: float) -> void:
+func configure(center: float, river_width: float, river_span: float, surface: ShaderMaterial = null) -> void:
 	center_z = center
 	width = river_width
 	span = river_span
+	water_material = surface
 	_build_dressing()
 
 func _physics_process(delta: float) -> void:
@@ -35,13 +38,15 @@ func _physics_process(delta: float) -> void:
 	delta = update_accumulator
 	update_accumulator = 0.0
 	flow_time += delta
+	if water_material != null: water_material.set_shader_parameter("river_time", flow_time)
 	if leaves != null and leaves.multimesh != null:
 		for index in range(leaf_origins.size()):
 			var origin := leaf_origins[index]
 			var flow_width := width * 0.80
-			var drift := fposmod(origin.x + flow_width * 0.5 + flow_time * (0.45 + float(index % 3) * 0.07), flow_width) - flow_width * 0.5
-			var position := Vector3(drift, origin.y + sin(flow_time * 1.35 + float(index) * 0.7) * 0.018, origin.z + sin(flow_time * 0.9 + float(index)) * 0.035)
-			var transform := Transform3D(Basis(Vector3.UP, flow_time * (0.55 + float(index % 4) * 0.08)).scaled(Vector3.ONE), position)
+			var drift := fposmod(origin.x + flow_width * 0.5 + flow_time * FLOW_SPEED * (0.94 + float(index % 3) * 0.06), flow_width) - flow_width * 0.5
+			var z := origin.z + sin(flow_time * 0.9 + float(index)) * 0.035
+			var position := Vector3(drift, _surface_height(drift, z) + 0.005, z)
+			var transform := Transform3D(Basis(Vector3.UP, flow_time * (0.07 + float(index % 4) * 0.02)), position)
 			leaves.multimesh.set_instance_transform(index, transform)
 	for index in range(ripples.size()):
 		var ripple := ripples[index]
@@ -57,7 +62,8 @@ func _physics_process(delta: float) -> void:
 		var ribbon := current_ribbons[index]
 		if not is_instance_valid(ribbon):
 			continue
-		ribbon.position.x = -width * 0.32 + fposmod(flow_time * (0.55 + float(index) * 0.08) + float(index) * width * 0.22, width * 0.64)
+		ribbon.position.x = -width * 0.32 + fposmod(flow_time * FLOW_SPEED + float(index) * width * 0.22, width * 0.64)
+		ribbon.position.y = _surface_height(ribbon.position.x, ribbon.position.z) + 0.006
 		if current_ribbon_multimesh != null:
 			var ribbon_size := current_ribbon_sizes[index]
 			var ribbon_basis := Basis.IDENTITY.scaled(Vector3(ribbon_size.x, 1.0, ribbon_size.y))
@@ -90,7 +96,7 @@ func _build_dressing() -> void:
 	for index in range(14):
 		var x := lerpf(-width * 0.38, width * 0.38, float(index % 7) / 6.0) + sin(float(index) * 3.7) * 0.18
 		var z := center_z - span * 0.5 + fposmod(float(index) * 1.47, span)
-		var origin := Vector3(x, -0.155, z)
+		var origin := Vector3(x, _surface_height(x, z) + 0.005, z)
 		leaf_origins.append(origin)
 		leaf_multimesh.set_instance_transform(index, Transform3D(Basis.IDENTITY, origin))
 
@@ -105,8 +111,8 @@ func _build_dressing() -> void:
 	ripple_batch.name = "RiverRippleBatch"
 	ripple_multimesh = MultiMesh.new()
 	ripple_multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	var ripple_mesh := BoxMesh.new()
-	ripple_mesh.size = Vector3.ONE
+	var ripple_mesh := PlaneMesh.new()
+	ripple_mesh.size = Vector2.ONE
 	ripple_multimesh.mesh = ripple_mesh
 	ripple_multimesh.instance_count = 7
 	ripple_batch.multimesh = ripple_multimesh
@@ -132,7 +138,7 @@ func _build_dressing() -> void:
 	# translucent highlight. Avoiding per-ribbon ShaderMaterials also prevents
 	# Compatibility renderer null-material lookups during zone retirement.
 	var current_material := StandardMaterial3D.new()
-	current_material.albedo_color = Color(0.15, 0.42, 0.38, 0.10)
+	current_material.albedo_color = Color(0.24, 0.48, 0.43, 0.18)
 	current_material.emission_enabled = true
 	current_material.emission = Color(0.06, 0.16, 0.14)
 	current_material.emission_energy_multiplier = 0.18
@@ -160,3 +166,8 @@ func _build_dressing() -> void:
 		current_ribbon_sizes.append(ribbon_size)
 		var ribbon_basis := Basis.IDENTITY.scaled(Vector3(ribbon_size.x, 1.0, ribbon_size.y))
 		current_ribbon_multimesh.set_instance_transform(index, Transform3D(ribbon_basis, ribbon.position))
+
+func _surface_height(x: float, z: float) -> float:
+	var along := x - flow_time * FLOW_SPEED
+	var across := z - center_z
+	return -0.24 + sin(along * 0.44 + sin(across * 3.2) * 0.7) * 0.020 + sin(along * 1.08 + across * 4.0) * 0.009

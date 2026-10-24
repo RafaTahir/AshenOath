@@ -78,6 +78,7 @@ const MUSIC_GROUP := "ashen_oath_music_players"
 const WORLD_AUDIO_EVENTS := [
 	"step", "step_road", "step_forest", "step_mud", "step_stone", "step_wood",
 	"swing", "heavy", "hit", "light_hit", "heavy_hit", "hurt", "enemy_windup",
+	"flesh_contact", "arrow_contact", "wood_contact", "stone_contact", "foliage_contact",
 	"ghoulkin_idle", "ghoulkin_lunge", "block", "parry", "stagger", "death",
 	"bomb", "potion", "boss", "reveal", "victory", "victory_return_cue",
 	"return_report", "tracks_found", "shrine_hum", "shrine_candle", "shrine_bell",
@@ -1275,6 +1276,7 @@ func _build_library() -> void:
 	sounds["portal_error"] = _tone_mix([72.0, 54.0], 0.24, 0.10, -28.0, 0.012)
 
 const RECORDED_RPG := {
+	"wood_contact":["creak1.ogg", "creak2.ogg"], "stone_contact":["footstep00.ogg", "footstep01.ogg"], "foliage_contact":["cloth1.ogg", "cloth2.ogg"],
 	"step_road": ["footstep00.ogg", "footstep01.ogg", "footstep02.ogg", "footstep03.ogg"],
 	"step_forest": ["footstep04.ogg", "footstep05.ogg", "footstep06.ogg"],
 	"step_mud": ["footstep07.ogg", "footstep08.ogg", "footstep09.ogg"],
@@ -1286,6 +1288,7 @@ const RECORDED_RPG := {
 	"village_life": ["creak1.ogg", "creak2.ogg"],
 }
 const RECORDED_AUTHORED := {
+	"flesh_contact":"flesh_cut.ogg", "arrow_contact":"arrow_pierce.ogg", "wood_contact":"forest_twigs.ogg",
 	"step_wood": "wood_step.ogg", "light_hit": "sword_clash_light.ogg", "heavy_hit": "sword_clash_heavy.ogg",
 	"parry": "sword_clash_light.ogg", "oathfire_sheathe": "sword_sheathe.ogg",
 	"forge_hammer": "forge_hammer.ogg", "river_current": "river_current.ogg", "record_page": "record_page.ogg",

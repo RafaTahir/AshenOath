@@ -209,6 +209,7 @@ var loading_started_usec := 0
 var new_game_started_usec := 0
 var last_loading_metrics: Dictionary = {}
 var new_game_start_pending := false
+var opening_scene_pending := false
 var zone_load_request_pending := false
 var resource_shutdown_prepared := false
 var requested_zone_id := ""
@@ -499,6 +500,12 @@ func _dispatch_gameplay_action(action: String, target_instance_id: int = 0) -> v
 			_show_companion_commands()
 
 func _request_pause_or_back(event: InputEvent) -> void:
+	if is_instance_valid(zone_root) and bool(zone_root.get_meta("opening_scene_active", false)):
+		if input_router.accept_event(event, &"pause", input_router.get_context()):
+			get_viewport().set_input_as_handled()
+			var life := zone_root.find_child("GreyfenLifeController", true, false)
+			if life != null: life.finish_opening_scene("skipped")
+		return
 	if _journey_load_pending():
 		if event.is_action_pressed("pause") and not event.is_echo():
 			get_viewport().set_input_as_handled()
@@ -580,6 +587,13 @@ func _finish_gameplay_handoff() -> void:
 func _process(delta: float) -> void:
 	_restore_browser_session(delta)
 	if not game_started or player == null or get_tree().paused:
+		return
+	if opening_scene_pending and not zone_transition_pending and not zone_load_request_pending and input_router.is_gameplay_context() and player.can_control:
+		var life := zone_root.find_child("GreyfenLifeController", true, false) if is_instance_valid(zone_root) else null
+		if life != null:
+			opening_scene_pending = false
+			life.begin_opening_scene()
+	if is_instance_valid(zone_root) and bool(zone_root.get_meta("opening_scene_active", false)):
 		return
 	if zone_transition_pending:
 		_advance_zone_transition()
@@ -997,6 +1011,7 @@ func _start_new_game_world() -> void:
 	print("LOADING: new_game_stage=zone_dispatch elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
 	print("LOADING: handoff_phase=load_zone_begin")
 	journey_loading.begin_arrival(self, "new_journey", "greyfen")
+	opening_scene_pending = true
 	_load_zone("greyfen", Vector3(0, 1, 9.8))
 	print("LOADING: handoff_phase=load_zone_end")
 	if not opening_boot_material_restore_queue.is_empty() \
@@ -1097,6 +1112,7 @@ func load_save_state(data: Dictionary) -> void:
 	})
 
 func _apply_loaded_journey(data: Dictionary) -> void:
+	opening_scene_pending = false
 	_ensure_gameplay_runtime()
 	if _zone_requires_campaign_pack(str(data.get("zone", "greyfen"))):
 		runtime_services.configure_campaign()
@@ -3539,15 +3555,20 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 	var heavy := bool(contact.get("heavy", false))
 	if bool(contact.get("first_sample", true)):
 		audio.play_event("heavy" if heavy else "swing")
-	var result: Dictionary = combat.resolve_player_blade_contact(player, active_enemies, contact, inventory.active_oil)
+	var civilians := _civilian_contact_candidates(player.global_position, 4.0)
+	var result: Dictionary = combat.resolve_player_blade_contact(player, active_enemies, contact, inventory.active_oil, civilians)
 	if not bool(result.get("hit", false)):
 		var practice: Node = preload("res://scripts/greyfen_village_details.gd").current(self)
-		if practice != null and practice.blade_contact(contact): result["hit"] = true
+		if practice != null and practice.blade_contact(contact):
+			result["hit"] = true
+			result["surface"] = "wood"
+			result["kind"] = "practice"
 	player.confirm_blade_contact(int(contact.get("attack_id", -1)), bool(result.get("hit", false)))
 	if bool(result.get("hit", false)):
+		_present_surface_contact(result, false)
 		_hitstop(0.055 if heavy else 0.032)
 		var contact_color := Color(0.66, 0.88, 1.0) if str(result.get("blade_id", "steel")) == "oathblade" or str(result.get("source_tag", "")) == "spirit" else Color(0.98, 0.78, 0.34)
-		CombatFeedback.weapon_contact(
+		if str(result.get("surface", "")) != "flesh": CombatFeedback.weapon_contact(
 			zone_root,
 			result.get("blade_base", player.global_position),
 			result.get("blade_tip", player.global_position),
@@ -3557,9 +3578,6 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 			result.get("previous_base", Vector3.ZERO),
 			result.get("previous_tip", Vector3.ZERO)
 		)
-		audio.play_spatial_event("heavy_hit" if heavy else "light_hit",
-			result.get("contact_point", result.get("point", player.global_position)),
-			player.global_position, 16.0, 0.045, 0.04)
 		if input_router != null:
 			input_router.rumble(0.16 if heavy else 0.09, 0.30 if heavy else 0.20, 0.07)
 		if camera_rig != null:
@@ -3602,7 +3620,9 @@ func _on_player_arrow(request: Dictionary) -> void:
 		if is_instance_valid(enemy):
 			arrow_exclusions.append(enemy.get_rid())
 	audio.play_event("swing", 0.02)
-	combat_vfx_coordinator.launch_arrow(zone_root, origin, direction, float(request.get("range", 24.0)), active_enemies, combat, arrow_exclusions, {
+	var arrow_targets: Array = active_enemies.duplicate()
+	arrow_targets.append_array(_civilian_contact_candidates(origin, float(request.get("range",24.0)) + 2.0))
+	combat_vfx_coordinator.launch_arrow(zone_root, origin, direction, float(request.get("range", 24.0)), arrow_targets, combat, arrow_exclusions, {
 		"width": float(request.get("width", 0.34)),
 		"damage": damage,
 		"source_tag": "arrow_%s" % arrow_id,
@@ -3611,9 +3631,9 @@ func _on_player_arrow(request: Dictionary) -> void:
 func _on_arrow_impact(result: Dictionary, arrow_id: String, damage: float, zone_instance: int) -> void:
 	if not is_instance_valid(zone_root) or zone_instance != zone_root.get_instance_id(): return
 	if bool(result.get("hit", false)):
-		audio.play_event("light_hit", 0.03)
-		hud.show_status_cue("Arrow hit: %d" % int(damage), "item")
-		CombatFeedback.impact_burst(zone_root, result.get("point", Vector3.ZERO), false, Color(1.0, 0.52, 0.20) if arrow_id == "ashfire_arrow" else Color(0.95, 0.78, 0.38))
+		_present_surface_contact(result, true)
+		if str(result.get("kind", "")) == "scenery": return
+		hud.show_status_cue("Arrow struck a person" if str(result.get("kind", "")) == "civilian" else "Arrow hit: %d" % int(damage), "item")
 		var target = result.get("enemy")
 		if target != null and is_instance_valid(target):
 			hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
@@ -3621,6 +3641,32 @@ func _on_arrow_impact(result: Dictionary, arrow_id: String, damage: float, zone_
 				inventory.add_item(arrow_id, 1)
 				story_save_pending = true
 				call_deferred("_persist_story_action")
+
+func _present_surface_contact(result: Dictionary, arrow: bool) -> void:
+	var surface := str(result.get("surface", "metal"))
+	var event := ("arrow_contact" if arrow else "flesh_contact") if surface == "flesh" else str({"wood":"wood_contact","stone":"stone_contact","foliage":"foliage_contact"}.get(surface,"light_hit"))
+	audio.play_spatial_event(event,result.get("point",player.global_position),player.global_position,14.0,0.06,0.06)
+	combat_vfx_coordinator.surface_contact(zone_root,result,bool(settings.settings.get("blood_effects",true)),bool(settings.settings.get("flash_reduction",false)))
+	audio.perception_cue.emit(result.get("point",player.global_position),7.0,str(result.get("kind","")) != "scenery")
+
+func _civilian_contact_candidates(position: Vector3, radius: float) -> Array:
+	if not is_instance_valid(zone_root): return []
+	var life: Node
+	for owner_name: String in ["GreyfenLifeController", "RegionalLifeController"]:
+		life = zone_root.get_node_or_null(owner_name)
+		if life != null: break
+	var people: Array = []
+	for area in interaction_focus.registered_nearby(position,zone_root,radius):
+		if str(area.get("interaction_type")) == "dialogue" and area.find_child("CharacterAnimationDriver",true,false) != null:
+			people.append(area)
+	if life == null and not people.is_empty():
+		life = _gameplay_script("greyfen_life_controller").new()
+		life.name = "RegionalLifeController"
+		zone_root.add_child(life)
+		life.configure(self,str(settings.settings.get("quality_preset","balanced")),true)
+	if life == null: return []
+	for person in people: life.enroll_contact_actor(person)
+	return life.contact_candidates(position,radius)
 func _make_arrow_trail(origin: Vector3, endpoint: Vector3, color: Color) -> void:
 	combat_vfx_coordinator.make_arrow_trail(zone_root, origin, endpoint, color)
 
@@ -4433,6 +4479,9 @@ func _on_touch_layout_unavailable(reason: String) -> void:
 func _pause_game() -> void:
 	if not game_started or not is_instance_valid(player) or _journey_load_pending():
 		return
+	if is_instance_valid(zone_root) and bool(zone_root.get_meta("opening_scene_active", false)):
+		var life := zone_root.find_child("GreyfenLifeController", true, false)
+		if life != null: life.finish_opening_scene("interrupted")
 	if camera_rig != null and camera_rig.has_method("clear_target_lock"):
 		camera_rig.clear_target_lock()
 	if hud != null and hud.has_method("clear_target_lock_status"):
@@ -4541,6 +4590,8 @@ func _handle_setting(action: String) -> void:
 		settings.cycle_subtitle_scale()
 	elif action == "camera_shake":
 		settings.cycle_camera_shake()
+	elif action == "blood_effects":
+		settings.toggle_blood_effects()
 	elif action == "reduced_motion":
 		settings.toggle_reduced_motion()
 	elif action == "high_contrast":

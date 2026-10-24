@@ -2,8 +2,8 @@
   "schema_version": 1,
   "build_tool": "tools/build_authored_event_audio.ps1",
   "source_archives": {
-    "tinysized.zip": "7f00e2b1dae15e68db0e1d6096767f03755e9e7c247128afc3e935e63774d7db",
-    "monster_sfx_pack.zip": "f39c5ae356b1fc01284057ee48e35ec1a52fcc84bfa959b77d0a696adc8459e4"
+    "monster_sfx_pack.zip": "f39c5ae356b1fc01284057ee48e35ec1a52fcc84bfa959b77d0a696adc8459e4",
+    "tinysized.zip": "7f00e2b1dae15e68db0e1d6096767f03755e9e7c247128afc3e935e63774d7db"
   },
   "entries": [
     {
@@ -186,6 +186,62 @@
       "channels": 1,
       "pack_owner": "audio",
       "status": "native_recording_candidate_not_listening_approved"
+    },
+    {
+      "id": "flesh_cut",
+      "events": [
+        "flesh_contact"
+      ],
+      "path": "res://assets_external/audio/authored/flesh_cut.ogg",
+      "bytes": 6631,
+      "sha256": "f1cacb128f70c2bd023c06bfc2c62b4df09deb390d75f314c975e5c27614c74b",
+      "source": "sfx-cc0\\quiver-leather-squeeze-01.wav",
+      "source_sha256": "e6c1f778db402d02aa20cbbb904fe4f7192fddda91d89ff70d818444a91bdc58",
+      "author": "Vehicle (Jan Schupke)",
+      "source_url": "https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx",
+      "license": "CC0-1.0",
+      "seconds": 0.26,
+      "gain_db": -6,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved",
+      "layers": [
+        {
+          "source": "sfx-cc0\\water-drop-03.wav",
+          "sha256": "e66ce053a9c8b3a64d26f733310d3c4a62d582124af1c63f9af310bd847dd87b",
+          "license": "CC0-1.0"
+        }
+      ],
+      "production_mode": "original_layered_foley_from_retained_licensed_recordings"
+    },
+    {
+      "id": "arrow_pierce",
+      "events": [
+        "arrow_contact"
+      ],
+      "path": "res://assets_external/audio/authored/arrow_pierce.ogg",
+      "bytes": 5871,
+      "sha256": "ca0f5e47da4e52f2be342844f3645c9dcba363413fca4c255fdaeb8220ccdd2f",
+      "source": "sfx-cc0\\cover-paper-tear-02.wav",
+      "source_sha256": "c53235914ff3cf0bf0afe244f2dc5aaf752eac1bd49ff51db0ae076b00351081",
+      "author": "Vehicle (Jan Schupke)",
+      "source_url": "https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx",
+      "license": "CC0-1.0",
+      "seconds": 0.2,
+      "gain_db": -7,
+      "sample_rate": 48000,
+      "channels": 1,
+      "pack_owner": "audio",
+      "status": "native_recording_candidate_not_listening_approved",
+      "layers": [
+        {
+          "source": "sfx-cc0\\quiver-leather-squeeze-02.wav",
+          "sha256": "f33ecdc45a63fff9ae019319674a737d1bd40b2247ee73b384704d3acc451446",
+          "license": "CC0-1.0"
+        }
+      ],
+      "production_mode": "original_layered_foley_from_retained_licensed_recordings"
     }
   ]
 }

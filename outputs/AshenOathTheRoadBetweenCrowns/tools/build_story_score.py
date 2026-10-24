@@ -8,6 +8,7 @@ from array import array
 import json
 import math
 import wave
+import argparse
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "assets_external" / "audio" / "story_score"
@@ -31,8 +32,8 @@ def frequency(midi):
     return 440.0 * 2.0 ** ((midi - 69.0) / 12.0)
 
 
-def render(score):
-    size = int(RATE * DURATION)
+def render(score, duration=DURATION):
+    size = int(RATE * duration)
     result = array("f", [0.0]) * size
     beat = 60.0 / score["tempo"]
     # Slowly breathed open strings retain acoustic space beneath the phrase.
@@ -40,20 +41,23 @@ def render(score):
         hz = frequency(midi)
         for i in range(size):
             t = i / RATE
-            edge = min(1.0, t / 1.6, (DURATION - t) / 2.2)
+            edge = min(1.0, t / 1.6, (duration - t) / 2.2)
             breath = .62 + .12 * math.sin(2 * math.pi * t / 8.0)
             value = math.sin(2 * math.pi * hz * t) + .17 * math.sin(2 * math.pi * hz * 2 * t + .07 * math.sin(t))
             result[i] += value * max(edge, 0) * breath * .026
     for start, midi, beats, instrument, velocity in score["events"]:
         onset = start * beat
-        length = min(beats * beat + (1.6 if instrument == "bell" else .8), DURATION - onset)
+        length = min(beats * beat + (1.6 if instrument == "bell" else .8), duration - onset)
         hz = frequency(midi)
         for j in range(max(0, int(length * RATE))):
             t = j / RATE
             attack = min(1, t / .014)
             envelope = attack * math.exp(-t * (1.65 if instrument == "plucked" else 1.05))
             envelope *= min(1, (length - t) / .35)
-            if instrument == "bell":
+            if instrument == "drum":
+                value = math.sin(2 * math.pi * (hz * t + 18 * (1-math.exp(-t*16)))) * math.exp(-t*11)
+                value += .12 * math.sin(t*17003) * math.sin(t*13117) * math.exp(-t*40)
+            elif instrument == "bell":
                 value = math.sin(2 * math.pi * hz * t) + .30 * math.sin(2 * math.pi * hz * 2.006 * t) * math.exp(-t * 1.5) + .13 * math.sin(2 * math.pi * hz * 3.98 * t) * math.exp(-t * 2)
             else:
                 value = math.sin(2 * math.pi * hz * t) + .24 * math.sin(2 * math.pi * hz * 2 * t) * math.exp(-t * 2.4) + .07 * math.sin(2 * math.pi * hz * 3 * t) * math.exp(-t * 4)
@@ -70,7 +74,50 @@ def render(score):
     return pcm
 
 
+def preview_scores():
+    # Original project themes: one motif, different pacing and harmonic space.
+    # Samples are for listening approval, not automatic production replacement.
+    motifs = [[62,69,72,64], [65,69,74,72], [67,72,76,74], [64,69,72,62]]
+    village = []
+    threat = []
+    combat = []
+    for phrase, notes in enumerate(motifs * 2):
+        start = phrase * 4
+        for note, pitch in enumerate(notes):
+            village.append((start+note*.8,pitch,1.1,"plucked",.34 if note == 0 else .25))
+        village.append((start+2.5,notes[0]-12,1.6,"plucked",.20))
+        threat.append((start,notes[0]-12,2.6,"bell",.17))
+        threat.append((start+2.5,notes[3]-12,.9,"plucked",.22))
+        for beat in range(4):
+            combat.append((start+beat,38 if beat%2 == 0 else 45,.45,"drum",.62 if beat%2 == 0 else .36))
+            combat.append((start+beat+.5,notes[beat]-12,.55,"plucked",.33))
+        combat.append((start,notes[0],2,"bell",.15))
+    return {
+        "greyfen_belonging":{"tempo":68,"bed":[50,57,65],"events":village},
+        "road_uncertainty":{"tempo":64,"bed":[38,45,53],"events":threat},
+        "hold_the_road":{"tempo":92,"bed":[38,45],"events":combat},
+    }
+
+def build_previews(destination):
+    destination.mkdir(parents=True, exist_ok=True)
+    for name, score in preview_scores().items():
+        duration = 32 * 60 / score["tempo"] + 3.0
+        pcm = render(score, duration)
+        with wave.open(str(destination / (name+".wav")), "wb") as stream:
+            stream.setnchannels(1)
+            stream.setsampwidth(2)
+            stream.setframerate(RATE)
+            stream.writeframes(pcm.tobytes())
+        print("Original listening sample:", destination / (name+".wav"))
+    (destination/"sample_manifest.json").write_text(json.dumps({"source":"tools/build_story_score.py","production_replacement":False,"listening_approval":"pending","composition":"original D-A-C-E motif variations","recording":"procedural synthesis; not live instrumental performance","tracks":list(preview_scores())},indent=2)+"\n",encoding="utf-8")
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--preview-directory", type=Path)
+    args = parser.parse_args()
+    if args.preview_directory:
+        build_previews(args.preview_directory)
+        return
     OUTPUT.mkdir(parents=True, exist_ok=True)
     for name, score in SCORES.items():
         pcm = render(score)

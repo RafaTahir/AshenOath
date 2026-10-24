@@ -81,6 +81,7 @@ var social_scene: Dictionary = {}
 var world_scene_clock := 0.0
 var gathering_staged := false
 var world_retry_after: Dictionary = {}
+var opening_scene: Dictionary = {}
 
 const CROWD_IDENTITIES := [
 	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
@@ -185,6 +186,43 @@ func set_spatial_service(service) -> void:
 func actor_count() -> int:
 	return actors.size()
 
+func contact_candidates(position: Vector3, radius: float) -> Array:
+	var result: Array = []
+	for entry: Dictionary in _crowd_index.nearby(position, radius):
+		var actor: Node3D = entry.node
+		if not is_instance_valid(actor) or not actor.is_visible_in_tree() or Presence.protected(actor) or actor.has_method("apply_damage"): continue
+		if str(entry.id) in ["white_hart", "white_hart_avatar", "halvern", "halvern_boss"]: continue
+		actor.set_meta("civilian_contact", _receive_contact.bind(entry))
+		result.append(actor)
+	return result
+
+func enroll_contact_actor(actor: Node3D) -> void:
+	if actor.has_method("apply_damage") or str(actor.name) in ["white_hart", "white_hart_avatar", "halvern", "halvern_boss"]: return
+	var person := actor.get_node_or_null("Person") as Node3D
+	if person != null and not person.is_visible_in_tree(): return
+	var entry := _world_actor(str(actor.name))
+	if not entry.is_empty() and entry.node == actor:
+		_crowd_index.update(actor,entry)
+
+func _receive_contact(contact: Dictionary, entry: Dictionary) -> void:
+	if not is_instance_valid(entry.node) or Presence.protected(entry.node) or get_tree().paused: return
+	_end_social_exchange()
+	_release_activity(entry)
+	entry.reaction = "anger" if str(CastProfile.presence_profile(str(entry.id)).get("danger_response", "")) == "guard" else "fear"
+	entry.reaction_time = 3.0
+	entry.threat_position = player.global_position
+	entry.route = []
+	entry.safety_route = []
+	entry.notice_cooldown = 8.0
+	if is_instance_valid(entry.driver): entry.driver.trigger_action("hurt", 1.0, 0.06, true, 0.32)
+	if is_instance_valid(entry.get("face")): entry.face.set_expression(str(entry.reaction))
+	var key := preload("res://scripts/story_honor.gd").actor_key(str(entry.id))
+	var words := "Keep that blade away from me!" if not str(contact.get("source_tag", "")).begins_with("arrow") else "You shot me! Put that bow down!"
+	host.hud.toast("%s: %s" % [str(entry.profile.get("occupation", "Villager")).capitalize(), words], 4.0)
+	host.story_state.record_relationship_event({"id":"lr." + key + ".weapon_contact","actor":key,"kind":"boundary","text":"Kael struck this person with a weapon.","acknowledgement":"You struck me. Keep your weapon lowered while we speak. I have not forgotten it."})
+	host.story_save_pending = true
+	host.call_deferred("_persist_story_action")
+
 func routine_ids() -> Array:
 	return actors.map(func(entry): return str(entry.id))
 
@@ -194,10 +232,14 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(host) or not is_instance_valid(player):
 		return
 	if get_parent() != host.zone_root or not bool(host.game_started):
+		finish_opening_scene("interrupted")
 		_end_social_exchange()
 		return
 	if get_tree().paused:
 		_end_social_exchange()
+		return
+	if not opening_scene.is_empty():
+		_tick_opening_scene(delta)
 		return
 	simulation_tick_accumulator += delta
 	var decision_tick: bool = simulation_tick_accumulator >= 1.0 / _simulation_hz()
@@ -263,6 +305,89 @@ func _process(delta: float) -> void:
 func build_population_member(index: int) -> void:
 	_build_population(index, 1)
 	_sync_story_state(true)
+
+func begin_opening_scene() -> bool:
+	if not opening_scene.is_empty() or str(host.current_zone_id) != "greyfen" or get_tree().paused: return false
+	_end_social_exchange()
+	opening_scene = {"index":0,"remaining":0.0,"actor":null,"entry":{},"activity":"","station":{},"control":player.can_control}
+	host.zone_root.set_meta("opening_scene_active", true)
+	host.hud.clear_journey_transients(false)
+	host.input_router.begin_context("dialogue")
+	player.can_control = false
+	host.hud.show_opening_scene_skip(finish_opening_scene.bind("skipped"))
+	host.audio.set_ambient_conversation(true)
+	return true
+
+func _tick_opening_scene(delta: float) -> void:
+	if host.resource_shutdown_prepared or host.zone_transition_pending or host._journey_load_pending():
+		finish_opening_scene("interrupted")
+		return
+	if float(opening_scene.remaining) > 0.0:
+		opening_scene.remaining = maxf(0.0, float(opening_scene.remaining) - delta)
+		return
+	_release_opening_performer()
+	var beats: Array[Dictionary] = preload("res://scripts/story_scene_direction.gd").opening_arrival()
+	if int(opening_scene.index) >= beats.size():
+		finish_opening_scene("completed")
+		return
+	var beat: Dictionary = beats[int(opening_scene.index)]
+	opening_scene.index = int(opening_scene.index) + 1
+	var entry := _world_actor(str(beat.actor))
+	if entry.is_empty() or not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree():
+		# Missing participants never become disembodied live speakers.
+		return
+	if not Presence.claim(entry.node, "work", get_instance_id()): return
+	opening_scene.actor = entry.node
+	opening_scene.entry = entry
+	var modifier: Node = entry.driver.life_modifier if is_instance_valid(entry.driver) else null
+	opening_scene.activity = str(modifier.activity) if is_instance_valid(modifier) else ""
+	opening_scene.station = modifier.station.duplicate(true) if is_instance_valid(modifier) else {}
+	entry.node.set_meta("cast_work_cancel", finish_opening_scene.bind("interrupted"))
+	_release_activity(entry)
+	if is_instance_valid(entry.driver):
+		entry.driver.set_distance_suspended(false)
+		entry.driver.set_life_activity(str(beat.activity))
+		var station: Dictionary = entry.profile.get("workstation", {})
+		if not station.is_empty() and entry.node.global_position.distance_to(station.get("stand", entry.node.global_position)) < 1.3:
+			entry.driver.set_life_workstation(station)
+	if host.camera_rig != null: host.camera_rig.frame_story_action(entry.node)
+	opening_scene.remaining = float(beat.seconds)
+	host.hud.show_ambient_subtitle(get_instance_id(), str(beat.speaker), str(beat.text), float(beat.seconds))
+	host.audio.play_nearby_speech(str(beat.actor), str(beat.text), entry.node)
+
+func _release_opening_performer() -> void:
+	if opening_scene.is_empty(): return
+	var actor: Node3D = opening_scene.get("actor")
+	if not is_instance_valid(actor): return
+	var entry: Dictionary = opening_scene.entry
+	if not entry.is_empty() and is_instance_valid(entry.driver):
+		entry.driver.set_life_activity(str(opening_scene.activity))
+		entry.driver.set_life_workstation(opening_scene.station)
+	Presence.release(actor, "work", get_instance_id())
+	opening_scene.actor = null
+
+func finish_opening_scene(reason: String = "skipped") -> void:
+	if opening_scene.is_empty(): return
+	_release_opening_performer()
+	var control := bool(opening_scene.control)
+	opening_scene.clear()
+	if not is_instance_valid(host): return
+	if is_instance_valid(get_parent()): get_parent().set_meta("opening_scene_active", false)
+	if is_instance_valid(host.hud):
+		host.hud.clear_ambient_subtitle(get_instance_id())
+		host.hud.hide_opening_scene_skip()
+	if is_instance_valid(host.camera_rig): host.camera_rig.release_dialogue_frame()
+	if is_instance_valid(host.audio): host.audio.set_ambient_conversation(false)
+	if is_instance_valid(player) and not player.transition_locked:
+		player.can_control = control and player.health_component.health > 0.0
+	if host.resource_shutdown_prepared or not host.is_inside_tree(): return
+	host.story_state.set_flag("opening_arrival_presentation", reason)
+	if not get_tree().paused and not host._journey_load_pending() and not host.zone_transition_pending and not host.zone_load_request_pending and get_parent() == host.zone_root:
+		host.input_router.begin_context("gameplay")
+		host._show_current_objective_guidance(7.0)
+		host.hud.toast("Anwen needs the northern road investigated. Maren's relief work can wait until you choose to help.", 7.0)
+	host.story_save_pending = true
+	host.call_deferred("_persist_story_action")
 
 func _build_population(first := 0, count := -1) -> void:
 	var population := 4 if quality == "potato" else (10 if quality == "quality" else 4)
@@ -1272,6 +1397,7 @@ func _on_perception_cue(position: Vector3, radius: float, danger: bool) -> void:
 			entry.face.set_expression(str(entry.reaction) if danger else "concern")
 
 func _exit_tree() -> void:
+	finish_opening_scene("interrupted")
 	_end_social_exchange()
 	for entry: Dictionary in actors:
 		_release_activity(entry)
