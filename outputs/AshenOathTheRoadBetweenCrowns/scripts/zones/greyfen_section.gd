@@ -585,7 +585,7 @@ func _build_gameplay_place(context: ZoneBuildContext, place_index: int) -> void:
 func _build_gameplay_side_clues(context: ZoneBuildContext) -> void:
 	if context.is_quest_active("side_widows_bell") and not context.is_objective_done("side_widows_bell", "find_bell"):
 		context.make_clue("grave_bell", "Inspect Harl's grave bell", Vector3(15.8, 0, 9.5), "side_widows_bell", "find_bell", Color(0.60, 0.55, 0.44))
-	if context.is_quest_active("side_iron_remembers") and not context.is_objective_done("side_iron_remembers", "recover_iron"):
+	if not bool(context.story_state.has_evidence("massacre_iron")) and not context.is_objective_done("side_iron_remembers", "recover_iron"):
 		context.make_clue("massacre_iron", "Recover blackened chapel iron", Vector3(15.4, 0, 8.5), "side_iron_remembers", "recover_iron", Color(0.26, 0.24, 0.20))
 	if context.is_quest_active("side_empty_grave") and not context.is_objective_done("side_empty_grave", "follow_empty_grave"):
 		context.make_clue("empty_grave_tracks", "Follow prints from the empty grave", Vector3(16.0, 0, 6.7), "side_empty_grave", "follow_empty_grave", Color(0.25, 0.24, 0.22))

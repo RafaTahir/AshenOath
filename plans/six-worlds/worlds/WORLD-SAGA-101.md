@@ -2,6 +2,7 @@
 
 Parent: [WORLD-SAGA-000](../WORLD-SAGA-000.md). Status: build-only implementation present; user acceptance pending.
 Current compilation/publication details: [implementation record](../IMPLEMENTATION.md).
+Greyfen village/tutorial extension: [2026-10-24 implementation and user checks](../../living-road/GREYFEN_VILLAGE_IMPLEMENTATION.md). Implementation, build, publication and user acceptance remain separate.
 Region: `greyfen`. Places: village, river/bridge, shrine, cemetery/chapel, later Assembly.
 Read the master's common save/reward/manual-acceptance rules with this ticket.
 

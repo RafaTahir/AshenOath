@@ -56,6 +56,7 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 		old.queue_free()
 	var presentation := Node3D.new()
 	presentation.name = "Presentation"
+	presentation.set_meta("village_plaques", zone_id == "greyfen")
 	layer.add_child(presentation)
 	match zone_id:
 		"greyfen": _greyfen(game, presentation)
@@ -195,6 +196,23 @@ static func _label(parent: Node3D, id: String, text: String, pos: Vector3, color
 	node.outline_modulate = Color(0.035, 0.028, 0.02)
 	node.no_depth_test = false
 	node.visibility_range_end = 14.0
+	if bool(parent.get_meta("village_plaques",false)):
+		node.font_size = 18
+		node.pixel_size = 0.0021
+		node.visibility_range_end = 5.0
+		if id != "NoticeHeading":
+			node.position.y = 0.94
+			var material := StandardMaterial3D.new()
+			material.albedo_color = TIMBER
+			for piece: Array in [[Vector3(pos.x,0.45,pos.z),Vector3(0.06,0.9,0.06)],[Vector3(pos.x,0.94,pos.z-0.035),Vector3(1.3,0.40,0.04)]]:
+				var support := MeshInstance3D.new()
+				var mesh := BoxMesh.new()
+				mesh.size = piece[1]
+				support.mesh = mesh
+				support.material_override = material
+				support.position = piece[0]
+				support.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+				parent.add_child(support)
 	parent.add_child(node)
 
 static func _notice(game, parent: Node3D, pos: Vector3, title: String, color := PAPER) -> void:
@@ -259,7 +277,8 @@ static func _cemetery_consequence(game, parent: Node3D) -> void:
 	for point in [Vector3(12.6, 0.05, 7.2), Vector3(14.4, 0.05, 10.2), Vector3(16.0, 0.05, 7.2)]:
 		var loose := shrine in ["cleansed", "disturbed"]
 		_box(game, parent, "UnboundGraveRibbon" if loose else "FoldedGraveRibbon", point, Vector3(0.32, 0.012, 0.09), LINEN, 24.0 if loose else 0.0)
-	_label(parent, "CemeteryAfterTheBell", "THE BELL IS STILL / THE BINDINGS ARE OPEN" if shrine == "cleansed" else "THE BELL IS STILL / DISTURBED NAMES REMAIN" if shrine == "disturbed" else "THE BELL IS STILL / THE RITE STILL BINDS" if shrine == "bound" else "THE BELL IS STILL / THE SHRINE AWAITS AN ANSWER", Vector3(12.5, 1.3, 11.0), LINEN)
+	# Ribbons and offerings carry the return state. The reachable memorial
+	# supplies its readable account; no floating cemetery verdict is needed.
 
 static func _greyfen_daily_consequences(game, parent: Node3D) -> void:
 	var operation := str(_flag(game, "mill_operation"))
@@ -311,7 +330,7 @@ static func _tor(game, parent: Node3D) -> void:
 static func _rook(game, parent: Node3D) -> void:
 	var disclosure := str(_flag(game, "rook_disclosure"))
 	if disclosure == "": return
-	var text: String = {"protected": "ROOK'S SHELTERED ROUTE\nNo names on the public map", "public": "ROOK'S PUBLIC ROUTE\nWalked with his permission", "erased": "ROOK'S MAP WITHDRAWN\nThe false road is closed"}.get(disclosure, "ROOK'S ROUTE")
+	var text: String = {"protected": "ROOK'S SHELTERED ROUTE\nNo names on the public map", "public": "ROOK'S EXPOSED ROUTE\nPublished without his consent", "erased": "ROOK'S MAP WITHDRAWN\nThe paper is gone; the road remains"}.get(disclosure, "ROOK'S ROUTE")
 	_notice(game, parent, Vector3(-9.0, 0, 7.0), text, GREEN if disclosure == "protected" else PAPER)
 
 static func _guardian(game, parent: Node3D) -> void:

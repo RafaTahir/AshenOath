@@ -325,6 +325,13 @@ func _enroll_named_npcs() -> void:
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
+	if entry.has("table_restore"):
+		entry.table_seconds = float(entry.get("table_seconds",120.0)) - delta
+		if float(entry.table_seconds) <= 0.0 or player.global_position.distance_to(entry.get("table_point",node.global_position)) > 9.0:
+			entry.pending_routine = entry.table_restore
+			entry.erase("table_restore")
+			_release_activity(entry)
+			_apply_pending_routine(entry)
 	if str(node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
 		_release_activity(entry)
 		return
@@ -653,6 +660,11 @@ func _on_activity_contact(event: String, point: Vector3, source: WeakRef) -> voi
 func _apply_pending_routine(entry: Dictionary) -> void:
 	var pending: Dictionary = entry.get("pending_routine", {})
 	if pending.is_empty(): return
+	if entry.has("table_restore") and not bool(pending.get("table_visit",false)):
+		entry.table_restore = pending.duplicate(true)
+		entry.table_restore["spatial_override"] = true
+		entry.pending_routine = {}
+		return
 	if gathering_staged and entry.has("gathering_restore") and not bool(pending.get("gathering", false)):
 		entry.gathering_restore = pending.duplicate(true)
 		entry.pending_routine = {}
@@ -661,7 +673,7 @@ func _apply_pending_routine(entry: Dictionary) -> void:
 	entry.profile = pending.profile
 	entry.consequence_line = str(pending.get("line", ""))
 	entry.node.set_meta("life_occupation", str(entry.profile.get("occupation", "villager")))
-	if bool(entry.named) and not bool(entry.get("regional", false)): return
+	if bool(entry.named) and not bool(entry.get("regional", false)) and not bool(pending.get("spatial_override",false)) and not bool(pending.get("gathering",false)): return
 	var next_path: Array = pending.path
 	if next_path == entry.path: return
 	entry.path = next_path.duplicate() if bool(entry.get("regional", false)) else host.river_safe_path(next_path, 0.9)
@@ -1214,7 +1226,7 @@ func _update_gathering_routines() -> void:
 		var entry := _world_actor(id)
 		if entry.is_empty(): continue
 		if active:
-			entry["gathering_restore"] = {"profile":entry.profile.duplicate(true), "path":entry.path.duplicate()}
+			entry["gathering_restore"] = {"profile":entry.profile.duplicate(true), "path":entry.path.duplicate(), "spatial_override":true}
 			var profile: Dictionary = entry.profile.duplicate(true)
 			profile["activity"] = "rest"
 			profile["activities"] = ["rest"]
@@ -1226,6 +1238,25 @@ func _update_gathering_routines() -> void:
 		_release_activity(entry)
 		entry.route = []
 		_apply_pending_routine(entry)
+
+func request_table_visit(id: String, point: Vector3) -> bool:
+	var entry := _world_actor(id)
+	if entry.is_empty() or Presence.protected(entry.node) or not entry.node.is_visible_in_tree() or host._story_has_active_combat(): return false
+	if entry.node.global_position.distance_to(point) <= 1.35:
+		entry.pause = maxf(float(entry.pause),2.0)
+		return true
+	if not entry.has("table_restore"):
+		entry.table_restore = {"profile":entry.profile.duplicate(true),"path":entry.path.duplicate(),"spatial_override":true}
+		entry.table_point = point
+		entry.table_seconds = 120.0
+		var profile: Dictionary = entry.profile.duplicate(true)
+		profile["activity"] = "rest"
+		profile["activities"] = ["rest"]
+		profile["workstation"] = {}
+		entry.pending_routine = {"profile":profile,"path":[point],"table_visit":true,"spatial_override":true}
+		_release_activity(entry)
+		_apply_pending_routine(entry)
+	return false
 
 func _on_perception_cue(position: Vector3, radius: float, danger: bool) -> void:
 	if not is_instance_valid(host) or not bool(host.game_started) or get_tree().paused:

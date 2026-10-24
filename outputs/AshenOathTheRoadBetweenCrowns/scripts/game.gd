@@ -982,6 +982,7 @@ func _start_new_game_world() -> void:
 	print("LOADING: handoff_phase=quest_begin")
 	quests.start_quest("main_road_of_crows")
 	story_state.set_flag("opening_care_enabled", true)
+	story_state.set_flag("greyfen_guide_available", true)
 	print("LOADING: handoff_phase=quest_end")
 	# The opening is now playable. Remaining packs must not delay New Game or
 	# the first quest interaction. In particular, do not start the character-pack
@@ -1968,6 +1969,8 @@ func _install_opening_soundscape(zone_id: String) -> void:
 	soundscape.configure(zone_root, zone_id, player, audio, quality)
 
 func _handle_interaction(area) -> void:
+	if current_zone_id == "greyfen" and area != null:
+		preload("res://scripts/greyfen_guidance.gd").learn(self, "use")
 	if area != null and area.interaction_id == "bracken" and str(story_state.get_flag("bracken_home", "")) == "adopted":
 		_show_companion_commands()
 		return
@@ -1977,10 +1980,11 @@ func _handle_interaction(area) -> void:
 	if area != null and area.interaction_type == "story_activity":
 		preload("res://scripts/story_activity_director.gd").handle(self, area)
 		return
+	var prop_activated := false
 	if world_props != null and area != null and area.has_meta("world_prop_id"):
-		world_props.activate_prop(str(area.get_meta("world_prop_id", "")))
+		prop_activated = world_props.activate_prop(str(area.get_meta("world_prop_id", "")))
 	var world_prop_component := area.find_child("InteractiveWorldProp", true, false) as InteractiveWorldProp if area != null else null
-	if world_prop_component != null:
+	if world_prop_component != null and not prop_activated:
 		world_prop_component.activate()
 	if world_vfx != null and is_instance_valid(world_vfx) and area is Node3D:
 		world_vfx.pulse_interaction((area as Node3D).global_position)
@@ -1988,6 +1992,8 @@ func _handle_interaction(area) -> void:
 		CovenantResolution.activate(self, area)
 		return
 	if area.interaction_type == "minigame":
+		var village: Node = preload("res://scripts/greyfen_village_details.gd").current(self)
+		if village != null and village.open_table(area): return
 		minigames.open_game("tic_tac_toe" if area.interaction_id == "common_table" else "draughts")
 	elif area.interaction_type == "vendor":
 		if vendor_service == null:
@@ -2375,6 +2381,9 @@ func _relocate_anwen_to_cemetery() -> void:
 	_face_npc_toward_player(anwen)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
+	if str(action.get("type", "")) == "greyfen_detail_action":
+		preload("res://scripts/greyfen_village_details.gd").choose(self, action)
+		return
 	if str(action.get("type", "")) == "saga_action":
 		var owner: Node = zone_root.get_node_or_null("StoryActivities/SixWorldStories") if is_instance_valid(zone_root) else null
 		if owner != null:
@@ -2479,7 +2488,10 @@ func _apply_dialogue_action(action: Dictionary) -> bool:
 	audio.stop_voice()
 	audio.play_event("ui")
 	var type = str(action.get("type", ""))
-	if type == "opening_care_account":
+	if type == "greyfen_restore_choice":
+		if not story_state.confirm_greyfen_choice(str(action.get("key", "")), str(action.get("value", ""))):
+			return false
+	elif type == "opening_care_account":
 		var opening_anwen := zone_root.find_child("sister_anwen", true, false) as Node3D
 		if current_zone_id == "greyfen" and opening_anwen != null:
 			story_state.set_flag("opening_care_introduced", true)
@@ -2650,11 +2662,17 @@ func _dialogue_action_available(action: Dictionary) -> bool:
 	var type := str(action.get("type", ""))
 	var quest_id := str(action.get("quest", ""))
 	var objective_id := str(action.get("objective", ""))
+	if type == "greyfen_restore_choice":
+		var key := str(action.get("key", ""))
+		var resolved: bool = quests.is_completed("side_iron_remembers") if key == "iron_fate" else quests.is_completed("main_road_of_crows") or quests.is_objective_done("main_road_of_crows", "return_village")
+		return current_zone_id == "greyfen" and resolved and bool(story_state.get_flag(key + "_confirmation_needed", false))
 	if type == "companion_choice":
 		return preload("res://scripts/companion_controller.gd").choice_available(self, action)
 	if type == "start_quest":
 		return quest_id != "" and quests.is_unlocked(quest_id) and not quests.is_active(quest_id) and not quests.is_completed(quest_id)
 	if type == "complete_objective":
+		if quest_id == "side_iron_remembers" and objective_id == "recover_iron" and not story_state.has_evidence("massacre_iron"):
+			return false
 		return quest_id != "" and objective_id != "" and quests.is_active(quest_id) and not quests.is_objective_done(quest_id, objective_id)
 	if type == "resolve_side_quest":
 		return quest_id != "" and quests.is_active(quest_id) and _quest_required_objectives_done(quest_id)
@@ -3522,6 +3540,9 @@ func _on_player_blade_contact(contact: Dictionary) -> void:
 	if bool(contact.get("first_sample", true)):
 		audio.play_event("heavy" if heavy else "swing")
 	var result: Dictionary = combat.resolve_player_blade_contact(player, active_enemies, contact, inventory.active_oil)
+	if not bool(result.get("hit", false)):
+		var practice: Node = preload("res://scripts/greyfen_village_details.gd").current(self)
+		if practice != null and practice.blade_contact(contact): result["hit"] = true
 	player.confirm_blade_contact(int(contact.get("attack_id", -1)), bool(result.get("hit", false)))
 	if bool(result.get("hit", false)):
 		_hitstop(0.055 if heavy else 0.032)
@@ -3657,6 +3678,8 @@ func _on_player_beam(charge_ratio: float, direction: Vector3) -> void:
 		"charge_ratio": charge_ratio
 	}
 	var hits: Array = combat.resolve_oathfire_cast(active_enemies, cast)
+	var practice: Node = preload("res://scripts/greyfen_village_details.gd").current(self)
+	if practice != null: practice.oathfire_contact(cast)
 	set_meta("last_oathfire_cast", cast)
 	set_meta("last_oathfire_hit_count", hits.size())
 	_make_oathfire_beam(origin, endpoint, charge_ratio, not _performance_mode())
@@ -3698,12 +3721,14 @@ func _on_player_footstep() -> void:
 	audio.play_footstep(current_zone_id, on_road, surface)
 
 func _on_player_parried() -> void:
+	if current_zone_id == "wychwood": preload("res://scripts/greyfen_guidance.gd").learn(self, "parry")
 	if progression != null and player != null:
 		player.stamina_component.restore(progression.effect_value("parry_stamina_restore", 0.0) + progression.entitlement_effect("saga_parry_restore", 0.0))
 	tutorial_flags["block_hint_done"] = true
 	hud.set_guidance_hint("")
 
 func _on_player_blocked(_amount: float) -> void:
+	if current_zone_id == "wychwood": preload("res://scripts/greyfen_guidance.gd").learn(self, "block")
 	audio.play_event("block")
 	if input_router != null:
 		input_router.rumble(0.18, 0.32, 0.08)
@@ -4122,7 +4147,8 @@ func _on_enemy_windup_started(enemy) -> void:
 			CombatFeedback.ground_ring(zone_root, enemy.global_position, Color(0.46, 0.05, 0.025), 0.62, 0.18)
 	if enemy != null and enemy.health_component != null:
 		hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
-	if current_zone_id == "wychwood" and not bool(tutorial_flags.get("block_hint_done", false)):
+	var guide_guard_pending := str(story_state.get_flag("greyfen_guide", "")) == "active" and (not bool(story_state.get_flag("greyfen_lesson:block", false)) or not bool(story_state.get_flag("greyfen_lesson:parry", false)))
+	if current_zone_id == "wychwood" and (guide_guard_pending or not bool(tutorial_flags.get("block_hint_done", false))):
 		hud.set_guidance_hint(_guard_tutorial_hint(), 4.2)
 
 func _on_enemy_attack_resolved(enemy, parried: bool, contact_position: Vector3) -> void:
@@ -4629,7 +4655,8 @@ func _reconcile_preparation_objective() -> void:
 
 func _guard_tutorial_hint() -> String:
 	var guard: Dictionary = input_router.describe_action("block") if input_router != null else {}
-	return "Begin guarding as the lunge lands to parry. %s." % str(guard.get("instruction", "Use your guard control to block")).trim_suffix(".")
+	var guarded := bool(story_state.get_flag("greyfen_lesson:block", false))
+	return ("Begin guarding as the lunge lands to parry. " if guarded else "Hold your guard through an incoming strike to block. ") + str(guard.get("instruction", "Use your guard control")).trim_suffix(".")
 
 func _update_tutorial_prompts() -> void:
 	if player == null:
@@ -6555,9 +6582,9 @@ func _make_board_game_chair(area: Node3D, position: Vector3, yaw: float, batch: 
 
 func _world_prop_spec(id: String) -> Dictionary:
 	return {
-		"notice_board": {"kind": "notice_board", "state_key": "evidence_report"},
+		"notice_board": {"kind": "notice_board", "state_key": "greyfen_prop:notice_board"},
 		"village_well": {"kind": "well", "state_key": "greyfen_well_state"},
-		"forge_corner": {"kind": "forge", "state_key": "iron_fate"},
+		"forge_corner": {"kind": "forge", "state_key": "greyfen_prop:forge_corner"},
 		"shrine_prayer": {"kind": "shrine", "state_key": "shrine_prayer_state"},
 		"common_table": {"kind": "table", "state_key": "common_table_state"},
 		"barrel_board": {"kind": "table", "state_key": "barrel_board_state"},

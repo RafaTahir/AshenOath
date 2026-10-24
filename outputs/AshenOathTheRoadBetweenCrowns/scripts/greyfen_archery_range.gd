@@ -189,6 +189,10 @@ func start(requested_mode: String) -> void:
 func training_ready() -> bool:
 	return running and not finishing and pending_shots == 0 and shots < _shot_limit() and _safe_to_start() and FIRING_RECT.has_point(Vector2(game.player.global_position.x, game.player.global_position.z))
 
+func record_cancel() -> void:
+	if running and training_ready() and game.input_router.is_gameplay_context():
+		preload("res://scripts/greyfen_guidance.gd").learn(game,"bow_cancel")
+
 func _shot_limit() -> int:
 	return int(CHALLENGES[mode].shots) if CHALLENGES.has(mode) else 8
 
@@ -228,6 +232,7 @@ func shot_finished(collider: Object, point: Vector3) -> void:
 		var radius := Vector2(point.y - center.y, point.z - center.z).length()
 		var points := 5 if radius <= 0.15 else 3 if radius <= 0.38 else 1
 		score += points
+		preload("res://scripts/greyfen_guidance.gd").learn(game,"bow_first" if game.camera_rig.is_first_person() else "bow_hit")
 		game.audio.play_event("light_hit", 0.02)
 		game.hud.toast("Ring hit: +%d" % points, 1.0)
 	_update_readout()

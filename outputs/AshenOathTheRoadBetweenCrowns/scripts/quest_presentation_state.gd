@@ -70,7 +70,10 @@ func get_tracked_quest() -> String:
 
 func set_tracked_quest(id: String) -> bool:
 	if quest_manager != null and quest_manager.has_method("set_tracked_quest"):
-		return bool(quest_manager.set_tracked_quest(id))
+		var selected := bool(quest_manager.set_tracked_quest(id))
+		if selected and story_state != null and str(story_state.get_flag("greyfen_guide", "")) == "active":
+			story_state.set_flag("greyfen_guide", "paused")
+		return selected
 	return false
 
 func get_active_objective_id(quest_id: String = "") -> String:
@@ -105,7 +108,15 @@ func _build_objective_view_model() -> Dictionary:
 	view.zone_id = zone_id
 	view.zone_name = get_zone_display_name()
 	var continuation: Dictionary = RouteCatalog.ending_continuation(story_state, zone_id)
-	if not continuation.is_empty():
+	var guidance: Dictionary = preload("res://scripts/greyfen_guidance.gd").view(story_state, zone_id)
+	if not guidance.is_empty() and continuation.is_empty():
+		view.objective_id = str(guidance.id)
+		view.quest_title = str(guidance.title)
+		view.objective_text = str(guidance.action)
+		view.next_action = view.objective_text
+		_apply_route(view, guidance)
+		view.tracker_text = "%s\n- %s" % [view.quest_title, view.next_action]
+	elif not continuation.is_empty():
 		view.objective_id = str(continuation.get("id", ""))
 		view.quest_title = str(continuation.get("title", "THE ROAD HOME"))
 		view.objective_text = str(continuation.get("action", ""))

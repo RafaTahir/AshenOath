@@ -22,12 +22,12 @@ RELEASE_MANIFEST = "release_manifest.json"
 MAX_TOTAL_BYTES = 104_857_600
 
 
-def lossless_gzip(payload: bytes) -> bytes:
+def lossless_gzip(payload: bytes, optimize_large: bool = False) -> bytes:
     """Spend packaging CPU, never image/audio quality, on compact code packs."""
     packed = gzip.compress(payload, compresslevel=9, mtime=0)
     # Optional build dependency; runtime clients still receive standard gzip.
     # Large already-compressed art packs do not benefit from this slow pass.
-    if len(payload) <= 8 * 1024 * 1024:
+    if optimize_large or len(payload) <= 8 * 1024 * 1024:
         try:
             import zopfli.gzip
         except ImportError:
@@ -154,7 +154,9 @@ def compress_wasm(path: Path) -> None:
         payload = gzip.decompress(payload)
     if not payload.startswith(b"\x00asm"):
         raise ValueError("Cannot package a non-WebAssembly engine")
-    packed = lossless_gzip(payload)
+    # Engine code benefits from the bounded encoder even above the small-pack
+    # threshold. Its decoded bytes and the required gzip format stay identical.
+    packed = lossless_gzip(payload, optimize_large=True)
     if gzip.decompress(packed) != payload:
         raise ValueError("WebAssembly lossless transport round trip failed")
     path.write_bytes(packed)

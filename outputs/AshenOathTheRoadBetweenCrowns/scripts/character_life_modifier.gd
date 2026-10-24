@@ -21,11 +21,18 @@ var tool_kind := ""
 var station: Dictionary = {}
 var last_contact_cycle := -1
 var tool_contact: Node3D
+var seated_legs: Array[Dictionary] = []
+var pelvis := -1
 
 func configure(body: Node3D, motion: Node) -> void:
 	actor = body
 	driver = motion
 	var skeleton := get_skeleton()
+	pelvis = skeleton.find_bone("pelvis")
+	for side: String in ["l", "r"]:
+		var thigh := skeleton.find_bone("thigh_" + side)
+		var calf := skeleton.find_bone("calf_" + side)
+		if thigh >= 0 and calf >= 0: seated_legs.append({"thigh":thigh,"calf":calf})
 	for alias: String in ["Head", "head", "head_01", "DEF-head"]:
 		head = skeleton.find_bone(alias)
 		if head >= 0:
@@ -71,6 +78,16 @@ func _process_modification() -> void:
 		_creature_pose(skeleton)
 	pose_weight = move_toward(pose_weight, 1.0 if requested else 0.0, delta * 4.5)
 	if pose_weight <= 0.001:
+		return
+	if effective == "sit":
+		if pelvis >= 0:
+			var parent := skeleton.get_bone_parent(pelvis)
+			var frame := skeleton.global_basis * (skeleton.get_bone_global_pose(parent).basis if parent >= 0 else Basis.IDENTITY)
+			var offset := frame.inverse() * Vector3(0,-0.45,0)
+			skeleton.set_bone_pose_position(pelvis,skeleton.get_bone_pose_position(pelvis)+offset*pose_weight)
+		for leg: Dictionary in seated_legs:
+			skeleton.set_bone_pose_rotation(leg.thigh,skeleton.get_bone_pose_rotation(leg.thigh)*Quaternion(Vector3.RIGHT,-1.35*pose_weight))
+			skeleton.set_bone_pose_rotation(leg.calf,skeleton.get_bone_pose_rotation(leg.calf)*Quaternion(Vector3.RIGHT,1.35*pose_weight))
 		return
 	if spine >= 0:
 		var base := skeleton.get_bone_pose_rotation(spine)

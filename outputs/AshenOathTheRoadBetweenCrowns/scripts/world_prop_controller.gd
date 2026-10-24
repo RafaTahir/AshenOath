@@ -193,8 +193,7 @@ func activate_prop(prop_id: String) -> bool:
 		var component := raw as InteractiveWorldProp
 		if component != null and is_instance_valid(component) and component.get_prop_id() == prop_id and zone_root.is_ancestor_of(component):
 			component.activate()
-			_play_prop_audio(component.get_kind())
-			activated = true
+			return true
 	for entry in entries:
 		if str(entry.get("id", "")) == prop_id:
 			entry.state = _next_state(str(entry.get("kind", "generic")), str(entry.get("state", "idle")))
@@ -254,7 +253,11 @@ func _apply_entry_state(entry: Dictionary) -> void:
 	if str(entry.get("kind", "")) in ["flame", "candle", "lantern"]:
 		node.visible = not inactive
 
-func _on_component_state_changed(_prop_id: String, _state: String) -> void:
+func _on_component_state_changed(prop_id: String, state: String) -> void:
+	for entry in entries:
+		if str(entry.id) == prop_id and str(entry.state_key) not in ["evidence_report", "iron_fate"]:
+			entry.state = state
+			_apply_entry_state(entry)
 	_play_prop_audio("interaction")
 
 func _play_prop_audio(kind: String) -> void:

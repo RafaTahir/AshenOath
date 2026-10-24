@@ -70,6 +70,14 @@ def compile_layout():
         files[name].discard("res://" + CHAPTER_ART)
     includes["Runtime Pack Campaign"].add(CHAPTER_ART)
     includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
+    # Touchable village details share retained source meshes, owned by opening.
+    for prop in ("Dummy.obj", "Pot_1.obj", "Pot_1_Lid.obj"):
+        relative = "assets_external/environment/props/" + prop
+        includes["Runtime Pack Opening"].add(relative)
+        for name in sections:
+            if name != "Runtime Pack Opening":
+                includes[name].discard(relative)
+                files[name].discard("res://" + relative)
     files["Runtime Pack Opening"].add("res://" + FORGE_HAMMER)
     # Regional written requests begin in Greyfen, before campaign packs mount.
     # Transfer the retained mesh instead of duplicating it or loading a late

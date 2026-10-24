@@ -6,6 +6,10 @@ signal honor_changed(entry: Dictionary)
 const Honor = preload("res://scripts/story_honor.gd")
 
 const VERSION := 2
+const GREYFEN_DECISIONS := {
+	"evidence_report": ["private", "public", "retained"],
+	"iron_fate": ["memorial", "tools", "surrendered"]
+}
 const VALUE_LIMITS := {
 	"anwen_trust": Vector2i(-3, 3),
 	"greyfen_fear": Vector2i(0, 6),
@@ -51,6 +55,8 @@ func set_flag(id: String, value: Variant) -> void:
 	var previous: Variant = flags.get(id)
 	begin_change()
 	flags[id] = value
+	if GREYFEN_DECISIONS.has(id) and str(value) in GREYFEN_DECISIONS[id]:
+		flags[id + "_confirmation_needed"] = false
 	if previous != value:
 		_capture_relationship_flag(id, value)
 		_capture_honor_flags(id)
@@ -301,6 +307,31 @@ func matches(conditions: Dictionary) -> bool:
 func save_state() -> Dictionary:
 	return {"version": VERSION, "flags": flags.duplicate(true), "values": values.duplicate(true), "evidence": evidence.duplicate(true), "decisions": decisions.duplicate(true)}
 
+func _repair_greyfen_prop_choices() -> void:
+	for key: String in GREYFEN_DECISIONS:
+		var value := str(_flags.get(key, ""))
+		if value == "" or value in GREYFEN_DECISIONS[key]:
+			continue
+		_flags["greyfen_prop_recovered:" + key] = value
+		_flags.erase(key)
+		# A decorative 'used' state is not evidence of the player's decision.
+		for index in range(decisions.size() - 1, -1, -1):
+			var recorded: Variant = decisions[index].get("flags", {})
+			if recorded is Dictionary and str(recorded.get(key, "")) in GREYFEN_DECISIONS[key]:
+				_flags[key] = str(recorded[key])
+				break
+		_flags[key + "_confirmation_needed"] = not _flags.has(key)
+
+func confirm_greyfen_choice(key: String, value: String) -> bool:
+	if not GREYFEN_DECISIONS.has(key) or value not in GREYFEN_DECISIONS[key] or not bool(_flags.get(key + "_confirmation_needed", false)):
+		return false
+	# Recovery restores a recollection, not a new reward, deed or relationship.
+	_flags[key] = value
+	_flags[key + "_confirmation_needed"] = false
+	record_decision("greyfen_restore:" + key, {"label":"Confirmed the surviving account", "sets_flags":{key:value}})
+	_notify_change()
+	return true
+
 func load_state(data: Dictionary) -> void:
 	_change_depth = 0
 	_change_pending = false
@@ -314,6 +345,7 @@ func load_state(data: Dictionary) -> void:
 				decisions.append(decision.duplicate(true))
 	var loaded_flags: Variant = data.get("flags", {})
 	flags = loaded_flags.duplicate(true) if typeof(loaded_flags) == TYPE_DICTIONARY else {}
+	_repair_greyfen_prop_choices()
 	var loaded_values_raw: Variant = data.get("values", {})
 	var loaded: Dictionary = loaded_values_raw if typeof(loaded_values_raw) == TYPE_DICTIONARY else {}
 	values = {"anwen_trust": 0, "greyfen_fear": 0, "hart_debt": 0}

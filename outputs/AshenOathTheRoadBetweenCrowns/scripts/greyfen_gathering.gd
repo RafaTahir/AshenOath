@@ -90,15 +90,16 @@ func _process(delta: float) -> void:
 	if present and not is_instance_valid(decorations):
 		var table := game.zone_root.find_child("common_table", true, false) as Node3D
 		var board := table.get_node_or_null("common_table_CarvedBoard") as MeshInstance3D if table != null else null
-		if board != null and board.mesh is BoxMesh:
+		if table != null:
+			var bounds: AABB = board.mesh.get_aabb() if board != null and board.mesh != null else AABB(Vector3(-0.9,0.72,-0.45),Vector3(1.8,0.10,0.9))
 			decorations = Node3D.new()
 			decorations.name = "GatheringLinen"
 			table.add_child(decorations)
 			var runner := MeshInstance3D.new()
 			var cloth := BoxMesh.new()
-			cloth.size = Vector3((board.mesh as BoxMesh).size.x + 0.2, 0.008, 0.17)
+			cloth.size = Vector3(bounds.size.x + 0.2, 0.008, 0.17)
 			runner.mesh = cloth
-			runner.position = board.position + Vector3(0, -0.04, (board.mesh as BoxMesh).size.z * 0.5 + 0.09)
+			runner.position = (board.position if board != null else Vector3.ZERO) + Vector3(bounds.get_center().x,bounds.end.y + 0.01,bounds.get_center().z)
 			var material := StandardMaterial3D.new()
 			material.albedo_color = Color(0.59, 0.65, 0.61)
 			runner.material_override = material

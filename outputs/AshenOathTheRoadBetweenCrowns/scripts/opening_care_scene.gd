@@ -22,6 +22,7 @@ var hand_skeleton: Skeleton3D
 var hand_bone := -1
 var hinted := false
 var injured_actor: Node3D
+var injured_driver: Node
 
 static func install(game, root: Node3D) -> void:
 	var scene: Node = root.get_node_or_null(LAYER)
@@ -91,6 +92,8 @@ func build() -> void:
 		injured_actor.add_child(traveler)
 		preload("res://scripts/character_identity_profile.gd").apply(traveler, "villager_human", "injured_traveler")
 		host._configure_npc_animation(traveler, "injured_traveler")
+		injured_driver = traveler.find_child("CharacterAnimationDriver", true, false)
+		if injured_driver != null: injured_driver.set_life_activity("sit")
 	coat_area = point("opening_coat_shelter", "Fold Oren's coat out of the weather", Vector3(1.3, 0, 0.6))
 	box(coat_area, "CoatBench", Vector3(0, 0.54, 0), Vector3(1.26, 0.08, 0.55), TIMBER)
 	for x: float in [-0.49, 0.49]:
@@ -140,15 +143,9 @@ func activate(id: String) -> void:
 			show_scene("opening_care_water")
 			var traveler_driver: Node = injured_actor.find_child("CharacterAnimationDriver", true, false) if is_instance_valid(injured_actor) else null
 			if traveler_driver != null:
-				var previous_mode: int = traveler_driver.process_mode
-				var restore_pose := func(_action: String):
-					if is_instance_valid(traveler_driver):
-						traveler_driver.process_mode = previous_mode
-				traveler_driver.action_finished.connect(restore_pose, CONNECT_ONE_SHOT)
-				traveler_driver.process_mode = Node.PROCESS_MODE_ALWAYS
-				if not traveler_driver.trigger_action("story_offer", 0.75):
-					traveler_driver.process_mode = previous_mode
-					traveler_driver.action_finished.disconnect(restore_pose)
+				# Receiving water must not replace the supported seated pose with
+				# a standing, full-body offer animation during paused dialogue.
+				traveler_driver.set_life_activity("sit")
 		"opening_coat_shelter":
 			if not coat_area.is_interaction_enabled(): return
 			commit({"opening_coat_sheltered": true})
@@ -178,7 +175,8 @@ func show_scene(id: String, actor: Node3D = null) -> void:
 func _process(_delta: float) -> void:
 	if host == null or host.current_zone_id != "greyfen" or host.player == null:
 		return
-	if not hinted and host.player.global_position.distance_to(global_position) < 4.0 and not flag("opening_care_introduced") and not flag("opening_cup_delivered"):
+	if is_instance_valid(injured_driver): injured_driver.set_life_activity("sit")
+	if not hinted and str(host.story_state.get_flag("greyfen_guide", "")) != "active" and host.player.global_position.distance_to(global_position) < 4.0 and not flag("opening_care_introduced") and not flag("opening_cup_delivered"):
 		hinted = true
 		host.hud.set_guidance_hint("Anwen keeps water by the step. A small coat lies on the bench beside her.", 7.0)
 	var carrying: bool = flag("opening_cup_carried") and not flag("opening_cup_delivered")
@@ -193,7 +191,11 @@ func _process(_delta: float) -> void:
 		carried_cup.top_level = true
 		var driver: Node = carrier.get("animation_driver") as Node
 		hand_skeleton = driver.call("get_skeleton") as Skeleton3D if driver != null else null
-		hand_bone = hand_skeleton.find_bone("hand_l") if hand_skeleton != null else -1
+		hand_bone = -1
+		if hand_skeleton != null:
+			for alias: String in ["hand_l", "LeftHand", "hand.L", "mixamorig:LeftHand"]:
+				hand_bone = hand_skeleton.find_bone(alias)
+				if hand_bone >= 0: break
 	var hand_position: Vector3 = carrier.global_transform * Vector3(-0.28, 0.90, -0.08)
 	if is_instance_valid(hand_skeleton) and hand_bone >= 0:
 		hand_position = (hand_skeleton.global_transform * hand_skeleton.get_bone_global_pose(hand_bone)).origin

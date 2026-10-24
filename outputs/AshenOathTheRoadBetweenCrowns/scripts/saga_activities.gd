@@ -254,6 +254,19 @@ func _site_position(site: String, id: String) -> Vector3:
 	if _site_positions.has(key):
 		return _site_positions[key]
 	var base: Vector3 = Catalog.SITES.get(zone, {}).get(site, Vector3(3, 0, 8))
+	if zone == "greyfen" and id == "saga_secret:GRE-S01":
+		base = Vector3(-11.45, 0, -6.8)
+		_site_positions[key] = base
+		return base
+	if zone == "greyfen" and site == "bell" and id.ends_with("_workplace"):
+		_site_positions[key] = base
+		return base
+	if zone == "greyfen" and site == "well":
+		# One real well, with the discovery reachable from its western rim.
+		base = Vector3(-8.65, 0, -0.2)
+		if id == "saga_secret:GRE-S02":
+			_site_positions[key] = base
+			return base
 	if site == "escort_care":
 		var care: Node3D = host.zone_root.get_node_or_null("OpeningCareScene")
 		base = host.zone_root.to_local(care.tray_area.global_position) + Vector3(0, 0, 0.65) if care != null and is_instance_valid(care.tray_area) else Vector3(1.15, 0, -5.45)

@@ -1,5 +1,10 @@
 # Living Road Status
 
+2026-10-24 Greyfen extension: [A Village Worth Caring About](GREYFEN_VILLAGE_IMPLEMENTATION.md)
+records the prop/evidence repairs, optional story tutorial, touchable quarters,
+supported acting and return-state work. Build/publication and user acceptance
+are recorded there separately; the historic counts below are not new acceptance.
+
 2026-10-22 extension: [A World Worth Caring About](WORLD_WORTH_CARING_IMPLEMENTATION.md)
 implements coordinated regional writing, physical work, remembered responses,
 preparation and performance changes under the existing owners. Its combined

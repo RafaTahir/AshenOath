@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "campaign-worth-remembering-20261024",
+  "release_id": "greyfen-village-20261024",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "campaign-worth-remembering-20261024",
+      "version": "greyfen-village-20261024",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4081312,
-      "candidate_sha256": "c35f50304a500fb08078e8dda8002f19a42214544bb55c3ca078f6a34cfe1edd",
+      "candidate_bytes": 4084864,
+      "candidate_sha256": "f7fdf2d7e1878c8554a4051cd77acdf0db1c54864810013793d86a0137ae2683",
       "contents": [
         "menu",
         "managers",
@@ -35,15 +35,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4081312,
-      "embedded_source_sha256": "c35f50304a500fb08078e8dda8002f19a42214544bb55c3ca078f6a34cfe1edd",
+      "embedded_source_bytes": 4084864,
+      "embedded_source_sha256": "f7fdf2d7e1878c8554a4051cd77acdf0db1c54864810013793d86a0137ae2683",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "campaign-worth-remembering-20261024",
-      "url": "packs/opening.pck?sha256=cf61bdf2a71c478e9a7cc8e7ba2c09dc447487c1180952a6f980334771d1ac2a",
-      "sha256": "cf61bdf2a71c478e9a7cc8e7ba2c09dc447487c1180952a6f980334771d1ac2a",
-      "bytes": 35530548,
+      "version": "greyfen-village-20261024",
+      "url": "packs/opening.pck?sha256=256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a",
+      "sha256": "256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a",
+      "bytes": 35745224,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -51,20 +51,20 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 35530548,
-      "candidate_sha256": "cf61bdf2a71c478e9a7cc8e7ba2c09dc447487c1180952a6f980334771d1ac2a",
+      "candidate_bytes": 35745224,
+      "candidate_sha256": "256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "cf61bdf2a71c478e9a7cc8e7ba2c09dc447487c1180952a6f980334771d1ac2a"
+      "cache_key": "256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a"
     },
     "campaign": {
-      "version": "campaign-worth-remembering-20261024",
-      "url": "packs/campaign.pck?sha256=59768cbbb6195461c6aef3c6d7a1a0b7e86f0d360e370ba6a3ccffe0a17c6484",
-      "sha256": "59768cbbb6195461c6aef3c6d7a1a0b7e86f0d360e370ba6a3ccffe0a17c6484",
-      "bytes": 8726068,
+      "version": "greyfen-village-20261024",
+      "url": "packs/campaign.pck?sha256=3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
+      "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
+      "bytes": 8726164,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,21 +73,21 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 8726068,
-      "candidate_sha256": "59768cbbb6195461c6aef3c6d7a1a0b7e86f0d360e370ba6a3ccffe0a17c6484",
+      "candidate_bytes": 8726164,
+      "candidate_sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "59768cbbb6195461c6aef3c6d7a1a0b7e86f0d360e370ba6a3ccffe0a17c6484"
+      "cache_key": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1"
     },
     "characters": {
-      "version": "campaign-worth-remembering-20261024",
-      "url": "packs/characters.pck?sha256=5323372ce41cda09d45a91dd2f22087a3dcc514d323b0664c152b35f3a024a40",
-      "sha256": "5323372ce41cda09d45a91dd2f22087a3dcc514d323b0664c152b35f3a024a40",
-      "bytes": 9658480,
+      "version": "greyfen-village-20261024",
+      "url": "packs/characters.pck?sha256=cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
+      "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
+      "bytes": 9658576,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -96,19 +96,19 @@
       "preload_priority": 30,
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 9658480,
-      "candidate_sha256": "5323372ce41cda09d45a91dd2f22087a3dcc514d323b0664c152b35f3a024a40",
+      "candidate_bytes": 9658576,
+      "candidate_sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "5323372ce41cda09d45a91dd2f22087a3dcc514d323b0664c152b35f3a024a40"
+      "cache_key": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3"
     },
     "monsters": {
-      "version": "campaign-worth-remembering-20261024",
-      "url": "packs/monsters.pck?sha256=a46cff6e0885c7878d6e4b16f1ee869295a3f0380636ad04005039deae83fb96",
-      "sha256": "a46cff6e0885c7878d6e4b16f1ee869295a3f0380636ad04005039deae83fb96",
-      "bytes": 14710232,
+      "version": "greyfen-village-20261024",
+      "url": "packs/monsters.pck?sha256=d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
+      "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
+      "bytes": 14710328,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -117,20 +117,20 @@
       "preload_priority": 40,
       "status": "streamed_web_candidate",
       "candidate_artifact": "monsters.pck",
-      "candidate_bytes": 14710232,
-      "candidate_sha256": "a46cff6e0885c7878d6e4b16f1ee869295a3f0380636ad04005039deae83fb96",
+      "candidate_bytes": 14710328,
+      "candidate_sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "contents": [
         "monster_families",
         "bosses",
         "animals"
       ],
-      "cache_key": "a46cff6e0885c7878d6e4b16f1ee869295a3f0380636ad04005039deae83fb96"
+      "cache_key": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22"
     },
     "audio": {
-      "version": "campaign-worth-remembering-20261024",
-      "url": "packs/audio.pck?sha256=604e741b2847315f2fbd9f4bb1b73b562c4dc633529b398e6d40e93cc1d1b6be",
-      "sha256": "604e741b2847315f2fbd9f4bb1b73b562c4dc633529b398e6d40e93cc1d1b6be",
-      "bytes": 19291644,
+      "version": "greyfen-village-20261024",
+      "url": "packs/audio.pck?sha256=77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752",
+      "sha256": "77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752",
+      "bytes": 19291740,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -138,20 +138,20 @@
       "preload_priority": 50,
       "status": "streamed_web_candidate",
       "candidate_artifact": "audio.pck",
-      "candidate_bytes": 19291644,
-      "candidate_sha256": "604e741b2847315f2fbd9f4bb1b73b562c4dc633529b398e6d40e93cc1d1b6be",
+      "candidate_bytes": 19291740,
+      "candidate_sha256": "77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752",
       "contents": [
         "ambience",
         "combat_cues",
         "voice_fallbacks"
       ],
-      "cache_key": "604e741b2847315f2fbd9f4bb1b73b562c4dc633529b398e6d40e93cc1d1b6be"
+      "cache_key": "77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752"
     },
     "quality_materials": {
-      "version": "campaign-worth-remembering-20261024",
-      "url": "packs/quality_materials.pck?sha256=94b0d19a024efaac0b8ac9670c247d98729b503a9af9844d3a7db030dcc1e152",
-      "sha256": "94b0d19a024efaac0b8ac9670c247d98729b503a9af9844d3a7db030dcc1e152",
-      "bytes": 7379212,
+      "version": "greyfen-village-20261024",
+      "url": "packs/quality_materials.pck?sha256=a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
+      "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
+      "bytes": 7379308,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -160,19 +160,19 @@
       "preload_priority": 60,
       "status": "streamed_web_candidate",
       "candidate_artifact": "quality_materials.pck",
-      "candidate_bytes": 7379212,
-      "candidate_sha256": "94b0d19a024efaac0b8ac9670c247d98729b503a9af9844d3a7db030dcc1e152",
+      "candidate_bytes": 7379308,
+      "candidate_sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "contents": [
         "opening_normal_maps",
         "opening_orm_maps"
       ],
-      "cache_key": "94b0d19a024efaac0b8ac9670c247d98729b503a9af9844d3a7db030dcc1e152"
+      "cache_key": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8"
     },
     "adjacent": {
-      "version": "campaign-worth-remembering-20261024",
-      "url": "packs/adjacent.pck?sha256=fb40fa4b7d0846d9efdd1e3efe41f74e532a4e8ef459ba0e85ddf55427a2434e",
-      "sha256": "fb40fa4b7d0846d9efdd1e3efe41f74e532a4e8ef459ba0e85ddf55427a2434e",
-      "bytes": 1405376,
+      "version": "greyfen-village-20261024",
+      "url": "packs/adjacent.pck?sha256=12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
+      "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
+      "bytes": 1405472,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -186,14 +186,14 @@
         "ruins"
       ],
       "candidate_artifact": "adjacent.pck",
-      "candidate_bytes": 1405376,
-      "candidate_sha256": "fb40fa4b7d0846d9efdd1e3efe41f74e532a4e8ef459ba0e85ddf55427a2434e",
-      "cache_key": "fb40fa4b7d0846d9efdd1e3efe41f74e532a4e8ef459ba0e85ddf55427a2434e"
+      "candidate_bytes": 1405472,
+      "candidate_sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
+      "cache_key": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918"
     }
   },
-  "build_id": "campaign-worth-remembering-20261024",
-  "generated_from_commit": "3d175fdad7abffe951ab55584dc49d83f2ae6ddc",
-  "generated_at_utc": "2026-10-24T02:49:24.145199Z",
-  "total_bytes": 96701560,
+  "build_id": "greyfen-village-20261024",
+  "generated_from_commit": "39f8701f49c26a50b0a2fab5b9ce03e34cbc43bf",
+  "generated_at_utc": "2026-10-24T12:08:47.014231Z",
+  "total_bytes": 96916812,
   "source_dirty": true
 }

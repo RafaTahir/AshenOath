@@ -72,7 +72,19 @@ func _available(area: Node) -> bool:
 	return area is Node3D and (area as Node3D).is_visible_in_tree()
 
 func _reach(area: Node) -> float:
+	if area.has_meta("interaction_reach"):
+		return clampf(float(area.get_meta("interaction_reach")), 0.5, 2.8)
 	return 3.6 if str(area.get("interaction_type")) in ["zone", "dialogue"] else 2.8
+
+func _anchor(area: Node3D, fallback_height: float = 0.96) -> Vector3:
+	return area.to_global(area.get_meta("interaction_anchor")) if area.has_meta("interaction_anchor") else area.global_position + Vector3.UP * fallback_height
+
+func _strict_line(area: Area3D, player: CharacterBody3D, origin: Vector3, target: Vector3) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(origin, target, 1)
+	query.exclude = [player.get_rid()]
+	query.collide_with_areas = false
+	var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or (hit.position as Vector3).distance_to(target) <= 0.16
 
 func setup(manager: Node, presentation: Node = null) -> void:
 	quest_manager = manager
@@ -89,13 +101,15 @@ func target_is_valid(area: Area3D, player: CharacterBody3D, camera: Camera3D) ->
 		return true
 	var origin := camera.global_position if camera != null else player.global_position + Vector3.UP
 	var target_height := 0.92 if kind in ["clue", "herb", "village_place"] else 0.96
-	var targets: Array[Vector3] = [area.global_position + Vector3.UP * target_height]
+	var targets: Array[Vector3] = [_anchor(area, target_height)]
 	if kind == "dialogue":
 		targets.append(area.global_position + Vector3.UP * 1.30)
 	var target := targets[0]
 	var forward := -camera.global_basis.z if camera != null else -player.global_basis.z
 	if forward.dot(origin.direction_to(target)) < 0.22:
 		return false
+	if bool(area.get_meta("strict_interaction_visibility", false)):
+		return _strict_line(area, player, origin, target) and _strict_line(area, player, player.global_position + Vector3.UP * 1.3, target)
 	# Preserve the existing eye-line exception for ground-level clues.
 	if kind in ["clue", "herb", "village_place"]:
 		return true
@@ -150,9 +164,9 @@ func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Call
 		var focus_range := _reach(candidate)
 		if distance > focus_range:
 			continue
-		var facing := forward.dot(view_origin.direction_to(candidate.global_position + Vector3.UP * 0.96))
+		var facing := forward.dot(view_origin.direction_to(_anchor(candidate)))
 		var eye_origin := player.global_position + Vector3.UP * 1.30
-		var eye_facing := forward.dot(eye_origin.direction_to(candidate.global_position + Vector3.UP * 0.96))
+		var eye_facing := forward.dot(eye_origin.direction_to(_anchor(candidate)))
 		# Dialogue has a target-specific eye-line validator in game.gd. Requiring
 		# this service's separate trigger-origin angle as well can reject a speaker
 		# who is visibly centered at conversation distance, especially with a

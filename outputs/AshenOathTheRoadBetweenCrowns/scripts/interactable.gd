@@ -11,6 +11,8 @@ func _notification(what: int) -> void:
 		interaction_position_changed.emit()
 
 const PROMPT_VERBS := {
+	"Knock at ": "Knock", "Lift ": "Lift", "Lower ": "Lower", "Check ": "Check",
+	"Fold ": "Fold", "Demonstrate ": "Demonstrate", "Work ": "Work",
 	"Talk to ": "Speak", "Speak to ": "Speak", "Speak with ": "Speak",
 	"Speak ": "Speak", "Hear ": "Hear", "Meet ": "Meet", "Hail ": "Hail",
 	"Confront ": "Confront", "Approach ": "Approach", "Inspect ": "Inspect",

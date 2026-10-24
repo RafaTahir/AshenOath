@@ -1154,21 +1154,6 @@
         }
       },
       {
-        "label": "I recovered iron from the chapel.",
-        "type": "complete_objective",
-        "quest": "side_iron_remembers",
-        "objective": "recover_iron",
-        "conditions": {
-          "quest_active": "side_iron_remembers",
-          "objectives_not_done": [
-            {
-              "quest": "side_iron_remembers",
-              "id": "recover_iron"
-            }
-          ]
-        }
-      },
-      {
         "label": "Replace the useful iron gradually. Make named memorial work.",
         "type": "story_choice",
         "quest": "side_iron_remembers",

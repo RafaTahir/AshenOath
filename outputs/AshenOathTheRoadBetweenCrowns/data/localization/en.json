@@ -3700,9 +3700,27 @@
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.1"
     },
+    "dialogue.blacksmith_tor.actions.2.cost": {
+      "source": "Restitution takes stock and labor; useful objects still need replacement.",
+      "text": "Restitution takes stock and labor; useful objects still need replacement.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.actions.2"
+    },
     "dialogue.blacksmith_tor.actions.2.label": {
-      "source": "I recovered iron from the chapel.",
-      "text": "I recovered iron from the chapel.",
+      "source": "Replace the useful iron gradually. Make named memorial work.",
+      "text": "Replace the useful iron gradually. Make named memorial work.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.actions.2"
+    },
+    "dialogue.blacksmith_tor.actions.2.preview": {
+      "source": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
+      "text": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
+      "speaker": "",
+      "context": "dialogue.blacksmith_tor.actions.2"
+    },
+    "dialogue.blacksmith_tor.actions.2.result": {
+      "source": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
+      "text": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.2"
     },
@@ -3713,20 +3731,20 @@
       "context": "dialogue.blacksmith_tor.actions.3"
     },
     "dialogue.blacksmith_tor.actions.3.label": {
-      "source": "Replace the useful iron gradually. Make named memorial work.",
-      "text": "Replace the useful iron gradually. Make named memorial work.",
+      "source": "Keep the tools in use. Disclose their source and fund replacement.",
+      "text": "Keep the tools in use. Disclose their source and fund replacement.",
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.3"
     },
     "dialogue.blacksmith_tor.actions.3.preview": {
-      "source": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
-      "text": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
+      "source": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
+      "text": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.3"
     },
     "dialogue.blacksmith_tor.actions.3.result": {
-      "source": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
-      "text": "Tor begins replacement before dismantling working objects. Memorial nails carry the recovered names; his forge remains open.",
+      "source": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
+      "text": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.3"
     },
@@ -3737,46 +3755,22 @@
       "context": "dialogue.blacksmith_tor.actions.4"
     },
     "dialogue.blacksmith_tor.actions.4.label": {
-      "source": "Keep the tools in use. Disclose their source and fund replacement.",
-      "text": "Keep the tools in use. Disclose their source and fund replacement.",
+      "source": "Surrender the marked stock. Let the families decide its use.",
+      "text": "Surrender the marked stock. Let the families decide its use.",
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.4"
     },
     "dialogue.blacksmith_tor.actions.4.preview": {
-      "source": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
-      "text": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
+      "source": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
+      "text": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.4"
     },
     "dialogue.blacksmith_tor.actions.4.result": {
-      "source": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
-      "text": "Tor leaves the marks visible and posts the source above his prices. The useful stock stays in working hands.",
+      "source": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
+      "text": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
       "speaker": "",
       "context": "dialogue.blacksmith_tor.actions.4"
-    },
-    "dialogue.blacksmith_tor.actions.5.cost": {
-      "source": "Restitution takes stock and labor; useful objects still need replacement.",
-      "text": "Restitution takes stock and labor; useful objects still need replacement.",
-      "speaker": "",
-      "context": "dialogue.blacksmith_tor.actions.5"
-    },
-    "dialogue.blacksmith_tor.actions.5.label": {
-      "source": "Surrender the marked stock. Let the families decide its use.",
-      "text": "Surrender the marked stock. Let the families decide its use.",
-      "speaker": "",
-      "context": "dialogue.blacksmith_tor.actions.5"
-    },
-    "dialogue.blacksmith_tor.actions.5.preview": {
-      "source": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
-      "text": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
-      "speaker": "",
-      "context": "dialogue.blacksmith_tor.actions.5"
-    },
-    "dialogue.blacksmith_tor.actions.5.result": {
-      "source": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
-      "text": "Tor hands over the stock and his account. He keeps the forge running on ordinary scrap while the disputed iron stays intact.",
-      "speaker": "",
-      "context": "dialogue.blacksmith_tor.actions.5"
     },
     "dialogue.blacksmith_tor.greeting": {
       "source": "Keep the scrap. I can spare a hinge more easily than another cart stuck outside.",

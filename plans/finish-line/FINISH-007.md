@@ -5,6 +5,10 @@ Implementation: retained Greyfen plus five additive quests present.
 Compilation: baseline recorded; not rerun. User acceptance: Pending.
 Publication: baseline only.
 
+2026-10-24 village/tutorial candidate: [bounded implementation and delivery record](../living-road/GREYFEN_VILLAGE_IMPLEMENTATION.md).
+Prior unchanged observations are retained below; new/affected runtime cells need
+user observation and are not accepted by source presence or successful packaging.
+
 ## Player Outcome
 
 Greyfen is a coherent home worth returning to: local work, people, cemetery

@@ -14,6 +14,8 @@ var current_state := "idle"
 var story_state: Node
 var _visual_nodes: Array[Node3D] = []
 var _elapsed := 0.0
+var _bindings: Array[Dictionary] = []
+var _motion: Tween
 
 func _ready() -> void:
 	add_to_group("interactive_world_prop")
@@ -26,6 +28,8 @@ func configure(id: String, prop_kind: String, persistent_key: String = "", initi
 	prop_id = id
 	kind = prop_kind
 	state_key = persistent_key
+	if state_key in ["evidence_report", "iron_fate"]:
+		state_key = "greyfen_prop:" + id
 	story_state = state_owner
 	current_state = initial_state
 	set_meta("world_prop_id", prop_id)
@@ -54,15 +58,21 @@ func activate() -> void:
 		next = "working" if current_state != "working" else "cooling"
 	elif kind == "door" or kind == "gate":
 		next = "closed" if current_state == "open" else "open"
+	elif kind in ["container", "shutter", "seat", "bucket", "bellows", "mechanism"]:
+		next = "closed" if current_state == "open" else "open"
 	set_state(next)
 
 func set_state(next_state: String, persist := true) -> void:
 	current_state = next_state
 	set_meta("world_prop_state", current_state)
-	if persist and story_state != null and state_key != "" and story_state.has_method("set_flag"):
+	if persist and story_state != null and state_key != "" and story_state.has_method("set_flag") and story_state.get_flag(state_key, "") != current_state:
 		story_state.set_flag(state_key, current_state)
 	_apply_state()
 	state_changed.emit(prop_id, current_state)
+
+func bind_visual(node: Node3D, property: String, idle_value: Variant, active_value: Variant) -> void:
+	_bindings.append({"node":weakref(node), "property":property, "idle":idle_value, "active":active_value})
+	_apply_state()
 
 func get_state() -> String:
 	return current_state
@@ -85,6 +95,18 @@ func _cache_visual_nodes() -> void:
 	_apply_state()
 
 func _apply_state() -> void:
+	if _motion != null and _motion.is_valid(): _motion.kill()
+	_motion = null
+	var active := current_state in ["open", "lit", "working", "used"]
+	for binding: Dictionary in _bindings:
+		var target: Node3D = binding.node.get_ref()
+		if not is_instance_valid(target): continue
+		var goal: Variant = binding.active if active else binding.idle
+		if not is_inside_tree() or get_tree().paused or bool(get_meta("reduced_motion", false)):
+			target.set_indexed(NodePath(str(binding.property)), goal)
+		else:
+			if _motion == null: _motion = create_tween().set_parallel(true)
+			_motion.tween_property(target, str(binding.property), goal, 0.22)
 	var inactive := current_state == "extinguished" or current_state == "closed"
 	for node in _visual_nodes:
 		if not is_instance_valid(node):

@@ -1905,6 +1905,7 @@ func _recycle_journal_buttons(parent: Node) -> void:
 		_journal_buttons.erase(key)
 
 func show_inventory(inventory, quests, story_state = null, progression = null, requested_section: String = "") -> void:
+	if is_instance_valid(_game_owner): preload("res://scripts/greyfen_guidance.gd").learn(_game_owner, "journal")
 	_capture_inventory_state()
 	if requested_section != "":
 		_journal_section_id = requested_section
@@ -1923,6 +1924,8 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	if progression != null:
 		sections.append({"id":"growth", "title":"Growth", "body":_journal_model("growth", [progression], func(): return progression.get_summary_text()), "entries":[]})
 	sections.append({"id":"quest_record", "title":"Quest Record", "body":_journal_model("quest_record", [quests], func(): return str(quests.get_journal_text())), "entries":[]})
+	if story_state != null:
+		sections.append({"id":"greyfen_guide", "title":"Before the Road", "body":preload("res://scripts/greyfen_guidance.gd").journal(story_state), "entries":[]})
 	var current_section: Dictionary = {}
 	for section: Dictionary in sections:
 		if str(section.get("id", "")) == _journal_section_id:
@@ -1968,6 +1971,10 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	elif not evidence:
 		inventory_text.text = reading
 	_add_preparation_heading("JOURNAL")
+	if _journal_section_id == "greyfen_guide" and story_state != null and is_instance_valid(_game_owner):
+		var guide_active := str(story_state.get_flag("greyfen_guide", "")) == "active"
+		var guide_button := _preparation_button("Pause village guidance" if guide_active else "Resume village guidance", "guide_mode", craft_buttons)
+		guide_button.pressed.connect(func(): preload("res://scripts/greyfen_guidance.gd").set_mode(_game_owner,"paused" if guide_active else "active"))
 	if current_section.has("meter"):
 		var honor_meter := ProgressBar.new()
 		honor_meter.min_value = -100

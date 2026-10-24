@@ -102,6 +102,15 @@ static func personal_scenes(game, actor_id: String) -> Array[Dictionary]:
 	return scenes
 
 static func add_personal_invitation(game, area: Node3D, content: Dictionary) -> void:
+	if str(game.current_zone_id) == "greyfen" and str(area.get("interaction_id")) == "mira":
+		content["actions"].append({"type":"greyfen_detail_action", "operation":"preparation", "label":"What should I understand before preparing?"})
+	var recovery_key := "evidence_report" if str(area.get("interaction_id")) == "notice_board" else ("iron_fate" if str(area.get("interaction_id")) == "blacksmith_tor" else "")
+	var was_resolved: bool = game.quests.is_completed("side_iron_remembers") if recovery_key == "iron_fate" else game.quests.is_completed("main_road_of_crows") or game.quests.is_objective_done("main_road_of_crows", "return_village")
+	if recovery_key != "" and was_resolved and bool(game.story_state.get_flag(recovery_key + "_confirmation_needed", false)):
+		content["pages"].append({"speaker":"Surviving account", "text":"The old object record obscured this decision. Confirm what you actually chose; this grants no supplies, standing or reward. You may leave it unknown."})
+		for value: String in game.story_state.GREYFEN_DECISIONS[recovery_key]:
+			var words := {"private":"I reported privately.", "public":"I reported publicly.", "retained":"I kept the report to myself.", "memorial":"The iron went to the memorial.", "tools":"The iron became tools.", "surrendered":"I surrendered the iron."}
+			content["actions"].append({"type":"greyfen_restore_choice", "label":words[value], "key":recovery_key, "value":value})
 	for entry: Dictionary in personal_scenes(game, str(area.get("interaction_id"))):
 		content["actions"].append({"type":"living_road_scene", "label":entry.label, "scene_id":entry.id, "actor_instance":area.get_instance_id()})
 
@@ -181,8 +190,13 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		preload("res://scripts/greyfen_archery_range.gd").install(game)
 		preload("res://scripts/bracken_field_trial.gd").install(game)
 		preload("res://scripts/greyfen_gathering.gd").install(game)
+		preload("res://scripts/greyfen_village_details.gd").install(game)
 
 static func handle(game, area) -> void:
+	if str(area.interaction_id).begins_with("greyfen_detail:"):
+		var details: Node = preload("res://scripts/greyfen_village_details.gd").current(game)
+		if details != null: details.activate(str(area.interaction_id))
+		return
 	if str(area.interaction_id).begins_with("opening_"):
 		var opening: Node = game.zone_root.get_node_or_null("OpeningCareScene")
 		if opening != null:

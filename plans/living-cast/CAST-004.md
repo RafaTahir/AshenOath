@@ -7,6 +7,10 @@ Compilation: see [STATUS](STATUS.md).
 User acceptance: Pending.
 Publication: see STATUS; independent of acceptance.
 
+2026-10-24 Greyfen work/contact, supported sitting and walking-to-table extension:
+[implementation and pending user checks](../living-road/GREYFEN_VILLAGE_IMPLEMENTATION.md).
+No broader facial-rig rollout or new population is claimed.
+
 ## Implementation And Ownership
 
 The existing life controller enrolls retained people in each region using

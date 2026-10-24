@@ -835,6 +835,9 @@ func _handle_bow_input() -> void:
 	if not _action_pressed("fire_bow"):
 		bow_requires_fire_release = false
 	if not aiming_now or dodge_time > 0.0 or hurt_react_time > 0.0:
+		var range_owner: Node = training_range.get_ref() if training_range != null else null
+		if not aiming_now and bow_drawing and bow_draw_time >= 0.08 and dodge_time <= 0.0 and hurt_react_time <= 0.0 and is_instance_valid(range_owner):
+			range_owner.record_cancel()
 		_cancel_bow()
 		return
 	bow_aiming = true
