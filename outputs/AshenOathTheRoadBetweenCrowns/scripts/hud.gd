@@ -18,6 +18,7 @@ signal craft_requested(item_id: String)
 signal item_use_requested(item_id: String)
 signal inventory_preference_requested(key: String, value: String)
 signal vendor_purchase_requested(vendor_id: String, item_id: String, quantity: int)
+signal vendor_sale_requested(vendor_id: String, item_id: String, quantity: int)
 signal upgrade_requested(upgrade_id: String)
 signal respec_requested
 signal dialogue_closed
@@ -1017,6 +1018,7 @@ func show_credits_menu() -> void:
 	menu_layer.visible = true
 	var box = _menu_box("Credits", "", "made under an ashen moon")
 	_add_menu_text(box, "Ashen Oath: The Road Between Crowns\nA game by RafaTahir.\nExternal art/audio/UI asset credits are distributed with the game under assets_external/licenses.")
+	_add_menu_text(box, "Chess rules and opponent search: thearst3rd, MIT License. Ashen Oath adds bounded search and table presentation. Full notice: data/chess_license.json.")
 	_add_menu_text(box, "Yo Frankie! ambience by Blender Foundation (CC-BY 3.0).\nDark Ambience Loop by Iwan Gabovitch, qubodup.net (CC-BY 3.0).")
 	var production_credits: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/production_credits.json")) if FileAccess.file_exists("res://data/production_credits.json") else {}
 	if typeof(production_credits) == TYPE_DICTIONARY:
@@ -2555,6 +2557,11 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 			purchase_label = "Already fitted" if bool(quote.get("upgrade", false)) and int(quote.get("owned", 0)) > 0 else "Unavailable"
 		var buy: Button = _preparation_button(purchase_label, "action:buy:" + selected_id, _preparation_actions, bool(quote.get("ok", false)))
 		buy.pressed.connect(func(id_value: String = selected_id): vendor_purchase_requested.emit(vendor_id, id_value, 1))
+		if not emergency and not bool(quote.get("upgrade",false)):
+			var five: Dictionary = vendor_service.quote(vendor_id,selected_id,5,inventory,story_state,quests)
+			if bool(five.get("ok",false)) and int(five.get("quantity",0)) == 5:
+				var bundle := _preparation_button("Buy 5 · %d coin" % int(five.total_price),"action:buy5:"+selected_id,_preparation_actions)
+				bundle.pressed.connect(func(id_value: String = selected_id): vendor_purchase_requested.emit(vendor_id,id_value,5))
 	_add_preparation_heading("SUPPLIES AND SERVICES")
 	for request_id: String in request_ids:
 		var title: String = "Emergency arrows" if request_id == "__emergency_arrows__" else ("Emergency medicine" if request_id == "__emergency_healing__" else str(inventory.get_item_name(request_id)))
@@ -2562,6 +2569,14 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		entry_button.toggle_mode = true
 		entry_button.button_pressed = selected_id == request_id
 		entry_button.pressed.connect(func(id_value: String = request_id): _select_preparation_entry("item", id_value))
+	var surplus: Array[Dictionary] = vendor_service.list_surplus(vendor_id,inventory)
+	if not surplus.is_empty():
+		_add_preparation_heading("SELL SURPLUS · ROAD RESERVES RETAINED")
+		for offer: Dictionary in surplus:
+			var item_id: String = str(offer.item_id)
+			var sale := _preparation_button("Sell 1 %s · +%d coin" % [inventory.get_item_name(item_id),int(offer.unit_price)],"action:sell:"+item_id,craft_buttons)
+			sale.tooltip_text = str(offer.message)
+			sale.pressed.connect(func(id_value: String = item_id): vendor_sale_requested.emit(vendor_id,id_value,1))
 	_add_preparation_close()
 	_queue_responsive_layout()
 	call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)

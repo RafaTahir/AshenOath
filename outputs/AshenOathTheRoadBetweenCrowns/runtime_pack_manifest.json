@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "greyfen-living-reference-20261025",
+  "release_id": "greyfen-leisure-economy-20261025",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "greyfen-living-reference-20261025",
+      "version": "greyfen-leisure-economy-20261025",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4088928,
-      "candidate_sha256": "5fd33d51133b4e3a6e985a587f3cba552bc9f42ef1a48fc33bfc918da2a805ad",
+      "candidate_bytes": 4092416,
+      "candidate_sha256": "b650eea58a073dfcaa28c0b42f5e2f03257a7afc77f4678c45b1b2c1c46b5fd0",
       "contents": [
         "menu",
         "managers",
@@ -35,12 +35,12 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4088928,
-      "embedded_source_sha256": "5fd33d51133b4e3a6e985a587f3cba552bc9f42ef1a48fc33bfc918da2a805ad",
+      "embedded_source_bytes": 4092416,
+      "embedded_source_sha256": "b650eea58a073dfcaa28c0b42f5e2f03257a7afc77f4678c45b1b2c1c46b5fd0",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "greyfen-living-reference-20261025",
+      "version": "greyfen-leisure-economy-20261025",
       "url": "packs/opening.pck?sha256=20baf659669f7f4eca9101c02eac6645a8a928863ac881bc22bf79bede6c5dee",
       "sha256": "20baf659669f7f4eca9101c02eac6645a8a928863ac881bc22bf79bede6c5dee",
       "bytes": 35715656,
@@ -61,7 +61,7 @@
       "cache_key": "20baf659669f7f4eca9101c02eac6645a8a928863ac881bc22bf79bede6c5dee"
     },
     "campaign": {
-      "version": "greyfen-living-reference-20261025",
+      "version": "greyfen-leisure-economy-20261025",
       "url": "packs/campaign.pck?sha256=3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "bytes": 8726164,
@@ -84,7 +84,7 @@
       "cache_key": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1"
     },
     "characters": {
-      "version": "greyfen-living-reference-20261025",
+      "version": "greyfen-leisure-economy-20261025",
       "url": "packs/characters.pck?sha256=cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "bytes": 9658576,
@@ -105,7 +105,7 @@
       "cache_key": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3"
     },
     "monsters": {
-      "version": "greyfen-living-reference-20261025",
+      "version": "greyfen-leisure-economy-20261025",
       "url": "packs/monsters.pck?sha256=d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "bytes": 14710328,
@@ -127,7 +127,7 @@
       "cache_key": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22"
     },
     "audio": {
-      "version": "greyfen-living-reference-20261025",
+      "version": "greyfen-leisure-economy-20261025",
       "url": "packs/audio.pck?sha256=b84a3719f7e40132b94e243b697996c98430b9d7dc57f3f91f6cce5763a8821b",
       "sha256": "b84a3719f7e40132b94e243b697996c98430b9d7dc57f3f91f6cce5763a8821b",
       "bytes": 19307620,
@@ -148,7 +148,7 @@
       "cache_key": "b84a3719f7e40132b94e243b697996c98430b9d7dc57f3f91f6cce5763a8821b"
     },
     "quality_materials": {
-      "version": "greyfen-living-reference-20261025",
+      "version": "greyfen-leisure-economy-20261025",
       "url": "packs/quality_materials.pck?sha256=a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "bytes": 7379308,
@@ -169,7 +169,7 @@
       "cache_key": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8"
     },
     "adjacent": {
-      "version": "greyfen-living-reference-20261025",
+      "version": "greyfen-leisure-economy-20261025",
       "url": "packs/adjacent.pck?sha256=12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "bytes": 1405472,
@@ -191,9 +191,9 @@
       "cache_key": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918"
     }
   },
-  "build_id": "greyfen-living-reference-20261025",
-  "generated_from_commit": "7f84ec431f851da20c9eb6b4fab4200d7091262a",
-  "generated_at_utc": "2026-10-24T19:41:28.002895Z",
+  "build_id": "greyfen-leisure-economy-20261025",
+  "generated_from_commit": "2e7725c9c0e5579d36c801927175f257e2e0c9b9",
+  "generated_at_utc": "2026-10-24T19:56:45.618845Z",
   "total_bytes": 96903124,
   "source_dirty": true
 }

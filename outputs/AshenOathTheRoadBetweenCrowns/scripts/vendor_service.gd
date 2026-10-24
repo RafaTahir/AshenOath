@@ -14,6 +14,50 @@ var stock_beats: Dictionary = {}
 var stock_purchases: Dictionary = {}
 var _transaction_active := false
 
+# Fixed buyback prices stay below the lowest permitted shop price. Keep a
+# practical reserve; evidence, ingredients, keepsakes and fittings are excluded.
+const BUYBACK := {
+	"tor_forge": {"bodkin_arrow": [1,3], "ashfire_arrow": [2,2], "iron_trap": [2,1], "moon_oil": [3,1]},
+	"mira_apothecary": {"redroot_potion": [1,2], "bitterleaf_tonic": [1,1], "ash_bomb": [2,1], "moon_oil": [3,1], "rot_oil": [3,1]}
+}
+
+func list_surplus(vendor_id: String, inventory) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for item_id: String in BUYBACK.get(vendor_id, {}):
+		var offer := sell_quote(vendor_id, item_id, 1, inventory)
+		if bool(offer.ok): result.append(offer)
+	return result
+
+func sell_quote(vendor_id: String, item_id: String, quantity: int, inventory) -> Dictionary:
+	var offer: Array = BUYBACK.get(vendor_id, {}).get(item_id, [])
+	var result := {"ok":false, "item_id":item_id, "quantity":0, "unit_price":0, "total_price":0, "message":"This is not a surplus supply accepted here."}
+	if offer.is_empty() or quantity <= 0 or not inventory.item_defs.has(item_id): return result
+	var owned: int = inventory.owned_count(item_id)
+	var reserve: int = int(offer[1])
+	var count := mini(mini(quantity, 99), maxi(owned-reserve, 0))
+	result.merge({"owned":owned,"reserve":reserve,"quantity":count,"unit_price":int(offer[0]),"total_price":count*int(offer[0])},true)
+	if count <= 0:
+		result.message = "Keep at least %d %s for the road." % [reserve,inventory.get_item_name(item_id)]; return result
+	if int(inventory.coin) > 2147480000-count*int(offer[0]):
+		result.message = "Your purse cannot hold this exchange."; return result
+	result.ok = true
+	result.message = "Sell %d %s for %d coin; keep %d. This is a supply exchange, not a quest handover." % [count,inventory.get_item_name(item_id),int(result.total_price),owned-count]
+	return result
+
+func sell(vendor_id: String, item_id: String, quantity: int, inventory) -> Dictionary:
+	if _transaction_active: return _fail("An exchange is already being completed.",item_id,"sell")
+	var offer := sell_quote(vendor_id,item_id,quantity,inventory)
+	if not bool(offer.ok): return _fail(str(offer.message),item_id,"sell")
+	_transaction_active = true
+	inventory.items[item_id] = int(inventory.items.get(item_id,0))-int(offer.quantity)
+	inventory.coin += int(offer.total_price)
+	inventory.changed.emit()
+	changed.emit()
+	_transaction_active = false
+	var text := "Sold %s x%d for %d coin. You have %d coin." % [inventory.get_item_name(item_id),int(offer.quantity),int(offer.total_price),int(inventory.coin)]
+	message.emit(text)
+	return {"ok":true,"operation":"sell","item_id":item_id,"quantity":int(offer.quantity),"message":text,"received":{"coin":int(offer.total_price)}}
+
 func load_vendors(path: String) -> void:
 	definitions = _read_json(path)
 

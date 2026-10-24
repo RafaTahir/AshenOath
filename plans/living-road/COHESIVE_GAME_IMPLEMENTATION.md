@@ -62,7 +62,7 @@ to development and main. Vercel `dpl_Fgf8ZXXEZckvY9hh8N29Hk87tZaJ` is READY;
 all 16 live artifact hashes and lengths matched the exact package. The local
 identity receipt is `.release-gate/cohesion-bow-camera-20261025/live-identity.json`.
 
-## Delivery 2: Current Source Work
+## Delivery 2: Published Greyfen Reference
 
 Implemented and compiled; user acceptance remains pending:
 - Optional 45-second in-engine Anwen/Tor/Maren opening, explicit New Game only.
@@ -96,10 +96,50 @@ reused at checked byte identity. Complete package: **104,672,024 bytes**, 16
 files, **185,576 bytes below** the cap. Current publication uses WORLD-SAGA-101;
 the existing delivery receipt records the actual commit/deployment outcome.
 
+Published commit `2e7725c9c0e5579d36c801927175f257e2e0c9b9`, development and
+main. Vercel `dpl_HJduyt5NsBFvRdbPWRnEH7R2CRKH` READY. All 16 live artifact
+lengths/hashes match; receipt: `.release-gate/greyfen-living-reference-20261025/live-identity.json`.
+
+## Delivery 3: Leisure and Useful Supply Exchanges
+
+Implementation present; compilation/package/publication records follow below.
+User gameplay acceptance remains pending.
+- Chess uses pinned MIT `thearst3rd/stopwaitingforgodot-chess` rules, including
+  castling, en passant, all four promotions, legal king safety and draw states.
+  Authored timber/brass/silver board and geometric piece silhouettes, keyboard
+  focus, 48-pixel cells, scrollable short-screen board, fixed Return/Resign.
+- Actual Rook and Tor visit through their existing routines. Remove duplicate
+  table bodies. Rook plays casually; Tor uses the retained search/evaluation
+  with iterative deepening, 2-ms yield points, a 900-ms deadline and cancellation.
+  No claimed Elo or measured performance gain.
+- Three Marks and explicitly regional 6x6 Draughts remain. Draughts now preserves
+  forced multi-captures, ends a turn on promotion and offers a quiet-move draw.
+  Tor evaluates capture risk; Rook is less consistent. Games remain optional.
+- Per-journey unfinished boards survive normal saves; chess restores validated
+  legal move history, including repetition. Returning never auto-opens a game or
+  reissues a result. First chess wins grant one prize per actual opponent only;
+  old Rook/Tor hints and rewards retain their original owners.
+- Existing shops buy a whitelist of surplus consumables. Practical reserves,
+  fixed below-purchase buyback prices, fresh authoritative quotes and an atomic
+  transaction exclude quest items, keepsakes, ingredients and fitted upgrades.
+  Existing coin, stock, free emergency supplies and settings remain.
+- Existing shop presentation adds five-item purchases when affordable/carryable,
+  and explicit sell-one controls; all successful exchanges use the current save
+  and inventory presentation owner.
+
+Manual acceptance: visit both tables with the real opponent; play/resign/restart
+each game, promote to each piece, save/Continue unfinished play, close during
+opponent thinking, check short-screen/touch focus, once-only prizes, and buy/sell
+surplus without losing reserves, evidence or coin. No agent runtime run authorized.
+
+Candidate `greyfen-leisure-economy-20261025`: minimum base/production exports
+compiled without parser/compiler errors. **104,712,154 bytes**, 16 files;
+**145,446 bytes below** the cap. External packs and engine bytes are unchanged
+and reused at checked identity. Publication uses existing WORLD-SAGA-101.
+
 ## Remaining Approved Work
 
-Finish packaging this source delivery, then economy/leisure (including chess
-and removal of duplicate board stand-ins), bounded neighboring-space/room
+Finish packaging this source delivery, then bounded neighboring-space/room
 streaming and atlas, and the remaining regional writing/staging/homecoming.
 Retain every explicit legacy-state/reward mapping and the pending facial-sample
 approval boundary. None of that remaining work is marked implemented here.

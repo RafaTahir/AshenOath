@@ -236,6 +236,7 @@ func configure(owner: Node) -> void:
 	hud.vendor_purchase_requested.connect(func(vendor_id: String, item_id: String, quantity: int):
 		owner.call("_purchase_from_vendor", vendor_id, item_id, quantity)
 	)
+	hud.vendor_sale_requested.connect(Callable(owner, "_sell_to_vendor"))
 	hud.action_selected.connect(Callable(owner, "_handle_dialogue_action"))
 	hud.dialogue_closed.connect(Callable(owner, "_release_dialogue_facing"))
 	hud.dialogue_closed.connect(Callable(owner, "_on_dialogue_closed_audio"))
@@ -289,6 +290,7 @@ func configure(owner: Node) -> void:
 	)
 	combat.impact.connect(Callable(owner, "_on_combat_impact"))
 	minigames.result.connect(Callable(owner, "_on_minigame_result"))
+	minigames.state_changed.connect(Callable(owner, "_on_minigame_state_changed"))
 	minigames.closed.connect(func(): hud.toast("The village carries on."))
 	settings.apply()
 	owner.call("_apply_runtime_settings", settings.settings)

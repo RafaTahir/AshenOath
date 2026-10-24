@@ -133,7 +133,9 @@ func _lamp_changed(id: String, state: String) -> void:
 
 func open_table(area: Node3D) -> bool:
 	var life: Node = game.zone_root.find_child("GreyfenLifeController",true,false)
-	if life == null: return false
+	if life == null:
+		game.hud.toast("The table is here; its opponent is not available yet.")
+		return true
 	var person := "rook" if str(area.interaction_id) == "common_table" else "blacksmith_tor"
 	var target := area.global_position + Vector3(0.8,0,-0.65)
 	if not life.request_table_visit(person,target):

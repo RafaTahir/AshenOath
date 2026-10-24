@@ -980,6 +980,8 @@ func _start_new_game_world() -> void:
 	inventory.reset_starting_loadout()
 	if vendor_service != null:
 		vendor_service.reset_state()
+	if minigames != null:
+		minigames.load_state({})
 	progression.load_state({})
 	current_zone_id = "greyfen"
 	day_night.set_time(day_night.START_TIME_MINUTES, 0)
@@ -1133,6 +1135,8 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 	hud.hide_menus()
 	if vendor_service != null:
 		vendor_service.load_state(data.get("vendors", {}))
+	if minigames != null:
+		minigames.load_state(data.get("minigames", {}) if data.get("minigames", {}) is Dictionary else {})
 	quests.load_state(data.get("quests", {}))
 	if quest_presentation != null:
 		quest_presentation.load_state(data.get("quest_presentation", {}))
@@ -2010,7 +2014,7 @@ func _handle_interaction(area) -> void:
 	if area.interaction_type == "minigame":
 		var village: Node = preload("res://scripts/greyfen_village_details.gd").current(self)
 		if village != null and village.open_table(area): return
-		minigames.open_game("tic_tac_toe" if area.interaction_id == "common_table" else "draughts")
+		minigames.open_game("tic_tac_toe" if area.interaction_id == "common_table" else "draughts", "rook" if area.interaction_id == "common_table" else "blacksmith_tor")
 	elif area.interaction_type == "vendor":
 		if vendor_service == null:
 			hud.toast("The shop is not available right now.")
@@ -2249,16 +2253,28 @@ func _on_minigame_result(game_id: String, outcome: String) -> void:
 		var wins_id := "%s_wins" % game_id
 		story_state.set_flag(wins_id, int(story_state.get_flag(wins_id,0)) + 1)
 		var reward_id := "%s_reward_claimed" % game_id
-		if not bool(story_state.get_flag(reward_id,false)):
+		var person: String = str(minigames.opponent_id)
+		var legacy_opponent := (game_id == "tic_tac_toe" and person == "rook") or (game_id == "draughts" and person == "blacksmith_tor")
+		if legacy_opponent and not bool(story_state.get_flag(reward_id,false)):
 			story_state.set_flag(reward_id,true)
 			if game_id == "tic_tac_toe":
 				story_state.set_flag("rook_road_hint",true)
 				hud.toast("Rook: Road wasn't always cursed. Ask who bent it.")
-			else:
+			elif game_id == "draughts":
 				story_state.set_flag("tor_iron_hint",true)
 				inventory.add_ingredients({"scrap_iron":1})
 				hud.toast("Tor gives up scrap bearing an old Vargan stamp.")
+		if game_id == "chess":
+			var claim := "chess_prize:" + person
+			if not bool(story_state.get_flag(claim, false)):
+				story_state.set_flag(claim, true)
+				inventory.add_reward({"coin": 3 if person == "rook" else 8})
+				hud.toast("%s pays the table's one-time prize." % ("Rook" if person == "rook" else "Tor"))
 	save_manager.autosave(self)
+
+func _on_minigame_state_changed() -> void:
+	if game_started and not zone_transition_pending and not zone_load_request_pending and pending_player_restore.is_empty():
+		save_manager.autosave(self)
 
 func _handle_road_of_crows_clue(area) -> void:
 	if not quests.is_active("main_road_of_crows"):
@@ -3987,6 +4003,13 @@ func _purchase_from_vendor(vendor_id: String, item_id: String, quantity: int = 1
 	preparation_action_in_progress = false
 	audio.play_event("ui")
 	_finish_preparation_operation(result, vendor_id)
+
+func _sell_to_vendor(vendor_id: String, item_id: String, quantity: int) -> void:
+	if vendor_service == null or inventory == null or not game_started: return
+	preparation_action_in_progress = true
+	var result: Dictionary = vendor_service.sell(vendor_id,item_id,quantity,inventory)
+	preparation_action_in_progress = false
+	_finish_preparation_operation(result,vendor_id)
 
 func _on_enemy_died(enemy) -> void:
 	if progression != null and not bool(enemy.get("is_boss")) and not bool(enemy.get_meta("bell_called_ghoulkin", false)):
@@ -6569,45 +6592,7 @@ func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:
 		chair_batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	_make_board_game_chair(area, Vector3(0.0, 0.0, size.z * 0.90), PI, chair_batch, 0)
 	_make_board_game_chair(area, Vector3(0.0, 0.0, -size.z * 0.90), 0.0, chair_batch, 2)
-	var opponent_role := "rook_smuggler" if id == "common_table" else "blacksmith_tor"
-	var opponent_id := "board_rook" if id == "common_table" else "board_tor"
-	if should_defer_character_role(opponent_role, opponent_id):
-		var deferred_opponent := Node3D.new()
-		deferred_opponent.name = "%s_Opponent" % id
-		deferred_opponent.position = Vector3(0.0, 0.0, size.z * 0.92)
-		deferred_opponent.rotation_degrees.y = 180.0
-		area.add_child(deferred_opponent)
-		var marker := Node3D.new()
-		marker.name = "DeferredCharacterVisual_%s" % opponent_id
-		marker.set_meta("deferred_visual_role", opponent_role)
-		marker.set_meta("deferred_visual_category", "characters")
-		marker.set_meta("deferred_visual_actor_id", opponent_id)
-		marker.set_meta("deferred_visual_scale", Vector3.ONE)
-		deferred_opponent.add_child(marker)
-		var deferred_gesture = BoardGameOpponent.new()
-		deferred_gesture.name = "BoardGameOpponentController"
-		deferred_opponent.add_child(deferred_gesture)
-		deferred_gesture.configure(player, null)
-		var deferred_ambient = NpcAmbient.new()
-		deferred_ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player, self)
-		deferred_opponent.add_child(deferred_ambient)
-		return
-	var opponent := _make_role_visual(opponent_role, "characters", Vector3.ONE)
-	if opponent == null:
-		return
-	opponent.name = "%s_Opponent" % id
-	opponent.position = Vector3(0.0, 0.0, size.z * 0.92)
-	opponent.rotation_degrees.y = 180.0
-	area.add_child(opponent)
-	CharacterPresentation.apply_npc(opponent, opponent_id)
-	_configure_npc_animation(opponent, "board_rook" if id == "common_table" else "board_tor")
-	var gesture_controller = BoardGameOpponent.new()
-	gesture_controller.name = "BoardGameOpponentController"
-	opponent.add_child(gesture_controller)
-	gesture_controller.configure(player, opponent.find_child("CharacterAnimationDriver", true, false))
-	var ambient = NpcAmbient.new()
-	ambient.setup("rook" if id == "common_table" else "blacksmith_tor", player, self)
-	opponent.add_child(ambient)
+	# The actual villager visits through GreyfenLifeController; no table-body copy.
 
 func _make_board_game_chair(area: Node3D, position: Vector3, yaw: float, batch: MultiMeshInstance3D, first_index: int) -> void:
 	var chair := Node3D.new()

@@ -219,6 +219,7 @@ func _build_save_data(game, for_checkpoint: bool = false) -> Dictionary:
 		"equipment": game.player.save_equipment_state() if game.player.has_method("save_equipment_state") else {},
 		"inventory": game.inventory.save_state(),
 		"vendors": game.vendor_service.save_state() if game.get("vendor_service") != null else {},
+		"minigames": game.minigames.save_state() if game.get("minigames") != null else {},
 		"quests": game.quests.save_state(),
 		"quest_presentation": game.quest_presentation.save_state() if game.get("quest_presentation") != null else {},
 		"quest_beats": game.quest_beats.save_state() if game.get("quest_beats") != null else {},
