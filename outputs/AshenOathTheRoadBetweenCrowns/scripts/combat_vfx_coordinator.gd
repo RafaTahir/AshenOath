@@ -3,7 +3,31 @@ extends RefCounted
 
 var _beam_effects: Array[WeakRef] = []
 
-func make_arrow_trail(parent: Node3D, origin: Vector3, endpoint: Vector3, color: Color) -> void:
+func launch_arrow(parent: Node3D, origin: Vector3, direction: Vector3, distance: float, enemies: Array, combat: Node, excluded: Array[RID], shot: Dictionary, completed: Callable) -> void:
+	var arrow := preload("res://scripts/arrow_projectile.gd").new()
+	arrow.name = "ArrowInFlight"
+	arrow.direction = direction.normalized()
+	arrow.remaining = distance
+	arrow.combat = weakref(combat)
+	arrow.excluded = excluded
+	arrow.shot = shot
+	arrow.completed = completed
+	for actor in enemies:
+		if is_instance_valid(actor): arrow.enemies.append(weakref(actor))
+	parent.add_child(arrow)
+	arrow.global_position = origin
+	arrow.look_at(origin + direction, Vector3.RIGHT if absf(direction.dot(Vector3.UP)) > 0.99 else Vector3.UP)
+	_add_arrow_mesh(arrow)
+
+func _add_arrow_mesh(parent: Node3D) -> void:
+	var model: PackedScene = load("res://assets_external/characters/Ranger_Arrow.fbx")
+	if model == null: return
+	var visual := model.instantiate() as Node3D
+	preload("res://scripts/arrow_visual.gd").attach(parent, visual, true)
+	for mesh in visual.find_children("*", "MeshInstance3D", true, false):
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
+func make_arrow_trail(parent: Node3D, origin: Vector3, endpoint: Vector3, _color: Color) -> void:
 	var length := origin.distance_to(endpoint)
 	if not is_instance_valid(parent) or length <= 0.05:
 		return
@@ -11,23 +35,11 @@ func make_arrow_trail(parent: Node3D, origin: Vector3, endpoint: Vector3, color:
 	effect.name = "ArrowFlightEffect"
 	effect.add_to_group("arrow_runtime_effect")
 	parent.add_child(effect)
-	effect.global_position = origin.lerp(endpoint, 0.5)
-	effect.look_at(endpoint, Vector3.UP)
-	var shaft := MeshInstance3D.new()
-	var mesh := CylinderMesh.new()
-	mesh.top_radius = 0.018
-	mesh.bottom_radius = 0.022
-	mesh.height = length
-	mesh.radial_segments = 6
-	shaft.mesh = mesh
-	shaft.rotation_degrees.x = 90.0
-	shaft.material_override = _material(Color(color.r, color.g, color.b, 0.88), 1.1)
-	effect.add_child(shaft)
-	effect.scale = Vector3(0.12, 0.12, 0.12)
+	effect.global_position = origin
+	effect.look_at(endpoint, Vector3.RIGHT if absf((endpoint-origin).normalized().dot(Vector3.UP)) > 0.99 else Vector3.UP)
+	_add_arrow_mesh(effect)
 	var tween := effect.create_tween()
-	tween.tween_property(effect, "scale", Vector3.ONE, 0.06)
-	tween.tween_interval(0.08)
-	tween.tween_property(effect, "scale", Vector3(0.08, 0.08, 0.08), 0.12)
+	tween.tween_property(effect, "global_position", endpoint, length / 48.0)
 	tween.tween_callback(effect.queue_free)
 
 func make_oathfire_beam(parent: Node3D, origin: Vector3, endpoint: Vector3, charge_ratio: float, rich_effect: bool, reduce_flashes: bool = false) -> void:

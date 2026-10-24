@@ -1,93 +1,93 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-24T16:41:04.551587Z",
-  "build_id": "audio-routing-20261025",
-  "generated_from_commit": "928537366c4e2cd21bcfcb2bee080a488d0ad2ee",
+  "generated_at_utc": "2026-10-24T19:00:41.283572Z",
+  "build_id": "cohesion-bow-camera-20261025",
+  "generated_from_commit": "c4d872662756c2b86a21d88385645d376a2018ac",
   "source_dirty": true,
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 101001676,
+  "total_bytes": 101002252,
   "packs": [
     {
       "id": "base",
-      "version": "audio-routing-20261025",
+      "version": "cohesion-bow-camera-20261025",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4084864,
-      "sha256": "5c5c82999b476e594e8e9db48e264feb624de57fa3dcd6c459c2721fedd5f0f1",
+      "bytes": 4085440,
+      "sha256": "aa2490506d13639856b2fac4457026e60b772cc934408773d04d15a93333883d",
       "status": "candidate_external",
       "log": "base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "audio-routing-20261025",
+      "version": "cohesion-bow-camera-20261025",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35745224,
       "sha256": "256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-village-20261024"
+      "reused_from_build": "audio-routing-20261025"
     },
     {
       "id": "adjacent",
-      "version": "audio-routing-20261025",
+      "version": "cohesion-bow-camera-20261025",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 1405472,
       "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-village-20261024"
+      "reused_from_build": "audio-routing-20261025"
     },
     {
       "id": "campaign",
-      "version": "audio-routing-20261025",
+      "version": "cohesion-bow-camera-20261025",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8726164,
       "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-village-20261024"
+      "reused_from_build": "audio-routing-20261025"
     },
     {
       "id": "characters",
-      "version": "audio-routing-20261025",
+      "version": "cohesion-bow-camera-20261025",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9658576,
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-village-20261024"
+      "reused_from_build": "audio-routing-20261025"
     },
     {
       "id": "monsters",
-      "version": "audio-routing-20261025",
+      "version": "cohesion-bow-camera-20261025",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14710328,
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-village-20261024"
+      "reused_from_build": "audio-routing-20261025"
     },
     {
       "id": "audio",
-      "version": "audio-routing-20261025",
+      "version": "cohesion-bow-camera-20261025",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19291740,
       "sha256": "77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-village-20261024"
+      "reused_from_build": "audio-routing-20261025"
     },
     {
       "id": "quality_materials",
-      "version": "audio-routing-20261025",
+      "version": "cohesion-bow-camera-20261025",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7379308,
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-village-20261024"
+      "reused_from_build": "audio-routing-20261025"
     }
   ],
   "errors": []

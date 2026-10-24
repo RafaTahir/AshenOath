@@ -214,6 +214,7 @@ func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_targ
 		return
 	var axis := (goal - shoulder).normalized()
 	var distance := clampf(shoulder.distance_to(goal), absf(upper - lower) + 0.005, upper + lower - 0.005)
+	goal = shoulder + axis * distance
 	var along := (upper * upper + distance * distance - lower * lower) / (2.0 * distance)
 	var bend := elbow - shoulder - axis * (elbow - shoulder).dot(axis)
 	if elbow_direction.length_squared() > 0.0001:

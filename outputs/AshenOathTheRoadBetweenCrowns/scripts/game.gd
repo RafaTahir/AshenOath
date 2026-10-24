@@ -3597,30 +3597,23 @@ func _on_player_arrow(request: Dictionary) -> void:
 	var damage := float(effect.get("damage", 28.0))
 	if float(request.get("draw_ratio", 0.0)) >= 0.99:
 		damage *= progression.effect_value("saga_full_draw_damage_multiplier", 1.0)
-	var endpoint: Vector3 = origin + direction * float(request.get("range", 24.0))
-	var query := PhysicsRayQueryParameters3D.create(origin, endpoint, 1)
 	var arrow_exclusions: Array[RID] = [player.get_rid()]
 	for enemy in active_enemies:
 		if is_instance_valid(enemy):
 			arrow_exclusions.append(enemy.get_rid())
-	query.exclude = arrow_exclusions
-	query.collide_with_areas = false
-	var wall_hit := get_world_3d().direct_space_state.intersect_ray(query)
-	if not wall_hit.is_empty():
-		endpoint = wall_hit.position
-	var result: Dictionary = combat.resolve_arrow_shot(active_enemies, {
-		"origin": origin,
-		"endpoint": endpoint,
-		"direction": direction,
+	audio.play_event("swing", 0.02)
+	combat_vfx_coordinator.launch_arrow(zone_root, origin, direction, float(request.get("range", 24.0)), active_enemies, combat, arrow_exclusions, {
 		"width": float(request.get("width", 0.34)),
 		"damage": damage,
 		"source_tag": "arrow_%s" % arrow_id,
-	})
-	_make_arrow_trail(origin, result.get("point", endpoint) if bool(result.get("hit", false)) else endpoint, Color(0.92, 0.70, 0.34) if arrow_id == "standard_arrow" else (Color(0.72, 0.86, 0.96) if arrow_id == "bodkin_arrow" else Color(1.0, 0.30, 0.12)))
+	}, _on_arrow_impact.bind(arrow_id, damage, zone_root.get_instance_id()))
+
+func _on_arrow_impact(result: Dictionary, arrow_id: String, damage: float, zone_instance: int) -> void:
+	if not is_instance_valid(zone_root) or zone_instance != zone_root.get_instance_id(): return
 	if bool(result.get("hit", false)):
 		audio.play_event("light_hit", 0.03)
 		hud.show_status_cue("Arrow hit: %d" % int(damage), "item")
-		CombatFeedback.impact_burst(zone_root, result.get("point", endpoint), false, Color(1.0, 0.52, 0.20) if arrow_id == "ashfire_arrow" else Color(0.95, 0.78, 0.38))
+		CombatFeedback.impact_burst(zone_root, result.get("point", Vector3.ZERO), false, Color(1.0, 0.52, 0.20) if arrow_id == "ashfire_arrow" else Color(0.95, 0.78, 0.38))
 		var target = result.get("enemy")
 		if target != null and is_instance_valid(target):
 			hud.show_enemy(target.display_name, target.health_component.health, target.health_component.max_health)
@@ -3628,9 +3621,6 @@ func _on_player_arrow(request: Dictionary) -> void:
 				inventory.add_item(arrow_id, 1)
 				story_save_pending = true
 				call_deferred("_persist_story_action")
-	else:
-		audio.play_event("swing", 0.02)
-
 func _make_arrow_trail(origin: Vector3, endpoint: Vector3, color: Color) -> void:
 	combat_vfx_coordinator.make_arrow_trail(zone_root, origin, endpoint, color)
 

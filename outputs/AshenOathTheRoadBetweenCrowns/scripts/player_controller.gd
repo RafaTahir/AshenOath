@@ -2166,7 +2166,8 @@ func _update_bow_equipment_reach(pose: Dictionary) -> void:
 	if not reaching:
 		equipment_left_arm_ik.influence = 0.0
 		equipment_left_arm_ik.stop()
-		if bow_visual != null:
+		# The archery modifier owns the held bow, including its local rotation.
+		if bow_visual != null and not is_bow_pose_active():
 			bow_visual.rotation_degrees = Vector3(0.0, 8.0, -12.0)
 		return
 	equipment_left_arm_ik.target = Transform3D(Basis.IDENTITY, pose.position)

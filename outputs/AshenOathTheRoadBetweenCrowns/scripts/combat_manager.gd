@@ -246,7 +246,8 @@ func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
 		best_along = along
 		best_point = target
 	if best_enemy == null:
-		message.emit("The arrow disappears into the dark.")
+		if bool(cast.get("report_miss", true)):
+			message.emit("The arrow disappears into the dark.")
 		return {"hit": false, "endpoint": endpoint, "enemy": null, "point": endpoint}
 	best_enemy.apply_damage(damage, str(cast.get("source_tag", "arrow")))
 	enemy_hit.emit(best_enemy.display_name, damage)

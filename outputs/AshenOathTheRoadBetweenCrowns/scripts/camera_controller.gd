@@ -63,6 +63,7 @@ var _dialogue_frame_key := ""
 var _dialogue_last_cut := 0
 var _dialogue_actor: WeakRef
 var _dialogue_focus := Vector3.ZERO
+var _dialogue_exit: Dictionary = {}
 var _camera_probe := SphereShape3D.new()
 
 signal target_lock_changed(target: Node3D, locked: bool)
@@ -172,6 +173,14 @@ func _process(delta: float) -> void:
 	_update_response_state(delta)
 	_update_target_lock(delta)
 	_update_view(delta)
+	if not _dialogue_exit.is_empty():
+		_dialogue_exit.elapsed += delta
+		var weight := smoothstep(0.0, 0.6, float(_dialogue_exit.elapsed))
+		var destination := camera.global_transform
+		camera.global_transform = (_dialogue_exit.transform as Transform3D).interpolate_with(destination, weight)
+		camera.global_position = _collide_camera(target.global_position + Vector3.UP * 1.3, camera.global_position)
+		camera.fov = lerpf(float(_dialogue_exit.fov), camera.fov, weight)
+		if weight >= 1.0: _dialogue_exit.clear()
 
 func prepare_view() -> void:
 	# Position the real camera under the menu without enabling gameplay input.
@@ -318,6 +327,7 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 		return
 	if _dialogue_return.is_empty():
 		_dialogue_return = {"yaw": yaw, "pitch": pitch, "distance": distance, "manual_orbit": _manual_orbit}
+	_dialogue_exit.clear()
 	_dialogue_frame_key = "two_shot"
 	_dialogue_actor = weakref(dialogue_target)
 	_dialogue_last_cut = Time.get_ticks_msec()
@@ -342,13 +352,9 @@ func frame_dialogue_target(dialogue_target: Node3D) -> void:
 	desired = _resolve_dialogue_camera(midpoint, desired, dialogue_target)
 	desired.y = maxf(desired.y, target.global_position.y + 0.55)
 	_smoothed_anchor = anchor
-	_smoothed_look = midpoint
 	_dialogue_focus = midpoint
 	_cached_collision_position = desired
-	global_position = anchor
-	camera.global_position = desired
-	camera.look_at(midpoint, Vector3.UP)
-	camera.fov = 58.0
+	_transition_dialogue_camera(desired, midpoint, 58.0)
 	_initialized = true
 
 func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> void:
@@ -356,6 +362,11 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	if _reduced_story_motion:
 		# Keep the established two-person composition through page changes.
 		return
+	# A subtitle page or a change of speaker is not a camera direction.
+	# Only explicit authored emphasis may leave the established two-shot.
+	if framing not in ["authored_close", "authored_two_shot"]:
+		return
+	framing = "close" if framing == "authored_close" else "two_shot"
 	var frame_key := "%s:%s:%d" % [speaker_id, framing, actor.get_instance_id()]
 	var actor_changed: bool = _dialogue_actor == null or _dialogue_actor.get_ref() != actor
 	var now := Time.get_ticks_msec()
@@ -386,14 +397,22 @@ func frame_dialogue_beat(actor: Node3D, speaker_id: String, framing: String) -> 
 	_dialogue_actor = weakref(actor)
 	_dialogue_focus = focus
 	desired.y = maxf(desired.y, target.global_position.y + 0.55)
+	_transition_dialogue_camera(desired, focus, 51.0 if framing == "close" else 58.0)
+	_cached_collision_position = desired
+
+func _transition_dialogue_camera(position: Vector3, focus: Vector3, fov: float) -> void:
 	if _dialogue_tween != null: _dialogue_tween.kill()
+	if _reduced_story_motion:
+		_place_dialogue_camera(position)
+		_look_at_dialogue_point(focus)
+		camera.fov = fov
+		_smoothed_look = focus
+		return
 	_dialogue_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
 	_dialogue_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_dialogue_tween.tween_method(_place_dialogue_camera, camera.global_position, desired, 0.32)
-	_dialogue_tween.tween_method(_look_at_dialogue_point, _smoothed_look, focus, 0.32)
-	_dialogue_tween.tween_property(camera, "fov", 51.0 if framing == "close" else 58.0, 0.32)
-	_smoothed_look = focus
-	_cached_collision_position = desired
+	_dialogue_tween.tween_method(_place_dialogue_camera, camera.global_position, position, 0.65)
+	_dialogue_tween.tween_method(_look_at_dialogue_point, _smoothed_look, focus, 0.65)
+	_dialogue_tween.tween_property(camera, "fov", fov, 0.65)
 
 func release_dialogue_frame() -> void:
 	_dialogue_actor = null
@@ -402,6 +421,8 @@ func release_dialogue_frame() -> void:
 		_dialogue_tween = null
 	if _dialogue_return.is_empty():
 		return
+	if not _reduced_story_motion:
+		_dialogue_exit = {"transform": camera.global_transform, "fov": camera.fov, "elapsed": 0.0}
 	yaw = float(_dialogue_return.yaw)
 	pitch = float(_dialogue_return.pitch)
 	distance = float(_dialogue_return.distance)
@@ -415,6 +436,7 @@ func release_dialogue_frame() -> void:
 func _look_at_dialogue_point(point: Vector3) -> void:
 	if camera.global_position.distance_squared_to(point) > 0.01:
 		camera.look_at(point, Vector3.UP)
+		_smoothed_look = point
 
 func _collide_camera(from_pos: Vector3, desired: Vector3) -> Vector3:
 	if from_pos.distance_squared_to(desired) < 0.000001:

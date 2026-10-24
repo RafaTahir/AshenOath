@@ -14,6 +14,7 @@ var released_draw := 0.0
 var reach := 0.6
 var string_top := Vector3(0, 0.58, 0.145)
 var string_bottom := Vector3(0, -0.58, 0.145)
+var limb_bend := 0.06
 var arrow_ready := false
 var fingers: Dictionary = {}
 
@@ -27,7 +28,9 @@ func setup(owner_actor: CharacterBody3D, hand_bow: Node3D, source_bow: Node3D, s
 			for joint in [2, 3]:
 				var bone := skeleton.find_bone("%s_0%d_%s" % [finger, joint, side])
 				if bone >= 0: fingers[bone] = 0.60 if side == "l" else (0.70 if finger in ["index", "middle"] else 0.20)
-	arrow = source_arrow
+	source_bow.rotation = Vector3(0, -PI * 0.5, 0)
+	source_bow.scale = Vector3.ONE * 0.44
+	source_bow.position = Vector3(0, 0, 0.094)
 	# The retained Ranger bow includes a separate, vertically packed display arrow.
 	# Only our nocked arrow belongs in the hand; the quiver keeps its own arrow.
 	for node in source_bow.find_children("*", "MeshInstance3D", true, false):
@@ -35,13 +38,8 @@ func setup(owner_actor: CharacterBody3D, hand_bow: Node3D, source_bow: Node3D, s
 			node.visible = false
 		else:
 			_prepare_limbs(node as MeshInstance3D)
-	source_bow.rotation = Vector3(0, -PI * 0.5, 0)
-	source_bow.scale = Vector3.ONE * 0.44
-	source_bow.position = Vector3(0, 0, 0.094)
-	if arrow != null:
-		arrow.rotation = Vector3(-PI * 0.5, 0, 0)
-		arrow.scale = Vector3.ONE * 0.41
-		bow.add_child(arrow)
+	if source_arrow != null:
+		arrow = preload("res://scripts/arrow_visual.gd").attach(bow, source_arrow)
 		arrow.visible = false
 	var thread := StandardMaterial3D.new()
 	thread.albedo_color = Color(0.72, 0.66, 0.49)
@@ -64,6 +62,16 @@ func _prepare_limbs(mesh: MeshInstance3D) -> void:
 	if mesh.mesh == null or not mesh.mesh is ArrayMesh:
 		return
 	var source := mesh.mesh as ArrayMesh
+	# FBX vertices are centimetre-scaled, Z-up, under an imported transform.
+	# Measure and bend in the held bow's frame, then convert back for the mesh.
+	var mesh_to_bow := bow.global_transform.affine_inverse() * mesh.global_transform
+	var bow_to_mesh := mesh_to_bow.affine_inverse()
+	var bounds: AABB = mesh_to_bow * source.get_aabb()
+	var height := bounds.size.y
+	var center := bounds.get_center().y
+	limb_bend = height * 0.045
+	string_top = Vector3(0, bounds.end.y, bounds.get_center().z)
+	string_bottom = Vector3(0, bounds.position.y, bounds.get_center().z)
 	var shaped := ArrayMesh.new()
 	shaped.add_blend_shape("Draw")
 	shaped.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
@@ -74,11 +82,10 @@ func _prepare_limbs(mesh: MeshInstance3D) -> void:
 		if indices.is_empty():
 			for index in vertices.size(): indices.append(index)
 		var kept := PackedInt32Array()
-		var height: float = source.get_aabb().size.y
 		for face in range(0, indices.size(), 3):
-			var a := vertices[indices[face]]
-			var b := vertices[indices[face+1]]
-			var c := vertices[indices[face+2]]
+			var a := mesh_to_bow * vertices[indices[face]]
+			var b := mesh_to_bow * vertices[indices[face+1]]
+			var c := mesh_to_bow * vertices[indices[face+2]]
 			var span := a.max(b).max(c) - a.min(b).min(c)
 			# Replace only the authored straight string, not either wooden limb.
 			if span.y > height * 0.65 and maxf(span.x, span.z) < height * 0.015:
@@ -88,9 +95,9 @@ func _prepare_limbs(mesh: MeshInstance3D) -> void:
 		if kept.is_empty(): continue
 		var bent := vertices.duplicate()
 		for index in vertices.size():
-			var point := vertices[index]
-			point.x += pow(clampf(absf(point.y) / maxf(height * 0.5, 0.001), 0.0, 1.0), 1.6) * 0.14
-			bent[index] = point
+			var point := mesh_to_bow * vertices[index]
+			point.z += pow(clampf(absf(point.y - center) / maxf(height * 0.5, 0.001), 0.0, 1.0), 1.8) * limb_bend
+			bent[index] = bow_to_mesh * point
 		var shape: Array = []
 		shape.resize(Mesh.ARRAY_MAX)
 		shape[Mesh.ARRAY_VERTEX] = bent
@@ -194,7 +201,7 @@ func _process_modification() -> void:
 		reach = shoulder.distance_to(elbow) + elbow.distance_to(hand)
 		var rest := shoulder + (-player.global_basis.z * 0.22 - Vector3.UP * 0.63) * reach
 		# Slightly unlocked bow elbow; draw hand anchors beside the jaw, never behind the skull.
-		grip = rest.lerp(shoulder + (forward * 0.80 + right * 0.48 + up * 0.035) * reach, aim_weight)
+		grip = rest.lerp(shoulder + (forward * 0.90 + right * 0.05 + up * 0.035) * reach, aim_weight)
 		var palm_offset := _hand_contact(skeleton, "l") - hand
 		_solve_arm(skeleton, arm, hand.lerp(grip - palm_offset, pose_weight), null, -up - right * 0.15)
 		grip = _hand_contact(skeleton, "l")
@@ -214,6 +221,9 @@ func _process_modification() -> void:
 			hand = _world(skeleton, int(arm.hand))
 			var hook_offset := (_hand_contact(skeleton, "r") - hand) * aim_weight
 			_solve_arm(skeleton, arm, hand.lerp(goal - hook_offset, pose_weight), null, right - forward * 0.65 + up * 0.15)
+		if aim_weight > 0.99 and release_time <= 0.0:
+			# The string follows the actual hook fingers, never an unreachable goal.
+			nock = _hand_contact(skeleton, "r")
 	# Derive from the live solved hand, not last frame's BoneAttachment transform.
 	var parent_frame: Transform3D = player._equipment_anchor_world(bow.get_parent())
 	var held_frame := frame
@@ -221,12 +231,12 @@ func _process_modification() -> void:
 		var carried := Basis(player.global_basis.x, Vector3.UP, player.global_basis.z).orthonormalized()
 		held_frame = carried.slerp(frame, aim_weight)
 	bow.transform = parent_frame.affine_inverse() * Transform3D(held_frame, grip)
-	arrow_rest = grip + up * 0.045 + right * 0.012
+	arrow_rest = nock + forward * preload("res://scripts/arrow_visual.gd").LENGTH
 	player.bow_pose_local_origin = player.to_local(arrow_rest)
 	player.bow_pose_valid = true
 	var local_nock := held_frame.inverse() * (nock - grip)
-	_set_string(strings[0], string_top + Vector3(0, 0, draw * 0.06), local_nock)
-	_set_string(strings[1], string_bottom + Vector3(0, 0, draw * 0.06), local_nock)
+	_set_string(strings[0], string_top + Vector3(0, 0, draw * limb_bend), local_nock)
+	_set_string(strings[1], string_bottom + Vector3(0, 0, draw * limb_bend), local_nock)
 	for limb in limbs: limb.set_blend_shape_value(0, draw)
 	arrow_ready = aim_weight > 0.1 and release_time <= 0.0 and player.bow_has_arrow()
 	if arrow != null:
@@ -235,6 +245,8 @@ func _process_modification() -> void:
 
 func _set_string(segment: MeshInstance3D, tip: Vector3, nock: Vector3) -> void:
 	var offset := tip - nock
+	if offset.length_squared() < 0.000001:
+		return
 	segment.transform = Transform3D(Basis(Quaternion(Vector3.UP, offset.normalized())).scaled(Vector3(1, offset.length(), 1)), (tip + nock) * 0.5)
 
 func _hand_contact(skeleton: Skeleton3D, side: String) -> Vector3:

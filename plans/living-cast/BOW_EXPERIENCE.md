@@ -1,5 +1,14 @@
 # Kael's Bow Experience
 
+## Corrective Delivery, 2026-10-25
+
+The original draw deformation was reproduced and corrected. See
+`../living-road/COHESIVE_GAME_IMPLEMENTATION.md` for the source cause, retained
+repairs, focused native evidence and remaining user acceptance. Combat arrows
+now travel and resolve contact during flight instead of using the previous
+instant damage plus expanding luminous trail. The historical implementation
+and package record below remain provenance, not current runtime approval.
+
 ## Implementation, 2026-10-23
 
 - Retained Ranger bow/arrow, Kael body, atlas, skin and equipment authority. No replacement character, texture, save schema, damage balance or new projectile simulation.
