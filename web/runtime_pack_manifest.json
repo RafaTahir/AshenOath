@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "road-atlas-score-preserved-20261025",
+  "release_id": "leisure-atlas-responsive-20261025",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4092880,
-      "candidate_sha256": "a3b9db3ac6eb9713fa40a0dfd6c92eb681d9f2ef8b8546d88dbeb40bbe48c624",
+      "candidate_bytes": 4093072,
+      "candidate_sha256": "caf822880deca80a95793a50ac821d459a450fc7ae3e5f50e09d5c398e853e21",
       "contents": [
         "menu",
         "managers",
@@ -35,12 +35,12 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4092880,
-      "embedded_source_sha256": "a3b9db3ac6eb9713fa40a0dfd6c92eb681d9f2ef8b8546d88dbeb40bbe48c624",
+      "embedded_source_bytes": 4093072,
+      "embedded_source_sha256": "caf822880deca80a95793a50ac821d459a450fc7ae3e5f50e09d5c398e853e21",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "url": "packs/opening.pck?sha256=70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6",
       "sha256": "70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6",
       "bytes": 35791816,
@@ -61,7 +61,7 @@
       "cache_key": "70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6"
     },
     "campaign": {
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "url": "packs/campaign.pck?sha256=3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "bytes": 8726164,
@@ -84,7 +84,7 @@
       "cache_key": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1"
     },
     "characters": {
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "url": "packs/characters.pck?sha256=cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "bytes": 9658576,
@@ -105,7 +105,7 @@
       "cache_key": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3"
     },
     "monsters": {
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "url": "packs/monsters.pck?sha256=d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "bytes": 14710328,
@@ -127,7 +127,7 @@
       "cache_key": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22"
     },
     "audio": {
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "url": "packs/audio.pck?sha256=bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a",
       "sha256": "bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a",
       "bytes": 19308388,
@@ -148,7 +148,7 @@
       "cache_key": "bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a"
     },
     "quality_materials": {
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "url": "packs/quality_materials.pck?sha256=a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "bytes": 7379308,
@@ -169,7 +169,7 @@
       "cache_key": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8"
     },
     "adjacent": {
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "url": "packs/adjacent.pck?sha256=12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "bytes": 1405472,
@@ -191,9 +191,9 @@
       "cache_key": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918"
     }
   },
-  "build_id": "road-atlas-score-preserved-20261025",
-  "generated_from_commit": "69d692d98114e915542bb14c360826959412a2d2",
-  "generated_at_utc": "2026-10-24T20:08:33.599663Z",
+  "build_id": "leisure-atlas-responsive-20261025",
+  "generated_from_commit": "ef924755bbae71749db4dfe58a2f7c80f1c80917",
+  "generated_at_utc": "2026-10-24T20:17:59.516037Z",
   "total_bytes": 96980052,
   "source_dirty": true
 }

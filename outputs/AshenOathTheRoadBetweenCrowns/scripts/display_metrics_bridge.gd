@@ -38,6 +38,15 @@ func setup(hud: Node, mobile_touch: Node) -> void:
 func _on_browser_display(_arguments: Array) -> void:
 	_queue_refresh()
 
+func register_target(target: Node) -> void:
+	if not is_instance_valid(target) or _stopped: return
+	for reference: WeakRef in _targets:
+		if reference.get_ref() == target: return
+	_targets.append(weakref(target))
+	if not _geometry.is_empty() and target.has_method("set_display_metrics"):
+		var current := _geometry.duplicate(); current["revision"] = _revision
+		target.call("set_display_metrics",current)
+
 func _queue_refresh() -> void:
 	if _stopped or not _configured or _refresh_pending or not is_inside_tree():
 		return

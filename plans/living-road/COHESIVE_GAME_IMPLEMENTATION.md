@@ -171,14 +171,41 @@ production exports compiled without parser/compiler errors. Complete deployment
 engine/other packs keep checked identity. The original three music resources
 are byte-for-byte the pre-sketch streams; no new final-mix approval is implied.
 
+Published as `ef924755bbae71749db4dfe58a2f7c80f1c80917` to development/main;
+Vercel `dpl_EbmUfDJgaFqqiBkVd6LqpxfwYCLJ` READY.
+
+## Delivery 5: Display-Space Touch Sizing
+
+Static review identified a real units mismatch in the new leisure/atlas surfaces:
+48 canvas pixels are not necessarily 48 displayed CSS pixels. Register the
+existing minigame service with the current display-metrics bridge; use the
+existing layout policy for safe areas, displayed minimum hit sizes, font sizes,
+resizing and short-screen behavior. Keep the board scrollable instead of shrinking
+chess cells below the touch minimum. Promotion choices use a two-column grid.
+Atlas chart positions and labels use the same display conversion; its detail
+has a bounded scrollable area and keyboard focus returns to the visible map.
+This source correction has no new gameplay/testing authorization or performance
+claim. Minimum compilation/package and publication are recorded independently.
+
+Candidate `leisure-atlas-responsive-20261025`: base and production exports
+compiled without parser/compiler errors. Complete package **104,801,746 bytes**,
+**55,854 bytes below** the cap. External pack and engine bytes are unchanged
+from the score-preserved candidate and reused at checked identity. Publication
+receipt under WORLD-SAGA-000 owns the commit/deployment result. Runtime user
+acceptance, mobile-device observations and numerical performance remain unverified.
+
 ## Remaining Approved Work
 
-Finish packaging this source delivery, then physical neighboring-space/room
-streaming. The atlas does not complete that implementation. Detailed requirements
+Next implementation is physical neighboring-space/room streaming under existing
+WORLD-SAGA ownership. The atlas does not complete that implementation. Requirements
 and the actual-vs-planned distinction are in `WORLD_CONNECTIONS.md`. The remaining
 streaming blocker is source ownership: builders/controllers read the mutable
 host root, sector, enemy and spatial-service fields. Resource prefetch cannot
 safely construct a second gameplay context under that contract. Do not replace
 this work with hidden loading, frozen duplicate actors or all-world residency.
+The next source change must establish one explicit owned zone-construction
+context, then implement the Greyfen/Wychwood pair with matched threshold frames,
+one bounded prepared neighbor, cancellation/signature invalidation and complete
+collision/population before crossing. Pair review precedes broader rollout.
 Retain every explicit legacy-state/reward mapping and the pending facial-sample
 approval boundary. None of that remaining work is marked implemented here.

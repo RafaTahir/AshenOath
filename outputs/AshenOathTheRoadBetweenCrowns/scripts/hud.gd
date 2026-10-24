@@ -2948,6 +2948,8 @@ func _apply_responsive_layout() -> void:
 		if is_instance_valid(surface):
 			_apply_responsive_typography(surface, fonts, float(policy.button_min_height), float(policy.unit_scale))
 	_apply_responsive_journal(policy)
+	if is_instance_valid(_world_atlas) and _world_atlas.visible:
+		_world_atlas.apply_layout(policy)
 	_apply_responsive_dialogue(policy)
 	_apply_responsive_menu(policy)
 	if is_instance_valid(_startup_view):
@@ -2970,7 +2972,10 @@ func _restore_reflow_state(snapshot: Dictionary, generation: int, surface_key: S
 		if bool(_layout_policy.get("compact", false)) and str(_inventory_panes.get(_inventory_screen, "reader")) == "entries":
 			_focus_first_enabled(craft_buttons)
 		else:
-			inventory_text.grab_focus()
+			if _journal_section_id == "atlas" and is_instance_valid(_world_atlas) and _world_atlas.visible:
+				_world_atlas.focus_current()
+			else:
+				inventory_text.grab_focus()
 	elif dialogue_layer.visible:
 		_focus_first_enabled(dialogue_actions)
 	elif menu_layer.visible and _rendered_screen != "":

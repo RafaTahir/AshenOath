@@ -32,19 +32,59 @@ var thinking := false
 var generation := 0
 var promotion_from := -1
 var promotion_to := -1
-var promotion_actions: HBoxContainer
+var promotion_actions: GridContainer
 var game_picker: OptionButton
 var resign_button: Button
 var draughts_chain := -1
 var draughts_quiet := 0
 var _was_paused := false
+var _display: Dictionary = {}
+var _unit := 1.0
+var _layout: Dictionary = {}
+var _settings_source: Node
+
+func set_display_metrics(metrics: Dictionary) -> void:
+	_display = metrics.duplicate()
+	if overlay != null: _apply_display()
+
+func _apply_display() -> void:
+	var scale := 1.0
+	if is_instance_valid(_settings_source):
+		scale = float(_settings_source.settings.get("subtitle_scale",1.0))
+	_layout = preload("res://scripts/hud_layout_policy.gd").resolve(get_viewport().get_visible_rect().size,_display,scale,"touch" if bool(_display.get("coarse_pointer",false)) else "keyboard")
+	_unit = float(_layout.unit_scale)
+	var safe: Rect2 = _layout.safe_rect
+	var margin := float(_layout.margin)
+	overlay.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	overlay.position = safe.position+Vector2.ONE*margin
+	overlay.size = (safe.size-Vector2.ONE*margin*2.0).max(Vector2.ONE)
+	var panel := overlay.get_theme_stylebox("panel") as StyleBoxFlat
+	if panel != null: panel.set_content_margin_all(float(_layout.padding))
+	title_label.add_theme_font_size_override("font_size",int(_layout.fonts.heading))
+	title_label.visible = not bool(_layout.short_display)
+	status_label.add_theme_font_size_override("font_size",int(_layout.fonts.caption))
+	game_picker.custom_minimum_size.y = float(_layout.button_min_height)
+	game_picker.add_theme_font_size_override("font_size",int(_layout.fonts.button))
+	_apply_controls(overlay)
+
+func _apply_controls(parent: Node) -> void:
+	for child in parent.get_children():
+		if child is Square:
+			var cell := 96.0 if active_game == "tic_tac_toe" else (56.0 if active_game == "draughts" else 48.0)
+			child.custom_minimum_size = Vector2.ONE*cell*_unit
+		elif child is Button and child != game_picker:
+			child.custom_minimum_size = Vector2(80.0*_unit,float(_layout.button_min_height))
+			child.add_theme_font_size_override("font_size",int(_layout.fonts.button))
+		if child is BoxContainer: child.add_theme_constant_override("separation",float(_layout.gap))
+		_apply_controls(child)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	rng.seed = 73191
 
-func setup(router: Node) -> void:
+func setup(router: Node, preferences: Node = null) -> void:
 	input_source = router
+	_settings_source = preferences
 
 func open_game(game_id: String, person: String = "rook") -> void:
 	if overlay == null:
@@ -60,6 +100,7 @@ func open_game(game_id: String, person: String = "rook") -> void:
 	_was_paused = get_tree().paused
 	get_tree().paused = true
 	_open_session()
+	_apply_display()
 	call_deferred("_focus_first_board_button")
 	opened.emit(game_id)
 
@@ -284,7 +325,7 @@ func _build_ui() -> void:
 	var scroll := ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL; box.add_child(scroll)
 	var center := CenterContainer.new(); center.size_flags_horizontal = Control.SIZE_EXPAND_FILL; center.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.add_child(center)
 	board_grid = GridContainer.new(); board_grid.add_theme_constant_override("h_separation",0); board_grid.add_theme_constant_override("v_separation",0); center.add_child(board_grid)
-	promotion_actions = HBoxContainer.new(); promotion_actions.alignment = BoxContainer.ALIGNMENT_CENTER; box.add_child(promotion_actions); promotion_actions.hide()
+	promotion_actions = GridContainer.new(); promotion_actions.columns = 2; promotion_actions.size_flags_horizontal = Control.SIZE_SHRINK_CENTER; box.add_child(promotion_actions); promotion_actions.hide()
 	for kind in ["q", "r", "b", "n"]:
 		var choice := Button.new(); choice.text = {"q":"Queen", "r":"Rook", "b":"Bishop", "n":"Knight"}[kind]; _style_action_button(choice); choice.pressed.connect(_promote.bind(kind)); promotion_actions.add_child(choice)
 	var actions := HBoxContainer.new(); actions.alignment = BoxContainer.ALIGNMENT_CENTER; box.add_child(actions)
@@ -323,6 +364,7 @@ func _render_ttt() -> void:
 		button.tooltip_text = "Square %d: %s" % [index+1,["empty","your mark","opponent's mark"][ttt_board[index]]]; button.disabled = finished or ttt_board[index] != 0
 		button.pressed.connect(func(): play_ttt(index)); board_grid.add_child(button)
 	call_deferred("_focus_first_board_button")
+	if not _layout.is_empty(): _apply_controls(board_grid)
 
 func _choose_ttt_move() -> int:
 	if opponent_id == "rook" and rng.randf() < 0.4:
@@ -384,6 +426,7 @@ func _render_draughts() -> void:
 		button.add_theme_color_override("font_color",Color(0.94,0.70,0.28) if draughts_board[index] > 0 else Color(0.86,0.86,0.80))
 		button.pressed.connect(func(): _on_draughts_square(index)); board_grid.add_child(button)
 	call_deferred("_focus_first_board_button")
+	if not _layout.is_empty(): _apply_controls(board_grid)
 
 func _focus_first_board_button() -> void:
 	if board_grid == null or not is_instance_valid(board_grid):
@@ -515,6 +558,7 @@ func _render_chess() -> void:
 		square.disabled = finished or thinking or chess.turn or promotion_from >= 0
 		square.pressed.connect(_on_chess_square.bind(index)); board_grid.add_child(square)
 	call_deferred("_focus_first_board_button")
+	if not _layout.is_empty(): _apply_controls(board_grid)
 
 func _on_chess_square(index: int) -> void:
 	if finished or thinking or chess.turn or promotion_from >= 0: return

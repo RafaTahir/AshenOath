@@ -1,91 +1,93 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-24T20:08:33.599663Z",
-  "build_id": "road-atlas-score-preserved-20261025",
-  "generated_from_commit": "69d692d98114e915542bb14c360826959412a2d2",
+  "generated_at_utc": "2026-10-24T20:17:59.516037Z",
+  "build_id": "leisure-atlas-responsive-20261025",
+  "generated_from_commit": "ef924755bbae71749db4dfe58a2f7c80f1c80917",
   "source_dirty": true,
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 101072932,
+  "total_bytes": 101073124,
   "packs": [
     {
       "id": "base",
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4092880,
-      "sha256": "a3b9db3ac6eb9713fa40a0dfd6c92eb681d9f2ef8b8546d88dbeb40bbe48c624",
+      "bytes": 4093072,
+      "sha256": "caf822880deca80a95793a50ac821d459a450fc7ae3e5f50e09d5c398e853e21",
       "status": "candidate_external",
       "log": "base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35791816,
       "sha256": "70cdeb1d120e7f74d808e2385e9d1ab9fb537de0ca767d5e8af8635f3b66c3d6",
-      "status": "candidate_external"
+      "status": "candidate_external",
+      "reused_from_build": "road-atlas-score-preserved-20261025"
     },
     {
       "id": "adjacent",
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 1405472,
       "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-leisure-economy-20261025"
+      "reused_from_build": "road-atlas-score-preserved-20261025"
     },
     {
       "id": "campaign",
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8726164,
       "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-leisure-economy-20261025"
+      "reused_from_build": "road-atlas-score-preserved-20261025"
     },
     {
       "id": "characters",
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9658576,
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-leisure-economy-20261025"
+      "reused_from_build": "road-atlas-score-preserved-20261025"
     },
     {
       "id": "monsters",
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14710328,
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-leisure-economy-20261025"
+      "reused_from_build": "road-atlas-score-preserved-20261025"
     },
     {
       "id": "audio",
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19308388,
       "sha256": "bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a",
-      "status": "candidate_external"
+      "status": "candidate_external",
+      "reused_from_build": "road-atlas-score-preserved-20261025"
     },
     {
       "id": "quality_materials",
-      "version": "road-atlas-score-preserved-20261025",
+      "version": "leisure-atlas-responsive-20261025",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7379308,
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "status": "candidate_external",
-      "reused_from_build": "greyfen-leisure-economy-20261025"
+      "reused_from_build": "road-atlas-score-preserved-20261025"
     }
   ],
   "errors": []
