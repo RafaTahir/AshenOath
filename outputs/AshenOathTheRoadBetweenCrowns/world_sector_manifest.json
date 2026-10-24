@@ -2,6 +2,14 @@
   "schema_version": 1,
   "program": "WORLDGRID-001",
   "cell_size": [48.0, 40.0],
+  "atlas": {
+    "kind": "route_diagram_not_to_scale",
+    "positions": {"greyfen":[180,100],"cemetery":[380,100],"wychwood":[180,240],"deep_wood":[180,380],"old_mill":[180,520],"burned_farmstead":[180,660],"marsh_crossing":[180,800],"bandit_road":[180,940],"vargan_approach":[440,940],"vargan_court":[440,800],"record_hall":[440,660],"undercroft":[440,520],"assembly":[640,100],"hart_glade":[640,380],"ruins":[640,240]},
+    "districts": {"cemetery":"greyfen"},
+    "phases": {"assembly":"greyfen"},
+    "journey_links": [["greyfen","deep_wood"],["greyfen","vargan_approach"],["undercroft","assembly"],["assembly","hart_glade"],["greyfen","ruins"]],
+    "local_links": [["greyfen","cemetery"],["cemetery","greyfen"],["ruins","greyfen"]]
+  },
   "sectors": {
     "greyfen": {
       "coordinate": [0, 0],
@@ -19,7 +27,7 @@
       "bounds": [22.0, 17.0],
       "edges": {
         "south": {"target": "greyfen", "lane": 0.0, "half_width": 5.0, "trigger": [0.0, 0.0, 15.0], "arrival": [0.0, 0.9, -13.0], "approach": [[10.8, 0.95, -5.0], [0.0, 0.95, -2.5]]},
-        "north": {"target": "deep_wood", "lane": 10.8, "half_width": 3.2, "trigger": [10.8, 0.0, -13.2], "arrival": [-7.0, 0.9, 11.0]}
+        "north": {"target": "deep_wood", "lane": 10.8, "half_width": 3.2, "trigger": [10.8, 0.0, -13.2], "arrival": [-7.0, 0.9, 11.0], "requires_objective": ["main_teeth_in_rain","name_the_dead"]}
       }
     },
     "deep_wood": {

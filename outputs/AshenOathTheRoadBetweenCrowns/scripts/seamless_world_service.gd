@@ -68,6 +68,10 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 		_arrival_edge = ""
 	if edge.is_empty():
 		return false
+	# Automatic boundary entry must obey the same earned opening as the
+	# authored gate; merely having a manifest edge cannot bypass that decision.
+	if not WorldSectorManifest.edge_available(edge,host.quests if host != null else null):
+		return false
 	var target := WorldSectorManifest.canonical(str(edge.get("target", "")))
 	if target == "" or host == null or not host.has_method("request_seamless_boundary_transition"):
 		return false

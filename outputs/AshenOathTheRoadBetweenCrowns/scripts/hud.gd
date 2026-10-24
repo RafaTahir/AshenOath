@@ -194,6 +194,7 @@ var _status_priority := 0
 var _bar_tweens: Dictionary = {}
 var _bar_name_labels: Array[Label] = []
 var _journal_section_id := "return"
+var _world_atlas: Control
 var _journal_context: Dictionary = {}
 var inventory_notice_label: Label
 var _preparation_actions: BoxContainer
@@ -1868,6 +1869,9 @@ func _present_preparation_notice() -> void:
 	inventory_notice_label.add_theme_color_override("font_color", Color(0.98, 0.96, 0.88) if high_contrast else Color(0.91, 0.84, 0.68))
 
 func _prepare_inventory_surface(preparation: bool) -> void:
+	if is_instance_valid(_world_atlas):
+		_world_atlas.hide()
+	inventory_text.show()
 	_recycle_journal_buttons(_preparation_actions)
 	_recycle_journal_buttons(craft_buttons)
 	for child in _preparation_actions.get_children():
@@ -1951,6 +1955,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 	sections.append({"id":"quest_record", "title":"Quest Record", "body":_journal_model("quest_record", [quests], func(): return str(quests.get_journal_text())), "entries":[]})
 	if story_state != null:
 		sections.append({"id":"greyfen_guide", "title":"Before the Road", "body":preload("res://scripts/greyfen_guidance.gd").journal(story_state), "entries":[]})
+	sections.append({"id":"atlas","title":"Road Atlas","body":"","entries":[]})
 	var current_section: Dictionary = {}
 	for section: Dictionary in sections:
 		if str(section.get("id", "")) == _journal_section_id:
@@ -1993,6 +1998,16 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 		_build_preparation_content(inventory, progression, story_state, quests, reading)
 	elif growing:
 		_build_growth_content(progression)
+	elif _journal_section_id == "atlas":
+		inventory_text.hide()
+		if is_instance_valid(_world_atlas):
+			_world_atlas.get_parent().remove_child(_world_atlas); _world_atlas.queue_free()
+		_world_atlas = preload("res://scripts/world_atlas.gd").new()
+		_world_atlas.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_journal_column.add_child(_world_atlas)
+		_journal_column.move_child(_world_atlas,inventory_text.get_index()+1)
+		var known: Dictionary = _game_owner.seamless_world.discovered_sectors if is_instance_valid(_game_owner) and _game_owner.seamless_world != null else {}
+		_world_atlas.configure(zone_id,known)
 	elif not evidence:
 		inventory_text.text = reading
 	_add_preparation_heading("JOURNAL")
@@ -3058,7 +3073,7 @@ func _apply_responsive_journal(policy: Dictionary) -> void:
 	craft_buttons.custom_minimum_size = Vector2.ZERO
 	craft_buttons.add_theme_constant_override("separation", int(round(gap)))
 	journal_art.custom_minimum_size = Vector2(0.0, float(model.art_height))
-	journal_art.visible = float(model.art_height) > 0.0 and journal_art.texture != null and not _preparation_actions.visible and _evidence_position_key == ""
+	journal_art.visible = float(model.art_height) > 0.0 and journal_art.texture != null and not _preparation_actions.visible and _evidence_position_key == "" and _journal_section_id != "atlas"
 	inventory_notice_label.custom_minimum_size = Vector2(0.0, float(model.notice_height))
 	var has_actions: bool = _preparation_actions.visible and _preparation_actions.get_child_count() > 0
 	var action_height: float = minf(float(model.reader_height), maxf(float(policy.button_min_height), float(model.action_height))) if has_actions else 0.0

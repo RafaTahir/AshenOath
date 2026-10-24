@@ -137,9 +137,48 @@ compiled without parser/compiler errors. **104,712,154 bytes**, 16 files;
 **145,446 bytes below** the cap. External packs and engine bytes are unchanged
 and reused at checked identity. Publication uses existing WORLD-SAGA-101.
 
+Published commit `69d692d98114e915542bb14c360826959412a2d2`, development and
+main; Vercel `dpl_BX2RDUUsMCYiKVesUwMRmcoyiKEk` READY. All 16 live files match
+their expected hashes/sizes. Identity receipt is under that candidate directory.
+
+## Delivery 4: Accurate Atlas and Approval Correction
+
+Implementation present; compilation/package/publication tracked separately.
+- The existing journal includes a selectable, keyboard/touch-readable Road Atlas
+  for all retained places. The manifest owns its graph, district/phase labels and
+  directed shortcuts. The chart is explicitly a route diagram, not geographic
+  scale or a claim of physical residency. Undiscovered encounters/secrets are not
+  revealed. A current-location marker and visited state use existing journey data.
+- North Wychwood automatic boundary travel now respects the same earned
+  `name_the_dead` opening as its authored gate. The manifest previously bypassed
+  that condition simply because an edge existed. Completed legacy quests qualify.
+- Existing regional scenes, cast profiles, 57 chapter IDs, personal relationships,
+  nonmodal exchanges and homecoming remain under their existing owners; the
+  journal grouping and intro do not duplicate those authored libraries.
+- Approval correction: Deliveries 2/3 mistakenly put the three direction-approved
+  sketches into production. Direction approval was not final replacement approval.
+  Restore ONLY those three original prepared music streams from `7f84ec4`, keep
+  the new material-contact cues, and prevent the asset compiler from reapplying
+  sketches. Sketches remain development material awaiting final listening approval.
+
+No agent runtime test is authorized for this delivery. User checks: Road Atlas
+selection/scroll/focus on short screens, directed return routes, Wychwood's earned
+north opening, unchanged save destinations, retained score and contact sounds.
+
+Candidate `road-atlas-score-preserved-20261025`: minimum opening/audio/base and
+production exports compiled without parser/compiler errors. Complete deployment
+**104,798,894 bytes**, 16 files; **58,706 bytes below** the strict cap. Retained
+engine/other packs keep checked identity. The original three music resources
+are byte-for-byte the pre-sketch streams; no new final-mix approval is implied.
+
 ## Remaining Approved Work
 
-Finish packaging this source delivery, then bounded neighboring-space/room
-streaming and atlas, and the remaining regional writing/staging/homecoming.
+Finish packaging this source delivery, then physical neighboring-space/room
+streaming. The atlas does not complete that implementation. Detailed requirements
+and the actual-vs-planned distinction are in `WORLD_CONNECTIONS.md`. The remaining
+streaming blocker is source ownership: builders/controllers read the mutable
+host root, sector, enemy and spatial-service fields. Resource prefetch cannot
+safely construct a second gameplay context under that contract. Do not replace
+this work with hidden loading, frozen duplicate actors or all-world residency.
 Retain every explicit legacy-state/reward mapping and the pending facial-sample
 approval boundary. None of that remaining work is marked implemented here.

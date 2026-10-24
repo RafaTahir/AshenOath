@@ -58,6 +58,35 @@ static func neighbors(zone_id: String) -> Array[String]:
 static func open_edges(zone_id: String) -> Dictionary:
 	return (sector(zone_id).get("edges", {}) as Dictionary).duplicate(true)
 
+static func atlas() -> Dictionary:
+	_ensure_loaded()
+	var view: Dictionary = _data.get("atlas", {}).duplicate(true)
+	var links: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	var add_link := func(source: String, target: String):
+		var pair: Array[String] = [source,target]; pair.sort()
+		var key := ":".join(pair)
+		if seen.has(key):
+			var existing: Dictionary = seen[key]
+			if source != str(existing.source): existing["return"] = true
+			return
+		var journey := false
+		for raw: Array in view.get("journey_links", []):
+			if source in raw and target in raw: journey = true
+		var link := {"source":source,"target":target,"journey":journey,"return":false}
+		seen[key] = link
+		links.append(link)
+	for source: String in all_ids():
+		for target: String in neighbors(source): add_link.call(source,target)
+	for pair: Array in view.get("local_links", []): add_link.call(str(pair[0]),str(pair[1]))
+	view["links"] = links
+	return view
+
+static func edge_available(edge: Dictionary, quests) -> bool:
+	var requirement: Array = edge.get("requires_objective", [])
+	if requirement.size() < 2: return true
+	return quests != null and (quests.is_completed(str(requirement[0])) or quests.is_objective_done(str(requirement[0]),str(requirement[1])))
+
 static func edge_between(source_zone: String, target_zone: String) -> Dictionary:
 	var target := canonical(target_zone)
 	for edge_id in open_edges(source_zone).keys():
