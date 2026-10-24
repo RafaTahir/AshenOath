@@ -1,102 +1,94 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-24T12:08:45.8259810Z",
-  "build_id": "greyfen-village-20261024",
-  "generated_from_commit": "39f8701f49c26a50b0a2fab5b9ce03e34cbc43bf",
+  "generated_at_utc": "2026-10-24T16:41:04.551587Z",
+  "build_id": "audio-routing-20261025",
+  "generated_from_commit": "928537366c4e2cd21bcfcb2bee080a488d0ad2ee",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\greyfen-village-20261024-final\\runtime-packs",
+  "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
   "total_bytes": 101001676,
   "packs": [
     {
       "id": "base",
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
       "bytes": 4084864,
-      "sha256": "f7fdf2d7e1878c8554a4051cd77acdf0db1c54864810013793d86a0137ae2683",
+      "sha256": "5c5c82999b476e594e8e9db48e264feb624de57fa3dcd6c459c2721fedd5f0f1",
       "status": "candidate_external",
-      "log": "logs/pack-base.stdout.log"
+      "log": "base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35745224,
       "sha256": "256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a",
       "status": "candidate_external",
-      "log": "logs/pack-opening.stdout.log"
+      "reused_from_build": "greyfen-village-20261024"
     },
     {
       "id": "adjacent",
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 1405472,
       "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "status": "candidate_external",
-      "log": "logs/pack-adjacent.stdout.log"
+      "reused_from_build": "greyfen-village-20261024"
     },
     {
       "id": "campaign",
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8726164,
       "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "status": "candidate_external",
-      "log": "logs/pack-campaign.stdout.log"
+      "reused_from_build": "greyfen-village-20261024"
     },
     {
       "id": "characters",
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9658576,
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "status": "candidate_external",
-      "log": "logs/pack-characters.stdout.log"
+      "reused_from_build": "greyfen-village-20261024"
     },
     {
       "id": "monsters",
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14710328,
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "status": "candidate_external",
-      "log": "logs/pack-monsters.stdout.log"
+      "reused_from_build": "greyfen-village-20261024"
     },
     {
       "id": "audio",
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19291740,
       "sha256": "77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752",
       "status": "candidate_external",
-      "log": "logs/pack-audio.stdout.log"
+      "reused_from_build": "greyfen-village-20261024"
     },
     {
       "id": "quality_materials",
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7379308,
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "status": "candidate_external",
-      "log": "logs/pack-quality_materials.stdout.log"
+      "reused_from_build": "greyfen-village-20261024"
     }
   ],
-  "errors": [],
-  "selected_web_export": {
-    "build_id": "greyfen-village-20261024",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\greyfen-village-20261024-final\\export",
-    "generated_from_commit": "39f8701f49c26a50b0a2fab5b9ce03e34cbc43bf",
-    "artifacts_total_bytes": 104608438,
-    "root_pck_sha256": "080158ff19275daab190016c84633db1775d1832b1ccc8b98f59a1aaa2a4640d",
-    "note": "Unchanged asset pack exports reused; base and root rebuilt for final save guards. Standard gzip, lossless engine compression."
-  }
+  "errors": []
 }

@@ -1,5 +1,21 @@
 # Living Cast - Current Checkpoint
 
+2026-10-25 audio-routing repair: the user authorized focused runtime diagnosis.
+[Cause, fix and measured output](AUDIO_ROUTING_REPAIR_20261025.md).
+Candidate `audio-routing-20261025` is implemented, compiled and packaged.
+Godot Web's dynamic bus append path reordered browser buses and disconnected
+Master from the output; increasing bus count instead preserves routing.
+Actual browser-session Windows peaks: 0.005226 after New Game, 0 while paused,
+0.005751 after Resume. These are signal measurements, not subjective listening
+approval or a full campaign test. All seven external content packs are unchanged.
+Complete package: **104672481 bytes**, **185119 bytes below** the strict cap.
+Root PCK: `41b2ead71671f755724901567a60aa9ceb670ab5351a6cffe8a3d90601ad4206`.
+Publication completion is owned by the current CAST-010 receipt. Phone/WebKit
+and subjective mix balance remain user-owned; formal cast acceptance is unchanged.
+The earlier recovery-only diagnosis below is retained as history, not current cause.
+
+## Previous Audio Recovery Attempt
+
 2026-10-24 audio-startup repair: implemented, compiled and packaged as
 `audio-recovery-20261024`. No runtime/listening test is authorized or claimed.
 The synchronized production package contains 17 files, **104817107 bytes**,

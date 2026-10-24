@@ -154,7 +154,9 @@ func _ready() -> void:
 	_build_music_state("main_menu")
 	cue_bus_name = "AshenCues_%d" % get_instance_id()
 	var cue_bus_index := AudioServer.get_bus_count()
-	AudioServer.add_bus(cue_bus_index)
+	# Godot 4.6 Web add_bus normalizes append to -1, which reorders its sample
+	# buses and can disconnect Master. Growing the bus count preserves indices.
+	AudioServer.set_bus_count(cue_bus_index + 1)
 	AudioServer.set_bus_name(cue_bus_index, cue_bus_name)
 	AudioServer.set_bus_send(cue_bus_index, bus_name)
 	var cue_limiter := AudioEffectHardLimiter.new()
@@ -381,7 +383,7 @@ func _exit_tree() -> void:
 func _create_mix_bus(label: String) -> String:
 	var name := "Ashen%s_%d" % [label, get_instance_id()]
 	var index := AudioServer.get_bus_count()
-	AudioServer.add_bus(index)
+	AudioServer.set_bus_count(index + 1)
 	AudioServer.set_bus_name(index, name)
 	AudioServer.set_bus_send(index, bus_name)
 	return name

@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "greyfen-village-20261024",
+  "release_id": "audio-routing-20261025",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 104857600,
   "packs": {
     "base": {
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -26,7 +26,7 @@
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
       "candidate_bytes": 4084864,
-      "candidate_sha256": "f7fdf2d7e1878c8554a4051cd77acdf0db1c54864810013793d86a0137ae2683",
+      "candidate_sha256": "5c5c82999b476e594e8e9db48e264feb624de57fa3dcd6c459c2721fedd5f0f1",
       "contents": [
         "menu",
         "managers",
@@ -36,11 +36,11 @@
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
       "embedded_source_bytes": 4084864,
-      "embedded_source_sha256": "f7fdf2d7e1878c8554a4051cd77acdf0db1c54864810013793d86a0137ae2683",
+      "embedded_source_sha256": "5c5c82999b476e594e8e9db48e264feb624de57fa3dcd6c459c2721fedd5f0f1",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "url": "packs/opening.pck?sha256=256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a",
       "sha256": "256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a",
       "bytes": 35745224,
@@ -61,7 +61,7 @@
       "cache_key": "256ec54badcc7c3935928fff3d4877fd75f43b3a5c24083a931a4e6a9a2f466a"
     },
     "campaign": {
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "url": "packs/campaign.pck?sha256=3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
       "bytes": 8726164,
@@ -84,7 +84,7 @@
       "cache_key": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1"
     },
     "characters": {
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "url": "packs/characters.pck?sha256=cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "bytes": 9658576,
@@ -105,7 +105,7 @@
       "cache_key": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3"
     },
     "monsters": {
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "url": "packs/monsters.pck?sha256=d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "bytes": 14710328,
@@ -127,7 +127,7 @@
       "cache_key": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22"
     },
     "audio": {
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "url": "packs/audio.pck?sha256=77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752",
       "sha256": "77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752",
       "bytes": 19291740,
@@ -148,7 +148,7 @@
       "cache_key": "77876edcb4c523f1618a3419e0940fbc6ce1b808d2f17ec72adc0eeda5679752"
     },
     "quality_materials": {
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "url": "packs/quality_materials.pck?sha256=a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "bytes": 7379308,
@@ -169,7 +169,7 @@
       "cache_key": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8"
     },
     "adjacent": {
-      "version": "greyfen-village-20261024",
+      "version": "audio-routing-20261025",
       "url": "packs/adjacent.pck?sha256=12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "sha256": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918",
       "bytes": 1405472,
@@ -191,9 +191,9 @@
       "cache_key": "12cb9c04155541fd348df06d2198f07fb8ce842599435e53ba363da504e81918"
     }
   },
-  "build_id": "greyfen-village-20261024",
-  "generated_from_commit": "39f8701f49c26a50b0a2fab5b9ce03e34cbc43bf",
-  "generated_at_utc": "2026-10-24T12:08:47.014231Z",
+  "build_id": "audio-routing-20261025",
+  "generated_from_commit": "928537366c4e2cd21bcfcb2bee080a488d0ad2ee",
+  "generated_at_utc": "2026-10-24T16:41:04.551587Z",
   "total_bytes": 96916812,
   "source_dirty": true
 }
