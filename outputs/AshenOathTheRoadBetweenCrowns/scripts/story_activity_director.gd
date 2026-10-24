@@ -18,6 +18,14 @@ const REST_PLACES := {
 }
 const REST_SECONDS := 4.0
 const REST_MINUTES := 30.0
+const APPROACH_SIGNS := {
+	"bell_eater":{"zone":"cemetery", "position":Vector3(-5,0,7), "prompt":"Inspect the clapper scar beside the disturbed graves", "title":"A bell dragged across the graves", "observation":"The clapper has struck the stone three times along one arc. Burial thread runs from the disturbed earth toward the chapel. This is a physical trace, not Harl speaking from his grave.", "advice":"Watch the clapper lift. The existing mourning stones interrupt the wave; the return swing leaves time to act."},
+	"bog_wretch":{"zone":"wychwood", "position":Vector3(7.7,0,-2.2), "prompt":"Inspect the tracks at the water's edge", "title":"A territory along the water", "observation":"Deep prints turn along the wet edge rather than following the dry work trail. Displaced silt has caught on the screen. These marks describe a creature's movement, not proof that the whole forest is hostile.", "advice":"Keep firm ground at your back and watch the first committed approach. Moon Oil is optional preparation; the existing memory-core resolutions are unchanged."},
+	"rootbound_colossus":{"zone":"deep_wood", "position":Vector3(-5,0,7), "prompt":"Inspect the root scar at the guardian's boundary", "title":"Roots bending toward a guarded place", "observation":"The thick roots bend inward around a sheltered board. Outside their marked reach the ordinary path continues. The scar shows a boundary, not a reason to attack everything in the wood.", "advice":"Enter deliberately. Follow the root channels away from the protected record; a committed strike and Oathfire reveal different existing openings."},
+	"ashwing":{"zone":"old_mill", "position":Vector3(5.3,0,8), "prompt":"Inspect ash caught on the mill yard's windward post", "title":"Ash crossing the grain wind", "observation":"Ash coats the windward face above clean sacks. A broad wing scrape ends near the hauling rope. The crew's escape channel lies below that plume; it is not the same job as deciding the mill's future.", "advice":"Check the sluice and the workers' exit. Watch the shoulder before the breath; move across the plume, not straight back along it."},
+	"halvern_boss":{"zone":"undercroft", "position":Vector3(-4,0,8), "prompt":"Inspect the repeated blade marks before the empty gate", "title":"A guard repeated at an empty gate", "observation":"The same blade arc has cut the stone repeatedly. It stops short of the gate, as if holding one command in place. A repeated movement cannot establish everything a dead soldier knew.", "advice":"Keep the copied order available. His raised guard offers the existing hearing through a clean parry or presentation of the command; ordinary combat remains possible."},
+	"white_hart_avatar":{"zone":"hart_glade", "position":Vector3(-7,0,8), "prompt":"Inspect the hoofprints entering the glade", "title":"Measured steps into the glade", "observation":"Hoofprints enter slowly and turn where the sightline opens. The marks establish an approach, not consent to a covenant. Only a direct encounter can supply the Hart's account.", "advice":"Approach the actual witness without raising a weapon. Hear the costs of the existing four resolutions; no preparation item or optional quest is an ending key."}
+}
 const FRIEND_TASKS := {
 	"mira_garden": {"actor": "mira", "person": "mira", "position": Vector3(-7.7, 0, -2.8), "prompt": "Sort the drying stems beside Mira's herb beds", "invitation": "Could you use a hand with the herbs?", "result": "The sound stems are separated from the damp ones. Mira's patients will not inherit a spoiled bundle.", "acknowledgement": "The stems you sorted dried cleanly. Two households needed them that evening."},
 	"rook_stool": {"actor": "rook", "person": "rook", "position": Vector3(-6.8, 0, 11.5), "prompt": "Brace the loose stool at the common table", "invitation": "That stool has a short leg.", "result": "The stool sits square. Rook can lose a wager without losing his seat.", "acknowledgement": "The stool hasn't moved an inch. My luck, unfortunately, remains as it was."},
@@ -283,6 +291,16 @@ static func _danger_near(game) -> bool:
 	return false
 
 func _build(root: Node3D) -> void:
+	for creature: String in APPROACH_SIGNS:
+		var sign: Dictionary = APPROACH_SIGNS[creature]
+		if str(sign.zone) != zone: continue
+		var position: Vector3 = sign.position
+		if host.spatial_service != null:
+			position = host.spatial_service.validate_position(position, 0.6, host.spatial_service.bank_for(position))
+		_point(root, "approach_" + creature, str(sign.prompt), position, str(sign.title), Color(0.50,0.48,0.40))
+		var area := root.find_child("approach_" + creature, true, false) as Node3D
+		if area != null:
+			preload("res://scripts/saga_work_presentation.gd").clue_visual(host, area, str(sign.prompt))
 	if zone == "greyfen":
 		_point(root, "lr_gathering", "Room at the common table", Vector3(-5.4, 0, 10.5), "ROOM FOR COMPANY", Color(0.59, 0.65, 0.61))
 		for id: String in FRIEND_TASKS:
@@ -374,7 +392,20 @@ func refresh() -> void:
 		saga.refresh()
 
 func activate(id: String) -> void:
-	if id.begins_with("saga_"):
+	if id.begins_with("approach_"):
+		var creature := id.trim_prefix("approach_")
+		var sign: Dictionary = APPROACH_SIGNS.get(creature, {})
+		var area := host.zone_root.find_child(id, true, false) as Node3D
+		if sign.is_empty() or str(sign.zone) != zone or not is_instance_valid(area) or not area.is_visible_in_tree() or not area.is_interaction_enabled() or not is_instance_valid(host.player) or not host.player.can_control or area.global_position.distance_to(host.player.global_position) > 3.2 or host._story_has_active_combat():
+			return
+		host.story_state.record_evidence("saga_approach:" + creature, {"zone":zone, "kind":"observed", "title":sign.title, "text":sign.observation, "advice":sign.advice})
+		host.story_save_pending = true
+		host.call_deferred("_persist_story_action")
+		host.get_tree().paused = true
+		host.audio.set_game_paused(true)
+		host.hud.show_dialogue({"name":sign.title, "pages":[{"speaker":"Observed traces", "speaker_id":"narrator", "text":str(sign.observation) + "\n\nPractical inference: " + str(sign.advice)}], "actions":[{"type":"close", "label":"Return to the path"}]})
+		return
+	if id.begins_with("saga_") or id.begins_with("side_escort_"):
 		var saga := get_node_or_null("SixWorldStories")
 		if saga != null:
 			saga.activate(id)
@@ -528,6 +559,8 @@ func _scene(id: String) -> void:
 				remembered.append(preload("res://scripts/saga_catalog.gd").aftermath(quest_id, str(host.story_state.get_flag(quest_id + "_outcome", ""))))
 		if not remembered.is_empty():
 			pages.append({"speaker":"The places you returned to", "speaker_id":"narrator", "text":"\n\n".join(remembered), "performance":{"framing":"two_shot", "emotion":"neutral"}})
+		if host.quests.is_completed("side_escort_04"):
+			pages.append({"speaker":"The relief crossing", "speaker_id":"narrator", "text":"Maren led the relief travelers across. Kael stayed through the last load. That present act and the abandoned escort remain different roads; nobody has recorded forgiveness on Maren's behalf."})
 		content["pages"] = pages
 	var actor_id := "sister_anwen" if id.begins_with("aftermath_names_") else "blacksmith_tor" if id.begins_with("aftermath_work_") or id.begins_with("work_road_") else "mira" if id.begins_with("work_relief_") else "captain_senn" if id == "soldiers_stand_down" else "rook"
 	var scene_actor = host.zone_root.find_child(actor_id, true, false)

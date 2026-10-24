@@ -42,6 +42,43 @@ static func turns(scene: Dictionary, host) -> Array:
 			return variant.turns
 	return scene.get("turns", [])
 
+static func dialogue_callbacks(id: String, pages: Array, state, quests) -> Array:
+	if state == null: return pages
+	var result: Array = pages.duplicate(true)
+	if id == "halvern" and bool(state.get_flag("escort_abandonment_acknowledged", false)):
+		for page: Dictionary in result:
+			if str(page.get("speaker_id", "")) == "player" and str(page.get("text", "")).begins_with("I was ordered to retreat from another road"):
+				page["text"] = "Maren has already heard me say it. I left civilians on a different road after promising escort, called it retreat, and never went back. Your refusal does not excuse mine."
+	var speaker := ""
+	var words := ""
+	if id == "notice_board" and not bool(state.get_flag("escort_abandonment_acknowledged", false)):
+		speaker = "narrator"
+		words = "A fresh delivery note: Maren's relief cart is at the arrivals yard. Tor has left an axle brace; Anwen has the clean linen. Another pair of hands would be welcome."
+	if quests != null and quests.is_completed("side_escort_01"):
+		match id:
+			"blacksmith_tor":
+				speaker = "blacksmith_tor"
+				if quests.is_completed("side_escort_04"):
+					result.append({"speaker":"Kael", "speaker_id":"player", "text":"Maren's crew reached the far shoulder. Your brace held.", "beat":"shared_account"})
+				words = "That relief axle is seated. A wheel should turn without someone having to hold their breath. " + ("It held through the crossing, by the account you brought back." if quests.is_completed("side_escort_04") else "Tell Maren to check it again after the crossing.")
+			"sister_anwen":
+				speaker = "sister_anwen"
+				words = "Maren brought the load in with half an axle and all her opinions. Useful woman. You left the linen where I could reach it; thank you."
+	var correction := str(state.get_flag("side_escort_05_outcome", ""))
+	if correction != "" and quests != null and quests.is_completed("side_escort_05"):
+		if id == "vargan_record_keeper":
+			speaker = "vargan_record_keeper"
+			words = "Your correction is beside its source. Maren's account remains in its agreed custody. I have not put words into the gaps."
+		elif correction == "public" and id == "rook":
+			speaker = "rook"
+			words = "Read your correction. Not going to make a joke about that one. There is still a chair here, if you can bear me being sensible for a moment."
+		elif correction == "public" and id == "assembly_choice":
+			speaker = "narrator"
+			words = "Kael's public correction is available beside his own report. Maren's limited account does not speak for the other survivors and supplies no proof of Vargan's massacre."
+	if words != "":
+		result.append({"speaker":"A remembered act" if speaker == "narrator" else {"blacksmith_tor":"Tor", "sister_anwen":"Anwen", "rook":"Rook", "vargan_record_keeper":"Vale"}.get(speaker, speaker), "speaker_id":speaker, "text":words, "beat":"remembered_action"})
+	return result
+
 static func reflections(state) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var heard: Variant = state.get_flag("world_scenes_heard", {})

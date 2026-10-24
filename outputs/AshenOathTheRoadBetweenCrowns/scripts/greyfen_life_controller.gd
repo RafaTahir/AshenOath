@@ -129,7 +129,10 @@ func configure(game: Node, quality_preset: String, only_registered: bool = false
 
 func enroll_region() -> void:
 	var zone_id := str(host.current_zone_id)
-	for id: String in CastProfile.life_data().get("zones", {}).get(zone_id, {}):
+	var definitions: Dictionary = CastProfile.life_data().get("zones", {}).get(zone_id, {}).duplicate()
+	if str(preload("res://scripts/saga_catalog.gd").person_location("saga_maren", host.quests).zone) == zone_id:
+		definitions["saga_maren"] = {"profile":"maren"}
+	for id: String in definitions:
 		var existing: Dictionary = {}
 		for candidate: Dictionary in actors:
 			if str(candidate.id) == id:
@@ -137,7 +140,7 @@ func enroll_region() -> void:
 				break
 		if bool(existing.get("regional", false)):
 			continue
-		var definition: Dictionary = CastProfile.life_data().zones[zone_id][id]
+		var definition: Dictionary = definitions[id]
 		var node := host.zone_root.find_child(str(definition.get("actor", id)), true, false) as Node3D
 		if not is_instance_valid(node) or not node.visible:
 			continue
@@ -322,6 +325,9 @@ func _enroll_named_npcs() -> void:
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
+	if str(node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
+		_release_activity(entry)
+		return
 	if not node.is_visible_in_tree() or node.get_node_or_null("Person") != null and not node.get_node("Person").visible:
 		_release_activity(entry)
 		return

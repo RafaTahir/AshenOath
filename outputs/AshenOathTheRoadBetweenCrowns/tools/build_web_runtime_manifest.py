@@ -70,6 +70,19 @@ def optimize_menu_png(export_dir: Path) -> None:
         if old_chunks[0] != new_chunks[0]:
             return
         idat = b"".join(data for kind, data in new_chunks if kind == b"IDAT")
+        # PNG uses zlib too. Recompress its unchanged filtered scanlines with
+        # the same optional lossless encoder used for small code packs.
+        try:
+            import zopfli.zlib
+        except ImportError:
+            pass
+        else:
+            scanlines = zlib.decompress(idat)
+            compact_idat = zopfli.zlib.compress(scanlines, numiterations=5)
+            if len(compact_idat) < len(idat):
+                if zlib.decompress(compact_idat) != scanlines:
+                    raise ValueError("Lossless PNG packaging changed scanlines")
+                idat = compact_idat
         packed = bytearray(original[:8])
         replaced = False
         for kind, data in old_chunks:

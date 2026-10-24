@@ -16,6 +16,23 @@ publication are not ten-ticket user acceptance. See [current delivery](ROLLOUT_I
 
 ## Ordered Tickets
 
+### Campaign Worth Remembering Amendment (2026-10-24)
+
+See [the bounded campaign implementation](../living-road/CAMPAIGN_WORTH_REMEMBERING.md)
+and [sourced case notes](../living-road/RESEARCH.md). This work extends the retained
+cast rather than replacing the earlier rollout or claiming its user approval.
+
+- CAST-001/004: Maren has one identity, a relief occupation and current regional
+  work anchors. The crossing owns locomotion while active; daily routines yield.
+- CAST-003/006: guarded cooperation, explicit company/distance and completed-deed
+  callbacks preserve her boundaries. Public/protected correction changes who can
+  acknowledge it; neither branch grants forgiveness.
+- CAST-008/009: six different physical threat approaches, actual-sight encounter
+  introductions, revised work exchanges and regional relief staging reuse the
+  existing bodies, performance, spatial and encounter owners.
+- CAST-010: one combined build-only candidate; no new facial-rig rollout, voices,
+  runtime acceptance or publication is implied by this amendment.
+
 - [CAST-001 - Character Ownership](CAST-001.md)
 - [CAST-002 - Human Faces](CAST-002.md)
 - [CAST-003 - Emotional Performance](CAST-003.md)

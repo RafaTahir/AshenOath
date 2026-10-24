@@ -17,16 +17,19 @@ static func account(id: String, step: Array) -> String:
 	return str(performance(id).get("beats", {}).get(str(step[0]), step[5]))
 
 static func observation(id: String, step: Array, index: int) -> String:
-	var clues: Array = performance(id).get("clues", {}).get(str(step[0]), [])
+	var clues: Array = performance(id).get("clues", QUESTS.get(id, {}).get("observations", {})).get(str(step[0]), [])
 	if index >= 0 and index < clues.size():
 		return str(clues[index])
 	return str(step[4][index]) + ". Compare this with the other marked evidence before drawing a conclusion."
 
 static func aftermath(id: String, outcome: String) -> String:
-	return str(performance(id).get("outcomes", {}).get(outcome, QUESTS[id].steps.back()[5]))
+	return str(performance(id).get("outcomes", QUESTS[id].get("outcomes", {})).get(outcome, QUESTS[id].steps.back()[5]))
 
 ## Existing objective/part IDs survive; only their authored physical stations move.
 const PART_SITES := {
+	"side_escort_01:steady_arrival":["escort_care", "escort_forge", "arrivals"],
+	"side_escort_02:read_two_roads":["deadfall", "boundary", "blind"],
+	"side_escort_05:compare_accounts":["archive", "copies"],
 	"saga_wyc_q01:compare_stumps":["grove", "grove", "boundary"],
 	"saga_wyc_q01:return_tag":["grove", "boundary", "grove", "workers"],
 	"saga_wyc_q04:follow_three_marks":["deadfall", "boundary", "blind"],
@@ -43,7 +46,7 @@ const PART_SITES := {
 	"saga_har_q03:mark_quiet_edge":["edge", "tracks"]
 }
 
-const PRESENTATION_SITES := {"saga_wyc_q04":"blind", "saga_dep_q03":"cellar", "saga_dep_q04":"graft", "saga_gre_q04":"kitchen"}
+const PRESENTATION_SITES := {"saga_wyc_q04":"blind", "saga_dep_q03":"cellar", "saga_dep_q04":"graft", "saga_gre_q04":"kitchen", "side_escort_02":"blind", "side_escort_04":"causeway"}
 
 const BUNDLED_CARRIES := {
 	"saga_dep_q02:prepare_bed":"supplied clean fill",
@@ -53,6 +56,7 @@ const BUNDLED_CARRIES := {
 }
 
 const GREETINGS := {
+	"saga_maren":"You can sit here. It is a seat, Kael. We needn't decide anything larger over supper.",
 	"saga_nessa":"There you are. Sit down a moment; I can talk without stopping the bread.",
 	"saga_jory":"I checked the rope again. Couldn't help myself. How was the road?",
 	"saga_iven":"Back along the same path? Good. Tell me if the markers need seeing to.",
@@ -70,6 +74,8 @@ const GREETINGS := {
 static func part_site(id: String, step: Array, part: int, state = null) -> String:
 	var site := str(step[2])
 	var stations: Array = PART_SITES.get(id + ":" + str(step[0]), [])
+	if id == "side_escort_01" and state != null and str(state.get_flag(id + "_outcome", "")) == "wheel":
+		stations = ["escort_forge", "escort_care", "arrivals"]
 	if part >= 0 and part < stations.size():
 		return str(stations[part])
 	if str(step[3]) == "carry" and part % 2 == 1 and part < step[4].size():
@@ -98,6 +104,7 @@ const REWARDS := {
 	"saga_oathbearer_inlay":{"name":"Oathbearer's Inlay", "description":"An earned fitting, not authority over another person. Oathfire cooldown is reduced by half a second, to its existing minimum.", "effects":{"saga_cooldown_reduction":0.5}}
 }
 const PEOPLE := {
+	"saga_maren":{"name":"Maren", "zone":"greyfen", "site":"arrivals", "role":"villager_female_human", "line":"Hold that wheel, would you? The patient has had enough surprises for one journey.", "return":"We got the load through. I am going with the next one because I choose to, not because the road has finished with us."},
 	"saga_dain":{"name":"Dain", "zone":"old_mill", "site":"dispatch", "alias":true, "line":"I can mend a wheel. I cannot make an honest weight out of a secret fee.", "return":"The cover is dry. There is work under it that we chose for ourselves."},
 	"saga_nessa":{"name":"Nessa", "zone":"greyfen", "site":"kitchen", "role":"villager_female_human", "line":"I can bake less. I cannot tell a child a smaller loaf is the same size.", "return":"There is bread on the shelf. Take a seat before you ask what needs doing."},
 	"saga_jory":{"name":"Jory", "zone":"greyfen", "site":"bell", "role":"villager_worker_human", "line":"A bell is a promise that somebody is listening. The pin is only iron.", "return":"I checked the rope this morning. You needn't keep listening for it."},
@@ -130,6 +137,34 @@ const SITES := {
 }
 
 const QUESTS := {
+	"side_escort_01":{"title":"The One Who Returned", "zone":"greyfen", "region":"greyfen", "actor":"saga_maren", "site":"arrivals", "activity":"care", "hook":"Maren's relief cart has arrived with a loose wheel and an exhausted traveler. Anwen has the patient; Tor needs someone to brace the axle. Neither job can wait for a biography.", "outcomes":{"care":"Anwen settled the traveler first; Tor's axle was braced afterward. Maren recognized Kael from the escort he abandoned. She survived without his return, and has offered no forgiveness.", "wheel":"Tor's axle was secured first while Anwen stayed with the traveler. Maren recognized Kael from the escort he abandoned. Her present relief work is her own."}, "steps":[
+		["choose_priority","Ask where your hands are needed first","arrivals","choice",{"care":"Help Anwen settle the traveler, then brace Tor's axle","wheel":"Brace Tor's axle while Anwen stays with the traveler"},"Both tasks will be finished. Choosing their order does not heal Kael, consume a patient's supplies or decide anyone's survival."],
+		["steady_arrival","Settle the relief arrival with Anwen and Tor","arrivals","work",["Hold the clean linen within Anwen's reach","Seat Tor's axle brace","Check the secured wheel and leave the traveler space"],"The wheel holds and the traveler can rest. Maren stacks the remaining supplies herself. Nobody waited here for a hunter to do all the work."],
+		["hear_recognition","Hear what Maren recognizes","arrivals","talk",[],"Maren: 'I know you. Not from this village. You were on our escort. You left at the bend.' Kael: 'I did.' Maren: 'I learned to set a wheel after that. We still needed to get somewhere. If you want to follow the work line, Iven can show you where it crosses the old road. Do not tell me what I must want from you.'"]]},
+	"side_escort_02":{"title":"No Footsteps Back", "zone":"wychwood", "region":"wychwood", "actor":"saga_maren", "site":"workers", "previous":"side_escort_01", "early_clues":true, "hook":"Iven's present work line crosses the road Maren remembers. Follow what can still be observed; old damage cannot tell Kael everything that happened after he left.", "outcomes":{"dry_shoulder":"Kael checked the dry shoulder on foot. Fresh work tracks are distinct from the older broken route; the clearing's creatures do not explain away his retreat.", "work_line":"Kael checked Iven's marked work line on foot. The maintained marks describe present passage, not a complete reconstruction of the abandoned escort."}, "steps":[
+		["read_two_roads","Compare old damage with the current work trail","deadfall","inspect",["Old escort wheel scrape","Fresh work-line notch","Current lookout tracks"],"The marks have different ages. Kael recognizes where he turned away, but cannot see the lives that continued beyond him."],
+		["choose_approach","Choose a maintained approach through Wychwood","workers","choice",{"dry_shoulder":"Take the dry shoulder to the old lookout","work_line":"Follow the maintained work line past the boundary"},"Both approaches use existing firm ground. Look at the clearing from the shoulder before entering; there is no new river crossing or replacement encounter."],
+		["walk_approach","Walk and check the chosen approach","deadfall","walk",["deadfall","boundary","blind"],"The fresh tracks continue past the old damage. Existing creatures and cleared encounters retain their actual state; none are summoned to reenact Kael's past."],
+		["mark_passage","Turn the existing route marker toward the checked passage","blind","work",["Turn the loose marker toward firm ground","Check the work-line notch against the route just walked"],"A useful marker faces the checked path. Maren's crew can read it without knowing Kael's story."]]},
+	"side_escort_03":{"title":"What We Carried", "zone":"old_mill", "region":"deep_wood", "actor":"saga_maren", "site":"shelter", "previous":"side_escort_02", "activity":"repair", "hook":"Maren has brought the relief load to the mill yard. A damaged lifting frame puts the usable supplies at risk. Dain knows the frame; Maren knows which loads can be moved safely.", "outcomes":{"medicine":"The supported lift recovered the sealed medicine load; damaged repair stock remains marked aside. Maren's crew made the decision with Kael, not for his absolution.", "tools":"The supported lift recovered the usable tools; the unstable medicine crate remains isolated for the crew's later work. No inventory supplies or campaign rescues were erased."}, "steps":[
+		["hear_lift_plan","Hear Maren's loading plan","shelter","talk",[],"Maren: 'Light crate to the left. Heavy one stays low. Dain says the frame will hold if someone seats that brace.' Kael: 'You have done this before.' Maren: 'There was no one left to do it for us. Mind your fingers.'"],
+		["brace_lift","Brace and test the relief lifting frame","shelter","work",["Seat the foot brace","Take the slack out of the lift rope","Test the supported crossbeam"],"The frame takes the strain. Nobody enters the old mill or changes the recorded workers' escape."],
+		["choose_load","Agree which supported load to recover now","shelter","choice",{"medicine":"Recover the light sealed medicine load","tools":"Recover the usable repair tools"},"The crew isolates the unsafe stock. A practical limit is not a claim that every loss can be undone."],
+		["lower_load","Lower the chosen load onto the supported tray","shelter","work",["Hold the brake while Maren guides the load","Lower the cradle onto its supports","Release the slack rope"],"Maren checks the load herself. 'That much we can use. Leave the rest marked. We are not putting a person under it.'"]]},
+	"side_escort_04":{"title":"Hold the Rear", "zone":"marsh_crossing", "region":"long_road", "actor":"saga_maren", "site":"keeper", "previous":"side_escort_03", "hook":"Maren and the relief travelers are ready for Nera's crossing. She will lead the group. Kael can clear the approach or protect the rear, and stay until the last traveler reaches firm ground.", "outcomes":{"approach":"Kael checked the approach while Maren led the travelers through Nera's existing safe route. The group waited at safe anchors when separated or threatened.", "rear":"Kael stayed behind the last traveler while Maren led the crossing. It was present work, not a replacement version of his retreat."}, "steps":[
+		["choose_position","Agree your place in the crossing","keeper","choice",{"approach":"Clear the approach; let Maren lead the travelers","rear":"Protect the rear; stay behind the last traveler"},"Maren: 'I give the travelers their pace. If you need us to stop, we stop. No one gets dragged along to finish your promise.'"],
+		["cross_with_crew","Accompany every traveler to the far safe shoulder","keeper","escort",["keeper","line","causeway"],"The last traveler reaches firm ground. The group kept its own pace; no unseen casualty clock decided the crossing."],
+		["check_last_load","Check the last load with Maren","causeway","talk",[],"Maren counts the people before the crates. 'All here. That is what I asked. It does not change the other road.' Kael: 'No.' Maren: 'Good. Help me get the rope dry.'"],
+		["coil_return_rope","Coil the emergency rope clear of the passage","causeway","work",["Dry the used length on the existing post","Coil it where the next traveler can reach it"],"Nera's emergency rope is ready for the next crossing. Nobody has inherited Senn's authority over the road."]]},
+	"side_escort_05":{"title":"The Word Retreat", "zone":"record_hall", "region":"vargan", "actor":"saga_maren", "site":"archive", "previous":"side_escort_04", "early_clues":true, "activity":"read", "hook":"Vale can retain a correction to Kael's own report. Maren has offered a limited written account of her escort, not testimony about Vargan's massacre. Her name is not the price of correcting his.", "outcomes":{"public":"Kael publicly corrected his own retreat report. Maren's separately offered account remains limited to what she experienced; her participation was not purchased.", "protected":"Kael retained a protected correction with a challengeable source reference. Maren's name and account were not made public. The original command proof is unchanged."}, "steps":[
+		["compare_accounts","Compare Kael's report with Maren's offered account","archive","inspect",["Kael's report of retreat","Maren's limited escort account"],"Kael called his departure a retreat and omitted the civilians he had promised to escort. Maren records only her own experience afterward. Neither page proves Vargan's massacre."],
+		["hear_boundary","Ask what Maren permits you to retain","archive","talk",[],"Maren: 'Keep what I gave you. Not a list of everyone who was there. Some of them do not want you finding them.' Vale: 'The correction concerns your report, Kael. Start with your own name.'"],
+		["choose_correction","Choose custody of your own correction","archive","choice",{"public":"Correct your own report in the public register","protected":"Retain a protected correction with a source reference"},"Kael: 'I left civilians after promising escort. I wrote retreat because it sounded like something done to me.' The correction does not ask anyone else for forgiveness."],
+		["place_correction","Place and reference the correction without altering old proof","copies","work",["Place Kael's signed correction","Keep Maren's offered account in its agreed custody","Cross-reference rather than overwrite the original"],"Vale leaves the original legible beside its correction. The command ledger and Halvern's bounded account retain their own authority."]]},
+	"side_escort_06":{"title":"A Road Kept Open", "zone":"hart_glade", "completed_zone":"greyfen", "region":"hartlands", "actor":"saga_maren", "site":"plot", "previous":"side_escort_05", "requires":"hart", "activity":"sort_supplies", "lore":"Maren's relief cord: a journal keepsake of a completed handover, not another oath or equipment bonus. The people from the abandoned escort retain lives Kael does not know.", "outcomes":{"company":"Maren accepted company for the handover and kept her own plans. Kael completed the existing journey home; the next road is an offer, not proof of forgiveness.", "distance":"Maren kept a little distance while the relief work was handed over. Kael respected it and completed the existing homecoming. Cooperation did not erase the abandoned escort."}, "steps":[
+		["handover_relief","Complete the relief handover beside the changed grove","plot","work",["Place the recovered load on the receiving tray","Leave the route markers with the willing receivers"],"The handover takes place after the recorded covenant. No Hart is restored after Ash, no binding is invented after Mercy, and no one is pledged to carry this work forever."],
+		["choose_company","Offer company without demanding reconciliation","plot","choice",{"company":"Share a quiet meal before the next journey","distance":"Keep a little distance and finish the handover"},"Maren: 'I can work beside you. Some days I may not want to. Let that be an answer too.' Kael agrees. The next journey remains hers to choose."],
+		["return_home","Finish the existing Greyfen homecoming, then meet Maren at arrivals","arrivals","homecoming",[],"Maren has collected her next route. 'Nessa packed too much bread. She says that is a problem for my judgment, not her baking.' The cord stays in Kael's journal. A place at supper is offered without another oath.",{"zone":"greyfen"}]]},
 	"saga_gre_q01":{"title":"The Baker's Last Sack", "zone":"greyfen", "actor":"saga_nessa", "site":"kitchen", "hook":"The marked sack and the delivery scale disagree. Help Nessa find what changed without accusing a hungry household.", "items":{"travel_bread":2}, "steps":[
 		["hear_shortfall","Ask Nessa about the short delivery","kitchen","talk",[],"Nessa: 'A smaller loaf is not the same size. Let's find the measure before we find someone to blame.'"],
 		["compare_measures","Compare the sack seam and delivery scale","cart","inspect",["Marked sack seam","Replaced scale pin"],"The sack's old seam agrees with Tor's weight. A smaller pin changed the delivery measure."],
@@ -330,7 +365,32 @@ const SECRETS := {
 static func region_for_prefix(prefix: String) -> String:
 	return str(WORLDS.get(prefix, {}).get("region", ""))
 
+static func region_for_quest(id: String) -> String:
+	return str(QUESTS.get(id, {}).get("region", region_for_prefix(id.get_slice("_", 1))))
+
+static func step_zone(id: String, step: Array) -> String:
+	if step.size() > 6:
+		return str(step[6].get("zone", QUESTS[id].zone))
+	return str(QUESTS[id].get("completed_zone", QUESTS[id].zone) if step.is_empty() else QUESTS[id].zone)
+
+static func person_location(id: String, quests) -> Dictionary:
+	var person: Dictionary = PEOPLE[id]
+	if id != "saga_maren":
+		return {"zone":person.zone, "site":person.site}
+	for index in range(1, 7):
+		var quest_id := "side_escort_%02d" % index
+		if quests.is_completed(quest_id):
+			continue
+		var quest: Dictionary = QUESTS[quest_id]
+		for step: Array in quest.steps:
+			if quests.is_objective_done(quest_id, str(step[0])):
+				continue
+			return {"zone":step_zone(quest_id, step), "site":"causeway" if quest_id == "side_escort_04" and quests.is_objective_done(quest_id, "cross_with_crew") else str(step[2]) if index == 6 else str(quest.site)}
+	return {"zone":"greyfen", "site":"arrivals"}
+
 static func quest_xp(id: String) -> int:
+	if id.begins_with("side_escort_"):
+		return 300
 	return [300,350,250,300,500][clampi(int(id.right(2)) - 1, 0, 4)]
 
 static func quest_definitions() -> Dictionary:
@@ -340,7 +400,7 @@ static func quest_definitions() -> Dictionary:
 		var objectives: Array = []
 		for step: Array in quest.steps:
 			objectives.append({"id":step[0], "text":step[1], "kind":"choice" if str(step[3]) == "choice" else "work"})
-		result[id] = {"title":quest.title, "type":"side", "description":opening(id), "objectives":objectives, "story_depth":"regional", "saga_zone":quest.zone}
+		result[id] = {"title":quest.title, "type":"side", "description":opening(id), "objectives":objectives, "story_depth":"personal" if id.begins_with("side_escort_") else "regional", "saga_zone":quest.zone}
 	return result
 
 static func route(quest_id: String, objective_id: String, state) -> Dictionary:
@@ -351,6 +411,12 @@ static func route(quest_id: String, objective_id: String, state) -> Dictionary:
 		var part := maxi(0, int(state.get_flag(quest_id + ":" + objective_id + ":part", 0))) if state != null else 0
 		var site := part_site(quest_id, step, part, state)
 		var target := quest_id + ":" + objective_id
+		if str(step[3]) == "walk":
+			var sites: Array = step[4].duplicate()
+			if quest_id == "side_escort_02" and state != null and str(state.get_flag(quest_id + "_outcome", "")) == "work_line":
+				sites = ["workers", "boundary", "blind"]
+			site = str(sites[mini(part, sites.size() - 1)])
+			target += ":walk"
 		if str(step[3]) == "signal" and state != null and bool(state.get_flag(quest_id + ":signal_mode_set", false)):
 			var returning := bool(state.get_flag(quest_id + ":left_work_area", false))
 			site = "posts" if returning else "line"
@@ -361,5 +427,6 @@ static func route(quest_id: String, objective_id: String, state) -> Dictionary:
 			for index in range(step[4].size()):
 				if state == null or not bool(state.get_flag(target + ":seen:" + str(index), false)):
 					targets.append(target + ":inspect:" + str(index))
-		return {"destination_zone":quest.zone, "destination_name":str(quest.zone).replace("_"," ").capitalize(), "target_ids":targets, "route_hint":str(step[1]) + " - " + site.replace("_"," "), "purpose":opening(quest_id), "next_action":step[1], "pinpoint":true}
+		var zone := step_zone(quest_id, step)
+		return {"destination_zone":zone, "destination_name":zone.replace("_"," ").capitalize(), "target_ids":targets, "route_hint":str(step[1]) + " - " + site.replace("_"," "), "purpose":opening(quest_id), "next_action":step[1], "pinpoint":true}
 	return {}

@@ -4,6 +4,13 @@ Date: 2026-10-19. Workspace: D:/Projects/AshenOath.
 Branch: codex/masterpiece-rebuild.
 Scope: finish and establish acceptance of the retained game, not replace it.
 
+2026-10-24 content amendment: [A Campaign Worth Remembering](../living-road/CAMPAIGN_WORTH_REMEMBERING.md)
+adds six optional personal quests to the preserved 51, for 57 total. FINISH-002,
+006-012 and 015 include the affected saved progress, rewards, regional scenes and
+homecoming in their existing user checklists. No ticket is accepted merely by
+this implementation; current build-only operation does not renew older agent
+playthrough/benchmark allowances. Existing strict requirements remain unchanged.
+
 Execution update - 2026-10-19: the user approved finite oils under FINISH-017 and
 requested completion of the remaining finishing work, then one final agent
 verification run and necessary corrections. No interim runtime tests. Publication

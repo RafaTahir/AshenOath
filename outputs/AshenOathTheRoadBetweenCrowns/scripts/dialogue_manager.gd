@@ -265,6 +265,7 @@ func get_dialogue(id: String) -> Dictionary:
 			visible_actions.append(action)
 	base["actions"] = visible_actions
 	base["pages"] = _build_pages(base)
+	base["pages"] = preload("res://scripts/story_world_scenes.gd").dialogue_callbacks(id, base["pages"], story_state, quest_manager)
 	var relationship_actor := str({"sister_anwen": "anwen", "blacksmith_tor": "tor", "rook": "rook", "mira": "mira", "widow_elna": "elna", "vargan_record_keeper": "vale"}.get(id, ""))
 	if story_state != null and relationship_actor != "":
 		var acknowledgement: String = story_state.relationship_acknowledgement(relationship_actor)
@@ -323,6 +324,8 @@ func _build_pages(data: Dictionary) -> Array:
 
 func _speaker_id(value: String) -> String:
 	var normalized := value.to_lower().strip_edges()
+	if normalized == "maren":
+		return "saga_maren"
 	if normalized in ["kael", "the hunter"]:
 		return "player"
 	if normalized in ["anwen", "sister anwen"]:

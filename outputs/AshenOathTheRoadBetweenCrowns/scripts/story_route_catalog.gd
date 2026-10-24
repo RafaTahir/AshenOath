@@ -137,7 +137,7 @@ static func zone_name(zone_id: String) -> String:
 	return str(ZONE_NAMES.get(zone_id, zone_id.replace("_", " ").capitalize()))
 
 static func for_objective(quest_id: String, objective_id: String, state = null, quests = null, current_zone: String = "") -> Dictionary:
-	if quest_id.begins_with("saga_"):
+	if preload("res://scripts/saga_catalog.gd").QUESTS.has(quest_id):
 		return preload("res://scripts/saga_catalog.gd").route(quest_id, objective_id, state)
 	var entry: Array = ROUTES.get(quest_id, {}).get(objective_id, [])
 	if entry.is_empty():

@@ -13,6 +13,56 @@ static func build(game, parent: Node3D, id: String, completed: bool, outcome: St
 	assembly.set_meta("recorded_outcome", outcome)
 	parent.add_child(assembly)
 	match id:
+		"side_escort_01":
+			_plank(game,assembly,Vector3(0,0.38,0),Vector3(1.0,0.08,0.55))
+			for x in [-0.38,0.38]:
+				_plank(game,assembly,Vector3(x,0.19,0),Vector3(0.08,0.38,0.48))
+			var wheel := TorusMesh.new()
+			wheel.inner_radius = 0.24
+			wheel.outer_radius = 0.29
+			wheel.rings = 16
+			wheel.ring_segments = 6
+			var rim := _mesh(game,assembly,wheel,Vector3(0.50,0.30,0),WOOD)
+			rim.rotation.z = PI * 0.5
+			var brace := _plank(game,assembly,Vector3(0.25,0.16,0),Vector3(0.55,0.10,0.12))
+			brace.name = "ReliefAxleBrace"
+			_plank(game,assembly,Vector3(-0.18,0.44,0),Vector3(0.38,0.04,0.30),LINEN)
+		"side_escort_02":
+			_plank(game,assembly,Vector3(0,0.5,0),Vector3(0.08,1.0,0.08))
+			var pointer := _plank(game,assembly,Vector3(0,0.82,0),Vector3(0.62,0.10,0.04),LINEN)
+			pointer.name = "ReliefRoutePointer"
+		"side_escort_03":
+			for x in [-0.55,0.55]:
+				_plank(game,assembly,Vector3(x,0.8,0),Vector3(0.10,1.6,0.10))
+			_plank(game,assembly,Vector3(0,1.6,0),Vector3(1.25,0.12,0.12))
+			var foot := _plank(game,assembly,Vector3(-0.40,0.16,0),Vector3(0.35,0.10,0.55))
+			foot.name = "ReliefLiftBrace"
+			_rod(game,assembly,Vector3(0,1.22,0),0.015,0.70,LINEN)
+			var load := game._make_role_visual("crate","environment",Vector3.ONE * 0.25) as Node3D
+			if load != null:
+				load.name = "ReliefLoad"
+				load.position.y = 0.85
+				assembly.add_child(load)
+				var wrapping := _plank(game,load,Vector3(0,0.15,0),Vector3(0.65,0.03,0.65),LINEN)
+				wrapping.visible = outcome == "medicine"
+			_plank(game,assembly,Vector3(0,0.18,0),Vector3(0.70,0.08,0.62))
+		"side_escort_04":
+			for index in range(3):
+				var coil := TorusMesh.new()
+				coil.inner_radius = 0.14 - float(index) * 0.025
+				coil.outer_radius = coil.inner_radius + 0.015
+				coil.rings = 12
+				coil.ring_segments = 4
+				var rope := _mesh(game,assembly,coil,Vector3(0,0.04,0),LINEN)
+				rope.name = "ReliefCoil" + str(index)
+		"side_escort_06":
+			_plank(game,assembly,Vector3(0,0.45,0),Vector3(1.10,0.07,0.56))
+			for x in [-0.43,0.43]:
+				_plank(game,assembly,Vector3(x,0.22,0),Vector3(0.07,0.44,0.45))
+			for x in [-0.26,0.26]:
+				_rod(game,assembly,Vector3(x,0.51,0.04),0.10,0.04,WOOD)
+			var supplies := _plank(game,assembly,Vector3(0,0.54,-0.12),Vector3(0.35,0.10,0.20),LINEN)
+			supplies.name = "ReliefReceivedLoad"
 		"saga_gre_q01", "saga_dep_q01":
 			_plank(game, assembly, Vector3(0,0.45,0), Vector3(0.85,0.06,0.46))
 			var beam := _plank(game, assembly, Vector3(0,0.82,0), Vector3(0.65,0.04,0.04))
@@ -161,6 +211,19 @@ static func sync_progress(assembly: Node3D, game, id: String) -> void:
 	if not is_instance_valid(assembly):
 		return
 	var complete: bool = game.quests.is_completed(id)
+	var axle := assembly.get_node_or_null("ReliefAxleBrace") as Node3D
+	if axle != null:
+		var needed := 1.0 / 3.0 if str(game.story_state.get_flag(id + "_outcome", "")) == "wheel" else 2.0 / 3.0
+		axle.rotation.z = 0.0 if _progress(game,id,"steady_arrival") >= needed else -0.22
+	var pointer := assembly.get_node_or_null("ReliefRoutePointer") as Node3D
+	if pointer != null:
+		pointer.rotation.y = (0.4 if str(game.story_state.get_flag(id + "_outcome", "")) == "work_line" else -0.4) if _progress(game,id,"mark_passage") >= 1.0 else PI * 0.5
+	var foot := assembly.get_node_or_null("ReliefLiftBrace") as Node3D
+	if foot != null: foot.rotation.z = 0.0 if _progress(game,id,"brace_lift") > 0.0 else -0.25
+	var relief_load := assembly.get_node_or_null("ReliefLoad") as Node3D
+	if relief_load != null: relief_load.position.y = lerpf(0.85, 0.23, _progress(game,id,"lower_load"))
+	var received := assembly.get_node_or_null("ReliefReceivedLoad") as Node3D
+	if received != null: received.visible = complete or _progress(game,id,"handover_relief") >= 1.0
 	var beam := assembly.get_node_or_null("ScaleBeam") as Node3D
 	if beam != null:
 		beam.rotation.z = 0.0 if complete or _progress(game,id,"weigh_next_batch") > 0.0 or _progress(game,id,"mark_next_load") > 0.0 else 0.15
@@ -201,6 +264,11 @@ static func sync_progress(assembly: Node3D, game, id: String) -> void:
 static func animate_work(assembly: Node3D, mode: String, part: int, amount: float) -> void:
 	if not is_instance_valid(assembly):
 		return
+	var load := assembly.get_node_or_null("ReliefLoad") as Node3D
+	if load != null and mode == "work":
+		var quest := str(assembly.get_meta("quest", ""))
+		if quest == "side_escort_03" and bool(assembly.get_meta("lowering", false)):
+			load.position.y = lerpf(0.85, 0.23, (float(part) + amount) / 3.0)
 	if mode == "door" and part < 2:
 		var hinge := assembly.get_node_or_null("DoorHinge") as Node3D
 		if hinge != null:
@@ -255,6 +323,25 @@ static func carried_item(game, label: String) -> Node3D:
 
 static func clue_visual(game, parent: Node3D, prompt: String) -> bool:
 	var words := prompt.to_lower()
+	if words.contains("clapper"):
+		var stone := game._make_role_visual("forest_rock", "environment", Vector3(0.24,0.12,0.20)) as Node3D
+		if stone != null: parent.add_child(stone)
+		for index in range(3):
+			_plank(game,parent,Vector3(-0.15 + float(index) * 0.12,0.12,0),Vector3(0.025,0.012,0.16),IRON)
+		_rod(game,parent,Vector3(0.18,0.10,0.05),0.012,0.20,LINEN).rotation.z = PI * 0.5
+		return true
+	if words.contains("windward post"):
+		_plank(game,parent,Vector3(0,0.50,0),Vector3(0.10,1.0,0.10))
+		for index in range(4):
+			_plank(game,parent,Vector3(0.01,0.55 + float(index) * 0.07,0.056),Vector3(0.09,0.04,0.006),Color(0.50,0.51,0.48))
+		return true
+	if words.contains("blade marks"):
+		var stone := game._make_role_visual("forest_rock", "environment", Vector3(0.25,0.10,0.25)) as Node3D
+		if stone != null: parent.add_child(stone)
+		for index in range(3):
+			var mark := _plank(game,parent,Vector3(float(index) * 0.06,0.10,0),Vector3(0.01,0.01,0.30),IRON)
+			mark.rotation.y = 0.4
+		return true
 	if words.contains("track") or words.contains("hoofprint") or words.contains("scrape"):
 		for index in range(4):
 			var print_mesh := SphereMesh.new()

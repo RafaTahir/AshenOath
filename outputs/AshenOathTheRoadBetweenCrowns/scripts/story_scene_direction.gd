@@ -31,6 +31,8 @@ const TOPICS := {
 }
 
 static func for_regional(speaker_id: String) -> Dictionary:
+	if speaker_id == "saga_maren":
+		return {"emotion":"guarded", "listener_emotion":"concerned", "gesture":"acknowledge", "listener_gesture":"", "framing":"two_shot", "reaction_delay":0.35}
 	var profile := preload("res://scripts/story_cast_profile.gd").presence_profile(speaker_id)
 	var activity := str(profile.get("activity", "idle"))
 	var emotion := "warmth" if activity in ["bake", "sort_seeds", "tend"] else "concern"

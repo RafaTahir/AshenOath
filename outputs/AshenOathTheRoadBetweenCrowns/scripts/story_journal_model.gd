@@ -133,9 +133,12 @@ static func recap_model(campaign: Dictionary, quests, state, zone_id: String) ->
 		if _flag_bool(state, "final_choice_completed"):
 			recap["promise"] = "The covenant's outcome stands. Keep the surviving account and return to the people who must live with what comes next."
 		return _finish_recap(recap)
-	if _flag_bool(state, "final_choice_completed"):
+	var tracked_escort: bool = quests != null and str(quests.get_tracked_quest()).begins_with("side_escort_") and quests.is_active(str(quests.get_tracked_quest()))
+	if _flag_bool(state, "final_choice_completed") and not tracked_escort:
 		recap.merge({"heading": "The road remains open", "promise": "The final choice and the return to Greyfen are recorded. Their consequences remain part of this journey.", "next_action": "Visit a known place or take up an unfinished task in the journal.", "destination_zone": zone_id, "destination_name": _zone_name(zone_id), "reason": "There is no new covenant or unseen obligation waiting to be selected for you."}, true)
 		return _finish_recap(recap)
+	if _flag_bool(state, "final_choice_completed") and tracked_escort:
+		recap["promise"] = "The covenant and the existing homecoming stand. Kael has chosen to continue the relief work; Maren's cooperation is not an unrecorded promise of forgiveness."
 	var quest_id: String = str(quests.get_tracked_quest()) if quests != null else ""
 	if quest_id == "" and quests != null:
 		for chapter in campaign.get("chapters", []):
@@ -513,7 +516,7 @@ static func _known_creatures(quests, state) -> Dictionary:
 	for id: String in _enemy_data:
 		var note: Dictionary = _preparation_data.get("creatures", {}).get(id, {})
 		var outcome_flag: String = str(note.get("outcome_flag", ""))
-		if _has_evidence(state, "creature:" + id) or _gate(note.get("known_gate", {}), quests, state) or (outcome_flag != "" and _gate({"flag":outcome_flag}, quests, state)):
+		if _has_evidence(state, "creature:" + id) or _has_evidence(state, "saga_approach:" + id) or _gate(note.get("known_gate", {}), quests, state) or (outcome_flag != "" and _gate({"flag":outcome_flag}, quests, state)):
 			known[id] = true
 	var graves: int = 0
 	for id: String in ["grave_harl", "grave_child", "grave_soldier"]:
@@ -537,6 +540,10 @@ static func creature_entries(campaign: Dictionary, quests, state) -> Array[Dicti
 		var note: Dictionary = _preparation_data.get("creatures", {}).get(id, {})
 		var observed: bool = _has_evidence(state, "creature:" + id)
 		var body: String = "Observed: Kael has faced this creature." if observed else "Known from a recovered account or a recorded encounter outcome."
+		if not observed and _has_evidence(state, "saga_approach:" + id):
+			body = "Approach signs inspected. The creature itself has not been recorded as directly observed."
+			var trace: Dictionary = state.evidence.get("saga_approach:" + id, {})
+			body += "\n\nObservation: " + str(trace.get("text", "")) + "\nPractical inference: " + str(trace.get("advice", ""))
 		var blade: String = EquipmentLoadout.preferred_blade_for_tag(str(definition.get("tag", "")))
 		body += "\n\nPREPARATION\n"
 		if blade != "":

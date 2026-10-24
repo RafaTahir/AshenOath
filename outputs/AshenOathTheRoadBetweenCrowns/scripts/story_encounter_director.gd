@@ -2,6 +2,7 @@ extends Node
 class_name StoryEncounterDirector
 
 const LIVING_ROAD_BEATS := {
+	"bog_wretch": {"arrival":"The Wretch turns along the wet edge before committing to the clearing. Leave yourself firm ground; its territory is not the whole forest.", "known":"The earlier tracks followed this wet edge. Watch the first approach before answering; the intimate memory and the living watercourse remain separate decisions.", "aftermath":"The Wretch's encounter is resolved. The recorded core choice remains its own act; clean water still needs the existing screen and channel work."},
 	"bell_eater": {"arrival":"The clapper pulls toward three disturbed graves. A burial rite has become a harness.", "known":"The shrine thread from the graves runs into that harness. Someone bound the names down; the bell is pulling them back.", "aftermath":"The bell falls quiet. It has not returned Harl or named the child. The people who tied those bindings still owe an account."},
 	"rootbound_colossus": {"arrival":"The guardian braces itself around a name-board. Its roots are drawing ash into the place it was meant to shelter.", "known":"The recovered register promised sanctuary. Here that promise is feeding a guardian through burned names. Turn the root channels away from the board.", "aftermath":"The guardian stops. What happened to the names is still a human decision, not something the forest chose."},
 	"ashwing": {"arrival":"Ashwing follows the mill's rising ash, not its grain. The shoulder turns before the plume follows. People are still inside.", "known":"The mill account ties these weights to the missing wagons. Burned testimony draws the drake here; the workers did not choose what its channels carried.", "aftermath":"The drake falls. Killing what fed on the ash has not cleared the mill's account."},
@@ -26,9 +27,13 @@ var last_beat := -1
 var blocked_this_attack := false
 var root_markers: Array[MeshInstance3D] = []
 var arrival_checked := false
+var arrival_tick := 0.0
 
 func _arrival_beat() -> void:
 	if arrival_checked or not LIVING_ROAD_BEATS.has(str(actor.enemy_id)) or not is_instance_valid(host.player) or not host.player.can_control or actor.dead or not actor.encounter_active or actor.global_position.distance_to(host.player.global_position) > 12.0:
+		return
+	var camera: Camera3D = host.get_viewport().get_camera_3d()
+	if not actor.is_visible_in_tree() or camera == null or not camera.is_position_in_frustum(actor.global_position + Vector3.UP) or not preload("res://scripts/character_presence.gd").can_see(host.player, actor, 14.0):
 		return
 	arrival_checked = true
 	var key := "lr_encounter_" + str(actor.enemy_id) + "_arrival"
@@ -37,6 +42,7 @@ func _arrival_beat() -> void:
 	var entry: Dictionary = LIVING_ROAD_BEATS[str(actor.enemy_id)]
 	var informed := false
 	match str(actor.enemy_id):
+		"bog_wretch": informed = host.story_state.has_evidence("saga_approach:bog_wretch")
 		"bell_eater": informed = _known("grave_child", "main_bell_beneath_greyfen", "grave_child")
 		"rootbound_colossus": informed = _known("register", "main_names_they_burned", "reconstruct_register")
 		"ashwing": informed = _known("mill_accounts", "main_ash_at_the_mill", "inspect_millstones")
@@ -261,7 +267,9 @@ func _refresh_root_marks() -> void:
 		root_markers[index].scale = Vector3(0.8, 1.0, 0.8) if cleared else Vector3.ONE
 
 func _physics_process(delta: float) -> void:
-	if is_instance_valid(actor):
+	arrival_tick -= delta
+	if not arrival_checked and arrival_tick <= 0.0 and is_instance_valid(actor):
+		arrival_tick = 0.25
 		_arrival_beat()
 	if actor == null or not is_instance_valid(actor) or actor.dead or not actor.encounter_active or rhythm_label == null:
 		return

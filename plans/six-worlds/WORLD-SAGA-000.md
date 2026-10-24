@@ -1,5 +1,11 @@
 # WORLD-SAGA-000 - The Unfinished Oath
 
+2026-10-24 additive amendment: [A Campaign Worth Remembering](../living-road/CAMPAIGN_WORTH_REMEMBERING.md)
+adds the optional six-quest escort storyline. Current authored runtime count:
+57 (21 retained original + 30 retained regional + 6 personal). The 51-quest counts
+below describe the original six-world implementation, not deleted or renamed work.
+No existing ending or boss gate depends on the escort arc. User acceptance pending.
+
 Parent: none. Children: WORLD-SAGA-101 through WORLD-SAGA-106 and their 30 quest cards.
 Date: 2026-10-19. Status: build-only implementation present; user acceptance pending.
 Current delivery: [implementation record](IMPLEMENTATION.md). Runtime definitions

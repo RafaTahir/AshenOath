@@ -36,7 +36,7 @@ func load_definitions() -> void:
 	parsed = JSON.parse_string(FileAccess.get_file_as_string(RULES_PATH))
 	rules = parsed if parsed is Dictionary else {}
 	for id: String in Saga.QUESTS:
-		rules.get("quests", {})[id] = {"xp": Saga.quest_xp(id), "region": Saga.region_for_prefix(id.get_slice("_", 1))}
+		rules.get("quests", {})[id] = {"xp": Saga.quest_xp(id), "region": Saga.region_for_quest(id)}
 	rules.get("bosses", {})["bog_wretch"] = {"xp":400, "region":"wychwood", "name":"Bog Wretch", "flags":["bog_memory_core_revealed", "saga_bog_resolved"]}
 	rules.get("bosses", {})["captain_senn"] = {"xp":450, "region":"long_road", "name":"Captain Senn", "flags":["senn_fate"]}
 	_index_remaining_rewards()

@@ -199,6 +199,8 @@ func is_unlocked(id: String) -> bool:
 	return bool(unlocked.get(id, false))
 
 func is_runtime_content_ready(id: String) -> bool:
+	if id.begins_with("side_escort_"):
+		return preload("res://scripts/saga_catalog.gd").QUESTS.has(id)
 	if not id.begins_with("side_"):
 		return true
 	return bool(IMPLEMENTED_SIDE_QUESTS.get(id, false))

@@ -1,47 +1,47 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-23T19:57:04.6712023Z",
-  "build_id": "audio-recovery-20261024",
-  "generated_from_commit": "8ae30a7578c79fe944334a312d59295b26ed8e19",
+  "generated_at_utc": "2026-10-24T02:49:23.8091006Z",
+  "build_id": "campaign-worth-remembering-20261024",
+  "generated_from_commit": "3d175fdad7abffe951ab55584dc49d83f2ae6ddc",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\audio-recovery-20261024\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\campaign-worth-remembering-20261024\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 100778264,
+  "total_bytes": 100782872,
   "packs": [
     {
       "id": "base",
-      "version": "audio-recovery-20261024",
+      "version": "campaign-worth-remembering-20261024",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4076704,
-      "sha256": "48e24d484c6139f6d91230928cd7218360d1ab44ea0c0b8b6fe555c713d13abf",
+      "bytes": 4081312,
+      "sha256": "c35f50304a500fb08078e8dda8002f19a42214544bb55c3ca078f6a34cfe1edd",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "audio-recovery-20261024",
+      "version": "campaign-worth-remembering-20261024",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35530548,
-      "sha256": "8c3abe3d859aec7e621d5d52317516a5a8d9cc6b69a4ec68946292c5f65a3449",
+      "sha256": "cf61bdf2a71c478e9a7cc8e7ba2c09dc447487c1180952a6f980334771d1ac2a",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "adjacent",
-      "version": "audio-recovery-20261024",
+      "version": "campaign-worth-remembering-20261024",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 1405376,
-      "sha256": "ea59b8e5718b9cf78aaf77329b1e89dc2ded4f27ac16742bb785deb79e4a2cc7",
+      "sha256": "fb40fa4b7d0846d9efdd1e3efe41f74e532a4e8ef459ba0e85ddf55427a2434e",
       "status": "candidate_external",
       "log": "logs/pack-adjacent.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "audio-recovery-20261024",
+      "version": "campaign-worth-remembering-20261024",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8726068,
@@ -51,27 +51,27 @@
     },
     {
       "id": "characters",
-      "version": "audio-recovery-20261024",
+      "version": "campaign-worth-remembering-20261024",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9658480,
-      "sha256": "bb0db7c2fa4fe462252b343c0d8a2f4ae843dec4d7060984628719537ecbce23",
+      "sha256": "5323372ce41cda09d45a91dd2f22087a3dcc514d323b0664c152b35f3a024a40",
       "status": "candidate_external",
       "log": "logs/pack-characters.stdout.log"
     },
     {
       "id": "monsters",
-      "version": "audio-recovery-20261024",
+      "version": "campaign-worth-remembering-20261024",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14710232,
-      "sha256": "d274caf542f8655e6b03a2528d46bd371f392d346ecec34396bfdeb1e5c65de4",
+      "sha256": "a46cff6e0885c7878d6e4b16f1ee869295a3f0380636ad04005039deae83fb96",
       "status": "candidate_external",
       "log": "logs/pack-monsters.stdout.log"
     },
     {
       "id": "audio",
-      "version": "audio-recovery-20261024",
+      "version": "campaign-worth-remembering-20261024",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19291644,
@@ -81,7 +81,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "audio-recovery-20261024",
+      "version": "campaign-worth-remembering-20261024",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7379212,
@@ -92,11 +92,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "audio-recovery-20261024",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\audio-recovery-20261024\\export",
-    "generated_from_commit": "8ae30a7578c79fe944334a312d59295b26ed8e19",
-    "artifacts_total_bytes": 104810850,
-    "root_pck_sha256": "aa048d0dff392ccc4008ee024520e691429a4f8a6cd2bbfeee017cf33ac04a10",
-    "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
+    "build_id": "campaign-worth-remembering-20261024",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\campaign-worth-remembering-20261024\\export",
+    "generated_from_commit": "3d175fdad7abffe951ab55584dc49d83f2ae6ddc",
+    "artifacts_total_bytes": 104811143,
+    "root_pck_sha256": "3d33109c0a72525b8ebb25a9835e90eb4622cfcb93369e600e74996ecd975a90",
+    "note": "Selected export uses lossless gzip transport; native pack records describe decoded build artifacts. Packaged with pinned zopfli 0.4.0; no runtime tests or publication."
   }
 }

@@ -3,6 +3,7 @@ extends RefCounted
 ## Authored identity recipes shared by wardrobe, facial attitude and staging.
 ## Heights and authored faces remain owned by the existing imported rigs.
 const CAST := {
+	"maren": {"primary":"35423a", "secondary":"705849", "hair":"40352d", "skin":"a07861", "width":1.0, "depth":1.0, "expression":"guarded", "gesture":"explain", "pace":0.88, "accent":"9f916e", "token":"road_knot", "motif":"road"},
 	"kael": {"primary":"26352f", "secondary":"493b32", "hair":"77756f", "skin":"a9785f", "width":1.0, "depth":1.0, "expression":"guarded", "gesture":"acknowledge", "pace":0.86, "accent":"a18c60", "token":"broken_oath", "motif":"oath"},
 	"anwen": {"primary":"28334b", "secondary":"646075", "hair":"b8b4aa", "skin":"a98270", "width":1.0, "depth":1.0, "expression":"concerned", "gesture":"offer", "pace":0.82, "accent":"b19b74", "token":"bell", "motif":"names"},
 	"rook": {"primary":"263a32", "secondary":"756047", "hair":"3b2c23", "skin":"8f664f", "width":0.95, "depth":0.97, "expression":"wry", "gesture":"explain", "pace":1.06, "accent":"aa805a", "token":"road_knot", "motif":"road"},
@@ -18,6 +19,7 @@ const CAST := {
 ## Character intent is separate from wardrobe. Supporting people keep their
 ## retained visual recipes even when they acquire a richer performance profile.
 const PRESENCE := {
+	"maren": ["relief organizer", "capable, dry, independent", "people becoming cargo in someone else's promise", ["anwen", "tor", "nera"], "sort_supplies", "shelter"],
 	"kael": ["hunter", "reserved, observant", "abandoning someone again", ["anwen", "rook", "mira"], "scan", "guard"],
 	"anwen": ["caretaker", "patient, exhausted", "a name being forgotten", ["elna", "jory", "kael"], "care", "warn"],
 	"tor": ["blacksmith", "direct, dependable", "repairs arriving too late", ["rook", "jory"], "forge", "warn"],
@@ -68,6 +70,12 @@ static func life_data() -> Dictionary:
 
 static func routine(id: String, zone: String, state, quests, phase: String) -> Dictionary:
 	var definition: Dictionary = life_data().get("zones", {}).get(zone, {}).get(id, {})
+	if id == "saga_maren":
+		var location: Dictionary = preload("res://scripts/saga_catalog.gd").person_location(id, quests)
+		if str(location.zone) != zone:
+			location = {"site":{"greyfen":"arrivals", "wychwood":"workers", "old_mill":"shelter", "marsh_crossing":"causeway", "record_hall":"archive", "hart_glade":"plot"}.get(zone, "arrivals")}
+		var point: Vector3 = preload("res://scripts/saga_catalog.gd").SITES.get(zone, {}).get(str(location.site), Vector3(3, 0, 8))
+		definition = {"profile":"maren", "work":[point.x,point.y,point.z], "stationary":true, "line":"Set the heavy end down first. We can talk while I check the straps."}
 	if definition.is_empty():
 		return {}
 	var profile := presence_profile(str(definition.get("profile", id)))
@@ -129,6 +137,8 @@ static func get_profile(role: String, seed: String = "") -> Dictionary:
 static func expression_for(profile: Dictionary, state) -> String:
 	var id := str(profile.get("id", ""))
 	if state != null:
+		if id == "maren":
+			return "neutral" if str(state.get_flag("side_escort_06_outcome", "")) == "company" else "guarded"
 		var standing: Dictionary = state.honor_view(id) if id != "" else {}
 		if bool(standing.get("grievance", false)):
 			return "guarded"

@@ -1,6 +1,32 @@
 {
   "version": 1,
   "quests": {
+    "side_escort_01": {
+      "activity":"care",
+      "dialogue":{"hear_recognition":["Maren: I know you. You were on our escort. You left at the bend.","Kael: I did.","Maren: I learned to set a wheel after that. We still needed to get somewhere.","Kael: I never came back to look.","Maren: No. Follow the work line if you mean to help now. Iven knows where it crosses the old road. Do not tell me what I must want from you."]}
+    },
+    "side_escort_02": {
+      "activity":"check_rope",
+      "clues":{"read_two_roads":["A deep wheel scrape runs beneath weathered growth. Kael recognizes the bend where his escort stopped. The mark cannot tell him who survived beyond it.","A fresh notch points along firm ground. Iven's current work line crosses the older road here; its recent cuts are not marks left by the abandoned escort.","Fresh boot prints reach the maintained lookout. Nearby creature traces belong to the present clearing. They do not reconstruct the attack Kael never returned to see."]}
+    },
+    "side_escort_03": {
+      "activity":"repair",
+      "dialogue":{"hear_lift_plan":["Maren: Light crate to the left. Heavy one stays low. Dain says the frame will hold if someone seats that brace.","Kael: You have done this before.","Maren: There was no one left to do it for us. Mind your fingers.","Kael: Tell me where to stand.","Maren: Outside the load. Nobody proves anything by standing under a falling crate."]}
+    },
+    "side_escort_04": {
+      "activity":"check_rope",
+      "dialogue":{"check_last_load":["Maren: All here. People first, then crates.","Kael: The last one is on firm ground.","Maren: That is what I asked. It does not change the other road.","Kael: No.","Maren: Good. Help me get the rope dry."]}
+    },
+    "side_escort_05": {
+      "activity":"read",
+      "clues":{"compare_accounts":["Kael's report describes an ordered retreat. It omits the civilians he had promised to escort. Correcting that omission concerns his own conduct, not the surviving command proof of Vargan's massacre.","Maren's offered account describes the departure and the work of continuing afterward. It names no other survivors and claims no knowledge of the concealed massacre. Its limits are written in her own hand."]},
+      "dialogue":{"hear_boundary":["Maren: Keep what I gave you. Not a list of everyone who was there. Some of them do not want you finding them.","Kael: I can correct my part without naming them.","Vale: The original stays legible. A correction does not make it never have happened.","Maren: Start with your own name, Kael. Mine is not the price of putting it there."]}
+    },
+    "side_escort_06": {
+      "activity":"sort_supplies",
+      "dialogue_distance":{"return_home":["Maren: The bread can stay by the gate. I am not ready to sit with you tonight.","Kael: I will leave you room.","Maren: Thank you. That is all I asked. The next load leaves when I have chosen the route."]},
+      "dialogue":{"return_home":["Maren: Nessa packed too much bread. She says that is a problem for my judgment, not her baking.","Kael: Which road next?","Maren: I am still choosing. You needn't wait beside the door until I do.","Kael: There is a place at the table.","Maren: A seat, then. Nothing larger over supper."]}
+    },
     "saga_gre_q01": {
       "opening": "Nessa has cut the morning loaves thinner. Before the next cart arrives, compare her sack with the delivery scale. She wants the missing flour found, not a hungry neighbor dragged through the square.",
       "activity": "check_supplies",

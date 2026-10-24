@@ -16,6 +16,12 @@ music, symbols or proprietary assets. Ashen Oath keeps its original setting,
 stylized asset family, ten main chapters, existing side quests and four endings.
 See [research](RESEARCH.md) for primary sources and limits of that research.
 
+2026-10-24 application: [A Campaign Worth Remembering](CAMPAIGN_WORTH_REMEMBERING.md)
+extends the existing owners with the optional six-quest Road He Left arc, regional
+approach signs and bounded scene/callback revisions. The campaign now has 57
+definitions; the original 51 IDs and four endings remain. Implementation,
+compilation, publication and user acceptance are tracked separately in that record.
+
 Locked choices:
 
 - Steel and Oathblade are two distinct physical swords. Bow remains available.

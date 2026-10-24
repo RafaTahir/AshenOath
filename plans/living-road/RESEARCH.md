@@ -110,3 +110,31 @@ Twenty anchor scenes and twelve short exchanges reuse WORLD-SAGA activities,
 CAST routines/performance, existing navigation and the journal. Six optional
 walks stop safely on separation. No camp, horse, survival tax, crime simulation,
 new quest count or copied plot is introduced.
+
+## A Campaign Worth Remembering: Witcher Case Notes (2026-10-24)
+
+This additive amendment covers the base game, Hearts of Stone and Blood and
+Wine, including spoilers. It draws on the linked written sources, not a claim
+to have replayed every quest, checked every NPC line or watched inaccessible
+conference recordings. Applications and their implementation owners are recorded
+in [CAMPAIGN_WORTH_REMEMBERING.md](CAMPAIGN_WORTH_REMEMBERING.md).
+
+| Specific example and source | Original adaptation and execution |
+| --- | --- |
+| [Lilac and Gooseberries](https://www.gamebanshee.com/thewitcher3/walkthrough/lilacandgooseberries.php): family, mentorship, the road and a practical search precede the large conflict. | Greyfen retains its playable opening. Maren's relief arrival uses Anwen's care and Tor's repair work before her recognition of Kael; no compulsory dream or cinematic. |
+| [The Beast of White Orchard](https://www.gamebanshee.com/thewitcher3/walkthrough/thebeastofwhiteorchard.php): victims, local expertise, the dead mate and bait contextualize the griffin. | Existing encounter approaches gain inspectable physical signs and useful existing counterplay. Journal text distinguishes reading a sign from actually observing its creature. |
+| [Family Matters](https://www.gamebanshee.com/thewitcher3/walkthrough/familymatters.php): material evidence revises an established account; sympathy does not erase harm. | Kael's retreat report and Maren's limited account can be read in either order. Public/protected correction changes custody, not the facts or her consent. No copied family plot or absolution reward. |
+| [Ladies of the Wood](https://www.gamebanshee.com/thewitcher3/walkthrough/ladiesofthewood.php): belief, traces, intermediaries and direct presence create different stages of anticipation. | Bell scars, water-edge tracks, guarded roots, ash plumes, disciplined blade marks and Hart tracks use different retained props. Creature introductions are remembered only with visible presence and line of sight. |
+| [Pyres of Novigrad](https://www.gamebanshee.com/thewitcher3/walkthrough/pyresofnovigrad.php) and [the royal wake](https://www.gamebanshee.com/thewitcher3/walkthrough/thekingisdead-longlivetheking.php): independent work and shared customs introduce people and institutions. | Existing regional anchors emphasize wet timber, seeds, loading, crossing supplies, copying and shelter. Keep recognizable work and limited knowledge rather than another line of quest dispensers. |
+| [Quest-designer interview](https://www.gamepressure.com/editorials/interview-with-cd-projekt-reds-lead-quest-designer-pawel-sasko/zd661): personal branches can converge into consequential campaign scenes. | Existing Assembly and epilogue owners acknowledge only completed relief work and publicly disclosed correction. Private evidence never becomes general gossip. |
+| [Hearts of Stone interview](https://gamingbolt.com/the-witcher-3-hearts-of-stone-interview-the-dawn-of-new-adventures) and [Dead Man's Party](https://www.gamebanshee.com/thewitcher3/walkthrough/deadmansparty.php): a personal arc benefits from contrasting kinds of play and relief. | Six escort chapters alternate care/repair, tracking and physical route choice, a supported lift, a resumable crossing, correction and ordinary company. They are not six document inspections. |
+| [Blood and Wine interview](https://www.pushsquare.com/news/2016/05/interview_partaking_in_blood_and_wine_with_the_witcher_3_developer_cd_projekt_red) and [Blood Run](https://www.gamebanshee.com/thewitcher3/walkthrough/bloodrun.php): an attractive region can conceal violence; a relationship complicates an apparent threat. | Relief work and an optional supper coexist with guarded disagreement. The existing playable homecoming remains the destination; no new estate, companion authority or automatic forgiveness. |
+| [The Last Wish](https://www.gamebanshee.com/thewitcher3/walkthrough/thelastwish.php) and [personal epilogues](https://www.gamebanshee.com/thewitcher3/walkthrough/somethingendssomethingbegins.php): freely chosen relationships and remembered behavior carry personal consequences. | Company and distance are legitimate final outcomes. Maren chooses her next route. All four explicit covenant endings remain available without this arc, and no hidden correct-answer ending score is introduced. |
+| [Official PC manual](https://cdn-l-thewitcher.cdprojektred.com/media/TW3/Pdf/Manuals/PC/The_Witcher_3_Wild_Hunt_Game_Manual_PC_EN.pdf): threat knowledge and preparation support an integrated combat toolkit. | Teach existing openings, ground, channels and plume recovery. Do not change damage balance, copy Signs/toxicity, or require preparation. Keep level 30, 17 Marks and 20 practices. |
+| [CDPR character transcript](https://www.cdprojektred.com/en/blog/173/beyond-the-concept-giving-life-to-characters-and-monsters-transcript-included) and [audio-team interview](https://www.asoundeffect.com/the-witcher-3-sound/): silhouette, performance and environmental sound communicate place. | Reuse retained human bodies, work assemblies, expressions, regional audio and protected dialogue. The facial sample still requires user approval before broader rig work; no new voice production or soundtrack. |
+
+The approved scope adds six optional quests to the retained 51, for 57 total.
+Each new quest awards 300 completion XP once through the existing reward claim.
+Honor remains Ashen Oath's own system, not a Witcher mechanic. Runtime quality,
+phone controls, listening and acceptance remain user-owned and unverified by
+this build-only implementation.
