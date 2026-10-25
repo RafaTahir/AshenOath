@@ -20,9 +20,9 @@ VARIANTS = {
         "source": "Superhero_Male_FullBody.gltf",
         "output": "Universal_Male_FullBody_1K.gltf",
         "maps": {
-            "T_Hair_1_Normal_png.png": "../T_Hair_1_Normal_1K.png",
+            "T_Hair_1_Normal.png": "../T_Hair_1_Normal_1K.png",
             "T_Hair_1_BaseColor.png": "../T_Hair_1_BaseColor_1K.png",
-            "T_Eye_Normal_png.png": "../T_Eye_Normal.png",
+            "T_Eye_Normal.png": "../T_Eye_Normal.png",
             "T_Eye_Brown.png": "../T_Eye_Brown.png",
             "T_Superhero_Male_Normal.png": "../T_Superhero_Male_Normal_1K.png",
             "T_Superhero_Male_Dark.png": "../T_Superhero_Male_Dark_1K.png",
@@ -35,7 +35,7 @@ VARIANTS = {
         "maps": {
             "T_Hair_2_Normal.png": "../T_Hair_2_Normal_1K.png",
             "T_Hair_2_BaseColor.png": "../T_Hair_2_BaseColor_1K.png",
-            "T_Eye_Normal_png.png": "../T_Eye_Normal.png",
+            "T_Eye_Normal.png": "../T_Eye_Normal.png",
             "T_Eye_Brown.png": "../T_Eye_Brown.png",
             "T_Superhero_Female_Normal.png": "../T_Superhero_Female_Normal_1K.png",
             "T_Superhero_Female_Dark_BaseColor.png": "../T_Superhero_Female_Dark_BaseColor_1K.png",
@@ -83,7 +83,7 @@ def build(project: Path) -> dict:
         for buffer_entry in document.get("buffers", []):
             if str(buffer_entry.get("uri", "")) == source_bin_name:
                 buffer_entry["uri"] = output_bin.name
-        output_gltf.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
+        output_gltf.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8", newline="\n")
         shutil.copyfile(source_bin, output_bin)
         manifest["variants"][role] = {
             "source": f"res://assets_external/characters_universal/{source_gltf.name}",
@@ -97,7 +97,7 @@ def build(project: Path) -> dict:
             "root_motion": False,
         }
     manifest_path = output_dir / "UNIVERSAL_FULLBODY_RUNTIME_MANIFEST.json"
-    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     return manifest
 
 
