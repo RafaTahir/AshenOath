@@ -7,11 +7,11 @@
   "variants": {
     "male": {
       "source": "res://assets_external/characters_universal/Superhero_Male_FullBody.gltf",
-      "source_sha256": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4",
+      "source_sha256": "e2a68c400eedbaed172fc0f2de8e665df66ceccab27fcbcf2152682322405ce4",
       "source_bin_sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f",
       "runtime": "res://assets_external/characters_universal/runtime/Universal_Male_FullBody_1K.gltf",
       "runtime_bin": "res://assets_external/characters_universal/runtime/Universal_Male_FullBody_1K.bin",
-      "runtime_sha256": "9e75f74b3e505f03fae0c4ec9344a1ef620bbbba4790043bfe67285abf46cf6e",
+      "runtime_sha256": "3f4ac46ac55b72944336e87a624b92f738b5e81764142bc3ddc9e2022d3045cf",
       "runtime_bin_sha256": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f",
       "maps": [
         "../T_Hair_1_Normal_1K.png",
@@ -26,11 +26,11 @@
     },
     "female": {
       "source": "res://assets_external/characters_universal/Superhero_Female_FullBody.gltf",
-      "source_sha256": "adedf28000a0716f689b009a70314506fc62f827498f77ba852acb5610f3f3f4",
+      "source_sha256": "215f2af81ad91eecfcee807bad19b541704b800844d997286b78d5dbed7a3b5e",
       "source_bin_sha256": "3a8220a485b33d05d879115a50697728b45a151781106033afb8b8c243fca208",
       "runtime": "res://assets_external/characters_universal/runtime/Universal_Female_FullBody_1K.gltf",
       "runtime_bin": "res://assets_external/characters_universal/runtime/Universal_Female_FullBody_1K.bin",
-      "runtime_sha256": "c4be4f121b11db9eb44447fd0b569e1be12dca17db3ce685fe6544751c6b3f89",
+      "runtime_sha256": "6544f84eebcf622882490840b169327f5fe17d6dd459e22d6d092d377aba6de6",
       "runtime_bin_sha256": "3a8220a485b33d05d879115a50697728b45a151781106033afb8b8c243fca208",
       "maps": [
         "../T_Hair_2_Normal_1K.png",
