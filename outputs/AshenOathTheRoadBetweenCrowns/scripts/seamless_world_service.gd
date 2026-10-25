@@ -39,6 +39,9 @@ var _cached_root: Node3D
 var _cached_epoch := -1
 var _cached_quality := ""
 var _cached_valid := false
+var _selected_connection: Dictionary = {}
+var _crossing: Dictionary = {}
+var _preview_root: Node3D
 
 func configure(runtime_host: Node, stream_service: Node) -> void:
 	host = runtime_host
@@ -64,32 +67,82 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(host) or not host.game_started or host.resource_shutdown_prepared:
 		cancel_preparation(); return
 	if _neighbor_scope != null and (not is_instance_valid(_neighbor_scope.owned_root) or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced"))): cancel_preparation()
-	var target := "wychwood" if str(host.current_zone_id) == "greyfen" else ("greyfen" if str(host.current_zone_id) == "wychwood" else "")
-	if target.is_empty(): cancel_preparation(); return
+	_poll += delta
+	if _poll < 0.06: return
+	_poll = 0.0
+	_selected_connection = _nearest_connection()
+	if _selected_connection.is_empty(): return
+	var target := str(_selected_connection.target)
 	if _neighbor_scope != null and _neighbor_scope.zone_id != target: cancel_preparation()
 	if get_tree().paused or host._journey_load_pending() or not is_instance_valid(host.player) or not host.player.can_control or host._story_has_active_combat(): return
 	if host.opening_checkpoint_pending or host.opening_detail_pending or host.zone_transition_pending: return
 	if host.player.velocity.length_squared() > 0.25 or host.player.bow_aiming: return
-	_poll += delta
-	if _poll < 0.06: return
-	_poll = 0.0
-	if _valid_cached_destination(target): return
+	if _valid_cached_destination(target):
+		_show_neighbor(_selected_connection); return
 	if _neighbor_state == "ready":
 		if _neighbor_epoch != _story_epoch: cancel_preparation()
+		else: _show_neighbor(_selected_connection)
 		return
 	if _neighbor_scope != null and _neighbor_epoch != _story_epoch:
 		cancel_preparation(); return
 	if _neighbor_scope == null:
-		var approach := -5.0 if target == "wychwood" else 5.0
-		if (target == "wychwood" and host.player.position.z > approach) or (target == "greyfen" and host.player.position.z < approach) or Time.get_ticks_msec() < _retry_after: return
+		if Time.get_ticks_msec() < _retry_after: return
 		if host.runtime_packs != null:
-			host.runtime_packs.request_zone_packs(target)
-			if not host.runtime_packs.zone_packs_ready(target): return
+			var extras: Array[String] = host._zone_encounter_packs(target)
+			host.runtime_packs.request_zone_packs(target,extras)
+			if not host.runtime_packs.zone_packs_ready(target,extras): return
 		if streaming_service != null:
 			streaming_service.request_zone(target)
 			if not streaming_service.is_ready(target): return
 		_begin_neighbor(target); return
 	_advance_preparation()
+
+func _nearest_connection() -> Dictionary:
+	if not is_instance_valid(host.player): return {}
+	var best: Dictionary = {}
+	var distance := 18.0
+	for edge: Dictionary in WorldSectorManifest.connections(str(host.current_zone_id)):
+		if not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): continue
+		var points := WorldSectorManifest.connector_points(edge)
+		var point := Vector2(host.player.position.x,host.player.position.z)
+		var proximity := INF
+		for i in range(points.size()-1):
+			proximity = minf(proximity,point.distance_to(Geometry2D.get_closest_point_to_segment(point,Vector2(points[i].x,points[i].z),Vector2(points[i+1].x,points[i+1].z))))
+		if proximity < distance:
+			distance = proximity; best = edge
+	return best
+
+func _show_neighbor(edge: Dictionary) -> void:
+	var target := str(edge.target)
+	if _neighbor_scope != null: publish_prepared(target)
+	var root: Node3D = host.route_zone_cache.get(target)
+	if not is_instance_valid(root): return
+	if is_instance_valid(_preview_root) and _preview_root != root:
+		host.zone_residency.end_preview(_preview_root)
+		_preview_root.visible = false; _preview_root.position = Vector3(0,-1000,0)
+	var placement := WorldSectorManifest.crossing_transform(edge).affine_inverse()
+	if root.transform != placement: root.transform = placement
+	root.visible = true
+	host.zone_residency.begin_preview(root)
+	preload("res://scripts/connected_route_geometry.gd").open_gate(host.zone_root,target,not _crossing.is_empty())
+	preload("res://scripts/connected_route_geometry.gd").open_gate(root,str(edge.source),true)
+	_preview_root = root
+
+func prepare_crossing_view() -> void:
+	if _crossing.is_empty(): return
+	_show_neighbor(WorldSectorManifest.connection_between(str(_crossing.source),str(_crossing.target)))
+
+func crossing_for(zone_id: String) -> Dictionary:
+	return _crossing if str(_crossing.get("target","")) == zone_id else {}
+
+func complete_crossing(previous_root: Node3D) -> void:
+	_preview_root = null
+	if not _crossing.is_empty() and is_instance_valid(previous_root):
+		previous_root.transform = _crossing.transform
+		previous_root.visible = true
+		host.zone_residency.begin_preview(previous_root)
+		_preview_root = previous_root
+	_crossing = {}
 
 func _advance_preparation() -> void:
 	_added_nodes.clear()
@@ -108,11 +161,11 @@ func has_prepared(zone_id: String) -> bool:
 	if _valid_cached_destination(zone_id): return true
 	return _neighbor_scope != null and is_instance_valid(_neighbor_scope.owned_root) and _neighbor_scope.zone_id == zone_id and _neighbor_state == "ready" and _neighbor_quality == str(host.settings.settings.get("quality_preset","balanced")) and _neighbor_signature == host._zone_state_signature(zone_id)
 
-func _valid_cached_destination(zone_id: String) -> bool:
+func _valid_cached_destination(zone_id: String, refresh: bool = false) -> bool:
 	var root: Node3D = host.route_zone_cache.get(zone_id)
 	if not is_instance_valid(root): return false
 	var quality := str(host.settings.settings.get("quality_preset","balanced"))
-	if root != _cached_root or _cached_epoch != _story_epoch or _cached_quality != quality:
+	if refresh or root != _cached_root or _cached_epoch != _story_epoch or _cached_quality != quality:
 		_cached_root = root; _cached_epoch = _story_epoch; _cached_quality = quality
 		_cached_valid = int(host.route_zone_signatures.get(zone_id,-1)) == host._zone_state_signature(zone_id)
 	return _cached_valid
@@ -135,7 +188,7 @@ func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 		if _neighbor_scope == null: break
 		if _neighbor_state == "ready":
 			_foreground = false; return true
-		var total: int = host.OPENING_DETAIL_STAGES.size()+3 if zone_id == "greyfen" else int(_neighbor_builder.BUILD_STEPS)+2
+		var total: int = _construction_steps()+2
 		host.hud.update_journey_load_progress(zone_id,float(_neighbor_step)/float(total),"Preparing the complete destination...")
 	_foreground = false
 	cancel_preparation()
@@ -143,11 +196,15 @@ func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 
 func _begin_neighbor(target: String) -> void:
 	var paths: Dictionary = preload("res://scripts/zone_composition_router.gd").CORE_BUILDER_PATHS
-	var builder_script := load(str(paths.get(target,""))) as Script
+	var builder_path := str(paths.get(target,preload("res://scripts/zone_composition_router.gd").CAMPAIGN_BUILDER_PATH))
+	var builder_script := load(builder_path) as Script
 	if builder_script == null or not builder_script.can_instantiate():
 		_neighbor_failure = "The destination builder could not be loaded: " + target
 		_retry_after = Time.get_ticks_msec()+30000
 		return
+	if is_instance_valid(_preview_root) and _preview_root != host.zone_root:
+		preload("res://scripts/connected_route_geometry.gd").close_gate(host.zone_root,str(_preview_root.get_meta("zone_resource_id","")),host.player.global_position)
+		_preview_root = null
 	host._trim_route_zone_cache([])
 	_neighbor_view = SubViewport.new(); _neighbor_view.name = "PreparedNeighborWorld"
 	_neighbor_view.size = Vector2i(2,2); _neighbor_view.own_world_3d = true
@@ -156,6 +213,7 @@ func _begin_neighbor(target: String) -> void:
 	_neighbor_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	add_child(_neighbor_view)
 	var root := Node3D.new(); root.name = target; root.process_mode = Node.PROCESS_MODE_DISABLED
+	root.set_meta("zone_resource_owner","preparing")
 	_neighbor_view.add_child(root)
 	var spatial: Node3D = host.ZoneSpatialService.new()
 	spatial.name = "PreparedSpatialService"; root.add_child(spatial)
@@ -166,9 +224,14 @@ func _begin_neighbor(target: String) -> void:
 	_neighbor_quality = str(host.settings.settings.get("quality_preset","balanced"))
 	_neighbor_epoch = _story_epoch; _neighbor_step = 0; _neighbor_state = "building"; _neighbor_failure = ""
 
+func _construction_steps() -> int:
+	if _neighbor_scope.zone_id == "greyfen": return host.OPENING_DETAIL_STAGES.size()+1
+	if _neighbor_scope.zone_id == "wychwood": return 11
+	return 1
+
 func _build_neighbor_step(context: ZoneBuildContext) -> void:
 	var greyfen := context.zone_id == "greyfen"
-	var steps: int = host.OPENING_DETAIL_STAGES.size()+1 if greyfen else int(_neighbor_builder.BUILD_STEPS)
+	var steps := _construction_steps()
 	if _neighbor_step == 0:
 		var layers: Dictionary = host.ZoneSceneCatalog.attach(context.zone_id,context.zone_root,["gameplay"] if greyfen else ["gameplay","decoration"])
 		if not bool(layers.ok): _neighbor_failure = str(layers.errors); return
@@ -178,7 +241,8 @@ func _build_neighbor_step(context: ZoneBuildContext) -> void:
 			else:
 				context.build_profile = "opening_detail"
 				_neighbor_builder.build_detail_stage(context,str(host.OPENING_DETAIL_STAGES[_neighbor_step-1]))
-		else: _neighbor_builder.build_step(context,_neighbor_step)
+		elif context.zone_id == "wychwood": _neighbor_builder.build_step(context,_neighbor_step)
+		else: _neighbor_builder.build(context)
 	elif _neighbor_step == steps:
 		host._flush_environment_batches()
 		host._install_world_prop_controller(context.zone_id)
@@ -194,6 +258,7 @@ func _build_neighbor_step(context: ZoneBuildContext) -> void:
 				_neighbor_failure = "Missing required body: " + str(enemy.enemy_id); return
 		context.zone_root.set_meta("opening_detail_complete",true)
 		context.zone_root.set_meta("prepared_neighbor_complete",true)
+		context.zone_root.set_meta("prepared_arrival_pending",true)
 		context.zone_root.set_meta("runtime_light_count",host.runtime_light_count)
 		_neighbor_state = "ready"; _neighbor_signature = host._zone_state_signature(context.zone_id)
 
@@ -219,8 +284,13 @@ func publish_prepared(zone_id: String) -> bool:
 	return true
 
 func _sync_resident_camera() -> void:
-	if not is_instance_valid(host) or not is_instance_valid(host.zone_root): return
-	var parent: Node = host.zone_root.get_parent()
+	_sync_owner_camera(_preview_root)
+	_sync_owner_camera(host.zone_root if is_instance_valid(host) else null)
+
+func _sync_owner_camera(root: Node3D) -> void:
+	if not is_instance_valid(host) or not is_instance_valid(root) or root.is_queued_for_deletion(): return
+	var parent: Node = root.get_parent()
+	if parent == null: return
 	_active_view = parent as SubViewport if parent.has_meta("prepared_zone_view") else null
 	if not is_instance_valid(_active_view): return
 	var source: Camera3D = host.get_viewport().get_camera_3d()
@@ -248,7 +318,9 @@ func _exit_tree() -> void:
 	if get_tree().node_added.is_connected(_construction_node_added): get_tree().node_added.disconnect(_construction_node_added)
 
 func open_edges_for(zone_id: String) -> Dictionary:
-	return WorldSectorManifest.open_edges(zone_id)
+	var edges := WorldSectorManifest.open_edges(zone_id)
+	for edge: Dictionary in WorldSectorManifest.connections(zone_id): edges[str(edge.id)] = edge
+	return edges
 
 func is_exterior_route(source_zone: String, target_zone: String) -> bool:
 	return WorldSectorManifest.is_exterior(source_zone) \
@@ -263,7 +335,7 @@ func is_interior_route(source_zone: String, target_zone: String) -> bool:
 		and (not WorldSectorManifest.is_exterior(source) or not WorldSectorManifest.is_exterior(target))
 
 func should_suppress_exterior_gate(source_zone: String, target_zone: String) -> bool:
-	return is_exterior_route(source_zone, target_zone)
+	return not WorldSectorManifest.connection_between(source_zone,target_zone).is_empty()
 
 func should_use_physical_door(source_zone: String, target_zone: String) -> bool:
 	return is_interior_route(source_zone, target_zone)
@@ -277,10 +349,26 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 	var source := WorldSectorManifest.canonical(zone_id)
 	if current_sector != source:
 		on_zone_activated(source, actor.global_position)
+	if cooldown <= 0.0:
+		for connection: Dictionary in WorldSectorManifest.connections(source):
+			if not WorldSectorManifest.edge_available(connection,host.quests,host.story_state): continue
+			var frame := WorldSectorManifest.crossing_frame(connection)
+			var point := frame.affine_inverse()*actor.global_position
+			var threshold := 0.0 if has_prepared(str(connection.target)) else -0.85
+			if point.z < threshold or point.z > 3.0 or absf(point.x) > float(connection.half_width): continue
+			var normal := WorldSectorManifest.direction(str(connection.id))
+			if actor.velocity.dot(normal) <= 0.05: continue
+			var transform := WorldSectorManifest.crossing_transform(connection)
+			_crossing = {"source":source,"target":str(connection.target),"transform":transform,"position":transform*actor.global_position,"velocity":transform.basis*actor.velocity,"basis":transform.basis*actor.global_basis}
+			pending_transition = {"source":source,"target":str(connection.target),"edge":str(connection.id),"physical":true}
+			if host.request_seamless_boundary_transition(str(connection.target),_crossing.position,str(connection.id)):
+				transition_count += 1; return true
+			_crossing = {}; pending_transition = {}
 	if cooldown > 0.0 or not WorldSectorManifest.is_exterior(source):
 		return false
 	var bounds := _zone_bounds(source)
 	var edge := WorldSectorManifest.edge_for_position(source, actor.global_position, bounds, 0.85)
+	if not edge.is_empty() and not WorldSectorManifest.connection_between(source,str(edge.target)).is_empty(): return false
 	# An older save may already be inside an exit. Require leaving that entry
 	# trigger before it can fire, rather than bouncing back after the cooldown.
 	if not _arrival_edge.is_empty():
@@ -291,7 +379,7 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 		return false
 	# Automatic boundary entry must obey the same earned opening as the
 	# authored gate; merely having a manifest edge cannot bypass that decision.
-	if not WorldSectorManifest.edge_available(edge,host.quests if host != null else null):
+	if not WorldSectorManifest.edge_available(edge,host.quests if host != null else null,host.story_state if host != null else null):
 		return false
 	var target := WorldSectorManifest.canonical(str(edge.get("target", "")))
 	if target == "" or host == null or not host.has_method("request_seamless_boundary_transition"):
@@ -352,6 +440,7 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 	sector_activated.emit(normalized)
 
 func on_zone_failed(zone_id: String, reason: String) -> void:
+	_crossing = {}
 	failed_transition_count += 1
 	pending_transition.clear()
 	last_transition["state"] = "failed"

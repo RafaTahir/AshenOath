@@ -20,7 +20,7 @@ func build(context: ZoneBuildContext) -> void:
 		return
 	# Retain the legacy district's historical behavior only outside the new
 	# late optional visit; no second Edric or Hart can skip the current campaign.
-	context.make_zone_gate("Back to Greyfen", Vector3(-20, 0, 5), "greyfen", Vector3(17, 1, -2))
+	context.make_zone_gate("Take the return journey to Greyfen", Vector3(20, 0, 5), "greyfen", Vector3(17, 1, -2))
 	context.make_named_interactable("edric", "dialogue", "Talk to Lord Edric", Vector3(-14, 0, 3), Color(0.44, 0.35, 0.24))
 	context.make_clue("old_hall", "Search old hall", Vector3(-2, 0, -4), "main_blood_under_stone", "locate_record_hall", Color(0.28, 0.24, 0.21))
 	context.make_clue("ritual_inscription", "Read ritual inscription", Vector3(4, 0, -8), "main_blood_under_stone", "evidence_iron_binding", Color(0.43, 0.39, 0.35))

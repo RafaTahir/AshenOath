@@ -7,7 +7,7 @@
     "positions": {"greyfen":[180,100],"cemetery":[380,100],"wychwood":[180,240],"deep_wood":[180,380],"old_mill":[180,520],"burned_farmstead":[180,660],"marsh_crossing":[180,800],"bandit_road":[180,940],"vargan_approach":[440,940],"vargan_court":[440,800],"record_hall":[440,660],"undercroft":[440,520],"assembly":[640,100],"hart_glade":[640,380],"ruins":[640,240]},
     "districts": {"cemetery":"greyfen"},
     "phases": {"assembly":"greyfen"},
-    "journey_links": [["greyfen","deep_wood"],["greyfen","vargan_approach"],["undercroft","assembly"],["assembly","hart_glade"],["greyfen","ruins"]],
+    "journey_links": [["greyfen","ruins"]],
     "local_links": [["greyfen","cemetery"],["cemetery","greyfen"],["ruins","greyfen"]]
   },
   "sectors": {
@@ -15,6 +15,7 @@
       "coordinate": [0, 0],
       "exterior": true,
       "bounds": [21.0, 17.0],
+      "interior_doors": ["assembly"],
       "edges": {
         "north": {"target": "wychwood", "lane": 0.0, "half_width": 5.0, "trigger": [0.0, 0.0, -15.2], "arrival": [0.0, 0.9, 13.0]},
         "west": {"target": "deep_wood", "lane": -10.0, "half_width": 3.2, "trigger": [-18.0, 0.0, -10.0], "arrival": [-7.0, 0.9, 11.0]},
@@ -88,9 +89,9 @@
     "cemetery": {"coordinate": [1, 0], "exterior": true, "bounds": [24.0, 21.0], "edges": {}, "optional_branch": true},
     "ruins": {"coordinate": [-1, 0], "exterior": true, "bounds": [24.0, 21.0], "edges": {"west":{"target":"hart_glade", "lane":5.0, "half_width":3.0, "trigger":[-21,0,5], "arrival":[18,0.9,9]}}, "optional_branch": true},
     "vargan_court": {"coordinate": [1, 7], "exterior": false, "bounds": [23.0, 19.0], "edges": {}, "interior_doors": ["vargan_approach", "record_hall"]},
-    "record_hall": {"coordinate": [1, 8], "exterior": false, "bounds": [17.0, 15.0], "edges": {}, "interior_doors": ["vargan_court", "undercroft"]},
-    "undercroft": {"coordinate": [1, 9], "exterior": false, "bounds": [18.0, 17.0], "edges": {}, "interior_doors": ["record_hall", "assembly"]},
-    "assembly": {"coordinate": [1, 10], "exterior": false, "bounds": [21.0, 17.0], "edges": {}, "interior_doors": ["undercroft", "hart_glade"]},
-    "hart_glade": {"coordinate": [1, 11], "exterior": true, "bounds": [22.0, 19.0], "edges": {"east":{"target":"ruins", "lane":9.0, "half_width":3.0, "trigger":[20,0,9], "arrival":[-18,0.9,5]}}, "interior_doors": ["assembly"]}
+    "record_hall": {"coordinate": [1, 8], "exterior": false, "bounds": [17.0, 20.0], "edges": {}, "interior_doors": ["vargan_court", "undercroft"]},
+    "undercroft": {"coordinate": [1, 9], "exterior": false, "bounds": [18.0, 17.0], "edges": {}, "interior_doors": ["record_hall"]},
+    "assembly": {"coordinate": [0, 0], "exterior": false, "bounds": [21.0, 17.0], "edges": {}, "interior_doors": ["greyfen"]},
+    "hart_glade": {"coordinate": [1, 11], "exterior": true, "bounds": [22.0, 19.0], "edges": {"east":{"target":"ruins", "lane":9.0, "half_width":3.0, "trigger":[20,0,9], "arrival":[-18,0.9,5]}}, "interior_doors": []}
   }
 }

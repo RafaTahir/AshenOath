@@ -27,7 +27,7 @@ size = Vector3(5.4, 0.2, 34)
 size = Vector3(16, 1.8, 1.2)
 
 [sub_resource type="BoxShape3D" id="Shape_south_berm"]
-size = Vector3(42, 1.8, 1.2)
+size = Vector3(18.6, 1.8, 1.2)
 
 [sub_resource type="BoxShape3D" id="Shape_west_short"]
 size = Vector3(1.2, 1.8, 3.8)
@@ -42,7 +42,7 @@ size = Vector3(1.2, 1.8, 13.2)
 size = Vector3(16, 3.2, 0.4)
 
 [sub_resource type="BoxShape3D" id="Shape_south_wall"]
-size = Vector3(42, 3.2, 0.4)
+size = Vector3(18.6, 3.2, 0.4)
 
 [sub_resource type="BoxShape3D" id="Shape_west_short_wall"]
 size = Vector3(0.4, 3.2, 3.8)
@@ -153,12 +153,12 @@ mesh = SubResource("Mesh_unit")
 material_override = SubResource("Material_berm")
 
 [node name="SouthBerm" type="StaticBody3D" parent="."]
-position = Vector3(0, 0.9, 17)
+position = Vector3(-11.7, 0.9, 17)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SouthBerm"]
 shape = SubResource("Shape_south_berm")
 [node name="Surface" type="MeshInstance3D" parent="SouthBerm"]
 visible = false
-scale = Vector3(42, 1.8, 1.2)
+scale = Vector3(18.6, 1.8, 1.2)
 mesh = SubResource("Mesh_unit")
 material_override = SubResource("Material_berm")
 
@@ -213,7 +213,7 @@ position = Vector3(13, 1.6, -17.65)
 shape = SubResource("Shape_north_wall")
 
 [node name="WorldBoundarySouth" type="StaticBody3D" parent="."]
-position = Vector3(0, 1.6, 17.65)
+position = Vector3(-11.7, 1.6, 17.65)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundarySouth"]
 shape = SubResource("Shape_south_wall")
 
@@ -256,3 +256,18 @@ position = Vector3(17.5, 0, 0)
 
 [node name="RiverBridgeAnchor" type="Marker3D" parent="."]
 position = Vector3(0, 0, 4.5)
+
+[node name="SouthBermEast" type="StaticBody3D" parent="."]
+position = Vector3(11.7, 0.9, 17)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SouthBermEast"]
+shape = SubResource("Shape_south_berm")
+[node name="Surface" type="MeshInstance3D" parent="SouthBermEast"]
+visible = false
+scale = Vector3(18.6, 1.8, 1.2)
+mesh = SubResource("Mesh_unit")
+material_override = SubResource("Material_berm")
+
+[node name="WorldBoundarySouthEast" type="StaticBody3D" parent="."]
+position = Vector3(11.7, 1.6, 17.65)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldBoundarySouthEast"]
+shape = SubResource("Shape_south_wall")

@@ -67,7 +67,7 @@ func _build(context: ZoneBuildContext) -> void:
 		context.make_quality_greyfen_overhaul()
 		context.make_tree_cluster([
 			Vector3(-16,0,-12), Vector3(-12.8,0,16.2), Vector3(16,0,-11),
-			Vector3(15,0,13), Vector3(0,0,15),
+			Vector3(15,0,13), Vector3(-5.6,0,15),
 		])
 		context.make_narrative_aftermath()
 
@@ -168,7 +168,7 @@ func _build_detail_stage(context: ZoneBuildContext, stage: String) -> void:
 		"trees":
 			context.make_tree_cluster([
 				Vector3(-16,0,-12), Vector3(-12.8,0,16.2), Vector3(16,0,-11),
-				Vector3(15,0,13), Vector3(0,0,15),
+				Vector3(15,0,13), Vector3(-5.6,0,15),
 			])
 		"aftermath":
 			context.make_narrative_aftermath()

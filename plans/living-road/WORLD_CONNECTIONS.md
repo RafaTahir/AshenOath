@@ -16,12 +16,12 @@ flowchart TD
   CRT <--> REC[Record Hall]
   REC <--> UND[Undercroft]
   GRE --- CEM[Cemetery: Greyfen district]
-  GRE -. current journey shortcut .-> DEP
-  GRE -. current military-road shortcut .-> APP
-  UND -. current journey transfer .-> ASM[Greyfen Assembly: retained stage]
-  ASM -. current journey transfer .-> HAR[Hart Glade]
+  GRE <--> DEP
+  GRE <--> APP
+  GRE --- ASM[Greyfen Assembly: explicit civic phase]
+  GRE <--> HAR[Hart Glade]
   HAR <--> RUI[Old Ruins]
-  RUI -. current return path .-> GRE
+  RUI -. early legacy return journey .-> GRE
 ```
 
 ## Physical Connection Requirements
@@ -47,11 +47,18 @@ does not mark the physical adjacency/residency implementation complete.
 
 ## Owned-Context Progress (2026-10-25)
 
-The first pair now has complete-scene preparation/reuse under ZoneBuildContext
-and ZoneResidencyService: isolated construction, one prepared neighbor, suspended
-controllers, source/quality invalidation and a cancellable cold-travel fallback.
-The retained destination hierarchy changes World3D ownership without tree exit.
-This removes the mutable-host construction prerequisite; it does not complete
-matched visible thresholds, continuous camera/motion or authored connecting ground.
-Those remain the next physical-join work. Build/publication and user runtime
-acceptance are separate in `COHESIVE_GAME_IMPLEMENTATION.md`.
+All fourteen passage pairs now have explicit local entrance frames, connecting
+ground/collision, covered sightline bends and readiness gates. Preparation/reuse
+extends through the retained core/campaign builders under ZoneBuildContext and
+ZoneResidencyService. The hierarchy changes World3D ownership without tree exit;
+movement/camera and local saves survive the frame rebase. Only occluded inactive
+branches are culled, not the active region's population. The diagram represents
+compressed connected spaces, not a geographically scaled continent or an
+all-regions-at-once simulation. Cold missing work retains cancellable progress.
+
+The Undercroft now returns through the Castle rooms. Greyfen owns entry/exit for
+the retained Assembly civic scene; its legacy saves remain valid. The earned
+Greyfen/Hart path and Hart/Ruins path supply actual regional travel. The optional
+early legacy-Ruins return journey is deliberately still a journey, not mislabeled
+as a walkable seam. Delivery 7 in `COHESIVE_GAME_IMPLEMENTATION.md` records exact
+implementation, packaging/publication and outstanding user acceptance separately.

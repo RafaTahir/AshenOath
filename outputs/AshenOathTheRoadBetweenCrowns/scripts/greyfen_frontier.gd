@@ -53,6 +53,7 @@ static func tree_positions(count: int) -> Array[Vector3]:
 		else:
 			var local_index := index - north_count - east_count - west_count
 			position = Vector3(-24.0 + float(local_index % 4) * 15.0, 0, 26.0 + float(local_index / 4) * 9.0)
+		position = WorldSectorManifest.clear_connector_position("greyfen",position,3.0)
 		position.y = height_at(position.x, position.z)
 		result.append(position)
 	return result

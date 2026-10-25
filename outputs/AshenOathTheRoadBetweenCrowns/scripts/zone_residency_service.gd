@@ -116,6 +116,7 @@ func _retire_zone_root(retired_root: Node) -> void:
 	if retired_zone_roots.has(retired_root):
 		return
 	_remove_root_from_route_cache(retired_root)
+	end_preview(retired_root)
 	_anchor_retired_materials(retired_root)
 	_anchor_shared_skinned_resources(retired_root)
 	_quiesce_zone_runtime(retired_root)
@@ -278,9 +279,10 @@ func _activate_cached_zone(zone_id: String) -> Node3D:
 	if cached_root == null or not is_instance_valid(cached_root):
 		return null
 	route_zone_cache.erase(zone_id)
+	end_preview(cached_root)
 	cached_root.set_meta("zone_resource_owner", "active")
 	cached_root.process_mode = Node.PROCESS_MODE_PAUSABLE
-	cached_root.position = Vector3.ZERO
+	cached_root.transform = Transform3D.IDENTITY
 	if bool(cached_root.get_meta("cached_collision_disabled", false)):
 		_set_zone_collision_enabled(cached_root, true)
 	cached_root.set_meta("cached_collision_disabled", false)
@@ -307,6 +309,39 @@ func restore_runtime(root: Node) -> void:
 			node.process_mode = int(node.get_meta("resident_process_mode"))
 			node.remove_meta("resident_process_mode")
 	root.remove_meta("resident_suspended_nodes")
+
+func begin_preview(root: Node) -> void:
+	if root.has_meta("resident_visibility"): return
+	var roads := root.get_node_or_null("ConnectedRoads")
+	if roads != null:
+		root.set_meta("resident_road_mode",roads.process_mode)
+		# Disabled CollisionObject parents otherwise remove these shapes from
+		# physics. The adjoining half must still support feet and camera rays.
+		roads.process_mode = Node.PROCESS_MODE_PAUSABLE
+	# The dogleg bounds the visible portal. Keep the complete region resident,
+	# but cull its occluded branches until it becomes the active owner.
+	var visibility: Array[Dictionary] = []
+	var pending: Array[Node] = []
+	for child: Node in root.get_children():
+		if str(child.name) != "ConnectedRoads": pending.append(child)
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		if node is Node3D:
+			visibility.append({"node":weakref(node),"visible":node.visible})
+			node.visible = false
+		else:
+			for child: Node in node.get_children(): pending.append(child)
+	root.set_meta("resident_visibility",visibility)
+
+func end_preview(root: Node) -> void:
+	for entry: Dictionary in root.get_meta("resident_visibility",[]):
+		var node: Node = entry.node.get_ref()
+		if is_instance_valid(node): node.visible = bool(entry.visible)
+	root.remove_meta("resident_visibility")
+	var roads := root.get_node_or_null("ConnectedRoads")
+	if roads != null and root.has_meta("resident_road_mode"):
+		roads.process_mode = int(root.get_meta("resident_road_mode"))
+	root.remove_meta("resident_road_mode")
 
 func _remove_root_from_route_cache(root: Node) -> void:
 	for raw_id in route_zone_cache.keys().duplicate():

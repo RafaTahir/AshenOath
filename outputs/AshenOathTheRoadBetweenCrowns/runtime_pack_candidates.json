@@ -1,91 +1,90 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-24T22:42:37.751938Z",
-  "build_id": "neighbor-ownership-20261025",
-  "generated_from_commit": "763da7394db72f4deb3b5bf37cd502e5432f3fb7",
+  "generated_at_utc": "2026-10-25T02:49:21.174574Z",
+  "build_id": "connected-campaign-20261025",
+  "generated_from_commit": "6ff674c1ca5f386ae4ead6325fcfe7ee90f3f43f",
   "source_dirty": true,
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 101075876,
+  "total_bytes": 101079732,
   "packs": [
     {
       "id": "base",
-      "version": "neighbor-ownership-20261025",
+      "version": "connected-campaign-20261025",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4094176,
-      "sha256": "67e3ef8cfb877f5415ba351d2fb035513eb0da14716ef680d14782af6f20c0a0",
+      "bytes": 4096464,
+      "sha256": "616d0bfe373d21942e47e8db9bd3231be6c5a874a27294db5b2dc308ae92bbb0",
       "status": "candidate_external",
       "log": "base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "neighbor-ownership-20261025",
+      "version": "connected-campaign-20261025",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 35792136,
-      "sha256": "b49a449eb0094d952a982eadab71305ce6e08106d9b627253e1da5c1000b2b04",
+      "bytes": 35792504,
+      "sha256": "ab20e619356ff57377930acb5a02e6b268818253d9f24f7c5a8b4330aa9aa92d",
       "status": "candidate_external"
     },
     {
       "id": "adjacent",
-      "version": "neighbor-ownership-20261025",
+      "version": "connected-campaign-20261025",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
-      "bytes": 1406800,
-      "sha256": "aa785642c11597199017b7a633fbe78e6fe3ca73f388af7ba6d6e448fbd1287d",
+      "bytes": 1406880,
+      "sha256": "1a8fad2031b11a79b80e48079185342ad9ee1eac1d53a30022491851a7c8fdfb",
       "status": "candidate_external"
     },
     {
       "id": "campaign",
-      "version": "neighbor-ownership-20261025",
+      "version": "connected-campaign-20261025",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 8726164,
-      "sha256": "3f7884b504613fb1bc566bee3b33f24936400bec624481c168ecc09bf3bad1a1",
-      "status": "candidate_external",
-      "reused_from_build": "leisure-atlas-responsive-20261025"
+      "bytes": 8727284,
+      "sha256": "24317092248980b08dedb26ca7da4df5bed3f1fb29151b2e70ff681592701d32",
+      "status": "candidate_external"
     },
     {
       "id": "characters",
-      "version": "neighbor-ownership-20261025",
+      "version": "connected-campaign-20261025",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9658576,
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "status": "candidate_external",
-      "reused_from_build": "leisure-atlas-responsive-20261025"
+      "reused_from_build": "connected-campaign-20261025"
     },
     {
       "id": "monsters",
-      "version": "neighbor-ownership-20261025",
+      "version": "connected-campaign-20261025",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14710328,
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "status": "candidate_external",
-      "reused_from_build": "leisure-atlas-responsive-20261025"
+      "reused_from_build": "connected-campaign-20261025"
     },
     {
       "id": "audio",
-      "version": "neighbor-ownership-20261025",
+      "version": "connected-campaign-20261025",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19308388,
       "sha256": "bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a",
       "status": "candidate_external",
-      "reused_from_build": "leisure-atlas-responsive-20261025"
+      "reused_from_build": "connected-campaign-20261025"
     },
     {
       "id": "quality_materials",
-      "version": "neighbor-ownership-20261025",
+      "version": "connected-campaign-20261025",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7379308,
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "status": "candidate_external",
-      "reused_from_build": "leisure-atlas-responsive-20261025"
+      "reused_from_build": "connected-campaign-20261025"
     }
   ],
   "errors": []

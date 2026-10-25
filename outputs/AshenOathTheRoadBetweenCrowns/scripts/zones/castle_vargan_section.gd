@@ -52,7 +52,7 @@ func _build_approach(context: ZoneBuildContext) -> void:
 	_make_gatehouse(context, Vector3(0, 0, -14))
 	_make_tower(context, Vector3(-8.5, 0, -13.5), 7.5)
 	_make_tower(context, Vector3(8.5, 0, -13.5), 7.5)
-	_make_distant_keep(context, Vector3(0, 0, -25))
+	_make_distant_keep(context, Vector3(-13, 0, -29))
 	context.make_loose_role("cart", Vector3(7, 0, 1), Vector3.ONE * 0.72, -18.0)
 	context.make_prepared_prop("BattlefieldRemnant_74e6628588")
 	_make_banner(context, Vector3(-5.5, 3.2, -13.0), Color(0.30, 0.055, 0.045))
@@ -216,7 +216,9 @@ func _make_castle_door(context: ZoneBuildContext, prompt: String, pos: Vector3, 
 			context.make_collision_box("RecordVestibuleReturn", pos + Vector3(side * 3.75, 1.7, -1.3), Vector3(0.40, 3.4, 2.8))
 		return
 	# Keep the existing nonblocking interaction Area and arrival state unchanged.
-	_make_architecture(context, "VarganFittedDoor", VarganDoor, pos)
+	var door := _make_architecture(context, "VarganFittedDoor", VarganDoor, pos)
+	if bool(area.get_meta("seamless_exterior_gate",false)):
+		preload("res://scripts/connected_route_geometry.gd").open_authored_door(door)
 
 func _make_tower(context: ZoneBuildContext, pos: Vector3, height: float) -> void:
 	context.make_reserved_collision_box("CrackedVarganTower", pos + Vector3(0, height * 0.5, 0), Vector3(5, height, 5))

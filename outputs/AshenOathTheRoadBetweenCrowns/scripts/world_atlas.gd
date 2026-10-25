@@ -18,7 +18,7 @@ func configure(zone: String, known: Dictionary) -> void:
 	discovered = known.duplicate()
 	discovered[current] = true
 	model = Manifest.atlas()
-	var legend := Label.new(); legend.text = "ASHEN OATH | ROAD ATLAS\nRoad crossings: solid | Journey transfers: dashed | Not to scale"
+	var legend := Label.new(); legend.text = "ASHEN OATH | ROAD ATLAS\nConnected passages: solid | Legacy return journey: dashed | Not to scale"
 	_legend = legend
 	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(legend)
 	scroll = ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.follow_focus = true; add_child(scroll)
@@ -67,7 +67,7 @@ func _select(id: String) -> void:
 		var other := ""
 		if str(link.source) == id: other = str(link.target)
 		elif str(link.target) == id and bool(link.get("return",false)): other = str(link.source)
-		if other != "": names.append(str(Routes.ZONE_NAMES.get(other,other)) + (" (journey transfer)" if bool(link.journey) else ""))
+		if other != "": names.append(str(Routes.ZONE_NAMES.get(other,other)) + (" (legacy journey)" if bool(link.journey) else ""))
 	var suffix := "Current location." if id == current else ("Visited." if discovered.has(id) else "Not yet visited; no encounters or secrets revealed.")
 	if model.get("districts",{}).has(id): suffix += " A district within Greyfen, not a separate world."
 	if model.get("phases",{}).has(id): suffix += " Greyfen's civic assembly, after the last witness is heard."

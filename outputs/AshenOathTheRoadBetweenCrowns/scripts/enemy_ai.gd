@@ -107,6 +107,12 @@ func listen_to_world(audio: Node) -> void:
 		audio.perception_cue.connect(_on_world_sound)
 
 func _on_world_sound(position: Vector3, radius: float, _danger: bool) -> void:
+	var owner_node: Node = get_parent()
+	while is_instance_valid(owner_node):
+		if owner_node.has_meta("zone_resource_owner"):
+			if str(owner_node.get_meta("zone_resource_owner")) != "active": return
+			break
+		owner_node = owner_node.get_parent()
 	if dead or is_boss or not encounter_active or can_see_player or Time.get_ticks_msec() < heard_cue_deadline:
 		return
 	if global_position.distance_squared_to(position) > radius*radius or position.distance_to(home_position) > leash_radius-1.0 or global_position.distance_squared_to(position) < 0.25:

@@ -70,6 +70,8 @@ static func build(context: ZoneBuildContext) -> void:
 	var bounds := tree.get_aabb()
 	var bottom := Vector3(bounds.get_center().x, bounds.position.y, bounds.get_center().z)
 	for index in multimesh.instance_count:
+		positions[index] = WorldSectorManifest.clear_connector_position(context.zone_id,positions[index],3.0)
+		positions[index].y = height_at(positions[index].x,positions[index].z)
 		var height := 7.8 + float(index % 6) * 0.56
 		var basis := Basis(Vector3.UP, float(index) * 1.71).scaled(Vector3.ONE * height / maxf(bounds.size.y, 0.01))
 		multimesh.set_instance_transform(index, Transform3D(basis, positions[index] - basis * bottom))

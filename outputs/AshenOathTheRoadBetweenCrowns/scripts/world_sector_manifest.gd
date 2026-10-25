@@ -4,6 +4,25 @@ class_name WorldSectorManifest
 const PATH := "res://world_sector_manifest.json"
 static var _data: Dictionary = {}
 static var _load_error := ""
+static var _connection_cache: Dictionary = {}
+static var _point_cache: Dictionary = {}
+static var _corridor_cache: Dictionary = {}
+const WALKABLE_LINKS := [
+	["greyfen","north",0.0,"wychwood","south",0.0],
+	["wychwood","north",10.8,"deep_wood","south",-7.0],
+	["deep_wood","north",7.0,"old_mill","south",-7.0],
+	["old_mill","north",7.0,"burned_farmstead","south",-7.0],
+	["burned_farmstead","north",7.0,"marsh_crossing","south",0.0],
+	["marsh_crossing","north",0.0,"bandit_road","south",-7.0],
+	["bandit_road","east",7.0,"vargan_approach","west",16.0],
+	["vargan_approach","north",0.0,"vargan_court","south",-10.5],
+	["vargan_court","north",0.0,"record_hall","south",-6.0],
+	["record_hall","north",6.0,"undercroft","south",-6.0],
+	["greyfen","west",-10.0,"deep_wood","east",9.0],
+	["greyfen","east",0.0,"vargan_approach","west",0.0],
+	["greyfen","south",0.0,"hart_glade","north",-7.0],
+	["hart_glade","east",9.0,"ruins","west",5.0]
+]
 static var _aliases := {
 	"deep_woods": "deep_wood",
 	"long_road": "bandit_road",
@@ -53,7 +72,105 @@ static func neighbors(zone_id: String) -> Array[String]:
 		var target := canonical(str(interior))
 		if target != "" and target not in result:
 			result.append(target)
+	for link: Dictionary in connections(zone_id):
+		if str(link.target) not in result: result.append(str(link.target))
 	return result
+
+static func connections(zone_id: String) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var source := canonical(zone_id)
+	if _connection_cache.has(source): return _connection_cache[source]
+	for row: Array in WALKABLE_LINKS:
+		var offset := 0 if str(row[0]) == source else (3 if str(row[3]) == source else -1)
+		if offset < 0: continue
+		var other := 3-offset
+		var target := str(row[other])
+		var edge := edge_between(source,target)
+		edge.merge({"source":source,"target":target,"id":str(row[offset+1]),"lane":float(row[offset+2]),"half_width":2.4,"physical":true},true)
+		if source == "greyfen" and target == "hart_glade":
+			edge["requires_objective"] = ["main_crowns_without_mercy","confession_choice"]
+		if source == "record_hall" and target == "undercroft":
+			edge["requires_flag"] = "castle_haunting_cleared"
+		if source == "ruins" and target == "hart_glade":
+			edge["requires_unlocked_quest"] = "main_hart_remembers"
+		result.append(edge)
+	_connection_cache[source] = result
+	return result
+
+static func connection_between(source: String, target: String) -> Dictionary:
+	for edge: Dictionary in connections(source):
+		if str(edge.target) == canonical(target): return edge
+	return {}
+
+static func direction(edge_id: String) -> Vector3:
+	match edge_id:
+		"north": return Vector3.FORWARD
+		"south": return Vector3.BACK
+		"west": return Vector3.LEFT
+	return Vector3.RIGHT
+
+static func connector_points(edge: Dictionary) -> PackedVector3Array:
+	var key := str(edge.source)+":"+str(edge.target)
+	if _point_cache.has(key): return _point_cache[key]
+	var normal := direction(str(edge.id))
+	var side := normal.cross(Vector3.UP)
+	var half := bounds(str(edge.source))
+	var origin := Vector3(float(edge.lane),0,normal.z*half.y) if normal.z != 0.0 else Vector3(normal.x*half.x,0,float(edge.lane))
+	# A short dogleg blocks the view between independently owned regions.
+	# Both halves have real ground/collision; the common plane is at the end.
+	var points := PackedVector3Array([origin-normal*2.0,origin+normal*4.0,origin+normal*4.0+side*6.0,origin+normal*8.0+side*6.0])
+	_point_cache[key] = points
+	return points
+
+static func crossing_frame(edge: Dictionary) -> Transform3D:
+	var points := connector_points(edge)
+	var normal := direction(str(edge.id))
+	return Transform3D(Basis(Vector3.UP,atan2(normal.x,normal.z)),points[-1])
+
+static func crossing_transform(edge: Dictionary) -> Transform3D:
+	var reverse := connection_between(str(edge.target),str(edge.source))
+	return crossing_frame(reverse)*Transform3D(Basis(Vector3.UP,PI),Vector3.ZERO)*crossing_frame(edge).affine_inverse()
+
+static func connector_contains(zone_id: String, position: Vector3, margin: float = 0.0) -> bool:
+	var point := Vector2(position.x,position.z)
+	for edge: Dictionary in connections(zone_id):
+		var key := str(edge.source)+":"+str(edge.target)+":"+str(margin)
+		if not _corridor_cache.has(key):
+			var points := connector_points(edge)
+			var left := PackedVector2Array()
+			var right := PackedVector2Array()
+			for i in range(points.size()):
+				var incoming := (points[i]-points[maxi(0,i-1)]).normalized()
+				var outgoing := (points[mini(i+1,points.size()-1)]-points[i]).normalized()
+				if i == 0: incoming = outgoing
+				if i == points.size()-1: outgoing = incoming
+				var normal_a := incoming.cross(Vector3.UP)
+				var normal_b := outgoing.cross(Vector3.UP)
+				var miter := (normal_a+normal_b).normalized()
+				var extent := (float(edge.half_width)+margin)/maxf(0.5,miter.dot(normal_b))
+				var a := points[i]-miter*extent
+				var b := points[i]+miter*extent
+				left.append(Vector2(a.x,a.z)); right.append(Vector2(b.x,b.z))
+			right.reverse(); left.append_array(right)
+			_corridor_cache[key] = left
+		if Geometry2D.is_point_in_polygon(point,_corridor_cache[key]): return true
+	return false
+
+static func clear_connector_position(zone_id: String, position: Vector3, clearance: float) -> Vector3:
+	var point := Vector2(position.x,position.z)
+	for _pass in range(3):
+		for edge: Dictionary in connections(zone_id):
+			var points := connector_points(edge)
+			for i in range(points.size()-1):
+				var a := Vector2(points[i].x,points[i].z)
+				var b := Vector2(points[i+1].x,points[i+1].z)
+				var closest := Geometry2D.get_closest_point_to_segment(point,a,b)
+				var offset := point-closest
+				var radius := float(edge.half_width)+clearance
+				if offset.length_squared() >= radius*radius: continue
+				var side := offset.normalized() if offset.length_squared() > 0.0001 else (b-a).normalized().orthogonal()
+				point = closest+side*(radius+0.05)
+	return Vector3(point.x,position.y,point.y)
 
 static func open_edges(zone_id: String) -> Dictionary:
 	return (sector(zone_id).get("edges", {}) as Dictionary).duplicate(true)
@@ -82,7 +199,11 @@ static func atlas() -> Dictionary:
 	view["links"] = links
 	return view
 
-static func edge_available(edge: Dictionary, quests) -> bool:
+static func edge_available(edge: Dictionary, quests, story = null) -> bool:
+	if edge.has("requires_flag") and (story == null or not bool(story.get_flag(str(edge.requires_flag),false))): return false
+	if edge.has("requires_unlocked_quest"):
+		var id := str(edge.requires_unlocked_quest)
+		if quests == null or not (quests.is_unlocked(id) or quests.is_active(id) or quests.is_completed(id) or (story != null and bool(story.get_flag("final_choice_completed",false)))): return false
 	var requirement: Array = edge.get("requires_objective", [])
 	if requirement.size() < 2: return true
 	return quests != null and (quests.is_completed(str(requirement[0])) or quests.is_objective_done(str(requirement[0]),str(requirement[1])))

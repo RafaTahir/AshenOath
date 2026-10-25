@@ -90,13 +90,24 @@ func setup(follow_target: Node3D, source: Node = null) -> void:
 	else:
 		_capture_pointer()
 
-func set_zone(zone_id: String) -> void:
+func set_zone(zone_id: String, preserve_follow: bool = false) -> void:
 	current_zone_id = zone_id
-	if zone_id in ["record_hall", "undercroft"]:
+	if not preserve_follow and zone_id in ["record_hall", "undercroft"]:
 		height = 1.55
 		distance = minf(distance, 4.2)
 		pitch = _clamp_pitch(-0.08)
-	reset_follow()
+	if not preserve_follow: reset_follow()
+
+func rebase_world(frame: Transform3D) -> void:
+	global_transform = frame*global_transform
+	if is_instance_valid(camera): camera.global_transform = frame*camera.global_transform
+	_smoothed_anchor = frame*_smoothed_anchor
+	_smoothed_look = frame*_smoothed_look
+	_cached_collision_position = frame*_cached_collision_position
+	yaw = wrapf(yaw+frame.basis.get_euler().y,-PI,PI)
+	_manual_look_yaw += frame.basis.get_euler().y
+	_collision_from = Vector3.INF; _collision_to = Vector3.INF; _collision_refresh = 0.0
+	reset_physics_interpolation()
 
 func set_enemy_candidates(candidates: Array) -> void:
 	# game.gd owns the active encounter list. Binding it here avoids repeatedly

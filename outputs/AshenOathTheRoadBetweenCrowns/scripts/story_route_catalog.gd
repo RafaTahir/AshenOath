@@ -80,7 +80,7 @@ const ROUTES := {
 		"confession_choice":["assembly", ["assembly_choice"], "Return to the assembly's speaking place.", "Decide what Kael will carry in his own name."]
 	},
 	"main_hart_remembers": {
-		"enter_glade":["hart_glade", [], "Take the reopened road from the assembly.", "Meet the witness at the heart of the binding."],
+		"enter_glade":["hart_glade", [], "Leave the assembly for Greyfen, then follow the southern Hart road.", "Meet the witness at the heart of the binding."],
 		"hear_testimony":["hart_glade", ["white_hart"], "The Hart waits within the circle.", "Hear the complete account before choosing its future."],
 		"final_choice":["hart_glade", ["white_hart"], "Ask the Hart what each intention requires.", "Choose the responsibility Kael is willing to carry."]
 	},

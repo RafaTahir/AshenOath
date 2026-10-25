@@ -236,12 +236,86 @@ retain checked identity. Complete deployment: **104,824,661 bytes**, 16 files,
 **32,939 bytes below** the cap. The WORLD-SAGA-000 publication receipt records
 the commit/deployment outcome. User runtime acceptance remains pending.
 
-## Remaining Approved Work
+## Delivery 7: Connected Regional Passages and Castle Returns
 
-Implement matched, authored exit/entry transforms and visible route composition
-for this pair before claiming physically continuous traversal. Current activation
-still uses the retained arrival handoff, not a contiguous continent. Then review
-the pair before broader neighboring-space/room rollout. Requirements and current
-versus planned connections remain in `WORLD_CONNECTIONS.md`; keep shortcuts and
-Assembly transfers honestly distinguished. Preserve local saves, all explicit
-legacy-state/reward mappings and the pending facial-sample approval boundary.
+Implementation: present. Compilation and packaging: complete. Publication outcome
+is recorded by the WORLD-SAGA-000 receipt. User runtime and visual acceptance
+remain pending.
+
+- The manifest owns fourteen two-way passage pairs: the main regional spine,
+  Castle rooms, Greyfen's forest/military spurs, Greyfen/Hartlands, and Hart/Ruins.
+  Each pair has explicit entrance frames, supporting ground, bank/wall collision,
+  a covered bend and a readiness gate. These are connected, compressed authored
+  spaces with local frames, not a newly georeferenced open-world continent.
+- Preserve Kael's heading, movement and camera frame through coordinate rebasing;
+  keep support checks before control and retain normal local-coordinate saves.
+  A saved passage position remains a passage position on Continue. Overhead
+  architecture is not walkable support. Warm readiness reuses the complete scene;
+  cold work shows honest cancellable progress, never an unchanging fake frame.
+- Only the adjoining passage is visible/simulated in an inactive region, behind
+  its occluding bend. The complete actor/scenery hierarchy remains resident and
+  restores its exact visibility and process modes before control. Passage physics
+  stays enabled independently, supporting feet and camera on both halves. Do not
+  confuse this portal visibility ownership with removing population or content.
+- Generalize owned construction to the retained core/campaign builders and civic
+  phase. Keep conditional encounter-pack requests identical to ordinary travel.
+  Commit queued construction flags and campaign arrival objectives only on actual
+  activation. Inactive enemies ignore current-region sound cues. Caching restores
+  the full transform, not merely position; camera interpolation no longer resets
+  during every support frame of a connected crossing.
+- Share immutable passage meshes and collision resources, retaining existing
+  surface textures. Keep fitted Castle door masonry; open the retained timber
+  leaf independently. Clear only the required Greyfen southern aperture, relocate
+  obstructing trees rather than delete them, and move the retained distant keep
+  out of the actual Castle entrance corridor. No NPC, quest or equipment asset
+  has been removed, and no saved visual preference has been lowered.
+- Return from the Undercroft through Record Hall, Court and Approach. Enter the
+  Assembly explicitly at Greyfen's common table. Leaving the Assembly returns
+  to Greyfen; the earned southern road reaches the Hart. Legacy Assembly saves
+  still load that civic scene. All four covenant resolutions and full homecoming
+  retain their existing owners and rewards. The old early-Ruins return journey
+  remains explicit, with its marker separated from the Hart path.
+- Update route signs, availability, objective guidance and the existing atlas.
+  Closed Hart/Ruins and Castle passages retain their actual earned requirements.
+  Ordinary props, chapter IDs, character identities, audio score, purchases,
+  minigame histories and once-only XP/reward ledgers are unchanged.
+
+The temporary independent idle-preview idea was not retained: portal visibility
+is sufficient, without copying animation libraries or advancing inactive actors.
+The existing facial-sample/final-music approval boundaries remain intact; approval
+of musical direction does not authorize replacing the production score.
+
+Candidate `connected-campaign-20261025`: opening, adjacent, campaign, base and
+production exports compiled without parser/compiler errors. Completed external
+packs were retained while the final root export incorporated the exact bend-floor
+recovery boundary and cancellable destination-download handoff. Engine and
+unaffected pack bytes retain their existing identity. Static source diff review
+completed; the package manifest matches all 16 packaged artifacts. Complete
+deployment: **104,849,183 bytes**, **8,417 bytes below** the cap. The generated
+publication receipt and `.release-gate/connected-campaign-20261025/live-identity.json`
+record publication and live byte identity separately from user acceptance.
+
+### Consolidated User Acceptance
+
+1. Cold/warm menu, explicit New Game, selected Continue, Retry and quality change:
+   no automatic entry, missing Greyfen, changed save or duplicate player.
+2. Bow equip/aim/draw/release/cancel, first person, arrow impacts, ammunition;
+   dialogue entry/pages/return without involuntary cuts.
+3. Opening skip/pause/resume, river current, people/journal stories, civilian
+   weapon reactions and blood/material feedback with the blood setting off/on.
+4. Rook/Tor table visits, all three games, saved unfinished play and once-only
+   prizes; purchases/surplus sales without losing reserves or evidence.
+5. Every passage in both directions: warm walk, cold progress, cancel/retry,
+   repeated reversal, first-person view, held movement, pause and focus recovery.
+   Check trees, feet, floor joins, camera, fitted doors and complete arrivals.
+6. Save/Continue in a bend, unfinished Wychwood wave, changed regional outcome,
+   and a quality change before a return. No duplicate actors, awards or choices.
+7. Castle return, Greyfen Assembly, all four endings and actual homecoming;
+   verify the Hart's appearance and that optional work remains optional.
+8. Actual phone input/layout, audible mix and reference-PC timing/FPS/frame pacing/
+   owned-process memory. Compilation is not evidence that these requirements pass.
+
+No agent gameplay, browser QA, screenshots or benchmarks were run for this
+delivery. No seconds-saved, numerical performance compliance or final listening
+approval is claimed. All authorized source work in this cohesive-game scope is
+implemented; user acceptance and the explicit art/music review gates remain open.

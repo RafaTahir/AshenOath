@@ -31,6 +31,8 @@ static var _unit_sack: CylinderMesh
 static func decorate(game, root: Node3D, zone_id: String) -> void:
 	if root == null or not is_instance_valid(root) or game.story_state == null:
 		return
+	if zone_id == "greyfen" and (game.quests.is_active("main_crowns_without_mercy") or game.quests.is_completed("main_crowns_without_mercy")) and root.find_child("gate_assembly",true,false) == null:
+		game._make_zone_gate("Join the assembly at Greyfen's common table",Vector3(0,0,8),"assembly",Vector3(0,0.95,12))
 	load("res://scripts/story_activity_director.gd").install(game, root, zone_id)
 	load("res://scripts/journey_flow_director.gd").install(game, root, zone_id)
 	CompanionController.install(game, root, zone_id)

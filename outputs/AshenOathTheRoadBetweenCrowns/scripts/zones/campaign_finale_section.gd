@@ -79,8 +79,7 @@ func _build_undercroft(context: ZoneBuildContext) -> void:
 			guardian.name = "HalvernGuard"
 			guardian.leash_radius = 8.0
 	context.make_zone_gate("Return to the Record Hall", Vector3(-6, 0, 14), "record_hall", Vector3(0, 1, -12))
-	if str(context.get_story_flag("halvern_fate", "")) != "":
-		context.make_zone_gate("Return to Greyfen for the assembly", Vector3(6, 0, -14), "assembly", Vector3(0, 1, 12))
+	# Greyfen owns the assembly entry. Return through the actual Castle rooms.
 
 func _make_undercroft_doorway_wall(context: ZoneBuildContext, z: float, doorway_x: float, visible_stone: bool) -> void:
 	# Gate focus and the player capsule need the same opening through the wall.
@@ -123,9 +122,9 @@ func _build_assembly(context: ZoneBuildContext) -> void:
 		context.make_torch(position)
 	context.make_clue("witnesses_ready", "Gather witnesses and records", Vector3(0, 0, -4.5), "main_crowns_without_mercy", "gather_witnesses", Color(0.42, 0.36, 0.26))
 	context.make_named_interactable("assembly_choice", "dialogue", "Address Greyfen", Vector3(0, 0, -9), Color(0.49, 0.34, 0.18))
-	context.make_zone_gate("Return beneath Castle Vargan", Vector3(-7, 0, 14), "undercroft", Vector3(0, 1, -12))
+	context.make_zone_gate("Leave the assembly for Greyfen", Vector3(-7, 0, 14), "greyfen", Vector3(0, 0.95, 8))
 	if str(context.get_story_flag("confession_method", "")) != "":
-		context.make_zone_gate("Walk the reopened road", Vector3(7, 0, -14), "hart_glade", Vector3(0, 1, 12))
+		context.make_zone_gate("Return to Greyfen and take the reopened southern road", Vector3(7, 0, -14), "greyfen", Vector3(0, 0.95, 11))
 
 func _build_hart_glade(context: ZoneBuildContext) -> void:
 	var moss := Color(0.065, 0.105, 0.078)
@@ -165,7 +164,7 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 		make_hart_witness(context)
 	else:
 		_make_hart_aftermath(context, covenant)
-	context.make_zone_gate("Return to Greyfen's assembly", Vector3(-7, 0, 16), "assembly", Vector3(0, 1, -12))
+	context.make_zone_gate("Follow the road home to Greyfen", Vector3(-7, 0, 16), "greyfen", Vector3(0, 0.95, 14))
 
 func _make_hart_aftermath(context: ZoneBuildContext, covenant: String) -> void:
 	# Completed covenants alter the same memorial garden, without repeating

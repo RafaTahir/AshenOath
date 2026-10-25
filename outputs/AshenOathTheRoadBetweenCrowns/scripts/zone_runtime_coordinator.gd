@@ -207,6 +207,9 @@ func _node_count(root: Node) -> int:
 	return count
 
 func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	_continuous_arrival = host.seamless_world.crossing_for(zone_id).duplicate() if host.seamless_world != null else {}
+	var previous_root: Node3D = host.zone_root
+	if not _continuous_arrival.is_empty(): host.seamless_world.prepare_crossing_view()
 	if host.seamless_world != null: host.seamless_world.publish_prepared(zone_id)
 	if host.new_game_start_pending and not host.game_started:
 		host.new_game_start_pending = false
@@ -304,7 +307,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		host.spatial_service.configure(zone_id, host._river_center(zone_id), host._zone_half_extents(zone_id))
 	host._bind_spatial_player_body()
 	if host.camera_rig != null and host.camera_rig.has_method("set_zone"):
-		host.camera_rig.set_zone(zone_id)
+		host.camera_rig.set_zone(zone_id,not _continuous_arrival.is_empty())
 	host.active_enemies.clear()
 	host._sync_camera_enemy_cache()
 	host.hud.set_prompt("")
@@ -384,6 +387,9 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if host.zone_root != null:
 		host.zone_root.set_meta("zone_resource_owner", "active")
 		host.zone_root.set_meta("zone_resource_id", zone_id)
+		if bool(host.zone_root.get_meta("prepared_arrival_pending",false)):
+			host.zone_root.remove_meta("prepared_arrival_pending")
+			if zone_id in host.ZoneCompositionRouter.CAMPAIGN_ZONES: host._apply_campaign_arrival(zone_id)
 		for flag_id: String in host.zone_root.get_meta("prepared_story_flags",{}):
 			host.story_state.set_flag(flag_id,host.zone_root.get_meta("prepared_story_flags")[flag_id])
 		host.zone_root.remove_meta("prepared_story_flags")
@@ -432,7 +438,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	# Authored arrivals are already reserved by the zone builder. Preserve their
 	# exact route position here; nearest_safe() is an emergency recovery API and
 	# can otherwise move a valid arrival to a distant edge anchor.
-	var safe_spawn: Vector3 = host.spatial_service.validate_position(spawn_pos, 0.8, host.spatial_service.bank_for(spawn_pos))
+	var safe_spawn: Vector3 = _continuous_arrival.position if not _continuous_arrival.is_empty() else (spawn_pos if WorldSectorManifest.connector_contains(zone_id,spawn_pos) else host.spatial_service.validate_position(spawn_pos, 0.8, host.spatial_service.bank_for(spawn_pos)))
 	if host.player == null:
 		host._spawn_player(safe_spawn)
 	else:
@@ -460,13 +466,16 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		host.performance_budget_monitor.set_active_zone(host.current_zone_id, host.zone_root, host.player, quality_preset)
 	print("LOADING: zone_stage=budget_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0))
 	if host.player != null:
+		if not _continuous_arrival.is_empty():
+			host.player.global_basis = _continuous_arrival.basis
 		host.pending_spawn_facing = host.player.rotation.y
 		host.pending_spawn_position = safe_spawn
-		host.player.global_position = safe_spawn + Vector3.UP * 0.9
+		host.player.global_position = safe_spawn if not _continuous_arrival.is_empty() else safe_spawn + Vector3.UP * 0.9
 		host.player.velocity = Vector3.ZERO
 		host.player.reset_physics_interpolation()
 		if host.camera_rig != null:
-			host.camera_rig.reset_follow()
+			if not _continuous_arrival.is_empty(): host.camera_rig.rebase_world(_continuous_arrival.transform)
+			else: host.camera_rig.reset_follow()
 		if using_prewarmed_spatial:
 			# This scene has already completed collision and navigation setup
 			# behind the menu. Do not wait for another rendered WebGL frame.
@@ -500,6 +509,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			host.zone_transition_pending = true
 	print("LOADING: handoff_phase=before_seamless")
 	if host.seamless_world != null:
+		host.seamless_world.complete_crossing(previous_root)
 		host.seamless_world.on_zone_activated(host.current_zone_id, safe_spawn)
 	print("LOADING: handoff_phase=after_seamless")
 	if host.game_started:
@@ -519,6 +529,8 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if host.audio.has_method("prewarm_music_state"):
 			host.audio.prewarm_music_state("ghoulkin_combat")
 
+var _continuous_arrival: Dictionary = {}
+
 func advance_transition() -> void:
 	host.zone_transition_frames += 1
 	if host.player == null or host.spatial_service == null:
@@ -534,12 +546,16 @@ func advance_transition() -> void:
 	host.player.global_position = grounded
 	host.player.reset_physics_interpolation()
 	if host.camera_rig != null:
-		host.camera_rig.reset_follow()
+		if _continuous_arrival.is_empty(): host.camera_rig.reset_follow()
 	host.player.rotation.y = host.pending_spawn_facing
 	host.player.velocity = Vector3.ZERO
 	if host.zone_transition_frames < 2:
 		return
 	host.player.set_transition_locked(false)
+	if not _continuous_arrival.is_empty():
+		host.player.velocity = _continuous_arrival.velocity
+		host.player.locomotion_velocity = Vector3(host.player.velocity.x,0,host.player.velocity.z)
+	_continuous_arrival = {}
 	host.last_safe_player_position = host.player.global_position
 	host.zone_transition_pending = false
 	host.campaign_visual_prewarm_suspended = false

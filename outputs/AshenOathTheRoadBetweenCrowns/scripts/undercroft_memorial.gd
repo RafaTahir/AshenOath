@@ -146,3 +146,5 @@ func _dress_existing_doors() -> void:
 		door.rotation_degrees.y = 180.0 if id == "gate_record_hall" else 0.0
 		door.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		area.add_child(door)
+		if bool(area.get_meta("seamless_exterior_gate",false)):
+			preload("res://scripts/connected_route_geometry.gd").open_authored_door(door)

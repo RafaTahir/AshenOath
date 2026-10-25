@@ -89,7 +89,9 @@ func _process(delta: float) -> void:
 		wandering = 0.0
 
 func _available(gate: Node3D) -> bool:
-	return is_instance_valid(gate) and not gate.is_queued_for_deletion() and str(gate.get("interaction_type")) == "zone" and gate.is_interaction_enabled()
+	if not is_instance_valid(gate) or gate.is_queued_for_deletion() or str(gate.get("interaction_type")) != "zone" or not gate.is_interaction_enabled(): return false
+	var edge := Sectors.connection_between(zone_id,str(gate.get("zone_target")))
+	return edge.is_empty() or Sectors.edge_available(edge,host.quests,host.story_state)
 
 func _collect_gates() -> void:
 	geometry_dirty = false

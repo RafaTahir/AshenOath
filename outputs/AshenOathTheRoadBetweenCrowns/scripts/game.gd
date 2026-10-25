@@ -575,7 +575,7 @@ func _begin_gameplay_handoff(reason: String) -> void:
 	_invalidate_interaction_prompt()
 
 func _finish_gameplay_handoff() -> void:
-	if neighbor_arrival_pending and not zone_transition_pending and not zone_load_request_pending and not opening_pack_waiting and not campaign_pack_waiting:
+	if neighbor_arrival_pending and not neighbor_crossing_pending and not zone_transition_pending and not zone_load_request_pending and not opening_pack_waiting and not campaign_pack_waiting:
 		neighbor_arrival_pending = false
 		hud.end_journey_load(true)
 	journey_loading.try_finish(self)
@@ -784,7 +784,7 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	requested_zone_spawn = spawn_pos
 	loading_started_usec = Time.get_ticks_usec()
 	if hud != null and hud.has_method("arm_loading"):
-		hud.arm_loading("Crossing the Oath Gate...")
+		hud.arm_loading("Joining Greyfen's assembly..." if zone_id == "assembly" else "Preparing the journey to " + _zone_display_name(zone_id) + "...")
 	if player != null:
 		player.set_transition_locked(true)
 	_perform_requested_zone_load()
@@ -793,7 +793,7 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 	if zone_transition_pending or zone_load_request_pending or player == null:
 		return false
 	var target := zone_id.strip_edges().to_lower()
-	if zone_runtime_coordinator != null:
+	if zone_runtime_coordinator != null and (seamless_world == null or seamless_world.crossing_for(target).is_empty()):
 		var request := zone_runtime_coordinator.normalize_zone_request(target, spawn_pos)
 		if not bool(request.get("ok", false)):
 			if hud != null:
@@ -825,11 +825,15 @@ func _perform_requested_zone_load() -> void:
 	requested_zone_id = ""
 	_load_zone_after_runtime_pack(destination, arrival)
 
-func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
-	_ensure_gameplay_runtime()
+func _zone_encounter_packs(zone_id: String) -> Array[String]:
 	var encounter_packs: Array[String] = []
 	if zone_id == "greyfen" and quests.is_active("main_bell_beneath_greyfen") and not _boss_is_resolved("bell_eater"):
 		encounter_packs.append("monsters")
+	return encounter_packs
+
+func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	_ensure_gameplay_runtime()
+	var encounter_packs := _zone_encounter_packs(zone_id)
 	if _zone_requires_campaign_pack(zone_id):
 		runtime_services.configure_campaign()
 	journey_loading.begin_arrival(self, "travel", zone_id)
@@ -852,6 +856,7 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 			if hud != null and hud.has_method("arm_loading"):
 				hud.arm_loading("Preparing Greyfen's saved encounter..." if not encounter_packs.is_empty() else "Preparing the road into Wychwood...")
 			runtime_packs.request_zone_packs(zone_id, encounter_packs)
+			_begin_travel_download(zone_id,encounter_packs)
 			_wait_for_opening_pack(zone_id, spawn_pos, zone_pack_request_serial, encounter_packs)
 			return
 	if not _zone_requires_campaign_pack(zone_id) or not OS.has_feature("web"):
@@ -868,18 +873,37 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 		if hud != null and hud.has_method("arm_loading"):
 			hud.arm_loading("Preparing the road beyond Greyfen...")
 		runtime_packs.request_zone_packs(zone_id)
+		_begin_travel_download(zone_id)
 		_wait_for_campaign_pack(zone_id, spawn_pos, zone_pack_request_serial)
 		return
 	_load_zone(zone_id, spawn_pos)
+
+func _begin_travel_download(zone_id: String, extras: Array[String] = []) -> void:
+	if not game_started or journey_loading.pending(self): return
+	neighbor_crossing_pending = true
+	neighbor_crossing_was_paused = get_tree().paused
+	get_tree().paused = true
+	audio.set_game_paused(true)
+	hud.begin_journey_load({"summary":{"title":_zone_display_name(zone_id)}})
+	runtime_packs.prioritize_zone(zone_id,extras)
+
+func _finish_travel_download() -> void:
+	if not neighbor_crossing_pending: return
+	neighbor_crossing_pending = false
+	neighbor_arrival_pending = true
+	get_tree().paused = neighbor_crossing_was_paused
+	audio.set_game_paused(neighbor_crossing_was_paused)
 
 func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial: int) -> void:
 	for _frame in range(900):
 		await get_tree().process_frame
 		if request_serial != zone_pack_request_serial or not campaign_pack_waiting:
 			return
+		if neighbor_crossing_pending: hud.update_journey_load_progress(zone_id,runtime_packs.zone_pack_progress(zone_id),"Downloading verified destination content...")
 		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id):
 			campaign_pack_waiting = false
-			if hud != null and hud.has_method("hide_loading"):
+			_finish_travel_download()
+			if not neighbor_arrival_pending and hud != null and hud.has_method("hide_loading"):
 				hud.hide_loading()
 			_load_zone(zone_id, spawn_pos)
 			return
@@ -893,9 +917,11 @@ func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial:
 		await get_tree().process_frame
 		if request_serial != zone_pack_request_serial or not opening_pack_waiting:
 			return
+		if neighbor_crossing_pending: hud.update_journey_load_progress(zone_id,runtime_packs.zone_pack_progress(zone_id,encounter_packs),"Downloading verified destination content...")
 		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id, encounter_packs):
 			opening_pack_waiting = false
-			if hud != null and hud.has_method("hide_loading"):
+			_finish_travel_download()
+			if not neighbor_arrival_pending and hud != null and hud.has_method("hide_loading"):
 				hud.hide_loading()
 			_load_zone(zone_id, spawn_pos)
 			return
@@ -905,6 +931,10 @@ func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial:
 	_recover_failed_pack_load("The opening pack could not be prepared. Your current location remains open; use the crossing to retry.")
 
 func _recover_failed_pack_load(reason: String = "The destination could not load. Please retry.") -> void:
+	if neighbor_crossing_pending:
+		get_tree().paused = neighbor_crossing_was_paused
+		audio.set_game_paused(neighbor_crossing_was_paused)
+		hud.end_journey_load(false)
 	neighbor_crossing_pending = false
 	neighbor_arrival_pending = false
 	if seamless_world != null: seamless_world.cancel_preparation()
@@ -1319,7 +1349,7 @@ func _bind_spatial_player_body() -> void:
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	_begin_gameplay_handoff("zone_activation")
-	var paired_crossing := game_started and current_zone_id != zone_id and current_zone_id in ["greyfen","wychwood"] and zone_id in ["greyfen","wychwood"] and not journey_loading.pending(self)
+	var paired_crossing := game_started and seamless_world != null and current_zone_id != zone_id and not journey_loading.pending(self) and ZoneCompositionRouter.supports(zone_id)
 	if paired_crossing and seamless_world != null and is_instance_valid(zone_root) and is_instance_valid(player) and not seamless_world.has_prepared(zone_id):
 		neighbor_crossing_pending = true
 		neighbor_crossing_was_paused = get_tree().paused
@@ -2001,7 +2031,7 @@ func _add_visual_100_layer(zone_id: String) -> void:
 
 func _install_world_prop_controller(zone_id: String) -> void:
 	StoryWorldDirector.decorate(self, zone_root, zone_id)
-	CovenantResolution.restore(self)
+	if not neighbor_building: CovenantResolution.restore(self)
 	if zone_root == null or not is_instance_valid(zone_root):
 		world_props = null
 		return
@@ -2663,8 +2693,8 @@ func _apply_dialogue_action(action: Dictionary) -> bool:
 			if not StoryActorPresence.remains("captain_senn", str(story_state.get_flag("senn_fate", ""))):
 				_consume_story_choice_interactable("captain_senn")
 		elif action.get("sets_flags", {}).has("confession_method") and current_zone_id == "assembly":
-			if not _has_interactable("gate_hart_glade"):
-				_make_zone_gate("Walk the reopened road", Vector3(7, 0, -14), "hart_glade", Vector3(0, 1, 12))
+			if not _has_interactable("gate_greyfen"):
+				_make_zone_gate("Return to Greyfen and take the southern Hart road", Vector3(7, 0, -14), "greyfen", Vector3(0, 0.95, 11))
 			_show_current_objective_guidance(6.0)
 		if action.get("sets_flags", {}).has("halvern_fate"):
 			var halvern_outcome := str(action["sets_flags"]["halvern_fate"])
@@ -4836,6 +4866,7 @@ func _tracked_objective_text(quest_id: String, objective_id: String) -> String:
 func _keep_player_in_world() -> void:
 	if player == null:
 		return
+	if WorldSectorManifest.connector_contains(current_zone_id,player.global_position) and player.global_position.y > -2.0: return
 	if _is_river_recovery_position(current_zone_id, player.global_position):
 		_recover_from_river(player, _river_center(current_zone_id), 3.4)
 		return
@@ -4866,6 +4897,8 @@ func _keep_player_in_world() -> void:
 		hud.toast("Kael catches himself before the dark takes him.")
 
 func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
+	if WorldSectorManifest.connector_contains(zone,pos) and pos.y > -2.0 and pos.y < 4.0:
+		return Vector3(pos.x,maxf(0.95,pos.y),pos.z)
 	var river_z := _river_center(zone)
 	if spatial_service != null and spatial_service.zone_id == zone:
 		var active_candidate: Vector3 = spatial_service.validate_position(pos, 0.90, spatial_service.bank_for(pos))
@@ -4977,7 +5010,12 @@ func _make_boundary_edge(edge_id: String, width: float, depth: float, color: Col
 	var open_edge: Dictionary = seamless_world.open_edges_for(current_zone_id).get(edge_id, {}) if seamless_world != null else {}
 	var opening_half := float(open_edge.get("half_width", 0.0))
 	var lane := float(open_edge.get("lane", 0.0))
-	var is_open := not open_edge.is_empty() and opening_half > 0.0
+	var openings: Array[Vector2] = []
+	for edge: Dictionary in WorldSectorManifest.connections(current_zone_id):
+		if str(edge.id) == edge_id: openings.append(Vector2(float(edge.lane)-float(edge.half_width),float(edge.lane)+float(edge.half_width)))
+	if openings.is_empty() and not open_edge.is_empty() and opening_half > 0.0 and WorldSectorManifest.connection_between(current_zone_id,str(open_edge.get("target",""))).is_empty():
+		openings.append(Vector2(lane-opening_half,lane+opening_half))
+	var is_open := not openings.is_empty()
 	var wall_thickness := 1.2
 	var wall_height := 1.8
 	var collision_thickness := 0.4
@@ -5002,9 +5040,15 @@ func _make_boundary_edge(edge_id: String, width: float, depth: float, color: Col
 				_make_invisible_wall(Vector3(half_w + 0.65, 1.6, 0), Vector3(collision_thickness, 3.2, depth))
 		return
 	var line_half := half_w if edge_id in ["north", "south"] else half_d
-	var start := clampf(lane - opening_half, -line_half + 0.6, line_half - 0.6)
-	var finish := clampf(lane + opening_half, -line_half + 0.6, line_half - 0.6)
-	var segments := [[-line_half, start], [finish, line_half]]
+	openings.sort_custom(func(a: Vector2,b: Vector2): return a.x < b.x)
+	var segments: Array = []
+	var cursor := -line_half
+	for opening: Vector2 in openings:
+		var start := clampf(opening.x,-line_half+0.6,line_half-0.6)
+		var finish := clampf(opening.y,-line_half+0.6,line_half-0.6)
+		if start > cursor: segments.append([cursor,start])
+		cursor = maxf(cursor,finish)
+	if cursor < line_half: segments.append([cursor,line_half])
 	for segment in segments:
 		var segment_start := float(segment[0])
 		var segment_end := float(segment[1])
@@ -6856,6 +6900,9 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 	for child in area.get_children():
 		if child is MeshInstance3D:
 			child.visible = false
+	if (current_zone_id == "greyfen" and zone_target == "assembly") or (current_zone_id == "assembly" and zone_target == "greyfen"):
+		area.set_meta("civic_phase",true)
+		return area
 	if homeward:
 		area.set_meta("homecoming_route", true)
 		return area
@@ -6864,6 +6911,8 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 		# portal. Keep the Area3D as a named migration marker for old saves, but
 		# remove its focus/collision path so it cannot steal interaction priority.
 		area.set_meta("seamless_exterior_gate", true)
+		if not WorldSectorManifest.is_exterior(current_zone_id) or not WorldSectorManifest.is_exterior(zone_target):
+			area.set_meta("interior_door",true)
 		area.monitoring = false
 		area.monitorable = false
 		return area
@@ -7264,8 +7313,8 @@ func _apply_boss_resolution_contract(boss_id: String) -> void:
 		story_state.set_flag(aftermath, true)
 
 func _publish_halvern_exit() -> void:
-	if current_zone_id == "undercroft" and str(story_state.get_flag("halvern_fate", "")) != "" and not _has_interactable("gate_assembly"):
-		_make_zone_gate("Return to Greyfen for the assembly", Vector3(6, 0, -14), "assembly", Vector3(0, 1, 12))
+	if current_zone_id == "undercroft" and str(story_state.get_flag("halvern_fate", "")) != "" and not _has_interactable("gate_record_hall"):
+		_make_zone_gate("Return through the Record Hall toward Greyfen", Vector3(-6, 0, 14), "record_hall", Vector3(6, 0.95, -12))
 
 func _on_boss_peaceful_resolution(boss_id: String, outcome: String, enemy: Node) -> void:
 	story_state.set_flag("boss_%s_outcome" % boss_id, outcome)
@@ -7512,6 +7561,7 @@ func _make_tree(pos: Vector3) -> void:
 			if Vector2(pos.x, pos.z).distance_to(Vector2(house_position.x, house_position.z)) < 5.5:
 				return
 	var radius := _scene_randf_range(1.0, 1.35)
+	pos = WorldSectorManifest.clear_connector_position(current_zone_id,pos,1.35)
 	if spatial_service != null:
 		spatial_service.add_presence_landmark("shelter", pos, 0.7)
 	var height := _scene_randf_range(2.0, 2.7)
@@ -7575,6 +7625,7 @@ func _upload_static_batch(instance: MultiMeshInstance3D, transforms: Array, colo
 	preload("res://scripts/static_multimesh_upload.gd").upload(instance.multimesh, transforms, colors, preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"))
 
 func _flush_environment_batches() -> void:
+	preload("res://scripts/connected_route_geometry.gd").install(ZoneBuildContext.new(self,current_zone_id))
 	var terrain_groups: Dictionary = {}
 	for item in terrain_patch_batch_data:
 		var terrain_key := str(item.material.get_instance_id())
