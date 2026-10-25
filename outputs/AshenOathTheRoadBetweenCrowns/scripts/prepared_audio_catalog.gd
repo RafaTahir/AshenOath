@@ -10,6 +10,7 @@ func _init() -> void:
 	_load_catalog()
 	if not OS.has_feature("web"):
 		available_owners["opening"] = true
+		available_owners["adjacent"] = true
 		available_owners["campaign"] = true
 
 func _load_catalog() -> void:
@@ -35,7 +36,7 @@ func recover_catalog() -> void:
 		_load_catalog()
 
 func mark_pack_available(pack_id: String) -> void:
-	if pack_id in ["opening", "campaign"]:
+	if pack_id in ["opening", "adjacent", "campaign"]:
 		available_owners[pack_id] = true
 
 func stream(category: String, id: String) -> AudioStream:

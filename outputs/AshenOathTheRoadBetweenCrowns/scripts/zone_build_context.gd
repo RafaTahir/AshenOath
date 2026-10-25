@@ -14,18 +14,16 @@ var _owns_destination := false
 var owned_fields: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var _first_step := true
-const SCOPED_FIELDS := ["zone_root", "current_zone_id", "spatial_service", "active_enemies",
-	"interaction_candidates", "interaction_area_cache", "interaction_area_cache_ready",
-	"runtime_light_count", "tree_batch_data", "deadfall_batch_data",
-	"prop_batch_data", "visual_box_batch_data", "terrain_patch_batch_data", "house_batch_data",
-	"house_module_batch_data", "environment_batches_flushed",
-	"world_props", "world_vfx", "encounter_spatial_index", "interaction_focus_dirty"]
+var generation := 0
+var cursor := 0
+var cancelled := false
+var failure := ""
+var _builder_reference: WeakRef
+const FIELDS_META := "zone_construction_fields"
 
 var zone_root: Node3D:
 	get:
-		if _owns_destination:
-			return owned_root if is_instance_valid(owned_root) else null
-		return _host.zone_root as Node3D if is_instance_valid(_host) else null
+		return owned_root if not cancelled and is_instance_valid(owned_root) else null
 var quests:
 	get:
 		return _host.quests
@@ -40,58 +38,112 @@ var enemy_defs:
 		return _host.enemy_defs
 
 func _init(game_host: Node, id: String, profile: String = "full") -> void:
-	_host = game_host
+	_host = game_host.coordinator if game_host.has_method("retire_construction_host") else game_host
 	zone_id = id
 	build_profile = profile
 	rng.seed = 78233
+	if is_instance_valid(game_host.zone_root):
+		owned_root = game_host.zone_root
+		owned_fields = fields_for(owned_root)
+		_owns_destination = owned_root != _host.zone_root
+		if _host.scene_rng != null:
+			rng = _host.scene_rng
+
+static func new_fields() -> Dictionary:
+	var areas: Array[Area3D] = []
+	var trees: Array[Dictionary] = []
+	var deadfalls: Array[Transform3D] = []
+	var boxes: Array[Dictionary] = []
+	var terrain: Array[Dictionary] = []
+	return {"active_enemies":[], "interaction_candidates":[],
+		"interaction_area_cache":areas, "interaction_area_cache_ready":false,
+		"runtime_light_count":0, "tree_batch_data":trees, "deadfall_batch_data":deadfalls,
+		"prop_batch_data":{}, "visual_box_batch_data":boxes, "terrain_patch_batch_data":terrain,
+		"house_batch_data":{}, "house_module_batch_data":{}, "environment_batches_flushed":false,
+		"world_props":null, "world_vfx":null, "spatial_service":null,
+		"encounter_spatial_index":preload("res://scripts/actor_spatial_index.gd").new(),
+		"interaction_focus_dirty":true}
+
+static func fields_for(root: Node3D) -> Dictionary:
+	if not root.has_meta(FIELDS_META):
+		root.set_meta(FIELDS_META, new_fields())
+	return root.get_meta(FIELDS_META)
+
+static func active_host(host: Node) -> Node3D:
+	if not is_instance_valid(host.zone_root):
+		return null
+	var reference: WeakRef = host.zone_root.get_meta("zone_construction_host", null)
+	var existing := reference.get_ref() as Node3D if reference != null else null
+	if existing != null:
+		return existing
+	return ZoneBuildContext.new(host, str(host.current_zone_id)).construction_host()
+
+func construction_host() -> Node3D:
+	if zone_root == null:
+		return null
+	var existing := _builder_reference.get_ref() as Node3D if _builder_reference != null else null
+	if existing == null:
+		var reference: WeakRef = zone_root.get_meta("zone_construction_host", null)
+		existing = reference.get_ref() as Node3D if reference != null else null
+	if existing != null:
+		return existing
+	# Keep the coordinator's viewport for runtime controllers even while a
+	# destination resides in an isolated preparation viewport. The root owns
+	# retirement; neither metadata nor this context owns a strong node reference.
+	var builder := load("res://scripts/zone_construction_host.gd").new() as Node3D
+	builder.bind(_host, self)
+	var coordinator: Node = _host.coordinator if _host.has_method("retire_construction_host") else _host
+	coordinator.add_child(builder)
+	_builder_reference = weakref(builder)
+	zone_root.set_meta("zone_construction_host", _builder_reference)
+	zone_root.tree_exiting.connect(builder.retire_construction_host)
+	return builder
+
+func is_preparing() -> bool:
+	return _owns_destination and is_instance_valid(owned_root) and _host.zone_root != owned_root
+
+func cancel() -> void:
+	cancelled = true
+	generation += 1
+
+func step_result(state: String = "progress") -> Dictionary:
+	return {"state":"cancelled" if cancelled else ("failed" if not failure.is_empty() else state),
+		"zone":zone_id, "generation":generation, "next_step":cursor, "error":failure}
 
 func own(root: Node3D, spatial: Node) -> void:
 	owned_root = root
 	_owns_destination = true
-	for field: String in SCOPED_FIELDS:
-		var value: Variant = _host.get(field)
-		if value is Array or value is Dictionary:
-			value = value.duplicate(); value.clear()
-		owned_fields[field] = value
-	owned_fields.merge({"zone_root":root,"current_zone_id":zone_id,"spatial_service":spatial,
-		"runtime_light_count":0,
-		"world_props":null,"world_vfx":null,"environment_batches_flushed":false,
-		"interaction_area_cache_ready":false,"interaction_focus_dirty":true,
-		"encounter_spatial_index":preload("res://scripts/actor_spatial_index.gd").new()},true)
+	owned_fields = fields_for(root)
+	owned_fields.spatial_service = spatial
+	rng = RandomNumberGenerator.new()
+	rng.seed = 78233
 
 func run_step(action: Callable) -> bool:
-	# The compatibility scope never yields: the active world is restored before
-	# any gameplay callback or subsequent construction step can execute.
-	if not is_instance_valid(owned_root) or not is_instance_valid(_host) or _host.neighbor_building or not action.is_valid():
+	if zone_root == null or not is_instance_valid(_host) or not action.is_valid():
 		return false
-	var previous: Dictionary = {}
-	for field: String in SCOPED_FIELDS:
-		previous[field] = _host.get(field)
-		_host.set(field,owned_fields[field])
-	var previous_rng: RandomNumberGenerator = _host.scene_rng
-	_host.scene_rng = rng
-	_host.neighbor_building = true
 	_host._begin_zone_world_reads(zone_id,_first_step)
 	_first_step = false
+	preload("res://scripts/prepared_zone_geometry.gd").set_zone_scope(zone_id)
+	_host.asset_helper.set_zone_scope(zone_id)
 	var result: Variant = action.call(self)
 	_host._end_zone_world_reads()
-	for field: String in SCOPED_FIELDS:
-		owned_fields[field] = _host.get(field)
-		_host.set(field,previous[field])
-	_host.neighbor_building = false
-	_host.scene_rng = previous_rng
 	preload("res://scripts/prepared_zone_geometry.gd").set_zone_scope(str(_host.current_zone_id))
 	_host.asset_helper.set_zone_scope(str(_host.current_zone_id))
-	return result is bool and result
+	if result is bool and result and not cancelled:
+		cursor += 1
+		return true
+	failure = "Construction step %d did not complete for %s." % [cursor, zone_id]
+	return false
 
 func use_scene_rng(seed_value: int) -> RandomNumberGenerator:
-	var previous: RandomNumberGenerator = _host.scene_rng
-	rng.seed = seed_value
-	_host.scene_rng = rng
+	var owner: ZoneBuildContext = construction_host().context
+	var previous := owner.rng
+	owner.rng = RandomNumberGenerator.new()
+	owner.rng.seed = seed_value
 	return previous
 
 func restore_scene_rng(previous: RandomNumberGenerator) -> void:
-	_host.scene_rng = previous
+	construction_host().context.rng = previous
 
 func is_opening_fast() -> bool:
 	return zone_id == "greyfen" and build_profile == "opening_fast"
@@ -114,7 +166,7 @@ func record_operation(label: String) -> void:
 		operations.append(label)
 
 func configure_zone_controller(controller: Node) -> void:
-	controller.configure(_host, quality_preset())
+	controller.configure(construction_host(), quality_preset())
 
 func quality_preset() -> String:
 	return str(settings.settings.get("quality_preset", "balanced"))
@@ -129,7 +181,9 @@ func is_objective_done(quest_id: String, objective_id: String) -> bool:
 	return quests.is_objective_done(quest_id, objective_id)
 
 func set_story_flag(flag_id: String, value: Variant) -> void:
-	if _owns_destination:
+	if cancelled or not is_instance_valid(owned_root):
+		return
+	if is_preparing():
 		if not is_instance_valid(owned_root):
 			return
 		var pending: Dictionary = owned_root.get_meta("prepared_story_flags",{})
@@ -151,15 +205,15 @@ func wychwood_wave_progress() -> int:
 	return clampi(int(_host.wychwood_pack_kills), 0, 5)
 
 func make_ground(pos: Vector3, size: Vector3, color: Color) -> void:
-	_host._make_ground(pos, size, color)
+	construction_host()._make_ground(pos, size, color)
 	ground_count += 1
 
 func make_split_ground(width: float, depth: float, river_z: float, river_span: float, color: Color, bridge_width: float = 0.0, bridge_length: float = 0.0, bridge_approach_length: float = 0.0) -> void:
-	_host._make_split_ground(width, depth, river_z, river_span, color, bridge_width, bridge_length, bridge_approach_length)
+	construction_host()._make_split_ground(width, depth, river_z, river_span, color, bridge_width, bridge_length, bridge_approach_length)
 	ground_count += 1
 
 func make_play_area_bounds(width: float, depth: float, color: Color) -> void:
-	_host._make_play_area_bounds(width, depth, color)
+	construction_host()._make_play_area_bounds(width, depth, color)
 	bounds_count += 1
 
 func register_authored_gameplay_core() -> bool:
@@ -186,50 +240,50 @@ func authored_anchor_position(anchor_name: String, fallback: Vector3) -> Vector3
 	return zone_root.to_local(anchor.global_position)
 
 func make_road(pos: Vector3, size: Vector3, color: Color) -> void:
-	_host._make_road(pos, size, color)
+	construction_host()._make_road(pos, size, color)
 
 func make_terrain_patch(id: String, pos: Vector3, size: Vector3, color: Color) -> void:
-	_host._make_terrain_patch(id, pos, size, color)
+	construction_host()._make_terrain_patch(id, pos, size, color)
 
 func make_grass_tufts(points: Array, color: Color) -> void:
-	_host._make_grass_tufts(points, color)
+	construction_host()._make_grass_tufts(points, color)
 
 func make_path_stone(pos: Vector3, scale_value: float) -> void:
-	_host._make_path_stone(pos, scale_value)
+	construction_host()._make_path_stone(pos, scale_value)
 
 func make_world_wheel(id: String, pos: Vector3, radius: float, depth: float, color: Color, rotation_degrees: Vector3 = Vector3.ZERO) -> void:
-	_host._make_world_wheel(id, pos, radius, depth, color, rotation_degrees)
+	construction_host()._make_world_wheel(id, pos, radius, depth, color, rotation_degrees)
 
 func make_water_patch(id: String, pos: Vector3, size: Vector3, color: Color) -> void:
-	_host._make_water_patch(id, pos, size, color)
+	construction_host()._make_water_patch(id, pos, size, color)
 
 func make_fog_sheet(pos: Vector3, size: Vector3, color: Color) -> void:
-	_host._make_fog_sheet(pos, size, color)
+	construction_host()._make_fog_sheet(pos, size, color)
 
 func make_light(id: String, pos: Vector3, color: Color, energy: float):
-	return _host._make_light(id, pos, color, energy)
+	return construction_host()._make_light(id, pos, color, energy)
 
 func make_torch(pos: Vector3) -> void:
-	_host._make_torch(pos)
+	construction_host()._make_torch(pos)
 
 func make_tree_cluster(points: Array) -> void:
-	_host._make_tree_cluster(points)
+	construction_host()._make_tree_cluster(points)
 
 func make_tree(pos: Vector3) -> void:
-	_host._make_tree(pos)
+	construction_host()._make_tree(pos)
 
 func make_tree_wall(axis_extent: float, fixed_pos: float, count: int, along_x: bool) -> void:
-	_host._make_tree_wall(axis_extent, fixed_pos, count, along_x)
+	construction_host()._make_tree_wall(axis_extent, fixed_pos, count, along_x)
 
 func make_pillar(pos: Vector3) -> void:
-	_host._make_pillar(pos)
+	construction_host()._make_pillar(pos)
 
 func make_prop_box(id: String, pos: Vector3, size: Vector3, color: Color) -> void:
-	_host._make_prop_box(id, pos, size, color)
+	construction_host()._make_prop_box(id, pos, size, color)
 
 func make_reserved_collision_box(id: String, pos: Vector3, size: Vector3) -> void:
 	# Replacing a blockout visual must retain its exact reservation/collision policy.
-	_host._make_prop_box(id, pos, size, Color.WHITE, false)
+	construction_host()._make_prop_box(id, pos, size, Color.WHITE, false)
 
 func make_collision_box(id: String, pos: Vector3, size: Vector3) -> void:
 	add_collision_box(zone_root, id, pos, size)
@@ -258,16 +312,16 @@ static func add_collision_box(root: Node3D, id: String, pos: Vector3, size: Vect
 	body.add_child(shape)
 
 func make_visual_box(id: String, pos: Vector3, size: Vector3, color: Color):
-	return _host._make_visual_box(id, pos, size, color)
+	return construction_host()._make_visual_box(id, pos, size, color)
 
 func append_prepared_detail(id: String) -> void:
-	_host._append_prepared_detail(id)
+	construction_host()._append_prepared_detail(id)
 
 func make_prepared_prop(id: String) -> void:
-	_host._make_prepared_prop(id)
+	construction_host()._make_prepared_prop(id)
 
 func make_loose_role(role: String, pos: Vector3, scale_value: Vector3, rotation_y: float):
-	return _host._make_loose_role(role, pos, scale_value, rotation_y)
+	return construction_host()._make_loose_role(role, pos, scale_value, rotation_y)
 
 func make_visual_role(role: String, category: String, pos: Vector3, scale_value: Vector3, rotation_y: float = 0.0, allow_defer: bool = true):
 	# Imported castle dressing is visual enrichment rather than arrival-critical
@@ -284,7 +338,7 @@ func make_visual_role(role: String, category: String, pos: Vector3, scale_value:
 		marker.rotation_degrees.y = rotation_y
 		add_node(marker)
 		return marker
-	var node = _host._make_role_visual(role, category, scale_value)
+	var node = construction_host()._make_role_visual(role, category, scale_value)
 	if node == null:
 		return null
 	node.position = pos
@@ -293,32 +347,32 @@ func make_visual_role(role: String, category: String, pos: Vector3, scale_value:
 	return node
 
 func make_fitted_environment_role(role: String, pos: Vector3, target_size: Vector3, rotation_y: float = 0.0, allow_defer: bool = true):
-	var fitted_scale: Vector3 = _host._environment_role_scale(role, target_size)
+	var fitted_scale: Vector3 = construction_host()._environment_role_scale(role, target_size)
 	return make_visual_role(role, "environment", pos, fitted_scale, rotation_y, allow_defer)
 
 func make_clue(id: String, prompt: String, pos: Vector3, quest_id: String, objective_id: String, color: Color):
-	return _host._make_clue(id, prompt, pos, quest_id, objective_id, color)
+	return construction_host()._make_clue(id, prompt, pos, quest_id, objective_id, color)
 
 func make_named_interactable(id: String, type: String, prompt: String, pos: Vector3, color: Color, scale_override: Vector3 = Vector3.ONE):
-	return _host._make_named_interactable(id, type, prompt, pos, color, scale_override)
+	return construction_host()._make_named_interactable(id, type, prompt, pos, color, scale_override)
 
 func make_village_place(id: String, type: String, prompt: String, pos: Vector3, size: Vector3, color: Color):
-	return _host._make_village_place(id, type, prompt, pos, size, color)
+	return construction_host()._make_village_place(id, type, prompt, pos, size, color)
 
 func make_zone_gate(prompt: String, pos: Vector3, target: String, spawn_pos: Vector3):
-	var gate = _host._make_zone_gate(prompt, pos, target, spawn_pos)
+	var gate = construction_host()._make_zone_gate(prompt, pos, target, spawn_pos)
 	if gate != null:
 		gate_count += 1
 	return gate
 
 func spawn_enemy(id: String, pos: Vector3, visual_role: String = ""):
-	return _host._spawn_enemy(id, pos, visual_role)
+	return construction_host()._spawn_enemy(id, pos, visual_role)
 
 func enemy_exists(id: String) -> bool:
 	return enemy_defs.has(id)
 
 func make_material(color: Color) -> StandardMaterial3D:
-	return _host._mat(color)
+	return construction_host()._mat(color)
 
 func make_world_material(surface: String, tint: Color = Color.WHITE) -> StandardMaterial3D:
 	return _host.world_materials.get_material(surface, str(_host.settings.settings.get("quality_preset", "balanced")), tint, 0.0, false)
@@ -336,88 +390,88 @@ func river_recovery_handler() -> Callable:
 	return Callable(_host, "_recover_from_river")
 
 func make_greyfen_terrain_layers() -> void:
-	_host._make_greyfen_terrain_layers()
+	construction_host()._make_greyfen_terrain_layers()
 
 func make_wychwood_terrain_layers() -> void:
-	_host._make_wychwood_terrain_layers()
+	construction_host()._make_wychwood_terrain_layers()
 
 func make_greyfen_path_edges() -> void:
-	_host._make_greyfen_path_edges()
+	construction_host()._make_greyfen_path_edges()
 
 func make_wychwood_path_edges() -> void:
-	_host._make_wychwood_path_edges()
+	construction_host()._make_wychwood_path_edges()
 
 func make_village_dressing() -> void:
-	_host._make_village_dressing()
+	construction_host()._make_village_dressing()
 
 func make_greyfen_first_impression_dressing(stage: String = "") -> void:
-	_host._make_greyfen_first_impression_dressing(stage)
+	construction_host()._make_greyfen_first_impression_dressing(stage)
 
 func make_quality_greyfen_overhaul() -> void:
-	_host._make_quality_greyfen_overhaul()
+	construction_host()._make_quality_greyfen_overhaul()
 
 func make_spawn_composition() -> void:
-	_host._make_spawn_composition()
+	construction_host()._make_spawn_composition()
 
 func make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) -> void:
-	_host._make_village_house_dressed(pos, yaw, node_name)
+	construction_host()._make_village_house_dressed(pos, yaw, node_name)
 
 func make_fence(pos: Vector3, vertical: bool) -> void:
-	_host._make_fence(pos, vertical)
+	construction_host()._make_fence(pos, vertical)
 
 func make_notice_board(pos: Vector3) -> void:
-	_host._make_notice_board(pos)
+	construction_host()._make_notice_board(pos)
 
 func make_shrine_scene(pos: Vector3) -> void:
-	_host._make_shrine_scene(pos)
+	construction_host()._make_shrine_scene(pos)
 
 func make_blacksmith_scene(pos: Vector3) -> void:
-	_host._make_blacksmith_scene(pos)
+	construction_host()._make_blacksmith_scene(pos)
 
 func make_cart(pos: Vector3, include_visual: bool = true) -> void:
-	_host._make_cart(pos, include_visual)
+	construction_host()._make_cart(pos, include_visual)
 
 func make_wychwood_gate_scene(pos: Vector3) -> void:
-	_host._make_wychwood_gate_scene(pos)
+	construction_host()._make_wychwood_gate_scene(pos)
 
 func make_route_markers() -> void:
-	_host._make_route_markers()
+	construction_host()._make_route_markers()
 
 func make_greyfen_story_beats() -> void:
-	_host._make_greyfen_road_of_crows_story_beats()
+	construction_host()._make_greyfen_road_of_crows_story_beats()
 
 func make_wychwood_route_dressing() -> void:
-	_host._make_wychwood_route_dressing()
+	construction_host()._make_wychwood_route_dressing()
 
 func make_wychwood_corridor() -> void:
-	_host._make_wychwood_corridor()
+	construction_host()._make_wychwood_corridor()
 
 func make_wychwood_story_beats() -> void:
-	_host._make_wychwood_road_of_crows_story_beats()
+	construction_host()._make_wychwood_road_of_crows_story_beats()
 
 func make_narrative_aftermath() -> void:
-	_host._make_narrative_aftermath(zone_id)
+	construction_host()._make_narrative_aftermath(zone_id)
 
 func make_deadfall(pos: Vector3) -> void:
-	_host._make_deadfall(pos)
+	construction_host()._make_deadfall(pos)
 
 func make_monster_clearing(pos: Vector3) -> void:
-	_host._make_monster_clearing(pos)
+	construction_host()._make_monster_clearing(pos)
 
 func make_ritual_stone(pos: Vector3) -> void:
-	_host._make_ritual_stone(pos)
+	construction_host()._make_ritual_stone(pos)
 
 func make_quality_wychwood_overhaul() -> void:
-	_host._make_quality_wychwood_overhaul()
+	construction_host()._make_quality_wychwood_overhaul()
 
 func make_gravestone(pos: Vector3) -> void:
-	_host._make_gravestone(pos)
+	construction_host()._make_gravestone(pos)
 
 func make_rubble(pos: Vector3) -> void:
-	_host._make_rubble(pos)
+	construction_host()._make_rubble(pos)
 
 func make_herb(id: String, pos: Vector3, color: Color) -> void:
-	_host._make_herb(id, pos, color)
+	construction_host()._make_herb(id, pos, color)
 
 func validate() -> Dictionary:
 	var errors: Array[String] = []

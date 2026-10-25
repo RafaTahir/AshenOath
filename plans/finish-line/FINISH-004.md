@@ -1,5 +1,23 @@
 # FINISH-004 - Complete Combat Toolkit
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained existing sword/guard/parry/bow/Oathfire contact and balance. Cancelled arena/surrender strikes release the externally driven animation schedule and attack reservation; damage and phase rules are unchanged.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Latest repair - 2026-10-20: a31 consumed 15 real arrows without damaging
 Rootbound. Its visual bounds centre is displaced behind the existing damage
 capsule; the old locked-aim ray misses that capsule from the observed east-side

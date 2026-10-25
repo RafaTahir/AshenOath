@@ -1,5 +1,23 @@
 # FINISH-006 - Progression And Economy
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained level 30, 17 Marks, 20 practices, canonical once-only XP, peaceful rewards, shops, pending deliveries, leisure rewards and approved finite oils. No tuning, free supplies or reward replay was introduced.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 2026-10-20 shared agent observations: a26 actually crafted a Redroot Potion from
 two redroot and one bitterleaf. a28 focused Mira's existing shop with normal
 camera/input, bought two remedies for 12 earned coin (15 -> 3), and used one

@@ -1,5 +1,23 @@
 # FINISH-011 - Castle Vargan Completion
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained east entrance, interiors, guaranteed proof, actual/recorded speaker distinction, five regional quests/secrets and single Halvern identity/outcome. Builders use explicit destination buffers, collision and interaction ownership.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Current targeted continuation - 2026-10-20: a45-castle completed on the compiled
 finish-line-20261020-senn-entry candidate and the original earned Chrome profile/
 origin38495. Senn's real nonlethal duel/testimony and the Long Road activities are

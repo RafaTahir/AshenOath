@@ -12,7 +12,8 @@ var voices = {}
 var voice_texts = {}
 var music = {}
 var ambient_streams = {}
-const SHARED_MUSIC := ["main_menu", "greyfen_explore", "shrine_anwen", "wychwood_tension", "ghoulkin_combat", "return_report"]
+const SHARED_MUSIC := ["main_menu"]
+const AUTHORIZED_ARRANGEMENTS := {"greyfen_explore":"greyfen_belonging", "wychwood_tension":"road_uncertainty", "ghoulkin_combat":"hold_the_road"}
 var prepared_audio_zone := ""
 var prepared_music_states: Dictionary = {}
 var prepared_encounter_state := ""
@@ -180,12 +181,12 @@ func bind_runtime_packs(packs: Node) -> void:
 	if not packs.is_connected("pack_mounted", _on_audio_pack_mounted):
 		packs.connect("pack_mounted", _on_audio_pack_mounted)
 	# A resumed/embedded pack may already be ready before services are wired.
-	for id in ["opening", "campaign", "audio"]:
+	for id in ["opening", "adjacent", "campaign", "audio"]:
 		if bool(packs.call("is_ready", id)):
 			_on_audio_pack_mounted(id, "")
 
 func _on_audio_pack_mounted(pack_id: String, _path: String) -> void:
-	if pack_id not in ["opening", "campaign", "audio"]:
+	if pack_id not in ["opening", "adjacent", "campaign", "audio"]:
 		return
 	prepared_audio.mark_pack_available(pack_id)
 	if pack_id == "audio":
@@ -636,10 +637,10 @@ func prewarm_opening_audio() -> void:
 	for id: String in prepared_audio.entries.get("cues", {}):
 		if id != "record_page":
 			_prepare_event(id)
-	for state_id in ["greyfen_explore", "wychwood_tension"]:
+	for state_id in ["greyfen_explore"]:
 		if not music.has(state_id):
 			_build_music_state(state_id)
-	for zone_id in ["greyfen", "wychwood"]:
+	for zone_id in ["greyfen"]:
 		if not ambient_streams.has(zone_id):
 			ambient_streams[zone_id] = _ambient_stream(zone_id)
 
@@ -1445,6 +1446,15 @@ func _build_music_library() -> void:
 		_build_music_state(state_id)
 
 func _build_music_state(state_id: String) -> void:
+	if not use_prepared_audio and AUTHORIZED_ARRANGEMENTS.has(state_id):
+		var source := "res://assets_external/audio/story_score/arrangements/%s.ogg" % str(AUTHORIZED_ARRANGEMENTS[state_id])
+		var arrangement := load(source) as AudioStreamOggVorbis
+		if arrangement == null:
+			push_error("Approved production music cannot be built: " + source)
+			return
+		arrangement.loop = true
+		music[state_id] = arrangement
+		return
 	if state_id in STORY_SCORE_STATES:
 		var stream: AudioStream = null
 		if runtime_file_assets_available:

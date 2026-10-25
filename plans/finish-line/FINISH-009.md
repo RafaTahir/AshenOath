@@ -1,5 +1,23 @@
 # FINISH-009 - Deep Woods Completion
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained freight, plot, cellar, orchard and roof activities, interrupted workers/escorts, Rootbound boundary, Ashwing phases, mill outcomes and the approved 20-percent oil-duration fitting. No duplicate Bog or invented legacy outcome.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Latest targeted evidence - 2026-10-20: a31 traversed Deep Woods, mill and farmstead
 in both directions and reconstructed the register. Its no-damage bow failure
 exposed the locked-aim visual-centre/capsule mismatch repaired under FINISH-004.

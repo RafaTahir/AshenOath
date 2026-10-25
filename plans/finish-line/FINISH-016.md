@@ -1,5 +1,23 @@
 # FINISH-016 - Final Package And Production
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+One combined production build and publication is authorized before user runtime acceptance. Existing Git preview, staged-production, HTTP identity and explicit promotion safeguards remain mandatory. The publication receipt owns actual delivery outcome.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Parent: [FINISH-000](FINISH-000.md). Dependencies: FINISH-001 through FINISH-015
 accepted by the user before promotion. The now-approved FINISH-017 oil mechanic
 also requires its affected verification; the earlier design deferral is historical.

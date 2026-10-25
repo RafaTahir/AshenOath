@@ -4,6 +4,73 @@ Date: 2026-10-19. Workspace: D:/Projects/AshenOath.
 Branch: codex/masterpiece-rebuild.
 Scope: finish and establish acceptance of the retained game, not replace it.
 
+## Current Execution - 2026-10-26
+
+Approved plan: **Complete the Implementation and Publish Once**. Current candidate:
+`finish-implementation-20261026`, preserved baseline `4b28d2d`. All project work
+remains physically on D:; branch `codex/masterpiece-rebuild`.
+
+All sixteen mandatory implementation contracts have been source-reconciled.
+Concrete gaps are addressed in explicit zone construction, budgeted publication,
+interaction registration, animation-clock restoration, dependency packaging and
+production music. Previously implemented regional/gameplay work remains intact.
+The broader facial source work already exists in eight assemblies plus Ranger;
+it was retained rather than recreated. FINISH-017 finite oils remain implemented.
+
+| Ticket | Owner | Current disposition |
+| --- | --- | --- |
+| FINISH-001 | Launch and menu | Source complete / runtime acceptance pending |
+| FINISH-002 | Saves and recovery | Source complete / runtime acceptance pending |
+| FINISH-003 | Movement, camera and character integrity | Source complete / runtime acceptance pending |
+| FINISH-004 | Combat | Source complete / runtime acceptance pending |
+| FINISH-005 | Desktop and phone usability | Source complete / runtime acceptance pending |
+| FINISH-006 | Progression and economy | Source complete / runtime acceptance pending |
+| FINISH-007 | Greyfen | Source complete / runtime acceptance pending |
+| FINISH-008 | Wychwood | Source complete / runtime acceptance pending |
+| FINISH-009 | Deep Woods | Source complete / runtime acceptance pending |
+| FINISH-010 | Long Road | Source complete / runtime acceptance pending |
+| FINISH-011 | Castle Vargan | Source complete / runtime acceptance pending |
+| FINISH-012 | Hartlands | Source complete / runtime acceptance pending |
+| FINISH-013 | Audiovisual | Source complete / runtime acceptance pending |
+| FINISH-014 | Performance source pass | Source complete / runtime acceptance pending |
+| FINISH-015 | Campaign | Source complete / runtime acceptance pending |
+| FINISH-016 | Package and production | Source complete / runtime acceptance pending |
+
+User acceptance remains **0/16** until the user supplies acceptance. This is not
+a claim that implementation is absent. No agent game/browser run, automated test,
+fixture, screenshot, benchmark or profiling is authorized or performed. Static
+source/diff review, required asset/build compilation and package/HTTP delivery
+safeguards are authorized. No further routine approval is required before delivery.
+
+Keep strict HD620 1280x720 Balanced targets and historical red measurements. No
+FPS, private-memory, startup or transition pass is claimed by compilation. The
+production package ceiling is strictly below 268,435,456 bytes, warning at
+209,715,200; individual Git files remain below 100 MiB.
+
+Compilation and packaging completed for `finish-implementation-20261026`: all
+eight runtime pack exports and the production Web export report no compiler or
+parser error. Core game/construction/animation scripts also passed syntax-only
+compilation without executing gameplay. Asset compilation produced the three
+authorized arrangements and recorded prepared-scene animation dependencies.
+Static diff review completed; no game/browser test, fixture or benchmark ran.
+
+Complete deployment: **17 files / 107,723,136 bytes** (below 268,435,456).
+Root transport SHA-256:
+`4b665aa89688463c27925dd336dec2da522c211dc26209a7dd04f86446b68d33`.
+Decoded artifact total: 146,942,222 bytes, not a runtime-memory measurement.
+Balanced/Potato opening dependencies: 48,078,977 transport bytes; Quality:
+55,297,878. At 20 Mbps, Balanced transfer alone still has a theoretical floor
+of approximately 19.23 seconds; no 15-second cold-control or FPS/memory pass
+is claimed. New arrangements stream as Vorbis; their original PCM masters remain
+in source, and the forest tracks are adjacent-pack owned.
+
+Package integrity/ownership/size/hash inspection passes. The final FINISH-016
+publication receipt for this build owns actual commit, preview, staged production,
+promotion and live identity; publication is not runtime or user acceptance.
+One consolidated final user checklist: [USER_TESTING.md](USER_TESTING.md).
+
+### Historical Execution Records
+
 ## Current Execution - 2026-10-25
 
 The approved **From Accumulated Features to a Cohesive Game** plan now owns the

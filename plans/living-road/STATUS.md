@@ -1,5 +1,15 @@
 # Living Road Status
 
+## Current Combined Delivery - 2026-10-26
+
+The approved FINISH implementation/publish pass preserves all 57 current quests,
+six worlds, earned choices, four endings and complete homecoming. The current
+candidate is `finish-implementation-20261026`; existing FINISH-000 and
+COHESIVE_GAME_IMPLEMENTATION.md own its source and build dispositions. The latest
+FINISH-016 receipt owns commit, deployment and live identity. No runtime check is
+run; all user acceptance remains separate. The older package IDs and counts
+below describe their historical deliveries, not the current next action.
+
 2026-10-24 Greyfen extension: [A Village Worth Caring About](GREYFEN_VILLAGE_IMPLEMENTATION.md)
 records the prop/evidence repairs, optional story tutorial, touchable quarters,
 supported acting and return-state work. Build/publication and user acceptance

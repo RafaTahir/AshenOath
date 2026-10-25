@@ -81,7 +81,7 @@
 		"boss_white_hart_avatar": "res://assets/audio/prepared/campaign/music_boss_white_hart_avatar.res",
 		"castle_silence": "res://assets/audio/prepared/campaign/music_castle_silence.res",
 		"deep_wood": "res://assets/audio/prepared/campaign/music_deep_wood.res",
-		"ghoulkin_combat": "res://assets/audio/prepared/opening/music_ghoulkin_combat.res",
+		"ghoulkin_combat": "res://assets/audio/prepared/adjacent/music_ghoulkin_combat.res",
 		"greyfen_explore": "res://assets/audio/prepared/opening/music_greyfen_explore.res",
 		"hart_glade": "res://assets/audio/prepared/campaign/music_hart_glade.res",
 		"main_menu": "res://assets/audio/prepared/menu/music_main_menu.res",
@@ -90,7 +90,7 @@
 		"return_report": "res://assets/audio/prepared/opening/music_return_report.res",
 		"shrine_anwen": "res://assets/audio/prepared/opening/music_shrine_anwen.res",
 		"undercroft": "res://assets/audio/prepared/campaign/music_undercroft.res",
-		"wychwood_tension": "res://assets/audio/prepared/opening/music_wychwood_tension.res"
+		"wychwood_tension": "res://assets/audio/prepared/adjacent/music_wychwood_tension.res"
 	},
-	"schema_version": 1
+	"schema_version": 1.0
 }

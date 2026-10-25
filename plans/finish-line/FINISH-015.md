@@ -1,5 +1,23 @@
 # FINISH-015 - Complete Campaign Acceptance
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained all 57 quests: 21 original, 30 regional and six optional Maren chapters; original endings, alternate clue order, actor fallbacks, Assembly and every homecoming stage. Regional source review is not a campaign playthrough or acceptance.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Parent: [FINISH-000](FINISH-000.md). Dependencies: FINISH-001 through FINISH-013.
 Gather observations while regional tickets are played; do not replay them simply
 because this aggregation ticket follows them. FINISH-014 is a separate final gate.

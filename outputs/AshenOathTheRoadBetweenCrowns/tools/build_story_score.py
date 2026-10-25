@@ -9,6 +9,8 @@ import json
 import math
 import wave
 import argparse
+import hashlib
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "assets_external" / "audio" / "story_score"
@@ -111,10 +113,77 @@ def build_previews(destination):
         print("Original listening sample:", destination / (name+".wav"))
     (destination/"sample_manifest.json").write_text(json.dumps({"source":"tools/build_story_score.py","production_replacement":False,"listening_approval":"pending","composition":"original D-A-C-E motif variations","recording":"procedural synthesis; not live instrumental performance","tracks":list(preview_scores())},indent=2)+"\n",encoding="utf-8")
 
+
+def build_arrangements():
+    destination = OUTPUT / "arrangements"
+    destination.mkdir(parents=True, exist_ok=True)
+    tracks = {}
+    for name, sketch in preview_scores().items():
+        events = []
+        # Statement, quieter answer, development, then a sparse return. The
+        # final four beats leave room for the room tail before the loop joins.
+        for section, velocity in enumerate((0.90, 0.66, 1.00, 0.72)):
+            for start, pitch, length, instrument, gain in sketch["events"]:
+                if section == 3 and start >= 28:
+                    continue
+                if section == 1 and instrument == "bell" and start % 8 >= 4:
+                    continue
+                ornament = 12 if section == 2 and instrument == "plucked" and start % 8 == 2 else 0
+                events.append((section * 32 + start, pitch + ornament, length, instrument, gain * velocity))
+        score = {**sketch, "events": events}
+        duration = 128 * 60 / score["tempo"]
+        pcm = render(score, duration)
+        # Equal-power overlap joins the acoustic tail to the opening. This is
+        # asset authoring, not a runtime crossfade or a playback verification.
+        overlap = int(RATE * 0.25)
+        for index in range(overlap):
+            angle = index / max(1, overlap - 1) * math.pi / 2
+            value = pcm[index] * math.sin(angle) + pcm[len(pcm) - overlap + index] * math.cos(angle)
+            pcm[index] = round(max(-32768, min(32767, value)))
+        del pcm[-overlap:]
+        path = destination / (name + ".wav")
+        with wave.open(str(path), "wb") as stream:
+            stream.setnchannels(1)
+            stream.setsampwidth(2)
+            stream.setframerate(RATE)
+            stream.writeframes(pcm.tobytes())
+        tracks[name] = {"path": "res://" + path.relative_to(ROOT).as_posix(), "frames": len(pcm), "tempo": score["tempo"], "sections": 4}
+        print("Production arrangement:", path)
+    manifest = {"revision": "living-road-arrangements-1", "production_replacement_authorized": True,
+                "human_listening_review": "pending_user", "license": "Ashen Oath original project composition",
+                "source": "tools/build_story_score.py", "recording": "procedural synthesis; not live instruments",
+                "sample_rate": RATE, "tracks": tracks}
+    (destination / "arrangements.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+
+def encode_arrangements(encoder):
+    destination = OUTPUT / "arrangements"
+    manifest_path = destination / "arrangements.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    for name, track in manifest["tracks"].items():
+        master = destination / (name + ".wav")
+        target = destination / (name + ".ogg")
+        subprocess.run([str(encoder), "-hide_banner", "-loglevel", "error", "-y", "-i", str(master),
+                        "-map_metadata", "-1", "-c:a", "libvorbis", "-q:a", "8", str(target)], check=True)
+        track.update({"path": "res://" + target.relative_to(ROOT).as_posix(),
+                      "master": "res://" + master.relative_to(ROOT).as_posix(),
+                      "master_sha256": hashlib.sha256(master.read_bytes()).hexdigest(),
+                      "encoding": "Vorbis quality 8; original PCM master retained"})
+        print("Production music encoding:", target)
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--preview-directory", type=Path)
+    parser.add_argument("--production-arrangements", action="store_true")
+    parser.add_argument("--vorbis-encoder", type=Path)
     args = parser.parse_args()
+    if args.vorbis_encoder:
+        encode_arrangements(args.vorbis_encoder)
+        return
+    if args.production_arrangements:
+        build_arrangements()
+        return
     if args.preview_directory:
         build_previews(args.preview_directory)
         return

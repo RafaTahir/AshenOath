@@ -1,5 +1,54 @@
 # A Cohesive Ashen Oath
 
+## Current Combined Delivery - 2026-10-26
+
+The user approved completing all FINISH source work and one push/deployment,
+with runtime testing/acceptance owned solely by the user. Build/package and HTTP
+identity safeguards are allowed; no further intermediate approval gate applies.
+Current implementation: `finish-implementation-20261026`, based on published r14.
+
+- Construction helpers now live in a zone-bound facade. Root metadata owns
+  enemy/interaction collections, spatial service, batch buffers, lighting counters
+  and world effects. The coordinator no longer substitutes its active fields.
+  Destination callbacks and Area signals cannot mutate another active zone.
+- Contexts carry generation, cursor and explicit progress/ready/cancel/failure
+  results. Cancellation invalidates only its destination; scene RNG remains
+  destination-owned. The facade retains the coordinator viewport while its root
+  can reside in an isolated preparation viewport, and retires with that root.
+- Seven geometry publication groups support bounded main-thread preparation.
+  The opening yields on its existing budget rather than forcing a frame per
+  detail; neighboring construction progresses each frame during movement.
+- A concrete boss clock defect is repaired: leaving the arena cancelled the
+  strike without releasing external animation ownership. Dialogue also restores
+  the full earlier playback/suspension policy; manual and automatic clocks are
+  mutually exclusive. This is a source-backed fix, not rendered-pose verification.
+- Prepared-actor dependency metadata replaces blanket animation inclusion.
+  Current generated libraries not referenced by prepared scenes are not shipped;
+  retained embedded animations and authored recovery sources remain.
+- Three direction-approved original music themes are developed and authorized
+  for production replacement. Forest tension/combat belong to the adjacent pack;
+  Greyfen no longer prepares them. Active/crossfading streams retain ownership;
+  inactive regional music can release after playback. No listening pass is claimed.
+- All 57 quests, region/secret/reward definitions, four endings, Maren, homecoming,
+  existing facial assemblies, identities, saves, oil rules and visual presets remain.
+
+Required compilation/package checks and publication are recorded in FINISH-000
+and the latest FINISH-016 receipt. Actual runtime acceptance, reference-PC strict
+performance, phone/WebKit behavior, art/feel and listening remain user-owned.
+No r9 Anwen/Bell/Bog route or other unchanged passed check is rerun.
+
+The final production package compiled and passed its integral artifact inspection:
+17 files, 107,723,136 total deployment bytes. Root transport SHA-256:
+`4b665aa89688463c27925dd336dec2da522c211dc26209a7dd04f86446b68d33`.
+Build-only source/artifact corrections refreshed the affected base/opening/adjacent
+outputs before the final freeze; other unchanged pack bytes were reused. No
+gameplay implement/test/retest loop occurred. The final dependency payload still
+implies approximately 19.23 seconds of transfer at 20 Mbps, before preparation;
+strict startup and historical low-FPS/private-memory failures are not erased.
+
+## Preserved Earlier Checkpoints
+
+
 ## Current Execution - 2026-10-25
 
 Latest direct delivery instruction: "Stop asking for me to do anything. Finish

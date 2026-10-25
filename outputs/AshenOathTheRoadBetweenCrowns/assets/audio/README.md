@@ -1,5 +1,24 @@
 # Prepared Compatibility Sound Bank
 
+## Current Music Delivery - 2026-10-26
+
+The user authorizes production replacement by three developed original themes:
+`greyfen_belonging`, `road_uncertainty` and `hold_the_road`. PCM masters, encoded
+Vorbis sources and provenance are retained under
+`assets_external/audio/story_score/arrangements/`. This is original procedural
+composition, not recorded instruments or cloned speech; listening remains pending.
+
+Use `tools/build_story_score.py --production-arrangements` to author the masters,
+then `--vorbis-encoder <existing ffmpeg path>` to encode the production sources.
+The existing `build_prepared_audio.gd -- --approved-arrangements` asset build
+compiles only the three replacements and their catalog paths. Greyfen belongs
+to opening; forest tension/combat belong to adjacent. Other music is preserved.
+The full bank builder uses the same approved streams, so regeneration cannot
+silently restore the superseded short tones. The historic bank notes below do
+not authorize running an equivalence test under the current build-only instruction.
+
+## Historical Bank
+
 `prepared_bank.res` is generated from Ashen Oath's existing procedural audio
 code, not downloaded audio or cloned voices. It preserves the provisional
 sound palette while moving PCM synthesis out of runtime startup.

@@ -1,5 +1,19 @@
 # Living Cast - Current Checkpoint
 
+## Current Combined Delivery - 2026-10-26
+
+The user authorizes the existing facial technique without an intermediate sample
+approval and authorizes development/publication of the three original music
+sketches. The eight retained human assemblies and Ranger facial bindings already
+exist and are preserved, not re-created. The combined FINISH implementation adds
+animation-clock reconciliation, full dialogue-policy restoration and cancellation
+of abandoned boss-strike clock ownership. The new exploration/tension/combat
+arrangements use the existing mixer and streamed Vorbis; original PCM masters
+remain in source. No listening, visual, gameplay or performance acceptance is
+claimed. Candidate and exact publication: FINISH-000 and the latest FINISH-016
+receipt. Formal cast acceptance remains 0/10. Earlier sample holds below are
+historical and do not impose another pre-publication approval gate.
+
 2026-10-25 audio-routing repair: the user authorized focused runtime diagnosis.
 [Cause, fix and measured output](AUDIO_ROUTING_REPAIR_20261025.md).
 Candidate `audio-routing-20261025` is implemented, compiled and packaged.

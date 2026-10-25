@@ -3,7 +3,8 @@ extends SceneTree
 ## Lossless asset compilation: existing streams, formats and loop points stay intact.
 const OUTPUT := "res://assets/audio/prepared/"
 const INDEX := "res://data/prepared_audio.json"
-const OPENING_MUSIC := ["greyfen_explore", "shrine_anwen", "wychwood_tension", "ghoulkin_combat", "return_report", "boss_bell_eater"]
+const OPENING_MUSIC := ["greyfen_explore", "shrine_anwen", "return_report", "boss_bell_eater"]
+const ADJACENT_MUSIC := ["wychwood_tension", "ghoulkin_combat"]
 const OPENING_AMBIENCE := ["greyfen", "wychwood", "cemetery", "chapel", "default"]
 
 func _initialize() -> void:
@@ -28,7 +29,7 @@ func _initialize() -> void:
 			if category == "cues":
 				owner = "menu" if id in ["ui", "menu_hover", "menu_click"] else "opening"
 			elif category == "music":
-				owner = "menu" if id == "main_menu" else ("opening" if id in OPENING_MUSIC else "campaign")
+				owner = "menu" if id == "main_menu" else ("adjacent" if id in ADJACENT_MUSIC else ("opening" if id in OPENING_MUSIC else "campaign"))
 			else:
 				owner = "opening" if id in OPENING_AMBIENCE else "campaign"
 			var path: String = OUTPUT + owner + "/" + category + "_" + id + ".res"
@@ -49,7 +50,8 @@ func _initialize() -> void:
 
 func _apply_curated_opening(index: Dictionary) -> Error:
 	var cues := {"flesh_contact":"authored/flesh_cut", "arrow_contact":"authored/arrow_pierce", "wood_contact":"authored/forest_twigs", "stone_contact":"rpg/footstep00", "foliage_contact":"rpg/cloth1"}
-	# Music sketches have direction approval only, not production mix approval.
+	# Approved arrangements are compiled by the bank builder; curated material
+	# effects do not replace their streams or claim a listening verdict.
 	for category: String in ["cues"]:
 		var tracks: Dictionary = cues
 		for id: String in tracks:
@@ -69,5 +71,5 @@ func _apply_curated_opening(index: Dictionary) -> Error:
 		return ERR_FILE_CANT_WRITE
 	file.store_string(JSON.stringify(index, "\t") + "\n")
 	file.close()
-	print("Curated opening audio compiled: 5 material cues. Existing score preserved; music sketches await final listening approval.")
+	print("Curated opening audio compiled: 5 material cues. Music ownership and listening status are preserved.")
 	return OK

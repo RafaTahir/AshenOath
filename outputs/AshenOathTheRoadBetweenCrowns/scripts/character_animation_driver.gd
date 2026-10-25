@@ -171,13 +171,33 @@ func _process(delta: float) -> void:
 func set_external_tick(enabled: bool) -> void:
 	# The owning physics/simulation loop can drive throttled animation without
 	# waking this node on every rendered frame.
+	if externally_ticked != enabled:
+		manual_update_accumulator = 0.0
 	externally_ticked = enabled
-	if manual_tick_timer != null and is_instance_valid(manual_tick_timer):
-		if enabled:
+	_reconcile_clock()
+
+func capture_clock() -> Dictionary:
+	return {"external":externally_ticked, "interval":manual_update_interval, "suspended":distance_suspended}
+
+func restore_clock(policy: Dictionary) -> void:
+	externally_ticked = bool(policy.get("external", false))
+	manual_update_interval = maxf(float(policy.get("interval", 0.0)), 0.0)
+	distance_suspended = bool(policy.get("suspended", false))
+	manual_update_accumulator = 0.0
+	process_mode = Node.PROCESS_MODE_DISABLED if distance_suspended else Node.PROCESS_MODE_INHERIT
+	_reconcile_clock()
+
+func _reconcile_clock() -> void:
+	var manual := externally_ticked or manual_update_interval > 0.0
+	for player: AnimationPlayer in animation_players:
+		player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL if manual else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
+		player.active = not distance_suspended
+	set_process(not distance_suspended and not externally_ticked and not manual)
+	if is_instance_valid(manual_tick_timer):
+		if distance_suspended or externally_ticked or manual_update_interval <= 0.0:
 			manual_tick_timer.stop()
-		elif manual_update_interval > 0.0 and not distance_suspended:
+		elif manual_tick_timer.is_stopped():
 			_start_manual_tick()
-	set_process(not enabled and manual_update_interval <= 0.0)
 
 func _on_manual_tick() -> void:
 	if externally_ticked or distance_suspended or manual_update_interval <= 0.0:
@@ -202,12 +222,13 @@ func _advance_animation(delta: float) -> void:
 		if story_gesture_remaining <= 0.0 and story_dialogue_active:
 			stop_action()
 			set_dialogue_pose(true)
-	if manual_update_interval > 0.0:
+	if manual_update_interval > 0.0 and not externally_ticked:
 		manual_update_accumulator += delta
 		if manual_update_accumulator < manual_update_interval:
 			return
 		delta = manual_update_accumulator
 		manual_update_accumulator = 0.0
+	if manual_update_interval > 0.0 or externally_ticked:
 		# Manual NPC animation is deliberately advanced only at its requested
 		# rate. Keeping imported AnimationPlayers active between these ticks
 		# still makes the Compatibility renderer evaluate every skeleton every
@@ -250,15 +271,7 @@ func set_update_rate_hz(rate_hz: float) -> void:
 		manual_update_accumulator = 0.0
 		if manual_tick_timer != null and is_instance_valid(manual_tick_timer):
 			manual_tick_timer.stop()
-	for player in animation_players:
-		player.callback_mode_process = (
-			AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
-			if manual_update_interval <= 0.0
-			else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
-		)
-		# MANUAL disables automatic evaluation; inactive also disables advance().
-		player.active = not distance_suspended
-	set_process(not externally_ticked and manual_update_interval <= 0.0)
+	_reconcile_clock()
 
 func is_valid() -> bool:
 	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0 \
@@ -271,6 +284,7 @@ func is_evaluation_scheduled() -> bool:
 
 func set_distance_suspended(suspended: bool) -> void:
 	if distance_suspended == suspended:
+		_reconcile_clock()
 		return
 	distance_suspended = suspended
 	process_mode = Node.PROCESS_MODE_DISABLED if suspended else Node.PROCESS_MODE_INHERIT
@@ -279,8 +293,7 @@ func set_distance_suspended(suspended: bool) -> void:
 			manual_tick_timer.stop()
 		else:
 			_start_manual_tick()
-	for player in animation_players:
-		player.active = not suspended
+	_reconcile_clock()
 	if not suspended and not dead:
 		_play_state(current_state if current_state != "" else "idle", 0.0)
 
@@ -454,6 +467,8 @@ func play_story_gesture(kind: String, pace: float = 0.9) -> void:
 func stop_story_gesture() -> void:
 	story_dialogue_active = false
 	story_gesture_remaining = 0.0
+	if dead:
+		return
 	stop_action()
 	presentation_state = ""
 	current_state = ""

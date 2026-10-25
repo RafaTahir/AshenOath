@@ -1,5 +1,23 @@
 # FINISH-003 - Movement, Camera And Character Integrity
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained eight-direction locomotion, first person, bow alignment, stable dialogue framing, materials and all existing weighted facial assemblies. Centralized playback clocks and full dialogue-policy restoration; corrected abandoned boss-strike clock ownership.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Parent: [FINISH-000](FINISH-000.md). Dependencies: FINISH-001, FINISH-002.
 Implementation: retained movement/material/camera repairs present.
 Compilation: baseline recorded; not rerun. User acceptance: Pending.

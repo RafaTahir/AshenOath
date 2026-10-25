@@ -11,8 +11,7 @@ var profile: Dictionary = {}
 var elapsed := 0.0
 var next_beat := 2.8
 var active := false
-var previous_external_tick := false
-var previous_update_interval := 0.0
+var previous_clock: Dictionary = {}
 var speaking := true
 var pending_gesture := ""
 var audio_source: Node
@@ -123,8 +122,7 @@ func start(target: Node3D, player: Node3D, state) -> void:
 			saved_modes[node] = node.process_mode
 			node.process_mode = Node.PROCESS_MODE_ALWAYS
 	if driver != null:
-		previous_external_tick = bool(driver.get("externally_ticked"))
-		previous_update_interval = float(driver.get("manual_update_interval"))
+		previous_clock = driver.capture_clock()
 		driver.set_external_tick(false)
 		driver.set_distance_suspended(false)
 		driver.set_update_rate_hz(30.0)
@@ -141,7 +139,7 @@ func start(target: Node3D, player: Node3D, state) -> void:
 
 func _process(delta: float) -> void:
 	if not active or not is_instance_valid(actor):
-		set_process(false)
+		stop()
 		return
 	var delivery: Dictionary = audio_source.get_dialogue_delivery() if is_instance_valid(audio_source) else {}
 	var delivering: bool = speaking and bool(delivery.get("playing", false)) and str(delivery.get("speaker_id", "")).to_lower() == page_speaker
@@ -170,8 +168,8 @@ func stop() -> void:
 	set_process(false)
 	if is_instance_valid(driver):
 		driver.stop_story_gesture()
-		driver.set_update_rate_hz(1.0 / previous_update_interval if previous_update_interval > 0.0 else 0.0)
-		driver.set_external_tick(previous_external_tick)
+		driver.restore_clock(previous_clock)
+	previous_clock.clear()
 	if is_instance_valid(face):
 		face.set_speech_amount(0.0)
 		face.set_conversation_active(false)

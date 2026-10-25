@@ -1,5 +1,23 @@
 # FINISH-001 - Reliable Launch And Menu
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained early usable menu, exact selected Continue, quality-aware packs, attempt generations, cancel/Retry and complete-world readiness. Root-owned construction and budgeted publication replace the remaining borrowed-state path.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Parent: [FINISH-000](FINISH-000.md). Dependencies: current baseline.
 Implementation: early usable menu and selected-destination preparation implemented 2026-10-21.
 Compilation: startup-menu-20261021 production import, eight packs and Web export completed.

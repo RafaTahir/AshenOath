@@ -1,0 +1,38 @@
+{
+  "revision": "living-road-arrangements-1",
+  "production_replacement_authorized": true,
+  "human_listening_review": "pending_user",
+  "license": "Ashen Oath original project composition",
+  "source": "tools/build_story_score.py",
+  "recording": "procedural synthesis; not live instruments",
+  "sample_rate": 16000,
+  "tracks": {
+    "greyfen_belonging": {
+      "path": "res://assets_external/audio/story_score/arrangements/greyfen_belonging.ogg",
+      "frames": 1803058,
+      "tempo": 68,
+      "sections": 4,
+      "master": "res://assets_external/audio/story_score/arrangements/greyfen_belonging.wav",
+      "master_sha256": "a47c003bc9733c8f406b3595699e17b5494fe583c3f9938aba5bdc50dc6e7015",
+      "encoding": "Vorbis quality 8; original PCM master retained"
+    },
+    "road_uncertainty": {
+      "path": "res://assets_external/audio/story_score/arrangements/road_uncertainty.ogg",
+      "frames": 1916000,
+      "tempo": 64,
+      "sections": 4,
+      "master": "res://assets_external/audio/story_score/arrangements/road_uncertainty.wav",
+      "master_sha256": "4ce30ef8b20f5c1f54e5404260da8af4f13466cd2270e64c10ee6c732cb5d87b",
+      "encoding": "Vorbis quality 8; original PCM master retained"
+    },
+    "hold_the_road": {
+      "path": "res://assets_external/audio/story_score/arrangements/hold_the_road.ogg",
+      "frames": 1331652,
+      "tempo": 92,
+      "sections": 4,
+      "master": "res://assets_external/audio/story_score/arrangements/hold_the_road.wav",
+      "master_sha256": "b3489b5c2ab3ea64fd6a641c11aba7233aa585639e9496006238603c9e7a2bb0",
+      "encoding": "Vorbis quality 8; original PCM master retained"
+    }
+  }
+}

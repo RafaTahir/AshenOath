@@ -210,6 +210,7 @@ func _physics_process(delta: float) -> void:
 	if dead or player == null:
 		return
 	if bool(get_meta("story_surrender_protected", false)):
+		_cancel_pending_strike()
 		velocity = Vector3.ZERO
 		if animation_driver != null:
 			animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
@@ -262,9 +263,7 @@ func _physics_process(delta: float) -> void:
 	var home_distance: float = global_position.distance_to(home_position)
 	var player_outside_arena: bool = is_boss and player.global_position.distance_to(home_position) > leash_radius
 	if player_outside_arena:
-		_release_attack_token()
-		pending_attack_time = 0.0
-		windup_time = 0.0
+		_cancel_pending_strike()
 		perception_memory_time = 0.0
 		_hide_windup_marker()
 		var home_dir := _navigation_direction(home_position) if home_distance > 0.35 else Vector3.ZERO
@@ -564,7 +563,19 @@ func _start_attack_animation() -> void:
 	# length. Preserve the telegraph clock and leave uncalibrated families alone.
 	var duration: float = windup_time / 0.85 if str(clip) == "SkeletonArmature|Skeleton_Attack" else 0.0
 	animation_driver.set_external_tick(true)
-	animation_driver.trigger_action("windup", 1.0, 0.10, false, duration)
+	if not animation_driver.trigger_action("windup", 1.0, 0.10, false, duration):
+		animation_driver.set_external_tick(false)
+
+func _cancel_pending_strike() -> void:
+	var had_strike := pending_attack_time > 0.0 or windup_time > 0.0
+	pending_attack_time = 0.0
+	windup_time = 0.0
+	_release_attack_token()
+	if animation_driver != null:
+		animation_driver.set_external_tick(false)
+		if had_strike and not dead:
+			animation_driver.stop_action()
+	_hide_windup_marker()
 
 func _boss_attack_id() -> String:
 	if not is_boss:

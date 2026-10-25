@@ -231,15 +231,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if host.hud != null and host.hud.has_method("clear_target_lock_status"):
 		host.hud.clear_target_lock_status()
 	host._clear_oathfire_effects()
-	host.runtime_light_count = 0
-	host.tree_batch_data.clear()
-	host.deadfall_batch_data.clear()
-	host.prop_batch_data.clear()
-	host.visual_box_batch_data.clear()
-	host.terrain_patch_batch_data.clear()
-	host.house_batch_data.clear()
-	host.house_module_batch_data.clear()
-	host.environment_batches_flushed = false
 	if host.player != null and host.player.has_method("cancel_beam_charge"):
 		host.player.cancel_beam_charge()
 	var previous_zone_id: String = host.current_zone_id
@@ -262,10 +253,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			host._cache_route_zone(previous_zone_id, host.zone_root, previous_enemies, host.active_zone_signature)
 			host._cache_route_spatial_service(previous_zone_id, previous_spatial_service)
 	host.active_interactable = null
-	host.interaction_candidates.clear()
-	host.interaction_area_cache.clear()
-	host.interaction_area_cache_ready = false
-	host.interaction_focus_dirty = true
 	host.interaction_focus_cache_valid = false
 	host.compass_dirty = true
 	host.compass_cache_valid = false
@@ -288,36 +275,33 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		and int(host.route_zone_signatures.get(zone_id, -1)) == requested_signature
 	print("LOADING: zone_begin id=%s prewarm=%s cached=%s" % [zone_id, using_prewarmed_spatial, using_cached_spatial])
 	host._release_active_spatial_service()
+	var destination_spatial: Node
 	if using_prewarmed_spatial:
-		host.spatial_service = host.greyfen_prewarm_spatial_service
+		destination_spatial = host.greyfen_prewarm_spatial_service
 		host.greyfen_prewarm_spatial_service = null
-		host.spatial_service.name = "ZoneSpatialService"
-		host.spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
 	elif using_cached_spatial:
-		host.spatial_service = cached_spatial_service
+		destination_spatial = cached_spatial_service
 		host.route_spatial_cache.erase(zone_id)
-		host.spatial_service.name = "ZoneSpatialService"
-		host.spatial_service.process_mode = Node.PROCESS_MODE_INHERIT
 	else:
-		host.spatial_service = host.ZoneSpatialService.new()
-		host.spatial_service.name = "ZoneSpatialService"
-		host.add_child(host.spatial_service)
-		host.spatial_service.configure(zone_id, host._river_center(zone_id), host._zone_half_extents(zone_id))
-	host._bind_spatial_player_body()
+		destination_spatial = host.ZoneSpatialService.new()
+		host.add_child(destination_spatial)
+		destination_spatial.configure(zone_id, host._river_center(zone_id), host._zone_half_extents(zone_id))
+	destination_spatial.name = "ZoneSpatialService"
+	destination_spatial.process_mode = Node.PROCESS_MODE_INHERIT
 	if host.camera_rig != null and host.camera_rig.has_method("set_zone"):
 		host.camera_rig.set_zone(zone_id,not _continuous_arrival.is_empty())
-	host.active_enemies.clear()
-	host._sync_camera_enemy_cache()
 	host.hud.set_prompt("")
 	# Target health belongs to the active encounter. Clear it before the new
 	# zone starts so Castle, finale, and dialogue views cannot inherit a dead
 	# Wychwood target from the previous route.
 	host.hud.hide_enemy()
 	if reused_zone:
+		host.spatial_service = destination_spatial
 		host.active_enemies = host._valid_cached_enemies(previous_enemies)
 	elif host.route_zone_cache.has(zone_id) and is_instance_valid(host.route_zone_cache[zone_id]) \
 			and int(host.route_zone_signatures.get(zone_id, -1)) == requested_signature:
 		host.zone_root = host._activate_cached_zone(zone_id)
+		host.spatial_service = destination_spatial
 		print("LOADING: cached_zone_activated id=%s valid=%s" % [zone_id, host.zone_root != null])
 		print("LOADING: zone_stage=cache_activated elapsed=%.1f" % (float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0))
 		host.active_zone_signature = int(host.route_zone_signatures.get(zone_id, requested_signature))
@@ -341,6 +325,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		host.zone_root.name = zone_id
 		host.zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 		host.add_child(host.zone_root)
+		host.spatial_service = destination_spatial
 		host._begin_zone_world_reads(zone_id)
 		var authored_layers = host.ZoneSceneCatalog.attach(zone_id, host.zone_root)
 		if not bool(authored_layers.get("ok", true)):
@@ -381,6 +366,10 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		# visible frame.
 		host._end_zone_world_reads()
 		host.active_zone_signature = host._zone_state_signature(zone_id)
+	host._bind_spatial_player_body()
+	host.interaction_candidates.clear()
+	host.interaction_area_cache_ready = false
+	host.interaction_focus_dirty = true
 	host._sync_camera_enemy_cache()
 	if host.zone_root != null:
 		host.zone_root.set_meta("zone_resource_owner", "active")

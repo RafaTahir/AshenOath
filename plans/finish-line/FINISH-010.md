@@ -1,5 +1,23 @@
 # FINISH-010 - Long Road Completion
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained marsh/road joins, readable signals, crossing activities, five quests/secrets, Ranger Senn, duel/stand-down prerequisites and fate choices. Context-local actor queries and construction prevent another region from supplying encounter presence.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Latest repair - 2026-10-20: a39 physically entered Marsh then automatically
 returned to Farmstead. GAME root cause: both incoming Marsh arrivals at z=+/-13
 overlap their opposite exit's 1.35-metre trigger at +/-14. The two arrival records

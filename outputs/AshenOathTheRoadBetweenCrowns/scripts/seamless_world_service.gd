@@ -58,7 +58,7 @@ func _sources_changed() -> void:
 	_story_epoch += 1
 
 func _construction_node_added(node: Node) -> void:
-	if host != null and host.neighbor_building and _neighbor_scope != null and is_instance_valid(_neighbor_scope.owned_root) and _neighbor_scope.owned_root.is_ancestor_of(node):
+	if _neighbor_scope != null and is_instance_valid(_neighbor_scope.owned_root) and _neighbor_scope.owned_root.is_ancestor_of(node):
 		_added_nodes.append(weakref(node))
 
 func _process(delta: float) -> void:
@@ -98,7 +98,14 @@ func _process(delta: float) -> void:
 			streaming_service.request_zone(target)
 			if not streaming_service.is_ready(target): return
 		_begin_neighbor(target); return
-	_advance_preparation()
+	var slice_started := Time.get_ticks_usec()
+	while _neighbor_scope != null and _neighbor_state == "building":
+		_advance_preparation()
+		if Time.get_ticks_usec() - slice_started >= 2000:
+			break
+	if _neighbor_scope != null and _neighbor_state == "building":
+		# Continue on the next frame, not after another 60-ms routing poll.
+		_poll = 0.06
 
 func _nearest_connection() -> Dictionary:
 	if not is_instance_valid(host.player): return {}
@@ -176,6 +183,8 @@ func _advance_preparation() -> void:
 
 func _neighbor_dependencies_current() -> bool:
 	if _neighbor_scope == null: return false
+	if _neighbor_scope.cancelled or _neighbor_scope.generation != host.journey_arrival_generation:
+		return false
 	if _neighbor_epoch == _story_epoch: return true
 	# A partial build's recorded reads grow after every successful step. Only
 	# already-consumed state can invalidate it; later steps read current state.
@@ -214,7 +223,7 @@ func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 		if _neighbor_scope == null: break
 		if _neighbor_state == "ready":
 			_foreground = false; return true
-		var total: int = _construction_steps()+2
+		var total: int = _construction_steps()+9
 		host.hud.update_journey_load_progress(zone_id,float(_neighbor_step)/float(total),"Preparing the complete destination...")
 	_foreground = false
 	if _neighbor_failure.is_empty():
@@ -248,6 +257,7 @@ func _begin_neighbor(target: String) -> void:
 	spatial.configure(target,host._river_center(target),host._zone_half_extents(target))
 	_neighbor_scope = ZoneBuildContext.new(host,target,"opening_boot" if target == "greyfen" else "full")
 	_neighbor_scope.own(root,spatial)
+	_neighbor_scope.generation = host.journey_arrival_generation
 	_neighbor_builder = builder_script.new()
 	_neighbor_quality = str(host.settings.settings.get("quality_preset","balanced"))
 	_neighbor_epoch = _story_epoch; _neighbor_step = 0; _neighbor_state = "building"; _neighbor_failure = ""
@@ -276,23 +286,25 @@ func _build_neighbor_step(context: ZoneBuildContext) -> bool:
 		elif _neighbor_builder.has_method("step_count"):
 			if not _neighbor_builder.build_step(context, _neighbor_step): return false
 		else: _neighbor_builder.build(context)
-	elif _neighbor_step == steps:
-		host._flush_environment_batches()
-		host._install_world_prop_controller(context.zone_id)
-		host._add_visual_100_layer(context.zone_id)
-		host._apply_first_route_materials(context.zone_root)
-	elif _neighbor_step == steps+1:
+	elif _neighbor_step < steps+7:
+		context.construction_host().flush_environment_batch_step(_neighbor_step-steps)
+	elif _neighbor_step == steps+7:
+		var builder := context.construction_host()
+		builder._install_world_prop_controller(context.zone_id)
+		builder._add_visual_100_layer(context.zone_id)
+		builder._apply_first_route_materials(context.zone_root)
+	elif _neighbor_step == steps+8:
 		context.owned_fields.spatial_service.build_navigation(context.zone_root)
 		host._validate_zone_render_resources(context.zone_root)
 		var result := context.validate()
 		if not bool(result.ok): _neighbor_failure = str(result.errors); return false
-		for enemy: Node in host.active_enemies:
+		for enemy: Node in context.owned_fields.active_enemies:
 			if not is_instance_valid(enemy.visual_root):
 				_neighbor_failure = "Missing required body: " + str(enemy.enemy_id); return false
 		context.zone_root.set_meta("opening_detail_complete",true)
 		context.zone_root.set_meta("prepared_neighbor_complete",true)
 		context.zone_root.set_meta("prepared_arrival_pending",true)
-		context.zone_root.set_meta("runtime_light_count",host.runtime_light_count)
+		context.zone_root.set_meta("runtime_light_count",context.owned_fields.runtime_light_count)
 		_neighbor_state = "ready"; _neighbor_signature = host._zone_state_signature(context.zone_id)
 	return true
 
@@ -345,12 +357,16 @@ func _sync_owner_camera(root: Node3D) -> void:
 	camera.h_offset = source.h_offset; camera.v_offset = source.v_offset
 
 func cancel_preparation() -> void:
+	if _neighbor_scope != null:
+		_neighbor_scope.cancel()
 	if is_instance_valid(_neighbor_view): _neighbor_view.queue_free()
 	_neighbor_view = null; _neighbor_scope = null; _neighbor_builder = null
 	_neighbor_state = "idle"; _neighbor_step = 0; _added_nodes.clear()
 
 func preparation_snapshot() -> Dictionary:
-	return {"state":_neighbor_state,"zone":_neighbor_scope.zone_id if _neighbor_scope != null else "","step":_neighbor_step,"failure":_neighbor_failure,"complete":_neighbor_state == "ready"}
+	var result := _neighbor_scope.step_result(_neighbor_state) if _neighbor_scope != null else {"state":_neighbor_state,"zone":"","generation":0,"next_step":_neighbor_step,"error":_neighbor_failure}
+	result.merge({"step":_neighbor_step,"failure":_neighbor_failure,"complete":_neighbor_state == "ready"},true)
+	return result
 
 func _exit_tree() -> void:
 	cancel_preparation()

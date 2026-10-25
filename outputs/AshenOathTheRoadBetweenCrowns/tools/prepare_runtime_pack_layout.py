@@ -104,12 +104,31 @@ def compile_layout():
                 if not (PROJECT / texture.removeprefix("res://")).is_file():
                     raise ValueError(f"Required actor atlas missing: {actor['role']}: {texture}")
                 files[pack].add(texture)
-    includes["Runtime Pack Opening"].add("assets_external/characters_prepared/animations/*.res")
+    animation_owners = {}
+    if actor_catalog.is_file():
+        for actor in json.loads(actor_catalog.read_text(encoding="utf-8-sig")).values():
+            if "animation_resources" not in actor:
+                raise ValueError(f"Prepared animation dependency record is absent: {actor['role']}; refresh the asset catalog")
+            for path in actor.get("animation_resources", []):
+                if not (PROJECT / path.removeprefix("res://")).is_file():
+                    raise ValueError(f"Required actor animation missing: {actor['role']}: {path}")
+                animation_owners.setdefault(path, set()).add(str(actor["owner"]))
+    for name in sections:
+        includes[name].discard("assets_external/characters_prepared/animations/*.res")
+    for path, owners in animation_owners.items():
+        owner = "opening" if "opening" in owners else ("characters" if "characters" in owners else "monsters")
+        name = "Runtime Pack " + owner.capitalize()
+        files[name].add(path)
+        for other in sections:
+            if other != name:
+                files[other].discard(path)
     for name in ROOT_NAMES:
+        files[name].add("res://scripts/zone_construction_host.gd")
         includes[name].add("data/prepared_actors.json")
         includes[name].add("data/prepared_static_batches.res")
         includes[name].update({"data/prepared_audio.json", "assets/audio/prepared/menu/*.res"})
     includes["Runtime Pack Opening"].add("assets/audio/prepared/opening/*.res")
+    includes[adjacent].add("assets/audio/prepared/adjacent/*.res")
     includes["Runtime Pack Campaign"].add("assets/audio/prepared/campaign/*.res")
     for name in sections:
         includes[name].discard("assets/audio/prepared_bank.res")
@@ -210,7 +229,8 @@ def compile_layout():
             exclusions.add(f"assets_external/{directory}/*.bin")
             exclusions.add(f"assets_external/{directory}/runtime/*.bin")
         exclusions.add("assets/audio/prepared_bank.res")
-        for audio_owner in ("menu", "opening", "campaign"):
+        exclusions.update({"assets/audio/prepared/opening/music_wychwood_tension.res", "assets/audio/prepared/opening/music_ghoulkin_combat.res"})
+        for audio_owner in ("menu", "opening", "adjacent", "campaign"):
             expected = ROOT_NAMES if audio_owner == "menu" else {"Runtime Pack " + audio_owner.capitalize()}
             if name not in expected:
                 exclusions.add(f"assets/audio/prepared/{audio_owner}/*")
@@ -222,8 +242,14 @@ def compile_layout():
         if name == "Runtime Pack Campaign":
             exclusions.add("assets_external/environment/prepared/greyfen_*")
             exclusions.add("assets_external/environment/prepared/wychwood_*")
-        if name in {"Runtime Pack Characters", "Runtime Pack Monsters"}:
-            exclusions.add("assets_external/characters_prepared/animations/*")
+        exclusions.discard("assets_external/characters_prepared/animations/*")
+        for animation_path, owners in animation_owners.items():
+            owner = "opening" if "opening" in owners else ("characters" if "characters" in owners else "monsters")
+            relative = animation_path.removeprefix("res://")
+            if name == "Runtime Pack " + owner.capitalize():
+                exclusions.discard(relative)
+            else:
+                exclusions.add(relative)
         if name == "Runtime Pack Characters":
             exclusions.update(shared_opening_textures)
         if name == "Runtime Pack Monsters":
@@ -247,6 +273,13 @@ def compile_layout():
         dependencies = manifest["packs"]["monsters"].setdefault("dependencies", [])
         if "characters" not in dependencies:
             dependencies.append("characters")
+    for owners in animation_owners.values():
+        owner = "opening" if "opening" in owners else ("characters" if "characters" in owners else "monsters")
+        for consumer in owners:
+            if consumer != owner:
+                dependencies = manifest["packs"][consumer].setdefault("dependencies", [])
+                if owner not in dependencies:
+                    dependencies.append(owner)
     manifest.setdefault("pack_presets", {})["adjacent"] = adjacent
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"Prepared {len(sections)} export presets with an adjacent-world pack")

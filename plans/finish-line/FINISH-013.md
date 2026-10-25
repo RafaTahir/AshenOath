@@ -1,5 +1,23 @@
 # FINISH-013 - Audiovisual Finish
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained bodies/materials, contact sound ownership and Web bus/unlock/pause repairs. Production replacement of the three original sketches is now explicitly authorized; developed arrangements use existing music states, ducking and crossfades. Listening approval remains pending.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Parent: [FINISH-000](FINISH-000.md). Dependencies: FINISH-003 through FINISH-005;
 collect shared observations while FINISH-007 through FINISH-012 are played.
 Implementation: retained character/world/material/audio passes present.

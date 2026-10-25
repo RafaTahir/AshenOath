@@ -1,5 +1,23 @@
 # FINISH-014 - Strict Reference-PC Performance
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Completed source-backed construction ownership, seven publication groups, frame-budgeted preparation, explicit animation dependencies, destination-owned music and inactive-stream release. Strict targets and all historical red measurements remain unchanged; no current performance result is inferred.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Parent: [FINISH-000](FINISH-000.md). Dependencies: FINISH-001 through FINISH-013
 content stable for final acceptance. Focused bottleneck repairs may occur earlier.
 Implementation: OPT-001 through OPT-056 present; measured gain not established.

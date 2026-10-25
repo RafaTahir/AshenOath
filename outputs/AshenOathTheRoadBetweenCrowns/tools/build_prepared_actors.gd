@@ -15,7 +15,51 @@ const NativeFace = preload("res://tools/build_native_facial_bindings.gd")
 const FACIAL_ASSEMBLIES := ["Kael_A_Set_Atlas.gltf", "Anwen_A_Set_Atlas.gltf", "Villager_Male_Atlas.gltf", "Villager_Female_Atlas.gltf", "Villager_Worker_Atlas.gltf", "Villager_Hooded_Atlas.gltf", "Bandit_Deserter_Atlas.gltf", "Bandit_Tracker_Atlas.gltf", "Male_Ranger_Runtime.gltf"]
 
 func _initialize() -> void:
+	if "--refresh-library-ownership" in OS.get_cmdline_user_args():
+		_refresh_library_ownership()
+		return
 	call_deferred("_compile")
+
+func _refresh_library_ownership() -> void:
+	var path := "res://data/prepared_actors.json"
+	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
+	for key: String in catalog:
+		var entry: Dictionary = catalog[key]
+		for binding: Dictionary in entry.get("material_bindings", []):
+			binding.surface = int(binding.surface)
+		var pending: Array[String] = [str(entry.path)]
+		var visited: Dictionary = {}
+		var libraries: Array[String] = []
+		while not pending.is_empty():
+			var resource_path: String = pending.pop_back()
+			if visited.has(resource_path):
+				continue
+			visited[resource_path] = true
+			if resource_path.begins_with(OUTPUT + "animations/") and resource_path.ends_with(".res"):
+				libraries.append(resource_path)
+			for encoded: String in ResourceLoader.get_dependencies(resource_path):
+				var dependency := ""
+				for component: String in encoded.split("::"):
+					if component.begins_with("res://"):
+						dependency = component
+						break
+				if dependency.is_empty() and encoded.begins_with("uid://"):
+					var uid := ResourceUID.text_to_id(encoded.get_slice("::", 0))
+					if ResourceUID.has_id(uid):
+						dependency = ResourceUID.get_id_path(uid)
+				if dependency.begins_with("res://"):
+					pending.append(dependency)
+		libraries.sort()
+		entry.animation_resources = libraries
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		push_error("Cannot record prepared actor animation ownership.")
+		quit(1)
+		return
+	file.store_string(JSON.stringify(catalog, "\t") + "\n")
+	file.close()
+	print("PREPARED LIBRARY OWNERSHIP: %d actor records; existing scenes unchanged." % catalog.size())
+	quit(0)
 
 func _compile() -> void:
 	helper = Helper.new()
@@ -112,7 +156,10 @@ func _compile() -> void:
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	helper.clear_runtime_caches()
 	helper.free()
-	quit(1 if failed else 0)
+	if failed:
+		quit(1)
+	else:
+		_refresh_library_ownership()
 
 func _save_libraries() -> void:
 	var directory := OUTPUT + "animations/"

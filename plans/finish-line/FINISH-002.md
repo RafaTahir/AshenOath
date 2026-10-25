@@ -1,5 +1,23 @@
 # FINISH-002 - Durable Saves And Recovery
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained atomic exact-journey selection, pending/durable/failed browser acknowledgement, factual objective history, global preferences, interrupted activities and restored encounter/death state. The earned r9 Anwen persistence result remains scoped evidence, not a new test.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Additional earned runtime cell - 2026-10-20 a38: normal Continue restored the
 selected primary unfinished Old Mill worker escort, matched to its pre-click
 pointer timestamp/journey/save rather than a later autosave. Saved progress

@@ -1,5 +1,23 @@
 # FINISH-005 - Desktop And Phone Usability
 
+## Current Implementation Delivery - 2026-10-26
+
+Candidate: `finish-implementation-20261026`, continued from published r14
+(`4b28d2d`) on the canonical D: development branch.
+
+Retained safe-area layout, displayed CSS touch sizing, focus/remapping and multi-touch ownership. Prepared interactions remain local until activation, then register in the active targeting index. Ordinary Area exits retain the existing focus-clear behavior; registration is separately retired with the object.
+
+Source implementation/reconciliation: complete for this build-only delivery.
+Compilation/package/publication: recorded centrally in
+[FINISH-000](FINISH-000.md) and the current FINISH-016 publication receipt.
+Agent runtime verification: NOT RUN; user acceptance: PENDING.
+No historical failure or unplayed case is promoted to passed. The approved
+build-and-publish boundary supersedes old intermediate approval/publication holds
+below; original runtime/performance contracts remain for the user's acceptance.
+
+## Preserved Contract And Historical Evidence
+
+
 Parent: [FINISH-000](FINISH-000.md). Dependencies: FINISH-001, FINISH-003.
 Implementation: existing responsive menus, touch controls and input guards present.
 Compilation: baseline recorded; not rerun. User acceptance: Pending.

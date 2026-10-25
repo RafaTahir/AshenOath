@@ -1,101 +1,95 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-25T14:35:59.855187Z",
-  "build_id": "cohesive-foundation-r14-20261025",
-  "generated_from_commit": "0dcb4cd08e8d978692bd92253e9ea7ce72f28003",
+  "ticket": "FINISH-016",
+  "generated_at_utc": "2026-10-25T17:51:01.858266Z",
+  "build_id": "finish-implementation-20261026",
+  "generated_from_commit": "4b28d2dd083b4b9efa2c73d8fb466227f7a1e2ef",
   "source_dirty": true,
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 101095416,
+  "total_bytes": 0,
   "packs": [
     {
       "id": "base",
-      "version": "cohesive-foundation-r14-20261025",
+      "version": "finish-implementation-20261026",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4105780,
-      "sha256": "4f9fa36f5af6e2be8503440d4a9e99f3c21deca008a156622c62185848cad5ad",
+      "bytes": 4162720,
+      "sha256": "34a2b5d27cad4e3a90545f840e3e2251398887bfc12e95d721f11c52859042a5",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "cohesive-foundation-r13-20261025",
+      "version": "finish-implementation-20261026",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 35792504,
-      "sha256": "75e519aa88aa662092db5d0b1717b234a7fd4cc9725dc77048513a017b5c4597",
+      "bytes": 35693124,
+      "sha256": "b5c8a3a6d2b5c1cf56165f3eb380620cab7df663ce124dc438a27ef05f11abc3",
       "status": "candidate_external",
-      "log": "logs/pack-opening.stdout.log",
-      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\opening.pck"
+      "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "adjacent",
-      "version": "cohesive-foundation-20261025",
+      "version": "finish-implementation-20261026",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
-      "bytes": 1406880,
-      "sha256": "8cddbfa72e7c503a1da80bac577cba99a0955274255c241caf8687ecd36e11d2",
+      "bytes": 2423028,
+      "sha256": "978549abaa0dcf7beebb24e64dd743e57ddab6273bac5ef0ab28eac0ad6e15aa",
       "status": "candidate_external",
-      "log": "logs/pack-adjacent.stdout.log",
-      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\adjacent.pck"
+      "log": "logs/pack-adjacent.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "cohesive-foundation-20261025",
+      "version": "finish-implementation-20261026",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 8730324,
-      "sha256": "f397eb9595e942a6fda7481bbfa7a57ef4e6bcfa3d325196df7c2a18d5beb818",
+      "bytes": 8730628,
+      "sha256": "372c1df7ba3e3e85701b559ef07abf502b289e2a27a45ecb492459163708ec0f",
       "status": "candidate_external",
-      "log": "logs/pack-campaign.stdout.log",
-      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\campaign.pck"
+      "log": "logs/pack-campaign.stdout.log"
     },
     {
       "id": "characters",
-      "version": "cohesive-foundation-20261025",
+      "version": "finish-implementation-20261026",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
-      "bytes": 9659664,
-      "sha256": "7b970a27f4e91a5af7c6dc75f888cc08b0590a1ae9bd4503c941f70b3783a27b",
+      "bytes": 9659968,
+      "sha256": "dd2a2e311f643b2eb221978c1a347435ad244a882431efcdad05978eecd07146",
       "status": "candidate_external",
-      "log": "logs/pack-characters.stdout.log",
-      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\characters.pck"
+      "log": "logs/pack-characters.stdout.log"
     },
     {
       "id": "monsters",
-      "version": "cohesive-foundation-20261025",
+      "version": "finish-implementation-20261026",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
-      "bytes": 14711416,
-      "sha256": "28f0e4adc9004825956d1b31c4b13103bec4fd69628408a7d9f3e16c8a9cbbd5",
+      "bytes": 14711720,
+      "sha256": "6be5b60fda59f168c0605d0b0c9cb1fb7ea388490c7a790c18735fe43232ba66",
       "status": "candidate_external",
-      "log": "logs/pack-monsters.stdout.log",
-      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\monsters.pck"
+      "log": "logs/pack-monsters.stdout.log"
     },
     {
       "id": "audio",
-      "version": "cohesive-foundation-20261025",
+      "version": "finish-implementation-20261026",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
-      "bytes": 19308452,
-      "sha256": "b19c68c7420da93495328e7c75b534dd87856a336f517ec51d143abf39e7a0af",
+      "bytes": 21355180,
+      "sha256": "1884172815bc6e76ee1b1e02d2c6c50723e578dfd339cd551dd309d305c7776a",
       "status": "candidate_external",
-      "log": "logs/pack-audio.stdout.log",
-      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\audio.pck"
+      "log": "logs/pack-audio.stdout.log"
     },
     {
       "id": "quality_materials",
-      "version": "cohesive-foundation-20261025",
+      "version": "finish-implementation-20261026",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
-      "bytes": 7380396,
-      "sha256": "a41f4d63bdf2c0af080da9f3d3fb997ef2de3fb6d86aece26478051365ca7662",
+      "bytes": 7380700,
+      "sha256": "cf078030e9e298cf166c45442ada9b4e5ac29558f8e4a61a27f523ff2b01c10d",
       "status": "candidate_external",
-      "log": "logs/pack-quality_materials.stdout.log",
-      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\quality_materials.pck"
+      "log": "logs/pack-quality_materials.stdout.log"
     }
   ],
   "errors": []
