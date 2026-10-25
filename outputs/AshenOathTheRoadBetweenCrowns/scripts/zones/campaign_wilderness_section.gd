@@ -14,29 +14,53 @@ const LINKS := {
 }
 
 func build(context: ZoneBuildContext) -> void:
-	match context.zone_id:
-		"deep_wood":
-			_build_deep_wood(context)
-		"old_mill":
-			_build_old_mill(context)
-		"burned_farmstead":
-			_build_farmstead(context)
-		"marsh_crossing":
-			_build_marsh(context)
-	_add_route_gates(context)
+	for step: Callable in construction_steps(context.zone_id):
+		if step.call(context) != true:
+			push_error("Wilderness construction failed: %s" % context.zone_id)
+			return
 
-func _base(context: ZoneBuildContext, color: Color, road_color: Color) -> void:
+func construction_steps(zone_id: String) -> Array[Callable]:
+	var result: Array[Callable] = [_build_base, _build_landscape, _build_route_dressing]
+	match zone_id:
+		"deep_wood": result.append_array([_build_deep_wood, _build_deep_wood_encounter])
+		"old_mill": result.append_array([_build_old_mill, _build_mill_yard, _build_mill_encounter])
+		"burned_farmstead": result.append(_build_farmstead)
+		"marsh_crossing": result.append(_build_marsh)
+		_: return []
+	result.append(_build_gates)
+	return result
+
+func _ground_color(zone_id: String) -> Color:
+	match zone_id:
+		"deep_wood": return Color(0.040, 0.072, 0.047)
+		"old_mill": return Color(0.115, 0.094, 0.066)
+		"burned_farmstead": return Color(0.115, 0.070, 0.043)
+	return Color(0.045, 0.077, 0.068)
+
+func _build_gates(context: ZoneBuildContext) -> bool:
+	_add_route_gates(context)
+	return true
+
+func _build_base(context: ZoneBuildContext) -> bool:
+	var color := _ground_color(context.zone_id)
 	var compatibility_marker := Node3D.new()
 	compatibility_marker.name = "CampaignSection_%s" % context.zone_id
 	compatibility_marker.set_meta("authored_builder", "WORLD-004")
 	context.add_node(compatibility_marker)
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(40, 0.16, 32), color)
 	context.make_play_area_bounds(40.0, 32.0, color.darkened(0.38))
+	return true
+
+func _build_landscape(context: ZoneBuildContext) -> bool:
 	if context.zone_id == "old_mill":
 		_make_mill_landscape(context)
 	else:
 		WildsPresentation.landscape(context)
 	WildsPresentation.adjoining_frontier(context)
+	return true
+
+func _build_route_dressing(context: ZoneBuildContext) -> bool:
+	var color := _ground_color(context.zone_id)
 	# The route is a compact, readable ribbon rather than a raised-looking slab.
 	# Terrain patches and edge stones carry the transition into the surrounding
 	# ground while keeping all dressing non-blocking.
@@ -57,6 +81,7 @@ func _base(context: ZoneBuildContext, color: Color, road_color: Color) -> void:
 	for x in [-10.5, 10.5]:
 		for z in [-9.0, -1.5, 6.0]:
 			context.make_loose_role("forest_tree_variant", Vector3(x, 0, z + sin(x + z) * 0.25), Vector3(1.12, 1.05, 1.12), (x + z) * 3.0)
+	return true
 
 func _make_route_surface(context: ZoneBuildContext, road_color: Color) -> void:
 	var rut := road_color.darkened(0.30)
@@ -68,8 +93,7 @@ func _make_route_surface(context: ZoneBuildContext, road_color: Color) -> void:
 		context.make_visual_box("WildernessDampRoadEdge", Vector3(-1.52, 0.048, z + 0.34), Vector3(0.16, 0.012, 1.05), damp_edge.darkened(0.18))
 		context.make_visual_box("WildernessDampRoadEdge", Vector3(1.52, 0.049, z - 0.22), Vector3(0.16, 0.012, 0.92), damp_edge.darkened(0.24))
 
-func _build_deep_wood(context: ZoneBuildContext) -> void:
-	_base(context, Color(0.040, 0.072, 0.047), Color(0.070, 0.083, 0.058))
+func _build_deep_wood(context: ZoneBuildContext) -> bool:
 	var marker := Node3D.new()
 	marker.name = "AuthoredDeepWood"
 	marker.set_meta("route_width", 3.0)
@@ -95,6 +119,9 @@ func _build_deep_wood(context: ZoneBuildContext) -> void:
 	for x in [-3.6, -1.8, 1.8, 3.6]:
 		context.make_visual_box("RootboundOathScar", Vector3(x, 0.045, -10.5), Vector3(0.09, 0.018, 3.4), Color(0.20, 0.46, 0.23))
 	context.make_light("Deep Wood Memory Glow", Vector3(0, 4.5, -8.5), Color(0.34, 0.56, 0.48), 2.0)
+	return true
+
+func _build_deep_wood_encounter(context: ZoneBuildContext) -> bool:
 	# The same saved Bog Wretch now has one owner in northern Wychwood.
 	if context.is_quest_active("main_names_they_burned") and context.is_objective_done("main_names_they_burned", "reconstruct_register") and not bool(context.get_story_flag("rootbound_colossus_defeated", false)):
 		var rootbound = context.spawn_enemy("rootbound_colossus", Vector3(0, 0.8, -10.5))
@@ -106,6 +133,7 @@ func _build_deep_wood(context: ZoneBuildContext) -> void:
 				rootbound.set_physics_process(false)
 				context.make_named_interactable("rootbound_challenge", "encounter", "Enter the guardian's memory clearing", Vector3(-3.2, 0, -6.4), Color(0.28, 0.36, 0.22), Vector3(0.3, 0.4, 0.3))
 	publish_rooks_false_road(context)
+	return true
 
 func publish_rooks_false_road(context: ZoneBuildContext) -> void:
 	if context.zone_id != "deep_wood" or not context.is_quest_active("side_rooks_map") or context.is_objective_done("side_rooks_map", "walk_false_road"):
@@ -114,8 +142,7 @@ func publish_rooks_false_road(context: ZoneBuildContext) -> void:
 		return
 	context.make_clue("rooks_false_road", "Compare Rook's map with the bent waystone", Vector3(3.6, 0, 7.4), "side_rooks_map", "walk_false_road", Color(0.39, 0.47, 0.36))
 
-func _build_old_mill(context: ZoneBuildContext) -> void:
-	_base(context, Color(0.115, 0.094, 0.066), Color(0.125, 0.105, 0.075))
+func _build_old_mill(context: ZoneBuildContext) -> bool:
 	var marker := Node3D.new()
 	marker.name = "AuthoredAshMill"
 	marker.set_meta("wheel_clearance", 3.2)
@@ -130,6 +157,9 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	context.make_loose_role("barrel", Vector3(-0.4, 0, -4.2), Vector3.ONE * 0.72, 0.0)
 	context.make_loose_role("crate", Vector3(-0.3, 0, -3.3), Vector3.ONE * 0.62, -8.0)
 	context.make_loose_role("cart", Vector3(6.6, 0, 2.8), Vector3.ONE * 0.72, -22.0)
+	return true
+
+func _build_mill_yard(context: ZoneBuildContext) -> bool:
 	# The east yard is Ashwing's unobstructed combat space. Scorched stones and
 	# ember seams frame the arena without adding collision or hiding the drake.
 	for position in ASHWING_ARENA_ROCKS:
@@ -142,6 +172,9 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	# itself was unobstructed.
 	for pos in [Vector3(9.0,0,-5), Vector3(8.0,0,-3), Vector3(7.2,0,5)]:
 		context.make_rubble(pos)
+	return true
+
+func _build_mill_encounter(context: ZoneBuildContext) -> bool:
 	var mill_fate := str(context.get_story_flag("mill_fate", ""))
 	if mill_fate in ["preserved", "burned", "exposed"]:
 		var record := Records.make_visual("mill_" + mill_fate)
@@ -163,6 +196,7 @@ func _build_old_mill(context: ZoneBuildContext) -> void:
 	elif context.is_objective_done("main_ash_at_the_mill", "mill_encounter") and not context.is_objective_done("main_ash_at_the_mill", "mill_choice"):
 		context.make_named_interactable("miller_record", "dialogue", "Read the miller's record", Vector3(-5.2,0.48,-3.4), Color(0.5,0.4,0.25))
 	publish_hidden_ash_measure(context)
+	return true
 
 func publish_hidden_ash_measure(context: ZoneBuildContext) -> void:
 	if context.zone_id != "old_mill" or not context.is_quest_active("side_millers_measure") or context.is_objective_done("side_millers_measure", "weigh_ash"):
@@ -171,8 +205,7 @@ func publish_hidden_ash_measure(context: ZoneBuildContext) -> void:
 		return
 	context.make_clue("hidden_ash_measure", "Inspect the miller's hidden measure", Vector3(-3.2, 0, 1.6), "side_millers_measure", "weigh_ash", Color(0.46, 0.34, 0.20))
 
-func _build_farmstead(context: ZoneBuildContext) -> void:
-	_base(context, Color(0.115, 0.070, 0.043), Color(0.135, 0.092, 0.058))
+func _build_farmstead(context: ZoneBuildContext) -> bool:
 	var marker := Node3D.new()
 	marker.name = "AuthoredBurnedFarmstead"
 	context.add_node(marker)
@@ -191,9 +224,9 @@ func _build_farmstead(context: ZoneBuildContext) -> void:
 		context.make_visual_box("FarmsteadCharredPost", Vector3(x, 1.05, 9.9), Vector3(0.22, 2.1, 0.22), Color(0.06, 0.034, 0.020))
 	context.make_light("FarmsteadEmberGlow", Vector3(0, 0.55, 6.0), Color(0.82, 0.20, 0.06), 0.55)
 	context.make_clue("register_rook", "Recover charred names", Vector3(-6.0,0.4,-5.8), "main_names_they_burned", "fragment_rook", Color(0.45,0.25,0.12))
+	return true
 
-func _build_marsh(context: ZoneBuildContext) -> void:
-	_base(context, Color(0.045, 0.077, 0.068), Color(0.090, 0.092, 0.068))
+func _build_marsh(context: ZoneBuildContext) -> bool:
 	var marker := Node3D.new()
 	marker.name = "AuthoredMarshCrossing"
 	marker.set_meta("boardwalk_width", 3.2)
@@ -208,6 +241,7 @@ func _build_marsh(context: ZoneBuildContext) -> void:
 		context.make_loose_role("forest_rock", pos, Vector3.ONE * 0.58, 0.0)
 	context.make_fog_sheet(Vector3(0,0.55,0), Vector3(30,1,14), Color(0.17,0.24,0.21,0.22))
 	context.make_clue("register_mira", "Recover the healer's fragment", Vector3(3,0,-7), "main_names_they_burned", "fragment_mira", Color(0.35,0.3,0.2))
+	return true
 
 func _make_waystones(context: ZoneBuildContext, color: Color) -> void:
 	for pos in [Vector3(-4.8, 0, -11.0), Vector3(4.8, 0, 10.8)]:

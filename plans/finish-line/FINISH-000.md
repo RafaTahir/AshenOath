@@ -4,6 +4,34 @@ Date: 2026-10-19. Workspace: D:/Projects/AshenOath.
 Branch: codex/masterpiece-rebuild.
 Scope: finish and establish acceptance of the retained game, not replace it.
 
+## Current Execution - 2026-10-25
+
+The approved **From Accumulated Features to a Cohesive Game** plan now owns the
+dependency order. Current source/evidence checkpoint:
+[cohesive-game implementation](../living-road/COHESIVE_GAME_IMPLEMENTATION.md).
+The direct zero-test/verification allocation remains in force for game QA: no
+game/browser runs, fixtures, screenshots, benchmarks or profiling. The latest
+direct instruction explicitly requires push/deployment without another user-run
+step. Publish the accumulated r14 build through the existing Git-staged workflow,
+retaining its package and HTTP delivery safeguards. Earlier holds on publication
+are superseded by that direct instruction, not converted into accepted tickets.
+Preserve all actual earlier results without repeating their gameplay checks.
+Implementation, compilation, agent verification, publication and user acceptance
+are separate. No new FINISH ticket is accepted by source edits or packaging.
+
+Foundation work includes objective-history truth, scoped prepared-destination
+invalidation, resumable campaign construction, route/Use visibility corrections,
+deferred gameplay UI and browser save-durability acknowledgement. Directly affected
+checks and outstanding browser acceptance are recorded in the linked checkpoint.
+Strict numerical requirements remain open and currently red; the authorized
+build-only delivery does not certify them. Rigid poses and remaining campaign,
+phone, listening and subjective acceptance also remain unresolved/unverified.
+The FINISH-016 publication receipt records delivery separately. The current package
+policy is strictly below 256 MiB, warning at 200 MiB, individual Git files below
+100 MiB; the old limits below describe their historical candidates only.
+
+### Historical Execution and Candidate Records
+
 2026-10-24 content amendment: [A Campaign Worth Remembering](../living-road/CAMPAIGN_WORTH_REMEMBERING.md)
 adds six optional personal quests to the preserved 51, for 57 total. FINISH-002,
 006-012 and 015 include the affected saved progress, rewards, regional scenes and

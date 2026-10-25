@@ -24,6 +24,7 @@ signal message(text: String)
 signal library_changed
 signal operation_finished(slot_id: String, operation: String, success: bool, text: String)
 signal load_prepared_requested(prepared: Dictionary)
+signal durability_changed(state: String, detail: String)
 
 var replay_session := false
 var journey_id := ""
@@ -38,6 +39,12 @@ var _decoded_slots: Dictionary = {}
 var _summary_cache: Dictionary = {}
 var _payload_tokens: Dictionary = {}
 var _browser_sync_pending := false
+var _browser_sync_generation := 0
+var _browser_sync_files: Dictionary = {}
+var _browser_sync_callback: JavaScriptObject
+var _persistence_write_failures: Dictionary = {}
+var durability_state := "idle"
+var durability_detail := ""
 
 func save_game(game, path: String = SAVE_PATH, label: String = "Game saved.") -> bool:
 	# Deferred autosaves can outlive a zone teardown. Never serialize a partially
@@ -130,7 +137,7 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data.vendors["emergency_refill_claimed"] = typeof(refill) == TYPE_BOOL and refill
 	var medicine: Variant = data.vendors.get("emergency_healing_claimed", false)
 	data.vendors["emergency_healing_claimed"] = typeof(medicine) == TYPE_BOOL and medicine
-	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags", "evidence_history"])
+	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags", "evidence_history", "completed_objectives"])
 	_sanitize_dictionary_fields(data.story_state, ["flags", "values", "evidence"])
 	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests", "claimed_rewards", "visited_sectors"])
 	_sanitize_dictionary_fields(data.world_state, ["removed_interactions", "day_night"])
@@ -255,12 +262,37 @@ func _write_atomic(path: String, data: Dictionary) -> bool:
 			DirAccess.rename_absolute(absolute_backup, absolute_path)
 		_remove_if_present(temporary)
 		return false
-	_queue_browser_sync()
+	_queue_browser_sync(path)
 	return true
 
-func _queue_browser_sync() -> void:
-	if not OS.has_feature("web") or _browser_sync_pending:
+func confirm_file_persistence(path: String) -> void:
+	if not FileAccess.file_exists(path):
+		report_persistence_failure(path, "Saved data could not be read back. Save again before closing this session.")
 		return
+	_queue_browser_sync(path)
+
+func report_persistence_failure(path: String, detail: String) -> void:
+	_persistence_write_failures[path] = detail
+	_browser_sync_generation += 1
+	_set_durability_failure(detail)
+
+func _queue_browser_sync(path: String = RESUME_PATH) -> void:
+	_persistence_write_failures.erase(path)
+	if not OS.has_feature("web"):
+		if not _persistence_write_failures.is_empty():
+			_set_durability_failure(str(_persistence_write_failures.values()[0]))
+			return
+		durability_state = "durable"
+		durability_detail = "Saved locally."
+		durability_changed.emit(durability_state, durability_detail)
+		return
+	if FileAccess.file_exists(path):
+		_browser_sync_files[ProjectSettings.globalize_path(path)] = FileAccess.get_sha256(path)
+	_browser_sync_generation += 1
+	durability_state = "pending"
+	durability_detail = "Saving to browser storage. Keep this tab open."
+	durability_changed.emit(durability_state, durability_detail)
+	if _browser_sync_pending: return
 	_browser_sync_pending = true
 	call_deferred("_sync_browser_files")
 
@@ -270,10 +302,42 @@ func _sync_browser_files() -> void:
 	# persistence again after the complete batch has published its final names.
 	if OS.has_feature("web"):
 		JavaScriptBridge.force_fs_sync()
+		if not _persistence_write_failures.is_empty():
+			_set_durability_failure(str(_persistence_write_failures.values()[0]))
+			return
+		var bridge: JavaScriptObject = JavaScriptBridge.get_interface("__ashenOathSaveDurability")
+		if bridge == null:
+			_set_durability_failure("Browser storage confirmation is unavailable. Save again or export your journey before closing.")
+			return
+		var settings_path := "user://ashen_oath_settings.json"
+		if FileAccess.file_exists(settings_path):
+			_browser_sync_files[ProjectSettings.globalize_path(settings_path)] = FileAccess.get_sha256(settings_path)
+		if _browser_sync_callback == null:
+			_browser_sync_callback = JavaScriptBridge.create_callback(_on_browser_sync_result)
+		bridge.confirm(JSON.stringify(_browser_sync_files), _browser_sync_generation, _browser_sync_callback)
+
+func _on_browser_sync_result(arguments: Array) -> void:
+	if arguments.is_empty(): return
+	var result: Variant = JSON.parse_string(str(arguments[0]))
+	if not result is Dictionary or int(result.get("generation", -1)) != _browser_sync_generation: return
+	if bool(result.get("ok", false)):
+		durability_state = "durable"
+		durability_detail = "Saved data confirmed in browser storage."
+		_browser_sync_files.clear()
+		durability_changed.emit(durability_state, durability_detail)
+	else:
+		_set_durability_failure("Browser storage could not confirm this save. Save again or export your journey before closing. " + str(result.get("error", "")))
+
+func _set_durability_failure(detail: String) -> void:
+	durability_state = "failed"
+	durability_detail = detail
+	durability_changed.emit(durability_state, durability_detail)
+	message.emit(durability_detail)
 
 func _save_message(text: String) -> String:
-	# force_fs_sync requests persistence; it does not acknowledge its completion.
-	return text + " Browser storage is syncing; keep this tab open." if OS.has_feature("web") else text
+	# Queued operation notices must not retain an obsolete persistence phase.
+	# durability_changed owns pending, confirmed and failed browser storage.
+	return text.trim_suffix(".") + " (local copy)." if OS.has_feature("web") else text
 
 func _read_slot(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -817,10 +881,12 @@ func request_load(selection: Dictionary) -> bool:
 	var prepared: Dictionary = prepare_load(selection)
 	if not bool(prepared.get("ok", false)):
 		var text: String = str(prepared.get("message", "The saved journey could not be prepared."))
+		print("JOURNEY: load_rejected reason=%s" % str(prepared.get("reason", "unavailable")))
 		operation_finished.emit(str(selection.get("slot_id", "")), "load", false, text)
 		message.emit(text)
 		library_changed.emit()
 		return false
+	print("JOURNEY: load_prepared destination=%s" % str(prepared.get("data", {}).get("zone", "")))
 	load_prepared_requested.emit(prepared)
 	return true
 
@@ -960,7 +1026,11 @@ func _write_resume_pointer(slot_id: String, source: String, data: Dictionary, su
 		return false
 	file.store_string(content)
 	file.flush()
+	var write_error := file.get_error()
 	file = null
+	if write_error != OK or FileAccess.get_file_as_string(temporary) != content:
+		_remove_if_present(temporary)
+		return false
 	var destination: String = ProjectSettings.globalize_path(RESUME_PATH)
 	var previous: String = ProjectSettings.globalize_path(backup_path(RESUME_PATH))
 	_remove_absolute_if_present(previous)

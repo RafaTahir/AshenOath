@@ -76,17 +76,17 @@ func _process(delta: float) -> void:
 	if _neighbor_scope != null and _neighbor_scope.zone_id != target: cancel_preparation()
 	if get_tree().paused or host._journey_load_pending() or not is_instance_valid(host.player) or not host.player.can_control or host._story_has_active_combat(): return
 	if host.opening_checkpoint_pending or host.opening_detail_pending or host.zone_transition_pending: return
-	if host.player.velocity.length_squared() > 0.25 or host.player.bow_aiming: return
+	if host.player.bow_aiming: return
 	# Cold activation starts just before the common plane. Retain the source
 	# half while it still supports Kael, even if a state change invalidated it.
 	if contains_resident_passage(host.player.global_position) and not WorldSectorManifest.connector_contains(str(host.current_zone_id),host.player.global_position): return
 	if _valid_cached_destination(target):
 		_show_neighbor(_selected_connection); return
 	if _neighbor_state == "ready":
-		if _neighbor_epoch != _story_epoch: cancel_preparation()
+		if not _neighbor_dependencies_current(): cancel_preparation()
 		else: _show_neighbor(_selected_connection)
 		return
-	if _neighbor_scope != null and _neighbor_epoch != _story_epoch:
+	if _neighbor_scope != null and not _neighbor_dependencies_current():
 		cancel_preparation(); return
 	if _neighbor_scope == null:
 		if Time.get_ticks_msec() < _retry_after: return
@@ -158,16 +158,30 @@ func complete_crossing(previous_root: Node3D) -> void:
 
 func _advance_preparation() -> void:
 	_added_nodes.clear()
-	_neighbor_scope.run_step(_build_neighbor_step)
+	var successful := _neighbor_scope.run_step(_build_neighbor_step)
 	for reference: WeakRef in _added_nodes:
 		var node: Node = reference.get_ref()
 		if is_instance_valid(node): host.zone_residency.suspend_node(_neighbor_scope.owned_root,node)
 	_added_nodes.clear()
-	_neighbor_step += 1
+	if successful:
+		_neighbor_step += 1
+		_neighbor_signature = host._zone_state_signature(_neighbor_scope.zone_id)
+		_neighbor_epoch = _story_epoch
+	elif _neighbor_failure.is_empty():
+		_neighbor_failure = "Construction step %d did not complete for %s." % [_neighbor_step, _neighbor_scope.zone_id]
 	if not _neighbor_failure.is_empty():
 		var error := _neighbor_failure
 		cancel_preparation(); _neighbor_failure = error; _retry_after = Time.get_ticks_msec()+30000
 		push_warning("Prepared neighbor failed; ordinary travel remains available: " + error)
+
+func _neighbor_dependencies_current() -> bool:
+	if _neighbor_scope == null: return false
+	if _neighbor_epoch == _story_epoch: return true
+	# A partial build's recorded reads grow after every successful step. Only
+	# already-consumed state can invalidate it; later steps read current state.
+	if _neighbor_step > 0 and _neighbor_signature != host._zone_state_signature(_neighbor_scope.zone_id): return false
+	_neighbor_epoch = _story_epoch
+	return true
 
 func has_prepared(zone_id: String) -> bool:
 	if _valid_cached_destination(zone_id): return true
@@ -184,7 +198,7 @@ func _valid_cached_destination(zone_id: String, refresh: bool = false) -> bool:
 
 func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 	if has_prepared(zone_id): return true
-	if _neighbor_scope != null and (_neighbor_scope.zone_id != zone_id or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced")) or _neighbor_epoch != _story_epoch): cancel_preparation()
+	if _neighbor_scope != null and (_neighbor_scope.zone_id != zone_id or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced")) or not _neighbor_dependencies_current()): cancel_preparation()
 	if _neighbor_scope == null: _begin_neighbor(zone_id)
 	if _neighbor_scope == null: return false
 	_foreground = true
@@ -194,7 +208,7 @@ func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 		# valid context and rebuilding it merely because the player reached the exit.
 		await get_tree().process_frame
 		if not keep_waiting.call() or _neighbor_scope == null: break
-		if _neighbor_epoch != _story_epoch or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced")):
+		if not _neighbor_dependencies_current() or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced")):
 			_neighbor_failure = "The destination changed during preparation."; break
 		_advance_preparation()
 		if _neighbor_scope == null: break
@@ -241,16 +255,17 @@ func _begin_neighbor(target: String) -> void:
 func _construction_steps() -> int:
 	if _neighbor_scope.zone_id == "greyfen": return host.OPENING_DETAIL_STAGES.size()+1
 	if _neighbor_scope.zone_id == "wychwood": return 11
+	if _neighbor_builder.has_method("step_count"): return _neighbor_builder.step_count(_neighbor_scope.zone_id)
 	return 1
 
-func _build_neighbor_step(context: ZoneBuildContext) -> void:
+func _build_neighbor_step(context: ZoneBuildContext) -> bool:
 	var greyfen := context.zone_id == "greyfen"
 	var steps := _construction_steps()
 	if _neighbor_step == 0:
 		var requested_layers: Array[String] = ["gameplay"]
 		if not greyfen: requested_layers.append("decoration")
 		var layers: Dictionary = host.ZoneSceneCatalog.attach(context.zone_id,context.zone_root,requested_layers)
-		if not bool(layers.ok): _neighbor_failure = str(layers.errors); return
+		if not bool(layers.ok): _neighbor_failure = str(layers.errors); return false
 	if _neighbor_step < steps:
 		if greyfen:
 			if _neighbor_step == 0: _neighbor_builder.build(context)
@@ -258,6 +273,8 @@ func _build_neighbor_step(context: ZoneBuildContext) -> void:
 				context.build_profile = "opening_detail"
 				_neighbor_builder.build_detail_stage(context,str(host.OPENING_DETAIL_STAGES[_neighbor_step-1]))
 		elif context.zone_id == "wychwood": _neighbor_builder.build_step(context,_neighbor_step)
+		elif _neighbor_builder.has_method("step_count"):
+			if not _neighbor_builder.build_step(context, _neighbor_step): return false
 		else: _neighbor_builder.build(context)
 	elif _neighbor_step == steps:
 		host._flush_environment_batches()
@@ -268,15 +285,16 @@ func _build_neighbor_step(context: ZoneBuildContext) -> void:
 		context.owned_fields.spatial_service.build_navigation(context.zone_root)
 		host._validate_zone_render_resources(context.zone_root)
 		var result := context.validate()
-		if not bool(result.ok): _neighbor_failure = str(result.errors); return
+		if not bool(result.ok): _neighbor_failure = str(result.errors); return false
 		for enemy: Node in host.active_enemies:
 			if not is_instance_valid(enemy.visual_root):
-				_neighbor_failure = "Missing required body: " + str(enemy.enemy_id); return
+				_neighbor_failure = "Missing required body: " + str(enemy.enemy_id); return false
 		context.zone_root.set_meta("opening_detail_complete",true)
 		context.zone_root.set_meta("prepared_neighbor_complete",true)
 		context.zone_root.set_meta("prepared_arrival_pending",true)
 		context.zone_root.set_meta("runtime_light_count",host.runtime_light_count)
 		_neighbor_state = "ready"; _neighbor_signature = host._zone_state_signature(context.zone_id)
+	return true
 
 func publish_prepared(zone_id: String) -> bool:
 	if _neighbor_scope == null: return false
@@ -292,7 +310,11 @@ func publish_prepared(zone_id: String) -> bool:
 	# _exit_tree(), preserving controller connections and the navigation owner.
 	# The root is already hidden and displaced before joining the active world.
 	_neighbor_view.set_meta("prepared_zone_view",true)
+	# Godot 4.6.3 releases own_world before detaching the viewport's scenario.
+	# Keep it alive until the world notifications and renderer handoff finish.
+	var retiring_world: World3D = _neighbor_view.find_world_3d()
 	_neighbor_view.own_world_3d = false
+	retiring_world = null
 	var camera := Camera3D.new(); camera.name = "ResidentCamera"
 	_neighbor_view.add_child(camera); camera.current = true
 	_neighbor_scope = null; _neighbor_builder = null

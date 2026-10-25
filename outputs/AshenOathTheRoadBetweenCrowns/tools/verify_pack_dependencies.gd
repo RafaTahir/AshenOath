@@ -11,21 +11,31 @@ class IsolatedManager extends "res://scripts/runtime_pack_manager.gd":
 		active_downloads[id] = true
 	func complete(id: String) -> void:
 		active_downloads.erase(id)
-		_mark_mounted(id, "fixture://" + id)
+		requests[id]["state"] = "verified"
 		_start_pending_downloads()
+	func _mount_cached_pack(id: String, _path: String) -> bool:
+		if not _dependencies_ready(id):
+			return false
+		_mark_mounted(id, "fixture://" + id)
+		return true
 
 var failures: Array[String] = []
 
 func _initialize() -> void:
+	if "--destination-queue-only" in OS.get_cmdline_user_args():
+		_verify_destination_queue()
+		_finish()
+		return
 	var manager := _manager()
 	_check(manager.request_pack("c"), "Diamond request rejected")
-	_check(manager.started == ["a", "b"], "Independent dependencies did not start together")
-	_check(manager.get_state("c") == "queued" and not manager.is_ready("c"), "Dependent became ready before prerequisites")
-	manager.complete("b")
-	_check(manager.get_state("c") == "queued", "Dependent started with one prerequisite missing")
-	manager.complete("a")
-	_check(manager.started == ["a", "b", "c"], "Dependent did not start after prerequisites")
+	_check(manager.started == ["a", "b", "c"], "Required downloads did not use the bounded parallel slots")
+	_check(manager.get_state("c") == "downloading" and not manager.is_ready("c"), "Dependent became ready before prerequisites")
 	manager.complete("c")
+	_check(manager.get_state("c") == "verified" and not manager.is_ready("c"), "Verified dependent mounted before prerequisites")
+	manager.complete("b")
+	_check(manager.get_state("c") == "verified" and not manager.is_ready("c"), "Dependent mounted with one prerequisite missing")
+	manager.complete("a")
+	_check(manager.started == ["a", "b", "c"], "Dependency completion duplicated a download")
 	_check(manager.is_ready("c"), "Completed dependency chain not ready")
 	manager.free()
 
@@ -33,6 +43,7 @@ func _initialize() -> void:
 	manager.request_pack("c")
 	manager._on_download_completed(HTTPRequest.RESULT_CANT_CONNECT, 0, PackedStringArray(), PackedByteArray(), "a")
 	_check(manager.get_state("c") == "failed", "Dependency failure did not propagate")
+	_check(not manager.active_downloads.has("c"), "Failed dependency left the dependent transfer running")
 	_check(manager.get_state("b") == "downloading", "Shared sibling was incorrectly cancelled")
 	_check(manager.retry_pack("c"), "Dependent retry rejected")
 	_check(manager.started.count("a") == 2 and int(manager.requests["a"]["attempt"]) == 1, "Failed prerequisite was not retried with a bounded count")
@@ -52,7 +63,7 @@ func _initialize() -> void:
 	manager.cancel_request("c")
 	manager.complete("a")
 	manager.complete("b")
-	_check(manager.get_state("c") == "cancelled" and not manager.started.has("c"), "Cancelled dependent restarted")
+	_check(manager.get_state("c") == "cancelled" and manager.started.count("c") == 1, "Cancelled dependent restarted")
 	manager.free()
 
 	manager = _manager()
@@ -75,12 +86,30 @@ func _initialize() -> void:
 			manager.request_pack("extra")
 	)
 	manager.request_pack("c")
-	_check(manager.active_downloads.size() == 3 and manager.started.count("extra") == 1, "Reentrant request broke concurrency or scheduling")
+	_check(manager.active_downloads.size() == 3 and manager.get_state("extra") == "queued", "Reentrant request exceeded bounded transfer slots")
+	manager.complete("a")
+	_check(manager.active_downloads.size() == 3 and manager.started.count("extra") == 1, "Reentrant request was lost or duplicated after a slot became available")
 	var started_before_clear := manager.started.size()
 	manager.clear_requests()
 	_check(manager.requests.is_empty() and manager.active_downloads.is_empty(), "Clear retained active requests")
 	_check(manager.started.size() == started_before_clear, "Clear started queued downloads while cancelling")
 	manager.free()
+	_verify_destination_queue()
+	_finish()
+
+func _verify_destination_queue() -> void:
+	var manager := IsolatedManager.new()
+	manager.manifest = JSON.parse_string(FileAccess.get_file_as_string("res://runtime_pack_manifest.json"))
+	manager._mark_embedded_ready("base")
+	manager._mark_mounted("opening", "fixture://opening")
+	manager.prioritize_zone("wychwood")
+	var queued := manager.request_zone_packs("wychwood", [], true)
+	_check(queued, "Current Wychwood Continue dependency set was rejected: " + str(manager.requests))
+	_check("adjacent" in manager.started and "characters" in manager.started, "Current destination did not schedule its required ownership")
+	_check(_request_from_dynamic_owner(manager), "Dynamic Continue owner rejected the destination pack request")
+	manager.free()
+
+func _finish() -> void:
 	for failure in failures:
 		printerr("PACK DEPENDENCIES: " + failure)
 	print("PACK DEPENDENCIES: %s (native scheduler/state proof; network/mount completion isolated)" % ["PASS" if failures.is_empty() else "FAIL"])
@@ -100,3 +129,7 @@ func _manager() -> IsolatedManager:
 func _check(condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)
+
+func _request_from_dynamic_owner(manager: Variant) -> bool:
+	var encounter_packs: Array[String] = []
+	return manager.request_zone_packs("wychwood", encounter_packs, true)

@@ -8,7 +8,20 @@ var _change_depth := 0
 var _change_pending := false
 var _completed_pending: Array[String] = []
 var _choice_depth := 0
-var evidence_history: Dictionary = {}
+var _evidence_history: Dictionary = {}
+var evidence_history: Dictionary:
+	get:
+		world_reads.read("evidence_history")
+		return _evidence_history
+	set(value):
+		_evidence_history = value
+var _completed_objectives: Dictionary = {}
+var completed_objectives: Dictionary:
+	get:
+		world_reads.read("completed_objectives")
+		return _completed_objectives
+	set(value):
+		_completed_objectives = value
 var quest_defs = {}
 var world_reads = preload("res://scripts/world_read_scope.gd").new()
 var _active: Dictionary = {}
@@ -32,7 +45,13 @@ const STARTING_UNLOCKS = {
 	"side_childs_charm": true, "side_soldiers_debt": true, "side_millers_measure": true,
 	"side_rooks_map": true, "side_three_candles": true
 }
-var unlocked = STARTING_UNLOCKS.duplicate()
+var _unlocked: Dictionary = STARTING_UNLOCKS.duplicate()
+var unlocked: Dictionary:
+	get:
+		world_reads.read("unlocked")
+		return _unlocked
+	set(value):
+		_unlocked = value
 var world_flags = {}
 var tracked_quest_id := ""
 var tracked_quest_is_manual := false
@@ -79,12 +98,17 @@ func start_quest(id: String) -> bool:
 	var objectives: Array = []
 	for objective in quest_defs[id].get("objectives", []):
 		var runtime_objective: Dictionary = objective.duplicate(true)
-		runtime_objective["done"] = false
+		runtime_objective["done"] = not is_choice_objective(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false))
+		if runtime_objective.done and str(objective.get("completion_flag", "")) != "":
+			world_flags[str(objective.completion_flag)] = true
 		objectives.append(runtime_objective)
 	active[id] = {"objectives": objectives}
 	if not tracked_quest_is_manual and (tracked_quest_id == "" or str(quest_defs[id].get("type", "")) == "main"):
 		tracked_quest_id = id
 	message.emit("Quest started: %s" % quest_defs[id].get("title", id))
+	_update_evidence_groups(id)
+	if not objectives.is_empty():
+		_try_complete_quest(id)
 	_emit_changed()
 	return true
 
@@ -109,10 +133,21 @@ func complete_objective(quest_id: String, objective_id: String) -> bool:
 	return false
 
 func complete_evidence(quest_id: String, evidence_id: String) -> bool:
-	if is_choice_objective(quest_id, evidence_id):
+	if _objective_definition(quest_id, evidence_id).is_empty() or is_choice_objective(quest_id, evidence_id):
 		return false
-	evidence_history["%s:%s" % [quest_id, evidence_id]] = true
-	return complete_objective(quest_id, evidence_id)
+	var key := "%s:%s" % [quest_id, evidence_id]
+	var newly_observed := not _saved_true(evidence_history.get(key, false))
+	evidence_history[key] = true
+	var advanced := complete_objective(quest_id, evidence_id)
+	if newly_observed and not advanced:
+		_emit_changed()
+	return advanced
+
+func _objective_definition(quest_id: String, objective_id: String) -> Dictionary:
+	for objective: Dictionary in quest_defs.get(quest_id, {}).get("objectives", []):
+		if str(objective.get("id", "")) == objective_id:
+			return objective
+	return {}
 
 func complete_choice(quest_id: String, objective_id: String) -> bool:
 	_choice_depth += 1
@@ -176,17 +211,25 @@ func _update_evidence_groups(quest_id: String) -> void:
 func is_objective_done(quest_id: String, objective_id: String) -> bool:
 	world_reads.read("active", quest_id)
 	world_reads.read("completed", quest_id)
-	# Completed quests no longer have an active objective array. Preserve the
-	# completed truth so story-choice guards, HUD fallbacks, and save reloads do
-	# not treat a finished objective as available again.
-	if _completed.has(quest_id):
+	world_reads.read("completed_objectives", quest_id)
+	world_reads.read("evidence_history", "%s:%s" % [quest_id, objective_id])
+	var definition := _objective_definition(quest_id, objective_id)
+	if definition.is_empty():
+		return false
+	if not is_choice_objective(quest_id, objective_id) and _saved_true(_evidence_history.get("%s:%s" % [quest_id, objective_id], false)):
 		return true
+	if _completed.has(quest_id):
+		if _completed_objectives.has(quest_id):
+			return _saved_true(_completed_objectives[quest_id].get(objective_id, false))
+		# Old saves erased objective arrays on completion. Preserve required
+		# progression, but never infer a skipped optional action or observation.
+		return not bool(definition.get("optional", false))
 	if not _active.has(quest_id):
 		return false
 	for objective in _active[quest_id]["objectives"]:
 		if objective["id"] == objective_id:
 			return bool(objective.get("done", false))
-	return _completed.has(quest_id)
+	return false
 
 func is_active(id: String) -> bool:
 	world_reads.read("active", id)
@@ -197,14 +240,13 @@ func is_completed(id: String) -> bool:
 	return _completed.has(id)
 
 func world_signature_state(zone_id: String) -> Dictionary:
-	var state: Dictionary = world_reads.snapshot(zone_id, {"active": _active, "completed": _completed})
-	state["unlocked"] = unlocked
+	var state: Dictionary = world_reads.snapshot(zone_id, {"active": _active, "completed": _completed, "completed_objectives": _completed_objectives, "unlocked": _unlocked, "evidence_history": _evidence_history})
 	state["world_flags"] = world_flags
-	state["evidence_history"] = evidence_history
 	return state
 
 func is_unlocked(id: String) -> bool:
-	return bool(unlocked.get(id, false))
+	world_reads.read("unlocked", id)
+	return bool(_unlocked.get(id, false))
 
 func is_runtime_content_ready(id: String) -> bool:
 	if id.begins_with("side_escort_"):
@@ -394,6 +436,10 @@ func _try_complete_quest(id: String) -> void:
 		if not bool(objective.get("done", false)) and not bool(objective.get("optional", false)):
 			return
 	completed[id] = true
+	var recorded: Dictionary = {}
+	for objective: Dictionary in active[id]["objectives"]:
+		recorded[str(objective.id)] = bool(objective.get("done", false))
+	completed_objectives[id] = recorded
 	active.erase(id)
 	if tracked_quest_id == id:
 		tracked_quest_id = ""
@@ -412,6 +458,7 @@ func save_state() -> Dictionary:
 	return {
 		"active": active.duplicate(true),
 		"evidence_history": evidence_history.duplicate(true),
+		"completed_objectives": completed_objectives.duplicate(true),
 		"completed": completed.duplicate(true),
 		"unlocked": unlocked.duplicate(true),
 		"world_flags": world_flags.duplicate(true),
@@ -429,6 +476,17 @@ func load_state(state: Dictionary) -> void:
 	evidence_history = recorded_evidence.duplicate(true) if recorded_evidence is Dictionary else {}
 	active = _sanitize_active(state.get("active", {}))
 	completed = _sanitize_id_map(state.get("completed", {}), true)
+	completed_objectives = {}
+	var recorded_objectives: Variant = state.get("completed_objectives", {})
+	if recorded_objectives is Dictionary:
+		for id: String in completed:
+			if not recorded_objectives.get(id) is Dictionary:
+				continue
+			var facts: Dictionary = {}
+			for objective: Dictionary in quest_defs[id].get("objectives", []):
+				var key := str(objective.id)
+				facts[key] = _saved_true(recorded_objectives[id].get(key, false))
+			completed_objectives[id] = facts
 	for id in completed:
 		active.erase(id)
 	var loaded_unlocked := _sanitize_id_map(state.get("unlocked", {}), false)
@@ -444,6 +502,11 @@ func load_state(state: Dictionary) -> void:
 		tracked_quest_id = _first_main_active()
 		tracked_quest_is_manual = false
 	_migrate_teeth_in_rain()
+	for id: String in active:
+		for objective: Dictionary in active[id].objectives:
+			if not is_choice_objective(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false)):
+				objective.done = true
+		_update_evidence_groups(id)
 	_emit_changed()
 
 func _sanitize_id_map(raw: Variant, completed_map: bool) -> Dictionary:

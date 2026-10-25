@@ -15,11 +15,17 @@ const VarganRecordEntry = preload("res://assets_external/environment/village/Var
 const CASTLE_ZONES := ["vargan_approach", "vargan_court", "record_hall"]
 
 func build(context: ZoneBuildContext) -> void:
-	var zone_id := context.zone_id
+	for step: Callable in construction_steps(context.zone_id):
+		if step.call(context) != true:
+			push_error("Castle construction failed: %s" % context.zone_id)
+			return
+
+func construction_steps(zone_id: String) -> Array[Callable]:
 	match zone_id:
-		"vargan_approach": _build_approach(context)
-		"vargan_court": _build_courtyard(context)
-		"record_hall": _build_record_hall(context)
+		"vargan_approach": return [_build_approach, _build_approach_fortifications, _build_approach_routes]
+		"vargan_court": return [_build_courtyard, _build_courtyard_workplaces, _build_courtyard_people]
+		"record_hall": return [_build_record_hall, _build_archive_records, _build_archive_people]
+	return []
 
 func _base(context: ZoneBuildContext, zone_id: String, ground_color: Color, size := Vector2(44, 34)) -> void:
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(size.x, 0.16, size.y), ground_color)
@@ -38,12 +44,15 @@ func _make_castle_route_surface(context: ZoneBuildContext, zone_id: String) -> v
 	road.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	context.add_node(road)
 
-func _build_approach(context: ZoneBuildContext) -> void:
+func _build_approach(context: ZoneBuildContext) -> bool:
 	_base(context, "Approach", Color(0.105, 0.105, 0.10), Vector2(46, 38))
 	context.make_road(Vector3(0, 0.02, 1), Vector3(5.2, 0.05, 34), Color(0.16, 0.15, 0.14))
 	_make_castle_route_surface(context, "vargan_approach")
 	_make_authored_approach_dressing(context)
 	_make_approach_dressing(context)
+	return true
+
+func _build_approach_fortifications(context: ZoneBuildContext) -> bool:
 	for z in [-12.0, -5.0, 3.0, 10.0]:
 		context.make_prop_box("RoadEdge", Vector3(-3.0, 0.12, z), Vector3(0.7, 0.24, 5.5), Color(0.09, 0.085, 0.08))
 		context.make_prop_box("RoadEdge", Vector3(3.0, 0.12, z), Vector3(0.7, 0.24, 5.5), Color(0.09, 0.085, 0.08))
@@ -60,12 +69,16 @@ func _build_approach(context: ZoneBuildContext) -> void:
 	for p in [Vector3(-4,0,-10.5), Vector3(4,0,-10.5), Vector3(-3.5,0,6), Vector3(3.5,0,6)]:
 		context.make_torch(p)
 	context.make_light("CastleGateLight", Vector3(0, 4.5, -10), Color(0.58, 0.55, 0.48), 3.0)
+	return true
+
+func _build_approach_routes(context: ZoneBuildContext) -> bool:
 	context.make_clue("vargan_mile_marker", "Inspect the worn Vargan marker", Vector3(-3.8, 0, 7), "main_blood_under_stone", "evidence_mile_marker", Color(0.34, 0.33, 0.30))
 	context.make_clue("vargan_supply_cart", "Inspect the broken military cart", Vector3(7, 0, 1), "main_blood_under_stone", "evidence_supply_cart", Color(0.32, 0.23, 0.14))
 	context.make_zone_gate("Return to the bandit road", Vector3(-7, 0, 16), "bandit_road", Vector3(0, 1, -12))
 	_make_castle_door(context, "Enter Castle Vargan", Vector3(0, 0, -12.2), "vargan_court", Vector3(0, 1, 12))
+	return true
 
-func _build_courtyard(context: ZoneBuildContext) -> void:
+func _build_courtyard(context: ZoneBuildContext) -> bool:
 	_base(context, "OuterCourtyard", Color(0.085, 0.082, 0.078), Vector2(46, 38))
 	context.make_road(Vector3(0, 0.02, 0), Vector3(8, 0.05, 32), Color(0.14, 0.135, 0.125))
 	_make_castle_route_surface(context, "vargan_court")
@@ -75,6 +88,9 @@ func _build_courtyard(context: ZoneBuildContext) -> void:
 	_make_gatehouse(context, Vector3(0, 0, 14))
 	for p in [Vector3(-9, 0, -10), Vector3(9, 0, -10), Vector3(-9, 0, 10), Vector3(9, 0, 10)]:
 		_make_tower(context, p, 6.0)
+	return true
+
+func _build_courtyard_workplaces(context: ZoneBuildContext) -> bool:
 	# Stable, forge, cistern, training yard, and servants' stair define the class-divided court.
 	context.make_reserved_collision_box("BrokenStable", Vector3(-13, 1.5, 1), Vector3(7, 3, 10))
 	_make_architecture(context, "VarganAuthoredStable", VarganStable, Vector3(-13, 0, 1))
@@ -88,6 +104,9 @@ func _build_courtyard(context: ZoneBuildContext) -> void:
 	for p in [Vector3(-5,0,10), Vector3(5,0,10), Vector3(-6,0,-10), Vector3(6,0,-10)]:
 		context.make_torch(p)
 	context.make_light("CourtyardColdLight", Vector3(0, 5, 0), Color(0.44, 0.48, 0.55), 2.6)
+	return true
+
+func _build_courtyard_people(context: ZoneBuildContext) -> bool:
 	context.make_named_interactable("vargan_gate_guard", "dialogue", "Speak to the gate guard", Vector3(-2.7, 0, 10.5), Color(0.28, 0.30, 0.33))
 	context.make_named_interactable("vargan_steward", "dialogue", "Speak to the castle steward", Vector3(2.5, 0, -4), Color(0.30, 0.25, 0.20))
 	var quality := context.quality_preset()
@@ -110,8 +129,9 @@ func _build_courtyard(context: ZoneBuildContext) -> void:
 	# asking the player to walk through the solid wing collision.
 	_make_castle_door(context, "Leave through the outer gate", Vector3(-10.5, 0, 16), "vargan_approach", Vector3(0, 1, -11))
 	_make_castle_door(context, "Enter the record hall", Vector3(0, 0, -14), "record_hall", Vector3(0, 1, 12))
+	return true
 
-func _build_record_hall(context: ZoneBuildContext) -> void:
+func _build_record_hall(context: ZoneBuildContext) -> bool:
 	# Extend the floor beyond the raised entry camera so its far box edge cannot
 	# project as a dark horizontal strip across the archive aisle.
 	_base(context, "RecordHall", Color(0.090, 0.077, 0.064), Vector2(34, 40))
@@ -126,6 +146,9 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 	_make_record_hall_vault(context)
 	_make_authored_record_hall_dressing(context)
 	_make_record_witness_memorial(context)
+	return true
+
+func _build_archive_records(context: ZoneBuildContext) -> bool:
 	# The invisible play-area boundary supplies the room edge. Do not add a
 	# visible side shell here: even a low plinth projects as a dark slab from
 	# the entry camera and hides the archive aisle.
@@ -163,6 +186,9 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 	context.make_light("RecordHallArchiveFill", Vector3(-8, 3.8, 1), Color(0.34, 0.40, 0.52), 2.0)
 	for p in [Vector3(-3,0,10), Vector3(3,0,10), Vector3(-3,0,-6), Vector3(3,0,-6)]:
 		context.make_torch(p)
+	return true
+
+func _build_archive_people(context: ZoneBuildContext) -> bool:
 	context.make_named_interactable("vargan_record_keeper", "dialogue", "Speak to the record keeper", Vector3(-4, 0, 9), Color(0.28, 0.24, 0.20))
 	var edric_testimony_pending := bool(context.get_story_flag("castle_haunting_cleared", false)) and str(context.get_story_flag("edric_stance", "")) == ""
 	if not edric_testimony_pending:
@@ -179,6 +205,7 @@ func _build_record_hall(context: ZoneBuildContext) -> void:
 	_make_castle_door(context, "Return to the outer courtyard", Vector3(-6, 0, 13), "vargan_court", Vector3(0, 1, -11))
 	if bool(context.get_story_flag("castle_haunting_cleared", false)):
 		_make_castle_door(context, "Descend toward the last witness", Vector3(6, 0, -13), "undercroft", Vector3(0, 1, 12))
+	return true
 
 func _make_gatehouse(context: ZoneBuildContext, pos: Vector3) -> void:
 	var landmark := Node3D.new()

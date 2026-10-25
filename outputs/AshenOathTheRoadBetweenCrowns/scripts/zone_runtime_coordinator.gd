@@ -240,8 +240,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	host.house_batch_data.clear()
 	host.house_module_batch_data.clear()
 	host.environment_batches_flushed = false
-	host.tree_collision_body = null
-	host.prop_collision_body = null
 	if host.player != null and host.player.has_method("cancel_beam_charge"):
 		host.player.cancel_beam_charge()
 	var previous_zone_id: String = host.current_zone_id

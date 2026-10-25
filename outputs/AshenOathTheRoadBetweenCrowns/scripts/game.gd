@@ -158,7 +158,12 @@ var material_cache: Dictionary = {}
 var runtime_light_count := 0
 var tree_batch_data: Array[Dictionary] = []
 var deadfall_batch_data: Array[Transform3D] = []
-var tree_collision_body: StaticBody3D
+var tree_collision_body: StaticBody3D:
+	get:
+		return ZoneBuildContext.existing_collision_batch(zone_root, "BatchedTreeCollisions")
+	set(_value):
+		# Legacy reset assignments cannot reassign a zone-owned body.
+		pass
 var route_zone_cache: Dictionary:
 	get: return zone_residency.route_zone_cache
 	set(value): zone_residency.route_zone_cache = value
@@ -202,7 +207,12 @@ var spatial_service: Node
 var zone_runtime_coordinator: ZoneRuntimeCoordinator
 var zone_residency := ZoneResidencyService.new()
 var environment_batches_flushed := false
-var prop_collision_body: StaticBody3D
+var prop_collision_body: StaticBody3D:
+	get:
+		return ZoneBuildContext.existing_collision_batch(zone_root, "BatchedPropCollisions")
+	set(_value):
+		# Keep legacy callers compatible without retaining another zone's body.
+		pass
 var pending_anwen_relocation := false
 var runtime_services: Node
 var performance_budget_monitor: PerformanceBudgetMonitor
@@ -609,6 +619,7 @@ func _process(delta: float) -> void:
 	if _journey_load_pending():
 		journey_loading.try_finish(self)
 		return
+	_record_first_control()
 	if input_router.consume_companion_menu_request():
 		_show_companion_commands()
 		return
@@ -672,7 +683,7 @@ func _ensure_gameplay_runtime() -> void:
 	if not runtime_services.is_complete():
 		return
 	gameplay_runtime_ready = true
-	quest_hud_coordinator.configure(quest_presentation, quests)
+	quest_hud_coordinator.configure(quest_presentation, quests, story_state)
 	_build_global_environment()
 	runtime_services.configure(self)
 	hud.revisit_covenant_requested.connect(func(): save_manager.load_pre_covenant(self))
@@ -825,9 +836,20 @@ func _perform_requested_zone_load() -> void:
 	requested_zone_id = ""
 	_load_zone_after_runtime_pack(destination, arrival)
 
-func _zone_encounter_packs(zone_id: String) -> Array[String]:
+func _zone_encounter_packs(zone_id: String, recorded_journey: Dictionary = {}) -> Array[String]:
 	var encounter_packs: Array[String] = []
-	if zone_id == "greyfen" and quests.is_active("main_bell_beneath_greyfen") and not _boss_is_resolved("bell_eater"):
+	if zone_id != "greyfen":
+		return encounter_packs
+	var bell_pending: bool
+	if recorded_journey.is_empty():
+		bell_pending = quests.is_active("main_bell_beneath_greyfen") and not _boss_is_resolved("bell_eater")
+	else:
+		var flags: Dictionary = recorded_journey.get("story_state", {}).get("flags", {})
+		var boss: Variant = recorded_journey.get("world_state", {}).get("boss_states", {}).get("bell_eater", {})
+		bell_pending = recorded_journey.get("quests", {}).get("active", {}).has("main_bell_beneath_greyfen") \
+			and not bool(flags.get("bell_eater_defeated", false)) and not bool(flags.get("bell_eater_legacy_retired", false)) \
+			and not (boss is Dictionary and str(boss.get("outcome", "")) == "defeated")
+	if bell_pending:
 		encounter_packs.append("monsters")
 	return encounter_packs
 
@@ -1089,10 +1111,11 @@ func _request_background_runtime_packs() -> void:
 		# retry mechanism so every background pack remains deferred as one batch.
 		_schedule_background_runtime_packs(BACKGROUND_RUNTIME_RETRY_SECONDS)
 		return
-	if runtime_packs.has_method("request_background_packs"):
-		runtime_packs.request_background_packs()
-	# Neighbor scene requests are also background work. Keep them behind the
-	# first playable frame so a cold New Game never waits on campaign metadata.
+	# Reuse already-mounted neighbor resources, but do not enqueue the entire
+	# campaign after a timer. Missing content belongs to the approached connection
+	# or explicit destination, not unrelated post-control background mounts.
+	# Recorded voices/foley retain their existing delayed availability owner.
+	runtime_packs.request_pack("audio", 1000)
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
 		zone_streaming.prewarm_neighbors(current_zone_id if current_zone_id != "" else "greyfen")
 
@@ -1261,6 +1284,7 @@ func _refresh_journey_models() -> void:
 
 func _request_journey_load(selection: Dictionary) -> void:
 	audio.play_event("ui")
+	print("JOURNEY: load_requested slot=%s source=%s" % [str(selection.get("slot_id", "")), str(selection.get("source", ""))])
 	save_manager.request_load(selection)
 
 func _open_journal_section(section_id: String) -> void:
@@ -1276,6 +1300,8 @@ func _apply_pending_player_restore() -> void:
 	pending_player_restore = {}
 	player.health_component.load_state(restore.health)
 	player.stamina_component.load_state(restore.stamina)
+	if not player.health_component.dead:
+		player.reset_for_journey_restore()
 	if player.has_method("load_equipment_state"):
 		player.load_equipment_state(restore.equipment)
 	_apply_progression_to_player()
@@ -1678,10 +1704,13 @@ func _zone_state_signature(zone_id: String = current_zone_id) -> int:
 	if story_world_state.get("flags") is Dictionary:
 		# Companion position/command is reinstalled separately, not world geometry.
 		story_world_state.flags.erase("bracken_travel")
+	var zone_removed: Dictionary = {}
+	for key: String in removed_interactions:
+		if key.begins_with(zone_id + ":"): zone_removed[key] = removed_interactions[key]
 	return hash([
 		story_world_state,
 		quest_world_state,
-		removed_interactions,
+		zone_removed,
 		str(settings.settings.get("quality_preset","balanced")) if settings != null else "balanced",
 	])
 
@@ -1722,13 +1751,22 @@ func _skinned_resource_fingerprint(branch: Node) -> String:
 
 func _record_loading_metrics(metrics: Dictionary) -> void:
 	last_loading_metrics = metrics
-	if game_started and not opening_startup_metrics.has("first_control_ms"):
-		opening_startup_metrics["first_control_ms"] = Time.get_ticks_msec()
-		if OS.has_feature("web"):
-			JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-first-control'));", false)
+	if game_started and not opening_startup_metrics.has("world_ready_ms"):
+		opening_startup_metrics["world_ready_ms"] = Time.get_ticks_msec()
 	transition_history.append(metrics.duplicate(true))
 	while transition_history.size() > MAX_TRANSITION_HISTORY:
 		transition_history.pop_front()
+
+func _record_first_control() -> void:
+	if opening_startup_metrics.has("first_control_ms") or not game_started or not is_instance_valid(player) or not player.can_control or player.transition_locked:
+		return
+	if opening_scene_pending or zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting or get_tree().paused or not input_router.is_gameplay_context():
+		return
+	if is_instance_valid(zone_root) and bool(zone_root.get_meta("opening_scene_active", false)):
+		return
+	opening_startup_metrics["first_control_ms"] = Time.get_ticks_msec()
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-first-control'));", false)
 
 func _create_owned_timer(seconds: float, ignore_time_scale: bool = false) -> Timer:
 	var timer := Timer.new()
@@ -6205,6 +6243,7 @@ func _make_shrine_scene(pos: Vector3) -> void:
 	shrine.position = pos
 	shrine.mesh = shrine_mesh
 	zone_root.add_child(shrine)
+	preload("res://scripts/camera_controller.gd").install_visual_clearance(shrine)
 	var shrine_tints := {
 		"medieval_brick": Color(0.68, 0.68, 0.62),
 		"plaster": Color(0.70, 0.71, 0.66),
@@ -6767,6 +6806,8 @@ func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
 		var actor: Node3D = supplied if is_instance_valid(supplied) and is_instance_valid(zone_root) and zone_root.is_ancestor_of(supplied) else null
 		if actor == null:
 			actor = zone_root.find_child(str(aliases.get(id, id)), true, false) as Node3D if zone_root != null else null
+		if actor == null and zone_root != null and id == "edric":
+			actor = zone_root.find_child("edric_castle", true, false) as Node3D
 		if actor == null and zone_root != null:
 			var witness: String = {"mira":"witness_-7", "rook":"witness_-3", "anwen":"witness_3"}.get(id, "")
 			if witness != "":
@@ -7087,6 +7128,8 @@ func _interaction_target_valid(area: Area3D) -> bool:
 func _set_interactable_label_visible(area: Node, visible: bool) -> void:
 	var label := area.find_child("InteractionWorldLabel", true, false) as Label3D
 	if label != null:
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.width = 240.0
 		label.visible = visible
 
 func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
@@ -7586,15 +7629,12 @@ func _make_tree(pos: Vector3) -> void:
 		"asset_role": tree_role,
 		"color": Color(0.055, 0.18, 0.085).lerp(Color(0.13, 0.24, 0.11), _scene_randf())
 	})
-	if tree_collision_body == null:
-		tree_collision_body = StaticBody3D.new()
-		tree_collision_body.name = "BatchedTreeCollisions"
-		zone_root.add_child(tree_collision_body)
+	var tree_body := ZoneBuildContext.collision_batch(zone_root, "BatchedTreeCollisions")
 	var shape := CollisionShape3D.new()
 	var box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(0.58, 3.6, 0.58))
 	shape.shape = box
 	shape.position = pos + Vector3(0, 2.1, 0)
-	tree_collision_body.add_child(shape)
+	tree_body.add_child(shape)
 
 func _make_tree_wall(axis_extent: float, fixed_pos: float, count: int, along_x: bool) -> void:
 	for i in range(count):
@@ -8148,11 +8188,7 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, ren
 		body.position = pos
 		zone_root.add_child(body)
 	elif not decorative_only:
-		if prop_collision_body == null:
-			prop_collision_body = StaticBody3D.new()
-			prop_collision_body.name = "BatchedPropCollisions"
-			zone_root.add_child(prop_collision_body)
-		body = prop_collision_body
+		body = ZoneBuildContext.collision_batch(zone_root, "BatchedPropCollisions")
 	if not decorative_only:
 		var shape := CollisionShape3D.new()
 		shape.name = "%sCollision" % name
@@ -8206,16 +8242,7 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, ren
 
 func _make_collision_box(name: String, pos: Vector3, size: Vector3) -> void:
 	# Fitted modular art and collision must not both render as overlapping shells.
-	if prop_collision_body == null:
-		prop_collision_body = StaticBody3D.new()
-		prop_collision_body.name = "BatchedPropCollisions"
-		zone_root.add_child(prop_collision_body)
-	var shape := CollisionShape3D.new()
-	shape.name = "%sCollision" % name
-	var box := preload("res://scripts/immutable_collision_shapes.gd").box(size)
-	shape.shape = box
-	shape.position = pos
-	prop_collision_body.add_child(shape)
+	ZoneBuildContext.add_collision_box(zone_root, name, pos, size)
 
 func _prop_requires_collision(lower_name: String) -> bool:
 	return lower_name.contains("wall") or lower_name.contains("fence") or lower_name.contains("rail") \

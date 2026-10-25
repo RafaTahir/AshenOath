@@ -10,19 +10,22 @@ var gate_count := 0
 var operation_count := 0
 var operations: Array[String] = []
 var owned_root: Node3D
+var _owns_destination := false
 var owned_fields: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var _first_step := true
 const SCOPED_FIELDS := ["zone_root", "current_zone_id", "spatial_service", "active_enemies",
 	"interaction_candidates", "interaction_area_cache", "interaction_area_cache_ready",
-	"runtime_light_count", "tree_batch_data", "deadfall_batch_data", "tree_collision_body",
+	"runtime_light_count", "tree_batch_data", "deadfall_batch_data",
 	"prop_batch_data", "visual_box_batch_data", "terrain_patch_batch_data", "house_batch_data",
-	"house_module_batch_data", "environment_batches_flushed", "prop_collision_body",
+	"house_module_batch_data", "environment_batches_flushed",
 	"world_props", "world_vfx", "encounter_spatial_index", "interaction_focus_dirty"]
 
 var zone_root: Node3D:
 	get:
-		return owned_root if is_instance_valid(owned_root) else _host.zone_root as Node3D
+		if _owns_destination:
+			return owned_root if is_instance_valid(owned_root) else null
+		return _host.zone_root as Node3D if is_instance_valid(_host) else null
 var quests:
 	get:
 		return _host.quests
@@ -44,21 +47,23 @@ func _init(game_host: Node, id: String, profile: String = "full") -> void:
 
 func own(root: Node3D, spatial: Node) -> void:
 	owned_root = root
+	_owns_destination = true
 	for field: String in SCOPED_FIELDS:
 		var value: Variant = _host.get(field)
 		if value is Array or value is Dictionary:
 			value = value.duplicate(); value.clear()
 		owned_fields[field] = value
 	owned_fields.merge({"zone_root":root,"current_zone_id":zone_id,"spatial_service":spatial,
-		"runtime_light_count":0,"tree_collision_body":null,"prop_collision_body":null,
+		"runtime_light_count":0,
 		"world_props":null,"world_vfx":null,"environment_batches_flushed":false,
 		"interaction_area_cache_ready":false,"interaction_focus_dirty":true,
 		"encounter_spatial_index":preload("res://scripts/actor_spatial_index.gd").new()},true)
 
-func run_step(action: Callable) -> void:
+func run_step(action: Callable) -> bool:
 	# The compatibility scope never yields: the active world is restored before
 	# any gameplay callback or subsequent construction step can execute.
-	assert(is_instance_valid(owned_root) and not _host.neighbor_building)
+	if not is_instance_valid(owned_root) or not is_instance_valid(_host) or _host.neighbor_building or not action.is_valid():
+		return false
 	var previous: Dictionary = {}
 	for field: String in SCOPED_FIELDS:
 		previous[field] = _host.get(field)
@@ -68,7 +73,7 @@ func run_step(action: Callable) -> void:
 	_host.neighbor_building = true
 	_host._begin_zone_world_reads(zone_id,_first_step)
 	_first_step = false
-	action.call(self)
+	var result: Variant = action.call(self)
 	_host._end_zone_world_reads()
 	for field: String in SCOPED_FIELDS:
 		owned_fields[field] = _host.get(field)
@@ -77,6 +82,7 @@ func run_step(action: Callable) -> void:
 	_host.scene_rng = previous_rng
 	preload("res://scripts/prepared_zone_geometry.gd").set_zone_scope(str(_host.current_zone_id))
 	_host.asset_helper.set_zone_scope(str(_host.current_zone_id))
+	return result is bool and result
 
 func use_scene_rng(seed_value: int) -> RandomNumberGenerator:
 	var previous: RandomNumberGenerator = _host.scene_rng
@@ -94,7 +100,11 @@ func is_opening_boot() -> bool:
 	return zone_id == "greyfen" and build_profile == "opening_boot"
 
 func add_node(node: Node, parent: Node = null) -> void:
+	if _owns_destination and not is_instance_valid(owned_root):
+		return
 	var target := parent if parent != null else zone_root
+	if not is_instance_valid(target):
+		return
 	target.add_child(node)
 	record_operation("add_node:%s" % str(node.name))
 
@@ -119,7 +129,9 @@ func is_objective_done(quest_id: String, objective_id: String) -> bool:
 	return quests.is_objective_done(quest_id, objective_id)
 
 func set_story_flag(flag_id: String, value: Variant) -> void:
-	if is_instance_valid(owned_root):
+	if _owns_destination:
+		if not is_instance_valid(owned_root):
+			return
 		var pending: Dictionary = owned_root.get_meta("prepared_story_flags",{})
 		pending[flag_id] = value
 		owned_root.set_meta("prepared_story_flags",pending)
@@ -220,7 +232,30 @@ func make_reserved_collision_box(id: String, pos: Vector3, size: Vector3) -> voi
 	_host._make_prop_box(id, pos, size, Color.WHITE, false)
 
 func make_collision_box(id: String, pos: Vector3, size: Vector3) -> void:
-	_host._make_collision_box(id, pos, size)
+	add_collision_box(zone_root, id, pos, size)
+
+static func existing_collision_batch(root: Node3D, batch_name: String) -> StaticBody3D:
+	return root.get_node_or_null(NodePath(batch_name)) as StaticBody3D if is_instance_valid(root) else null
+
+static func collision_batch(root: Node3D, batch_name: String) -> StaticBody3D:
+	if not is_instance_valid(root):
+		return null
+	var body := existing_collision_batch(root, batch_name)
+	if body == null:
+		body = StaticBody3D.new()
+		body.name = batch_name
+		root.add_child(body)
+	return body
+
+static func add_collision_box(root: Node3D, id: String, pos: Vector3, size: Vector3) -> void:
+	var body := collision_batch(root, "BatchedPropCollisions")
+	if body == null:
+		return
+	var shape := CollisionShape3D.new()
+	shape.name = "%sCollision" % id
+	shape.shape = preload("res://scripts/immutable_collision_shapes.gd").box(size)
+	shape.position = pos
+	body.add_child(shape)
 
 func make_visual_box(id: String, pos: Vector3, size: Vector3, color: Color):
 	return _host._make_visual_box(id, pos, size, color)

@@ -17,6 +17,10 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	if "--campaign-construction-only" in OS.get_cmdline_user_args():
+		await _campaign_construction_contract()
+		quit(0 if failures.is_empty() else 1)
+		return
 	if "--connected-greyfen-only" in OS.get_cmdline_user_args():
 		await _connected_greyfen_contract()
 		quit(0 if failures.is_empty() else 1)
@@ -108,6 +112,12 @@ func _connected_greyfen_contract() -> void:
 	if not await _wait_connected_playable(game,"greyfen"):
 		_check(false,"Greyfen did not become playable")
 	else:
+		var observer = preload("res://scripts/production_observation_bridge.gd").new()
+		game.add_child(observer)
+		var route: Dictionary = observer.route_for_id(game, "gate_wychwood")
+		_check(bool(route.get("physical_connection", false)) and bool(route.ok), "Read-only route did not follow the physical Greyfen/Wychwood connector")
+		if not route.points.is_empty():
+			_check(float(route.points.back().z) < -20.0 and absf(float(route.points.back().x) - 6.0) < 0.1, "Route stopped at the obsolete gate instead of the real dogleg")
 		for target: String in ["wychwood","deep_wood","vargan_approach"]:
 			if not await _connected_crossing(game,"greyfen",target): break
 			if not await _connected_crossing(game,target,"greyfen"): break
@@ -115,6 +125,50 @@ func _connected_greyfen_contract() -> void:
 	print("CONNECTED GREYFEN: %s (%d failures; native collision/build check, not browser input proof)" % ["PASS" if failures.is_empty() else "FAIL",failures.size()])
 	game.prepare_resource_shutdown()
 	await _frames(int(game.ZONE_RETIRE_FRAMES)+6)
+	game.finalize_resource_shutdown()
+	game.queue_free()
+	await _frames(24)
+
+func _campaign_construction_contract() -> void:
+	var game = (load("res://scenes/main.tscn") as PackedScene).instantiate()
+	root.add_child(game)
+	await _frames(4)
+	game.call("_new_game")
+	if await _wait_connected_playable(game, "greyfen"):
+		var service = game.seamless_world
+		service.cancel_preparation()
+		service._foreground = true
+		for zone: String in ["deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road", "vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade"]:
+			var source_root: Node3D = game.zone_root
+			var source_enemies: Array = game.active_enemies.duplicate()
+			var source_spatial: Node = game.spatial_service
+			var story_before: Dictionary = game.story_state.save_state().duplicate(true)
+			service._begin_neighbor(zone)
+			for step in range(service._construction_steps() + 2):
+				service._advance_preparation()
+				_check(game.zone_root == source_root and game.spatial_service == source_spatial and game.active_enemies == source_enemies and game.current_zone_id == "greyfen" and not game.neighbor_building, "Prepared step leaked active-world ownership: %s/%d" % [zone, step])
+				if service._neighbor_scope == null: break
+				await process_frame
+			_check(service._neighbor_state == "ready", "Campaign preparation failed: %s %s" % [zone, service.preparation_snapshot()])
+			_check(game.story_state.save_state() == story_before, "Unvisited prepared destination changed durable story: " + zone)
+			var prepared_root: Node3D = service._neighbor_scope.owned_root if service._neighbor_scope != null else null
+			service.cancel_preparation()
+			await _frames(3)
+			_check(not is_instance_valid(prepared_root), "Cancelled destination retained its scene tree: " + zone)
+			print("CAMPAIGN CONSTRUCTION: %s ready/cancel checked" % zone)
+		service._begin_neighbor("old_mill")
+		service._advance_preparation()
+		var partial: Node3D = service._neighbor_scope.owned_root if service._neighbor_scope != null else null
+		service.cancel_preparation()
+		await _frames(3)
+		_check(not is_instance_valid(partial), "Partial preparation cancellation retained its root")
+		service._foreground = false
+	else:
+		_check(false, "Greyfen did not become playable for construction checks")
+	for failure: String in failures: push_error(failure)
+	print("CAMPAIGN CONSTRUCTION CONTRACT: %s (construction/cancellation only; not route or story acceptance)" % ("PASS" if failures.is_empty() else "FAIL"))
+	game.prepare_resource_shutdown()
+	await _frames(int(game.ZONE_RETIRE_FRAMES) + 6)
 	game.finalize_resource_shutdown()
 	game.queue_free()
 	await _frames(24)

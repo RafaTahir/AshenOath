@@ -22,7 +22,19 @@ EXPECTED_FILES = {
     "release_manifest.json",
 }
 FORBIDDEN_SUFFIXES = {".map", ".debug", ".zip", ".blend"}
-ALLOWED_RUNTIME_SUBDIRECTORIES = {"packs"}
+ALLOWED_RUNTIME_SUBDIRECTORIES = {"packs", "engine"}
+ENGINE_FILES = ("index.js", "index.wasm", "index.audio.worklet.js", "index.audio.position.worklet.js")
+
+
+def engine_paths(release: dict) -> dict[str, str]:
+    engine = release.get("engine", {"executable": "index", "script": "index.js", "wasm": "index.wasm"})
+    if not isinstance(engine, dict):
+        raise ValueError("engine identity must be an object")
+    stem = str(engine.get("executable", ""))
+    if not re.fullmatch(r"(?:engine/[a-f0-9]{24}/)?index", stem) \
+            or engine.get("script") != stem + ".js" or engine.get("wasm") != stem + ".wasm":
+        raise ValueError("engine paths are inconsistent or outside the supported layout")
+    return {name: stem + name.removeprefix("index") for name in ENGINE_FILES}
 
 
 def mb(size: int) -> float:
@@ -131,6 +143,14 @@ def verify_release_identity(export_dir: Path, runtime: dict, release: dict) -> l
         for path in export_dir.rglob("*")
         if path.is_file() and path.name != "release_manifest.json"
     }
+    engines = engine_paths(release)
+    if engines["index.js"].startswith("engine/") and all(relative in actual for relative in engines.values()):
+        digest = hashlib.sha256(b"ashen-oath-engine:gzip-js-v1\0")
+        for name, relative in engines.items():
+            digest.update(name.encode("utf-8"))
+            digest.update(bytes.fromhex(sha256(actual[relative])))
+        if engines["index.js"] != f"engine/{digest.hexdigest()[:24]}/index.js":
+            failures.append("engine directory identity differs from its actual bytes")
     recorded = release.get("artifacts", [])
     recorded_by_path = {
         str(item.get("path", "")): item
@@ -155,15 +175,15 @@ def verify_release_identity(export_dir: Path, runtime: dict, release: dict) -> l
                     failures.append(f"compressed PCK identity is stale or invalid: {relative}")
             except (OSError, EOFError):
                 failures.append(f"compressed PCK is corrupt: {relative}")
-        if relative == "index.wasm" and path.read_bytes().startswith(b"\x1f\x8b"):
+        if relative in (engines["index.wasm"], engines["index.js"]) and path.read_bytes().startswith(b"\x1f\x8b"):
             try:
                 decoded = gzip.decompress(path.read_bytes())
-                if item.get("content_encoding") != "gzip" or not decoded.startswith(b"\x00asm") \
+                if item.get("content_encoding") != "gzip" or (relative == engines["index.wasm"] and not decoded.startswith(b"\x00asm")) \
                         or item.get("decoded_bytes") != len(decoded) \
                         or item.get("decoded_sha256") != hashlib.sha256(decoded).hexdigest():
-                    failures.append("compressed WebAssembly decoded identity is stale or invalid")
+                    failures.append(f"compressed engine decoded identity is stale or invalid: {relative}")
             except (OSError, EOFError):
-                failures.append("compressed WebAssembly is corrupt")
+                failures.append(f"compressed engine is corrupt: {relative}")
     expected_total = sum(path.stat().st_size for path in actual.values())
     if int(release.get("artifacts_total_bytes", -1)) != expected_total:
         failures.append("release artifact total is stale")
@@ -229,6 +249,13 @@ def main() -> int:
             failures.append(f"unable to compare runtime pack manifest: {exc}")
 
     root_paths = {path.name: path for path in export_dir.iterdir() if path.is_file()}
+    release = {}
+    try:
+        release = json.loads((export_dir / "release_manifest.json").read_text(encoding="utf-8-sig"))
+        engines = engine_paths(release)
+    except (OSError, ValueError, TypeError) as exc:
+        failures.append(f"invalid release engine layout: {exc}")
+        engines = {name: name for name in ENGINE_FILES}
     nested_paths = {}
     for directory in export_dir.iterdir():
         if not directory.is_dir():
@@ -240,7 +267,8 @@ def main() -> int:
             if path.is_file():
                 nested_paths[path.relative_to(export_dir).as_posix()] = path
     paths = {**root_paths, **nested_paths}
-    missing = sorted(EXPECTED_FILES - root_paths.keys())
+    expected = (EXPECTED_FILES - set(ENGINE_FILES)) | set(engines.values())
+    missing = sorted(expected - paths.keys())
     extras = sorted(root_paths.keys() - EXPECTED_FILES)
     if missing:
         failures.append("missing files: " + ", ".join(missing))
@@ -258,21 +286,22 @@ def main() -> int:
     html = paths.get("index.html")
     if html:
         html_text = html.read_text(encoding="utf-8", errors="ignore")
-        for runtime_name in ("index.js", "index.wasm", "index.pck"):
+        for runtime_name in (engines["index.js"], engines["index.wasm"], "index.pck"):
             if runtime_name not in html_text:
                 failures.append(f"index.html does not reference {runtime_name}")
         # Godot injects the runtime byte sizes into the custom shell. A stale
         # size makes the visible progress bar claim readiness before the PCK is
         # actually available, so treat the shell/artifact pair as one contract.
-        size_match = re.search(r'"fileSizes"\s*:\s*\{([^{}]*)\}', html_text)
-        if size_match is None:
-            failures.append("index.html is missing the generated Engine fileSizes contract")
-        else:
-            declared_sizes = {
-                name: int(value)
-                for name, value in re.findall(r'"(index\.(?:wasm|pck))"\s*:\s*(\d+)', size_match.group(1))
-            }
-            for runtime_name in ("index.wasm", "index.pck"):
+        config_match = re.search(r"const GODOT_CONFIG\s*=\s*(\{[^\n]+\});", html_text)
+        try:
+            config = json.loads(config_match.group(1)) if config_match else {}
+            declared_sizes = config.get("fileSizes", {})
+            if not declared_sizes:
+                failures.append("index.html is missing the generated Engine fileSizes contract")
+            expected_stem = engines["index.js"].removesuffix(".js")
+            if config.get("executable") != expected_stem or config.get("mainPack", "index.pck") != "index.pck":
+                failures.append("index.html executable/mainPack differs from the exported engine layout")
+            for runtime_name in (engines["index.wasm"], "index.pck"):
                 actual_path = paths.get(runtime_name)
                 declared = declared_sizes.get(runtime_name)
                 if actual_path is None or declared is None:
@@ -284,6 +313,8 @@ def main() -> int:
                         f"index.html fileSizes.{runtime_name}={declared} does not match "
                         f"artifact bytes {actual_path.stat().st_size}"
                     )
+        except (ValueError, TypeError, AttributeError):
+            failures.append("index.html generated Engine configuration is invalid")
 
     total_bytes = sum(path.stat().st_size for path in paths.values())
     if mb(total_bytes) >= MAX_TOTAL_MB:
@@ -296,6 +327,8 @@ def main() -> int:
         failures.append("empty runtime files: " + ", ".join(sorted(empty)))
 
     for name, path in nested_paths.items():
+        if name.startswith("engine/") and name not in engines.values():
+            failures.append(f"unexpected engine file: {name}")
         if Path(name).suffix.lower() in FORBIDDEN_SUFFIXES:
             failures.append(f"forbidden development file: {name}")
         if Path(name).suffix.lower() == ".pck":

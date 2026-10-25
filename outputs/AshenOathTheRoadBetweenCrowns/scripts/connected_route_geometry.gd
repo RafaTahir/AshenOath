@@ -79,13 +79,13 @@ static func install(context: ZoneBuildContext) -> void:
 				var outward := (side[i]-points[i]).normalized()
 				crest.append(side[i]+outward*1.3+Vector3.UP*(4.5 if stone else 5.4+sin(float(i)*1.7)*0.35))
 				outer.append(side[i]+outward*4.0)
-			_strip(path,"Bank",side,crest,banks,true)
-			_strip(path,"BackSlope",crest,outer,banks,false)
+			_strip(path,"Bank",side,crest,banks,true,"bank" if not stone else "")
+			_strip(path,"BackSlope",crest,outer,banks,false,"backslope" if not stone else "")
 		# Cover only the bends, keeping the entrance and regional view open.
 		# This also makes the normal collision-safe camera respect the passage.
 		var roof_left := PackedVector3Array([left[1]+Vector3.UP*4.5,left[2]+Vector3.UP*4.5])
 		var roof_right := PackedVector3Array([right[1]+Vector3.UP*4.5,right[2]+Vector3.UP*4.5])
-		_strip(path,"BendArch",roof_left,roof_right,banks,true)
+		_strip(path,"BendArch",roof_left,roof_right,banks,true,"arch" if not stone else "")
 		_make_gate(path,edge,width,timber)
 		path.set_meta("required_ground",true)
 		var marker := context.zone_root.find_child("gate_"+str(edge.target),true,false) as Node3D
@@ -148,12 +148,12 @@ static func _gate_collision(gate: Node, enabled: bool) -> void:
 		body.collision_layer = 1 if enabled else 0
 		body.collision_mask = 1 if enabled else 0
 
-static func _strip(parent: Node3D, name: String, left: PackedVector3Array, right: PackedVector3Array, material: Material, collision: bool) -> void:
-	var key := var_to_bytes([left,right]).hex_encode()
+static func _strip(parent: Node3D, name: String, left: PackedVector3Array, right: PackedVector3Array, material: Material, collision: bool, profile: String = "") -> void:
+	var key := var_to_bytes([left,right,profile]).hex_encode()
 	var reference: WeakRef = _meshes.get(key)
 	var mesh: ArrayMesh = reference.get_ref() if reference != null else null
 	if mesh == null:
-		mesh = _build_strip(left,right)
+		mesh = _build_contoured_strip(left,right,profile) if profile != "" else _build_strip(left,right)
 		_meshes[key] = weakref(mesh)
 	var visual := MeshInstance3D.new()
 	visual.name = name
@@ -172,6 +172,44 @@ static func _strip(parent: Node3D, name: String, left: PackedVector3Array, right
 		shape.shape = triangles
 		body.add_child(shape)
 		visual.add_child(body)
+
+static func _build_contoured_strip(left: PackedVector3Array, right: PackedVector3Array, profile: String) -> ArrayMesh:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var distance := 0.0
+	const CROSS_SECTIONS := 4
+	for segment in range(left.size() - 1):
+		var length := left[segment].distance_to(left[segment + 1])
+		var sections := maxi(2, ceili(length / 1.4))
+		for section in sections:
+			for across in CROSS_SECTIONS:
+				var corners: Array[Vector3] = []
+				var uvs: Array[Vector2] = []
+				for corner: Vector2i in [Vector2i(0,0),Vector2i(1,0),Vector2i(1,1),Vector2i(0,1)]:
+					var u := float(section + corner.x) / sections
+					var v := float(across + corner.y) / CROSS_SECTIONS
+					var inner := left[segment].lerp(left[segment + 1], u)
+					var outer := right[segment].lerp(right[segment + 1], u)
+					var point := inner.lerp(outer, v)
+					var ridge := outer if profile == "bank" else inner
+					var undulation := sin(ridge.x * 1.13 + ridge.z * 0.67) * 0.22 + cos(ridge.x * 0.47 - ridge.z * 1.31) * 0.12
+					if profile == "arch":
+						point.y += sin(v * PI) * 0.70
+					else:
+						var crest_weight := v if profile == "bank" else 1.0 - v
+						point.y += undulation * crest_weight
+						var outward := outer - inner
+						outward.y = 0.0
+						# Never push a bank inward across the retained walkable edge.
+						point += outward.normalized() * sin(v * PI) * (0.10 + 0.10 * sin(point.x * 2.1 + point.z * 1.7))
+					corners.append(point)
+					uvs.append(Vector2(v * 2.0, distance + u * length) * 0.35)
+				for vertex in [0,2,3,0,1,2]:
+					surface.set_uv(uvs[vertex])
+					surface.add_vertex(corners[vertex])
+		distance += length
+	surface.generate_normals()
+	return surface.commit()
 
 static func _build_strip(left: PackedVector3Array, right: PackedVector3Array) -> ArrayMesh:
 	var surface := SurfaceTool.new()

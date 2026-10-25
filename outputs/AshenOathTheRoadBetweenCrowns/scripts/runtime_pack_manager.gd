@@ -398,6 +398,15 @@ func cancel_request(pack_id: String) -> void:
 	var request: Dictionary = requests.get(id, {})
 	if request.is_empty() or get_state(id) == "ready":
 		return
+	_stop_pack_transfer(id, request)
+	request["state"] = "cancelled"
+	request["error"] = ""
+	requests[id] = request
+	pack_cancelled.emit(id)
+	_emit_startup_progress()
+	_start_pending_downloads()
+
+func _stop_pack_transfer(id: String, request: Dictionary) -> void:
 	if OS.has_feature("web") and get_state(id) == "shell_loading":
 		JavaScriptBridge.eval("window.__ashenOathCancelPack && window.__ashenOathCancelPack(%s)" % JSON.stringify(id), true)
 	var downloader := downloaders.get(id) as HTTPRequest
@@ -408,12 +417,6 @@ func cancel_request(pack_id: String) -> void:
 		if active_download_id == id:
 			active_download_id = _first_active_download_id()
 	_remove_file(str(request.get("temp_path", "")))
-	request["state"] = "cancelled"
-	request["error"] = ""
-	requests[id] = request
-	pack_cancelled.emit(id)
-	_emit_startup_progress()
-	_start_pending_downloads()
 
 func clear_requests() -> void:
 	var was_scheduling := scheduling_downloads
@@ -478,11 +481,11 @@ func _start_pending_downloads() -> void:
 			var id := str(value)
 			if foreground_pending and id not in foreground_pack_ids:
 				continue
-			if get_state(id) in ["queued", "verified"]:
+			if get_state(id) in ["queued", "shell_loading", "downloading", "verifying", "verified", "mounting"]:
 				var failed_dependency := ""
 				for dependency in get_pack(id).get("dependencies", []):
-					if get_state(str(dependency)) == "failed":
-						failed_dependency = "Dependency %s failed: %s" % [dependency, get_last_error(str(dependency))]
+					if get_state(str(dependency)) in ["failed", "cancelled"]:
+						failed_dependency = "Dependency %s is %s: %s" % [dependency, get_state(str(dependency)), get_last_error(str(dependency))]
 						break
 				if failed_dependency != "":
 					_fail(id, failed_dependency)
@@ -493,15 +496,6 @@ func _start_pending_downloads() -> void:
 				started = true
 				break
 			if get_state(id) == "queued":
-				var dependency_error := ""
-				for dependency in get_pack(id).get("dependencies", []):
-					if get_state(str(dependency)) in ["failed", "cancelled"]:
-						dependency_error = "Dependency %s is %s: %s" % [dependency, get_state(str(dependency)), get_last_error(str(dependency))]
-						break
-				if dependency_error != "":
-					_fail(id, dependency_error)
-					started = true
-					break
 				if active_downloads.size() >= download_limit:
 					continue
 				_start_download(id)
@@ -730,6 +724,7 @@ func _mark_mounted(id: String, path: String) -> void:
 
 func _fail(id: String, reason: String) -> void:
 	var request: Dictionary = requests.get(id, {}).duplicate()
+	_stop_pack_transfer(id, request)
 	request["state"] = "failed"
 	request["progress"] = 0.0
 	request["error"] = reason

@@ -402,6 +402,7 @@ func _build_authored_greyfen_details(context: ZoneBuildContext, segment: int = -
 		var shrine_arch: Node3D = context.make_fitted_environment_role("castle_arch", Vector3(6.0, 0.0, -7.75), Vector3(2.70, 2.22, 0.24), 0.0, false)
 		if shrine_arch != null:
 			shrine_arch.name = "GreyfenShrineStoneArch"
+			preload("res://scripts/camera_controller.gd").install_visual_clearance(shrine_arch)
 			if shrine_arch is MeshInstance3D:
 				(shrine_arch as MeshInstance3D).material_override = context.make_world_material("medieval_brick", Color(0.72, 0.75, 0.70))
 		_mark_detail(layer, "GreyfenShrineArchDetail")

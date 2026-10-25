@@ -19,19 +19,43 @@ const SECTIONS := {
 	"hart_glade":{"back":"assembly","next":"","color":Color(0.075,0.10,0.085)}
 }
 
+var _step_zone := ""
+var _section: RefCounted
+var _steps: Array[Callable] = []
+
+func step_count(zone_id: String) -> int:
+	_prepare_steps(zone_id)
+	return _steps.size()
+
+func build_step(context: ZoneBuildContext, index: int) -> bool:
+	_prepare_steps(context.zone_id)
+	if index < 0 or index >= _steps.size(): return false
+	return _steps[index].call(context) == true
+
+func _prepare_steps(zone_id: String) -> void:
+	if _step_zone == zone_id: return
+	_step_zone = zone_id
+	_steps.clear()
+	if zone_id in CampaignWildernessSection.ZONES:
+		_section = CampaignWildernessSection.new()
+	elif zone_id in BanditRoadSection.ZONES:
+		_section = BanditRoadSection.new()
+	elif zone_id in CampaignFinaleSection.ZONES:
+		_section = CampaignFinaleSection.new()
+	elif zone_id in CastleVarganSection.CASTLE_ZONES:
+		_section = CastleVarganSection.new()
+	else:
+		_section = null
+	if _section != null:
+		_steps = _section.construction_steps(zone_id)
+
 func build(context: ZoneBuildContext) -> void:
 	var zone_id := context.zone_id
-	if zone_id in CampaignWildernessSection.ZONES:
-		CampaignWildernessSection.new().build(context)
-		return
-	if zone_id in BanditRoadSection.ZONES:
-		BanditRoadSection.new().build(context)
-		return
-	if zone_id in CampaignFinaleSection.ZONES:
-		CampaignFinaleSection.new().build(context)
-		return
-	if zone_id in CastleVarganSection.CASTLE_ZONES:
-		CastleVarganSection.new().build(context)
+	if step_count(zone_id) > 0:
+		for index in range(_steps.size()):
+			if not build_step(context, index):
+				push_error("Campaign construction failed: %s step %d" % [zone_id, index])
+				return
 		return
 	var definition: Dictionary = SECTIONS[zone_id]
 	var ground_color: Color = definition.color

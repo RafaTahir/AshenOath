@@ -8,6 +8,16 @@ const StoryActorPresence = preload("res://scripts/story_actor_presence.gd")
 const ZONES := ["bandit_road"]
 
 func build(context: ZoneBuildContext) -> void:
+	for step: Callable in construction_steps(context.zone_id):
+		if step.call(context) != true:
+			push_error("Road construction failed")
+			return
+
+func construction_steps(zone_id: String) -> Array[Callable]:
+	if zone_id != "bandit_road": return []
+	return [_build_ground, _build_checkpoint, _build_surroundings, _build_people, _build_routes]
+
+func _build_ground(context: ZoneBuildContext) -> bool:
 	var ground := Color(0.105, 0.085, 0.058)
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(44, 0.16, 38), ground)
 	context.make_play_area_bounds(44.0, 38.0, ground.darkened(0.38))
@@ -20,9 +30,13 @@ func build(context: ZoneBuildContext) -> void:
 	var authored := Node3D.new()
 	authored.name = "AuthoredBanditRoad"
 	context.add_node(authored)
+	return true
 
+func _build_checkpoint(context: ZoneBuildContext) -> bool:
 	_make_checkpoint(context)
+	return true
 
+func _build_surroundings(context: ZoneBuildContext) -> bool:
 	# Camp structures are beyond both the testimony clearing and east approach.
 	context.make_loose_role("cart", Vector3(-8.5, 0, 4.0), Vector3.ONE * 0.68, 12.0)
 	for position in [Vector3(4.3, 0, -2.0), Vector3(11.7, 0, 2.7)]:
@@ -36,7 +50,9 @@ func build(context: ZoneBuildContext) -> void:
 	# Vargan boundary and blocked a player-sized capsule before the edge.
 	for position in [Vector3(-9, 0, -9), Vector3(16, 0, 12), Vector3(-10, 0, 11)]:
 		context.make_rubble(position)
+	return true
 
+func _build_people(context: ZoneBuildContext) -> bool:
 	if StoryActorPresence.remains("captain_senn", str(context.get_story_flag("senn_fate", ""))):
 		context.make_named_interactable("captain_senn", "dialogue", "Confront Captain Senn", Vector3(8.7, 0, -1.2), Color(0.34, 0.20, 0.13))
 	if context.is_quest_active("side_soldiers_debt") and not context.is_objective_done("side_soldiers_debt", "find_deserters"):
@@ -48,11 +64,15 @@ func build(context: ZoneBuildContext) -> void:
 			if guard != null:
 				guard.set_meta("senn_guard", true)
 				guard.leash_radius = 8.0
+	return true
 
+func _build_routes(context: ZoneBuildContext) -> bool:
+	var ground := Color(0.105, 0.085, 0.058)
 	context.make_zone_gate("Return to the marsh crossing", Vector3(-7, 0, 16.5), "marsh_crossing", Vector3(0, 1, -12))
 	for point in [Vector3(8, 0.02, 5.8), Vector3(12, 0.02, 7), Vector3(16, 0.02, 7), Vector3(19, 0.02, 7)]:
 		context.make_terrain_patch("VarganEastRoad", point, Vector3(4.5, 0.025, 3.5), ground.lightened(0.12))
 	context.make_zone_gate("Follow the Vargan road east", Vector3(20, 0, 7), "vargan_approach", Vector3(-16, 1, 16))
+	return true
 
 func _make_checkpoint(context: ZoneBuildContext) -> void:
 	for x in [-7.5, 7.5]:

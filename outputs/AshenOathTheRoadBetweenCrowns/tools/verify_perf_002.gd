@@ -9,7 +9,14 @@ const REPEAT_ROUTE: Array[String] = [
 
 var failures := 0
 
+class TickProbe extends Node:
+	var ticks := 0
+	func _process(_delta: float) -> void: ticks += 1
+
 func _initialize() -> void:
+	if "--anchor-contract-only" in OS.get_cmdline_user_args():
+		call_deferred("_anchor_contract")
+		return
 	var scene := load("res://scenes/main.tscn") as PackedScene
 	check(scene != null, "Main scene is unavailable")
 	if scene == null:
@@ -46,6 +53,52 @@ func _initialize() -> void:
 	game.queue_free()
 	await _frames(5)
 	_finish()
+
+func _anchor_contract() -> void:
+	var residency = preload("res://scripts/zone_residency_service.gd").new()
+	root.add_child(residency)
+	residency.configure(func(_branch: Node): pass)
+	var zone := Node3D.new()
+	root.add_child(zone)
+	var actor := Node3D.new()
+	zone.add_child(actor)
+	var body := StaticBody3D.new()
+	body.process_mode = Node.PROCESS_MODE_PAUSABLE
+	actor.add_child(body)
+	var collision := CollisionShape3D.new()
+	collision.shape = BoxShape3D.new()
+	body.add_child(collision)
+	var worker := TickProbe.new()
+	worker.process_mode = Node.PROCESS_MODE_ALWAYS
+	actor.add_child(worker)
+	var skeleton := Skeleton3D.new()
+	skeleton.add_bone("root")
+	actor.add_child(skeleton)
+	var mesh := MeshInstance3D.new()
+	mesh.mesh = BoxMesh.new()
+	var skin := Skin.new()
+	skin.add_bind(0, Transform3D.IDENTITY)
+	mesh.skin = skin
+	skeleton.add_child(mesh)
+	await physics_frame
+	await process_frame
+	var ray := PhysicsRayQueryParameters3D.create(Vector3(0, 2, 0), Vector3(0, -2, 0), 1)
+	check(not zone.get_world_3d().direct_space_state.intersect_ray(ray).is_empty(), "Anchor fixture has no initial physics body")
+	residency._anchor_shared_skinned_resources(zone)
+	var ticks := worker.ticks
+	await _frames(3)
+	await physics_frame
+	check(residency.skinned_resource_anchors.size() == 1, "Shared skin resource was not retained")
+	check(worker.ticks == ticks, "Retired skin anchor still processes explicit ALWAYS descendants")
+	check(body.collision_layer == 0 and body.collision_mask == 0, "Retired skin anchor retains active collision")
+	check(zone.get_world_3d().direct_space_state.intersect_ray(ray).is_empty(), "Retired skin anchor still blocks the active physics world")
+	residency.release_shared_anchors()
+	residency.release_material_anchors()
+	zone.free()
+	residency.free()
+	await _frames(3)
+	print("RETIRED ANCHOR CONTRACT: %s (resource lifetime, processing and physics only)" % ("PASS" if failures == 0 else "FAIL"))
+	quit(0 if failures == 0 else 1)
 
 func _visit_zone(game, zone_id: String) -> void:
 	game.call("_load_zone", zone_id, Vector3(0, 1, 7))

@@ -1,6 +1,8 @@
 extends Node
 
 signal changed(settings: Dictionary)
+signal storage_written(path: String)
+signal storage_failed(path: String, detail: String)
 
 const SETTINGS_PATH := "user://ashen_oath_settings.json"
 const DEFAULT_SETTINGS := {
@@ -180,14 +182,23 @@ func _save_settings() -> void:
 		loaded_user_settings = true
 	var file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	if file != null:
-		file.store_string(JSON.stringify(settings))
+		var content := JSON.stringify(settings)
+		file.store_string(content)
 		file.flush()
+		var write_error := file.get_error()
 		file.close()
-		if OS.has_feature("web") and not _browser_sync_pending:
+		if write_error != OK or FileAccess.get_file_as_string(SETTINGS_PATH) != content:
+			persistence_available = false
+			storage_failed.emit(SETTINGS_PATH, "Preferences could not be written completely. Keep this session open and try saving them again.")
+			return
+		persistence_available = true
+		storage_written.emit(SETTINGS_PATH)
+		if OS.has_feature("web") and storage_written.get_connections().is_empty() and not _browser_sync_pending:
 			_browser_sync_pending = true
 			call_deferred("_sync_browser_settings")
 	else:
 		persistence_available = false
+		storage_failed.emit(SETTINGS_PATH, "Preferences could not be written. Keep this session open and try saving them again.")
 		push_warning("Settings persistence unavailable in this runtime: %s" % FileAccess.get_open_error())
 
 func _sync_browser_settings() -> void:

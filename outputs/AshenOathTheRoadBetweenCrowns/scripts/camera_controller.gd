@@ -68,6 +68,28 @@ var _camera_probe := SphereShape3D.new()
 
 signal target_lock_changed(target: Node3D, locked: bool)
 
+static func install_visual_clearance(root: Node3D) -> void:
+	var meshes := root.find_children("*", "MeshInstance3D", true, false)
+	if root is MeshInstance3D:
+		meshes.push_front(root)
+	for raw: Node in meshes:
+		var visual := raw as MeshInstance3D
+		if visual.mesh == null or visual.skin != null or visual.has_node("CameraVisualClearance"):
+			continue
+		var triangles := preload("res://scripts/immutable_collision_shapes.gd").camera_mesh(visual.mesh)
+		if triangles == null:
+			continue
+		# Exact static surfaces keep arches open; only camera queries see them.
+		var body := StaticBody3D.new()
+		body.name = "CameraVisualClearance"
+		body.collision_layer = 1 << 6
+		body.collision_mask = 0
+		body.set_meta("walkable_support", false)
+		var shape := CollisionShape3D.new()
+		shape.shape = triangles
+		body.add_child(shape)
+		visual.add_child(body)
+
 func setup(follow_target: Node3D, source: Node = null) -> void:
 	target = follow_target
 	_camera_probe.radius = 0.22
@@ -502,24 +524,38 @@ func _dialogue_actor_bounds(actor: Node3D) -> AABB:
 	return combined if found else AABB(actor.global_position + Vector3(-0.35, 0, -0.35), Vector3(0.7, 1.7, 0.7))
 
 func _resolve_dialogue_camera(focus: Vector3, desired: Vector3, actor: Node3D) -> Vector3:
-	var bounds := _dialogue_actor_bounds(actor).grow(0.30)
+	var actor_bounds := _dialogue_actor_bounds(actor)
+	var bounds := actor_bounds.grow(0.30)
 	var best := _collide_camera(focus, desired)
+	var best_visible := -1
+	var sightlines: Array[Vector3] = [focus, target.global_position + Vector3.UP * 1.30,
+		actor_bounds.position + actor_bounds.size * Vector3(0.5, 0.82, 0.5)]
+	var exclusions: Array[RID] = []
+	if target is CollisionObject3D:
+		exclusions.append(target.get_rid())
+	if actor is CollisionObject3D:
+		exclusions.append(actor.get_rid())
 	for angle in [0.0, 30.0, -30.0, 60.0, -60.0, 90.0, -90.0, 180.0]:
 		var candidate := _collide_camera(focus, focus + Basis(Vector3.UP, deg_to_rad(angle)) * (desired - focus))
 		if bounds.has_point(candidate) or candidate.distance_to(target.global_position + Vector3.UP * 1.3) < 0.65:
 			continue
-		var query: PhysicsRayQueryParameters3D = _query_scratch.ray(candidate, focus, 1 | (1 << 6))
-		query.exclude = [target.get_rid()] if target is CollisionObject3D else []
-		query.hit_from_inside = true
-		if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+		var visible := 0
+		for point: Vector3 in sightlines:
+			var query: PhysicsRayQueryParameters3D = _query_scratch.ray(candidate, point, 1 | (1 << 6))
+			query.exclude = exclusions
+			query.hit_from_inside = true
+			if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+				visible += 1
+		if visible == sightlines.size():
 			return candidate
-		if bounds.has_point(best):
+		if visible > best_visible:
 			best = candidate
+			best_visible = visible
 	return best
 
 func _place_dialogue_camera(position: Vector3) -> void:
-	var actor: Node3D = _dialogue_actor.get_ref() as Node3D if _dialogue_actor != null else null
-	camera.global_position = _resolve_dialogue_camera(_dialogue_focus, position, actor) if is_instance_valid(actor) else _collide_camera(_dialogue_focus, position)
+	# Choose the composition once, not another orbit angle on every tween tick.
+	camera.global_position = _collide_camera(_dialogue_focus, position)
 
 func shake(amount: float) -> void:
 	if reduce_flashes:

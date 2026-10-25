@@ -7,6 +7,7 @@ const BridgeContract = preload("res://scripts/bridge_surface_contract.gd")
 
 var presentation: Node
 var quests: Node
+var story_state: Node
 var dirty := true
 var cache_valid := false
 var last_position := Vector3.ZERO
@@ -83,6 +84,8 @@ func _navigation_dial_geometry(zone_id: String, spatial_source: Node, zone_root:
 		var center: Vector3 = raw_exclusion.get("center", Vector3.ZERO)
 		var half_size: Vector2 = raw_exclusion.get("half_size", Vector2.ZERO)
 		terrain.append({"kind": "obstacle", "points": _dial_rect_points(Rect2(Vector2(center.x, center.z) - half_size, half_size * 2.0))})
+	for edge: Dictionary in SectorManifest.connections(zone_id):
+		terrain.append({"kind": "road", "points": SectorManifest.connector_polygon(edge)})
 	_dial_geometry_key = key
 	_dial_geometry = {"bounds": bounds, "terrain": terrain, "spatial_revision": key}
 	return _dial_geometry
@@ -111,12 +114,20 @@ func _navigation_dial_markers(view: Dictionary, player: Node3D, zone_id: String,
 				selected = candidate
 	else:
 		kind = "passage"
+		var local_position: Vector3 = zone_root.to_local(player.global_position) if is_instance_valid(zone_root) else player.global_position
+		var connection := _physical_connection(zone_id, destination, local_position)
+		if not connection.is_empty():
+			markers.append({"id": "road_" + str(connection.target), "kind": kind,
+				"position": _connector_waypoint(connection, local_position),
+				"label": "Road to " + RouteCatalog.zone_name(str(connection.target))})
+			return markers
 		var best_steps: int = 999
+		var available := SectorManifest.available_neighbors(zone_id, quests, story_state)
 		for candidate: Variant in candidates:
 			if not _dial_candidate_eligible(candidate, zone_root) or str(candidate.get("interaction_type")) != "zone":
 				continue
 			var target_zone: String = str(candidate.get("zone_target"))
-			if target_zone == "":
+			if target_zone == "" or target_zone not in available:
 				continue
 			var steps: int = _steps_to(target_zone, destination, zone_id)
 			var distance: float = candidate.global_position.distance_squared_to(player.global_position)
@@ -137,9 +148,46 @@ func _dial_candidate_eligible(candidate: Variant, zone_root: Node3D) -> bool:
 		return false
 	return not is_instance_valid(zone_root) or zone_root.is_ancestor_of(candidate)
 
-func configure(view_source: Node, quest_manager: Node) -> void:
+func configure(view_source: Node, quest_manager: Node, state: Node = null) -> void:
 	presentation = view_source
 	quests = quest_manager
+	story_state = state
+
+func _physical_connection(zone_id: String, destination: String, position: Vector3) -> Dictionary:
+	var best: Dictionary = {}
+	var best_steps := 999
+	var nearest := INF
+	for edge: Dictionary in SectorManifest.connections(zone_id):
+		if not SectorManifest.edge_available(edge, quests, story_state):
+			continue
+		var steps := _steps_to(str(edge.target), destination, zone_id)
+		if steps < 0:
+			continue
+		var distance := position.distance_squared_to(SectorManifest.connector_points(edge)[0])
+		if steps < best_steps or (steps == best_steps and distance < nearest):
+			best = edge
+			best_steps = steps
+			nearest = distance
+	return best
+
+func _connector_waypoint(edge: Dictionary, position: Vector3) -> Vector2:
+	var points := SectorManifest.connector_points(edge)
+	var player := Vector2(position.x, position.z)
+	if not Geometry2D.is_point_in_polygon(player, SectorManifest.connector_polygon(edge, 0.4)):
+		return Vector2(points[0].x, points[0].z)
+	var closest_segment := 0
+	var distance := INF
+	for index in range(points.size() - 1):
+		var a := Vector2(points[index].x, points[index].z)
+		var b := Vector2(points[index + 1].x, points[index + 1].z)
+		var candidate := player.distance_squared_to(Geometry2D.get_closest_point_to_segment(player, a, b))
+		if candidate < distance:
+			distance = candidate
+			closest_segment = index
+	var next := closest_segment + 1
+	if next < points.size() - 1 and player.distance_to(Vector2(points[next].x, points[next].z)) < 0.8:
+		next += 1
+	return Vector2(points[next].x, points[next].z)
 
 func refresh_tracker(hud: Node, refresh_presentation: Callable) -> void:
 	dirty = true
@@ -261,20 +309,24 @@ func _eligible(candidate) -> bool:
 	return candidate.has_method("get_context_prompt")
 
 func _next_exit_hint(zone_id: String, destination: String, candidates: Array) -> String:
+	var connection := _physical_connection(zone_id, destination, Vector3.ZERO)
+	if not connection.is_empty():
+		return "Take the %s road toward %s" % [str(connection.id), RouteCatalog.zone_name(destination)]
 	var best_gate = null
 	var best_steps := 999
+	var available := SectorManifest.available_neighbors(zone_id, quests, story_state)
 	for candidate in candidates:
 		if not _eligible(candidate) or str(candidate.get("interaction_type")) != "zone":
 			continue
 		var target: String = str(candidate.get("zone_target"))
-		if target == "":
+		if target == "" or target not in available:
 			continue
 		var steps: int = _steps_to(target, destination, zone_id)
 		if steps >= 0 and steps < best_steps:
 			best_steps = steps
 			best_gate = candidate
 	if best_gate == null:
-		return "Follow the known road toward %s" % RouteCatalog.zone_name(destination)
+		return "No open route to %s yet" % RouteCatalog.zone_name(destination)
 	var next_zone: String = str(best_gate.get("zone_target"))
 	var edge: Dictionary = SectorManifest.edge_between(zone_id, next_zone)
 	if not edge.is_empty():
@@ -291,7 +343,7 @@ func _steps_to(source: String, destination: String, excluded_zone: String) -> in
 	var queue: Array = [[source, 0]]
 	while not queue.is_empty():
 		var entry: Array = queue.pop_front()
-		for next_zone in SectorManifest.neighbors(str(entry[0])):
+		for next_zone in SectorManifest.available_neighbors(str(entry[0]), quests, story_state):
 			if visited.has(next_zone):
 				continue
 			var steps: int = int(entry[1]) + 1

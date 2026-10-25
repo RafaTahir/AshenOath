@@ -1,6 +1,7 @@
 extends Node
 
 signal changed
+signal state_changed(changes: Dictionary)
 signal honor_changed(entry: Dictionary)
 
 const Honor = preload("res://scripts/story_honor.gd")
@@ -30,11 +31,30 @@ var flags: Dictionary:
 		return _flags
 	set(value):
 		_flags = value
-var values: Dictionary = {"anwen_trust": 0, "greyfen_fear": 0, "hart_debt": 0}
-var evidence: Dictionary = {}
-var decisions: Array = []
+var _values: Dictionary = {"anwen_trust": 0, "greyfen_fear": 0, "hart_debt": 0}
+var values: Dictionary:
+	get:
+		world_reads.read("values")
+		return _values
+	set(value):
+		_values = value
+var _evidence: Dictionary = {}
+var evidence: Dictionary:
+	get:
+		world_reads.read("evidence")
+		return _evidence
+	set(value):
+		_evidence = value
+var _decisions: Array = []
+var decisions: Array:
+	get:
+		world_reads.read("decisions", "all")
+		return _decisions
+	set(value):
+		_decisions = value
 var _change_depth := 0
 var _change_pending := false
+var _changed_keys: Dictionary = {}
 
 func begin_change() -> void:
 	_change_depth += 1
@@ -43,24 +63,36 @@ func end_change() -> void:
 	_change_depth = maxi(0, _change_depth - 1)
 	if _change_depth == 0 and _change_pending:
 		_change_pending = false
+		var changes := _changed_keys.duplicate(true)
+		_changed_keys.clear()
+		state_changed.emit(changes)
 		changed.emit()
 
-func _notify_change() -> void:
+func _notify_change(bucket: String = "*", id: String = "*") -> void:
+	if not _changed_keys.has(bucket): _changed_keys[bucket] = {}
+	_changed_keys[bucket][id] = true
 	if _change_depth > 0:
 		_change_pending = true
 	else:
+		var changes := _changed_keys.duplicate(true)
+		_changed_keys.clear()
+		state_changed.emit(changes)
 		changed.emit()
 
 func set_flag(id: String, value: Variant) -> void:
-	var previous: Variant = flags.get(id)
+	var previous: Variant = _flags.get(id)
+	var confirmation_pending: bool = GREYFEN_DECISIONS.has(id) and str(value) in GREYFEN_DECISIONS[id] and bool(_flags.get(id + "_confirmation_needed", false))
+	if _flags.has(id) and previous == value and not confirmation_pending:
+		return
 	begin_change()
 	flags[id] = value
 	if GREYFEN_DECISIONS.has(id) and str(value) in GREYFEN_DECISIONS[id]:
 		flags[id + "_confirmation_needed"] = false
+		if confirmation_pending: _notify_change("flags", id + "_confirmation_needed")
 	if previous != value:
 		_capture_relationship_flag(id, value)
 		_capture_honor_flags(id)
-	_notify_change()
+	_notify_change("flags", id)
 	end_change()
 
 func get_flag(id: String, fallback: Variant = null) -> Variant:
@@ -89,7 +121,7 @@ func record_honor_event(id: String, announce: bool = true) -> bool:
 	entry["sequence"] = int(previous.get("sequence", ledger.size() + 1))
 	ledger[group] = entry
 	flags["honor_ledger"] = ledger
-	_notify_change()
+	_notify_change("flags", "honor_ledger")
 	if announce:
 		var notification := entry.duplicate(true)
 		notification["delta"] = int(honor_view().score) - before
@@ -107,7 +139,7 @@ func honor_view(actor_id: String = "") -> Dictionary:
 	var deeds: Array[Dictionary] = []
 	var grievance := false
 	var actor := Honor.actor_key(actor_id)
-	var raw: Variant = flags.get("honor_ledger", {})
+	var raw: Variant = get_flag("honor_ledger", {})
 	if raw is Dictionary:
 		for entry: Variant in raw.values():
 			if not entry is Dictionary or not Honor.DEEDS.has(str(entry.get("id", ""))):
@@ -123,26 +155,25 @@ func honor_view(actor_id: String = "") -> Dictionary:
 	return {"score":score, "band":Honor.band(score), "deeds":deeds, "known":not deeds.is_empty(), "grievance":grievance, "reaction":"I remember what you did to us. Good work elsewhere does not settle that." if grievance else ("I have seen you keep your word. I will hear you out; the answer is still mine." if score >= 10 else ("I will check the account myself before I agree to anything." if score <= -10 else "I can speak to what I have seen, not everything said about you."))}
 
 func world_signature_state(zone_id: String) -> Dictionary:
-	var state: Dictionary = world_reads.snapshot(zone_id, {"flags": _flags})
-	state["values"] = values
-	state["evidence"] = evidence
-	state["decisions"] = decisions
-	return state
+	return world_reads.snapshot(zone_id, {"flags": _flags, "values": _values, "evidence": _evidence, "decisions": {"all": _decisions}})
 
 func adjust_value(id: String, amount: int) -> int:
 	var limit: Vector2i = VALUE_LIMITS.get(id, Vector2i(-999, 999))
-	values[id] = clampi(int(values.get(id, 0)) + amount, limit.x, limit.y)
-	_notify_change()
+	var next := clampi(int(values.get(id, 0)) + amount, limit.x, limit.y)
+	if values.has(id) and int(values[id]) == next: return next
+	values[id] = next
+	_notify_change("values", id)
 	return int(values[id])
 
 func record_evidence(id: String, entry: Dictionary = {}) -> void:
 	if id == "" or evidence.has(id):
 		return
 	evidence[id] = entry.duplicate(true)
-	_notify_change()
+	_notify_change("evidence", id)
 
 func has_evidence(id: String) -> bool:
-	return evidence.has(id)
+	world_reads.read("evidence", id)
+	return _evidence.has(id)
 
 func companion_events() -> Dictionary:
 	var saved: Variant = get_flag("bracken_bond_events", {})
@@ -178,7 +209,7 @@ func has_heard_testimony() -> bool:
 
 func relationship_events(actor_id: String = "") -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	var stored: Variant = flags.get("living_road_relationships", {})
+	var stored: Variant = get_flag("living_road_relationships", {})
 	if not stored is Dictionary:
 		return result
 	for raw: Variant in stored.values():
@@ -335,6 +366,7 @@ func confirm_greyfen_choice(key: String, value: String) -> bool:
 func load_state(data: Dictionary) -> void:
 	_change_depth = 0
 	_change_pending = false
+	_changed_keys.clear()
 	var loaded_evidence: Variant = data.get("evidence", {})
 	evidence = loaded_evidence.duplicate(true) if loaded_evidence is Dictionary else {}
 	decisions = []
@@ -359,4 +391,6 @@ func load_state(data: Dictionary) -> void:
 	_capture_honor_flags("", false)
 	_change_pending = false
 	end_change()
+	_changed_keys.clear()
+	state_changed.emit({"*":{"*":true}})
 	changed.emit()

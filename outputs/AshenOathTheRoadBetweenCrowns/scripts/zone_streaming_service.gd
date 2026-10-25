@@ -44,7 +44,12 @@ func neighbors(zone_id: String) -> Array[String]:
 	return WorldSectorManifest.neighbors(zone_id)
 
 func prewarm_neighbors(zone_id: String) -> void:
+	var packs = owner_node.get("runtime_packs") if is_instance_valid(owner_node) else null
 	for neighbor in neighbors(zone_id):
+		# Opportunistic imports must not download every adjacent world's content.
+		# The nearest connection and explicit travel own missing-pack requests.
+		if packs != null and not packs.zone_packs_ready(neighbor):
+			continue
 		request_zone(neighbor)
 	var keep_ids: Array[String] = []
 	keep_ids.append(zone_id.strip_edges().to_lower())

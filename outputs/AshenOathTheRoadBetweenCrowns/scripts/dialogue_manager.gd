@@ -324,6 +324,18 @@ func _build_pages(data: Dictionary) -> Array:
 
 func _speaker_id(value: String) -> String:
 	var normalized := value.to_lower().strip_edges()
+	var authored_names := {
+		"mira fen": "mira",
+		"lord edric vargan": "edric",
+		"sir halvern": "halvern",
+		"the returned soldier": "returned_soldier",
+		"steward merrow": "vargan_steward",
+		"tired castle servant": "vargan_servant",
+		"vargan patrol guard": "vargan_patrol",
+		"record keeper vale": "vargan_record_keeper",
+	}
+	if authored_names.has(normalized):
+		return str(authored_names[normalized])
 	if normalized == "maren":
 		return "saga_maren"
 	if normalized in ["kael", "the hunter"]:

@@ -48,3 +48,13 @@ static func cylinder(radius: float, height: float, margin: float = 0.04) -> Cyli
 		shape.margin = margin
 		_remember(key, shape)
 	return shape
+
+static func camera_mesh(mesh: Mesh) -> ConcavePolygonShape3D:
+	var key := _key("camera_mesh", mesh.get_instance_id(), 0.04)
+	var shape := _cached(key) as ConcavePolygonShape3D
+	if shape == null:
+		shape = mesh.create_trimesh_shape()
+		if shape != null:
+			shape.backface_collision = true
+			_remember(key, shape)
+	return shape

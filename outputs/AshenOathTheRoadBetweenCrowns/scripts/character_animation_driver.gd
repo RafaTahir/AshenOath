@@ -492,6 +492,31 @@ func set_working(active: bool) -> void:
 			current_state = ""
 			_play_state("idle", 0.12)
 
+func reset_for_journey_restore() -> void:
+	# A cached player can survive the load; health restoration alone cannot
+	# release the terminal animation state or the final sampled death pose.
+	dead = false
+	clear_life_activity()
+	story_dialogue_active = false
+	story_gesture_remaining = 0.0
+	presentation_state = ""
+	current_direction = Vector3.ZERO
+	current_local_direction = Vector3.ZERO
+	requested_speed_ratio = 0.0
+	current_speed_mps = 0.0
+	physical_motion_available = false
+	locomotion_state = "idle"
+	last_locomotion_clip = StringName()
+	last_locomotion_state = StringName()
+	last_locomotion_phase = -1.0
+	locomotion_phase_distance = 0.0
+	target_playback_scale = 1.0
+	current_playback_scale = 1.0
+	if skeleton != null:
+		skeleton.reset_bone_poses()
+	action_active = true
+	stop_action("idle", 0.0)
+
 func set_dead() -> void:
 	if dead:
 		return

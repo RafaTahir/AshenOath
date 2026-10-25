@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "vercel-headroom-20261025",
+  "release_id": "cohesive-foundation-r14-20261025",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-r14-20261025",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4097364,
-      "candidate_sha256": "838f3387592833319b914b7e6c5f29f0628f545bb2cd23e3e7beb6824dfc386e",
+      "candidate_bytes": 4105780,
+      "candidate_sha256": "4f9fa36f5af6e2be8503440d4a9e99f3c21deca008a156622c62185848cad5ad",
       "contents": [
         "menu",
         "managers",
@@ -35,14 +35,14 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4097364,
-      "embedded_source_sha256": "838f3387592833319b914b7e6c5f29f0628f545bb2cd23e3e7beb6824dfc386e",
+      "embedded_source_bytes": 4105780,
+      "embedded_source_sha256": "4f9fa36f5af6e2be8503440d4a9e99f3c21deca008a156622c62185848cad5ad",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "vercel-headroom-20261025",
-      "url": "packs/opening.pck?sha256=b462f7998efaf8571b3ee2e51fe73836dd4b56ffa144d4b76025ec4e437d9c55",
-      "sha256": "b462f7998efaf8571b3ee2e51fe73836dd4b56ffa144d4b76025ec4e437d9c55",
+      "version": "cohesive-foundation-r14-20261025",
+      "url": "packs/opening.pck?sha256=75e519aa88aa662092db5d0b1717b234a7fd4cc9725dc77048513a017b5c4597",
+      "sha256": "75e519aa88aa662092db5d0b1717b234a7fd4cc9725dc77048513a017b5c4597",
       "bytes": 35792504,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
@@ -52,19 +52,19 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
       "candidate_bytes": 35792504,
-      "candidate_sha256": "b462f7998efaf8571b3ee2e51fe73836dd4b56ffa144d4b76025ec4e437d9c55",
+      "candidate_sha256": "75e519aa88aa662092db5d0b1717b234a7fd4cc9725dc77048513a017b5c4597",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "b462f7998efaf8571b3ee2e51fe73836dd4b56ffa144d4b76025ec4e437d9c55"
+      "cache_key": "75e519aa88aa662092db5d0b1717b234a7fd4cc9725dc77048513a017b5c4597"
     },
     "campaign": {
-      "version": "vercel-headroom-20261025",
-      "url": "packs/campaign.pck?sha256=24317092248980b08dedb26ca7da4df5bed3f1fb29151b2e70ff681592701d32",
-      "sha256": "24317092248980b08dedb26ca7da4df5bed3f1fb29151b2e70ff681592701d32",
-      "bytes": 8727284,
+      "version": "cohesive-foundation-r14-20261025",
+      "url": "packs/campaign.pck?sha256=f397eb9595e942a6fda7481bbfa7a57ef4e6bcfa3d325196df7c2a18d5beb818",
+      "sha256": "f397eb9595e942a6fda7481bbfa7a57ef4e6bcfa3d325196df7c2a18d5beb818",
+      "bytes": 8730324,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,20 +73,20 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 8727284,
-      "candidate_sha256": "24317092248980b08dedb26ca7da4df5bed3f1fb29151b2e70ff681592701d32",
+      "candidate_bytes": 8730324,
+      "candidate_sha256": "f397eb9595e942a6fda7481bbfa7a57ef4e6bcfa3d325196df7c2a18d5beb818",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "24317092248980b08dedb26ca7da4df5bed3f1fb29151b2e70ff681592701d32"
+      "cache_key": "f397eb9595e942a6fda7481bbfa7a57ef4e6bcfa3d325196df7c2a18d5beb818"
     },
     "characters": {
-      "version": "vercel-headroom-20261025",
-      "url": "packs/characters.pck?sha256=47f985be35d9ecbd779893630228b086a79c8619763d7ed46f74b6750d7f5915",
-      "sha256": "47f985be35d9ecbd779893630228b086a79c8619763d7ed46f74b6750d7f5915",
+      "version": "cohesive-foundation-r14-20261025",
+      "url": "packs/characters.pck?sha256=7b970a27f4e91a5af7c6dc75f888cc08b0590a1ae9bd4503c941f70b3783a27b",
+      "sha256": "7b970a27f4e91a5af7c6dc75f888cc08b0590a1ae9bd4503c941f70b3783a27b",
       "bytes": 9659664,
       "entry_scene": "",
       "dependencies": [
@@ -97,17 +97,17 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
       "candidate_bytes": 9659664,
-      "candidate_sha256": "47f985be35d9ecbd779893630228b086a79c8619763d7ed46f74b6750d7f5915",
+      "candidate_sha256": "7b970a27f4e91a5af7c6dc75f888cc08b0590a1ae9bd4503c941f70b3783a27b",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "47f985be35d9ecbd779893630228b086a79c8619763d7ed46f74b6750d7f5915"
+      "cache_key": "7b970a27f4e91a5af7c6dc75f888cc08b0590a1ae9bd4503c941f70b3783a27b"
     },
     "monsters": {
-      "version": "vercel-headroom-20261025",
-      "url": "packs/monsters.pck?sha256=d55d5bbb3b744b2585e26d2e0ac55495cba58bc745a250448cb617075f7dfd72",
-      "sha256": "d55d5bbb3b744b2585e26d2e0ac55495cba58bc745a250448cb617075f7dfd72",
+      "version": "cohesive-foundation-r14-20261025",
+      "url": "packs/monsters.pck?sha256=28f0e4adc9004825956d1b31c4b13103bec4fd69628408a7d9f3e16c8a9cbbd5",
+      "sha256": "28f0e4adc9004825956d1b31c4b13103bec4fd69628408a7d9f3e16c8a9cbbd5",
       "bytes": 14711416,
       "entry_scene": "",
       "dependencies": [
@@ -118,16 +118,16 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "monsters.pck",
       "candidate_bytes": 14711416,
-      "candidate_sha256": "d55d5bbb3b744b2585e26d2e0ac55495cba58bc745a250448cb617075f7dfd72",
+      "candidate_sha256": "28f0e4adc9004825956d1b31c4b13103bec4fd69628408a7d9f3e16c8a9cbbd5",
       "contents": [
         "monster_families",
         "bosses",
         "animals"
       ],
-      "cache_key": "d55d5bbb3b744b2585e26d2e0ac55495cba58bc745a250448cb617075f7dfd72"
+      "cache_key": "28f0e4adc9004825956d1b31c4b13103bec4fd69628408a7d9f3e16c8a9cbbd5"
     },
     "audio": {
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-r14-20261025",
       "url": "packs/audio.pck?sha256=b19c68c7420da93495328e7c75b534dd87856a336f517ec51d143abf39e7a0af",
       "sha256": "b19c68c7420da93495328e7c75b534dd87856a336f517ec51d143abf39e7a0af",
       "bytes": 19308452,
@@ -148,7 +148,7 @@
       "cache_key": "b19c68c7420da93495328e7c75b534dd87856a336f517ec51d143abf39e7a0af"
     },
     "quality_materials": {
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-r14-20261025",
       "url": "packs/quality_materials.pck?sha256=a41f4d63bdf2c0af080da9f3d3fb997ef2de3fb6d86aece26478051365ca7662",
       "sha256": "a41f4d63bdf2c0af080da9f3d3fb997ef2de3fb6d86aece26478051365ca7662",
       "bytes": 7380396,
@@ -169,9 +169,9 @@
       "cache_key": "a41f4d63bdf2c0af080da9f3d3fb997ef2de3fb6d86aece26478051365ca7662"
     },
     "adjacent": {
-      "version": "vercel-headroom-20261025",
-      "url": "packs/adjacent.pck?sha256=586bd090d749fcc7a1c7a7e33254e83689bc8b67837dcb28ce1d994ba343e897",
-      "sha256": "586bd090d749fcc7a1c7a7e33254e83689bc8b67837dcb28ce1d994ba343e897",
+      "version": "cohesive-foundation-r14-20261025",
+      "url": "packs/adjacent.pck?sha256=8cddbfa72e7c503a1da80bac577cba99a0955274255c241caf8687ecd36e11d2",
+      "sha256": "8cddbfa72e7c503a1da80bac577cba99a0955274255c241caf8687ecd36e11d2",
       "bytes": 1406880,
       "entry_scene": "",
       "dependencies": [
@@ -187,14 +187,14 @@
       ],
       "candidate_artifact": "adjacent.pck",
       "candidate_bytes": 1406880,
-      "candidate_sha256": "586bd090d749fcc7a1c7a7e33254e83689bc8b67837dcb28ce1d994ba343e897",
-      "cache_key": "586bd090d749fcc7a1c7a7e33254e83689bc8b67837dcb28ce1d994ba343e897"
+      "candidate_sha256": "8cddbfa72e7c503a1da80bac577cba99a0955274255c241caf8687ecd36e11d2",
+      "cache_key": "8cddbfa72e7c503a1da80bac577cba99a0955274255c241caf8687ecd36e11d2"
     }
   },
-  "build_id": "vercel-headroom-20261025",
-  "generated_from_commit": "68e06975a2b71048359225154bd506d435e93656",
-  "generated_at_utc": "2026-10-25T05:22:15.866600Z",
-  "total_bytes": 96986596,
+  "build_id": "cohesive-foundation-r14-20261025",
+  "generated_from_commit": "0dcb4cd08e8d978692bd92253e9ea7ce72f28003",
+  "generated_at_utc": "2026-10-25T14:35:59.855187Z",
+  "total_bytes": 96989636,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1"
 }

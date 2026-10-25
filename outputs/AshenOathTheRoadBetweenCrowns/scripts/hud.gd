@@ -120,6 +120,7 @@ var dialogue_actions: VBoxContainer
 var dialogue_choices_scroll: ScrollContainer
 var dialogue_page_label: Label
 var inventory_layer: PanelContainer
+var _gameplay_ui_ready := false
 var inventory_text: RichTextLabel
 var craft_buttons: VBoxContainer
 var controls_back_target = "main"
@@ -220,6 +221,7 @@ var _journey_cancel_button: Button
 var _journey_return_pending: Dictionary = {}
 var _journey_return_last_id := ""
 var _save_slot_notice: Label
+var _save_durability_notice: Label
 var _topic_navigation = DialogueTopicNavigation.new()
 var _dialogue_view_generation := 0
 var _evidence_navigation = JournalEvidenceNavigation.new()
@@ -299,8 +301,16 @@ func _ready() -> void:
 	bow_sight.hud = self
 	hud_root.add_child(bow_sight)
 	_build_menu_layer()
-	_build_dialogue()
-	_build_inventory()
+	# Stable surface identities keep menu/input ownership valid while their
+	# gameplay-only content waits for the pre-control preparation boundary.
+	dialogue_layer = PanelContainer.new()
+	dialogue_layer.name = "DialogueLowerThird"
+	dialogue_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	dialogue_layer.hide()
+	add_child(dialogue_layer)
+	inventory_layer = PanelContainer.new()
+	inventory_layer.hide()
+	add_child(inventory_layer)
 	_build_loading_layer()
 	for surface: Control in [menu_layer, dialogue_layer, inventory_layer, loading_layer]:
 		surface.visibility_changed.connect(_on_hud_surface_visibility_changed)
@@ -311,6 +321,15 @@ func _ready() -> void:
 	_apply_hud_layout()
 	_on_hud_surface_visibility_changed()
 	_update_process_policy()
+
+func prepare_gameplay_ui() -> void:
+	if _gameplay_ui_ready: return
+	_gameplay_ui_ready = true
+	_build_dialogue()
+	_build_inventory()
+	_apply_theme()
+	apply_accessibility(_current_settings())
+	_apply_hud_layout()
 
 func _process(delta: float) -> void:
 	if health_bar == null:
@@ -1667,6 +1686,7 @@ func _add_topic_navigation_button(label: String, key: String, callback: Callable
 	dialogue_actions.add_child(button)
 	return button
 func show_dialogue(data: Dictionary) -> void:
+	prepare_gameplay_ui()
 	get_tree().paused = true
 	_topic_navigation.reset()
 	if _dialogue_review_open:
@@ -1934,6 +1954,7 @@ func _recycle_journal_buttons(parent: Node) -> void:
 		_journal_buttons.erase(key)
 
 func show_inventory(inventory, quests, story_state = null, progression = null, requested_section: String = "") -> void:
+	prepare_gameplay_ui()
 	if is_instance_valid(_game_owner): preload("res://scripts/greyfen_guidance.gd").learn(_game_owner, "journal")
 	_capture_inventory_state()
 	if requested_section != "":
@@ -2533,6 +2554,7 @@ func _open_journal_section(section_id: String) -> void:
 	_evidence_reference_entry = ""
 	show_inventory(_journal_context.get("inventory"), _journal_context.get("quests"), _journal_context.get("state"), _journal_context.get("progression"), section_id)
 func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, story_state = null) -> void:
+	prepare_gameplay_ui()
 	_capture_inventory_state()
 	_evidence_position_key = ""
 	_inventory_screen = "vendor:" + vendor_id
@@ -2947,10 +2969,10 @@ func _apply_responsive_layout() -> void:
 	for surface: Control in [dialogue_layer, inventory_layer, menu_layer, loading_layer]:
 		if is_instance_valid(surface):
 			_apply_responsive_typography(surface, fonts, float(policy.button_min_height), float(policy.unit_scale))
-	_apply_responsive_journal(policy)
+	if _gameplay_ui_ready: _apply_responsive_journal(policy)
 	if is_instance_valid(_world_atlas) and _world_atlas.visible:
 		_world_atlas.apply_layout(policy)
-	_apply_responsive_dialogue(policy)
+	if _gameplay_ui_ready: _apply_responsive_dialogue(policy)
 	_apply_responsive_menu(policy)
 	if is_instance_valid(_startup_view):
 		_startup_view.apply_layout(policy)
@@ -3518,11 +3540,6 @@ func _build_menu_layer() -> void:
 	add_child(menu_layer)
 
 func _build_dialogue() -> void:
-	dialogue_layer = PanelContainer.new()
-	dialogue_layer.name = "DialogueLowerThird"
-	dialogue_layer.process_mode = Node.PROCESS_MODE_ALWAYS
-	dialogue_layer.visible = false
-	add_child(dialogue_layer)
 	var box: VBoxContainer = VBoxContainer.new()
 	box.add_theme_constant_override("separation", 8)
 	dialogue_layer.add_child(box)
@@ -3603,9 +3620,6 @@ func _build_dialogue() -> void:
 	dialogue_choices_scroll.add_child(dialogue_actions)
 
 func _build_inventory() -> void:
-	inventory_layer = PanelContainer.new()
-	inventory_layer.visible = false
-	add_child(inventory_layer)
 	_inventory_root = VBoxContainer.new()
 	inventory_layer.add_child(_inventory_root)
 	_inventory_columns = HBoxContainer.new()
@@ -3698,6 +3712,7 @@ func _clear_menu() -> void:
 	_journey_card_kind = ""
 	_journey_primary_button = null
 	_save_slot_notice = null
+	_save_durability_notice = null
 	new_game_status_label = null
 	_opening_progress = null
 	_opening_retry = null
@@ -3818,6 +3833,16 @@ func _menu_box(title: String, subtitle: String = "", omen_text: String = "", _he
 	_menu_content.set_meta("menu_button_height", 48.0)
 	_menu_content.set_meta("menu_font_size", 20)
 	_menu_scroll.add_child(_menu_content)
+	if active_menu in ["main", "pause", "settings", "remap", "save_library", "save_slot", "save_import"]:
+		_save_durability_notice = Label.new()
+		_save_durability_notice.name = "SaveDurabilityStatus"
+		_save_durability_notice.set_meta("layout_font_role", "caption")
+		_save_durability_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_save_durability_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		frame_box.add_child(_save_durability_notice)
+		var storage = _save_service()
+		if storage != null:
+			_on_save_durability_changed(str(storage.durability_state), str(storage.durability_detail))
 	_menu_footer = HBoxContainer.new()
 	frame_box.add_child(_menu_footer)
 	_menu_back_button = Button.new()
@@ -4030,8 +4055,8 @@ func apply_accessibility(current: Dictionary) -> void:
 			if tween != null and tween.is_valid():
 				tween.kill()
 		hint_label.modulate = Color.WHITE
-		dialogue_text.modulate = Color.WHITE
-		dialogue_title.modulate = Color.WHITE
+		if dialogue_text != null: dialogue_text.modulate = Color.WHITE
+		if dialogue_title != null: dialogue_title.modulate = Color.WHITE
 		status_label.modulate = _status_color(_status_kind)
 	if tracker_back != null:
 		(tracker_back as ColorRect).color = Color(0.018, 0.016, 0.014, 0.94 if high_contrast else 0.70)
@@ -4459,15 +4484,16 @@ func _apply_hud_visual_identity() -> void:
 	var settings: Dictionary = _current_settings()
 	var opacity: float = clampf(float(settings.get("subtitle_background_opacity", 0.55)), 0.0, 1.0)
 	dialogue_layer.add_theme_stylebox_override("panel", HudVisualStyle.dialogue_panel(high_contrast, opacity))
-	dialogue_title.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.GOLD)
-	dialogue_text.add_theme_color_override("default_color", Color.WHITE if high_contrast else HudVisualStyle.IVORY)
-	_dialogue_history_button.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.MUTED)
-	_dialogue_back_button.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.MUTED)
+	if _gameplay_ui_ready:
+		dialogue_title.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.GOLD)
+		dialogue_text.add_theme_color_override("default_color", Color.WHITE if high_contrast else HudVisualStyle.IVORY)
+		_dialogue_history_button.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.MUTED)
+		_dialogue_back_button.add_theme_color_override("font_color", Color.WHITE if high_contrast else HudVisualStyle.MUTED)
 	_apply_hud_visual_colors()
 
 func _apply_hud_visual_colors() -> void:
 	for label: Label in _hud_text_labels():
-		HudVisualStyle.label_color(label, HudVisualStyle.IVORY, high_contrast)
+		if label != null: HudVisualStyle.label_color(label, HudVisualStyle.IVORY, high_contrast)
 	for label: Label in [tracker_title_label, _quest_marker, notice_category_label]:
 		HudVisualStyle.label_color(label, HudVisualStyle.GOLD, high_contrast)
 	for label: Label in [tracker_route_label, tracker_work_label, tracker_footer_label, compass_label, _world_clock_label, _gameplay_bindings, equipment_label, stamina_value_label]:
@@ -4698,7 +4724,16 @@ func _save_service():
 			service.library_changed.connect(_refresh_save_library)
 		if service.has_signal("operation_finished") and not service.operation_finished.is_connected(_on_save_operation_finished):
 			service.operation_finished.connect(_on_save_operation_finished)
+		if service.has_signal("durability_changed") and not service.durability_changed.is_connected(_on_save_durability_changed):
+			service.durability_changed.connect(_on_save_durability_changed)
 	return service
+
+func _on_save_durability_changed(state: String, detail: String) -> void:
+	if not is_instance_valid(_save_durability_notice):
+		return
+	_save_durability_notice.text = detail
+	_save_durability_notice.visible = state != "idle" and not detail.is_empty()
+	_save_durability_notice.add_theme_color_override("font_color", Color(1.0, 0.65, 0.5) if state == "failed" else Color.WHITE if high_contrast else HudVisualStyle.GOLD)
 
 func _on_save_operation_finished(slot_id: String, operation: String, success: bool, text: String) -> void:
 	if slot_id != "":

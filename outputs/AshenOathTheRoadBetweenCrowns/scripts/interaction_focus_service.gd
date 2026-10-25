@@ -117,9 +117,10 @@ func target_is_valid(area: Area3D, player: CharacterBody3D, camera: Camera3D) ->
 		return false
 	if bool(area.get_meta("strict_interaction_visibility", false)):
 		return _strict_line(area, player, origin, target) and _strict_line(area, player, player.global_position + Vector3.UP * 1.3, target)
-	# Preserve the existing eye-line exception for ground-level clues.
+	# Low clues can sit below the camera's ground sightline, but the player's
+	# reach must still be unobstructed. The former exemption also ignored walls.
 	if kind in ["clue", "herb", "village_place"]:
-		return true
+		return _strict_line(area, player, player.global_position + Vector3.UP * 1.3, target)
 	var space := player.get_world_3d().direct_space_state
 	for target_point in targets:
 		var query := PhysicsRayQueryParameters3D.create(origin, target_point, 1)

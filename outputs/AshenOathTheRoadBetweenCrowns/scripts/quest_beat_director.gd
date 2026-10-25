@@ -26,8 +26,8 @@ const BEATS := {
 		"speak_mira": {"stage":"greyfen_herbalist", "cue":"Mira knows what the ash is doing to the living.", "next":"Ask Mira what the dead remember."},
 		"read_chapel_names": {"stage":"ruined_crow_chapel", "cue":"The chapel wall still holds the names Greyfen tried to rub away.", "next":"Read the erased names in the Crow Chapel."},
 		"name_the_dead": {"stage":"ritual_stones", "cue":"A name spoken aloud can change the road.", "next":"Speak Oren's name at the ritual stones."},
-		"fight_bog_wretch": {"stage":"deep_wood_clearing", "cue":"Something in the deeper wood is carrying a human memory.", "next":"Find the Bog Wretch.", "compass":"Deep Wood"},
-		"bog_core_choice": {"stage":"deep_wood_clearing", "cue":"The memory core still holds a choice that belongs to the living.", "next":"Choose what to do with the Bog Wretch's memory core."},
+		"fight_bog_wretch": {"stage":"wychwood_northern_clearing", "cue":"The Bog Wretch holds a human memory in Wychwood's northern clearing.", "next":"Defeat the Bog Wretch.", "compass":"Wychwood"},
+		"bog_core_choice": {"stage":"wychwood_northern_clearing", "cue":"The memory core still holds a choice that belongs to the living.", "next":"Choose what to do with the Bog Wretch's memory core."},
 	},
 	"main_names_they_burned": {
 		"reconstruct_register": {"stage":"burned_register", "cue":"Three fragments are enough to restore the road's missing names.", "next":"Reconstruct the refugee register."},

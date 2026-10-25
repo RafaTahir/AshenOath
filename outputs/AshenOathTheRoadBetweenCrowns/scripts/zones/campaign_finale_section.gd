@@ -15,15 +15,22 @@ const UndercroftMemorial = preload("res://scripts/undercroft_memorial.gd")
 const ZONES := ["undercroft", "assembly", "hart_glade"]
 
 func build(context: ZoneBuildContext) -> void:
-	match context.zone_id:
-		"undercroft":
-			_build_undercroft(context)
-		"assembly":
-			_build_assembly(context)
-		"hart_glade":
-			_build_hart_glade(context)
-			context.make_road(Vector3(15,0.025,9), Vector3(12,0.035,3), Color(0.13,0.17,0.11))
-			context.make_zone_gate("Follow the optional path to the Old Ruins", Vector3(20,0,9), "ruins", Vector3(-18,1,5))
+	for step: Callable in construction_steps(context.zone_id):
+		if step.call(context) != true:
+			push_error("Finale construction failed: %s" % context.zone_id)
+			return
+
+func construction_steps(zone_id: String) -> Array[Callable]:
+	match zone_id:
+		"undercroft": return [_build_undercroft, _build_undercroft_shell, _build_undercroft_people]
+		"assembly": return [_build_assembly, _build_assembly_court, _build_assembly_people]
+		"hart_glade": return [_build_hart_glade, _build_hart_surroundings, _build_hart_presence, _build_hart_ruins_route]
+	return []
+
+func _build_hart_ruins_route(context: ZoneBuildContext) -> bool:
+	context.make_road(Vector3(15,0.025,9), Vector3(12,0.035,3), Color(0.13,0.17,0.11))
+	context.make_zone_gate("Follow the optional path to the Old Ruins", Vector3(20,0,9), "ruins", Vector3(-18,1,5))
+	return true
 
 func _marker(context: ZoneBuildContext, zone_id: String, authored_name: String) -> void:
 	var compatibility := Node3D.new()
@@ -33,7 +40,7 @@ func _marker(context: ZoneBuildContext, zone_id: String, authored_name: String) 
 	authored.name = authored_name
 	context.add_node(authored)
 
-func _build_undercroft(context: ZoneBuildContext) -> void:
+func _build_undercroft(context: ZoneBuildContext) -> bool:
 	var stone := Color(0.068, 0.068, 0.072)
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(36, 0.16, 34), stone)
 	context.make_play_area_bounds(36.0, 34.0, stone.darkened(0.42))
@@ -51,6 +58,9 @@ func _build_undercroft(context: ZoneBuildContext) -> void:
 	context.add_node(memorial)
 	_make_undercroft_dressing(context)
 	_make_authored_undercroft_dressing(context)
+	return true
+
+func _build_undercroft_shell(context: ZoneBuildContext) -> bool:
 	_make_undercroft_stone_box(context, "UndercroftStoneFloor", Vector3(0, 0.008, 0), Vector3(28.0, 0.012, 31.0), "cobblestone", Color(0.65, 0.63, 0.60))
 	_make_undercroft_stone_box(context, "UndercroftStoneCeiling", Vector3(0, 5.95, 0), Vector3(28.0, 0.14, 31.0), "medieval_brick", Color(0.56, 0.54, 0.52))
 	for x in [-13.96, 13.96]:
@@ -71,6 +81,9 @@ func _build_undercroft(context: ZoneBuildContext) -> void:
 	context.make_light("UndercroftHalvernFill", Vector3(0, 3.4, -6.5), Color(0.42, 0.46, 0.56), 3.0)
 	for position in [Vector3(-4, 0, 9), Vector3(4, 0, 9), Vector3(-4, 0, -8), Vector3(4, 0, -8)]:
 		context.make_torch(position)
+	return true
+
+func _build_undercroft_people(context: ZoneBuildContext) -> bool:
 	if StoryActorPresence.remains("halvern", str(context.get_story_flag("halvern_fate", ""))):
 		context.make_named_interactable("halvern", "dialogue", "Speak to Sir Halvern", Vector3(0, 0, -9), Color(0.42, 0.43, 0.48))
 	if context.is_quest_active("main_last_witness") and str(context.get_story_flag("halvern_fate", "")) == "":
@@ -80,6 +93,7 @@ func _build_undercroft(context: ZoneBuildContext) -> void:
 			guardian.leash_radius = 8.0
 	context.make_zone_gate("Return to the Record Hall", Vector3(-6, 0, 14), "record_hall", Vector3(0, 1, -12))
 	# Greyfen owns the assembly entry. Return through the actual Castle rooms.
+	return true
 
 func _make_undercroft_doorway_wall(context: ZoneBuildContext, z: float, doorway_x: float, visible_stone: bool) -> void:
 	# Gate focus and the player capsule need the same opening through the wall.
@@ -101,17 +115,23 @@ func _make_undercroft_doorway_wall(context: ZoneBuildContext, z: float, doorway_
 			size.z = 0.10
 			_make_undercroft_stone_box(context, "UndercroftStoneRear_%d" % index, center, size, "medieval_brick", Color(0.71, 0.69, 0.66))
 
-func _build_assembly(context: ZoneBuildContext) -> void:
+func _build_assembly(context: ZoneBuildContext) -> bool:
 	var earth := Color(0.125, 0.105, 0.075)
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(42, 0.16, 34), earth)
 	context.make_play_area_bounds(42.0, 34.0, earth.darkened(0.36))
 	_make_undercroft_stone_box(context, "AssemblySettlementGround", Vector3(0, -0.015, -4), Vector3(66, 0.014, 62), "forest_ground", Color(0.46, 0.51, 0.39))
 	_make_undercroft_stone_box(context, "AssemblyCivicPaving", Vector3(0, 0.033, 1), Vector3(8, 0.014, 30), "cobblestone", Color(0.68, 0.66, 0.59))
 	_make_assembly_dressing(context)
+	return true
+
+func _build_assembly_court(context: ZoneBuildContext) -> bool:
 	AssemblyFrontier.adjoining_frontier(context)
 	_marker(context, "assembly", "AuthoredGreyfenAssembly")
 	_make_undercroft_stone_box(context, "AssemblyDais", Vector3(0, 0.045, -8.5), Vector3(10, 0.014, 5), "medieval_brick", Color(0.71, 0.69, 0.61))
 	_make_assembly_court(context)
+	return true
+
+func _build_assembly_people(context: ZoneBuildContext) -> bool:
 	# The record always supplies the primary route's evidence. A person standing
 	# before the village is an additional voluntary act, not a renamed flag.
 	for witness in [["witness_-7", -8.0, "mira"], ["witness_-3", -4.0, "rook"], ["witness_3", 4.0, "anwen"]]:
@@ -125,8 +145,9 @@ func _build_assembly(context: ZoneBuildContext) -> void:
 	context.make_zone_gate("Leave the assembly for Greyfen", Vector3(-7, 0, 14), "greyfen", Vector3(0, 0.95, 8))
 	if str(context.get_story_flag("confession_method", "")) != "":
 		context.make_zone_gate("Return to Greyfen and take the reopened southern road", Vector3(7, 0, -14), "greyfen", Vector3(0, 0.95, 11))
+	return true
 
-func _build_hart_glade(context: ZoneBuildContext) -> void:
+func _build_hart_glade(context: ZoneBuildContext) -> bool:
 	var moss := Color(0.065, 0.105, 0.078)
 	context.make_ground(Vector3(0, -0.08, 0), Vector3(44, 0.16, 38), moss)
 	context.make_play_area_bounds(44.0, 38.0, moss.darkened(0.36))
@@ -134,6 +155,9 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 	_make_hart_landscape(context)
 	_make_hart_glade_dressing(context)
 	_marker(context, "hart_glade", "AuthoredWhiteHartGlade")
+	return true
+
+func _build_hart_surroundings(context: ZoneBuildContext) -> bool:
 	for position in [
 		Vector3(-16, 0, -13), Vector3(-14, 0, -5), Vector3(-15, 0, 10),
 		Vector3(16, 0, -13), Vector3(14, 0, -5), Vector3(15, 0, 10)
@@ -147,6 +171,9 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 		rune_material.emission = Color(0.64, 0.85, 0.72)
 		rune_material.emission_energy_multiplier = 0.55
 		rune.material_override = rune_material
+	return true
+
+func _build_hart_presence(context: ZoneBuildContext) -> bool:
 	var covenant := str(context.get_story_flag("final_covenant", ""))
 	if covenant == "":
 		_make_hart_grove(context)
@@ -165,6 +192,7 @@ func _build_hart_glade(context: ZoneBuildContext) -> void:
 	else:
 		_make_hart_aftermath(context, covenant)
 	context.make_zone_gate("Follow the road home to Greyfen", Vector3(-7, 0, 16), "greyfen", Vector3(0, 0.95, 14))
+	return true
 
 func _make_hart_aftermath(context: ZoneBuildContext, covenant: String) -> void:
 	# Completed covenants alter the same memorial garden, without repeating

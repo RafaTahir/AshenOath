@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from verify_web_export import verify_pack_files
+from verify_web_export import engine_paths, verify_pack_files
 
 
 class PackCompleteness(unittest.TestCase):
@@ -18,6 +18,8 @@ class PackCompleteness(unittest.TestCase):
         self.pack = {"url": "packs/opening.pck?v=test", "status": "streamed_web_candidate",
                      "bytes": len(self.payload), "sha256": hashlib.sha256(self.payload).hexdigest(),
                      "dependencies": ["base"]}
+        self.pack["url"] = "packs/opening.pck?sha256=" + self.pack["sha256"]
+        self.pack["cache_key"] = self.pack["sha256"]
         self.manifest = {"packs": {"base": {"status": "embedded_current_pck", "url": ""}, "opening": self.pack}}
 
     def write_pack(self):
@@ -57,6 +59,21 @@ class PackCompleteness(unittest.TestCase):
 
     def test_invalid_manifest_fails(self):
         self.assertIn("must be an object", " ".join(verify_pack_files(self.root, [])))
+
+    def test_addressed_engine_layout_retains_all_required_files(self):
+        stem = "engine/" + "a" * 24 + "/index"
+        engine = {"executable": stem, "script": stem + ".js", "wasm": stem + ".wasm"}
+        paths = engine_paths({"engine": engine})
+        self.assertEqual(stem + ".wasm", paths["index.wasm"])
+        self.assertEqual(stem + ".audio.worklet.js", paths["index.audio.worklet.js"])
+        self.assertEqual(4, len(paths))
+
+    def test_engine_path_escape_and_mismatch_fail(self):
+        for stem in ["../index", "engine/not-a-hash/index", "https://elsewhere/index"]:
+            with self.assertRaises(ValueError):
+                engine_paths({"engine": {"executable": stem, "script": stem + ".js", "wasm": stem + ".wasm"}})
+        with self.assertRaises(ValueError):
+            engine_paths({"engine": {"executable": "index", "script": "wrong.js", "wasm": "index.wasm"}})
 
 
 if __name__ == "__main__":

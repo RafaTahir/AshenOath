@@ -76,6 +76,16 @@ static func neighbors(zone_id: String) -> Array[String]:
 		if str(link.target) not in result: result.append(str(link.target))
 	return result
 
+static func available_neighbors(zone_id: String, quests, story = null) -> Array[String]:
+	var result: Array[String] = []
+	for target: String in neighbors(zone_id):
+		var edge := connection_between(zone_id, target)
+		if edge.is_empty():
+			edge = edge_between(zone_id, target)
+		if edge_available(edge, quests, story):
+			result.append(target)
+	return result
+
 static func connections(zone_id: String) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var source := canonical(zone_id)
@@ -134,27 +144,31 @@ static func crossing_transform(edge: Dictionary) -> Transform3D:
 static func connector_contains(zone_id: String, position: Vector3, margin: float = 0.0) -> bool:
 	var point := Vector2(position.x,position.z)
 	for edge: Dictionary in connections(zone_id):
-		var key := str(edge.source)+":"+str(edge.target)+":"+str(margin)
-		if not _corridor_cache.has(key):
-			var points := connector_points(edge)
-			var left := PackedVector2Array()
-			var right := PackedVector2Array()
-			for i in range(points.size()):
-				var incoming := (points[i]-points[maxi(0,i-1)]).normalized()
-				var outgoing := (points[mini(i+1,points.size()-1)]-points[i]).normalized()
-				if i == 0: incoming = outgoing
-				if i == points.size()-1: outgoing = incoming
-				var normal_a := incoming.cross(Vector3.UP)
-				var normal_b := outgoing.cross(Vector3.UP)
-				var miter := (normal_a+normal_b).normalized()
-				var extent := (float(edge.half_width)+margin)/maxf(0.5,miter.dot(normal_b))
-				var a := points[i]-miter*extent
-				var b := points[i]+miter*extent
-				left.append(Vector2(a.x,a.z)); right.append(Vector2(b.x,b.z))
-			right.reverse(); left.append_array(right)
-			_corridor_cache[key] = left
-		if Geometry2D.is_point_in_polygon(point,_corridor_cache[key]): return true
+		if Geometry2D.is_point_in_polygon(point, connector_polygon(edge, margin)): return true
 	return false
+
+static func connector_polygon(edge: Dictionary, margin: float = 0.0) -> PackedVector2Array:
+	var key := str(edge.source)+":"+str(edge.target)+":"+str(margin)
+	if _corridor_cache.has(key):
+		return _corridor_cache[key]
+	var points := connector_points(edge)
+	var left := PackedVector2Array()
+	var right := PackedVector2Array()
+	for i in range(points.size()):
+		var incoming := (points[i]-points[maxi(0,i-1)]).normalized()
+		var outgoing := (points[mini(i+1,points.size()-1)]-points[i]).normalized()
+		if i == 0: incoming = outgoing
+		if i == points.size()-1: outgoing = incoming
+		var normal_a := incoming.cross(Vector3.UP)
+		var normal_b := outgoing.cross(Vector3.UP)
+		var miter := (normal_a+normal_b).normalized()
+		var extent := (float(edge.half_width)+margin)/maxf(0.5,miter.dot(normal_b))
+		var a := points[i]-miter*extent
+		var b := points[i]+miter*extent
+		left.append(Vector2(a.x,a.z)); right.append(Vector2(b.x,b.z))
+	right.reverse(); left.append_array(right)
+	_corridor_cache[key] = left
+	return left
 
 static func clear_connector_position(zone_id: String, position: Vector3, clearance: float) -> Vector3:
 	var point := Vector2(position.x,position.z)

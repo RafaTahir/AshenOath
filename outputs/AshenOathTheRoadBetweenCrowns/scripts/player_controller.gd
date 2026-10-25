@@ -2312,6 +2312,27 @@ func save_equipment_state() -> Dictionary:
 		return beam_restore_equipment.duplicate(true)
 	return equipment_loadout.save_state()
 
+func reset_for_journey_restore() -> void:
+	cancel_buffered_input("journey_restore")
+	velocity = Vector3.ZERO
+	movement_state = "idle"
+	footstep_distance = 0.0
+	attack_cooldown = 0.0
+	hurt_flash_time = 0.0
+	hurt_react_time = 0.0
+	block_pose_weight = 0.0
+	jump_pose_weight = 0.0
+	landing_compression = 0.0
+	if guard_arm_ik != null:
+		guard_arm_ik.stop()
+	guard_arm_applied = false
+	_update_hurt_overlay()
+	if visual_root != null:
+		visual_root.transform = Transform3D.IDENTITY
+	if animation_driver != null:
+		animation_driver.reset_for_journey_restore()
+	reset_physics_interpolation()
+
 func load_equipment_state(data: Dictionary) -> void:
 	if typeof(data) != TYPE_DICTIONARY:
 		return

@@ -8,6 +8,7 @@ const WINDOW_ROUTE_QUERY := "window.__ashenOathReadOnlyRouteQuery"
 const WINDOW_ROUTE_RESULT := "window.__ashenOathReadOnlyRouteResult"
 const WINDOW_OBSERVATION_BINDING := "__ASHEN_OATH_READ_ONLY_OBSERVATION__"
 const PUBLISH_INTERVAL := 0.20
+const SectorManifest = preload("res://scripts/world_sector_manifest.gd")
 const CATALOG_MIN_REFRESH_MS := 1000
 
 var _host: Node
@@ -79,6 +80,7 @@ func _answer_route_query(game: Node) -> void:
 	JavaScriptBridge.eval("%s = %s;" % [WINDOW_ROUTE_RESULT, payload], false)
 
 func route_for_id(game: Node, target_id: String) -> Dictionary:
+	_host = game
 	var result := {"read_only": true, "ok": false, "target_id": target_id, "zone": str(game.get("current_zone_id")), "points": []}
 	if target_id.is_empty() or target_id.length() > 80 or not bool(game.get("game_started")):
 		return result
@@ -100,7 +102,37 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 				break
 	if target == null:
 		return result
-	var points: Array[Vector3] = physical_route_for_points(player, spatial, spatial.build_route(player.global_position, target.global_position, 0.55))
+	if str(target.get("interaction_type")) == "zone":
+		var connection := SectorManifest.connection_between(str(game.current_zone_id), str(target.get("zone_target")))
+		if not connection.is_empty():
+			if not SectorManifest.edge_available(connection, game.quests, game.story_state): return result
+			var corridor := SectorManifest.connector_points(connection)
+			var normal := SectorManifest.direction(str(connection.id))
+			var raw_route: Array[Vector3] = []
+			var next_segment := 0
+			if SectorManifest.connector_contains(str(game.current_zone_id), player.global_position):
+				raw_route.append(player.global_position)
+				var nearest := INF
+				for index in range(corridor.size() - 1):
+					var closest := Geometry3D.get_closest_point_to_segment(player.global_position, corridor[index], corridor[index + 1])
+					var distance := player.global_position.distance_squared_to(closest)
+					if distance < nearest: nearest = distance; next_segment = index
+			else:
+				raw_route = _route_from_player(game, player, spatial, corridor[0])
+				if raw_route.is_empty(): return result
+			for index in range(next_segment + 1, corridor.size()):
+				# Stop before the readiness leaf. The driver's final ordinary forward
+				# input reaches the existing warm/cold handoff, never a mutation API.
+				raw_route.append(corridor[index] - normal * 1.9 if index == corridor.size() - 1 else corridor[index])
+			var approach := physical_route_for_points(player, spatial, raw_route)
+			for point: Vector3 in approach: result.points.append(_vector(point))
+			result["physical_connection"] = true
+			result["crossing_point"] = _vector(corridor[-1])
+			result["crossing_direction"] = _vector(normal)
+			result["waypoint_tolerance"] = 0.25
+			result.ok = not approach.is_empty()
+			return result
+	var points: Array[Vector3] = _route_from_player(game, player, spatial, target.global_position)
 	if str(target.get("interaction_type")) != "zone":
 		var conversation := str(target.get("interaction_type")) == "dialogue"
 		var reach := 3.6 if conversation else 2.8
@@ -122,7 +154,7 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 					var candidate: Vector3 = target.global_position + toward_player.rotated(Vector3.UP, deg_to_rad(degrees)) * radius
 					if not spatial.is_walkable_position(candidate, 0.55, spatial.bank_for(target.global_position)):
 						continue
-					var approach: Array[Vector3] = physical_route_for_points(player, spatial, spatial.build_route(player.global_position, candidate, 0.55))
+					var approach: Array[Vector3] = _route_from_player(game, player, spatial, candidate)
 					var endpoint_distance: float = approach.back().distance_to(target.global_position) if not approach.is_empty() else INF
 					if endpoint_distance <= reach and (not conversation or endpoint_distance >= 1.8):
 						points = approach
@@ -134,6 +166,30 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 	result["waypoint_tolerance"] = 0.25
 	result.ok = not result.points.is_empty()
 	return result
+
+func _route_from_player(game: Node, player: CharacterBody3D, spatial: Node, destination: Vector3) -> Array[Vector3]:
+	var source := player.global_position
+	var prefix: Array[Vector3] = []
+	var bounds: Vector2 = spatial.half_extents
+	if absf(source.x) > bounds.x - 0.55 or absf(source.z) > bounds.y - 0.55:
+		var nearest := INF
+		var inbound := PackedVector3Array()
+		var segment := -1
+		for connection: Dictionary in SectorManifest.connections(str(game.current_zone_id)):
+			var corridor := SectorManifest.connector_points(connection)
+			for index in range(corridor.size() - 1):
+				var closest := Geometry3D.get_closest_point_to_segment(source, corridor[index], corridor[index + 1])
+				var distance := source.distance_squared_to(closest)
+				if distance < nearest: nearest = distance; inbound = corridor; segment = index
+		if segment < 0: return []
+		prefix.append(source)
+		for index in range(segment, -1, -1): prefix.append(inbound[index])
+		source = prefix.back()
+	var core: Array[Vector3] = spatial.build_route(source, destination, 0.55)
+	if core.is_empty(): return []
+	if prefix.is_empty(): return physical_route_for_points(player, spatial, core)
+	for index in range(1, core.size()): prefix.append(core[index])
+	return physical_route_for_points(player, spatial, prefix)
 
 func physical_route_for_points(player: CharacterBody3D, spatial: Node, points: Array[Vector3]) -> Array[Vector3]:
 	if points.size() < 2 or player == null or spatial == null:
@@ -157,6 +213,7 @@ func physical_route_for_points(player: CharacterBody3D, spatial: Node, points: A
 	query.margin = 0.01
 	var context := {"space": player.get_world_3d().direct_space_state, "spatial": spatial,
 		"query": query, "actual": capsule, "padded": padded,
+		"seamless": _host.get("seamless_world") if is_instance_valid(_host) else null,
 		"offset": capsule_node.global_position - player.global_position + Vector3.UP * 0.06}
 	var grounded: Array[Vector3] = points.duplicate()
 	for index in grounded.size():
@@ -180,7 +237,9 @@ func physical_route_for_points(player: CharacterBody3D, spatial: Node, points: A
 
 func _physical_point_clear(context: Dictionary, point: Vector3, padded: bool = false) -> bool:
 	var bounds: Vector2 = context.spatial.half_extents
-	if absf(point.x) > bounds.x - 0.55 or absf(point.z) > bounds.y - 0.55 \
+	var inside := absf(point.x) <= bounds.x - 0.55 and absf(point.z) <= bounds.y - 0.55
+	var resident: bool = is_instance_valid(context.seamless) and context.seamless.contains_resident_passage(point)
+	if (not inside and not resident and not SectorManifest.connector_contains(str(context.spatial.zone_id), point, -0.55)) \
 		or not context.spatial.validate_segment(point, point, 0.55):
 		return false
 	var query: PhysicsShapeQueryParameters3D = context.query

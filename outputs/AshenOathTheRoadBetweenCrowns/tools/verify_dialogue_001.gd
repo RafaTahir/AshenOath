@@ -11,6 +11,20 @@ func _initialize() -> void:
 	root.add_child(manager)
 	manager.setup(state)
 	manager.load_dialogue("res://data/dialogue.json")
+	var speaker_names := {
+		"Mira Fen": "mira", "Lord Edric Vargan": "edric", "Sir Halvern": "halvern",
+		"The Returned Soldier": "returned_soldier", "Steward Merrow": "vargan_steward",
+		"Tired Castle Servant": "vargan_servant", "Vargan Patrol Guard": "vargan_patrol",
+		"Record Keeper Vale": "vargan_record_keeper", "Kael": "player",
+		"Sister Anwen": "sister_anwen", "The White Hart": "white_hart",
+	}
+	for display_name: String in speaker_names:
+		var binding_pages: Array = manager._build_pages({"name": display_name, "greeting": "Greeting", "lines": [display_name + ": Reply"]})
+		check(binding_pages.all(func(page): return str(page.speaker_id) == str(speaker_names[display_name])), "Speaker binding changed between greeting/reply for " + display_name)
+	if "--speaker-bindings-only" in OS.get_cmdline_user_args():
+		print("DIALOGUE SPEAKER BINDINGS: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+		quit(0 if failures == 0 else 1)
+		return
 	var anwen: Dictionary = manager.get_dialogue("sister_anwen")
 	var pages: Array = anwen.get("pages", [])
 	check(pages.size() >= 4, "Anwen conversation has no complete speaker-aware page sequence")

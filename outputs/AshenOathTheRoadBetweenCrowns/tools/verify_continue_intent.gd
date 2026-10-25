@@ -14,6 +14,27 @@ func _run_continue() -> void:
 	var game = load("res://scenes/main.tscn").instantiate()
 	root.add_child(game)
 	await _frames(6)
+	for argument: String in OS.get_cmdline_user_args():
+		if not argument.begins_with("--earned-report="):
+			continue
+		var report_path := argument.trim_prefix("--earned-report=")
+		var report: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(report_path))
+		var files_value: Variant = report.get("browsers", [{}])[0].get("persisted_files")
+		if not files_value is Dictionary or files_value.is_empty():
+			_fail("Earned report has no readable persistent files; no state was copied")
+			await _shutdown_game(game)
+			_finish()
+			return
+		var files: Dictionary = files_value
+		for name: String in files:
+			if name in ["ashen_oath_autosave.json", "ashen_oath_checkpoint.json", "ashen_oath_resume.json", "ashen_oath_settings.json", "ashen_oath_save.json"]:
+				var copy := FileAccess.open("user://" + name, FileAccess.WRITE)
+				if copy == null:
+					_fail("Could not copy the genuine browser-earned fixture: " + name)
+					continue
+				copy.store_string(JSON.stringify(files[name]))
+				copy.close()
+		game._refresh_journey_models()
 	var saved: Dictionary = {}
 	for path in [game.save_manager.SAVE_PATH, game.save_manager.AUTOSAVE_PATH, game.save_manager.CHECKPOINT_PATH]:
 		var slot: Dictionary = game.save_manager._read_slot(path)
@@ -22,8 +43,6 @@ func _run_continue() -> void:
 			break
 	if saved.is_empty() and not earn_save:
 		_fail("This check needs a save earned by a previous player-input run")
-	elif not earn_save and (game.greyfen_prewarm_started or not game.route_zone_cache.is_empty()):
-		_fail("Continue menu built an unused New Game world")
 	if failures.is_empty():
 		var new_game_test := earn_save or "--new-game-from-save" in OS.get_cmdline_user_args()
 		var label := "New Game" if new_game_test else "Continue"

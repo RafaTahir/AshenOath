@@ -197,6 +197,11 @@ func _anchor_shared_skinned_resources(root: Node) -> void:
 		# validation pass. Validate it in place so imported meshes with empty
 		# surfaces cannot reach the renderer during retirement.
 		validate_resources.call(branch)
+		# This branch leaves the retiring root before its normal suspension and
+		# collision pass. Retain render resources, not a second live actor.
+		_quiesce_zone_runtime(branch)
+		_set_zone_collision_enabled(branch, false)
+		suspend_runtime(branch)
 		branch.reparent(retired_skinned_actor_pool, false)
 		if branch is Node3D:
 			(branch as Node3D).visible = false

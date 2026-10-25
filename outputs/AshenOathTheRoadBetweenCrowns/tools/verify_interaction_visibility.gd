@@ -37,19 +37,27 @@ func _run() -> void:
 	await _sync_physics()
 	_check(not focus.target_is_valid(area, player, camera), "Unrelated wall did not block both speaker eye lines")
 	area.interaction_type = "clue"
-	_check(focus.target_is_valid(area, player, camera), "Ground clue lost its existing low-dressing exception")
+	area.position.z = -2.5
+	_check(not focus.target_is_valid(area, player, camera), "Ground clue bypassed an unrelated wall")
+	box.size.y = 0.1
+	wall.position.y = -0.05
+	await _sync_physics()
+	_check(focus.target_is_valid(area, player, camera), "Ground support blocked the clue's player eye line")
+	box.size.y = 2.0
+	wall.position.y = 1.0
 	area.interaction_type = "zone"
 	_check(focus.target_is_valid(area, player, camera), "Gate framing blocked its travel volume")
 	area.position.z = -3.66
 	_check(not focus.target_is_valid(area, player, camera), "Gate visibility exceeded the existing range")
-	area.position.z = -3
+	area.position.z = -2.4
 	area.interaction_type = "vendor"
-	player.position.x = 2
+	player.position.x = 1.2
 	camera.position.x = -2
 	wall.position.x = -1
 	await _sync_physics()
 	_check(focus.target_is_valid(area, player, camera), "Open physical shop approach lost the player-eye fallback")
 	area.interaction_type = "dialogue"
+	area.position.z = -3
 	wall.position = Vector3(0, 1, -3)
 	player.position.x = 0
 	camera.position.x = 0

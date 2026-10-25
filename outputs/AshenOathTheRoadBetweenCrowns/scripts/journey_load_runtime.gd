@@ -56,8 +56,9 @@ func request(game, prepared: Dictionary) -> void:
 			return
 		game.runtime_packs.quality_preset = str(game.settings.settings.get("quality_preset", "balanced"))
 		game.runtime_packs.prioritize_zone(target)
-		if not game.runtime_packs.zone_packs_ready(target):
-			var queued: bool = game.runtime_packs.request_zone_packs(target, [], true)
+		var encounter_packs: Array[String] = game._zone_encounter_packs(target, prepared.get("data", {}))
+		if not game.runtime_packs.zone_packs_ready(target, encounter_packs):
+			var queued: bool = game.runtime_packs.request_zone_packs(target, encounter_packs, true)
 			if not queued:
 				cancel(game, "The destination could not be downloaded. Your current session remains in place; select the journey to retry.")
 				return
@@ -66,13 +67,13 @@ func request(game, prepared: Dictionary) -> void:
 				await game.get_tree().process_frame
 				if not _is_current(game, generation):
 					return
-				if game.runtime_packs.zone_packs_ready(target):
+				if game.runtime_packs.zone_packs_ready(target, encounter_packs):
 					break
-				game.hud.update_journey_load_progress(target, game.runtime_packs.zone_pack_progress(target))
-				if not game.runtime_packs.zone_pack_failures(target).is_empty():
+				game.hud.update_journey_load_progress(target, game.runtime_packs.zone_pack_progress(target, encounter_packs))
+				if not game.runtime_packs.zone_pack_failures(target, encounter_packs).is_empty():
 					cancel(game, "The destination download stopped. Your current session remains in place; select the journey to retry.")
 					return
-			if not game.runtime_packs.zone_packs_ready(target):
+			if not game.runtime_packs.zone_packs_ready(target, encounter_packs):
 				cancel(game, "The destination took too long to prepare. Your current session remains in place; select the journey to retry.")
 				return
 	if not _is_current(game, generation):
@@ -127,6 +128,7 @@ func try_finish(game) -> void:
 	game._refresh_tracker()
 	game._refresh_equipment_readout()
 	game._refresh_journey_models()
+	game.call_deferred("_schedule_background_runtime_packs")
 	game.call_deferred("_publish_journey_arrival")
 
 func cancel(game, reason: String = "Journey loading cancelled.", present: bool = true, shutdown: bool = false) -> void:
@@ -136,6 +138,8 @@ func cancel(game, reason: String = "Journey loading cancelled.", present: bool =
 	var cancelled: Dictionary = game.journey_continuity.cancel_restore(int(staged.get("generation", -1)), reason)
 	if cancelled.is_empty():
 		return
+	if not shutdown:
+		print("JOURNEY: load_cancelled destination=%s phase=%s reason=%s" % [str(staged.get("target_zone", "")), str(staged.get("phase", "")), reason])
 	# An abandoned generation cannot claim its payload when a download finishes.
 	game.zone_pack_request_serial += 1
 	var source: Dictionary = cancelled.get("source", {})

@@ -92,9 +92,13 @@ func _initialize() -> void:
 		return
 	var new_game_start := Time.get_ticks_usec()
 	game.call("_new_game")
-	await _wait_for_playable(game)
+	await _wait_for_transition(game)
 	report.transitions["new_game_ms"] = _elapsed_ms(new_game_start)
 	_target_check(float(report.transitions.new_game_ms) <= 750.0, "prewarmed New Game exceeded 750 ms")
+	await _wait_for_playable(game)
+	report.transitions["new_game_control_available_ms"] = _elapsed_ms(new_game_start)
+	report.transitions["control_timing_scope"] = "Includes the unskipped optional introduction; world handoff is recorded separately."
+	report.zones["greyfen_first_playable"] = await _sample_zone(game, "greyfen_first_playable", 2000)
 	for profile in PROFILE_ZONES:
 		var zone_id := str(profile[0])
 		if selected_zone != "" and zone_id != selected_zone:
@@ -180,7 +184,7 @@ func _sample_zone(game: Node, zone_id: String, duration_ms: int) -> Dictionary:
 	var frame_times: Array[float] = []
 	var slow_frame_indices: Array[int] = []
 	var slow_frame_samples: Array[Dictionary] = []
-	var expected_zone := "wychwood" if zone_id == "wychwood_combat" else zone_id
+	var expected_zone := "wychwood" if zone_id == "wychwood_combat" else "greyfen" if zone_id == "greyfen_first_playable" else zone_id
 	var start_state := _player_sample_state(game)
 	var escaped_state: Dictionary = {}
 	var started := Time.get_ticks_msec()
@@ -256,6 +260,19 @@ func _player_sample_state(game: Node) -> Dictionary:
 	}
 
 func _wait_for_playable(game: Node) -> void:
+	var deadline := Time.get_ticks_msec() + 180000
+	var stable_frames := 0
+	while Time.get_ticks_msec() < deadline:
+		await process_frame
+		var ready: bool = game.game_started and is_instance_valid(game.player) and game.player.can_control and not game.player.transition_locked \
+			and not game.zone_transition_pending and not game.zone_load_request_pending and not game.opening_scene_pending \
+			and not paused and game.input_router.is_gameplay_context() \
+			and is_instance_valid(game.zone_root) and not bool(game.zone_root.get_meta("opening_scene_active", false))
+		stable_frames = stable_frames + 1 if ready else 0
+		if stable_frames >= 2: return
+	_fail("%s did not restore actual gameplay control" % str(game.current_zone_id))
+
+func _wait_for_transition(game: Node) -> void:
 	if not bool(game.zone_transition_pending) and not bool(game.zone_load_request_pending):
 		return
 	for _index in range(120):
@@ -299,6 +316,9 @@ func _wait_for_greyfen_hydration(game: Node) -> bool:
 	while Time.get_ticks_msec() - started < 45000:
 		if is_instance_valid(game.zone_root) and bool(game.zone_root.get_meta("opening_detail_complete", false)):
 			report.transitions["greyfen_hydration_ms"] = Time.get_ticks_msec() - started
+			if frame_times.is_empty():
+				report["greyfen_hydration_frames"] = {"status": "not_applicable", "reason": "Complete before gameplay control", "frames": 0}
+				return true
 			frame_times.sort()
 			var worst_count := mini(frame_times.size(), maxi(1, ceili(float(frame_times.size()) * 0.01)))
 			var worst_total := 0.0
@@ -356,7 +376,8 @@ func _write_report() -> void:
 		report["generated_at_utc"] = Time.get_datetime_string_from_system(true)
 		report["acceptance_profile"] = acceptance_profile
 		report["target_misses"] = target_misses
-		report["performance_certified"] = acceptance_profile == "strict" and failures.is_empty()
+		report["performance_certified"] = false
+		report["numerical_sample_passed"] = acceptance_profile == "strict" and failures.is_empty()
 		report["scope_limitation"] = "Native diagnostic zone sampling; not player-route or total-process-memory proof."
 		report["limits"] = {
 			"profile_preset": profile_preset,

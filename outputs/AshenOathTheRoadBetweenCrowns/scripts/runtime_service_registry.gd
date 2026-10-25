@@ -76,6 +76,8 @@ func configure_menu(owner: Node) -> void:
 	var input_router = services["input_router"]
 	var mobile_touch = services["mobile_touch"]
 	var audio = services["audio"]
+	settings.storage_written.connect(save_manager.confirm_file_persistence)
+	settings.storage_failed.connect(save_manager.report_persistence_failure)
 	audio.bind_runtime_packs(services["runtime_packs"])
 	hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	hud.set_runtime_services(owner, save_manager)
@@ -84,6 +86,10 @@ func configure_menu(owner: Node) -> void:
 	save_manager.set_summary_definitions(summary_quests, owner.call("_read_json", "res://data/items.json"))
 	save_manager.load_prepared_requested.connect(Callable(owner, "_on_prepared_journey_load"))
 	save_manager.library_changed.connect(Callable(owner, "_queue_journey_models_refresh"))
+	save_manager.message.connect(func(text: String):
+		var failed: bool = "failed" in text.to_lower() or "no valid" in text.to_lower() or "could not" in text.to_lower()
+		hud.post_notice(text, "error" if failed else "save", 5.5 if failed else 2.5, text)
+	)
 	input_router.install_default_actions()
 	input_router.set_settings_manager(settings)
 	input_router.apply_settings(settings.settings)
@@ -130,6 +136,7 @@ func configure_campaign() -> void:
 	services["dialogue"].load_dialogue("res://data/campaign_dialogue.json")
 
 func configure(owner: Node) -> void:
+	services["hud"].prepare_gameplay_ui()
 	assert(not configured, "Runtime services may only be configured once")
 	assert(is_complete(), "Runtime services must exist before configuration")
 	configure_menu(owner)
@@ -276,10 +283,6 @@ func configure(owner: Node) -> void:
 			hud.post_notice(text, "inventory", 3.5, text)
 	)
 	vendor_service.changed.connect(Callable(owner, "_refresh_equipment_readout"))
-	save_manager.message.connect(func(text: String):
-		var failed: bool = "failed" in text.to_lower() or "no valid" in text.to_lower() or "could not" in text.to_lower()
-		hud.post_notice(text, "error" if failed else "save", 5.5 if failed else 2.5, text)
-	)
 	progression.message.connect(func(text: String):
 		if not bool(owner.get("preparation_action_in_progress")):
 			hud.post_notice(text, "inventory", 3.5, text)

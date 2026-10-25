@@ -50,12 +50,21 @@ func _run() -> void:
 	root.add_child(game)
 	game.settings.set_quality_preset("balanced")
 	game._on_launch_accepted()
-	var deadline := Time.get_ticks_msec() + 30000
-	while not game.route_zone_cache.has("greyfen") and Time.get_ticks_msec() < deadline:
+	var deadline := Time.get_ticks_msec() + 120000
+	while (not game.route_zone_cache.has("greyfen") or game.greyfen_prewarm_started) and Time.get_ticks_msec() < deadline:
 		await process_frame
+	if not game.route_zone_cache.has("greyfen") or game.greyfen_prewarm_started:
+		push_error("Profile opening preparation timed out")
+		game.prepare_resource_shutdown()
+		game.queue_free()
+		await process_frame
+		quit(1)
+		return
 	game._new_game()
-	deadline = Time.get_ticks_msec() + 45000
-	while game.zone_root == null or not game.zone_root.get_meta("opening_detail_complete", false):
+	deadline = Time.get_ticks_msec() + 120000
+	while game.zone_root == null or not game.zone_root.get_meta("opening_detail_complete", false) or game.opening_scene_pending \
+		or game.zone_root.get_meta("opening_scene_active", false) or not is_instance_valid(game.player) or not game.player.can_control \
+		or game.zone_transition_pending or game.player.transition_locked or paused or not game.input_router.is_gameplay_context():
 		if Time.get_ticks_msec() >= deadline:
 			push_error("Profile setup timed out")
 			game.prepare_resource_shutdown()
@@ -80,7 +89,10 @@ func _run() -> void:
 	var output := {"scope": "diagnostic stationary hydrated Greyfen; not performance or real-route acceptance",
 		"render_timing_note": "Renderer samples may be delayed; GPU zero means unavailable, not free rendering.",
 		"controller": game.samples, "frames": frames}
-	var file := FileAccess.open("D:/Temp/AshenOath/opening_runtime_profile.json", FileAccess.WRITE)
+	var report_path := "D:/Temp/AshenOath/opening_runtime_profile_%d.json" % OS.get_process_id()
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--report-path="): report_path = argument.trim_prefix("--report-path=")
+	var file := FileAccess.open(report_path, FileAccess.WRITE)
 	file.store_string(JSON.stringify(output, "\t"))
 	file.close()
 	print("OPENING RUNTIME PROFILE: " + JSON.stringify(game.samples))

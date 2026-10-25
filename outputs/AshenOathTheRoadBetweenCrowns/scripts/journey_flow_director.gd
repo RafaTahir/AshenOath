@@ -35,9 +35,11 @@ func configure(game: Node, zone: String) -> void:
 func _child_added(_node: Node) -> void:
 	geometry_dirty = true
 
+func _gate_removed() -> void:
+	geometry_dirty = true
+
 func _story_changed() -> void:
 	route_dirty = true
-	geometry_dirty = true
 
 func _process(delta: float) -> void:
 	if not is_instance_valid(host) or host.zone_root != get_parent() or not host.game_started: return
@@ -101,6 +103,7 @@ func _collect_gates() -> void:
 	for candidate: Node in get_parent().find_children("*", "Area3D", true, false):
 		if not candidate.has_method("get_context_prompt") or str(candidate.get("interaction_type")) != "zone": continue
 		if str(candidate.get("zone_target")) == "": continue
+		if not candidate.tree_exiting.is_connected(_gate_removed): candidate.tree_exiting.connect(_gate_removed)
 		var sign := _make_sign(candidate)
 		gate_cache.append({"gate":candidate, "sign":sign})
 	route_dirty = true
@@ -139,6 +142,8 @@ func _steps_to(source: String, destination: String) -> int:
 		var entry: Array = queue.pop_front()
 		for next_zone: String in Sectors.neighbors(str(entry[0])):
 			if visited.has(next_zone): continue
+			var edge := Sectors.connection_between(str(entry[0]), next_zone)
+			if not edge.is_empty() and not Sectors.edge_available(edge, host.quests, host.story_state): continue
 			var steps := int(entry[1]) + 1
 			if next_zone == destination: return steps
 			visited[next_zone] = true

@@ -1,103 +1,102 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-25T05:22:15.4458575Z",
-  "build_id": "vercel-headroom-20261025",
-  "generated_from_commit": "68e06975a2b71048359225154bd506d435e93656",
+  "generated_at_utc": "2026-10-25T14:35:59.855187Z",
+  "build_id": "cohesive-foundation-r14-20261025",
+  "generated_from_commit": "0dcb4cd08e8d978692bd92253e9ea7ce72f28003",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\vercel-headroom-20261025\\runtime-packs",
+  "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 101083960,
+  "total_bytes": 101095416,
   "packs": [
     {
       "id": "base",
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-r14-20261025",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4097364,
-      "sha256": "838f3387592833319b914b7e6c5f29f0628f545bb2cd23e3e7beb6824dfc386e",
+      "bytes": 4105780,
+      "sha256": "4f9fa36f5af6e2be8503440d4a9e99f3c21deca008a156622c62185848cad5ad",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-r13-20261025",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35792504,
-      "sha256": "b462f7998efaf8571b3ee2e51fe73836dd4b56ffa144d4b76025ec4e437d9c55",
+      "sha256": "75e519aa88aa662092db5d0b1717b234a7fd4cc9725dc77048513a017b5c4597",
       "status": "candidate_external",
-      "log": "logs/pack-opening.stdout.log"
+      "log": "logs/pack-opening.stdout.log",
+      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\opening.pck"
     },
     {
       "id": "adjacent",
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-20261025",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 1406880,
-      "sha256": "586bd090d749fcc7a1c7a7e33254e83689bc8b67837dcb28ce1d994ba343e897",
+      "sha256": "8cddbfa72e7c503a1da80bac577cba99a0955274255c241caf8687ecd36e11d2",
       "status": "candidate_external",
-      "log": "logs/pack-adjacent.stdout.log"
+      "log": "logs/pack-adjacent.stdout.log",
+      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\adjacent.pck"
     },
     {
       "id": "campaign",
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-20261025",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 8727284,
-      "sha256": "24317092248980b08dedb26ca7da4df5bed3f1fb29151b2e70ff681592701d32",
+      "bytes": 8730324,
+      "sha256": "f397eb9595e942a6fda7481bbfa7a57ef4e6bcfa3d325196df7c2a18d5beb818",
       "status": "candidate_external",
-      "log": "logs/pack-campaign.stdout.log"
+      "log": "logs/pack-campaign.stdout.log",
+      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\campaign.pck"
     },
     {
       "id": "characters",
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-20261025",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9659664,
-      "sha256": "47f985be35d9ecbd779893630228b086a79c8619763d7ed46f74b6750d7f5915",
+      "sha256": "7b970a27f4e91a5af7c6dc75f888cc08b0590a1ae9bd4503c941f70b3783a27b",
       "status": "candidate_external",
-      "log": "logs/pack-characters.stdout.log"
+      "log": "logs/pack-characters.stdout.log",
+      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\characters.pck"
     },
     {
       "id": "monsters",
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-20261025",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14711416,
-      "sha256": "d55d5bbb3b744b2585e26d2e0ac55495cba58bc745a250448cb617075f7dfd72",
+      "sha256": "28f0e4adc9004825956d1b31c4b13103bec4fd69628408a7d9f3e16c8a9cbbd5",
       "status": "candidate_external",
-      "log": "logs/pack-monsters.stdout.log"
+      "log": "logs/pack-monsters.stdout.log",
+      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\monsters.pck"
     },
     {
       "id": "audio",
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-20261025",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19308452,
       "sha256": "b19c68c7420da93495328e7c75b534dd87856a336f517ec51d143abf39e7a0af",
       "status": "candidate_external",
-      "log": "logs/pack-audio.stdout.log"
+      "log": "logs/pack-audio.stdout.log",
+      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\audio.pck"
     },
     {
       "id": "quality_materials",
-      "version": "vercel-headroom-20261025",
+      "version": "cohesive-foundation-20261025",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7380396,
       "sha256": "a41f4d63bdf2c0af080da9f3d3fb997ef2de3fb6d86aece26478051365ca7662",
       "status": "candidate_external",
-      "log": "logs/pack-quality_materials.stdout.log"
+      "log": "logs/pack-quality_materials.stdout.log",
+      "retained_from": "D:\\Projects\\AshenOath\\.release-gate\\cohesive-foundation-r13-20261025\\runtime-packs\\quality_materials.pck"
     }
   ],
-  "errors": [],
-  "selected_web_export": {
-    "build_id": "vercel-headroom-20261025",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\vercel-headroom-20261025\\export",
-    "generated_from_commit": "68e06975a2b71048359225154bd506d435e93656",
-    "artifacts_total_bytes": 104894047,
-    "root_pck_sha256": "cb1f1a0ec3886223fa3520d03dc52a02fc2d74aba2d6d07c74dd72e0af349df5",
-    "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
-  }
+  "errors": []
 }
