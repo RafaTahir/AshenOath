@@ -67,7 +67,7 @@ func _process_modification() -> void:
 	var delta := minf(get_process_delta_time(), 0.05)
 	elapsed += delta
 	var near := true
-	var viewer: Node3D = actor.get_meta("cast_viewer", null)
+	var viewer: Node3D = actor.get_meta("cast_viewer") if actor.has_meta("cast_viewer") else null
 	if is_instance_valid(viewer):
 		near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
 	var effective := activity if activity != "" else carried_activity

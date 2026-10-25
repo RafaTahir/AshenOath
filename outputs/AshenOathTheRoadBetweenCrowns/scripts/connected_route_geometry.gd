@@ -119,7 +119,7 @@ static func open_gate(root: Node3D, target: String, instant: bool) -> void:
 	if gate == null: return
 	var hinge := gate.get_node("Hinge") as Node3D
 	if instant:
-		var tween: Tween = gate.get_meta("opening_tween",null)
+		var tween: Tween = gate.get_meta("opening_tween") if gate.has_meta("opening_tween") else null
 		if tween != null and tween.is_valid(): tween.kill()
 		hinge.rotation.y = PI*0.5
 		_gate_collision(gate,true)
@@ -135,7 +135,7 @@ static func open_gate(root: Node3D, target: String, instant: bool) -> void:
 static func close_gate(root: Node3D, target: String, actor_position: Vector3) -> void:
 	var gate := root.get_node_or_null("ConnectedRoads/RoadTo_"+target+"/TravelGate") as Node3D
 	if gate == null: return
-	var tween: Tween = gate.get_meta("opening_tween",null)
+	var tween: Tween = gate.get_meta("opening_tween") if gate.has_meta("opening_tween") else null
 	if tween != null and tween.is_valid(): tween.kill()
 	gate.remove_meta("opening_tween")
 	gate.get_node("Hinge").rotation.y = 0.0

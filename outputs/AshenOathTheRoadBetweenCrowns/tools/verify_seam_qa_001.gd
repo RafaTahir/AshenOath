@@ -17,6 +17,10 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	if "--connected-greyfen-only" in OS.get_cmdline_user_args():
+		await _connected_greyfen_contract()
+		quit(0 if failures.is_empty() else 1)
+		return
 	if "--arrival-contract-only" in OS.get_cmdline_user_args():
 		await _arrival_contract()
 		quit(0 if failures.is_empty() else 1)
@@ -95,6 +99,71 @@ func _run() -> void:
 			push_error(failure)
 		print("SEAM-QA-001 VERIFIER: FAIL (%d)" % failures.size())
 	quit(0 if failures.is_empty() else 1)
+
+func _connected_greyfen_contract() -> void:
+	var game = (load("res://scenes/main.tscn") as PackedScene).instantiate()
+	root.add_child(game)
+	await _frames(4)
+	game.call("_new_game")
+	if not await _wait_connected_playable(game,"greyfen"):
+		_check(false,"Greyfen did not become playable")
+	else:
+		for target: String in ["wychwood","deep_wood","vargan_approach"]:
+			if not await _connected_crossing(game,"greyfen",target): break
+			if not await _connected_crossing(game,target,"greyfen"): break
+	for failure: String in failures: push_error(failure)
+	print("CONNECTED GREYFEN: %s (%d failures; native collision/build check, not browser input proof)" % ["PASS" if failures.is_empty() else "FAIL",failures.size()])
+	game.prepare_resource_shutdown()
+	await _frames(int(game.ZONE_RETIRE_FRAMES)+6)
+	game.finalize_resource_shutdown()
+	game.queue_free()
+	await _frames(24)
+
+func _wait_connected_playable(game: Node, target: String) -> bool:
+	var deadline := Time.get_ticks_msec()+180000
+	while Time.get_ticks_msec() < deadline:
+		await process_frame
+		if game.current_zone_id == target and is_instance_valid(game.player) and game.player.can_control and not game.zone_transition_pending and not game.neighbor_crossing_pending and not game.neighbor_arrival_pending:
+			if game.opening_scene_pending or bool(game.zone_root.get_meta("opening_scene_active",false)): continue
+			return true
+	return false
+
+func _connected_crossing(game: Node, source: String, target: String) -> bool:
+	var edge := WorldSectorManifest.connection_between(source,target)
+	_check(not edge.is_empty(),"missing connection %s -> %s" % [source,target])
+	if edge.is_empty(): return false
+	var points := WorldSectorManifest.connector_points(edge)
+	var normal := WorldSectorManifest.direction(str(edge.id))
+	var warm: bool = game.seamless_world.has_prepared(target)
+	var frame := WorldSectorManifest.crossing_frame(edge)
+	points[-1] -= normal*(0.7 if warm else 1.45)
+	for index in range(points.size()-1):
+		var parameters := PhysicsTestMotionParameters3D.new()
+		parameters.from = Transform3D(Basis.IDENTITY,points[index]+Vector3.UP*0.15)
+		parameters.motion = points[index+1]-points[index]
+		parameters.margin = 0.01
+		parameters.max_collisions = 8
+		var result := PhysicsTestMotionResult3D.new()
+		if PhysicsServer3D.body_test_motion(game.player.get_rid(),parameters,result):
+			for hit in result.get_collision_count():
+				if absf(result.get_collision_normal(hit).y) < 0.5:
+					_check(false,"blocked passage %s -> %s segment %d: %s" % [source,target,index,result.get_collider(hit)])
+		var ray := PhysicsRayQueryParameters3D.create(points[index]+Vector3.UP*2.0,points[index]+Vector3.DOWN*2.0,1,[game.player.get_rid()])
+		_check(not game.player.get_world_3d().direct_space_state.intersect_ray(ray).is_empty(),"missing passage floor %s -> %s segment %d" % [source,target,index])
+	# Fixture placement is explicit: sweep the real body first, then exercise
+	# the crossing owner. This is not represented as an earned gameplay run.
+	game.player.global_position = frame.origin+normal*(0.06 if warm else -1.15)+Vector3.UP*0.15
+	game.player.velocity = normal*2.0
+	game.seamless_world.cooldown = 0.0
+	game.call("_process",0.25)
+	var ready := await _wait_connected_playable(game,target)
+	_check(ready,"connection did not become playable: %s -> %s (%s)" % [source,target,game.seamless_world.preparation_snapshot()])
+	if not ready: return false
+	_check(game.zone_root.has_node("ConnectedRoads/RoadTo_"+source),"missing return passage in "+target)
+	_check(not game.player.transition_locked,"retained player lock in "+target)
+	_check(game.player.global_position.y > -0.2,"unsupported arrival in "+target)
+	print("CONNECTED CROSSING: %s -> %s ready=%s position=%s" % [source,target,ready,game.player.global_position])
+	return true
 
 func _arrival_contract() -> void:
 	var count := 0

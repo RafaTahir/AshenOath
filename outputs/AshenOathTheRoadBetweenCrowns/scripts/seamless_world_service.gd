@@ -62,10 +62,10 @@ func _construction_node_added(node: Node) -> void:
 		_added_nodes.append(weakref(node))
 
 func _process(delta: float) -> void:
-	_sync_resident_camera()
-	if _foreground: return
 	if not is_instance_valid(host) or not host.game_started or host.resource_shutdown_prepared:
 		cancel_preparation(); return
+	_sync_resident_camera()
+	if _foreground: return
 	if _neighbor_scope != null and (not is_instance_valid(_neighbor_scope.owned_root) or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced"))): cancel_preparation()
 	_poll += delta
 	if _poll < 0.06: return
@@ -77,6 +77,9 @@ func _process(delta: float) -> void:
 	if get_tree().paused or host._journey_load_pending() or not is_instance_valid(host.player) or not host.player.can_control or host._story_has_active_combat(): return
 	if host.opening_checkpoint_pending or host.opening_detail_pending or host.zone_transition_pending: return
 	if host.player.velocity.length_squared() > 0.25 or host.player.bow_aiming: return
+	# Cold activation starts just before the common plane. Retain the source
+	# half while it still supports Kael, even if a state change invalidated it.
+	if contains_resident_passage(host.player.global_position) and not WorldSectorManifest.connector_contains(str(host.current_zone_id),host.player.global_position): return
 	if _valid_cached_destination(target):
 		_show_neighbor(_selected_connection); return
 	if _neighbor_state == "ready":
@@ -135,12 +138,21 @@ func prepare_crossing_view() -> void:
 func crossing_for(zone_id: String) -> Dictionary:
 	return _crossing if str(_crossing.get("target","")) == zone_id else {}
 
+func contains_resident_passage(position: Vector3) -> bool:
+	if not is_instance_valid(_preview_root) or _preview_root.is_queued_for_deletion() or not _preview_root.visible: return false
+	return WorldSectorManifest.connector_contains(str(_preview_root.get_meta("zone_resource_id","")),_preview_root.to_local(position))
+
 func complete_crossing(previous_root: Node3D) -> void:
 	_preview_root = null
+	if not _crossing.is_empty():
+		# Cold fallback construction has no prepared preview to open these.
+		# Never leave an arriving capsule inside the reverse readiness leaf.
+		preload("res://scripts/connected_route_geometry.gd").open_gate(host.zone_root,str(_crossing.source),true)
 	if not _crossing.is_empty() and is_instance_valid(previous_root):
 		previous_root.transform = _crossing.transform
 		previous_root.visible = true
 		host.zone_residency.begin_preview(previous_root)
+		preload("res://scripts/connected_route_geometry.gd").open_gate(previous_root,str(_crossing.target),true)
 		_preview_root = previous_root
 	_crossing = {}
 
@@ -191,6 +203,8 @@ func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 		var total: int = _construction_steps()+2
 		host.hud.update_journey_load_progress(zone_id,float(_neighbor_step)/float(total),"Preparing the complete destination...")
 	_foreground = false
+	if _neighbor_failure.is_empty():
+		_neighbor_failure = "Preparation cancelled." if not keep_waiting.call() else "Destination preparation exceeded its bounded deadline."
 	cancel_preparation()
 	return false
 
@@ -233,7 +247,9 @@ func _build_neighbor_step(context: ZoneBuildContext) -> void:
 	var greyfen := context.zone_id == "greyfen"
 	var steps := _construction_steps()
 	if _neighbor_step == 0:
-		var layers: Dictionary = host.ZoneSceneCatalog.attach(context.zone_id,context.zone_root,["gameplay"] if greyfen else ["gameplay","decoration"])
+		var requested_layers: Array[String] = ["gameplay"]
+		if not greyfen: requested_layers.append("decoration")
+		var layers: Dictionary = host.ZoneSceneCatalog.attach(context.zone_id,context.zone_root,requested_layers)
 		if not bool(layers.ok): _neighbor_failure = str(layers.errors); return
 	if _neighbor_step < steps:
 		if greyfen:
@@ -284,8 +300,9 @@ func publish_prepared(zone_id: String) -> bool:
 	return true
 
 func _sync_resident_camera() -> void:
-	_sync_owner_camera(_preview_root)
-	_sync_owner_camera(host.zone_root if is_instance_valid(host) else null)
+	if is_instance_valid(_preview_root): _sync_owner_camera(_preview_root)
+	else: _preview_root = null
+	if is_instance_valid(host) and is_instance_valid(host.zone_root): _sync_owner_camera(host.zone_root)
 
 func _sync_owner_camera(root: Node3D) -> void:
 	if not is_instance_valid(host) or not is_instance_valid(root) or root.is_queued_for_deletion(): return
@@ -354,7 +371,7 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 			if not WorldSectorManifest.edge_available(connection,host.quests,host.story_state): continue
 			var frame := WorldSectorManifest.crossing_frame(connection)
 			var point := frame.affine_inverse()*actor.global_position
-			var threshold := 0.0 if has_prepared(str(connection.target)) else -0.85
+			var threshold := 0.0 if has_prepared(str(connection.target)) else -1.25
 			if point.z < threshold or point.z > 3.0 or absf(point.x) > float(connection.half_width): continue
 			var normal := WorldSectorManifest.direction(str(connection.id))
 			if actor.velocity.dot(normal) <= 0.05: continue

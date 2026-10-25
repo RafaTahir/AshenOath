@@ -319,3 +319,54 @@ No agent gameplay, browser QA, screenshots or benchmarks were run for this
 delivery. No seconds-saved, numerical performance compliance or final listening
 approval is claimed. All authorized source work in this cohesive-game scope is
 implemented; user acceptance and the explicit art/music review gates remain open.
+
+## Delivery 8: Greyfen Exit Repair
+
+The user reported blocked exits on `connected-campaign-20261025`. Two authorized
+test allocations were used; no additional gameplay run is claimed.
+
+- Test 1, production in-app Chromium: real New Game and keyboard travel reached
+  the north passage, then displayed the destination-preparation failure. Repeated
+  missing `cast_viewer` metadata errors obscured earlier console messages.
+- The Windows Chrome control bridge subsequently stopped Computer Use because
+  it could not confidently determine the current browser URL. No further UI
+  input was sent. This is not a successful Chrome verification.
+- Test 2, focused native headless collision/build check in an isolated D: profile:
+  Greyfen/Wychwood, Greyfen/Deep Wood and Greyfen/Castle Approach all activated
+  in both directions with control restored after the fallback repair. The run
+  was **FAIL**, not accepted: one Castle-return capsule sweep was blocked and
+  preparation/lifetime errors remained. Raw evidence is preserved at
+  `D:\Temp\AshenOath\route-repair-native-20261025\stdout.log` and `stderr.log`.
+  Fixture positioning and collision sweeps are not ordinary-input browser proof.
+
+The native trace identified the primary implementation error: the conditional
+untyped layer array failed the loader's `Array[String]` argument at construction
+step zero. Later steps could run despite the missing first stage, and full-build
+destinations then failed their ground/bounds/return-gate contract. Use an explicit
+typed layer list. Keep normal, fully validated destination construction available
+when opportunistic preparation fails; an optimization cannot trap the player.
+
+Post-run source corrections also open both readiness leaves after a cold
+fallback, guard freed preview-camera references, and check optional tween/viewer
+metadata before reading it. Cold travel begins before contact with the leaf.
+Recognize the retained source half during early handoff and do not retire its
+supporting floor while Kael is still on it; the ordinary world-recovery guard
+must not relocate a player standing on that real passage.
+
+These final corrections receive static review and minimum packaging only. Both
+test allocations are consumed. Browser input, final collision clearance, visual
+continuity, phone behavior and performance remain **UNVERIFIED** after those
+corrections. Do not relabel the failed native run as a pass. Preserve all content,
+quality preferences, saves, character identities and existing approval boundaries.
+
+User checks: leave Greyfen north, west and east; walk back through each passage;
+check cold/warm travel, cancellation/retry and pause; stop at the common boundary
+without being relocated or having the floor retired; Save/Continue near each bend.
+Publication and exact-byte identity are recorded separately in the existing
+WORLD-SAGA-000 receipt and `.release-gate/route-repair-20261025/live-identity.json`.
+
+Final candidate `route-repair-20261025` compiled and packaged after those source
+corrections: **104,849,885 bytes**, **7,715 bytes below** the cap. External packs
+and engine bytes were reused unchanged. The final root/base export is aligned
+with the repaired scripts; successful compilation does not supersede the failed
+runtime record or establish browser/gameplay acceptance.

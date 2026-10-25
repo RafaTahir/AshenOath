@@ -1,90 +1,93 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-25T02:49:21.174574Z",
-  "build_id": "connected-campaign-20261025",
-  "generated_from_commit": "6ff674c1ca5f386ae4ead6325fcfe7ee90f3f43f",
+  "generated_at_utc": "2026-10-25T04:27:17.508185Z",
+  "build_id": "route-repair-20261025",
+  "generated_from_commit": "f6c462d0ea2b64e1d66947f74c0610a91efdefd6",
   "source_dirty": true,
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 104857600,
-  "total_bytes": 101079732,
+  "total_bytes": 101079828,
   "packs": [
     {
       "id": "base",
-      "version": "connected-campaign-20261025",
+      "version": "route-repair-20261025",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4096464,
-      "sha256": "616d0bfe373d21942e47e8db9bd3231be6c5a874a27294db5b2dc308ae92bbb0",
+      "bytes": 4096560,
+      "sha256": "0842e9a0210f20e00dac9938ac8fb3726b12b38745b0f6274b809b79d733e938",
       "status": "candidate_external",
       "log": "base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "connected-campaign-20261025",
+      "version": "route-repair-20261025",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35792504,
       "sha256": "ab20e619356ff57377930acb5a02e6b268818253d9f24f7c5a8b4330aa9aa92d",
-      "status": "candidate_external"
+      "status": "candidate_external",
+      "reused_from_build": "route-repair-20261025"
     },
     {
       "id": "adjacent",
-      "version": "connected-campaign-20261025",
+      "version": "route-repair-20261025",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 1406880,
       "sha256": "1a8fad2031b11a79b80e48079185342ad9ee1eac1d53a30022491851a7c8fdfb",
-      "status": "candidate_external"
+      "status": "candidate_external",
+      "reused_from_build": "route-repair-20261025"
     },
     {
       "id": "campaign",
-      "version": "connected-campaign-20261025",
+      "version": "route-repair-20261025",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8727284,
       "sha256": "24317092248980b08dedb26ca7da4df5bed3f1fb29151b2e70ff681592701d32",
-      "status": "candidate_external"
+      "status": "candidate_external",
+      "reused_from_build": "route-repair-20261025"
     },
     {
       "id": "characters",
-      "version": "connected-campaign-20261025",
+      "version": "route-repair-20261025",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9658576,
       "sha256": "cc8c7a5d54aed38d755c97f2ccc65f76745b9536cacfa6fde20a901221abb0a3",
       "status": "candidate_external",
-      "reused_from_build": "connected-campaign-20261025"
+      "reused_from_build": "route-repair-20261025"
     },
     {
       "id": "monsters",
-      "version": "connected-campaign-20261025",
+      "version": "route-repair-20261025",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14710328,
       "sha256": "d5c822c6bbb68263ef872523b7fdfebb9cda46c6c58c612e72247306f049cc22",
       "status": "candidate_external",
-      "reused_from_build": "connected-campaign-20261025"
+      "reused_from_build": "route-repair-20261025"
     },
     {
       "id": "audio",
-      "version": "connected-campaign-20261025",
+      "version": "route-repair-20261025",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 19308388,
       "sha256": "bbbf494ef72447bd22c62c50eeee41aeaf180d0b5bbb9ecdb6022a99299a669a",
       "status": "candidate_external",
-      "reused_from_build": "connected-campaign-20261025"
+      "reused_from_build": "route-repair-20261025"
     },
     {
       "id": "quality_materials",
-      "version": "connected-campaign-20261025",
+      "version": "route-repair-20261025",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7379308,
       "sha256": "a7c37dc79ed35289f8621333c454eb7db44ce18615f649a6cb20a2df78acefa8",
       "status": "candidate_external",
-      "reused_from_build": "connected-campaign-20261025"
+      "reused_from_build": "route-repair-20261025"
     }
   ],
   "errors": []

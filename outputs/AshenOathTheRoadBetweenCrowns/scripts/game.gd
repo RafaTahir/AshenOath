@@ -1363,9 +1363,10 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		get_tree().paused = neighbor_crossing_was_paused
 		audio.set_game_paused(neighbor_crossing_was_paused)
 		if not ready:
-			hud.end_journey_load(false)
-			_recover_failed_pack_load("The destination could not be prepared. Your current location remains available; use the crossing to retry.")
-			return
+			# Opportunistic preparation must never become the only way out of a
+			# region. The normal coordinator still validates the complete build
+			# and rolls back to this world if that authoritative load fails.
+			print("TRAVEL: neighbor preparation unavailable for %s: %s; using normal destination construction" % [zone_id,seamless_world.preparation_snapshot().get("failure","")])
 		neighbor_arrival_pending = true
 		hud.set_journey_load_applying("Entering " + _zone_display_name(zone_id) + "...")
 	zone_runtime_coordinator.load_zone(zone_id, spawn_pos)
@@ -4866,7 +4867,8 @@ func _tracked_objective_text(quest_id: String, objective_id: String) -> String:
 func _keep_player_in_world() -> void:
 	if player == null:
 		return
-	if WorldSectorManifest.connector_contains(current_zone_id,player.global_position) and player.global_position.y > -2.0: return
+	var in_passage := WorldSectorManifest.connector_contains(current_zone_id,player.global_position) or (seamless_world != null and seamless_world.contains_resident_passage(player.global_position))
+	if in_passage and player.global_position.y > -2.0: return
 	if _is_river_recovery_position(current_zone_id, player.global_position):
 		_recover_from_river(player, _river_center(current_zone_id), 3.4)
 		return
