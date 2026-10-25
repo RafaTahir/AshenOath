@@ -12,7 +12,7 @@
 		}
 	],
 	"output": "res://assets/companions/bracken.scn",
-	"output_sha256": "870ca4e0b9f5fb293a89b45f998eb29de2c2ae4c74932f001d09a5c8c591c64a",
+	"output_sha256": "f3d4c4794f8d4140f9be8c2ff5bb52f285516441293b0db8742e045c64f2796b",
 	"source": "res://assets_external/enemies/Dog.fbx",
 	"source_sha256": "a7250b3c68857120e6da0fd9ea2cdb4a4493823b6afed371b7aa9208407af039",
 	"target_height_m": 0.78,

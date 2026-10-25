@@ -5,6 +5,7 @@ import json
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
+from deployment_policy import POLICY
 
 
 def read_json(path: Path) -> dict:
@@ -101,6 +102,8 @@ def main() -> int:
     manifest["build_id"] = build_id
     manifest["generated_from_commit"] = source_commit
     manifest["source_dirty"] = bool(candidates.get("source_dirty", False))
+    manifest["max_deployment_bytes"] = POLICY["max_deployment_bytes"]
+    manifest["deployment_policy_id"] = POLICY["id"]
     manifest["generated_at_utc"] = generated_at
     manifest["artifact_policy"] = (
         "opening_embedded_external_campaign"

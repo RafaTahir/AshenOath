@@ -6,7 +6,9 @@ import re
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-MAX_TOTAL_MB = 100.0
+from deployment_policy import POLICY
+
+MAX_TOTAL_MB = POLICY["max_deployment_bytes"] / (1024 * 1024)
 MAX_PCK_MB = 60.0
 EXPECTED_FILES = {
     "index.html",

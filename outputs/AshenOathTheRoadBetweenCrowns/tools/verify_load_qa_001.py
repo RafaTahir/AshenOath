@@ -41,8 +41,9 @@ def main() -> int:
     manifest = project / "runtime_pack_manifest.json"
     try:
         data = json.loads(manifest.read_text(encoding="utf-8"))
-        if int(data.get("max_deployment_bytes", 0)) > 100 * 1024 * 1024:
-            errors.append("runtime pack budget exceeds 100 MB")
+        from deployment_policy import POLICY
+        if not 0 < int(data.get("max_deployment_bytes", 0)) <= POLICY["max_deployment_bytes"]:
+            errors.append("runtime pack budget exceeds the shared deployment policy or is missing")
     except (OSError, json.JSONDecodeError) as exc:
         errors.append(f"runtime pack manifest invalid: {exc}")
     hud = project / "scripts" / "hud.gd"

@@ -92,5 +92,5 @@
 		"undercroft": "res://assets/audio/prepared/campaign/music_undercroft.res",
 		"wychwood_tension": "res://assets/audio/prepared/opening/music_wychwood_tension.res"
 	},
-	"schema_version": 1.0
+	"schema_version": 1
 }

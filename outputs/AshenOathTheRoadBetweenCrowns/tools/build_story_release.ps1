@@ -15,12 +15,13 @@ param(
 
 # Production packaging by default. The explicit -Publish option also commits
 # explicitly selected source/artifacts, pushes development/main and deploys to Vercel.
-# Neither mode invokes tests, QA, review tools, browsers or post-deploy requests.
+# Neither mode invokes gameplay tests or browsers. Publication checks HTTP artifact identity.
 $ErrorActionPreference = "Stop"
 $ProjectRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $RepositoryRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent (Split-Path -Parent $ProjectRoot)))
 $GeneratedRoot = Join-Path $RepositoryRoot ".release-gate"
 $WebRoot = Join-Path $RepositoryRoot "web"
+$DeploymentPolicy = Get-Content -LiteralPath (Join-Path $ProjectRoot 'data/deployment_policy.json') -Raw | ConvertFrom-Json
 if ($Publish -and $SkipWebCopy) { throw "-Publish requires the generated web transport to be copied." }
 if ($Publish -and (-not $PublishPaths.Count -or $Ticket -notmatch '^(LR|OPT)-\d{3}$')) { throw "-Publish requires a supported ticket ID and explicit -PublishPaths for authored source." }
 
@@ -154,7 +155,8 @@ $candidate = [ordered]@{
     source_dirty = $true
     artifact_directory = $PackRoot
     artifacts_are_external = $true
-    max_deployment_bytes = 104857600
+    max_deployment_bytes = [int64]$DeploymentPolicy.max_deployment_bytes
+    deployment_policy_id = [string]$DeploymentPolicy.id
     total_bytes = [int64](($records | ForEach-Object { $_.bytes } | Measure-Object -Sum).Sum)
     packs = $records
     errors = @()
@@ -245,7 +247,7 @@ if ($Publish) {
 } else {
     Write-Host "Packaging completed; publication was not requested."
 }
-Write-Host "This command did not run tests, QA, review tools, browsers or post-deployment requests."
+Write-Host "No gameplay, browser QA or benchmark was run. Publication, when requested, checks HTTP artifact identity."
 } finally {
     [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483648) | Out-Null
 }

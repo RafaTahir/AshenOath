@@ -8,6 +8,7 @@ import hashlib
 import json
 import sys
 from pathlib import Path
+from deployment_policy import POLICY
 
 
 def sha256(path: Path) -> str:
@@ -64,8 +65,10 @@ def main() -> int:
     recorded_total = int(manifest.get("total_bytes", -1))
     if recorded_total != total:
         errors.append(f"total_bytes {recorded_total} != pack sum {total}")
-    if total > 100 * 1024 * 1024:
-        errors.append("candidate pack total exceeds 100 MB")
+    # Historical PACK-003 records retain their recorded budget. Current native
+    # candidate totals are decoded bytes; publication validates encoded web/.
+    if manifest.get("deployment_policy_id") != POLICY["id"] and total > int(manifest.get("max_deployment_bytes", POLICY["max_deployment_bytes"])):
+        errors.append("legacy candidate pack total exceeds its recorded budget")
     if errors:
         print("PACK CANDIDATES: FAIL")
         for error in errors:

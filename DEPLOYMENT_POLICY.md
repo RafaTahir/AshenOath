@@ -1,43 +1,55 @@
-# Ashen Oath Milestone Deployment Policy
+# Ashen Oath Deployment Policy
 
-The public build changes only at an explicitly approved roadmap milestone.
+Current policy: `vercel-git-256mib-v1`, approved 2026-10-25.
 
-## Ordinary Tickets
+The canonical numeric policy is
+`outputs/AshenOathTheRoadBetweenCrowns/data/deployment_policy.json`.
+Packaging tools, generated manifests and current release checks consume it.
 
-- Work on `codex/roadmap-*`.
-- Run the targeted ticket gate selected from changed files.
-- Capture only changed views.
-- Export locally only for browser, export-filter, runtime-resource, input, or
-  audio-unlock risk.
-- Commit and push the development branch.
-- Never synchronize tracked `web/`, push `main`, or poll Vercel.
+- Complete deployed `web/`, including its release manifest: strictly below
+  268,435,456 bytes (256 MiB); warning at 209,715,200 bytes (200 MiB).
+- Each committed file: strictly below 104,857,600 bytes (100 MiB).
+- The aggregate ceiling is an internal working budget, not a Vercel guarantee.
+  Only successfully delivered candidate sizes are recorded as verified.
+- Source uploads, encoded deployment bytes, decoded resources, initial-download
+  dependencies, process memory and monthly transfer are separate quantities.
+- Vercel Hobby remains unchanged. No paid services, migration or loss of content,
+  population, visual quality or performance requirements is authorized.
 
-Command:
+## Publication
 
-```powershell
-.\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short summary"
-```
+Use the existing `ashenoath` project, `web` output and Git integration. Work on
+`codex/masterpiece-rebuild` in `D:\Projects\AshenOath`.
 
-## Production Milestones
+1. Package the production preset locally; validate the exact committed files.
+2. Push development and verify the Git preview for that exact SHA over HTTP.
+3. Fast-forward `main`; verify staged production before promotion.
+4. Promote those staged bytes and verify public delivery on the existing origin.
 
-Milestone release must run from `main` after the approved roadmap branch is
-merged:
+Auto-assignment of production domains is disabled. Neither a Git push nor a
+successful static build alone is publication approval. There is no CLI source
+upload or remote Godot rebuild. Protected previews remain protected; automation
+credentials never enter source, logs or URLs.
 
-```powershell
-.\scripts\deploy_web_update.ps1 -TicketId "MILESTONE-ID" -Summary "release summary" -Production -RoadmapMilestone
-```
+Missing assets, stale manifests, wrong hashes/encoding, failed deployments or
+concurrent releases block promotion. Keep the immediately previous production
+deployment available for Hobby rollback. No force push or history rewrite.
 
-The command runs the complete authoritative release suite, regenerates full
-visual evidence, exports and verifies the Web package, synchronizes `web/`,
-pushes `main`, waits for Vercel, and compares the live PCK hash.
+## Evidence and limits
 
-Any failing gate stops the workflow. Production mode is rejected without
-`-RoadmapMilestone`.
+Gameplay, browser QA, listening and performance acceptance remain user-owned.
+Compilation, package checks, HTTP identity and user acceptance are separate.
+HTTP inspection does not execute the game.
 
-## Vercel
+Hobby includes 100 GB fast data transfer per month, independently of this package
+budget, and is restricted to personal/noncommercial use. Receipts do not invent
+usage readings when account usage has not been measured.
 
-- Repository: `RafaTahir/AshenOath`
-- Production branch: `main`
-- Output: `web`
-- URL: `https://ashenoath.vercel.app/`
-- Runtime files must use `Cache-Control: no-cache, must-revalidate`.
+Historical reports retain their original limits. This policy supersedes older
+milestone-only instructions and universal 100 MiB assertions for new packages;
+it does not retroactively change historical acceptance.
+
+References: https://vercel.com/docs/limits,
+https://vercel.com/docs/git,
+https://vercel.com/docs/deployments/promoting-a-deployment,
+https://vercel.com/docs/plans/hobby.

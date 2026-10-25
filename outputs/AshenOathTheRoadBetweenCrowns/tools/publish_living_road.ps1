@@ -42,7 +42,7 @@ foreach ($remoteBranch in @('origin/main', 'origin/codex/masterpiece-rebuild')) 
 
 # Static byte/manifest inspection is part of packaging, not gameplay acceptance.
 & $PythonPath (Join-Path $PSScriptRoot 'build_web_runtime_manifest.py') $WebRoot --check-existing
-if ($LASTEXITCODE -ne 0) { throw 'Package identity or the 100 MiB budget failed; nothing was committed or pushed.' }
+if ($LASTEXITCODE -ne 0) { throw 'Package identity or the shared deployment budget failed; nothing was committed or pushed.' }
 $manifest = Get-Content -LiteralPath (Join-Path $WebRoot 'release_manifest.json') -Raw | ConvertFrom-Json
 $receipt = [ordered]@{
     ticket = $Ticket
@@ -53,52 +53,36 @@ $receipt = [ordered]@{
     user_acceptance = 'pending'
     runtime_testing = 'not_run_user_owned'
     production_url = 'https://ashenoath.vercel.app'
-    deployment_log = (Join-Path $RunRoot 'vercel.log')
+    deployment_method = 'git_staged_production'
 }
 function Save-Receipt {
     [IO.File]::WriteAllText((Join-Path $RunRoot 'publication.json'), (($receipt | ConvertTo-Json -Depth 8) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
 }
 Save-Receipt
 
+function Invoke-PublicationStep([string]$Action) {
+    & $PythonPath (Join-Path $PSScriptRoot 'vercel_git_release.py') $Action --receipt (Join-Path $RunRoot 'publication.json')
+    if ($LASTEXITCODE -ne 0) { throw "Publication stopped at $Action. Preserve and resume the receipt in $RunRoot; do not rebuild or recommit unchanged bytes." }
+}
+
+# Staging is enabled before either Git push. Protected previews remain protected.
+Invoke-PublicationStep 'setup'
+
 # Explicit paths include authored source; --only leaves unrelated staged work alone.
 Invoke-Git (@('add', '--') + $CommitPaths)
 Invoke-Git (@('commit', '--only', '-m', $Message, '--') + $CommitPaths)
-$receipt.package_commit = (& git -C $RepositoryRoot rev-parse HEAD).Trim()
-$receipt.phase = 'committed'
-Save-Receipt
-Invoke-Git @('push', '--atomic', 'origin', 'HEAD:codex/masterpiece-rebuild', 'HEAD:main')
-$receipt.phase = 'pushed'
-Save-Receipt
+Invoke-PublicationStep 'bind'
+Invoke-Git @('push', 'origin', 'HEAD:codex/masterpiece-rebuild')
+Invoke-PublicationStep 'preview'
 
-# Upload only the committed static site; source assets and diagnostics stay local.
-$SiteRoot = Join-Path $RunRoot 'site'
-New-Item -ItemType Directory -Path $SiteRoot | Out-Null
-$archive = Join-Path $RunRoot 'site.zip'
-Invoke-Git @('archive', '--format=zip', "--output=$archive", 'HEAD', 'web', 'vercel.json')
-Expand-Archive -LiteralPath $archive -DestinationPath $SiteRoot
-New-Item -ItemType Directory -Path (Join-Path $SiteRoot '.vercel') | Out-Null
-Copy-Item -LiteralPath $LinkPath -Destination (Join-Path $SiteRoot '.vercel/project.json')
-
-$PriorTemp = $env:TEMP
-$PriorTmp = $env:TMP
-$PriorNpmCache = $env:npm_config_cache
-try {
-    $env:TEMP = 'D:\Temp\AshenOath'
-    $env:TMP = $env:TEMP
-    $env:npm_config_cache = Join-Path $env:TEMP 'npm-cache'
-    New-Item -ItemType Directory -Force -Path $env:npm_config_cache | Out-Null
-    Push-Location $SiteRoot
-    try {
-        & npx.cmd --yes vercel --prod --yes 2>&1 | Tee-Object -FilePath $receipt.deployment_log
-        if ($LASTEXITCODE -ne 0) { throw "Vercel failed; pushed commit and exact site are retained at $RunRoot. Resume deployment from site, without recommitting." }
-    } finally { Pop-Location }
-} finally {
-    $env:TEMP = $PriorTemp
-    $env:TMP = $PriorTmp
-    $env:npm_config_cache = $PriorNpmCache
-}
-$receipt.phase = 'published_awaiting_user'
-Save-Receipt
+# Recheck main after the preview wait; a concurrent change must not be overwritten.
+Invoke-Git @('fetch', 'origin', 'main')
+& git -C $RepositoryRoot merge-base --is-ancestor origin/main HEAD
+if ($LASTEXITCODE -ne 0) { throw 'Main changed during the preview. Preserve this candidate and integrate before continuing.' }
+Invoke-Git @('push', 'origin', 'HEAD:main')
+Invoke-PublicationStep 'production'
+Invoke-PublicationStep 'promote'
+$receipt = Get-Content -LiteralPath (Join-Path $RunRoot 'publication.json') -Raw | ConvertFrom-Json
 Write-Host "Published $Ticket : $($receipt.package_commit)"
 Write-Host "Receipt: $RunRoot/publication.json"
 Write-Host 'Runtime/gameplay/listening acceptance belongs to the user and was not executed.'

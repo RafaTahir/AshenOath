@@ -1,133 +1,61 @@
 # Ashen Oath Deployment Workflow
 
-## Pipeline
+`D: source -> local production export -> committed web/ -> Git preview -> staged production -> promotion`
 
-Ashen Oath uses this production path:
+## Current configuration
 
-`Godot source project -> slim Godot Web export -> web/ -> GitHub -> Vercel`
+- Repository: `RafaTahir/AshenOath`; development: `codex/masterpiece-rebuild`.
+- Vercel project: `ashenoath`; production branch: `main`; output: `web`.
+- Remote build: `echo "Static Godot build"`; no Godot compilation in Vercel.
+- Production: `https://ashenoath.vercel.app/`; automatic domain assignment off.
+- Budget and boundaries: [DEPLOYMENT_POLICY.md](DEPLOYMENT_POLICY.md).
 
-This pipeline runs only for approved roadmap milestones. Ordinary tickets use
-targeted verification and a development-branch checkpoint; they do not export
-unless Web-specific risk requires it.
+## Build and publish
 
-- Editable Godot project: `outputs/AshenOathTheRoadBetweenCrowns`
-- Generated export: `outputs/AshenOath_Web`
-- Deployable static folder: `web`
-- Vercel config: `vercel.json`
-- Production URL: `https://ashenoath.vercel.app/`
+Use `outputs/AshenOathTheRoadBetweenCrowns/tools/build_story_release.ps1` for
+necessary production compilation. It does not launch gameplay.
+Use a fresh output directory under `.release-gate`; preserve previous artifacts.
 
-## QA Build Boundary
+Publish with `tools/publish_living_road.ps1 -Ticket ... -Message ... -CommitPaths ...`
+from the canonical project. Supply explicit source/generated paths; unrelated
+staged and untracked work is preserved. The publisher reads the Vercel CLI login
+or `VERCEL_TOKEN`, without saving credentials in the repository.
 
-The repository contains two Web presets by design: `Web Browser` is the
-production candidate and `Web QA Browser` is a disposable local test build.
-Only the QA preset carries the `ashenoath_qa` feature flag and browser telemetry
-commands. Never upload `.release-gate/AshenOath_QA` or expose `?qa=1` on the
-production candidate. `tools/verify_security_001.py` is the static boundary
-check used before a milestone release.
+The publisher configures staging, binds a commit and package identity, pushes
+development, and waits for that exact Git preview. After HTTP files match,
+it checks main has not diverged, fast-forwards main, verifies staged production,
+and promotes that deployment. There is no duplicate CLI upload.
 
-## One-Time GitHub Setup
+Receipts: `.release-gate/living-road/<ticket>-<UTC>/publication.json`.
+They record deployments, commit, build ID, encoded/decoded sizes, hashes,
+headers, prior production ID, limitations and separate user acceptance.
 
-If GitHub CLI is installed and authenticated later:
+## Failure and resumption
 
-```powershell
-cd "D:\Projects\AshenOath"
-gh repo create ashen-oath --private --source . --remote origin --push
-```
+Do not rebuild/recommit an unchanged candidate after a transport failure.
+`tools/vercel_git_release.py` supports `setup`, `bind`, `preview`, `production`
+and `promote`, each with `--receipt <absolute receipt path>`. Resume only the
+failed step after resolving its recorded error. `bind` is for the original new
+candidate, never to disguise changed bytes after preview verification.
 
-Manual setup without GitHub CLI:
+If preview failed, do not push main. If production verification failed, do not
+promote. Normal fast-forward protections remain. HTTP checks reject missing or
+stale files, unexpected redirects, wrong MIME/encoding, decoded pack mismatches
+and incorrect cache policy. Deployment protection is not disabled.
 
-1. Create a private GitHub repository named `ashen-oath`.
-2. From this workspace, run:
+If public delivery fails after promotion, roll back to the recorded immediately
+previous production deployment, not a destructive Git reset. Hobby permits that
+previous deployment. Rollback leaves automatic domain assignment disabled.
 
-```powershell
-git remote add origin https://github.com/YOUR_ACCOUNT/ashen-oath.git
-git branch -M main
-git push -u origin main
-```
+## Cache and saves
 
-Do not paste tokens into files. Use normal GitHub browser login, Git Credential Manager, or GitHub CLI auth.
+Keep `vercel.json` headers/rewrites: gzip PCK/WASM/engine script delivery,
+immutable content-addressed engine and pack URLs, and revalidated mutable roots.
+Changing a pack regenerates its identity; policy changes do not clear saves or
+preferences. Never upload QA exports, credentials, archives or import caches.
 
-## One-Time Vercel Setup
+Larger packages require successful Git staging. Only the actual delivered size
+is proven, not the entire 256 MiB ceiling. No padding is added to prove capacity.
 
-Because Vercel CLI is not currently installed/authenticated in this workspace, use the dashboard:
-
-1. Go to Vercel.
-2. Add New Project.
-3. Import the GitHub repo.
-4. Framework preset: Other or static.
-5. Build command: leave empty unless Vercel requires one.
-6. Output directory: `web`.
-7. Deploy.
-8. Production URL: `https://ashenoath.vercel.app/`.
-9. Future pushes to `main` update production automatically.
-
-The project includes `vercel.json`, which declares `web` as the output directory. Godot Web runtime files use stable names, so `index.html`, `index.pck`, `index.js`, `index.wasm`, and worklet files must always revalidate instead of using long-lived browser cache.
-
-## Daily Codex Workflow
-
-After implementing an ordinary ticket on `codex/roadmap-*`:
-
-```powershell
-cd "D:\Projects\AshenOath"
-.\scripts\deploy_web_update.ps1 -TicketId "TICKET-ID" -Summary "short task summary"
-```
-
-The script selects affected gates, uses cached passes when inputs are unchanged,
-and commits/pushes the development branch. It does not modify `web/`.
-
-For an approved production milestone:
-
-```powershell
-.\scripts\deploy_web_update.ps1 -TicketId "MILESTONE-ID" -Summary "release summary" -Production -RoadmapMilestone
-```
-
-Only milestone mode runs the full suite, complete gallery, export, packed
-startup, `web/` synchronization, `main` push, and Vercel verification.
-
-## Manual Deploy
-
-1. Run the deploy script with the ticket ID and summary.
-2. The script launches the exported `index.pck` through Godot to catch omitted scripts and preload failures before deployment.
-3. Confirm `web/` contains `index.html`, `index.js`, `index.wasm`, `index.pck`, `index.png`, and worklet files.
-4. Confirm the script committed and pushed to GitHub.
-5. Check the Vercel dashboard for the production deployment if a deployment URL is not already configured locally.
-
-## Avoiding Stale Browser Cache
-
-- Runtime files are configured with `Cache-Control: no-cache, must-revalidate`.
-- After deployment, verify the live headers:
-
-```powershell
-Invoke-WebRequest -Uri "https://ashenoath.vercel.app/index.pck?v=cache-check" -Method Head -UseBasicParsing
-```
-
-The `Cache-Control` header must include `no-cache` or `must-revalidate`, not `max-age=3600`.
-
-- A cache-busting query string can still be used while testing:
-
-```text
-https://ashenoath.vercel.app/?v=ticket-id
-```
-
-- For public release notes, include a visible version tag or ticket ID.
-
-## Do Not Commit
-
-- Secrets or `.env` files.
-- Raw downloads and archives.
-- Screenshots or `Development_Gallery`.
-- Old non-slim exports under `outputs/AshenOath_Web` or `outputs/AshenOath_Web_Slim`.
-- Godot `.godot` import cache.
-
-## Local Web Test
-
-```powershell
-cd "D:\Projects\AshenOath\web"
-& "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" -m http.server 8787 --bind 127.0.0.1
-```
-
-Open:
-
-```text
-http://127.0.0.1:8787/index.html
-```
+Runtime acceptance remains user-owned: launch, Continue, transitions, input,
+audio, visuals and phones. No game/browser tests are part of publication.

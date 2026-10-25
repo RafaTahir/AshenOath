@@ -14,7 +14,7 @@ signal pack_cancelled(pack_id: String)
 const MANIFEST_PATH := "res://runtime_pack_manifest.json"
 const CACHE_ROOT := "user://ashenoath_packs"
 const CACHE_INDEX_PATH := "user://ashenoath_packs/cache_index.json"
-const MAX_DEPLOYMENT_BYTES := 104857600
+const DEPLOYMENT_POLICY_PATH := "res://data/deployment_policy.json"
 const MAX_RETRIES := 2
 const CHUNK_SIZE := 1024 * 1024
 const MAX_CONCURRENT_DOWNLOADS := 3
@@ -448,7 +448,12 @@ func retire_unneeded_packs(keep_ids: Array[String]) -> void:
 	_start_pending_downloads()
 
 func deployment_budget_ok(total_bytes: int) -> bool:
-	return total_bytes < int(manifest.get("max_deployment_bytes", MAX_DEPLOYMENT_BYTES))
+	var maximum := int(manifest.get("max_deployment_bytes", 0))
+	if maximum <= 0 and FileAccess.file_exists(DEPLOYMENT_POLICY_PATH):
+		var policy: Variant = JSON.parse_string(FileAccess.get_file_as_string(DEPLOYMENT_POLICY_PATH))
+		if policy is Dictionary:
+			maximum = int(policy.get("max_deployment_bytes", 0))
+	return total_bytes >= 0 and maximum > 0 and total_bytes < maximum
 
 func _start_pending_downloads() -> void:
 	if scheduling_downloads:

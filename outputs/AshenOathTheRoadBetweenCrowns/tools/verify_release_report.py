@@ -14,6 +14,7 @@ import re
 import subprocess
 from pathlib import Path
 from typing import Any
+from deployment_policy import POLICY
 
 from PIL import Image, ImageStat
 from release_identity import HashCache, artifact_snapshot, harness_fingerprint, runtime_fingerprint
@@ -151,7 +152,8 @@ def validate_artifact(project: Path, report: dict[str, Any], errors: list[str]) 
     fail(errors, set(recorded_by_path) == set(actual_by_relative), "artifact record does not match files on disk")
     total = sum(path.stat().st_size for path in actual_files)
     fail(errors, int(artifact.get("total_bytes", -1)) == total, "artifact total size is stale")
-    fail(errors, total < int(artifact.get("max_bytes", 100 * 1024 * 1024)), f"artifact exceeds 100 MiB: {total} bytes")
+    maximum = int(artifact.get("max_bytes", POLICY["max_deployment_bytes"]))
+    fail(errors, total < maximum, f"artifact must be below its recorded {maximum}-byte budget: {total} bytes")
     pck = actual_by_relative.get("index.pck")
     fail(errors, pck is not None, "artifact has no root index.pck")
     if pck is not None:

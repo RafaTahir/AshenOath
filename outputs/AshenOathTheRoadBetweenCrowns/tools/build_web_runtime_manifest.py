@@ -16,10 +16,30 @@ import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
+from deployment_policy import POLICY, check_budget, check_file_size, size_summary
 
 
 RELEASE_MANIFEST = "release_manifest.json"
-MAX_TOTAL_BYTES = 104_857_600
+MAX_TOTAL_BYTES = POLICY["max_deployment_bytes"]
+
+
+def retained_gzip(decoded: bytes, relative: str) -> bytes | None:
+    """Reuse proven transport only when its entire decoded content is unchanged."""
+    published = Path(__file__).resolve().parents[3] / "web"
+    if relative == "index.wasm":
+        candidates = sorted(published.glob("engine/*/index.wasm"))
+    else:
+        candidates = [published / relative]
+    for candidate in candidates:
+        if not candidate.is_file():
+            continue
+        packed = candidate.read_bytes()
+        try:
+            if packed.startswith(b"\x1f\x8b") and gzip.decompress(packed) == decoded:
+                return packed
+        except (OSError, EOFError, zlib.error):
+            continue
+    return None
 
 
 def lossless_gzip(payload: bytes, optimize_large: bool = False) -> bytes:
@@ -156,7 +176,7 @@ def compress_wasm(path: Path) -> None:
         raise ValueError("Cannot package a non-WebAssembly engine")
     # Engine code benefits from the bounded encoder even above the small-pack
     # threshold. Its decoded bytes and the required gzip format stay identical.
-    packed = lossless_gzip(payload, optimize_large=True)
+    packed = retained_gzip(payload, "index.wasm") or lossless_gzip(payload, optimize_large=True)
     if gzip.decompress(packed) != payload:
         raise ValueError("WebAssembly lossless transport round trip failed")
     path.write_bytes(packed)
@@ -191,7 +211,7 @@ def compress_pck_transport(export_dir: Path) -> None:
             raise ValueError(f"{path.name} is not a valid Godot PCK payload")
         if payload.startswith(b"\x1f\x8b"):
             continue
-        packed = lossless_gzip(decoded)
+        packed = retained_gzip(decoded, path.relative_to(export_dir).as_posix()) or lossless_gzip(decoded)
         if gzip.decompress(packed) != decoded:
             raise ValueError(f"{path.name} gzip transport failed its lossless round trip")
         temporary = path.with_name(path.name + ".tmp")
@@ -231,6 +251,7 @@ def inspect_packaged_export(export_dir: Path) -> dict:
         if not path.is_relative_to(export_dir) or path == export_dir:
             raise ValueError(f"Artifact escapes export directory: {relative}")
         total += path.stat().st_size
+        check_file_size(relative, path.stat().st_size)
         if path.stat().st_size != entry["bytes"] or sha256(path) != entry["sha256"]:
             raise ValueError(f"Artifact size/hash mismatch: {relative}")
         encoded_script = relative == engine["script"] and engine.get("script_encoding") == "gzip"
@@ -248,13 +269,17 @@ def inspect_packaged_export(export_dir: Path) -> dict:
     if total != manifest["artifacts_total_bytes"]:
         raise ValueError("Manifest aggregate size does not match its artifacts")
     directory_bytes = total + (export_dir / RELEASE_MANIFEST).stat().st_size
-    if directory_bytes >= MAX_TOTAL_BYTES:
-        raise ValueError(f"Complete Web directory is {directory_bytes} bytes; must be below {MAX_TOTAL_BYTES}")
+    warnings = check_budget(directory_bytes)
+    check_file_size(RELEASE_MANIFEST, (export_dir / RELEASE_MANIFEST).stat().st_size)
+    if manifest.get("deployment_policy") != POLICY:
+        raise ValueError("Release deployment policy is missing or stale")
     if manifest["root_pck"] != by_path["index.pck"] or manifest["runtime_pack_manifest"] != by_path["runtime_pack_manifest.json"]:
         raise ValueError("Release identity references do not match artifact records")
     runtime = json.loads((export_dir / "runtime_pack_manifest.json").read_text(encoding="utf-8-sig"))
     if runtime["release_id"] != manifest["build_id"]:
         raise ValueError("Runtime and release build identities differ")
+    if runtime.get("max_deployment_bytes") != POLICY["max_deployment_bytes"] or runtime.get("deployment_policy_id") != POLICY["id"]:
+        raise ValueError("Runtime deployment policy is missing or stale")
     runtime_packs = runtime["packs"]
     declared_packs = {p["id"]: p for p in manifest["packs"]}
     if len(declared_packs) != len(manifest["packs"]) or set(runtime_packs) != set(declared_packs):
@@ -278,7 +303,11 @@ def inspect_packaged_export(export_dir: Path) -> dict:
             raise ValueError(f"Runtime pack does not match decoded delivery bytes: {pack_id}")
         if pack["sha256"] not in url.query:
             raise ValueError(f"Pack URL lacks content identity: {pack_id}")
-    return {"build_id": manifest["build_id"], "artifacts": len(records), "directory_bytes": directory_bytes}
+    summary = size_summary(records, runtime)
+    if manifest.get("size_summary") != summary:
+        raise ValueError("Release size breakdown is stale")
+    return {"build_id": manifest["build_id"], "artifacts": len(records), "directory_bytes": directory_bytes,
+            "deployment_policy": POLICY, "warnings": warnings, "size_summary": summary}
 
 
 def inject_shell_identity(html_path: Path, build_id: str) -> None:
@@ -395,10 +424,7 @@ def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit:
         "packs": [{"id": item["id"], "sha256": item["sha256"]} for item in pack_records],
     }, sort_keys=True, separators=(",", ":")).encode("utf-8")
     total_bytes = sum(int(item["bytes"]) for item in records)
-    if total_bytes >= MAX_TOTAL_BYTES:
-        raise ValueError(
-            f"Web payload {total_bytes} bytes reaches or exceeds the 100 MiB limit"
-        )
+    check_budget(total_bytes)
     return {
         "schema_version": 2,
         "engine": engine,
@@ -413,6 +439,8 @@ def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit:
         "runtime_pack_manifest": by_path["runtime_pack_manifest.json"],
         "root_pck": by_path["index.pck"],
         "artifacts_total_bytes": total_bytes,
+        "deployment_policy": POLICY,
+        "size_summary": size_summary(records, runtime),
         "artifacts": records,
         "packs": pack_records,
     }
@@ -461,7 +489,9 @@ def main() -> int:
     output.write_text(json.dumps(manifest, separators=(",", ":")) + "\n", encoding="utf-8")
     if output == export_dir / RELEASE_MANIFEST:
         try:
-            inspect_packaged_export(export_dir)
+            inspection = inspect_packaged_export(export_dir)
+            for warning in inspection["warnings"]:
+                print(f"PACKAGE WARNING: {warning}", file=sys.stderr)
         except (OSError, ValueError, TypeError, KeyError) as error:
             print(f"PACKAGE INTEGRITY: {error}", file=sys.stderr)
             return 1

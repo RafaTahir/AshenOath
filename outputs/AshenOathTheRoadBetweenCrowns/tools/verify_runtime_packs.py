@@ -26,8 +26,9 @@ def main() -> int:
     if not isinstance(packs, dict) or not packs:
         errors.append("packs must be a non-empty object")
     max_bytes = int(manifest.get("max_deployment_bytes", 0))
-    if max_bytes <= 0 or max_bytes > 100 * 1024 * 1024:
-        errors.append("deployment budget must be positive and at most 100 MB")
+    from deployment_policy import POLICY
+    if max_bytes <= 0 or max_bytes > POLICY["max_deployment_bytes"]:
+        errors.append("deployment budget must be positive and within the shared policy")
     for pack_id, pack in packs.items():
         if not isinstance(pack, dict):
             errors.append(f"{pack_id}: pack must be an object")
@@ -39,8 +40,8 @@ def main() -> int:
             if dependency not in packs:
                 errors.append(f"{pack_id}: unknown dependency {dependency}")
         declared_bytes = int(pack.get("bytes", 0))
-        if declared_bytes < 0 or declared_bytes > max_bytes:
-            errors.append(f"{pack_id}: invalid byte budget")
+        if declared_bytes < 0:
+            errors.append(f"{pack_id}: invalid decoded byte count")
         digest = str(pack.get("sha256", ""))
         if digest and len(digest) != 64:
             errors.append(f"{pack_id}: sha256 must be 64 hex characters when present")

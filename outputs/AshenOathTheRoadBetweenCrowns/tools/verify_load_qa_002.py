@@ -8,11 +8,12 @@ import hashlib
 import json
 import subprocess
 from pathlib import Path
+from deployment_policy import POLICY
 
 
 PACK_IDS = {"base", "opening", "campaign", "characters", "monsters", "audio", "quality_materials"}
 REQUIRED_EXTERNAL_PACKS = {"opening", "campaign", "characters", "monsters", "audio", "quality_materials"}
-MAX_BYTES = 100 * 1024 * 1024
+MAX_BYTES = POLICY["max_deployment_bytes"]
 
 
 def sha256(path: Path) -> str:
@@ -77,10 +78,17 @@ def main() -> int:
     if not manifest_build_id or manifest_build_id != candidate_build_id:
         errors.append("runtime pack manifest and candidates disagree on build_id")
 
-    if int(manifest.get("max_deployment_bytes", 0)) > MAX_BYTES:
-        errors.append("runtime pack manifest exceeds the 100 MB deployment budget")
-    if int(candidates.get("total_bytes", 0)) > MAX_BYTES:
-        errors.append("candidate packs exceed the 100 MB deployment budget")
+    if not 0 < int(manifest.get("max_deployment_bytes", 0)) <= MAX_BYTES:
+        errors.append("runtime pack manifest has an invalid deployment budget")
+    # Candidate totals are decoded native PCKs, not the complete Web transport.
+    # The publication checker validates every encoded Web file and its manifest.
+    selected = candidates.get("selected_web_export")
+    if selected:
+        from build_web_runtime_manifest import inspect_packaged_export
+        try:
+            inspect_packaged_export(Path(selected["artifact_directory"]).resolve())
+        except (OSError, ValueError, KeyError) as exc:
+            errors.append(f"selected Web delivery is invalid: {exc}")
     packs = manifest.get("packs", {})
     candidate_rows = {str(row.get("id")): row for row in candidates.get("packs", [])}
     if set(packs) != PACK_IDS or set(candidate_rows) != PACK_IDS:

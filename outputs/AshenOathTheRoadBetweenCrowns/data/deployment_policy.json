@@ -1,0 +1,9 @@
+{
+  "id": "vercel-git-256mib-v1",
+  "max_deployment_bytes": 268435456,
+  "warning_deployment_bytes": 209715200,
+  "max_git_file_bytes": 104857600,
+  "deployment_method": "vercel_git_staged_production",
+  "hosting_plan": "hobby",
+  "limit_basis": "Internal working ceiling, not a Vercel capacity guarantee; every candidate requires successful staged deployment and artifact verification."
+}

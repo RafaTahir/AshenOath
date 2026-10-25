@@ -293,7 +293,7 @@ function Get-ArtifactSnapshot {
         files = @($records)
         pck_sha256 = if ($null -ne $pck) { [string]$pck.sha256 } else { "" }
         export_provenance = $provenance
-        max_bytes = 104857600
+        max_bytes = [int64](Get-Content -LiteralPath (Join-Path $PSScriptRoot '../data/deployment_policy.json') -Raw | ConvertFrom-Json).max_deployment_bytes
     }
 }
 
