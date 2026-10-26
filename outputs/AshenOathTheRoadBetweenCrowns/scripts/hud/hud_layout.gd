@@ -1,6 +1,8 @@
 extends "res://scripts/hud/hud_component.gd"
 ## Hud layout: explicit view operations; requests leave through typed signals.
 
+var _pending_reflow_restore: Callable
+
 func _hud_label(parent: Node, node_name: String, font_size: int) -> Label:
 	var label := Label.new()
 	label.name = node_name
@@ -91,7 +93,20 @@ func _apply_responsive_layout() -> void:
 	view.call_deferred("_restore_reflow_state", snapshot, generation, surface_key)
 
 func _restore_reflow_state(snapshot: Dictionary, generation: int, surface_key: String) -> void:
-	await view.get_tree().process_frame
+	if not is_instance_valid(view) or not view.is_inside_tree():
+		return
+	# An owned method connection is removed when this panel is freed. An await
+	# would leave a suspended function trying to resume after HUD destruction.
+	var next_frame: Signal = view.get_tree().process_frame
+	if _pending_reflow_restore.is_valid() and next_frame.is_connected(_pending_reflow_restore):
+		next_frame.disconnect(_pending_reflow_restore)
+	_pending_reflow_restore = _finish_reflow_restore.bind(snapshot, generation, surface_key)
+	next_frame.connect(_pending_reflow_restore, CONNECT_ONE_SHOT)
+
+func _finish_reflow_restore(snapshot: Dictionary, generation: int, surface_key: String) -> void:
+	_pending_reflow_restore = Callable()
+	if not is_instance_valid(view) or not view.is_inside_tree():
+		return
 	if generation != _layout_generation or surface_key != _responsive_surface_key():
 		return
 	var restored: bool = HudReflowState.restore(snapshot, view)

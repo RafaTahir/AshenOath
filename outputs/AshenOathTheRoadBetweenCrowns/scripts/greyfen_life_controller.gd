@@ -164,6 +164,15 @@ func enroll_region() -> void:
 		entry["routine_zone"] = zone_id
 		entry["profile"] = routine
 		entry["path"] = path
+		# Promotion replaces the village schedule and anything queued to restore
+		# it. A later safe-point update must not reinstall its nonregional profile.
+		entry["pending_routine"] = {}
+		for restore_key: String in ["table_restore", "gathering_restore"]:
+			if entry.has(restore_key):
+				var restoration: Dictionary = entry[restore_key]
+				restoration["profile"] = routine.duplicate(true)
+				restoration["path"] = path.duplicate()
+				restoration["line"] = str(routine.line)
 		entry["consequence_line"] = str(routine.line)
 		entry["target"] = 0
 		entry["alias_anchor"] = host.zone_root.find_child(id, true, false) if definition.has("actor") else null

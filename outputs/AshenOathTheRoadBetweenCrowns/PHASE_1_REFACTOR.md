@@ -46,6 +46,10 @@ Run from this project directory with Godot 4.6.3:
 godot --headless --editor --path . --quit
 godot --headless --path . --script tools/verify_boundaries.gd -- --structure-only
 godot --headless --path . --script tools/verify_boundaries.gd
+godot --headless --path . --script tools/verify_greyfen_routine_ownership.gd
+godot --headless --path . --script tools/verify_save_001.gd
+godot --headless --path . --script tools/verify_input_004.gd
+python -m unittest discover -s tools -p test_content_integrity.py -v
 python tools/verify_content_integrity.py
 ```
 
@@ -57,6 +61,11 @@ version-13 keys and rejection of future save versions. It keeps every captured
 engine/script error as a failure, and retains temporary saves on failure.
 `--structure-only` does not require the Linux worker.
 
+SAVE-001 also creates an isolated child-process profile. Run INPUT-004 with a
+temporary user-data profile because it exercises persisted input bindings; in
+Linux, set `XDG_DATA_HOME` to a newly created temporary directory before launching
+Godot.
+
 Results for this change:
 
 | Check | Result |
@@ -66,36 +75,60 @@ Results for this change:
 | Game extraction audit | Pass: 455 methods, 188 fields, 46 constants |
 | HUD comparison against original implementation | Pass: menu, settings, combat/quest, dialogue, text history, dialogue-close signal count and inventory |
 | Quest snapshot isolation | Pass |
-| Route, live references, player control and save assertions | Pass; full boundary gate still fails for the NPC error below |
+| Full route, live references, player control, current/version-12 save restoration and shutdown | Pass: 15,492 checks, zero failures, engine errors or warnings |
+| Greyfen routine ownership regression | Pass: 137 checks; original code fails eight ownership assertions |
+| Content integrity and companion contract regression | Pass: 21 quests, 84 objectives, 117 dialogue actions, 54 runtime references; five regression tests |
+| INPUT-004 | Pass, including physical Enter press/repeat/release, held-input rejection, settled focus and pending-reflow teardown |
+| SAVE-001 | Pass: 120 checks, zero engine/script errors; backup generation, corrupt-primary recovery, ordered fallback and future-version preservation |
 | Fresh runtime packs and production Web export | Pass; all 29 extracted GDScript modules present in root PCK |
 | Export/package integrity and native packed startup without source fallback | Pass |
-| Complete Web output size, including manifest and external packs | 106,025,335 bytes (101.1136 MiB), strictly below 268,435,456 bytes |
+| Complete Web output size, including manifest and external packs | 106,025,344 bytes (101.1136 MiB), strictly below 268,435,456 bytes |
 
-The Web build was staged outside the checkout with all eight pack presets freshly
-exported. Lossless packaging used zopfli 0.4.0. Tracked runtime manifests and
+The initial Web build was staged outside the checkout with all eight pack presets
+freshly exported. The follow-up root export reused those packs only after checking
+their hashes, sizes and that no changed source/dependency path belongs to them.
+All five changed compiled application scripts are present in the refreshed root
+PCK. Lossless packaging used zopfli 0.4.0. Tracked runtime manifests and
 `web/` were not replaced. The packed startup result is a headless native check of
 the exported packs; browser performance and hardware visual acceptance are not
 established by it.
 
-## Existing failures retained
+## Follow-up fixes for the four failing categories
 
-These failures remain visible; no acceptance assertions were removed to make the
-refactor pass:
+- **Greyfen NPC runtime defect:** regional enrollment replaced an actor's profile
+  but left its queued village routine and temporary-activity restoration data
+  pointing to the old profile, which has no regional `activities` field. The
+  promotion boundary now invalidates the old queue and updates existing table/
+  gathering restoration snapshots to the authored regional routine. No default
+  activities were invented. Regression coverage exercises initial enrollment,
+  unchanged story signatures, deferred hydration, reconfiguration, phase/story
+  changes and both restoration paths; it failed eight assertions before the fix.
+- **Companion validator contract defect:** runtime already dispatches all eight
+  authored `companion_choice` entries to the seven supported Bracken operations.
+  The validator now recognizes that action type and requires a valid
+  `companion_action`. Negative tests reject missing, malformed and unknown
+  operations, unknown action types and invalid quest references. Authored choices
+  and runtime quest behavior are unchanged.
+- **INPUT-004 runtime and harness defects:** physical-only Enter/Space events were
+  recognized by the HUD but rejected by the router's logical-key action binding.
+  A copied event now supplies the matching logical key for the same router
+  validation, retaining held-input guards and release activation. Reflow keeps
+  its next-frame scheduling through a node-owned one-shot callback that cancels
+  on destruction. The verifier checks current controller instructions and waits
+  a bounded number of frames for focus on the active surface instead of expecting
+  old text and immediate focus. Press/repeat/release, duplicate release, router
+  rejection and pending-reflow destruction assertions protect the intended
+  behavior. All seven HUD comparisons still pass.
+- **SAVE-001 harness defects:** the old stub lacked `zone_root`, used unregistered
+  filenames and expected request acceptance to synchronously apply a save. The
+  verifier now owns an empty zone, writes registered slots only in an isolated
+  profile and exercises prepare/accept/complete semantics. It verifies selected
+  slot/source identity, exact backup generation, ordered fallback, all-corrupt
+  rejection, unchanged rejected files and future-save preservation. Unwritable
+  fixtures and script errors fail the test. SaveManager needed no changes; the
+  separate full boundary test verifies real-game restoration.
 
-- **Boundary runtime:** `greyfen_life_controller.gd:679` accesses an absent
-  `activities` key on a legacy NPC routine. The same error was observed before
-  extraction. The final run reports one engine error type and two failed
-  assertions, with route/save assertions completing and shutdown succeeding.
-- **Content integrity:** eight `bracken_rescue` dialogue actions use
-  `companion_choice`, which the existing verifier does not recognize. The
-  verifier now scans the extracted systems and still checks all 54 runtime quest
-  references.
-- **INPUT-004:** three assertions fail both before and after extraction:
-  controller guidance text, remap focus and physical Enter dialogue advance.
-  Both runs also report the existing deferred reflow-after-free error.
-- **SAVE-001:** two assertions fail: corrupt-primary backup recovery and fallback
-  slot loading. Its unchanged `GameStub` lacks `zone_root`, and the verifier uses
-  old load assumptions. The real-game current/legacy save tests above pass.
-
-The NPC routine, input verifier and legacy save verifier need separate follow-up;
-their gameplay behavior and assertions were not rewritten in this extraction.
+No requested gate remains failing. HUD/input checks retain the pre-existing
+anchor-size warning, also observed in the original HUD comparison. The full
+boundary reports no warnings/errors; the Web build has no error diagnostics. Hardware/browser visual
+and performance acceptance remains outside these headless checks.

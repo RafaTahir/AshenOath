@@ -225,7 +225,14 @@ func handle_input(event: InputEvent) -> void:
 	else:
 		return
 	if pressed:
-		if not pointer and input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(event, "ui_accept", input_source.get_context()):
+		var accept_event: InputEvent = event
+		if event is InputEventKey and event.keycode == KEY_NONE:
+			# The accept actions bind logical keys. Keep physical-only Enter/Space
+			# events on the same router validation path without mutating the event.
+			var logical_key := event.duplicate() as InputEventKey
+			logical_key.keycode = logical_key.physical_keycode
+			accept_event = logical_key
+		if not pointer and input_source != null and input_source.has_method("accept_event") and not input_source.accept_event(accept_event, "ui_accept", input_source.get_context()):
 			view.get_viewport().set_input_as_handled()
 			return
 		var candidate: Button

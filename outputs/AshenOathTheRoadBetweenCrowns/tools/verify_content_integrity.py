@@ -12,6 +12,7 @@ from typing import Any
 
 
 KNOWN_ACTION_TYPES = {
+    "companion_choice",
     "complete_objective",
     "ending",
     "give_ingredients",
@@ -19,6 +20,10 @@ KNOWN_ACTION_TYPES = {
     "start_quest",
     "story_choice",
 }
+
+# companion_controller.gd choice_available/apply_choice implement these authored
+# operations; companion_actor_instance is bound at runtime, not in dialogue JSON.
+COMPANION_ACTIONS = {"calm", "release", "adopt", "leave", "pet", "feed", "rest"}
 
 
 def load_json(path: Path, errors: list[str]) -> dict[str, Any]:
@@ -77,6 +82,12 @@ def validate_dialogues(
                 action_type = str(action.get("type", ""))
                 if action_type not in KNOWN_ACTION_TYPES:
                     errors.append(f"{source}: unsupported action type '{action_type}'")
+                if action_type == "companion_choice":
+                    operation = action.get("companion_action")
+                    if not isinstance(operation, str) or operation not in COMPANION_ACTIONS:
+                        errors.append(
+                            f"{source}: unsupported companion_action {operation!r}"
+                        )
                 if action_type in {"start_quest", "resolve_side_quest"}:
                     quest_id = str(action.get("quest", ""))
                     if quest_id not in objectives:
