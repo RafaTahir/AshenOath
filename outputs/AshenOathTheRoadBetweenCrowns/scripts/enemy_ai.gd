@@ -567,7 +567,7 @@ func _start_attack_animation() -> void:
 		animation_driver.set_external_tick(false)
 
 func _cancel_pending_strike() -> void:
-	var had_strike := pending_attack_time > 0.0 or windup_time > 0.0
+	var had_strike: bool = pending_attack_time > 0.0 or windup_time > 0.0
 	pending_attack_time = 0.0
 	windup_time = 0.0
 	_release_attack_token()

@@ -1,0 +1,2277 @@
+{
+  "_gameplay_script": {
+    "system": "session",
+    "source_line": 76,
+    "entry": "_gameplay_script"
+  },
+  "_opening_stage_required_before_control": {
+    "system": "startup",
+    "source_line": 376,
+    "entry": "_opening_stage_required_before_control"
+  },
+  "_record_opening_stage": {
+    "system": "startup",
+    "source_line": 379,
+    "entry": "_record_opening_stage"
+  },
+  "_opening_presentation_present": {
+    "system": "startup",
+    "source_line": 390,
+    "entry": "_opening_presentation_present"
+  },
+  "_ready": {
+    "system": "session",
+    "source_line": 437,
+    "entry": "start_session"
+  },
+  "_prepare_opening_after_menu_render": {
+    "system": "session",
+    "source_line": 473,
+    "entry": "_prepare_opening_after_menu_render"
+  },
+  "_restore_browser_session": {
+    "system": "session",
+    "source_line": 488,
+    "entry": "_restore_browser_session"
+  },
+  "_input": {
+    "system": "session",
+    "source_line": 503,
+    "entry": "route_input"
+  },
+  "_unhandled_input": {
+    "system": "session",
+    "source_line": 510,
+    "entry": "route_unhandled_input"
+  },
+  "_on_virtual_gameplay_action": {
+    "system": "session",
+    "source_line": 524,
+    "entry": "_on_virtual_gameplay_action"
+  },
+  "_dispatch_gameplay_action": {
+    "system": "session",
+    "source_line": 527,
+    "entry": "_dispatch_gameplay_action"
+  },
+  "_request_pause_or_back": {
+    "system": "session",
+    "source_line": 552,
+    "entry": "_request_pause_or_back"
+  },
+  "_invalidate_interaction_prompt": {
+    "system": "session",
+    "source_line": 576,
+    "entry": "_invalidate_interaction_prompt"
+  },
+  "_publish_interaction_prompt": {
+    "system": "session",
+    "source_line": 581,
+    "entry": "_publish_interaction_prompt"
+  },
+  "_on_input_context_changed": {
+    "system": "session",
+    "source_line": 595,
+    "entry": "_on_input_context_changed"
+  },
+  "_on_transient_input_reset": {
+    "system": "session",
+    "source_line": 605,
+    "entry": "_on_transient_input_reset"
+  },
+  "_begin_gameplay_handoff": {
+    "system": "session",
+    "source_line": 610,
+    "entry": "_begin_gameplay_handoff"
+  },
+  "_finish_gameplay_handoff": {
+    "system": "session",
+    "source_line": 622,
+    "entry": "_finish_gameplay_handoff"
+  },
+  "_process": {
+    "system": "session",
+    "source_line": 640,
+    "entry": "tick_session"
+  },
+  "_play_voice_smoke_test": {
+    "system": "session",
+    "source_line": 694,
+    "entry": "_play_voice_smoke_test"
+  },
+  "_setup_runtime": {
+    "system": "session",
+    "source_line": 702,
+    "entry": "_setup_runtime"
+  },
+  "_bind_runtime_services": {
+    "system": "session",
+    "source_line": 709,
+    "entry": "_bind_runtime_services"
+  },
+  "_ensure_gameplay_runtime": {
+    "system": "session",
+    "source_line": 714,
+    "entry": "_ensure_gameplay_runtime"
+  },
+  "_new_game": {
+    "system": "session",
+    "source_line": 740,
+    "entry": "_new_game"
+  },
+  "_cancel_new_game_request": {
+    "system": "session",
+    "source_line": 800,
+    "entry": "_cancel_new_game_request"
+  },
+  "_handle_quit_request": {
+    "system": "session",
+    "source_line": 812,
+    "entry": "_handle_quit_request"
+  },
+  "_request_zone_load": {
+    "system": "zone_lifecycle",
+    "source_line": 818,
+    "entry": "_request_zone_load"
+  },
+  "request_seamless_boundary_transition": {
+    "system": "zone_lifecycle",
+    "source_line": 838,
+    "entry": "request_seamless_boundary_transition"
+  },
+  "_perform_direct_zone_load": {
+    "system": "zone_lifecycle",
+    "source_line": 862,
+    "entry": "_perform_direct_zone_load"
+  },
+  "_perform_requested_zone_load": {
+    "system": "zone_lifecycle",
+    "source_line": 867,
+    "entry": "_perform_requested_zone_load"
+  },
+  "_zone_encounter_packs": {
+    "system": "zone_lifecycle",
+    "source_line": 874,
+    "entry": "_zone_encounter_packs"
+  },
+  "_load_zone_after_runtime_pack": {
+    "system": "zone_lifecycle",
+    "source_line": 891,
+    "entry": "_load_zone_after_runtime_pack"
+  },
+  "_begin_travel_download": {
+    "system": "zone_lifecycle",
+    "source_line": 938,
+    "entry": "_begin_travel_download"
+  },
+  "_finish_travel_download": {
+    "system": "zone_lifecycle",
+    "source_line": 947,
+    "entry": "_finish_travel_download"
+  },
+  "_wait_for_campaign_pack": {
+    "system": "zone_lifecycle",
+    "source_line": 954,
+    "entry": "_wait_for_campaign_pack"
+  },
+  "_wait_for_opening_pack": {
+    "system": "zone_lifecycle",
+    "source_line": 972,
+    "entry": "_wait_for_opening_pack"
+  },
+  "_recover_failed_pack_load": {
+    "system": "zone_lifecycle",
+    "source_line": 990,
+    "entry": "_recover_failed_pack_load"
+  },
+  "_zone_requires_campaign_pack": {
+    "system": "zone_lifecycle",
+    "source_line": 1022,
+    "entry": "_zone_requires_campaign_pack"
+  },
+  "_zone_requires_opening_pack": {
+    "system": "zone_lifecycle",
+    "source_line": 1028,
+    "entry": "_zone_requires_opening_pack"
+  },
+  "_start_new_game_world": {
+    "system": "zone_lifecycle",
+    "source_line": 1031,
+    "entry": "_start_new_game_world"
+  },
+  "_request_background_runtime_packs": {
+    "system": "zone_lifecycle",
+    "source_line": 1137,
+    "entry": "_request_background_runtime_packs"
+  },
+  "_opening_route_is_active": {
+    "system": "zone_lifecycle",
+    "source_line": 1157,
+    "entry": "_opening_route_is_active"
+  },
+  "should_defer_neighbor_prewarm": {
+    "system": "zone_lifecycle",
+    "source_line": 1162,
+    "entry": "should_defer_neighbor_prewarm"
+  },
+  "_schedule_background_runtime_packs": {
+    "system": "zone_lifecycle",
+    "source_line": 1167,
+    "entry": "_schedule_background_runtime_packs"
+  },
+  "_schedule_opening_save": {
+    "system": "zone_lifecycle",
+    "source_line": 1181,
+    "entry": "_schedule_opening_save"
+  },
+  "load_save_state": {
+    "system": "save",
+    "source_line": 1197,
+    "entry": "load_save_state"
+  },
+  "_apply_loaded_journey": {
+    "system": "save",
+    "source_line": 1214,
+    "entry": "_apply_loaded_journey"
+  },
+  "_journey_load_pending": {
+    "system": "save",
+    "source_line": 1284,
+    "entry": "_journey_load_pending"
+  },
+  "_on_prepared_journey_load": {
+    "system": "save",
+    "source_line": 1287,
+    "entry": "_on_prepared_journey_load"
+  },
+  "_cancel_journey_load": {
+    "system": "save",
+    "source_line": 1290,
+    "entry": "_cancel_journey_load"
+  },
+  "_publish_journey_arrival": {
+    "system": "save",
+    "source_line": 1302,
+    "entry": "_publish_journey_arrival"
+  },
+  "_queue_journey_models_refresh": {
+    "system": "save",
+    "source_line": 1305,
+    "entry": "_queue_journey_models_refresh"
+  },
+  "_refresh_journey_models": {
+    "system": "save",
+    "source_line": 1311,
+    "entry": "_refresh_journey_models"
+  },
+  "_request_journey_load": {
+    "system": "save",
+    "source_line": 1320,
+    "entry": "_request_journey_load"
+  },
+  "_open_journal_section": {
+    "system": "save",
+    "source_line": 1325,
+    "entry": "_open_journal_section"
+  },
+  "_apply_pending_player_restore": {
+    "system": "save",
+    "source_line": 1331,
+    "entry": "_apply_pending_player_restore"
+  },
+  "_spawn_player": {
+    "system": "zone_lifecycle",
+    "source_line": 1346,
+    "entry": "_spawn_player"
+  },
+  "_sync_camera_enemy_cache": {
+    "system": "zone_lifecycle",
+    "source_line": 1387,
+    "entry": "_sync_camera_enemy_cache"
+  },
+  "_bind_spatial_player_body": {
+    "system": "zone_lifecycle",
+    "source_line": 1403,
+    "entry": "_bind_spatial_player_body"
+  },
+  "_load_zone": {
+    "system": "zone_lifecycle",
+    "source_line": 1413,
+    "entry": "_load_zone"
+  },
+  "_advance_zone_transition": {
+    "system": "zone_lifecycle",
+    "source_line": 1438,
+    "entry": "_advance_zone_transition"
+  },
+  "_apply_zone_audio": {
+    "system": "zone_lifecycle",
+    "source_line": 1442,
+    "entry": "_apply_zone_audio"
+  },
+  "_schedule_deferred_zone_audio": {
+    "system": "zone_lifecycle",
+    "source_line": 1452,
+    "entry": "_schedule_deferred_zone_audio"
+  },
+  "_finish_deferred_zone_audio": {
+    "system": "zone_lifecycle",
+    "source_line": 1458,
+    "entry": "_finish_deferred_zone_audio"
+  },
+  "_activate_prewarmed_player_runtime": {
+    "system": "zone_lifecycle",
+    "source_line": 1469,
+    "entry": "_activate_prewarmed_player_runtime"
+  },
+  "_start_campaign_visual_prewarm": {
+    "system": "startup",
+    "source_line": 1481,
+    "entry": "_start_campaign_visual_prewarm"
+  },
+  "_cancel_campaign_visual_prewarm": {
+    "system": "startup",
+    "source_line": 1504,
+    "entry": "_cancel_campaign_visual_prewarm"
+  },
+  "should_defer_visual_role": {
+    "system": "startup",
+    "source_line": 1512,
+    "entry": "should_defer_visual_role"
+  },
+  "should_defer_character_role": {
+    "system": "startup",
+    "source_line": 1524,
+    "entry": "should_defer_character_role"
+  },
+  "_schedule_deferred_visual_roles": {
+    "system": "startup",
+    "source_line": 1529,
+    "entry": "_schedule_deferred_visual_roles"
+  },
+  "_run_deferred_visual_roles": {
+    "system": "startup",
+    "source_line": 1540,
+    "entry": "_run_deferred_visual_roles"
+  },
+  "_deferred_visual_markers": {
+    "system": "startup",
+    "source_line": 1614,
+    "entry": "_deferred_visual_markers"
+  },
+  "_run_campaign_visual_prewarm": {
+    "system": "startup",
+    "source_line": 1623,
+    "entry": "_run_campaign_visual_prewarm"
+  },
+  "_schedule_zone_runtime_finalize": {
+    "system": "zone_lifecycle",
+    "source_line": 1667,
+    "entry": "_schedule_zone_runtime_finalize"
+  },
+  "_finish_zone_runtime_finalize": {
+    "system": "zone_lifecycle",
+    "source_line": 1670,
+    "entry": "_finish_zone_runtime_finalize"
+  },
+  "_finish_prewarmed_greyfen_runtime": {
+    "system": "zone_lifecycle",
+    "source_line": 1698,
+    "entry": "_finish_prewarmed_greyfen_runtime"
+  },
+  "_recover_failed_zone_load": {
+    "system": "zone_lifecycle",
+    "source_line": 1714,
+    "entry": "_recover_failed_zone_load"
+  },
+  "_grounded_spawn_position": {
+    "system": "zone_lifecycle",
+    "source_line": 1717,
+    "entry": "_grounded_spawn_position"
+  },
+  "_zone_display_name": {
+    "system": "zone_lifecycle",
+    "source_line": 1728,
+    "entry": "_zone_display_name"
+  },
+  "_valid_cached_enemies": {
+    "system": "zone_lifecycle",
+    "source_line": 1731,
+    "entry": "_valid_cached_enemies"
+  },
+  "_zone_state_signature": {
+    "system": "zone_lifecycle",
+    "source_line": 1734,
+    "entry": "_zone_state_signature"
+  },
+  "_begin_zone_world_reads": {
+    "system": "zone_lifecycle",
+    "source_line": 1754,
+    "entry": "_begin_zone_world_reads"
+  },
+  "_end_zone_world_reads": {
+    "system": "zone_lifecycle",
+    "source_line": 1761,
+    "entry": "_end_zone_world_reads"
+  },
+  "_deferred_free_zone": {
+    "system": "zone_lifecycle",
+    "source_line": 1765,
+    "entry": "_deferred_free_zone"
+  },
+  "_release_zone_render_resources": {
+    "system": "zone_lifecycle",
+    "source_line": 1768,
+    "entry": "_release_zone_render_resources"
+  },
+  "_retire_zone_root": {
+    "system": "zone_lifecycle",
+    "source_line": 1771,
+    "entry": "_retire_zone_root"
+  },
+  "_bind_retirement_material": {
+    "system": "zone_lifecycle",
+    "source_line": 1774,
+    "entry": "_bind_retirement_material"
+  },
+  "_anchor_retired_materials": {
+    "system": "zone_lifecycle",
+    "source_line": 1777,
+    "entry": "_anchor_retired_materials"
+  },
+  "_keep_retired_material": {
+    "system": "zone_lifecycle",
+    "source_line": 1780,
+    "entry": "_keep_retired_material"
+  },
+  "_anchor_shared_skinned_resources": {
+    "system": "zone_lifecycle",
+    "source_line": 1783,
+    "entry": "_anchor_shared_skinned_resources"
+  },
+  "_skinned_resource_fingerprint": {
+    "system": "zone_lifecycle",
+    "source_line": 1786,
+    "entry": "_skinned_resource_fingerprint"
+  },
+  "_record_loading_metrics": {
+    "system": "zone_lifecycle",
+    "source_line": 1789,
+    "entry": "_record_loading_metrics"
+  },
+  "_record_first_control": {
+    "system": "zone_lifecycle",
+    "source_line": 1797,
+    "entry": "_record_first_control"
+  },
+  "_create_owned_timer": {
+    "system": "zone_lifecycle",
+    "source_line": 1808,
+    "entry": "_create_owned_timer"
+  },
+  "_cancel_owned_timers": {
+    "system": "zone_lifecycle",
+    "source_line": 1824,
+    "entry": "_cancel_owned_timers"
+  },
+  "_quiesce_zone_runtime": {
+    "system": "zone_lifecycle",
+    "source_line": 1839,
+    "entry": "_quiesce_zone_runtime"
+  },
+  "_cache_route_zone": {
+    "system": "zone_lifecycle",
+    "source_line": 1842,
+    "entry": "_cache_route_zone"
+  },
+  "_cache_route_spatial_service": {
+    "system": "zone_lifecycle",
+    "source_line": 1845,
+    "entry": "_cache_route_spatial_service"
+  },
+  "_release_route_spatial_service": {
+    "system": "zone_lifecycle",
+    "source_line": 1848,
+    "entry": "_release_route_spatial_service"
+  },
+  "_release_active_spatial_service": {
+    "system": "zone_lifecycle",
+    "source_line": 1851,
+    "entry": "_release_active_spatial_service"
+  },
+  "_defer_cached_zone_collision_disable": {
+    "system": "zone_lifecycle",
+    "source_line": 1861,
+    "entry": "_defer_cached_zone_collision_disable"
+  },
+  "_activate_cached_zone": {
+    "system": "zone_lifecycle",
+    "source_line": 1869,
+    "entry": "_activate_cached_zone"
+  },
+  "_remove_root_from_route_cache": {
+    "system": "zone_lifecycle",
+    "source_line": 1872,
+    "entry": "_remove_root_from_route_cache"
+  },
+  "_trim_route_zone_cache": {
+    "system": "zone_lifecycle",
+    "source_line": 1875,
+    "entry": "_trim_route_zone_cache"
+  },
+  "_set_zone_collision_enabled": {
+    "system": "zone_lifecycle",
+    "source_line": 1881,
+    "entry": "_set_zone_collision_enabled"
+  },
+  "_collect_zone_collision_targets": {
+    "system": "zone_lifecycle",
+    "source_line": 1884,
+    "entry": "_collect_zone_collision_targets"
+  },
+  "_set_single_zone_collision_enabled": {
+    "system": "zone_lifecycle",
+    "source_line": 1887,
+    "entry": "_set_single_zone_collision_enabled"
+  },
+  "_schedule_zone_autosave": {
+    "system": "zone_lifecycle",
+    "source_line": 1890,
+    "entry": "_schedule_zone_autosave"
+  },
+  "_clear_route_zone_cache": {
+    "system": "zone_lifecycle",
+    "source_line": 1900,
+    "entry": "_clear_route_zone_cache"
+  },
+  "prepare_resource_shutdown": {
+    "system": "zone_lifecycle",
+    "source_line": 1918,
+    "entry": "prepare_resource_shutdown"
+  },
+  "finalize_resource_shutdown": {
+    "system": "zone_lifecycle",
+    "source_line": 1965,
+    "entry": "finalize_resource_shutdown"
+  },
+  "zone_lifecycle_snapshot": {
+    "system": "zone_lifecycle",
+    "source_line": 2036,
+    "entry": "zone_lifecycle_snapshot"
+  },
+  "_subtree_node_count": {
+    "system": "zone_lifecycle",
+    "source_line": 2063,
+    "entry": "_subtree_node_count"
+  },
+  "_exit_tree": {
+    "system": "zone_lifecycle",
+    "source_line": 2071,
+    "entry": "release_session"
+  },
+  "_add_visual_100_layer": {
+    "system": "world",
+    "source_line": 2089,
+    "entry": "_add_visual_100_layer"
+  },
+  "_install_world_prop_controller": {
+    "system": "world",
+    "source_line": 2092,
+    "entry": "_install_world_prop_controller"
+  },
+  "_install_opening_soundscape": {
+    "system": "world",
+    "source_line": 2095,
+    "entry": "_install_opening_soundscape"
+  },
+  "_handle_interaction": {
+    "system": "interaction",
+    "source_line": 2112,
+    "entry": "_handle_interaction"
+  },
+  "_handle_village_place": {
+    "system": "interaction",
+    "source_line": 2353,
+    "entry": "_handle_village_place"
+  },
+  "_on_minigame_result": {
+    "system": "interaction",
+    "source_line": 2368,
+    "entry": "_on_minigame_result"
+  },
+  "_on_minigame_state_changed": {
+    "system": "interaction",
+    "source_line": 2396,
+    "entry": "_on_minigame_state_changed"
+  },
+  "_handle_road_of_crows_clue": {
+    "system": "quest",
+    "source_line": 2400,
+    "entry": "_handle_road_of_crows_clue"
+  },
+  "_road_evidence_count": {
+    "system": "quest",
+    "source_line": 2432,
+    "entry": "_road_evidence_count"
+  },
+  "_make_all_evidence_safe_edge": {
+    "system": "quest",
+    "source_line": 2439,
+    "entry": "_make_all_evidence_safe_edge"
+  },
+  "_apply_campaign_arrival": {
+    "system": "quest",
+    "source_line": 2442,
+    "entry": "_apply_campaign_arrival"
+  },
+  "_road_ready_to_report": {
+    "system": "quest",
+    "source_line": 2462,
+    "entry": "_road_ready_to_report"
+  },
+  "_legacy_report_choice_required": {
+    "system": "quest",
+    "source_line": 2467,
+    "entry": "_legacy_report_choice_required"
+  },
+  "_crow_shrine_choice_ready": {
+    "system": "quest",
+    "source_line": 2470,
+    "entry": "_crow_shrine_choice_ready"
+  },
+  "_chapel_can_open": {
+    "system": "quest",
+    "source_line": 2476,
+    "entry": "_chapel_can_open"
+  },
+  "_ensure_cemetery_ambush": {
+    "system": "quest",
+    "source_line": 2481,
+    "entry": "_ensure_cemetery_ambush"
+  },
+  "_spawn_crow_shrine_choice": {
+    "system": "quest",
+    "source_line": 2498,
+    "entry": "_spawn_crow_shrine_choice"
+  },
+  "_restore_greyfen_cemetery_state": {
+    "system": "quest",
+    "source_line": 2505,
+    "entry": "_restore_greyfen_cemetery_state"
+  },
+  "_relocate_anwen_to_cemetery": {
+    "system": "quest",
+    "source_line": 2518,
+    "entry": "_relocate_anwen_to_cemetery"
+  },
+  "_handle_dialogue_action": {
+    "system": "dialogue",
+    "source_line": 2533,
+    "entry": "_handle_dialogue_action"
+  },
+  "_finish_story_action": {
+    "system": "dialogue",
+    "source_line": 2589,
+    "entry": "_finish_story_action"
+  },
+  "_persist_story_action": {
+    "system": "dialogue",
+    "source_line": 2611,
+    "entry": "_persist_story_action"
+  },
+  "_story_has_active_combat": {
+    "system": "dialogue",
+    "source_line": 2623,
+    "entry": "_story_has_active_combat"
+  },
+  "_apply_dialogue_action": {
+    "system": "dialogue",
+    "source_line": 2630,
+    "entry": "_apply_dialogue_action"
+  },
+  "_dialogue_action_requires_zone_rebuild": {
+    "system": "dialogue",
+    "source_line": 2780,
+    "entry": "_dialogue_action_requires_zone_rebuild"
+  },
+  "_dialogue_action_available": {
+    "system": "dialogue",
+    "source_line": 2803,
+    "entry": "_dialogue_action_available"
+  },
+  "_dialogue_action_unavailable_reason": {
+    "system": "dialogue",
+    "source_line": 2837,
+    "entry": "_dialogue_action_unavailable_reason"
+  },
+  "_quest_required_objectives_done": {
+    "system": "quest",
+    "source_line": 2846,
+    "entry": "_quest_required_objectives_done"
+  },
+  "_story_choice_prerequisites_done": {
+    "system": "quest",
+    "source_line": 2855,
+    "entry": "_story_choice_prerequisites_done"
+  },
+  "_on_launch_accepted": {
+    "system": "startup",
+    "source_line": 2869,
+    "entry": "_on_launch_accepted"
+  },
+  "_on_opening_pack_progress": {
+    "system": "startup",
+    "source_line": 2905,
+    "entry": "_on_opening_pack_progress"
+  },
+  "_on_startup_pack_ready": {
+    "system": "startup",
+    "source_line": 2909,
+    "entry": "_on_startup_pack_ready"
+  },
+  "_begin_opening_prewarm_if_ready": {
+    "system": "startup",
+    "source_line": 2918,
+    "entry": "_begin_opening_prewarm_if_ready"
+  },
+  "_wait_for_startup_packs_then_prewarm": {
+    "system": "startup",
+    "source_line": 2927,
+    "entry": "_wait_for_startup_packs_then_prewarm"
+  },
+  "_begin_opening_prewarm": {
+    "system": "startup",
+    "source_line": 2947,
+    "entry": "_begin_opening_prewarm"
+  },
+  "_prepare_opening_services": {
+    "system": "startup",
+    "source_line": 2955,
+    "entry": "_prepare_opening_services"
+  },
+  "_wait_for_opening_build_slot": {
+    "system": "startup",
+    "source_line": 3003,
+    "entry": "_wait_for_opening_build_slot"
+  },
+  "_opening_attempt_current": {
+    "system": "startup",
+    "source_line": 3008,
+    "entry": "_opening_attempt_current"
+  },
+  "_prepare_opening_resources": {
+    "system": "startup",
+    "source_line": 3012,
+    "entry": "_prepare_opening_resources"
+  },
+  "_discard_menu_opening": {
+    "system": "startup",
+    "source_line": 3035,
+    "entry": "_discard_menu_opening"
+  },
+  "_restart_menu_opening": {
+    "system": "startup",
+    "source_line": 3044,
+    "entry": "_restart_menu_opening"
+  },
+  "_opening_prepare_failed": {
+    "system": "startup",
+    "source_line": 3056,
+    "entry": "_opening_prepare_failed"
+  },
+  "_abort_opening_prewarm": {
+    "system": "startup",
+    "source_line": 3075,
+    "entry": "_abort_opening_prewarm"
+  },
+  "_publish_web_opening_state": {
+    "system": "startup",
+    "source_line": 3097,
+    "entry": "_publish_web_opening_state"
+  },
+  "_prewarm_greyfen_after_menu_frame": {
+    "system": "startup",
+    "source_line": 3118,
+    "entry": "_prewarm_greyfen_after_menu_frame"
+  },
+  "_apply_web_opening_boot_material_budget": {
+    "system": "startup",
+    "source_line": 3327,
+    "entry": "_apply_web_opening_boot_material_budget"
+  },
+  "_apply_opening_boot_material": {
+    "system": "startup",
+    "source_line": 3348,
+    "entry": "_apply_opening_boot_material"
+  },
+  "_restore_opening_boot_material_entry": {
+    "system": "startup",
+    "source_line": 3387,
+    "entry": "_restore_opening_boot_material_entry"
+  },
+  "_restore_opening_boot_materials": {
+    "system": "startup",
+    "source_line": 3394,
+    "entry": "_restore_opening_boot_materials"
+  },
+  "_run_opening_detail_stage": {
+    "system": "startup",
+    "source_line": 3414,
+    "entry": "_run_opening_detail_stage"
+  },
+  "_defer_opening_renderables": {
+    "system": "startup",
+    "source_line": 3596,
+    "entry": "_defer_opening_renderables"
+  },
+  "_complete_ending": {
+    "system": "quest",
+    "source_line": 3606,
+    "entry": "_complete_ending"
+  },
+  "_show_ending_consequence": {
+    "system": "quest",
+    "source_line": 3651,
+    "entry": "_show_ending_consequence"
+  },
+  "_show_completed_epilogue": {
+    "system": "quest",
+    "source_line": 3676,
+    "entry": "_show_completed_epilogue"
+  },
+  "_on_player_blade_contact": {
+    "system": "combat",
+    "source_line": 3690,
+    "entry": "_on_player_blade_contact"
+  },
+  "_on_player_arrow_unavailable": {
+    "system": "combat",
+    "source_line": 3730,
+    "entry": "_on_player_arrow_unavailable"
+  },
+  "_on_player_arrow": {
+    "system": "combat",
+    "source_line": 3734,
+    "entry": "_on_player_arrow"
+  },
+  "_on_arrow_impact": {
+    "system": "combat",
+    "source_line": 3767,
+    "entry": "_on_arrow_impact"
+  },
+  "_present_surface_contact": {
+    "system": "combat",
+    "source_line": 3781,
+    "entry": "_present_surface_contact"
+  },
+  "_civilian_contact_candidates": {
+    "system": "combat",
+    "source_line": 3788,
+    "entry": "_civilian_contact_candidates"
+  },
+  "_make_arrow_trail": {
+    "system": "combat",
+    "source_line": 3806,
+    "entry": "_make_arrow_trail"
+  },
+  "_on_player_beam_phase": {
+    "system": "combat",
+    "source_line": 3809,
+    "entry": "_on_player_beam_phase"
+  },
+  "_on_player_beam": {
+    "system": "combat",
+    "source_line": 3815,
+    "entry": "_on_player_beam"
+  },
+  "_make_oathfire_beam": {
+    "system": "combat",
+    "source_line": 3871,
+    "entry": "_make_oathfire_beam"
+  },
+  "_clear_oathfire_effects": {
+    "system": "combat",
+    "source_line": 3875,
+    "entry": "_clear_oathfire_effects"
+  },
+  "_on_player_footstep": {
+    "system": "combat",
+    "source_line": 3878,
+    "entry": "_on_player_footstep"
+  },
+  "_on_player_parried": {
+    "system": "combat",
+    "source_line": 3895,
+    "entry": "_on_player_parried"
+  },
+  "_on_player_blocked": {
+    "system": "combat",
+    "source_line": 3902,
+    "entry": "_on_player_blocked"
+  },
+  "_on_player_hurt": {
+    "system": "combat",
+    "source_line": 3918,
+    "entry": "_on_player_hurt"
+  },
+  "_on_player_stamina_exhausted": {
+    "system": "combat",
+    "source_line": 3928,
+    "entry": "_on_player_stamina_exhausted"
+  },
+  "_use_potion": {
+    "system": "inventory",
+    "source_line": 3932,
+    "entry": "_use_potion"
+  },
+  "_throw_bomb": {
+    "system": "inventory",
+    "source_line": 3935,
+    "entry": "_throw_bomb"
+  },
+  "_use_inventory_item": {
+    "system": "inventory",
+    "source_line": 3938,
+    "entry": "_use_inventory_item"
+  },
+  "_preparation_item_result": {
+    "system": "inventory",
+    "source_line": 3991,
+    "entry": "_preparation_item_result"
+  },
+  "_update_preparation_context": {
+    "system": "inventory",
+    "source_line": 3999,
+    "entry": "_update_preparation_context"
+  },
+  "_show_preparation_menu": {
+    "system": "inventory",
+    "source_line": 4023,
+    "entry": "_show_preparation_menu"
+  },
+  "_craft_preparation_item": {
+    "system": "inventory",
+    "source_line": 4027,
+    "entry": "_craft_preparation_item"
+  },
+  "_use_preparation_item": {
+    "system": "inventory",
+    "source_line": 4033,
+    "entry": "_use_preparation_item"
+  },
+  "_set_inventory_preference": {
+    "system": "inventory",
+    "source_line": 4039,
+    "entry": "_set_inventory_preference"
+  },
+  "_learn_preparation_practice": {
+    "system": "inventory",
+    "source_line": 4048,
+    "entry": "_learn_preparation_practice"
+  },
+  "_respec_unavailable_reason": {
+    "system": "inventory",
+    "source_line": 4056,
+    "entry": "_respec_unavailable_reason"
+  },
+  "_redistribute_practices": {
+    "system": "inventory",
+    "source_line": 4068,
+    "entry": "_redistribute_practices"
+  },
+  "_use_quick_item": {
+    "system": "inventory",
+    "source_line": 4078,
+    "entry": "_use_quick_item"
+  },
+  "_finish_preparation_operation": {
+    "system": "inventory",
+    "source_line": 4089,
+    "entry": "_finish_preparation_operation"
+  },
+  "_refresh_preparation_after_operation": {
+    "system": "inventory",
+    "source_line": 4098,
+    "entry": "_refresh_preparation_after_operation"
+  },
+  "_purchase_from_vendor": {
+    "system": "inventory",
+    "source_line": 4112,
+    "entry": "_purchase_from_vendor"
+  },
+  "_sell_to_vendor": {
+    "system": "inventory",
+    "source_line": 4127,
+    "entry": "_sell_to_vendor"
+  },
+  "_on_enemy_died": {
+    "system": "combat",
+    "source_line": 4134,
+    "entry": "_on_enemy_died"
+  },
+  "_try_complete_black_dog_investigation": {
+    "system": "combat",
+    "source_line": 4271,
+    "entry": "_try_complete_black_dog_investigation"
+  },
+  "_try_complete_oren_thread_trace": {
+    "system": "combat",
+    "source_line": 4284,
+    "entry": "_try_complete_oren_thread_trace"
+  },
+  "_record_encounter_knowledge": {
+    "system": "combat",
+    "source_line": 4298,
+    "entry": "_record_encounter_knowledge"
+  },
+  "_on_enemy_damaged": {
+    "system": "combat",
+    "source_line": 4312,
+    "entry": "_on_enemy_damaged"
+  },
+  "_on_enemy_windup_started": {
+    "system": "combat",
+    "source_line": 4318,
+    "entry": "_on_enemy_windup_started"
+  },
+  "_on_enemy_attack_resolved": {
+    "system": "combat",
+    "source_line": 4333,
+    "entry": "_on_enemy_attack_resolved"
+  },
+  "_on_enemy_parry_window_opened": {
+    "system": "combat",
+    "source_line": 4358,
+    "entry": "_on_enemy_parry_window_opened"
+  },
+  "_on_quest_completed": {
+    "system": "quest",
+    "source_line": 4371,
+    "entry": "_on_quest_completed"
+  },
+  "_apply_progression_to_player": {
+    "system": "quest",
+    "source_line": 4388,
+    "entry": "_apply_progression_to_player"
+  },
+  "_on_progression_changed": {
+    "system": "quest",
+    "source_line": 4392,
+    "entry": "_on_progression_changed"
+  },
+  "_queue_progression_rewards": {
+    "system": "quest",
+    "source_line": 4396,
+    "entry": "_queue_progression_rewards"
+  },
+  "_flush_progression_rewards": {
+    "system": "quest",
+    "source_line": 4402,
+    "entry": "_flush_progression_rewards"
+  },
+  "_collect_progression_rewards": {
+    "system": "quest",
+    "source_line": 4410,
+    "entry": "_collect_progression_rewards"
+  },
+  "_on_progression_arrival": {
+    "system": "quest",
+    "source_line": 4417,
+    "entry": "_on_progression_arrival"
+  },
+  "_record_bog_stagger": {
+    "system": "combat",
+    "source_line": 4423,
+    "entry": "_record_bog_stagger"
+  },
+  "_expose_bog_core": {
+    "system": "combat",
+    "source_line": 4429,
+    "entry": "_expose_bog_core"
+  },
+  "_on_target_lock_changed": {
+    "system": "combat",
+    "source_line": 4441,
+    "entry": "_on_target_lock_changed"
+  },
+  "_update_target_lock_hud": {
+    "system": "combat",
+    "source_line": 4450,
+    "entry": "_update_target_lock_hud"
+  },
+  "_on_combat_impact": {
+    "system": "combat",
+    "source_line": 4460,
+    "entry": "_on_combat_impact"
+  },
+  "_hitstop": {
+    "system": "combat",
+    "source_line": 4473,
+    "entry": "_hitstop"
+  },
+  "_has_living_enemy": {
+    "system": "combat",
+    "source_line": 4490,
+    "entry": "_has_living_enemy"
+  },
+  "_nearest_living_enemy": {
+    "system": "combat",
+    "source_line": 4496,
+    "entry": "_nearest_living_enemy"
+  },
+  "_remove_interactable": {
+    "system": "interaction",
+    "source_line": 4508,
+    "entry": "_remove_interactable"
+  },
+  "_consume_story_choice_interactable": {
+    "system": "interaction",
+    "source_line": 4518,
+    "entry": "_consume_story_choice_interactable"
+  },
+  "_has_interactable": {
+    "system": "interaction",
+    "source_line": 4525,
+    "entry": "_has_interactable"
+  },
+  "_mark_interaction_removed": {
+    "system": "interaction",
+    "source_line": 4533,
+    "entry": "_mark_interaction_removed"
+  },
+  "_is_interaction_removed": {
+    "system": "interaction",
+    "source_line": 4540,
+    "entry": "_is_interaction_removed"
+  },
+  "save_world_state": {
+    "system": "save",
+    "source_line": 4543,
+    "entry": "save_world_state"
+  },
+  "load_world_state": {
+    "system": "save",
+    "source_line": 4561,
+    "entry": "load_world_state"
+  },
+  "_on_player_died": {
+    "system": "combat",
+    "source_line": 4571,
+    "entry": "_on_player_died"
+  },
+  "_on_dialogue_closed_audio": {
+    "system": "dialogue",
+    "source_line": 4583,
+    "entry": "_on_dialogue_closed_audio"
+  },
+  "_finish_covenant_if_ready": {
+    "system": "dialogue",
+    "source_line": 4596,
+    "entry": "_finish_covenant_if_ready"
+  },
+  "_notification": {
+    "system": "hud",
+    "source_line": 4603,
+    "entry": "route_notification"
+  },
+  "_on_touch_layout_unavailable": {
+    "system": "hud",
+    "source_line": 4612,
+    "entry": "_on_touch_layout_unavailable"
+  },
+  "_pause_game": {
+    "system": "hud",
+    "source_line": 4622,
+    "entry": "_pause_game"
+  },
+  "_show_companion_commands": {
+    "system": "hud",
+    "source_line": 4641,
+    "entry": "_show_companion_commands"
+  },
+  "_show_touch_actions": {
+    "system": "hud",
+    "source_line": 4654,
+    "entry": "_show_touch_actions"
+  },
+  "_on_touch_quick_action": {
+    "system": "hud",
+    "source_line": 4663,
+    "entry": "_on_touch_quick_action"
+  },
+  "_resume_game": {
+    "system": "hud",
+    "source_line": 4678,
+    "entry": "_resume_game"
+  },
+  "_handle_setting": {
+    "system": "hud",
+    "source_line": 4701,
+    "entry": "_handle_setting"
+  },
+  "_apply_runtime_settings": {
+    "system": "hud",
+    "source_line": 4757,
+    "entry": "_apply_runtime_settings"
+  },
+  "_queue_story_guidance_refresh": {
+    "system": "hud",
+    "source_line": 4789,
+    "entry": "_queue_story_guidance_refresh"
+  },
+  "_apply_story_guidance_refresh": {
+    "system": "hud",
+    "source_line": 4796,
+    "entry": "_apply_story_guidance_refresh"
+  },
+  "_refresh_tracker": {
+    "system": "hud",
+    "source_line": 4802,
+    "entry": "_refresh_tracker"
+  },
+  "_show_current_objective_guidance": {
+    "system": "hud",
+    "source_line": 4812,
+    "entry": "_show_current_objective_guidance"
+  },
+  "_refresh_equipment_readout": {
+    "system": "hud",
+    "source_line": 4815,
+    "entry": "_refresh_equipment_readout"
+  },
+  "_reconcile_preparation_objective": {
+    "system": "hud",
+    "source_line": 4833,
+    "entry": "_reconcile_preparation_objective"
+  },
+  "_guard_tutorial_hint": {
+    "system": "hud",
+    "source_line": 4840,
+    "entry": "_guard_tutorial_hint"
+  },
+  "_update_tutorial_prompts": {
+    "system": "hud",
+    "source_line": 4845,
+    "entry": "_update_tutorial_prompts"
+  },
+  "_update_compass": {
+    "system": "hud",
+    "source_line": 4885,
+    "entry": "_update_compass"
+  },
+  "_compass_state_signature": {
+    "system": "hud",
+    "source_line": 4888,
+    "entry": "_compass_state_signature"
+  },
+  "_compass_needs_refresh": {
+    "system": "hud",
+    "source_line": 4891,
+    "entry": "_compass_needs_refresh"
+  },
+  "_distance_to_tracked_interactable": {
+    "system": "hud",
+    "source_line": 4894,
+    "entry": "_distance_to_tracked_interactable"
+  },
+  "_tracked_objective_id": {
+    "system": "hud",
+    "source_line": 4897,
+    "entry": "_tracked_objective_id"
+  },
+  "_tracked_objective_text": {
+    "system": "hud",
+    "source_line": 4905,
+    "entry": "_tracked_objective_text"
+  },
+  "_keep_player_in_world": {
+    "system": "zone_lifecycle",
+    "source_line": 4913,
+    "entry": "_keep_player_in_world"
+  },
+  "_safe_loaded_position": {
+    "system": "zone_lifecycle",
+    "source_line": 4947,
+    "entry": "_safe_loaded_position"
+  },
+  "validate_walkable_position": {
+    "system": "zone_lifecycle",
+    "source_line": 4974,
+    "entry": "validate_walkable_position"
+  },
+  "_recover_from_river": {
+    "system": "zone_lifecycle",
+    "source_line": 4977,
+    "entry": "_recover_from_river"
+  },
+  "_river_center": {
+    "system": "zone_lifecycle",
+    "source_line": 4989,
+    "entry": "_river_center"
+  },
+  "_is_river_recovery_position": {
+    "system": "zone_lifecycle",
+    "source_line": 4992,
+    "entry": "_is_river_recovery_position"
+  },
+  "_is_river_excluded": {
+    "system": "zone_lifecycle",
+    "source_line": 5012,
+    "entry": "_is_river_excluded"
+  },
+  "river_safe_position": {
+    "system": "zone_lifecycle",
+    "source_line": 5015,
+    "entry": "river_safe_position"
+  },
+  "river_safe_path": {
+    "system": "zone_lifecycle",
+    "source_line": 5018,
+    "entry": "river_safe_path"
+  },
+  "get_zone_half_extents": {
+    "system": "zone_lifecycle",
+    "source_line": 5027,
+    "entry": "get_zone_half_extents"
+  },
+  "_zone_half_extents": {
+    "system": "zone_lifecycle",
+    "source_line": 5030,
+    "entry": "_zone_half_extents"
+  },
+  "_make_play_area_bounds": {
+    "system": "world",
+    "source_line": 5033,
+    "entry": "_make_play_area_bounds"
+  },
+  "_make_boundary_edge": {
+    "system": "world",
+    "source_line": 5036,
+    "entry": "_make_boundary_edge"
+  },
+  "_make_invisible_wall": {
+    "system": "world",
+    "source_line": 5039,
+    "entry": "_make_invisible_wall"
+  },
+  "_make_greyfen_terrain_layers": {
+    "system": "world",
+    "source_line": 5042,
+    "entry": "_make_greyfen_terrain_layers"
+  },
+  "_finish_greyfen_ground_surfaces": {
+    "system": "world",
+    "source_line": 5045,
+    "entry": "_finish_greyfen_ground_surfaces"
+  },
+  "_finish_greyfen_paved_roads": {
+    "system": "world",
+    "source_line": 5048,
+    "entry": "_finish_greyfen_paved_roads"
+  },
+  "_make_wychwood_terrain_layers": {
+    "system": "world",
+    "source_line": 5051,
+    "entry": "_make_wychwood_terrain_layers"
+  },
+  "_make_wychwood_clearing_floor": {
+    "system": "world",
+    "source_line": 5054,
+    "entry": "_make_wychwood_clearing_floor"
+  },
+  "_make_wychwood_winding_path": {
+    "system": "world",
+    "source_line": 5064,
+    "entry": "_make_wychwood_winding_path"
+  },
+  "_wychwood_path_center": {
+    "system": "world",
+    "source_line": 5082,
+    "entry": "_wychwood_path_center"
+  },
+  "_make_greyfen_path_edges": {
+    "system": "world",
+    "source_line": 5085,
+    "entry": "_make_greyfen_path_edges"
+  },
+  "_make_wychwood_path_edges": {
+    "system": "world",
+    "source_line": 5088,
+    "entry": "_make_wychwood_path_edges"
+  },
+  "_make_terrain_patch": {
+    "system": "world",
+    "source_line": 5091,
+    "entry": "_make_terrain_patch"
+  },
+  "_make_terrain_patch_raw": {
+    "system": "world",
+    "source_line": 5094,
+    "entry": "_make_terrain_patch_raw"
+  },
+  "_make_path_stone": {
+    "system": "world",
+    "source_line": 5097,
+    "entry": "_make_path_stone"
+  },
+  "_make_low_berm": {
+    "system": "world",
+    "source_line": 5100,
+    "entry": "_make_low_berm"
+  },
+  "_make_grass_tufts": {
+    "system": "world",
+    "source_line": 5103,
+    "entry": "_make_grass_tufts"
+  },
+  "_make_spawn_composition": {
+    "system": "world",
+    "source_line": 5106,
+    "entry": "_make_spawn_composition"
+  },
+  "_make_greyfen_first_impression_dressing": {
+    "system": "world",
+    "source_line": 5109,
+    "entry": "_make_greyfen_first_impression_dressing"
+  },
+  "_make_quality_greyfen_overhaul": {
+    "system": "world",
+    "source_line": 5112,
+    "entry": "_make_quality_greyfen_overhaul"
+  },
+  "_make_quality_survival_cluster": {
+    "system": "world",
+    "source_line": 5115,
+    "entry": "_make_quality_survival_cluster"
+  },
+  "_make_road_ruts": {
+    "system": "world",
+    "source_line": 5118,
+    "entry": "_make_road_ruts"
+  },
+  "_make_lantern_rhythm": {
+    "system": "world",
+    "source_line": 5121,
+    "entry": "_make_lantern_rhythm"
+  },
+  "_make_shrine_approach": {
+    "system": "world",
+    "source_line": 5124,
+    "entry": "_make_shrine_approach"
+  },
+  "_make_village_story_clusters": {
+    "system": "world",
+    "source_line": 5127,
+    "entry": "_make_village_story_clusters"
+  },
+  "_make_lantern_post": {
+    "system": "world",
+    "source_line": 5130,
+    "entry": "_make_lantern_post"
+  },
+  "_make_fake_light_pool": {
+    "system": "world",
+    "source_line": 5133,
+    "entry": "_make_fake_light_pool"
+  },
+  "_make_firewood_stack": {
+    "system": "world",
+    "source_line": 5136,
+    "entry": "_make_firewood_stack"
+  },
+  "_make_broken_fence_run": {
+    "system": "world",
+    "source_line": 5139,
+    "entry": "_make_broken_fence_run"
+  },
+  "_make_wheelbarrow": {
+    "system": "world",
+    "source_line": 5142,
+    "entry": "_make_wheelbarrow"
+  },
+  "_make_mourning_marker": {
+    "system": "world",
+    "source_line": 5145,
+    "entry": "_make_mourning_marker"
+  },
+  "_make_shrine_candle": {
+    "system": "world",
+    "source_line": 5148,
+    "entry": "_make_shrine_candle"
+  },
+  "_make_hanging_cloth": {
+    "system": "world",
+    "source_line": 5151,
+    "entry": "_make_hanging_cloth"
+  },
+  "_make_fake_fog_bank": {
+    "system": "world",
+    "source_line": 5154,
+    "entry": "_make_fake_fog_bank"
+  },
+  "_make_crow_silhouettes": {
+    "system": "world",
+    "source_line": 5157,
+    "entry": "_make_crow_silhouettes"
+  },
+  "_add_crow_part": {
+    "system": "world",
+    "source_line": 5160,
+    "entry": "_add_crow_part"
+  },
+  "_make_visual_box": {
+    "system": "world",
+    "source_line": 5163,
+    "entry": "_make_visual_box"
+  },
+  "_append_prepared_detail": {
+    "system": "world",
+    "source_line": 5166,
+    "entry": "_append_prepared_detail"
+  },
+  "_make_prepared_prop": {
+    "system": "world",
+    "source_line": 5169,
+    "entry": "_make_prepared_prop"
+  },
+  "_add_visual_box_child": {
+    "system": "world",
+    "source_line": 5172,
+    "entry": "_add_visual_box_child"
+  },
+  "_make_greyfen_road_of_crows_story_beats": {
+    "system": "world",
+    "source_line": 5175,
+    "entry": "_make_greyfen_road_of_crows_story_beats"
+  },
+  "_make_wychwood_road_of_crows_story_beats": {
+    "system": "world",
+    "source_line": 5178,
+    "entry": "_make_wychwood_road_of_crows_story_beats"
+  },
+  "_make_post_ghoulkin_story_clue": {
+    "system": "world",
+    "source_line": 5181,
+    "entry": "_make_post_ghoulkin_story_clue"
+  },
+  "_make_narrative_aftermath": {
+    "system": "world",
+    "source_line": 5184,
+    "entry": "_make_narrative_aftermath"
+  },
+  "_make_black_feather_scatter": {
+    "system": "world",
+    "source_line": 5187,
+    "entry": "_make_black_feather_scatter"
+  },
+  "_make_broken_charm": {
+    "system": "world",
+    "source_line": 5190,
+    "entry": "_make_broken_charm"
+  },
+  "_make_dark_track": {
+    "system": "world",
+    "source_line": 5193,
+    "entry": "_make_dark_track"
+  },
+  "_make_claw_marks": {
+    "system": "world",
+    "source_line": 5196,
+    "entry": "_make_claw_marks"
+  },
+  "_make_wychwood_corridor": {
+    "system": "world",
+    "source_line": 5199,
+    "entry": "_make_wychwood_corridor"
+  },
+  "_make_stylized_house": {
+    "system": "world",
+    "source_line": 5202,
+    "entry": "_make_stylized_house"
+  },
+  "_make_village_house_dressed": {
+    "system": "world",
+    "source_line": 5209,
+    "entry": "_make_village_house_dressed"
+  },
+  "_add_house_module": {
+    "system": "world",
+    "source_line": 5212,
+    "entry": "_add_house_module"
+  },
+  "_make_house_facade_module": {
+    "system": "world",
+    "source_line": 5230,
+    "entry": "_make_house_facade_module"
+  },
+  "_add_house_gables": {
+    "system": "world",
+    "source_line": 5272,
+    "entry": "_add_house_gables"
+  },
+  "_add_house_gabled_roof": {
+    "system": "world",
+    "source_line": 5301,
+    "entry": "_add_house_gabled_roof"
+  },
+  "_append_house_quad": {
+    "system": "world",
+    "source_line": 5339,
+    "entry": "_append_house_quad"
+  },
+  "_add_house_box": {
+    "system": "world",
+    "source_line": 5353,
+    "entry": "_add_house_box"
+  },
+  "_make_house_collision": {
+    "system": "world",
+    "source_line": 5391,
+    "entry": "_make_house_collision"
+  },
+  "_add_lit_window": {
+    "system": "world",
+    "source_line": 5394,
+    "entry": "_add_lit_window"
+  },
+  "_add_role_child": {
+    "system": "world",
+    "source_line": 5403,
+    "entry": "_add_role_child"
+  },
+  "_make_village_dressing": {
+    "system": "world",
+    "source_line": 5412,
+    "entry": "_make_village_dressing"
+  },
+  "_make_wychwood_gate_scene": {
+    "system": "world",
+    "source_line": 5415,
+    "entry": "_make_wychwood_gate_scene"
+  },
+  "_make_wychwood_route_dressing": {
+    "system": "world",
+    "source_line": 5418,
+    "entry": "_make_wychwood_route_dressing"
+  },
+  "_make_quality_wychwood_overhaul": {
+    "system": "world",
+    "source_line": 5421,
+    "entry": "_make_quality_wychwood_overhaul"
+  },
+  "_make_loose_role": {
+    "system": "world",
+    "source_line": 5424,
+    "entry": "_make_loose_role"
+  },
+  "_make_roof": {
+    "system": "world",
+    "source_line": 5427,
+    "entry": "_make_roof"
+  },
+  "_make_notice_board": {
+    "system": "world",
+    "source_line": 5431,
+    "entry": "_make_notice_board"
+  },
+  "_make_route_markers": {
+    "system": "world",
+    "source_line": 5434,
+    "entry": "_make_route_markers"
+  },
+  "_make_shrine_scene": {
+    "system": "world",
+    "source_line": 5437,
+    "entry": "_make_shrine_scene"
+  },
+  "_make_blacksmith_scene": {
+    "system": "world",
+    "source_line": 5440,
+    "entry": "_make_blacksmith_scene"
+  },
+  "_make_cemetery_scene": {
+    "system": "world",
+    "source_line": 5443,
+    "entry": "_make_cemetery_scene"
+  },
+  "_make_tree_cluster": {
+    "system": "world",
+    "source_line": 5451,
+    "entry": "_make_tree_cluster"
+  },
+  "_make_collapsed_road": {
+    "system": "world",
+    "source_line": 5454,
+    "entry": "_make_collapsed_road"
+  },
+  "_make_monster_clearing": {
+    "system": "world",
+    "source_line": 5463,
+    "entry": "_make_monster_clearing"
+  },
+  "_make_named_interactable": {
+    "system": "world",
+    "source_line": 5466,
+    "entry": "_make_named_interactable"
+  },
+  "_make_ledger_interaction_visual": {
+    "system": "world",
+    "source_line": 5469,
+    "entry": "_make_ledger_interaction_visual"
+  },
+  "_make_token_interaction_visual": {
+    "system": "world",
+    "source_line": 5472,
+    "entry": "_make_token_interaction_visual"
+  },
+  "_make_village_place": {
+    "system": "world",
+    "source_line": 5475,
+    "entry": "_make_village_place"
+  },
+  "_apply_greyfen_well_visual": {
+    "system": "world",
+    "source_line": 5478,
+    "entry": "_apply_greyfen_well_visual"
+  },
+  "_make_board_game_staging": {
+    "system": "world",
+    "source_line": 5481,
+    "entry": "_make_board_game_staging"
+  },
+  "_make_board_game_chair": {
+    "system": "world",
+    "source_line": 5484,
+    "entry": "_make_board_game_chair"
+  },
+  "_world_prop_spec": {
+    "system": "world",
+    "source_line": 5487,
+    "entry": "_world_prop_spec"
+  },
+  "_configure_npc_animation": {
+    "system": "world",
+    "source_line": 5498,
+    "entry": "_configure_npc_animation"
+  },
+  "_prepare_dialogue_presence": {
+    "system": "dialogue",
+    "source_line": 5501,
+    "entry": "_prepare_dialogue_presence"
+  },
+  "_stage_dialogue_moment": {
+    "system": "dialogue",
+    "source_line": 5526,
+    "entry": "_stage_dialogue_moment"
+  },
+  "_on_dialogue_page_changed": {
+    "system": "dialogue",
+    "source_line": 5531,
+    "entry": "_on_dialogue_page_changed"
+  },
+  "_on_dialogue_topic_requested": {
+    "system": "dialogue",
+    "source_line": 5552,
+    "entry": "_on_dialogue_topic_requested"
+  },
+  "_face_npc_toward_player": {
+    "system": "dialogue",
+    "source_line": 5566,
+    "entry": "_face_npc_toward_player"
+  },
+  "_release_dialogue_facing": {
+    "system": "dialogue",
+    "source_line": 5569,
+    "entry": "_release_dialogue_facing"
+  },
+  "_make_gate_marker": {
+    "system": "world",
+    "source_line": 5581,
+    "entry": "_make_gate_marker"
+  },
+  "_label_for_interactable": {
+    "system": "world",
+    "source_line": 5584,
+    "entry": "_label_for_interactable"
+  },
+  "_make_clue": {
+    "system": "world",
+    "source_line": 5591,
+    "entry": "_make_clue"
+  },
+  "_present_castle_clue": {
+    "system": "world",
+    "source_line": 5594,
+    "entry": "_present_castle_clue"
+  },
+  "_make_herb": {
+    "system": "world",
+    "source_line": 5606,
+    "entry": "_make_herb"
+  },
+  "_make_zone_gate": {
+    "system": "world",
+    "source_line": 5609,
+    "entry": "_make_zone_gate"
+  },
+  "_add_physical_door_visual": {
+    "system": "world",
+    "source_line": 5612,
+    "entry": "_add_physical_door_visual"
+  },
+  "_make_blocked_gate": {
+    "system": "world",
+    "source_line": 5615,
+    "entry": "_make_blocked_gate"
+  },
+  "_connect_interactable": {
+    "system": "interaction",
+    "source_line": 5622,
+    "entry": "_connect_interactable"
+  },
+  "_update_interaction_focus": {
+    "system": "interaction",
+    "source_line": 5650,
+    "entry": "_update_interaction_focus"
+  },
+  "_interaction_focus_needs_refresh": {
+    "system": "interaction",
+    "source_line": 5675,
+    "entry": "_interaction_focus_needs_refresh"
+  },
+  "_refresh_interaction_candidates": {
+    "system": "interaction",
+    "source_line": 5688,
+    "entry": "_refresh_interaction_candidates"
+  },
+  "_prune_invalid_interaction_candidates": {
+    "system": "interaction",
+    "source_line": 5727,
+    "entry": "_prune_invalid_interaction_candidates"
+  },
+  "_remove_interaction_candidate": {
+    "system": "interaction",
+    "source_line": 5733,
+    "entry": "_remove_interaction_candidate"
+  },
+  "_interaction_target_valid": {
+    "system": "interaction",
+    "source_line": 5744,
+    "entry": "_interaction_target_valid"
+  },
+  "_set_interactable_label_visible": {
+    "system": "interaction",
+    "source_line": 5747,
+    "entry": "_set_interactable_label_visible"
+  },
+  "_spawn_enemy": {
+    "system": "combat",
+    "source_line": 5754,
+    "entry": "_spawn_enemy"
+  },
+  "_boss_is_resolved": {
+    "system": "combat",
+    "source_line": 5757,
+    "entry": "_boss_is_resolved"
+  },
+  "_ensure_bell_eater": {
+    "system": "combat",
+    "source_line": 5781,
+    "entry": "_ensure_bell_eater"
+  },
+  "_retire_bell_eater": {
+    "system": "combat",
+    "source_line": 5800,
+    "entry": "_retire_bell_eater"
+  },
+  "_open_rootbound_encounter": {
+    "system": "combat",
+    "source_line": 5820,
+    "entry": "_open_rootbound_encounter"
+  },
+  "_evacuate_bell_eater_bystanders": {
+    "system": "combat",
+    "source_line": 5832,
+    "entry": "_evacuate_bell_eater_bystanders"
+  },
+  "_restore_bell_eater_bystanders": {
+    "system": "combat",
+    "source_line": 5854,
+    "entry": "_restore_bell_eater_bystanders"
+  },
+  "_on_boss_controller_phase_changed": {
+    "system": "combat",
+    "source_line": 5872,
+    "entry": "_on_boss_controller_phase_changed"
+  },
+  "_on_boss_checkpoint": {
+    "system": "combat",
+    "source_line": 5877,
+    "entry": "_on_boss_checkpoint"
+  },
+  "_on_boss_resolved": {
+    "system": "combat",
+    "source_line": 5889,
+    "entry": "_on_boss_resolved"
+  },
+  "_apply_boss_resolution_contract": {
+    "system": "combat",
+    "source_line": 5903,
+    "entry": "_apply_boss_resolution_contract"
+  },
+  "_publish_halvern_exit": {
+    "system": "combat",
+    "source_line": 5920,
+    "entry": "_publish_halvern_exit"
+  },
+  "_on_boss_peaceful_resolution": {
+    "system": "combat",
+    "source_line": 5924,
+    "entry": "_on_boss_peaceful_resolution"
+  },
+  "_on_boss_phase_changed": {
+    "system": "combat",
+    "source_line": 5947,
+    "entry": "_on_boss_phase_changed"
+  },
+  "_on_boss_special_attack": {
+    "system": "combat",
+    "source_line": 5969,
+    "entry": "_on_boss_special_attack"
+  },
+  "_activate_wychwood_wave": {
+    "system": "combat",
+    "source_line": 6002,
+    "entry": "_activate_wychwood_wave"
+  },
+  "_ensure_wychwood_wave": {
+    "system": "combat",
+    "source_line": 6013,
+    "entry": "_ensure_wychwood_wave"
+  },
+  "checkpoint_return_position": {
+    "system": "combat",
+    "source_line": 6028,
+    "entry": "checkpoint_return_position"
+  },
+  "_has_active_encounter_enemy": {
+    "system": "combat",
+    "source_line": 6049,
+    "entry": "_has_active_encounter_enemy"
+  },
+  "_enemy_attack_token": {
+    "system": "combat",
+    "source_line": 6055,
+    "entry": "_enemy_attack_token"
+  },
+  "_make_ground": {
+    "system": "world",
+    "source_line": 6065,
+    "entry": "_make_ground"
+  },
+  "_make_split_ground": {
+    "system": "world",
+    "source_line": 6068,
+    "entry": "_make_split_ground"
+  },
+  "_make_bridge_corridor_collision": {
+    "system": "world",
+    "source_line": 6071,
+    "entry": "_make_bridge_corridor_collision"
+  },
+  "_make_hut": {
+    "system": "world",
+    "source_line": 6074,
+    "entry": "_make_hut"
+  },
+  "_scene_randf": {
+    "system": "world",
+    "source_line": 6080,
+    "entry": "_scene_randf"
+  },
+  "_scene_randf_range": {
+    "system": "world",
+    "source_line": 6083,
+    "entry": "_scene_randf_range"
+  },
+  "_make_tree": {
+    "system": "world",
+    "source_line": 6086,
+    "entry": "_make_tree"
+  },
+  "_make_tree_wall": {
+    "system": "world",
+    "source_line": 6089,
+    "entry": "_make_tree_wall"
+  },
+  "_make_deadfall": {
+    "system": "world",
+    "source_line": 6092,
+    "entry": "_make_deadfall"
+  },
+  "_clear_environment_batch_buffers": {
+    "system": "world",
+    "source_line": 6095,
+    "entry": "_clear_environment_batch_buffers"
+  },
+  "_upload_static_batch": {
+    "system": "world",
+    "source_line": 6107,
+    "entry": "_upload_static_batch"
+  },
+  "_flush_environment_batches": {
+    "system": "world",
+    "source_line": 6110,
+    "entry": "_flush_environment_batches"
+  },
+  "_flush_authored_tree_assets": {
+    "system": "world",
+    "source_line": 6113,
+    "entry": "_flush_authored_tree_assets"
+  },
+  "_make_multimesh_batch": {
+    "system": "world",
+    "source_line": 6116,
+    "entry": "_make_multimesh_batch"
+  },
+  "_valid_material_or_fallback": {
+    "system": "world",
+    "source_line": 6119,
+    "entry": "_valid_material_or_fallback"
+  },
+  "_ensure_mesh_surface_materials": {
+    "system": "world",
+    "source_line": 6122,
+    "entry": "_ensure_mesh_surface_materials"
+  },
+  "_validate_zone_render_resources": {
+    "system": "world",
+    "source_line": 6125,
+    "entry": "_validate_zone_render_resources"
+  },
+  "_make_road": {
+    "system": "world",
+    "source_line": 6172,
+    "entry": "_make_road"
+  },
+  "_make_world_wheel": {
+    "system": "world",
+    "source_line": 6175,
+    "entry": "_make_world_wheel"
+  },
+  "_make_water_patch": {
+    "system": "world",
+    "source_line": 6178,
+    "entry": "_make_water_patch"
+  },
+  "_make_fence": {
+    "system": "world",
+    "source_line": 6181,
+    "entry": "_make_fence"
+  },
+  "_make_gravestone": {
+    "system": "world",
+    "source_line": 6184,
+    "entry": "_make_gravestone"
+  },
+  "_make_cart": {
+    "system": "world",
+    "source_line": 6187,
+    "entry": "_make_cart"
+  },
+  "_make_world_prop_anchor": {
+    "system": "world",
+    "source_line": 6190,
+    "entry": "_make_world_prop_anchor"
+  },
+  "_make_ritual_stone": {
+    "system": "world",
+    "source_line": 6193,
+    "entry": "_make_ritual_stone"
+  },
+  "_make_pillar": {
+    "system": "world",
+    "source_line": 6196,
+    "entry": "_make_pillar"
+  },
+  "_make_rubble": {
+    "system": "world",
+    "source_line": 6199,
+    "entry": "_make_rubble"
+  },
+  "_make_torch": {
+    "system": "world",
+    "source_line": 6202,
+    "entry": "_make_torch"
+  },
+  "_make_hit_spark": {
+    "system": "world",
+    "source_line": 6205,
+    "entry": "_make_hit_spark"
+  },
+  "_make_fog_sheet": {
+    "system": "world",
+    "source_line": 6222,
+    "entry": "_make_fog_sheet"
+  },
+  "_make_prop_box": {
+    "system": "world",
+    "source_line": 6225,
+    "entry": "_make_prop_box"
+  },
+  "_make_collision_box": {
+    "system": "world",
+    "source_line": 6228,
+    "entry": "_make_collision_box"
+  },
+  "_prop_requires_collision": {
+    "system": "world",
+    "source_line": 6231,
+    "entry": "_prop_requires_collision"
+  },
+  "_is_first_route_clearance": {
+    "system": "world",
+    "source_line": 6234,
+    "entry": "_is_first_route_clearance"
+  },
+  "_route_safe_position": {
+    "system": "world",
+    "source_line": 6237,
+    "entry": "_route_safe_position"
+  },
+  "_apply_first_route_materials": {
+    "system": "world",
+    "source_line": 6240,
+    "entry": "_apply_first_route_materials"
+  },
+  "_first_route_palette_key": {
+    "system": "world",
+    "source_line": 6243,
+    "entry": "_first_route_palette_key"
+  },
+  "_node_keyword_path": {
+    "system": "world",
+    "source_line": 6246,
+    "entry": "_node_keyword_path"
+  },
+  "_mesh_needs_visible_fallback": {
+    "system": "world",
+    "source_line": 6249,
+    "entry": "_mesh_needs_visible_fallback"
+  },
+  "_surface_has_authored_colors": {
+    "system": "world",
+    "source_line": 6252,
+    "entry": "_surface_has_authored_colors"
+  },
+  "_is_bad_white_material": {
+    "system": "world",
+    "source_line": 6255,
+    "entry": "_is_bad_white_material"
+  },
+  "_first_route_material": {
+    "system": "world",
+    "source_line": 6258,
+    "entry": "_first_route_material"
+  },
+  "_role_for_interactable": {
+    "system": "world",
+    "source_line": 6261,
+    "entry": "_role_for_interactable"
+  },
+  "_visual_role_for_interactable": {
+    "system": "world",
+    "source_line": 6287,
+    "entry": "_visual_role_for_interactable"
+  },
+  "_role_for_prop": {
+    "system": "world",
+    "source_line": 6309,
+    "entry": "_role_for_prop"
+  },
+  "_make_role_visual": {
+    "system": "world",
+    "source_line": 6317,
+    "entry": "_make_role_visual"
+  },
+  "_environment_role_scale": {
+    "system": "world",
+    "source_line": 6320,
+    "entry": "_environment_role_scale"
+  },
+  "_visual_role_for_legacy_character": {
+    "system": "world",
+    "source_line": 6331,
+    "entry": "_visual_role_for_legacy_character"
+  },
+  "_make_light": {
+    "system": "world",
+    "source_line": 6354,
+    "entry": "_make_light"
+  },
+  "_performance_mode": {
+    "system": "world",
+    "source_line": 6357,
+    "entry": "_performance_mode"
+  },
+  "_compatibility_budget_mode": {
+    "system": "world",
+    "source_line": 6360,
+    "entry": "_compatibility_budget_mode"
+  },
+  "_keep_performance_light": {
+    "system": "world",
+    "source_line": 6363,
+    "entry": "_keep_performance_light"
+  },
+  "_build_global_environment": {
+    "system": "world",
+    "source_line": 6366,
+    "entry": "_build_global_environment"
+  },
+  "_mat": {
+    "system": "world",
+    "source_line": 6370,
+    "entry": "_mat"
+  },
+  "_terrain_material": {
+    "system": "world",
+    "source_line": 6389,
+    "entry": "_terrain_material"
+  },
+  "_road_material": {
+    "system": "world",
+    "source_line": 6414,
+    "entry": "_road_material"
+  },
+  "_grass_material": {
+    "system": "world",
+    "source_line": 6431,
+    "entry": "_grass_material"
+  },
+  "_emissive_mat": {
+    "system": "world",
+    "source_line": 6442,
+    "entry": "_emissive_mat"
+  },
+  "_read_json": {
+    "system": "session",
+    "source_line": 6450,
+    "entry": "_read_json"
+  },
+  "_zone_construction": {
+    "system": "world",
+    "source_line": 6458,
+    "entry": "_zone_construction"
+  },
+  "_zone_runtime_fields": {
+    "system": "world",
+    "source_line": 6461,
+    "entry": "_zone_runtime_fields"
+  },
+  "_publish_opening_batches": {
+    "system": "world",
+    "source_line": 6464,
+    "entry": "_publish_opening_batches"
+  }
+}
