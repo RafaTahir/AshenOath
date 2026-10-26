@@ -105,7 +105,19 @@ def validate_runtime_literals(
     objectives: dict[str, set[str]],
     errors: list[str],
 ) -> int:
-    game_path = project / "scripts/game.gd"
+    # Include the extracted implementations, so a small composition root cannot
+    # silently turn this gate into a zero-reference check.
+    paths = [project / "scripts/game.gd"]
+    paths.extend(sorted((project / "scripts/systems").glob("*.gd")))
+    return sum(_validate_runtime_source(project, path, objectives, errors) for path in paths)
+
+
+def _validate_runtime_source(
+    project: Path,
+    game_path: Path,
+    objectives: dict[str, set[str]],
+    errors: list[str],
+) -> int:
     source = game_path.read_text(encoding="utf-8")
     references: list[tuple[str, str, str, int]] = []
     method_pattern = re.compile(
@@ -135,7 +147,7 @@ def validate_runtime_literals(
         )
     for quest_id, objective_id, method, line in references:
         validate_reference(
-            f"scripts/game.gd:{line}:{method}",
+            f"{game_path.relative_to(project).as_posix()}:{line}:{method}",
             quest_id,
             objective_id,
             objectives,

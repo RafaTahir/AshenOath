@@ -60,6 +60,8 @@ func _create_missing_services(ids: Array) -> Dictionary:
 		var service: Node = script.new()
 		services[id] = service
 		service.name = _service_node_name(id)
+		if id == "hud":
+			service.set_settings_source(services["settings"])
 		add_child(service)
 		if id not in MENU_SERVICES and not configured:
 			prepared_service_modes[id] = service.process_mode

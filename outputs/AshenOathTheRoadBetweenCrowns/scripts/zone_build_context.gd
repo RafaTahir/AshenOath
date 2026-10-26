@@ -72,7 +72,7 @@ static func fields_for(root: Node3D) -> Dictionary:
 static func active_host(host: Node) -> Node3D:
 	if not is_instance_valid(host.zone_root):
 		return null
-	var reference: WeakRef = host.zone_root.get_meta("zone_construction_host", null)
+	var reference: WeakRef = host.zone_root.get_meta("zone_construction_host") if host.zone_root.has_meta("zone_construction_host") else null
 	var existing := reference.get_ref() as Node3D if reference != null else null
 	if existing != null:
 		return existing
@@ -83,7 +83,7 @@ func construction_host() -> Node3D:
 		return null
 	var existing := _builder_reference.get_ref() as Node3D if _builder_reference != null else null
 	if existing == null:
-		var reference: WeakRef = zone_root.get_meta("zone_construction_host", null)
+		var reference: WeakRef = zone_root.get_meta("zone_construction_host") if zone_root.has_meta("zone_construction_host") else null
 		existing = reference.get_ref() as Node3D if reference != null else null
 	if existing != null:
 		return existing
