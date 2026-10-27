@@ -1229,7 +1229,7 @@ func _make_village_dressing() -> void:
 		["barrel", Vector3(-4.0, 0, 3.4), 0.56, -8.0],
 		["barrel", Vector3(-4.8, 0, 4.1), 0.48, 15.0],
 		["crate", Vector3(-7.3, 0, 4.9), 0.64, 25.0],
-		["crate", Vector3(11.1, 0, -3.7), 0.72, -18.0],
+		["crate", Vector3(11.1, 0, -2.7), 0.72, -18.0],
 		["barrel", Vector3(10.7, 0, 2.9), 0.58, 18.0],
 		# Keep the return-to-Castle sightline clear. This rock used to sit on the
 		# diagonal from the Wychwood arrival to Greyfen's east exit and its imported

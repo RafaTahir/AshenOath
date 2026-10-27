@@ -39,7 +39,7 @@ func _run() -> void:
 	await process_frame
 	hud.update_equipment(3, 2, "", 24, "Standard")
 	hud.set_input_device("gamepad")
-	_check(hud.last_arrow_count == 24 and hud.equipment_label.text.contains("Standard x24"), "Glyph switching discards ammunition state")
+	_check(hud.last_arrow_count == 24 and hud.supply_counts["arrows"].text == "24" and hud.supply_labels["arrows"].text == "Standard", "Glyph switching discards ammunition state")
 	hud.set_input_device("keyboard_mouse")
 	var remap_text := ""
 	for page in range(6):

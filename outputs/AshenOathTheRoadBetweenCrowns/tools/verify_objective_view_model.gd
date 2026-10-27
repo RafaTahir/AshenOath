@@ -40,7 +40,7 @@ func _initialize() -> void:
 	_check(str(view.get("zone_name", "")) == "Castle Vargan Courtyard", "Objective view exposed an incorrect zone label")
 	_check(str(view.get("tracker_text", "")).contains("Speak with Sister Anwen"), "Tracker did not use the objective view action")
 	_check(str(view.get("contextual_text", "")) == "Speak with Sister Anwen", "Contextual guidance disagrees with the objective view")
-	_check(str(view.get("compass_text", "")) == str(view.get("zone_name", "")), "Compass lost the current zone when the beat has no authored destination")
+	_check(str(view.get("compass_text", "")) == "Greyfen" and str(view.get("destination_zone", "")) == "greyfen", "Compass must retain the authored Anwen destination while tracking from Castle")
 	var save_summary: Dictionary = view.get("save_summary", {})
 	_check(str(save_summary.get("quest_id", "")) == str(view.get("quest_id", "")), "Save summary selected a different quest")
 	_check(str(save_summary.get("objective_id", "")) == str(view.get("objective_id", "")), "Save summary selected a different objective")

@@ -37,7 +37,7 @@ Runtime catalogs and export presets own inclusion. A raw inventory entry is not
 runtime ownership; conversely, a model without literal `.gd` references may still
 be required by a catalog, resource, import, fallback or preparation tool.
 
-Production contains a root Web artifact, engine files and seven external packs.
+Production contains a root Web artifact, engine files and eight external packs.
 The shared policy is `data/deployment_policy.json`: total deployed files strictly
 below 256 MiB, warning at 200 MiB; individual tracked files below 100 MiB. Download
 bytes, decoded resources and process memory are different measurements. Removing
@@ -58,8 +58,27 @@ handoff 750 ms. These are requirements, not claims that current builds pass them
 
 ## Cleanup Evidence - 2026-10-27
 
-[Cleanup and headless/export results](release_reports/release_cleanup_20261027.json)
-record source removals, the reversible D: archive, refreshed technical identities
-and exact candidate bytes. Boot and packed startup passed; the full integration
-suite is not green. Pending asset review is not silently converted to approval.
-Production remains held while the recorded integration/strict-asset gates are red.
+The reproducible source-only profile is `tools/run_headless_release.ps1`.
+It uses the existing release verifier inventory and owned-process runner, writes
+unique isolated D: profiles/logs, and rejects engine errors and shutdown leaks.
+`-Only` selects diagnostic rechecks; it cannot establish a complete source run.
+Reports explicitly identify `headless_release_with_disclosures`: numerical scene
+budget overruns remain visible limitations, while the default strict verifier
+behavior and original targets are retained. This profile does not certify
+rendering, browser/phone behavior, listening quality or reference-PC performance.
+
+Current repair progress is in
+[Release repair status](release_reports/release_repair_20261027.json).
+
+[Historical cleanup results](release_reports/release_cleanup_20261027.json)
+retain the original failures, source removals and reversible D: archive. Current
+repair coverage uses the consolidated run and two targeted fixture rechecks,
+with original failing logs preserved. The combined candidate is
+`release-repair-20261027`: 17 files, 107,936,848 deployed bytes. Compilation,
+pack ownership, transport/decoded integrity and isolated packed startup pass.
+Git-triggered publication has a separate receipt under
+`.release-gate/living-road/FINISH-016-*/publication.json` at the repository root.
+Pending user acceptance is not converted to approval. Bracken is authorized for
+release inclusion, not visually approved. Numerical scene-budget overruns and
+historical strict-performance failures remain disclosed; no rendered, browser,
+phone or listening certification is claimed.

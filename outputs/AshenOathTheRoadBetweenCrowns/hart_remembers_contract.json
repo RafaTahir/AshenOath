@@ -12,7 +12,8 @@
     "bind": "duty",
     "kill": "ash"
   },
-  "peaceful": ["expose", "free"],
-  "combat_handoff": ["bind", "kill"],
+  "peaceful": ["expose", "free", "bind"],
+  "combat_handoff": ["kill"],
+  "enacted_rituals": ["expose", "free", "bind"],
   "witness_fallback": "kael"
 }

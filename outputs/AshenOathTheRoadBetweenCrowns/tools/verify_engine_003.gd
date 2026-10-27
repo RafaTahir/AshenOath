@@ -20,7 +20,9 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await _frames(3)
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _wait_for_zone(game, "greyfen")
 	await _verify_lifecycle(game)
 	print("VERIFIER_PHASE: SHUTDOWN")
@@ -37,7 +39,7 @@ func _initialize() -> void:
 	_finish()
 
 func _verify_static_contract() -> void:
-	var game_source := FileAccess.get_file_as_string("res://scripts/game.gd")
+	var game_source := FileAccess.get_file_as_string("res://scripts/systems/game_bindings.gd") + FileAccess.get_file_as_string("res://scripts/systems/zone_lifecycle_service.gd")
 	for required in [
 		"func _cache_route_zone(",
 		"func _activate_cached_zone(",
@@ -86,7 +88,7 @@ func _verify_lifecycle(game) -> void:
 			check(cached_root != null and is_instance_valid(cached_root), "Cache contains an invalid root: %s" % cached_id)
 			if cached_root != null and is_instance_valid(cached_root):
 				check(str(cached_root.get_meta("zone_resource_owner", "")) == "cached", "Cache ownership marker is wrong for %s" % cached_id)
-				check(not cached_root.visible, "Cached zone remains visible: %s" % cached_id)
+				check(not cached_root.visible or cached_root.has_meta("resident_visibility"), "Cached zone remains visible without an owned adjoining preview: %s" % cached_id)
 				check(cached_root.process_mode == Node.PROCESS_MODE_DISABLED, "Cached zone still processes: %s" % cached_id)
 		check(_missing_material_count(game.zone_root) == 0, "%s contains visible geometry without an effective material" % zone_id)
 		var render_report: Dictionary = game.call("_validate_zone_render_resources", game.zone_root)
@@ -138,7 +140,9 @@ func _missing_material_count(root_node: Node) -> int:
 		if batch.multimesh == null or batch.multimesh.mesh == null:
 			continue
 		if batch.material_override == null:
-			missing += 1
+			for surface_index in range(batch.multimesh.mesh.get_surface_count()):
+				if batch.multimesh.mesh.surface_get_material(surface_index) == null:
+					missing += 1
 	return missing
 
 func _wait_for_zone(game, zone_id: String) -> void:

@@ -1,6 +1,6 @@
 extends SceneTree
 
-class DeferredGame extends "res://scripts/game.gd":
+class DeferredLifecycle extends "res://scripts/systems/zone_lifecycle_service.gd":
 	var delayed_zone := ""
 	var delayed_position := Vector3.ZERO
 	func _load_zone_after_runtime_pack(id: String, position: Vector3) -> void:
@@ -11,17 +11,30 @@ func _initialize() -> void:
 	call_deferred("run")
 
 func run() -> void:
+	# Freeze only the fixture's passive regeneration clock so exact saved
+	# stamina can be inspected after asynchronous construction has completed.
+	node_added.connect(_freeze_stamina_clock)
 	var game = load("res://scenes/main.tscn").instantiate()
-	game.set_script(DeferredGame)
+	var previous: Node = game.get_system("zone_lifecycle")
+	game.remove_child(previous)
+	previous.free()
+	var lifecycle := DeferredLifecycle.new()
+	game._systems["zone_lifecycle"] = lifecycle
+	lifecycle.configure(game, game._state, game._systems)
+	game.add_child(lifecycle)
 	root.add_child(game)
 	await process_frame
 	await process_frame
 	game.load_save_state({"version":9, "zone":"greyfen", "player_position":[0,1,7], "player_health":{"health":47.0,"max_health":125.0}, "player_stamina":{"stamina":31.0,"max_stamina":100.0}})
 	var deadline := Time.get_ticks_msec() + 60000
-	while game.delayed_zone == "" and Time.get_ticks_msec() < deadline:
+	while lifecycle.delayed_zone == "" and Time.get_ticks_msec() < deadline:
 		await process_frame
 	var passed: bool = game.player == null and not game.pending_player_restore.is_empty()
-	game._load_zone(game.delayed_zone, game.delayed_position)
+	game._load_zone(lifecycle.delayed_zone, lifecycle.delayed_position)
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
+	print("RESTORE INITIAL: health=%s stamina=%s pending=%s" % [game.player.health_component.health, game.player.stamina_component.stamina, game.pending_player_restore])
 	passed = passed and game.player != null and game.pending_player_restore.is_empty()
 	if game.player != null:
 		passed = passed and is_equal_approx(game.player.health_component.health, 47.0)
@@ -40,6 +53,7 @@ func run() -> void:
 		passed = passed and is_equal_approx(game.player.stamina_component.stamina, 31.0)
 		passed = passed and is_zero_approx(game.player.hurt_react_time) and is_zero_approx(game.player.attack_cooldown)
 		passed = passed and game.player.visual_root.transform.is_equal_approx(Transform3D.IDENTITY)
+		print("RESTORE CACHED: health=%s stamina=%s dead=%s state=%s transform=%s" % [game.player.health_component.health, game.player.stamina_component.stamina, game.player.animation_driver.dead, game.player.animation_driver.current_state, game.player.visual_root.transform])
 	game.prepare_resource_shutdown()
 	for frame in int(game.ZONE_RETIRE_FRAMES) + 4:
 		await process_frame
@@ -51,3 +65,7 @@ func run() -> void:
 		push_error("Deferred save must apply once after player creation and release a cached player's death pose without healing")
 	print("DEFERRED PLAYER RESTORE: ", "PASS" if passed else "FAIL")
 	quit(0 if passed else 1)
+
+func _freeze_stamina_clock(node: Node) -> void:
+	if node.get_script() == preload("res://scripts/stamina_component.gd"):
+		node.regen_rate = 0.0

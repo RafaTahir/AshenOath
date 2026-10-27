@@ -23,13 +23,18 @@ func _initialize() -> void:
 	var game := packed.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(5)
 	_verify_native_quality(game)
 	_verify_day_night(game)
 	_verify_greyfen(game)
 	_verify_player_and_beam(game)
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _frames(5)
 	_verify_wychwood(game)
 	await _finish(game)
@@ -76,7 +81,8 @@ func _verify_day_night(game: Node) -> void:
 	clock.set_time(720.0, 2)
 	_check(clock.current_phase == "day", "day phase boundary failed")
 	_check(director.sun_disc.visible and not director.star_field.visible, "day sky visibility is incorrect")
-	_check(director.sky_backdrop.visible and bool(director.sky_backdrop.get_sky_state().get("clouds_visible", false)), "authored day clouds are hidden")
+	_check(director.current_environment.sky == director.authored_sky and director.cloud_layer.visible, "authored environment sky or day clouds are hidden")
+	_check(director.sky_backdrop == null, "Legacy sky overlay obscures the world")
 	clock.set_time(1140.0, 2)
 	_check(clock.current_phase == "dusk", "dusk phase boundary failed")
 	clock.set_time(60.0, 3)
@@ -98,8 +104,8 @@ func _verify_greyfen(game: Node) -> void:
 	var house := _find_group_member(game.zone_root, "greyfen_house")
 	_check(house != null, "Greyfen has no authored house")
 	if house != null:
-		for detail in ["StoneFoundation", "StoneChimney", "WindowShutter", "DoorStep"]:
-			_check(house.find_child(detail, true, false) != null, "house detail missing: %s" % detail)
+		var mesh = house.find_child("AuthoredHouse", true, false) as MeshInstance3D
+		_check(mesh != null and mesh.mesh != null and mesh.mesh.get_surface_count() == 6, "Prepared house does not retain its six authored material/detail surfaces")
 	var grass := game.zone_root.find_child("GrassBatch", true, false) as MultiMeshInstance3D
 	_check(grass != null and grass.multimesh != null and grass.multimesh.mesh is QuadMesh, "grass is not a crossed-card MultiMesh batch")
 	if grass != null:
@@ -151,9 +157,11 @@ func _has_authored_surface(node: Node, require_normal: bool) -> bool:
 
 func _has_textured_mesh(node: Node) -> bool:
 	if node is MeshInstance3D:
-		var material := (node as MeshInstance3D).material_override as StandardMaterial3D
-		if material != null and material.albedo_texture != null:
-			return true
+		var mesh_node := node as MeshInstance3D
+		if mesh_node.mesh != null:
+			for surface in mesh_node.mesh.get_surface_count():
+				var material := mesh_node.get_active_material(surface) as StandardMaterial3D
+				if material != null and material.albedo_texture != null: return true
 	for child in node.get_children():
 		if _has_textured_mesh(child): return true
 	return false

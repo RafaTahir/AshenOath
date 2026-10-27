@@ -4,17 +4,24 @@ const Touch = preload("res://scripts/mobile_touch_controls.gd")
 const Router = preload("res://scripts/input_router.gd")
 
 class FakeHud extends CanvasLayer:
+	signal interaction_prompt_changed(model: Dictionary)
 	var menu_layer := Control.new()
 	var dialogue_layer := Control.new()
 	var inventory_layer := Control.new()
+	var loading_layer := Control.new()
+	var loading_armed := false
 	func _ready() -> void:
 		add_child(menu_layer)
 		add_child(dialogue_layer)
 		add_child(inventory_layer)
+		add_child(loading_layer)
+		loading_layer.hide()
 		dialogue_layer.hide()
 		inventory_layer.hide()
 	func set_input_device(_device: String) -> void:
 		pass
+	func get_interaction_prompt_model() -> Dictionary:
+		return {}
 
 class PolledTouch extends Touch:
 	func _process(_delta: float) -> void:
@@ -59,6 +66,7 @@ func _run() -> void:
 	await _frames(3)
 	_check(not touch.visible and not touch.is_processing(), "Menu touch state was not event-driven")
 	hud.menu_layer.hide()
+	router.set_gameplay_context()
 	await _frames(3)
 	_check(touch.visible, "Closing menu did not show touch controls")
 	var before := touch.layout_calls
@@ -74,13 +82,7 @@ func _run() -> void:
 		await _frames(2)
 		var baseline_layout: Dictionary = baseline.get_layout_snapshot()
 		_check(expected.actions == baseline_layout.actions and expected.radii == baseline_layout.radii, "Event layout differs from the retained original")
-		var elapsed: Array[int] = []
-		for _round in range(3):
-			var started := Time.get_ticks_usec()
-			for _index in range(6000):
-				baseline._process(1.0 / 60.0)
-			elapsed.append(Time.get_ticks_usec() - started)
-		print("ARCH-002 TOUCH COST: old 6000 idle callbacks us=%s; new 40 actual idle frames: process=%d layout_delta=%d" % [elapsed, touch.process_calls, touch.layout_calls - before])
+		print("TOUCH IDLE OWNERSHIP: process=%d layout_delta=%d (no timing benchmark)" % [touch.process_calls, touch.layout_calls - before])
 		baseline.queue_free()
 	touch._begin_touch(2, touch._move_center() + Vector2(0, -65))
 	_check(router.movement_vector().length() > 0.5, "Movement control did not respond")

@@ -22,11 +22,9 @@ func _initialize() -> void:
 				continue
 			matched = true
 			_check(entry.get("bytes", 0) == FileAccess.get_file_as_bytes(path).size() and entry.get("sha256", "") == FileAccess.get_sha256(path), "Furniture release metadata is stale: " + id)
-			_check(entry.get("pack_owner", "") == "base" and FileAccess.file_exists(entry.get("license_file", "")), "Furniture owner/license missing: " + id)
+			_check(entry.get("pack_owner", "") == "opening" and FileAccess.file_exists(entry.get("license_file", "")), "Furniture owner/license missing: " + id)
 		_check(matched, "Furniture derivative is absent from the runtime manifest: " + id)
-		for preset_id in [0, 1, 2]:
-			var filter := str(presets.get_value("preset.%d" % preset_id, "include_filter", ""))
-			_check(path.trim_prefix("res://") in filter.split(","), "Furniture absent from production/QA/base pack ownership: " + id)
+		_check(preload("res://tools/runtime_fixture.gd").pack_owners(path) == ["opening"], "Furniture needs exactly one opening pack owner: " + id)
 		_check(mesh.get_surface_count() == 2, "Furniture surface budget drift: " + id)
 		_check(mesh.get_aabb().position.y >= -0.002, "Furniture extends below its grounded origin: " + id)
 		_check(mesh.get_meta("role", "") == id and mesh.get_meta("license", "") == "CC0 1.0", "Furniture role/license identity drift: " + id)

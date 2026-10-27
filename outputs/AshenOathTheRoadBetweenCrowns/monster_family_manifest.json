@@ -27,11 +27,11 @@
       "source_path": "res://assets_external/enemies/Skeleton.fbx"
     },
     "wychwood_brute": {
-      "visual_role": "ghoulkin_skeleton",
+      "visual_role": "wychwood_brute_creature",
       "profile": "brute",
       "height": 1.98,
       "skin": "runtime_materials",
-      "runtime_source_role": "ghoulkin_skeleton",
+      "runtime_source_role": "wychwood_brute_creature",
       "source_path": "res://assets_external/enemies/Skeleton.fbx"
     }
   },

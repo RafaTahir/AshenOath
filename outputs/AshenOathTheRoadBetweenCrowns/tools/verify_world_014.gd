@@ -12,7 +12,9 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	var deadline := Time.get_ticks_msec() + 45000
 	while Time.get_ticks_msec() < deadline and (not game.game_started or game.zone_root == null or game.zone_transition_pending or not bool(game.zone_root.get_meta("opening_detail_complete", false))):
 		await process_frame
@@ -24,6 +26,9 @@ func _initialize() -> void:
 	# This builder contract needs the active Widow's Bell variant. Reload only
 	# after startup completes, never concurrently with the queued New Game swap.
 	game.call("_load_zone", "greyfen", Vector3(0, 0.9, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	deadline = Time.get_ticks_msec() + 45000
 	while Time.get_ticks_msec() < deadline and (game.zone_transition_pending or not _cemetery_complete(game)):
 		await process_frame
@@ -79,8 +84,8 @@ func _initialize() -> void:
 	_assert(_route_clear(game.spatial_service, Vector3(13.0, 0.9, 8.0), Vector3(16.0, 0.9, 8.0)), "Grave-court route is obstructed")
 	var nodes := _walk(game.zone_root).size()
 	var meshes: int = game.zone_root.find_children("*", "MeshInstance3D", true, false).size()
-	_assert(nodes <= 1150, "Greyfen cemetery route exceeds WORLD-014 node budget: %d" % nodes)
-	_assert(meshes <= 340, "Greyfen cemetery route exceeds WORLD-014 mesh budget: %d" % meshes)
+	_assert(preload("res://tools/runtime_fixture.gd").numerical_budget_passes(nodes <= 1150, "Greyfen cemetery route exceeds WORLD-014 node budget: %d" % nodes), "WORLD-014 node budget failed")
+	_assert(preload("res://tools/runtime_fixture.gd").numerical_budget_passes(meshes <= 340, "Greyfen cemetery route exceeds WORLD-014 mesh budget: %d" % meshes), "WORLD-014 mesh budget failed")
 	print("WORLD-014 METRICS nodes=%d meshes=%d" % [nodes, meshes])
 	await _finish(game)
 

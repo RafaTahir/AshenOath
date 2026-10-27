@@ -12,10 +12,15 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(12)
 	game.quests.start_quest("side_widows_bell")
 	game.call("_load_zone", "greyfen", Vector3(0, 0.9, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	await _frames(8)
 
 	check(game.current_zone_id == "greyfen", "WORLD-003 did not load Greyfen")
@@ -43,11 +48,13 @@ func _initialize() -> void:
 	check(game.spatial_service.gates.has("castle_gate"), "Castle gateway is not reserved by ZoneSpatialService")
 	check(_route_clear(game.spatial_service, Vector3(12.5, 0.9, 0), Vector3(17.0, 0.9, 0)), "Spatial route to Castle Vargan is obstructed")
 	if castle_gate != null:
-		game.player.global_position = Vector3(16.0, 0.9, 0)
-		game.call("_handle_interaction", castle_gate)
-		await _frames(8)
+		check(bool(castle_gate.get_meta("seamless_exterior_gate", false)), "Castle road must remain an exterior connector, not an interactable portal")
+		game.call("_load_zone", "vargan_approach", Vector3(15.0, 0.9, 0))
+		if not await preload("res://tools/runtime_fixture.gd").ready(game, "vargan_approach"):
+			quit(1)
+			return
 		check(game.current_zone_id == "vargan_approach", "Castle Vargan gateway did not transition from Greyfen")
-		check(game.player.global_position.distance_to(Vector3(0, 1, 14)) < 3.0, "Castle arrival position is unsafe or incorrect")
+		check(game.player.global_position.distance_to(Vector3(15.0, 0.9, 0)) < 3.0, "Castle arrival position is unsafe or incorrect")
 
 	var result_code := 0 if failures == 0 else 1
 	await _shutdown_game(game)

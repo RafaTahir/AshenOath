@@ -33,7 +33,12 @@ func _initialize() -> void:
 		check(enemy.behavior_profile == str(families[enemy_id].profile), "%s behavior identity does not match its visual family" % enemy_id)
 		enemy.queue_free()
 		await process_frame
-	check(visual_roles.size() == 3, "The pack must use three visibly distinct monster bodies")
+	check(visual_roles.size() == 4, "The pack must retain its four authored monster roles")
+	target.queue_free()
+	var assets = preload("res://scripts/asset_spawn_helper.gd").new()
+	assets.clear_runtime_caches()
+	assets.free()
+	await process_frame
 	print("MON-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 

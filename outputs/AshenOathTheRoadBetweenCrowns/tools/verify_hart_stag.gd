@@ -28,43 +28,49 @@ func run() -> void:
 		var delta: Vector3 = skeleton.global_transform.basis * (skeleton.get_bone_global_rest(skeleton.find_bone("Head")).origin - skeleton.get_bone_global_rest(skeleton.find_bone("Body")).origin)
 		check(delta.z < -0.1, "Stag head must face gameplay -Z")
 		var player: AnimationPlayer = driver.get_animation_player()
-		check(player.active and player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL, "Throttled mixer must evaluate only scheduled advances")
+		var graph = driver.animation_graph
+		driver.set_external_tick(true)
+		check(not player.active and graph.tree.active and graph.tree.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL, "AnimationTree must be the sole manually scheduled mixer")
 		for state in ["walk", "run", "attack", "hit", "death"]:
 			var clip: StringName = driver.get_clip_for_state(state)
 			if clip == StringName():
 				continue
-			player.play(clip, 0.0)
-			player.seek(0.0, true)
-			player.advance(0.0)
+			driver.stop_action()
+			if state in ["walk", "run"]:
+				driver.set_locomotion(0.5 if state == "walk" else 1.6, Vector3.FORWARD, true)
+			else:
+				driver.trigger_action(state)
+			driver.advance_external(0.15)
 			var poses: Array[Transform3D] = []
 			for bone in skeleton.get_bone_count():
 				poses.append(skeleton.get_bone_pose(bone))
-			player.seek(player.get_animation(clip).length * 0.55, true)
-			player.advance(0.0)
+			driver.advance_external(0.15)
 			var changed := false
 			for bone in skeleton.get_bone_count():
 				changed = changed or not poses[bone].is_equal_approx(skeleton.get_bone_pose(bone))
 			check(changed, "Native stag clip must move bones: " + state)
-		player.play(driver.get_clip_for_state("idle"), 0.0)
-		player.seek(0.0, true)
+		driver.dead = false
+		driver.stop_action()
+		driver.set_locomotion(0.0, Vector3.ZERO, true)
 		driver.set_distance_suspended(true)
-		check(not player.active, "Dormant Hart must suspend mixer evaluation")
+		check(not driver.is_evaluation_scheduled(), "Dormant Hart must suspend mixer evaluation")
 		driver.set_distance_suspended(false)
-		check(player.active, "Resumed Hart must restore mixer evaluation")
+		check(driver.is_evaluation_scheduled(), "Resumed Hart must restore mixer evaluation")
 		driver.set_external_tick(true)
 		driver.set_locomotion(0.5, Vector3(0, 0, -1), true)
-		var time_before: float = player.current_animation_position
+		var time_before: float = graph.gait_phase
 		await process_frame
 		await process_frame
-		check(is_equal_approx(player.current_animation_position, time_before), "Manual mixer must not advance on idle frames")
+		check(is_equal_approx(graph.gait_phase, time_before), "Manual mixer must not advance on idle frames")
 		driver.advance_external(0.04)
-		check(is_equal_approx(player.current_animation_position, time_before), "Sub-budget update must not advance animation")
+		check(graph.gait_phase > time_before, "Externally owned clock must advance exactly when its owner ticks")
+		time_before = graph.gait_phase
 		driver.advance_external(0.05)
-		check(not is_equal_approx(player.current_animation_position, time_before), "Scheduled update must advance animation")
+		check(graph.gait_phase > time_before, "Scheduled update must advance animation")
 		driver.set_distance_suspended(true)
-		time_before = player.current_animation_position
+		time_before = graph.gait_phase
 		driver.advance_external(0.2)
-		check(is_equal_approx(player.current_animation_position, time_before), "Dormant actor must ignore scheduled ticks")
+		check(is_equal_approx(graph.gait_phase, time_before), "Dormant actor must ignore scheduled ticks")
 		driver.set_distance_suspended(false)
 		driver.set_locomotion(0.0, Vector3.ZERO, true)
 		driver.locomotion_step.connect(func(side: StringName): step_sides.append(side))
@@ -144,10 +150,10 @@ func run() -> void:
 		var witness_driver = witness.get_node("HartWitnessAnimation")
 		check(witness_driver.is_valid(), "Peaceful witness must have native idle")
 		witness_driver.set_external_tick(true)
-		var witness_player: AnimationPlayer = witness_driver.get_animation_player()
-		var before: float = witness_player.current_animation_position
+		var playback: AnimationNodeStateMachinePlayback = witness_driver.animation_graph.playback
+		var before: float = playback.get_current_play_position()
 		witness_driver.advance_external(0.1)
-		check(witness_player.current_animation_position > before, "Peaceful witness idle must advance")
+		check(playback.get_current_play_position() > before, "Peaceful witness idle must advance")
 		witness.free()
 	factory.clear_runtime_caches()
 	factory.free()

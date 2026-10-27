@@ -15,7 +15,7 @@ func _initialize() -> void:
 	for required in ["CastleVargan_%s", "\"Approach\"", "\"OuterCourtyard\"", "\"RecordHall\"", "vargan_gate_guard", "vargan_ledger_choice", "RecordHallHaunting"]:
 		check(required in castle, "Missing Castle Vargan feature: %s" % required)
 	var campaign := FileAccess.get_file_as_string("res://scripts/zones/campaign_section.gd")
-	check("BanditRoadSection.new().build(context)" in campaign, "Campaign router does not dispatch WORLD-005")
+	check("_section = BanditRoadSection.new()" in campaign and "_section.construction_steps(zone_id)" in campaign, "Campaign router does not dispatch bounded WORLD-005 construction")
 	var preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	check("bandit_road_section.gd" in preset, "WORLD-005 builder is omitted from Web export")
 	print("WORLD-005 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))

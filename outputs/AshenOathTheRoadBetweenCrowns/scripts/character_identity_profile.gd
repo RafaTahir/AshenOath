@@ -70,8 +70,9 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 	# creature. Its head is part of that authored surface rather than a
 	# separately named face mesh, so record the real native surface count instead
 	# of treating the absence of a second surface as missing anatomy.
-	if native_face and face_surfaces == 0 and role_is_monster_role(role):
+	if native_face and face_surfaces == 0 and (role_is_monster_role(role) or _contains_complete_family(root)):
 		face_surfaces = _native_monster_surface_count(root)
+		root.set_meta("character_face_surface_contract", "single_connected_skinned_mesh")
 	root.set_meta("character_face_surfaces", face_surfaces)
 	root.set_meta("character_face_features", "native_mesh" if native_face else "missing_native_face")
 	if role_is_monster_role(role) and native_face and face_surfaces > 0:

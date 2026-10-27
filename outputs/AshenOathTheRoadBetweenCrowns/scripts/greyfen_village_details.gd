@@ -77,6 +77,8 @@ func _build() -> void:
 func _point(id: String, prompt: String, position_value: Vector3, kind: String, words: String) -> Node3D:
 	var area = Interactable.new()
 	area.setup("greyfen_detail:" + id, "story_activity", prompt)
+	if absf(position_value.z - 4.5) < 2.8:
+		position_value.z = 4.5 + (-2.9 if position_value.z < 4.5 else 2.9)
 	area.position = position_value
 	area.build_collision(0.65)
 	var heights := {"container":0.55,"bucket":0.55,"bellows":0.63,"mechanism":0.8,"shutter":1.36,"knock":1.1,"seat":0.45}
@@ -151,6 +153,16 @@ func _model(parent: Node3D, file: String, height: float, point: Vector3) -> Node
 	if node == null:
 		push_error("Greyfen required detail unavailable: " + file)
 		return null
+	# Imported OBJ meshes can have empty slots even when their retained atlas
+	# exists. Bind only missing slots; preserve authored materials and surfaces.
+	if file.get_extension().to_lower() == "obj":
+		var path := "res://assets_external/environment/props/" + file
+		for mesh_node: MeshInstance3D in game.asset_helper._collect_meshes(node):
+			if mesh_node.mesh == null or mesh_node.material_override != null:
+				continue
+			for surface in mesh_node.mesh.get_surface_count():
+				if mesh_node.get_active_material(surface) == null:
+					mesh_node.set_surface_override_material(surface, game.asset_helper._obj_material(path))
 	game.asset_helper._normalize_scene_bounds(node, height)
 	parent.add_child(node)
 	node.position += point

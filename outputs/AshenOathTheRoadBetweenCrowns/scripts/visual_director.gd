@@ -12,7 +12,7 @@ const CLOUD_VOLUMES := [
 var world_environment: WorldEnvironment
 var sun: DirectionalLight3D
 var moon: DirectionalLight3D
-var sky_dome: MeshInstance3D
+var sky_dome: Node3D
 var sun_disc: MeshInstance3D
 var sun_halo: MeshInstance3D
 var sun_rays: Node3D
@@ -536,7 +536,7 @@ func _lighting_profile(zone_id: String) -> Dictionary:
 	return profile
 
 func _build_sky_layer() -> void:
-	sky_dome = MeshInstance3D.new()
+	sky_dome = Node3D.new()
 	sky_dome.name = "SkyGradientDome"
 	# The Environment owns the gradient; retain only the legacy transform anchor.
 	sky_dome.scale = Vector3(420, 210, 420)
@@ -701,8 +701,6 @@ func _reduced_motion() -> bool:
 	return reduced_motion
 
 func _set_sky_colors(dome_color: Color, sun_color: Color, cloud_color: Color) -> void:
-	if sky_dome != null and sky_dome.mesh != null:
-		sky_dome.material_override = _sky_material(dome_color)
 	if sun_disc != null:
 		sun_disc.material_override = _emissive_billboard_material(sun_color, 1.45, 0.90)
 	if cloud_layer != null:

@@ -62,6 +62,7 @@ func _format_input_text(text: String) -> String:
 		var block: Dictionary = input_source.describe_action("block")
 		var guard_verb := "Toggle" if str(block.get("mode", "hold")) == "toggle" else "Hold"
 		var replacements := {
+			"Left click strike": _action_label("light_attack") + " Strike",
 			"Left click": _action_label("light_attack"),
 			"Left mouse": _action_label("light_attack"),
 			"Right mouse": _action_label("heavy_attack"),

@@ -6,7 +6,7 @@ func _initialize() -> void:
 	var contract = JSON.parse_string(FileAccess.get_file_as_string("res://narrative_aftermath_contract.json"))
 	check(typeof(contract) == TYPE_DICTIONARY, "Narrative aftermath contract is invalid")
 	check(contract.get("evidence_flags", []).size() == 5, "All five Road of Crows evidence states are not registered")
-	var game_source := FileAccess.get_file_as_string("res://scripts/game.gd")
+	var game_source := FileAccess.get_file_as_string("res://scripts/systems/quest_service.gd") + FileAccess.get_file_as_string("res://scripts/zone_construction_host.gd")
 	for required in [
 		"road_evidence_bram",
 		"road_evidence_sella",

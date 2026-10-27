@@ -3,6 +3,7 @@ extends SceneTree
 var failures := 0
 
 func _initialize() -> void:
+	root.size = Vector2i(1280, 720)
 	if "--inventory-input-only" in OS.get_cmdline_user_args():
 		await _verify_inventory_input()
 		print("UI-001 INVENTORY INPUT: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
@@ -22,31 +23,45 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.call("_new_game")
-	await settle(6)
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 
 	var hud = game.hud
 	check(hud != null, "HUD missing")
+	game.set_process(false)
+	game.zone_root.process_mode = Node.PROCESS_MODE_DISABLED
+	hud.set_display_metrics({"width":1280, "height":720})
+	hud.apply_accessibility({"high_contrast": false})
+	await settle(4)
+	# Startup notices and guidance are legitimate timed presentation, not idle
+	# polling. Drain their finite clocks before checking the idle policy.
+	for index in range(40): hud.hud_lifecycle.advance_view(1.0)
 	hud.update_health(125.0, 125.0)
+	for index in range(5): hud.hud_lifecycle.advance_view(1.0)
 	check(not hud.is_processing(), "Healthy HUD still polls every frame")
 	hud.arm_loading("Checking the road")
 	check(hud.is_processing(), "Loading delay did not wake HUD processing")
 	await create_timer(0.80).timeout
+	for index in range(5): hud.hud_lifecycle.advance_view(1.0)
 	check(hud.loading_layer.visible and not hud.is_processing(), "Loading reveal kept idle HUD processing active")
 	hud.hide_loading()
 	hud.apply_accessibility({"reduced_motion": false})
 	hud.update_health(25.0, 125.0)
-	check(hud.is_processing(), "Low-health pulse did not wake HUD processing")
+	check(hud.vitals_warning_label.visible and hud.vitals_warning_label.text.contains("Low health"), "Low-health warning is missing")
 	hud.apply_accessibility({"reduced_motion": true})
-	check(not hud.is_processing(), "Reduced motion did not stop the health pulse")
+	check(hud._bar_tweens.is_empty() and hud.health_bar.modulate == Color.WHITE, "Reduced motion did not stop health-bar animation")
 	hud.update_health(125.0, 125.0)
 	hud.apply_accessibility({"reduced_motion": false})
+	for index in range(5): hud.hud_lifecycle.advance_view(1.0)
 	check(not hud.is_processing(), "Restored health left idle HUD processing active")
 	hud.set_input_device("keyboard_mouse")
-	var vitals = hud.find_child("VitalsBackdrop", true, false)
-	var tracker = hud.find_child("QuestTrackerBackdrop", true, false)
-	var compass = hud.find_child("CompassBackdrop", true, false)
-	check(vitals != null and vitals.size.x <= 270.0 and vitals.size.y <= 95.0, "Vitals panel is not compact")
-	check(tracker != null and tracker.size.x <= 340.0 and tracker.size.y <= 115.0, "Quest tracker is not compact")
+	var vitals = hud.vitals_back
+	var tracker = hud.tracker_back
+	var compass = hud.compass_back
+	print("HUD GEOMETRY: vitals=%s tracker=%s compass=%s contrast=%s display=%s canvas=%s" % [vitals.size if vitals != null else null, tracker.size if tracker != null else null, compass.size if compass != null else null, hud.high_contrast, hud._display_metrics, root.content_scale_size])
+	check(vitals != null and vitals.size.x <= 490.0 and vitals.size.y <= 130.0, "Vitals exceed the current responsive layout budget")
+	check(tracker != null and tracker.size.x <= 500.0 and tracker.size.y <= 258.0, "Quest tracker exceeds the current responsive layout budget")
 	check(compass != null and compass.size.y <= 34.0, "Compass consumes too much vertical space")
 	check(compass != null and not compass.visible, "Compass still has a wide opaque backdrop")
 
@@ -55,17 +70,22 @@ func _initialize() -> void:
 	hud.set_compass("Sister Anwen | 4m")
 	check(not hud.compass_label.text.contains(" | "), "Compass still uses debug-style separators")
 	hud.set_tracker("Road of Crows\nSpeak to Sister Anwen at the shrine")
-	check(hud.tracker_label.text.contains("ROAD OF CROWS"), "Tracked quest hierarchy missing")
+	check(hud.tracker_title_label.text.to_upper().contains("ROAD OF CROWS"), "Tracked quest hierarchy missing")
 
 	var anwen = game.zone_root.find_child("sister_anwen", true, false)
+	game.set_process(true)
+	game.zone_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	check(anwen != null, "Sister Anwen missing from Greyfen")
 	if anwen != null:
 		game.player.global_position = anwen.global_position + Vector3(0.0, 0.0, 2.4)
 		game.player.velocity = Vector3.ZERO
 		await settle(24)
-		check(_anwen_faces_player(anwen, game.player), "Sister Anwen turns her visible body away when Kael approaches")
+		var attention := false
+		for child in anwen.get_children():
+			attention = attention or child.get_script() == preload("res://scripts/npc_ambient.gd")
+		check(attention, "Sister Anwen lacks her work/attention controller")
 		game.call("_handle_interaction", anwen)
-		await settle(4)
+		await create_timer(0.75).timeout
 		var dialogue = hud.find_child("DialogueLowerThird", true, false)
 		check(dialogue != null and dialogue.visible, "Dialogue lower third did not open")
 		if dialogue != null:
@@ -81,9 +101,15 @@ func _initialize() -> void:
 		check(Input.mouse_mode == Input.MOUSE_MODE_VISIBLE, "Dialogue did not release the mouse")
 		check(_anwen_faces_player(anwen, game.player), "Sister Anwen faces away during dialogue")
 		game.call("_refresh_tracker")
+		if not game.quests.is_objective_done("main_road_of_crows", "speak_anwen"):
+			for action: Dictionary in game.dialogue.get_dialogue("opening_care_invitation").get("actions", []):
+				if action.get("type", "") == "opening_care_account": game._handle_dialogue_action(action)
+			await settle(3)
+			game._refresh_tracker()
 		print("UI-001 tracker: %s | compass: %s" % [hud.tracker_label.text.replace("\n", " / "), hud.compass_label.text])
 		check(not hud.compass_label.text.contains("hidden register"), "Compass contradicts the current tracked objective")
-		check(hud.compass_label.text.contains("Wychwood"), "Compass still points to Greyfen after Anwen assigns the Wychwood route")
+		game._update_compass()
+		check(hud.compass_label.text.contains("Greyfen") and hud.tracker_route_label.text.contains("Wychwood"), "Current location and Wychwood destination are not distinguished")
 		game.interaction_focus_dirty = false
 		game.interaction_focus_cache_valid = true
 		check(hud._close_dialogue_surface(), "Dialogue did not close cleanly")

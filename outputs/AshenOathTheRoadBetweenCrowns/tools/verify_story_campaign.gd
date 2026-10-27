@@ -16,12 +16,12 @@ func _initialize() -> void:
 	check(restored.get_flag("names_policy") == "published" and restored.values == state.values, "Story state round trip failed")
 
 	var quests = QuestManager.new(); root.add_child(quests); quests.load_quests("res://data/quests.json")
-	check(quests.quest_defs.size() == 20, "Expected ten main and ten side quests")
+	check(quests.quest_defs.size() == 57, "Expected 21 retained, 30 regional and six escort quests")
 	var main_count := 0; var side_count := 0
 	for id in quests.quest_defs:
 		if quests.quest_defs[id].get("type") == "main": main_count += 1
 		else: side_count += 1
-	check(main_count == 10 and side_count == 10, "Quest type counts are wrong")
+	check(main_count == 10 and side_count == 47, "Quest type counts are wrong")
 	for id in quests.quest_defs:
 		quests.unlocked[id] = true
 		if str(quests.quest_defs[id].get("type", "")) == "side" and not quests.is_runtime_content_ready(str(id)):
@@ -29,19 +29,28 @@ func _initialize() -> void:
 			continue
 		if not quests.is_active(id) and not quests.is_completed(id): quests.start_quest(id)
 		if quests.is_active(id):
-			for objective in quests.active[id]["objectives"].duplicate(true): quests.complete_objective(id, str(objective["id"]))
+			for objective in quests.active[id]["objectives"].duplicate(true):
+				if quests.is_choice_objective(id, str(objective.id)):
+					quests.complete_choice(id, str(objective.id))
+				else:
+					quests.complete_objective(id, str(objective.id))
 		check(quests.is_completed(id), "%s cannot complete" % id)
 
 	var dialogue = DialogueManager.new(); root.add_child(dialogue); dialogue.setup(state)
 	dialogue.load_dialogue("res://data/dialogue.json"); dialogue.load_dialogue("res://data/campaign_dialogue.json")
 	for id in ["captain_senn","halvern","edric_campaign","assembly_choice","white_hart","crow_shrine_choice"]:
-		check(dialogue.dialogues.has(id), "Missing campaign dialogue: %s" % id)
+		check(not dialogue.get_dialogue(id).is_empty(), "Missing lazy campaign dialogue: %s" % id)
 	check(dialogue.get_dialogue("white_hart").get("actions", []).size() == 4, "Four endings are not offered")
 
 	var scene = load("res://scenes/main.tscn"); var game = scene.instantiate(); root.add_child(game)
-	await process_frame; game.call("_new_game"); await process_frame
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	for zone in ["deep_wood","old_mill","burned_farmstead","marsh_crossing","bandit_road","vargan_approach","vargan_court","record_hall","undercroft","assembly","hart_glade"]:
-		game.call("_load_zone",zone,Vector3(0,1,12)); await process_frame
+		game.call("_load_zone",zone,Vector3(0,1,12))
+		if not await preload("res://tools/runtime_fixture.gd").ready(game, zone):
+			quit(1)
+			return
 		var marker = game.zone_root.find_child("CampaignSection_%s" % zone,true,false)
 		if zone == "vargan_approach": marker = game.zone_root.find_child("CastleVargan_Approach",true,false)
 		elif zone == "vargan_court": marker = game.zone_root.find_child("CastleVargan_OuterCourtyard",true,false)

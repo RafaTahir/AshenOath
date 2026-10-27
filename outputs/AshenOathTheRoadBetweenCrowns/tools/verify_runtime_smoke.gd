@@ -20,10 +20,7 @@ func _initialize() -> void:
 		await process_frame
 	_check(game.opening_startup_metrics.has("menu_ready_ms"), "Main menu never reached usable readiness")
 	game.call("_new_game")
-	while Time.get_ticks_msec() < deadline:
-		if game.player != null and game.zone_root != null and not game.zone_transition_pending and not game.zone_load_request_pending and bool(game.player.can_control):
-			break
-		await process_frame
+	_check(await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"), "Explicit New Game readiness failed")
 	_check(game.get("world_materials") != null, "World material service was not initialized before control")
 	_check(bool(game.get("game_started")) and game.current_zone_id == "greyfen", "Explicit New Game did not enter Greyfen")
 	_check(game.zone_root != null and game.player != null and bool(game.player.can_control), "Greyfen never reached playable readiness")
@@ -62,4 +59,4 @@ func _check(condition: bool, message: String) -> void:
 		failures.append(message)
 
 func _finish(code: int = 1) -> void:
-	quit(code)
+	call_deferred("quit", code)

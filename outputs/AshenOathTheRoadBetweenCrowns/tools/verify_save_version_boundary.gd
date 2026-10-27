@@ -1,6 +1,11 @@
 extends SceneTree
 
 const Saves = preload("res://scripts/save_manager.gd")
+class FixtureSaves extends Saves:
+	var fixture_path := ""
+	func slot_path(id: String) -> String:
+		return fixture_path if id == "manual_1" else super.slot_path(id)
+
 class Receiver:
 	extends Node
 	var loaded := {}
@@ -13,13 +18,20 @@ func _initialize() -> void:
 	call_deferred("run")
 
 func run() -> void:
-	var manager := Saves.new()
+	var manager := FixtureSaves.new()
 	var receiver := Receiver.new()
 	var path := "D:/Temp/AshenOath/save-version-%d.json" % OS.get_process_id()
+	manager.fixture_path = path
+	manager.load_prepared_requested.connect(func(prepared: Dictionary):
+		var accepted: Dictionary = manager.accept_prepared_load(str(prepared.request_id))
+		if bool(accepted.get("ok", false)):
+			receiver.load_save_state(prepared.data)
+		manager.finish_load(receiver, str(prepared.request_id), false)
+	)
 	DirAccess.make_dir_recursive_absolute(path.get_base_dir())
 	var future := JSON.stringify({"version": Saves.CURRENT_VERSION + 1})
 	write_file(path, future)
-	write_file(path + ".bak", JSON.stringify({"version": Saves.CURRENT_VERSION}))
+	write_file(path + ".bak", JSON.stringify({"version": Saves.CURRENT_VERSION, "zone": "greyfen"}))
 	check(not manager.load_game(receiver, path), "Future primary must not silently load an older backup")
 	check(receiver.loaded.is_empty(), "Future primary must leave the game unchanged")
 	check(not manager.load_first_available(receiver, [path]), "Checkpoint loading must reject future primary too")

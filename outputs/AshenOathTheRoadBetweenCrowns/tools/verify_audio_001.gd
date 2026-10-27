@@ -11,7 +11,9 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await settle(5)
 	for event_name in ["step_road","step_forest","step_mud","swing","heavy","light_hit","heavy_hit","block","parry","oathfire_sheathe","cloth_wind","village_life","menu_hover","menu_click"]:
 		check(game.audio.has_recorded_event(event_name),"Recorded audio missing for %s" % event_name)
@@ -30,7 +32,7 @@ func _initialize() -> void:
 	var wheel := InputEventMouseButton.new()
 	wheel.button_index = MOUSE_BUTTON_WHEEL_UP
 	wheel.pressed = true
-	camera.call("_input",wheel)
+	camera.call("_unhandled_input",wheel)
 	check(camera.get_zoom_distance() < initial_zoom,"Mouse-wheel zoom in failed")
 	var after_wheel: float = camera.get_zoom_distance()
 	Input.action_press("camera_zoom_out")

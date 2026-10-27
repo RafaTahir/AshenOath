@@ -241,11 +241,11 @@ static func _copy_identity_contract(owner: Node3D, visual_target: Node3D, role: 
 	# visual owns the actual materials and face driver. Mirror the measurable
 	# contract so verifiers and save/debug tools inspect the same actor identity.
 	for key in [
-		"source_forward_positive_z",
 		"character_identity_profile",
 		"character_identity_surfaces",
 		"character_face_surfaces",
 		"character_face_features",
+		"character_face_surface_contract",
 		"character_face_contract",
 		"character_asset_family",
 		"character_composite",
@@ -257,6 +257,16 @@ static func _copy_identity_contract(owner: Node3D, visual_target: Node3D, role: 
 	]:
 		if visual_target.has_meta(key):
 			owner.set_meta(key, visual_target.get_meta(key))
+	# A wrapper's forward convention includes the imported model's authored
+	# rotation. Copying the raw source flag turns a half-turned body away twice.
+	var visual_to_owner := Basis.IDENTITY
+	var cursor: Node3D = visual_target
+	while cursor != null and cursor != owner:
+		visual_to_owner = cursor.basis * visual_to_owner
+		cursor = cursor.get_parent() as Node3D
+	if cursor == owner:
+		var source_forward := Vector3.BACK if bool(visual_target.get_meta("source_forward_positive_z", false)) else Vector3.FORWARD
+		owner.set_meta("source_forward_positive_z", (visual_to_owner * source_forward).z > 0.0)
 	if not owner.has_meta("character_identity_profile"):
 		owner.set_meta("character_identity_profile", role)
 

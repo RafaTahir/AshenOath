@@ -8,7 +8,9 @@ func _initialize() -> void:
 	var game := scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(5)
 	_check(not game.zone_transition_pending, "Initial world never reached spawn readiness")
 	_check(game.player.can_control and not game.player.transition_locked, "Player control enabled before or never after spawn readiness")
@@ -18,6 +20,9 @@ func _initialize() -> void:
 	for zone_id in ["wychwood", "deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road", "vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade", "greyfen"]:
 		game.player.velocity = Vector3(7.0, -20.0, -6.0)
 		game.call("_load_zone", zone_id, Vector3(0, 1, 7))
+		if not await preload("res://tools/runtime_fixture.gd").ready(game, zone_id):
+			quit(1)
+			return
 		await _frames(5)
 		_check(not game.zone_transition_pending, "%s did not become ready" % zone_id)
 		_check(game.player.can_control and not game.player.transition_locked, "%s left player locked" % zone_id)

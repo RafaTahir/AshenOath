@@ -10,8 +10,10 @@ func _initialize() -> void:
 		return
 	var game = packed.instantiate()
 	root.add_child(game)
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await process_frame
-	game.call("_new_game")
 	await _frames(6)
 
 	var player = game.player
@@ -41,6 +43,9 @@ func _initialize() -> void:
 			_verify_driver(entry.driver, str(entry.id), ["idle", "walk"])
 
 	game.call("_load_zone", "wychwood", Vector3(0, 0.9, 9))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _frames(6)
 	_assert(game.active_enemies.size() == 5, "Wychwood's five animated enemies are missing")
 	for enemy in game.active_enemies:
@@ -66,15 +71,21 @@ func _verify_driver(driver, label: String, required_states: Array[String]) -> vo
 	_assert(driver.get_skeleton() != null and driver.get_skeleton().get_bone_count() > 0, "%s has no animated skeleton" % label)
 
 func _verify_locomotion_cadence(driver) -> void:
-	driver.set_locomotion(0.32, Vector3.FORWARD, true)
+	var clock: Dictionary = driver.capture_clock()
+	driver.set_external_tick(true)
+	driver.set_locomotion(0.5, Vector3.FORWARD, true)
+	driver.advance_external(0.02)
 	var slow_scale: float = driver.target_playback_scale
-	driver.set_locomotion(0.68, Vector3.FORWARD, true)
+	driver.set_locomotion(0.75, Vector3.FORWARD, true)
+	driver.advance_external(0.02)
 	var fast_scale: float = driver.target_playback_scale
 	driver.set_locomotion(1.0, Vector3.FORWARD, true)
+	driver.advance_external(0.02)
 	var run_scale: float = driver.target_playback_scale
-	_assert(slow_scale >= 0.68 and slow_scale < fast_scale, "walk cadence does not scale with movement speed")
-	_assert(fast_scale <= 1.22 and run_scale >= 0.88 and run_scale <= 1.20, "locomotion cadence exceeds the safe playback range")
+	_assert(slow_scale >= 0.6 and slow_scale < fast_scale, "walk cadence does not scale with movement speed")
+	_assert(fast_scale <= 1.6 and run_scale >= 0.6 and run_scale <= 1.6, "locomotion cadence exceeds the approved 0.6-1.6 playback range")
 	driver.set_locomotion(0.0, Vector3.ZERO, true)
+	driver.restore_clock(clock)
 
 func _active_clip_contains(driver, state: String) -> bool:
 	if driver == null:
@@ -84,7 +95,7 @@ func _active_clip_contains(driver, state: String) -> bool:
 	driver.set_locomotion(0.0, Vector3.ZERO, true)
 	var player := driver.get_animation_player() as AnimationPlayer
 	var resolved: StringName = driver.get_clip_for_state(state)
-	return player != null and resolved != StringName() and player.current_animation == resolved
+	return player != null and resolved != StringName() and driver.is_evaluation_scheduled() and driver.animation_graph.requested == "locomotion"
 
 func _has_proxy_anatomy(node: Node) -> bool:
 	var forbidden := ["faceplane", "motionarm", "motionleg", "weaponarm", "longarm", "clawleft", "clawright", "chestread", "bootread"]

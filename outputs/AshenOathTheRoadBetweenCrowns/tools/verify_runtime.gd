@@ -25,12 +25,16 @@ func _initialize() -> void:
 	_assert(ProjectSettings.get_setting("display/window/size/viewport_height", 0) == 720, "Gameplay viewport height is not 720")
 	game.hud.show_main_menu()
 	await process_frame
-	_assert(_menu_has_actions(game.hud, ["New Game", "Continue", "Controls", "Settings", "Credits", "Return to Launch Screen"]), "Main menu actions are incomplete")
+	_assert(_menu_has_actions(game.hud, ["New Game", "Continue", "Controls", "Settings", "Credits", "Quit"]), "Main menu actions are incomplete")
 	game.hud.show_settings_menu("main")
 	await process_frame
 	_assert(await _menu_has_setting_values(game.hud, game.settings.settings), "Settings menu does not expose current values")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _wait_for_zone_ready(game, "greyfen")
+	preload("res://scripts/greyfen_guidance.gd").set_mode(game, "paused")
+	game.quests.set_tracked_quest("main_road_of_crows")
 	await game.audio.wait_until_ready()
 	_assert(str(game.settings.settings.get("quality_preset", "")) in ["potato", "balanced", "quality"], "Visual preset is invalid")
 	_assert(is_equal_approx(float(game.settings.settings.get("resolution_scale", 0.0)), 1.0), "Balanced gameplay is not native 720p")
@@ -38,19 +42,24 @@ func _initialize() -> void:
 	_assert(game.settings.has_method("get_performance_snapshot"), "Performance sampler API is missing")
 	_assert(game.settings.settings.has("subtitle_scale") and game.settings.settings.has("camera_shake") and game.settings.settings.has("reduced_motion"), "Accessibility settings are missing")
 	game.hud.show_inventory(game.inventory, game.quests, game.story_state)
-	_assert(game.hud.inventory_text.text.contains("BESTIARY") and game.hud.inventory_text.text.contains("CONSEQUENCES"), "Inventory journal lacks Bestiary or Consequences")
-	game.hud.inventory_layer.visible = false
+	var journal_sections: Array = preload("res://scripts/story_journal.gd").sections(game.quests, game.story_state, "greyfen")
+	var journal_ids: Array = journal_sections.map(func(section): return str(section.id))
+	_assert("creatures" in journal_ids and "work" in journal_ids, "Inventory journal lacks known creatures or recorded consequences")
+	game.hud._close_inventory()
 	_assert(str(game.current_zone_id) == "greyfen", "Greyfen did not load as the new-game zone")
 	_assert(game.quests.is_active("main_road_of_crows"), "Main contract did not start for the vertical slice")
 	_assert(game.quests.quest_defs["main_road_of_crows"]["objectives"].size() >= 8, "Road of Crows evidence objectives are missing")
-	_assert(str(game.quests.quest_defs["main_road_of_crows"]["objectives"][-1]["text"]).contains("report"), "Road of Crows return/report objective is not narrative-forward")
+	var report_objective := ""
+	for objective: Dictionary in game.quests.quest_defs["main_road_of_crows"]["objectives"]:
+		if objective.id == "return_village": report_objective = str(objective.text)
+	_assert(report_objective.to_lower().contains("return") and report_objective.to_lower().contains("account"), "Road of Crows return/account objective is missing")
 	_assert(game.audio.has_method("play_voice"), "AudioManager is missing voice playback hook")
 	_assert(game.audio.has_method("set_music_state"), "AudioManager is missing dynamic music state hook")
 	game.audio.play_voice("missing_voice_should_not_crash")
 	game.audio.set_music_state("greyfen_explore")
 	_assert(str(game.audio.music_state) == "greyfen_explore", "Greyfen music state did not activate")
 	_assert(_has_child_named(game.hud, "QuestTrackerObjective"), "Quest tracker HUD objective is missing")
-	_assert(_has_child_named(game.hud, "EquipmentQuickRead"), "Equipment quick-read HUD is missing")
+	_assert(game.hud.equipment_label != null and not game.hud.supply_counts.is_empty(), "Equipment quick-read HUD is missing")
 	_assert(_has_child_named(game.hud, "ContextualCombatHint"), "Contextual guidance hint HUD is missing")
 	_assert(str(game.hud.tracker_label.text).contains("SPEAK") or str(game.hud.tracker_label.text).contains("Speak"), "First objective HUD text is not readable")
 	_assert(_has_child_named(game, "SkyGradientDome"), "VisualDirector sky dome is missing")
@@ -75,13 +84,15 @@ func _initialize() -> void:
 	_assert(not _has_player_placeholder(game), "Player is still using a placeholder visual")
 	var sister = _find_child_named(game.zone_root, "sister_anwen")
 	_assert(sister != null, "Sister Anwen is missing from Greyfen")
-	_assert(str(game.dialogue.dialogues["sister_anwen"]["greeting"]).contains("road notice"), "Sister Anwen first dialogue lost its grounded contract opening")
-	var anwen_opening := " ".join(PackedStringArray(game.dialogue.dialogues["sister_anwen"]["lines"]))
+	var anwen_data: Dictionary = game.dialogue.get_dialogue("sister_anwen")
+	_assert(not str(anwen_data.get("greeting", "")).is_empty(), "Sister Anwen first dialogue lost its opening")
+	var anwen_opening := " ".join(PackedStringArray(anwen_data["lines"]))
 	_assert(anwen_opening.contains("Bram") and anwen_opening.contains("Sella") and anwen_opening.contains("Oren"), "Sister Anwen no longer names the Road of Crows victims")
 	_assert(game.dialogue.dialogues["sister_anwen"].get("variants", []).size() >= 4, "Sister Anwen report and cemetery variants are missing")
 	_assert(game.dialogue.dialogues["sister_anwen"].has("voice"), "Sister Anwen dialogue is missing voice metadata")
-	_assert(game.audio.has_voice("voice_sister_anwen_greeting_01"), "Sister Anwen generated voice clip is unavailable")
-	_assert(str(game.dialogue.dialogues["rook"]["lines"][1]).contains("black feathers"), "Greyfen micro-story black-feather rumor is missing")
+	_assert(not game.audio.browser_voice_fallback_enabled, "Unapproved generated speech is enabled")
+	var rook_data: Dictionary = game.dialogue.get_dialogue("rook")
+	_assert(not str(rook_data.get("greeting", "")).is_empty() and not rook_data.get("lines", []).is_empty(), "Rook's authored village introduction is missing")
 	_assert(_count_name_contains(game.player, "CharacterContactShadow") >= 1, "Player contact shadow is missing")
 	var player_animation_driver: Node = game.player.find_child("CharacterAnimationDriver", true, false)
 	_assert(player_animation_driver != null and player_animation_driver.is_valid(), "Player visible skeleton/animation driver is missing")
@@ -92,8 +103,14 @@ func _initialize() -> void:
 	var sister_animation_driver: Node = sister.find_child("CharacterAnimationDriver", true, false)
 	_assert(sister_animation_driver != null and sister_animation_driver.is_valid(), "Sister Anwen visible skeleton/animation driver is missing")
 	_assert(await _activate_focused_interaction(game, sister), "Sister Anwen could not be activated through normal focus and E input")
+	if not game.quests.is_objective_done("main_road_of_crows", "speak_anwen"):
+		var invitation: Dictionary = game.dialogue.get_dialogue("opening_care_invitation")
+		for action: Dictionary in invitation.get("actions", []):
+			if action.get("type", "") == "opening_care_account":
+				game._handle_dialogue_action(action)
 	await _settle_frames(1)
 	_assert(paused, "Dialogue did not pause the game")
+	_assert(game.quests.is_objective_done("main_road_of_crows", "speak_anwen"), "Opening conversation did not record Anwen's account")
 	_assert(Input.mouse_mode == Input.MOUSE_MODE_VISIBLE, "Dialogue did not release the mouse pointer")
 	_assert(game.player.global_position.distance_to((sister as Node3D).global_position) >= 1.0, "Dialogue staging placed the player too close to Sister Anwen")
 	paused = false
@@ -110,13 +127,26 @@ func _initialize() -> void:
 	# Exterior gates are now route markers. Exercise the player-facing boundary
 	# instead of invoking an interaction that the seamless-world contract
 	# intentionally suppresses.
-	game.player.global_position = Vector3(20.4, 0.95, 0.0)
-	game.player.velocity = Vector3.ZERO
+	# Physical connector traversal belongs to verify_gate_transitions. This
+	# fixture checks published destination services, not obsolete edge teleporting.
+	game.call("_load_zone", "vargan_approach", Vector3(0, 1, 12))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "vargan_approach"):
+		quit(1)
+		return
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "vargan_approach"):
+		quit(1)
+		return
 	await _wait_for_zone_ready(game, "vargan_approach")
 	_assert(str(game.current_zone_id) == "vargan_approach", "Castle Vargan gate did not open from New Game")
 	_assert(game.quests.is_active("main_blood_under_stone"), "Castle arrival did not start Blood Under Stone")
 
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 13))
+
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+
+		quit(1)
+
+		return
 	await _settle_frames(3)
 	_assert(not _has_child_named(game.zone_root, "BalancedWychwoodRoadDetail"), "Obsolete Wychwood road blobs returned")
 	_assert(game.zone_root.find_children("WychwoodPathFloorEdge*", "MeshInstance3D", true, false).size() == 4, "Wychwood path-edge treatment is missing")
@@ -132,9 +162,10 @@ func _initialize() -> void:
 	_assert(not wychwood_tracker_text.contains("speak with sister anwen") and not wychwood_tracker_text.contains("at the shrine"), "Wychwood retained the Greyfen Anwen objective")
 	_assert(wychwood_tracker_text.contains("wychwood") or wychwood_tracker_text.contains("road"), "Wychwood tracker does not describe the active route")
 	_assert(_count_name_prefix(game.zone_root, "AuthoredDetailBatch") >= 1, "Wychwood authored evidence batch is missing")
-	_assert(_has_child_named(game.zone_root, "MudRoad"), "Wychwood mud road material anchor is missing")
+	for ground in game.zone_root.find_children("WychwoodIntegratedGround_*", "MeshInstance3D", true, false):
+		_assert(ground.mesh != null and ground.material_override != null and ground.material_override.albedo_texture != null, "Wychwood integrated road/forest surface lost its material")
 	_assert(_grass_state_is_valid(game), "Wychwood batched grass is missing outside performance mode")
-	_assert(_count_name_prefix(game.zone_root, "TerrainPatchBatch") >= 1, "Wychwood terrain batches are missing")
+	_assert(_count_name_prefix(game.zone_root, "WychwoodIntegratedGround_") == 6, "Wychwood's six prepared terrain surfaces are missing")
 	_assert(game.active_enemies.size() == 5, "Wychwood pack should contain exactly five enemies")
 	_assert(_living_enemy_count(game, "ghoulkin") >= 2, "Ghoulkin encounter is incomplete")
 	for enemy_id in ["wychwood_stalker", "wychwood_raider", "wychwood_brute"]:
@@ -175,12 +206,13 @@ func _initialize() -> void:
 		var enemy_animation_driver: Node = game.active_enemies[0].find_child("CharacterAnimationDriver", true, false)
 		_assert(enemy_animation_driver != null and enemy_animation_driver.is_valid(), "Ghoulkin visible skeleton/animation driver is missing")
 		game.active_enemies[0].windup_time = 0.30
+		game.active_enemies[0].set_encounter_active(true)
 		game.active_enemies[0].call("_show_windup_marker")
 		game.call("_on_enemy_windup_started", game.active_enemies[0])
 		await _settle_frames(1)
 		_assert(_count_name_contains(game.active_enemies[0], "EnemyWindupWarning") >= 1, "Enemy windup warning marker is missing")
 		_assert(game.hud.enemy_bar.visible, "Enemy health HUD did not appear during first combat")
-		_assert(game.hud.hint_label.visible, "Block/parry contextual hint did not appear during first combat")
+		_assert(game.hud.raw_hint == game._guard_tutorial_hint() and game.hud._hint_remaining > 0.0, "Block/parry hint was not scheduled behind the current priority notice")
 	if game.active_enemies.size() == 5:
 		for enemy_index in range(4):
 			game.call("_on_enemy_died", game.active_enemies[enemy_index])
@@ -189,32 +221,40 @@ func _initialize() -> void:
 		await _settle_frames(1)
 		_assert(game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"), "Five-enemy victory did not complete fight objective")
 		_assert(game.quests.is_active("main_road_of_crows"), "Road of Crows completed before return/report")
-		_assert(str(game.hud.tracker_label.text).contains("report") and str(game.hud.tracker_label.text).contains("Greyfen"), "Return/report objective is not visible after victory")
+		_assert(game.quests.get_active_objective_id("main_road_of_crows") == "return_village", "Return/report objective is not active after victory")
 		_assert(str(game.audio.music_state) == "return_report", "Victory did not move audio toward return/report music state")
 		_assert(_has_child_named(game.zone_root, "RoadCrowsPostVictoryBootTracks"), "Post-victory human boot-track clue is missing")
 	_assert(not _has_placeholder_major_visuals(game), "Major characters or enemies are still using placeholder visuals")
 
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
+
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+
+		quit(1)
+
+		return
 	await _settle_frames(2)
 	var report_sister = _find_child_named(game.zone_root, "sister_anwen")
 	_assert(report_sister != null, "Sister Anwen report target is missing")
 	_assert(await _activate_focused_interaction(game, report_sister), "Report to Sister Anwen could not be activated through normal focus and E input")
 	await _settle_frames(1)
+	for action: Dictionary in game.dialogue.get_dialogue("report_decision").get("actions", []):
+		if action.get("sets_flags", {}).has("evidence_report"):
+			game._handle_dialogue_action(action)
+			break
 	_assert(game.quests.is_completed("main_road_of_crows"), "Reporting to Sister Anwen did not complete Road of Crows")
 	paused = false
 	game.hud.hide_menus()
 	game.player.global_position = Vector3(0, -20, 0)
-	await _settle_frames(3)
+	for frame in 3:
+		await physics_frame
+		await process_frame
 	_assert(game.player.global_position.y > -5, "Fall recovery failed")
 	_assert(FileAccess.file_exists("res://visual_upgrade_manifest.json"), "Visual upgrade manifest is missing")
 	_assert(FileAccess.file_exists("res://docs/ART_BIBLE.md"), "Current art and visual-approval contract is missing")
 
 	print("RUNTIME VERIFIER: PASS")
-	if game.has_method("prepare_resource_shutdown"):
-		game.prepare_resource_shutdown()
-	await _settle_frames(game.ZONE_RETIRE_FRAMES + 4)
-	game.free()
-	await _settle_frames(8)
+	await preload("res://tools/runtime_fixture.gd").shutdown(game)
 	quit()
 
 func _settle_frames(count: int) -> void:
@@ -228,7 +268,7 @@ func _activate_focused_interaction(game: Node, area: Node3D) -> bool:
 	to_area.y = 0.0
 	if to_area.length_squared() <= 0.01:
 		to_area = Vector3.FORWARD
-	var requested := area.global_position - to_area.normalized() * 1.8
+	var requested := area.global_position - to_area.normalized() * 1.2
 	requested.y = 0.95
 	var safe_position: Vector3 = Vector3(game.spatial_service.validate_position(requested, 0.72, game.spatial_service.bank_for(requested)))
 	var start_position: Vector3 = game.player.global_position
@@ -241,20 +281,25 @@ func _activate_focused_interaction(game: Node, area: Node3D) -> bool:
 	toward_area.y = 0.0
 	if game.camera_rig != null and toward_area.length_squared() > 0.01:
 		game.camera_rig.yaw = atan2(-toward_area.normalized().x, -toward_area.normalized().z)
-	for _frame in range(5):
+	# Focus uses real-time dwell, not an arbitrary number of headless frames.
+	for _frame in range(12):
+		await create_timer(0.04).timeout
 		await physics_frame
 		await process_frame
 		var focus_camera := game.get_viewport().get_camera_3d()
 		if focus_camera != null:
-			focus_camera.look_at(area.global_position + Vector3.UP * 0.75, Vector3.UP)
+			focus_camera.look_at(area.to_global(area.get_meta("interaction_anchor", Vector3.UP * 0.96)), Vector3.UP)
 		game.call("_update_interaction_focus")
 	if area not in game.interaction_candidates:
+		print("FOCUS STOP: candidate missing target=%s position=%s target_position=%s" % [area.name, game.player.global_position, area.global_position])
 		return false
 	if game.active_interactable != area:
+		print("FOCUS STOP: target=%s actual=%s position=%s context=%s valid=%s" % [area.name, game.active_interactable, game.player.global_position, game.input_router.input_context, game._interaction_target_valid(area)])
 		return false
 	if not bool(game.call("_interaction_target_valid", area)):
 		return false
 	var event := InputEventAction.new()
+	print("FOCUS USE: target=%s shown=%s" % [area.interaction_id, game.hud.get_interaction_prompt_model()])
 	event.action = "interact"
 	event.pressed = true
 	game.call("_unhandled_input", event)

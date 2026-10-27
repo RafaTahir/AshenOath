@@ -25,6 +25,7 @@ func _initialize() -> void:
 	state.set_flag("rook_map_fate", "preserved")
 	state.set_flag("ash_measure_fate", "farmer")
 	state.set_flag("bannerless_fate", "testimony")
+	state.set_flag("mill_operation", "restitution")
 	state.adjust_value("anwen_trust", 2)
 	var witness := EpilogueResolver.resolve("expose", state)
 	var mercy := EpilogueResolver.resolve("free", state)
@@ -33,18 +34,17 @@ func _initialize() -> void:
 	for result in [witness, mercy, duty, ash]:
 		check(result.size() >= 6, "A resolved epilogue omitted consequence cards")
 	check(witness[0] != mercy[0] and mercy[0] != duty[0] and duty[0] != ash[0], "Ending covenant cards are not distinct")
-	check("Elna's bell" in witness[-1], "Village-story consequences are missing")
-	check("Oren's charm: returned to his named grave" in witness[-1], "Oren's returned charm is missing from the epilogue")
-	check("Bram, Sella, and Oren's candles: lit along the cemetery road" in witness[-1], "Three named candles are missing from the epilogue")
-	check("Rook's road: preserved" in witness[-1], "Rook's preserved road is missing from the epilogue")
-	check("the miller's measure: farmer" in witness[-1], "The miller's measure outcome is missing from the epilogue")
-	check("the bannerless soldiers: testimony" in witness[-1], "The deserters' testimony is missing from the epilogue")
+	var account := "\n".join(witness)
+	for text in ["ELNA", "Oren's thread rests at a named grave", "Bram, Sella, and Oren have three lights", "Rook keeps the older road", "mill's labor and stock help repair", "deserters' signed refusal"]:
+		check(text in account, "Recorded consequence is missing from the epilogue: " + text)
 
 	var game = load("res://scenes/main.tscn").instantiate()
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await settle(3)
 	game.quests.unlocked["main_hart_remembers"] = true
 	game.quests.start_quest("main_hart_remembers")

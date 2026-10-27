@@ -63,11 +63,13 @@ func _run() -> void:
 	_check(actor.get_meta("dialogue_facing_lock", false), "Anwen facing lock was not owned by the coordinator")
 	_check(coordinator.get_focus_actor() == actor and camera.frames == 1, "Speaker/camera staging was lost")
 	coordinator.stage(actor, player, camera, func(position: Vector3) -> Vector3: return position)
-	_check(player.position.is_equal_approx(Vector3(0, 0.002, 1.75)), "Conversation step is not grounded before physics pauses")
+	_check(player.position.is_equal_approx(initial_position), "Conversation must preserve the player's supported position")
+	_check(coordinator._supported_step(player, Vector3(0, 0, 1.75)).is_equal_approx(Vector3(0, 0.002, 1.75)), "Ground support query lost the actual floor")
 	player.rotation.y = 0.8
 	actor.rotation.y = 0.8
 	paused = true
 	coordinator.refresh_page(player, camera)
+	await create_timer(0.75, true).timeout
 	_check(is_equal_approx(player.rotation.y, 0.0) and is_equal_approx(absf(actor.rotation.y), PI), "Paused speaker turn did not restore face-to-face orientation")
 	_check(camera.frames == 3, "Paused speaker turn did not refresh camera framing")
 	paused = false
@@ -86,7 +88,8 @@ func _run() -> void:
 	await physics_frame
 	player.position = Vector3(0, 0, 1)
 	coordinator.stage(actor, player, camera, func(position: Vector3) -> Vector3: return position)
-	_check(player.position.is_equal_approx(Vector3(0, 0.252, 1.75)), "Conversation ignored the actual raised floor")
+	_check(player.position.is_equal_approx(Vector3(0, 0, 1)), "Conversation teleported Kael to a raised floor")
+	_check(coordinator._supported_step(player, Vector3(0, 0, 1.75)).is_equal_approx(Vector3(0, 0.252, 1.75)), "Ground query ignored the actual raised floor")
 	coordinator.release(player)
 	floor_body.position.y = 0.95
 	await physics_frame

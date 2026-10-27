@@ -10,8 +10,10 @@ func _initialize() -> void:
 		return
 	var game = packed.instantiate()
 	root.add_child(game)
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await process_frame
-	game.call("_new_game")
 	await _frames(8)
 	var kael = game.player
 	var anwen = game.zone_root.find_child("sister_anwen", true, false)
@@ -28,6 +30,9 @@ func _initialize() -> void:
 	check(_palette_signature(kael) != _palette_signature(villager), "Kael and the villager still share the same palette")
 
 	game.call("_load_zone", "wychwood", Vector3(0, 0.9, 9))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _frames(8)
 	check(game.active_enemies.size() == 5, "Wychwood five-enemy gate is missing")
 	var ghoul = game.active_enemies[0] if not game.active_enemies.is_empty() else null
@@ -138,6 +143,9 @@ func _palette_signature(node: Node) -> String:
 	return ",".join(surfaces)
 
 func _has_active_animation(node: Node) -> bool:
+	for driver in node.find_children("*", "Node", true, false):
+		if driver.has_method("is_evaluation_scheduled") and driver.is_evaluation_scheduled():
+			return true
 	for player in node.find_children("*", "AnimationPlayer", true, false):
 		if player.is_playing():
 			return true

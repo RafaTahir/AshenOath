@@ -4,7 +4,7 @@ const Coordinator = preload("res://scripts/quest_hud_coordinator.gd")
 const Interactable = preload("res://scripts/interactable.gd")
 
 class PresentationFixture extends Node:
-	var view := {"quest_id": "main_road_of_crows", "objective_id": "speak_anwen", "tracker_text": "Speak with Sister Anwen", "next_action": "Speak with Sister Anwen", "contextual_text": "Speak with Sister Anwen", "compass_text": "Greyfen | Anwen"}
+	var view := {"zone_id":"greyfen", "zone_name":"Greyfen", "destination_zone":"greyfen", "target_ids":["sister_anwen"], "pinpoint":true, "quest_id": "main_road_of_crows", "objective_id": "speak_anwen", "tracker_text": "Speak with Sister Anwen", "next_action": "Speak with Sister Anwen", "contextual_text": "Speak with Sister Anwen", "compass_text": "Greyfen"}
 	func get_objective_view_model() -> Dictionary:
 		return view
 
@@ -45,7 +45,7 @@ func _run() -> void:
 	coordinator.show_guidance(hud, 5.0)
 	_check(hud.tracker_label.text == "Speak with Sister Anwen" and hud.guidance == "", "Tracker/guidance duplication changed")
 	coordinator.update_compass(hud, player, "greyfen", [anwen], "Greyfen")
-	_check(hud.compass == "Greyfen | Anwen | 3m", "Anwen's initial objective distance changed")
+	_check(hud.compass == "Greyfen | 3m" and coordinator.build_navigation_model(player, "greyfen", [anwen]).action == "Speak with Sister Anwen", "Anwen's initial objective distance/action changed")
 	_check(not coordinator.needs_refresh(player, "greyfen"), "Idle compass cache was not reused")
 	player.position.x = 0.26
 	_check(coordinator.needs_refresh(player, "greyfen"), "Quarter-metre movement did not invalidate the cache")
@@ -58,7 +58,7 @@ func _run() -> void:
 	_check(coordinator.needs_refresh(player, "wychwood"), "Zone change did not invalidate the cache")
 	anwen.free()
 	coordinator.update_compass(hud, player, "greyfen", [anwen], "Greyfen")
-	_check(hud.compass == "Greyfen | Anwen", "Retired target retained a distance or stale reference")
+	_check(hud.compass == "Greyfen", "Retired target retained a distance or stale reference")
 	coordinator.show_guidance(hud, 4.0)
 	_check(hud.guidance == "Speak with Sister Anwen", "Contextual guidance was lost when absent from tracker")
 	coordinator = null

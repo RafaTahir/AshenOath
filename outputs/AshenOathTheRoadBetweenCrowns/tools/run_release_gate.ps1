@@ -1055,6 +1055,7 @@ try {
         "verify_save_version_boundary.gd",
         "verify_settings_roundtrip.gd",
         "verify_inventory_restore.gd",
+        "verify_role_resource_prewarm.gd",
         "verify_runtime_smoke.gd", "verify_runtime.gd", "verify_runtime_regressions.gd", "verify_zone_builder_integrity.gd", "verify_gate_transitions.gd", "verify_engine_001.gd", "verify_engine_003.gd", "verify_engine_004.gd", "verify_story_campaign.gd", "verify_quest_002.gd", "verify_objective_view_model.gd", "verify_save_001.gd", "verify_qa_002.gd", "verify_art_001.gd", "verify_asset_001.gd", "verify_character_real_001.gd", "verify_face_river_sun_001.gd",
         "verify_motion_quality.gd", "verify_river_swimming.gd", "verify_river_bank_faces.gd", "verify_greyfen_life.gd",
         "verify_event_driven_touch.gd", "verify_event_driven_life.gd",

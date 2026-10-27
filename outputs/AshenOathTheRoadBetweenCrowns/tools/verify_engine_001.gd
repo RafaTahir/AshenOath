@@ -15,13 +15,18 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	await process_frame
-	_verify_service_boundary(game)
 	_verify_composition_contract()
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(4)
+	_verify_service_boundary(game)
 	_verify_actor_boundary(game)
 	_verify_zone_route(game, "greyfen")
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 13))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _frames(4)
 	_verify_zone_route(game, "wychwood")
 	_verify_service_boundary(game)
@@ -45,7 +50,10 @@ func _verify_service_boundary(game) -> void:
 		if service == null:
 			continue
 		check(service.get_parent() == registry, "%s is not owned by RuntimeServices" % id)
-		check(game.get(id) == service, "game.%s does not reference the registered service" % id)
+		if id != "display_metrics":
+			check(game.get(id) == service, "game.%s does not reference the registered service" % id)
+		else:
+			check(service.has_method("shutdown"), "Display metrics service has no owned shutdown")
 	check(registry.get_child_count() == RuntimeServiceRegistry.REQUIRED_SERVICES.size(),
 		"RuntimeServices contains unexpected or duplicate children")
 
@@ -72,7 +80,7 @@ func _verify_zone_route(game, expected_zone: String) -> void:
 		check(str(zone.name) == expected_zone, "%s composition root has the wrong identity" % expected_zone)
 
 func _verify_composition_contract() -> void:
-	var game_source := FileAccess.get_file_as_string("res://scripts/game.gd")
+	var game_source := FileAccess.get_file_as_string("res://scripts/game.gd") + FileAccess.get_file_as_string("res://scripts/systems/zone_lifecycle_service.gd") + FileAccess.get_file_as_string("res://scripts/zone_runtime_coordinator.gd")
 	check(game_source.contains("RuntimeActorFactory.create_player_camera"),
 		"game.gd does not delegate player-camera construction")
 	check(game_source.contains("ZoneCompositionRouter.composition_kind"),

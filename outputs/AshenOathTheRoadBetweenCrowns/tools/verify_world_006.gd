@@ -14,7 +14,7 @@ func _initialize() -> void:
 		check(required in source, "Missing WORLD-006 feature: %s" % required)
 	check(source.count("context.make_zone_gate") >= 5, "WORLD-006 route links are incomplete")
 	var campaign := FileAccess.get_file_as_string("res://scripts/zones/campaign_section.gd")
-	check("CampaignFinaleSection.new().build(context)" in campaign, "Campaign router does not dispatch WORLD-006")
+	check("_section = CampaignFinaleSection.new()" in campaign and "_section.construction_steps(zone_id)" in campaign, "Campaign router does not dispatch bounded WORLD-006 construction")
 	var preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	check("campaign_finale_section.gd" in preset, "WORLD-006 builder is omitted from Web export")
 	print("WORLD-006 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))

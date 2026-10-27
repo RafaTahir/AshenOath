@@ -21,7 +21,9 @@ func _initialize() -> void:
 	tested_game = game
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(4)
 	var player = game.player
 	_assert(player != null, "player failed to instantiate")
@@ -48,7 +50,9 @@ func _initialize() -> void:
 	_assert(valid_npcs >= 3, "nearby Greyfen NPCs are missing real skeletal animation")
 
 	game.call("_load_zone", "Wychwood", Vector3.ZERO)
-	await _frames(4)
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	if game.active_enemies.is_empty():
 		for entry in [["ghoulkin", Vector3(-2, 0, -4)], ["ghoulkin", Vector3(2, 0, -4)], ["wychwood_stalker", Vector3(-3, 0, -7)], ["wychwood_raider", Vector3(0, 0, -8)], ["wychwood_brute", Vector3(3, 0, -7)]]:
 			game.call("_spawn_enemy", entry[0], entry[1])
@@ -66,36 +70,8 @@ func _initialize() -> void:
 	# relying on queue_free() to release renderer-owned dependencies in order.
 	_finish()
 
-func _clip_moves_bones(driver: Node, clip: StringName) -> bool:
-	var player := driver.get_animation_player() as AnimationPlayer
-	var skeleton := driver.get_skeleton() as Skeleton3D
-	if player == null or skeleton == null or not player.has_animation(clip):
-		return false
-	var was_active := player.active
-	player.active = true
-	player.play(clip)
-	player.seek(0.0, true)
-	if player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL:
-		player.advance(0.0)
-	var before: Array[Transform3D] = []
-	for index in range(skeleton.get_bone_count()):
-		before.append(skeleton.get_bone_pose(index))
-	var animation := player.get_animation(clip)
-	player.seek(min(0.35, animation.length * 0.55), true)
-	if player.callback_mode_process == AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL:
-		player.advance(0.0)
-	for index in range(skeleton.get_bone_count()):
-		if _transform_delta(before[index], skeleton.get_bone_pose(index)) > 0.002:
-			player.active = was_active
-			return true
-	player.active = was_active
-	return false
-
 func _state_moves_bones(driver: Node, state: String) -> bool:
-	if not driver.has_method("get_clip_for_state"):
-		return false
-	var clip: StringName = driver.get_clip_for_state(state)
-	return clip != StringName() and _clip_moves_bones(driver, clip)
+	return preload("res://tools/runtime_fixture.gd").state_moves_bones(driver, state)
 
 func _transform_delta(a: Transform3D, b: Transform3D) -> float:
 	return a.origin.distance_to(b.origin) + a.basis.x.distance_to(b.basis.x) + a.basis.y.distance_to(b.basis.y)

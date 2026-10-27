@@ -15,9 +15,14 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await settle(3)
 	game.call("_load_zone", "vargan_approach", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "vargan_approach"):
+		quit(1)
+		return
 	await settle(3)
 	check(game.quests.is_active("main_blood_under_stone"), "Blood Under Stone did not start")
 
@@ -28,11 +33,17 @@ func _initialize() -> void:
 	check(game.quests.is_objective_done("main_blood_under_stone", "castle_evidence_ready"), "Castle evidence did not complete at threshold")
 
 	game.call("_load_zone", "vargan_court", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "vargan_court"):
+		quit(1)
+		return
 	await settle(3)
 	var guard_dialogue = game.dialogue.get_dialogue("vargan_gate_guard")
 	game.call("_handle_dialogue_action", guard_dialogue["actions"][0])
 	await settle(2)
 	game.call("_load_zone", "record_hall", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "record_hall"):
+		quit(1)
+		return
 	await settle(3)
 	var ledger = game.dialogue.get_dialogue("vargan_ledger_choice")
 	check(ledger.get("actions", []).size() == 3, "Ledger does not offer three choices")

@@ -67,6 +67,7 @@ class ScreenshotQa003Tests(unittest.TestCase):
         view = dict(self.manifest["views"][0])
         image = QA_003.newest_match(self.gallery, view["current_glob"])
         self.assertIsNotNone(image)
+        view.pop("approved_sha256", None)
         missing = QA_003.verify_view(view, self.gallery, None, None, True, "milestone", True, True)
         self.assertEqual("fail", missing.status)
         self.assertIn("approved_sha256", missing.message)

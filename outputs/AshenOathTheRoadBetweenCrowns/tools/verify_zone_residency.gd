@@ -24,7 +24,7 @@ func _run() -> void:
 	var body := zone.get_node("Body") as StaticBody3D
 	_check(body.collision_layer == 5 and body.collision_mask == 3, "Offscreen caching changed preserved collision")
 	_check(service._activate_cached_zone("greyfen") == zone, "Activation did not reuse the root")
-	_check(zone.visible and zone.position == Vector3.ZERO and zone.process_mode == Node.PROCESS_MODE_INHERIT, "Activation state was not restored")
+	_check(zone.visible and zone.position == Vector3.ZERO and zone.process_mode == Node.PROCESS_MODE_PAUSABLE, "Activation state was not restored")
 	service._cache_route_zone("greyfen", zone, [actor], 18, true)
 	_check(body.collision_layer == 0 and body.collision_mask == 0, "Visible cache retained physical collision")
 	service._activate_cached_zone("greyfen")

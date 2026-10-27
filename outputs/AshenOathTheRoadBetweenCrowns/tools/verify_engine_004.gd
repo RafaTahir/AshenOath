@@ -19,7 +19,9 @@ func _initialize() -> void:
 	var game := scene.instantiate()
 	root.add_child(game)
 	await _frames(3)
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _wait_for_zone(game, "greyfen")
 	_check(game.world_materials.get_fallback_material() != null, "Stable world fallback material is missing")
 	_check(game.world_materials.get_fallback_material() == game.world_materials.get_fallback_material(), "Fallback material is not cache-stable")
@@ -27,6 +29,9 @@ func _initialize() -> void:
 	for zone_id in TEST_ZONES:
 		if str(game.current_zone_id) != zone_id:
 			game.call("_load_zone", zone_id, Vector3(0, 1, 7))
+			if not await preload("res://tools/runtime_fixture.gd").ready(game, zone_id):
+				quit(1)
+				return
 			await _wait_for_zone(game, zone_id)
 		await _wait_for_retirement(game)
 		_validate_active_zone(game, zone_id)
@@ -81,7 +86,7 @@ func _validate_active_zone(game: Node, zone_id: String) -> void:
 	_check(int(report.get("invalid_geometry", 0)) == 0, "Active zone has invalid geometry: %s" % zone_id)
 	if game.visual_director != null and is_instance_valid(game.visual_director):
 		var sky_report: Dictionary = game.call("_validate_zone_render_resources", game.visual_director)
-		_check(int(sky_report.get("invalid_geometry", 0)) == 0, "Sky has invalid geometry: %s" % zone_id)
+		_check(int(sky_report.get("invalid_geometry", 0)) == 0, "Sky has invalid geometry: %s %s" % [zone_id, sky_report.get("invalid_geometry_names", [])])
 	if game.player != null and is_instance_valid(game.player):
 		var player_report: Dictionary = game.call("_validate_zone_render_resources", game.player)
 		_check(int(player_report.get("invalid_geometry", 0)) == 0, "Player has invalid geometry: %s" % zone_id)
@@ -103,6 +108,7 @@ func _missing_material_count(root_node: Node) -> int:
 			if material == null:
 				material = mesh_instance.mesh.surface_get_material(surface_index)
 			if material == null:
+				print("MISSING MATERIAL: ", mesh_instance.get_path(), " surface=", surface_index)
 				missing += 1
 	var batches: Array[Node] = []
 	if root_node is MultiMeshInstance3D:
@@ -115,6 +121,7 @@ func _missing_material_count(root_node: Node) -> int:
 		if batch.material_override == null:
 			for surface_index in range(batch.multimesh.mesh.get_surface_count()):
 				if batch.multimesh.mesh.surface_get_material(surface_index) == null:
+					print("MISSING BATCH MATERIAL: ", batch.get_path(), " surface=", surface_index)
 					missing += 1
 	return missing
 

@@ -11,7 +11,9 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	var detail_deadline := Time.get_ticks_msec() + 30000
 	while Time.get_ticks_msec() < detail_deadline:
 		if game.game_started and game.zone_root != null and bool(game.zone_root.get_meta("opening_detail_complete", false)):
@@ -53,6 +55,9 @@ func _initialize() -> void:
 		check(moved_count >= 4, "Fewer than four Greyfen routines moved under navigation")
 
 	game.call("_load_zone", "wychwood", Vector3(0, 0.9, 12.5))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _settle(10)
 	await _verify_zone(game, "wychwood", Vector3(0, 0.9, 12.5), Vector3(0, 0.9, -12.5))
 	check(game.active_enemies.size() == 5, "Wychwood must contain five encounter enemies")

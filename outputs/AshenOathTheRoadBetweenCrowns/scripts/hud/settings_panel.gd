@@ -107,6 +107,8 @@ func show_controls_menu(back_target: String = "main") -> void:
 			instructions.append("%s: %s" % [str(action).replace("_", " ").capitalize(), str(descriptor.get("instruction", descriptor.get("binding", "Unbound")))])
 		instructions.append("%s: tap to cycle weapons; hold to draw or sheath" % input_source.action_label("weapon_cycle"))
 		_add_menu_text(box, "Move with the movement keys, left stick or touch pad; look with the mouse, right stick or touch look area.\n\n" + "\n".join(instructions))
+		if input_device == "touch":
+			_add_menu_text(box, "Left thumb move | Drag the right side to look\nLandscape orientation is required during gameplay.\nMore contains supplies, weapons, camera and companion actions.")
 	elif input_device == "gamepad":
 		_add_menu_text(box, "Left Stick move | Right Stick look | D-Pad Up/Down zoom\nL3 run | B dodge | Y jump | Tap X cycle weapons | Hold X draw/sheath\nRB light attack | RT heavy attack | LT aim bow\nBow: aim, hold RT to draw, release RT to loose; lower aim to cancel\nSword: hold LT Oathfire | Tap/Hold LB parry or block | A interact\nBow: D-Pad Up cycle arrows | D-Pad Left potion | D-Pad Right bomb | View journal | Menu pause")
 	elif input_device == "touch":

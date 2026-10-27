@@ -28,8 +28,12 @@ func _initialize() -> void:
 		var entry: Dictionary = database.get_visual_asset_for_role(role)
 		var path := str(entry.get("path", ""))
 		check(path != "" and curated_paths.has(path), "Visual role is outside the curated library: %s -> %s" % [role, path])
+	helper.clear_runtime_caches()
+	helper.free()
+	database.free()
+	await process_frame
 	print("ASSET-001 INSTANTIATION VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	call_deferred("quit", 0 if failures == 0 else 1)
 
 func verify_spawn(helper: Node, database: Node, role: String, group: String) -> void:
 	var entry: Dictionary = database.get_asset_for_role(role)

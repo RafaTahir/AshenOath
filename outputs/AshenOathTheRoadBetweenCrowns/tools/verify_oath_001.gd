@@ -14,7 +14,9 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await settle(5)
 	var player = game.player
 	check(player != null, "Player missing")
@@ -61,6 +63,9 @@ func _initialize() -> void:
 		check(effects[0].find_child("OathfireBeamHotCore", true, false) != null, "Authored hot core missing in Balanced mode")
 
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	await settle(3)
 	check(get_nodes_in_group("oathfire_runtime_effect").is_empty(), "Oathfire VFX survived a zone transition")
 	check(player.beam_cast_state == "" and player.get_beam_locked_direction() == Vector3.ZERO, "Oathfire state survived cancellation/zone transition")

@@ -9,6 +9,11 @@ class PlayerProbe extends CharacterBody3D:
 	func set_transition_locked(value: bool) -> void:
 		transition_locked = value
 
+class ZoneProbe extends "res://scripts/zone_runtime_coordinator.gd":
+	var game: Node
+	func load_zone(_zone: String, _position: Vector3 = Vector3.ZERO) -> void:
+		game.activations += 1
+
 class TestGame extends "res://scripts/game.gd":
 	var activations := 0
 	func _ready() -> void:
@@ -20,11 +25,13 @@ func _initialize() -> void:
 	call_deferred("run")
 
 func run() -> void:
-	var game = load("res://scenes/main.tscn").instantiate()
-	game.set_script(TestGame)
+	var game = TestGame.new()
 	root.add_child(game)
+	game.add_child(game.zone_residency)
 	game.runtime_packs = ReadyPacks.new()
 	game.add_child(game.runtime_packs)
+	game.zone_runtime_coordinator = ZoneProbe.new(game)
+	game.zone_runtime_coordinator.game = game
 	game.zone_pack_request_serial = 2
 	game.opening_pack_waiting = true
 	await game._wait_for_opening_pack("wychwood", Vector3.ZERO, 1)

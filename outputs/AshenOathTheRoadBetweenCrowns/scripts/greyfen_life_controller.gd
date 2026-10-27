@@ -374,8 +374,9 @@ func _tick_opening_scene(delta: float) -> void:
 
 func _release_opening_performer() -> void:
 	if opening_scene.is_empty(): return
-	var actor: Node3D = opening_scene.get("actor")
-	if not is_instance_valid(actor): return
+	var candidate = opening_scene.get("actor")
+	if not is_instance_valid(candidate): return
+	var actor: Node3D = candidate
 	var entry: Dictionary = opening_scene.entry
 	if not entry.is_empty() and is_instance_valid(entry.driver):
 		entry.driver.set_life_activity(str(opening_scene.activity))
@@ -390,6 +391,11 @@ func finish_opening_scene(reason: String = "skipped") -> void:
 	opening_scene.clear()
 	if not is_instance_valid(host): return
 	if is_instance_valid(get_parent()): get_parent().set_meta("opening_scene_active", false)
+	var coordinator: Node = host.coordinator if host.has_method("retire_construction_host") else host
+	# A retiring destination may release its local performer, never the new
+	# world's camera, HUD, input or durable scene history.
+	if not is_instance_valid(coordinator) or coordinator.is_queued_for_deletion(): return
+	if bool(coordinator.resource_shutdown_prepared) or coordinator.zone_root != get_parent(): return
 	if is_instance_valid(host.hud):
 		host.hud.clear_ambient_subtitle(get_instance_id())
 		host.hud.hide_opening_scene_skip()

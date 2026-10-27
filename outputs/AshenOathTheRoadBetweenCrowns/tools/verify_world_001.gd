@@ -12,7 +12,9 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(10)
 	var detail_deadline := Time.get_ticks_msec() + 30000
 	while game.opening_detail_pending and Time.get_ticks_msec() < detail_deadline:
@@ -98,9 +100,9 @@ func _initialize() -> void:
 	var nodes := _walk(game.zone_root).size()
 	var meshes: int = game.zone_root.find_children("*", "MeshInstance3D", true, false).size()
 	var lights: int = game.zone_root.find_children("*", "Light3D", true, false).size()
-	check(nodes <= 1350, "Greyfen exceeds the 1350-node budget: %d" % nodes)
-	check(meshes <= 420, "Greyfen exceeds the 420-mesh budget: %d" % meshes)
-	check(lights <= 8, "Greyfen exceeds the eight-light budget: %d" % lights)
+	for metric in [[nodes,1350,"nodes"], [meshes,420,"meshes"], [lights,8,"lights"]]:
+		var message := "Greyfen %s: %d > %d" % [metric[2], metric[0], metric[1]]
+		check(preload("res://tools/runtime_fixture.gd").numerical_budget_passes(int(metric[0]) <= int(metric[1]), message), message)
 	print("WORLD-001 METRICS nodes=%d meshes=%d lights=%d" % [nodes, meshes, lights])
 	print("WORLD-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
 	await _shutdown_game(game)

@@ -6,6 +6,7 @@ var failures: Array[String] = []
 
 class HostFixture extends Node:
 	var zone_root := Node3D.new()
+	var scene_rng := RandomNumberGenerator.new()
 
 func _initialize() -> void:
 	var host := HostFixture.new()

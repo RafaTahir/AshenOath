@@ -9,12 +9,17 @@ func _initialize() -> void:
 	var game = packed.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(3)
 	_assert(game.zone_root.find_child("AuthoredVisualLayer_Greyfen", true, false) != null, "authored Greyfen visual layer is missing")
 	_assert(not _has_synthetic_feature(game.zone_root), "synthetic Visual100 marker geometry remains in Greyfen")
 	_assert(_has_textured_surface(game.zone_root), "Greyfen has no textured authored surface")
 	game.call("_load_zone", "wychwood", Vector3.ZERO)
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _frames(3)
 	_assert(game.zone_root.find_child("AuthoredVisualLayer_Wychwood", true, false) != null, "authored Wychwood visual layer is missing")
 	_assert(not _has_synthetic_feature(game.zone_root), "synthetic Visual100 marker geometry remains in Wychwood")

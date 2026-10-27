@@ -10,16 +10,22 @@ func _initialize() -> void:
 		return
 	var game = scene.instantiate()
 	root.add_child(game)
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await process_frame
-	game.call("_new_game")
 	await settle(5)
 
 	var player = game.player
 	check(player != null, "Player missing")
 	check(player.has_signal("blade_contact_requested"), "Player lacks authoritative blade-contact signal")
 	check(player.rig_sword_visual != null, "Kael has no drawn sword visual")
-	check(player.rig_sword_visual.name == "KaelOathblade", "Kael is still using the ambiguous imported sword instead of the controlled Oathblade")
-	check(str(player.rig_sword_visual.get_meta("weapon_visual_source", "")) == "res://assets_external/characters/Sword.fbx", "Kael's sword is not using the approved modeled Sword.fbx source")
+	var steel: Node = player.rig_sword_visual.find_child("KaelSteelSword", true, false)
+	var oathblade: Node = player.rig_sword_visual.find_child("KaelOathblade", true, false)
+	check(steel != null and oathblade != null, "Both authored blades must remain attached to the shared hand root")
+	for blade in [steel, oathblade]:
+		check(blade != null and str(blade.get_meta("weapon_visual_source", "")) == "res://assets_external/characters/Sword.fbx", "Kael's sword is not using the approved modeled Sword.fbx source")
+	player.equipment_loadout.set_sword_drawn(true)
 	check(player.rig_sword_visual.find_child("OathbladeModeledMesh", true, false) != null, "Kael's modeled sword mesh is missing from the hand equipment root")
 	check(player.sword_attachment != null and player.sword_equipment_pivot != null, "Kael's Oathblade lacks its hand socket or equipment pivot")
 	check(_has_bone_attachment_ancestor(player.rig_sword_visual), "Kael's drawn sword is not attached to a skeleton bone")
@@ -62,6 +68,9 @@ func _initialize() -> void:
 	check(heavy_motion >= 0.14, "Heavy attack clip does not visibly move Kael's arm")
 
 	game.call("_load_zone", "wychwood", Vector3(0, 1, -4))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await settle(5)
 	check(not game.active_enemies.is_empty(), "Wychwood combat pack missing")
 	if not game.active_enemies.is_empty():
@@ -69,6 +78,7 @@ func _initialize() -> void:
 		enemy.set_encounter_active(true)
 		enemy.set_physics_process(false)
 		player.set_physics_process(false)
+		player.equipment_loadout.set_sword_drawn(true)
 		segment = player.get_blade_world_segment()
 		blade_base = segment.get("base", player.global_position + Vector3(0, 1, 0))
 		blade_tip = segment.get("tip", blade_base)
@@ -76,6 +86,7 @@ func _initialize() -> void:
 		enemy.global_position = Vector3(sweep_center.x, player.global_position.y, sweep_center.z)
 		var health_before: float = enemy.health_component.health
 		var contact := {
+			"attack_id": 0, "blade_id": player.get_selected_blade_id(),
 			"base": blade_base, "tip": blade_tip,
 			"previous_base": blade_base, "previous_tip": blade_tip,
 			"damage": 24.0, "reach": 2.0, "heavy": false
@@ -89,6 +100,7 @@ func _initialize() -> void:
 		contact.tip = blade_tip + miss_offset
 		contact.previous_base = contact.base
 		contact.previous_tip = contact.tip
+		contact.attack_id = 1
 		result = game.combat.resolve_player_blade_contact(player, [enemy], contact, "")
 		check(not bool(result.get("hit", false)), "Off-target blade sweep incorrectly used the old radius hit")
 		check(is_equal_approx(enemy.health_component.health, damage_after_hit), "Missed sweep applied damage")
@@ -101,6 +113,13 @@ func _initialize() -> void:
 		player.call("_update_blade_contact")
 		check(int(contact_state.count) == 1, "One sword attack did not emit exactly one contact event")
 
+		if enemy.dead:
+			for candidate in game.active_enemies:
+				if not candidate.dead:
+					enemy = candidate
+					break
+		enemy.set_encounter_active(true)
+		enemy.set_physics_process(false)
 		var parry_state := {"position": Vector3.ZERO, "resolved": false}
 		enemy.attack_resolved.connect(func(_enemy: Node, parried: bool, position: Vector3):
 			parry_state.resolved = parried
@@ -111,7 +130,9 @@ func _initialize() -> void:
 		# trace explicitly; the rendered fixture separately advances the complete
 		# windup/strike animation through real block input.
 		enemy.global_position = player.global_position + Vector3(0, 0, -0.55)
-		enemy.attack_trace_start = enemy.global_position + Vector3(0, 0.9, 0)
+		enemy.player = player
+		enemy.rotation.y = PI
+		enemy.attack_trace_start = player.global_position + Vector3(0, 1.0, 0)
 		player.parry_window = 0.24
 		enemy.call("_resolve_attack")
 		check(bool(parry_state.resolved), "Timed parry did not resolve through enemy contact")

@@ -21,7 +21,7 @@ def main() -> int:
 
     project_settings = (project / "project.godot").read_text(encoding="utf-8")
     presets = (project / "export_presets.cfg").read_text(encoding="utf-8")
-    game = (project / "scripts" / "game.gd").read_text(encoding="utf-8")
+    session = (project / "scripts" / "systems" / "session_service.gd").read_text(encoding="utf-8")
     telemetry = (project / "scripts" / "qa_browser_telemetry.gd").read_text(encoding="utf-8")
 
     require("[autoload]" not in project_settings, "production project still declares an autoload section")
@@ -50,7 +50,8 @@ def main() -> int:
         and '"res://scripts/qa_browser_telemetry.gd"' in qa_export_sources,
         "QA preset does not explicitly contain the telemetry entrypoint",
     )
-    require('OS.has_feature("ashenoath_qa")' in game, "runtime QA attachment is not feature-gated")
+    require(re.search(r'if OS\.has_feature\("ashenoath_qa"\):\s*\n\s+var qa_script = load\("res://scripts/qa_browser_telemetry\.gd"\)', session) is not None,
+            "runtime QA attachment is not feature-gated in its session owner")
     require('JavaScriptBridge.eval' in telemetry, "QA telemetry has no browser bridge")
     require("has_feature(\"web\")" in telemetry and "has_feature(\"ashenoath_qa\")" in telemetry,
             "QA telemetry does not require both Web and ash enoath QA features")

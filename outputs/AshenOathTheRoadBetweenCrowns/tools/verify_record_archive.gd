@@ -33,7 +33,7 @@ func _initialize() -> void:
 			check(not (arrays[Mesh.ARRAY_INDEX] as PackedInt32Array).is_empty(), "Archive geometry was not indexed")
 			check((arrays[Mesh.ARRAY_COLOR] as PackedColorArray).size() == (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size(), "Archive color data is incomplete")
 		var preset := FileAccess.get_file_as_string("res://export_presets.cfg")
-		check(preset.contains("campaign_finale_section.gd,assets_external/environment/props/RecordArchive_Authored.res"), "Campaign pack omits its required archive mesh")
+		check(preload("res://tools/runtime_fixture.gd").pack_owners(PATH) == ["campaign"], "Archive must have exactly one campaign pack owner")
 		var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://runtime_asset_manifest.json"))
 		var entry: Dictionary = {}
 		for candidate in manifest.get("authored_environment_derivatives", []):
@@ -55,7 +55,7 @@ func check(condition: bool, message: String) -> void:
 func _check_architecture_uvs() -> void:
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var builder := Castle.new()
+	var builder := preload("res://tools/prepared_zone_geometry_factory.gd")
 	for triangle in [
 		[Vector3(0, 0, 0), Vector3(0, 3, 0), Vector3(0, 0, 4)],
 		[Vector3(0, 0, 0), Vector3(4, 0, 0), Vector3(0, 0, 3)],

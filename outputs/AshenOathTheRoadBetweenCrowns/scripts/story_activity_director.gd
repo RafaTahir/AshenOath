@@ -5,7 +5,7 @@ extends Node
 const Interactable = preload("res://scripts/interactable.gd")
 const LAYER := "StoryActivities"
 const WAYPOINTS := {
-	"greyfen": ["Greyfen common kitchen", Vector3(-1, 1, 7)],
+	"greyfen": ["Greyfen common kitchen", Vector3(-1, 1, 7.6)],
 	"deep_wood": ["Deep Wood waystone", Vector3(0, 1, 11)],
 	"old_mill": ["The mill south yard", Vector3(0, 1, 10)],
 	"bandit_road": ["The old checkpoint", Vector3(0, 1, 11)],
@@ -929,7 +929,13 @@ func _point(root: Node3D, id: String, prompt: String, pos: Vector3, title: Strin
 		return
 	var area = Interactable.new()
 	area.setup(id, "story_activity", prompt)
-	area.position = pos
+	var safe_position := pos
+	var river := preload("res://scripts/spatial_surface_contract.gd").river_center(str(host.current_zone_id))
+	if river < 999.0 and absf(pos.z - river) < 2.8:
+		# Activity stations must be usable from dry ground, even when an older
+		# authored coordinate predates the widened river and safety rails.
+		safe_position.z = river + (-2.9 if pos.z < river else 2.9)
+	area.position = host.river_safe_position(safe_position, 0.8)
 	area.build_collision(1.1)
 	root.add_child(area)
 	area.add_to_group("story_activity")

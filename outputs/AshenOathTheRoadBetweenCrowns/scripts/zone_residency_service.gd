@@ -57,7 +57,11 @@ func _deferred_free_zone(retired_root: Node) -> void:
 		if is_instance_valid(scene_owner) and scene_owner.has_meta("prepared_zone_view"):
 			scene_owner.queue_free()
 	else:
-		retired_zone_roots.erase(retired_root)
+		# A shutdown owner may already have freed this branch. Typed arrays
+		# reject a freed object as an erase argument; remove invalid slots by index.
+		for index in range(retired_zone_roots.size() - 1, -1, -1):
+			if not is_instance_valid(retired_zone_roots[index]):
+				retired_zone_roots.remove_at(index)
 	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
 	# Material anchors only bridge the renderer-safe retirement window. Once the
 	# final staged root has been queued and released, no retired scene owns those

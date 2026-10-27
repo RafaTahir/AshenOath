@@ -12,7 +12,9 @@ func _initialize() -> void:
 	# Castle population coverage is defined for the Balanced release preset, not a
 	# player's persisted Potato preference.
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await settle(4)
 	check(game.quests.quest_defs.has("main_blood_under_stone"), "Blood Under Stone quest is missing")
 	var required := ["reach_castle", "speak_guard", "enter_courtyard", "castle_evidence_ready", "locate_record_hall", "recover_ledger", "ledger_choice", "survive_haunting", "last_witness_hook"]
@@ -21,11 +23,18 @@ func _initialize() -> void:
 	for id in required: check(id in ids, "Missing Blood Under Stone objective: %s" % id)
 
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	await settle(3)
 	var fresh_gate = game.zone_root.find_child("gate_vargan_approach", true, false)
 	check(fresh_gate != null, "Fresh New Game castle route is missing")
-	if fresh_gate != null: game.call("_handle_interaction", fresh_gate)
-	await settle(3)
+	# Physical connector traversal is covered by verify_gate_transitions. This
+	# fixture covers destination population and progression, not retired portals.
+	game._load_zone("vargan_approach", Vector3(0, 1, 12))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "vargan_approach"):
+		quit(1)
+		return
 	check(game.current_zone_id == "vargan_approach", "Fresh New Game could not enter Castle Vargan")
 	check(game.quests.is_active("main_blood_under_stone"), "Castle entry did not start Blood Under Stone")
 
@@ -36,7 +45,11 @@ func _initialize() -> void:
 		check(evidence != null, "Missing approach evidence: %s" % id)
 		if evidence != null: game.call("_handle_interaction", evidence)
 
+	if game.hud._close_dialogue_surface(): game.hud.dialogue_closed.emit()
 	game.call("_load_zone", "vargan_court", Vector3(0, 1, 12))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "vargan_court"):
+		quit(1)
+		return
 	# Castle named actors are intentionally hydrated just after the arrival
 	# handoff to keep the cold transition responsive. Wait through that
 	# presentation budget before asserting the rendered actor contract.
@@ -56,11 +69,15 @@ func _initialize() -> void:
 		var evidence = game.zone_root.find_child(id, true, false)
 		if evidence != null: game.call("_handle_interaction", evidence)
 
+	if game.hud._close_dialogue_surface(): game.hud.dialogue_closed.emit()
 	game.call("_load_zone", "record_hall", Vector3(0, 1, 12))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "record_hall"):
+		quit(1)
+		return
 	await settle(3)
 	check(game.zone_root.find_child("CastleVargan_RecordHall", true, false) != null, "Record Hall is missing")
 	for id in ["vargan_record_keeper", "edric_castle", "vargan_ledger_choice"]: check(game.zone_root.find_child(id, true, false) != null, "Missing record-hall interaction: %s" % id)
-	for id in ["vargan_gate_guard", "vargan_steward", "vargan_servant", "vargan_patrol", "vargan_record_keeper", "edric_castle", "vargan_ledger_choice"]: check(game.dialogue.dialogues.has(id), "Missing castle dialogue: %s" % id)
+	for id in ["vargan_gate_guard", "vargan_steward", "vargan_servant", "vargan_patrol", "vargan_record_keeper", "edric_castle", "vargan_ledger_choice"]: check(not game.dialogue.get_dialogue(id).is_empty(), "Missing castle dialogue: %s" % id)
 
 	var ledger = game.dialogue.get_dialogue("vargan_ledger_choice")
 	check(ledger.get("actions", []).size() == 3, "Ledger must expose three choices")

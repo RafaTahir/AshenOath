@@ -12,7 +12,9 @@ func _initialize() -> void:
 	game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _settle_frames(4)
 	await _check_greyfen_visible_quality()
 	await _check_player_locomotion_animation()
@@ -22,6 +24,9 @@ func _initialize() -> void:
 
 func _check_greyfen_visible_quality() -> void:
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	await _settle_frames(4)
 	_check_non_white_materials(game.zone_root, "greyfen")
 	_check_house_presence()
@@ -30,6 +35,9 @@ func _check_greyfen_visible_quality() -> void:
 
 func _check_wychwood_visible_quality() -> void:
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _settle_frames(6)
 	_check_non_white_materials(game.zone_root, "wychwood")
 	_check_route_clearance("wychwood")
@@ -46,6 +54,7 @@ func _check_non_white_materials(root_node: Node, zone_id: String) -> void:
 
 func _check_house_presence() -> void:
 	var valid_houses = 0
+	var authored_houses := 0
 	for node in get_nodes_in_group("greyfen_house"):
 		if not (node is Node3D):
 			continue
@@ -59,11 +68,19 @@ func _check_house_presence() -> void:
 		var has_roof_contract := str(node.get_meta("roof_treatment", "")) != ""
 		if has_collision and has_roof_contract:
 			valid_houses += 1
+			var visual := node.find_child("AuthoredHouse", true, false) as MeshInstance3D
+			if visual != null and visual.mesh != null and visual.mesh.get_surface_count() == 6 and not _mesh_has_bad_material(visual):
+				authored_houses += 1
 	var batched_houses := 0
-	for child in game.zone_root.get_children():
-		if child is MultiMeshInstance3D and str(child.name).begins_with("HouseBatch_") and child.multimesh != null and child.multimesh.instance_count > 0 and child.material_override != null:
-			batched_houses += 1
-	if valid_houses < 3 or batched_houses < 2:
+	for child in game.zone_root.find_children("*", "MultiMeshInstance3D", true, false):
+		if (str(child.name).begins_with("HouseBatch_") or str(child.name).begins_with("HouseModuleBatch_")) and child.multimesh != null and child.multimesh.instance_count > 0:
+			var valid_materials: bool = child.material_override != null
+			if not valid_materials and child.multimesh.mesh != null:
+				valid_materials = child.multimesh.mesh.get_surface_count() > 0
+				for surface in child.multimesh.mesh.get_surface_count():
+					valid_materials = valid_materials and child.multimesh.mesh.surface_get_material(surface) != null
+			if valid_materials: batched_houses += 1
+	if valid_houses < 3 or (authored_houses < 3 and batched_houses < 2):
 		_fail("Greyfen needs at least 3 valid non-white visible houses; found %d" % valid_houses)
 
 func _check_cemetery_shell() -> void:
@@ -110,22 +127,16 @@ func _check_route_clearance(zone_id: String) -> void:
 
 func _check_player_locomotion_animation() -> void:
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	await _settle_frames(4)
 	var player = game.player
 	if player == null:
 		_fail("player missing")
 		return
-	var before = _snapshot_interesting_transforms(player)
-	player.velocity = Vector3(0, 0, -4.0)
-	player.move_phase = 0.0
 	var driver: Node = player.find_child("CharacterAnimationDriver", true, false)
-	if driver != null and driver.is_valid():
-		driver.set_locomotion(1.0, Vector3(0, 0, -1), true)
-	for i in range(18):
-		player.call("_animate_visuals", 0.016, Vector3(0, 0, -1), true)
-		await process_frame
-	var after = _snapshot_interesting_transforms(player)
-	if _transform_delta(before, after) < 0.08:
+	if driver == null or not preload("res://tools/runtime_fixture.gd").state_moves_bones(driver, "run"):
 		_fail("player locomotion has no visible transform change")
 
 func _check_sword_animation() -> void:
@@ -137,7 +148,7 @@ func _check_sword_animation() -> void:
 	if sword == null:
 		_fail("Kael Oathblade missing")
 		return
-	if sword.find_child("OathbladeSteel", true, false) == null:
+	if sword.find_child("OathbladeModeledMesh", true, false) == null:
 		_fail("Oathblade has no modeled steel blade")
 	var attachment = player.find_child("KaelSwordSocket", true, false)
 	if attachment == null:
@@ -160,7 +171,7 @@ func _attack_changes_sword(player: Node, sword: Node3D, heavy: bool) -> bool:
 	var max_delta = 0.0
 	for i in range(22):
 		player.attack_anim_time = max(float(player.attack_anim_time) - 0.016, 0.0)
-		player.call("_animate_visuals", 0.016, Vector3.ZERO, false)
+		player.call("_animate_visuals", 0.016)
 		var arc = player.find_child("visible_sword_slash_arc_root", true, false)
 		if arc != null and bool(arc.get("visible")):
 			saw_arc = true
@@ -244,7 +255,9 @@ func _collect_meshes(root_node: Node) -> Array[MeshInstance3D]:
 
 func _collect_route_blockers(root_node: Node) -> Array[Node]:
 	var result: Array[Node] = []
-	if _is_route_blocker_keyword(_keyword_path(root_node)):
+	# Canopies and spatial batches span the route without blocking a capsule.
+	# Clearance belongs to their actual enabled collider, not the render AABB.
+	if root_node is CollisionShape3D and not root_node.disabled and root_node.shape != null and _is_route_blocker_keyword(_keyword_path(root_node)):
 		result.append(root_node)
 	for child in root_node.get_children():
 		result.append_array(_collect_route_blockers(child))

@@ -18,7 +18,9 @@ func _initialize() -> void:
 	var game: Node = packed.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	var deadline := Time.get_ticks_msec() + 45000
 	while Time.get_ticks_msec() < deadline and (game.zone_root == null or not bool(game.zone_root.get_meta("opening_detail_complete", false))):
 		await process_frame
@@ -55,10 +57,13 @@ func _initialize() -> void:
 			var sources: Dictionary = furniture.mesh.get_meta("source_sha256", {})
 			for source in ["Table_Large.obj", "Chair_1.obj"]:
 				_check(sources.get(source, "") == FileAccess.get_sha256("res://assets_external/environment/props/" + source), "Native furniture source identity drift: " + source)
-		_check(area.find_child("%s_Opponent" % id, true, false) != null, "board table lacks its opponent: %s" % id)
+		var person := "rook" if id == "common_table" else "blacksmith_tor"
+		var opponent: Node = game.zone_root.find_child(person, true, false)
+		_check(opponent != null, "board table lacks its named opponent: %s" % id)
 		_check(area.find_child("BoardGameBeckoningGesture", true, false) == null, "board opponent still has a proxy hand: %s" % id)
-		var invitation: Node = area.find_child("BoardGameOpponentController", true, false)
-		_check(invitation != null and invitation.animation_driver != null, "board opponent lacks a skeletal invitation: %s" % id)
+		var invitation: Node = opponent.find_child("CharacterAnimationDriver", true, false) if opponent != null else null
+		var life: Node = game.zone_root.find_child("GreyfenLifeController", true, false)
+		_check(invitation != null and invitation.is_valid() and life != null and life.has_method("request_table_visit"), "named board opponent lacks skeletal performance or table-visit ownership: %s" % id)
 		var squares := 0
 		for batch in area.find_children("%s_BoardSquares*" % id, "MultiMeshInstance3D", true, false):
 			squares += batch.multimesh.instance_count
@@ -88,9 +93,9 @@ func _initialize() -> void:
 			camera.global_position = area.global_position + Vector3(2.5, 2.6, 3.8)
 			camera.look_at(area.global_position + Vector3(0, 0.9, 0))
 			var invitation_deadline := Time.get_ticks_msec() + 2000
-			while invitation != null and not bool(invitation.invitation_started) and Time.get_ticks_msec() < invitation_deadline:
+			while opponent != null and not life.request_table_visit(person, area.global_position + Vector3(0.8,0,-0.65)) and Time.get_ticks_msec() < invitation_deadline:
 				await process_frame
-			_check(invitation != null and bool(invitation.invitation_started), "nearby opponent did not start skeletal invitation: " + id)
+			_check(opponent != null and opponent.global_position.distance_to(area.global_position) < 2.5, "named opponent did not arrive at the table: " + id)
 			await _frames(12)
 			await RenderingServer.frame_post_draw
 			var image := root.get_texture().get_image()

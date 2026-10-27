@@ -15,12 +15,17 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await settle(3)
 
 	game.quests.unlocked["main_last_witness"] = true
 	game.quests.start_quest("main_last_witness")
 	game.call("_load_zone", "undercroft", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "undercroft"):
+		quit(1)
+		return
 	await settle(3)
 	var guardian = game.zone_root.find_child("HalvernGuard", true, false)
 	check(guardian != null, "Halvern's threshold encounter is missing")
@@ -34,6 +39,9 @@ func _initialize() -> void:
 	check(game.quests.is_active("main_crowns_without_mercy"), "Crowns Without Mercy did not start")
 
 	game.call("_load_zone", "assembly", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "assembly"):
+		quit(1)
+		return
 	await settle(3)
 	var evidence = game.zone_root.find_child("witnesses_ready", true, false)
 	check(evidence != null, "Assembly evidence interaction is missing")
@@ -46,15 +54,19 @@ func _initialize() -> void:
 	check(game.quests.is_active("main_hart_remembers"), "The Hart Remembers did not start")
 
 	game.call("_load_zone", "hart_glade", Vector3(0, 1, 9))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "hart_glade"):
+		quit(1)
+		return
 	await settle(3)
 	var hart = game.dialogue.get_dialogue("white_hart")
 	check(hart.get("actions", []).size() == 4, "White Hart does not expose four endings")
 	game.call("_handle_dialogue_action", hart["actions"][1])
 	await settle(3)
+	check(await preload("res://tools/runtime_fixture.gd").enact_covenant(game, "free"), "Mercy ritual did not complete through its interactions")
 	check(str(game.story_state.get_flag("final_covenant", "")) == "mercy", "Mercy ending was not stored")
 	check(game.quests.is_completed("main_hart_remembers"), "Peaceful Hart ending did not complete the campaign")
 	var witnesses = game.story_state.get_flag("final_witnesses", [])
-	check(typeof(witnesses) == TYPE_ARRAY and "halvern" in witnesses, "Final witness snapshot omitted Halvern")
+	check(typeof(witnesses) == TYPE_ARRAY and witnesses.has("halvern") == (str(game.story_state.get_flag("witness_consent_halvern", "")) == "voluntary"), "Final witness snapshot contradicts Halvern's recorded consent")
 	var result_code := 0 if failures == 0 else 1
 	await _shutdown_game(game)
 	print("QUEST-005 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))

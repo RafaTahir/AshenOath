@@ -34,9 +34,11 @@ func _initialize() -> void:
 	check(library.get_grass_material("balanced").albedo_texture != null, "Grass material lacks its alpha texture")
 	var stats: Dictionary = library.cache_stats()
 	check(int(stats.textures) == 22, "Texture cache should contain 21 PBR maps plus grass")
-	library.queue_free()
+	library.clear_cache()
+	library.free()
+	await process_frame
 	print("MAT-001 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
-	quit(0 if failures == 0 else 1)
+	call_deferred("quit", 0 if failures == 0 else 1)
 
 func check(condition: bool, message: String) -> void:
 	if condition:

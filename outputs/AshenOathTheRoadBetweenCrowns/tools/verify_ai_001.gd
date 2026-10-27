@@ -13,9 +13,14 @@ func _initialize() -> void:
 	tested_game = game
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await settle(4)
 	game.call("_load_zone", "wychwood", Vector3(0, 0.9, 8.0))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await settle(8)
 
 	check(game.active_enemies.size() == 5, "Wychwood encounter must contain five enemies")
@@ -33,7 +38,7 @@ func _initialize() -> void:
 		var route: Array = game.spatial_service.build_route(enemy.global_position, enemy.call("_engagement_target"), 0.55)
 		check(not route.is_empty(), "%s cannot route to its engagement lane" % enemy.display_name)
 	check(profiles.has("skirmisher") and profiles.has("flanker") and profiles.has("feinter") and profiles.has("brute"), "Wychwood roles are not visibly distinct")
-	check(active_count == 0, "Wychwood enemies activate before Kael reaches the authored reveal")
+	check(active_count == 1, "Wychwood must restore its first authoritative wave at arrival")
 	game.player.global_position = Vector3(0, 0.9, 0.0)
 	game.call("_update_tutorial_prompts")
 	await settle(2)
@@ -71,8 +76,11 @@ func _initialize() -> void:
 	game.player.global_position = Vector3(0, 0.9, 0)
 	first.global_position = Vector3(0, 0.9, 1.2)
 	second.global_position = Vector3(0, 0.9, 2.0)
+	if first.encounter_spatial_index != null: first.encounter_spatial_index.update(first)
+	if second.encounter_spatial_index != null: second.encounter_spatial_index.update(second)
 	check(not second.call("_attack_lane_clear"), "Rear enemy can attack through an ally")
 	second.global_position = Vector3(1.6, 0.9, 1.8)
+	if second.encounter_spatial_index != null: second.encounter_spatial_index.update(second)
 	check(second.call("_attack_lane_clear"), "Clear side attack lane is incorrectly blocked")
 	check(game.call("_enemy_attack_token", first, true), "First attacker cannot claim the attack token")
 	check(not game.call("_enemy_attack_token", second, true), "Two enemies can attack simultaneously")

@@ -10,12 +10,18 @@ func run() -> void:
 	root.add_child(game)
 	await process_frame
 	await process_frame
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	# Saved-state integration fixture, not real-input route evidence.
-	for covenant in ["duty", "ash"]:
+	for covenant in ["ash"]:
 		game.story_state.set_flag("final_covenant", covenant)
 		game.story_state.set_flag("final_choice_completed", false)
 		game.load_world_state({"pending_ending": "bind" if covenant == "duty" else "kill", "boss_states": {"white_hart_avatar": {"phase": 2, "checkpoint": 2, "checkpoint_health_ratio": 0.55, "outcome": ""}}})
 		game._load_zone("hart_glade", Vector3(0, 1, 9))
+		if not await preload("res://tools/runtime_fixture.gd").ready(game, "hart_glade"):
+			quit(1)
+			return
 		for frame in 8:
 			await process_frame
 		var bosses: Array = []
@@ -33,11 +39,25 @@ func run() -> void:
 			controller.load_state(saved)
 			check(is_equal_approx(health.health / health.max_health, 0.43), "Full health snapshot must take precedence over phase checkpoint")
 		check(game.zone_root.find_child("WhiteHartWitnessDisplay", true, false) == null, "Pending fight must not retain peaceful double")
+	# Duty resumes its enacted promise, not a second combat encounter.
+	game.story_state.set_flag("final_covenant", "duty")
+	game.story_state.set_flag("final_choice_completed", false)
+	game.story_state.set_flag("covenant_ritual_step", 1)
+	game.load_world_state({"pending_ending": "bind", "boss_states": {}})
+	game._load_zone("hart_glade", Vector3(0, 1, 9))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "hart_glade"):
+		quit(1)
+		return
+	check(game.active_enemies.is_empty(), "Pending Duty must not invent a combat encounter")
+	check(game.zone_root.find_child("covenant_bind_0", true, false) == null and game.zone_root.find_child("covenant_bind_1", true, false) != null, "Duty must restore its unfinished ritual step")
 	for covenant in ["witness", "mercy", "duty", "ash"]:
 		game.story_state.set_flag("final_covenant", covenant)
 		game.story_state.set_flag("final_choice_completed", true)
 		game.load_world_state({"pending_ending": "", "boss_states": {}})
 		game._load_zone("hart_glade", Vector3(0, 1, 9))
+		if not await preload("res://tools/runtime_fixture.gd").ready(game, "hart_glade"):
+			quit(1)
+			return
 		for frame in 8:
 			await process_frame
 		check(game.active_enemies.is_empty(), "Completed " + covenant + " must not restart the boss")

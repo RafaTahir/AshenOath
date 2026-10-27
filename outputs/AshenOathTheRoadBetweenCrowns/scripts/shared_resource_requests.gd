@@ -54,6 +54,10 @@ func take(path: String, owner: Object, token: String = "", wait: bool = false) -
 	return result
 
 func load_now(path: String, owner: Object) -> Resource:
+	# Join a real prefetch, but do not enqueue a worker just to block on it.
+	# ResourceLoader's normal cache still shares synchronous decoded resources.
+	if not _requests.has(path):
+		return ResourceLoader.load(path)
 	if request(path, owner) != OK:
 		return null
 	return take(path, owner, "", true)

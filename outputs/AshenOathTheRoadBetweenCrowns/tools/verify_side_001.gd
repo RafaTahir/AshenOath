@@ -10,12 +10,17 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await settle(3)
 	for id in contract["quests"].keys():
 		check(game.quests.is_unlocked(id), "Side quest is not available: %s" % id)
 		game.quests.start_quest(id)
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	await settle(3)
 	check(game.zone_root.find_child("village_stories", true, false) == null, "Instant side-quest completion shortcut still exists")
 	for interaction in ["grave_bell", "massacre_iron", "empty_grave_tracks", "sheepfold"]:
@@ -29,6 +34,9 @@ func _initialize() -> void:
 	# unrelated opening pack so its five slots do not prevent the side bandits.
 	game.quests.complete_objective("main_road_of_crows", "fight_ghoulkin")
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 10))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await settle(3)
 	var camp = game.zone_root.find_child("bandit_camp", true, false)
 	check(camp != null, "Black Dog camp evidence is missing")
@@ -47,6 +55,9 @@ func _initialize() -> void:
 	if roots != null:
 		game.call("_handle_interaction", roots)
 	game.call("_load_zone", "greyfen", Vector3(0, 1, 7))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	await settle(3)
 	check(game.zone_root.find_child("returned_soldier", true, false) != null, "Returned soldier did not appear")
 	var resolvers := {

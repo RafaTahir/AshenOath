@@ -12,9 +12,14 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	game.quests.start_quest("main_road_of_crows")
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 12.5))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _frames(12)
 
 	check(game.current_zone_id == "wychwood", "WORLD-002 did not load Wychwood")

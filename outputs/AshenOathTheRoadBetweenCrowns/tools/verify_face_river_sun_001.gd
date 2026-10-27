@@ -8,8 +8,9 @@ func _initialize() -> void:
 	var main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	await process_frame
-	main.call("_new_game")
-	await _frames(5)
+	if not await preload("res://tools/runtime_fixture.gd").start(main):
+		quit(1)
+		return
 	_verify_character(main.player, "Kael")
 	var anwen = main.zone_root.find_child("sister_anwen", true, false)
 	_verify_character(anwen, "Sister Anwen")
@@ -23,7 +24,9 @@ func _initialize() -> void:
 	_verify_path(sample,4.5,"sample bridge path")
 	_verify_sun(main.visual_director)
 	main.call("_load_zone","wychwood")
-	await _frames(4)
+	if not await preload("res://tools/runtime_fixture.gd").ready(main, "wychwood"):
+		quit(1)
+		return
 	for enemy in main.active_enemies:
 		_verify_character(enemy, str(enemy.enemy_id))
 	var passed := failures == 0
@@ -55,7 +58,8 @@ func _verify_character(node: Node, label: String) -> void:
 	# bone in one connected imported surface. Humans still require multiple
 	# face-bearing surfaces; monsters require the stricter single-surface native
 	# contract plus the animated head-bone check above.
-	var minimum_face_surfaces := 1 if is_single_surface_monster else 2
+	var connected_face := str(_find_meta(node, "character_face_surface_contract", "")) == "single_connected_skinned_mesh"
+	var minimum_face_surfaces := 1 if is_single_surface_monster or connected_face else 2
 	check(face_surface_count >= minimum_face_surfaces and face_features in ["native_mesh", "bone_attached"], "%s mesh-native face material is missing" % label)
 
 func _has_fragment(node: Node, fragment: String) -> bool:

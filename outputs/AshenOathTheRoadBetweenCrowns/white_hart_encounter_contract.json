@@ -2,8 +2,9 @@
   "ticket": "BOSS-001",
   "enemy": "white_hart_avatar",
   "arena": "hart_glade",
-  "combat_endings": ["bind", "kill"],
-  "peaceful_endings": ["expose", "free"],
+  "combat_endings": ["kill"],
+  "peaceful_endings": ["expose", "free", "bind"],
+  "enacted_rituals": ["expose", "free", "bind"],
   "phases": [
     {"phase": 1, "health_above": 0.66},
     {"phase": 2, "health_above": 0.33},

@@ -10,15 +10,19 @@ func _initialize() -> void:
 	var game = packed.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(4)
 	_verify_sky(game)
 	_verify_characters(game)
 	_verify_dialogue(game)
-	_verify_interactions(game)
+	await _verify_interactions(game)
 	_verify_oathfire(game)
 	game.call("_load_zone","wychwood",Vector3(0,1,8))
-	await _frames(4)
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	_verify_enemies(game)
 	var result_code := 0 if failures == 0 else 1
 	await _shutdown_game(game)
@@ -31,14 +35,13 @@ func _verify_sky(game) -> void:
 	check(sky.sun_disc.visible and not sky.moon_disc.visible,"Midday sun/moon visibility overlaps")
 	sky.set_time(0.0,"night",0)
 	check(sky.moon_disc.visible and not sky.sun_disc.visible,"Midnight sun/moon visibility overlaps")
-	check(sky.sky_backdrop.visible and bool(sky.sky_backdrop.get_sky_state().get("stars_visible", false)),"Authored night sky backdrop is hidden")
-	var cards := 0
-	var spheres := 0
+	check(sky.current_environment.background_mode == Environment.BG_SKY and sky.current_environment.sky == sky.authored_sky,"Authored environment sky is missing")
+	check(sky.sky_backdrop == null,"Legacy canvas sky must not obscure the world")
+	var formations := 0
 	for node in _walk(sky.cloud_layer):
 		if node is MeshInstance3D:
-			if (node as MeshInstance3D).mesh is QuadMesh: cards += 1
-			if (node as MeshInstance3D).mesh is SphereMesh: spheres += 1
-	check(cards >= 3 and spheres == 0,"Balanced clouds are not a soft three-lobe card formation")
+			if (node as MeshInstance3D).mesh != null: formations += 1
+	check(formations >= 4,"Authored cloud formation pool is incomplete")
 
 func _verify_characters(game) -> void:
 	var player_visual = game.player.find_child("player_kael_visual",true,false)
@@ -61,12 +64,14 @@ func _verify_dialogue(game) -> void:
 	game.hud.dialogue_page_index = game.hud.dialogue_pages.size()-1
 	game.hud.call("_render_dialogue_page")
 	check(game.hud.dialogue_actions.get_child_count() >= 1,"Dialogue choices are missing at conversation end")
-	game.hud.dialogue_layer.visible = false
+	game.hud._close_dialogue_surface()
+	game.hud.dialogue_closed.emit()
 
 func _verify_interactions(game) -> void:
 	check(game.has_method("_update_interaction_focus"),"Central interaction focus resolver is missing")
 	var anwen = game.zone_root.find_child("sister_anwen",true,false)
 	game.call("_stage_dialogue_moment",anwen)
+	await create_timer(0.75).timeout
 	if anwen != null:
 		var to_player: Vector3 = game.player.global_position-anwen.global_position
 		to_player.y = 0.0

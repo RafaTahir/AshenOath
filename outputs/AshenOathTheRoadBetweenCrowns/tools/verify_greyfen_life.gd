@@ -9,7 +9,9 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	var detail_deadline := Time.get_ticks_msec() + 30000
 	while Time.get_ticks_msec() < detail_deadline:
 		if game.game_started and game.zone_root != null and bool(game.zone_root.get_meta("opening_detail_complete", false)):
@@ -32,7 +34,7 @@ func _initialize() -> void:
 				continue
 			var routine: Node3D = entry.node
 			game.player.global_position = routine.global_position + Vector3(0, 1, 1)
-			life._process(0.25)
+			life._physics_process(0.25)
 			check(routine.visible, "Balanced hides a nearby authored villager")
 			break
 		check(life.AMBIENT_LINES.size() >= 8,"Ambient dialogue pool is too small")
@@ -54,7 +56,7 @@ func _initialize() -> void:
 	mini.close_game()
 	check(not paused and not mini.world_control_locked and not mini.is_open(),"Tic-tac-toe exit did not restore world input")
 
-	mini.open_game("draughts")
+	mini.open_game("draughts", "blacksmith_tor")
 	mini.draughts_board.fill(0)
 	mini.draughts_board[8] = 1
 	mini.draughts_board[15] = -1
@@ -80,7 +82,7 @@ func _initialize() -> void:
 				continue
 			var routine: Node3D = entry.node
 			game.player.global_position = routine.global_position + Vector3(0, 1, 1)
-			life._process(0.25)
+			life._physics_process(0.25)
 			check(routine.visible, "Potato hides a nearby authored villager")
 			break
 	check(game.zone_root.find_child("common_table",true,false) != null and game.zone_root.find_child("barrel_board",true,false) != null,"Potato mode removed minigames")

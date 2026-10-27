@@ -1627,6 +1627,7 @@ func _attach_humanoid_sword(label: String) -> void:
 	socket.add_child(grip)
 	# Derive the authored grip in actor space, including offline zone builds.
 	# Reading global transforms here is invalid before the zone enters the tree.
+	if animation_driver != null:
 		animation_driver.sample_pose()
 	skeleton.force_update_all_bone_transforms()
 	var skeleton_to_actor := Transform3D.IDENTITY

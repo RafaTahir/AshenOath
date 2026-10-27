@@ -13,7 +13,12 @@ func _initialize() -> void:
 func _run() -> void:
 	var game := Game.new()
 	game.add_child(game.zone_residency)
+	game.asset_helper = preload("res://scripts/asset_spawn_helper.gd").new()
+	game.add_child(game.asset_helper)
+	game.zone_root = Node3D.new()
+	game.add_child(game.zone_root)
 	_check_authored_materials(game)
+	game.zone_root.free()
 	if "--materials-only" in OS.get_cmdline_user_args():
 		game.free()
 		print("AUTHORED MATERIAL FALLBACK: %s" % ("PASS" if failures == 0 else "FAIL"))

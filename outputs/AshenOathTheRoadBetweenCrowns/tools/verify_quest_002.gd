@@ -11,13 +11,18 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _settle(3)
 
 	game.quests.unlocked["main_teeth_in_rain"] = true
 	_check(game.quests.start_quest("main_teeth_in_rain"), "Teeth in the Rain could not start")
 	game.story_state.set_flag("teeth_in_rain_available", true)
 	game.call("_load_zone", "greyfen", Vector3(0, 1, -13))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"):
+		quit(1)
+		return
 	await _settle(3)
 
 	var mooncap_before := int(game.inventory.ingredients.get("mooncap", 0))
@@ -46,10 +51,16 @@ func _initialize() -> void:
 	_check(bool(game.story_state.get_flag("chapel_names_read", false)), "Chapel evidence state was not persisted")
 
 	game.call("_load_zone", "deep_wood", Vector3(0, 1, 12))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "deep_wood"):
+		quit(1)
+		return
 	await _settle(3)
 	_check(_living_enemy_count(game, "bog_wretch") == 0, "Bog Wretch spawned before Oren's name was spoken")
 
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 13))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _settle(3)
 	var ritual = _find_named(game.zone_root, "ritual_stones")
 	_check(ritual != null, "Ritual stones did not appear after reading the chapel names")
@@ -61,9 +72,19 @@ func _initialize() -> void:
 	_check(bool(game.story_state.get_flag("oren_name_spoken", false)), "Oren's spoken-name state was not persisted")
 	_check(_find_gate_to(game.zone_root, "deep_wood") != null, "Deeper Wychwood gate did not unlock")
 
-	game.call("_load_zone", "deep_wood", Vector3(0, 1, 12))
+	var challenge = _find_named(game.zone_root, "saga_bog_challenge")
+	_check(challenge != null, "Wychwood's earned Bog Wretch challenge is missing")
+	if challenge != null:
+		for enemy in game.active_enemies.duplicate():
+			if is_instance_valid(enemy) and str(enemy.enemy_id) != "bog_wretch" and not enemy.dead:
+				enemy.apply_damage(10000.0, "")
+		game.player.global_position = challenge.global_position + Vector3(0, 0, 1.5)
+		game.call("_handle_interaction", challenge)
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _settle(3)
-	_check(_living_enemy_count(game, "bog_wretch") == 1, "Deeper Wychwood must contain exactly one Bog Wretch")
+	_check(_living_enemy_count(game, "bog_wretch") == 1, "Wychwood must contain exactly one earned Bog Wretch")
 	var bog = _find_living_enemy(game, "bog_wretch")
 	if bog != null:
 		game.call("_expose_bog_core", bog, "Moon Oil")

@@ -18,12 +18,17 @@ func _initialize() -> void:
 		_finish()
 		return
 	_verify_bindings()
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	_verify_device_switch(router)
 	await _verify_hud(game.hud, router)
 	await _verify_minigame(game.minigames)
-	_verify_virtual_interface(router)
+	await _verify_virtual_interface(router)
 	_verify_settings(game.settings)
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _settle(8)
 	_check(game.player != null and game.player.input_source == router, "player does not use the input router")
 	_check(game.camera_rig != null and game.camera_rig.input_source == router, "camera does not use the input router")
@@ -77,39 +82,50 @@ func _verify_device_switch(router: Node) -> void:
 func _verify_hud(hud: Node, router: Node) -> void:
 	router._set_device("gamepad")
 	hud.set_input_device("gamepad")
+	hud.hide_menus()
 	hud.set_prompt("E - Speak to Sister Anwen")
 	_check(hud.prompt_label.text.begins_with("[A]"), "interaction prompt did not switch to gamepad")
 	hud.set_guidance_hint("Left click strike | Space dodge | Tap Q parry | Hold Q block", 5.0)
-	_check(hud.hint_label.text.contains("[RB]") and hud.hint_label.text.contains("[B]") and hud.hint_label.text.contains("[LB]"), "combat guidance did not switch to gamepad")
+	print("GAMEPAD GUIDANCE: ", hud.hint_label.text, " device=", router.active_device)
+	for action in ["light_attack", "dodge", "block"]:
+		_check(hud.hint_label.text.contains("[%s]" % router.action_label(action)), "combat guidance did not use the active controller binding: " + action)
 	hud.update_equipment(2, 1, "Moon Oil")
-	_check(hud.equipment_label.text.contains("D-Pad Left") and hud.equipment_label.text.contains("D-Pad Right"), "equipment shortcuts did not switch to gamepad")
+	_check(hud._quick_bindings.potions.text == "[D-Pad Left]" and hud._quick_bindings.bombs.text == "[D-Pad Right]", "equipment shortcuts did not switch to gamepad")
 	hud.show_controls_menu("main")
 	await process_frame
 	await process_frame
 	var control_text := ""
 	for label in hud.menu_layer.find_children("*", "Label", true, false):
 		control_text += str(label.text) + "\n"
-	_check(control_text.contains("Right Stick look") and control_text.contains("Hold LT Oathfire Beam"), "controls screen lacks gamepad layout")
+	_check(control_text.to_lower().contains("right stick") and control_text.contains(str(router.describe_action("oathfire_beam").instruction)), "controls screen lacks current gamepad instructions")
 	_check(root.get_viewport().gui_get_focus_owner() is Button, "gamepad menu focus was not assigned")
+	hud.hide_menus()
 	hud.show_dialogue({"name": "Anwen", "greeting": "Stay a moment.", "lines": [], "actions": []})
 	await process_frame
 	await process_frame
 	var focus = root.get_viewport().gui_get_focus_owner()
-	_check(focus is Button and focus.text == "Close", "dialogue did not assign gamepad focus")
-	hud.dialogue_layer.visible = false
+	_check(focus is Button and focus.text in ["Close", "Continue"], "dialogue did not assign gamepad focus to reading or close")
+	hud._close_dialogue_surface()
+	hud.dialogue_closed.emit()
+	router._set_device("keyboard_mouse")
 	hud.set_input_device("keyboard_mouse")
 	hud.set_prompt("E - Speak to Sister Anwen")
 	_check(hud.prompt_label.text.begins_with("[E]"), "keyboard prompt did not restore")
 	router._set_device("keyboard_mouse")
 
 func _verify_virtual_interface(router: Node) -> void:
+	router.set_gameplay_context()
 	router.set_virtual_axes(Vector2(0.7, -0.4), Vector2(-0.5, 0.25))
 	_check(router.active_device == "touch", "virtual axes did not select touch input")
 	_check(router.movement_vector().distance_to(Vector2(0.7, -0.4)) < 0.01, "virtual movement vector is incorrect")
 	router.set_virtual_action("interact", true)
-	_check(Input.is_action_pressed("interact"), "virtual action press did not reach semantic action")
+	await physics_frame
+	await process_frame
+	_check(router.is_action_pressed("interact"), "virtual action press did not reach semantic action")
 	router.set_virtual_action("interact", false)
-	_check(not Input.is_action_pressed("interact"), "virtual action release remained stuck")
+	await physics_frame
+	await process_frame
+	_check(not router.is_action_pressed("interact"), "virtual action release remained stuck")
 	router.clear_virtual_input()
 	_check(router.virtual_move == Vector2.ZERO and router.virtual_look == Vector2.ZERO, "virtual axes did not clear")
 

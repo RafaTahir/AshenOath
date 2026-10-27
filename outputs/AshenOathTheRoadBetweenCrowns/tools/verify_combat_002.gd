@@ -27,6 +27,8 @@ func _initialize() -> void:
 	var state := {"contacts": 0}
 	player.blade_contact_requested.connect(func(_contact): state.contacts = int(state.contacts) + 1)
 	player.can_control = true
+	player.equipment_loadout.set_sword_drawn(true)
+	check(player.is_blade_ready(), "Contact fixture requires a drawn, fully bound blade")
 	player.attack_anim_time = 0.0
 	player.pending_attack_damage = 24.0
 	player.pending_attack_radius = 2.0
@@ -41,6 +43,8 @@ func _initialize() -> void:
 	check(bool(tuning.low_fps_contract.blade_contact_uses_threshold_crossing), "Low-FPS blade contract is disabled")
 	check(int(tuning.enemy.maximum_simultaneous_attackers) == 1, "Pack attack-token balance changed")
 	print("COMBAT-002 VERIFIER: %s" % ("PASS" if failures == 0 else "FAIL (%d)" % failures))
+	player.free()
+	await process_frame
 	quit(0 if failures == 0 else 1)
 
 func _check_locked_bow() -> void:

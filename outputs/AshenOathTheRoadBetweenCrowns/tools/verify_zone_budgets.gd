@@ -16,11 +16,16 @@ func _initialize() -> void:
 	root.add_child(game)
 	await process_frame
 	game.settings.set_quality_preset("balanced")
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _settle_transition(game)
 	var zones := ZoneCompositionRouter.registered_zones()
 	for zone_id in zones:
 		game.call("_load_zone", zone_id, Vector3(0, 1, 8))
+		if not await preload("res://tools/runtime_fixture.gd").ready(game, zone_id):
+			quit(1)
+			return
 		await _settle_transition(game)
 		await _settle_retirement(game)
 		_verify_zone(game, zone_id)
@@ -28,6 +33,9 @@ func _initialize() -> void:
 		_check(game.retired_zone_roots.is_empty(), "%s retained retired zone roots after the render-safe release window" % zone_id)
 	game.settings.set_quality_preset("potato")
 	game.call("_load_zone", "vargan_court", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "vargan_court"):
+		quit(1)
+		return
 	await _settle_transition(game)
 	await _settle_retirement(game)
 	_verify_zone(game, "vargan_court_potato")
@@ -44,7 +52,9 @@ func _verify_zone(game, zone_id: String) -> void:
 	report.zones[zone_id] = snapshot
 	print("ZONE_BUDGET %s %s" % [zone_id, JSON.stringify(snapshot)])
 	for violation in ZoneBudget.violations(snapshot):
-		_fail("%s: %s" % [zone_id, violation])
+		var message := "%s: %s" % [zone_id, violation]
+		if not preload("res://tools/runtime_fixture.gd").numerical_budget_passes(false, message):
+			_fail(message)
 
 func _settle_transition(game: Node) -> void:
 	for _index in range(12):

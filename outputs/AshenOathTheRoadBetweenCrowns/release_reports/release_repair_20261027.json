@@ -1,0 +1,95 @@
+{
+  "status": "source_and_package_ready_for_git_publication_user_acceptance_pending",
+  "baseline_commit": "0a13d0328555c1ceaa5065746898d1ad524b0543",
+  "branch": "codex/masterpiece-rebuild",
+  "acceptance_scope": "headless_release_with_disclosures",
+  "authorization": {
+    "agent_headless_checks": true,
+    "agent_graphical_browser_gameplay": false,
+    "publish_after_headless_and_artifact_gates": true,
+    "bracken_release_inclusion": true,
+    "bracken_visual_acceptance": false
+  },
+  "historical_cleanup_report": "release_reports/release_cleanup_20261027.json",
+  "raw_evidence_directory": "D:/Temp/AshenOath/release-cleanup-20261027",
+  "retained_runtime_repairs": [
+    "Enemy animation parser indentation corrected.",
+    "Synchronous resource acquisition uses the normal cache while joining existing shared prefetch requests.",
+    "Retiring opening scenes cannot restore global input, camera or HUD state or dereference freed performers.",
+    "Legacy sky transform anchor is a Node3D, not an empty MeshInstance3D.",
+    "Village OBJ details bind missing materials through their retained atlas without flattening authored surfaces.",
+    "Village activity and detail targets avoid the river safety band.",
+    "Connected human facial anatomy records its actual material surface contract.",
+    "Validated resident destinations open their source travel gate before the crossing plane; cold unready gates remain closed.",
+    "Retired-zone callbacks prune freed typed-array entries without dereferencing them.",
+    "NPC wrapper forward metadata includes the visual's authored local rotation, preserving correct dialogue and perception facing.",
+    "A retained Greyfen crate is moved one metre off the authored east-road approach."
+  ],
+  "verification": {
+    "applicable_headless_requirements_satisfied": true,
+    "unfiltered_run_passed_without_rechecks": false,
+    "applicable_coverage": "complete_with_targeted_rechecks; not strict performance or rendered certification",
+    "consolidated_result": {"pass": 99, "fail": 2, "note": "Original failures remain in the raw report; the two corrected fixture paths are covered below."},
+    "targeted_rechecks": [
+      {"gate": "verify_runtime", "status": "pass", "report": "D:/Temp/AshenOath/release-cleanup-20261027/final-runtime-recheck/headless-results.json"},
+      {"gate": "verify_gate_transitions", "status": "pass", "report": "D:/Temp/AshenOath/release-cleanup-20261027/final-castle-return/result.json", "coverage": "19 completed full-route legs plus the focused Greyfen/Castle immediate-return check; no full-route replay claimed"}
+    ],
+    "pack_http": {"status": "pass", "report": "D:/Temp/AshenOath/release-cleanup-20261027/final-pack-http.json"},
+    "current_consolidated_run": "D:/Temp/AshenOath/release-cleanup-20261027/frozen-source-1/headless-results.json",
+    "runtime_content_fingerprint_before_packaging": "2a6c6eee88b7af959dcad984a9eb5299c9cc34618ea70b3c2dca98293568f846",
+    "harness_fingerprint_at_run_start": "647a16d0bdb45effc824b6bce3e5e69d5c94aae32d4761a5357826a5cf65a517",
+    "final_harness_fingerprint": "e353e8513d518824dcc70018af9d1e7437630283ab5c0cd545a9136ef057fa7b",
+    "source_unchanged_after_build": true,
+    "artifact_checks": {"pass": 5, "fail": 0, "report": "D:/Temp/AshenOath/release-cleanup-20261027/export-results-repair-final.json", "isolated_packed_startup": "pass"},
+    "selected_passes": [
+      "48 Python unit cases",
+      "required production components: 23 components, 17 roles",
+      "runtime smoke and shared loader shutdown",
+      "asset instantiation and material shutdown",
+      "deferred save restoration and cached death-pose reset",
+      "stale pack request ownership",
+      "engine service ownership and render-resource lifecycle",
+      "AnimationTree Hart pose advancement and suspension",
+      "synthetic weapon input context",
+      "event-driven touch and routine ownership",
+      "57-quest structural campaign check",
+      "QA telemetry production isolation",
+      "face, river-path and celestial structure",
+      "Greyfen routines and opponent-specific once-only rewards",
+      "Vargan authored architecture and physical passage"
+    ],
+    "pending": [
+      "Git publication and HTTP deployment identity"
+    ]
+  },
+  "candidate": {
+    "build_id": "release-repair-20261027",
+    "directory": "D:/Projects/AshenOath/.release-gate/release-repair-20261027/export",
+    "files": 17,
+    "directory_bytes": 107936848,
+    "max_deployment_bytes": 268435456,
+    "transport_artifact_bytes": 107929138,
+    "decoded_artifact_bytes": 146978002,
+    "root_pck_sha256": "e8e24f5d072f1f4edae38e9bb4e5aeb1ee7e86944cae9a215729a16ac2d31f94",
+    "opening_balanced_potato_transport_bytes": 48348677,
+    "opening_quality_transport_bytes": 55558125,
+    "theoretical_balanced_transfer_floor_at_20mbps_seconds": 19.3394708,
+    "timing_note": "Transfer arithmetic only, not measured startup, FPS, frame pacing or runtime memory."
+  },
+  "numerical_limitations": [
+    "WORLD-001 Greyfen nodes: 1609 > 1350",
+    "WORLD-014 cemetery nodes: 1583 > 1150; meshes: 379 > 340",
+    "Zone budget Greyfen nodes: 1581 > 1350; MultiMeshes: 67 > 48; visible skeletons: 15 > 10"
+  ],
+  "disclosures": {
+    "rendered_gameplay": "unverified",
+    "real_browser_input_persistence_audio": "unverified",
+    "actual_phone": "unverified",
+    "visual_and_listening_approval": "unverified",
+    "strict_performance_targets": "retained; historical failures not superseded by headless timings",
+    "publication": "Git-triggered Vercel delivery; the independent .release-gate/living-road/FINISH-016-*/publication.json receipt records actual commit, provider status and HTTP identity.",
+    "delivery_override": "The standing user instruction selects automatic Git production assignment. The retained byte-budget policy's older staged-delivery description is not the active publication method; no CLI upload or manual promotion is used.",
+    "ticket_acceptance": "No pending FINISH user-acceptance cells are promoted by source checks, compilation or publication."
+  },
+  "next_action": "Push the synchronized candidate on development/main for automatic Git delivery; inspect the publication receipt and exact deployed HTTP identity. Runtime acceptance remains user-owned."
+}

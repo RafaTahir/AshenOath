@@ -20,16 +20,17 @@ func _verify_static_contract() -> void:
 	var browser_source := _read(BROWSER_HARNESS)
 	_check(not project_source.contains("QABrowserTelemetry=\"*res://scripts/qa_browser_telemetry.gd\""),
 		"QA telemetry must not be a production autoload")
-	_check(export_source.contains("name=\"Web QA Browser\"") and export_source.contains("custom_features=\"ashenoath_qa\""),
+	var qa_section := _preset_section(export_source, 1)
+	_check(qa_section.contains("name=\"Web QA Browser\"") and _preset_line(qa_section, "custom_features").contains("ashenoath_qa"),
 		"Disposable QA Web preset is missing")
-	_check(export_source.contains("export_files=PackedStringArray(\"res://scenes/main.tscn\"") and
-		export_source.contains("\"res://scripts/qa_browser_telemetry.gd\""),
+	_check(_preset_line(qa_section, "export_files").contains("res://scenes/main.tscn") and
+		_preset_line(qa_section, "export_files").contains("res://scripts/qa_browser_telemetry.gd"),
 		"QA telemetry is missing from the disposable QA Web export")
 	_check(telemetry_source.contains("URLSearchParams") and telemetry_source.contains("get('qa') === '1'"),
 		"QA telemetry is not query-gated")
 	_check(telemetry_source.contains("ashenoath_qa"),
 		"QA telemetry is not custom-feature gated")
-	_check(project_source.contains("OS.has_feature(\"ashenoath_qa\")") or _read("res://scripts/game.gd").contains("OS.has_feature(\"ashenoath_qa\")"),
+	_check(project_source.contains("OS.has_feature(\"ashenoath_qa\")") or _read("res://scripts/systems/session_service.gd").contains("OS.has_feature(\"ashenoath_qa\")"),
 		"Game does not attach QA telemetry only in the QA build")
 	_check(telemetry_source.contains("snapshot_for_game"),
 		"QA telemetry has no read-only snapshot interface")
@@ -60,13 +61,9 @@ func _verify_runtime_snapshot() -> void:
 	var game := scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_on_launch_accepted")
-	await process_frame
-	game.call("_new_game")
-	for _frame in range(180):
-		if bool(game.get("game_started")) and str(game.get("current_zone_id")) == "greyfen" and not bool(game.get("zone_transition_pending")):
-			break
-		await process_frame
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	var telemetry_script := load(TELEMETRY) as GDScript
 	_check(telemetry_script != null and telemetry_script.can_instantiate(), "QA telemetry script does not load or has a parser error")
 	if telemetry_script == null or not telemetry_script.can_instantiate():

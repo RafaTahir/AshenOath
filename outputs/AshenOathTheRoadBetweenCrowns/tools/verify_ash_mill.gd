@@ -61,6 +61,7 @@ func _run() -> void:
 	var builder := Wilderness.new()
 	builder._make_mill_shell(context)
 	builder._make_mill_landscape(context)
+	builder._make_entry_ramp(context, Vector3(-5.2, 0, -1.65), 0.48, 2.6)
 	var track := game.zone_root.find_child("AshMillCartTrack", true, false) as MeshInstance3D
 	var ridge := game.zone_root.find_child("AshMillDistantBank", true, false) as MeshInstance3D
 	check(track != null and track.material_override != null, "Mill track has no valid surface")
@@ -81,14 +82,16 @@ func _run() -> void:
 	await physics_frame
 	for x in [-8.2, -6.5, -5.2, -3.0, -2.2]:
 		for direction in [-1.0, 1.0]:
-			player.position = Vector3(x, 0, -4.6 if direction > 0 else -1.5)
+			# The authored foundation is 0.48m high. This is a horizontal clearance
+			# sweep at its supported floor, not a capsule spawned inside the slab.
+			player.position = Vector3(x, 0.49, -4.6 if direction > 0 else -1.5)
 			for step in range(30):
 				await physics_frame
 				var contact := player.move_and_collide(Vector3(0, 0, direction * 0.1))
 				check(contact == null, "Mill front snags the capsule at x=%s step=%d" % [x, step])
 				if contact != null:
 					break
-	player.position = Vector3(-5.2, 0, -4.6)
+	player.position = Vector3(-5.2, 0.49, -4.6)
 	check(player.move_and_collide(Vector3(0, 0, -5)) != null, "Original rear wall lost collision")
 	player.free()
 	game.zone_residency._bind_retirement_material(game.zone_root)

@@ -7,10 +7,15 @@ func _initialize() -> void:
 	var game = scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	game.call("_new_game")
+	if not await preload("res://tools/runtime_fixture.gd").start(game):
+		quit(1)
+		return
 	await _frames(6)
 	_verify_river(game, "greyfen")
 	game.call("_load_zone", "wychwood", Vector3(0, 1, 8))
+	if not await preload("res://tools/runtime_fixture.gd").ready(game, "wychwood"):
+		quit(1)
+		return
 	await _frames(8)
 	_verify_river(game, "wychwood")
 	var result_code := 0 if failures == 0 else 1
@@ -23,7 +28,11 @@ func _verify_river(game, zone_id: String) -> void:
 	check(river != null, "%s river is missing" % zone_id)
 	if river == null:
 		return
-	for bank_name in ["NorthBankSlope", "SouthBankSlope"]:
+	var bank_names: Array = [] if bool(river.get_meta("ground_owns_bank_surface", false)) else ["NorthBankSlope", "SouthBankSlope"]
+	if bank_names.is_empty():
+		var ground = game.zone_root.find_child("GreyfenGroundMerged", true, false) as MeshInstance3D
+		check(ground != null and ground.mesh != null, "Greyfen's integrated river-bank ground is missing")
+	for bank_name in bank_names:
 		var bank := river.find_child(bank_name, true, false) as MeshInstance3D
 		check(bank != null and bank.mesh is ArrayMesh and bank.mesh.get_surface_count() > 0, "%s %s lacks rendered geometry" % [zone_id, bank_name])
 		if bank != null:

@@ -62,6 +62,7 @@ class RegistryTests(unittest.TestCase):
     def test_current_acceptance_requires_evidence(self):
         registry = copy.deepcopy(BASELINE)
         registry["current_program"]["acceptance"]["RELEASE-001"] = "accepted"
+        registry["current_program"]["accepted_evidence"].pop("RELEASE-001", None)
         self.assertEqual(self.run_gate(registry), 1)
 
     def test_malformed_current_acceptance_rejected(self):

@@ -134,7 +134,10 @@ func _show_neighbor(edge: Dictionary) -> void:
 	if root.transform != placement: root.transform = placement
 	root.visible = true
 	host.zone_residency.begin_preview(root)
-	preload("res://scripts/connected_route_geometry.gd").open_gate(host.zone_root,target,not _crossing.is_empty())
+	# A validated resident destination may be entered. Keeping this leaf shut
+	# until _crossing exists deadlocks warm travel: collision prevents Kael
+	# reaching the plane which creates _crossing in the first place.
+	preload("res://scripts/connected_route_geometry.gd").open_gate(host.zone_root,target,true)
 	preload("res://scripts/connected_route_geometry.gd").open_gate(root,str(edge.source),true)
 	_preview_root = root
 
@@ -328,6 +331,9 @@ func publish_prepared(zone_id: String) -> bool:
 	_neighbor_view.own_world_3d = false
 	retiring_world = null
 	var camera := Camera3D.new(); camera.name = "ResidentCamera"
+	# This query-only camera copies the live view every render tick; a second
+	# physics interpolation schedule would smooth the copied pose twice.
+	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	_neighbor_view.add_child(camera); camera.current = true
 	_neighbor_scope = null; _neighbor_builder = null
 	_neighbor_view = null; _neighbor_state = "idle"

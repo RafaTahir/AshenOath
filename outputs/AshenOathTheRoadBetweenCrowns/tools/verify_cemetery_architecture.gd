@@ -26,8 +26,7 @@ func _initialize() -> void:
 			if id in ["chapel", "bell_frame", "boundary"]:
 				_check(FileAccess.file_exists(entry.get("license_file", "")), "Cemetery kit license missing: " + id)
 		_check(matched, "Cemetery resource is absent from the runtime manifest: " + id)
-		for preset_id in [0, 1, 2]:
-			_check(path.trim_prefix("res://") in str(presets.get_value("preset.%d" % preset_id, "include_filter", "")).split(","), "Cemetery production/QA/base ownership drift: " + id)
+		_check(preload("res://tools/runtime_fixture.gd").pack_owners(path) == ["opening"], "Cemetery needs exactly one opening pack owner: " + id)
 		_check(mesh.get_meta("role", "") == id, "Cemetery assembly identity mismatch: " + id)
 		var hashes: Dictionary = mesh.get_meta("source_sha256", {})
 		_check(hashes.size() == 4, "Cemetery source provenance missing: " + id)
