@@ -12,6 +12,7 @@ var spine := -1
 var head := -1
 var wings: Array[int] = []
 var carried_activity := ""
+var activity_prop := ""
 var creature_id := ""
 var creature_intent := ""
 var creature_amount := 0.0
@@ -23,11 +24,20 @@ var last_contact_cycle := -1
 var tool_contact: Node3D
 var seated_legs: Array[Dictionary] = []
 var pelvis := -1
+var ambient_weight := 0.0
+var shift_rotation := 0.0
+var shift_target := 0.0
+var next_shift := 0.0
+var idle_rng := RandomNumberGenerator.new()
+var humanoid := false
 
 func configure(body: Node3D, motion: Node) -> void:
 	actor = body
 	driver = motion
-	var skeleton := get_skeleton()
+	# configure runs while prepared actors are still outside the SceneTree.
+	var skeleton := get_parent() as Skeleton3D
+	if skeleton == null:
+		return
 	pelvis = skeleton.find_bone("pelvis")
 	for side: String in ["l", "r"]:
 		var thigh := skeleton.find_bone("thigh_" + side)
@@ -54,6 +64,10 @@ func configure(body: Node3D, motion: Node) -> void:
 		if upper >= 0 and lower >= 0 and hand >= 0:
 			arms.append({"upper":upper, "lower":lower, "hand":hand, "side":-1.0 if side == "l" else 1.0})
 	elapsed = float(absi(str(body.name).hash()) % 41) * 0.1
+	idle_rng.seed = absi((str(body.name) + str(body.get_instance_id())).hash())
+	next_shift = elapsed + idle_rng.randf_range(6.0, 10.0)
+	var role := str(body.get_meta("character_visual_role", ""))
+	humanoid = not arms.is_empty() and wings.is_empty() and role not in ["ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute", "bog_wretch", "gravebound_knight", "bell_eater", "rootbound_colossus", "ashwing", "white_hart_avatar"]
 
 func _process_modification() -> void:
 	var skeleton := get_skeleton()
@@ -61,6 +75,7 @@ func _process_modification() -> void:
 		return
 	if bool(driver.dead) or bool(driver.distance_suspended) or driver.has_active_action():
 		pose_weight = 0.0
+		ambient_weight = 0.0
 		if is_instance_valid(tool):
 			tool.visible = false
 		return
@@ -72,6 +87,7 @@ func _process_modification() -> void:
 		near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
 	var effective := activity if activity != "" else carried_activity
 	var requested := effective != "" and near and not bool(driver.story_dialogue_active)
+	_ambient_pose(skeleton, delta, near, effective)
 	_update_tool(effective, requested)
 	creature_weight = move_toward(creature_weight, creature_amount if near and not bool(driver.story_dialogue_active) else 0.0, delta*3.0)
 	if creature_weight > 0.001:
@@ -93,7 +109,7 @@ func _process_modification() -> void:
 		var base := skeleton.get_bone_pose_rotation(spine)
 		var bend := 0.12 if effective == "scavenge" else 0.0
 		skeleton.set_bone_pose_rotation(spine, base * Quaternion(Vector3.RIGHT, (bend + sin(elapsed * 1.4) * 0.007) * pose_weight))
-	if effective in ["watch", "lookout", "idle", "remember", "rest"]:
+	if effective in ["watch", "lookout", "idle", "remember", "rest", "sleep"]:
 		return
 	var forward: Vector3 = driver.get_visible_forward()
 	var right := forward.cross(Vector3.UP).normalized()
@@ -135,6 +151,14 @@ func _process_modification() -> void:
 			"care":
 				depth = 0.42 if float(arm.side) > 0 else 0.15
 				drop = 0.42
+			"eat":
+				across = -0.10 * float(arm.side)
+				depth = 0.23
+				drop = 0.12 + (0.08 * sin(elapsed * 0.9) if float(arm.side) > 0 else 0.25)
+			"pray":
+				across = -0.30 * float(arm.side)
+				depth = 0.25
+				drop = 0.21
 			"carry", "check_supplies", "sort_supplies":
 				across = -0.18*float(arm.side)
 				depth = 0.26
@@ -163,6 +187,8 @@ func _process_modification() -> void:
 
 func _update_tool(kind: String, visible_now: bool) -> void:
 	var style := str({"repair":"hammer", "forge":"hammer", "read":"book", "notice_board":"book", "check_rope":"rope", "well":"rope", "bake":"bread", "kitchen":"bread", "care":"cloth", "carry":"supply", "check_supplies":"supply", "sort_supplies":"supply", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "herb_stall":"bowl"}.get(kind, ""))
+	if activity_prop != "":
+		style = activity_prop
 	if style != "" and style != tool_kind:
 		if is_instance_valid(tool):
 			tool.queue_free()
@@ -171,6 +197,24 @@ func _update_tool(kind: String, visible_now: bool) -> void:
 		tool_contact = tool.find_child("ForgedHead", true, false) as Node3D if is_instance_valid(tool) and style == "hammer" else null
 	if is_instance_valid(tool):
 		tool.visible = visible_now and style == tool_kind
+
+func _ambient_pose(skeleton: Skeleton3D, delta: float, near: bool, effective: String) -> void:
+	var resting := humanoid and creature_id == "" and near and float(driver.current_speed_mps) < 0.08 and not bool(driver.story_dialogue_active)
+	# Workstation hands and feet retain their anchors; sway is idle-only. Bone
+	# modifiers compose over each graph pose, never accumulate on the last pose.
+	ambient_weight = move_toward(ambient_weight, 1.0 if resting else 0.0, delta * 3.0)
+	if ambient_weight <= 0.001 or spine < 0:
+		return
+	var amplitude := 0.007 if effective == "sleep" else 0.015
+	var breath := sin(elapsed * TAU * 0.22) * amplitude * ambient_weight
+	var scale := skeleton.get_bone_pose_scale(spine)
+	skeleton.set_bone_pose_scale(spine, scale * Vector3(1.0 + breath * 0.30, 1.0 + breath, 1.0 + breath * 0.65))
+	if elapsed >= next_shift:
+		next_shift = elapsed + idle_rng.randf_range(6.0, 10.0)
+		shift_target = idle_rng.randf_range(-0.014, 0.014)
+	shift_rotation = lerpf(shift_rotation, shift_target, 1.0 - exp(-1.7 * delta))
+	if effective in ["", "rest", "idle", "watch", "lookout", "remember"]:
+		skeleton.set_bone_pose_rotation(spine, skeleton.get_bone_pose_rotation(spine) * Quaternion(Vector3.FORWARD, shift_rotation * ambient_weight))
 
 func _creature_pose(skeleton: Skeleton3D) -> void:
 	var recovery := creature_intent == "recovery"

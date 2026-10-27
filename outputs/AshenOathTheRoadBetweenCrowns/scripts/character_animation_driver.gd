@@ -26,11 +26,14 @@ const STATE_ALIASES := {
 	"attack_light": ["swordslash", "attack", "punch"],
 	"attack_heavy": ["swordslash", "attack", "punch"],
 	"dodge": ["roll", "dodge", "run"],
+	"block": ["block", "parry", "idleweapon", "idlesword", "idle"],
 	"parry": ["parry", "block", "hitreceive", "hitrecieve", "receivehit", "recievehit"],
+	"greet": ["wave", "interact", "talk", "idle"],
 	"draw": ["sworddraw", "draw", "interact", "idle"],
 	"sheath": ["swordsheath", "sheath", "interact", "idle"],
 	"beam_cast": ["interact", "cast", "attack"],
 	"hit": ["hitreceive", "hitrecieve", "receivehit", "recievehit", "hitreact", "spawn"],
+	"hurt": ["hitreceive", "hitrecieve", "receivehit", "recievehit", "hitreact", "spawn"],
 	"death": ["death", "die"]
 }
 
@@ -42,13 +45,16 @@ const ACTION_PRIORITY := {
 	"work": 1,
 	"story_offer": 1,
 	"story_explain": 1,
+	"greet": 1,
 	"dodge": 2,
 	"attack": 3,
 	"attack_light": 3,
 	"attack_heavy": 3,
 	"beam_cast": 3,
 	"parry": 4,
+	"block": 4,
 	"hit": 5,
+	"hurt": 5,
 	"death": 100,
 }
 const LOOPING_ACTIONS := {"beam_cast": true}
@@ -101,12 +107,15 @@ var locomotion_step_index := 0
 var story_gesture_remaining := 0.0
 var story_dialogue_active := false
 var life_modifier
+var animation_graph
+var action_duration := 0.0
 static var _resolved_bindings: Dictionary = {}
 
 func _ready() -> void:
 	# Imported actors are configured before their visual root is parented. Defer
 	# timer startup until this driver actually belongs to the SceneTree.
 	_start_manual_tick(true)
+	_reconcile_clock()
 
 func configure(root: Node3D, clips: Dictionary) -> bool:
 	character_root = root
@@ -161,9 +170,25 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 		contract_errors.append("required idle clip is missing")
 		contract_failed.emit(contract_errors[0])
 		return false
-	if not animation_player.animation_finished.is_connected(_on_animation_finished):
-		animation_player.animation_finished.connect(_on_animation_finished)
-	set_process(true)
+	# Resolve aliases once; AnimationPlayer now supplies libraries, never playback.
+	for state: String in STATE_ALIASES:
+		_clip_for(state)
+	var directions := {}
+	for state: String in ["walk_back", "run_back"]:
+		directions[state] = _playback_direction_for_state(state) > 0.0
+	if animation_graph != null and is_instance_valid(animation_graph.tree):
+		animation_graph.tree.free()
+	animation_graph = preload("res://scripts/systems/character_animation_graph.gd").new()
+	var graph_clips := {}
+	for state: String in resolved_clip_map:
+		if resolved_clip_map[state] != StringName():
+			graph_clips[state] = resolved_clip_map[state]
+	if not animation_graph.configure(self, animation_player, graph_clips, directions, locomotion_height_scale):
+		contract_errors.append("AnimationTree cannot bind its animation root")
+		contract_failed.emit(contract_errors.back())
+		return false
+	_ensure_life_modifier()
+	_reconcile_clock()
 	_play_state("idle", 0.0)
 	return true
 
@@ -194,8 +219,10 @@ func restore_clock(policy: Dictionary) -> void:
 func _reconcile_clock() -> void:
 	var manual := externally_ticked or manual_update_interval > 0.0
 	for player: AnimationPlayer in animation_players:
-		player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL if manual else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
-		player.active = not distance_suspended
+		player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+		player.active = false
+	if animation_graph != null:
+		animation_graph.activate(distance_suspended)
 	set_process(not distance_suspended and not externally_ticked and not manual)
 	if is_instance_valid(manual_tick_timer):
 		if distance_suspended or externally_ticked or manual_update_interval <= 0.0:
@@ -219,7 +246,7 @@ func advance_external(delta: float) -> void:
 	_advance_animation(delta)
 
 func _advance_animation(delta: float) -> void:
-	if animation_player == null or distance_suspended:
+	if animation_graph == null or distance_suspended or not is_inside_tree():
 		return
 	if story_gesture_remaining > 0.0:
 		story_gesture_remaining = maxf(story_gesture_remaining - delta, 0.0)
@@ -232,26 +259,14 @@ func _advance_animation(delta: float) -> void:
 			return
 		delta = manual_update_accumulator
 		manual_update_accumulator = 0.0
-	if manual_update_interval > 0.0 or externally_ticked:
-		# Manual NPC animation is deliberately advanced only at its requested
-		# rate. Keeping imported AnimationPlayers active between these ticks
-		# still makes the Compatibility renderer evaluate every skeleton every
-		# rendered frame, defeating the distance/quality budget.
-		current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
-		var manual_playback_direction := _playback_direction_for_state(current_state)
-		for player in animation_players:
-			player.speed_scale = current_playback_scale * manual_playback_direction
-			player.advance(delta)
-		if action_active:
-			action_elapsed += delta
-		_emit_locomotion_step_events()
-		return
 	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
-	var playback_direction := _playback_direction_for_state(current_state)
-	for player in animation_players:
-		player.speed_scale = current_playback_scale * playback_direction
+	animation_graph.set_gait(current_speed_mps)
+	animation_graph.set_action_rate(current_playback_scale)
+	animation_graph.advance(delta)
 	if action_active:
 		action_elapsed += delta
+		if not dead and not action_looping and action_elapsed >= action_duration:
+			_finish_action()
 	_emit_locomotion_step_events()
 
 func set_update_rate_hz(rate_hz: float) -> void:
@@ -284,7 +299,7 @@ func is_valid() -> bool:
 func is_evaluation_scheduled() -> bool:
 	# Manual mixers stay active but evaluate only explicit scheduled advances.
 	# Distance suspension disables both the schedule and mixer.
-	return is_valid() and not distance_suspended and (externally_ticked or manual_update_interval > 0.0 or animation_player.active)
+	return is_valid() and not distance_suspended and animation_graph != null and animation_graph.scheduled()
 
 func set_distance_suspended(suspended: bool) -> void:
 	if distance_suspended == suspended:
@@ -317,7 +332,7 @@ func set_locomotion(speed_ratio: float, _direction: Vector3, grounded: bool) -> 
 	# Do not guess metres/second from the magnitude of their direction argument:
 	# legacy callers use both unit directions and velocities here.
 	physical_motion_available = false
-	current_speed_mps = 0.0
+	current_speed_mps = maxf(speed_ratio, 0.0) * 2.0
 	_update_locomotion(speed_ratio, _direction, grounded)
 
 func set_locomotion_motion(world_velocity: Vector3, grounded: bool, reference_speed: float = 5.3, running: bool = false) -> void:
@@ -407,7 +422,7 @@ func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time
 		var requested_priority: int = int(ACTION_PRIORITY.get(action_name, 0))
 		if not force and requested_priority < active_priority:
 			return false
-		if not force and current_state == action_name and animation_player.is_playing():
+		if not force and current_state == action_name:
 			return false
 	var clip := _clip_for(action_name)
 	if clip == StringName():
@@ -423,9 +438,9 @@ func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time
 	# clock. The general locomotion/action speed clamp cannot express that rate.
 	target_playback_scale = animation_player.get_animation(clip).length / duration if duration > 0.0 else clampf(playback_scale, 0.55, 1.45)
 	current_playback_scale = target_playback_scale
-	for player in animation_players:
-		player.speed_scale = current_playback_scale
-	_play_clip_all(clip, clampf(blend_time, 0.0, 0.25))
+	action_duration = duration if duration > 0.0 else animation_player.get_animation(clip).length / maxf(target_playback_scale, 0.01)
+	animation_graph.transition(action_name, blend_time, true)
+	animation_graph.set_action_rate(current_playback_scale)
 	action_started.emit(action_name)
 	return true
 
@@ -550,7 +565,9 @@ func set_dead() -> void:
 	current_playback_scale = 1.0
 	var clip := _clip_for("death")
 	if clip != StringName():
-		_play_clip_all(clip, 0.08)
+		active_action_clip = clip
+		animation_graph.transition("death", 0.08, true)
+		animation_graph.set_action_rate(1.0)
 
 func set_life_activity(kind: String) -> void:
 	if kind == "":
@@ -575,6 +592,8 @@ func clear_life_activity() -> void:
 	if life_modifier != null:
 		life_modifier.activity = ""
 		life_modifier.station = {}
+		life_modifier.activity_prop = ""
+		life_modifier.carried_activity = ""
 	if presentation_state.begins_with("life:"):
 		presentation_state = ""
 		current_state = ""
@@ -598,6 +617,13 @@ func set_carried_activity(kind: String) -> void:
 	if life_modifier != null:
 		life_modifier.carried_activity = kind
 
+func set_activity_prop(kind: String) -> void:
+	if kind == "" and life_modifier == null:
+		return
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.activity_prop = kind
+
 func set_creature_presence(id: String, intent: String, amount: float) -> void:
 	_ensure_life_modifier()
 	if life_modifier != null:
@@ -614,6 +640,10 @@ func _ensure_life_modifier() -> void:
 
 func get_animation_player() -> AnimationPlayer:
 	return animation_player
+
+func sample_pose() -> void:
+	if animation_graph != null:
+		animation_graph.advance(0.0)
 
 func get_playback_direction_for_state(state: String) -> float:
 	# Expose the resolved direction to focused motion tests. A reverse gait may
@@ -642,7 +672,8 @@ func get_contract_report() -> Dictionary:
 		"current_local_direction": current_local_direction,
 		"action_active": action_active,
 		"action_elapsed": action_elapsed,
-		"root_motion_disabled": root_motion_disabled
+		"root_motion_disabled": root_motion_disabled,
+		"pose_owner": "AnimationTree"
 	}
 
 func get_locomotion_state() -> String:
@@ -664,46 +695,17 @@ func get_action_progress() -> float:
 	var animation := animation_player.get_animation(active_action_clip)
 	if animation == null or animation.length <= 0.0:
 		return 0.0
-	return clampf(animation_player.current_animation_position / animation.length, 0.0, 1.0)
+	return clampf(action_elapsed / maxf(action_duration, 0.01), 0.0, 1.0)
 
 func _play_state(state: String, blend: float) -> void:
-	if current_state == state and animation_player.is_playing():
+	if animation_graph == null or current_state == state:
 		return
-	var clip := _clip_for(state)
-	if clip == StringName():
-		clip = _clip_for("idle")
-	if clip == StringName():
-		return
-	var previous_state: String = current_state
-	var previous_clip: StringName = StringName(animation_player.current_animation)
-	var preserve_phase: bool = previous_state in LOCOMOTION_STATES and state in LOCOMOTION_STATES and animation_player.is_playing()
-	var normalized_phase := -1.0
-	if preserve_phase and animation_player.has_animation(previous_clip):
-		var previous_animation: Animation = animation_player.get_animation(previous_clip)
-		if previous_animation.length > 0.0:
-			normalized_phase = fposmod(animation_player.current_animation_position / previous_animation.length, 1.0)
-			if previous_clip != clip:
-				# Preserve cycle frequency while the new physical cadence settles.
-				current_playback_scale *= animation_player.get_animation(clip).length / previous_animation.length
 	current_state = state
-	var playback_direction: float = _playback_direction_for_state(state)
-	if preserve_phase and previous_clip == clip:
-		# Walk, lateral fallback and backstep can share one authored clip. Keep
-		# its exact pose, including on a playback-direction reversal. Calling
-		# play()/seek(0) here caused a repeated foot snap during turns.
-		for player in animation_players:
-			player.speed_scale = current_playback_scale * playback_direction
-	else:
-		if state in LOCOMOTION_STATES and not preserve_phase:
-			current_playback_scale = target_playback_scale
-		_play_clip_all(clip, blend, playback_direction, normalized_phase)
-	if preserve_phase and normalized_phase >= 0.0:
-		last_locomotion_clip = clip
-		last_locomotion_state = StringName(state)
-		last_locomotion_phase = normalized_phase
-	else:
-		last_locomotion_clip = StringName()
-		last_locomotion_state = StringName()
+	animation_graph.transition(state, blend)
+	animation_graph.set_gait(current_speed_mps)
+	if state not in LOCOMOTION_STATES and state != "idle":
+		animation_graph.set_action_rate(target_playback_scale)
+	if state not in LOCOMOTION_STATES:
 		last_locomotion_phase = -1.0
 		locomotion_phase_distance = 0.0
 
@@ -788,18 +790,12 @@ func _authored_directional_clip(state: String) -> StringName:
 func _clip_key(value: String) -> String:
 	return value.to_lower().replace("characterarmature", "").replace("humanarmature", "").replace("human armature", "").replace("|", "").replace("_", "").replace("-", "").replace(" ", "")
 
-func _on_animation_finished(_animation: StringName) -> void:
+func _finish_action() -> void:
 	if dead:
 		return
 	if action_active and action_looping:
 		return
 	if not action_active:
-		# Locomotion and presentation clips are allowed to be authored as either
-		# looping or one-shot clips. Re-enter the same state when a one-shot ends
-		# so a short imported clip cannot leave a character frozen.
-		var sustained_state := current_state
-		if sustained_state != "":
-			_play_state(sustained_state, 0.06)
 		return
 	var finished_state := current_state
 	action_active = false
@@ -808,6 +804,8 @@ func _on_animation_finished(_animation: StringName) -> void:
 	action_elapsed = 0.0
 	current_state = ""
 	action_finished.emit(finished_state)
+	if action_active or dead:
+		return
 	if story_dialogue_active and finished_state.begins_with("story_"):
 		story_gesture_remaining = 0.0
 		set_dialogue_pose(true)
@@ -835,19 +833,6 @@ func _collect_animation_players(root: Node) -> void:
 	for child in root.get_children():
 		_collect_animation_players(child)
 
-func _play_clip_all(clip: StringName, blend: float, playback_direction: float = 1.0, normalized_phase: float = -1.0) -> void:
-	for player in animation_players:
-		if player.has_animation(clip):
-			player.speed_scale = current_playback_scale * playback_direction
-			player.play(clip, blend, 1.0, playback_direction < 0.0)
-			var clip_length: float = player.get_animation(clip).length
-			var position: float = normalized_phase * clip_length if normalized_phase >= 0.0 else (clip_length if playback_direction < 0.0 else 0.0)
-			player.seek(position, true)
-			# Sample the first pose immediately. This is required for manual players,
-			# but is also important for a newly spawned actor that can be paused for
-			# dialogue or capture before its first idle callback.
-			player.advance(0.0)
-
 func _playback_direction_for_state(state: String) -> float:
 	if state not in ["walk_back", "run_back"]:
 		return 1.0
@@ -860,35 +845,19 @@ func _playback_direction_for_state(state: String) -> float:
 	return 1.0 if authored_clip != StringName() and resolved_clip == authored_clip else -1.0
 
 func _emit_locomotion_step_events() -> void:
-	if animation_player == null or action_active or current_state not in LOCOMOTION_STATES:
+	if animation_graph == null or action_active or not grounded or current_speed_mps <= 0.045 or current_state not in LOCOMOTION_STATES:
 		last_locomotion_clip = StringName()
 		last_locomotion_state = StringName()
 		last_locomotion_phase = -1.0
 		locomotion_phase_distance = 0.0
 		return
-	var clip := _clip_for(current_state)
-	if clip == StringName() or not animation_player.has_animation(clip):
-		return
-	var animation := animation_player.get_animation(clip)
-	if animation == null or animation.length <= 0.0:
-		return
-	var phase := fposmod(animation_player.current_animation_position / animation.length, 1.0)
-	if last_locomotion_clip != clip or last_locomotion_state != StringName(current_state) or last_locomotion_phase < 0.0:
-		last_locomotion_clip = clip
-		last_locomotion_state = StringName(current_state)
+	var phase: float = animation_graph.gait_phase
+	if last_locomotion_phase < 0.0:
 		last_locomotion_phase = phase
 		locomotion_phase_distance = 0.0
 		return
-	# Use the animation position itself as the clock. Some imported clips report
-	# increasing positions even when played backwards, so signed phase tests can
-	# mistake a normal reverse frame for multiple contacts. Absolute wrapped
-	# phase distance stays correct for forward and reverse playback alike.
-	var phase_delta := phase - last_locomotion_phase
-	if phase_delta > 0.5:
-		phase_delta -= 1.0
-	elif phase_delta < -0.5:
-		phase_delta += 1.0
-	locomotion_phase_distance += absf(phase_delta)
+	# The normalized walk/run graph shares one cycle clock; blending never seeks.
+	locomotion_phase_distance += maxf(phase - last_locomotion_phase, 0.0)
 	while locomotion_phase_distance >= 0.5:
 		locomotion_phase_distance -= 0.5
 		locomotion_step.emit(StringName("left") if locomotion_step_index % 2 == 0 else StringName("right"))

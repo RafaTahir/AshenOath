@@ -1,6 +1,7 @@
 extends RefCounted
 
 const Palette = preload("res://scripts/systems/character_palette.gd")
+const RoutineDirector = preload("res://scripts/systems/npc_routine_director.gd")
 
 ## Authored identity recipes shared by wardrobe, facial attitude and staging.
 ## Heights and authored faces remain owned by the existing imported rigs.
@@ -66,11 +67,11 @@ const WORKSTATIONS := {
 static func life_data() -> Dictionary:
 	if _life_data.is_empty():
 		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/cast_life.json"))
-		if data is Dictionary and int(data.get("version", 0)) == 1:
+		if data is Dictionary and int(data.get("version", 0)) in [1, 2]:
 			_life_data = data
 	return _life_data
 
-static func routine(id: String, zone: String, state, quests, phase: String) -> Dictionary:
+static func routine(id: String, zone: String, state, quests, phase: String, minutes: float = -1.0) -> Dictionary:
 	var definition: Dictionary = life_data().get("zones", {}).get(zone, {}).get(id, {})
 	if id == "saga_maren":
 		var location: Dictionary = preload("res://scripts/saga_catalog.gd").person_location(id, quests)
@@ -103,7 +104,15 @@ static func routine(id: String, zone: String, state, quests, phase: String) -> D
 		var social: Array = definition.social
 		path = [Vector3(social[0],social[1],social[2]), Vector3(work[0],work[1],work[2])]
 		activities = ["rest", activity]
-	return {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "station":WORKSTATIONS.get(id, {}), "revision":str([phase,resolved,state.get_flag("final_covenant", "") if state != null else ""])}
+	var result := {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "station":WORKSTATIONS.get(id, {}), "revision":str([phase,resolved,state.get_flag("final_covenant", "") if state != null else ""])}
+	if minutes >= 0.0:
+		var locations := definition.duplicate(true)
+		locations.work = work
+		# Work intent always resolves the consequence-specific occupation, not a
+		# temporary rest pose from the legacy phase-only projection above.
+		result.activity = activity
+		result = RoutineDirector.resolve(life_data(), id, locations, result, minutes)
+	return result
 
 static func presence_profile(role: String, seed: String = "") -> Dictionary:
 	var words := " " + (role + " " + seed).to_lower().replace("_", " ").replace("-", " ") + " "

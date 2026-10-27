@@ -1,5 +1,96 @@
 {
-  "version": 1,
+  "version": 2,
+  "clock": "day_night.world_time_minutes",
+  "schedules_by_actor": {
+    "blacksmith_tor":"smith_day", "forge_helper":"smith_day",
+    "sister_anwen":"cleric_day", "shrine_pilgrim":"cleric_day",
+    "mira":"worker_day", "saga_nessa":"baker_day", "saga_jory":"watch_day",
+    "rook":"worker_day", "farmer_toma":"worker_day", "widow_elna":"villager_day",
+    "saga_iven":"worker_day", "saga_edda":"worker_day", "saga_dain":"worker_day",
+    "mill_second_worker":"worker_day", "saga_ressa":"worker_day", "saga_nera":"crossing_watch",
+    "saga_tavin":"worker_day", "captain_senn":"watch_day", "saga_lysa":"scribe_day",
+    "vargan_record_keeper":"scribe_day", "vargan_steward":"scribe_day",
+    "vargan_servant":"worker_day", "saga_odran":"worker_day", "saga_maelin":"worker_day",
+    "saga_oris":"worker_day", "saga_maren":"worker_day"
+  },
+  "routines": {
+    "smith_day": [
+      {"start":0,"end":330,"action":"sleep","targets":["rest"],"sleeping":true,"prop":""},
+      {"start":330,"end":420,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":420,"end":720,"action":"forge","targets":["work"],"prop":"hammer"},
+      {"start":720,"end":780,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":780,"end":1080,"action":"forge","targets":["work"],"prop":"hammer"},
+      {"start":1080,"end":1140,"action":"carry","targets":["errand","work"],"prop":"supply"},
+      {"start":1140,"end":1200,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":1200,"end":1440,"action":"rest","targets":["rest"],"prop":""}
+    ],
+    "worker_day": [
+      {"start":0,"end":330,"action":"sleep","targets":["rest"],"sleeping":true,"prop":""},
+      {"start":330,"end":420,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":420,"end":720,"action":"work","targets":["work"]},
+      {"start":720,"end":780,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":780,"end":1080,"action":"work","targets":["work"]},
+      {"start":1080,"end":1140,"action":"carry","targets":["errand","work"],"prop":"supply"},
+      {"start":1140,"end":1200,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":1200,"end":1440,"action":"rest","targets":["rest"],"prop":""}
+    ],
+    "baker_day": [
+      {"start":0,"end":270,"action":"sleep","targets":["rest"],"sleeping":true,"prop":""},
+      {"start":270,"end":720,"action":"work","targets":["work"]},
+      {"start":720,"end":780,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":780,"end":1080,"action":"work","targets":["work"]},
+      {"start":1080,"end":1140,"action":"carry","targets":["work","errand"],"prop":"supply"},
+      {"start":1140,"end":1200,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":1200,"end":1440,"action":"rest","targets":["rest"],"prop":""}
+    ],
+    "cleric_day": [
+      {"start":0,"end":330,"action":"sleep","targets":["rest"],"sleeping":true,"prop":""},
+      {"start":330,"end":390,"action":"pray","targets":["rest"],"prop":""},
+      {"start":390,"end":420,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":420,"end":720,"action":"work","targets":["work"]},
+      {"start":720,"end":780,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":780,"end":1080,"action":"work","targets":["work"]},
+      {"start":1080,"end":1140,"action":"carry","targets":["errand","work"],"prop":"supply"},
+      {"start":1140,"end":1200,"action":"pray","targets":["rest"],"prop":""},
+      {"start":1200,"end":1440,"action":"rest","targets":["rest"],"prop":""}
+    ],
+    "scribe_day": [
+      {"start":0,"end":330,"action":"sleep","targets":["rest"],"sleeping":true,"prop":""},
+      {"start":330,"end":420,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":420,"end":720,"action":"work","targets":["work"]},
+      {"start":720,"end":780,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":780,"end":1110,"action":"work","targets":["work"]},
+      {"start":1110,"end":1200,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":1200,"end":1440,"action":"rest","targets":["rest"],"prop":""}
+    ],
+    "watch_day": [
+      {"start":0,"end":330,"action":"sleep","targets":["rest"],"sleeping":true,"prop":""},
+      {"start":330,"end":420,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":420,"end":720,"action":"work","targets":["work"]},
+      {"start":720,"end":780,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":780,"end":1140,"action":"work","targets":["work"]},
+      {"start":1140,"end":1200,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":1200,"end":1440,"action":"rest","targets":["rest"],"prop":""}
+    ],
+    "crossing_watch": [
+      {"start":0,"end":330,"action":"work","targets":["work"]},
+      {"start":330,"end":420,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":420,"end":1080,"action":"work","targets":["work"]},
+      {"start":1080,"end":1140,"action":"carry","targets":["errand","work"],"prop":"supply"},
+      {"start":1140,"end":1200,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":1200,"end":1440,"action":"work","targets":["work"]}
+    ],
+    "villager_day": [
+      {"start":0,"end":330,"action":"sleep","targets":["rest"],"sleeping":true,"prop":""},
+      {"start":330,"end":420,"action":"eat","targets":["rest"],"prop":"bread"},
+      {"start":420,"end":720,"action":"work","targets":["work"]},
+      {"start":720,"end":780,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":780,"end":1080,"action":"work","targets":["work"]},
+      {"start":1080,"end":1140,"action":"carry","targets":["work","errand"],"prop":"supply"},
+      {"start":1140,"end":1200,"action":"eat","targets":["social"],"prop":"bread"},
+      {"start":1200,"end":1440,"action":"rest","targets":["rest"],"prop":""}
+    ]
+  },
   "zones": {
     "greyfen": {
       "blacksmith_tor": {"work":[9.3,0,-0.2],"errand":[10.5,0,1],"rest":[9.5,0,3],"line":"Mind the end of that. It stays hot after it stops glowing.","after_quest":"saga_gre_q03","after_line":"A door that closes properly. That is useful work."},

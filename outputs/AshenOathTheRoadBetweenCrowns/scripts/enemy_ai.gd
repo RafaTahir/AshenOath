@@ -1504,7 +1504,7 @@ func _attach_boss_identity_to_bone(mapped: Node3D, bone_name: String, socket_nam
 	if torso < 0:
 		push_error("%s requires the authored %s bone" % [enemy_id, bone_name])
 		return
-	animation_driver.get_animation_player().advance(0.0)
+	animation_driver.sample_pose()
 	skeleton.force_update_all_bone_transforms()
 	var skeleton_to_actor := Transform3D.IDENTITY
 	var ancestor: Node = skeleton
@@ -1619,7 +1619,7 @@ func _attach_humanoid_sword(label: String) -> void:
 	socket.add_child(grip)
 	# Derive the authored grip in actor space, including offline zone builds.
 	# Reading global transforms here is invalid before the zone enters the tree.
-	animation_driver.get_animation_player().advance(0.0)
+		animation_driver.sample_pose()
 	skeleton.force_update_all_bone_transforms()
 	var skeleton_to_actor := Transform3D.IDENTITY
 	var ancestor: Node = skeleton

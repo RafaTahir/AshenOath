@@ -186,8 +186,15 @@ func _on_update_timer_timeout() -> void:
 					head_modifier.look_pitch = -clampf(atan2(to_target.y, maxf(Vector2(to_target.x, to_target.z).length(), 0.1)), -0.15, 0.15)
 	# Brief, staggered breaks in eye contact rather than a permanent player stare.
 	var attention_phase := fmod(attention_elapsed + float(absi(role_id.hash()) % 37) * 0.1, 6.8)
-	if attention_phase > 5.6:
+	if not conversation_active and role_id not in NATIVE_MONSTER_ROLES and attention_phase > 5.6:
 		wanted_look = 0.16 * sin((attention_phase - 5.6) / 1.2 * PI)
+	# One head owner supplies gentle idle scanning as well as directed gaze.
+	# Conversation, greeting nods and explicit focus retain their authored view.
+	if not conversation_active and role_id not in NATIVE_MONSTER_ROLES and (head_modifier == null or head_modifier.gesture_time <= 0.0):
+		var motion_ref: WeakRef = head_modifier.get_parent().get_meta("character_motion_owner", null) if head_modifier != null else null
+		var motion: Node = motion_ref.get_ref() if motion_ref != null else null
+		if is_instance_valid(motion) and not motion.has_active_action() and not motion.story_dialogue_active and motion.presentation_state in ["", "life:idle", "life:rest", "life:watch", "life:lookout"] and float(motion.current_speed_mps) < 0.08:
+			wanted_look += sin(attention_elapsed * 0.38 + float(absi(role_id.hash()) % 17)) * 0.24
 	look_offset = lerpf(look_offset, wanted_look, 1.0 - exp(-5.0 * step))
 	_apply_eye_look()
 	if blink_remaining > 0.0:

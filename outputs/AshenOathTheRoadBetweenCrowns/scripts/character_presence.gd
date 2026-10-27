@@ -53,7 +53,7 @@ static func eye_height(actor: Node3D) -> float:
 	var spec: Dictionary = actor.get_meta("character_role_spec", {})
 	return float(spec.get("height", 1.72)) * 0.90
 
-static func can_see(actor: Node3D, target: Node3D, radius: float) -> bool:
+static func can_see(actor: Node3D, target: Node3D, radius: float, hear_approach: bool = false) -> bool:
 	if not is_instance_valid(actor) or not is_instance_valid(target) or not actor.is_inside_tree() or not target.is_inside_tree():
 		return false
 	if actor.global_position.distance_squared_to(target.global_position) > radius * radius:
@@ -62,7 +62,7 @@ static func can_see(actor: Node3D, target: Node3D, radius: float) -> bool:
 	var forward := actor.global_basis.z if bool(actor.get_meta("source_forward_positive_z", false)) else -actor.global_basis.z
 	if actor.has_meta("cast_forward_axis"):
 		forward = (actor.global_basis*(actor.get_meta("cast_forward_axis") as Vector3)).normalized()
-	if offset.length_squared() > 1.0 and forward.dot(offset.normalized()) < -0.15:
+	if not hear_approach and offset.length_squared() > 1.0 and forward.dot(offset.normalized()) < -0.15:
 		return false
 	var query := PhysicsRayQueryParameters3D.create(actor.global_position + Vector3.UP * eye_height(actor), target.global_position + Vector3.UP * eye_height(target), 1)
 	query.collide_with_areas = false

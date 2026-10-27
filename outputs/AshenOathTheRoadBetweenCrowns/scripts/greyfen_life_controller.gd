@@ -7,6 +7,7 @@ const ConsequenceRoutines = preload("res://scripts/village_consequence_routines.
 const Presence = preload("res://scripts/character_presence.gd")
 const CastProfile = preload("res://scripts/story_cast_profile.gd")
 const WorldScenes = preload("res://scripts/story_world_scenes.gd")
+const RoutineDirector = preload("res://scripts/systems/npc_routine_director.gd")
 
 const WALK_ACCELERATION := 1.65
 const WALK_BRAKING := 2.8
@@ -76,6 +77,7 @@ var activity_reservations: Dictionary = {}
 var social_cooldown := 9.0
 var regional_only := false
 var routine_phase := ""
+var routine_minute := -1
 var cast_revision := 0
 var social_scene: Dictionary = {}
 var world_scene_clock := 0.0
@@ -154,7 +156,7 @@ func enroll_region() -> void:
 		var driver := node.find_child("CharacterAnimationDriver", true, false)
 		if driver == null:
 			continue
-		var routine := CastProfile.routine(id, zone_id, host.story_state, host.quests, routine_phase)
+		var routine := CastProfile.routine(id, zone_id, host.story_state, host.quests, routine_phase, _routine_minutes())
 		var path: Array = []
 		for point: Vector3 in routine.path:
 			path.append(host.validate_walkable_position(point))
@@ -254,6 +256,10 @@ func _process(delta: float) -> void:
 	var decision_tick: bool = simulation_tick_accumulator >= 1.0 / _simulation_hz()
 	if decision_tick:
 		simulation_tick_accumulator = 0.0
+		var minute := floori(_routine_minutes())
+		if minute != routine_minute:
+			routine_minute = minute
+			story_dirty = true
 	line_cooldown = max(line_cooldown - delta, 0.0)
 	social_cooldown = maxf(social_cooldown - delta, 0.0)
 	if decision_tick and story_dirty:
@@ -474,6 +480,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		return
 	entry.bark_cooldown = maxf(float(entry.get("bark_cooldown", 0.0)) - delta, 0.0)
 	if Presence.protected(node):
+		_cancel_greeting(entry)
 		_release_activity(entry)
 		entry.social_time = 0.0
 		Presence.release(node, "social", get_instance_id())
@@ -481,6 +488,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		entry.travel_direction = Vector3.ZERO
 		return
 	if float(entry.get("reaction_time", 0.0)) > 0.0:
+		_cancel_greeting(entry)
 		_release_activity(entry)
 		var threat: Vector3 = entry.get("threat_position", player.global_position)
 		if _seek_safety(entry, threat, delta):
@@ -506,28 +514,16 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
 		return
+	if not entry.pending_routine.is_empty() and bool(entry.profile.get("scheduled", false)):
+		_cancel_greeting(entry)
+		if bool(entry.get("activity_active", false)):
+			_end_activity(entry)
+		elif float(entry.motion_speed) > 0.05:
+			_brake_actor(entry, delta)
+			return
 	if not bool(entry.get("activity_active", false)) and float(entry.get("motion_speed", 0.0)) < 0.05:
 		_apply_pending_routine(entry)
-	var distance_to_player := node.global_position.distance_to(player.global_position)
-	if distance_to_player > 3.4:
-		entry.greeted_on_approach = false
-	if distance_to_player < 1.65 or (distance_to_player < 2.4 and player.velocity.length() < 0.35):
-		_release_activity(entry)
-		entry.pause = max(float(entry.pause), 1.2)
-		_brake_actor(entry, delta)
-		if float(entry.motion_speed) < 0.05:
-			_face(node, player.global_position, delta)
-		if social_scene.is_empty() and host.hud.ambient_subtitle_available(get_instance_id()) and line_cooldown <= 0.0 and (not bool(entry.named) or bool(entry.get("regional", false))) and not bool(entry.get("greeted_on_approach", false)) and float(entry.bark_cooldown) <= 0.0 and float(entry.motion_speed) < 0.05:
-			line_cooldown = 15.0
-			entry.bark_cooldown = 75.0
-			entry.greeted_on_approach = true
-			var remark := _line_for_actor(entry)
-			var speech_duration := 0.0
-			if host.audio != null:
-				speech_duration = float(host.audio.play_nearby_speech(str(entry.id), remark, node))
-			line_cooldown = maxf(line_cooldown, speech_duration + 4.0)
-			if social_scene.is_empty():
-				host.hud.show_ambient_subtitle(get_instance_id(), str(entry.profile.get("occupation", "Villager")).capitalize(), remark, maxf(5.5, speech_duration + 0.3))
+	if _tick_greeting(entry, delta):
 		return
 	if bool(entry.get("activity_active", false)):
 		_update_activity(entry, delta)
@@ -680,10 +676,61 @@ func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: No
 		node.set_meta("cast_forward_offset", atan2(-local.x,-local.z))
 	return entry
 
+func _tick_greeting(entry: Dictionary, delta: float) -> bool:
+	var node: Node3D = entry.node
+	var distance := node.global_position.distance_to(player.global_position)
+	if distance > 4.6:
+		entry.greeted_on_approach = false
+	var remaining := float(entry.get("greeting_remaining", 0.0))
+	if remaining <= 0.0:
+		if distance > 4.0 or bool(entry.profile.get("sleeping", false)) or bool(entry.get("greeted_on_approach", false)) or float(entry.bark_cooldown) > 0.0 or not social_scene.is_empty():
+			return false
+		if not is_instance_valid(entry.driver) or entry.driver.has_active_action() or not Presence.can_see(node, player, 4.0, true):
+			return false
+		entry.greeted_on_approach = true
+		entry.bark_cooldown = 60.0
+		remaining = 3.2
+		entry.greeting_started = false
+	entry.greeting_remaining = maxf(remaining - delta, 0.0)
+	_brake_actor(entry, delta)
+	if float(entry.motion_speed) <= 0.05:
+		_face(node, player.global_position, delta)
+		var heading: Vector3 = entry.driver.get_visible_forward()
+		var to_player := player.global_position - node.global_position
+		to_player.y = 0.0
+		if not bool(entry.get("greeting_started", false)) and (to_player.length_squared() < 0.01 or heading.dot(to_player.normalized()) > 0.85):
+			entry.greeting_started = true
+			entry.greeting_remaining = 1.2
+			# Retain the work reservation and route cursor. Only the temporary pose
+			# yields; time continues to advance and may replace this intent.
+			entry.driver.clear_life_activity()
+			entry.driver.trigger_action("greet", 1.0, 0.10, false, 1.1)
+			if is_instance_valid(entry.get("face")):
+				entry.face.set_focus_target(player)
+				entry.face.play_story_gesture("acknowledge")
+			if line_cooldown <= 0.0 and host.hud.ambient_subtitle_available(get_instance_id()):
+				var remark := _line_for_actor(entry)
+				var duration := float(host.audio.play_nearby_speech(str(entry.id), remark, node)) if host.audio != null else 0.0
+				line_cooldown = maxf(15.0, duration + 4.0)
+				host.hud.show_ambient_subtitle(get_instance_id(), str(entry.profile.get("occupation", "Villager")).capitalize(), remark, maxf(5.5, duration + 0.3))
+	if float(entry.greeting_remaining) <= 0.0:
+		_cancel_greeting(entry)
+	return true
+
+func _cancel_greeting(entry: Dictionary) -> void:
+	if float(entry.get("greeting_remaining", 0.0)) <= 0.0 and not bool(entry.get("greeting_started", false)):
+		return
+	entry.greeting_remaining = 0.0
+	entry.greeting_started = false
+	if is_instance_valid(entry.driver) and str(entry.driver.current_state) == "greet":
+		entry.driver.stop_action()
+	if is_instance_valid(entry.get("face")):
+		entry.face.set_focus_target(null)
+
 func _begin_activity(entry: Dictionary) -> void:
 	var node: Node3D = entry.node
 	var profile: Dictionary = entry.profile
-	if bool(entry.get("regional", false)):
+	if bool(entry.get("regional", false)) or bool(profile.get("scheduled", false)):
 		var index := int(entry.get("arrived_target", 0))
 		entry.profile.activity = str(entry.profile.activities[mini(index, entry.profile.activities.size()-1)])
 	var anchor := _activity_anchor(entry)
@@ -719,6 +766,8 @@ func _update_activity(entry: Dictionary, delta: float) -> void:
 	if anchor != Vector3.ZERO:
 		_face(node, anchor, delta)
 	_set_activity_pose(entry, true)
+	if bool(profile.get("hold_activity", false)):
+		return
 	if float(entry.activity_elapsed) >= float(profile.get("activity_seconds", 2.0)):
 		_end_activity(entry)
 		entry.pause = rng.randf_range(0.65, 1.55)
@@ -827,6 +876,9 @@ func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 	var activity := str(entry.profile.get("activity", "idle"))
 	if driver.has_method("set_life_activity"):
 		driver.set_life_activity(activity if active else "")
+		driver.set_activity_prop(str(entry.profile.get("prop", "")) if active else "")
+		if active:
+			driver.set_life_workstation(entry.profile.get("workstation", {}))
 		return
 	if active:
 		if activity == "notice_board" or activity == "lookout" or bool(entry.get("quiet_after_report", false)):
@@ -846,7 +898,7 @@ func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 			driver.set_dialogue_pose(false)
 
 func _activity_anchor(entry: Dictionary) -> Vector3:
-	if bool(entry.get("regional", false)) and not entry.path.is_empty():
+	if (bool(entry.get("regional", false)) or bool(entry.profile.get("scheduled", false))) and not entry.path.is_empty():
 		return entry.path[clampi(int(entry.get("arrived_target", 0)), 0, entry.path.size()-1)]
 	if bool(entry.named) and not entry.path.is_empty():
 		return entry.path.back()
@@ -877,6 +929,9 @@ func _on_phase_changed(phase: String) -> void:
 	routine_phase = phase
 	story_dirty = true
 
+func _routine_minutes() -> float:
+	return float(host.day_night.get_time()) if is_instance_valid(host) and is_instance_valid(host.day_night) else 990.0
+
 func _sync_story_state(force: bool) -> void:
 	if host == null:
 		return
@@ -884,7 +939,7 @@ func _sync_story_state(force: bool) -> void:
 	var state = host.get("story_state")
 	var report := str(state.get_flag("evidence_report", "")) if state != null and state.has_method("get_flag") else ""
 	var bell := bool(state.get_flag("cemetery_bell_rung", false)) if state != null and state.has_method("get_flag") else false
-	var signature := "%s|%s|%s|%s|%s" % [report, str(bell), ConsequenceRoutines.signature(state), routine_phase, cast_revision]
+	var signature := str([report, bell, ConsequenceRoutines.signature(state), routine_phase, cast_revision, floori(_routine_minutes())])
 	if not force and signature == story_signature:
 		return
 	story_signature = signature
@@ -895,7 +950,12 @@ func _sync_story_state(force: bool) -> void:
 		reaction += "_bell_rung"
 	for entry in actors:
 		if bool(entry.get("regional", false)):
-			var routine := CastProfile.routine(str(entry.id), str(entry.routine_zone), state, host.quests, routine_phase)
+			var routine := CastProfile.routine(str(entry.id), str(entry.routine_zone), state, host.quests, routine_phase, _routine_minutes())
+			if routine.is_empty():
+				continue
+			var previous: Dictionary = entry.pending_routine.get("profile", entry.profile)
+			if str(routine.revision) == str(previous.get("revision", "")):
+				continue
 			var path: Array = []
 			for point: Vector3 in routine.path:
 				path.append(host.validate_walkable_position(point))
@@ -914,7 +974,11 @@ func _sync_story_state(force: bool) -> void:
 		var outcome := ConsequenceRoutines.for_actor(str(entry.id), state)
 		for key in ["activity", "occupation", "activity_seconds"]:
 			if outcome.has(key): next_profile[key] = outcome[key]
-		entry.pending_routine = {"profile":next_profile, "path":outcome.get("path", entry.base_path).duplicate(), "line":outcome.get("line", "")}
+		next_profile["revision"] = str([reaction, cast_revision])
+		var schedule := RoutineDirector.for_existing_route(CastProfile.life_data(), str(entry.id), next_profile, outcome.get("path", entry.base_path), _routine_minutes())
+		var previous: Dictionary = entry.pending_routine.get("profile", entry.profile)
+		if str(schedule.get("revision", "")) != str(previous.get("revision", "")):
+			entry.pending_routine = {"profile":schedule, "path":schedule.get("path", entry.base_path).duplicate(), "line":outcome.get("line", ""), "spatial_override":true}
 		var node: Node3D = entry.node
 		if is_instance_valid(node):
 			node.set_meta("life_story_reaction", reaction)
@@ -1028,6 +1092,8 @@ func _try_social_exchange(entry: Dictionary) -> void:
 
 func _social_actor_available(entry: Dictionary) -> bool:
 	if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or Presence.protected(entry.node):
+		return false
+	if bool(entry.profile.get("sleeping", false)) or float(entry.get("greeting_remaining", 0.0)) > 0.0:
 		return false
 	if float(entry.get("reaction_time", 0.0)) > 0.0 or float(entry.get("motion_speed", 0.0)) > 0.05:
 		return false
@@ -1428,6 +1494,7 @@ func get_routine_snapshot() -> Array:
 			"id": str(entry.id), "named": bool(entry.named),
 			"occupation": str(entry.profile.get("occupation", "")),
 			"activity": str(entry.profile.get("activity", "")),
+			"intent": str(entry.profile.get("intent", "")), "window": str(entry.profile.get("intent_key", "")),
 			"state": str(entry.life_state), "story_reaction": str(entry.story_reaction),
 			"activity_cycles": int(entry.activity_cycles),
 			"position": entry.node.global_position if is_instance_valid(entry.node) else Vector3.ZERO
@@ -1490,7 +1557,11 @@ func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.Z
 				driver.set_locomotion_motion(direction * speed, true)
 			else:
 				driver.set_locomotion(clampf(speed / 2.0,0.0,0.70),direction,true)
-		if bool(entry.get("regional", false)):
+		if bool(entry.profile.get("scheduled", false)):
+			var carrying := speed > 0.05 and bool(entry.profile.get("carry_in_transit", false))
+			driver.set_carried_activity("carry" if carrying else "")
+			driver.set_activity_prop(str(entry.profile.get("prop", "")) if carrying else "")
+		elif bool(entry.get("regional", false)):
 			driver.set_carried_activity("carry" if speed > 0.05 and int(entry.target) == 1 and routine_phase != "night" else "")
 	entry.phase = float(entry.phase) + get_process_delta_time() * (0.8 + speed * 1.7)
 

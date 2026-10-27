@@ -1,5 +1,54 @@
 # Living Cast - Current Checkpoint
 
+## Blended Motion And Scheduled Intent - 2026-10-27
+
+CAST-001/003/004/005 source extension: one manually clocked AnimationTree owns
+each actor pose; achieved horizontal speed blends normalized idle/walk/run
+clips. Directional NPC gaits remain available, while Kael retains forward-only
+locomotion. The existing action arbiter drives dodge, light/heavy attack, block,
+parry, hurt and other retained states with 0.06-0.14 second crossfades. Imported
+AnimationPlayers supply immutable libraries only. Manual play/seek phase repair
+is removed; physical movement and damage clocks are unchanged.
+
+`cast_life.json` version 2 adds explicit daily activity windows, existing target
+anchors and socketed prop intent. The new routine director resolves intent from
+the existing saved day/night time; it is not another movement or save owner.
+Consequence-specific work and important scripted scenes retain priority. People
+walk to the current intent after arrival/Continue rather than replaying elapsed
+hours or teleporting. Sleep is a quiet rest-anchor pose (no new beds/interiors);
+essential conversations remain usable. Four-metre approach greetings are
+finite, wall-aware and cooldown-limited, preserve the work reservation/route,
+and do not suspend the global schedule. Sleeping people do not ambient-greet.
+
+The existing skeleton modifier adds bounded spine breathing (maximum 1.5%),
+idle-only weight shifts at 6-10 second intervals, and task-specific eat/pray
+poses. The existing gaze owner supplies gentle idle scanning without competing
+with conversation or greeting focus. Combat and distance suspension suppress
+ambient poses; intended bodies, population, materials, saves and rewards remain.
+
+Implementation: present; static source/call-site/diff review complete.
+Compilation: eight content packs and the production Web preset compiled without
+errors. Candidate `living-motion-20261027` contains 17 files, 107,994,423 bytes
+(103.0 MiB), below the 256 MiB policy. Static package checks include transport
+and decoded sizes/hashes, complete declared packs, dependencies and file budget.
+Root transport SHA-256:
+`f9395a5fbbd4f2d529d75f92489b10845f964466e487aff2c96062be45a0738c`.
+Balanced opening dependency transport: 48,345,209 bytes; this is not a measured
+startup time, runtime memory figure or claimed performance improvement.
+Publication: exact Git push/commit status is owned by the current CAST-010
+receipt. Git triggers Vercel automatically; no manual deployment, remote-build
+polling or live/gameplay checks form part of this delivery.
+Runtime behavior, feel, phone performance and user acceptance: UNVERIFIED.
+No gameplay, browser QA, screenshots, tests or benchmarks are authorized/run.
+Formal cast acceptance remains 0/10.
+
+User checklist: idle -> walk -> run and sharp reversals; combat/dodge/block/hurt
+and return to movement; dialogue interruption and cached-zone returns; Tor's
+forge and each occupation across time windows; greet within 4m, remain nearby,
+then see work resume; eat/carry/pray/rest tools; sleeping greeting suppression;
+Save/Continue at another time of day; close idle breathing/gaze without foot
+sliding or detached anatomy. Existing phone/input checks remain user-owned.
+
 ## Role Silhouette Delivery - 2026-10-27
 
 CAST-001/002/009/010 source extension: anatomical shoulder/head/torso ratios,
