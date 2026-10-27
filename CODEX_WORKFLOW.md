@@ -1,5 +1,15 @@
 # Codex Production Workflow
 
+## Current Delivery Override - 2026-10-27
+
+Use `DEPLOYMENT_POLICY.md` and `DEPLOYMENT_WORKFLOW.md`: local Godot export and
+static package safeguards, then Git pushes to development and `main`. Vercel
+builds/publishes automatically with production-domain assignment enabled.
+`tools/publish_living_road.ps1` is the current publisher. Do not add CLI uploads,
+preview/staged HTTP gates, build polling or manual promotion. Runtime testing is
+user-owned unless separately authorized. The older tiers below are historical
+guidance where they conflict with this override.
+
 Ashen Oath uses the credit-efficient WORKFLOW-002 pipeline. Read only the
 roadmap context brief, the active ticket, and files directly implicated by that
 ticket. Do not reread phase history or scan the full asset library.

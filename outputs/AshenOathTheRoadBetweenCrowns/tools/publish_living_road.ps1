@@ -53,7 +53,7 @@ $receipt = [ordered]@{
     user_acceptance = 'pending'
     runtime_testing = 'not_run_user_owned'
     production_url = 'https://ashenoath.vercel.app'
-    deployment_method = 'git_staged_production'
+    deployment_method = 'git_automatic_production'
 }
 function Save-Receipt {
     [IO.File]::WriteAllText((Join-Path $RunRoot 'publication.json'), (($receipt | ConvertTo-Json -Depth 8) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
@@ -65,24 +65,25 @@ function Invoke-PublicationStep([string]$Action) {
     if ($LASTEXITCODE -ne 0) { throw "Publication stopped at $Action. Preserve and resume the receipt in $RunRoot; do not rebuild or recommit unchanged bytes." }
 }
 
-# Staging is enabled before either Git push. Protected previews remain protected.
-Invoke-PublicationStep 'setup'
+# Git owns remote builds and live assignment. Protected previews stay protected.
+Invoke-PublicationStep 'setup-auto'
 
 # Explicit paths include authored source; --only leaves unrelated staged work alone.
 Invoke-Git (@('add', '--') + $CommitPaths)
 Invoke-Git (@('commit', '--only', '-m', $Message, '--') + $CommitPaths)
 Invoke-PublicationStep 'bind'
 Invoke-Git @('push', 'origin', 'HEAD:codex/masterpiece-rebuild')
-Invoke-PublicationStep 'preview'
 
-# Recheck main after the preview wait; a concurrent change must not be overwritten.
+# Recheck main before the production push; never overwrite concurrent work.
 Invoke-Git @('fetch', 'origin', 'main')
 & git -C $RepositoryRoot merge-base --is-ancestor origin/main HEAD
-if ($LASTEXITCODE -ne 0) { throw 'Main changed during the preview. Preserve this candidate and integrate before continuing.' }
+if ($LASTEXITCODE -ne 0) { throw 'Main changed before the production push. Preserve this candidate and integrate before continuing.' }
 Invoke-Git @('push', 'origin', 'HEAD:main')
-Invoke-PublicationStep 'production'
-Invoke-PublicationStep 'promote'
 $receipt = Get-Content -LiteralPath (Join-Path $RunRoot 'publication.json') -Raw | ConvertFrom-Json
-Write-Host "Published $Ticket : $($receipt.package_commit)"
+$receipt.phase = 'git_push_complete_awaiting_vercel'
+$receipt | Add-Member -NotePropertyName deployment_status -NotePropertyValue 'provider_managed_not_verified' -Force
+Save-Receipt
+Write-Host "Pushed $Ticket : $($receipt.package_commit); Vercel builds and publishes automatically."
 Write-Host "Receipt: $RunRoot/publication.json"
+Write-Host 'No CLI upload, remote-build polling, HTTP campaign or manual promotion was performed.'
 Write-Host 'Runtime/gameplay/listening acceptance belongs to the user and was not executed.'

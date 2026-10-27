@@ -1,4 +1,4 @@
-"""Publish committed static bytes through Git, with staging and HTTP identity checks.
+"""Configure Git delivery; retain explicit staged-release recovery for history.
 
 No game execution. Credentials stay in the CLI credential store/environment and
 are never included in receipts, URLs, or diagnostic output.
@@ -216,7 +216,7 @@ def wait_deployment(client, receipt, environment, timeout):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=["setup", "bind", "preview", "production", "promote"])
+    parser.add_argument("action", choices=["setup-auto", "setup", "bind", "preview", "production", "promote"])
     parser.add_argument("--receipt", required=True, type=Path)
     parser.add_argument("--timeout", type=int, default=900)
     args = parser.parse_args()
@@ -228,7 +228,16 @@ def main():
     try:
         project = client.project()
         client.assert_configuration(project)
-        if args.action == "setup":
+        if args.action == "setup-auto":
+            receipt.setdefault("previous_production_id", client.live_deployment())
+            if project.get("autoAssignCustomDomains") is not True:
+                client.api(f"/v9/projects/{PROJECT_ID}", "PATCH", {"autoAssignCustomDomains": True})
+            if client.project().get("autoAssignCustomDomains") is not True:
+                raise ValueError("Automatic production-domain assignment could not be enabled")
+            receipt["deployment_method"] = "git_automatic_production"
+            receipt["hosting_plan"] = "hobby"
+            receipt["phase"] = "automatic_assignment_enabled"
+        elif args.action == "setup":
             receipt.setdefault("previous_production_id", client.live_deployment())
             if project.get("autoAssignCustomDomains") is not False:
                 client.api(f"/v9/projects/{PROJECT_ID}", "PATCH", {"autoAssignCustomDomains": False})

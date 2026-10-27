@@ -18,22 +18,28 @@ Packaging tools, generated manifests and current release checks consume it.
 
 ## Publication
 
+Updated by the user's 2026-10-27 instruction: Git-triggered automatic production.
+
 Use the existing `ashenoath` project, `web` output and Git integration. Work on
 `codex/masterpiece-rebuild` in `D:\Projects\AshenOath`.
 
 1. Package the production preset locally; validate the exact committed files.
-2. Push development and verify the Git preview for that exact SHA over HTTP.
-3. Fast-forward `main`; verify staged production before promotion.
-4. Promote those staged bytes and verify public delivery on the existing origin.
+2. Push development; Vercel creates its preview automatically.
+3. Advance `main` without discarding concurrent work and push the same commit.
+4. Vercel builds and assigns the production domain automatically on success.
 
-Auto-assignment of production domains is disabled. Neither a Git push nor a
-successful static build alone is publication approval. There is no CLI source
-upload or remote Godot rebuild. Protected previews remain protected; automation
-credentials never enter source, logs or URLs.
+Auto-assignment of production domains is enabled. No manual CLI upload, duplicate
+deployment, preview/staged HTTP gate, remote-build polling or promotion is part of
+the default publisher. Vercel serves the locally exported `web/`; it does not
+compile Godot. Protected previews remain protected; credentials never enter
+source, logs or URLs. Cloud merges into `main` also go live after a successful build.
 
-Missing assets, stale manifests, wrong hashes/encoding, failed deployments or
-concurrent releases block promotion. Keep the immediately previous production
-deployment available for Hobby rollback. No force push or history rewrite.
+Local package completeness, hashes, sizes and safe Git ancestry remain pre-push
+safeguards. Failed provider builds do not constitute successful deployment.
+Keep the previous production deployment available for rollback; no force push
+or history rewrite. This workflow does not claim unperformed runtime acceptance.
+Existing artifact policy labels and historical staged receipts retain the
+metadata under which they were built; current receipts record the actual delivery method.
 
 ## Evidence and limits
 
