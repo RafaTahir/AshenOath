@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "ticket": "FINISH-003",
-  "generated_at_utc": "2026-10-27T06:28:15.163105Z",
-  "build_id": "grounded-camera-20261027",
-  "generated_from_commit": "ceed88bea45d9e91414f551f911335b77f639fef",
+  "generated_at_utc": "2026-10-27T07:10:17.996781Z",
+  "build_id": "world-view-hotfix-20261027",
+  "generated_from_commit": "7176b0c02ede7adfab8fba011949b4b9858eb9c2",
   "source_dirty": true,
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
@@ -13,37 +13,37 @@
   "packs": [
     {
       "id": "base",
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4437312,
-      "sha256": "bbadd2602211771b4ecf9a6a57065ce6304cb090bf549d7c09841e7c5a7b4085",
+      "bytes": 4437712,
+      "sha256": "b0b1eca282bccf57064e9ca3d2c8a170ca2acc72edb25eb571ca93bb3520bbd8",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35867452,
-      "sha256": "0420a7514f519ea97731c191927ccb1599e4a739051f7abcbfc202038db2c9cd",
+      "sha256": "d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "adjacent",
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2425540,
-      "sha256": "4a84b7b9931ea632e1b4ab4463b43f02fb4bcce49ded35f0cc595cfdca98135c",
+      "sha256": "059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb",
       "status": "candidate_external",
       "log": "logs/pack-adjacent.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8733380,
@@ -53,7 +53,7 @@
     },
     {
       "id": "characters",
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9662720,
@@ -63,7 +63,7 @@
     },
     {
       "id": "monsters",
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14714472,
@@ -73,7 +73,7 @@
     },
     {
       "id": "audio",
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21357932,
@@ -83,7 +83,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7383452,

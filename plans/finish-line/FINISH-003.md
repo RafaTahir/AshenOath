@@ -1,5 +1,35 @@
 # FINISH-003 - Movement, Camera And Character Integrity
 
+## Blank World View Hotfix - 2026-10-27
+
+User report: the HUD is visible after loading, but the 3D world is blank.
+Read-only HTTP inspection returned the expected production manifest for
+`grounded-camera-20261027`, with its expected root identity. This is not proof of
+runtime rendering or of every delivered asset. No accessible existing game tab
+was available for error-log inspection; no game/browser run was started.
+
+The source repair removes the recent incremental orbit-history transformation,
+retaining the single 14/s position and 8/s look filters, trauma shake and the
+physics/cadence/foot changes. Camera preparation explicitly selects the real
+camera; arrival restores the published active world's visibility and 3D viewport
+before releasing the handoff. Invalid/degenerate camera transforms and stale
+follow history are reseeded without moving the player or changing a journey.
+Dialogue publication synchronizes the stored camera position. Covered prewarm
+may disable 3D only while it still owns the menu, not after its active-world
+ownership check. A disabled gameplay viewport can recover through the same
+existing session owner, without spawning another world or clearing saves.
+
+Candidate: `world-view-hotfix-20261027`. All eight runtime packs and the production
+Web export compiled successfully. Static packaging/manifest generation passed:
+17 deployed files, 108,010,642 bytes total; largest file 32,705,550 bytes. The exact
+candidate was synchronized to `web/` for the Git automatic-publication workflow.
+Publication commit/status is recorded separately in the existing release receipt.
+The exact trigger and the player's visible result remain unverified under the
+current build-only instruction. These source corrections are not represented as
+an observed runtime pass. User checks: New Game reaches visible complete Greyfen,
+Continue shows its recorded world, opening/dialogue/Resume retain the view, and
+third-/first-person camera transitions preserve scenery and character visibility.
+
 ## Camera, Cadence And Grounding Repair - 2026-10-27
 
 Candidate: `grounded-camera-20261027`, preserving the published living-motion

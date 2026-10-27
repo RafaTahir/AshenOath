@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "grounded-camera-20261027",
+  "release_id": "world-view-hotfix-20261027",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4437312,
-      "candidate_sha256": "bbadd2602211771b4ecf9a6a57065ce6304cb090bf549d7c09841e7c5a7b4085",
+      "candidate_bytes": 4437712,
+      "candidate_sha256": "b0b1eca282bccf57064e9ca3d2c8a170ca2acc72edb25eb571ca93bb3520bbd8",
       "contents": [
         "menu",
         "managers",
@@ -35,14 +35,14 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4437312,
-      "embedded_source_sha256": "bbadd2602211771b4ecf9a6a57065ce6304cb090bf549d7c09841e7c5a7b4085",
+      "embedded_source_bytes": 4437712,
+      "embedded_source_sha256": "b0b1eca282bccf57064e9ca3d2c8a170ca2acc72edb25eb571ca93bb3520bbd8",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "grounded-camera-20261027",
-      "url": "packs/opening.pck?sha256=0420a7514f519ea97731c191927ccb1599e4a739051f7abcbfc202038db2c9cd",
-      "sha256": "0420a7514f519ea97731c191927ccb1599e4a739051f7abcbfc202038db2c9cd",
+      "version": "world-view-hotfix-20261027",
+      "url": "packs/opening.pck?sha256=d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb",
+      "sha256": "d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb",
       "bytes": 35867452,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
@@ -52,16 +52,16 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
       "candidate_bytes": 35867452,
-      "candidate_sha256": "0420a7514f519ea97731c191927ccb1599e4a739051f7abcbfc202038db2c9cd",
+      "candidate_sha256": "d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "0420a7514f519ea97731c191927ccb1599e4a739051f7abcbfc202038db2c9cd"
+      "cache_key": "d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb"
     },
     "campaign": {
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "url": "packs/campaign.pck?sha256=a0ec7cc54744623b1602b1a834a115ec103e84e421feafd1c6ab9c01280e4b84",
       "sha256": "a0ec7cc54744623b1602b1a834a115ec103e84e421feafd1c6ab9c01280e4b84",
       "bytes": 8733380,
@@ -84,7 +84,7 @@
       "cache_key": "a0ec7cc54744623b1602b1a834a115ec103e84e421feafd1c6ab9c01280e4b84"
     },
     "characters": {
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "url": "packs/characters.pck?sha256=fe7dae334a63b7fc00c03179c5abb0a82f580f38be6ee813a8f797b213b475af",
       "sha256": "fe7dae334a63b7fc00c03179c5abb0a82f580f38be6ee813a8f797b213b475af",
       "bytes": 9662720,
@@ -105,7 +105,7 @@
       "cache_key": "fe7dae334a63b7fc00c03179c5abb0a82f580f38be6ee813a8f797b213b475af"
     },
     "monsters": {
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "url": "packs/monsters.pck?sha256=de9c188895f0c3be5b12202a95bc24279804a40b6e3e0421e040d393606c0984",
       "sha256": "de9c188895f0c3be5b12202a95bc24279804a40b6e3e0421e040d393606c0984",
       "bytes": 14714472,
@@ -127,7 +127,7 @@
       "cache_key": "de9c188895f0c3be5b12202a95bc24279804a40b6e3e0421e040d393606c0984"
     },
     "audio": {
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "url": "packs/audio.pck?sha256=cb5c4229039526ae670592c679ee9fdab4778c8860698e2d9d4dad3410358a18",
       "sha256": "cb5c4229039526ae670592c679ee9fdab4778c8860698e2d9d4dad3410358a18",
       "bytes": 21357932,
@@ -148,7 +148,7 @@
       "cache_key": "cb5c4229039526ae670592c679ee9fdab4778c8860698e2d9d4dad3410358a18"
     },
     "quality_materials": {
-      "version": "grounded-camera-20261027",
+      "version": "world-view-hotfix-20261027",
       "url": "packs/quality_materials.pck?sha256=e06ed94326b3f764cb67cc13691a66ee6b4e7dc4f0899c339875c067d1cc5457",
       "sha256": "e06ed94326b3f764cb67cc13691a66ee6b4e7dc4f0899c339875c067d1cc5457",
       "bytes": 7383452,
@@ -169,9 +169,9 @@
       "cache_key": "e06ed94326b3f764cb67cc13691a66ee6b4e7dc4f0899c339875c067d1cc5457"
     },
     "adjacent": {
-      "version": "grounded-camera-20261027",
-      "url": "packs/adjacent.pck?sha256=4a84b7b9931ea632e1b4ab4463b43f02fb4bcce49ded35f0cc595cfdca98135c",
-      "sha256": "4a84b7b9931ea632e1b4ab4463b43f02fb4bcce49ded35f0cc595cfdca98135c",
+      "version": "world-view-hotfix-20261027",
+      "url": "packs/adjacent.pck?sha256=059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb",
+      "sha256": "059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb",
       "bytes": 2425540,
       "entry_scene": "",
       "dependencies": [
@@ -187,13 +187,13 @@
       ],
       "candidate_artifact": "adjacent.pck",
       "candidate_bytes": 2425540,
-      "candidate_sha256": "4a84b7b9931ea632e1b4ab4463b43f02fb4bcce49ded35f0cc595cfdca98135c",
-      "cache_key": "4a84b7b9931ea632e1b4ab4463b43f02fb4bcce49ded35f0cc595cfdca98135c"
+      "candidate_sha256": "059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb",
+      "cache_key": "059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb"
     }
   },
-  "build_id": "grounded-camera-20261027",
-  "generated_from_commit": "ceed88bea45d9e91414f551f911335b77f639fef",
-  "generated_at_utc": "2026-10-27T06:28:15.163105Z",
+  "build_id": "world-view-hotfix-20261027",
+  "generated_from_commit": "7176b0c02ede7adfab8fba011949b4b9858eb9c2",
+  "generated_at_utc": "2026-10-27T07:10:17.996781Z",
   "total_bytes": 100144948,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1"

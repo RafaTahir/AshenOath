@@ -637,7 +637,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		prewarm_root.set_meta("opening_first_frame_rendered", true)
 	prewarm_root.set_meta("opening_presentation_ready", true)
 	_host.get_tree().paused = was_paused
-	_host.get_viewport().disable_3d = true
 	# New Game can activate Greyfen while this menu-covered prewarm is still
 	# finishing. Never let the background task overwrite the active zone or its
 	# spatial service after that handoff.
@@ -653,6 +652,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 			hud.set_new_game_ready(true)
 		return
 	# Retain the prepared resources while the menu owns the screen.
+	_host.get_viewport().disable_3d = true
 	_cache_route_zone("greyfen", zone_root, [], _zone_state_signature("greyfen"), true, false, false)
 	zone_root = null
 	spatial_service = null

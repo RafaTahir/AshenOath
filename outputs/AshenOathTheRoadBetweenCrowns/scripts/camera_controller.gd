@@ -41,7 +41,7 @@ var _initialized = false
 var _smoothed_anchor = Vector3.ZERO
 var _smoothed_look = Vector3.ZERO
 var _smoothed_position := Vector3.ZERO
-var _last_view_orbit := Basis.IDENTITY
+var _reported_invalid_view := false
 var _previous_dodge_time = 0.0
 var _dodge_response = 0.0
 var _landing_response = 0.0
@@ -139,7 +139,6 @@ func rebase_world(frame: Transform3D) -> void:
 	_smoothed_anchor = frame*_smoothed_anchor
 	_smoothed_look = frame*_smoothed_look
 	_smoothed_position = frame*_smoothed_position
-	_last_view_orbit = frame.basis * _last_view_orbit
 	_cached_collision_position = frame*_cached_collision_position
 	yaw = wrapf(yaw+frame.basis.get_euler().y,-PI,PI)
 	_manual_look_yaw += frame.basis.get_euler().y
@@ -236,6 +235,21 @@ func prepare_view() -> void:
 		return
 	reset_follow()
 	_update_view(0.0)
+	camera.make_current()
+
+func restore_gameplay_view() -> bool:
+	if not is_instance_valid(target) or not is_instance_valid(camera) or not is_inside_tree():
+		return false
+	# CanvasLayer HUD rendering does not establish a valid active 3D camera.
+	# Restore the existing camera; never spawn a second player/camera or load a
+	# different save to recover presentation.
+	if not camera.global_transform.is_finite() or absf(camera.global_basis.determinant()) < 0.000001:
+		camera.global_transform = Transform3D.IDENTITY
+		_initialized = false
+	if not _initialized or not _smoothed_position.is_finite() or not _smoothed_look.is_finite():
+		prepare_view()
+	camera.make_current()
+	return camera.global_transform.is_finite() and camera.is_current()
 
 func reset_follow() -> void:
 	_initialized = false
@@ -252,6 +266,17 @@ func _update_view(delta: float) -> void:
 	var followed_position: Vector3 = target.get_global_transform_interpolated().origin
 	if delta <= 0.0:
 		followed_position = target.global_position
+	if not followed_position.is_finite():
+		followed_position = target.global_position
+	if not followed_position.is_finite():
+		if not _reported_invalid_view:
+			push_error("Gameplay camera has no finite player position; world state was not changed.")
+			_reported_invalid_view = true
+		_visibility_batch = false
+		return
+	if not is_finite(yaw): yaw = 0.0
+	if not is_finite(pitch): pitch = -0.19
+	if not is_finite(distance): distance = 6.8
 	if not _enemy_cache_authoritative:
 		_enemy_cache_refresh -= delta
 		if _enemy_cache_refresh <= 0.0:
@@ -326,18 +351,13 @@ func _update_view(delta: float) -> void:
 		var encounter_frame := _large_encounter_frame(desired, framing_subject)
 		natural_look = encounter_frame.point
 		target_fov = encounter_frame.fov
-	if not _initialized:
+	if not _initialized or not _smoothed_position.is_finite() or not _smoothed_look.is_finite():
 		_smoothed_anchor = target_pos
 		_smoothed_look = natural_look
 		_smoothed_position = desired
-		_last_view_orbit = orbit
 		_initialized = true
-	# Apply deliberate orbit changes immediately; decay only the remaining
-	# follow/framing error. Never feed shaken output back into these filters.
-	var orbit_change := orbit * _last_view_orbit.inverse()
-	_smoothed_position = target_pos + orbit_change * (_smoothed_position - target_pos)
-	_smoothed_look = target_pos + orbit_change * (_smoothed_look - target_pos)
-	_last_view_orbit = orbit
+	# Follow finite world-space targets directly. Repeatedly rotating stored
+	# world positions through an orbit delta must not own the published view.
 	_smoothed_anchor = target_pos
 	global_position = target_pos
 	_smoothed_position = _smoothed_position.lerp(desired, _smooth_weight(delta, POSITION_STIFFNESS))
@@ -580,6 +600,7 @@ func _resolve_dialogue_camera(focus: Vector3, desired: Vector3, actor: Node3D) -
 func _place_dialogue_camera(position: Vector3) -> void:
 	# Choose the composition once, not another orbit angle on every tween tick.
 	camera.global_position = _collide_camera(_dialogue_focus, position)
+	_smoothed_position = camera.global_position
 
 func shake(amount: float) -> void:
 	if reduce_flashes or _reduced_story_motion or _shake_strength <= 0.0 or shake_decay >= 999.0:

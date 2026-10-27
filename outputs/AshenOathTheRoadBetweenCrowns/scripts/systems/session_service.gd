@@ -202,6 +202,7 @@ func _finish_gameplay_handoff() -> void:
 		neighbor_arrival_pending = false
 		hud.end_journey_load(true)
 	journey_loading.try_finish(_host)
+	_restore_active_world_view()
 	if input_router == null or input_router.get_context() != "transition":
 		_publish_journey_arrival()
 		return
@@ -215,8 +216,23 @@ func _finish_gameplay_handoff() -> void:
 	_invalidate_interaction_prompt()
 	_publish_journey_arrival()
 
+func _restore_active_world_view() -> void:
+	if not game_started or not is_instance_valid(zone_root) or not is_instance_valid(player) or not is_instance_valid(camera_rig):
+		return
+	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting or _journey_load_pending():
+		return
+	if str(zone_root.get_meta("zone_resource_owner", "active")) != "active":
+		return
+	# Only a fully published active world may take rendering back from the
+	# menu/preparation path. HUD visibility is not a substitute for this handoff.
+	zone_root.visible = true
+	_host.get_viewport().disable_3d = false
+	camera_rig.restore_gameplay_view()
+
 func tick_session(delta: float) -> void:
 	_restore_browser_session(delta)
+	if game_started and _host.get_viewport().disable_3d:
+		_restore_active_world_view()
 	if not game_started or player == null or _host.get_tree().paused:
 		return
 	if opening_scene_pending and not zone_transition_pending and not zone_load_request_pending and input_router.is_gameplay_context() and player.can_control:
