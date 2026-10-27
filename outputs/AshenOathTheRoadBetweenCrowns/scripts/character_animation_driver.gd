@@ -143,6 +143,10 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 		contract_errors.append("missing AnimationPlayer or Skeleton3D")
 		contract_failed.emit(contract_errors[0])
 		return false
+	skeleton.set_meta("character_motion_owner", weakref(self))
+	var silhouette := skeleton.get_node_or_null("CharacterSilhouette")
+	if silhouette != null:
+		silhouette.bind_motion(self)
 	var binding_key := var_to_str([clip_map, animation_player.get_animation_list()]).sha256_text()
 	if _resolved_bindings.has(binding_key):
 		resolved_clip_map = _resolved_bindings[binding_key].resolved.duplicate()

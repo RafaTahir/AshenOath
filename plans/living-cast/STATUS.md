@@ -1,5 +1,38 @@
 # Living Cast - Current Checkpoint
 
+## Role Silhouette Delivery - 2026-10-27
+
+CAST-001/002/009/010 source extension: anatomical shoulder/head/torso ratios,
+six idle postures and fitted retained-library role shapes replace random width
+variation. Six regional palettes and 27 unique named accents are data-owned.
+Kael/Anwen faces/atlases, Ranger identity, monster bodies, collision and saves
+remain retained. The mask verifier is authored for user execution, not run.
+Implementation/build/publication status is recorded in the latest CAST-010
+publication receipt; no new visual, gameplay or performance acceptance is
+claimed. Formal cast acceptance remains 0/10.
+
+Scope and user checks: `outputs/AshenOathTheRoadBetweenCrowns/assets/characters/silhouette/README.md`.
+
+Current delivery candidate: `role-silhouette-20261027-integrated`, built after a
+clean fast-forward to GitHub main `40b3215` (normal-texture correction and Phase 1
+game/HUD extraction), preserving the silhouette work. All 31 service/HUD/character
+modules are present in the root export. Complete package: 107,980,319 bytes (103.0
+MiB); root transport SHA-256:
+`2dbabb1aabdb0eb3d36e1e0d1e851783186bd300bbeb8c060479335cd4517f03`.
+The earlier candidate below was not published because the release guard detected
+the newer main commits. The integrated package supersedes it; the CAST-010
+receipt records actual push, staged promotion and HTTP file-identity results.
+
+Earlier candidate `role-silhouette-20261027`: required asset import, script compilation,
+eight content-pack exports and production Web export completed. Package integrity
+checks cover all 17 files: 107,807,868 bytes (102.8 MiB), below the 256 MiB ceiling.
+Root transport SHA-256: `443355b034ce4534d2a3c8f81c49ef55858a3d882d0eab69a310ebd9be149b76`.
+An initial type-inference compilation error was corrected. The first pack build
+was interrupted for a source-confirmed off-tree skeleton setup correction;
+the final pack set was then built from the corrected source. No masks,
+screenshots, game/browser runs or benchmarks were executed. Publication completion
+is owned by the CAST-010 receipt, not by this implementation record.
+
 ## Current Combined Delivery - 2026-10-26
 
 The user authorizes the existing facial technique without an intermediate sample

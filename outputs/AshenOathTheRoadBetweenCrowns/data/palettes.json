@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "policy": "Regional clothing, neutral working materials, one reserved accent per named human. Skin and hair retain their authored identities. Crowds never borrow named accents.",
+  "regions": {
+    "greyfen": {"primary":"414939","secondary":"756451","linen":"c5bdac","leather":"594333","boots":"302a26","metal":"777b78"},
+    "wychwood": {"primary":"374b42","secondary":"6c7054","linen":"b5b9a5","leather":"51493a","boots":"2b302a","metal":"6d7973"},
+    "deep_woods": {"primary":"53504b","secondary":"76645a","linen":"bcb5a9","leather":"59483e","boots":"322d2c","metal":"7d7b74"},
+    "long_road": {"primary":"4a555b","secondary":"767065","linen":"c2beb0","leather":"51483f","boots":"2b2d31","metal":"818686"},
+    "castle_vargan": {"primary":"454b5a","secondary":"716773","linen":"c5c3bc","leather":"484247","boots":"2e2b33","metal":"91959b"},
+    "hartlands": {"primary":"4b6159","secondary":"8b8b76","linen":"d2d0bf","leather":"5b5746","boots":"343e36","metal":"8d9b90"}
+  },
+  "named": {
+    "kael": {"region":"greyfen","accent":"a18c60","skin":"a9785f","hair":"77756f","primary":"26352f","secondary":"493b32"},
+    "anwen": {"region":"greyfen","accent":"b19b74","skin":"a98270","hair":"b8b4aa","primary":"28334b","secondary":"646075"},
+    "rook": {"region":"greyfen","accent":"aa805a","skin":"8f664f","hair":"3b2c23"},
+    "mira": {"region":"greyfen","accent":"799672","skin":"a97559","hair":"33251e"},
+    "tor": {"region":"greyfen","accent":"bc7850","skin":"a88a6c","hair":"66554a"},
+    "elna": {"region":"greyfen","accent":"a69ec3","skin":"a47a66","hair":"96908a"},
+    "toma": {"region":"greyfen","accent":"c4b999","skin":"b07f68","hair":"5c4939"},
+    "nessa": {"region":"greyfen","accent":"ce977f","skin":"b07f68","hair":"4a3020"},
+    "jory": {"region":"greyfen","accent":"d1b95d","skin":"a97559","hair":"5c4939"},
+    "len": {"region":"greyfen","accent":"779ca7","skin":"a47b63","hair":"71604e"},
+    "maren": {"region":"long_road","accent":"9f916e","skin":"a07861","hair":"40352d"},
+    "senn": {"region":"long_road","accent":"aa9470","skin":"916b54","hair":"746b5a"},
+    "nera": {"region":"long_road","accent":"83b5ad","skin":"8d604c","hair":"302523"},
+    "tavin": {"region":"long_road","accent":"c09569","skin":"a97559","hair":"4a3020"},
+    "iven": {"region":"wychwood","accent":"8da75e","skin":"8d604c","hair":"4a3020"},
+    "edda": {"region":"wychwood","accent":"b38088","skin":"a97559","hair":"302523"},
+    "oren": {"region":"wychwood","accent":"78a0bf","skin":"a47b63","hair":"71604e"},
+    "dain": {"region":"deep_woods","accent":"c49b55","skin":"a88a6c","hair":"66554a"},
+    "ressa": {"region":"deep_woods","accent":"a9bd77","skin":"a97559","hair":"33251e"},
+    "edric": {"region":"castle_vargan","accent":"ac945b","skin":"a2765e","hair":"574639"},
+    "halvern": {"region":"castle_vargan","accent":"8c8370","skin":"89715e","hair":"7d7669"},
+    "vale": {"region":"castle_vargan","accent":"9dabc9","skin":"a47b63","hair":"302523"},
+    "merrow": {"region":"castle_vargan","accent":"b69baf","skin":"a47b63","hair":"71604e"},
+    "lysa": {"region":"castle_vargan","accent":"85b8c3","skin":"a97559","hair":"33251e"},
+    "odran": {"region":"castle_vargan","accent":"b1b671","skin":"8d604c","hair":"96908a"},
+    "maelin": {"region":"hartlands","accent":"e0bb83","skin":"b07f68","hair":"4a3020"},
+    "oris": {"region":"hartlands","accent":"92a7d0","skin":"a88a6c","hair":"66554a"}
+  },
+  "zone_regions": {
+    "greyfen":"greyfen","cemetery":"greyfen","wychwood":"wychwood","deep_wood":"deep_woods","old_mill":"deep_woods","burned_farmstead":"deep_woods","bandit_road":"long_road","marsh_crossing":"long_road","castle_vargan":"castle_vargan","vargan_court":"castle_vargan","record_hall":"castle_vargan","undercroft":"castle_vargan","ruins":"hartlands","hart_glade":"hartlands"
+  },
+  "aliases": {
+    "player":"kael","player_human":"kael","player_kael":"kael","sister_anwen":"anwen","sister_anwen_human":"anwen","mira_herbalist":"mira","mira_human":"mira","rook_smuggler":"rook","rook_human":"rook","blacksmith_tor":"tor","widow_elna":"elna","farmer_toma":"toma","captain_senn":"senn","lord_edric":"edric","halvern_boss":"halvern","returned_soldier":"len","vargan_record_keeper":"vale","record_keeper_vale":"vale","vargan_steward":"merrow","steward_merrow":"merrow"
+  }
+}

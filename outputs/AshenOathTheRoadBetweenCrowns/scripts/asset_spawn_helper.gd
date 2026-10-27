@@ -209,6 +209,7 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 				spawned = _compose_player_body(spawned, path, role_name, variant_seed)
 			var composed_usec := Time.get_ticks_usec()
 			spawned.name = role_name
+			spawned.set_meta("character_region", _zone_scope)
 			_apply_runtime_policy_metadata(spawned, role_name, runtime_policy, path)
 			_prepare_spawned_asset(spawned,path,role_name,fallback_category)
 			if spawned.get_meta("character_material_bindings_valid", true) == false:

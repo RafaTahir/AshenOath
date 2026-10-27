@@ -15,6 +15,7 @@ ROOT_NAMES = {"Web Browser", "Web QA Browser", "Runtime Pack Base"}
 SAGA_OPENING_RECORD = "assets_external/environment/props/CampaignRecord_register_mira_Authored.res"
 CHAPTER_ART = "assets/ui/story_chapters_atlas.png"
 FORGE_HAMMER = "assets/characters/forge_hammer.tscn"
+SILHOUETTE_DIRECTORY = "assets/characters/silhouette/"
 CAMPAIGN_PREFIXES = (
     "assets_external/environment/forest/Campaign_",
     "assets_external/environment/forest/Hart",
@@ -61,6 +62,12 @@ def compile_layout():
     files = {n: set(selected_files(config[s].get("export_files", "PackedStringArray()")))
              for n, s in sections.items()}
     for name in ROOT_NAMES:
+        includes[name].update({"scripts/systems/*.gd", "scripts/hud/*.gd", "scripts/systems/method_ownership.json"})
+        files[name].update({
+            "res://scripts/systems/character_silhouette.gd",
+            "res://scripts/systems/character_palette.gd",
+            "res://shaders/character_region_palette.gdshader",
+        })
         includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})
         includes[name].update({"assets/ui/fonts/*.ttf", "assets/ui/fonts/OFL.txt"})
     # Optional chapter illustrations never gate the usable menu or first control.
@@ -79,6 +86,9 @@ def compile_layout():
                 includes[name].discard(relative)
                 files[name].discard("res://" + relative)
     files["Runtime Pack Opening"].add("res://" + FORGE_HAMMER)
+    for layer in (PROJECT / SILHOUETTE_DIRECTORY).glob("*.obj"):
+        files["Runtime Pack Opening"].add("res://" + layer.relative_to(PROJECT).as_posix())
+    includes["Runtime Pack Opening"].add(SILHOUETTE_DIRECTORY + "provenance.json")
     # Regional written requests begin in Greyfen, before campaign packs mount.
     # Transfer the retained mesh instead of duplicating it or loading a late
     # resource opportunistically during opening preparation.
@@ -212,6 +222,12 @@ def compile_layout():
     # dependency expansion as well as from explicit selections.
     for name, section in sections.items():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        if name != "Runtime Pack Opening":
+            exclusions.add(SILHOUETTE_DIRECTORY + "*")
+        else:
+            exclusions.discard(SILHOUETTE_DIRECTORY + "*")
+        if name not in ROOT_NAMES:
+            exclusions.update({"scripts/systems/*", "scripts/hud/*"})
         if name == "Runtime Pack Campaign":
             exclusions.discard(CHAPTER_ART)
         else:

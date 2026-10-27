@@ -17,7 +17,7 @@ static func capture(root: Node3D, source: String) -> bool:
 				continue
 			bindings.append({
 				"mesh": path, "surface": surface, "material": material,
-				"texture": material.albedo_texture.resource_path if _textured(material) else "",
+				"texture": texture_for(material).resource_path if _textured(material) else "",
 			})
 	if bindings.is_empty():
 		errors.append("%s: no authored character material bindings" % source)
@@ -90,10 +90,11 @@ static func restore(root: Node3D) -> bool:
 static func descriptors(root: Node3D) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for binding in root.get_meta(BINDINGS, []):
-		var material := binding.material as BaseMaterial3D
+		var material := binding.material as Material
+		var texture := texture_for(material)
 		result.append({
 			"mesh": str(binding.mesh), "surface": int(binding.surface),
-			"texture": material.albedo_texture.resource_path if material != null and material.albedo_texture != null else "",
+			"texture": texture.resource_path if texture != null else "",
 		})
 	return result
 
@@ -130,4 +131,13 @@ static func _owners(root: Node) -> Array[Node3D]:
 	return result
 
 static func _textured(material: Material) -> bool:
-	return material is BaseMaterial3D and material.albedo_texture != null
+	return texture_for(material) != null
+
+static func texture_for(material: Material) -> Texture2D:
+	if material is BaseMaterial3D:
+		return (material as BaseMaterial3D).albedo_texture
+	if material is ShaderMaterial:
+		var shader := (material as ShaderMaterial).shader
+		if shader != null and shader.resource_path == "res://shaders/character_region_palette.gdshader":
+			return (material as ShaderMaterial).get_shader_parameter("authored_atlas") as Texture2D
+	return null

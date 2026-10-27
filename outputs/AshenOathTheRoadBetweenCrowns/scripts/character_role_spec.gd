@@ -20,7 +20,60 @@ const DEFAULT_SPEC := {
 	"required_sockets": ["head", "weapon", "offhand"],
 	"height_tolerance": 0.08,
 	"visual_forward_degrees": 0.0,
+	"posture": "upright",
 }
+
+const POSTURES := {
+	"upright": {"spine":0.0, "neck":0.0, "roll":0.0},
+	"worked": {"spine":3.0, "neck":-2.0, "roll":1.0},
+	"guarded": {"spine":-1.0, "neck":2.0, "roll":0.0},
+	"weary": {"spine":2.0, "neck":3.0, "roll":-1.0},
+	"noble": {"spine":-2.0, "neck":-2.0, "roll":0.0},
+	"coiled": {"spine":3.0, "neck":-3.0, "roll":-1.5},
+}
+
+# These are anatomical changes, not random root scaling. Every pair among the
+# four professions differs on at least two authored proportion axes.
+const SILHOUETTES := {
+	"blacksmith": {"shoulder_width":1.25, "head_scale":0.98, "torso_length":0.92, "hunch":10.0, "posture":"worked", "layers":["apron", "smith_tool"]},
+	"ranger": {"shoulder_width":0.85, "head_scale":1.08, "torso_length":1.04, "hunch":5.0, "posture":"coiled", "layers":["cloak", "satchel"]},
+	"cleric": {"shoulder_width":0.90, "head_scale":1.12, "torso_length":0.94, "hunch":16.0, "posture":"weary", "layers":["hood", "mantle", "walking_stick"]},
+	"guard": {"shoulder_width":1.18, "head_scale":0.88, "torso_length":1.08, "hunch":0.0, "posture":"guarded", "layers":["helmet", "pauldron_left", "pauldron_right"]},
+	"noble": {"shoulder_width":1.06, "head_scale":0.96, "torso_length":1.06, "hunch":0.0, "posture":"noble", "layers":["mantle"]},
+	"worker": {"shoulder_width":1.10, "head_scale":1.04, "torso_length":0.96, "hunch":7.0, "posture":"worked", "layers":["satchel"]},
+	"scholar": {"shoulder_width":0.92, "head_scale":1.08, "torso_length":1.03, "hunch":8.0, "posture":"weary", "layers":["satchel"]},
+	"villager": {"shoulder_width":1.0, "head_scale":1.0, "torso_length":1.0, "hunch":0.0, "posture":"upright", "layers":[]},
+	"player": {"shoulder_width":1.0, "head_scale":1.0, "torso_length":1.0, "hunch":0.0, "posture":"upright", "layers":[]},
+}
+
+static func silhouette_for_role(role_id: String, seed: String = "") -> Dictionary:
+	var words := " " + (role_id + " " + seed).to_lower().replace("_", " ").replace("-", " ") + " "
+	var archetype := "villager"
+	if role_id in ["player", "player_kael", "player_human", "kael"]:
+		archetype = "player"
+	elif _has_word(words, ["blacksmith", "tor", "forge"]):
+		archetype = "blacksmith"
+	elif _has_word(words, ["edric", "lord", "noble"]):
+		archetype = "noble"
+	elif _has_word(words, ["anwen", "cleric", "sister", "pilgrim", "shrine"]):
+		archetype = "cleric"
+	elif _has_word(words, ["guard", "knight", "halvern", "patrol", "soldier"]):
+		archetype = "guard"
+	elif _has_word(words, ["ranger", "senn", "tracker", "iven", "rook", "maren", "deserter"]):
+		archetype = "ranger"
+	elif _has_word(words, ["vale", "lysa", "record", "keeper", "steward", "merrow"]):
+		archetype = "scholar"
+	elif _has_word(words, ["worker", "nessa", "dain", "oris", "edda", "toma", "ressa", "nera", "tavin", "odran", "maelin"]):
+		archetype = "worker"
+	var result: Dictionary = SILHOUETTES[archetype].duplicate(true)
+	result["archetype"] = archetype
+	return result
+
+static func _has_word(words: String, candidates: Array) -> bool:
+	for word: String in candidates:
+		if words.contains(" " + word + " "):
+			return true
+	return false
 
 const SPECS := {
 	"captain_senn": {"height":1.75, "collision_height":1.64, "collision_radius":0.31, "lod":32.0, "visual_forward_degrees":180.0},
@@ -85,13 +138,15 @@ const SPECS := {
 	"ashwing_creature": {"height": 2.40, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0, "airborne": true},
 }
 
-static func for_role(role_id: String) -> Dictionary:
+static func for_role(role_id: String, seed: String = "") -> Dictionary:
 	var key := role_id.strip_edges().to_lower()
 	var result: Dictionary = DEFAULT_SPEC.duplicate(true)
 	if SPECS.has(key):
 		result.merge(SPECS[key], true)
 	result["role"] = key
 	result["known"] = SPECS.has(key)
+	result["silhouette"] = silhouette_for_role(key, seed)
+	result["posture"] = str(result.silhouette.posture)
 	return result
 
 static func target_height(role_id: String, fallback: float = 1.72) -> float:

@@ -3,17 +3,8 @@ extends RefCounted
 const CharacterFaceDriver = preload("res://scripts/character_face_driver.gd")
 const StoryCastProfile = preload("res://scripts/story_cast_profile.gd")
 const CharacterMaterialBindings = preload("res://scripts/character_material_bindings.gd")
-
-const KAEL := {
-	"skin": Color("a9785f"), "hair": Color("77756f"), "eyes": Color("171412"),
-	"primary": Color("202a25"), "secondary": Color("30362d"), "linen": Color("b8ad99"),
-	"leather": Color("4a2d1c"), "boots": Color("2b1d17"), "metal": Color("8e784b")
-}
-const ANWEN := {
-	"skin": Color("a98270"), "hair": Color("b8b4aa"), "eyes": Color("292525"),
-	"primary": Color("28334b"), "secondary": Color("43475d"), "linen": Color("d2cab8"),
-	"leather": Color("3a2929"), "boots": Color("332428"), "metal": Color("a1854e")
-}
+const CharacterPalette = preload("res://scripts/systems/character_palette.gd")
+const RegionShader = preload("res://shaders/character_region_palette.gdshader")
 const HUMAN_ROLES := [
 	"player", "player_kael", "player_human", "kael", "sister_anwen", "sister_anwen_human", "anwen",
 	"mira_human", "mira_herbalist", "rook_human", "rook_smuggler", "villager_human", "villager_female_human",
@@ -30,12 +21,8 @@ const MONSTER_ROLES := [
 static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dictionary:
 	var role := role_id.to_lower()
 	var resolved_seed := variant_seed if not variant_seed.is_empty() else role
-	var profile := _profile_for(role, resolved_seed)
+	var profile := CharacterPalette.colors(role, resolved_seed, str(root.get_meta("character_region", "")))
 	var cast := StoryCastProfile.get_profile(role, resolved_seed)
-	if not cast.is_empty():
-		profile = profile.duplicate()
-		for channel in ["primary", "secondary", "skin", "hair"]:
-			profile[channel] = Color(str(cast[channel]))
 	var recipe := _recipe_for(role, profile, resolved_seed)
 	var surfaces := 0
 	var face_surfaces := 0
@@ -60,6 +47,8 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 					role_is_monster_role(role),
 					_wash_strength(token, role)
 				))
+			elif not role_is_monster_role(role):
+				_apply_regional_cloth(mesh, index, source, profile)
 			surfaces += 1
 			if token.contains("head") or token.contains("skin") or token.contains("eyes") or token.contains("hair") or token.contains("skull") or token.contains("jaw") or token.contains("mouth") or token.contains("teeth"):
 				face_surfaces += 1
@@ -71,7 +60,7 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 		root.set_meta("story_cast_profile", cast)
 	root.set_meta("character_identity_surfaces", surfaces)
 	root.set_meta("character_identity_material_mode", "prebaked_atlas" if prebaked_identity else "runtime_palette")
-	_apply_bounded_variant_scale(root, role, resolved_seed)
+	root.set_meta("character_palette", {"region":str(profile.region), "identity":str(profile.id), "accent":profile.get("accent", null)})
 	# Identity is now carried by the imported mesh materials. Earlier passes
 	# attached jaw, hair, eye and clothing primitives to the skeleton; those
 	# features were the source of the visible neck hump and could drift during
@@ -150,49 +139,28 @@ static func role_is_monster(root: Node) -> bool:
 	return str(root.get_meta("character_identity_profile", "")) in MONSTER_ROLES
 
 static func _profile_for(role: String, variant_seed: String = "") -> Dictionary:
-	if role in ["player", "player_kael", "player_human", "kael"]:
-		return KAEL
-	if role in ["sister_anwen", "sister_anwen_human", "anwen"]:
-		return ANWEN
-	var seed_text := variant_seed if not variant_seed.is_empty() else role
-	if role.contains("blacksmith") or role.contains("forge"):
-		return _occupation_profile(role, Color("2f2925"), Color("5b3522"), Color("a88a6c"), seed_text)
-	if role.contains("widow") or role.contains("mourner"):
-		return _occupation_profile(role, Color("272634"), Color("3b394d"), Color("a47a66"), seed_text)
-	if role.contains("pilgrim") or role.contains("shrine"):
-		return _occupation_profile(role, Color("343b32"), Color("5a5540"), Color("99705b"), seed_text)
-	if role.contains("steward") or role.contains("record_keeper"):
-		return _occupation_profile(role, Color("3b302b"), Color("6d5941"), Color("a47b63"), seed_text)
-	if role.contains("servant"):
-		return _occupation_profile(role, Color("4a3b35"), Color("6b5142"), Color("b07f68"), seed_text)
-	if role.contains("patrol"):
-		return _occupation_profile(role, Color("26333b"), Color("5a4a38"), Color("8f664f"), seed_text)
-	if role.contains("guard") or role.contains("vargan") or role.contains("edric"):
-		return _occupation_profile(role, Color("30363d"), Color("4d2424"), Color("a2765e"), seed_text)
-	if role.contains("ranger") or role.contains("senn") or role.contains("rook"):
-		return _occupation_profile(role, Color("26342d"), Color("44372a"), Color("8f664f"), seed_text)
-	if role.contains("mira"):
-		return _occupation_profile(role, Color("263b2b"), Color("4d5a3c"), Color("a97559"), seed_text)
-	var seed := _stable_seed(seed_text)
-	var skins := [Color("8d604c"), Color("a97559"), Color("bc876b"), Color("76503f")]
-	var hairs := [Color("241a15"), Color("4a3020"), Color("71604e"), Color("302523")]
-	var cloth := [Color("3b4430"), Color("4a3430"), Color("303e49"), Color("4a422e")]
-	return {
-		"skin": skins[seed % skins.size()], "hair": hairs[int(seed / 3) % hairs.size()], "eyes": Color("1b1816"),
-		"primary": cloth[int(seed / 5) % cloth.size()], "secondary": cloth[(int(seed / 7) + 1) % cloth.size()].lightened(0.08),
-		"linen": Color("b5aa91"), "leather": Color("4b3020"), "boots": Color("2d211a"), "metal": Color("786742")
-	}
+	return CharacterPalette.colors(role, variant_seed)
 
-static func _occupation_profile(role: String, primary: Color, secondary: Color, skin: Color, variant_seed: String = "") -> Dictionary:
-	var seed := _stable_seed(variant_seed if not variant_seed.is_empty() else role)
-	var hair_options := [Color("241a15"), Color("4a3020"), Color("71604e"), Color("302523")]
-	var skin_options := [skin, skin.lightened(0.07), skin.darkened(0.06), Color("8d604c")]
-	var eye_options := [Color("1b1816"), Color("30251e"), Color("26312c")]
-	return {
-		"skin": skin_options[seed % skin_options.size()], "hair": hair_options[int(seed / 3) % hair_options.size()], "eyes": eye_options[int(seed / 5) % eye_options.size()],
-		"primary": primary, "secondary": secondary, "linen": Color("b5aa91"),
-		"leather": Color("4b3020"), "boots": Color("2d211a"), "metal": Color("786742")
-	}
+static func _apply_regional_cloth(mesh: MeshInstance3D, surface: int, source: Material, palette: Dictionary) -> void:
+	if str(palette.id) in ["kael", "anwen"]:
+		return
+	if source is ShaderMaterial and (source as ShaderMaterial).shader == RegionShader:
+		return
+	if not source is StandardMaterial3D:
+		return
+	var original := source as StandardMaterial3D
+	var texture := original.albedo_texture
+	if texture == null or not texture.resource_path.get_file().contains("_Atlas"):
+		return
+	var key := var_to_str([texture, original.albedo_color, palette.primary])
+	if not _regional_materials.has(key):
+		var material := ShaderMaterial.new()
+		material.shader = RegionShader
+		material.set_shader_parameter("authored_atlas", texture)
+		material.set_shader_parameter("authored_tint", original.albedo_color)
+		material.set_shader_parameter("regional_cloth", palette.primary)
+		_regional_materials[key] = material
+	mesh.set_surface_override_material(surface, _regional_materials[key])
 
 static func _stable_seed(value: String) -> int:
 	var result := 17
@@ -236,28 +204,6 @@ static func _wash_strength(token: String, role: String) -> float:
 		return 0.34
 	return 0.24
 
-static func _apply_bounded_variant_scale(root: Node, role: String, variant_seed: String) -> void:
-	if role_is_monster_role(role) or role in ["player", "player_kael", "player_human", "kael", "sister_anwen", "sister_anwen_human", "anwen"]:
-		return
-	if root.has_meta("character_variant_scale"):
-		return
-	var seed := _stable_seed(variant_seed if not variant_seed.is_empty() else role)
-	# Keep height unchanged so CharacterRoleSpec and the collision capsule stay
-	# authoritative. A small width/depth range supplies silhouette variation
-	# without producing giant actors or invalidating grounded origins.
-	var width := 0.95 + float(seed % 11) * 0.01
-	var depth := 0.95 + float(int(seed / 11) % 11) * 0.01
-	var cast := StoryCastProfile.get_profile(role, variant_seed)
-	if not cast.is_empty():
-		width = float(cast.get("width", width))
-		depth = float(cast.get("depth", depth))
-	var node_root := root as Node3D
-	if node_root == null:
-		return
-	var current: Vector3 = node_root.scale
-	node_root.scale = Vector3(current.x * width, current.y, current.z * depth)
-	root.set_meta("character_variant_scale", Vector3(width, 1.0, depth))
-
 static func _color_for(token: String, role: String, profile: Dictionary) -> Color:
 	if role in MONSTER_ROLES:
 		var monster_skin: Color = {
@@ -300,9 +246,11 @@ static func _color_for(token: String, role: String, profile: Dictionary) -> Colo
 	return profile.primary
 
 static var _palette_materials: Dictionary = {}
+static var _regional_materials: Dictionary = {}
 
 static func clear_material_cache() -> void:
 	_palette_materials.clear()
+	_regional_materials.clear()
 
 static func _identity_material(source, color: Color, monster := false, wash_override: float = -1.0) -> StandardMaterial3D:
 	var source_key: Variant = source if source is Material else "untextured"
