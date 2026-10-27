@@ -112,6 +112,15 @@ static func connection_between(source: String, target: String) -> Dictionary:
 		if str(edge.target) == canonical(target): return edge
 	return {}
 
+static func road_landmark(source: String, target: String) -> Dictionary:
+	_ensure_loaded()
+	var pair: Array = [canonical(source), canonical(target)]
+	for landmark: Dictionary in _data.get("road_landmarks", []):
+		var between: Array = landmark.get("between", [])
+		if between.size() == 2 and pair[0] in between and pair[1] in between:
+			return landmark.duplicate(true)
+	return {}
+
 static func direction(edge_id: String) -> Vector3:
 	match edge_id:
 		"north": return Vector3.FORWARD

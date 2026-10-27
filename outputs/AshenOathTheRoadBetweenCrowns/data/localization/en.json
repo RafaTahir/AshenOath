@@ -9647,22 +9647,34 @@
       "context": "preparation_notes.known_use.restored_bog_account"
     },
     "quests.main_ash_at_the_mill.objectives.inspect_millstones.text": {
-      "source": "Compare the ash measure with the missing wagons.",
-      "text": "Compare the ash measure with the missing wagons.",
+      "source": "Optional: compare the ash measure with the missing wagons.",
+      "text": "Optional: compare the ash measure with the missing wagons.",
       "speaker": "",
       "context": "quests.main_ash_at_the_mill.objectives.inspect_millstones"
     },
     "quests.main_ash_at_the_mill.objectives.mill_choice.text": {
-      "source": "Keep the evidence and choose how Greyfen receives flour.",
-      "text": "Keep the evidence and choose how Greyfen receives flour.",
+      "source": "Overcome Ashwing, then decide how Greyfen receives flour.",
+      "text": "Overcome Ashwing, then decide how Greyfen receives flour.",
       "speaker": "",
       "context": "quests.main_ash_at_the_mill.objectives.mill_choice"
     },
     "quests.main_ash_at_the_mill.objectives.mill_encounter.text": {
-      "source": "Protect the working route from the ash-bound threat.",
-      "text": "Protect the working route from the ash-bound threat.",
+      "source": "Clear the ash-bound attackers from the workers' route.",
+      "text": "Clear the ash-bound attackers from the workers' route.",
       "speaker": "",
       "context": "quests.main_ash_at_the_mill.objectives.mill_encounter"
+    },
+    "quests.main_ash_at_the_mill.objectives.open_mill_sluice.text": {
+      "source": "Optional: open the sluice to clear the workers' escape channel.",
+      "text": "Optional: open the sluice to clear the workers' escape channel.",
+      "speaker": "",
+      "context": "quests.main_ash_at_the_mill.objectives.open_mill_sluice"
+    },
+    "quests.main_ash_at_the_mill.objectives.escort_mill_workers.text": {
+      "source": "Optional: stay with the workers until both reach the south yard.",
+      "text": "Optional: stay with the workers until both reach the south yard.",
+      "speaker": "",
+      "context": "quests.main_ash_at_the_mill.objectives.escort_mill_workers"
     },
     "quests.main_ash_at_the_mill.objectives.reach_mill.text": {
       "source": "Reach the mill that supplies Greyfen.",
@@ -9731,8 +9743,8 @@
       "context": "quests.main_bell_beneath_greyfen"
     },
     "quests.main_blood_under_stone.objectives.castle_evidence_ready.text": {
-      "source": "Piece together House Vargan's control of the road.",
-      "text": "Piece together House Vargan's control of the road.",
+      "source": "Optional: compare the traces of House Vargan's road closure.",
+      "text": "Optional: compare the traces of House Vargan's road closure.",
       "speaker": "",
       "context": "quests.main_blood_under_stone.objectives.castle_evidence_ready"
     },
@@ -9797,8 +9809,8 @@
       "context": "quests.main_blood_under_stone.objectives.reach_castle"
     },
     "quests.main_blood_under_stone.objectives.recover_ledger.text": {
-      "source": "Read the command beside the refugee register.",
-      "text": "Read the command beside the refugee register.",
+      "source": "Secure the command proof inside the record hall.",
+      "text": "Secure the command proof inside the record hall.",
       "speaker": "",
       "context": "quests.main_blood_under_stone.objectives.recover_ledger"
     },
@@ -9809,8 +9821,8 @@
       "context": "quests.main_blood_under_stone.objectives.speak_guard"
     },
     "quests.main_blood_under_stone.objectives.survive_haunting.text": {
-      "source": "Survive what the erased names awakened.",
-      "text": "Survive what the erased names awakened.",
+      "source": "Survive the archive haunting with the copied command intact.",
+      "text": "Survive the archive haunting with the copied command intact.",
       "speaker": "",
       "context": "quests.main_blood_under_stone.objectives.survive_haunting"
     },

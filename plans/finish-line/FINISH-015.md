@@ -1,5 +1,28 @@
 # FINISH-015 - Complete Campaign Acceptance
 
+## Throughline Delivery - 2026-10-27
+
+Candidate: `campaign-throughline-20261027`. Narrative contract and user checks:
+[THROUGHLINE](../../outputs/AshenOathTheRoadBetweenCrowns/docs/THROUGHLINE.md).
+Preserves 57 quests, dialogue-tree prose, existing IDs/choices/rewards and all
+four endings/homecoming. The mill foregrounds existing combat/counterplay and
+optional flag-backed worker rescue; Castle's three-trace corroboration becomes
+optional without removing mandatory command proof. Primary objective guidance
+skips optional work. Completed saves stay completed; actual older action flags
+can credit the two new optional mill objectives without granting rewards again.
+
+Road landmarks share atlas definitions and existing connector crossing frames.
+Existing StoryState dialogue decisions project into cast routines, lowered
+banners, retired toll equipment and truthful withdrawn-order presentation.
+Destination preconstruction cannot credit live quest actions.
+
+Implementation/static authoring review: complete. All eight runtime packs and
+the production Web export compiled successfully. Package integrity passed:
+17 deployed files, 108,016,627 bytes total, largest file 32,705,546 bytes.
+Publication commit/status is recorded in the FINISH-015 Git publication receipt.
+Agent runtime verification: NOT RUN;
+user acceptance: PENDING. No historical performance result is changed.
+
 ## Current Implementation Delivery - 2026-10-26
 
 Candidate: `finish-implementation-20261026`, continued from published r14

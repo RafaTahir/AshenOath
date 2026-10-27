@@ -4,6 +4,7 @@ const Sectors = preload("res://scripts/world_sector_manifest.gd")
 static var _door_meshes: Dictionary = {}
 static var _meshes: Dictionary = {}
 static var _shapes: Dictionary = {}
+static var _landmark_box: BoxMesh
 
 static func open_authored_door(door: MeshInstance3D) -> void:
 	if door.mesh == null or door.mesh.get_surface_count() < 2 or door.has_meta("hinged_authored_door"): return
@@ -87,11 +88,67 @@ static func install(context: ZoneBuildContext) -> void:
 		var roof_right := PackedVector3Array([right[1]+Vector3.UP*4.5,right[2]+Vector3.UP*4.5])
 		_strip(path,"BendArch",roof_left,roof_right,banks,true,"arch" if not stone else "")
 		_make_gate(path,edge,width,timber)
+		_make_landmark(path,edge,width,timber,banks)
 		path.set_meta("required_ground",true)
 		var marker := context.zone_root.find_child("gate_"+str(edge.target),true,false) as Node3D
 		if marker == null:
 			marker = context.make_zone_gate("Road to "+str(edge.target).replace("_"," ").capitalize(),source_points[0],str(edge.target),Vector3.ZERO)
 		if marker != null: marker.position = source_points[0]
+
+static func _make_landmark(parent: Node3D, edge: Dictionary, half: float, timber: Material, stone: Material) -> void:
+	var definition := Sectors.road_landmark(str(edge.source), str(edge.target))
+	if definition.is_empty(): return
+	# Each sector owns its side of a real paired landmark at the common plane.
+	# The crossing transform places the other half opposite it, not somewhere
+	# inferred from the atlas's deliberately non-geographic diagram positions.
+	var landmark := Node3D.new()
+	landmark.name = "RoadLandmark"
+	landmark.transform = parent.transform.affine_inverse() * Sectors.crossing_frame(edge)
+	landmark.set_meta("atlas_landmark", str(definition.name))
+	parent.add_child(landmark)
+	var h := float(definition.height)
+	var x := half + 2.1
+	var pieces: Array[Transform3D] = []
+	var kind := str(definition.kind)
+	if kind in ["aqueduct", "ruined_arch"]:
+		for side in [-1.0, 1.0]:
+			pieces.append(_landmark_part(Vector3(side*x,h*0.36,-1.6),Vector3(1.1,h*0.72,1.6)))
+			pieces.append(_landmark_part(Vector3(side*(x-0.6),h*0.78,-1.6),Vector3(2.0,0.65,1.6),-side*0.28))
+			pieces.append(_landmark_part(Vector3(side*(x-1.5),h*0.88,-1.6),Vector3(1.3,0.58,1.6),-side*0.56))
+		if kind == "aqueduct":
+			for side in [-1.0, 1.0]:
+				pieces.append(_landmark_part(Vector3(side*(x-0.3),h,-1.6),Vector3(2.4,0.45,1.9)))
+	elif kind == "bastion":
+		for side in [-1.0, 1.0]:
+			pieces.append(_landmark_part(Vector3(side*x,h*0.43,-1.8),Vector3(2.0,h*0.86,2.4)))
+			for tooth in [-0.7, 0.0, 0.7]:
+				pieces.append(_landmark_part(Vector3(side*x+tooth,h*0.92,-1.8),Vector3(0.35,h*0.16,2.4)))
+	else:
+		for side in [-1.0, 1.0]:
+			for offset in [-0.7, 0.7]:
+				pieces.append(_landmark_part(Vector3(side*x+offset,h*0.46,-1.8),Vector3(0.28,h*0.92,0.32)))
+			pieces.append(_landmark_part(Vector3(side*x,h*0.74,-1.8),Vector3(2.0,0.24,2.3)))
+			pieces.append(_landmark_part(Vector3(side*x,h*0.95,-1.8),Vector3(2.5,0.30,2.7)))
+			if kind == "bell_frame":
+				pieces.append(_landmark_part(Vector3(side*x,h*0.83,-1.8),Vector3(0.65,0.7,0.6)))
+			elif kind == "beacon":
+				pieces.append(_landmark_part(Vector3(side*x,h*0.84,-1.8),Vector3(0.6,0.65,0.6),0.5))
+		if kind == "gantry":
+			pieces.append(_landmark_part(Vector3(0,h*0.91,-1.8),Vector3(x*2.0,0.30,0.35)))
+	if _landmark_box == null: _landmark_box = BoxMesh.new()
+	var batch := MultiMesh.new()
+	batch.transform_format = MultiMesh.TRANSFORM_3D
+	batch.mesh = _landmark_box
+	batch.instance_count = pieces.size()
+	for i in pieces.size(): batch.set_instance_transform(i, pieces[i])
+	var visual := MultiMeshInstance3D.new()
+	visual.multimesh = batch
+	visual.material_override = stone if kind in ["aqueduct", "ruined_arch", "bastion"] else timber
+	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	landmark.add_child(visual)
+
+static func _landmark_part(position: Vector3, size: Vector3, roll: float = 0.0) -> Transform3D:
+	return Transform3D(Basis(Vector3.BACK,roll).scaled(size),position)
 
 static func _make_gate(parent: Node3D, edge: Dictionary, half: float, material: Material) -> void:
 	var gate := Node3D.new(); gate.name = "TravelGate"

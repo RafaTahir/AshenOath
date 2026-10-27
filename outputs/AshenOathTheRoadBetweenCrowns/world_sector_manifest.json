@@ -10,6 +10,20 @@
     "journey_links": [["greyfen","ruins"]],
     "local_links": [["greyfen","cemetery"],["cemetery","greyfen"],["ruins","greyfen"]]
   },
+  "road_landmarks": [
+    {"between":["greyfen","wychwood"],"name":"The twin warning frames","kind":"bell_frame","height":8.0},
+    {"between":["wychwood","deep_wood"],"name":"The broken forest aqueduct","kind":"aqueduct","height":8.5},
+    {"between":["deep_wood","old_mill"],"name":"The mill hauling gantries","kind":"gantry","height":8.0},
+    {"between":["old_mill","burned_farmstead"],"name":"The scorched supply arches","kind":"ruined_arch","height":8.0},
+    {"between":["burned_farmstead","marsh_crossing"],"name":"The high-water signal frames","kind":"beacon","height":8.0},
+    {"between":["marsh_crossing","bandit_road"],"name":"The crossing watchtowers","kind":"watchtower","height":9.0},
+    {"between":["bandit_road","vargan_approach"],"name":"The Vargan road watchtowers","kind":"watchtower","height":9.0},
+    {"between":["vargan_approach","vargan_court"],"name":"Vargan's paired gate bastions","kind":"bastion","height":8.0},
+    {"between":["greyfen","deep_wood"],"name":"The old western aqueduct","kind":"aqueduct","height":8.5},
+    {"between":["greyfen","vargan_approach"],"name":"The crown-road watchtowers","kind":"watchtower","height":9.0},
+    {"between":["greyfen","hart_glade"],"name":"The split oath arch","kind":"ruined_arch","height":8.0},
+    {"between":["hart_glade","ruins"],"name":"The sanctuary's broken arch","kind":"ruined_arch","height":8.0}
+  ],
   "sectors": {
     "greyfen": {
       "coordinate": [0, 0],

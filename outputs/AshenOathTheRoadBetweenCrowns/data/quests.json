@@ -210,15 +210,28 @@
       },
       {
         "id": "inspect_millstones",
-        "text": "Compare the ash measure with the missing wagons."
+        "text": "Optional: compare the ash measure with the missing wagons.",
+        "optional": true
+      },
+      {
+        "id": "open_mill_sluice",
+        "text": "Optional: open the sluice to clear the workers' escape channel.",
+        "optional": true,
+        "story_flag": "mill_ventilation_open"
+      },
+      {
+        "id": "escort_mill_workers",
+        "text": "Optional: stay with the workers until both reach the south yard.",
+        "optional": true,
+        "story_flag": "mill_workers_rescued"
       },
       {
         "id": "mill_encounter",
-        "text": "Protect the working route from the ash-bound threat."
+        "text": "Clear the ash-bound attackers from the workers' route."
       },
       {
         "id": "mill_choice",
-        "text": "Keep the evidence and choose how Greyfen receives flour."
+        "text": "Overcome Ashwing, then decide how Greyfen receives flour."
       }
     ],
     "unlocks": [
@@ -301,9 +314,11 @@
       },
       {
         "id": "castle_evidence_ready",
-        "text": "Piece together House Vargan's control of the road.",
+        "text": "Optional: compare the traces of House Vargan's road closure.",
         "group": "castle_evidence",
-        "required_count": 3
+        "required_count": 3,
+        "group_summary": true,
+        "optional": true
       },
       {
         "id": "locate_record_hall",
@@ -311,7 +326,7 @@
       },
       {
         "id": "recover_ledger",
-        "text": "Read the command beside the refugee register."
+        "text": "Secure the command proof inside the record hall."
       },
       {
         "id": "ledger_choice",
@@ -319,7 +334,7 @@
       },
       {
         "id": "survive_haunting",
-        "text": "Survive what the erased names awakened."
+        "text": "Survive the archive haunting with the copied command intact."
       },
       {
         "id": "last_witness_hook",

@@ -143,6 +143,17 @@ func complete_evidence(quest_id: String, evidence_id: String) -> bool:
 		_emit_changed()
 	return advanced
 
+func sync_story_objectives(state: Node) -> void:
+	if state == null:
+		return
+	# Optional work is credited only from its existing durable action owner,
+	# including work done before the main quest was started or on an old save.
+	for id: String in quest_defs:
+		for objective: Dictionary in quest_defs[id].get("objectives", []):
+			var flag := str(objective.get("story_flag", ""))
+			if flag != "" and bool(objective.get("optional", false)) and _saved_true(state.get_flag(flag, false)):
+				complete_evidence(id, str(objective.id))
+
 func _objective_definition(quest_id: String, objective_id: String) -> Dictionary:
 	for objective: Dictionary in quest_defs.get(quest_id, {}).get("objectives", []):
 		if str(objective.get("id", "")) == objective_id:
@@ -199,11 +210,13 @@ func _update_evidence_groups(quest_id: String) -> void:
 		var group := str(objective.get("group", ""))
 		if group == "": continue
 		if not groups.has(group): groups[group] = {"done": 0, "required": int(objective.get("required_count", 1))}
-		if bool(objective.get("done", false)): groups[group]["done"] += 1
+		if bool(objective.get("done", false)) and not bool(objective.get("group_summary", false)): groups[group]["done"] += 1
 	for objective in objectives:
 		var group := str(objective.get("group", ""))
 		if group == "" or not groups.has(group): continue
-		if bool(objective.get("optional", false)):
+		if bool(objective.get("group_summary", false)):
+			objective["done"] = bool(objective.get("done", false)) or int(groups[group]["done"]) >= int(groups[group]["required"])
+		elif bool(objective.get("optional", false)):
 			objective["optional_satisfied"] = int(groups[group]["done"]) >= int(groups[group]["required"])
 		elif int(objective.get("required_count", 0)) > 0 and int(groups[group]["done"]) >= int(objective["required_count"]):
 			objective["done"] = true
@@ -270,10 +283,9 @@ func get_tracker_text() -> String:
 		if not quest_defs.has(id) or typeof(active.get(id, {})) != TYPE_DICTIONARY:
 			continue
 		var title = str(quest_defs[id].get("title", id))
+		var active_objective := get_active_objective_id(id)
 		for objective in active[id]["objectives"]:
-			if bool(objective.get("done", false)):
-				continue
-			if bool(objective.get("optional", false)) and bool(objective.get("optional_satisfied", false)):
+			if str(objective.get("id", "")) != active_objective:
 				continue
 			var group := str(objective.get("group", ""))
 			if group != "":
@@ -300,7 +312,7 @@ func _group_progress(quest_id: String, group_id: String) -> Dictionary:
 		if str(objective.get("group", "")) != group_id:
 			continue
 		required = maxi(required, int(objective.get("required_count", 1)))
-		if bool(objective.get("optional", false)) and bool(objective.get("done", false)):
+		if bool(objective.get("optional", false)) and not bool(objective.get("group_summary", false)) and bool(objective.get("done", false)):
 			done += 1
 	return {"done": done, "required": required}
 

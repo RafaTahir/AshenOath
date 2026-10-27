@@ -72,7 +72,7 @@ static func life_data() -> Dictionary:
 	return _life_data
 
 static func routine(id: String, zone: String, state, quests, phase: String, minutes: float = -1.0) -> Dictionary:
-	var definition: Dictionary = life_data().get("zones", {}).get(zone, {}).get(id, {})
+	var definition: Dictionary = life_data().get("zones", {}).get(zone, {}).get(id, {}).duplicate(true)
 	if id == "saga_maren":
 		var location: Dictionary = preload("res://scripts/saga_catalog.gd").person_location(id, quests)
 		if str(location.zone) != zone:
@@ -82,14 +82,22 @@ static func routine(id: String, zone: String, state, quests, phase: String, minu
 	if definition.is_empty():
 		return {}
 	var profile := presence_profile(str(definition.get("profile", id)))
-	var work: Array = definition.work
-	var activity := str(profile.activity)
-	var line := str(definition.get("line", ""))
 	var resolved: bool = quests != null and str(definition.get("after_quest", "")) != "" and quests.is_completed(str(definition.after_quest))
 	if resolved:
-		work = definition.get("after_work", work)
-		activity = str(definition.get("after_activity", activity))
-		line = str(definition.get("after_line", line))
+		definition["work"] = definition.get("after_work", definition.work)
+		definition["activity"] = definition.get("after_activity", profile.activity)
+		definition["line"] = definition.get("after_line", definition.get("line", ""))
+	var consequences: Array[String] = []
+	for projection: Dictionary in definition.get("consequences", []):
+		var flag := str(projection.get("flag", ""))
+		if state == null or flag == "" or state.get_flag(flag, null) != projection.get("value"):
+			continue
+		consequences.append(flag + ":" + str(projection.value))
+		for key: String in ["work", "errand", "rest", "social", "activity", "line", "station"]:
+			if projection.has(key): definition[key] = projection[key]
+	var work: Array = definition.work
+	var activity := str(definition.get("activity", profile.activity))
+	var line := str(definition.get("line", ""))
 	var rest: Array = definition.get("rest", work)
 	var errand: Array = definition.get("errand", work)
 	var path: Array = [Vector3(work[0],work[1],work[2]), Vector3(errand[0],errand[1],errand[2])]
@@ -104,7 +112,7 @@ static func routine(id: String, zone: String, state, quests, phase: String, minu
 		var social: Array = definition.social
 		path = [Vector3(social[0],social[1],social[2]), Vector3(work[0],work[1],work[2])]
 		activities = ["rest", activity]
-	var result := {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "station":WORKSTATIONS.get(id, {}), "revision":str([phase,resolved,state.get_flag("final_covenant", "") if state != null else ""])}
+	var result := {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "station":definition.get("station", WORKSTATIONS.get(id, {})), "revision":str([phase,resolved,consequences,state.get_flag("final_covenant", "") if state != null else ""])}
 	if minutes >= 0.0:
 		var locations := definition.duplicate(true)
 		locations.work = work

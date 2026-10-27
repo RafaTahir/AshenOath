@@ -402,7 +402,9 @@ func _make_undercroft_vault(context: ZoneBuildContext) -> void:
 func _make_assembly_dressing(context: ZoneBuildContext) -> void:
 	for x in [-12.0, 12.0]:
 		context.make_visual_box("AssemblyWitnessBannerPole", Vector3(x, 2.5, -7.5), Vector3(0.16, 5.0, 0.16), Color(0.16, 0.095, 0.045))
-		context.make_visual_box("AssemblyWitnessBanner", Vector3(x, 3.6, -7.5), Vector3(1.1, 1.7, 0.06), Color(0.25, 0.055, 0.035))
+		var banner: MeshInstance3D = context.make_visual_box("AssemblyWitnessBanner", Vector3(x, 3.6, -7.5), Vector3(1.1, 1.7, 0.06), Color(0.25, 0.055, 0.035))
+		banner.set_meta("renewal_banner", true)
+		banner.visible = not bool(context.get_story_flag("renewal_stopped", false))
 	context.make_light("AssemblyFireLight", Vector3(0, 2.0, 4.2), Color(0.78, 0.28, 0.08), 1.0)
 
 func _make_assembly_court(context: ZoneBuildContext) -> void:

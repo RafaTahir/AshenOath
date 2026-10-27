@@ -31,6 +31,10 @@ static var _unit_sack: CylinderMesh
 static func decorate(game, root: Node3D, zone_id: String) -> void:
 	if root == null or not is_instance_valid(root) or game.story_state == null:
 		return
+	# Destination construction may project outcomes but must not advance the
+	# live journey. Only the published game's arrival/choice path credits work.
+	if not game.has_method("retire_construction_host") and root == game.zone_root and bool(game.game_started):
+		game.quests.sync_story_objectives(game.story_state)
 	if zone_id == "greyfen" and (game.quests.is_active("main_crowns_without_mercy") or game.quests.is_completed("main_crowns_without_mercy")) and root.find_child("gate_assembly",true,false) == null:
 		game._make_zone_gate("Join the assembly at Greyfen's common table",Vector3(0,0,8),"assembly",Vector3(0,0.95,12))
 	load("res://scripts/story_activity_director.gd").install(game, root, zone_id)
@@ -428,15 +432,23 @@ static func _marsh(game, parent: Node3D) -> void:
 static func _bandit_road(game, parent: Node3D) -> void:
 	var fate := str(_flag(game, "senn_fate"))
 	if fate == "": return
-	_notice(game, parent, Vector3(-5.7, 0, 6.0), "SENN'S ROAD\n" + {"exile": "The captain has left; the orders remain", "punished": "The command has fallen; testimony costs blood", "heard": "The captain's account travels with Kael", "spared": "A soldier remains to answer"}.get(fate, "The command has been answered"))
+	_notice(game, parent, Vector3(-5.7, 0, 6.0), "THE OPEN ROAD\n" + {"exile": "Senn has left; the crossing crew keeps the stores", "punished": "The command has fallen; the crossing still needs work", "testimony": "Senn remains to answer; passage is not a toll"}.get(fate, "The command has been answered"))
+	# The retired toll equipment is stored beside Tavin, not across the lane.
+	for index in range(3):
+		_box(game, parent, "StoredTollRail", Vector3(-6.1,0.18+index*0.13,7.1), Vector3(2.0,0.10,0.15), TIMBER)
+	_box(game, parent, "FoldedCheckpointPennant", Vector3(-5.3,0.62,7.1), Vector3(0.55,0.08,0.36), RED)
 
 static func _vargan(game, parent: Node3D, zone: String) -> void:
+	var withdrawn := bool(_flag(game, "renewal_stopped", false))
 	if zone == "record_hall":
 		_table(game, parent, Vector3(-3.0, 0, 4.0), 1.5)
 		_box(game, parent, "RenewalOrder", Vector3(-3.0, 0.85, 4.0), Vector3(1.05, 0.025, 0.57), PAPER)
-		_label(parent, "RenewalOrderTitle", "RENEWAL ORDER\nA living household must pledge", Vector3(-3.0, 1.8, 4.0), RED)
+		_label(parent, "RenewalOrderTitle", "WITHDRAWN RENEWAL\nOriginal retained with the correction" if withdrawn else "RENEWAL ORDER\nA living household must pledge", Vector3(-3.0, 1.8, 4.0), GREEN if withdrawn else RED)
 	else:
-		_notice(game, parent, Vector3(-5.2, 0, 8.0), "HOUSE VARGAN\nThe renewal is still commanded", RED)
+		_notice(game, parent, Vector3(-5.2, 0, 8.0), "RENEWAL WITHDRAWN\nSupplies do not purchase a household's oath" if withdrawn else "HOUSE VARGAN\nThe renewal is still commanded", GREEN if withdrawn else RED)
+		for x in [-7.4, 7.4]:
+			_box(game, parent, "VarganAuthorityPole", Vector3(x,2.4,10.5), Vector3(0.12,4.8,0.12), TIMBER)
+			_box(game, parent, "FoldedVarganBanner" if withdrawn else "RaisedVarganBanner", Vector3(x,0.16,10.5) if withdrawn else Vector3(x,3.5,10.5), Vector3(0.85,0.10,0.4) if withdrawn else Vector3(0.85,1.35,0.035), RED)
 	if str(_flag(game, "witness_consent_edric")) == "compelled":
 		_notice(game, parent, Vector3(5.2, 0, 6.0), "EDRIC'S COMPELLED ACCOUNT\nEvidence, not voluntary testimony")
 
@@ -449,6 +461,12 @@ static func _undercroft(game, parent: Node3D) -> void:
 
 static func _assembly(game, parent: Node3D) -> void:
 	var stopped := bool(_flag(game, "renewal_stopped", false))
+	for banner in game.zone_root.find_children("*", "MeshInstance3D", true, false):
+		if bool(banner.get_meta("renewal_banner", false)):
+			banner.visible = not stopped
+	if stopped:
+		for x in [-12.0, 12.0]:
+			_box(game,parent,"LoweredAssemblyBanner",Vector3(x,0.14,-7.5),Vector3(1.0,0.12,0.5),RED)
 	_table(game, parent, Vector3(2.7, 0, -6.4), 1.3)
 	_box(game, parent, "RenewalSignaturePage", Vector3(2.7, 0.85, -6.4), Vector3(0.9, 0.02, 0.52), PAPER)
 	if stopped:

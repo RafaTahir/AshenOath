@@ -45,6 +45,8 @@ const ROUTES := {
 	"main_ash_at_the_mill": {
 		"reach_mill":["old_mill", [], "The mill lies beyond Deep Wychwood.", "Learn what has been feeding Greyfen's fields."],
 		"inspect_millstones":["old_mill", ["millstones"], "Inspect the stones inside the mill.", "Establish what was ground into the flour."],
+		"open_mill_sluice":["old_mill", ["mill_sluice"], "Open the sluice beside the mill's escape channel.", "Clear the workers' route without making preparation compulsory."],
+		"escort_mill_workers":["old_mill", ["mill_workers"], "Call the workers and stay near them until both reach the south yard.", "They can wait safely if you need to interrupt the crossing."],
 		"mill_encounter":["old_mill", [], "The sluice opens an escape channel; the hauling rope can ground Ashwing.", "People and their records remain at risk during the fight."],
 		"mill_choice":["old_mill", ["miller_record"], "The miller's record lies beside the stones.", "Settle the mill's future with the account intact."]
 	},
@@ -57,7 +59,7 @@ const ROUTES := {
 		"reach_castle":["vargan_approach", [], "Follow the military road to Vargan's outer gate.", "Find the authority behind the closure."],
 		"speak_guard":["vargan_court", ["vargan_gate_guard"], "The guard stands just inside the courtyard gate.", "Ask who ordered the road closed."],
 		"enter_courtyard":["vargan_court", [], "Pass through Vargan's outer gate.", "Follow the order into the castle."],
-		"castle_evidence_ready":["vargan_court", [], "Compare the closure notice and the traces of the old order.", "Establish why the road was closed."],
+		"castle_evidence_ready":["vargan_court", [], "Optional: compare the closure notice and traces of the old order.", "These corroborate the command; collecting three is not required for access or testimony."],
 		"evidence_mile_marker":["vargan_approach", [], "Read the worn marker on the military road.", "Compare what the road promised with what was ordered."],
 		"evidence_supply_cart":["vargan_approach", [], "Inspect the abandoned military cart beside the approach.", "Account for the supplies taken down this road."],
 		"evidence_gate_notice":["vargan_court", [], "Read the closure notice beside the courtyard gate.", "Establish who claimed the authority to close the road."],
@@ -170,7 +172,7 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 	if quest_id == "main_blood_under_stone" and objective_id == "last_witness_hook":
 		result["next_action"] = "Demand Edric's answer about the renewal"
 	elif quest_id == "main_blood_under_stone" and objective_id == "castle_evidence_ready":
-		result["next_action"] = "Compare three accounts of Vargan's road closure"
+		result["next_action"] = "Optional: corroborate the road closure; the command proof remains in the archive"
 	return result
 
 static func _unfinished_group_route(quest_id: String, members: Array, quests, current_zone: String, fallback: Array) -> Array:

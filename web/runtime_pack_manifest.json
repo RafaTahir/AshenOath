@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "world-view-hotfix-20261027",
+  "release_id": "campaign-throughline-20261027",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "world-view-hotfix-20261027",
+      "version": "campaign-throughline-20261027",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4437712,
-      "candidate_sha256": "b0b1eca282bccf57064e9ca3d2c8a170ca2acc72edb25eb571ca93bb3520bbd8",
+      "candidate_bytes": 4440896,
+      "candidate_sha256": "9c37af7014565654fe22f7822a7237b640dcf2d9c0bd40b9837cb03e6243f130",
       "contents": [
         "menu",
         "managers",
@@ -35,14 +35,14 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4437712,
-      "embedded_source_sha256": "b0b1eca282bccf57064e9ca3d2c8a170ca2acc72edb25eb571ca93bb3520bbd8",
+      "embedded_source_bytes": 4440896,
+      "embedded_source_sha256": "9c37af7014565654fe22f7822a7237b640dcf2d9c0bd40b9837cb03e6243f130",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "world-view-hotfix-20261027",
-      "url": "packs/opening.pck?sha256=d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb",
-      "sha256": "d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb",
+      "version": "campaign-throughline-20261027",
+      "url": "packs/opening.pck?sha256=04a95f9578dd13966ec4dfdacd21565d6d90ab9b7f9603dc46b53243366e6b17",
+      "sha256": "04a95f9578dd13966ec4dfdacd21565d6d90ab9b7f9603dc46b53243366e6b17",
       "bytes": 35867452,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
@@ -52,19 +52,19 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
       "candidate_bytes": 35867452,
-      "candidate_sha256": "d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb",
+      "candidate_sha256": "04a95f9578dd13966ec4dfdacd21565d6d90ab9b7f9603dc46b53243366e6b17",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "d069418ebc3d1f1476ce99edeed53b1ebb53ff25d2784888f22728bdc096b8eb"
+      "cache_key": "04a95f9578dd13966ec4dfdacd21565d6d90ab9b7f9603dc46b53243366e6b17"
     },
     "campaign": {
-      "version": "world-view-hotfix-20261027",
-      "url": "packs/campaign.pck?sha256=a0ec7cc54744623b1602b1a834a115ec103e84e421feafd1c6ab9c01280e4b84",
-      "sha256": "a0ec7cc54744623b1602b1a834a115ec103e84e421feafd1c6ab9c01280e4b84",
-      "bytes": 8733380,
+      "version": "campaign-throughline-20261027",
+      "url": "packs/campaign.pck?sha256=e130e9f54bed652a13df2cab4a2b088ca83098e11e68adf4188745837c7a431f",
+      "sha256": "e130e9f54bed652a13df2cab4a2b088ca83098e11e68adf4188745837c7a431f",
+      "bytes": 8733492,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,18 +73,18 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 8733380,
-      "candidate_sha256": "a0ec7cc54744623b1602b1a834a115ec103e84e421feafd1c6ab9c01280e4b84",
+      "candidate_bytes": 8733492,
+      "candidate_sha256": "e130e9f54bed652a13df2cab4a2b088ca83098e11e68adf4188745837c7a431f",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "a0ec7cc54744623b1602b1a834a115ec103e84e421feafd1c6ab9c01280e4b84"
+      "cache_key": "e130e9f54bed652a13df2cab4a2b088ca83098e11e68adf4188745837c7a431f"
     },
     "characters": {
-      "version": "world-view-hotfix-20261027",
+      "version": "campaign-throughline-20261027",
       "url": "packs/characters.pck?sha256=fe7dae334a63b7fc00c03179c5abb0a82f580f38be6ee813a8f797b213b475af",
       "sha256": "fe7dae334a63b7fc00c03179c5abb0a82f580f38be6ee813a8f797b213b475af",
       "bytes": 9662720,
@@ -105,7 +105,7 @@
       "cache_key": "fe7dae334a63b7fc00c03179c5abb0a82f580f38be6ee813a8f797b213b475af"
     },
     "monsters": {
-      "version": "world-view-hotfix-20261027",
+      "version": "campaign-throughline-20261027",
       "url": "packs/monsters.pck?sha256=de9c188895f0c3be5b12202a95bc24279804a40b6e3e0421e040d393606c0984",
       "sha256": "de9c188895f0c3be5b12202a95bc24279804a40b6e3e0421e040d393606c0984",
       "bytes": 14714472,
@@ -127,7 +127,7 @@
       "cache_key": "de9c188895f0c3be5b12202a95bc24279804a40b6e3e0421e040d393606c0984"
     },
     "audio": {
-      "version": "world-view-hotfix-20261027",
+      "version": "campaign-throughline-20261027",
       "url": "packs/audio.pck?sha256=cb5c4229039526ae670592c679ee9fdab4778c8860698e2d9d4dad3410358a18",
       "sha256": "cb5c4229039526ae670592c679ee9fdab4778c8860698e2d9d4dad3410358a18",
       "bytes": 21357932,
@@ -148,7 +148,7 @@
       "cache_key": "cb5c4229039526ae670592c679ee9fdab4778c8860698e2d9d4dad3410358a18"
     },
     "quality_materials": {
-      "version": "world-view-hotfix-20261027",
+      "version": "campaign-throughline-20261027",
       "url": "packs/quality_materials.pck?sha256=e06ed94326b3f764cb67cc13691a66ee6b4e7dc4f0899c339875c067d1cc5457",
       "sha256": "e06ed94326b3f764cb67cc13691a66ee6b4e7dc4f0899c339875c067d1cc5457",
       "bytes": 7383452,
@@ -169,9 +169,9 @@
       "cache_key": "e06ed94326b3f764cb67cc13691a66ee6b4e7dc4f0899c339875c067d1cc5457"
     },
     "adjacent": {
-      "version": "world-view-hotfix-20261027",
-      "url": "packs/adjacent.pck?sha256=059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb",
-      "sha256": "059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb",
+      "version": "campaign-throughline-20261027",
+      "url": "packs/adjacent.pck?sha256=4dd0b7be14b33d2a86ecc3dfbe18330bf6bd6af6d8c92fbd9df5db10f6a64422",
+      "sha256": "4dd0b7be14b33d2a86ecc3dfbe18330bf6bd6af6d8c92fbd9df5db10f6a64422",
       "bytes": 2425540,
       "entry_scene": "",
       "dependencies": [
@@ -187,14 +187,14 @@
       ],
       "candidate_artifact": "adjacent.pck",
       "candidate_bytes": 2425540,
-      "candidate_sha256": "059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb",
-      "cache_key": "059ff4730e15d06b81369d883d75326994b4752dd3ddc24db45849caeb5d8dfb"
+      "candidate_sha256": "4dd0b7be14b33d2a86ecc3dfbe18330bf6bd6af6d8c92fbd9df5db10f6a64422",
+      "cache_key": "4dd0b7be14b33d2a86ecc3dfbe18330bf6bd6af6d8c92fbd9df5db10f6a64422"
     }
   },
-  "build_id": "world-view-hotfix-20261027",
-  "generated_from_commit": "7176b0c02ede7adfab8fba011949b4b9858eb9c2",
-  "generated_at_utc": "2026-10-27T07:10:17.996781Z",
-  "total_bytes": 100144948,
+  "build_id": "campaign-throughline-20261027",
+  "generated_from_commit": "2b929dedf7054e3c95b768e36752a2d4bcac3016",
+  "generated_at_utc": "2026-10-27T07:44:03.808488Z",
+  "total_bytes": 100145060,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1"
 }

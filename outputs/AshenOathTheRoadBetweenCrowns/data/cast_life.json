@@ -93,7 +93,10 @@
   },
   "zones": {
     "greyfen": {
-      "blacksmith_tor": {"work":[9.3,0,-0.2],"errand":[10.5,0,1],"rest":[9.5,0,3],"line":"Mind the end of that. It stays hot after it stops glowing.","after_quest":"saga_gre_q03","after_line":"A door that closes properly. That is useful work."},
+      "blacksmith_tor": {"work":[9.3,0,-0.2],"errand":[10.5,0,1],"rest":[9.5,0,3],"line":"Mind the end of that. It stays hot after it stops glowing.","after_quest":"saga_gre_q03","after_line":"A door that closes properly. That is useful work.","consequences":[
+        {"flag":"iron_fate","value":"tools","activity":"repair","work":[8.0,0,2.9],"errand":[9.3,0,-0.2],"station":{},"line":"The recovered iron is going into working tools. Leave the finished pieces on that side."},
+        {"flag":"iron_fate","value":"memorial","activity":"repair","work":[9.3,0,-0.2],"station":{},"line":"These are the memorial fittings. The names belong beside the work, not under it."}
+      ]},
       "mira": {"work":[-7,0,-2],"errand":[-8.5,0,-1.2],"rest":[-7.7,0,-4.1],"line":"Those jars have labels for a reason. Let me finish this handful."},
       "rook": {"work":[-7.8,0,8.5],"errand":[-6.2,0,6.8],"rest":[-3.8,0,8.6],"social":[-5.6,0,10.2],"line":"A trader is allowed to sit down. I checked.","after_quest":"saga_gre_q04","after_line":"Nessa has her kettle. My reputation may take a little longer."},
       "saga_nessa": {"work":[-3.7,0,7.4],"errand":[-5.6,0,10.3],"rest":[-6,0,11.1],"social":[-6.8,0,10.2],"after_quest":"saga_gre_q05","after_work":[4,0,10],"after_activity":"care","line":"The next batch needs water. Bread takes its time, however loudly people ask for it."},
@@ -114,14 +117,24 @@
       "saga_ressa": {"work":[3.5,0,8],"errand":[1.7,0,10.5],"rest":[2.8,0,9.4],"after_quest":"saga_dep_q04","after_work":[-7.2,0,7.8],"line":"Small roots first. Pulling harder will not make them grow faster.","after_line":"The frame should take the wind. The stem has enough to do."}
     },
     "marsh_crossing": {
-      "saga_nera": {"work":[-4.4,0,9],"errand":[-5,0,6],"rest":[-5.8,0,8.8],"night_work":true,"after_quest":"saga_roa_q04","after_work":[4.5,0,9],"line":"Stop where it is firm. You can ask me from there.","after_line":"A notch for daylight, a hood for night. Neither replaces looking where you step."}
+      "saga_nera": {"work":[-4.4,0,9],"errand":[-5,0,6],"rest":[-5.8,0,8.8],"night_work":true,"after_quest":"saga_roa_q04","after_work":[4.5,0,9],"line":"Stop where it is firm. You can ask me from there.","after_line":"A notch for daylight, a hood for night. Neither replaces looking where you step.","consequences":[
+        {"flag":"senn_fate","value":"testimony","activity":"check_rope","errand":[-4.4,0,6],"line":"The captain is answering for his orders. I am still checking the crossing."},
+        {"flag":"senn_fate","value":"exile","activity":"check_rope","errand":[-4.4,0,6],"line":"Senn has gone. The rope still needs checking before anyone crosses."},
+        {"flag":"senn_fate","value":"punished","activity":"check_rope","errand":[-4.4,0,6],"line":"Removing the captain did not mend a single board. Keep this approach clear."}
+      ]}
     },
     "bandit_road": {
-      "saga_tavin": {"work":[-5,0,6.6],"errand":[-6.3,0,4.1],"rest":[-3.6,0,9.4],"social":[5.5,0,3.4],"after_quest":"saga_roa_q05","after_work":[-3.6,0,9.4],"line":"Coils on the dry side. Wet rope is heavier than it has any right to be.","after_line":"I am counting repair pieces. Not travelers."},
+      "saga_tavin": {"work":[-5,0,6.6],"errand":[-6.3,0,4.1],"rest":[-3.6,0,9.4],"social":[5.5,0,3.4],"after_quest":"saga_roa_q05","after_work":[-3.6,0,9.4],"line":"Coils on the dry side. Wet rope is heavier than it has any right to be.","after_line":"I am counting repair pieces. Not travelers.","consequences":[
+        {"flag":"senn_fate","value":"testimony","activity":"check_supplies","work":[-3.6,0,9.4],"errand":[-5,0,6.6],"line":"Repair stores on the cart. No toll beside the passage count."},
+        {"flag":"senn_fate","value":"exile","activity":"carry","work":[-3.6,0,9.4],"errand":[-5,0,6.6],"line":"The captain has left. These stores stay with the crossing crew."},
+        {"flag":"senn_fate","value":"punished","activity":"sort_supplies","work":[-3.6,0,9.4],"errand":[-5,0,6.6],"line":"There is no captain to give this order now. Rope and planks still go to the crossing."}
+      ]},
       "captain_senn": {"work":[6.7,0,2.8],"errand":[6.7,0,2.8],"rest":[6.7,0,2.8],"stationary":true,"line":"Keep the lane clear. Whatever you came to ask me."}
     },
     "record_hall": {
-      "saga_lysa": {"work":[-5,0,7.8],"errand":[-7.2,0,7.6],"rest":[-4.6,0,8.8],"social":[-3.8,0,7.8],"after_quest":"saga_var_q05","after_work":[7.4,0,4.8],"line":"Set it beside the source. Not on top of it.","after_line":"The reply tray is empty. That is not permission to fill in the missing names."},
+      "saga_lysa": {"work":[-5,0,7.8],"errand":[-7.2,0,7.6],"rest":[-4.6,0,8.8],"social":[-3.8,0,7.8],"after_quest":"saga_var_q05","after_work":[7.4,0,4.8],"line":"Set it beside the source. Not on top of it.","after_line":"The reply tray is empty. That is not permission to fill in the missing names.","consequences":[
+        {"flag":"renewal_stopped","value":true,"activity":"read","work":[7.4,0,4.8],"errand":[-5,0,7.8],"station":{},"line":"The renewal sheets are withdrawn. Keep the original order beside the corrected account."}
+      ]},
       "vargan_record_keeper": {"profile":"vale","work":[-2.3,0,7.8],"errand":[-3,0,8.2],"rest":[-2.6,0,8.8],"social":[-2.6,0,7.8],"line":"An alteration is not the same as an approval. Keep both dates."}
     },
     "vargan_court": {

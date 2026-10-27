@@ -63,15 +63,20 @@ func focus_current() -> void:
 
 func _select(id: String) -> void:
 	var names: Array[String] = []
+	var landmarks: Array[String] = []
 	for link: Dictionary in model.links:
 		var other := ""
 		if str(link.source) == id: other = str(link.target)
 		elif str(link.target) == id and bool(link.get("return",false)): other = str(link.source)
-		if other != "": names.append(str(Routes.ZONE_NAMES.get(other,other)) + (" (legacy journey)" if bool(link.journey) else ""))
+		if other != "":
+			names.append(str(Routes.ZONE_NAMES.get(other,other)) + (" (legacy journey)" if bool(link.journey) else ""))
+			var landmark := Manifest.road_landmark(id, other)
+			if not landmark.is_empty(): landmarks.append(str(landmark.name))
 	var suffix := "Current location." if id == current else ("Visited." if discovered.has(id) else "Not yet visited; no encounters or secrets revealed.")
 	if model.get("districts",{}).has(id): suffix += " A district within Greyfen, not a separate world."
 	if model.get("phases",{}).has(id): suffix += " Greyfen's civic assembly, after the last witness is heard."
 	detail.text = "%s | %s\nOutward routes (some story-gated): %s" % [str(Routes.ZONE_NAMES.get(id,id)),suffix,", ".join(names)]
+	if not landmarks.is_empty(): detail.text += "\nRoad landmarks: " + "; ".join(landmarks)
 
 func _draw_routes() -> void:
 	for link: Dictionary in model.links:

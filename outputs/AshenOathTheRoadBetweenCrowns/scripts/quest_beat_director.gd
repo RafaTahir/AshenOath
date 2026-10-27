@@ -34,10 +34,12 @@ const BEATS := {
 		"names_choice": {"stage":"greyfen_assembly", "cue":"The restored names can be spoken now or held until the road is weaker.", "next":"Choose whether to publish the names."},
 	},
 	"main_ash_at_the_mill": {
-		"reach_mill": {"stage":"old_mill_approach", "cue":"The mill is still turning on what Greyfen refused to name.", "next":"Reach the abandoned mill.", "compass":"Old Mill"},
+		"reach_mill": {"stage":"old_mill_approach", "cue":"The mill is still turning on what Greyfen refused to name.", "next":"Reach the mill and the workers' route.", "compass":"Old Mill"},
 		"inspect_millstones": {"stage":"old_mill_floor", "cue":"The stones remember what was ground into Greyfen's fields.", "next":"Inspect the millstones."},
+		"open_mill_sluice": {"stage":"old_mill_sluice", "cue":"The workers' escape channel lies below the ash plume.", "next":"Optional: open the mill sluice."},
+		"escort_mill_workers": {"stage":"old_mill_south_yard", "cue":"The crew can wait safely if Kael has to stop.", "next":"Optional: stay near the workers until both reach clean air."},
 		"mill_encounter": {"stage":"old_mill_marsh_edge", "cue":"Ash is moving against the wind above the mill.", "next":"Clear the ash-bound mill."},
-		"mill_choice": {"stage":"old_mill_records", "cue":"The mill records can expose the bargain or preserve its evidence.", "next":"Choose the fate of the mill records."},
+		"mill_choice": {"stage":"old_mill_records", "cue":"Food, workers and the surviving accounts outlast the fight.", "next":"Overcome Ashwing, then determine how the mill serves Greyfen."},
 	},
 	"main_soldier_without_banner": {
 		"reach_bandit_road": {"stage":"bandit_road", "cue":"Captain Senn kept the old road but discarded its banner.", "next":"Find Captain Senn on the bandit road.", "compass":"Bandit Road"},
