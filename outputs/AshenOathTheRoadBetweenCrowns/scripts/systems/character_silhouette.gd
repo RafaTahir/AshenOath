@@ -75,9 +75,8 @@ func configure(body: Node3D, role: String, seed: String) -> void:
 	if skeleton == null:
 		push_error("CharacterSilhouette must be attached to its Skeleton3D before configuration")
 		return
-	var motion_owner: Variant = skeleton.get_meta("character_motion_owner", null)
-	if motion_owner is WeakRef:
-		motion = motion_owner.get_ref()
+	var motion_owner: Variant = skeleton.get_meta("character_motion_owner") if skeleton.has_meta("character_motion_owner") else null
+	motion = motion_owner.get_ref() if motion_owner is WeakRef else null
 	spine_bones.clear()
 	shoulders.clear()
 	for aliases: Array in [["spine_01", "Spine", "spine"], ["spine_02", "Spine1"], SOCKETS.chest]:

@@ -207,7 +207,7 @@ func _initialize() -> void:
 	await _settle_frames(3)
 	_assert(game.player.global_position.y > -5, "Fall recovery failed")
 	_assert(FileAccess.file_exists("res://visual_upgrade_manifest.json"), "Visual upgrade manifest is missing")
-	_assert(FileAccess.file_exists("res://MISSING_VISUAL_ASSETS.md"), "Missing visual asset report is missing")
+	_assert(FileAccess.file_exists("res://docs/ART_BIBLE.md"), "Current art and visual-approval contract is missing")
 
 	print("RUNTIME VERIFIER: PASS")
 	if game.has_method("prepare_resource_shutdown"):

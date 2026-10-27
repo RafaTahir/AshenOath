@@ -13,8 +13,20 @@ func _initialize() -> void:
 	await _frames(12)
 	_check(game != null and is_instance_valid(game), "Game root failed to initialize")
 	_check(game.get("runtime_services") != null, "Runtime services were not initialized")
-	_check(game.get("world_materials") != null, "World material service was not initialized")
 	_check(not bool(game.get("resource_shutdown_prepared")), "Runtime entered shutdown during smoke test")
+	_check(not bool(game.get("game_started")), "Boot started a journey without explicit New Game")
+	var deadline := Time.get_ticks_msec() + 120000
+	while not game.opening_startup_metrics.has("menu_ready_ms") and Time.get_ticks_msec() < deadline:
+		await process_frame
+	_check(game.opening_startup_metrics.has("menu_ready_ms"), "Main menu never reached usable readiness")
+	game.call("_new_game")
+	while Time.get_ticks_msec() < deadline:
+		if game.player != null and game.zone_root != null and not game.zone_transition_pending and not game.zone_load_request_pending and bool(game.player.can_control):
+			break
+		await process_frame
+	_check(game.get("world_materials") != null, "World material service was not initialized before control")
+	_check(bool(game.get("game_started")) and game.current_zone_id == "greyfen", "Explicit New Game did not enter Greyfen")
+	_check(game.zone_root != null and game.player != null and bool(game.player.can_control), "Greyfen never reached playable readiness")
 
 	# Runtime smoke owns teardown explicitly. This keeps normal shutdown errors
 	# attributable to the game lifecycle instead of an unconditional quit timer.

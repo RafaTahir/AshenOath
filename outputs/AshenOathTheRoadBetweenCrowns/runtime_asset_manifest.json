@@ -108,7 +108,10 @@
       "export_eligible": true,
       "fallback_mode": "none",
       "target_height_m": 0.78,
-      "required_clips": ["DogArmature|Idle", "DogArmature|Walking"],
+      "required_clips": [
+        "DogArmature|Idle",
+        "DogArmature|Walking"
+      ],
       "build_ledger": "res://assets/companions/bracken_build.json",
       "notes": "BUILD-ONLY delivery; original complete skinned Dog, user owns visual/runtime acceptance. Not the Black Dog Contract."
     },
@@ -126,9 +129,21 @@
       "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
       "target_height_m": 1.75,
       "runtime_files": [
-        {"path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf", "bytes": 30867, "sha256": "93869760db4a8568c4a221806aa86be1bd159c8fb830f076904b502f3010d1ec"},
-        {"path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.bin", "bytes": 1989016, "sha256": "015173382bfbff2178c9d15f0c3e1d2a704b7039a38bbb0be0113683e9561e5d"},
-        {"path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png", "bytes": 2037323, "sha256": "f22a8f798bb7232386805add6ac58db0cf506702eac6a61ab4cdfa1c202ce686"}
+        {
+          "path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+          "bytes": 35984,
+          "sha256": "8be821b71152120f4a9516e732690318b68d5342cbd114847b67da5ef1baca64"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.bin",
+          "bytes": 1993880,
+          "sha256": "985ab2e38a0d59fbf318788b1d154b9568e414cb9c7a6827c243b9c7b8dd1639"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png",
+          "bytes": 2037323,
+          "sha256": "f22a8f798bb7232386805add6ac58db0cf506702eac6a61ab4cdfa1c202ce686"
+        }
       ],
       "approval_evidence": "WORLD_002_BANDIT_FRONTIER_20260930.md; native body/animation, real-input guard defeat and testimony, gameplay-distance day/night and earned-aftermath review. Final campaign/browser/performance certification remains separate."
     },
@@ -144,11 +159,23 @@
       "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
       "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
       "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
-      "target_height_m": 1.70,
+      "target_height_m": 1.7,
       "runtime_files": [
-        {"path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf", "bytes": 30655, "sha256": "0e3f198c5cec76838ed0bcb2b65482d246762e767e392b2447a99ad1b325b681"},
-        {"path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.bin", "bytes": 1933248, "sha256": "f8814d0ac031aa1eb8ec95d69661bd663485c05d0a14b48cfcbf86404a74c80b"},
-        {"path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png", "bytes": 2038174, "sha256": "17760978251d0b979c6b0c543ba956ae69d77eb8da39a7c8cc0c5a6acd1bc8c7"}
+        {
+          "path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
+          "bytes": 35772,
+          "sha256": "a0baa9fc1b778ad116dedfd730bd269a9367d0df1a4e6094c4a1b425a1ead76b"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.bin",
+          "bytes": 1938112,
+          "sha256": "eb21c8c182c81a11f18fc0f1c0b3a0d8890a4b2bea3177d668683d6d20877dbf"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png",
+          "bytes": 2038174,
+          "sha256": "17760978251d0b979c6b0c543ba956ae69d77eb8da39a7c8cc0c5a6acd1bc8c7"
+        }
       ],
       "approval_evidence": "WORLD_002_BANDIT_FRONTIER_20260930.md; native body/animation, real-input guard defeat and testimony, gameplay-distance day/night and earned-aftermath review. Final campaign/browser/performance certification remains separate."
     },
@@ -223,12 +250,36 @@
       "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
       "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
       "runtime_files": [
-        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "bytes": 54079, "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"},
-        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin", "bytes": 1746884, "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png", "bytes": 840454, "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png", "bytes": 786403, "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"},
-        {"path": "res://assets_external/characters/Sword.fbx", "bytes": 30540, "sha256": "6318f52dd847cc9c5ca4136a92acc08fe38276261a0ade8a1ada42d9ba88f0ea"}
+        {
+          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+          "bytes": 54079,
+          "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin",
+          "bytes": 1746884,
+          "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png",
+          "bytes": 840454,
+          "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
+          "bytes": 940081,
+          "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png",
+          "bytes": 786403,
+          "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"
+        },
+        {
+          "path": "res://assets_external/characters/Sword.fbx",
+          "bytes": 30540,
+          "sha256": "6318f52dd847cc9c5ca4136a92acc08fe38276261a0ade8a1ada42d9ba88f0ea"
+        }
       ],
       "visual_evidence": "Development_Gallery/screenshots/BOSS-006_01_Halvern_TheGate_20260926_132908.png",
       "blocked_reason": ""
@@ -247,13 +298,13 @@
       "runtime_files": [
         {
           "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
-          "bytes": 30477,
-          "sha256": "76b9abd7664a1a230f74501d03e6388553ab933732d4e1ab66c399a34286f276"
+          "bytes": 35594,
+          "sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
-          "bytes": 1171216,
-          "sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926"
+          "bytes": 1176080,
+          "sha256": "3bdc20f6ddf3861f984408ff42af64ccf2e9c8993700c783859aea2e14a743a1"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
@@ -278,13 +329,13 @@
       "runtime_files": [
         {
           "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
-          "bytes": 31257,
-          "sha256": "bc18388f80f73a739c996efa963565dc283d1491d1006643cc3ee0f3bf05587c"
+          "bytes": 36847,
+          "sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
-          "bytes": 1440748,
-          "sha256": "b4e8b543a3dd8510d097f6c63af461c6b61f2a3ed62f64748e09a7f556d989f9"
+          "bytes": 1445612,
+          "sha256": "1d5c8314084cab3ea95f1efde3daa9ee22bc8ee95a4697801405bbe4f35729db"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
@@ -310,13 +361,13 @@
       "runtime_files": [
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
-          "bytes": 30510,
-          "sha256": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
+          "bytes": 35627,
+          "sha256": "4e570daddc32d5d65512913249478b01afa2c0df193f485d3f474b3145c9e81e"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
-          "bytes": 1171216,
-          "sha256": "d808c177751183950b609ce6d7dcba3544d08bc9c653d06e22f6ff0075040926"
+          "bytes": 1176080,
+          "sha256": "3bdc20f6ddf3861f984408ff42af64ccf2e9c8993700c783859aea2e14a743a1"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
@@ -341,13 +392,13 @@
       "runtime_files": [
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
-          "bytes": 30516,
-          "sha256": "c98bfbee092140937e2907535a8beb2d3aa1e5185f9313f9b5a880a1f1291afe"
+          "bytes": 35633,
+          "sha256": "f221a14a0dcea56db70e1822eb4f06f3ecff581c49e5ef145aee0b9642392ceb"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
-          "bytes": 1150432,
-          "sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d"
+          "bytes": 1155296,
+          "sha256": "c8ef3367e3e9d628458e00c9b84620e93a68c22e5950d7cccdf91450bd055d00"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
@@ -372,13 +423,13 @@
       "runtime_files": [
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
-          "bytes": 30516,
-          "sha256": "34fc435ac57da9bbeaa59854340bd298e74b821eb13157694c7cf38c0149d815"
+          "bytes": 35633,
+          "sha256": "54739fadbd5e4f3f398a07c78094adae7ddb9ad3a28b8b67e785fdd6c0ddf6f8"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.bin",
-          "bytes": 1150432,
-          "sha256": "42eda764ce432ec2cc96adeab7453f2676d1be764c9f032e125664c73ce4ce1d"
+          "bytes": 1155296,
+          "sha256": "c8ef3367e3e9d628458e00c9b84620e93a68c22e5950d7cccdf91450bd055d00"
         },
         {
           "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png",
@@ -401,7 +452,9 @@
       "model_family": "Project-authored grounded Universal Ghoulkin with retained Demon/Orc/BlueDemon tactical variants",
       "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-      "additional_license_files": ["res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt"],
+      "additional_license_files": [
+        "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt"
+      ],
       "runtime_files": [
         {
           "path": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
@@ -481,7 +534,11 @@
       "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
       "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
       "runtime_files": [
-        {"path": "res://assets_external/enemies/ultimate_monsters/Creep.glb", "bytes": 5766984, "sha256": "8abe19342e4cc60d569c863e6954ec147847289502ac807d42bb288a0c9d71ec"}
+        {
+          "path": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
+          "bytes": 5766984,
+          "sha256": "8abe19342e4cc60d569c863e6954ec147847289502ac807d42bb288a0c9d71ec"
+        }
       ],
       "visual_evidence": "Development_Gallery/screenshots/BOSS-004_03_Rootbound_ExposedHeart_20260926_143330.png",
       "notes": "Complete imported anatomy and corrected forward axis. Chest-bone wound is fitted against skinned mesh vertices; no duplicate root arms, feet, mantle or crown. Three phase captures reviewed; world composition remains unaccepted separately.",
@@ -991,7 +1048,10 @@
       "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
       "build_tool": "res://tools/build_greyfen_social.gd",
       "pack_owner": "base",
-      "source_files": ["Table_Large.obj", "Chair_1.obj"],
+      "source_files": [
+        "Table_Large.obj",
+        "Chair_1.obj"
+      ],
       "surfaces": 2,
       "triangles": 1978
     },
@@ -1006,7 +1066,10 @@
       "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
       "build_tool": "res://tools/build_greyfen_social.gd",
       "pack_owner": "base",
-      "source_files": ["Table_Large.obj", "Chair_1.obj"],
+      "source_files": [
+        "Table_Large.obj",
+        "Chair_1.obj"
+      ],
       "surfaces": 2,
       "triangles": 1978
     },
@@ -1021,7 +1084,12 @@
       "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
       "build_tool": "res://tools/build_greyfen_social.gd",
       "pack_owner": "base",
-      "source_files": ["Stall_Empty.obj", "Potion_1.obj", "Potion_2.obj", "Bag.obj"],
+      "source_files": [
+        "Stall_Empty.obj",
+        "Potion_1.obj",
+        "Potion_2.obj",
+        "Bag.obj"
+      ],
       "surfaces": 2,
       "triangles": 4618
     },
@@ -1065,17 +1133,17 @@
       "triangles": 1354
     },
     {
-    "id": "bandit_road_landscape",
+      "id": "bandit_road_landscape",
       "status": "native_candidate_pending_camera_route_acceptance",
       "path": "res://assets_external/environment/forest/Campaign_bandit_road_Landscape.res",
-    "bytes": 13950,
-    "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "bytes": 13950,
+      "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
       "source_pack": "Original Ashen Oath geometry",
       "license": "Original project mesh; retained CC0 runtime surface textures",
       "build_tool": "res://tools/build_campaign_wilds.gd",
       "pack_owner": "campaign",
-    "surfaces": 2,
-    "triangles": 768
+      "surfaces": 2,
+      "triangles": 768
     },
     {
       "id": "farmstead_west",
@@ -1108,11 +1176,11 @@
       "triangles": 1864
     },
     {
-    "id": "road_checkpoint",
+      "id": "road_checkpoint",
       "status": "native_candidate_pending_camera_route_acceptance",
       "path": "res://assets_external/environment/village/RoadCheckpoint_Authored.res",
-    "bytes": 45789,
-    "sha256": "30c914365a831201d1abbfe4af2d24eabc30858f61fad50fdcf3e28e71a6cdae",
+      "bytes": 45789,
+      "sha256": "30c914365a831201d1abbfe4af2d24eabc30858f61fad50fdcf3e28e71a6cdae",
       "source_pack": "Original Ashen Oath geometry / Quaternius Medieval Village and Fantasy Props MegaKits",
       "license": "CC0 1.0 / original project geometry",
       "license_file": "res://assets_external/licenses/quaternius_medieval_village_megakit/License_Standard.txt",
@@ -1120,7 +1188,7 @@
       "build_tool": "res://tools/build_campaign_wilds.gd",
       "pack_owner": "campaign",
       "surfaces": 4,
-    "triangles": 3334
+      "triangles": 3334
     },
     {
       "id": "record_hall_archive",
@@ -1133,7 +1201,14 @@
       "license_file": "res://assets_external/licenses/quaternius_fantasy_props_megakit/License_Standard.txt",
       "build_tool": "res://tools/build_record_archive.gd",
       "pack_owner": "campaign",
-      "source_files": ["Bookcase_2.obj", "Chair_1.obj", "Table_Large.obj", "BookGroup_Small_1.obj", "BookGroup_Small_2.obj", "Book_Stack_1.obj"],
+      "source_files": [
+        "Bookcase_2.obj",
+        "Chair_1.obj",
+        "Table_Large.obj",
+        "BookGroup_Small_1.obj",
+        "BookGroup_Small_2.obj",
+        "Book_Stack_1.obj"
+      ],
       "surfaces": 2,
       "triangles": 65170
     },
@@ -1313,15 +1388,69 @@
       "surfaces_per_asset": 2,
       "source_hashes_embedded": true,
       "assets": [
-        {"variant": "gatehouse", "path": "res://assets_external/environment/village/Vargan_gatehouse_Authored.res", "bytes": 48963, "triangles": 3672, "sha256": "a0616ca275238e4d0b3d5e7368fc59dea99ac9eb0e14f66a5a5a720d8edfe42f"},
-        {"variant": "tower", "path": "res://assets_external/environment/village/Vargan_tower_Authored.res", "bytes": 19519, "triangles": 1444, "sha256": "552dd69390e088f9e72534146952e05a2c76ef1781a299ba1fab112a7ee222db"},
-        {"variant": "keep", "path": "res://assets_external/environment/village/Vargan_keep_Authored.res", "bytes": 27053, "triangles": 2092, "sha256": "429438daf3529d394f95a6e77b5314b17ee382df49a5b2cf9f9d41b09e444c7e"},
-        {"variant": "curtain", "path": "res://assets_external/environment/village/Vargan_curtain_Authored.res", "bytes": 6875, "triangles": 356, "sha256": "3cb9a84c6818e5bbb0a21f8ed54547265c9d9bf1c2a12552eaf580ef748e31e9"},
-        {"variant": "stable", "path": "res://assets_external/environment/village/Vargan_stable_Authored.res", "bytes": 103068, "triangles": 6440, "sha256": "7b782ee651f7d182dd6a7a3dea07693513cbea50ebc66156256600134bc0fe44"},
-        {"variant": "cistern", "path": "res://assets_external/environment/village/Vargan_cistern_Authored.res", "bytes": 6059, "triangles": 284, "sha256": "cf69c45dbe8fea475470e83368a8a790471ed2fc4f9bb7fb5433723bf0e86db2"},
-        {"variant": "door", "path": "res://assets_external/environment/village/Vargan_door_Authored.res", "bytes": 9460, "triangles": 482, "sha256": "e8b8715a9905e98ec3f1a1ad25b2f4007c3341482f42909ace5526a5d0351b7c"},
-        {"variant": "forge", "path": "res://assets_external/environment/village/Vargan_forge_Authored.res", "bytes": 73560, "triangles": 4698, "sha256": "b8b42f2abc87a309c9524e92ab890a3689c9d1506b5b394e853293acb981c707"},
-        {"variant": "record_entry", "path": "res://assets_external/environment/village/Vargan_record_entry_Authored.res", "bytes": 86402, "triangles": 5426, "sha256": "552fe55901a81e26a93d6a376f93033ea48369ae6d08884efbb97e3d02e50437"}
+        {
+          "variant": "gatehouse",
+          "path": "res://assets_external/environment/village/Vargan_gatehouse_Authored.res",
+          "bytes": 48963,
+          "triangles": 3672,
+          "sha256": "a0616ca275238e4d0b3d5e7368fc59dea99ac9eb0e14f66a5a5a720d8edfe42f"
+        },
+        {
+          "variant": "tower",
+          "path": "res://assets_external/environment/village/Vargan_tower_Authored.res",
+          "bytes": 19519,
+          "triangles": 1444,
+          "sha256": "552dd69390e088f9e72534146952e05a2c76ef1781a299ba1fab112a7ee222db"
+        },
+        {
+          "variant": "keep",
+          "path": "res://assets_external/environment/village/Vargan_keep_Authored.res",
+          "bytes": 27053,
+          "triangles": 2092,
+          "sha256": "429438daf3529d394f95a6e77b5314b17ee382df49a5b2cf9f9d41b09e444c7e"
+        },
+        {
+          "variant": "curtain",
+          "path": "res://assets_external/environment/village/Vargan_curtain_Authored.res",
+          "bytes": 6875,
+          "triangles": 356,
+          "sha256": "3cb9a84c6818e5bbb0a21f8ed54547265c9d9bf1c2a12552eaf580ef748e31e9"
+        },
+        {
+          "variant": "stable",
+          "path": "res://assets_external/environment/village/Vargan_stable_Authored.res",
+          "bytes": 103068,
+          "triangles": 6440,
+          "sha256": "7b782ee651f7d182dd6a7a3dea07693513cbea50ebc66156256600134bc0fe44"
+        },
+        {
+          "variant": "cistern",
+          "path": "res://assets_external/environment/village/Vargan_cistern_Authored.res",
+          "bytes": 6059,
+          "triangles": 284,
+          "sha256": "cf69c45dbe8fea475470e83368a8a790471ed2fc4f9bb7fb5433723bf0e86db2"
+        },
+        {
+          "variant": "door",
+          "path": "res://assets_external/environment/village/Vargan_door_Authored.res",
+          "bytes": 9460,
+          "triangles": 482,
+          "sha256": "e8b8715a9905e98ec3f1a1ad25b2f4007c3341482f42909ace5526a5d0351b7c"
+        },
+        {
+          "variant": "forge",
+          "path": "res://assets_external/environment/village/Vargan_forge_Authored.res",
+          "bytes": 73560,
+          "triangles": 4698,
+          "sha256": "b8b42f2abc87a309c9524e92ab890a3689c9d1506b5b394e853293acb981c707"
+        },
+        {
+          "variant": "record_entry",
+          "path": "res://assets_external/environment/village/Vargan_record_entry_Authored.res",
+          "bytes": 86402,
+          "triangles": 5426,
+          "sha256": "552fe55901a81e26a93d6a376f93033ea48369ae6d08884efbb97e3d02e50437"
+        }
       ]
     }
   ],

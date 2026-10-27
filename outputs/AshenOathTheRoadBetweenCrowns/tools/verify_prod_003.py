@@ -31,11 +31,11 @@ def main() -> int:
     for ticket in registry.get("tickets", []):
         if ticket.get("status") == "complete":
             failures.append(f"recovery ticket {ticket.get('id')} still uses historical complete status")
-    state = (project / "PROJECT_STATE.md").read_text(encoding="utf-8", errors="replace")
+    state = (project / "README.md").read_text(encoding="utf-8", errors="replace")
     if "pre-alpha" not in state.lower():
-        failures.append("PROJECT_STATE.md does not state the pre-alpha scope")
+        failures.append("README.md does not state the pre-alpha scope")
     if "visual approval" not in state.lower():
-        failures.append("PROJECT_STATE.md does not expose the visual approval boundary")
+        failures.append("README.md does not expose the visual approval boundary")
     if failures:
         for failure in failures:
             print(f"PROD-003: FAIL - {failure}")

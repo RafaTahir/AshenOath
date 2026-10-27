@@ -13,7 +13,7 @@ from generate_prod_002_dashboard import render_dashboard
 
 PROJECT = Path(__file__).resolve().parents[1]
 DEFAULT_REGISTRY = PROJECT / "PROD_002_ISSUE_REGISTRY.json"
-DEFAULT_DASHBOARD = PROJECT / "PROD_002_MILESTONE_DASHBOARD.md"
+DEFAULT_DASHBOARD = PROJECT / ".release-gate" / "prod_002_milestone_dashboard.md"
 
 EXPECTED_TICKETS = {
     "PROD-001", "PROD-002", "QA-001", "QA-002", "QA-003", "QA-004",

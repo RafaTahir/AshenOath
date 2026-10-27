@@ -1,69 +1,65 @@
 # Ashen Oath: The Road Between Crowns
 
-Playable Godot 4.6 dark fantasy action RPG vertical slice built as a Web-first release. The benchmark is Witcher 3-style dark fantasy staging and quest readability, constrained to a browser-playable Godot slice.
+A Godot 4.6 dark-fantasy action RPG, authored here and published as a static Web
+game. The current implementation contains six regions, 57 quests, four covenant
+resolutions and a playable homecoming. This remains a pre-alpha: implementation,
+compilation, automated checks, visual approval and user acceptance are separate.
+A successful export does not prove game feel, phone compatibility or performance.
 
-## Open And Run
+## Open and Play
 
-1. Install Godot 4.x.
-2. Open Godot Project Manager.
-3. Choose Import.
-4. Select this folder: `AshenOathTheRoadBetweenCrowns`.
-5. Open the project and press Play.
+Import `project.godot` with Godot 4.6 (the retained build tool is 4.6.3).
+`scenes/main.tscn` is the entry point. Fresh launches show the main menu; only an
+explicit New Game or selected Continue starts a journey. Menu readiness and world
+readiness are separate: complete destination scenery, collision, actors and the
+gameplay camera must be ready before control is released.
 
-The main scene is `res://scenes/main.tscn`.
+Use the in-game Controls and Settings screens for current keyboard, mouse,
+controller and touch bindings. Remapping and saved preferences are authoritative.
+Browser audio unlock needs a genuine user gesture. Actual phone and audible
+acceptance remain user-owned.
 
-On this machine you can also run `Run_Ashen_Oath_Godot_4_6.bat` from this folder.
+## Current Documentation
 
-The browser build is the only release output. Rebuild it with `Export_Web_Build.bat` or the editor export preset named `Web Browser`. The output folder is `../AshenOath_Web`; upload the contents of that folder to a static host. See `WEB_DEPLOY.md`.
+- [Campaign throughline and consequences](docs/THROUGHLINE.md)
+- [Retained art direction and identities](docs/ART_BIBLE.md)
+- [Runtime ownership boundaries](scripts/README_BOUNDARIES.md)
+- [Packaging and Git-based publication](WEB_DEPLOY.md)
 
-To test the browser build locally after exporting, run `Serve_Web_Build.bat` and open `http://127.0.0.1:8080`.
+Obsolete root milestone Markdown and stale root process logs are removed during
+release housekeeping. Their committed versions remain available in Git history.
+Repository-level plans and machine-readable registries are not erased or promoted
+to acceptance. Asset licenses and provenance stay with retained assets.
 
-## Controls
+## Assets and Builds
 
-- WASD: move
-- Mouse: camera
-- Arrow keys: camera fallback
-- Shift: run
-- Space: dodge
-- Left mouse: light attack
-- Right mouse: heavy attack
-- Q: block
-- E: interact
-- R: use Redroot Potion
-- F: throw Ash Bomb
-- Tab: inventory, journal, crafting
-- Esc: pause/settings
+Runtime catalogs and export presets own inclusion. A raw inventory entry is not
+runtime ownership; conversely, a model without literal `.gd` references may still
+be required by a catalog, resource, import, fallback or preparation tool.
 
-## Browser Build Notes
+Production contains a root Web artifact, engine files and seven external packs.
+The shared policy is `data/deployment_policy.json`: total deployed files strictly
+below 256 MiB, warning at 200 MiB; individual tracked files below 100 MiB. Download
+bytes, decoded resources and process memory are different measurements. Removing
+excluded source models does not automatically improve Web payload or FPS.
 
-The first screen asks for one click before the main menu. That click enables browser audio and gives Godot permission to capture the mouse during gameplay. Dialogue, inventory, settings, and menus release the pointer again so buttons can be clicked normally.
+## Checks and Limitations
 
-## Playable Flow
+Existing integration checks live under `tools/`. Headless Godot checks resource
+loading, scripted integration and lifecycle errors, not visible rendering, sound
+balance, real browser input or phone behavior. Preserve complete scenes, intended
+population, saves and quality presets when interpreting results.
 
-Start in Greyfen Village, speak to Sister Anwen, follow the lanterned Wychwood road, investigate the forest clues, fight the first Ghoulkin encounter, and return/update the contract objective. Broader quest content remains present in data, but the release target is the first playable route.
+Reference-PC targets remain native 1280x720 Balanced on the Intel HD 620 laptop:
+32 FPS average, 30 FPS 1% low, peak private memory below 450 MiB, warm transitions
+at most 350 ms and cold transitions at most 900 ms. Startup goals remain first
+paint 0.75 s; cold/warm menu 12/6 s; navigation-to-control 15/7 s; prepared New Game
+handoff 750 ms. These are requirements, not claims that current builds pass them.
 
-## Current Recovery Pass
+## Cleanup Evidence - 2026-10-27
 
-- Greyfen and Wychwood now prioritize one authored first-route slice with mapped kit assets, layered terrain patches, road shoulders, path stones, grass tufts, shrine staging, forest gate lighting, fog sheets, and stronger monster-clearing composition.
-- Player, NPC, and enemy silhouettes use mapped kit assets where available, with simple staging and readable labels.
-- Inventory items can be crafted and used: Redroot heals, Bitterleaf restores stamina, Ash Bomb damages nearby enemies, Moon Oil and Rot Oil apply blade bonuses, and Iron Trap slows enemies.
-- The HUD, splash screen, controls screen, menus, dialogue, journal, crafting, and ending screens have a consistent dark-fantasy visual treatment.
-- Procedural animation, hit flashes, camera shake, hit-stop, generated audio cues, ambient loops, and in-world labels improve combat and exploration feel.
-- Combat now includes timed enemy windups, parry windows, stagger response, target-facing attacks, boss combat branches, and clearer feedback.
-- Save/load now includes autosave, checkpoint saves, death checkpoint loading, versioned save payloads, and persistent removed clues/herbs.
-- Side quests remain represented in data, but unfinished areas should not define the first impression.
-- Quest rewards now grant actual coin/items from quest data.
-- Inventory items have replaceable SVG icon assets and JSON icon metadata.
-- The project has been smoke-tested with Godot 4.6.3 using headless scene startup, an automated flow test, and web export output verification.
-
-## Production Limits
-
-This build is intentionally lightweight enough for browser play on low-end hardware. The standard is Witcher 3 as a direction benchmark for staging, density, atmosphere, and quest clarity, but true AAA production still requires authored meshes, skeletal animation, bespoke audio, and a long QA pass. The project should keep replacing generated pieces with authored assets.
-
-## Placeholder Content
-
-All art remains low-poly and lightweight, but major first-slice characters/enemies now use mapped kit assets where available. The code is structured so models, icons, sounds, animation, and authored scenes can keep replacing generated primitives over time.
-
-## Low-Spec Notes
-
-The project uses small hub zones, limited enemies, simple AI, compatibility rendering, fog, low draw complexity, and a settings menu with Potato Mode.
+[Cleanup and headless/export results](release_reports/release_cleanup_20261027.json)
+record source removals, the reversible D: archive, refreshed technical identities
+and exact candidate bytes. Boot and packed startup passed; the full integration
+suite is not green. Pending asset review is not silently converted to approval.
+Production remains held while the recorded integration/strict-asset gates are red.

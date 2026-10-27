@@ -11,7 +11,7 @@ from typing import Any
 
 
 DEFAULT_REGISTRY = Path(__file__).resolve().parents[1] / "PROD_002_ISSUE_REGISTRY.json"
-DEFAULT_OUTPUT = Path(__file__).resolve().parents[1] / "PROD_002_MILESTONE_DASHBOARD.md"
+DEFAULT_OUTPUT = Path(__file__).resolve().parents[1] / ".release-gate" / "prod_002_milestone_dashboard.md"
 
 
 def load_registry(path: Path) -> dict[str, Any]:
@@ -150,6 +150,7 @@ def main() -> int:
         print("PROD-002 DASHBOARD: PASS")
         return 0
     if args.write:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered, encoding="utf-8", newline="\n")
         print(f"PROD-002 DASHBOARD: WROTE {args.output}")
         return 0
