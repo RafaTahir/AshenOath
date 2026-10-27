@@ -820,6 +820,7 @@ func _notification(what: int) -> void:
 		_cancel_friend_work()
 
 func _physics_process(delta: float) -> void:
+	delta = preload("res://scripts/systems/character_motion_step.gd").simulation_delta(delta)
 	if host == null or host.current_zone_id != zone or host.player == null:
 		_cancel_rest()
 		_cancel_friend_work()

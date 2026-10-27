@@ -21,7 +21,14 @@ const TARGET_MAX_DISTANCE := 12.0
 const TARGET_OBSTRUCTION_GRACE := 0.42
 var height = 2.1
 var camera: Camera3D
-var shake_amount = 0.0
+const POSITION_STIFFNESS := 14.0
+const LOOK_STIFFNESS := 8.0
+const MAX_SHAKE_OFFSET := 0.18
+const SHAKE_FREQUENCY := 15.0
+var trauma := 0.0
+var _shake_strength := 1.0
+var _shake_time := 0.0
+var _shake_noise := FastNoiseLite.new()
 var shake_decay = 6.0
 var keyboard_turn_speed = 2.2
 var invert_y = false
@@ -33,6 +40,8 @@ var current_zone_id = "greyfen"
 var _initialized = false
 var _smoothed_anchor = Vector3.ZERO
 var _smoothed_look = Vector3.ZERO
+var _smoothed_position := Vector3.ZERO
+var _last_view_orbit := Basis.IDENTITY
 var _previous_dodge_time = 0.0
 var _dodge_response = 0.0
 var _landing_response = 0.0
@@ -93,6 +102,10 @@ static func install_visual_clearance(root: Node3D) -> void:
 func setup(follow_target: Node3D, source: Node = null) -> void:
 	target = follow_target
 	_camera_probe.radius = 0.22
+	_shake_noise.seed = 11427
+	_shake_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	_shake_noise.fractal_type = FastNoiseLite.FRACTAL_NONE
+	_shake_noise.frequency = 1.0
 	input_source = source
 	camera = Camera3D.new()
 	camera.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
@@ -125,6 +138,8 @@ func rebase_world(frame: Transform3D) -> void:
 	if is_instance_valid(camera): camera.global_transform = frame*camera.global_transform
 	_smoothed_anchor = frame*_smoothed_anchor
 	_smoothed_look = frame*_smoothed_look
+	_smoothed_position = frame*_smoothed_position
+	_last_view_orbit = frame.basis * _last_view_orbit
 	_cached_collision_position = frame*_cached_collision_position
 	yaw = wrapf(yaw+frame.basis.get_euler().y,-PI,PI)
 	_manual_look_yaw += frame.basis.get_euler().y
@@ -311,26 +326,29 @@ func _update_view(delta: float) -> void:
 		var encounter_frame := _large_encounter_frame(desired, framing_subject)
 		natural_look = encounter_frame.point
 		target_fov = encounter_frame.fov
-	var shake = Vector3.ZERO
-	if shake_amount > 0.001:
-		shake = Vector3(randf_range(-shake_amount, shake_amount), randf_range(-shake_amount, shake_amount), 0.0)
-		shake_amount = max(shake_amount - shake_decay * delta, 0.0)
 	if not _initialized:
 		_smoothed_anchor = target_pos
 		_smoothed_look = natural_look
-		global_position = target_pos
-		camera.global_position = desired
+		_smoothed_position = desired
+		_last_view_orbit = orbit
 		_initialized = true
-	_smoothed_anchor = _smoothed_anchor.lerp(target_pos, _smooth_weight(delta, 8.0))
-	_smoothed_look = _smoothed_look.lerp(natural_look, _smooth_weight(delta, 6.6))
-	global_position = global_position.lerp(_smoothed_anchor, _smooth_weight(delta, 10.0))
-	var smoothed_position := camera.global_position.lerp(desired + shake, _smooth_weight(delta, 9.2))
+	# Apply deliberate orbit changes immediately; decay only the remaining
+	# follow/framing error. Never feed shaken output back into these filters.
+	var orbit_change := orbit * _last_view_orbit.inverse()
+	_smoothed_position = target_pos + orbit_change * (_smoothed_position - target_pos)
+	_smoothed_look = target_pos + orbit_change * (_smoothed_look - target_pos)
+	_last_view_orbit = orbit
+	_smoothed_anchor = target_pos
+	global_position = target_pos
+	_smoothed_position = _smoothed_position.lerp(desired, _smooth_weight(delta, POSITION_STIFFNESS))
+	_smoothed_look = _smoothed_look.lerp(natural_look, _smooth_weight(delta, LOOK_STIFFNESS))
 	if is_first_person():
 		# Follow the capsule, not the lagged orbit or animated head bone.
-		camera.global_position = target_pos
+		_smoothed_position = target_pos
 		_smoothed_look = natural_look
 	else:
-		camera.global_position = _publish_encounter_position(target_pos, smoothed_position, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, smoothed_position)
+		_smoothed_position = _publish_encounter_position(target_pos, _smoothed_position, desired, framing_subject) if _combat_subject_height(framing_subject) > 2.6 else _collide_camera(target_pos, _smoothed_position)
+	camera.global_position = _smoothed_position
 	if target.has_method("set_camera_close_view"):
 		var eye_position: Vector3 = followed_position + Vector3.UP * eye_height
 		var collision_close := camera.global_position.distance_to(eye_position) < 0.85
@@ -347,9 +365,13 @@ func _update_view(delta: float) -> void:
 		camera.fov = maxf(camera.fov, target_fov)
 	_idle_time += delta
 	var idle_breath = Vector3.ZERO
-	if flat_speed < 0.25 and combat_focus == null and not is_first_person() and _bow_camera_weight <= 0.0:
+	if flat_speed < 0.25 and combat_focus == null and not is_first_person() and _bow_camera_weight <= 0.0 and not _reduced_story_motion:
 		idle_breath.y = sin(_idle_time * 1.35) * 0.018
 	camera.look_at(_smoothed_look + idle_breath, Vector3.UP)
+	var shake := _trauma_offset(delta)
+	if shake.length_squared() > 0.0000001:
+		var frame := camera.global_basis.orthonormalized()
+		camera.global_position = _collide_camera(target_pos, _smoothed_position + frame * shake)
 	camera.fov = lerp(camera.fov, target_fov + _fov_kick, _smooth_weight(delta, 5.0))
 	_fov_kick = max(_fov_kick - delta * 5.0, 0.0)
 	_visibility_batch = false
@@ -478,6 +500,8 @@ func release_dialogue_frame() -> void:
 	_dialogue_return.clear()
 	_dialogue_frame_key = ""
 	_collision_refresh = 0.0
+	# Reset follow state; the existing dialogue exit owns the return blend.
+	_initialized = false
 	if is_instance_valid(target) and target.has_method("set_camera_close_view"):
 		target.set_camera_close_view(is_first_person())
 
@@ -558,10 +582,19 @@ func _place_dialogue_camera(position: Vector3) -> void:
 	camera.global_position = _collide_camera(_dialogue_focus, position)
 
 func shake(amount: float) -> void:
-	if reduce_flashes:
+	if reduce_flashes or _reduced_story_motion or _shake_strength <= 0.0 or shake_decay >= 999.0:
 		return
-	shake_amount = max(shake_amount, amount)
+	trauma = clampf(trauma + maxf(amount, 0.0) / 0.35, 0.0, 1.0)
 	_fov_kick = max(_fov_kick, amount * 4.8)
+
+func _trauma_offset(delta: float) -> Vector3:
+	_shake_time += maxf(delta, 0.0) * SHAKE_FREQUENCY
+	if reduce_flashes or _reduced_story_motion or _shake_strength <= 0.0 or shake_decay >= 999.0:
+		trauma = 0.0
+	var amplitude := trauma * trauma * MAX_SHAKE_OFFSET * _shake_strength
+	var offset := Vector3(_shake_noise.get_noise_2d(_shake_time, 0.0), _shake_noise.get_noise_2d(_shake_time, 73.0), 0.0) * amplitude
+	trauma = maxf(trauma - maxf(shake_decay, 0.0) * 0.25 * maxf(delta, 0.0), 0.0)
+	return offset
 
 func get_flat_forward() -> Vector3:
 	return -Basis(Vector3.UP, yaw).z.normalized()
@@ -710,8 +743,9 @@ func apply_accessibility(values: Dictionary) -> void:
 	_reduced_story_motion = bool(values.get("reduced_motion", false))
 	targeting_assist = bool(values.get("targeting_assist", true))
 	reduce_flashes = bool(values.get("flash_reduction", false))
+	_shake_strength = clampf(float(values.get("camera_shake", 1.0)), 0.0, 1.0)
 	if reduce_flashes or bool(values.get("reduced_motion", false)):
-		shake_amount = 0.0
+		trauma = 0.0
 		_fov_kick = 0.0
 
 func assist_attack_direction(origin: Vector3, forward: Vector3, reach: float = 4.0) -> Vector3:

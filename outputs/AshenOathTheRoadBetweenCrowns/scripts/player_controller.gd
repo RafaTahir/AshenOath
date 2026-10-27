@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+const MotionStep = preload("res://scripts/systems/character_motion_step.gd")
+
 signal blade_contact_requested(contact: Dictionary)
 signal potion_requested
 signal bomb_requested
@@ -212,12 +214,14 @@ func _ready() -> void:
 	_build_body()
 	floor_snap_length = 0.34
 	floor_max_angle = deg_to_rad(48.0)
+	floor_stop_on_slope = true
 	max_slides = 6
 	safe_margin = 0.035
 	contact_shadow = find_child("CharacterContactShadow", true, false) as Node3D
 	was_on_floor = is_on_floor()
 
 func _physics_process(delta: float) -> void:
+	delta = MotionStep.simulation_delta(delta)
 	if input_source != null and input_source.has_method("is_gameplay_context") and not input_source.is_gameplay_context():
 		_movement_frame_active = false
 		_cancel_bow()
@@ -253,8 +257,9 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
 		_apply_gravity(delta)
-		move_and_slide()
-		_capture_locomotion_motion()
+		MotionStep.slide(self, delta)
+		_capture_locomotion_motion(delta)
+		_update_ground_adaptation(delta)
 		_animate_visuals(delta)
 		_update_blade_contact()
 		return
@@ -611,8 +616,8 @@ func _handle_movement(delta: float) -> void:
 				stamina_exhausted.emit("dodge")
 	_try_step_up(move_dir)
 	_apply_gravity(delta)
-	move_and_slide()
-	_capture_locomotion_motion()
+	MotionStep.slide(self, delta)
+	_capture_locomotion_motion(delta)
 	_update_ground_adaptation(delta)
 	_animate_visuals(delta)
 
@@ -648,10 +653,10 @@ func _set_movement_facing(heading: float) -> void:
 	if camera_controller != null and (bow_aiming or _uses_first_person_camera()):
 		camera_controller.follow_movement_heading(rotation.y)
 
-func _capture_locomotion_motion() -> void:
+func _capture_locomotion_motion(delta: float) -> void:
 	# Collision sliding, acceleration, dodges and the final coasting step all
 	# have one movement sample. Desired input is never used as a gait direction.
-	var achieved_velocity: Vector3 = get_real_velocity()
+	var achieved_velocity: Vector3 = get_position_delta() / maxf(delta, 0.000001)
 	locomotion_velocity = Vector3(achieved_velocity.x, 0.0, achieved_velocity.z)
 
 func _update_locomotion_state() -> void:

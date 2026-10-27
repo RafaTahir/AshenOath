@@ -1,5 +1,54 @@
 # FINISH-003 - Movement, Camera And Character Integrity
 
+## Camera, Cadence And Grounding Repair - 2026-10-27
+
+Candidate: `grounded-camera-20261027`, preserving the published living-motion
+implementation and the existing animation/action owners.
+
+- Camera follow has one shake-free exponential position filter (14/s) and one
+  look filter (8/s), instead of chained anchor/output filtering. Deliberate orbit
+  input rotates the stored follow frame immediately. First-person eye anchoring,
+  collision safety, rebasing and dialogue-return composition remain retained.
+- Camera impacts use bounded, squared trauma and continuous FastNoiseLite motion
+  after the follow filter. Shaken output never feeds back into follow history.
+  Saved shake intensity, zero-shake, reduced-motion and flash-reduction settings
+  suppress the appropriate effects; idle camera breathing respects reduced motion.
+- Locomotion rates are recomputed from achieved horizontal speed and authored
+  reference cadence, clamped to 0.6-1.6, with no state-switch multiplication or
+  phase seeks. Timed combat actions retain their controller-owned durations.
+- Player, companion, routine and ambient root movement use physics callbacks.
+  Enemy perception/decisions retain their throttled rates, but physical motion
+  now advances each physics tick at its configured speed rather than skipping
+  capsule movement with the AI tick. Achieved displacement drives enemy cadence.
+- Web simulation steps above 1/30 second are bounded. A shared movement helper
+  also accounts for move_and_slide's internal engine delta; collision-adjusted
+  velocity is restored afterward. This deliberately drops excess stalled Web
+  simulation time instead of applying an unbounded catch-up displacement.
+- Existing floor snap remains active; enemies explicitly receive equivalent
+  snap/stop-on-slope settings. Foot rays distinguish animated lift from terrain
+  clearance, permit bounded downward reach, smooth offsets/normals, and align
+  ankles to supported slopes. Airborne, dead, action-owned and seated poses opt
+  out. Analytic leg solving removes repeated whole-rig forced refreshes.
+
+Implementation: present; static call-site/diff review complete.
+Compilation: all eight content packs and production Web export completed without
+errors. Static packaging passed for 17 files, 108,009,852 bytes (103.0 MiB),
+below the shared 256 MiB policy. Root transport SHA-256:
+`a1f9ceff8b7eb01edaab05d67fe4f01537a2d572be982df99066b2ba56c6f1e9`.
+Balanced opening transport is 48,360,514 bytes, not a measured startup time.
+Publication: the FINISH-003 Git publication receipt owns the actual commit/push
+result. Vercel builds and publishes automatically after the main push; no manual
+deployment, provider polling or live/gameplay verification is claimed.
+Agent runtime tests, browser QA, captures and benchmarks: NOT RUN.
+User acceptance and measured smoothness/performance: PENDING, not a passing claim.
+No meshes, textures, population, saves, input bindings or damage values removed.
+
+User checks: walk/run/reverse/stop on flat ground, bridge joins and slopes; jump
+and dodge without planted airborne feet; idle NPC feet and seated traveler poses;
+ordinary enemy pursuit and combat timing; orbit, first person and bow aiming;
+dialogue/Continue/zone returns without stale follow history; impacts and every
+shake/reduced-motion setting; repeat on actual phones, including a tab return.
+
 ## Current Implementation Delivery - 2026-10-26
 
 Candidate: `finish-implementation-20261026`, continued from published r14

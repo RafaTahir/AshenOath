@@ -259,8 +259,12 @@ func _advance_animation(delta: float) -> void:
 			return
 		delta = manual_update_accumulator
 		manual_update_accumulator = 0.0
-	current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
 	animation_graph.set_gait(current_speed_mps)
+	if not action_active and presentation_state == "" and grounded:
+		target_playback_scale = animation_graph.rate_for(current_state)
+		current_playback_scale = target_playback_scale
+	else:
+		current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
 	animation_graph.set_action_rate(current_playback_scale)
 	animation_graph.advance(delta)
 	if action_active:
@@ -348,6 +352,8 @@ func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground:
 	requested_speed_ratio = clampf(speed_ratio, 0.0, 1.35)
 	grounded = on_ground
 	current_direction = Vector3(world_direction.x, 0.0, world_direction.z)
+	if animation_graph != null:
+		animation_graph.set_gait(current_speed_mps)
 	current_direction = current_direction.normalized() if current_direction.length_squared() > 0.0001 else Vector3.ZERO
 	var visible_forward := get_visible_forward()
 	if visible_forward.length_squared() > 0.5 and current_direction != Vector3.ZERO:
@@ -385,34 +391,9 @@ func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground:
 		else:
 			state = "run" if wants_running and _clip_for("run") != StringName() else "walk"
 	locomotion_state = state
-	if physical_motion_available and state in LOCOMOTION_STATES:
-		target_playback_scale = _physical_gait_playback_scale(state)
-	elif state in ["walk", "strafe", "strafe_left", "strafe_right"]:
-		target_playback_scale = clampf(requested_speed_ratio / 0.58, 0.30, 1.40)
-	elif state == "walk_back":
-		target_playback_scale = clampf(requested_speed_ratio / 0.46, 0.30, 1.40)
-	elif state in ["run", "run_back"]:
-		target_playback_scale = clampf(0.88 + (requested_speed_ratio - 0.72) * 0.85, 0.70, 1.45)
-	else:
-		target_playback_scale = 1.0
+	target_playback_scale = animation_graph.rate_for(state)
+	current_playback_scale = target_playback_scale
 	_play_state(state, 0.16)
-
-func _physical_gait_playback_scale(state: String) -> float:
-	var clip: StringName = _clip_for(state)
-	if clip == StringName() or not animation_player.has_animation(clip):
-		return 1.0
-	var animation: Animation = animation_player.get_animation(clip)
-	var key := _clip_key(str(clip))
-	var running_clip: bool = key.contains("run") or key.contains("sprint") or key.contains("jog")
-	var cycle_distance: float = RUN_CYCLE_DISTANCE_M if running_clip else WALK_CYCLE_DISTANCE_M
-	cycle_distance = float(animation.get_meta("cycle_distance_m", cycle_distance))
-	var calibration_key: String = "run_cycle_distance_m" if running_clip else "walk_cycle_distance_m"
-	cycle_distance = float(character_root.get_meta(calibration_key, cycle_distance)) * locomotion_height_scale
-	var playback: float = current_speed_mps * maxf(animation.length, 0.01) / maxf(cycle_distance, 0.20)
-	# Slow villagers can use genuinely slow cadence. Upper limits protect a
-	# missing directional gait from extreme leg cycling; physical travel stays
-	# with the controller. Retreat is deliberately a smaller, bounded walk.
-	return clampf(playback, 0.12, 1.50 if state == "walk_back" else 1.65)
 
 func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10, force: bool = false, duration: float = 0.0) -> bool:
 	if not is_valid() or dead:

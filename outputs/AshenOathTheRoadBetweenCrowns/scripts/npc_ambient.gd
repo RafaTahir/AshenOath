@@ -61,7 +61,7 @@ func setup(id: String, target: Node3D = null, game: Node = null) -> void:
 func _ready() -> void:
 	var parent_3d: Node3D = get_parent() as Node3D
 	if parent_3d == null:
-		set_process(false)
+		set_physics_process(false)
 		return
 	base_y = parent_3d.position.y
 	base_yaw = parent_3d.rotation_degrees.y
@@ -78,7 +78,8 @@ func _ready() -> void:
 	if animation_driver != null:
 		animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	delta = preload("res://scripts/systems/character_motion_step.gd").simulation_delta(delta)
 	var parent_3d: Node3D = get_parent() as Node3D
 	if parent_3d == null:
 		return

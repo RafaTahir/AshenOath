@@ -8,6 +8,7 @@ const Presence = preload("res://scripts/character_presence.gd")
 const CastProfile = preload("res://scripts/story_cast_profile.gd")
 const WorldScenes = preload("res://scripts/story_world_scenes.gd")
 const RoutineDirector = preload("res://scripts/systems/npc_routine_director.gd")
+const MotionStep = preload("res://scripts/systems/character_motion_step.gd")
 
 const WALK_ACCELERATION := 1.65
 const WALK_BRAKING := 2.8
@@ -239,7 +240,8 @@ func routine_ids() -> Array:
 
 var _crowd_index = preload("res://scripts/actor_spatial_index.gd").new()
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	delta = MotionStep.simulation_delta(delta)
 	if not is_instance_valid(host) or not is_instance_valid(player):
 		return
 	if get_parent() != host.zone_root or not bool(host.game_started):
@@ -1563,7 +1565,7 @@ func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.Z
 			driver.set_activity_prop(str(entry.profile.get("prop", "")) if carrying else "")
 		elif bool(entry.get("regional", false)):
 			driver.set_carried_activity("carry" if speed > 0.05 and int(entry.target) == 1 and routine_phase != "night" else "")
-	entry.phase = float(entry.phase) + get_process_delta_time() * (0.8 + speed * 1.7)
+	entry.phase = float(entry.phase) + MotionStep.simulation_delta(get_physics_process_delta_time()) * (0.8 + speed * 1.7)
 
 func _face(node: Node3D, target: Vector3, delta: float, walking: bool = false) -> void:
 	var offset := target - node.global_position

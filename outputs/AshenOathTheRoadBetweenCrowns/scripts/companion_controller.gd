@@ -202,6 +202,7 @@ func _ready() -> void:
 	refresh_presence()
 
 func _physics_process(delta: float) -> void:
+	delta = preload("res://scripts/systems/character_motion_step.gd").simulation_delta(delta)
 	if game == null or get_parent() != game.zone_root or zone_id != str(game.current_zone_id) or not game.game_started or game.zone_transition_pending or game._journey_load_pending() or not is_instance_valid(game.player):
 		return
 	if placement_pending:
@@ -242,12 +243,12 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= 18.0 * delta
 	else:
 		velocity.y = 0.0
-	move_and_slide()
+	preload("res://scripts/systems/character_motion_step.gd").slide(self, delta)
 	var motion := global_position - previous
 	motion.y = 0.0
 	var speed := motion.length() / maxf(delta, 0.001)
 	if speed > 0.05:
-		rotation.y = lerp_angle(rotation.y, atan2(-motion.x, -motion.z), minf(1.0, 9.0 * delta))
+		rotation.y = lerp_angle(rotation.y, atan2(-motion.x, -motion.z), 1.0 - exp(-9.0 * delta))
 	_set_animation(speed)
 	if is_on_floor() and not game.spatial_service.is_river_excluded(global_position, CLEARANCE):
 		last_safe_position = global_position

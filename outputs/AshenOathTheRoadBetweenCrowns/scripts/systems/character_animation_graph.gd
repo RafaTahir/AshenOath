@@ -20,6 +20,7 @@ var walk_distance := 1.45
 var run_distance := 3.20
 var speed := 0.0
 var gait_rate := 1.0
+var gait_rates: Dictionary = {}
 var gait_phase := 0.0
 var proportion := 1.0
 
@@ -154,14 +155,18 @@ func set_gait(ground_speed: float) -> void:
 		return
 	for state: String in GAITS:
 		var distance: Vector2 = strides[state]
-		var stride := lerpf(distance.x, distance.y, weight)
-		if speed < walk_speed:
-			stride *= clampf(speed / maxf(walk_speed, 0.01), 0.0, 1.0)
-		var rate := clampf(speed / maxf(stride, 0.1), 0.12, 2.5) if speed > 0.045 else 1.0
+		# Normalized clips have one-second cycles: authored cycle distance is
+		# their reference metres/second, not an accumulated playback multiplier.
+		var reference_speed := lerpf(distance.x, distance.y, weight)
+		var rate := clampf(speed / maxf(reference_speed, 0.1), 0.6, 1.6) if speed > 0.045 else 1.0
+		gait_rates[state] = rate
 		if state == active_state:
 			gait_rate = rate
 		tree.set("parameters/%s/Pose/blend_position" % state, minf(speed, run_speed))
 		tree.set("parameters/%s/Rate/scale" % state, rate)
+
+func rate_for(logical: String) -> float:
+	return float(gait_rates.get(state_for(logical), 1.0))
 
 func set_action_rate(value: float) -> void:
 	if tree != null and active_state not in GAITS and nodes.has(active_state):

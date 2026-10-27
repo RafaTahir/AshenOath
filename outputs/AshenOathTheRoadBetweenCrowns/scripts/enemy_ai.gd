@@ -15,6 +15,7 @@ const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
+const MotionStep = preload("res://scripts/systems/character_motion_step.gd")
 # The role manifest owns the Ashwing source selected at runtime; do not pull
 # the large optional enemy asset into the browser boot dependency graph here.
 
@@ -129,6 +130,8 @@ func _on_world_sound(position: Vector3, radius: float, _danger: bool) -> void:
 func setup(id: String, definition: Dictionary, target: Node3D) -> void:
 	enemy_id = id
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	floor_snap_length = 0.34
+	floor_stop_on_slope = true
 	display_name = definition.get("name", id)
 	damage = float(definition.get("damage", 10.0))
 	move_speed = float(definition.get("speed", 2.0))
@@ -205,6 +208,8 @@ func set_encounter_peers(peers: Array, spatial_index = null) -> void:
 		navigation_refresh_time = phase * 0.35
 
 func _physics_process(delta: float) -> void:
+	delta = MotionStep.simulation_delta(delta)
+	var motion_delta := delta
 	if encounter_spatial_index != null:
 		encounter_spatial_index.update(self)
 	if dead or player == null:
@@ -219,6 +224,7 @@ func _physics_process(delta: float) -> void:
 	if early_distance > sense_range + 1.0 and pending_attack_time <= 0.0 and stagger_time <= 0.0 and is_on_floor():
 		far_tick_accumulator += delta
 		if far_tick_accumulator < 0.20:
+			_step_motion(motion_delta)
 			return
 		delta = far_tick_accumulator
 		far_tick_accumulator = 0.0
@@ -231,6 +237,7 @@ func _physics_process(delta: float) -> void:
 	if not is_boss:
 		near_tick_accumulator += delta
 		if near_tick_accumulator < NEAR_AI_TICK_INTERVAL:
+			_step_motion(motion_delta)
 			return
 		delta = near_tick_accumulator
 		near_tick_accumulator = 0.0
@@ -281,7 +288,6 @@ func _physics_process(delta: float) -> void:
 		if home_distance > 0.35 and home_dir.length_squared() > 0.01:
 			velocity.x = home_dir.x * move_speed
 			velocity.z = home_dir.z * move_speed
-			look_at(global_position + home_dir, Vector3.UP)
 		else:
 			velocity.x = move_toward(velocity.x, 0.0, 8.0 * delta)
 			velocity.z = move_toward(velocity.z, 0.0, 8.0 * delta)
@@ -323,11 +329,7 @@ func _physics_process(delta: float) -> void:
 		dir = _validated_step_direction(dir, engagement_target, move_speed * speed_factor * delta)
 		velocity.x = dir.x * move_speed * speed_factor
 		velocity.z = dir.z * move_speed * speed_factor
-		if dir.length_squared() > 0.01:
-			# A moving actor faces the route it is actually taking. This keeps
-			# flanks and retreats readable instead of producing sideways slides.
-			look_at(global_position + dir, Vector3.UP)
-		else:
+		if dir.length_squared() <= 0.01:
 			look_at(Vector3(player.global_position.x, global_position.y, player.global_position.z), Vector3.UP)
 	else:
 		velocity.x = 0.0
@@ -346,6 +348,10 @@ func _physics_process(delta: float) -> void:
 			attack_trace_end = attack_trace_start
 			_show_windup_marker()
 			windup_started.emit(self)
+	_step_motion(motion_delta)
+
+func _step_motion(delta: float) -> void:
+	# Throttling perception/decisions must not throttle capsule movement.
 	if not is_on_floor():
 		velocity.y -= 24.0 * delta
 	else:
@@ -353,14 +359,16 @@ func _physics_process(delta: float) -> void:
 	_apply_peer_spacing(delta)
 	var facing_velocity := Vector3(velocity.x, 0.0, velocity.z)
 	if facing_velocity.length_squared() > 0.01:
-		look_at(global_position + facing_velocity, Vector3.UP)
-	move_and_slide()
+		rotation.y = lerp_angle(rotation.y, atan2(-facing_velocity.x, -facing_velocity.z), 1.0 - exp(-12.0 * delta))
+	MotionStep.slide(self, delta)
 	if encounter_spatial_index != null:
 		encounter_spatial_index.update(self)
 	if animation_driver != null:
-		if Vector2(velocity.x, velocity.z).length_squared() > 0.01:
+		var achieved := get_position_delta() / maxf(delta, 0.000001)
+		achieved.y = 0.0
+		if achieved.length_squared() > 0.01:
 			animation_driver.clear_life_activity()
-		animation_driver.set_locomotion(Vector2(velocity.x, velocity.z).length() / max(move_speed, 0.1), velocity, is_on_floor())
+		animation_driver.set_locomotion_motion(achieved, is_on_floor(), maxf(move_speed, 0.1))
 	_animate_visuals(delta)
 
 func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vector3:
