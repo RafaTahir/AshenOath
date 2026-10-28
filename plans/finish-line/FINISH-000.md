@@ -10,18 +10,22 @@ The approved ten-child roadmap supersedes the execution restrictions and
 source-complete assumptions in the dated delivery record below. Mandatory user
 acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
 
-Only **FINISH-016/PACK-CLOSURE** is active. Development was fast-forwarded from
+**FINISH-001/RESPONSIVE-PREPARATION** is active following Rafa's Continue instruction.
+PACK-CLOSURE was pushed as `8603d80` to development and main; deployment waiting
+was explicitly withdrawn by Rafa. That instruction does not imply runtime acceptance.
+Development was fast-forwarded from
 `31a0906` to `2620ab869858a50b62a7829902fc99965b6fd72d`, preserving all seven cloud
 commits, newer monster/character work and both pre-existing untracked directories.
 Targeted isolated verification is authorized for each active child. Deliver via
 development/main Git pushes and Vercel automatic deployment; confirm exact artifact
-identity, label DELIVERED / AWAITING RAFA, then stop for acceptance before the next
+identity when requested; push completion is the delivery boundary under Rafa's latest
+instruction. Label PUSHED / AWAITING RAFA, then stop before the next
 child. No separate CLI deployment and no implied whole-game acceptance.
 
 | Order | Child ticket | Current state |
 | --- | --- | --- |
-| 1 | FINISH-016/PACK-CLOSURE | Implemented, compiled, developer-verified; publication receipt owns delivery status; awaiting Rafa |
-| 2 | FINISH-001/RESPONSIVE-PREPARATION | Not started |
+| 1 | FINISH-016/PACK-CLOSURE | Implemented, compiled, developer-verified, pushed 8603d80; awaiting Rafa |
+| 2 | FINISH-001/RESPONSIVE-PREPARATION | Implemented/compiled; focused checks and affected browser observations recorded; push receipt owns delivery; runtime acceptance pending |
 | 3 | FINISH-014/SAFE-CONNECTOR-HANDOFF | Not started |
 | 4 | FINISH-003/ANIMATION-LIFECYCLE | Not started |
 | 5 | FINISH-003/FACE-ARTIFACT | Not started; actor/geometry identification required |
@@ -54,6 +58,16 @@ See [bounded evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_repor
 A separate existing paused-game Quality-switch overlay blockage was observed;
 fresh persisted-Quality reload/Continue works. Its paused transition owner is
 recorded for child 2. It is not passed, hidden, or repaired under child 1.
+
+Child 2 source repair and package: `responsive-preparation-20261029-r2`,
+**162,872,366 bytes / 155.33 MiB**. The paused Quality reload now completes back
+to Settings and permits Resume without browser restart. The observed reload still
+took about 48 seconds: the completion repair is not a speed/performance pass.
+Prepared New Game paints acknowledgement before handoff; cancellation/repeated
+input and interrupted UI preparation pass the focused fixture. The 100 ms budget,
+controlled cold/warm timings and final reload/Continue remain unverified (browser
+controller timed out). No full FINISH contract or user acceptance is closed.
+See [child 2 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/responsive_preparation_20261029.json).
 
 Existing strict startup/performance targets remain, including historical failures.
 This child establishes resource closure, not performance acceptance. Unlocalized

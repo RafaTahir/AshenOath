@@ -25,6 +25,7 @@ func _init() -> void:
 func set_runtime_services(owner: Node, saves: Node) -> void: hud_lifecycle.set_runtime_services(owner, saves)
 func _ready() -> void: hud_lifecycle.initialize_view()
 func prepare_gameplay_ui() -> void: hud_lifecycle.prepare_gameplay_ui()
+func prepare_gameplay_ui_async(keep_preparing: Callable) -> bool: return await hud_lifecycle.prepare_gameplay_ui_async(keep_preparing)
 func _process(delta: float) -> void: hud_lifecycle.advance_view(delta)
 func _update_process_policy() -> void: hud_lifecycle._update_process_policy()
 func _build_ambient_subtitles() -> void: dialogue_panel._build_ambient_subtitles()

@@ -241,14 +241,14 @@ func set_new_game_ready(value: bool) -> void:
 
 func set_new_game_status(text: String) -> void:
 	new_game_status = text.strip_edges()
-	if new_game_status == "":
-		new_game_status = "Greyfen is ready."
 	if active_menu == "main" and is_instance_valid(new_game_status_label):
 		new_game_status_label.text = new_game_status
 
 func set_opening_preparation(state: String, message: String, progress: float = -1.0, requested: bool = false) -> void:
 	_opening_preparation = {"state": state, "message": message, "progress": progress, "requested": requested}
-	set_new_game_status(message)
+	# Internal construction prose remains in diagnostics, not the loading UI.
+	var label := message if state == "failed" else ("100%" if state == "ready" else ("%d%%" % clampi(int(progress * 100.0), 0, 99) if progress >= 0.0 else ""))
+	set_new_game_status(label)
 	if not is_instance_valid(_opening_progress):
 		return
 	_opening_progress.visible = state not in ["ready", "failed", "idle"]

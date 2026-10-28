@@ -6,6 +6,40 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
+Rafa subsequently authorized continuing to child 2 and removed Vercel waiting:
+push development/main, do not poll hosting or perform a separate deployment.
+No user acceptance is inferred from Continue or from successful compilation.
+
+### FINISH-001/RESPONSIVE-PREPARATION (active)
+
+- The opening core is now six separately scheduled prerequisites, preserving
+  authored ground, river collision, Anwen and all three gates. Every continuation
+  validates the original generation/root; all full-village stages and the actual
+  final-camera render still finish before control. Scene RNG continuity is retained.
+- Gameplay dialogue/inventory UI preparation yields between its existing operations.
+  Partial construction resumes without duplicating surfaces; Settings/save browsing
+  keeps priority even while New Game is queued. Repeated New Game input queues once.
+- Paused settings reloads advance their transition lifecycle without advancing
+  gameplay or requiring an inaccessible Resume. Startup diagnostics distinguish the
+  New Game input timestamp, its first rendered acknowledgement, and worst core step.
+- Loading labels omit internal phase prose: known progress is percentage-only,
+  non-ready progress never displays 100%, and missing-resource Retry details remain.
+- Focused menu/UI cancellation/Continue selection/paused-transition checks pass.
+  Prepared New Game also paints the accepted request before cached handoff, with
+  repeated-input and cancellation coverage. Initial/final exports and exact package
+  checks pass: `responsive-preparation-20261029-r2`, 162,872,366 bytes / 155.33 MiB.
+- In-app Chromium reached complete Greyfen, and paused Balanced -> Quality now
+  returns to usable Settings and Resume without reload or resource/runtime errors.
+  This took approximately 48 seconds, which remains an explicit limitation.
+- Browser controls timed out during the normal reload check; selected Continue on
+  this candidate remains unverified. Initial candidate evidence is reused only for
+  unchanged dependencies; the final acknowledgement boundary is fixture-covered,
+  not represented as a second browser run. Controlled startup/100 ms response,
+  phone and strict performance acceptance remain unproven, not relaxed.
+- The QA server is stopped. Push development/main and stop without Vercel polling,
+  as instructed. No mandatory acceptance count changes and no child 3 work begins.
+
+[Child 2 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/responsive_preparation_20261029.json).
 
 ### FINISH-016/PACK-CLOSURE (developer-verified; awaiting delivery receipt/Rafa)
 

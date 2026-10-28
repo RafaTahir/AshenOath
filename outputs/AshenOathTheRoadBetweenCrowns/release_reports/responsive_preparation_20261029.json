@@ -1,0 +1,65 @@
+{
+  "ticket": "FINISH-001/RESPONSIVE-PREPARATION",
+  "date_local": "2026-10-29",
+  "baseline_commit": "8603d809ed7971480c81a11530a0a1c41ed6aa07",
+  "build_id": "responsive-preparation-20261029-r2",
+  "implementation": "complete_for_bounded_source_repairs",
+  "compilation": "passed",
+  "developer_verification": "focused_fixture_pass_and_partial_browser_coverage",
+  "user_acceptance": "pending",
+  "publication": "Matching FINISH-001 publication receipt owns commit/push status. Rafa explicitly removed Vercel waiting and deployment verification from this execution boundary.",
+  "changes": [
+    "Split opening core publication into six generation/root-guarded steps: authored ground, river collision, Anwen and three gates. Preserve scene RNG sequence and complete village/final-camera readiness before control.",
+    "Prepare dialogue/inventory UI in resumable per-frame operations. Preserve surface identity and menu focus across cancellation.",
+    "Keep Settings/save browsing ahead of background opening work even with a queued New Game.",
+    "Ignore repeated New Game requests and paint the accepted prepared-world request before synchronous handoff; cancellation/generation changes can stop entry at that boundary.",
+    "Advance zone-transition completion while paused without advancing ordinary simulation, fixing the quality-switch overlay blockage.",
+    "Show known preparation as percentages, cap non-ready display below 100%, omit unknown numeric status and retain actionable failed-resource Retry details.",
+    "Extend existing startup metrics with input-received time, first rendered acknowledgement and worst core-step duration. No new monitor, renderer experiment or quality reduction."
+  ],
+  "checks": [
+    {"name": "source_compilation", "result": "pass", "detail": "Game/greyfen script checks and initial production exports compile without parser errors."},
+    {"name": "menu_status_stability", "result": "pass", "detail": "Stable controls/focus; exact selected Continue callback; unknown/99%/100%/failure labels; cancelled/resumed UI construction with no duplicated surfaces; transition advances while tree remains paused; prepared New Game waits for acknowledgement, ignores repeated requests and cancels before entry. Final fixture log is clean."},
+    {"name": "package_integrity", "result": "pass", "detail": "Initial and final r2 package checks pass: 17 files, matching transport/decoded identities, ownership and deployment budget. Final r2 base/root re-export compiled successfully; no assets recompiled or changed."},
+    {"name": "browser_menu_during_preparation", "result": "observed", "detail": "Isolated in-app Chromium: main menu showed live 63%/82% preparation, Settings opened through ordinary input, and returning to main retained the prepared world. No unexpected console error/warning observed."},
+    {"name": "browser_new_game", "result": "observed_on_initial_candidate", "detail": "Normal New Game request reached a complete visible Greyfen and ordinary pause menu. One saved journey earned through the real New Game flow; production-origin saves untouched."},
+    {"name": "browser_paused_quality_reload", "result": "pass_on_initial_candidate", "detail": "Balanced -> Quality through normal Settings, pack mounted, transition completed while paused, loader disappeared back to Settings without browser reload; visible Resume returned to Greyfen. No unexpected console error/warning observed."},
+    {"name": "browser_reload_selected_continue", "result": "unverified_controller_blocker", "detail": "Controller timed out after normal reload. No save injection, forced journey selection or replacement playthrough. Retained ticket-1 save evidence remains valid at its unchanged persistence dependency scope, not represented as this candidate's completed reload check."}
+  ],
+  "evidence_reuse": "Browser checks used responsive-preparation-20261029. The r2 changes only the prepared New Game acknowledgement boundary in base/root; its cancellation/repeated-request behavior passes the focused fixture. UI construction, environment assets, quality reload, persistence, opening-pack construction and six unchanged runtime packs retain their evidence at unchanged dependency scope. No final r2 browser replay is claimed.",
+  "package": {
+    "deployment_bytes": 162872366,
+    "transport_artifact_bytes_excluding_release_manifest": 162864644,
+    "decoded_artifact_bytes": 203015403,
+    "balanced_opening_download_bytes": 97943023,
+    "quality_opening_download_bytes": 105152905,
+    "max_deployment_bytes": 268435456,
+    "root_transport_sha256": "f6c5af7b7eb1d5eec26ad52dd4c23e85bcb5a51a27ab899aecccc5317dd4bcd3",
+    "root_decoded_sha256": "e6a1f97102b6a516b2153451a661ad36c6f21bee1923ac37e9eff3dd6d826204",
+    "note": "155.33 MiB deployed. Initial downloads remain approximately 97.94 MB; no seconds-saved or runtime-memory claim."
+  },
+  "observations_not_benchmarks": {
+    "engine_elapsed_usable_menu_ms": 12741,
+    "scheduled_core_wall_ms_including_yields": 2380,
+    "prepared_new_game_ready_elapsed_ms_initial_candidate": 1420.1,
+    "paused_quality_reload_playable_ms": 47827.1,
+    "note": "Uncontrolled in-app browser, viewport changes and user-style menu browsing. These are different existing engine-stage log measurements, not navigation-to-control, strict reference-PC acceptance or a demonstrated before/after gain."
+  },
+  "corrections": [
+    {"owner": "HARNESS", "detail": "The added session probe initially left its unparented residency Node alive; fixture cleanup corrected, clean rerun passed."},
+    {"owner": "PACKAGING TOOL", "detail": "Scratch packaging metadata assignment lacked an Add-Member for selected_web_export. Corrected metadata/copy stage without repeating successful initial exports."},
+    {"owner": "HARNESS", "detail": "An early QA server start correctly rejected stale web bytes while packaging was incomplete; started successfully after synchronization."},
+    {"owner": "BROWSER CONTROL", "detail": "Rapid inputs/viewport capture were inconsistent; normal-duration mouse presses established the quality-switch result. Later reload timed out twice in browser controls; no further graphical test started."}
+  ],
+  "remaining_conditions": [
+    "The proposed <=100 ms visible-acknowledgement budget remains unmeasured on the reference PC; final paint-before-handoff behavior is fixture-covered, not browser-certified.",
+    "Controlled cold/warm navigation-to-control and first-playable frame comparison remain unverified. Startup/transition targets and historical failures are retained.",
+    "The observed approximately 48-second Quality reload remains an explicit responsiveness/performance limitation; fixing the completion deadlock does not make that delay acceptable.",
+    "Actual phone behavior, alternate saved destinations, end-to-end forced-download Retry and quality changes during an active construction step require remaining acceptance. Resource/attempt guards and valid prior fixture evidence are preserved."
+  ],
+  "evidence_root": "D:/Temp/AshenOath/responsive-preparation-20261029",
+  "build_logs": "D:/Projects/AshenOath/.release-gate/responsive-preparation-20261029-r2/logs",
+  "save_isolation": "Dedicated localhost origin 127.0.0.1:43729; only its newly earned journey/settings changed.",
+  "cleanup": "QA server stopped; no listening process remains on port 43729. Browser controller stopped responding; the agent-created, unmarked temporary tab is subject to automatic end-of-turn cleanup. No user tab was closed or process killed.",
+  "next": "After development/main push, stop. Do not wait for Vercel or begin SAFE-CONNECTOR-HANDOFF without Rafa's next instruction."
+}

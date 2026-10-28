@@ -1,104 +1,104 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-28T16:08:55.1706670Z",
-  "build_id": "pack-closure-20261028-r2",
-  "generated_from_commit": "2620ab869858a50b62a7829902fc99965b6fd72d",
+  "generated_at_utc": "2026-10-28T17:52:59.1570114Z",
+  "build_id": "responsive-preparation-20261029-r2",
+  "generated_from_commit": "8603d809ed7971480c81a11530a0a1c41ed6aa07",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\pack-closure-20261028-r2\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\responsive-preparation-20261029-r2\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 160051576,
+  "total_bytes": 160054392,
   "packs": [
     {
       "id": "base",
-      "version": "pack-closure-20261028-r2",
+      "version": "responsive-preparation-20261029-r2",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4427348,
-      "sha256": "7bc82cf4cb3f0851aedf90b76127a601cfb7643c40e1202318555e390b03ffc2",
+      "bytes": 4429316,
+      "sha256": "6ee555ff5e97871998c3618ff28e7e3a172b65816f7bd0522775904311bab9b3",
       "status": "candidate_external",
-      "log": "../pack-closure-20261028/logs/pack-base.stdout.log"
+      "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "pack-closure-20261028-r2",
+      "version": "responsive-preparation-20261029-r2",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 86266020,
-      "sha256": "74c52d7950452a72eaf064f3402852ee7309876662d393574241a39a4e2f5017",
+      "bytes": 86266868,
+      "sha256": "427bee7812ca1bc0dce00b75f2bac55520c67b4fe382206e1588601516764bec",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "adjacent",
-      "version": "pack-closure-20261028-r2",
+      "version": "responsive-preparation-20261029-r2",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2370980,
       "sha256": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
       "status": "candidate_external",
-      "log": "logs/pack-adjacent.stdout.log"
+      "log": "../pack-closure-20261028-r2/runtime-packs/adjacent.pck"
     },
     {
       "id": "campaign",
-      "version": "pack-closure-20261028-r2",
+      "version": "responsive-preparation-20261029-r2",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8678436,
       "sha256": "00231388353d5597563e933967bea76d8a7641109a088863e4cf5d6d28317455",
       "status": "candidate_external",
-      "log": "../pack-closure-20261028/logs/pack-campaign.stdout.log"
+      "log": "../pack-closure-20261028-r2/runtime-packs/campaign.pck"
     },
     {
       "id": "characters",
-      "version": "pack-closure-20261028-r2",
+      "version": "responsive-preparation-20261029-r2",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 8999204,
       "sha256": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
       "status": "candidate_external",
-      "log": "../pack-closure-20261028/logs/pack-characters.stdout.log"
+      "log": "../pack-closure-20261028-r2/runtime-packs/characters.pck"
     },
     {
       "id": "monsters",
-      "version": "pack-closure-20261028-r2",
+      "version": "responsive-preparation-20261029-r2",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 20678316,
       "sha256": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
       "status": "candidate_external",
-      "log": "../pack-closure-20261028/logs/pack-monsters.stdout.log"
+      "log": "../pack-closure-20261028-r2/runtime-packs/monsters.pck"
     },
     {
       "id": "audio",
-      "version": "pack-closure-20261028-r2",
+      "version": "responsive-preparation-20261029-r2",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21302876,
       "sha256": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
       "status": "candidate_external",
-      "log": "../pack-closure-20261028/logs/pack-audio.stdout.log"
+      "log": "../pack-closure-20261028-r2/runtime-packs/audio.pck"
     },
     {
       "id": "quality_materials",
-      "version": "pack-closure-20261028-r2",
+      "version": "responsive-preparation-20261029-r2",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7328396,
       "sha256": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
       "status": "candidate_external",
-      "log": "../pack-closure-20261028/logs/pack-quality_materials.stdout.log"
+      "log": "../pack-closure-20261028-r2/runtime-packs/quality_materials.pck"
     }
   ],
   "errors": [],
-  "reused_unchanged_pack_inputs": "base, campaign, characters, monsters, audio and quality_materials are byte-identical to pack-closure-20261028; only the three approved arrangements in opening/adjacent changed.",
+  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from responsive-preparation-20261029. Re-exported owners: base. No assets, export ownership or visual settings changed.",
   "selected_web_export": {
-    "build_id": "pack-closure-20261028-r2",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\pack-closure-20261028-r2\\export",
-    "generated_from_commit": "2620ab869858a50b62a7829902fc99965b6fd72d",
-    "artifacts_total_bytes": 162861939,
-    "root_pck_sha256": "6f5f23ce7588a9ca2c8d9c0f3837e66142f73791654e60555e0431d9e0022d3e",
-    "note": "Approved music restored; unchanged packs reused by full input identity."
+    "build_id": "responsive-preparation-20261029-r2",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\responsive-preparation-20261029-r2\\export",
+    "generated_from_commit": "8603d809ed7971480c81a11530a0a1c41ed6aa07",
+    "artifacts_total_bytes": 162864644,
+    "root_pck_sha256": "f6c5af7b7eb1d5eec26ad52dd4c23e85bcb5a51a27ab899aecccc5317dd4bcd3",
+    "note": "Script-only responsive preparation repair; unchanged packs reused by input scope."
   }
 }

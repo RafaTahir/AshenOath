@@ -1,5 +1,6 @@
 extends "res://scripts/hud/hud_component.gd"
 ## Hud lifecycle: explicit view operations; requests leave through typed signals.
+var _gameplay_ui_step := 0
 
 func set_runtime_services(owner: Node, saves: Node) -> void:
 	_game_owner = owner
@@ -42,13 +43,27 @@ func initialize_view() -> void:
 	_update_process_policy()
 
 func prepare_gameplay_ui() -> void:
-	if _gameplay_ui_ready: return
-	_gameplay_ui_ready = true
-	_build_dialogue()
-	_build_inventory()
-	_apply_theme()
-	apply_accessibility(_current_settings())
-	_apply_hud_layout()
+	while not _gameplay_ui_ready:
+		_prepare_gameplay_ui_step()
+
+func prepare_gameplay_ui_async(keep_preparing: Callable) -> bool:
+	while not _gameplay_ui_ready:
+		await view.get_tree().process_frame
+		if not keep_preparing.call():
+			return false
+		_prepare_gameplay_ui_step()
+	return bool(keep_preparing.call())
+
+func _prepare_gameplay_ui_step() -> void:
+	match _gameplay_ui_step:
+		0: _build_dialogue()
+		1: _build_inventory()
+		2: _apply_theme()
+		3: apply_accessibility(_current_settings())
+		4:
+			_apply_hud_layout()
+			_gameplay_ui_ready = true
+	_gameplay_ui_step += 1
 
 func advance_view(delta: float) -> void:
 	if health_bar == null:

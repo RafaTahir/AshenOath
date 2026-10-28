@@ -233,6 +233,11 @@ func tick_session(delta: float) -> void:
 	_restore_browser_session(delta)
 	if game_started and _host.get_viewport().disable_3d:
 		_restore_active_world_view()
+	# Loading is lifecycle work, not simulation. Settings may reload a world
+	# while paused; its completion must not require Resume behind the loader.
+	if game_started and player != null and zone_transition_pending:
+		_advance_zone_transition()
+		return
 	if not game_started or player == null or _host.get_tree().paused:
 		return
 	if opening_scene_pending and not zone_transition_pending and not zone_load_request_pending and input_router.is_gameplay_context() and player.can_control:
@@ -241,9 +246,6 @@ func tick_session(delta: float) -> void:
 			opening_scene_pending = false
 			life.begin_opening_scene()
 	if is_instance_valid(zone_root) and bool(zone_root.get_meta("opening_scene_active", false)):
-		return
-	if zone_transition_pending:
-		_advance_zone_transition()
 		return
 	if _journey_load_pending():
 		journey_loading.try_finish(_host)
@@ -332,8 +334,15 @@ func _ensure_gameplay_runtime() -> void:
 	boss_defs = _read_json("res://data/bosses.json")
 
 func _new_game() -> void:
-	if game_started or zone_transition_pending or zone_load_request_pending or _journey_load_pending():
+	if game_started or new_game_start_pending or zone_transition_pending or zone_load_request_pending or _journey_load_pending():
 		return
+	var received_usec := Time.get_ticks_usec()
+	opening_startup_metrics["new_game_input_received_ms"] = float(received_usec) / 1000.0
+	if DisplayServer.get_name().to_lower() != "headless":
+		RenderingServer.frame_post_draw.connect(func():
+			if not resource_shutdown_prepared and float(opening_startup_metrics.get("new_game_input_received_ms", -1.0)) == float(received_usec) / 1000.0:
+				opening_startup_metrics["new_game_ack_frame_ms"] = float(Time.get_ticks_usec() - received_usec) / 1000.0
+		, CONNECT_ONE_SHOT)
 	zone_pack_request_serial += 1
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
@@ -375,6 +384,16 @@ func _new_game() -> void:
 		return
 	new_game_start_pending = true
 	new_game_requested_while_preparing = false
+	var generation := opening_prepare_generation
+	_publish_web_opening_state("ready", "Greyfen is ready.", 1.0)
+	# Paint the accepted request before the synchronous cached-world handoff.
+	# Otherwise even a prepared scene makes the menu appear inert for that work.
+	if DisplayServer.get_name().to_lower() == "headless":
+		await _host.get_tree().process_frame
+	else:
+		await RenderingServer.frame_post_draw
+	if not new_game_start_pending or generation != opening_prepare_generation or game_started or _journey_load_pending() or resource_shutdown_prepared:
+		return
 	if loading_started_usec <= 0:
 		loading_started_usec = Time.get_ticks_usec()
 	if new_game_started_usec <= 0:

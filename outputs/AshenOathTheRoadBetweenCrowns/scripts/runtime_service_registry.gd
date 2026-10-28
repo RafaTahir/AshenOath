@@ -45,6 +45,8 @@ func prepare_gameplay_services(keep_preparing: Callable) -> bool:
 		if Time.get_ticks_usec() - slice_started >= 8000:
 			await get_tree().process_frame
 			slice_started = Time.get_ticks_usec()
+	if not await services["hud"].prepare_gameplay_ui_async(keep_preparing):
+		return false
 	return bool(keep_preparing.call()) and is_complete()
 
 func _create_missing_services(ids: Array) -> Dictionary:

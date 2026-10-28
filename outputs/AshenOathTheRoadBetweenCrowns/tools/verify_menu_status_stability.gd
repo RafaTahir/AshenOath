@@ -4,6 +4,20 @@ const Hud = preload("res://scripts/hud.gd")
 var activations := 0
 var selected_journeys: Array[Dictionary] = []
 
+class PausedTransitionProbe extends "res://scripts/systems/session_service.gd":
+	var transitions := 0
+	var starts := 0
+	func _restore_browser_session(_delta: float) -> void: pass
+	func _journey_load_pending() -> bool: return false
+	func _publish_web_opening_state(_phase: String, _message: String = "", _progress: float = -1.0) -> void: pass
+	func _start_new_game_world() -> void: starts += 1
+	func _advance_zone_transition() -> void:
+		transitions += 1
+		zone_transition_pending = false
+
+class PreparationSettings extends RefCounted:
+	var settings := {"quality_preset": "balanced"}
+
 func _initialize() -> void:
 	call_deferred("_run")
 
@@ -33,6 +47,14 @@ func _run() -> void:
 	passed = passed and not hud._gameplay_ui_ready and hud.dialogue_layer.get_child_count() == 0 and hud.inventory_layer.get_child_count() == 0
 	passed = passed and status == hud.new_game_status_label and status.text == "Preparing Greyfen 19"
 	passed = passed and root.gui_get_focus_owner() == focus
+	hud.set_opening_preparation("resources", "Internal resource prose", -1.0)
+	passed = passed and status.text == "" and hud._opening_progress.indeterminate
+	hud.set_opening_preparation("building", "Internal stage prose", 1.0)
+	passed = passed and status.text == "99%"
+	hud.set_opening_preparation("ready", "Internal completion prose", 1.0)
+	passed = passed and status.text == "100%" and not hud._opening_progress.visible
+	hud.set_opening_preparation("failed", "Missing required texture; select Retry.")
+	passed = passed and "required texture" in status.text and hud._opening_retry.visible
 	var selected := {"slot_id":"auto", "source":"primary", "token":"earned-copy"}
 	hud.set_journey_models({"continue":{"available":true, "selection":selected, "summary":{}}})
 	hud.journey_load_requested.connect(func(selection: Dictionary): selected_journeys.append(selection))
@@ -82,7 +104,17 @@ func _run() -> void:
 	hud.show_controls_menu("main")
 	hud.set_new_game_status("Ready while controls are open")
 	passed = passed and hud.active_menu != "main" and hud.new_game_status_label == null
-	hud.prepare_gameplay_ui()
+	# Cancelling partway through UI construction retains completed surfaces;
+	# resumption cannot build duplicate controls or disturb the current menu.
+	var preparation := {"calls": 0}
+	var prepare_ui := func():
+		preparation.calls += 1
+		return preparation.calls <= 2
+	var completed: bool = await hud.prepare_gameplay_ui_async(prepare_ui)
+	passed = passed and not completed and not hud._gameplay_ui_ready
+	var partial_dialogue := hud.dialogue_layer.get_child_count()
+	completed = await hud.prepare_gameplay_ui_async(func(): return true)
+	passed = passed and completed and partial_dialogue == hud.dialogue_layer.get_child_count()
 	var dialogue_surface := hud.dialogue_layer
 	var inventory_surface := hud.inventory_layer
 	var content_count := dialogue_surface.get_child_count() + inventory_surface.get_child_count()
@@ -93,6 +125,39 @@ func _run() -> void:
 	saves.queue_free()
 	for frame in range(3):
 		await process_frame
+	var host := Node3D.new()
+	root.add_child(host)
+	var probe := PausedTransitionProbe.new()
+	var state = preload("res://scripts/systems/game_state.gd").new(host)
+	probe.configure(host, state, {})
+	state.player = Node3D.new()
+	state.game_started = true
+	state.zone_transition_pending = true
+	paused = true
+	probe.tick_session(0.016)
+	passed = passed and probe.transitions == 1 and not state.zone_transition_pending and paused
+	probe.tick_session(0.016)
+	passed = passed and probe.transitions == 1
+	paused = false
+	state.game_started = false
+	state.settings = PreparationSettings.new()
+	var cached := Node3D.new()
+	probe.route_zone_cache["greyfen"] = cached
+	probe.call("_new_game")
+	passed = passed and state.new_game_start_pending and probe.starts == 0
+	probe.call("_new_game")
+	probe._cancel_new_game_request()
+	await process_frame
+	passed = passed and probe.starts == 0 and not state.new_game_start_pending
+	probe.call("_new_game")
+	await process_frame
+	await process_frame
+	passed = passed and probe.starts == 1
+	cached.free()
+	state.player.free()
+	state.zone_residency.free()
+	probe.free()
+	host.free()
 	if not passed:
 		push_error("Menu status update replaced controls or stole focus")
 	print("MENU STATUS STABILITY: " + ("PASS" if passed else "FAIL"))

@@ -365,8 +365,8 @@ func _prepare_opening_services(generation: int) -> void:
 	_host.call_deferred("_prepare_opening_resources", generation)
 
 func _wait_for_opening_build_slot(generation: int) -> void:
-	# Settings/save browsing gets the main thread; an explicit New Game owns it.
-	while _opening_attempt_current(generation) and not new_game_start_pending and hud.active_menu != "main":
+	# Settings/save browsing retains priority even after a queued New Game.
+	while _opening_attempt_current(generation) and hud.active_menu != "main":
 		await _host.get_tree().process_frame
 
 func _opening_attempt_current(generation: int) -> bool:
@@ -522,7 +522,24 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		spatial_service = null
 		_opening_prepare_failed("Greyfen could not be prepared. Select New Game to retry.")
 		return
-	var prewarm_build := ZoneCompositionRouter.build_core(_host, "greyfen", "opening_boot")
+	var prewarm_root: Node3D = zone_root
+	var core_context := ZoneBuildContext.new(_host, "greyfen", "opening_boot")
+	var core_script: Script = load(ZoneCompositionRouter.CORE_BUILDER_PATHS.greyfen)
+	var core_builder = core_script.new()
+	for step in range(core_builder.OPENING_CORE_STEPS):
+		await _host.get_tree().process_frame
+		await _wait_for_opening_build_slot(generation)
+		if not _opening_attempt_current(generation) or not is_instance_valid(prewarm_root) or zone_root != prewarm_root:
+			return
+		var step_started := Time.get_ticks_usec()
+		_begin_zone_world_reads("greyfen", step == 0)
+		var step_ready: bool = core_builder.build_opening_step(core_context, step)
+		_end_zone_world_reads()
+		opening_startup_metrics["core_step_worst_ms"] = maxf(float(opening_startup_metrics.get("core_step_worst_ms", 0.0)), float(Time.get_ticks_usec() - step_started) / 1000.0)
+		if not step_ready:
+			_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's opening step %d could not be prepared. Select Retry to try again." % step)
+			return
+	var prewarm_build := core_context.validate()
 	var build_ms := Time.get_ticks_msec() - phase_started
 	print("LOADING: Greyfen prewarm build_complete ms=%d ok=%s" % [build_ms, bool(prewarm_build.get("ok", false))])
 	if not bool(prewarm_build.get("ok", false)):
@@ -533,7 +550,6 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		spatial_service = null
 		_opening_prepare_failed("Greyfen could not be prepared. Select New Game to retry.")
 		return
-	var prewarm_root: Node3D = zone_root
 	await _host.get_tree().process_frame
 	await _wait_for_opening_build_slot(generation)
 	if not _opening_attempt_current(generation):

@@ -7,6 +7,7 @@ const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd"
 const GreyfenFrontier = preload("res://scripts/greyfen_frontier.gd")
 const NOTICE_BOARD_POSITION := Vector3(4.4, 0.0, 12.1)
 const BOOT_VISUAL_BUCKETS := 8
+const OPENING_CORE_STEPS := 6
 const BOUNDARY_STAGES: Array[String] = ["horizon", "vegetation", "lights", "north_south_fences", "side_fences"]
 const VILLAGE_HOUSES := [
 	[Vector3(-5, 0, -3), 8.0, "DressedVillageHouse_WestLane"],
@@ -14,11 +15,40 @@ const VILLAGE_HOUSES := [
 	[Vector3(-10, 0, 11), 24.0, "DressedVillageHouse_SpawnFrame"],
 	[Vector3(14, 0, -8.4), -42.0, "DressedVillageHouse_ShrineFrame"],
 ]
+var _opening_rng_state: int
 
 func build(context: ZoneBuildContext) -> void:
 	var previous := context.use_scene_rng(41021)
 	_build(context)
 	context.restore_scene_rng(previous)
+
+func build_opening_step(context: ZoneBuildContext, step: int) -> bool:
+	# Retain the synchronous build contract for other callers. Menu preparation
+	# publishes these same prerequisites separately, before any control is possible.
+	if step < 0 or step >= OPENING_CORE_STEPS or context.zone_root == null:
+		return false
+	var previous := context.use_scene_rng(41021)
+	if step > 0:
+		context.construction_host().context.rng.state = _opening_rng_state
+	match step:
+		0:
+			var root := Node3D.new()
+			root.name = "AuthoredGreyfenSection"
+			root.set_meta("ticket", "WORLD-001")
+			root.set_meta("main_route_half_width", 2.8)
+			context.add_node(root)
+			if not context.register_authored_gameplay_core():
+				context.restore_scene_rng(previous)
+				return false
+		1:
+			RiverSection.new().build(context, 4.5, 42.0, 3.4, true)
+		2:
+			_build_boot_anwen(context)
+		3, 4, 5:
+			_build_boot_gate(context, step - 3)
+	_opening_rng_state = context.construction_host().context.rng.state
+	context.restore_scene_rng(previous)
+	return true
 
 func _build(context: ZoneBuildContext) -> void:
 	var opening_fast := context.is_opening_fast()
@@ -459,29 +489,28 @@ func _build_castle_road(context: ZoneBuildContext) -> void:
 	context.append_prepared_detail("CastleRoadRuts_a0bdff01c9")
 
 func _build_boot_gameplay_content(context: ZoneBuildContext) -> void:
-	# The boot profile is deliberately small: it is the scene shown while the
-	# menu-covered prewarm finishes. Keep the first objective and all legal exits
-	# available, then hydrate the full village on the first settled gameplay
-	# frames. These gate markers are removed before the full gameplay stage so
-	# the player never receives duplicate focus targets.
+	_build_boot_anwen(context)
+	for index in range(3):
+		_build_boot_gate(context, index)
+
+func _build_boot_anwen(context: ZoneBuildContext) -> void:
 	var anwen_position := context.authored_anchor_position("AnwenAnchor", Vector3(2.0, 0, -5.0))
 	var anwen = context.make_named_interactable("sister_anwen", "dialogue", "Talk to Sister Anwen", anwen_position, Color(0.34, 0.35, 0.48))
 	_defer_boot_interactable_visual(anwen, 0)
+
+func _build_boot_gate(context: ZoneBuildContext, index: int) -> void:
 	var boot_gates := [
 		["To Wychwood", context.authored_anchor_position("WychwoodGateAnchor", Vector3(0, 0, -15.2)), "wychwood", Vector3(0, 1, 13)],
 		["The long road", context.authored_anchor_position("DeepWoodGateAnchor", Vector3(-18, 0, -10)), "deep_wood", Vector3(0, 1, 12)],
 		["Road to Castle Vargan", context.authored_anchor_position("CastleGateAnchor", Vector3(17.5, 0, 0)), "vargan_approach", Vector3(0, 1, 14)],
 	]
-	for entry in boot_gates:
-		var gate = context.make_zone_gate(entry[0], entry[1], entry[2], entry[3])
-		if gate != null:
-			gate.set_meta("opening_boot_gate", true)
-			# The Area3D remains live for route/focus correctness. Rendering three
-			# animated portals during menu prewarm only spends the first WebGL frame
-			# on visuals that the gameplay stage replaces immediately after control.
-			_defer_boot_interactable_visual(gate, -1)
-			if str(entry[2]) == "vargan_approach":
-				gate.rotation_degrees.y = 90.0
+	var entry: Array = boot_gates[index]
+	var gate = context.make_zone_gate(entry[0], entry[1], entry[2], entry[3])
+	if gate != null:
+		gate.set_meta("opening_boot_gate", true)
+		_defer_boot_interactable_visual(gate, -1)
+		if str(entry[2]) == "vargan_approach":
+			gate.rotation_degrees.y = 90.0
 
 func _defer_boot_interactable_visual(interactable: Node3D, reveal_bucket: int) -> void:
 	if interactable == null:
