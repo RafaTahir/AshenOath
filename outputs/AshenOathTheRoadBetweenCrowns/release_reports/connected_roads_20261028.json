@@ -1,0 +1,49 @@
+{
+  "build_id": "connected-roads-20261028",
+  "scope": "Existing inter-world preparation and connecting-road presentation",
+  "baseline_commit": "1b470ce751c8a0a6df99f067ae5a0343feb31557",
+  "implementation": "complete",
+  "compilation": "passed_after_one_web_root_type_correction",
+  "package_integrity": "passed",
+  "publication_receipt": ".release-gate/connected-roads-20261028/publication.json",
+  "runtime_testing": "not_run",
+  "user_acceptance": "pending",
+  "source_findings": [
+    "Preparation previously began only within 18 metres of a physical connector.",
+    "Nearest-exit changes could repeatedly cancel useful partial construction.",
+    "Arrival also requested all neighboring zone resources rather than one selected destination.",
+    "The Wychwood builder grouped many scenery and actor operations into 11 atomic stages.",
+    "Road geometry duplicated the manifest centerline and used largely identical bare covered bends."
+  ],
+  "retained_changes": [
+    "Prepare one available destination after first control and checkpoint work settle; favor Wychwood during the opening.",
+    "Retain the selected preparation until another road is clearly approached; use connected objective destinations when selecting new work.",
+    "Yield construction around protected input, combat and aiming; allow movement and repay expensive atomic steps with quiet frames.",
+    "Background downloads share existing validated requests at lower priority; mount at most one background pack per frame and defer during protected activity.",
+    "Split Wychwood into 31 steps with all retained content and every required encounter actor ready before activation.",
+    "Derive connector geometry from the authoritative centerline; add supported arches, retaining edges, drainage, physical signs and regional roadside joinery.",
+    "Keep existing route locks, crossings, complete readiness, saves, quality presets and bounded residency."
+  ],
+  "package": {
+    "files": 17,
+    "directory_bytes": 107946159,
+    "maximum_bytes_exclusive": 268435456,
+    "root_transport_sha256": "15006f3cb3ea8ca5230a004056103a7d8508eeb61abed93277f3ea049308b457",
+    "opening_required_balanced_potato_bytes": 48357638,
+    "opening_required_quality_bytes": 55567086
+  },
+  "limitations": [
+    "No measured transition-time, frame-rate or memory improvement is claimed.",
+    "The 1.5 ms slice is cooperative; individual Godot publication operations are atomic and can exceed it.",
+    "Cold downloads, resource mounts and final activation can still require the existing loading presentation.",
+    "The previous candidate's runtime evidence is historical, not acceptance of changed routes or scheduling.",
+    "Rendered scenery, camera clearance, actual phone performance and user acceptance remain unverified."
+  ],
+  "manual_checks": [
+    "Start in Greyfen, explore briefly, then walk into Wychwood and return immediately.",
+    "Approach a different unlocked exit, turn back, and confirm scenery and control remain intact.",
+    "Interrupt background preparation with dialogue, combat, pause and aiming, then resume travel.",
+    "Continue an earned save and change quality; confirm correct destination actors, quest states and Retry behavior.",
+    "Inspect every connecting road's signs, grounded details, clearance and lighting on desktop and phone."
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "release-repair-20261027",
+  "release_id": "connected-roads-20261028",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4387456,
-      "candidate_sha256": "cc381ddb1be6f44a92c9811c96d8598e9b1f9837135dfda0bd04707b2a2cb1fa",
+      "candidate_bytes": 4387920,
+      "candidate_sha256": "63388523a1d1d6f6cab95e777d6ecd72dd88240131d32caa824b9626a8634538",
       "contents": [
         "menu",
         "managers",
@@ -35,14 +35,14 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4387456,
-      "embedded_source_sha256": "cc381ddb1be6f44a92c9811c96d8598e9b1f9837135dfda0bd04707b2a2cb1fa",
+      "embedded_source_bytes": 4387920,
+      "embedded_source_sha256": "63388523a1d1d6f6cab95e777d6ecd72dd88240131d32caa824b9626a8634538",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "release-repair-20261027",
-      "url": "packs/opening.pck?sha256=3f650f83439d4048b8108ec8f7e5a004cec856c7189dea5aa569c79c9b03bb63",
-      "sha256": "3f650f83439d4048b8108ec8f7e5a004cec856c7189dea5aa569c79c9b03bb63",
+      "version": "connected-roads-20261028",
+      "url": "packs/opening.pck?sha256=13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761",
+      "sha256": "13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761",
       "bytes": 35810924,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
@@ -52,16 +52,16 @@
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
       "candidate_bytes": 35810924,
-      "candidate_sha256": "3f650f83439d4048b8108ec8f7e5a004cec856c7189dea5aa569c79c9b03bb63",
+      "candidate_sha256": "13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "3f650f83439d4048b8108ec8f7e5a004cec856c7189dea5aa569c79c9b03bb63"
+      "cache_key": "13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761"
     },
     "campaign": {
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "url": "packs/campaign.pck?sha256=9b47e6ebe97230d0a4c709ce4f0e6c8fea11e2391f4c503046ec06cef758acc7",
       "sha256": "9b47e6ebe97230d0a4c709ce4f0e6c8fea11e2391f4c503046ec06cef758acc7",
       "bytes": 8676964,
@@ -84,7 +84,7 @@
       "cache_key": "9b47e6ebe97230d0a4c709ce4f0e6c8fea11e2391f4c503046ec06cef758acc7"
     },
     "characters": {
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "url": "packs/characters.pck?sha256=0000552203be55daf15b16c3c1cc31192e5c403cdb2f844b1401c8171c510310",
       "sha256": "0000552203be55daf15b16c3c1cc31192e5c403cdb2f844b1401c8171c510310",
       "bytes": 9606192,
@@ -105,7 +105,7 @@
       "cache_key": "0000552203be55daf15b16c3c1cc31192e5c403cdb2f844b1401c8171c510310"
     },
     "monsters": {
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "url": "packs/monsters.pck?sha256=d9c833f3010d81302d723c6a56364240f12823a458a5203dd42cdb533228d3a7",
       "sha256": "d9c833f3010d81302d723c6a56364240f12823a458a5203dd42cdb533228d3a7",
       "bytes": 14657944,
@@ -127,7 +127,7 @@
       "cache_key": "d9c833f3010d81302d723c6a56364240f12823a458a5203dd42cdb533228d3a7"
     },
     "audio": {
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "url": "packs/audio.pck?sha256=5f05f82dccfb8c322130c42fdc86facf9260e4183d0c896579c52bddebe1defb",
       "sha256": "5f05f82dccfb8c322130c42fdc86facf9260e4183d0c896579c52bddebe1defb",
       "bytes": 21301404,
@@ -148,7 +148,7 @@
       "cache_key": "5f05f82dccfb8c322130c42fdc86facf9260e4183d0c896579c52bddebe1defb"
     },
     "quality_materials": {
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "url": "packs/quality_materials.pck?sha256=4300bc34e456575df5424ffde5d9b379c0214f7a8e09f2d0de507ca6c89a49c5",
       "sha256": "4300bc34e456575df5424ffde5d9b379c0214f7a8e09f2d0de507ca6c89a49c5",
       "bytes": 7326924,
@@ -169,10 +169,10 @@
       "cache_key": "4300bc34e456575df5424ffde5d9b379c0214f7a8e09f2d0de507ca6c89a49c5"
     },
     "adjacent": {
-      "version": "release-repair-20261027",
-      "url": "packs/adjacent.pck?sha256=5f6eb0e94f1c49ae46649032526c1f88d95b6e428b42412b9af7d77d938bbbab",
-      "sha256": "5f6eb0e94f1c49ae46649032526c1f88d95b6e428b42412b9af7d77d938bbbab",
-      "bytes": 2369012,
+      "version": "connected-roads-20261028",
+      "url": "packs/adjacent.pck?sha256=dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1",
+      "sha256": "dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1",
+      "bytes": 2369508,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -186,15 +186,15 @@
         "ruins"
       ],
       "candidate_artifact": "adjacent.pck",
-      "candidate_bytes": 2369012,
-      "candidate_sha256": "5f6eb0e94f1c49ae46649032526c1f88d95b6e428b42412b9af7d77d938bbbab",
-      "cache_key": "5f6eb0e94f1c49ae46649032526c1f88d95b6e428b42412b9af7d77d938bbbab"
+      "candidate_bytes": 2369508,
+      "candidate_sha256": "dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1",
+      "cache_key": "dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1"
     }
   },
-  "build_id": "release-repair-20261027",
-  "generated_from_commit": "0a13d0328555c1ceaa5065746898d1ad524b0543",
-  "generated_at_utc": "2026-10-27T12:49:00.626669Z",
-  "total_bytes": 99749364,
+  "build_id": "connected-roads-20261028",
+  "generated_from_commit": "1b470ce751c8a0a6df99f067ae5a0343feb31557",
+  "generated_at_utc": "2026-10-28T03:49:48.417381Z",
+  "total_bytes": 99749860,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1"
 }

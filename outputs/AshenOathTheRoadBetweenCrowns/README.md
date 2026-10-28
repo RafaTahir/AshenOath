@@ -37,7 +37,8 @@ Runtime catalogs and export presets own inclusion. A raw inventory entry is not
 runtime ownership; conversely, a model without literal `.gd` references may still
 be required by a catalog, resource, import, fallback or preparation tool.
 
-Production contains a root Web artifact, engine files and eight external packs.
+Production contains a root Web artifact, engine files and seven external packs
+(the base pack is embedded in the root artifact).
 The shared policy is `data/deployment_policy.json`: total deployed files strictly
 below 256 MiB, warning at 200 MiB; individual tracked files below 100 MiB. Download
 bytes, decoded resources and process memory are different measurements. Removing
@@ -56,7 +57,38 @@ at most 350 ms and cold transitions at most 900 ms. Startup goals remain first
 paint 0.75 s; cold/warm menu 12/6 s; navigation-to-control 15/7 s; prepared New Game
 handoff 750 ms. These are requirements, not claims that current builds pass them.
 
-## Cleanup Evidence - 2026-10-27
+## Connected Travel - 2026-10-28
+
+Candidate `connected-roads-20261028` prepares one available destination after
+the current world's first-control/checkpoint window. Greyfen favors Wychwood;
+an approached road or directly connected tracked objective can select another
+destination. Small changes of proximity retain useful in-flight construction.
+Unavailable story routes never become traversable through preparation.
+
+Wychwood now retains the same content in 31 construction steps instead of 11.
+Background slices target 1.5 ms, yielding additional frames after expensive
+atomic steps. These are scheduling limits, not measured frame-time guarantees.
+Background pack mounts wait out protected interactions/combat; explicit journey
+requests retain priority. Only one neighbor is prepared, and it remains isolated
+until its complete readiness contract passes and the player approaches.
+
+Existing connector centerlines, gates, arrivals and collision remain authoritative.
+The shared visual pass adds supported masonry arches, contoured shoulders,
+retaining courses, drains, destination signs and regional roadside joinery.
+No new lights, textures, actors or scenery removals are used for this change.
+
+Static review and production packaging only: no new runtime tests, playthrough,
+browser QA or performance benchmark. Earlier passed checks remain historical
+evidence, not proof of this changed candidate. User checks: walk Greyfen/Wychwood
+both ways, approach another exit then return, interrupt with dialogue/combat,
+change quality, Continue a saved journey, and inspect passage/camera clearance.
+Actual transition speed, hitching and visual appeal remain unverified.
+Compilation and package integrity passed; the complete candidate is 107,946,159
+bytes. See [Connected travel delivery](release_reports/connected_roads_20261028.json)
+for the source findings, build correction and user checklist. Publication is
+recorded separately in `.release-gate/connected-roads-20261028/publication.json`.
+
+## Historical Cleanup Evidence - 2026-10-27
 
 The reproducible source-only profile is `tools/run_headless_release.ps1`.
 It uses the existing release verifier inventory and owned-process runner, writes
@@ -67,7 +99,7 @@ budget overruns remain visible limitations, while the default strict verifier
 behavior and original targets are retained. This profile does not certify
 rendering, browser/phone behavior, listening quality or reference-PC performance.
 
-Current repair progress is in
+The previous release's repair progress is in
 [Release repair status](release_reports/release_repair_20261027.json).
 
 [Historical cleanup results](release_reports/release_cleanup_20261027.json)

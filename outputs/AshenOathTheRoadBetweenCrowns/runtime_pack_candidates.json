@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "ticket": "FINISH-016",
-  "generated_at_utc": "2026-10-27T12:49:00.626669Z",
-  "build_id": "release-repair-20261027",
-  "generated_from_commit": "0a13d0328555c1ceaa5065746898d1ad524b0543",
+  "generated_at_utc": "2026-10-28T03:49:48.417381Z",
+  "build_id": "connected-roads-20261028",
+  "generated_from_commit": "1b470ce751c8a0a6df99f067ae5a0343feb31557",
   "source_dirty": true,
   "artifact_directory": "external_runtime_packs",
   "artifacts_are_external": true,
@@ -13,37 +13,37 @@
   "packs": [
     {
       "id": "base",
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4387456,
-      "sha256": "cc381ddb1be6f44a92c9811c96d8598e9b1f9837135dfda0bd04707b2a2cb1fa",
+      "bytes": 4387920,
+      "sha256": "63388523a1d1d6f6cab95e777d6ecd72dd88240131d32caa824b9626a8634538",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 35810924,
-      "sha256": "3f650f83439d4048b8108ec8f7e5a004cec856c7189dea5aa569c79c9b03bb63",
+      "sha256": "13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "adjacent",
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
-      "bytes": 2369012,
-      "sha256": "5f6eb0e94f1c49ae46649032526c1f88d95b6e428b42412b9af7d77d938bbbab",
+      "bytes": 2369508,
+      "sha256": "dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1",
       "status": "candidate_external",
       "log": "logs/pack-adjacent.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8676964,
@@ -53,7 +53,7 @@
     },
     {
       "id": "characters",
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 9606192,
@@ -63,7 +63,7 @@
     },
     {
       "id": "monsters",
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 14657944,
@@ -73,7 +73,7 @@
     },
     {
       "id": "audio",
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21301404,
@@ -83,7 +83,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "release-repair-20261027",
+      "version": "connected-roads-20261028",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7326924,

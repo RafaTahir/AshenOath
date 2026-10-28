@@ -3,33 +3,48 @@ extends RefCounted
 const RiverSection = preload("res://scripts/zones/river_section.gd")
 const BridgeSurfaceContract = preload("res://scripts/bridge_surface_contract.gd")
 const LandscapePresentation = preload("res://scripts/world_landscape_presentation.gd")
-const BUILD_STEPS := 11
+const BUILD_STEPS := 31
+
+func step_count(_zone_id: String) -> int:
+	return BUILD_STEPS
 
 func build(context: ZoneBuildContext) -> void:
 	var previous := context.use_scene_rng(78233)
 	for step in range(BUILD_STEPS): build_step(context,step)
 	context.restore_scene_rng(previous)
 
-func build_step(context: ZoneBuildContext, step: int) -> void:
+func build_step(context: ZoneBuildContext, step: int) -> bool:
+	var presentation := context.zone_root.get_node_or_null("WychwoodAuthoredPresentation") as Node3D
 	match step:
 		0: _begin(context)
 		1:
 			context.make_split_ground(44.0, 34.0, 0.0, 3.4, Color(0.065, 0.105, 0.07), BridgeSurfaceContract.DECK_WIDTH, BridgeSurfaceContract.bridge_length(3.4), BridgeSurfaceContract.APPROACH_LENGTH)
-			RiverSection.new().build(context, 0.0, 44.0, 3.4)
-		2:
-			context.make_wychwood_terrain_layers()
-			context.make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
-			context.make_wychwood_path_edges()
-		3:
-			_build_light_composition(context)
-			_build_gate_threshold(context)
-		4: _build_authored_presentation(context)
-		5: _build_forest_frame(context)
-		6: _build_investigation_route(context)
-		7: _build_combat_clearing(context)
-		8: context.make_quality_wychwood_overhaul()
-		9: _build_gameplay_content(context)
-		10: context.make_narrative_aftermath()
+		2: RiverSection.new().build(context, 0.0, 44.0, 3.4)
+		3: context.make_wychwood_terrain_layers()
+		4: context.make_play_area_bounds(44, 34, Color(0.04, 0.075, 0.045))
+		5: context.make_wychwood_path_edges()
+		6: _build_light_composition(context)
+		7: _build_gate_threshold(context)
+		8: _begin_authored_presentation(context)
+		9: _make_root_arch(presentation,context)
+		10: _make_canopy_layer(presentation, context, "WychwoodCanopyLower", 2.8, 6 if context.quality_preset() == "potato" else 9 if context.quality_preset() == "balanced" else 12, Color(0.13, 0.22, 0.13))
+		11: _make_canopy_layer(presentation, context, "WychwoodCanopyUpper", 4.4, 4 if context.quality_preset() == "potato" else 7 if context.quality_preset() == "balanced" else 9, Color(0.09, 0.17, 0.11))
+		12: _make_understory_layer(presentation,context)
+		13: _make_forest_floor_layer(presentation,context)
+		14: _make_path_floor_edges(presentation,context)
+		15: _make_path_rock_edges(presentation)
+		16: _make_clue_sightline_markers(presentation,context)
+		17: _make_clearing_frame(presentation,context)
+		18: _build_forest_frame(context)
+		19: _build_investigation_route(context)
+		20: _build_combat_clearing(context)
+		21: context.make_quality_wychwood_overhaul()
+		22: _build_gameplay_content(context)
+		23,24,25,26,27: _build_encounter_wave(context,step-23)
+		28,29: _build_bandit(context,step-28)
+		30: context.make_narrative_aftermath()
+		_: return false
+	return true
 
 func _begin(context: ZoneBuildContext) -> void:
 	var root := Node3D.new()
@@ -38,7 +53,7 @@ func _begin(context: ZoneBuildContext) -> void:
 	root.set_meta("main_route_half_width", 2.6)
 	context.add_node(root)
 
-func _build_authored_presentation(context: ZoneBuildContext) -> void:
+func _begin_authored_presentation(context: ZoneBuildContext) -> void:
 	var presentation := Node3D.new()
 	presentation.name = "WychwoodAuthoredPresentation"
 	presentation.set_meta("ticket", "WORLD-013")
@@ -48,15 +63,6 @@ func _build_authored_presentation(context: ZoneBuildContext) -> void:
 	presentation.set_meta("clue_sightlines", 5)
 	presentation.set_meta("combat_arena_authored", true)
 	context.add_node(presentation)
-	_make_root_arch(presentation, context)
-	_make_canopy_layer(presentation, context, "WychwoodCanopyLower", 2.8, 6 if context.quality_preset() == "potato" else 9 if context.quality_preset() == "balanced" else 12, Color(0.13, 0.22, 0.13))
-	_make_canopy_layer(presentation, context, "WychwoodCanopyUpper", 4.4, 4 if context.quality_preset() == "potato" else 7 if context.quality_preset() == "balanced" else 9, Color(0.09, 0.17, 0.11))
-	_make_understory_layer(presentation, context)
-	_make_forest_floor_layer(presentation, context)
-	_make_path_floor_edges(presentation, context)
-	_make_path_rock_edges(presentation)
-	_make_clue_sightline_markers(presentation, context)
-	_make_clearing_frame(presentation, context)
 
 func _make_east_layby(context: ZoneBuildContext) -> void:
 	var road := MeshInstance3D.new()
@@ -505,18 +511,20 @@ func _build_gameplay_content(context: ZoneBuildContext) -> void:
 	context.make_herb("mooncap", Vector3(-7, 0, -6), Color(0.58, 0.65, 0.86))
 	context.make_herb("redroot", Vector3(-10, 0, -2), Color(0.55, 0.12, 0.11))
 	context.make_herb("grave_moss", Vector3(5, 0, -13), Color(0.24, 0.42, 0.24))
+
+func _build_encounter_wave(context: ZoneBuildContext, wave: int) -> void:
+	if wave < context.wychwood_wave_progress(): return
 	if context.is_quest_active("main_road_of_crows") and not context.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
 		var brute_z := -14.2 if context.is_objective_done("main_road_of_crows", "drag_marks") else -12.4
 		var ids := ["ghoulkin", "ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute"]
 		var positions := [Vector3(-2.4, 0.8, -8.8), Vector3(2.7, 0.8, -9.6), Vector3(-4.8, 0.8, -3.8), Vector3(4.6, 0.8, -5.3), Vector3(0.2, 0.8, brute_z)]
-		for wave in range(context.wychwood_wave_progress(), ids.size()):
-			var enemy = context.spawn_enemy(ids[wave], positions[wave])
-			if enemy != null:
-				enemy.set_meta("wychwood_wave", wave)
-				# Presence belongs to the encounter, not the tutorial prompt loop.
-				# Future waves stay dormant; the earned next wave is already visible
-				# on arrival, including Continue before the clearing trigger.
-				enemy.set_encounter_active(wave == context.wychwood_wave_progress())
+		var enemy = context.spawn_enemy(ids[wave], positions[wave])
+		if enemy != null:
+			enemy.set_meta("wychwood_wave", wave)
+			# Every retained wave is constructed before readiness; only the earned
+			# next wave is active, as on ordinary direct arrival and Continue.
+			enemy.set_encounter_active(wave == context.wychwood_wave_progress())
+
+func _build_bandit(context: ZoneBuildContext, index: int) -> void:
 	if context.is_quest_active("side_black_dog") and not context.is_objective_done("side_black_dog", "find_dog") and not bool(context.get_story_flag("black_dog_bandits_defeated", false)):
-		context.spawn_enemy("bandit", Vector3(-14, 0.8, -14))
-		context.spawn_enemy("bandit", Vector3(-12, 0.8, -15))
+		context.spawn_enemy("bandit", Vector3(-14, 0.8, -14) if index == 0 else Vector3(-12, 0.8, -15))

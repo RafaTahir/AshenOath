@@ -40,6 +40,8 @@ var web_preload_wait_started := 0
 var shell_poll_elapsed := 0.0
 var download_limit := MAX_CONCURRENT_DOWNLOADS
 var foreground_pack_ids: Array[String] = []
+var background_work_allowed: Callable
+var _background_mount_frame := -1
 
 func required_startup_packs() -> Array[String]:
 	var ids: Array[String] = STARTUP_PACK_IDS.duplicate()
@@ -492,6 +494,7 @@ func _start_pending_downloads() -> void:
 					started = true
 					break
 			if get_state(id) == "verified" and _dependencies_ready(id):
+				if not _can_mount_now(id): continue
 				_mount_cached_pack(id, str(requests[id].get("path", "")))
 				started = true
 				break
@@ -611,9 +614,10 @@ func _try_mount_web_preloaded_pack(id: String) -> bool:
 	request["progress"] = 0.97
 	request["path"] = path
 	requests[id] = request
-	if not _dependencies_ready(id):
+	if not _dependencies_ready(id) or not _can_mount_now(id):
 		requests[id]["state"] = "verified"
 		return true
+	_note_background_mount(id)
 	if not ProjectSettings.load_resource_pack(path, false):
 		return false
 	print("LOADING: startup_pack preloaded id=%s bytes=%d" % [id, actual_bytes])
@@ -696,6 +700,7 @@ func _on_download_completed(result: int, response_code: int, _headers: PackedStr
 func _mount_cached_pack(id: String, path: String) -> bool:
 	if not _dependencies_ready(id):
 		return false
+	_note_background_mount(id)
 	var request: Dictionary = requests.get(id, {})
 	request["state"] = "mounting"
 	request["progress"] = 0.97
@@ -706,6 +711,15 @@ func _mount_cached_pack(id: String, path: String) -> bool:
 		return false
 	_mark_mounted(id, path)
 	return true
+
+func _can_mount_now(id: String) -> bool:
+	if int(requests.get(id,{}).get("priority",0)) < 500: return true
+	return _background_mount_frame != Engine.get_process_frames() \
+		and (not background_work_allowed.is_valid() or bool(background_work_allowed.call()))
+
+func _note_background_mount(id: String) -> void:
+	if int(requests.get(id,{}).get("priority",0)) >= 500:
+		_background_mount_frame = Engine.get_process_frames()
 
 func _mark_embedded_ready(id: String) -> void:
 	requests[id] = {"state": "ready", "progress": 1.0, "path": "embedded", "error": ""}
@@ -813,14 +827,14 @@ func _remove_file(path: String) -> void:
 	DirAccess.remove_absolute(path)
 
 func _process(delta: float) -> void:
-	if active_downloads.is_empty():
-		return
 	shell_poll_elapsed += delta
-	if OS.has_feature("web") and shell_poll_elapsed >= 0.10:
+	# A verified background pack may be waiting for dialogue/combat to finish
+	# even with no network transfer left. It must still receive a mount turn.
+	if shell_poll_elapsed >= 0.10:
 		shell_poll_elapsed = 0.0
 		for value in active_downloads.keys():
 			var id := str(value)
-			if get_state(id) != "shell_loading":
+			if not OS.has_feature("web") or get_state(id) != "shell_loading":
 				continue
 			var state := get_web_preloaded_state(id)
 			if state == "preloaded":

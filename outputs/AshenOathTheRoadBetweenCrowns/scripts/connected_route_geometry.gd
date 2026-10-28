@@ -49,6 +49,8 @@ static func install(context: ZoneBuildContext) -> void:
 	ground.cull_mode = BaseMaterial3D.CULL_DISABLED; banks.cull_mode = BaseMaterial3D.CULL_DISABLED
 	ground.emission_enabled = true; ground.emission = Color(0.06,0.07,0.06); ground.emission_energy_multiplier = 0.2
 	var timber := context.make_world_material("timber",Color(0.52,0.45,0.32))
+	var masonry := context.make_world_material("medieval_brick",Color(0.60,0.61,0.55)).duplicate() as BaseMaterial3D
+	masonry.cull_mode = BaseMaterial3D.CULL_DISABLED
 	for edge: Dictionary in Sectors.connections(context.zone_id):
 		var path := Node3D.new()
 		path.name = "RoadTo_"+str(edge.target)
@@ -57,7 +59,11 @@ static func install(context: ZoneBuildContext) -> void:
 		var source_points := Sectors.connector_points(edge)
 		var normal := Sectors.direction(str(edge.id))
 		path.transform = Transform3D(Basis(Vector3.UP,atan2(normal.x,normal.z)),source_points[0]+normal*2.0)
-		var points := PackedVector3Array([Vector3(0,0,-2),Vector3(0,0,4),Vector3(-6,0,4),Vector3(-6,0,8)])
+		# Geometry and route queries consume the same centerline, including bends.
+		var points := PackedVector3Array()
+		for point: Vector3 in source_points: points.append(path.transform.affine_inverse()*point)
+		var style := _route_style(edge)
+		path.set_meta("route_style",style)
 		var width := float(edge.half_width)
 		var left: PackedVector3Array = []
 		var right: PackedVector3Array = []
@@ -78,15 +84,17 @@ static func install(context: ZoneBuildContext) -> void:
 			var outer: PackedVector3Array = []
 			for i in range(side.size()):
 				var outward := (side[i]-points[i]).normalized()
-				crest.append(side[i]+outward*1.3+Vector3.UP*(4.5 if stone else 5.4+sin(float(i)*1.7)*0.35))
-				outer.append(side[i]+outward*4.0)
+				crest.append(side[i]+outward*2.2+Vector3.UP*(4.5 if stone else 5.4+sin(float(i)*1.7)*0.35))
+				outer.append(side[i]+outward*5.5)
 			_strip(path,"Bank",side,crest,banks,true,"bank" if not stone else "")
 			_strip(path,"BackSlope",crest,outer,banks,false,"backslope" if not stone else "")
 		# Cover only the bends, keeping the entrance and regional view open.
 		# This also makes the normal collision-safe camera respect the passage.
 		var roof_left := PackedVector3Array([left[1]+Vector3.UP*4.5,left[2]+Vector3.UP*4.5])
 		var roof_right := PackedVector3Array([right[1]+Vector3.UP*4.5,right[2]+Vector3.UP*4.5])
-		_strip(path,"BendArch",roof_left,roof_right,banks,true,"arch" if not stone else "")
+		# The covered bend is a supported old road arch, not a floating soil lid.
+		_strip(path,"BendArch",roof_left,roof_right,masonry,true,"arch")
+		_make_route_details(path,edge,points,left,right,style,timber,masonry,context)
 		_make_gate(path,edge,width,timber)
 		_make_landmark(path,edge,width,timber,banks)
 		path.set_meta("required_ground",true)
@@ -94,6 +102,117 @@ static func install(context: ZoneBuildContext) -> void:
 		if marker == null:
 			marker = context.make_zone_gate("Road to "+str(edge.target).replace("_"," ").capitalize(),source_points[0],str(edge.target),Vector3.ZERO)
 		if marker != null: marker.position = source_points[0]
+
+static func _route_style(edge: Dictionary) -> String:
+	var pair: Array = [str(edge.source),str(edge.target)]
+	if "marsh_crossing" in pair: return "causeway"
+	if "record_hall" in pair or "undercroft" in pair or "vargan_court" in pair: return "castle"
+	if "hart_glade" in pair or "ruins" in pair: return "sanctuary"
+	if "old_mill" in pair or "burned_farmstead" in pair: return "haul_road"
+	if "vargan_approach" in pair or "bandit_road" in pair: return "watch_road"
+	return "forest_cutting"
+
+static func _make_route_details(parent: Node3D, edge: Dictionary, points: PackedVector3Array, left: PackedVector3Array, right: PackedVector3Array, style: String, timber: Material, stone: Material, context: ZoneBuildContext) -> void:
+	var masonry: Array[Transform3D] = []
+	var wood: Array[Transform3D] = []
+	var drainage: Array[Transform3D] = []
+	# Low retaining courses and drain edges follow the actual bend. Nothing
+	# extends into the walkable strip or adds an obstacle to the route collider.
+	for side: PackedVector3Array in [left,right]:
+		for segment in range(points.size()-1):
+			var length := side[segment].distance_to(side[segment+1])
+			var tangent := (side[segment+1]-side[segment]).normalized()
+			var yaw := atan2(tangent.x,tangent.z)
+			var count := maxi(1,ceili(length/1.25))
+			for index in range(count):
+				var fraction := (float(index)+0.5)/float(count)
+				var center := points[segment].lerp(points[segment+1],fraction)
+				var border := side[segment].lerp(side[segment+1],fraction)
+				var outward := (border-center).normalized()
+				var height := 0.22+float(index%3)*0.035
+				masonry.append(Transform3D(Basis(Vector3.UP,yaw).scaled(Vector3(0.38,height,length/float(count)-0.04)),border+outward*0.28+Vector3.UP*height*0.5))
+				drainage.append(Transform3D(Basis(Vector3.UP,yaw).scaled(Vector3(0.16,0.012,length/float(count))),border-outward*0.12+Vector3.UP*0.018))
+				if style == "causeway" and index%2 == 0:
+					wood.append(_landmark_part(border+outward*0.34+Vector3.UP*0.55,Vector3(0.14,1.10,0.14)))
+			if style == "causeway":
+				var middle := (side[segment]+side[segment+1])*0.5
+				var outward := (middle-(points[segment]+points[segment+1])*0.5).normalized()
+				wood.append(Transform3D(Basis(Vector3.UP,yaw).scaled(Vector3(0.12,0.12,length)),middle+outward*0.34+Vector3.UP*0.92))
+	# Repeated masonry ribs explain how the cutting roof is supported. They sit
+	# outside its retained camera/collision envelope, preserving head clearance.
+	for fraction in [0.08,0.5,0.92]:
+		var a := left[1].lerp(left[2],fraction)
+		var b := right[1].lerp(right[2],fraction)
+		var across := (b-a).normalized()
+		var mid := (a+b)*0.5
+		var forward := (points[2]-points[1]).normalized()
+		var yaw := atan2(forward.x,forward.z)
+		for sign_value in [-1.0,1.0]:
+			var foot: Vector3 = mid+across*float(sign_value)*(a.distance_to(b)*0.5+0.24)
+			for course in range(6):
+				masonry.append(Transform3D(Basis(Vector3.UP,yaw).scaled(Vector3(0.42,0.72,0.54)),foot+Vector3.UP*(0.36+float(course)*0.75)))
+		for arch_step in range(9):
+			var f := (float(arch_step)+0.5)/9.0
+			var position := a.lerp(b,f)+Vector3.UP*(4.62+sin(f*PI)*0.70)
+			var slope := cos(f*PI)*PI*0.70/a.distance_to(b)
+			var basis := Basis(Vector3.UP,yaw)*Basis(Vector3.BACK,atan(slope))
+			masonry.append(Transform3D(basis.scaled(Vector3(a.distance_to(b)/9.0+0.03,0.22,0.54)),position))
+	# The road's work differs by region, using the retained timber/stone set.
+	var shoulder := right[0]+(right[0]-points[0]).normalized()*0.6
+	if style == "haul_road":
+		for index in range(4):
+			wood.append(Transform3D(Basis(Vector3.UP,0.12).scaled(Vector3(0.25,0.18,2.0)),shoulder+Vector3(float(index%2)*0.27,0.10+float(index/2)*0.19,1.5)))
+	elif style == "sanctuary":
+		for index in range(3):
+			masonry.append(_landmark_part(shoulder+Vector3(0,0.22+float(index)*0.40,1.1),Vector3(0.50-float(index)*0.08,0.40,0.45),0.04*float(index)))
+	elif style in ["forest_cutting","watch_road"]:
+		for z in [0.0,1.4,2.8]:
+			wood.append(_landmark_part(shoulder+Vector3(0,0.60,z),Vector3(0.16,1.2,0.16)))
+		wood.append(_landmark_part(shoulder+Vector3(0,0.90,1.4),Vector3(0.10,0.13,3.0)))
+	_add_box_batch(parent,"RoadMasonry",masonry,stone)
+	_add_box_batch(parent,"RoadJoinery",wood,timber)
+	_add_box_batch(parent,"RoadDrainage",drainage,context.make_world_material("wet_mud",Color(0.24,0.28,0.25)))
+	_make_waypost(parent,edge,left[0]+(left[0]-points[0]).normalized()*0.40,timber,context)
+
+static func _add_box_batch(parent: Node3D, name: String, pieces: Array[Transform3D], material: Material) -> void:
+	if pieces.is_empty(): return
+	if _landmark_box == null:
+		_landmark_box = BoxMesh.new()
+		_landmark_box.size = Vector3.ONE
+	var batch := MultiMesh.new()
+	batch.transform_format = MultiMesh.TRANSFORM_3D
+	batch.mesh = _landmark_box
+	batch.instance_count = pieces.size()
+	for i in range(pieces.size()): batch.set_instance_transform(i,pieces[i])
+	var visual := MultiMeshInstance3D.new()
+	visual.name = name
+	visual.multimesh = batch
+	visual.material_override = material
+	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	parent.add_child(visual)
+
+static func _make_waypost(parent: Node3D, edge: Dictionary, position: Vector3, timber: Material, context: ZoneBuildContext) -> void:
+	var sign := Node3D.new()
+	sign.name = "RouteWaypost"
+	sign.position = position
+	parent.add_child(sign)
+	var pieces: Array[Transform3D] = [
+		_landmark_part(Vector3(0,0.9,0),Vector3(0.15,1.8,0.15)),
+		_landmark_part(Vector3(0,1.65,0),Vector3(2.05,0.42,0.11))]
+	_add_box_batch(sign,"SignTimber",pieces,timber)
+	var text := TextMesh.new()
+	text.text = str(edge.target).replace("_"," ").capitalize()
+	text.font_size = 42
+	text.pixel_size = 0.003
+	text.depth = 0.004
+	var label := MeshInstance3D.new()
+	label.name = "Destination"
+	label.mesh = text
+	label.position = Vector3(0,1.65,-0.061)
+	label.rotation.y = PI
+	label.material_override = context.make_material(Color(0.82,0.77,0.60))
+	label.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	sign.add_child(label)
 
 static func _make_landmark(parent: Node3D, edge: Dictionary, half: float, timber: Material, stone: Material) -> void:
 	var definition := Sectors.road_landmark(str(edge.source), str(edge.target))
@@ -156,20 +275,24 @@ static func _make_gate(parent: Node3D, edge: Dictionary, half: float, material: 
 	parent.add_child(gate)
 	var hinge := Node3D.new(); hinge.name = "Hinge"; hinge.position.x = -half
 	gate.add_child(hinge)
-	var leaf := MeshInstance3D.new()
-	var mesh := BoxMesh.new(); mesh.size = Vector3(half*2,4.5,0.18)
-	leaf.mesh = mesh; leaf.position = Vector3(half,2.25,0); leaf.material_override = material
+	var leaf := Node3D.new(); leaf.name = "TimberLeaf"
+	leaf.position = Vector3(half,2.25,0)
 	hinge.add_child(leaf)
+	var pieces: Array[Transform3D] = []
+	var plank_width := half*2.0/12.0
+	for index in range(12):
+		pieces.append(_landmark_part(Vector3(-half+plank_width*(float(index)+0.5),0,0),Vector3(plank_width-0.012,4.5,0.18)))
+	for y in [-1.65,1.55]:
+		pieces.append(_landmark_part(Vector3(0,y,-0.13),Vector3(half*2.0,0.15,0.12)))
+	var brace_start := Vector3(-half+0.15,-1.55,-0.14)
+	var brace_end := Vector3(half-0.15,1.45,-0.14)
+	pieces.append(Transform3D(Basis(Quaternion(Vector3.UP,(brace_end-brace_start).normalized())).scaled(Vector3(0.15,brace_start.distance_to(brace_end),0.12)),(brace_start+brace_end)*0.5))
+	_add_box_batch(leaf,"GateJoinery",pieces,material)
 	var body := StaticBody3D.new()
 	body.set_meta("walkable_support",false)
 	var shape := CollisionShape3D.new()
-	var box := preload("res://scripts/immutable_collision_shapes.gd").box(mesh.size)
+	var box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(half*2,4.5,0.18))
 	shape.shape = box; body.add_child(shape); leaf.add_child(body)
-	for y in [0.6,3.8]:
-		var band := MeshInstance3D.new()
-		var strip := BoxMesh.new(); strip.size = Vector3(half*2,0.12,0.22)
-		band.mesh = strip; band.position = Vector3(half,y,0); band.material_override = material
-		hinge.add_child(band)
 
 static func open_gate(root: Node3D, target: String, instant: bool) -> void:
 	var gate := root.get_node_or_null("ConnectedRoads/RoadTo_"+target+"/TravelGate") as Node3D

@@ -2,6 +2,10 @@ extends Node
 class_name SeamlessWorldService
 
 const WorldSectorManifest = preload("res://scripts/world_sector_manifest.gd")
+const APPROACH_RADIUS := 18.0
+const COMMIT_RADIUS := 9.0
+const FIRST_CONTROL_GRACE := 2.0
+const BUILD_SLICE_USEC := 1500
 
 signal boundary_transition_requested(source_zone: String, target_zone: String, edge_id: String)
 signal sector_activated(zone_id: String)
@@ -42,11 +46,17 @@ var _cached_valid := false
 var _selected_connection: Dictionary = {}
 var _crossing: Dictionary = {}
 var _preview_root: Node3D
+var _playable_seconds := 0.0
+var _build_cooldown := 0.0
+var _last_step_usec := 0
+var _selection_reason := ""
 
 func configure(runtime_host: Node, stream_service: Node) -> void:
 	host = runtime_host
 	streaming_service = stream_service
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if host.runtime_packs != null:
+		host.runtime_packs.background_work_allowed = _background_work_allowed
 	if not get_tree().node_added.is_connected(_construction_node_added):
 		get_tree().node_added.connect(_construction_node_added)
 	if not host.story_state.changed.is_connected(_sources_changed):
@@ -56,6 +66,14 @@ func configure(runtime_host: Node, stream_service: Node) -> void:
 
 func _sources_changed() -> void:
 	_story_epoch += 1
+
+func _background_work_allowed() -> bool:
+	return is_instance_valid(host) and not host.resource_shutdown_prepared \
+		and host.game_started and _playable_seconds >= FIRST_CONTROL_GRACE \
+		and not get_tree().paused and not host._journey_load_pending() \
+		and is_instance_valid(host.player) and host.player.can_control \
+		and not host.player.bow_aiming and not host._story_has_active_combat() \
+		and not host.opening_checkpoint_pending and not host.zone_transition_pending
 
 func _construction_node_added(node: Node) -> void:
 	if _neighbor_scope != null and is_instance_valid(_neighbor_scope.owned_root) and _neighbor_scope.owned_root.is_ancestor_of(node):
@@ -67,24 +85,28 @@ func _process(delta: float) -> void:
 	_sync_resident_camera()
 	if _foreground: return
 	if _neighbor_scope != null and (not is_instance_valid(_neighbor_scope.owned_root) or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced"))): cancel_preparation()
-	_poll += delta
-	if _poll < 0.06: return
-	_poll = 0.0
-	_selected_connection = _nearest_connection()
-	if _selected_connection.is_empty(): return
-	var target := str(_selected_connection.target)
-	if _neighbor_scope != null and _neighbor_scope.zone_id != target: cancel_preparation()
 	if get_tree().paused or host._journey_load_pending() or not is_instance_valid(host.player) or not host.player.can_control or host._story_has_active_combat(): return
 	if host.opening_checkpoint_pending or host.opening_detail_pending or host.zone_transition_pending: return
 	if host.player.bow_aiming: return
+	_playable_seconds += delta
+	_build_cooldown = maxf(0.0, _build_cooldown - delta)
+	if _playable_seconds < FIRST_CONTROL_GRACE: return
+	_poll += delta
+	if _poll < 0.06: return
+	_poll = 0.0
+	_selected_connection = _preparation_connection()
+	if _selected_connection.is_empty(): return
+	var target := str(_selected_connection.target)
+	if _neighbor_scope != null and _neighbor_scope.zone_id != target: cancel_preparation()
 	# Cold activation starts just before the common plane. Retain the source
 	# half while it still supports Kael, even if a state change invalidated it.
 	if contains_resident_passage(host.player.global_position) and not WorldSectorManifest.connector_contains(str(host.current_zone_id),host.player.global_position): return
 	if _valid_cached_destination(target):
-		_show_neighbor(_selected_connection); return
+		if _connection_distance(_selected_connection) < APPROACH_RADIUS: _show_neighbor(_selected_connection)
+		return
 	if _neighbor_state == "ready":
 		if not _neighbor_dependencies_current(): cancel_preparation()
-		else: _show_neighbor(_selected_connection)
+		elif _connection_distance(_selected_connection) < APPROACH_RADIUS: _show_neighbor(_selected_connection)
 		return
 	if _neighbor_scope != null and not _neighbor_dependencies_current():
 		cancel_preparation(); return
@@ -92,17 +114,26 @@ func _process(delta: float) -> void:
 		if Time.get_ticks_msec() < _retry_after: return
 		if host.runtime_packs != null:
 			var extras: Array[String] = host._zone_encounter_packs(target)
-			host.runtime_packs.request_zone_packs(target,extras)
+			# Share the ordinary hash-validated downloads without giving speculative
+			# travel the priority of an explicit Continue or journey request.
+			for pack_id: String in host.runtime_packs.required_zone_packs(target,extras):
+				host.runtime_packs.request_pack(pack_id,500)
 			if not host.runtime_packs.zone_packs_ready(target,extras): return
 		if streaming_service != null:
 			streaming_service.request_zone(target)
 			if not streaming_service.is_ready(target): return
 		_begin_neighbor(target); return
+	if _build_cooldown > 0.0: return
 	var slice_started := Time.get_ticks_usec()
 	while _neighbor_scope != null and _neighbor_state == "building":
 		_advance_preparation()
-		if Time.get_ticks_usec() - slice_started >= 2000:
+		if Time.get_ticks_usec() - slice_started >= BUILD_SLICE_USEC:
 			break
+	# A Godot scene publication is atomic. Repay an over-budget step with quiet
+	# frames instead of stacking expensive steps on an already slow frame.
+	var spent := float(Time.get_ticks_usec() - slice_started) / 1000000.0
+	_build_cooldown = minf(0.25, spent * 4.0)
+	if delta > 1.0 / 30.0: _build_cooldown = maxf(_build_cooldown,0.10)
 	if _neighbor_scope != null and _neighbor_state == "building":
 		# Continue on the next frame, not after another 60-ms routing poll.
 		_poll = 0.06
@@ -110,16 +141,65 @@ func _process(delta: float) -> void:
 func _nearest_connection() -> Dictionary:
 	if not is_instance_valid(host.player): return {}
 	var best: Dictionary = {}
-	var distance := 18.0
+	var distance := APPROACH_RADIUS
 	for edge: Dictionary in WorldSectorManifest.connections(str(host.current_zone_id)):
 		if not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): continue
-		var points := WorldSectorManifest.connector_points(edge)
-		var point := Vector2(host.player.position.x,host.player.position.z)
-		var proximity := INF
-		for i in range(points.size()-1):
-			proximity = minf(proximity,point.distance_to(Geometry2D.get_closest_point_to_segment(point,Vector2(points[i].x,points[i].z),Vector2(points[i+1].x,points[i+1].z))))
+		var proximity := _connection_distance(edge)
 		if proximity < distance:
 			distance = proximity; best = edge
+	return best
+
+func _connection_distance(edge: Dictionary) -> float:
+	var points := WorldSectorManifest.connector_points(edge)
+	var point := Vector2(host.player.position.x,host.player.position.z)
+	var proximity := INF
+	for i in range(points.size()-1):
+		proximity = minf(proximity,point.distance_to(Geometry2D.get_closest_point_to_segment(point,Vector2(points[i].x,points[i].z),Vector2(points[i+1].x,points[i+1].z))))
+	return proximity
+
+func _preparation_connection() -> Dictionary:
+	var source := str(host.current_zone_id)
+	var near := _nearest_connection()
+	var retained: Dictionary = {}
+	if _neighbor_scope != null:
+		retained = WorldSectorManifest.connection_between(source,_neighbor_scope.zone_id)
+	elif not _selected_connection.is_empty() and str(_selected_connection.get("source","")) == source:
+		retained = _selected_connection
+	if not retained.is_empty() and not WorldSectorManifest.edge_available(retained,host.quests,host.story_state): retained = {}
+	if not retained.is_empty() and str(retained.target) == previous_sector and _connection_distance(retained) > APPROACH_RADIUS:
+		retained = {}
+	# Explicitly approaching a different road wins, but wandering between the
+	# village services must not continually destroy a useful partial world.
+	if not near.is_empty() and _connection_distance(near) < COMMIT_RADIUS:
+		if retained.is_empty() or str(near.target) == str(retained.target) or _connection_distance(near)+4.0 < _connection_distance(retained):
+			_selection_reason = "approached_road"
+			return near
+	if not retained.is_empty():
+		_selection_reason = "retained_preparation"
+		return retained
+	var destination := ""
+	if host.quest_presentation != null:
+		destination = str(host.quest_presentation.get_objective_view_model().get("destination_zone",""))
+	var objective_edge := WorldSectorManifest.connection_between(source,destination)
+	if not objective_edge.is_empty() and WorldSectorManifest.edge_available(objective_edge,host.quests,host.story_state):
+		_selection_reason = "current_objective"
+		return objective_edge
+	# The opening promise begins inside Greyfen; prepare its next road while
+	# Kael talks and explores instead of waiting for the forest threshold.
+	if source == "greyfen" and not host.quests.is_completed("main_road_of_crows"):
+		_selection_reason = "opening_road"
+		return WorldSectorManifest.connection_between(source,"wychwood")
+	if not near.is_empty():
+		_selection_reason = "nearest_available_road"
+		return near
+	var best: Dictionary = {}
+	var distance := INF
+	for edge: Dictionary in WorldSectorManifest.connections(source):
+		if str(edge.target) == previous_sector or not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): continue
+		var proximity := _connection_distance(edge)
+		if proximity < distance:
+			best = edge; distance = proximity
+	_selection_reason = "next_available_road"
 	return best
 
 func _show_neighbor(edge: Dictionary) -> void:
@@ -168,11 +248,13 @@ func complete_crossing(previous_root: Node3D) -> void:
 
 func _advance_preparation() -> void:
 	_added_nodes.clear()
+	var started := Time.get_ticks_usec()
 	var successful := _neighbor_scope.run_step(_build_neighbor_step)
 	for reference: WeakRef in _added_nodes:
 		var node: Node = reference.get_ref()
 		if is_instance_valid(node): host.zone_residency.suspend_node(_neighbor_scope.owned_root,node)
 	_added_nodes.clear()
+	_last_step_usec = Time.get_ticks_usec()-started
 	if successful:
 		_neighbor_step += 1
 		_neighbor_signature = host._zone_state_signature(_neighbor_scope.zone_id)
@@ -267,7 +349,6 @@ func _begin_neighbor(target: String) -> void:
 
 func _construction_steps() -> int:
 	if _neighbor_scope.zone_id == "greyfen": return host.OPENING_DETAIL_STAGES.size()+1
-	if _neighbor_scope.zone_id == "wychwood": return 11
 	if _neighbor_builder.has_method("step_count"): return _neighbor_builder.step_count(_neighbor_scope.zone_id)
 	return 1
 
@@ -285,7 +366,6 @@ func _build_neighbor_step(context: ZoneBuildContext) -> bool:
 			else:
 				context.build_profile = "opening_detail"
 				_neighbor_builder.build_detail_stage(context,str(host.OPENING_DETAIL_STAGES[_neighbor_step-1]))
-		elif context.zone_id == "wychwood": _neighbor_builder.build_step(context,_neighbor_step)
 		elif _neighbor_builder.has_method("step_count"):
 			if not _neighbor_builder.build_step(context, _neighbor_step): return false
 		else: _neighbor_builder.build(context)
@@ -371,11 +451,15 @@ func cancel_preparation() -> void:
 
 func preparation_snapshot() -> Dictionary:
 	var result := _neighbor_scope.step_result(_neighbor_state) if _neighbor_scope != null else {"state":_neighbor_state,"zone":"","generation":0,"next_step":_neighbor_step,"error":_neighbor_failure}
-	result.merge({"step":_neighbor_step,"failure":_neighbor_failure,"complete":_neighbor_state == "ready"},true)
+	result.merge({"step":_neighbor_step,"failure":_neighbor_failure,"complete":_neighbor_state == "ready",
+		"selected_destination":str(_selected_connection.get("target","")),"selection_reason":_selection_reason,
+		"last_step_usec":_last_step_usec,"background_cooldown":_build_cooldown},true)
 	return result
 
 func _exit_tree() -> void:
 	cancel_preparation()
+	if is_instance_valid(host) and host.runtime_packs != null and host.runtime_packs.background_work_allowed == _background_work_allowed:
+		host.runtime_packs.background_work_allowed = Callable()
 	if get_tree().node_added.is_connected(_construction_node_added): get_tree().node_added.disconnect(_construction_node_added)
 
 func open_edges_for(zone_id: String) -> Dictionary:
@@ -476,6 +560,8 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 		host.progression.record_saga_departure(current_sector, host.quests)
 	previous_sector = current_sector if current_sector != normalized else previous_sector
 	current_sector = normalized
+	_selected_connection = {}
+	_playable_seconds = 0.0
 	_arrival_edge = str(WorldSectorManifest.edge_for_position(normalized, local_position,
 		_zone_bounds(normalized), 0.85).get("id", ""))
 	last_world_position = WorldSectorManifest.local_to_world(normalized, local_position)
@@ -488,16 +574,10 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 	cooldown = 0.25
 	last_transition["state"] = "active"
 	last_transition["activated_at_usec"] = Time.get_ticks_usec()
-	var defer_neighbor_prewarm: bool = host != null and host.has_method("should_defer_neighbor_prewarm") and host.should_defer_neighbor_prewarm()
-	# Greyfen is also activated during the menu prewarm/New Game handoff. Do not
-	# start adjacent scene imports from that synchronous activation path; the
-	# host schedules the same work after the opening checkpoint window.
-	if streaming_service != null and normalized != "greyfen" and not defer_neighbor_prewarm:
-		for neighbor in WorldSectorManifest.neighbors(normalized):
-			if streaming_service.has_method("request_zone"):
-				streaming_service.request_zone(neighbor)
-		if streaming_service.has_method("retire_unneeded_zones"):
-			streaming_service.retire_unneeded_zones(active_sector_ids)
+	# The background selector owns one useful neighbor after control settles.
+	# Do not import every adjacent region synchronously at an arrival.
+	if streaming_service != null:
+		streaming_service.retire_unneeded_zones(active_sector_ids)
 	sector_activated.emit(normalized)
 
 func on_zone_failed(zone_id: String, reason: String) -> void:
