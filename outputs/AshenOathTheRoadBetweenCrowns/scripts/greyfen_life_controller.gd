@@ -1,5 +1,7 @@
 extends Node
 
+signal awareness_changed(actor_id: String, reaction: String)
+
 const CharacterPresentation = preload("res://scripts/character_presentation.gd")
 const AssetSpawnHelper = preload("res://scripts/asset_spawn_helper.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
@@ -216,15 +218,13 @@ func enroll_contact_actor(actor: Node3D) -> void:
 func _receive_contact(contact: Dictionary, entry: Dictionary) -> void:
 	if not is_instance_valid(entry.node) or Presence.protected(entry.node) or get_tree().paused: return
 	_end_social_exchange()
-	_release_activity(entry)
-	entry.reaction = "anger" if str(CastProfile.presence_profile(str(entry.id)).get("danger_response", "")) == "guard" else "fear"
-	entry.reaction_time = 3.0
-	entry.threat_position = player.global_position
-	entry.route = []
-	entry.safety_route = []
+	var owns_motion: bool = str(entry.node.get_meta("locomotion_owner", "")) in ["", "greyfen_life"]
+	_release_activity(entry, owns_motion)
+	if owns_motion:
+		_start_reaction(entry, "anger" if str(CastProfile.presence_profile(str(entry.id)).get("danger_response", "")) == "guard" else "fear", player.global_position, 3.0, player)
 	entry.notice_cooldown = 8.0
-	if is_instance_valid(entry.driver): entry.driver.trigger_action("hurt", 1.0, 0.06, true, 0.32)
-	if is_instance_valid(entry.get("face")): entry.face.set_expression(str(entry.reaction))
+	if owns_motion and is_instance_valid(entry.driver): entry.driver.trigger_action("hurt", 1.0, 0.06, true, 0.32)
+	if owns_motion and is_instance_valid(entry.get("face")): entry.face.set_expression(str(entry.reaction))
 	var key := preload("res://scripts/story_honor.gd").actor_key(str(entry.id))
 	var words := "Keep that blade away from me!" if not str(contact.get("source_tag", "")).begins_with("arrow") else "You shot me! Put that bow down!"
 	host.hud.toast("%s: %s" % [str(entry.profile.get("occupation", "Villager")).capitalize(), words], 4.0)
@@ -467,14 +467,14 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 			_release_activity(entry)
 			_apply_pending_routine(entry)
 	if str(node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
-		_release_activity(entry)
+		_release_activity(entry, false)
 		return
 	if not node.is_visible_in_tree() or node.get_node_or_null("Person") != null and not node.get_node("Person").visible:
 		_release_activity(entry)
 		return
 	entry.bark_cooldown = maxf(float(entry.get("bark_cooldown", 0.0)) - delta, 0.0)
 	if Presence.protected(node):
-		_release_activity(entry)
+		_release_activity(entry, false)
 		entry.social_time = 0.0
 		Presence.release(node, "social", get_instance_id())
 		entry.motion_speed = 0.0
@@ -511,9 +511,17 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	var distance_to_player := node.global_position.distance_to(player.global_position)
 	if distance_to_player > 3.4:
 		entry.greeted_on_approach = false
-	if distance_to_player < 1.65 or (distance_to_player < 2.4 and player.velocity.length() < 0.35):
-		_release_activity(entry)
-		entry.pause = max(float(entry.pause), 1.2)
+		entry.attention_used = false
+		entry.attention_remaining = 0.0
+	var approaching: bool = distance_to_player < 1.65 or (distance_to_player < 2.4 and player.velocity.length() < 0.35)
+	if approaching and not bool(entry.get("attention_used", false)):
+		entry.attention_used = true
+		entry.attention_remaining = 1.2
+		entry.attention_workstation = bool(entry.get("activity_active", false))
+	if float(entry.get("attention_remaining", 0.0)) > 0.0:
+		# A brief acknowledgement pauses the current beat; lingering nearby
+		# must not discard its progress or continually restart the interruption.
+		entry.attention_remaining = maxf(float(entry.attention_remaining) - delta, 0.0)
 		_brake_actor(entry, delta)
 		if float(entry.motion_speed) < 0.05:
 			_face(node, player.global_position, delta)
@@ -529,6 +537,10 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 			if social_scene.is_empty():
 				host.hud.show_ambient_subtitle(get_instance_id(), str(entry.profile.get("occupation", "Villager")).capitalize(), remark, maxf(5.5, speech_duration + 0.3))
 		return
+	if bool(entry.get("attention_workstation", false)):
+		entry.attention_workstation = false
+		if bool(entry.get("activity_active", false)) and is_instance_valid(entry.driver):
+			entry.driver.set_life_workstation(entry.profile.get("workstation", {}))
 	if bool(entry.get("activity_active", false)):
 		_update_activity(entry, delta)
 		return
@@ -600,8 +612,12 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 func _crowd_pace(entry: Dictionary, direction: Vector3, delta: float) -> float:
 	var pace := 1.0
 	var obstruction: Node3D
+	var obstruction_distance := INF
 	for other: Dictionary in _crowd_index.nearby(entry.node.global_position, 1.62):
 		if other == entry or not is_instance_valid(other.node): continue
+		if not other.node.is_visible_in_tree(): continue
+		var person := other.node.get_node_or_null("Person") as Node3D
+		if person != null and not person.is_visible_in_tree(): continue
 		var offset: Vector3 = other.node.global_position - entry.node.global_position
 		offset.y = 0.0
 		var ahead := offset.dot(direction)
@@ -609,20 +625,69 @@ func _crowd_pace(entry: Dictionary, direction: Vector3, delta: float) -> float:
 		var lateral := (offset - direction * ahead).length()
 		if lateral < 0.60:
 			pace = minf(pace, smoothstep(0.60, 1.5, ahead))
-			if str(entry.id) > str(other.id) or bool(other.get("activity_active", false)) or float(other.get("pause", 0.0)) > 0.0:
+			if ahead < obstruction_distance and (str(entry.id) > str(other.id) or bool(other.get("activity_active", false)) or float(other.get("pause", 0.0)) > 0.0):
 				obstruction = other.node
+				obstruction_distance = ahead
+	# Attention and physical clearance are separate. A player beside a worker
+	# can remain nearby; one standing in the route still receives right of way.
+	if _player_shares_height(entry.node.global_position):
+		var offset: Vector3 = player.global_position - entry.node.global_position
+		offset.y = 0.0
+		var ahead := offset.dot(direction)
+		var lateral := (offset - direction * ahead).length()
+		if ahead > 0.0 and ahead < 1.65 and lateral < 0.72:
+			pace = minf(pace, smoothstep(0.82, 1.65, ahead))
+			if ahead < obstruction_distance:
+				obstruction = player
 	entry.yield_time = float(entry.get("yield_time", 0.0)) + delta if pace < 0.15 else 0.0
-	if float(entry.yield_time) > 1.2 and is_instance_valid(obstruction) and spatial_service != null:
+	if float(entry.yield_time) > 1.2 and is_instance_valid(obstruction) and spatial_service != null and not entry.route.is_empty():
 		entry.yield_time = -1.5
 		var side := direction.cross(Vector3.UP).normalized()
+		var reconnect: Vector3 = entry.route[int(entry.route_index)]
 		for sign_value: float in [1.0, -1.0]:
 			var step_aside: Vector3 = entry.node.global_position + side * sign_value * 0.95
 			var pass_point: Vector3 = obstruction.global_position + side * sign_value * 0.95 + direction * 0.85
-			if spatial_service.validate_runtime_segment(entry.node.global_position, step_aside, 0.58) and spatial_service.validate_runtime_segment(step_aside, pass_point, 0.58):
+			pass_point.y = entry.node.global_position.y
+			if _clear_detour_segment(entry.node.global_position, step_aside) and _clear_detour_segment(step_aside, pass_point) and _clear_detour_segment(pass_point, reconnect):
 				entry.route.insert(int(entry.route_index), pass_point)
 				entry.route.insert(int(entry.route_index), step_aside)
 				break
 	return pace
+
+func _clear_detour_segment(start: Vector3, destination: Vector3) -> bool:
+	var offset := destination - start
+	offset.y = 0.0
+	var distance := offset.length()
+	return _player_clear_step(start, offset.normalized(), distance) >= distance and spatial_service.validate_runtime_segment(start, destination, 0.58)
+
+func _player_clear_step(start: Vector3, direction: Vector3, step: float) -> float:
+	# The shared spatial service excludes the player from its physics probes.
+	# Clip this swept step analytically, including braking and scripted walking.
+	if not _player_shares_height(start): return step
+	var offset := start - player.global_position
+	offset.y = 0.0
+	var planar := Vector3(direction.x, 0.0, direction.z)
+	var length_squared := planar.length_squared()
+	if length_squared < 0.000001: return step
+	var approach := offset.dot(planar)
+	var clearance := offset.length_squared() - 0.72 * 0.72
+	# If the player entered someone's space, allow the actor to walk out;
+	# never push or teleport either body to repair an existing overlap.
+	if clearance <= 0.0:
+		return step if approach >= 0.0 else 0.0
+	if approach >= 0.0: return step
+	var discriminant := approach * approach - length_squared * clearance
+	if discriminant <= 0.0: return step
+	var contact_step := (-approach - sqrt(discriminant)) / length_squared
+	return minf(step, maxf(contact_step - 0.005, 0.0))
+
+func _player_shares_height(position: Vector3) -> bool:
+	if not is_instance_valid(player): return false
+	var spec: Dictionary = player.get_meta("character_role_spec", {})
+	# Roots can represent feet or the player's capsule center. Keep one adult
+	# body height plus root tolerance, but ignore clearly separate floors.
+	var height := maxf(1.72, float(spec.get("height", 1.72))) + 0.3
+	return absf(position.y - player.global_position.y) <= height
 
 func _brake_actor(entry: Dictionary, delta: float) -> void:
 	entry.motion_speed = move_toward(float(entry.get("motion_speed", 0.0)), 0.0, WALK_BRAKING * delta)
@@ -632,7 +697,7 @@ func _brake_actor(entry: Dictionary, delta: float) -> void:
 func _move_actor(entry: Dictionary, direction: Vector3, speed: float, delta: float, remaining_distance: float = INF) -> void:
 	var node: Node3D = entry.node
 	var start: Vector3 = node.global_position
-	var step: float = minf(speed * delta, remaining_distance)
+	var step: float = _player_clear_step(start, direction, minf(speed * delta, remaining_distance))
 	if direction.length_squared() < 0.001 or step <= 0.00001:
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
@@ -733,14 +798,16 @@ func _end_activity(entry: Dictionary) -> void:
 	_set_activity_pose(entry, false)
 	_apply_pending_routine(entry)
 
-func _release_activity(entry: Dictionary) -> void:
+func _release_activity(entry: Dictionary, release_pose: bool = true) -> void:
 	var was_active := bool(entry.get("activity_active", false))
 	var station := str(entry.get("station", ""))
 	if station != "" and activity_reservations.get(station) == entry.node:
 		activity_reservations.erase(station)
 	entry.station = ""
-	if bool(entry.get("activity_active", false)):
-		entry.activity_active = false
+	entry.activity_active = false
+	if not release_pose:
+		return
+	if was_active:
 		_set_activity_pose(entry, false)
 	if was_active and entry.driver != null and entry.driver.has_method("clear_life_activity"):
 		entry.driver.clear_life_activity()
@@ -942,49 +1009,83 @@ func _line_for_actor(entry: Dictionary) -> String:
 	return str(OCCUPATION_LINES.get(str(entry.id), AMBIENT_LINES.get(str(entry.profile.get("line", "")), AMBIENT_LINES.greyfen_keep_working)))
 
 func _update_reaction(entry: Dictionary, delta: float) -> void:
-	var was_reacting := float(entry.get("reaction_time", 0.0)) > 0.0
 	entry.reaction_time = maxf(float(entry.get("reaction_time", 0.0)) - delta, 0.0)
+	entry.sound_attention_cooldown = maxf(float(entry.get("sound_attention_cooldown", 0.0)) - delta, 0.0)
 	entry.notice_cooldown = maxf(float(entry.get("notice_cooldown", 0.0)) - delta, 0.0)
 	entry.sense_clock = float(entry.get("sense_clock", 0.0)) - delta
-	if bool(entry.get("distance_suspended", false)) or Presence.protected(entry.node) or float(entry.sense_clock) > 0.0:
+	if bool(entry.get("distance_suspended", false)) or Presence.protected(entry.node) or str(entry.node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
+		return
+	if float(entry.reaction_time) <= 0.0 and bool(entry.get("reaction_active", false)):
+		_finish_reaction(entry)
+	if float(entry.sense_clock) > 0.0:
 		return
 	entry.sense_clock = 0.35
 	var face: Node = entry.get("face")
 	var threat := ""
 	var threat_position: Vector3 = player.global_position
+	var threat_actor: Node3D = player
 	if Presence.can_see(entry.node, player, 5.0):
 		threat = Presence.player_threat(player)
 	for enemy: Node3D in host.encounter_spatial_index.nearby(entry.node.global_position, 7.0):
 		if is_instance_valid(enemy) and not bool(enemy.get("dead")) and bool(enemy.get("encounter_active")) and Presence.can_see(entry.node, enemy, 7.0):
 			threat = "danger"
 			threat_position = enemy.global_position
+			threat_actor = enemy
 			break
 	if threat != "":
-		if not was_reacting:
-			entry.route = []
-			entry.safety_route = []
 		var response := str(CastProfile.presence_profile(str(entry.id)).get("danger_response", "shelter"))
-		entry.reaction = ("anger" if response == "guard" else "fear") if threat == "danger" else "suspicion"
-		entry.reaction_time = 2.5
-		entry.threat_position = threat_position
-		if face != null:
-			face.set_focus_target(player)
-			face.set_expression(str(entry.reaction))
-		if float(entry.notice_cooldown) <= 0.0 and line_cooldown <= 0.0:
+		var accepted := _start_reaction(entry, ("anger" if response == "guard" else "fear") if threat == "danger" else "suspicion", threat_position, 2.5, threat_actor)
+		if accepted and float(entry.notice_cooldown) <= 0.0 and line_cooldown <= 0.0:
 			entry.notice_cooldown = 24.0
 			line_cooldown = 8.0
 			var warning := "Give us room. People are still working here." if threat == "armed" else "Behind the wall. Leave the road clear!"
 			host.hud.toast("%s: %s" % [str(entry.profile.occupation).capitalize(), warning], 3.5)
-	elif face != null and float(entry.reaction_time) <= 0.0:
-		if was_reacting:
-			entry.route = []
-			entry.safety_route = []
+	elif float(entry.reaction_time) <= 0.0:
 		if float(entry.get("social_time", 0.0)) > 0.0:
 			return
-		var cast := CastProfile.presence_profile(str(entry.id))
-		face.set_expression(CastProfile.expression_for(cast, host.story_state))
-		face.set_focus_target(player if entry.node.global_position.distance_squared_to(player.global_position) < 16.0 else null)
+		if is_instance_valid(face):
+			var cast := CastProfile.presence_profile(str(entry.id))
+			face.set_expression(CastProfile.expression_for(cast, host.story_state))
+			face.set_focus_target(player if entry.node.global_position.distance_squared_to(player.global_position) < 16.0 else null)
 	_try_social_exchange(entry)
+
+func _reaction_priority(kind: String) -> int:
+	match kind:
+		"attention": return 1
+		"suspicion": return 2
+		"fear", "anger": return 3
+	return 0
+
+func _start_reaction(entry: Dictionary, kind: String, position: Vector3, duration: float, focus: Node3D = null) -> bool:
+	var active := float(entry.get("reaction_time", 0.0)) > 0.0
+	if active and _reaction_priority(kind) < _reaction_priority(str(entry.get("reaction", ""))):
+		return false
+	var changed := not active or str(entry.get("reaction", "")) != kind
+	if changed:
+		entry.route = []
+		entry.safety_route = []
+	elif (entry.get("safety_threat_position", entry.get("threat_position", position)) as Vector3).distance_squared_to(position) > 1.0:
+		entry.safety_route = []
+	entry.reaction = kind
+	entry.reaction_active = true
+	entry.reaction_time = maxf(float(entry.get("reaction_time", 0.0)), duration)
+	entry.threat_position = position
+	if is_instance_valid(entry.get("face")):
+		entry.face.set_focus_target(focus)
+		entry.face.set_expression("concern" if kind == "attention" else kind)
+	if changed:
+		awareness_changed.emit(str(entry.id), kind)
+	return true
+
+func _finish_reaction(entry: Dictionary) -> void:
+	# Rejoin the authored route from the actual feet, even without a face driver.
+	entry.reaction_active = false
+	entry.reaction = ""
+	entry.route = []
+	entry.safety_route = []
+	if not bool(entry.get("activity_active", false)):
+		_set_activity_pose(entry, false)
+	awareness_changed.emit(str(entry.id), "")
 
 func _seek_safety(entry: Dictionary, threat: Vector3, delta: float) -> bool:
 	if (bool(entry.named) and not bool(entry.get("regional", false))) or str(entry.get("reaction", "")) != "fear" or spatial_service == null:
@@ -1001,6 +1102,7 @@ func _seek_safety(entry: Dictionary, threat: Vector3, delta: float) -> bool:
 			return false
 		route.assign(spatial_service.build_route(entry.node.global_position, candidate, 0.72))
 		entry.safety_route = route
+		entry.safety_threat_position = threat
 		entry.safety_index = 1 if route.size() > 1 else 0
 	if route.is_empty():
 		return false
@@ -1398,12 +1500,14 @@ func _on_perception_cue(position: Vector3, radius: float, danger: bool) -> void:
 	for entry: Dictionary in _crowd_index.nearby(position, radius):
 		if not is_instance_valid(entry.node) or Presence.protected(entry.node) or not entry.node.is_visible_in_tree():
 			continue
+		if str(entry.node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
+			continue
+		if not danger and float(entry.get("sound_attention_cooldown", 0.0)) > 0.0:
+			continue
 		var guard := str(CastProfile.presence_profile(str(entry.id)).get("danger_response", "")) == "guard"
-		entry.reaction = ("anger" if guard else "fear") if danger else "attention"
-		entry.reaction_time = maxf(float(entry.get("reaction_time", 0.0)), 2.5)
-		entry.threat_position = position
-		if is_instance_valid(entry.get("face")):
-			entry.face.set_expression(str(entry.reaction) if danger else "concern")
+		if _start_reaction(entry, ("anger" if guard else "fear") if danger else "attention", position, 2.5):
+			if not danger:
+				entry.sound_attention_cooldown = 6.0
 
 func _exit_tree() -> void:
 	finish_opening_scene("interrupted")
