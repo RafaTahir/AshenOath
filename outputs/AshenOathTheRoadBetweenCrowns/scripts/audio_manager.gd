@@ -504,12 +504,13 @@ func _update_nearby_voice() -> void:
 	if is_instance_valid(nearby_voice_face):
 		nearby_voice_face.set_speech_amount(0.0 if game_paused else _speech_amplitude(nearby_voice_entry, nearby_voice_player.get_playback_position()))
 
-func stop_nearby_speech(actor: Node3D) -> void:
+func stop_nearby_speech(actor: Node3D, reset_face: bool = true) -> void:
 	if nearby_voice_actor != null and nearby_voice_actor.get_ref() == actor:
-		_stop_nearby_voice()
+		_stop_nearby_voice(reset_face)
 
-func _stop_nearby_voice() -> void:
-	if is_instance_valid(nearby_voice_face): nearby_voice_face.set_speech_amount(0.0)
+func _stop_nearby_voice(reset_face: bool = true) -> void:
+	# A new presentation owner may already be driving the actor's mouth.
+	if reset_face and is_instance_valid(nearby_voice_face): nearby_voice_face.set_speech_amount(0.0)
 	nearby_voice_face = null
 	nearby_voice_actor = null
 	nearby_voice_entry = {}
