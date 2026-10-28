@@ -715,7 +715,40 @@ func _move_actor(entry: Dictionary, direction: Vector3, speed: float, delta: flo
 		alias.global_position = node.global_position
 	var achieved_velocity: Vector3 = (node.global_position - start) / maxf(delta, 0.001)
 	achieved_velocity.y = 0.0
+	if achieved_velocity.length_squared() > 0.000001:
+		entry.travel_direction = achieved_velocity.normalized()
 	_set_motion(entry, achieved_velocity.length(), achieved_velocity.normalized())
+
+func _walk_scripted_step(entry: Dictionary, point: Vector3, speed_limit: float, turn_threshold: float, arrival_radius: float, delta: float) -> void:
+	var node: Node3D = entry.node
+	var offset := point - node.global_position
+	offset.y = 0.0
+	var direction := offset.normalized()
+	var wanted_yaw := _wanted_yaw(node, direction)
+	var turn_error := absf(wrapf(wanted_yaw - node.rotation.y, -PI, PI))
+	# Keep the last achieved heading while braking. A sharp corner must not
+	# rotate the chest while the feet continue along the preceding route leg.
+	if turn_error > turn_threshold and float(entry.motion_speed) > 0.05:
+		_brake_actor(entry, delta)
+		return
+	_face(node, point, delta, true)
+	turn_error = absf(wrapf(wanted_yaw - node.rotation.y, -PI, PI))
+	if turn_error > turn_threshold:
+		_brake_actor(entry, delta)
+		return
+	var remaining_distance := offset.length()
+	var desired_speed := speed_limit
+	# Only the final point plants the feet; intermediate route anchors retain
+	# their existing pass-through tolerance and full walking speed.
+	if arrival_radius > 0.0:
+		remaining_distance = maxf(remaining_distance - arrival_radius, 0.0)
+		desired_speed = minf(desired_speed, sqrt(2.0 * WALK_BRAKING * remaining_distance))
+	var current_speed := float(entry.motion_speed)
+	var rate := WALK_ACCELERATION if desired_speed > current_speed else WALK_BRAKING
+	entry.motion_speed = move_toward(current_speed, desired_speed, rate * delta)
+	var heading: Vector3 = entry.driver.get_visible_forward() if is_instance_valid(entry.driver) else -node.global_basis.z
+	heading.y = 0.0
+	_move_actor(entry, heading.normalized(), float(entry.motion_speed), delta, remaining_distance)
 
 func _make_entry(id: String, node: Node3D, path: Array, speed: float, driver: Node, named: bool) -> Dictionary:
 	var profile: Dictionary = ROUTINE_PROFILES.get(id, {"occupation": "villager", "activity": "idle", "activity_seconds": 2.0, "line": "greyfen_keep_working"})
@@ -1109,19 +1142,17 @@ func _seek_safety(entry: Dictionary, threat: Vector3, delta: float) -> bool:
 	var index := int(entry.get("safety_index", 0))
 	var offset: Vector3 = route[index] - entry.node.global_position
 	offset.y = 0.0
-	if offset.length() < 0.12:
-		if index + 1 >= route.size():
-			return false
+	var final_point := index + 1 >= route.size()
+	# A small numerical tolerance avoids waiting forever on the exact radius;
+	# a moving actor still has to finish braking before its reaction pose starts.
+	if final_point and offset.length() <= 0.12 + 0.005 and float(entry.motion_speed) < 0.12:
+		entry.motion_speed = 0.0
+		_set_motion(entry, 0.0)
+		return false
+	if not final_point and offset.length() < 0.12:
 		entry.safety_index = index + 1
 		return true
-	var direction := offset.normalized()
-	_face(entry.node, route[index], delta, true)
-	var facing_error := absf(wrapf(_wanted_yaw(entry.node, direction) - entry.node.rotation.y, -PI, PI))
-	if facing_error > 0.70:
-		_brake_actor(entry, delta)
-		return true
-	entry.motion_speed = move_toward(float(entry.motion_speed), minf(float(entry.speed) * 1.15, 1.25), WALK_ACCELERATION * delta)
-	_move_actor(entry, direction, float(entry.motion_speed), delta, offset.length())
+	_walk_scripted_step(entry, route[index], minf(float(entry.speed) * 1.15, 1.25), 0.70, 0.12 if final_point else 0.0, delta)
 	return true
 
 func _try_social_exchange(entry: Dictionary) -> void:
@@ -1130,6 +1161,8 @@ func _try_social_exchange(entry: Dictionary) -> void:
 
 func _social_actor_available(entry: Dictionary) -> bool:
 	if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or Presence.protected(entry.node):
+		return false
+	if str(entry.node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
 		return false
 	if float(entry.get("reaction_time", 0.0)) > 0.0 or float(entry.get("motion_speed", 0.0)) > 0.05:
 		return false
@@ -1219,13 +1252,14 @@ func _end_social_exchange() -> void:
 		if not is_instance_valid(entry.node):
 			continue
 		Presence.release(entry.node, "social", get_instance_id())
+		var release_pose := not Presence.has_protected_owner(entry.node) and str(entry.node.get_meta("locomotion_owner", "")) in ["", "greyfen_life"]
 		if is_instance_valid(host) and is_instance_valid(host.audio):
-			host.audio.stop_nearby_speech(entry.node)
+			host.audio.stop_nearby_speech(entry.node, release_pose)
 		entry.social_time = 0.0
 		entry.route = []
 		entry.motion_speed = 0.0
 		entry.pause = 0.8
-		if Presence.has_protected_owner(entry.node):
+		if not release_pose:
 			continue
 		if is_instance_valid(entry.driver):
 			entry.driver.stop_story_gesture()
@@ -1271,7 +1305,7 @@ func _try_world_scene() -> void:
 		for id: String in scene.actors:
 			if id == "player": continue
 			var entry := _world_actor(id)
-			if entry.is_empty() or Presence.protected(entry.node) or not entry.node.is_visible_in_tree() or float(entry.get("reaction_time", 0.0)) > 0.0:
+			if entry.is_empty() or Presence.protected(entry.node) or not entry.node.is_visible_in_tree() or str(entry.node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"] or float(entry.get("reaction_time", 0.0)) > 0.0:
 				ready = false
 				break
 			var distance: float = entry.node.global_position.distance_to(player.global_position)
@@ -1286,6 +1320,11 @@ func _try_world_scene() -> void:
 		return
 
 func _start_world_scene(scene: Dictionary, selected: Array[Dictionary]) -> void:
+	# Recheck the complete cast before releasing any activity or claiming poses.
+	# An escort may have acquired motion since this actor joined the life roster.
+	for entry: Dictionary in selected:
+		if not is_instance_valid(entry.node) or str(entry.node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
+			return
 	var saved: Array[Dictionary] = []
 	for entry: Dictionary in selected:
 		if not Presence.claim(entry.node, "social", get_instance_id()):
@@ -1322,7 +1361,7 @@ func _tick_world_scene(delta: float) -> void:
 		return
 	for record: Dictionary in social_scene.actors:
 		var entry: Dictionary = record.entry
-		if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or Presence.protected(entry.node) or float(entry.get("reaction_time", 0.0)) > 0:
+		if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or Presence.protected(entry.node) or str(entry.node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"] or float(entry.get("reaction_time", 0.0)) > 0:
 			_end_social_exchange()
 			return
 		entry.social_time = 2.0
@@ -1425,7 +1464,7 @@ func _remember_world_scene_progress() -> void:
 func _world_walk_to(entry: Dictionary, target: Vector3, delta: float) -> bool:
 	var offset: Vector3 = target - entry.node.global_position
 	offset.y = 0
-	if offset.length() < 0.2:
+	if offset.length() <= 0.2 + 0.005 and float(entry.motion_speed) < 0.12:
 		entry.route = []
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
@@ -1439,17 +1478,11 @@ func _world_walk_to(entry: Dictionary, target: Vector3, delta: float) -> bool:
 	var point: Vector3 = entry.route[int(entry.route_index)]
 	offset = point - entry.node.global_position
 	offset.y = 0
-	if offset.length() < 0.2:
+	var final_point: bool = int(entry.route_index) + 1 >= entry.route.size()
+	if not final_point and offset.length() < 0.2:
 		entry.route_index = int(entry.route_index) + 1
-		if int(entry.route_index) >= entry.route.size(): entry.route = []
 		return false
-	_face(entry.node, point, delta, true)
-	var facing := absf(wrapf(_wanted_yaw(entry.node, offset) - entry.node.rotation.y, -PI, PI))
-	if facing > 0.5:
-		_brake_actor(entry, delta)
-		return false
-	entry.motion_speed = move_toward(float(entry.motion_speed), minf(0.7, sqrt(2.0 * WALK_BRAKING * offset.length())), delta * WALK_ACCELERATION)
-	_move_actor(entry, offset.normalized(), float(entry.motion_speed), delta, offset.length())
+	_walk_scripted_step(entry, point, 0.7, 0.5, 0.2 if final_point else 0.0, delta)
 	return false
 
 func _update_gathering_routines() -> void:

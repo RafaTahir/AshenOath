@@ -37,9 +37,13 @@ class Spatial extends RefCounted:
 	var block_reconnect := false
 	var detour_checks := 0
 	var reconnect_checks := 0
+	var runtime_checks := 0
+	var route_builds := 0
 	func build_route(start: Vector3, destination: Vector3, _clearance: float) -> Array:
+		route_builds += 1
 		return [start, destination]
 	func validate_runtime_segment(start: Vector3, destination: Vector3, _clearance: float) -> bool:
+		runtime_checks += 1
 		if absf(destination.x - start.x) > 0.1:
 			detour_checks += 1
 			if block_detours: return false
@@ -63,6 +67,9 @@ class Host extends Node3D:
 var failures: Array[String] = []
 var checks := 0
 var error_log := ErrorLog.new()
+var scripted_steps := 0
+var scripted_queries := 0
+var scripted_max_queries_per_step := 0
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -78,10 +85,18 @@ func _run() -> void:
 	_verify_separate_floor()
 	_verify_crowd_visibility()
 	_verify_detour_reconnection()
+	for kind: String in ["world", "safety"]:
+		_verify_scripted_heading(kind)
+		_verify_scripted_corner(kind)
+		_verify_scripted_arrival(kind)
+		_verify_scripted_intermediate(kind)
+		_verify_scripted_player_clearance(kind)
+	_check(scripted_queries > 0 and scripted_max_queries_per_step <= 1, "scripted walking uses at most one existing spatial validation per actor step")
 	OS.remove_logger(error_log)
 	_check(error_log.errors.is_empty(), "no engine or script errors during movement verification")
 	for error: String in error_log.errors:
 		print("NPC ATTENTION MOVEMENT ENGINE ERROR: " + error)
+	print("NPC SCRIPTED MOVEMENT BUDGET: steps=%d validations=%d max_per_step=%d" % [scripted_steps, scripted_queries, scripted_max_queries_per_step])
 	print("NPC ATTENTION MOVEMENT: %s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
 	quit(0 if failures.is_empty() else 1)
 
@@ -248,6 +263,126 @@ func _verify_detour_reconnection() -> void:
 	f.life.spatial_service.block_reconnect = true
 	f.life._crowd_pace(f.entry, Vector3.FORWARD, 0.05)
 	_check(f.life.spatial_service.reconnect_checks == 2 and f.entry.route.size() == 1, "both detour reconnections must be safe before inserting waypoints")
+	f.host.free()
+
+func _scripted_fixture(kind: String, target: Vector3, intermediate: bool = false) -> Dictionary:
+	var f := _fixture()
+	var points: Array = [Vector3(0, 0, -1.5), target] if intermediate else [target]
+	if kind == "safety":
+		f.entry.reaction = "fear"
+		f.entry.safety_route = points
+		f.entry.safety_index = 0
+	else:
+		f.entry.route = points
+		f.entry.route_index = 0
+	return f
+
+func _scripted_tick(f: Dictionary, kind: String, target: Vector3) -> bool:
+	var before: int = f.life.spatial_service.runtime_checks
+	var arrived: bool = f.life._world_walk_to(f.entry, target, 0.05) if kind == "world" else not f.life._seek_safety(f.entry, Vector3(0, 0, 1), 0.05)
+	var queries: int = f.life.spatial_service.runtime_checks - before
+	scripted_steps += 1
+	scripted_queries += queries
+	scripted_max_queries_per_step = maxi(scripted_max_queries_per_step, queries)
+	return arrived
+
+func _verify_scripted_heading(kind: String) -> void:
+	var target := Vector3(1, 0, -4)
+	var f := _scripted_fixture(kind, target)
+	f.entry.node.rotation.y = 0.2
+	f.entry.motion_speed = 0.5
+	f.entry.travel_direction = Vector3.RIGHT
+	var path: Array = f.entry.path.duplicate()
+	var routine_target: int = f.entry.target
+	_scripted_tick(f, kind, target)
+	var moved: Vector3 = f.entry.node.position
+	var heading: Vector3 = f.entry.driver.get_visible_forward()
+	_check(moved.length() > 0.01 and moved.normalized().dot(heading) > 0.999, kind + " translation follows the visible chest while turning")
+	_check((f.entry.travel_direction as Vector3).dot(moved.normalized()) > 0.999, kind + " movement replaces stale travel direction with achieved motion")
+	var before: Vector3 = f.entry.node.position
+	f.life._brake_actor(f.entry, 0.05)
+	var braking: Vector3 = f.entry.node.position - before
+	_check(braking.length() > 0.005 and braking.normalized().dot(moved.normalized()) > 0.999, kind + " braking follows the last scripted movement rather than an old routine leg")
+	_check(f.entry.path == path and f.entry.target == routine_target, kind + " movement preserves the authored routine destination")
+	f.host.free()
+
+func _verify_scripted_corner(kind: String) -> void:
+	var target := Vector3(0, 0, -4)
+	var f := _scripted_fixture(kind, target)
+	f.entry.node.rotation.y = -PI * 0.5
+	f.entry.travel_direction = Vector3.RIGHT
+	f.entry.motion_speed = 0.7
+	var yaw: float = f.entry.node.rotation.y
+	_scripted_tick(f, kind, target)
+	_check(f.entry.node.position.x > 0.02 and absf(f.entry.node.position.z) < 0.00001 and f.entry.node.rotation.y == yaw, kind + " sharp corner brakes along the prior leg before rotating")
+	var maximum_turn := 0.0
+	var arrived := false
+	for _index in 200:
+		yaw = f.entry.node.rotation.y
+		arrived = _scripted_tick(f, kind, target)
+		maximum_turn = maxf(maximum_turn, absf(wrapf(f.entry.node.rotation.y - yaw, -PI, PI)))
+		if arrived: break
+	_check(arrived and f.entry.node.position.z < -3.7, kind + " corner turns and completes actual travel without stalling")
+	_check(maximum_turn <= Life.ROUTE_TURN_RATE * 0.05 + 0.00001, kind + " corner preserves the bounded turn rate")
+	f.host.free()
+
+func _verify_scripted_arrival(kind: String) -> void:
+	var target := Vector3(0, 0, -2)
+	var f := _scripted_fixture(kind, target)
+	var radius := 0.2 if kind == "world" else 0.12
+	var limit := 0.7 if kind == "world" else 0.92
+	# Exercise normal world route construction once, then retain it until arrival.
+	if kind == "world": f.entry.route = []
+	var arrived := false
+	var slowed := false
+	var maximum_speed := 0.0
+	for _index in 180:
+		var before: Vector3 = f.entry.node.position
+		arrived = _scripted_tick(f, kind, target)
+		var achieved_speed: float = before.distance_to(f.entry.node.position) / 0.05
+		maximum_speed = maxf(maximum_speed, achieved_speed)
+		var distance: float = f.entry.node.position.distance_to(target)
+		if not arrived and distance < radius + 0.2 and achieved_speed > 0.01 and achieved_speed < limit - 0.15:
+			slowed = true
+		if arrived: break
+	var distance: float = f.entry.node.position.distance_to(target)
+	_check(arrived and distance >= radius - 0.001 and distance <= radius + 0.005, kind + " arrives finitely at its original radius without teleporting")
+	_check(slowed and maximum_speed <= limit + 0.00001, kind + " decelerates before final arrival and retains its speed cap")
+	_check(f.entry.motion_speed == 0.0 and f.entry.driver.velocity == Vector3.ZERO, kind + " completed arrival reports planted feet")
+	_check(f.life.spatial_service.route_builds == (1 if kind == "world" else 0), kind + " arrival does not rebuild its active route each frame")
+	f.host.free()
+
+func _verify_scripted_intermediate(kind: String) -> void:
+	var target := Vector3(0, 0, -4)
+	var f := _scripted_fixture(kind, target, true)
+	f.entry.motion_speed = 0.7
+	var crossed := false
+	var crossing_speed := 0.0
+	for _index in 80:
+		_scripted_tick(f, kind, target)
+		var index: int = f.entry.route_index if kind == "world" else f.entry.safety_index
+		if index > 0:
+			crossed = true
+			crossing_speed = f.entry.motion_speed
+			break
+	_check(crossed and f.entry.node.position.z < -1.25 and crossing_speed >= 0.69, kind + " collinear intermediate anchor does not trigger final-arrival braking")
+	f.host.free()
+
+func _verify_scripted_player_clearance(kind: String) -> void:
+	var target := Vector3(0, 0, -4)
+	var f := _scripted_fixture(kind, target)
+	f.host.player.position = Vector3(0, 0, -1)
+	var minimum := INF
+	var arrived := false
+	for _index in 100:
+		arrived = _scripted_tick(f, kind, target) or arrived
+		minimum = minf(minimum, f.entry.node.position.distance_to(f.host.player.position))
+	_check(not arrived and minimum >= 0.72 and f.entry.node.position.z > -0.29, kind + " scripted walking respects a blocking player without premature completion")
+	f.host.player.position.x = 2.0
+	for _index in 160:
+		arrived = _scripted_tick(f, kind, target)
+		if arrived: break
+	_check(arrived and f.entry.node.position.z < -3.7, kind + " scripted walking resumes after the player clears its route")
 	f.host.free()
 
 func _check(condition: bool, label: String) -> void:

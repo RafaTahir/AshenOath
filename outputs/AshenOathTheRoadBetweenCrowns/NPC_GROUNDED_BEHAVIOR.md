@@ -36,6 +36,19 @@ it does not add a second scheduler or replace authored behavior.
   retain control of their poses and movement. Awareness cleanup waits until
   ownership returns. Weapon contact still records its existing grievance,
   warning and save request, without replacing a scripted escort pose.
+- **Scripted motion follows the body.** Ambient scene walks and retreats use
+  the actor's visible forward direction, as routine walking already does.
+  Sharp turns brake along the last achieved movement before rotating. Final
+  arrivals decelerate toward the existing arrival radius instead of stopping
+  abruptly. Authored destinations, speed caps and intermediate route points
+  remain unchanged.
+- **Ambient scenes yield to escorts.** A scene cannot claim an actor whose
+  movement is already owned elsewhere. If an escort takes over during a scene,
+  the ambient scene releases its own state without clearing the new pose or
+  advancing the completed-beat checkpoint. It can resume that checkpoint when
+  the actor becomes available again. Interrupted ambient audio stops without
+  resetting the new owner's mouth animation; ordinary speech stops retain
+  their existing face reset.
 
 `GreyfenLifeController.awareness_changed(actor_id, reaction)` reports reaction
 transitions; an empty reaction reports completion. No new gameplay listener is
@@ -46,19 +59,47 @@ combat values, animations and assets remain compatible.
 ## Design reference and research boundary
 
 RDR2 and The Witcher 3 are the user's requested references for believable people
-with jobs, contextual reactions and movement. Their exact internal algorithms
-are not asserted here. Fresh authoritative research was attempted, but this
-environment's HTTPS proxy denied the requests with a CONNECT-tunnel
-`403 Forbidden`. No source text was retrieved from these unverified leads:
+with jobs, contextual reactions and movement. The coordinating task supplied
+these primary references and descriptions on 2026-10-28:
+
+- CD PROJEKT RED, Witcher 3 REDkit documentation, described in the handoff as
+  scripted NPC actions and movement:
+  https://cdprojektred.atlassian.net/wiki/spaces/W3REDkit/pages/1189085185
+- Rockstar developer presentation, *Making the Believable Horses of Red Dead
+  Redemption II* (GDC 2021):
+  https://media.gdcvault.com/GDC%2B2021/making_horses_gdc2021.pdf
+
+Both direct requests from this cloud environment failed with HTTPS proxy
+`Tunnel connection failed: 403 Forbidden`. No document body, PDF pages or
+quotable technical excerpts were retrieved here. The source subjects above
+come from the handoff; they are not claims of independent document inspection.
+The horse presentation is an animation/movement reference, not evidence for
+Rockstar's human NPC schedules, perception, navigation or decision architecture.
+
+The practical comparison is therefore with AshenOath's inspected implementation:
+
+| Reference subject / intended player experience | Existing AshenOath support | Concrete gap addressed |
+| --- | --- | --- |
+| Scripted actions and movement; characters finish purposeful tasks | Authored workstations, daily routines, finite social scenes and persisted completed beats | A nearby player could indefinitely interrupt work; a scene could compete with an escort's later motion claim |
+| Believable motion; the body visibly leads a turn and settles at a destination | Bounded yaw, acceleration, braking, achieved-velocity animation input and chest-forward routine walking | Scripted walks/retreats still translated sideways, retained stale braking direction and stopped abruptly at arrival |
+| Context-sensitive reactions, requested as a general NPC goal | Existing sight/sound reactions, priorities and authored safe destinations | Ordinary sounds could replace danger; repeated distractions could prevent resumption |
+
+These are original fixes derived from observable code paths and runtime tests,
+not reconstructions of either game's implementation. More elaborate activity
+chains, authored gait/turn clips, terrain adaptation or motion matching remain
+research candidates. They are not implemented or promised by this increment;
+they would need verified source details, suitable licensed assets and measured
+budget on AshenOath's target hardware.
+
+Earlier general research requests were also proxy-blocked:
 
 - Rockstar RDR2 features: https://www.rockstargames.com/reddeadredemption2/features
 - Official Witcher 3 page: https://www.thewitcher.com/us/en/witcher3
 - GDC Vault search: https://gdcvault.com/search.php#&keyword=witcher
 
-The implementation is original AshenOath behavior. No proprietary assets,
-dialogue or code were copied. Source-backed comparisons still require approved
-access to authoritative material. This increment does not claim either game's
-simulation depth, animation quality or production performance.
+No proprietary assets, dialogue or code were copied. Detailed source-backed
+comparisons still require access to the documents. This increment does not claim
+either game's simulation depth, animation quality or production performance.
 
 ## Validation and cost
 
@@ -68,6 +109,7 @@ Run from this project directory after activating the cloud toolchain:
 source /workspace/ashen-oath-cloud/activate.sh
 godot --headless --path . --script tools/verify_npc_attention_movement.gd
 godot --headless --path . --script tools/verify_npc_awareness.gd
+godot --headless --path . --script tools/verify_npc_scene_ownership.gd
 godot --headless --path . --script tools/verify_greyfen_routine_ownership.gd
 godot --headless --path . --script tools/verify_boundaries.gd
 python3 tools/verify_content_integrity.py
@@ -77,16 +119,30 @@ Godot 4.6.3 results:
 
 | Check | Result |
 | --- | --- |
-| Attention/movement | Pass: 27 checks, zero engine/script errors |
+| Attention/movement, including scripted turns, braking and arrival | Pass: 56 checks, zero engine/script errors |
 | Awareness priority, cooldown, expiry, ownership, escape planning and threat focus | Pass: 25 checks, zero engine/script errors |
+| Scene takeover, real audio cleanup and unchanged/resumable checkpoints | Pass: 18 checks, zero engine/script errors |
 | Existing regional routine ownership | Pass: 137 checks |
-| Actual Greyfen -> Wychwood -> return, player control, five enemies, current/version-12 saves and shutdown | Pass: 15,492 checks, zero failures, engine errors or warnings |
+| Actual Greyfen -> Wychwood -> return, player control, five enemies and current/version-12 saves | Pass: 15,492 checks, zero failures or captured engine errors; shutdown caveat below |
 | Content integrity | Pass: 21 quests, 84 objectives, 117 dialogue actions, 54 runtime references |
 
 Movement tests translate real Node3D actors across fixed ticks, including a
 successful pass, closed passage, swept collision, repeated hovering, retained
 work progress and protected poses. Small fixtures isolate decisions; the full
 boundary verifier separately exercises actual scenes and save restoration.
+Scripted movement fixtures executed 809 steps with 603 spatial validations,
+at most one validation per step. Scene interruption tests use the actual audio
+manager and verify that cleanup releases voice resources while leaving the new
+owner's face output and saved checkpoint intact.
+
+The first follow-up boundary run emitted `ObjectDB instances leaked at exit`
+after its passing summary (the logger had already been removed). One isolated
+verbose diagnostic rerun also passed all 15,492 checks and did not reproduce
+that warning; verbose shutdown listed orphan skeleton-related StringNames.
+The intermittent leak warning has not been attributed or fixed. Do not treat
+the captured `warnings=0` summary as proof that shutdown was warning-free.
+Evidence is retained in `.release-gate/npc-followup-boundaries.log` and
+`.release-gate/npc-followup-boundaries-diagnostic.log` in this workspace.
 
 The existing local crowd index and staggered sensing budget remain in use.
 Player clearance is a constant-cost analytic check with no extra physics scan;
