@@ -286,6 +286,8 @@ def main() -> int:
     html = paths.get("index.html")
     if html:
         html_text = html.read_text(encoding="utf-8", errors="ignore")
+        if "menu-background.png" in html_text and not (export_dir / "menu-background.png").is_file():
+            failures.append("index.html references a missing menu-background.png")
         for runtime_name in (engines["index.js"], engines["index.wasm"], "index.pck"):
             if runtime_name not in html_text:
                 failures.append(f"index.html does not reference {runtime_name}")

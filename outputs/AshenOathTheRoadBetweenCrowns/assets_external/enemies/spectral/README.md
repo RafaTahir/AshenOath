@@ -67,7 +67,7 @@ unreviewed by the user. Studio images are source-art previews, not gameplay or
 FPS evidence. The current global production-component check also reports 18
 pre-existing stale human-asset hash/size records; no monster errors remain.
 
-The complete rebuilt Web directory is **112,052,385 bytes (106.9 MiB)**, below
+The complete rebuilt Web directory is **113,770,969 bytes (108.5 MiB)**, below
 the strict 268,435,456-byte ceiling. Package integrity and isolated packed
 startup pass. The exported monster resources separately pass **1,746 checks**
 after mounting the declared packs, without source-resource fallback. The
