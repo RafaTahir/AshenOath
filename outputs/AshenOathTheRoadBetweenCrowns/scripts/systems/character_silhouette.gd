@@ -43,7 +43,8 @@ var rest_weight := 1.0
 var skeleton_frame := Transform3D.IDENTITY
 
 static func apply(root: Node3D, role: String, seed: String = "") -> Dictionary:
-	var skeleton := _skeleton(root)
+	var binding := _skeleton_binding(root)
+	var skeleton := binding.get("skeleton") as Skeleton3D
 	# This system is a human role contract, not a new monster reshaping pass.
 	if skeleton == null or _bone(skeleton, ["upperarm_l", "UpperArm.L", "LeftArm"]) < 0 or _bone(skeleton, ["spine_03", "Chest", "Spine2"]) < 0:
 		return {}
@@ -59,21 +60,20 @@ static func apply(root: Node3D, role: String, seed: String = "") -> Dictionary:
 		skeleton.add_child(modifier)
 		# Later modifiers solve their work/gaze against the proportioned body.
 		skeleton.move_child(modifier, 0)
-	modifier.configure(root, role, seed)
+	modifier.configure(root, role, seed, skeleton, binding.frame)
 	return root.get_meta("character_silhouette", {})
 
-func configure(body: Node3D, role: String, seed: String) -> void:
+func configure(body: Node3D, role: String, seed: String, skeleton: Skeleton3D, skeleton_to_body: Transform3D) -> void:
 	visual = body
 	profile = RoleSpec.silhouette_for_role(role, seed)
 	profile.shoulder_width = clampf(float(profile.shoulder_width), 0.85, 1.25)
 	profile.head_scale = clampf(float(profile.head_scale), 0.88, 1.12)
 	profile.torso_length = clampf(float(profile.torso_length), 0.92, 1.08)
 	profile.hunch = clampf(float(profile.hunch), 0.0, 18.0)
-	# Prepared destinations configure off-tree. Godot binds get_skeleton() only
-	# on tree entry, so setup must use the explicit parent, not that runtime cache.
-	var skeleton := get_parent() as Skeleton3D
+	# Prepared destinations configure off-tree, before Godot binds get_skeleton().
+	# The assembly supplies both the skeleton and its frame relative to the body.
 	if skeleton == null:
-		push_error("CharacterSilhouette must be attached to its Skeleton3D before configuration")
+		push_error("CharacterSilhouette configuration requires its Skeleton3D")
 		return
 	var motion_owner: Variant = skeleton.get_meta("character_motion_owner") if skeleton.has_meta("character_motion_owner") else null
 	motion = motion_owner.get_ref() if motion_owner is WeakRef else null
@@ -86,7 +86,7 @@ func configure(body: Node3D, role: String, seed: String) -> void:
 	head = _bone(skeleton, SOCKETS.head)
 	neck = _bone(skeleton, SOCKETS.neck)
 	chest = _bone(skeleton, SOCKETS.chest)
-	skeleton_frame = Transform3D(Basis.from_scale(body.scale), Vector3.ZERO) * _relative(skeleton, body)
+	skeleton_frame = Transform3D(Basis.from_scale(body.scale), Vector3.ZERO) * skeleton_to_body
 	var lateral := skeleton_frame.basis.inverse() * Vector3.RIGHT
 	var center := skeleton_frame * skeleton.get_bone_global_rest(chest).origin
 	for slot: String in ["left_shoulder", "right_shoulder"]:
@@ -238,15 +238,6 @@ static func _material(palette: Dictionary, channel: String) -> StandardMaterial3
 		_materials[key] = material
 	return _materials[key]
 
-static func _relative(node: Node3D, ancestor: Node3D) -> Transform3D:
-	var result := Transform3D.IDENTITY
-	var cursor: Node = node
-	while cursor != null and cursor != ancestor:
-		if cursor is Node3D:
-			result = (cursor as Node3D).transform * result
-		cursor = cursor.get_parent()
-	return result
-
 static func _bone(skeleton: Skeleton3D, aliases: Array) -> int:
 	for alias: String in aliases:
 		var index := skeleton.find_bone(alias)
@@ -254,11 +245,15 @@ static func _bone(skeleton: Skeleton3D, aliases: Array) -> int:
 			return index
 	return -1
 
-static func _skeleton(node: Node) -> Skeleton3D:
+static func _skeleton_binding(node: Node) -> Dictionary:
 	if node is Skeleton3D:
-		return node as Skeleton3D
+		return {"skeleton":node, "frame":Transform3D.IDENTITY}
 	for child in node.get_children():
-		var found := _skeleton(child)
-		if found != null:
+		var found := _skeleton_binding(child)
+		if not found.is_empty():
+			# Compose only the selected descendant path, excluding the visual root.
+			# Local transforms also work before tree entry and across plain Nodes.
+			if child is Node3D:
+				found.frame = (child as Node3D).transform * (found.frame as Transform3D)
 			return found
-	return null
+	return {}

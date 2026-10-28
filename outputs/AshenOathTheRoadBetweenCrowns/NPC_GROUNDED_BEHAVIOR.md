@@ -121,6 +121,7 @@ godot --headless --path . --script tools/verify_npc_attention_movement.gd
 godot --headless --path . --script tools/verify_npc_awareness.gd
 godot --headless --path . --script tools/verify_npc_scene_ownership.gd
 godot --headless --path . --script tools/verify_greyfen_routine_ownership.gd
+godot --headless --path . --script tools/verify_silhouette_bindings.gd
 godot --headless --path . --script tools/verify_boundaries.gd
 python3 tools/verify_content_integrity.py
 ```
@@ -140,27 +141,43 @@ and minute transitions instead of the removed cloud attention timer.
 | Awareness and recovery | Pass: 25 checks |
 | Scene ownership, protected poses, audio and save checkpoint | Pass: 21 checks |
 | Regional ownership and work/meal/sleep minute transitions | Pass: 261 checks |
+| Explicit silhouette binding, bone offsets and equipment placement | Pass: 100 checks, zero engine/script errors |
 | Content integrity | Pass: 21 quests, 86 objectives, 117 dialogue actions, 54 runtime references |
-| Combined architecture + Greyfen/Wychwood/return + current/version-12 save checks | **Fail: 2 of 16,102 checks**, both existing ancestor-lookups in main's `scripts/systems/character_silhouette.gd:74` and `:247`; zero engine/script error types or warnings |
+| Combined architecture + Greyfen/Wychwood/return + current/version-12 save checks | Pass after silhouette binding fix: 16,097 checks, zero failures, engine/script error types or warnings |
 
-The silhouette script is byte-for-byte unchanged from main `31a09063`.
-Its direct skeleton-parent access and ancestor-transform walk violate the
-existing extracted-system boundary rule. Neither the implementation nor the
-assertion was altered to make integration appear green. Route and save checks
-completed; the aggregate gate remains failed and blocks the main merge.
+The initial integration retained main's silhouette script unchanged and exposed
+two existing boundary violations. The authorized follow-up removes its direct
+skeleton-parent access and ancestor-transform walk. The assembly now supplies
+the skeleton and its relative frame explicitly, composing local transforms only
+along the selected descendant path during the existing skeleton search. Body
+scale, transform order, authored proportions, posture, material and equipment
+math remain unchanged; no additional per-frame work is added.
+
+The focused fixture checks rotated/nonuniform hierarchies both off-tree and
+in-tree, plain Node wrappers, first-skeleton selection, root-as-skeleton,
+unparented explicit configuration, bone/rest invariants, and actual blacksmith
+OBJ/hammer placement. The original boundary assertions remain unchanged. This
+is numerical/runtime evidence, not rendered silhouette or visual acceptance.
 
 The first combined run also encountered missing import caches for main's new
 silhouette meshes. A normal Godot editor import successfully imported ten
 existing OBJ sources. The necessary rerun removed all resource/runtime errors;
-only the two source-boundary failures remain. No art source was changed.
-Logs are retained under `.release-gate/npc-integration-*.log`; the final combined
-run is `npc-integration-boundaries-imported.log`.
+only the two source-boundary failures remained before the follow-up fix. No art
+source was changed. Logs are retained under `.release-gate/npc-integration-*.log`
+and `.release-gate/silhouette-bindings-*.log`. The final passing combined run is
+`npc-integration-boundaries-fixed.log`. The earlier shutdown leak warning did
+not recur in this run.
 
-The GitHub check-run request for main returned `Forbidden` from this environment.
+GitHub read requests for main's check runs, classic protection
+(`/repos/RafaTahir/AshenOath/branches/main/protection`) and effective branch rules
+(`/repos/RafaTahir/AshenOath/rules/branches/main`) returned `Forbidden` from this
+environment. This is inaccessible policy evidence, not proof that no checks
+are configured.
 The coordinating task separately reported successful Vercel statuses on both
 input tips; those are deployment statuses, not test results for this integration.
 No required-check policy or successful remote integration test run is claimed.
-Main remains unmodified pending those checks and resolution of the boundary gate.
+Main remains unmodified until the required remote checks and policy can be
+established for the final integration commit.
 
 Committed `web/` and hosting configuration are unchanged from main. Its Web tree
 is `e61bf8348ee8dbe3dc772329638ff74cdf821eaf`; no export or separate production
