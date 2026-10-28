@@ -1,96 +1,104 @@
 {
   "schema_version": 2,
-  "ticket": "FINISH-016",
-  "generated_at_utc": "2026-10-28T03:49:48.417381Z",
-  "build_id": "connected-roads-20261028",
-  "generated_from_commit": "1b470ce751c8a0a6df99f067ae5a0343feb31557",
+  "generated_at_utc": "2026-10-28T16:08:55.1706670Z",
+  "build_id": "pack-closure-20261028-r2",
+  "generated_from_commit": "2620ab869858a50b62a7829902fc99965b6fd72d",
   "source_dirty": true,
-  "artifact_directory": "external_runtime_packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\pack-closure-20261028-r2\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 0,
+  "total_bytes": 160051576,
   "packs": [
     {
       "id": "base",
-      "version": "connected-roads-20261028",
+      "version": "pack-closure-20261028-r2",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4387920,
-      "sha256": "63388523a1d1d6f6cab95e777d6ecd72dd88240131d32caa824b9626a8634538",
+      "bytes": 4427348,
+      "sha256": "7bc82cf4cb3f0851aedf90b76127a601cfb7643c40e1202318555e390b03ffc2",
       "status": "candidate_external",
-      "log": "logs/pack-base.stdout.log"
+      "log": "../pack-closure-20261028/logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "connected-roads-20261028",
+      "version": "pack-closure-20261028-r2",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 35810924,
-      "sha256": "13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761",
+      "bytes": 86266020,
+      "sha256": "74c52d7950452a72eaf064f3402852ee7309876662d393574241a39a4e2f5017",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "adjacent",
-      "version": "connected-roads-20261028",
+      "version": "pack-closure-20261028-r2",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
-      "bytes": 2369508,
-      "sha256": "dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1",
+      "bytes": 2370980,
+      "sha256": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
       "status": "candidate_external",
       "log": "logs/pack-adjacent.stdout.log"
     },
     {
       "id": "campaign",
-      "version": "connected-roads-20261028",
+      "version": "pack-closure-20261028-r2",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 8676964,
-      "sha256": "9b47e6ebe97230d0a4c709ce4f0e6c8fea11e2391f4c503046ec06cef758acc7",
+      "bytes": 8678436,
+      "sha256": "00231388353d5597563e933967bea76d8a7641109a088863e4cf5d6d28317455",
       "status": "candidate_external",
-      "log": "logs/pack-campaign.stdout.log"
+      "log": "../pack-closure-20261028/logs/pack-campaign.stdout.log"
     },
     {
       "id": "characters",
-      "version": "connected-roads-20261028",
+      "version": "pack-closure-20261028-r2",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
-      "bytes": 9606192,
-      "sha256": "0000552203be55daf15b16c3c1cc31192e5c403cdb2f844b1401c8171c510310",
+      "bytes": 8999204,
+      "sha256": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
       "status": "candidate_external",
-      "log": "logs/pack-characters.stdout.log"
+      "log": "../pack-closure-20261028/logs/pack-characters.stdout.log"
     },
     {
       "id": "monsters",
-      "version": "connected-roads-20261028",
+      "version": "pack-closure-20261028-r2",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
-      "bytes": 14657944,
-      "sha256": "d9c833f3010d81302d723c6a56364240f12823a458a5203dd42cdb533228d3a7",
+      "bytes": 20678316,
+      "sha256": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
       "status": "candidate_external",
-      "log": "logs/pack-monsters.stdout.log"
+      "log": "../pack-closure-20261028/logs/pack-monsters.stdout.log"
     },
     {
       "id": "audio",
-      "version": "connected-roads-20261028",
+      "version": "pack-closure-20261028-r2",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
-      "bytes": 21301404,
-      "sha256": "5f05f82dccfb8c322130c42fdc86facf9260e4183d0c896579c52bddebe1defb",
+      "bytes": 21302876,
+      "sha256": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
       "status": "candidate_external",
-      "log": "logs/pack-audio.stdout.log"
+      "log": "../pack-closure-20261028/logs/pack-audio.stdout.log"
     },
     {
       "id": "quality_materials",
-      "version": "connected-roads-20261028",
+      "version": "pack-closure-20261028-r2",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
-      "bytes": 7326924,
-      "sha256": "4300bc34e456575df5424ffde5d9b379c0214f7a8e09f2d0de507ca6c89a49c5",
+      "bytes": 7328396,
+      "sha256": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
       "status": "candidate_external",
-      "log": "logs/pack-quality_materials.stdout.log"
+      "log": "../pack-closure-20261028/logs/pack-quality_materials.stdout.log"
     }
   ],
-  "errors": []
+  "errors": [],
+  "reused_unchanged_pack_inputs": "base, campaign, characters, monsters, audio and quality_materials are byte-identical to pack-closure-20261028; only the three approved arrangements in opening/adjacent changed.",
+  "selected_web_export": {
+    "build_id": "pack-closure-20261028-r2",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\pack-closure-20261028-r2\\export",
+    "generated_from_commit": "2620ab869858a50b62a7829902fc99965b6fd72d",
+    "artifacts_total_bytes": 162861939,
+    "root_pck_sha256": "6f5f23ce7588a9ca2c8d9c0f3837e66142f73791654e60555e0431d9e0022d3e",
+    "note": "Approved music restored; unchanged packs reused by full input identity."
+  }
 }

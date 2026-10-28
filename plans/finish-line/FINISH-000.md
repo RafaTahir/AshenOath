@@ -4,7 +4,64 @@ Date: 2026-10-19. Workspace: D:/Projects/AshenOath.
 Branch: codex/masterpiece-rebuild.
 Scope: finish and establish acceptance of the retained game, not replace it.
 
-## Current Execution - 2026-10-26
+## Current Director Repair Roadmap - 2026-10-28
+
+The approved ten-child roadmap supersedes the execution restrictions and
+source-complete assumptions in the dated delivery record below. Mandatory user
+acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
+
+Only **FINISH-016/PACK-CLOSURE** is active. Development was fast-forwarded from
+`31a0906` to `2620ab869858a50b62a7829902fc99965b6fd72d`, preserving all seven cloud
+commits, newer monster/character work and both pre-existing untracked directories.
+Targeted isolated verification is authorized for each active child. Deliver via
+development/main Git pushes and Vercel automatic deployment; confirm exact artifact
+identity, label DELIVERED / AWAITING RAFA, then stop for acceptance before the next
+child. No separate CLI deployment and no implied whole-game acceptance.
+
+| Order | Child ticket | Current state |
+| --- | --- | --- |
+| 1 | FINISH-016/PACK-CLOSURE | Implemented, compiled, developer-verified; publication receipt owns delivery status; awaiting Rafa |
+| 2 | FINISH-001/RESPONSIVE-PREPARATION | Not started |
+| 3 | FINISH-014/SAFE-CONNECTOR-HANDOFF | Not started |
+| 4 | FINISH-003/ANIMATION-LIFECYCLE | Not started |
+| 5 | FINISH-003/FACE-ARTIFACT | Not started; actor/geometry identification required |
+| 6 | FINISH-007/SOLID-FURNITURE | Not started |
+| 7 | FINISH-005/HONEST-TARGETING | Not started |
+| 8 | FINISH-013/CONNECTOR-COMPOSITION | Not started; mesh identification required |
+| 9 | FINISH-007/OPENING-PURPOSE | Not started |
+| 10 | FINISH-008/WATER-AFTERMATH | Not started |
+
+PACK-CLOSURE reproduces all ten reported missing environment textures from the
+baseline `phase1-8c6264708df367f6` root/opening packs in an isolated scratch project.
+OBJ material-library texture paths were included as source references without
+their required texture import payloads. The new build-derived ledger selects the
+32 required environment texture resources explicitly, with one pack owner, and
+startup/Continue preflight validates their decoded leaves before parent materials.
+Failure remains sticky until a new attempt and includes the resource in Retry.
+No palette, lighting, character identity or source texture quality is changed.
+
+Candidate `pack-closure-20261028-r2`: 32/32 isolated exported textures pass; focused
+preflight/Retry, pack wait and integrity checks pass. Normal-input in-app Chromium
+New Game (Balanced) and persisted-Quality reload/Continue pass without resource
+errors. Complete package **162,869,651 bytes / 155.32 MiB**; Balanced opening
+97,940,318 bytes, approximately **39.18 seconds transfer alone at 20 Mbps**.
+Required restored assets increase download size; no startup improvement is claimed.
+Final packaging restores three approved music resources byte-for-byte to HEAD after
+the old split step overwrote them. Only their packs/root were re-exported; the first
+candidate's checks are reused for unchanged texture, input and save dependencies.
+See [bounded evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/pack_closure_20261028.json).
+
+A separate existing paused-game Quality-switch overlay blockage was observed;
+fresh persisted-Quality reload/Continue works. Its paused transition owner is
+recorded for child 2. It is not passed, hidden, or repaired under child 1.
+
+Existing strict startup/performance targets remain, including historical failures.
+This child establishes resource closure, not performance acceptance. Unlocalized
+faces/terrain, regional campaign coverage, actual-phone behavior and listening
+remain open under their respective owners. Details and evidence are tracked in
+the [cohesive-game record](../living-road/COHESIVE_GAME_IMPLEMENTATION.md).
+
+## Historical Combined Execution - 2026-10-26
 
 Approved plan: **Complete the Implementation and Publish Once**. Current candidate:
 `finish-implementation-20261026`, preserved baseline `4b28d2d`. All project work

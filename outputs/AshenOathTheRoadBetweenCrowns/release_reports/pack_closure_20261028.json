@@ -1,0 +1,73 @@
+{
+  "ticket": "FINISH-016/PACK-CLOSURE",
+  "date": "2026-10-28",
+  "build_id": "pack-closure-20261028-r2",
+  "runtime_verification_build_id": "pack-closure-20261028",
+  "baseline_commit": "2620ab869858a50b62a7829902fc99965b6fd72d",
+  "baseline_build": "phase1-8c6264708df367f6",
+  "implementation": "complete",
+  "compilation": "passed",
+  "developer_verification": "passed_for_pack_closure",
+  "user_acceptance": "pending",
+  "publication": "Exact commit, deployment and HTTP identity are recorded in the matching .release-gate/living-road/FINISH-016-*/publication.json receipt. This report alone is not deployment confirmation.",
+  "publication_tooling": "The first wrapper attempt stopped before commit/push on Vercel settings API HTTP 403. GitHub confirmed the existing main Git deployment succeeded and the live manifest remained reachable. Git-only publication now leaves hosting settings untouched, captures the previous live manifest, binds artifacts locally and confirms delivery through Git status and public HTTP hashes; no credential or provider failure is represented as successful deployment.",
+  "root_cause": "Selected environment OBJ/MTL source references lacked exported Texture2D import/remap payloads. Parent resources could load with incomplete materials without blocking opening readiness.",
+  "repair": [
+    "Compile environment material dependencies from selected resources and OBJ material libraries.",
+    "Select all 32 required environment texture imports explicitly in their single owning opening pack.",
+    "Validate decoded texture leaves before opening or selected Continue constructs material parents.",
+    "Keep failed preflight state sticky until Retry; release only owned requests and retain valid cached resources.",
+    "Defer old-catalog validation until regeneration and retire only exact obsolete generated selections."
+  ],
+  "checks": [
+    {"name": "isolated_baseline_pack_load", "result": "expected_failure", "detail": "All ten previously reported textures lacked import payloads and failed to load from production root/opening packs."},
+    {"name": "isolated_candidate_pack_load", "result": "pass", "detail": "32/32 texture imports loaded as positive-dimension Texture2D from exported packs; zero missing resources. Source checkout could not satisfy requests."},
+    {"name": "export_single_ownership", "result": "pass", "detail": "All 32 .import entries appear only in their declared opening-pack export, not another runtime pack."},
+    {"name": "resource_prewarm", "result": "pass", "detail": "Missing roles, wrong resource type, empty/null textures, sticky failure, Retry, cache retention and independent request ownership."},
+    {"name": "opening_pack_readiness", "result": "pass_after_fixture_correction", "detail": "Missing opening/Quality failure, proper Quality dependency, unrelated failure isolation. Existing fixture omitted Wychwood's adjacent pack; corrected fixture, not game dependency."},
+    {"name": "pack_wait_ownership", "result": "pass", "detail": "Stale waiters cannot activate/cancel newer requests; source world preserved on pack failure."},
+    {"name": "pack_completeness", "result": "pass", "detail": "10 existing checks, including missing/corrupt packs, ownership, dependency cycles and addressed engine paths."},
+    {"name": "production_build", "result": "pass", "detail": "Asset/script compilation, eight runtime pack exports and production Web export. Final packaging correction restored three approved music resources byte-for-byte to the retained HEAD resources, re-exported their opening/adjacent owners and the root, and reused six unchanged packs. No compiler/parser failure."},
+    {"name": "package_integrity", "result": "pass", "detail": "Current manifest, transport/decoded hashes, pack graph and deployment budget match the 17 deployed files."},
+    {"name": "browser_balanced_new_game", "result": "pass", "detail": "Isolated in-app Chromium at 1280x720, normal mouse New Game, visible village/woodwork/bridge/trees/rocks, ordinary forward movement across the bridge, earned Quick Save. No browser resource/runtime warning or error observed."},
+    {"name": "browser_persisted_quality_continue", "result": "pass", "detail": "Quality selected through UI, browser durability confirmed, reload retained Quality and saved journey summary, normal selected Continue restored Greyfen and movement with visible materials and no resource/runtime warning or error."},
+    {"name": "static_review", "result": "pass_for_authored_source", "detail": "Scoped source/call-site review, Godot and Python syntax and generated asset provenance. Source/plans diff whitespace check passes; whole-tree check reports generated Web CRLF and one retained template whitespace-only line. Certified Web bytes were not changed for cosmetic whitespace."}
+  ],
+  "evidence_reuse": "Runtime and isolated texture checks used the first candidate. The r2 correction changes only three approved music streams and resulting pack/root identities; environment texture payloads, dependency ledger, runtime code, input and save dependencies are unchanged. Those passed checks are retained at that scope, not represented as an r2 replay or audio listening approval.",
+  "check_corrections": [
+    "Initial new isolated verifier had a typed-Variant syntax issue; corrected before baseline/candidate results.",
+    "Export-log ownership parser initially retained ANSI colour suffixes and reported empty matches; normalized log control codes, then all 32 passed.",
+    "One browser-control timeout during Quality reload required reconnecting to the same tab; no new journey or replacement candidate."
+  ],
+  "observations_not_benchmarks": {
+    "balanced_new_game_ready_elapsed_ms": 22465.9,
+    "quality_reload_greyfen_prewarm_ms": 66958,
+    "quality_continue_playable_ms": 6897.5,
+    "note": "Different stages and uncontrolled local browser conditions. Not end-to-end timing certification or a before/after speed claim."
+  },
+  "package": {
+    "deployment_bytes": 162869651,
+    "transport_artifact_bytes_excluding_release_manifest": 162861939,
+    "decoded_artifact_bytes": 203012451,
+    "files_including_release_manifest": 17,
+    "balanced_opening_download_bytes": 97940318,
+    "quality_opening_download_bytes": 105150200,
+    "balanced_20mbps_transfer_floor_seconds": 39.1761272,
+    "max_deployment_bytes": 268435456,
+    "largest_git_artifact_bytes": 82258797,
+    "largest_git_artifact": "web/packs/opening.pck",
+    "root_transport_sha256": "6f5f23ce7588a9ca2c8d9c0f3837e66142f73791654e60555e0431d9e0022d3e",
+    "root_decoded_sha256": "91b27cc06dfb11b39648b9fe68fc337d2e08e2efc9c0913fa129e8c8394441a7",
+    "note": "Restored required assets increase the opening download. No content/texture-quality reduction. Decoded bytes are not process-memory evidence."
+  },
+  "remaining_findings": [
+    {"classification": "GAME", "owner": "FINISH-001/RESPONSIVE-PREPARATION", "finding": "Changing Quality during paused gameplay leaves the loading overlay blocking Settings. Source transition advancement occurs after the paused-session return. Browser storage completed and a fresh reload/Continue worked. No change made under PACK-CLOSURE."},
+    {"classification": "PERFORMANCE LIMITATION", "owner": "FINISH-001/RESPONSIVE-PREPARATION and FINISH-014", "finding": "Opening download transfer floor alone exceeds the retained 15-second cold-control target; observed preparation remains slow. No FPS/memory/transition compliance claimed."}
+  ],
+  "unverified": ["Actual Chrome, Edge, Firefox and phone/WebKit", "All-world/campaign gameplay", "Sustained FPS and owned-process memory", "Audio listening and subjective visual approval", "Browser end-to-end forced-download-failure Retry; failure/Retry contract exercised by focused fixtures"],
+  "evidence_root": "D:/Temp/AshenOath/pack-closure-20261028",
+  "build_logs": "D:/Projects/AshenOath/.release-gate/pack-closure-20261028/logs",
+  "final_packaging_logs": "D:/Projects/AshenOath/.release-gate/pack-closure-20261028-r2/logs",
+  "save_isolation": "Dedicated localhost origin 127.0.0.1:43728. Production-origin saves/settings were not changed.",
+  "next": "After exact Git delivery confirmation, stop for Rafa acceptance before FINISH-001/RESPONSIVE-PREPARATION."
+}

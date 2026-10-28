@@ -50,13 +50,13 @@ func request(game, prepared: Dictionary) -> void:
 		game.player.set_transition_locked(true)
 	game.hud.begin_journey_load(prepared)
 	var target: String = str(staged.get("target_zone", "greyfen"))
+	var encounter_packs: Array[String] = game._zone_encounter_packs(target, prepared.get("data", {}))
 	if OS.has_feature("web"):
 		if game.runtime_packs == null:
 			cancel(game, "The destination's content is unavailable. Your current session remains in place.")
 			return
 		game.runtime_packs.quality_preset = str(game.settings.settings.get("quality_preset", "balanced"))
 		game.runtime_packs.prioritize_zone(target)
-		var encounter_packs: Array[String] = game._zone_encounter_packs(target, prepared.get("data", {}))
 		if not game.runtime_packs.zone_packs_ready(target, encounter_packs):
 			var queued: bool = game.runtime_packs.request_zone_packs(target, encounter_packs, true)
 			if not queued:
@@ -92,6 +92,26 @@ func request(game, prepared: Dictionary) -> void:
 	game._ensure_gameplay_runtime()
 	if not game.gameplay_runtime_ready:
 		cancel(game, "Journey services could not be prepared. Select the saved journey to retry.")
+		return
+	if game.runtime_packs == null:
+		cancel(game, "The destination's content is unavailable. Select the saved journey to retry.")
+		return
+	# Keep the recorded journey unclaimed until every destination environment
+	# texture has decoded; parent meshes can otherwise hide missing textures.
+	var required_packs: Array[String] = game.runtime_packs.required_zone_packs(target, encounter_packs)
+	game.hud.update_journey_load_progress(target, -1.0, "Preparing destination materials...")
+	game.asset_helper.begin_resource_attempt()
+	var environment_status: Error = game.asset_helper.request_environment_resources(required_packs)
+	while _is_current(game, generation):
+		if environment_status in [OK, ERR_BUSY]:
+			environment_status = game.asset_helper.poll_role_resources(30000)
+		if environment_status == OK:
+			break
+		if environment_status != ERR_BUSY:
+			cancel(game, "The destination's environment could not be prepared. %s Select the saved journey to retry." % game.asset_helper.resource_prewarm_error)
+			return
+		await game.get_tree().process_frame
+	if not _is_current(game, generation):
 		return
 	if not bool(source.get("direct_data", false)):
 		var accepted: Dictionary = game.save_manager.accept_prepared_load(request_id)

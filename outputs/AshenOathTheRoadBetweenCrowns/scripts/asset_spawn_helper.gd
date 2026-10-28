@@ -9,6 +9,7 @@ const SharedResourceRequests = preload("res://scripts/shared_resource_requests.g
 const PreparedActorCatalog = preload("res://scripts/prepared_actor_catalog.gd")
 const CharacterNodeManifest = preload("res://scripts/character_node_manifest.gd")
 const CharacterMaterialBindings = preload("res://scripts/character_material_bindings.gd")
+const ENVIRONMENT_RESOURCE_CATALOG := "res://data/environment_material_dependencies.json"
 var resource_requests = SharedResourceRequests.acquire()
 var building_prepared_assets := false
 var tree_source_cache: Dictionary = {}
@@ -66,48 +67,97 @@ var prepared_animation_libraries: Dictionary = {}
 var runtime_role_diagnostics: Dictionary = {}
 var _reported_blocked_roles: Dictionary = {}
 var resource_prewarm_error := ""
+var _resource_prewarm_status: Error = OK
+var _required_environment_textures: Dictionary = {}
 
 func begin_resource_attempt() -> void:
-	resource_prewarm_error = ""
+	# Retire only this helper's old claims. A new destination must not poll an
+	# abandoned attempt, while other consumers can still finish their requests.
 	for path in pending_role_resources.keys():
 		var status: int = resource_requests.status(path)
-		if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			pending_role_resources[path] = Time.get_ticks_msec()
-		else:
-			if status == ResourceLoader.THREAD_LOAD_LOADED:
-				var resource: Resource = resource_requests.take(path, self)
-				if resource != null:
-					resource_cache[path] = resource
-			resource_requests.release(path, self)
-			pending_role_resources.erase(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var resource: Resource = resource_requests.take(path, self)
+			if resource != null and (not _required_environment_textures.has(path) or _valid_environment_texture(resource)):
+				resource_cache[path] = resource
+		resource_requests.release(path, self)
+	pending_role_resources.clear()
+	for path in resource_cache.keys():
+		if resource_cache[path] == null or (_required_environment_textures.has(path) and not _valid_environment_texture(resource_cache[path])):
+			resource_cache.erase(path)
+	_required_environment_textures.clear()
+	_resource_prewarm_status = OK
+	resource_prewarm_error = ""
+
+func request_environment_resources(pack_ids: Array) -> Error:
+	if _resource_prewarm_status != OK:
+		return _resource_prewarm_status
+	if not FileAccess.file_exists(ENVIRONMENT_RESOURCE_CATALOG):
+		return _fail_resource_prewarm(ERR_FILE_NOT_FOUND, ENVIRONMENT_RESOURCE_CATALOG + ": resource catalog not found")
+	var catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string(ENVIRONMENT_RESOURCE_CATALOG))
+	if not catalog is Dictionary or catalog.get("schema_version") != 1 or not catalog.get("textures") is Dictionary:
+		return _fail_resource_prewarm(ERR_INVALID_DATA, ENVIRONMENT_RESOURCE_CATALOG + ": invalid resource catalog")
+	var textures: Dictionary = catalog["textures"]
+	if textures.is_empty():
+		return _fail_resource_prewarm(ERR_INVALID_DATA, ENVIRONMENT_RESOURCE_CATALOG + ": empty resource catalog")
+	var paths: Array[String] = []
+	for path: String in textures:
+		var entry: Variant = textures[path]
+		if not entry is Dictionary or str(entry.get("owner", "")) not in ["opening", "adjacent", "campaign"] or not entry.get("consumers") is Array:
+			return _fail_resource_prewarm(ERR_INVALID_DATA, "%s: invalid resource catalog entry for %s" % [ENVIRONMENT_RESOURCE_CATALOG, path])
+		var required: bool = entry["owner"] in pack_ids
+		for consumer in entry["consumers"]:
+			if consumer in pack_ids:
+				required = true
+		if required:
+			_required_environment_textures[path] = true
+			paths.append(path)
+	return request_resource_paths(paths)
+
+func _valid_environment_texture(resource: Resource) -> bool:
+	var texture := resource as Texture2D
+	return texture != null and texture.get_width() > 0 and texture.get_height() > 0
+
+func _fail_resource_prewarm(error: Error, detail: String) -> Error:
+	if _resource_prewarm_status == OK:
+		_resource_prewarm_status = error
+		resource_prewarm_error = detail
+	return _resource_prewarm_status
 
 func request_role_resources(role_names: Array, visual_roles: bool = false, variant_seed: String = "") -> Error:
+	if _resource_prewarm_status != OK:
+		return _resource_prewarm_status
 	_ensure_database()
 	var paths: Array[String] = []
 	for role in role_names:
 		var entry: Dictionary = database.get_visual_asset_for_role(str(role)) if visual_roles else database.get_asset_for_role(str(role))
 		var path := str(entry.get("path", ""))
 		if path.is_empty():
-			resource_prewarm_error = "Required actor role has no resource: %s" % role
-			return ERR_FILE_NOT_FOUND
+			return _fail_resource_prewarm(ERR_FILE_NOT_FOUND, "Required actor role has no resource: %s" % role)
 		var prepared := PreparedActorCatalog.entry(str(role), path, variant_seed) if not building_prepared_assets else {}
 		path = str(prepared.get("path", path))
 		paths.append(path)
 	return request_resource_paths(paths)
 
 func request_resource_paths(paths: Array) -> Error:
+	if _resource_prewarm_status != OK:
+		return _resource_prewarm_status
 	for raw_path in paths:
 		var path := str(raw_path)
 		_record_asset_use(path)
 		if path.is_empty() or not ResourceLoader.exists(path):
-			resource_prewarm_error = path + ": resource not found"
-			return ERR_FILE_NOT_FOUND
-		if resource_cache.has(path) or pending_role_resources.has(path):
+			return _fail_resource_prewarm(ERR_FILE_NOT_FOUND, path + ": resource not found")
+		if resource_cache.has(path):
+			if _required_environment_textures.has(path) and not _valid_environment_texture(resource_cache[path]):
+				resource_cache.erase(path)
+				return _fail_resource_prewarm(ERR_CANT_OPEN, path + ": required environment texture is not a non-empty Texture2D")
+			if resource_cache[path] != null:
+				continue
+			resource_cache.erase(path)
+		if pending_role_resources.has(path):
 			continue
 		var error: Error = resource_requests.request(path, self)
 		if error != OK:
-			resource_prewarm_error = "%s: %s" % [path, error_string(error)]
-			return error
+			return _fail_resource_prewarm(error, "%s: %s" % [path, error_string(error)])
 		pending_role_resources[path] = Time.get_ticks_msec()
 	return OK
 
@@ -115,23 +165,27 @@ func is_resource_cached(path: String) -> bool:
 	return resource_cache.has(path)
 
 func poll_role_resources(timeout_msec: int = 20000) -> Error:
+	if _resource_prewarm_status != OK:
+		return _resource_prewarm_status
 	for path in pending_role_resources.keys():
 		var status: int = resource_requests.status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var resource: Resource = resource_requests.take(path, self)
 			pending_role_resources.erase(path)
+			if _required_environment_textures.has(path) and not _valid_environment_texture(resource):
+				resource_cache.erase(path)
+				return _fail_resource_prewarm(ERR_CANT_OPEN, path + ": required environment texture is not a non-empty Texture2D")
 			if resource == null:
-				resource_prewarm_error = path + ": decoded resource is null"
-				return ERR_CANT_OPEN
+				return _fail_resource_prewarm(ERR_CANT_OPEN, path + ": decoded resource is null")
 			resource_cache[path] = resource
 		elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			resource_requests.release(path, self)
 			pending_role_resources.erase(path)
-			resource_prewarm_error = "%s: threaded load status %d" % [path, status]
-			return ERR_CANT_OPEN
+			return _fail_resource_prewarm(ERR_CANT_OPEN, "%s: threaded load status %d" % [path, status])
 		elif Time.get_ticks_msec() - int(pending_role_resources[path]) > timeout_msec:
-			resource_prewarm_error = path + ": resource request timed out"
-			return ERR_TIMEOUT
+			resource_requests.release(path, self)
+			pending_role_resources.erase(path)
+			return _fail_resource_prewarm(ERR_TIMEOUT, path + ": resource request timed out")
 	return OK if pending_role_resources.is_empty() else ERR_BUSY
 
 func clear_runtime_caches() -> void:

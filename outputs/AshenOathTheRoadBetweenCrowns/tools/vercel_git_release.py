@@ -224,10 +224,13 @@ def main():
     if not path.is_relative_to(REPO / ".release-gate"):
         raise ValueError("Receipt must remain within the D: repository release directory")
     receipt = read_json(path)
-    client = Vercel()
     try:
-        project = client.project()
-        client.assert_configuration(project)
+        # Binding is local artifact validation, not a hosting-settings operation.
+        # Git-only publication must not require an unrelated CLI API credential.
+        if args.action != "bind":
+            client = Vercel()
+            project = client.project()
+            client.assert_configuration(project)
         if args.action == "setup-auto":
             receipt.setdefault("previous_production_id", client.live_deployment())
             if project.get("autoAssignCustomDomains") is not True:

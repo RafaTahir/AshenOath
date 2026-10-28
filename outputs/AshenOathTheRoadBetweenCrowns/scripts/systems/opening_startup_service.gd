@@ -322,6 +322,21 @@ func _prepare_opening_services(generation: int) -> void:
 	_publish_web_opening_state("resources", "Preparing characters and materials...")
 	world_materials.begin_prewarm_attempt()
 	asset_helper.begin_resource_attempt()
+	# Decode required texture leaves before any prop or environment parent can
+	# be cached with an incomplete imported material graph, including headless.
+	var environment_status: Error = asset_helper.request_environment_resources(["opening"])
+	while _opening_attempt_current(generation):
+		if environment_status in [OK, ERR_BUSY]:
+			environment_status = asset_helper.poll_role_resources(30000)
+		if environment_status == OK:
+			break
+		if environment_status != ERR_BUSY:
+			print("LOADING: opening_resource_failure environment=%s" % asset_helper.resource_prewarm_error)
+			_opening_prepare_failed("Greyfen's environment could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
+			return
+		await _host.get_tree().process_frame
+	if not _opening_attempt_current(generation):
+		return
 	# Both platforms now own the opening pack before requesting its resources.
 	if DisplayServer.get_name().to_lower() != "headless":
 		world_materials.prewarm_surfaces(["forest_ground", "cobblestone", "wet_mud", "medieval_brick", "plaster", "timber", "roof_tiles"], str(settings.settings.get("quality_preset", "balanced")))
@@ -608,6 +623,9 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 				return
 			slice_started = Time.get_ticks_usec()
 	if not _opening_attempt_current(generation):
+		return
+	if not asset_helper.resource_prewarm_error.is_empty():
+		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's environment could not be prepared. %s Select Retry to try again." % asset_helper.resource_prewarm_error)
 		return
 	if not _opening_presentation_present(prewarm_root):
 		_host.get_tree().paused = was_paused

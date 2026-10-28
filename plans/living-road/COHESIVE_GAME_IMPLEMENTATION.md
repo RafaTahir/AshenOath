@@ -1,6 +1,62 @@
 # A Cohesive Ashen Oath
 
-## Current Combined Delivery - 2026-10-26
+## Current Director Repair - 2026-10-28
+
+The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
+current. One child is implemented, verified and delivered at a time, then waits
+for Rafa's acceptance. Existing systems and the seven cloud commits through
+`2620ab8` remain the baseline; this is not a replacement recovery program.
+
+### FINISH-016/PACK-CLOSURE (developer-verified; awaiting delivery receipt/Rafa)
+
+- Reproduced all ten reported missing Texture2D imports from the current production
+  root/opening packs, mounted in `D:/Temp/AshenOath/pack-closure-20261028/baseline`.
+  Source checkout resources could not satisfy those requests. Baseline check failed.
+- Environment OBJ/MTL texture references were not closed by export include filters.
+  The compiler now derives a 32-texture environment dependency ledger from selected
+  resources and material libraries. Export selections include texture import/remap
+  payloads in one owner, preserving all authored texture data and material choices.
+- New Game and selected Continue use the existing request owner and attempt guards
+  to validate required environment textures before loading material parents. Missing,
+  empty or wrong-type resources cannot become ready; Retry starts a fresh attempt
+  without losing valid cached resources, saves or preferences.
+- Isolated candidate package checks load 32/32 textures successfully. Required
+  imports have one owner. Resource preflight/Retry, missing-pack/Quality readiness,
+  stale-wait ownership and ten pack-integrity cases pass. The readiness fixture's
+  obsolete missing adjacent-pack assumption was corrected, not relaxed.
+- Production asset/script compilation and all eight packs passed. The complete
+  17-file package is 162,869,651 bytes (155.32 MiB), below the 256 MiB ceiling.
+  Largest Git artifact is 82,258,797 bytes. Required restored textures increase
+  Balanced opening bytes to 97,940,318, a 39.18-second theoretical transfer floor
+  at 20 Mbps; this is not a startup/performance pass.
+- Final candidate `pack-closure-20261028-r2` restores three approved music streams
+  byte-for-byte to retained HEAD after the old audio split step overwrote them.
+  The standard build now reapplies the approved arrangements after that step.
+  Only affected packs/root were re-exported. Runtime evidence remains from r1 at
+  its unchanged texture, code, input and save dependency scope; no audio approval
+  or second browser replay is claimed.
+- An isolated in-app Chromium session at 1280x720 reached visible Greyfen by mouse
+  New Game, moved over the bridge and earned a save. Saved Quality survived reload;
+  selected Continue restored the journey and normal movement without resource or
+  runtime warnings/errors. Production saves/preferences were untouched. Browser
+  control timed out once during reload and reconnected to the same session.
+- Separate GAME finding for child 2: changing quality while gameplay is paused
+  leaves a blocking loading overlay. Session transition advancement is behind the
+  paused-session return. Storage completed; fresh reload/Continue worked. Do not
+  describe hot quality switching as passed or begin child 2 before acceptance.
+
+Full bounded evidence and limitations:
+[pack_closure_20261028.json](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/pack_closure_20261028.json).
+The matching FINISH-016 publication receipt owns commit, deployment and HTTP
+identity. Once delivery is confirmed, disposition is DELIVERED / AWAITING RAFA;
+no mandatory FINISH acceptance count changes without the user.
+
+Unchanged follow-ups remain: draughts adjudication, progression-gate assumptions,
+Ranger facial parity, demonstrated stride defects, catalog-order recollections,
+Castle/Hartlands memorial differentiation, regional interruption/endings,
+sustained performance/memory, actual-phone and listening acceptance.
+
+## Historical Combined Delivery - 2026-10-26
 
 The user approved completing all FINISH source work and one push/deployment,
 with runtime testing/acceptance owned solely by the user. Build/package and HTTP

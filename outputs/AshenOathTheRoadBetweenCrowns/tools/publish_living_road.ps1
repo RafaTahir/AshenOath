@@ -2,6 +2,7 @@ param(
     [Parameter(Mandatory = $true)][string]$Ticket,
     [Parameter(Mandatory = $true)][string]$Message,
     [Parameter(Mandatory = $true)][string[]]$CommitPaths,
+    [string]$RuntimeEvidence = "",
     [string]$PythonPath = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 )
 
@@ -11,6 +12,13 @@ $RepositoryRoot = [IO.Path]::GetFullPath((Split-Path -Parent (Split-Path -Parent
 if ($RepositoryRoot -ne 'D:\Projects\AshenOath') { throw 'Publish from the canonical D: repository.' }
 if ($Ticket -notmatch '^(LR|MOBILE|BOOT|XP|OPT|WORLD-SAGA|FINISH|CAST)-\d{3}$') { throw 'Expected a supported project ticket ID.' }
 if (-not $CommitPaths.Count) { throw 'Explicit authored and generated commit paths are required.' }
+if ($RuntimeEvidence) {
+    if ([IO.Path]::IsPathRooted($RuntimeEvidence)) { throw 'Runtime evidence must use a repository-relative path.' }
+    $evidencePath = [IO.Path]::GetFullPath((Join-Path $RepositoryRoot $RuntimeEvidence))
+    if (-not $evidencePath.StartsWith($RepositoryRoot + '\', [StringComparison]::OrdinalIgnoreCase) -or -not (Test-Path -LiteralPath $evidencePath -PathType Leaf)) {
+        throw 'The specified targeted-runtime evidence is unavailable in this repository.'
+    }
+}
 $WebRoot = Join-Path $RepositoryRoot 'web'
 $LinkPath = Join-Path $RepositoryRoot '.vercel/project.json'
 if (-not (Test-Path -LiteralPath $LinkPath)) { throw 'Link this D: checkout to the existing ashenoath Vercel project first.' }
@@ -51,7 +59,8 @@ $receipt = [ordered]@{
     artifact_source = $manifest.source
     package_commit = ''
     user_acceptance = 'pending'
-    runtime_testing = 'not_run_user_owned'
+    runtime_testing = $(if ($RuntimeEvidence) { 'targeted_developer_checks_see_evidence' } else { 'not_run_user_owned' })
+    runtime_evidence = $RuntimeEvidence
     production_url = 'https://ashenoath.vercel.app'
     deployment_method = 'git_automatic_production'
 }
@@ -65,8 +74,14 @@ function Invoke-PublicationStep([string]$Action) {
     if ($LASTEXITCODE -ne 0) { throw "Publication stopped at $Action. Preserve and resume the receipt in $RunRoot; do not rebuild or recommit unchanged bytes." }
 }
 
-# Git owns remote builds and live assignment. Protected previews stay protected.
-Invoke-PublicationStep 'setup-auto'
+# Git owns remote builds and live assignment; publication does not change hosting
+# settings or depend on an unrelated CLI API credential. Retain live rollback identity.
+$previousResponse = Invoke-WebRequest -Uri 'https://ashenoath.vercel.app/release_manifest.json' -Headers @{'Cache-Control' = 'no-cache'} -TimeoutSec 60
+$previousManifest = $previousResponse.Content | ConvertFrom-Json
+if (-not $previousManifest.build_id -or -not $previousManifest.root_pck.sha256) { throw 'Current production identity is unavailable; nothing was committed or pushed.' }
+$receipt.previous_production_manifest = $previousManifest
+$receipt.hosting_configuration = 'unchanged_existing_git_integration'
+Save-Receipt
 
 # Explicit paths include authored source; --only leaves unrelated staged work alone.
 Invoke-Git (@('add', '--') + $CommitPaths)
@@ -86,4 +101,4 @@ Save-Receipt
 Write-Host "Pushed $Ticket : $($receipt.package_commit); Vercel builds and publishes automatically."
 Write-Host "Receipt: $RunRoot/publication.json"
 Write-Host 'No CLI upload, remote-build polling, HTTP campaign or manual promotion was performed.'
-Write-Host 'Runtime/gameplay/listening acceptance belongs to the user and was not executed.'
+Write-Host 'User acceptance remains pending. Targeted developer checks, when authorized, are described only in the referenced evidence.'

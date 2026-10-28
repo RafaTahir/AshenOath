@@ -4,6 +4,7 @@ This is packaging, not a runtime resource fallback. Original source assets stay
 in the project; each selected path is transferred to its owning pack.
 """
 
+import argparse
 import configparser
 import fnmatch
 import json
@@ -38,7 +39,7 @@ def selected_files(value):
     return json.loads("[" + value.removeprefix("PackedStringArray(").removesuffix(")") + "]")
 
 
-def compile_layout():
+def compile_layout(defer_environment=False):
     path = PROJECT / "export_presets.cfg"
     config = configparser.ConfigParser(interpolation=None, strict=True)
     config.read(path, encoding="utf-8-sig")
@@ -224,10 +225,32 @@ def compile_layout():
         if relative.endswith(".png") and item in files["Runtime Pack Characters"]:
             files["Runtime Pack Monsters"].remove(item)
             shared_character_textures.add(relative)
+    environment_path = PROJECT / "data/environment_material_dependencies.json"
+    # The first build pass precedes import/catalog generation. Validate and
+    # apply environment closure only on the mandatory post-import pass.
+    environment = {} if defer_environment else json.loads(environment_path.read_text(encoding="utf-8-sig"))["textures"]
+    for texture, record in environment.items():
+        if not texture.startswith("res://assets_external/environment/") or not (PROJECT / texture.removeprefix("res://")).is_file():
+            raise ValueError(f"Required environment texture missing: {texture} (owner {record['owner']})")
+        destination = "Runtime Pack " + record["owner"].capitalize()
+        if destination not in sections:
+            raise ValueError(f"Unknown environment texture owner: {texture}: {destination}")
+        for name in sections:
+            includes[name].discard(texture.removeprefix("res://"))
+            files[name].discard(texture)
+        # Selecting a texture as a resource exports its remap and decoded
+        # import. An include-filter path alone is not a loadable Texture2D.
+        files[destination].add(texture)
     # Root scripts use dynamic zone loading. Exclude transferred resources from
     # dependency expansion as well as from explicit selections.
     for name, section in sections.items():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        for texture, record in environment.items():
+            relative = texture.removeprefix("res://")
+            if name == "Runtime Pack " + record["owner"].capitalize():
+                exclusions.discard(relative)
+            else:
+                exclusions.add(relative)
         if name != "Runtime Pack Opening":
             exclusions.add(SILHOUETTE_DIRECTORY + "*")
         else:
@@ -291,6 +314,12 @@ def compile_layout():
         "contents": ["wychwood", "cemetery_layers", "ruins"],
     })
     manifest["packs"]["opening"]["contents"] = ["greyfen", "opening_actors", "shared_opening_scenery"]
+    for record in environment.values():
+        for consumer in record["consumers"]:
+            if consumer != record["owner"]:
+                dependencies = manifest["packs"][consumer].setdefault("dependencies", [])
+                if record["owner"] not in dependencies:
+                    dependencies.append(record["owner"])
     if shared_character_textures:
         dependencies = manifest["packs"]["monsters"].setdefault("dependencies", [])
         if "characters" not in dependencies:
@@ -308,4 +337,6 @@ def compile_layout():
 
 
 if __name__ == "__main__":
-    compile_layout()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--defer-environment", action="store_true")
+    compile_layout(parser.parse_args().defer_environment)

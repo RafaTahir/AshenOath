@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "textures": {
+    "res://assets_external/environment/forest/Bark_NormalTree.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/forest/Bark_NormalTree_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/forest/Bark_TwistedTree.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/forest/Bark_TwistedTree_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/forest/Leaves_NormalTree_C.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/forest/Leaves_TwistedTree_C.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/forest/PathRocks_Diffuse.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/forest/Rocks_Diffuse.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/props/T_Trim_Cloth_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/props/T_Trim_Cloth_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/props/T_Trim_Furniture_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/props/T_Trim_Furniture_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/props/T_Trim_Metal_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/props/T_Trim_Metal_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/props/T_Trim_Props_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/props/T_Trim_Props_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_Brick_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_Brick_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_Brick_Roughness.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_Plaster_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_Plaster_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_RockTrim_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_RockTrim_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_RoundTiles_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_RoundTiles_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_RoundTiles_Roughness.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_UnevenBrick_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_UnevenBrick_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_UnevenBrick_Roughness.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_WoodTrim_BaseColor.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_WoodTrim_Normal.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/environment/village/T_WoodTrim_Roughness.png": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    }
+  }
+}

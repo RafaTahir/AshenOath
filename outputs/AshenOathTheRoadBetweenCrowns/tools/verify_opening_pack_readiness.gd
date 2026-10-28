@@ -39,6 +39,10 @@ func _initialize() -> void:
 		_fail(manager, "Wychwood permits missing monster resources")
 		return
 	manager.requests["monsters"] = {"state": "ready", "progress": 1.0}
+	if manager.zone_packs_ready("wychwood"):
+		_fail(manager, "Wychwood permits a missing adjacent-world pack")
+		return
+	manager.requests["adjacent"] = {"state": "ready", "progress": 1.0}
 	if not manager.zone_packs_ready("wychwood"):
 		_fail(manager, "Wychwood unnecessarily requires campaign characters")
 		return

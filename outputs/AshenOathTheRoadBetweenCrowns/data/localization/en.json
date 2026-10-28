@@ -305,8 +305,8 @@
       "context": "campaign_dialogue.bog_core_choice"
     },
     "campaign_dialogue.bog_core_choice.variants.0.greeting": {
-      "source": "The Moon Oil reveals a groove beneath the new paint. Oren had restored the first name on the old token.",
-      "text": "The Moon Oil reveals a groove beneath the new paint. Oren had restored the first name on the old token.",
+      "source": "The exposed core reveals a groove beneath the new paint. Oren had restored the first name on the old token.",
+      "text": "The exposed core reveals a groove beneath the new paint. Oren had restored the first name on the old token.",
       "speaker": "",
       "context": "campaign_dialogue.bog_core_choice.variants.0"
     },
@@ -9646,6 +9646,12 @@
       "speaker": "",
       "context": "preparation_notes.known_use.restored_bog_account"
     },
+    "quests.main_ash_at_the_mill.objectives.escort_mill_workers.text": {
+      "source": "Optional: stay with the workers until both reach the south yard.",
+      "text": "Optional: stay with the workers until both reach the south yard.",
+      "speaker": "",
+      "context": "quests.main_ash_at_the_mill.objectives.escort_mill_workers"
+    },
     "quests.main_ash_at_the_mill.objectives.inspect_millstones.text": {
       "source": "Optional: compare the ash measure with the missing wagons.",
       "text": "Optional: compare the ash measure with the missing wagons.",
@@ -9669,12 +9675,6 @@
       "text": "Optional: open the sluice to clear the workers' escape channel.",
       "speaker": "",
       "context": "quests.main_ash_at_the_mill.objectives.open_mill_sluice"
-    },
-    "quests.main_ash_at_the_mill.objectives.escort_mill_workers.text": {
-      "source": "Optional: stay with the workers until both reach the south yard.",
-      "text": "Optional: stay with the workers until both reach the south yard.",
-      "speaker": "",
-      "context": "quests.main_ash_at_the_mill.objectives.escort_mill_workers"
     },
     "quests.main_ash_at_the_mill.objectives.reach_mill.text": {
       "source": "Reach the mill that supplies Greyfen.",
