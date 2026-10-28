@@ -260,7 +260,7 @@
     },
     "ghoulkin": {
       "family": "monster",
-      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "source_pack": "ashenoath_spectral_bestiary",
       "target_height_range": [
         1.6,
         2.0
@@ -275,12 +275,55 @@
         "Death"
       ],
       "equipment_sockets": [],
-      "status": "char_restore_001_retained_skeleton_family",
+      "status": "spectral_inclusion_authorized_visual_review_pending",
       "approved": false,
       "export_eligible": false,
-      "blocked_reason": "Retained Skeleton source is runtime-valid; bespoke cursed-human family art remains a later visual gate.",
-      "path": "res://assets_external/enemies/Skeleton.fbx",
-      "current_fallback": "res://assets_external/enemies/Skeleton.fbx"
+      "blocked_reason": "Visual review remains pending; explicit user authorization separately permits this candidate in the current game.",
+      "path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+      "current_fallback": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+      "visual_reviewed": false,
+      "visual_review": "pending_user_review",
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_creation_and_in_game_application",
+      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
+      "runtime_acceptance": "requires_current_checks",
+      "model": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "sha256": "733183d562531956035b52d3c8a6dd318fa4605dcff9d711f5db049b97769548",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.bin",
+          "bytes": 1205908,
+          "sha256": "52e0f62da839c86a9b87356278b03ee1ec0c5820bef48a76833f2e9b3bd4a307"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+          "bytes": 34721,
+          "sha256": "733183d562531956035b52d3c8a6dd318fa4605dcff9d711f5db049b97769548"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
+          "bytes": 340345,
+          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+        }
+      ],
+      "provenance": {
+        "source": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+        "source_sha256": "612046dd227c5a4a8324c903198b5e4cad46afa15c0e43ca77871eb120824f39",
+        "source_pack": "quaternius_universal_base_characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "license_sha256": "7e32fb16ba0aa1d9f15fd5ce95e8da395ef67cbaf5b681b249d495016482dced",
+        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
+        "authored_changes": [
+          "bone-local gaunt anatomy",
+          "surface furrows",
+          "spectral vertex coloration",
+          "skinned torn veils and chest filaments"
+        ],
+        "rig_and_animation_contract": "unchanged"
+      }
     },
     "ghoulkin_skeleton": {
       "family": "monster",
@@ -309,7 +352,7 @@
     },
     "bog_wretch": {
       "family": "monster",
-      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "source_pack": "ashenoath_spectral_bestiary",
       "target_height": 1.6,
       "triangle_budget": 18000,
       "texture_budget": 1024,
@@ -321,17 +364,60 @@
         "Death"
       ],
       "equipment_sockets": [],
-      "status": "runtime_accepted_connected_family",
+      "status": "spectral_inclusion_authorized_visual_review_pending",
       "approved": false,
       "export_eligible": false,
-      "blocked_reason": "Retained Skeleton source is runtime-valid; bespoke swamp anatomy and visual approval remain a later gate.",
-      "path": "res://assets_external/enemies/Skeleton.fbx",
-      "current_fallback": "res://assets_external/enemies/Skeleton.fbx",
-      "notes": "Retained Skeleton source with swamp palette, elongated posture, and memory-core dressing profile."
+      "blocked_reason": "Visual review remains pending; explicit user authorization separately permits this candidate in the current game.",
+      "path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+      "current_fallback": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+      "notes": "Retained Skeleton source with swamp palette, elongated posture, and memory-core dressing profile.",
+      "visual_reviewed": false,
+      "visual_review": "pending_user_review",
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_creation_and_in_game_application",
+      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
+      "runtime_acceptance": "requires_current_checks",
+      "model": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "sha256": "9b56326509d5c500bc3a0e1101f357253c3ab20a7d43b95e91a9033c26412b90",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.bin",
+          "bytes": 1488496,
+          "sha256": "7c6983404b16129e9b603d870147bced07164fcd664880c3b35a86a1ff0230cb"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+          "bytes": 33221,
+          "sha256": "9b56326509d5c500bc3a0e1101f357253c3ab20a7d43b95e91a9033c26412b90"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
+          "bytes": 340345,
+          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+        }
+      ],
+      "provenance": {
+        "source": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+        "source_sha256": "609030e399c459309ff458b9b49c59e6ff9d4a598335208edb1dad0afe88bc6a",
+        "source_pack": "quaternius_universal_base_characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "license_sha256": "7e32fb16ba0aa1d9f15fd5ce95e8da395ef67cbaf5b681b249d495016482dced",
+        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
+        "authored_changes": [
+          "bone-local gaunt anatomy",
+          "surface furrows",
+          "spectral vertex coloration",
+          "skinned torn veils and chest filaments"
+        ],
+        "rig_and_animation_contract": "unchanged"
+      }
     },
     "gravebound_knight": {
       "family": "monster",
-      "source_pack": "quaternius_lowpoly_animated_monsters",
+      "source_pack": "ashenoath_spectral_bestiary",
       "target_height": 1.88,
       "triangle_budget": 20000,
       "texture_budget": 1024,
@@ -343,17 +429,60 @@
         "Death"
       ],
       "equipment_sockets": [],
-      "status": "runtime_accepted_connected_family",
+      "status": "spectral_inclusion_authorized_visual_review_pending",
       "approved": false,
       "export_eligible": false,
-      "blocked_reason": "Retained Skeleton source is runtime-valid; bespoke Gravebound armor and visual approval remain a later gate.",
-      "path": "res://assets_external/enemies/Skeleton.fbx",
+      "blocked_reason": "Visual review remains pending; explicit user authorization separately permits this candidate in the current game.",
+      "path": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
       "current_fallback": "res://assets_external/enemies/Skeleton.fbx",
-      "notes": "Retained Skeleton source with iron/ash material, armor dressing, and testimony-ready posture profile."
+      "notes": "Retained Skeleton source with iron/ash material, armor dressing, and testimony-ready posture profile.",
+      "visual_reviewed": false,
+      "visual_review": "pending_user_review",
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_creation_and_in_game_application",
+      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
+      "runtime_acceptance": "requires_current_checks",
+      "model": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
+      "source_url": "https://opengameart.org/content/animated-monsters-pack",
+      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "sha256": "5f39234d0c70bc1959ccdc580a7f48326623e2e6320a89d73bb6e60c8b16cc2b",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/enemies/spectral/Gravebound_Spectral.bin",
+          "bytes": 325036,
+          "sha256": "7d2afc53ce5ad3f6663d0c2b70815ee447c543532cc62af4fda15f06ce858370"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
+          "bytes": 96350,
+          "sha256": "5f39234d0c70bc1959ccdc580a7f48326623e2e6320a89d73bb6e60c8b16cc2b"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
+          "bytes": 340345,
+          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+        }
+      ],
+      "provenance": {
+        "source": "res://assets_external/enemies/Skeleton.fbx",
+        "source_sha256": "be0a5992b677e563c6c9601e76fdcb9d50e91c195aebb1eb70604fbfe8fb26d5",
+        "source_pack": "quaternius_lowpoly_animated_monsters",
+        "source_url": "https://opengameart.org/content/animated-monsters-pack",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "license_sha256": "c685483e08b5c8deb0083292e4eab1535a8daee50fed2ce0a5bf28091cf268a3",
+        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
+        "authored_changes": [
+          "bone-local gaunt anatomy",
+          "surface furrows",
+          "spectral vertex coloration",
+          "skinned torn veils and chest filaments"
+        ],
+        "rig_and_animation_contract": "unchanged"
+      }
     },
     "white_hart": {
       "family": "animal",
-      "source_pack": "quaternius_ultimate_animated_animals",
+      "source_pack": "ashenoath_spectral_bestiary",
       "target_height": 2.55,
       "triangle_budget": 24000,
       "texture_budget": 1024,
@@ -367,11 +496,247 @@
       "equipment_sockets": [
         "Head"
       ],
-      "status": "runtime_candidate_connected_animal",
+      "status": "spectral_inclusion_authorized_visual_review_pending",
       "approved": false,
       "export_eligible": false,
-      "blocked_reason": "The selected animated stag source is not locally acquired; the Wolf mapping is a temporary finale fallback.",
-      "current_fallback": "res://assets_external/enemies/WhiteHart_Stag.glb"
+      "blocked_reason": "Visual review remains pending; explicit user authorization separately permits this candidate in the current game.",
+      "current_fallback": "res://assets_external/enemies/WhiteHart_Stag.glb",
+      "visual_reviewed": false,
+      "visual_review": "pending_user_review",
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_creation_and_in_game_application",
+      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
+      "runtime_acceptance": "requires_current_checks",
+      "path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
+      "model": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
+      "source_url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Animals_CC0.txt",
+      "sha256": "cc40fa426fedc8fa3e80142f1d6117ff2f900da51b0be0eb44efe643f6d3278d",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.bin",
+          "bytes": 1994644,
+          "sha256": "a3c50d083d1977149690456af9db89f14388f1f7c611c74e52af2cbc29cb2045"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
+          "bytes": 682684,
+          "sha256": "cc40fa426fedc8fa3e80142f1d6117ff2f900da51b0be0eb44efe643f6d3278d"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
+          "bytes": 340345,
+          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+        }
+      ],
+      "provenance": {
+        "source": "res://assets_external/enemies/WhiteHart_Stag.glb",
+        "source_sha256": "6da8ff2a2a1c8cb467c3e2b8838b2a9128ad90ade3dc3d5ee81b3dea5e764de5",
+        "source_pack": "quaternius_ultimate_animated_animals",
+        "source_url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Animals_CC0.txt",
+        "license_sha256": "3f02da5aa208454bdad0bee95671467206606f5aa32d7b8eb387779ee2f18602",
+        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
+        "authored_changes": [
+          "bone-local gaunt anatomy",
+          "surface furrows",
+          "spectral vertex coloration",
+          "skinned torn veils and chest filaments"
+        ],
+        "rig_and_animation_contract": "unchanged"
+      }
+    },
+    "bell_eater": {
+      "family": "monster",
+      "triangle_budget": 24000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "equipment_sockets": [],
+      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "approved": false,
+      "visual_reviewed": false,
+      "visual_review": "pending_user_review",
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_creation_and_in_game_application",
+      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
+      "runtime_acceptance": "requires_current_checks",
+      "source_pack": "ashenoath_spectral_bestiary",
+      "path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+      "model": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "sha256": "31f89ce10a1672830a6e6a9a19b657764e361a957125ac54c703958e02fc7c94",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.bin",
+          "bytes": 1494160,
+          "sha256": "b8181e864648923a92171deaea646abae2cb31105503575def9fc605abbc15b7"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+          "bytes": 33209,
+          "sha256": "31f89ce10a1672830a6e6a9a19b657764e361a957125ac54c703958e02fc7c94"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
+          "bytes": 340345,
+          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+        }
+      ],
+      "export_eligible": false,
+      "current_fallback": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+      "provenance": {
+        "source": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+        "source_sha256": "8367ee17b8825065467412aee29448a5f33f52422b9e58635609200ab3d3334e",
+        "source_pack": "quaternius_universal_base_characters",
+        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
+        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+        "license_sha256": "7e32fb16ba0aa1d9f15fd5ce95e8da395ef67cbaf5b681b249d495016482dced",
+        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
+        "authored_changes": [
+          "bone-local gaunt anatomy",
+          "surface furrows",
+          "spectral vertex coloration",
+          "skinned torn veils and chest filaments"
+        ],
+        "rig_and_animation_contract": "unchanged"
+      },
+      "blocked_reason": "Visual review remains pending; explicit user authorization separately permits this candidate in the current game."
+    },
+    "rootbound_colossus": {
+      "family": "monster",
+      "triangle_budget": 24000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "equipment_sockets": [],
+      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "approved": false,
+      "visual_reviewed": false,
+      "visual_review": "pending_user_review",
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_creation_and_in_game_application",
+      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
+      "runtime_acceptance": "requires_current_checks",
+      "source_pack": "ashenoath_spectral_bestiary",
+      "path": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
+      "model": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
+      "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
+      "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+      "sha256": "82842e437ca95790fd726b5f90891e8be1f2357cb4f499cef092bbdb53b9f0bc",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/enemies/spectral/Rootbound_Spectral.bin",
+          "bytes": 5857380,
+          "sha256": "6a1ade6073665cd2dbc23bfa64e7af65c116dc916fe53cc1002f822d751a1dee"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
+          "bytes": 1048683,
+          "sha256": "82842e437ca95790fd726b5f90891e8be1f2357cb4f499cef092bbdb53b9f0bc"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
+          "bytes": 340345,
+          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+        }
+      ],
+      "export_eligible": false,
+      "current_fallback": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
+      "provenance": {
+        "source": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
+        "source_sha256": "8abe19342e4cc60d569c863e6954ec147847289502ac807d42bb288a0c9d71ec",
+        "source_pack": "quaternius_ultimate_monsters",
+        "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
+        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+        "license_sha256": "c26720908f6b927032e29e4d26d8c0c787b10240ce434e39290b7b730da981eb",
+        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
+        "authored_changes": [
+          "bone-local gaunt anatomy",
+          "surface furrows",
+          "spectral vertex coloration",
+          "skinned torn veils and chest filaments"
+        ],
+        "rig_and_animation_contract": "unchanged"
+      },
+      "blocked_reason": "Visual review remains pending; explicit user authorization separately permits this candidate in the current game."
+    },
+    "ashwing": {
+      "family": "monster",
+      "triangle_budget": 24000,
+      "texture_budget": 1024,
+      "required_clips": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "equipment_sockets": [],
+      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "approved": false,
+      "visual_reviewed": false,
+      "visual_review": "pending_user_review",
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_creation_and_in_game_application",
+      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
+      "runtime_acceptance": "requires_current_checks",
+      "source_pack": "ashenoath_spectral_bestiary",
+      "path": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
+      "model": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
+      "source_url": "https://opengameart.org/content/animated-monsters-pack",
+      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "sha256": "cb7db4c600c6db7f8237ee542e8d718fdaa572e2a577fb8a1531de1d42123425",
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/enemies/spectral/Ashwing_Spectral.bin",
+          "bytes": 556432,
+          "sha256": "c78f0bf0843fd95a4ffdeb3b88eb80ea8a0604e88ba4a606726254195d210a82"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
+          "bytes": 164734,
+          "sha256": "cb7db4c600c6db7f8237ee542e8d718fdaa572e2a577fb8a1531de1d42123425"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
+          "bytes": 340345,
+          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+        }
+      ],
+      "export_eligible": false,
+      "current_fallback": "res://assets_external/enemies/Ashwing_Playfix.glb",
+      "provenance": {
+        "source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+        "source_sha256": "b6bad819a4d5215d50d980614064cca975415d13714d30394b90a7c65285099e",
+        "source_pack": "quaternius_lowpoly_animated_monsters",
+        "source_url": "https://opengameart.org/content/animated-monsters-pack",
+        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+        "license_sha256": "c685483e08b5c8deb0083292e4eab1535a8daee50fed2ce0a5bf28091cf268a3",
+        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
+        "authored_changes": [
+          "bone-local gaunt anatomy",
+          "surface furrows",
+          "spectral vertex coloration",
+          "skinned torn veils and chest filaments"
+        ],
+        "rig_and_animation_contract": "unchanged"
+      },
+      "blocked_reason": "Visual review remains pending; explicit user authorization separately permits this candidate in the current game."
     }
   }
 }

@@ -93,6 +93,25 @@ def load_json(path: Path, errors: list[str]) -> dict[str, Any]:
     return value
 
 
+def has_spectral_inclusion(role: dict[str, Any]) -> bool:
+    """The explicit user inclusion scope does not claim visual approval."""
+    provenance = role.get("provenance", {})
+    model = str(role.get("model", ""))
+    if not isinstance(provenance, dict):
+        return False
+    def hash_record(value: Any) -> bool:
+        return isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
+    return role.get("source_pack") == "ashenoath_spectral_bestiary" \
+        and role.get("inclusion_authorized") is True and role.get("export_eligible") is True \
+        and role.get("authorization_kind") == "user_requested_creation_and_in_game_application" \
+        and role.get("approved") is False and role.get("visual_reviewed") is False \
+        and model.startswith("res://assets_external/") and "/spectral/" in model and model.endswith(".gltf") \
+        and str(provenance.get("source", "")).startswith("res://assets_external/") \
+        and "/spectral/" not in str(provenance.get("source", "")) \
+        and provenance.get("license_file") == role.get("license_file") \
+        and hash_record(provenance.get("source_sha256")) and hash_record(provenance.get("license_sha256"))
+
+
 def check_artifact(
     project: Path,
     role_id: str,
@@ -134,7 +153,8 @@ def check_role(
     for key in ("family", "status", "approved", "export_eligible"):
         if key not in role:
             errors.append(f"role {role_id} is missing {key}")
-    approved = bool(role.get("approved", False))
+    inclusion_authorized = has_spectral_inclusion(role)
+    approved = bool(role.get("approved", False)) or inclusion_authorized
     export_eligible = role.get("export_eligible")
     if approved and export_eligible is not True:
         errors.append(f"approved role {role_id} must be export_eligible")
@@ -157,6 +177,15 @@ def check_role(
                 check_artifact(project, role_id, artifact, errors)
         if not str(role.get("source_url", "")).startswith("https://"):
             errors.append(f"approved role {role_id} has no HTTPS source URL")
+        if inclusion_authorized:
+            provenance = role["provenance"]
+            source_path = resource_path(project, provenance["source"])
+            if source_path is None or not source_path.is_file() or digest(source_path) != provenance["source_sha256"]:
+                errors.append(f"authorized role {role_id} retained source SHA-256 is stale or missing")
+            if license_path is None or not license_path.is_file() or digest(license_path) != provenance["license_sha256"]:
+                errors.append(f"authorized role {role_id} retained license SHA-256 is stale or missing")
+            if not any(isinstance(item, dict) and item.get("path") == model_value for item in artifacts or []):
+                errors.append(f"authorized role {role_id} runtime_files do not bind its model")
     else:
         reason = str(role.get("blocked_reason", "")).strip()
         fallback_value = str(role.get("fallback", ""))
@@ -227,7 +256,7 @@ def check_runtime_policy_rules(manifest: dict[str, Any], errors: list[str]) -> N
     for role_id, role in roles.items():
         if not isinstance(role, dict):
             continue
-        approved = bool(role.get("approved", False))
+        approved = bool(role.get("approved", False)) or has_spectral_inclusion(role)
         if approved and role.get("fallback_mode", "none") != "none":
             errors.append(f"approved role {role_id} must have fallback_mode none")
         if not approved and role.get("fallback_mode") != "diagnostic_only":
@@ -244,7 +273,7 @@ def check_production_roles(manifest: dict[str, Any], errors: list[str]) -> None:
         if not isinstance(role, dict):
             errors.append(f"production role {role_id} must be an object")
             continue
-        if role.get("approved") is not True or role.get("export_eligible") is not True:
+        if (role.get("approved") is not True and not has_spectral_inclusion(role)) or role.get("export_eligible") is not True:
             errors.append(f"production role {role_id} is not approved for export")
         if role.get("fallback_mode") != "none":
             errors.append(f"production role {role_id} must not use diagnostic fallback")

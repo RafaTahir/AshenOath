@@ -67,9 +67,15 @@ def compile_layout():
             "res://scripts/systems/character_silhouette.gd",
             "res://scripts/systems/character_palette.gd",
             "res://shaders/character_region_palette.gdshader",
+            "res://scripts/spectral_monster_presentation.gd",
+            "res://shaders/spectral_veil.gdshader",
+            "res://data/spectral_monster_profiles.json",
         })
         includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})
         includes[name].update({"assets/ui/fonts/*.ttf", "assets/ui/fonts/OFL.txt"})
+    spectral_profiles = PROJECT / "data/spectral_monster_profiles.json"
+    if spectral_profiles.exists():
+        files["Runtime Pack Monsters"].update(json.loads(spectral_profiles.read_text())["assets"])
     # Optional chapter illustrations never gate the usable menu or first control.
     # Keep one owner; the unchanged Greyfen menu artwork is still root-resident.
     for name in sections:

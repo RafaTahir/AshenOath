@@ -105,6 +105,9 @@ func _compile() -> void:
 		var source_transform := visual.transform
 		var source_bounds: AABB = helper._calculate_node_bounds(visual)
 		helper._prepare_spawned_asset(visual, source, role, entry.category)
+		# Authored replacements carry an explicit retained rig frame. Cache that
+		# frame rather than recalculating scale from new cosmetic geometry.
+		source_bounds = visual.get_meta("prepared_source_bounds", source_bounds)
 		if not bool(visual.get_meta("character_material_bindings_valid", false)):
 			_failed("Required actor material/texture failed: %s: %s" % [key, str(visual.get_meta("character_material_errors", []))])
 			visual.free()

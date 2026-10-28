@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "connected-roads-20261028",
+  "release_id": "phase1-8c6264708df367f6",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "connected-roads-20261028",
+      "version": "phase1-8c6264708df367f6",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4387920,
-      "candidate_sha256": "63388523a1d1d6f6cab95e777d6ecd72dd88240131d32caa824b9626a8634538",
+      "candidate_bytes": 4442064,
+      "candidate_sha256": "b2633eb28182feedc6301bb2ed80a72d4a4cfd1550d6cc3460ee3c8f4f5bd4d4",
       "contents": [
         "menu",
         "managers",
@@ -35,15 +35,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4387920,
-      "embedded_source_sha256": "63388523a1d1d6f6cab95e777d6ecd72dd88240131d32caa824b9626a8634538",
+      "embedded_source_bytes": 4442064,
+      "embedded_source_sha256": "b2633eb28182feedc6301bb2ed80a72d4a4cfd1550d6cc3460ee3c8f4f5bd4d4",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "connected-roads-20261028",
-      "url": "packs/opening.pck?sha256=13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761",
-      "sha256": "13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761",
-      "bytes": 35810924,
+      "version": "phase1-8c6264708df367f6",
+      "url": "packs/opening.pck?sha256=54fb07e0f40cabaef5749ad77cd9eeb56d405014b90b1c989469777f15a845b3",
+      "sha256": "54fb07e0f40cabaef5749ad77cd9eeb56d405014b90b1c989469777f15a845b3",
+      "bytes": 35959900,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -51,20 +51,20 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 35810924,
-      "candidate_sha256": "13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761",
+      "candidate_bytes": 35959900,
+      "candidate_sha256": "54fb07e0f40cabaef5749ad77cd9eeb56d405014b90b1c989469777f15a845b3",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "13106dcbe922f779f9a090019eba7902479218a335b3284099c0756944630761"
+      "cache_key": "54fb07e0f40cabaef5749ad77cd9eeb56d405014b90b1c989469777f15a845b3"
     },
     "campaign": {
-      "version": "connected-roads-20261028",
-      "url": "packs/campaign.pck?sha256=9b47e6ebe97230d0a4c709ce4f0e6c8fea11e2391f4c503046ec06cef758acc7",
-      "sha256": "9b47e6ebe97230d0a4c709ce4f0e6c8fea11e2391f4c503046ec06cef758acc7",
-      "bytes": 8676964,
+      "version": "phase1-8c6264708df367f6",
+      "url": "packs/campaign.pck?sha256=9a44e620de90b77366f052313d0438e2d01e9de523e95e06e16bf9230f7bbc4d",
+      "sha256": "9a44e620de90b77366f052313d0438e2d01e9de523e95e06e16bf9230f7bbc4d",
+      "bytes": 8718052,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,21 +73,21 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 8676964,
-      "candidate_sha256": "9b47e6ebe97230d0a4c709ce4f0e6c8fea11e2391f4c503046ec06cef758acc7",
+      "candidate_bytes": 8718052,
+      "candidate_sha256": "9a44e620de90b77366f052313d0438e2d01e9de523e95e06e16bf9230f7bbc4d",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "9b47e6ebe97230d0a4c709ce4f0e6c8fea11e2391f4c503046ec06cef758acc7"
+      "cache_key": "9a44e620de90b77366f052313d0438e2d01e9de523e95e06e16bf9230f7bbc4d"
     },
     "characters": {
-      "version": "connected-roads-20261028",
-      "url": "packs/characters.pck?sha256=0000552203be55daf15b16c3c1cc31192e5c403cdb2f844b1401c8171c510310",
-      "sha256": "0000552203be55daf15b16c3c1cc31192e5c403cdb2f844b1401c8171c510310",
-      "bytes": 9606192,
+      "version": "phase1-8c6264708df367f6",
+      "url": "packs/characters.pck?sha256=d14f0ec31e316adab42a585c999ea058e122ec98c78a88b7885c7f33e1a04ec4",
+      "sha256": "d14f0ec31e316adab42a585c999ea058e122ec98c78a88b7885c7f33e1a04ec4",
+      "bytes": 9647280,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -96,19 +96,19 @@
       "preload_priority": 30,
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 9606192,
-      "candidate_sha256": "0000552203be55daf15b16c3c1cc31192e5c403cdb2f844b1401c8171c510310",
+      "candidate_bytes": 9647280,
+      "candidate_sha256": "d14f0ec31e316adab42a585c999ea058e122ec98c78a88b7885c7f33e1a04ec4",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "0000552203be55daf15b16c3c1cc31192e5c403cdb2f844b1401c8171c510310"
+      "cache_key": "d14f0ec31e316adab42a585c999ea058e122ec98c78a88b7885c7f33e1a04ec4"
     },
     "monsters": {
-      "version": "connected-roads-20261028",
-      "url": "packs/monsters.pck?sha256=d9c833f3010d81302d723c6a56364240f12823a458a5203dd42cdb533228d3a7",
-      "sha256": "d9c833f3010d81302d723c6a56364240f12823a458a5203dd42cdb533228d3a7",
-      "bytes": 14657944,
+      "version": "phase1-8c6264708df367f6",
+      "url": "packs/monsters.pck?sha256=228609a9b0eecf8ec0cef6005e2f49c31ecc3f81701f9207e69009530b38cde5",
+      "sha256": "228609a9b0eecf8ec0cef6005e2f49c31ecc3f81701f9207e69009530b38cde5",
+      "bytes": 20518556,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -117,20 +117,20 @@
       "preload_priority": 40,
       "status": "streamed_web_candidate",
       "candidate_artifact": "monsters.pck",
-      "candidate_bytes": 14657944,
-      "candidate_sha256": "d9c833f3010d81302d723c6a56364240f12823a458a5203dd42cdb533228d3a7",
+      "candidate_bytes": 20518556,
+      "candidate_sha256": "228609a9b0eecf8ec0cef6005e2f49c31ecc3f81701f9207e69009530b38cde5",
       "contents": [
         "monster_families",
         "bosses",
         "animals"
       ],
-      "cache_key": "d9c833f3010d81302d723c6a56364240f12823a458a5203dd42cdb533228d3a7"
+      "cache_key": "228609a9b0eecf8ec0cef6005e2f49c31ecc3f81701f9207e69009530b38cde5"
     },
     "audio": {
-      "version": "connected-roads-20261028",
-      "url": "packs/audio.pck?sha256=5f05f82dccfb8c322130c42fdc86facf9260e4183d0c896579c52bddebe1defb",
-      "sha256": "5f05f82dccfb8c322130c42fdc86facf9260e4183d0c896579c52bddebe1defb",
-      "bytes": 21301404,
+      "version": "phase1-8c6264708df367f6",
+      "url": "packs/audio.pck?sha256=265120d02d4ff32a803bd812b90bd07d336df5ccaa7fd9b6d8c5c98741c8046e",
+      "sha256": "265120d02d4ff32a803bd812b90bd07d336df5ccaa7fd9b6d8c5c98741c8046e",
+      "bytes": 21342492,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -138,20 +138,20 @@
       "preload_priority": 50,
       "status": "streamed_web_candidate",
       "candidate_artifact": "audio.pck",
-      "candidate_bytes": 21301404,
-      "candidate_sha256": "5f05f82dccfb8c322130c42fdc86facf9260e4183d0c896579c52bddebe1defb",
+      "candidate_bytes": 21342492,
+      "candidate_sha256": "265120d02d4ff32a803bd812b90bd07d336df5ccaa7fd9b6d8c5c98741c8046e",
       "contents": [
         "ambience",
         "combat_cues",
         "voice_fallbacks"
       ],
-      "cache_key": "5f05f82dccfb8c322130c42fdc86facf9260e4183d0c896579c52bddebe1defb"
+      "cache_key": "265120d02d4ff32a803bd812b90bd07d336df5ccaa7fd9b6d8c5c98741c8046e"
     },
     "quality_materials": {
-      "version": "connected-roads-20261028",
-      "url": "packs/quality_materials.pck?sha256=4300bc34e456575df5424ffde5d9b379c0214f7a8e09f2d0de507ca6c89a49c5",
-      "sha256": "4300bc34e456575df5424ffde5d9b379c0214f7a8e09f2d0de507ca6c89a49c5",
-      "bytes": 7326924,
+      "version": "phase1-8c6264708df367f6",
+      "url": "packs/quality_materials.pck?sha256=3af6f1117ef1976d955865c6f13da8fb3a4aabf32d5e29d7c54f3079042b9f84",
+      "sha256": "3af6f1117ef1976d955865c6f13da8fb3a4aabf32d5e29d7c54f3079042b9f84",
+      "bytes": 7368012,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -160,19 +160,19 @@
       "preload_priority": 60,
       "status": "streamed_web_candidate",
       "candidate_artifact": "quality_materials.pck",
-      "candidate_bytes": 7326924,
-      "candidate_sha256": "4300bc34e456575df5424ffde5d9b379c0214f7a8e09f2d0de507ca6c89a49c5",
+      "candidate_bytes": 7368012,
+      "candidate_sha256": "3af6f1117ef1976d955865c6f13da8fb3a4aabf32d5e29d7c54f3079042b9f84",
       "contents": [
         "opening_normal_maps",
         "opening_orm_maps"
       ],
-      "cache_key": "4300bc34e456575df5424ffde5d9b379c0214f7a8e09f2d0de507ca6c89a49c5"
+      "cache_key": "3af6f1117ef1976d955865c6f13da8fb3a4aabf32d5e29d7c54f3079042b9f84"
     },
     "adjacent": {
-      "version": "connected-roads-20261028",
-      "url": "packs/adjacent.pck?sha256=dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1",
-      "sha256": "dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1",
-      "bytes": 2369508,
+      "version": "phase1-8c6264708df367f6",
+      "url": "packs/adjacent.pck?sha256=1deaeddc334fdd1ae613b1a0513373ccf4012a8574989e4063689978975b5c94",
+      "sha256": "1deaeddc334fdd1ae613b1a0513373ccf4012a8574989e4063689978975b5c94",
+      "bytes": 2410596,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -186,15 +186,15 @@
         "ruins"
       ],
       "candidate_artifact": "adjacent.pck",
-      "candidate_bytes": 2369508,
-      "candidate_sha256": "dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1",
-      "cache_key": "dacbdbe29a0bdb5799e48eb1ba26803c5821121f2939f2f4c9e27c339fe40ac1"
+      "candidate_bytes": 2410596,
+      "candidate_sha256": "1deaeddc334fdd1ae613b1a0513373ccf4012a8574989e4063689978975b5c94",
+      "cache_key": "1deaeddc334fdd1ae613b1a0513373ccf4012a8574989e4063689978975b5c94"
     }
   },
-  "build_id": "connected-roads-20261028",
-  "generated_from_commit": "1b470ce751c8a0a6df99f067ae5a0343feb31557",
-  "generated_at_utc": "2026-10-28T03:49:48.417381Z",
-  "total_bytes": 99749860,
+  "build_id": "phase1-8c6264708df367f6",
+  "generated_from_commit": "4dded512fe7ebab762670d504f096fd0754fb2a1",
+  "generated_at_utc": "2026-10-28T07:22:58.314832Z",
+  "total_bytes": 105964888,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1"
 }

@@ -1,44 +1,140 @@
 {
-  "version": 3,
-  "ticket": "MON-002",
+  "version": 4,
+  "ticket": "SPECTRAL-BESTIARY",
   "families": {
     "ghoulkin": {
       "visual_role": "ghoulkin_creature",
       "profile": "skirmisher",
       "height": 1.63,
-      "skin": "authored_ash_skin_and_burial_cloth_atlas",
+      "skin": "authored_spectral_body_and_skinned_veils",
       "runtime_source_role": "ghoulkin_creature",
-      "source_path": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf"
+      "source_path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+      "source_rig_bones": [
+        65
+      ],
+      "visual_review": "pending_user_review"
     },
     "wychwood_stalker": {
       "visual_role": "wychwood_stalker_creature",
       "profile": "flanker",
-      "height": 1.60,
-      "skin": "runtime_materials",
+      "height": 1.6,
+      "skin": "authored_spectral_body_and_skinned_veils",
       "runtime_source_role": "wychwood_stalker_creature",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "source_path": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
+      "source_rig_bones": [
+        43
+      ],
+      "visual_review": "pending_user_review"
     },
     "wychwood_raider": {
       "visual_role": "wychwood_raider_creature",
       "profile": "feinter",
       "height": 1.86,
-      "skin": "runtime_materials",
+      "skin": "authored_spectral_body_and_skinned_veils",
       "runtime_source_role": "wychwood_raider_creature",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "source_path": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
+      "source_rig_bones": [
+        43
+      ],
+      "visual_review": "pending_user_review"
     },
     "wychwood_brute": {
       "visual_role": "wychwood_brute_creature",
       "profile": "brute",
       "height": 1.98,
-      "skin": "runtime_materials",
+      "skin": "authored_spectral_body_and_skinned_veils",
       "runtime_source_role": "wychwood_brute_creature",
-      "source_path": "res://assets_external/enemies/Skeleton.fbx"
+      "source_path": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
+      "source_rig_bones": [
+        43
+      ],
+      "visual_review": "pending_user_review"
+    },
+    "bog_wretch": {
+      "visual_role": "bog_wretch_creature",
+      "runtime_source_role": "bog_wretch_creature",
+      "source_path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+      "skin": "authored_spectral_body_and_skinned_veils",
+      "profile": "lurker",
+      "height": 1.72,
+      "source_rig_bones": [
+        65
+      ],
+      "visual_review": "pending_user_review"
+    },
+    "gravebound_knight": {
+      "visual_role": "gravebound_knight_creature",
+      "runtime_source_role": "gravebound_knight_creature",
+      "source_path": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
+      "skin": "authored_spectral_body_and_skinned_veils",
+      "profile": "sentinel",
+      "height": 1.88,
+      "source_rig_bones": [
+        17
+      ],
+      "visual_review": "pending_user_review"
+    },
+    "bell_eater": {
+      "visual_role": "bell_eater_boss",
+      "runtime_source_role": "bell_eater_boss",
+      "source_path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+      "skin": "authored_spectral_body_and_skinned_veils",
+      "profile": "boss",
+      "height": 3.8,
+      "source_rig_bones": [
+        65
+      ],
+      "visual_review": "pending_user_review"
+    },
+    "rootbound_colossus": {
+      "visual_role": "rootbound_colossus_boss",
+      "runtime_source_role": "rootbound_colossus_boss",
+      "source_path": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
+      "skin": "authored_spectral_body_and_skinned_veils",
+      "profile": "boss",
+      "height": 4.4,
+      "source_rig_bones": [
+        55
+      ],
+      "visual_review": "pending_user_review"
+    },
+    "ashwing": {
+      "visual_role": "ashwing_boss",
+      "runtime_source_role": "ashwing_boss",
+      "source_path": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
+      "skin": "authored_spectral_body_and_skinned_veils",
+      "profile": "boss",
+      "height": 4.8,
+      "source_rig_bones": [
+        27,
+        1
+      ],
+      "visual_review": "pending_user_review"
+    },
+    "white_hart_avatar": {
+      "visual_role": "white_hart_boss",
+      "runtime_source_role": "white_hart_boss",
+      "source_path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
+      "skin": "authored_spectral_body_and_skinned_veils",
+      "profile": "boss",
+      "height": 3.6,
+      "source_rig_bones": [
+        38
+      ],
+      "visual_review": "pending_user_review"
     }
   },
   "shared_contract": {
-    "required_states": ["idle", "walk", "run", "attack", "hit", "death"],
+    "required_states": [
+      "idle",
+      "walk",
+      "run",
+      "attack",
+      "hit",
+      "death"
+    ],
     "root_motion": false,
     "proxy_anatomy": false,
-    "source_policy": "roles_use_validated_cc0_monster_families_with_deterministic_profiles"
+    "source_policy": "original_spectral_derivatives_preserve_each_retained_rig_animation_and_contact_contract"
   }
 }

@@ -12,20 +12,76 @@
       "bytes": null,
       "entry_scene": "res://assets_external/characters_universal/Male_Peasant.gltf",
       "runtime_artifacts": [
-        {"path": "res://assets_external/characters_universal/Male_Peasant.gltf", "bytes": 34843, "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"},
-        {"path": "res://assets_external/characters_universal/Male_Peasant.bin", "bytes": 674764, "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"},
-        {"path": "res://assets_external/characters_universal/Female_Peasant.gltf", "bytes": 31461, "sha256": "eea58d4539638cee1270fe0bf7d4d59a5878eb71e5aac6cb1c907531ad248fcb"},
-        {"path": "res://assets_external/characters_universal/Female_Peasant.bin", "bytes": 658600, "sha256": "40eccaa2bd545c893142ef7dca0866ea8f20df3a86c67c5615024bc4fe546e83"},
-        {"path": "res://assets_external/characters_universal/Male_Head.gltf", "bytes": 40570, "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"},
-        {"path": "res://assets_external/characters_universal/Female_Head.gltf", "bytes": 41414, "sha256": "44794328bed68f79e6ada8b9ba08c1f26d7172d2a61ae7092bbda7df68ed2df3"},
-        {"path": "res://assets_external/characters_universal/Hair_Buns.gltf", "bytes": 25358, "sha256": "16c66a1c15c53439b8ddf51573f27cb73d7cf72e02c1d4fcdb7b1bd4c50cbec8"},
-        {"path": "res://assets_external/characters_universal/Hair_Buzzed.gltf", "bytes": 24633, "sha256": "d3856f39364c6ea6360dca4f5127d02f8e64b408feb54875eb0eb45b8b6fbe9f"},
-        {"path": "res://assets_external/characters_universal/Hair_SimpleParted.gltf", "bytes": 24639, "sha256": "451e578936425522bbe23fcc92d9fc25da23ad5a681d952aae0c149189bef062"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png", "bytes": 655637, "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png", "bytes": 890240, "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"},
-        {"path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png", "bytes": 648791, "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"},
-        {"path": "res://assets_external/characters_universal/T_Eye_Brown.png", "bytes": 35958, "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"},
-        {"path": "res://assets_external/characters_universal/T_Eye_Normal.png", "bytes": 15099, "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"}
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.gltf",
+          "bytes": 34843,
+          "sha256": "731676abc53ef4cf4e74ac61a85f4294d2255588fa659c6bbd9d5b3a1c0aaff6"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Male_Peasant.bin",
+          "bytes": 674764,
+          "sha256": "e46bde795f7b69b351d322d7a5628e07131cfb48ed0afe366293f1b3f530433c"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Female_Peasant.gltf",
+          "bytes": 31461,
+          "sha256": "eea58d4539638cee1270fe0bf7d4d59a5878eb71e5aac6cb1c907531ad248fcb"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Female_Peasant.bin",
+          "bytes": 658600,
+          "sha256": "40eccaa2bd545c893142ef7dca0866ea8f20df3a86c67c5615024bc4fe546e83"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Male_Head.gltf",
+          "bytes": 40570,
+          "sha256": "e49ed6b260dd28353c7b22178f0aee354d3b3def02ae701265490938131ae6f4"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Female_Head.gltf",
+          "bytes": 41414,
+          "sha256": "44794328bed68f79e6ada8b9ba08c1f26d7172d2a61ae7092bbda7df68ed2df3"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Hair_Buns.gltf",
+          "bytes": 25358,
+          "sha256": "16c66a1c15c53439b8ddf51573f27cb73d7cf72e02c1d4fcdb7b1bd4c50cbec8"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Hair_Buzzed.gltf",
+          "bytes": 24633,
+          "sha256": "d3856f39364c6ea6360dca4f5127d02f8e64b408feb54875eb0eb45b8b6fbe9f"
+        },
+        {
+          "path": "res://assets_external/characters_universal/Hair_SimpleParted.gltf",
+          "bytes": 24639,
+          "sha256": "451e578936425522bbe23fcc92d9fc25da23ad5a681d952aae0c149189bef062"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_BaseColor_1K.png",
+          "bytes": 655637,
+          "sha256": "404460677f67b0d1056f02f0d5e30111f54d431825f7ea007c9c61aa8782ea7b"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_Normal_1K.png",
+          "bytes": 890240,
+          "sha256": "e821600a279520cb6c6f68ed66011608038ddd94d101dbeb92fe94ecc99f9339"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Peasant_ORM_1K.png",
+          "bytes": 648791,
+          "sha256": "97e11d88919a5fc4258b2809ec2ee2364f469687e6010bf14f14c55233ed972e"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Brown.png",
+          "bytes": 35958,
+          "sha256": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025"
+        },
+        {
+          "path": "res://assets_external/characters_universal/T_Eye_Normal.png",
+          "bytes": 15099,
+          "sha256": "9ed61f7726a54fe346a78b9e5a18905d8e2b88f86235d97f53cd207a26f3f8c7"
+        }
       ],
       "dependencies": [],
       "preload_priority": 10,
@@ -58,13 +114,35 @@
       "bytes": null,
       "entry_scene": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
       "runtime_artifacts": [
-        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf", "bytes": 54079, "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"},
-        {"path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin", "bytes": 1746884, "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png", "bytes": 840454, "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png", "bytes": 940081, "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"},
-        {"path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png", "bytes": 786403, "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"}
+        {
+          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+          "bytes": 54079,
+          "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin",
+          "bytes": 1746884,
+          "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png",
+          "bytes": 840454,
+          "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
+          "bytes": 940081,
+          "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"
+        },
+        {
+          "path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png",
+          "bytes": 786403,
+          "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"
+        }
       ],
-      "dependencies": ["quaternius_universal_base_characters"],
+      "dependencies": [
+        "quaternius_universal_base_characters"
+      ],
       "preload_priority": 20,
       "license": "CC0 1.0",
       "status": "source_locked_with_selected_ranger_runtime",
@@ -80,9 +158,15 @@
       "bytes": null,
       "entry_scene": null,
       "runtime_artifacts": [
-        {"path": "res://assets_external/animations/soul_universal_animation_library_2.glb", "bytes": 8061600, "sha256": "0815dd05531cae9bc313fc9c0ba81330bc72f8e19ec45f73738e74ddc5796a43"}
+        {
+          "path": "res://assets_external/animations/soul_universal_animation_library_2.glb",
+          "bytes": 8061600,
+          "sha256": "0815dd05531cae9bc313fc9c0ba81330bc72f8e19ec45f73738e74ddc5796a43"
+        }
       ],
-      "dependencies": ["quaternius_universal_base_characters"],
+      "dependencies": [
+        "quaternius_universal_base_characters"
+      ],
       "preload_priority": 30,
       "license": "CC0 1.0",
       "status": "selected_runtime_animation_available",
@@ -112,7 +196,11 @@
       "bytes": null,
       "entry_scene": "res://assets_external/enemies/Skeleton.fbx",
       "runtime_artifacts": [
-        {"path": "res://assets_external/enemies/Skeleton.fbx", "bytes": 433820, "sha256": "be0a5992b677e563c6c9601e76fdcb9d50e91c195aebb1eb70604fbfe8fb26d5"}
+        {
+          "path": "res://assets_external/enemies/Skeleton.fbx",
+          "bytes": 433820,
+          "sha256": "be0a5992b677e563c6c9601e76fdcb9d50e91c195aebb1eb70604fbfe8fb26d5"
+        }
       ],
       "dependencies": [],
       "preload_priority": 45,
@@ -135,15 +223,179 @@
       "license": "CC0 1.0",
       "status": "source_locked_manual_download",
       "export_policy": "blocked_until_selected_runtime_artifacts_pass_visual_review"
+    },
+    {
+      "id": "ashenoath_spectral_bestiary",
+      "version": "1",
+      "url": "https://github.com/RafaTahir/AshenOath",
+      "dependencies": [
+        "quaternius_lowpoly_animated_monsters",
+        "quaternius_ultimate_animated_animals",
+        "quaternius_ultimate_monsters",
+        "quaternius_universal_base_characters"
+      ],
+      "preload_priority": 40,
+      "license": "CC0 1.0 retained sources; project-owned authored additions",
+      "authored_additions_license": "Project-owned; this registration does not make a public-domain dedication.",
+      "status": "inclusion_authorized_visual_review_pending",
+      "inclusion_authorized": true,
+      "visual_reviewed": false,
+      "runtime_artifacts": [
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.bin",
+          "bytes": 1494160,
+          "sha256": "b8181e864648923a92171deaea646abae2cb31105503575def9fc605abbc15b7"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+          "bytes": 33209,
+          "sha256": "31f89ce10a1672830a6e6a9a19b657764e361a957125ac54c703958e02fc7c94"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.bin",
+          "bytes": 1488496,
+          "sha256": "7c6983404b16129e9b603d870147bced07164fcd664880c3b35a86a1ff0230cb"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+          "bytes": 33221,
+          "sha256": "9b56326509d5c500bc3a0e1101f357253c3ab20a7d43b95e91a9033c26412b90"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.bin",
+          "bytes": 1205908,
+          "sha256": "52e0f62da839c86a9b87356278b03ee1ec0c5820bef48a76833f2e9b3bd4a307"
+        },
+        {
+          "path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+          "bytes": 34721,
+          "sha256": "733183d562531956035b52d3c8a6dd318fa4605dcff9d711f5db049b97769548"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Ashwing_Spectral.bin",
+          "bytes": 556432,
+          "sha256": "c78f0bf0843fd95a4ffdeb3b88eb80ea8a0604e88ba4a606726254195d210a82"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
+          "bytes": 164734,
+          "sha256": "cb7db4c600c6db7f8237ee542e8d718fdaa572e2a577fb8a1531de1d42123425"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Brute_Spectral.bin",
+          "bytes": 1515336,
+          "sha256": "091d5efa1dd7dbb4a54293c734b8a7c79ca3c7868e5a549e873814c97a860c8b"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
+          "bytes": 520674,
+          "sha256": "51ea119741c57e6d3b02897368e27512f6aabad16d977ace1678a9c23457f06a"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Gravebound_Spectral.bin",
+          "bytes": 325036,
+          "sha256": "7d2afc53ce5ad3f6663d0c2b70815ee447c543532cc62af4fda15f06ce858370"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
+          "bytes": 96350,
+          "sha256": "5f39234d0c70bc1959ccdc580a7f48326623e2e6320a89d73bb6e60c8b16cc2b"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Raider_Spectral.bin",
+          "bytes": 1581860,
+          "sha256": "aa67af73a2cce10f4df4afa393b62179f313a3defc1b2fc5ea9d3cf2cf6e9575"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
+          "bytes": 522360,
+          "sha256": "fd6e2ab158a09c7473a100eb91d205c5f6d780ff0ffcae50f2fe651954c951f6"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Rootbound_Spectral.bin",
+          "bytes": 5857380,
+          "sha256": "6a1ade6073665cd2dbc23bfa64e7af65c116dc916fe53cc1002f822d751a1dee"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
+          "bytes": 1048683,
+          "sha256": "82842e437ca95790fd726b5f90891e8be1f2357cb4f499cef092bbdb53b9f0bc"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Stalker_Spectral.bin",
+          "bytes": 1569544,
+          "sha256": "71655a749a3661f3bce00e49bae04fb01f3a829beee671037f37db821cc3bd52"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
+          "bytes": 522534,
+          "sha256": "0f862c68612231cfcd182d5f5e42029b4441e7d9436eb7b6ef5495ebd4aa2750"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.bin",
+          "bytes": 1994644,
+          "sha256": "a3c50d083d1977149690456af9db89f14388f1f7c611c74e52af2cbc29cb2045"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
+          "bytes": 682684,
+          "sha256": "cc40fa426fedc8fa3e80142f1d6117ff2f900da51b0be0eb44efe643f6d3278d"
+        },
+        {
+          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
+          "bytes": 340345,
+          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+        }
+      ],
+      "entry_scene": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+      "export_policy": "explicit_user_inclusion_authorization_with_separate_pending_visual_review",
+      "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json"
     }
   ],
   "runtime_rules": {
-    "allowed_runtime_formats": [".glb", ".gltf", ".ogg", ".wav", ".png", ".jpg", ".webp"],
-    "excluded_source_directories": ["assets_external/downloads", "assets_external/raw"],
-    "excluded_source_patterns": ["assets_external/animations/*_RM.*", "assets_external/animations/*.fbx", "assets_external/animations/*Setup*", "assets_external/animations/*Mannequin*"],
-    "forbidden_role_tokens": ["faceplane", "eye_box", "proxy", "fake_neck", "root_mounted", "placeholder"],
-    "required_role_fields": ["family", "source_pack", "status", "approved", "triangle_budget", "texture_budget", "required_clips", "equipment_sockets", "export_eligible"],
-    "required_artifact_fields": ["path", "bytes", "sha256"],
+    "allowed_runtime_formats": [
+      ".glb",
+      ".gltf",
+      ".ogg",
+      ".wav",
+      ".png",
+      ".jpg",
+      ".webp"
+    ],
+    "excluded_source_directories": [
+      "assets_external/downloads",
+      "assets_external/raw"
+    ],
+    "excluded_source_patterns": [
+      "assets_external/animations/*_RM.*",
+      "assets_external/animations/*.fbx",
+      "assets_external/animations/*Setup*",
+      "assets_external/animations/*Mannequin*"
+    ],
+    "forbidden_role_tokens": [
+      "faceplane",
+      "eye_box",
+      "proxy",
+      "fake_neck",
+      "root_mounted",
+      "placeholder"
+    ],
+    "required_role_fields": [
+      "family",
+      "source_pack",
+      "status",
+      "approved",
+      "triangle_budget",
+      "texture_budget",
+      "required_clips",
+      "equipment_sockets",
+      "export_eligible"
+    ],
+    "required_artifact_fields": [
+      "path",
+      "bytes",
+      "sha256"
+    ],
     "max_named_human_triangles": 20000,
     "max_crowd_human_triangles": 14000,
     "max_named_texture_dimension": 1024

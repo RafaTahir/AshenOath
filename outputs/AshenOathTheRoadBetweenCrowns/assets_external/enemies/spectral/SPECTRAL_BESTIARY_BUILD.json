@@ -1,0 +1,869 @@
+{
+  "version": 1,
+  "pack": "AshenOath Spectral Bestiary",
+  "assets": [
+    {
+      "enemy_id": "ashwing",
+      "role": "ashwing_boss",
+      "title": "Cinder Apparition",
+      "source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+      "path": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
+      "source_sha256": "b6bad819a4d5215d50d980614064cca975415d13714d30394b90a7c65285099e",
+      "skins": [
+        27,
+        1
+      ],
+      "animations": [
+        "DragonArmature|Dragon_Attack",
+        "DragonArmature|Dragon_Attack2",
+        "DragonArmature|Dragon_Death",
+        "DragonArmature|Dragon_Flying",
+        "DragonArmature|Dragon_Hit"
+      ],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 1670,
+          "triangles": 804,
+          "source_bounds": [
+            [
+              -0.017723774537444115,
+              -0.020305028185248375,
+              -0.013211318291723728
+            ],
+            [
+              0.0177284125238657,
+              0.016245899721980095,
+              0.023983068764209747
+            ]
+          ]
+        },
+        {
+          "mesh": 0,
+          "vertices": 218,
+          "triangles": 102,
+          "source_bounds": [
+            [
+              -0.017257746309041977,
+              -0.002662832848727703,
+              0.004850606434047222
+            ],
+            [
+              0.017262384295463562,
+              0.016245899721980095,
+              0.023983068764209747
+            ]
+          ]
+        },
+        {
+          "mesh": 0,
+          "vertices": 32,
+          "triangles": 16,
+          "source_bounds": [
+            [
+              -0.0040271952748298645,
+              -0.01061038114130497,
+              -0.0016179331578314304
+            ],
+            [
+              0.0040271952748298645,
+              -0.0074537452310323715,
+              0.010435991920530796
+            ]
+          ]
+        },
+        {
+          "mesh": 0,
+          "vertices": 410,
+          "triangles": 182,
+          "source_bounds": [
+            [
+              -0.006558294408023357,
+              -0.01938989758491516,
+              -0.014540677890181541
+            ],
+            [
+              0.006558294408023357,
+              -0.0020812409929931164,
+              0.014495507813990116
+            ]
+          ]
+        },
+        {
+          "mesh": 1,
+          "vertices": 280,
+          "triangles": 120,
+          "source_bounds": [
+            [
+              -0.004764458630234003,
+              -0.0005564468447118998,
+              -0.00040482188342139125
+            ],
+            [
+              0.004764458630234003,
+              0.0013775203842669725,
+              0.0014196550473570824
+            ]
+          ]
+        },
+        {
+          "mesh": 1,
+          "vertices": 360,
+          "triangles": 120,
+          "source_bounds": [
+            [
+              -0.004765642341226339,
+              -0.0013775203842669725,
+              -0.0014196550473570824
+            ],
+            [
+              0.004765642341226339,
+              0.0011400848161429167,
+              0.001097493921406567
+            ]
+          ]
+        }
+      ],
+      "triangles": 1596,
+      "veil_triangles": 252,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.76,
+        0.36,
+        0.6
+      ],
+      "source_mesh_height": 0.03655092790722847,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "Ashwing_Spectral.gltf": {
+          "bytes": 164734,
+          "sha256": "cb7db4c600c6db7f8237ee542e8d718fdaa572e2a577fb8a1531de1d42123425"
+        },
+        "Ashwing_Spectral.bin": {
+          "bytes": 556432,
+          "sha256": "c78f0bf0843fd95a4ffdeb3b88eb80ea8a0604e88ba4a606726254195d210a82"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "bell_eater",
+      "role": "bell_eater_boss",
+      "title": "The Unrung",
+      "source": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+      "path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+      "source_sha256": "8367ee17b8825065467412aee29448a5f33f52422b9e58635609200ab3d3334e",
+      "skins": [
+        65
+      ],
+      "animations": [],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 8659,
+          "triangles": 14570,
+          "source_bounds": [
+            [
+              -0.9368466734886169,
+              -0.009509667754173279,
+              -0.1550000160932541
+            ],
+            [
+              0.9368466138839722,
+              1.8300000429153442,
+              0.24797983467578888
+            ]
+          ]
+        }
+      ],
+      "triangles": 14886,
+      "veil_triangles": 316,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.85,
+        0.48,
+        0.23
+      ],
+      "source_mesh_height": 1.8395097255706787,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "BellEater_Spectral_Atlas.gltf": {
+          "bytes": 33209,
+          "sha256": "31f89ce10a1672830a6e6a9a19b657764e361a957125ac54c703958e02fc7c94"
+        },
+        "BellEater_Spectral_Atlas.bin": {
+          "bytes": 1494160,
+          "sha256": "b8181e864648923a92171deaea646abae2cb31105503575def9fc605abbc15b7"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "bog_wretch",
+      "role": "bog_wretch_creature",
+      "title": "Fen Lantern",
+      "source": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+      "path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+      "source_sha256": "609030e399c459309ff458b9b49c59e6ff9d4a598335208edb1dad0afe88bc6a",
+      "skins": [
+        65
+      ],
+      "animations": [],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 8659,
+          "triangles": 14570,
+          "source_bounds": [
+            [
+              -0.9368466734886169,
+              -0.009509667754173279,
+              -0.1550000160932541
+            ],
+            [
+              0.9368466138839722,
+              1.8300000429153442,
+              0.24797983467578888
+            ]
+          ]
+        }
+      ],
+      "triangles": 14822,
+      "veil_triangles": 252,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.46,
+        0.65,
+        0.31
+      ],
+      "source_mesh_height": 1.8395097255706787,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "BogWretch_Spectral_Atlas.gltf": {
+          "bytes": 33221,
+          "sha256": "9b56326509d5c500bc3a0e1101f357253c3ab20a7d43b95e91a9033c26412b90"
+        },
+        "BogWretch_Spectral_Atlas.bin": {
+          "bytes": 1488496,
+          "sha256": "7c6983404b16129e9b603d870147bced07164fcd664880c3b35a86a1ff0230cb"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "ghoulkin",
+      "role": "ghoulkin_creature",
+      "title": "Pallbearer",
+      "source": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+      "path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+      "source_sha256": "612046dd227c5a4a8324c903198b5e4cad46afa15c0e43ca77871eb120824f39",
+      "skins": [
+        65
+      ],
+      "animations": [],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 8659,
+          "triangles": 14570,
+          "source_bounds": [
+            [
+              -0.9368466734886169,
+              -0.009509668685495853,
+              -0.1550000011920929
+            ],
+            [
+              0.9368466138839722,
+              1.8300000429153442,
+              0.24797983467578888
+            ]
+          ]
+        }
+      ],
+      "triangles": 14822,
+      "veil_triangles": 252,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.56,
+        0.48,
+        0.76
+      ],
+      "source_mesh_height": 1.8395097255706787,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "Ghoulkin_Spectral_Atlas.gltf": {
+          "bytes": 34721,
+          "sha256": "733183d562531956035b52d3c8a6dd318fa4605dcff9d711f5db049b97769548"
+        },
+        "Ghoulkin_Spectral_Atlas.bin": {
+          "bytes": 1205908,
+          "sha256": "52e0f62da839c86a9b87356278b03ee1ec0c5820bef48a76833f2e9b3bd4a307"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "gravebound_knight",
+      "role": "gravebound_knight_creature",
+      "title": "Barrow Watcher",
+      "source": "res://.release-gate/spectral-monsters/Gravebound_Source.glb",
+      "path": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
+      "source_sha256": "225c44103176a0f7c160c724ca7bb09ee542c52a8d18f4a1719a606485a74fc9",
+      "skins": [
+        17
+      ],
+      "animations": [
+        "SkeletonArmature|Skeleton_Attack",
+        "SkeletonArmature|Skeleton_Death",
+        "SkeletonArmature|Skeleton_Idle",
+        "SkeletonArmature|Skeleton_Running",
+        "SkeletonArmature|Skeleton_Spawn"
+      ],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 2105,
+          "triangles": 1810,
+          "source_bounds": [
+            [
+              -0.02304621785879135,
+              -0.005685495678335428,
+              -0.029838699847459793
+            ],
+            [
+              0.022999553009867668,
+              0.007606153376400471,
+              0.02105727605521679
+            ]
+          ]
+        }
+      ],
+      "triangles": 2126,
+      "veil_triangles": 316,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.49,
+        0.44,
+        0.79
+      ],
+      "source_mesh_height": 0.013291649520397186,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "Gravebound_Spectral.gltf": {
+          "bytes": 96350,
+          "sha256": "5f39234d0c70bc1959ccdc580a7f48326623e2e6320a89d73bb6e60c8b16cc2b"
+        },
+        "Gravebound_Spectral.bin": {
+          "bytes": 325036,
+          "sha256": "7d2afc53ce5ad3f6663d0c2b70815ee447c543532cc62af4fda15f06ce858370"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "rootbound_colossus",
+      "role": "rootbound_colossus_boss",
+      "title": "Root Revenant",
+      "source": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
+      "path": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
+      "source_sha256": "8abe19342e4cc60d569c863e6954ec147847289502ac807d42bb288a0c9d71ec",
+      "skins": [
+        55
+      ],
+      "animations": [
+        "Bite_Action",
+        "Crouch_Action",
+        "Damage_Action",
+        "Death_Action",
+        "Eating_Action",
+        "Idle1_Action",
+        "Idle2_Action",
+        "JumpIn_Action",
+        "JumpOut_Action",
+        "Punch_Action",
+        "Roar_Action",
+        "Sleep_finish_Action",
+        "Sleep_loop_Action",
+        "Sleep_start_Action",
+        "Sniff_Action",
+        "Walk1_Action",
+        "Walk2_Action"
+      ],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 9142,
+          "triangles": 15852,
+          "source_bounds": [
+            [
+              -2.4268245697021484,
+              -0.003455365775153041,
+              -0.6298797130584717
+            ],
+            [
+              2.4268245697021484,
+              5.54754638671875,
+              2.501743793487549
+            ]
+          ]
+        }
+      ],
+      "triangles": 16104,
+      "veil_triangles": 252,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.59,
+        0.66,
+        0.28
+      ],
+      "source_mesh_height": 5.55100154876709,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "Rootbound_Spectral.gltf": {
+          "bytes": 1048683,
+          "sha256": "82842e437ca95790fd726b5f90891e8be1f2357cb4f499cef092bbdb53b9f0bc"
+        },
+        "Rootbound_Spectral.bin": {
+          "bytes": 5857380,
+          "sha256": "6a1ade6073665cd2dbc23bfa64e7af65c116dc916fe53cc1002f822d751a1dee"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "white_hart_avatar",
+      "role": "white_hart_boss",
+      "title": "The Moonlit Hart",
+      "source": "res://assets_external/enemies/WhiteHart_Stag.glb",
+      "path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
+      "source_sha256": "6da8ff2a2a1c8cb467c3e2b8838b2a9128ad90ade3dc3d5ee81b3dea5e764de5",
+      "skins": [
+        38
+      ],
+      "animations": [
+        "Attack_Headbutt",
+        "Attack_Kick",
+        "Death",
+        "Eating",
+        "Gallop",
+        "Gallop_Jump",
+        "Idle",
+        "Idle_2",
+        "Idle_Headlow",
+        "Idle_HitReact1",
+        "Idle_HitReact2",
+        "Jump_toIdle",
+        "Walk"
+      ],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 1898,
+          "triangles": 930,
+          "source_bounds": [
+            [
+              -0.7333086133003235,
+              0.2977970242500305,
+              -1.8016184568405151
+            ],
+            [
+              0.733308732509613,
+              4.192246437072754,
+              2.8951797485351562
+            ]
+          ]
+        },
+        {
+          "mesh": 0,
+          "vertices": 366,
+          "triangles": 178,
+          "source_bounds": [
+            [
+              -0.5304579734802246,
+              0.009703462943434715,
+              -1.7705113887786865
+            ],
+            [
+              0.5304578542709351,
+              3.591862440109253,
+              3.0358686447143555
+            ]
+          ]
+        },
+        {
+          "mesh": 0,
+          "vertices": 1692,
+          "triangles": 828,
+          "source_bounds": [
+            [
+              -0.7333086133003235,
+              0.08949878811836243,
+              -1.7360180616378784
+            ],
+            [
+              0.733308732509613,
+              4.1880388259887695,
+              2.976412296295166
+            ]
+          ]
+        },
+        {
+          "mesh": 0,
+          "vertices": 150,
+          "triangles": 74,
+          "source_bounds": [
+            [
+              -0.35272398591041565,
+              3.6048386096954346,
+              2.289911985397339
+            ],
+            [
+              0.3527241349220276,
+              4.139641284942627,
+              2.9210994243621826
+            ]
+          ]
+        },
+        {
+          "mesh": 0,
+          "vertices": 100,
+          "triangles": 44,
+          "source_bounds": [
+            [
+              -0.33805304765701294,
+              3.809619426727295,
+              2.3766908645629883
+            ],
+            [
+              0.33805322647094727,
+              3.909916639328003,
+              2.5181829929351807
+            ]
+          ]
+        }
+      ],
+      "triangles": 2370,
+      "veil_triangles": 316,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.84,
+        0.76,
+        0.48
+      ],
+      "source_mesh_height": 4.18254280090332,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "WhiteHart_Spectral.gltf": {
+          "bytes": 682684,
+          "sha256": "cc40fa426fedc8fa3e80142f1d6117ff2f900da51b0be0eb44efe643f6d3278d"
+        },
+        "WhiteHart_Spectral.bin": {
+          "bytes": 1994644,
+          "sha256": "a3c50d083d1977149690456af9db89f14388f1f7c611c74e52af2cbc29cb2045"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "wychwood_brute",
+      "role": "wychwood_brute_creature",
+      "title": "Hollow Crown",
+      "source": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+      "path": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
+      "source_sha256": "9eb899fc619dff9a973669e0962452990c8ec44d4501dd41fe4f4fe5afd631f4",
+      "skins": [
+        43
+      ],
+      "animations": [
+        "Death",
+        "Duck",
+        "HitReact",
+        "Idle",
+        "Jump",
+        "Jump_Idle",
+        "Jump_Land",
+        "No",
+        "Punch",
+        "Run",
+        "Walk",
+        "Wave",
+        "Weapon",
+        "Yes"
+      ],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 8476,
+          "triangles": 16919,
+          "source_bounds": [
+            [
+              -2.2819831371307373,
+              -0.007405395153909922,
+              -0.7716606855392456
+            ],
+            [
+              2.282015323638916,
+              2.815790891647339,
+              0.29940831661224365
+            ]
+          ]
+        }
+      ],
+      "triangles": 17171,
+      "veil_triangles": 252,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.51,
+        0.38,
+        0.72
+      ],
+      "source_mesh_height": 2.8231961727142334,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "Brute_Spectral.gltf": {
+          "bytes": 520674,
+          "sha256": "51ea119741c57e6d3b02897368e27512f6aabad16d977ace1678a9c23457f06a"
+        },
+        "Brute_Spectral.bin": {
+          "bytes": 1515336,
+          "sha256": "091d5efa1dd7dbb4a54293c734b8a7c79ca3c7868e5a549e873814c97a860c8b"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "wychwood_raider",
+      "role": "wychwood_raider_creature",
+      "title": "Oathless Shade",
+      "source": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+      "path": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
+      "source_sha256": "e61a37f8d9b2eee28928bdfad2c55e0798cc0a212e925cc5dcc66b243526c1a3",
+      "skins": [
+        43
+      ],
+      "animations": [
+        "Death",
+        "Duck",
+        "HitReact",
+        "Idle",
+        "Jump",
+        "Jump_Idle",
+        "Jump_Land",
+        "No",
+        "Punch",
+        "Run",
+        "Walk",
+        "Wave",
+        "Weapon",
+        "Yes"
+      ],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 8482,
+          "triangles": 16920,
+          "source_bounds": [
+            [
+              -2.2819981575012207,
+              -0.04464741423726082,
+              -0.469055712223053
+            ],
+            [
+              2.2820286750793457,
+              3.1768500804901123,
+              0.2994419038295746
+            ]
+          ]
+        }
+      ],
+      "triangles": 17172,
+      "veil_triangles": 252,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.68,
+        0.35,
+        0.61
+      ],
+      "source_mesh_height": 3.2214975357055664,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "Raider_Spectral.gltf": {
+          "bytes": 522360,
+          "sha256": "fd6e2ab158a09c7473a100eb91d205c5f6d780ff0ffcae50f2fe651954c951f6"
+        },
+        "Raider_Spectral.bin": {
+          "bytes": 1581860,
+          "sha256": "aa67af73a2cce10f4df4afa393b62179f313a3defc1b2fc5ea9d3cf2cf6e9575"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    },
+    {
+      "enemy_id": "wychwood_stalker",
+      "role": "wychwood_stalker_creature",
+      "title": "Thorn Veil",
+      "source": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+      "path": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
+      "source_sha256": "9ce361b41a0e80d42a70f6325169b9c70a6e3304b8d856b8344a2b7f185067af",
+      "skins": [
+        43
+      ],
+      "animations": [
+        "Death",
+        "Duck",
+        "HitReact",
+        "Idle",
+        "Jump",
+        "Jump_Idle",
+        "Jump_Land",
+        "No",
+        "Punch",
+        "Run",
+        "Walk",
+        "Wave",
+        "Weapon",
+        "Yes"
+      ],
+      "source_meshes": [
+        {
+          "mesh": 0,
+          "vertices": 8476,
+          "triangles": 16920,
+          "source_bounds": [
+            [
+              -2.280851125717163,
+              -0.015488493256270885,
+              -0.5958133339881897
+            ],
+            [
+              2.280925989151001,
+              3.0810256004333496,
+              0.29943764209747314
+            ]
+          ]
+        }
+      ],
+      "triangles": 17172,
+      "veil_triangles": 252,
+      "materials": 2,
+      "textures": [
+        512,
+        512
+      ],
+      "spectral_color": [
+        0.42,
+        0.47,
+        0.82
+      ],
+      "source_mesh_height": 3.0965139865875244,
+      "authored_changes": [
+        "bone-local gaunt anatomy",
+        "surface furrows",
+        "spectral vertex coloration",
+        "skinned torn veils and chest filaments"
+      ],
+      "files": {
+        "Stalker_Spectral.gltf": {
+          "bytes": 522534,
+          "sha256": "0f862c68612231cfcd182d5f5e42029b4441e7d9436eb7b6ef5495ebd4aa2750"
+        },
+        "Stalker_Spectral.bin": {
+          "bytes": 1569544,
+          "sha256": "71655a749a3661f3bce00e49bae04fb01f3a829beee671037f37db821cc3bd52"
+        }
+      },
+      "visual_approval": "pending_user_review",
+      "rig_and_animation_payloads": "unchanged"
+    }
+  ]
+}

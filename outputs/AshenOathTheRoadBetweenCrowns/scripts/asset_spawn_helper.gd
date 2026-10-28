@@ -961,6 +961,7 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 	])
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
+	preload("res://scripts/spectral_monster_presentation.gd").prepare(root, path)
 	var character := category in ["characters", "enemies"] and _has_skeleton(root)
 	if character:
 		var valid := CharacterMaterialBindings.restore(root) if root.has_meta(CharacterMaterialBindings.BINDINGS) else CharacterMaterialBindings.capture(root, path)

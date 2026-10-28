@@ -1,122 +1,137 @@
 {
-	"ashwing_boss|res://assets_external/enemies/Ashwing_Playfix.glb": {
+	"ashwing_boss|res://assets_external/enemies/spectral/Ashwing_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 1,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 2,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 3,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "DragonArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "EyeArmature/Skeleton3D/Eyes",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "EyeArmature/Skeleton3D/Eyes",
 				"surface": 1,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/d46346998ec7f44a74d383e1.scn",
+		"path": "res://assets_external/characters_prepared/monsters/f659d86683e80a8aa25a6193.scn",
 		"role": "ashwing_boss",
-		"source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+		"source": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
 		"variant_safe": false
 	},
-	"ashwing_creature|res://assets_external/enemies/Ashwing_Playfix.glb": {
+	"ashwing_creature|res://assets_external/enemies/spectral/Ashwing_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 1,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 2,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 3,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "DragonArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "EyeArmature/Skeleton3D/Eyes",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "EyeArmature/Skeleton3D/Eyes",
 				"surface": 1,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/d46346998ec7f44a74d383e1.scn",
+		"path": "res://assets_external/characters_prepared/monsters/f659d86683e80a8aa25a6193.scn",
 		"role": "ashwing_creature",
-		"source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+		"source": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
 		"variant_safe": false
 	},
-	"ashwing|res://assets_external/enemies/Ashwing_Playfix.glb": {
+	"ashwing|res://assets_external/enemies/spectral/Ashwing_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 1,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 2,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "DragonArmature/Skeleton3D/Dragon",
 				"surface": 3,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "DragonArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "EyeArmature/Skeleton3D/Eyes",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "EyeArmature/Skeleton3D/Eyes",
 				"surface": 1,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/d46346998ec7f44a74d383e1.scn",
+		"path": "res://assets_external/characters_prepared/monsters/f659d86683e80a8aa25a6193.scn",
 		"role": "ashwing",
-		"source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+		"source": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
 		"variant_safe": false
 	},
 	"bandit_deserter|res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf": {
@@ -164,35 +179,45 @@
 		"source": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
 		"variant_safe": true
 	},
-	"bell_eater_boss|res://assets_external/characters_universal/runtime/BellEater_Playfix.glb": {
+	"bell_eater_boss|res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/BellEater_Playfix_Ghoulkin_Authored_Atlas.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/0027cb6b1bda068f6e9ddc12.scn",
+		"path": "res://assets_external/characters_prepared/monsters/a976086c0e07eaddf051077f.scn",
 		"role": "bell_eater_boss",
-		"source": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
-		"variant_safe": false
+		"source": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+		"variant_safe": true
 	},
-	"bell_eater|res://assets_external/characters_universal/runtime/BellEater_Playfix.glb": {
+	"bell_eater|res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/BellEater_Playfix_Ghoulkin_Authored_Atlas.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/0027cb6b1bda068f6e9ddc12.scn",
+		"path": "res://assets_external/characters_prepared/monsters/a976086c0e07eaddf051077f.scn",
 		"role": "bell_eater",
-		"source": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
-		"variant_safe": false
+		"source": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+		"variant_safe": true
 	},
 	"blacksmith_tor|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
 		"animation_resources": [],
@@ -209,35 +234,45 @@
 		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
 		"variant_safe": true
 	},
-	"bog_wretch_creature|res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb": {
+	"bog_wretch_creature|res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/BogWretch_Playfix_Ghoulkin_Authored_Atlas.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/852bc7b3136cc26ff54b5227.scn",
+		"path": "res://assets_external/characters_prepared/monsters/cc729845df7a3535cc82dd78.scn",
 		"role": "bog_wretch_creature",
-		"source": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
-		"variant_safe": false
+		"source": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+		"variant_safe": true
 	},
-	"bog_wretch|res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb": {
+	"bog_wretch|res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/BogWretch_Playfix_Ghoulkin_Authored_Atlas.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/852bc7b3136cc26ff54b5227.scn",
+		"path": "res://assets_external/characters_prepared/monsters/cc729845df7a3535cc82dd78.scn",
 		"role": "bog_wretch",
-		"source": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
-		"variant_safe": false
+		"source": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+		"variant_safe": true
 	},
 	"castle_guard_human|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
 		"animation_resources": [],
@@ -344,19 +379,24 @@
 		"source": "res://assets_external/enemies/Skeleton.fbx",
 		"variant_safe": false
 	},
-	"ghoulkin_creature|res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf": {
+	"ghoulkin_creature|res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/8e26d61e03a43bbf9eb7b42e.scn",
+		"path": "res://assets_external/characters_prepared/monsters/89e7bf646f779431c45d288c.scn",
 		"role": "ghoulkin_creature",
-		"source": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+		"source": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
 		"variant_safe": true
 	},
 	"ghoulkin_skeleton|res://assets_external/enemies/Skeleton.fbx": {
@@ -374,49 +414,64 @@
 		"source": "res://assets_external/enemies/Skeleton.fbx",
 		"variant_safe": false
 	},
-	"ghoulkin|res://assets_external/enemies/ultimate_monsters/Ghost.glb": {
+	"ghoulkin|res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Skeleton3D/Ghost_Skull",
+				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Ghost_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/798e75b35ac525d6462741b6.scn",
+		"path": "res://assets_external/characters_prepared/monsters/89e7bf646f779431c45d288c.scn",
 		"role": "ghoulkin",
-		"source": "res://assets_external/enemies/ultimate_monsters/Ghost.glb",
-		"variant_safe": false
+		"source": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+		"variant_safe": true
 	},
-	"gravebound_knight_creature|res://assets_external/enemies/Skeleton.fbx": {
+	"gravebound_knight_creature|res://assets_external/enemies/spectral/Gravebound_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "SkeletonArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"path": "res://assets_external/characters_prepared/monsters/e0e38f506b60255737c7e7ef.scn",
 		"role": "gravebound_knight_creature",
-		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"source": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
 		"variant_safe": false
 	},
-	"gravebound_knight|res://assets_external/enemies/Skeleton.fbx": {
+	"gravebound_knight|res://assets_external/enemies/spectral/Gravebound_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "SkeletonArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"path": "res://assets_external/characters_prepared/monsters/e0e38f506b60255737c7e7ef.scn",
 		"role": "gravebound_knight",
-		"source": "res://assets_external/enemies/Skeleton.fbx",
+		"source": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
 		"variant_safe": false
 	},
 	"halvern_boss|res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf": {
@@ -779,19 +834,44 @@
 		"source": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
 		"variant_safe": true
 	},
-	"rootbound_colossus_boss|res://assets_external/enemies/ultimate_monsters/Creep.glb": {
+	"rootbound_colossus_boss|res://assets_external/enemies/spectral/Rootbound_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "Creep/Skeleton3D/Body_lod0",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Creep_Creep_BaseColor.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "Creep/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/07afa1014ad9bc1971c8df11.scn",
+		"path": "res://assets_external/characters_prepared/monsters/e30b8fa6154b9393cab0c7ae.scn",
 		"role": "rootbound_colossus_boss",
-		"source": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
+		"source": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
+		"variant_safe": false
+	},
+	"rootbound_colossus|res://assets_external/enemies/spectral/Rootbound_Spectral.gltf": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Creep/Skeleton3D/Body_lod0",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "Creep/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/e30b8fa6154b9393cab0c7ae.scn",
+		"role": "rootbound_colossus",
+		"source": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
 		"variant_safe": false
 	},
 	"sister_anwen_human|res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf": {
@@ -884,84 +964,94 @@
 		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
 		"variant_safe": true
 	},
-	"white_hart_avatar|res://assets_external/enemies/WhiteHart_Stag.glb": {
+	"white_hart_avatar|res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Head/Stag_Horns",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 1,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 2,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 3,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 4,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "AnimalArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/b6b3efc1f81d0ac77af948c2.scn",
+		"path": "res://assets_external/characters_prepared/monsters/6851a3530bd16f67f3dcbb36.scn",
 		"role": "white_hart_avatar",
-		"source": "res://assets_external/enemies/WhiteHart_Stag.glb",
+		"source": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
 		"variant_safe": false
 	},
-	"white_hart_boss|res://assets_external/enemies/WhiteHart_Stag.glb": {
+	"white_hart_boss|res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Head/Stag_Horns",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 1,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 2,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 3,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
 				"mesh": "AnimalArmature/Skeleton3D/Stag",
 				"surface": 4,
-				"texture": ""
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "AnimalArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/b6b3efc1f81d0ac77af948c2.scn",
+		"path": "res://assets_external/characters_prepared/monsters/6851a3530bd16f67f3dcbb36.scn",
 		"role": "white_hart_boss",
-		"source": "res://assets_external/enemies/WhiteHart_Stag.glb",
+		"source": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
 		"variant_safe": false
 	},
 	"widow_elna|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
@@ -979,114 +1069,124 @@
 		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
 		"variant_safe": true
 	},
-	"wychwood_brute_creature|res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf": {
+	"wychwood_brute_creature|res://assets_external/enemies/spectral/Brute_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "CharacterArmature/Skeleton3D/BlueDemon",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/BlueDemon_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/09837878792b90acb6a7ab43.scn",
+		"path": "res://assets_external/characters_prepared/monsters/529569b32519914e86e514c5.scn",
 		"role": "wychwood_brute_creature",
-		"source": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+		"source": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
 		"variant_safe": false
 	},
-	"wychwood_brute|res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf": {
+	"wychwood_brute|res://assets_external/enemies/spectral/Brute_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "CharacterArmature/Skeleton3D/BlueDemon",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/BlueDemon_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+			},
+			{
+				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
+				"surface": 0,
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/09837878792b90acb6a7ab43.scn",
+		"path": "res://assets_external/characters_prepared/monsters/529569b32519914e86e514c5.scn",
 		"role": "wychwood_brute",
-		"source": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+		"source": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
 		"variant_safe": false
 	},
-	"wychwood_raider_creature|res://assets_external/enemies/ultimate_monsters/Orc.gltf": {
+	"wychwood_raider_creature|res://assets_external/enemies/spectral/Raider_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "CharacterArmature/Skeleton3D/Orc",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Orc_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
-				"mesh": "CharacterArmature/Skeleton3D/Orc_Weapon",
+				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Orc_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/32b208264e604034a14e1a79.scn",
+		"path": "res://assets_external/characters_prepared/monsters/3953da30e9b97d80ba006e4f.scn",
 		"role": "wychwood_raider_creature",
-		"source": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+		"source": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
 		"variant_safe": false
 	},
-	"wychwood_raider|res://assets_external/enemies/ultimate_monsters/Orc.gltf": {
+	"wychwood_raider|res://assets_external/enemies/spectral/Raider_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "CharacterArmature/Skeleton3D/Orc",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Orc_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
-				"mesh": "CharacterArmature/Skeleton3D/Orc_Weapon",
+				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Orc_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/32b208264e604034a14e1a79.scn",
+		"path": "res://assets_external/characters_prepared/monsters/3953da30e9b97d80ba006e4f.scn",
 		"role": "wychwood_raider",
-		"source": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+		"source": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
 		"variant_safe": false
 	},
-	"wychwood_stalker_creature|res://assets_external/enemies/ultimate_monsters/Demon.gltf": {
+	"wychwood_stalker_creature|res://assets_external/enemies/spectral/Stalker_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "CharacterArmature/Skeleton3D/Demon",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Demon_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
-				"mesh": "CharacterArmature/Skeleton3D/Trident",
+				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Demon_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/b09bf8d32ece558626d99470.scn",
+		"path": "res://assets_external/characters_prepared/monsters/4221561c477d26a888fbce6b.scn",
 		"role": "wychwood_stalker_creature",
-		"source": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+		"source": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
 		"variant_safe": false
 	},
-	"wychwood_stalker|res://assets_external/enemies/ultimate_monsters/Demon.gltf": {
+	"wychwood_stalker|res://assets_external/enemies/spectral/Stalker_Spectral.gltf": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
 				"mesh": "CharacterArmature/Skeleton3D/Demon",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Demon_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			},
 			{
-				"mesh": "CharacterArmature/Skeleton3D/Trident",
+				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/ultimate_monsters/Demon_Atlas_Monsters.png"
+				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/b09bf8d32ece558626d99470.scn",
+		"path": "res://assets_external/characters_prepared/monsters/4221561c477d26a888fbce6b.scn",
 		"role": "wychwood_stalker",
-		"source": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+		"source": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
 		"variant_safe": false
 	}
 }

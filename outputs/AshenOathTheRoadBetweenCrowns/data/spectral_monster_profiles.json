@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "pack": "ashenoath_spectral_bestiary",
+  "normalization_policy": "immutable_source_frame_keeps_rig_scale_and_contact_positions; actual_geometry_is_measured_separately",
+  "assets": {
+    "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf": {
+      "enemy_id": "ghoulkin",
+      "source": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
+      "normalization_bounds": {
+        "position": [
+          -0.936846673488617,
+          -0.00950966868549585,
+          -0.155000001192093
+        ],
+        "size": [
+          1.87369322776794,
+          1.83950972557068,
+          0.402979850769043
+        ]
+      },
+      "palette": [
+        0.56,
+        0.48,
+        0.76
+      ],
+      "raw_height": 1.83950971160084,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/enemies/spectral/Stalker_Spectral.gltf": {
+      "enemy_id": "wychwood_stalker",
+      "source": "res://assets_external/enemies/ultimate_monsters/Demon.gltf",
+      "normalization_bounds": {
+        "position": [
+          -2.32791876792908,
+          -0.0154884932562709,
+          -1.32959747314453
+        ],
+        "size": [
+          4.65583753585815,
+          3.120445728302,
+          2.32008075714111
+        ]
+      },
+      "palette": [
+        0.42,
+        0.47,
+        0.82
+      ],
+      "raw_height": 3.0965140936896205,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/enemies/spectral/Raider_Spectral.gltf": {
+      "enemy_id": "wychwood_raider",
+      "source": "res://assets_external/enemies/ultimate_monsters/Orc.gltf",
+      "normalization_bounds": {
+        "position": [
+          -2.36281418800354,
+          -0.0133713772520423,
+          -0.723158538341522
+        ],
+        "size": [
+          4.68480968475342,
+          3.20867300033569,
+          1.87081217765808
+        ]
+      },
+      "palette": [
+        0.68,
+        0.35,
+        0.61
+      ],
+      "raw_height": 3.221497494727373,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/enemies/spectral/Brute_Spectral.gltf": {
+      "enemy_id": "wychwood_brute",
+      "source": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf",
+      "normalization_bounds": {
+        "position": [
+          -2.31423044204712,
+          -0.00740539515390992,
+          -0.619283676147461
+        ],
+        "size": [
+          4.62846088409424,
+          2.84064912796021,
+          2.15654015541077
+        ]
+      },
+      "palette": [
+        0.51,
+        0.38,
+        0.72
+      ],
+      "raw_height": 2.823196286801249,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf": {
+      "enemy_id": "bog_wretch",
+      "source": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
+      "normalization_bounds": {
+        "position": [
+          -0.875981211662292,
+          0.0,
+          -0.275338649749756
+        ],
+        "size": [
+          1.75196266174316,
+          1.72000002861023,
+          0.3767991065979
+        ]
+      },
+      "palette": [
+        0.46,
+        0.65,
+        0.31
+      ],
+      "raw_height": 1.720000023752819,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf": {
+      "enemy_id": "gravebound_knight",
+      "source": "res://assets_external/enemies/Skeleton.fbx",
+      "normalization_bounds": {
+        "position": [
+          -2.29107904434204,
+          -1.62936007976532,
+          -0.758756697177887
+        ],
+        "size": [
+          4.60457706451416,
+          5.08959722518921,
+          1.3291654586792
+        ]
+      },
+      "palette": [
+        0.49,
+        0.44,
+        0.79
+      ],
+      "raw_height": 5.089597030527738,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf": {
+      "enemy_id": "bell_eater",
+      "source": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
+      "normalization_bounds": {
+        "position": [
+          -0.875981211662292,
+          0.0,
+          -0.275338649749756
+        ],
+        "size": [
+          1.75196266174316,
+          1.72000002861023,
+          0.3767991065979
+        ]
+      },
+      "palette": [
+        0.85,
+        0.48,
+        0.23
+      ],
+      "raw_height": 1.720000023752819,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf": {
+      "enemy_id": "rootbound_colossus",
+      "source": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
+      "normalization_bounds": {
+        "position": [
+          -2.42682456970215,
+          -0.00345536577515304,
+          -0.629879713058472
+        ],
+        "size": [
+          4.8536491394043,
+          5.55100154876709,
+          3.13162350654602
+        ]
+      },
+      "palette": [
+        0.59,
+        0.66,
+        0.28
+      ],
+      "raw_height": 5.551001752493903,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf": {
+      "enemy_id": "ashwing",
+      "source": "res://assets_external/enemies/Ashwing_Playfix.glb",
+      "normalization_bounds": {
+        "position": [
+          -1.78178930282593,
+          0.0,
+          -2.21640038490295
+        ],
+        "size": [
+          3.56311249732971,
+          4.80000019073486,
+          3.67354130744934
+        ]
+      },
+      "palette": [
+        0.76,
+        0.36,
+        0.6
+      ],
+      "raw_height": 4.799999517190162,
+      "max_visual_displacement": 0.03
+    },
+    "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf": {
+      "enemy_id": "white_hart_avatar",
+      "source": "res://assets_external/enemies/WhiteHart_Stag.glb",
+      "normalization_bounds": {
+        "position": [
+          -1.27329242229462,
+          0.00970346294343472,
+          -1.80161845684052
+        ],
+        "size": [
+          2.53608465194702,
+          5.37824535369873,
+          4.83748722076416
+        ]
+      },
+      "palette": [
+        0.84,
+        0.76,
+        0.48
+      ],
+      "raw_height": 5.378246577396682,
+      "max_visual_displacement": 0.03
+    }
+  }
+}

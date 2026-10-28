@@ -108,11 +108,16 @@ func get_runtime_policy(role_name: String, category: String = "") -> Dictionary:
 			"fallback_mode": "diagnostic_only" if required else "none",
 			"reason": "Required visual role has no runtime acceptance record." if required else "",
 		}
-	var approved := bool(acceptance.get("approved", false)) and bool(acceptance.get("export_eligible", false))
+	var inclusion_authorized := _has_spectral_inclusion(acceptance)
+	# Runtime inclusion and visual review are separate. The user explicitly
+	# requested these registered derivatives in the game before visual sign-off.
+	var approved := bool(acceptance.get("export_eligible", false)) and (bool(acceptance.get("approved", false)) or inclusion_authorized)
 	return {
 		"required": required,
 		"known": true,
 		"approved": approved,
+		"inclusion_authorized": inclusion_authorized,
+		"visual_reviewed": bool(acceptance.get("visual_reviewed", false)),
 		"status": str(acceptance.get("status", "unknown")),
 		"release_blocked": required and not approved,
 		"fallback_mode": "none" if approved or not required else "diagnostic_only",
@@ -120,7 +125,14 @@ func get_runtime_policy(role_name: String, category: String = "") -> Dictionary:
 	}
 
 func is_release_eligible(role_name: String) -> bool:
-	return bool(get_runtime_acceptance(role_name).get("export_eligible", false))
+	return bool(get_runtime_policy(role_name).get("approved", false))
+
+func _has_spectral_inclusion(acceptance: Dictionary) -> bool:
+	var model := str(acceptance.get("model", ""))
+	return str(acceptance.get("source_pack", "")) == "ashenoath_spectral_bestiary" \
+		and bool(acceptance.get("inclusion_authorized", false)) \
+		and str(acceptance.get("authorization_kind", "")) == "user_requested_creation_and_in_game_application" \
+		and model.begins_with("res://assets_external/") and model.contains("/spectral/") and model.ends_with(".gltf")
 
 func get_assets_by_category(category: String) -> Array:
 	var results = []
