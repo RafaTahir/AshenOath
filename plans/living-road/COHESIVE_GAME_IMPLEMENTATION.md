@@ -6,9 +6,34 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
-Rafa subsequently authorized continuing through child 4 and removed Vercel waiting:
+Rafa subsequently authorized continuing through child 5 and removed Vercel waiting:
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
+
+### FINISH-003/FACE-ARTIFACT (confirmed hood repair; awaiting Rafa)
+
+- Isolated Anwen and `shrine_pilgrim` role captures identify the added
+  `SilhouetteEquipment_hood/FittedLayer/RoleShape_hood` as the covering geometry.
+  The Monk robe group is closed over the face despite excluding the separate
+  face object; hiding that layer restores intact anatomy. Orientation alone
+  fails. The unnamed walker in the original report remains an inferred match.
+- Repair the retained mesh's face/hairline opening and crown fit, preserving
+  native faces/hair, rigs, clips, materials, mantle, staff and identities. Update
+  its existing compiler/provenance, not another facial system. Earlier narrow
+  opening/fit candidates clipped hair and are not the delivered mesh.
+- Paired front/side captures cover neutral, blink, speech, gaze and walking on
+  both recipes. Final Web bytes pass mouse New Game, ordinary care-area approach,
+  displayed Anwen Use and clear-approach dialogue with a visible native face.
+  No console warnings/errors. Controller timeouts and viewport changes recovered
+  on the same tab; no restart/reload or gameplay override. Not all-view art approval.
+- Opening/root build and existing package integrity pass for
+  `face-artifact-20261029`: 162,882,017 complete deployed-directory bytes including
+  the manifest. Seven unchanged packs reused. No speed or memory gain claimed.
+- Care furniture, targeting and approach-dependent camera crowding remain open
+  under their bounded owners. Formal FINISH acceptance remains 0/16. Push this
+  child, do not wait for Vercel, and stop before SOLID-FURNITURE.
+
+[Face repair evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/face_artifact_20261029.json).
 
 ### FINISH-003/ANIMATION-LIFECYCLE (developer-verified; push receipt owns delivery)
 

@@ -100,13 +100,17 @@
         null
       ],
       "fitted_size_m": [
-        0.37,
-        0.39,
-        0.36
+        0.34,
+        0.3,
+        0.35
       ],
       "vertices": 41,
-      "triangles": 70,
-      "sha256": "12b43abcd9079929668407095ff13ba6ba33bfbad9dfecd8a9e24e13e4b3676c"
+      "triangles": 34,
+      "sha256": "02acce0390153887c2a68e1e43336168d224374e56f8f7f9a07bbdcdeca51fb2",
+      "face_opening": {
+        "source_centroid_z_below": 0.06,
+        "source_brow_y": 2.87
+      }
     },
     "helmet": {
       "source": "res://assets_external/characters/Helmet1.obj",

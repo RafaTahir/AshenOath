@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-29T06:28:59.6681548Z",
-  "build_id": "animation-lifecycle-20261029",
-  "generated_from_commit": "5f43ab75660997b1986cee59af9c7e389c1c02da",
+  "generated_at_utc": "2026-10-29T07:18:01.1042321Z",
+  "build_id": "face-artifact-20261029",
+  "generated_from_commit": "71c253a4392143b38ba4d003862774450f74e073",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\animation-lifecycle-20261029\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\face-artifact-20261029\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 160056216,
+  "total_bytes": 160055256,
   "packs": [
     {
       "id": "base",
-      "version": "animation-lifecycle-20261029",
+      "version": "face-artifact-20261029",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
       "bytes": 4430756,
@@ -22,17 +22,17 @@
     },
     {
       "id": "opening",
-      "version": "animation-lifecycle-20261029",
+      "version": "face-artifact-20261029",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
-      "bytes": 86266868,
-      "sha256": "427bee7812ca1bc0dce00b75f2bac55520c67b4fe382206e1588601516764bec",
+      "bytes": 86265908,
+      "sha256": "4b9c6f304c2b6760a0537ddae810a6f22f6888d774b7b288ef1c2e6e222510e9",
       "status": "candidate_external",
       "log": "logs/pack-opening.stdout.log"
     },
     {
       "id": "adjacent",
-      "version": "animation-lifecycle-20261029",
+      "version": "face-artifact-20261029",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2370980,
@@ -42,7 +42,7 @@
     },
     {
       "id": "campaign",
-      "version": "animation-lifecycle-20261029",
+      "version": "face-artifact-20261029",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8678820,
@@ -52,7 +52,7 @@
     },
     {
       "id": "characters",
-      "version": "animation-lifecycle-20261029",
+      "version": "face-artifact-20261029",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 8999204,
@@ -62,7 +62,7 @@
     },
     {
       "id": "monsters",
-      "version": "animation-lifecycle-20261029",
+      "version": "face-artifact-20261029",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 20678316,
@@ -72,7 +72,7 @@
     },
     {
       "id": "audio",
-      "version": "animation-lifecycle-20261029",
+      "version": "face-artifact-20261029",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21302876,
@@ -82,7 +82,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "animation-lifecycle-20261029",
+      "version": "face-artifact-20261029",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7328396,
@@ -92,13 +92,13 @@
     }
   ],
   "errors": [],
-  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from safe-connector-20261029. Re-exported owners: base, campaign. No assets, export ownership or visual settings changed.",
+  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from animation-lifecycle-20261029. Re-exported owners: opening. Shared cleric hood repaired and reimported; opening owns the changed mesh. Other asset, script, export-ownership and visual-setting inputs remain unchanged; seven content packs reused.",
   "selected_web_export": {
-    "build_id": "animation-lifecycle-20261029",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\animation-lifecycle-20261029\\export",
-    "generated_from_commit": "5f43ab75660997b1986cee59af9c7e389c1c02da",
-    "artifacts_total_bytes": 162874900,
-    "root_pck_sha256": "69173b367e9deae59d97e4f8be6b157cc5fceca6973f1be7f587d482fdee8728",
-    "note": "Script-only repair; unchanged packs reused by their complete input scope."
+    "build_id": "face-artifact-20261029",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\face-artifact-20261029\\export",
+    "generated_from_commit": "71c253a4392143b38ba4d003862774450f74e073",
+    "artifacts_total_bytes": 162874307,
+    "root_pck_sha256": "b5325d7c8829280bc2251cc94302c18139bd5d33ebb30ed94516fad930a0adae",
+    "note": "Shared cleric hood repaired and reimported; opening owns the changed mesh. Other asset, script, export-ownership and visual-setting inputs remain unchanged; seven content packs reused."
   }
 }

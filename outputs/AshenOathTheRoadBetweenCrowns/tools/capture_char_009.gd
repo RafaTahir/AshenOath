@@ -11,6 +11,10 @@ func _initialize() -> void:
 		quit(1)
 		return
 	root.size = Vector2i(1280, 720)
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with("--face-isolation="):
+			call_deferred("_face_isolation", argument.trim_prefix("--face-isolation="))
+			return
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://Development_Gallery/screenshots"))
 	var helper := AssetSpawnHelper.new()
 	root.add_child(helper)
@@ -91,3 +95,79 @@ func _save(name: String) -> void:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _face_isolation(output: String) -> void:
+	# The same runtime roles, presentation and playback owner as the care area.
+	DirAccess.make_dir_recursive_absolute(output)
+	create_timer(90.0).timeout.connect(func(): push_error("Face isolation timed out"); quit(1))
+	var stage := _create_stage()
+	var camera: Camera3D
+	for child in stage.get_children():
+		if child is Camera3D:
+			camera = child
+	var helper := AssetSpawnHelper.new()
+	stage.add_child(helper)
+	for spec: Array in [["sister_anwen_human", "sister_anwen"], ["villager_worker_human", "shrine_pilgrim"]]:
+		var visual := helper.spawn_visual_role(str(spec[0]), "characters", str(spec[1]) + ":2")
+		if visual == null:
+			failures += 1
+			continue
+		stage.add_child(visual)
+		CharacterPresentation.apply_npc(visual, str(spec[1]), false)
+		var driver := preload("res://scripts/character_animation_driver.gd").new()
+		visual.add_child(driver)
+		if not driver.configure(visual, {"idle":"Idle", "walk":"Walk", "run":"Run"}):
+			push_error("Face capture animation failed: " + str(spec[1]))
+			failures += 1
+			visual.free()
+			continue
+		var face := visual.find_child("CharacterFaceDriver", true, false)
+		var hood := visual.find_child("SilhouetteEquipment_hood", true, false) as Node3D
+		if face == null or face.head_modifier == null or hood == null:
+			push_error("Face capture requires the face driver and fitted hood: " + str(spec[1]))
+			failures += 1
+			visual.free()
+			continue
+		if face != null and face.update_timer != null:
+			# Explicit samples must not be replaced by a random blink/gaze tick.
+			face.update_timer.stop()
+		var skeleton := driver.skeleton as Skeleton3D
+		var head := skeleton.find_bone("head")
+		if head < 0:
+			head = skeleton.find_bone("Head")
+		print("FACE_ACTOR ", spec[1], " source=", spec[0], " head=", head)
+		for layer: String in ["hood", "mantle"]:
+			var node := visual.find_child("RoleShape_" + layer, true, false) as MeshInstance3D
+			if node != null:
+				print("FACE_LAYER ", spec[1], " ", node.get_path(), " aabb=", node.get_aabb(), " world=", node.global_transform)
+		for state: String in ["neutral", "blink", "speech", "gaze", "walk"]:
+			driver.set_dialogue_pose(state in ["speech", "gaze"])
+			driver.set_locomotion_motion(Vector3(0, 0, 0.72) if state == "walk" else Vector3.ZERO, true, 1.6)
+			if face != null:
+				face.set_conversation_active(true)
+				face.set_speech_amount(0.8 if state == "speech" else 0.0)
+				face.set_expression("concerned" if state == "speech" else "neutral")
+				face.head_modifier.look_yaw = 0.24 if state == "gaze" else 0.0
+				face.head_modifier.blink_closure = 1.0 if state == "blink" else 0.0
+			await create_timer(0.35).timeout
+			for view: String in ["front", "side"]:
+				camera.position = Vector3(0, 1.53, -2.2) if view == "front" else Vector3(2.2, 1.53, 0)
+				camera.look_at(Vector3(0, 1.45, 0))
+				camera.fov = 38.0
+				for with_hood: bool in [true, false]:
+					if hood != null:
+						hood.visible = with_hood
+					await _frames(2)
+					await RenderingServer.frame_post_draw
+					var path := output.path_join("%s_%s_%s_%s.png" % [spec[1],state,view,"hood" if with_hood else "bare"])
+					var image := root.get_texture().get_image()
+					if image == null or image.save_png(path) != OK:
+						failures += 1
+			if head >= 0:
+				print("FACE_STATE ", spec[1], " ", state, " head_scale=", skeleton.get_bone_pose_scale(head))
+		visual.free()
+		await _frames(2)
+	helper.clear_runtime_caches()
+	stage.free()
+	print("FACE ISOLATION: ", "PASS" if failures == 0 else "FAIL", " (capture/setup only; inspect appearance)")
+	quit(0 if failures == 0 else 1)

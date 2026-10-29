@@ -10,7 +10,11 @@ The approved ten-child roadmap supersedes the execution restrictions and
 source-complete assumptions in the dated delivery record below. Mandatory user
 acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
 
-**FINISH-003/ANIMATION-LIFECYCLE** is active following Rafa's Continue instruction.
+**FINISH-003/FACE-ARTIFACT** is the current delivery following Rafa's Continue.
+The shared closed-hood defect is repaired, compiled and targeted-checked on
+`face-artifact-20261029`; the FINISH-003 push receipt owns delivery status. The
+next child is SOLID-FURNITURE, not started pending another Continue.
+Child 4 was pushed as `71c253a` to development/main; acceptance remains pending.
 Child 3 was pushed as `5f43ab7` to development and main; its remaining speed and
 coverage limitations stay recorded. This does not establish user acceptance.
 Child 2 was pushed as `a587888` to development and main. Continue authorizes
@@ -31,8 +35,8 @@ child. No separate CLI deployment and no implied whole-game acceptance.
 | 1 | FINISH-016/PACK-CLOSURE | Implemented, compiled, developer-verified, pushed 8603d80; awaiting Rafa |
 | 2 | FINISH-001/RESPONSIVE-PREPARATION | Implemented/compiled, focused checks/partial browser coverage, pushed a587888; awaiting Rafa |
 | 3 | FINISH-014/SAFE-CONNECTOR-HANDOFF | Implemented/compiled, targeted native and normal-input browser round trip pass, pushed 5f43ab7; awaiting Rafa |
-| 4 | FINISH-003/ANIMATION-LIFECYCLE | Implemented/compiled; focused clock/ownership, 22-actor native skin-motion and browser input/dialogue recovery checks pass; FINISH-003 push receipt owns delivery; awaiting Rafa |
-| 5 | FINISH-003/FACE-ARTIFACT | Not started; actor/geometry identification required |
+| 4 | FINISH-003/ANIMATION-LIFECYCLE | Implemented/compiled; scoped native/browser checks pass, pushed 71c253a; awaiting Rafa |
+| 5 | FINISH-003/FACE-ARTIFACT | Confirmed shared closed hood repaired/compiled; paired role captures and final-package Anwen dialogue checked; FINISH-003 push receipt owns delivery; awaiting Rafa |
 | 6 | FINISH-007/SOLID-FURNITURE | Not started |
 | 7 | FINISH-005/HONEST-TARGETING | Not started |
 | 8 | FINISH-013/CONNECTOR-COMPOSITION | Not started; mesh identification required |

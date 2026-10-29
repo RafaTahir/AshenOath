@@ -1,5 +1,31 @@
 # FINISH-003 - Movement, Camera And Character Integrity
 
+## Director Child: Face Artifact - 2026-10-29
+
+The confirmed GAME defect is the added cleric hood, not missing native anatomy.
+Anwen and the care-route `shrine_pilgrim` recipe reproduce a closed cloth shell
+over intact faces. Hiding only `SilhouetteEquipment_hood` reveals those faces;
+rotating it does not fix the closed mesh. The originally unnamed second actor
+remains inferred, not independently matched to an unavailable user image.
+
+The retained Monk-derived hood now has an open face/hairline and fitted crown.
+Original faces, hair, skins, rigs, clips, colours, mantle and staff are unchanged.
+The compiler and provenance retain that repair. Paired front/side native captures
+cover neutral, blink, speech, gaze and walking on both affected role recipes.
+Final-package normal-input browser New Game, care-area movement and Anwen
+dialogue show her face, with no console warnings/errors. Controller/viewport
+interruptions recovered on the same tab; no campaign restart or extra candidate.
+
+Candidate `face-artifact-20261029`: compilation and package integrity pass.
+Complete directory including manifest: 162,882,017 bytes / 155.34 MiB. Opening
+was rebuilt, seven unchanged content packs reused. Publication is owned by the
+FINISH-003 Git receipt; no Vercel waiting. Status: implementation/targeted checks
+complete for the confirmed hood defect; user acceptance pending. Furniture,
+targeting and approach-dependent camera crowding remain separate obligations.
+This is not all-cast, all-lighting, phone, performance or whole-ticket acceptance.
+
+[Bounded evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/face_artifact_20261029.json).
+
 ## Director Child: Animation Lifecycle - 2026-10-29
 
 Bounded source repair: complete; compilation: passed; targeted developer checks:

@@ -32,6 +32,12 @@ cloth/hood cuts and exact generated geometry. The working apron adapts the
 retained cloak cloth; the hood excludes Monk's separate face. No extra face,
 replacement body, downloaded model or duplicate texture is introduced.
 
+The cleric hood has a deliberately open face/hairline and a 0.34 x 0.30 m
+fitted crown. The original Monk robe group was closed across the face even
+after excluding its separate face object; the compiler now removes that cloth
+panel before fitting. This preserves Anwen's native face/hair and the pilgrim's
+native face rather than covering them with a second head-sized shell.
+
 Layers use BoneAttachment3D on actual chest, head, shoulder and hip bones.
 The smith's stowed hammer yields to the existing held work hammer. Anwen and
 pilgrims retain their authoritative staff socket. Body and shape culling extend

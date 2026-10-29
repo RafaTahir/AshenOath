@@ -1,0 +1,58 @@
+{
+  "ticket": "FINISH-003/FACE-ARTIFACT",
+  "build_id": "face-artifact-20261029",
+  "baseline_commit": "71c253a4392143b38ba4d003862774450f74e073",
+  "classification": "GAME",
+  "implementation": "complete_for_confirmed_shared_hood_defect",
+  "compilation": "passed",
+  "user_acceptance": "pending",
+  "mandatory_finish_tickets_user_accepted": 0,
+  "publication": "Git push status is owned by the FINISH-003 publication receipt; no Vercel waiting",
+  "diagnosis": {
+    "actors": ["sister_anwen", "shrine_pilgrim"],
+    "walker_identification": "shrine_pilgrim is a confirmed affected shared-hood consumer on the care-area route. The originally unnamed second actor cannot be independently matched to the user's unavailable image.",
+    "node": "Armature/Skeleton3D/SilhouetteEquipment_hood/FittedLayer/RoleShape_hood",
+    "resource": "res://assets/characters/silhouette/hood.obj",
+    "cause": "The extracted Monk robe group remained closed across the face despite excluding the separate face group. Its added head-sized cloth shell covered intact native faces.",
+    "isolation": "Both actual role recipes reproduce the defect; hiding only the added hood reveals complete native faces. Rotating the shell 180 degrees does not fix it.",
+    "repair": "Open the retained cloth at the face and hairline; fit its crown to 0.34 x 0.30 x 0.35 metres. Preserve the back/crown, socket, mantle, staff, original faces, hair, skins, clips and palettes.",
+    "hood_sha256": "02acce0390153887c2a68e1e43336168d224374e56f8f7f9a07bbdcdeca51fb2",
+    "hood_triangles_before": 70,
+    "hood_triangles_after": 34
+  },
+  "developer_checks": {
+    "native_renderer": "Intel HD Graphics 620, Compatibility through ANGLE, 1280x720",
+    "isolated_capture": "Existing capture_char_009 extended with --face-isolation. Paired hood/bare captures for Anwen and pilgrim in neutral, blink, speech, gaze and walk, front and side. Final sampled appearance inspected; capture exit 0 is not an automated art-approval claim.",
+    "retained_interventions": "Only the final open/clearance-fitted hood. Earlier narrow opening intersected hair and was replaced; orientation-only intervention rejected.",
+    "native_log": "D:/Temp/AshenOath/face-artifact-20261029/appearance.log",
+    "native_images": "D:/Temp/AshenOath/face-artifact-20261029/appearance",
+    "browser": "In-app Chromium; real mouse New Game, optional intro skipped, ordinary keyboard bridge/care-area approach, displayed Speak Sister Anwen, two spoken lines and normal Close on exact final Web bytes.",
+    "browser_observation": "Anwen's native face is visible in gameplay and the clear-approach dialogue composition. Nearby routines run; no closed cloth shell over the sampled faces. No gameplay state was manufactured.",
+    "browser_console_warnings_errors": [],
+    "browser_capture": "D:/Temp/AshenOath/face-artifact-20261029/browser-anwen-dialogue.png",
+    "browser_control_limitations": "The app changed viewport during the run; a temporary 1280x720 override restored the reference view. Two controller/CDP timeouts recovered on the same tab without restart, reload or candidate replacement. Override reset and tab closed afterward.",
+    "isolated_storage": "Native APPDATA under ticket scratch; browser localhost port 43735, not production-origin saves",
+    "static_diff": "Reviewed; CR-at-EOL-aware whitespace check passed"
+  },
+  "package": {
+    "rebuilt_content_packs": ["opening"],
+    "reused_content_packs": 7,
+    "root_export": "source-aligned production Web export",
+    "artifact_transport_bytes": 162874307,
+    "complete_directory_bytes_including_manifest": 162882017,
+    "decoded_artifact_bytes": 203022891,
+    "opening_required_balanced_transport_bytes": 97952326,
+    "opening_required_quality_transport_bytes": 105162208,
+    "largest_git_file_bytes": 82259580,
+    "root_transport_sha256": "b5325d7c8829280bc2251cc94302c18139bd5d33ebb30ed94516fad930a0adae",
+    "root_decoded_sha256": "755ead7433d07ae99071d90b3c540dcda2edaf9754999c5c3fbd36208317dc2b",
+    "integrity": "passed existing manifest/hash/size check; below 256 MiB, individual files below 100 MiB"
+  },
+  "remaining": [
+    "Rafa appearance/feel acceptance, actual phones, all lighting and later-zone consumers are not established by this focused check.",
+    "Care-area furniture, obstruction-sensitive targeting and some approach-dependent camera crowding remain visible obligations; no global framing repair is claimed.",
+    "No startup, FPS, frame-time, memory or whole-campaign compliance claim. Historical failures and requirements remain.",
+    "Next authorized child is SOLID-FURNITURE only after another Continue; not started here."
+  ],
+  "cleanup": "All native capture/build commands ended. Owned server PID 18352 stopped; temporary browser tab closed and viewport reset. Unrelated work preserved."
+}

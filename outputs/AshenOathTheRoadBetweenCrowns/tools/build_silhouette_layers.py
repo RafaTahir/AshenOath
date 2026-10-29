@@ -45,6 +45,14 @@ def read_group(filename: str, prefix: str, min_y=None, max_y=None):
 
 def compile_layer(name, filename, group, size, center, min_y=None, max_y=None):
     vertices, faces = read_group(filename, group, min_y, max_y)
+    # Monk's robe group is closed over the separate face. Keep its crown,
+    # side rims and back, but open the front below the brow before fitting.
+    # Coordinates here are the retained source frame (-Z faces forward).
+    if name == "hood":
+        faces = [face for face in faces if not (
+            sum(vertices[i][2] for i in face) / 3 < 0.06
+            and sum(vertices[i][1] for i in face) / 3 < 2.87
+        )]
     low = [min(v[a] for v in vertices) for a in range(3)]
     high = [max(v[a] for v in vertices) for a in range(3)]
     dimensions = [high[a] - low[a] for a in range(3)]
@@ -61,7 +69,7 @@ def compile_layer(name, filename, group, size, center, min_y=None, max_y=None):
     lines.extend("f " + " ".join(str(i + 1) for i in f) for f in faces)
     destination = OUTPUT / f"{name}.obj"
     destination.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    return {
+    record = {
         "source": f"res://assets_external/characters/{filename}",
         "source_sha256": hashlib.sha256((SOURCE / filename).read_bytes()).hexdigest(),
         "group": group,
@@ -71,6 +79,9 @@ def compile_layer(name, filename, group, size, center, min_y=None, max_y=None):
         "triangles": len(faces),
         "sha256": hashlib.sha256(destination.read_bytes()).hexdigest(),
     }
+    if name == "hood":
+        record["face_opening"] = {"source_centroid_z_below": 0.06, "source_brow_y": 2.87}
+    return record
 
 
 def main():
@@ -83,9 +94,8 @@ def main():
         ("apron_bib", "Ranger.obj", "Cloak_", (.32, .31, .045), (0, -.13, 0), None, 2.42),
         ("apron_skirt", "Ranger.obj", "Cloak_", (.54, .49, .075), (0, -.245, 0), None, 2.42),
         ("satchel", "Ranger.obj", "Pouch_", (.24, .29, .17), (0, -.145, 0)),
-        # Monk's robe object includes the hood; its separate face object is
-        # intentionally excluded. No second head or facial geometry is attached.
-        ("hood", "Monk.obj", "Monk__", (.37, .39, .36), (0, .16, -.025), 2.42, None),
+        # Fit around the retained human crown, not a second head-sized shell.
+        ("hood", "Monk.obj", "Monk__", (.34, .30, .35), (0, .085, -.020), 2.42, None),
         ("helmet", "Helmet1.obj", "Helmet_", (.40, .36, .42), (0, .15, 0)),
         ("pauldron_left", "Warrior.obj", "ShoulderPad.L", (.28, .29, .34), (.045, -.045, 0)),
         ("pauldron_right", "Warrior.obj", "ShoulderPad.R", (.28, .29, .34), (-.045, -.045, 0)),
