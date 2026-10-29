@@ -1,0 +1,64 @@
+{
+  "ticket": "FINISH-007/OPENING-PURPOSE",
+  "date": "2026-10-29",
+  "baseline_commit": "e3a8848ae98c3d1579c14ffd132c654e5cf6f952",
+  "candidate": "opening-purpose-20261029-r2",
+  "implementation": "complete",
+  "user_acceptance": "pending",
+  "parent_mandatory_accepted": "0/16",
+  "scope": [
+    "Anwen names the three missing people, northern road, cart and reason to return",
+    "Existing objective authority keeps one north-road destination",
+    "Optional care remains available but does not delay a returning investigator",
+    "Evidence-conditioned report and return pages preserve unknown optional facts",
+    "Report labels and receipts do not invent objects or witness consent",
+    "Remove the redundant already-earned interview completion action"
+  ],
+  "retained": ["57 quests", "all IDs and rewards", "three-of-five evidence threshold", "three report choices and effects", "Maren optional", "tutorial optional", "all prior repairs", "saves and preferences"],
+  "checks": [
+    {"command": "Godot --headless --script tools/verify_dialogue_001.gd -- --opening-purpose-only", "exit_code": 0, "result": "PASS", "coverage": "Two complementary early/out-of-order clue sets across private/public/retained report choices; truthful pages, saved optional history, consent, once-only quest completion event, cemetery continuation, 57 quests, northern tracker/compass and fail-closed conditional lines"},
+    {"command": "Godot --headless --script tools/verify_dialogue_001.gd", "exit_code": 0, "result": "PASS", "coverage": "Existing speaker-aware dialogue, variant selection and once-only supply checks"},
+    {"command": "git -c core.whitespace=cr-at-eol diff --check", "exit_code": 0, "result": "PASS", "notes": "Existing Git line-ending conversion warnings only; no generated-byte normalization"}
+  ],
+  "check_boundaries": "Native logic fixtures are isolated in-memory state, not earned gameplay, browser persistence or combat evidence. No user saves loaded or altered.",
+  "compilation": "PASS: minimum production base-pack and Web Browser export; no compiler errors reported",
+  "package": {
+    "integrity": "PASS",
+    "directory_bytes": 162887031,
+    "transport_artifact_bytes": 162879316,
+    "decoded_artifact_bytes": 203028871,
+    "balanced_initial_transport_bytes": 97957335,
+    "quality_initial_transport_bytes": 105167217,
+    "max_deployment_bytes": 268435456,
+    "warnings": [],
+    "root_pck_sha256": "17814cd85177c6878fa24df3e85e878b90a7934dfda436e4fd6c597068b88984",
+    "root_pck_decoded_sha256": "0217b422bc40d14f73d09827aaaa1fc496ec6bbd2deeb65d7090be0c09e9a551",
+    "reused_asset_packs": 7,
+    "logs": ".release-gate/opening-purpose-20261029-r2/logs",
+    "provenance": "Exported from e3a8848 plus scoped working-tree implementation; publication receipt binds the final source/package commit. Download sizes are not measured timings or process memory."
+  },
+  "browser": {
+    "status": "PARTIAL",
+    "candidate_observed": "opening-purpose-20261029",
+    "origin": "http://127.0.0.1:43740",
+    "scope": "Fresh isolated journey; real mouse New Game, keyboard movement and Use. No teleport, fabricated flags or user save access.",
+    "passed_observations": [
+      "Complete opening entered from mouse New Game; intro skipped normally",
+      "Anwen reached across the bridge using normal movement and displayed Use",
+      "Main account selected ahead of optional care; no chores required",
+      "Anwen explicitly gives the northern road, broken cart and reason to return",
+      "Closing dialogue sets Take the north road into Wychwood without accepting Maren or village guidance",
+      "Ordinary north crossing enters Wychwood; objective changes to cart and roadside investigation",
+      "Bram, Sella and wire discovered through Use; Oren and drag marks left undiscovered",
+      "Three clues advance to the unchanged forest encounter; one Ghoulkin defeated with ordinary input",
+      "Quick Save reports pending and then Saved data confirmed in browser storage"
+    ],
+    "incomplete": "Did not finish the forest encounter or reach the return report in this browser session. Repeated ordinary close attacks reported no blade contact and charged casts did not consistently point at the visibly marked target. Owner unresolved: input-control, aim/contact and presentation were not isolated. No combat pass or confirmed game defect is inferred; no combat code changed by this child.",
+    "console_warnings_errors": [],
+    "screenshots": ["D:/Temp/AshenOath/opening-purpose-20261029/anwen-road-request.png", "D:/Temp/AshenOath/opening-purpose-20261029/forest-check-incomplete.png"],
+    "replacement_scope": "r2 only shortens the newly added clipped Anwen location hint. All passed route, dialogue and clue evidence is retained at unchanged dependency scope; no repeated full route. The shortened hint has static review and successful compilation, not another runtime layout observation.",
+    "cleanup": "Owned tab closed, temporary viewport reset and owned server PID 17300 stopped after command-line identity confirmation. Isolated earned save retained at its browser origin."
+  },
+  "publication": {"status": "ready_for_git_publication_receipt_owns_outcome", "method": "Existing development/main Git publisher; receipt owns final commit", "wait_for_vercel": false},
+  "limitations": ["No performance gain or strict-gate pass claimed", "Actual phone and subjective story clarity require Rafa", "Whole FINISH-007 and other parents remain unaccepted", "Ticket 10 WATER-AFTERMATH not started"]
+}

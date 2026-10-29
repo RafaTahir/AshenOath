@@ -10,6 +10,18 @@ The approved ten-child roadmap supersedes the execution restrictions and
 source-complete assumptions in the dated delivery record below. Mandatory user
 acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
 
+**FINISH-007/OPENING-PURPOSE** continues pushed connector
+repair `e3a8848`. Clear northern-road purpose and evidence-conditioned reports
+are implemented; focused six-case logic and general dialogue checks pass.
+Normal-input browser coverage reaches the briefing, north-road crossing and three
+clues; the remaining forest fight/return report is unverified. The source-aligned
+r2 candidate only shortens the newly clipped location hint. Compilation and package
+integrity pass at 162,887,031 complete bytes. Scoped report and Git receipt own
+final build/push evidence; no performance or user acceptance is inferred.
+Keep optional care, Maren and guidance optional; preserve earned facts, choices
+and once-only rewards. See [FINISH-007](FINISH-007.md). Stop after this child's
+development/main pushes; do not wait for Vercel or begin WATER-AFTERMATH.
+
 **FINISH-005/HONEST-TARGETING** is implemented/compiled on
 `honest-targeting-20261029-r2`; the FINISH-005 Git receipt owns push status.
 Explicit ownership/full reach replaces the nearby-collider exemption; stale
@@ -38,7 +50,7 @@ Greyfen -> Wychwood -> Greyfen round trip pass on those exact bytes, with no cap
 console warnings/errors. Existing close-angle gate/pier camera crowding and some
 angle-dependent surface striping remain disclosed, not broadly repaired here.
 The FINISH-013 Git receipt owns push identity; do not wait for Vercel.
-Do not begin OPENING-PURPOSE in this delivery. Mandatory user acceptance stays 0/16.
+That delivery was pushed as `e3a8848`. Mandatory user acceptance stays 0/16.
 
 **FINISH-007/SOLID-FURNITURE** was pushed as `16707bc` and is implemented/compiled on
 `solid-furniture-20261029`; its Git receipt owns push status. Fitted table/chair
@@ -56,7 +68,7 @@ both added cleric layers and retires stale owned attachments; native four-angle
 captures pass on `cleric-rear-cleanup-20261029`. Compilation and package integrity
 pass at 162,882,438 complete bytes. The FINISH-003 receipt owns push status.
 No appearance acceptance is inferred from the prior check. The next child after
-the current connector delivery is OPENING-PURPOSE; not started.
+the connector delivery is OPENING-PURPOSE; its scoped delivery is recorded above.
 Child 4 was pushed as `71c253a` to development/main; acceptance remains pending.
 Child 3 was pushed as `5f43ab7` to development and main; its remaining speed and
 coverage limitations stay recorded. This does not establish user acceptance.
@@ -82,8 +94,8 @@ child. No separate CLI deployment and no implied whole-game acceptance.
 | 5 | FINISH-003/FACE-ARTIFACT | Prior front-only repair rejected at rear; hood/mantle removal and stale-layer cleanup implemented, four-angle native captures pass; replacement build/push receipt owns delivery; awaiting Rafa |
 | 6 | FINISH-007/SOLID-FURNITURE | Implemented/compiled; 32 native capsule cases and opponent/Chess checks pass, partial normal-input browser coverage; Git receipt owns push status; awaiting Rafa |
 | 7 | FINISH-005/HONEST-TARGETING | Implemented/compiled, scoped native and normal-input dialogue/shop/board checks pass; final r2 package; Git receipt owns push; awaiting Rafa |
-| 8 | FINISH-013/CONNECTOR-COMPOSITION | Implemented/compiled; named-wedge native views, 20 directional geometry cases and normal-input browser round trip pass; Git receipt owns push; awaiting Rafa |
-| 9 | FINISH-007/OPENING-PURPOSE | Not started |
+| 8 | FINISH-013/CONNECTOR-COMPOSITION | Implemented/compiled; named-wedge native views, 20 directional geometry cases and normal-input browser round trip pass; pushed e3a8848; awaiting Rafa |
+| 9 | FINISH-007/OPENING-PURPOSE | Implemented/compiled; focused logic/general dialogue pass; normal-input briefing/crossing/clues observed, combat/return gap disclosed; r2 integrity pass, Git receipt owns delivery; awaiting Rafa |
 | 10 | FINISH-008/WATER-AFTERMATH | Not started |
 
 PACK-CLOSURE reproduces all ten reported missing environment textures from the

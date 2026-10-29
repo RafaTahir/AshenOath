@@ -124,8 +124,9 @@
     "name": "Sister Anwen",
     "greeting": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
     "lines": [
-      "Kael: I read the road notice. Three missing.",
+      "Kael: Three people missing?",
       "Anwen: Bram drove. Sella had Oren beside her. He left his coat here because the sun was out.",
+      "Anwen: Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
       "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
       "Kael: What happened when you read it?",
       "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
@@ -223,10 +224,11 @@
         "conditions": {
           "evidence_report": "private"
         },
-        "greeting": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
+        "greeting": "You brought the account to me. We can speak here without putting anyone's name on the board.",
         "lines": [
-          "Kael: You sent them out carrying something the shrine had erased.",
-          "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
+          {"text": "Anwen: That is Oren's carving. Turn it over. The older name is beneath his paint.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "oren"}]}},
+          {"text": "Anwen: That burial thread is mine. I thought it would quiet what they were carrying.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "sella"}]}},
+          {"text": "Kael: Someone bound it again with Vargan wire. I found the binding on the road.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "vargan_wire"}]}},
           "Kael: The pack is dead. The people hiding this are alive.",
           "Anwen: Take your payment if you must. I need help I have no right to order."
         ],
@@ -271,7 +273,7 @@
         "conditions": {
           "evidence_report": "public"
         },
-        "greeting": "I saw the token on the board. Rook has moved his bedding from the window.",
+        "greeting": "I saw your account on the board. Rook has moved his bedding from the window.",
         "lines": [
           "Kael: People needed to know what was on their road.",
           "Anwen: Yes. And the people who can explain it need a way to survive being known.",
@@ -318,10 +320,10 @@
         "conditions": {
           "evidence_report": "retained"
         },
-        "greeting": "Keep your hand closed if you need to. I recognize the shape through your glove.",
+        "greeting": "Keep the originals if you need to. We can work from the account you choose to share.",
         "lines": [
-          "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
-          "Kael: Someone alive tried to take it from the pack.",
+          {"text": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "oren"}]}},
+          {"text": "Kael: Someone alive left drag marks beside the creatures' tracks.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "drag_marks"}]}},
           "Anwen: Then leaving now would leave a witness carrying something dangerous. I am asking you to stay."
         ],
         "actions": [
@@ -405,12 +407,6 @@
         "result": "Anwen's hand tightens around the prayer cord. 'Then do not let fear choose the wording.'",
         "preview": "Anwen's hand tightens around the prayer cord. 'Then do not let fear choose the wording.'",
         "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
-      },
-      {
-        "label": "I will follow the cart. Keep his coat here.",
-        "type": "complete_objective",
-        "quest": "main_road_of_crows",
-        "objective": "speak_anwen"
       },
       {
         "label": "Will you speak for your own part, without the seal?",

@@ -1366,7 +1366,7 @@
     "name": "Sister Anwen",
     "actions": [
       {
-        "label": "Give Anwen the token privately. Stay to protect those who speak.",
+        "label": "Give Anwen the evidence privately. Stay to protect those who speak.",
         "type": "story_choice",
         "sets_flags": {
           "evidence_report": "private",
@@ -1374,7 +1374,7 @@
           "cemetery_bell_rung": true,
           "legacy_report_choice_required": false
         },
-        "result": "Anwen recognizes the older name and agrees to open the account. Kael stays to help protect its living witnesses.",
+        "result": "Anwen receives the recovered evidence in private. Kael stays to help protect its living witnesses; their consent to speak remains their own.",
         "quest": "main_road_of_crows",
         "objective": "return_village",
         "conditions": {
@@ -1389,7 +1389,7 @@
         "adjusts_values": {
           "anwen_trust": 1
         },
-        "preview": "Anwen recognizes the older name and agrees to open the account. Kael stays to help protect its living witnesses.",
+        "preview": "Anwen receives the recovered evidence in private. Kael stays to help protect its living witnesses; their consent to speak remains their own.",
         "cost": "Public disclosure can expose witnesses; private or retained evidence delays the wider account."
       },
       {
@@ -1401,7 +1401,7 @@
           "cemetery_bell_rung": true,
           "legacy_report_choice_required": false
         },
-        "result": "The token and wire are pinned beneath the contract. Some doors close; somebody brings dry cloth to cover the token. Kael remains responsible for the people newly visible.",
+        "result": "The recovered account is posted beneath the contract. Some doors close. Public evidence does not grant permission to publish a witness's private story.",
         "quest": "main_road_of_crows",
         "objective": "return_village",
         "conditions": {
@@ -1417,11 +1417,11 @@
           "greyfen_fear": 1,
           "anwen_trust": -1
         },
-        "preview": "The token and wire are pinned beneath the contract. Some doors close; somebody brings dry cloth to cover the token. Kael remains responsible for the people newly visible.",
+        "preview": "The recovered account is posted beneath the contract. Some doors close. Public evidence does not grant permission to publish a witness's private story.",
         "cost": "Public disclosure can expose witnesses; private or retained evidence delays the wider account."
       },
       {
-        "label": "Keep the token. Make protected copies and stay with the investigation.",
+        "label": "Keep the evidence. Make protected copies and stay with the investigation.",
         "type": "story_choice",
         "sets_flags": {
           "evidence_report": "retained",
@@ -1448,11 +1448,17 @@
         "cost": "Public disclosure can expose witnesses; private or retained evidence delays the wider account."
       }
     ],
-    "greeting": "Anwen puts three empty cups beside the coat Oren left. Rook waits by the door.",
+    "greeting": "Tell me what you found. If some of it is still unknown, say so.",
     "lines": [
-      "Kael: The creatures gathered their belongings. Someone alive bound the token afterward and tried to remove it.",
-      "Anwen: I recognize the old carving. You can give it to me, show the village, or keep it while we make copies.",
-      "Rook: If you show it, show the people behind it a way to stay safe as well.",
+      "Kael: The pack is dead. Here is what I could establish on the road.",
+      {"text": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "bram"}]}},
+      {"text": "Kael: Red thread bound the black feathers.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "sella"}]}},
+      {"text": "Anwen: My knot. I tied that thread for Sella.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "sella"}]}},
+      {"text": "Kael: Oren's wooden crow had his name scraped away.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "oren"}]}},
+      {"text": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "vargan_wire"}]}},
+      {"text": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "drag_marks"}]}},
+      "Anwen: Give me what you found, show the village, or keep it while we make copies. Do not fill the gaps for anyone.",
+      "Anwen: A public account is not permission to speak for the people behind it.",
       "Kael: I will stay. The payment ends the hunt. It does not settle what I now know."
     ],
     "voice": [],

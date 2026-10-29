@@ -44,8 +44,8 @@
       },
       {
         "id": "evidence_ready",
-        "text": "Find why the missing travelers carried old tokens.",
-        "tracker_text": "Investigate the travelers' last journey",
+        "text": "Follow the north road into Wychwood and investigate the travelers' broken cart.",
+        "tracker_text": "Investigate the broken cart in Wychwood",
         "group": "road_evidence",
         "required_count": 3
       },
@@ -55,7 +55,7 @@
       },
       {
         "id": "return_village",
-        "text": "Return with the account. Decide who receives the evidence."
+        "text": "Return to Anwen or the village notice board. Decide who receives the evidence you found."
       }
     ],
     "unlocks": [

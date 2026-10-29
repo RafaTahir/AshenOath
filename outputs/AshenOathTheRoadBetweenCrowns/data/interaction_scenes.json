@@ -215,8 +215,8 @@
       {"priority": 10, "conditions": {"opening_coat_sheltered": true}, "greeting": "You found a dry place for his coat. Thank you.", "lines": ["Anwen: The man behind the screen needs the cup on the step. Leave it on the linen by his hand, if you would."]}
     ],
     "actions": [
-      {"type": "opening_care_resume", "label": "I'll help here for a moment."},
-      {"type": "opening_care_account", "label": "Tell me about the missing travelers."}
+      {"type": "opening_care_account", "label": "Tell me about the missing travelers."},
+      {"type": "opening_care_resume", "label": "I'll help here for a moment. (Optional)"}
     ]
   },
   "opening_care_water": {

@@ -1,28 +1,28 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-29T11:21:07.5483779Z",
-  "build_id": "connector-composition-20261029",
-  "generated_from_commit": "d96d2d9a50b016ca14d6b0333e41a59f023864e7",
+  "generated_at_utc": "2026-10-29T12:18:28.9806909Z",
+  "build_id": "opening-purpose-20261029-r2",
+  "generated_from_commit": "e3a8848ae98c3d1579c14ffd132c654e5cf6f952",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\connector-composition-20261029\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\opening-purpose-20261029-r2\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 160057416,
+  "total_bytes": 160058840,
   "packs": [
     {
       "id": "base",
-      "version": "connector-composition-20261029",
+      "version": "opening-purpose-20261029-r2",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4432916,
-      "sha256": "6b7f83c52709e5261a72a17492d99e69f7664693b40357fad61e7bdea3e55492",
+      "bytes": 4434340,
+      "sha256": "bd58c85a6bd2559872f2d673c5ba35fbadaa1c476af14895ce271a697482209b",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "connector-composition-20261029",
+      "version": "opening-purpose-20261029-r2",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 86265908,
@@ -32,7 +32,7 @@
     },
     {
       "id": "adjacent",
-      "version": "connector-composition-20261029",
+      "version": "opening-purpose-20261029-r2",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2370980,
@@ -42,7 +42,7 @@
     },
     {
       "id": "campaign",
-      "version": "connector-composition-20261029",
+      "version": "opening-purpose-20261029-r2",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8678820,
@@ -52,7 +52,7 @@
     },
     {
       "id": "characters",
-      "version": "connector-composition-20261029",
+      "version": "opening-purpose-20261029-r2",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 8999204,
@@ -62,7 +62,7 @@
     },
     {
       "id": "monsters",
-      "version": "connector-composition-20261029",
+      "version": "opening-purpose-20261029-r2",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 20678316,
@@ -72,7 +72,7 @@
     },
     {
       "id": "audio",
-      "version": "connector-composition-20261029",
+      "version": "opening-purpose-20261029-r2",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21302876,
@@ -82,7 +82,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "connector-composition-20261029",
+      "version": "opening-purpose-20261029-r2",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7328396,
@@ -92,13 +92,13 @@
     }
   ],
   "errors": [],
-  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from honest-targeting-20261029-r2. Re-exported owners: base. Rebuilt base/root for confirmed connector soil banks: lower rounded shoulders, ground-level runouts, shared crest stations and camera-only outer-slope clearance. Unchanged road floors, stone connectors, gates, route atlas, actors, saves, materials and quality presets; seven unchanged packs reused.",
+  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from opening-purpose-20261029. Re-exported owners: base. Opening purpose, evidence-conditional reporting and optional care preserved; final correction shortens the Anwen HUD location hint. Seven asset packs reused unchanged.",
   "selected_web_export": {
-    "build_id": "connector-composition-20261029",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\connector-composition-20261029\\export",
-    "generated_from_commit": "d96d2d9a50b016ca14d6b0333e41a59f023864e7",
-    "artifacts_total_bytes": 162878706,
-    "root_pck_sha256": "23f5ba22807a621c81df7596d085299e99a77c979c4ee5b4a43b2a814206403c",
-    "note": "Rebuilt base/root for confirmed connector soil banks: lower rounded shoulders, ground-level runouts, shared crest stations and camera-only outer-slope clearance. Unchanged road floors, stone connectors, gates, route atlas, actors, saves, materials and quality presets; seven unchanged packs reused."
+    "build_id": "opening-purpose-20261029-r2",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\opening-purpose-20261029-r2\\export",
+    "generated_from_commit": "e3a8848ae98c3d1579c14ffd132c654e5cf6f952",
+    "artifacts_total_bytes": 162879316,
+    "root_pck_sha256": "17814cd85177c6878fa24df3e85e878b90a7934dfda436e4fd6c597068b88984",
+    "note": "Opening purpose, evidence-conditional reporting and optional care preserved; final correction shortens the Anwen HUD location hint. Seven asset packs reused unchanged."
   }
 }

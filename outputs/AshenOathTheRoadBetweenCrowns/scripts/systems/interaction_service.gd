@@ -67,8 +67,7 @@ func _handle_interaction(area) -> void:
 		if report_chosen and area.interaction_id == "sister_anwen":
 			audio.play_event("return_report", 0.02)
 			audio.set_music_state("return_report")
-			hud.show_status_cue("Anwen knows the sign", "victory")
-			hud.toast("Anwen goes still at the feathers. 'Then it was called here,' she says, and will say no more.")
+			hud.show_status_cue("Bring back the road's account", "item")
 		_set_interactable_label_visible(area, false)
 		if not report_chosen:
 			preload("res://scripts/story_activity_director.gd").add_friend_invitation(_host, area, dialogue_data)

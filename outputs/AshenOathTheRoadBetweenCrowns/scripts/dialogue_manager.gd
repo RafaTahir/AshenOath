@@ -289,6 +289,10 @@ func _build_pages(data: Dictionary) -> Array:
 			"beat": "greeting"
 		})
 	for raw_line in data.get("lines", []):
+		if raw_line is Dictionary and raw_line.has("conditions"):
+			# Conditional testimony must not reveal unobserved optional evidence.
+			if story_state == null or quest_manager == null or not _conditions_match(raw_line.conditions):
+				continue
 		var line := str(raw_line.get("text", "")) if typeof(raw_line) == TYPE_DICTIONARY else str(raw_line)
 		line = line.strip_edges()
 		if line == "":

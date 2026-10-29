@@ -1,5 +1,48 @@
 # FINISH-007 - Greyfen Completion
 
+## Director Child: Opening Purpose - 2026-10-29
+
+Continues child 8 delivery `e3a8848`; this is child 9 only, not whole-Greyfen
+acceptance. Anwen names the missing people, northern Wychwood road, broken cart
+and reason to return. The existing objective authority supplies one route for
+tracker/compass. Optional care remains available but the road account is the
+first invitation; an already-returning investigator is not diverted into care.
+Maren, guidance and village chores remain optional and are not auto-started.
+
+The three-of-five investigation previously reported a token, binding wire and
+feathers regardless of discovery. Authored conditional lines now use actual
+objective history, including saved completed history. Unknown facts stay unknown.
+Report choices/receipts refer to recovered evidence, not compulsory objects, and
+do not grant witness consent. Remove the redundant disabled interview-completion
+action; the retained interaction still owns that earned objective. No quest ID,
+threshold, reward, choice effect, encounter or save format changes.
+
+Focused existing dialogue verifier passes six cases (two complementary clue
+orders across private/public/retained reports), early evidence, omitted facts,
+saved history, consent, one completion event and northern objective presentation.
+The general dialogue verifier also passes. These are isolated native logic checks,
+not a gameplay, durability or combat pass. Normal-input browser coverage reaches
+Anwen's main account without chores, the north-road objective, the Wychwood crossing
+and three clues (Bram, Sella and wire, without Oren or drag marks). Maren remains
+optional. Quick Save displays pending, then browser-storage confirmation. No console
+warnings/errors were captured. This is not a browser restart durability check.
+
+The forest fight and return report were not completed in-browser. Close strikes
+reported no blade contact and charged casts did not consistently face the marked
+target. Input-control versus game aim/contact/presentation ownership remains
+unresolved; no combat defect or pass is inferred. Preserve that coverage gap rather
+than substituting the isolated six-case report checks for earned gameplay.
+The r2 candidate changes only the new Anwen hint length after observed HUD clipping;
+unchanged passed route evidence is reused. Final production compilation and package
+integrity pass at **162,887,031 complete bytes**, with seven asset packs unchanged.
+Shortened-hint runtime layout, the completed browser return report and user story
+clarity remain unverified. See the scoped
+[report](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/opening_purpose_20261029.json).
+FINISH parent acceptance remains 0/16; no performance gain claimed.
+The Git receipt owns development/main push status; no Vercel wait or manual deploy.
+WATER-AFTERMATH has not begun. Rafa's remaining child check is the complete first
+road report, including optional help/early departure, omitted clues and report consent.
+
 ## Director Child: Solid Furniture - 2026-10-29
 
 Active child only; not whole-Greyfen acceptance. Both `common_table` and

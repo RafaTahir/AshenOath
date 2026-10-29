@@ -44,6 +44,8 @@ static func introduce(game, actor: Node3D) -> bool:
 		return false
 	if game.quests.is_objective_done("main_road_of_crows", "speak_anwen"):
 		return false
+	if game.quests.is_objective_done("main_road_of_crows", "fight_ghoulkin"):
+		return false
 	var scene: Node = game.zone_root.get_node_or_null(LAYER)
 	if scene == null:
 		return false

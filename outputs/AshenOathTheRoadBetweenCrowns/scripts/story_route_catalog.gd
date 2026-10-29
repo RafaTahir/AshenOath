@@ -15,8 +15,8 @@ const ZONE_NAMES := {
 # deliberately leave investigation and combat as areas rather than hidden pins.
 const ROUTES := {
 	"main_road_of_crows": {
-		"speak_anwen":["greyfen", ["sister_anwen"], "Anwen waits at the shrine.", "Learn who is missing before taking the road."],
-		"evidence_ready":["wychwood", [], "Inspect the broken cart and the disturbed roadside.", "Identify the missing people from what remains."],
+		"speak_anwen":["greyfen", ["sister_anwen"], "Anwen cares for a traveler by the north shrine.", "Ask about Bram, Sella and Oren, who have not come home."],
+		"evidence_ready":["wychwood", [], "Follow the north road into Wychwood; inspect the broken cart and disturbed roadside.", "Bring Anwen an account of what happened to the missing travelers."],
 		"fight_ghoulkin":["wychwood", [], "The pack holds the clearing beyond the cart.", "Carry the road's account back to the living."],
 		"return_village":["greyfen", ["sister_anwen", "notice_board", "retain_evidence"], "Choose how to report at the shrine or notice board.", "What you report will shape Greyfen's response."]
 	},
@@ -155,6 +155,10 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 	for id in entry[1]:
 		ids.append(str(id))
 	var result := {"destination_zone":str(entry[0]), "destination_name":zone_name(str(entry[0])), "target_ids":ids, "route_hint":str(entry[2]), "purpose":str(entry[3]), "pinpoint":not ids.is_empty()}
+	if quest_id == "main_road_of_crows" and objective_id == "evidence_ready":
+		result["next_action"] = "Take the north road into Wychwood" if current_zone == "greyfen" else "Investigate the broken cart and roadside"
+		if current_zone == "wychwood":
+			result["route_hint"] = "Compare the travelers' belongings and tracks around the broken cart."
 	if quest_id == "main_last_witness" and objective_id == "break_halvern_guard":
 		result["next_action"] = "Break Halvern's guard or earn his peaceful hearing"
 		if state != null and bool(state.get_flag("command_proof_recovered", false)):

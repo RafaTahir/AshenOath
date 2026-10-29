@@ -6,9 +6,37 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
-Rafa subsequently authorized continuing through child 8 and removed Vercel waiting:
+Rafa subsequently authorized continuing through child 9 and removed Vercel waiting:
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
+
+### FINISH-007/OPENING-PURPOSE (awaiting Rafa; Git receipt owns push status)
+
+Continues pushed child 8 `e3a8848`. Give Anwen's retained introduction a concrete
+destination and purpose, with one northern-road objective. Care remains visibly
+optional and does not interrupt a completed investigation; Maren stays separate.
+The investigation still needs three of five clues, so the report and Anwen's
+return variants now condition optional testimony on saved objective facts.
+Neutral choice labels/receipts do not invent a token, wire or witness consent.
+Remove the already-earned interview's redundant disabled completion action.
+No quests, gates, rewards, actor art, encounter or save schema changes.
+
+Existing dialogue checks pass: six isolated clue-order/report cases, early
+evidence, unknown optional history after save/load, unchanged personal consent,
+once-only completion and unified north-road guidance; general dialogue check pass.
+Normal-input browser coverage reaches Anwen's main account without care chores,
+the northern-road tracker, Wychwood crossing and three clues. Oren/drag marks are
+deliberately undiscovered; Maren stays optional. One creature is defeated, but the
+remaining fight/report is not completed: close strikes miss and cast direction is
+inconsistent with the marked target; input-control versus game ownership is not
+isolated. This is a disclosed coverage gap, not a combat pass or confirmed diagnosis.
+Quick Save reports browser storage confirmed; no captured console warnings/errors.
+The final r2 only shortens the new clipped Anwen hint; reuse unchanged route evidence.
+Final compilation and package integrity pass at **162,887,031 complete bytes**;
+seven asset packs remain unchanged. No replacement browser run or restart-durability
+claim. The scoped report records exact hashes, evidence limits and owned-process cleanup.
+No performance or user acceptance claim. Push this child only, without waiting for
+Vercel; WATER-AFTERMATH remains next and has not started.
 
 ### FINISH-013/CONNECTOR-COMPOSITION (awaiting Rafa; Git receipt owns push status)
 
