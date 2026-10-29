@@ -94,7 +94,11 @@
     "saga_wyc_q05": {
       "opening": "The Bog Wretch is resolved. Walk the inlet, screen and collection point, then restore the chosen flow with a reused gate and clean pots. Water still needs somewhere to go.",
       "activity": "check_rope",
-      "beats": {"survey_watercourse":"Silt catches at the screen before the collection pots. The obstruction is ordinary debris, whatever memory the guardian carried.","clear_and_set":"Debris lifts into the basket. The screen seats in its frame and the gate leaves room for the river.","place_clean_pots":"The two pots sit below the clearer outflow. Iven rinses his hands. 'That is something I can ask the crew to trust.'"},
+      "beats": {"survey_watercourse":"Silt catches at the screen before the collection pots. The obstruction is ordinary debris, whatever memory the guardian carried.","clear_and_set":"The debris is removed and the reused screen and gate sit clear of the main river. The chosen collection route is ready for its pots.","place_clean_pots":"Both clean pots are on their stand beside the chosen outflow. The work remains here for the next crew, not just in the account."},
+      "return_lines": {
+        "saga_iven":{"side_channel":"The timber channel reaches our stand now. I can lift the screen without climbing into the river. I'll put cleaning it on the crew's list.","natural_run":"We moved the stand, not the stream. A few more steps with a pot; less silt for us to clear. I can live with that."},
+        "saga_edda":{"side_channel":"Iven has his collection channel. The old run still has room beside it. Keep that screen clear and we can both work here.","natural_run":"Water follows the old bend again. The pots are on the dry bank now. That is where they should have been."}
+      },
       "outcomes": {"side_channel":"A contained side channel feeds the workers' collection. The screen is reachable for cleaning and the bridge span stays clear.","natural_run":"The natural run is clear; the collection stand has moved to suit it. The restored bank is not another route across the river."}
     },
     "saga_dep_q01": {

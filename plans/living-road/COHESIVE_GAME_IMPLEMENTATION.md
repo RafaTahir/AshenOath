@@ -6,9 +6,26 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
-Rafa subsequently authorized continuing through child 9 and removed Vercel waiting:
+Rafa subsequently authorized continuing through child 10 and removed Vercel waiting:
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
+
+### FINISH-008/WATER-AFTERMATH (awaiting Rafa; Git receipt owns push status)
+
+Continues opening-purpose push `08e5ef4`. The existing optional water quest now
+projects its saved branch into a contained timber collection channel or an open
+natural run with a relocated stand. Removed debris, screen/gate and individual
+pots follow recorded work. Prompts and the pot objective use the same physical
+stations; Iven/Edda acknowledge only the completed recorded outcome. Unknown legacy
+branches stay unknown. No new quest, reward, save schema, bridge or river collision.
+
+Isolated native work/save/reconstruction/once-only 500 XP checks pass, with two
+distinct layout captures. First-run fixture unlock/process-order mistakes are
+recorded as HARNESS failures, corrected before the successful rerun. This is not
+an earned browser route or actual Wychwood interaction/phone acceptance. Existing
+strict performance and parent 0/16 acceptance remain unchanged. Compilation and
+package integrity pass at 162,891,255 complete bytes, with seven unchanged packs.
+Git delivery is recorded by the publication receipt; stop after push, no Vercel wait.
 
 ### FINISH-007/OPENING-PURPOSE (awaiting Rafa; Git receipt owns push status)
 

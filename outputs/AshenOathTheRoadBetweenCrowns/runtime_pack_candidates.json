@@ -1,28 +1,28 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-29T12:18:28.9806909Z",
-  "build_id": "opening-purpose-20261029-r2",
-  "generated_from_commit": "e3a8848ae98c3d1579c14ffd132c654e5cf6f952",
+  "generated_at_utc": "2026-10-29T12:49:35.6570260Z",
+  "build_id": "water-aftermath-20261029",
+  "generated_from_commit": "08e5ef4b21dd75c1c90708c307de51f9a3812da0",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\opening-purpose-20261029-r2\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\water-aftermath-20261029\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 160058840,
+  "total_bytes": 160059544,
   "packs": [
     {
       "id": "base",
-      "version": "opening-purpose-20261029-r2",
+      "version": "water-aftermath-20261029",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4434340,
-      "sha256": "bd58c85a6bd2559872f2d673c5ba35fbadaa1c476af14895ce271a697482209b",
+      "bytes": 4435044,
+      "sha256": "fcebbc0573cea7f1dd3884584354f1f0bd8ee1fd16697287cd73626f3eaeefd5",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "opening-purpose-20261029-r2",
+      "version": "water-aftermath-20261029",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 86265908,
@@ -32,7 +32,7 @@
     },
     {
       "id": "adjacent",
-      "version": "opening-purpose-20261029-r2",
+      "version": "water-aftermath-20261029",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2370980,
@@ -42,7 +42,7 @@
     },
     {
       "id": "campaign",
-      "version": "opening-purpose-20261029-r2",
+      "version": "water-aftermath-20261029",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8678820,
@@ -52,7 +52,7 @@
     },
     {
       "id": "characters",
-      "version": "opening-purpose-20261029-r2",
+      "version": "water-aftermath-20261029",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 8999204,
@@ -62,7 +62,7 @@
     },
     {
       "id": "monsters",
-      "version": "opening-purpose-20261029-r2",
+      "version": "water-aftermath-20261029",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 20678316,
@@ -72,7 +72,7 @@
     },
     {
       "id": "audio",
-      "version": "opening-purpose-20261029-r2",
+      "version": "water-aftermath-20261029",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21302876,
@@ -82,7 +82,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "opening-purpose-20261029-r2",
+      "version": "water-aftermath-20261029",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7328396,
@@ -92,13 +92,13 @@
     }
   ],
   "errors": [],
-  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from opening-purpose-20261029. Re-exported owners: base. Opening purpose, evidence-conditional reporting and optional care preserved; final correction shortens the Anwen HUD location hint. Seven asset packs reused unchanged.",
+  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from opening-purpose-20261029-r2. Re-exported owners: base. Wychwood water aftermath uses saved branch and work stages for channel, screen, gate and relocated collection stand; branch-specific Iven/Edda responses. Existing river material and seven asset packs retained unchanged.",
   "selected_web_export": {
-    "build_id": "opening-purpose-20261029-r2",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\opening-purpose-20261029-r2\\export",
-    "generated_from_commit": "e3a8848ae98c3d1579c14ffd132c654e5cf6f952",
-    "artifacts_total_bytes": 162879316,
-    "root_pck_sha256": "17814cd85177c6878fa24df3e85e878b90a7934dfda436e4fd6c597068b88984",
-    "note": "Opening purpose, evidence-conditional reporting and optional care preserved; final correction shortens the Anwen HUD location hint. Seven asset packs reused unchanged."
+    "build_id": "water-aftermath-20261029",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\water-aftermath-20261029\\export",
+    "generated_from_commit": "08e5ef4b21dd75c1c90708c307de51f9a3812da0",
+    "artifacts_total_bytes": 162883543,
+    "root_pck_sha256": "8f749f2b9c6cc83a4f590253d4187272bfcb42a78508afc514259fc34e5723e1",
+    "note": "Wychwood water aftermath uses saved branch and work stages for channel, screen, gate and relocated collection stand; branch-specific Iven/Edda responses. Existing river material and seven asset packs retained unchanged."
   }
 }

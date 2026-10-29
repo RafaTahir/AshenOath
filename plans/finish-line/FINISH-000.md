@@ -10,7 +10,16 @@ The approved ten-child roadmap supersedes the execution restrictions and
 source-complete assumptions in the dated delivery record below. Mandatory user
 acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
 
-**FINISH-007/OPENING-PURPOSE** continues pushed connector
+**FINISH-008/WATER-AFTERMATH** is child 10, authorized by Rafa's latest Continue.
+The source projects the two recorded water plans into different channel/stand
+arrangements, saved work stages and Iven/Edda acknowledgements. Focused isolated
+native checks, compilation and package integrity pass (162,891,255 complete bytes);
+full in-world browser quest coverage remains unverified.
+See [FINISH-008](FINISH-008.md) and its scoped report for build/push evidence.
+Stop after development/main pushes; do not wait for Vercel or start retained
+follow-ups. The ten children do not automatically accept their FINISH parents.
+
+**FINISH-007/OPENING-PURPOSE**, pushed as `08e5ef4`, continues connector
 repair `e3a8848`. Clear northern-road purpose and evidence-conditioned reports
 are implemented; focused six-case logic and general dialogue checks pass.
 Normal-input browser coverage reaches the briefing, north-road crossing and three
@@ -19,8 +28,8 @@ r2 candidate only shortens the newly clipped location hint. Compilation and pack
 integrity pass at 162,887,031 complete bytes. Scoped report and Git receipt own
 final build/push evidence; no performance or user acceptance is inferred.
 Keep optional care, Maren and guidance optional; preserve earned facts, choices
-and once-only rewards. See [FINISH-007](FINISH-007.md). Stop after this child's
-development/main pushes; do not wait for Vercel or begin WATER-AFTERMATH.
+and once-only rewards. See [FINISH-007](FINISH-007.md). Its browser combat/return
+coverage gap is retained; continuing child 10 is not acceptance of child 9.
 
 **FINISH-005/HONEST-TARGETING** is implemented/compiled on
 `honest-targeting-20261029-r2`; the FINISH-005 Git receipt owns push status.
@@ -96,7 +105,7 @@ child. No separate CLI deployment and no implied whole-game acceptance.
 | 7 | FINISH-005/HONEST-TARGETING | Implemented/compiled, scoped native and normal-input dialogue/shop/board checks pass; final r2 package; Git receipt owns push; awaiting Rafa |
 | 8 | FINISH-013/CONNECTOR-COMPOSITION | Implemented/compiled; named-wedge native views, 20 directional geometry cases and normal-input browser round trip pass; pushed e3a8848; awaiting Rafa |
 | 9 | FINISH-007/OPENING-PURPOSE | Implemented/compiled; focused logic/general dialogue pass; normal-input briefing/crossing/clues observed, combat/return gap disclosed; r2 integrity pass, Git receipt owns delivery; awaiting Rafa |
-| 10 | FINISH-008/WATER-AFTERMATH | Not started |
+| 10 | FINISH-008/WATER-AFTERMATH | Implemented/compiled; isolated native branch/progress/save/re-entry/500 XP checks and captures pass after fixture correction; package integrity pass, Git receipt owns push; browser/user acceptance pending |
 
 PACK-CLOSURE reproduces all ten reported missing environment textures from the
 baseline `phase1-8c6264708df367f6` root/opening packs in an isolated scratch project.

@@ -1,0 +1,48 @@
+{
+  "ticket": "FINISH-008/WATER-AFTERMATH",
+  "date": "2026-10-29",
+  "baseline_commit": "08e5ef4b21dd75c1c90708c307de51f9a3812da0",
+  "candidate": "water-aftermath-20261029",
+  "implementation": "complete",
+  "user_acceptance": "pending",
+  "parent_mandatory_accepted": "0/16",
+  "scope": [
+    "Distinct contained side channel and original natural run with relocated collection stand",
+    "Saved debris/screen/gate/pot progress projects without writing story or reward state",
+    "Work Use anchors and objective site follow the actual apparatus and selected bank",
+    "Completed recorded water choice changes Iven and Edda's acknowledgement",
+    "Unknown legacy branch receives neither fabricated layout completion nor invented account"
+  ],
+  "preserved": ["Bog prerequisite", "quest/objective/outcome IDs", "survey-choice-work-pot sequence", "500 XP once", "save fields", "bridge-only crossings", "river collision", "existing shader/material/clock", "all seven asset packs", "all prior repairs"],
+  "checks": [
+    {"tool": "tools/verify_water_002.gd --aftermath-only --capture-dir=...", "attempt": 1, "exit_code": 1, "result": "FAIL", "owner": "HARNESS", "cause": "Fixture did not unlock optional quest and disabled director physics before tree entry, allowing automatic process enrollment. No game source change required.", "logs": "D:/Temp/AshenOath/water-aftermath-20261029/native.stdout.log; native.stderr.log"},
+    {"tool": "tools/verify_water_002.gd --aftermath-only --capture-dir=.../final", "attempt": 2, "exit_code": 0, "result": "PASS", "coverage": "Both branches; three incremental construction stages; saved partial reconstruction; two individual pot placements; idempotent projection with no XP/state writes; completion grants 500 XP; serialized completed reconstruction preserves bank and denies duplicate XP; acknowledgements defined; unknown legacy branch remains unknown.", "warnings": ["Existing native driver switches low-quality OpenGL 3.3 support to ANGLE"], "logs": "D:/Temp/AshenOath/water-aftermath-20261029/native-r2.stdout.log; native-r2.stderr.log"}
+  ],
+  "visuals": {
+    "scope": "Native isolated authored apparatus, existing river material, fixed review camera and neutral floor; NOT the full Wychwood scene or normal gameplay camera",
+    "side_channel": "D:/Temp/AshenOath/water-aftermath-20261029/final/side_channel.png",
+    "natural_run": "D:/Temp/AshenOath/water-aftermath-20261029/final/natural_run.png",
+    "review": "Distinct channel presence, screen position and collection-stand locations observed"
+  },
+  "browser": {"status": "NOT_RUN_FOR_LATE_QUEST", "reason": "The retained normal-input journey has not passed the existing Wychwood encounter/Bog gate. No manufactured browser progression or repeated campaign was used to claim this late-quest check."},
+  "compilation": "PASS: production base pack and Web Browser export; no compiler errors reported",
+  "static_diff_review": "PASS; existing CRLF conversion warnings only",
+  "package": {
+    "integrity": "PASS",
+    "directory_bytes": 162891255,
+    "transport_artifact_bytes": 162883543,
+    "decoded_artifact_bytes": 203034147,
+    "balanced_initial_transport_bytes": 97961562,
+    "quality_initial_transport_bytes": 105171444,
+    "max_deployment_bytes": 268435456,
+    "warnings": [],
+    "root_pck_sha256": "8f749f2b9c6cc83a4f590253d4187272bfcb42a78508afc514259fc34e5723e1",
+    "root_pck_decoded_sha256": "c841806d9280c86d6a9f83ebf69aef5fa5b9c8e1e1f03d3710f1544766921d96",
+    "reused_asset_packs": 7,
+    "logs": ".release-gate/water-aftermath-20261029/logs",
+    "provenance": "Exported from 08e5ef4 plus scoped working-tree implementation; publication receipt binds final source/package commit. Byte totals are not measured startup or memory results."
+  },
+  "processes": "Both bounded native checks and production package process exited. No browser/server launched for this ticket.",
+  "publication": {"status": "ready_for_git_publication_receipt_owns_outcome", "method": "Existing development/main Git publisher; receipt owns exact commit/outcome", "wait_for_vercel": false},
+  "limitations": ["Full-zone approach/interaction and Save/Continue browser coverage remain unverified", "Actual phone and subjective visual acceptance belong to Rafa", "No numerical performance gain or parent acceptance claimed", "Prior ticket 9 combat/return gap and retained roadmap follow-ups remain open"]
+}

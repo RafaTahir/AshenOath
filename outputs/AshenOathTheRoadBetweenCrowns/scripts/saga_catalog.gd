@@ -23,6 +23,8 @@ static func observation(id: String, step: Array, index: int) -> String:
 	return str(step[4][index]) + ". Compare this with the other marked evidence before drawing a conclusion."
 
 static func aftermath(id: String, outcome: String) -> String:
+	if id == "saga_wyc_q05" and outcome not in ["side_channel", "natural_run"]:
+		return "The work is recorded as complete, but this saved account does not identify the chosen watercourse. No branch has been inferred."
 	return str(performance(id).get("outcomes", QUESTS[id].get("outcomes", {})).get(outcome, QUESTS[id].steps.back()[5]))
 
 ## Existing objective/part IDs survive; only their authored physical stations move.
@@ -73,6 +75,8 @@ const GREETINGS := {
 
 static func part_site(id: String, step: Array, part: int, state = null) -> String:
 	var site := str(step[2])
+	if id == "saga_wyc_q05" and str(step[0]) == "place_clean_pots" and state != null and str(state.get_flag(id + "_outcome", "")) == "natural_run":
+		return "pots_natural"
 	var stations: Array = PART_SITES.get(id + ":" + str(step[0]), [])
 	if id == "side_escort_01" and state != null and str(state.get_flag(id + "_outcome", "")) == "wheel":
 		stations = ["escort_forge", "escort_care", "arrivals"]
@@ -123,7 +127,7 @@ const PEOPLE := {
 ## The activity owner fits them to the shared spatial occupancy contract.
 const SITES := {
 	"greyfen":{"kitchen":Vector3(-3.7,0,7.4), "cart":Vector3(-5.6,0,10.3), "store":Vector3(-9.0,0,10.3), "bell":Vector3(-11,0,-7), "basket":Vector3(-9,0,-6), "door":Vector3(9,0,8.8), "timber":Vector3(6.2,0,12.5), "table":Vector3(-7,0,12.1), "arrivals":Vector3(-2.8,0,13.5), "courtyard":Vector3(4,0,10), "well":Vector3(-2.8,0,1.4), "letter":Vector3(8,0,10.4)},
-	"wychwood":{"workers":Vector3(-5.8,0,10.2), "grove":Vector3(-8.2,0,8), "boundary":Vector3(-10,0,6.7), "shelter":Vector3(6,0,10), "snares":Vector3(8,0,7.8), "deadfall":Vector3(-5,0,12), "blind":Vector3(-10,0,10.8), "water":Vector3(7.7,0,-5.8), "pots":Vector3(10,0,-6), "bog":Vector3(3.6,0,-7.0)},
+	"wychwood":{"workers":Vector3(-5.8,0,10.2), "grove":Vector3(-8.2,0,8), "boundary":Vector3(-10,0,6.7), "shelter":Vector3(6,0,10), "snares":Vector3(8,0,7.8), "deadfall":Vector3(-5,0,12), "blind":Vector3(-10,0,10.8), "water":Vector3(7.7,0,-5.8), "pots":Vector3(10,0,-6), "pots_natural":Vector3(10,0,-4.3), "bog":Vector3(3.6,0,-7.0)},
 	"old_mill":{"dispatch":Vector3(-3.6,0,7.5), "sacks":Vector3(-6,0,8.3), "slip":Vector3(-8,0,7), "shelter":Vector3(-4.5,0,11), "timber":Vector3(-7.3,0,10), "records":Vector3(-2.4,0,9.5), "hatch":Vector3(-7.8,0,1.1)},
 	"burned_farmstead":{"garden":Vector3(3.5,0,8), "runoff":Vector3(5.5,0,9), "fill":Vector3(1.7,0,10.5), "cellar":Vector3(-4,0,-6), "flue":Vector3(-3.7,0,-3.6), "crock":Vector3(-3,0,-5.1), "orchard":Vector3(-5,0,7.8), "graft":Vector3(-7.2,0,7.8), "fallen":Vector3(-8.5,0,5.7)},
 	"marsh_crossing":{"keeper":Vector3(-4.4,0,9), "mooring":Vector3(-5,0,6), "box":Vector3(-6.8,0,7.7), "posts":Vector3(4.5,0,9), "line":Vector3(4.5,0,3.2), "causeway":Vector3(6.5,0,9.7)},

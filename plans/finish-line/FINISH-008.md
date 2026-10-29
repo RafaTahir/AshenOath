@@ -1,5 +1,48 @@
 # FINISH-008 - Wychwood Completion
 
+## Director Child: Water Aftermath - 2026-10-29
+
+Child 10 continues opening-purpose delivery `08e5ef4`. The existing WYC-Q05
+survey/choice/screen-and-gate/pots sequence, Bog prerequisite, quest/objective IDs,
+saved work counters and 500 XP award remain unchanged.
+
+`side_channel` now assembles a timber collection run beside the open original
+course. `natural_run` clears the original bend, stores the reused screen clear of
+its flow and moves the collection stand to the authored dry-bank position. The
+gate, removed debris and two individually placed pots project saved work stages.
+Work prompts use the apparatus anchors, and the objective follows the moved pot
+station. No bridge, river barrier, navigation surface or crossing changes.
+
+The shared river material/clock is reused, with no additional frame-update owner.
+Iven and Edda have distinct, choice-specific acknowledgements only after completed
+work. Unknown legacy branches remain unknown in both projection and text.
+Rendering the aftermath never writes choices or rewards.
+
+Focused native verification passes both branches, partial work serialization and
+reconstruction, completed re-entry, idempotent projection, one 500 XP grant and
+duplicate-grant rejection. Two native isolated-work captures show distinct layouts.
+The first fixture run failed because it did not unlock the optional quest and
+disabled the director before scene-tree entry; those HARNESS errors are corrected.
+The successful rerun has only the existing OpenGL-to-ANGLE driver warning.
+
+These are isolated service/staging checks, not an earned browser quest, full-zone
+collision/approach check or actual phone coverage. The normal-input late-quest
+browser route and Rafa's visual/interaction acceptance remain unverified. No
+performance gain is claimed and parent user acceptance remains **0/16**.
+
+Candidate/build/package/push evidence:
+[water_aftermath_20261029.json](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/water_aftermath_20261029.json).
+Candidate `water-aftermath-20261029` compiles and passes package integrity at
+**162,891,255 complete bytes**, reusing seven unchanged asset packs. The Git
+publication receipt owns the exact final commit and push outcome.
+Publish this child through development/main Git only; stop after push without
+waiting for Vercel. No retained follow-up is silently marked passed.
+
+Rafa's scoped check: resolve the Bog legitimately; choose either water plan;
+interrupt and Continue during screen/pot work; finish, leave and return; inspect
+the channel, gate and stand; speak to Iven/Edda; confirm no repeat XP. Exercise
+the other choice from a genuine pre-choice checkpoint, not by changing the save.
+
 ## Current Implementation Delivery - 2026-10-26
 
 Candidate: `finish-implementation-20261026`, continued from published r14

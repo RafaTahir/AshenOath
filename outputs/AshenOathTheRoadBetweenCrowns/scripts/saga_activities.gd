@@ -178,6 +178,10 @@ func refresh() -> void:
 				if id == "side_escort_01" and str(step[0]) == "steady_arrival" and part < 2:
 					area.position = _site_position(Catalog.part_site(id, step, part, host.story_state), id + ":" + objective)
 					if old_prop != null: old_prop.visible = false
+				if id == "saga_wyc_q05":
+					if old_prop != null: old_prop.visible = false
+					var anchor_name := "PotWorkAnchor" if objective == "place_clean_pots" else "GateWorkAnchor"
+					area.global_position = _assemblies[id].get_node(anchor_name).global_position
 			if mode == "escort":
 				_restore_escort(id, step, area)
 				if id == "side_escort_04" and _flag(id + ":escort_started"):
@@ -254,6 +258,10 @@ func _site_position(site: String, id: String) -> Vector3:
 	if _site_positions.has(key):
 		return _site_positions[key]
 	var base: Vector3 = Catalog.SITES.get(zone, {}).get(site, Vector3(3, 0, 8))
+	if zone == "wychwood" and id == "saga_wyc_q05_workplace":
+		# One authored apparatus; temporary survey markers must not displace it.
+		_site_positions[key] = base
+		return base
 	if zone == "greyfen" and id == "saga_secret:GRE-S01":
 		base = Vector3(-11.45, 0, -6.8)
 		_site_positions[key] = base
@@ -532,6 +540,12 @@ func _open_person(area: Node3D, id: String) -> void:
 	if not written and bool(host.story_state.honor_view(id).known):
 		actions.append(_action(area, "honor", "", "How do things stand between us?"))
 	var words := str(Catalog.GREETINGS.get(id, person.line)) if finished else str(person.line)
+	if id in ["saga_iven", "saga_edda"] and host.quests.is_completed("saga_wyc_q05"):
+		var water_outcome := str(host.story_state.get_flag("saga_wyc_q05_outcome", ""))
+		var acknowledgement := str(Catalog.performance("saga_wyc_q05").get("return_lines", {}).get(id, {}).get(water_outcome, ""))
+		if acknowledgement != "":
+			words = acknowledgement
+			remembered = _aftermath_text("saga_wyc_q05")
 	if id == "saga_maren":
 		words = _maren_greeting()
 	if not written and bool(host.story_state.honor_view(id).grievance):

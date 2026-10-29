@@ -120,14 +120,7 @@ static func build(game, parent: Node3D, id: String, completed: bool, outcome: St
 				for index in range(3):
 					_plank(game,assembly,Vector3(-0.3+index*0.3,0.54,0),Vector3(0.22,0.035,0.32),Color(0.40,0.43,0.40))
 		"saga_wyc_q05":
-			for index in range(7):
-				_plank(game,assembly,Vector3(-0.45+index*0.15,0.26,0),Vector3(0.025,0.45,0.05))
-			for y in [0.08,0.44]:
-				_plank(game,assembly,Vector3(0,y,0),Vector3(1,0.04,0.06))
-			for x in [-0.35,0.35]:
-				_rod(game,assembly,Vector3(x,0.12,0.42),0.12,0.20,Color(0.39,0.29,0.20))
-			var gate := _plank(game,assembly,Vector3(0,0.25,0.04),Vector3(0.7,0.35,0.025))
-			gate.name = "DrainGate"
+			_build_watercourse(game, assembly)
 		"saga_dep_q02", "saga_dep_q04", "saga_var_q03", "saga_har_q04", "saga_har_q05":
 			if id == "saga_har_q05" and outcome == "resting_shelter":
 				_shelter(game,assembly,LINEN)
@@ -198,6 +191,116 @@ static func build(game, parent: Node3D, id: String, completed: bool, outcome: St
 				_plank(game,assembly,Vector3(x,0.22,0),Vector3(0.04,0.44,0.32))
 	return assembly
 
+static func _build_watercourse(game, assembly: Node3D) -> void:
+	# A shallow bank-side run, not another crossing or a change to river collision.
+	var natural := Node3D.new()
+	natural.name = "NaturalRun"
+	assembly.add_child(natural)
+	var points := [Vector3(-1.3,0,0), Vector3(0,0,0.65), Vector3(1.2,0,1.5), Vector3(2.3,0,1.5)]
+	for index in range(points.size()-1):
+		_water_segment(game, natural, points[index], points[index+1], false)
+	var side := Node3D.new()
+	side.name = "ContainedChannel"
+	assembly.add_child(side)
+	_water_segment(game, side, Vector3(-1.3,0,0), Vector3(-0.45,0,-0.2), true)
+	_water_segment(game, side, Vector3(-0.45,0,-0.2), Vector3(2.3,0,-0.2), true)
+	var debris := Node3D.new()
+	debris.name = "InletDebris"
+	assembly.add_child(debris)
+	for index in range(3):
+		var piece := _plank(game,debris,Vector3(-1.0+index*0.12,0.09,index*0.12),Vector3(0.55,0.08,0.07))
+		piece.rotation.y = -0.5 + index*0.45
+	var screen := Node3D.new()
+	screen.name = "ReusedScreen"
+	screen.position = Vector3(-0.45,0,-0.2)
+	screen.rotation.y = PI*0.5
+	assembly.add_child(screen)
+	for index in range(7):
+		_plank(game,screen,Vector3(-0.27+index*0.09,0.26,0),Vector3(0.025,0.45,0.05))
+	for y in [0.08,0.44]:
+		_plank(game,screen,Vector3(0,y,0),Vector3(0.65,0.04,0.06))
+	var gate := _plank(game,screen,Vector3(0,0.25,0.04),Vector3(0.56,0.35,0.025))
+	gate.name = "DrainGate"
+	var stand := Node3D.new()
+	stand.name = "CollectionStand"
+	stand.position = Vector3(2.3,0,-0.2)
+	assembly.add_child(stand)
+	_plank(game,stand,Vector3(0,0.31,0),Vector3(0.82,0.06,0.55))
+	for x in [-0.32,0.32]:
+		_plank(game,stand,Vector3(x,0.15,0),Vector3(0.06,0.30,0.5))
+	for index in range(2):
+		var pot := Node3D.new()
+		pot.name = "CleanPot" + str(index)
+		pot.position = Vector3(-0.21+index*0.42,0.35,0)
+		stand.add_child(pot)
+		_rod(game,pot,Vector3(0,0.11,0),0.13,0.22,Color(0.39,0.29,0.20))
+		var rim := TorusMesh.new()
+		rim.inner_radius = 0.105
+		rim.outer_radius = 0.14
+		rim.rings = 12
+		rim.ring_segments = 5
+		_mesh(game,pot,rim,Vector3(0,0.23,0),Color(0.48,0.35,0.23))
+		_rod(game,pot,Vector3(0,0.222,0),0.104,0.006,Color(0.05,0.19,0.21))
+		var waiting := Node3D.new()
+		waiting.name = "WaitingPot" + str(index)
+		waiting.position = Vector3(2.0+index*0.42,0,-0.8)
+		assembly.add_child(waiting)
+		_mesh(game,waiting,pot.get_child(0).mesh,Vector3(0,0.11,0),Color(0.39,0.29,0.20))
+		_mesh(game,waiting,rim,Vector3(0,0.23,0),Color(0.48,0.35,0.23))
+		_rod(game,waiting,Vector3(0,0.222,0),0.104,0.006,Color(0.17,0.14,0.09))
+	var work_anchor := Marker3D.new()
+	work_anchor.name = "GateWorkAnchor"
+	work_anchor.position = Vector3(0,0,-0.65)
+	assembly.add_child(work_anchor)
+	var pot_anchor := Marker3D.new()
+	pot_anchor.name = "PotWorkAnchor"
+	pot_anchor.position = Vector3(2.3,0,-0.8)
+	assembly.add_child(pot_anchor)
+
+static func _water_segment(game, parent: Node3D, start: Vector3, end: Vector3, contained: bool) -> void:
+	var segment := Node3D.new()
+	segment.position = (start + end)*0.5
+	segment.rotation.y = atan2((end-start).x, (end-start).z)
+	parent.add_child(segment)
+	var length := start.distance_to(end)
+	_plank(game,segment,Vector3(0,0.018,0),Vector3(0.56,0.03,length),WOOD if contained else Color(0.13,0.16,0.13))
+	for x in [-0.27,0.27]:
+		_plank(game,segment,Vector3(x,0.075,0),Vector3(0.055,0.12 if contained else 0.04,length),WOOD if contained else Color(0.25,0.29,0.24))
+	var surface := PlaneMesh.new()
+	surface.size = Vector2(0.45,length)
+	var water := _mesh(game,segment,surface,Vector3(0,0.045,0),Color(0.05,0.19,0.21))
+	water.name = "Water"
+	water.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var river := game.zone_root.get_node_or_null("LivingRiverSection/FlowingRiverWater") as MeshInstance3D
+	if river != null:
+		# Share the existing river clock/material, without a second per-frame owner.
+		water.material_override = river.material_override
+
+static func _sync_watercourse(assembly: Node3D, game) -> void:
+	const ID := "saga_wyc_q05"
+	var outcome := str(game.story_state.get_flag(ID + "_outcome", ""))
+	var known := outcome in ["side_channel", "natural_run"]
+	var work := _progress(game,ID,"clear_and_set") if known else 0.0
+	var pots := _progress(game,ID,"place_clean_pots") if known else 0.0
+	assembly.get_node("InletDebris").visible = work < 1.0/3.0
+	var side := assembly.get_node("ContainedChannel") as Node3D
+	side.visible = outcome == "side_channel" and work >= 2.0/3.0
+	for run: Node3D in [assembly.get_node("NaturalRun"), side]:
+		for segment: Node3D in run.get_children():
+			segment.get_node("Water").visible = known and work >= 1.0
+	var screen := assembly.get_node("ReusedScreen") as Node3D
+	# Natural flow bypasses the reused screen, stored clear on the dry bank.
+	screen.position = Vector3(-0.45,0,-0.2) if outcome != "natural_run" or work < 2.0/3.0 else Vector3(-0.65,0,-0.85)
+	screen.rotation.z = 0.0 if work >= 2.0/3.0 else -0.35
+	(screen.get_node("DrainGate") as Node3D).position.y = 0.56 if work >= 1.0 else 0.25
+	var stand := assembly.get_node("CollectionStand") as Node3D
+	var destination := Vector3(2.3,0,1.5) if outcome == "natural_run" else Vector3(2.3,0,-0.2)
+	stand.position = destination if work >= 1.0 else Vector3(2.3,0,-0.2)
+	(assembly.get_node("PotWorkAnchor") as Node3D).position = destination + Vector3(0,0,-0.6)
+	for index in range(2):
+		stand.get_node("CleanPot" + str(index)).visible = pots >= float(index+1)/3.0
+		assembly.get_node("WaitingPot" + str(index)).visible = pots < float(index+1)/3.0
+
 static func _progress(game, id: String, objective: String) -> float:
 	if game.quests.is_objective_done(id, objective) or game.quests.is_completed(id):
 		return 1.0
@@ -210,6 +313,8 @@ static func _progress(game, id: String, objective: String) -> float:
 static func sync_progress(assembly: Node3D, game, id: String) -> void:
 	if not is_instance_valid(assembly):
 		return
+	if id == "saga_wyc_q05":
+		_sync_watercourse(assembly,game)
 	var complete: bool = game.quests.is_completed(id)
 	var axle := assembly.get_node_or_null("ReliefAxleBrace") as Node3D
 	if axle != null:
@@ -250,9 +355,6 @@ static func sync_progress(assembly: Node3D, game, id: String) -> void:
 			var local_site: Vector3 = preload("res://scripts/saga_catalog.gd").SITES["marsh_crossing"][str(sites[index])]
 			post.position = assembly.to_local(game.zone_root.to_global(local_site))
 			post.rotation.z = 0.0 if _progress(game,id,"set_markers") >= float(index+1)/3.0 else 0.28
-	var gate := assembly.get_node_or_null("DrainGate") as Node3D
-	if gate != null:
-		gate.position.y = 0.48 if _progress(game,id,"clear_and_set") >= 1.0 else 0.25
 	var toll := assembly.get_node_or_null("RetiredTollBeam") as Node3D
 	if toll != null and _progress(game,id,"open_lane") > 0.0:
 		toll.position = Vector3(0.65,0.06,-0.3)
