@@ -1,5 +1,44 @@
 # FINISH-005 - Desktop And Phone Usability
 
+## Director Child: Honest Targeting - 2026-10-29
+
+Active child only, continued from `16707bc`. Visibility uses target-descendant
+collision or an explicit collision-object owner, never the former 1.2 m proximity
+exemption. The ray continues past owned bodies to reject unrelated walls behind
+them; camera visibility and physical reach are checked separately. Preserve low
+ground clues, intentional travel volumes and the shop's clear player-eye fallback.
+Focus scoring, quest priority, nearby indexing, dwell and remapping remain intact.
+The field-trial invitation now uses the existing optional-companion focus policy:
+deliberately examinable, without incidentally displacing the game board.
+
+Use freshly checks the target actually displayed. An unavailable prompt or stale
+virtual-target request cannot activate a different object. Greyfen's handling
+fixtures advertise their existing 1.05 m hand reach; seats use their actual 0.35 m
+activation reach. Table pieces explicitly share the common table's collision
+owner rather than ignoring nearby scenery. No new input or targeting authority.
+
+Focused native ownership/reach and displayed-target dispatch checks pass,
+including actual table meshes, remapped key de-duplication, virtual Use and newly
+blocked targets. The expanded fixture's initial constructor error and orphan
+service warning are recorded as HARNESS issues; no game/runtime pass is inferred
+from them. Compilation/package/browser status will be recorded in the child
+evidence and existing Git receipt. Actual-phone acceptance remains user-owned.
+User acceptance is pending; CONNECTOR-COMPOSITION has not begun.
+Normal-input Anwen dialogue and Mira shop access pass on the initial candidate;
+their dependencies are unchanged by the replacement optional-marker metadata.
+A nonfatal Canvas polygon-triangulation error during village movement remains an
+unresolved presentation observation, not a passed or newly diagnosed subsystem.
+Final `honest-targeting-20261029-r2` compiles and passes package integrity at
+**162,885,942 complete bytes**. Genuine Quick Save/Continue resumes the table
+approach; normal board Use invites Rook and opens Three Marks, then mouse
+selection opens Chess. No round/reward, physical-phone or full UI acceptance
+claimed. A stale in-memory local server initially mixed candidate identities;
+restarting that server resolves delivery without another game change/rebuild.
+No new console errors after the byte-consistent final reload. See
+[bounded evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/honest_targeting_20261029.json).
+Push development/main, do not wait for Vercel, then stop before child 8. Formal
+mandatory FINISH acceptance remains 0/16.
+
 ## Current Implementation Delivery - 2026-10-26
 
 Candidate: `finish-implementation-20261026`, continued from published r14

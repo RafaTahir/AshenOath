@@ -80,7 +80,7 @@ func _available(area: Node) -> bool:
 
 func _reach(area: Node) -> float:
 	if area.has_meta("interaction_reach"):
-		return clampf(float(area.get_meta("interaction_reach")), 0.5, 2.8)
+		return clampf(float(area.get_meta("interaction_reach")), 0.25, 2.8)
 	return 3.6 if str(area.get("interaction_type")) in ["zone", "dialogue"] else 2.8
 
 func _anchor(area: Node3D, fallback_height: float = 0.96) -> Vector3:
@@ -90,8 +90,32 @@ func _strict_line(area: Area3D, player: CharacterBody3D, origin: Vector3, target
 	var query := PhysicsRayQueryParameters3D.create(origin, target, 1)
 	query.exclude = [player.get_rid()]
 	query.collide_with_areas = false
-	var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
-	return hit.is_empty() or (hit.position as Vector3).distance_to(target) <= 0.16
+	query.hit_from_inside = true
+	var space := player.get_world_3d().direct_space_state
+	# Skip only target-owned bodies, then continue checking the entire reach.
+	# A target's own counter must never conceal a wall further along the ray.
+	for _index in range(16):
+		var hit := space.intersect_ray(query)
+		if hit.is_empty():
+			return true
+		var collider := hit.get("collider") as CollisionObject3D
+		if not _owns_collision(area, collider):
+			return false
+		var excluded := query.exclude
+		excluded.append(collider.get_rid())
+		query.exclude = excluded
+	return false
+
+func _owns_collision(area: Area3D, collider: CollisionObject3D) -> bool:
+	if not is_instance_valid(collider):
+		return false
+	if collider == area or area.is_ancestor_of(collider):
+		return true
+	# Shared fixtures explicitly identify their body or interaction owner. Never
+	# infer ownership from proximity, a common zone parent or an arbitrary path.
+	var path: NodePath = area.get_meta("interaction_collision_owner", NodePath())
+	var owner := area.get_node_or_null(path) as CollisionObject3D if not path.is_empty() else null
+	return is_instance_valid(owner) and (owner == collider or owner.is_ancestor_of(collider))
 
 func setup(manager: Node, presentation: Node = null) -> void:
 	quest_manager = manager
@@ -101,6 +125,8 @@ func target_is_valid(area: Area3D, player: CharacterBody3D, camera: Camera3D) ->
 	if not is_instance_valid(player) or not _available(area):
 		return false
 	if player.global_position.distance_to(area.global_position) > _reach(area):
+		return false
+	if area.has_meta("interaction_hand_reach") and (player.global_position + Vector3.UP).distance_to(_anchor(area)) > float(area.get_meta("interaction_hand_reach")):
 		return false
 	var kind := str(area.get("interaction_type"))
 	# Authored travel framing must not occlude the non-blocking travel volume.
@@ -121,29 +147,13 @@ func target_is_valid(area: Area3D, player: CharacterBody3D, camera: Camera3D) ->
 	# reach must still be unobstructed. The former exemption also ignored walls.
 	if kind in ["clue", "herb", "village_place"]:
 		return _strict_line(area, player, player.global_position + Vector3.UP * 1.3, target)
-	var space := player.get_world_3d().direct_space_state
+	var eye_origin := player.global_position + Vector3.UP * 1.3
 	for target_point in targets:
-		var query := PhysicsRayQueryParameters3D.create(origin, target_point, 1)
-		query.exclude = [player.get_rid()]
-		query.collide_with_areas = false
-		query.collide_with_bodies = true
-		var hit := space.intersect_ray(query)
-		if hit.is_empty():
+		if _strict_line(area, player, origin, target_point) and _strict_line(area, player, eye_origin, target_point):
 			return true
-		var collider := hit.get("collider") as Node3D
-		if collider != null:
-			var current: Node = collider
-			while current != null:
-				if current == area or (current is Node3D and (current as Node3D).global_position.distance_to(area.global_position) <= 1.2):
-					return true
-				current = current.get_parent()
 	# Shop counters retain their player-eye fallback behind booth framing.
 	if kind == "vendor":
-		var vendor_query := PhysicsRayQueryParameters3D.create(player.global_position + Vector3.UP * 0.96, target, 1)
-		vendor_query.exclude = [player.get_rid()]
-		vendor_query.collide_with_areas = false
-		vendor_query.collide_with_bodies = true
-		return space.intersect_ray(vendor_query).is_empty()
+		return _strict_line(area, player, player.global_position + Vector3.UP * 0.96, target)
 	return false
 
 func choose(candidates: Array, player: Node3D, camera: Camera3D, validator: Callable) -> Node:

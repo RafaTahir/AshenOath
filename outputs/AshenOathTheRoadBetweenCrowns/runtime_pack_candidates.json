@@ -1,28 +1,28 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-29T09:46:04.2682096Z",
-  "build_id": "solid-furniture-20261029",
-  "generated_from_commit": "c523b85a0aae48ac24bbb67c3a53dea3cdfae237",
+  "generated_at_utc": "2026-10-29T10:22:39.3022697Z",
+  "build_id": "honest-targeting-20261029-r2",
+  "generated_from_commit": "16707bc8c88a8156f519b56f2badc2c9fa2e6c10",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\solid-furniture-20261029\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\honest-targeting-20261029-r2\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 160056760,
+  "total_bytes": 160057384,
   "packs": [
     {
       "id": "base",
-      "version": "solid-furniture-20261029",
+      "version": "honest-targeting-20261029-r2",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4432260,
-      "sha256": "810610db0ccbd285ea3dbaab2c4676cc5667a875f5e017c8c9076edf6ee5a710",
+      "bytes": 4432884,
+      "sha256": "0fd60ebcfc66a06b74eb0ba065904d8bddcd3d7ff60becd072970616832b80bd",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "solid-furniture-20261029",
+      "version": "honest-targeting-20261029-r2",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 86265908,
@@ -32,7 +32,7 @@
     },
     {
       "id": "adjacent",
-      "version": "solid-furniture-20261029",
+      "version": "honest-targeting-20261029-r2",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2370980,
@@ -42,7 +42,7 @@
     },
     {
       "id": "campaign",
-      "version": "solid-furniture-20261029",
+      "version": "honest-targeting-20261029-r2",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8678820,
@@ -52,7 +52,7 @@
     },
     {
       "id": "characters",
-      "version": "solid-furniture-20261029",
+      "version": "honest-targeting-20261029-r2",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 8999204,
@@ -62,7 +62,7 @@
     },
     {
       "id": "monsters",
-      "version": "solid-furniture-20261029",
+      "version": "honest-targeting-20261029-r2",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 20678316,
@@ -72,7 +72,7 @@
     },
     {
       "id": "audio",
-      "version": "solid-furniture-20261029",
+      "version": "honest-targeting-20261029-r2",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21302876,
@@ -82,7 +82,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "solid-furniture-20261029",
+      "version": "honest-targeting-20261029-r2",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7328396,
@@ -92,13 +92,13 @@
     }
   ],
   "errors": [],
-  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from cleric-rear-cleanup-20261029. Re-exported owners: base. Construction-owned fitted game-table and chair collision; clear bench, pieces and gathering anchors; bounded opponent approaches and stationary-crowd yielding. Existing artwork and seven content pack inputs unchanged.",
+  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from honest-targeting-20261029. Re-exported owners: base. Retain verified explicit collision ownership/reach and displayed-target dispatch. Classify Bracken field-trial invitation with the existing optional-companion priority policy after demonstrated browser competition. No asset changes; seven content packs reused.",
   "selected_web_export": {
-    "build_id": "solid-furniture-20261029",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\solid-furniture-20261029\\export",
-    "generated_from_commit": "c523b85a0aae48ac24bbb67c3a53dea3cdfae237",
-    "artifacts_total_bytes": 162877351,
-    "root_pck_sha256": "ee6c12f116d9262da68a25a7ccc30f94fdc18ad15f17260c9dbeb6703e4a75cc",
-    "note": "Construction-owned fitted game-table and chair collision; clear bench, pieces and gathering anchors; bounded opponent approaches and stationary-crowd yielding. Existing artwork and seven content pack inputs unchanged."
+    "build_id": "honest-targeting-20261029-r2",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\honest-targeting-20261029-r2\\export",
+    "generated_from_commit": "16707bc8c88a8156f519b56f2badc2c9fa2e6c10",
+    "artifacts_total_bytes": 162878226,
+    "root_pck_sha256": "6c063fc0eb56db932beebdfacecceb5d53c68f7a121e40f9f58b9852861d15b6",
+    "note": "Retain verified explicit collision ownership/reach and displayed-target dispatch. Classify Bracken field-trial invitation with the existing optional-companion priority policy after demonstrated browser competition. No asset changes; seven content packs reused."
   }
 }

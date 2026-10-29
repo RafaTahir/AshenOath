@@ -110,7 +110,10 @@ func _dispatch_gameplay_action(action: String, target_instance_id: int = 0) -> v
 	match action:
 		"interact":
 			var shown: Dictionary = hud.get_interaction_prompt_model()
-			var chosen_id: int = target_instance_id if target_instance_id > 0 else int(shown.get("target_instance_id", 0))
+			var shown_id := int(shown.get("target_instance_id", 0))
+			if not bool(shown.get("available", false)) or (target_instance_id > 0 and target_instance_id != shown_id):
+				return
+			var chosen_id: int = shown_id
 			var focused_target: Area3D = instance_from_id(chosen_id) as Area3D if chosen_id > 0 else null
 			if is_instance_valid(focused_target) and zone_root != null and zone_root.is_ancestor_of(focused_target) and _interaction_target_valid(focused_target):
 				_handle_interaction(focused_target)

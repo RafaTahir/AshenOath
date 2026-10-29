@@ -10,7 +10,19 @@ The approved ten-child roadmap supersedes the execution restrictions and
 source-complete assumptions in the dated delivery record below. Mandatory user
 acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
 
-**FINISH-007/SOLID-FURNITURE** is implemented/compiled on
+**FINISH-005/HONEST-TARGETING** is implemented/compiled on
+`honest-targeting-20261029-r2`; the FINISH-005 Git receipt owns push status.
+Explicit ownership/full reach replaces the nearby-collider exemption; stale
+virtual targets are rejected. Greyfen handling/seat prompt reach is honest and
+the field-trial marker uses existing optional-companion priority. Native visibility,
+dispatch/remapping and optional-focus checks pass. Normal-input Anwen/shop access
+is retained from the unchanged initial candidate; final r2 Continue/board Use and
+Chess selection pass. Complete package: **162,885,942 bytes**, seven unchanged
+packs reused. No user acceptance inferred. A nonfatal Canvas triangulation error
+observed during initial village movement remains an unresolved presentation item;
+final r2 scoped use adds no new console errors. Do not repeat passed checks.
+
+**FINISH-007/SOLID-FURNITURE** was pushed as `16707bc` and is implemented/compiled on
 `solid-furniture-20261029`; its Git receipt owns push status. Fitted table/chair
 collision, clear bench/gathering anchors and opponent approaches are retained.
 The 32 capsule sweeps and final native named-approach/Chess checks pass. The bounded
@@ -25,8 +37,8 @@ Rafa's rear-view screenshot rejects the residual hood shell/mantle in the prior
 both added cleric layers and retires stale owned attachments; native four-angle
 captures pass on `cleric-rear-cleanup-20261029`. Compilation and package integrity
 pass at 162,882,438 complete bytes. The FINISH-003 receipt owns push status.
-No appearance acceptance is inferred from the prior check. The
-next child after the active furniture work is HONEST-TARGETING; not started.
+No appearance acceptance is inferred from the prior check. The next child after
+the current targeting delivery is CONNECTOR-COMPOSITION; not started.
 Child 4 was pushed as `71c253a` to development/main; acceptance remains pending.
 Child 3 was pushed as `5f43ab7` to development and main; its remaining speed and
 coverage limitations stay recorded. This does not establish user acceptance.
@@ -51,7 +63,7 @@ child. No separate CLI deployment and no implied whole-game acceptance.
 | 4 | FINISH-003/ANIMATION-LIFECYCLE | Implemented/compiled; scoped native/browser checks pass, pushed 71c253a; awaiting Rafa |
 | 5 | FINISH-003/FACE-ARTIFACT | Prior front-only repair rejected at rear; hood/mantle removal and stale-layer cleanup implemented, four-angle native captures pass; replacement build/push receipt owns delivery; awaiting Rafa |
 | 6 | FINISH-007/SOLID-FURNITURE | Implemented/compiled; 32 native capsule cases and opponent/Chess checks pass, partial normal-input browser coverage; Git receipt owns push status; awaiting Rafa |
-| 7 | FINISH-005/HONEST-TARGETING | Not started |
+| 7 | FINISH-005/HONEST-TARGETING | Implemented/compiled, scoped native and normal-input dialogue/shop/board checks pass; final r2 package; Git receipt owns push; awaiting Rafa |
 | 8 | FINISH-013/CONNECTOR-COMPOSITION | Not started; mesh identification required |
 | 9 | FINISH-007/OPENING-PURPOSE | Not started |
 | 10 | FINISH-008/WATER-AFTERMATH | Not started |

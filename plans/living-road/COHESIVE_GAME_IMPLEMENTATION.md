@@ -6,9 +6,37 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
-Rafa subsequently authorized continuing through child 6 and removed Vercel waiting:
+Rafa subsequently authorized continuing through child 7 and removed Vercel waiting:
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
+
+### FINISH-005/HONEST-TARGETING (awaiting Rafa; Git receipt owns push status)
+
+Continue from child 6 at `16707bc`; retain its collision/approach changes and all
+prior character fixes. Target visibility no longer infers ownership from 1.2 m
+proximity or an arbitrary zone ancestor. Skip only descendant bodies or an
+explicit collision-object owner and continue checking for other walls. Preserve
+the ground-clue/player-eye and travel-volume rules, shop fallback, focus scoring
+and dwell. Gameplay Use freshly validates the displayed target; stale virtual
+requests cannot activate a previous prompt. Small Greyfen handling fixtures and
+seats advertise only their actual activation reach, with explicit table ownership
+for its pieces. Native visibility and dispatch probes pass; the latter includes
+remapped key de-duplication and virtual requests. An initial fixture constructor
+error and unattached test-service cleanup warning are HARNESS-owned, not runtime
+game failures. Browser observation also finds an unclassified field-trial marker
+crowding out the board: add its existing optional-companion focus metadata, not
+another scoring system. Focused optional selection passes. Final
+`honest-targeting-20261029-r2` compiles/packages at **162,885,942 complete bytes**,
+reusing seven packs. Anwen dialogue and Mira shop access pass on unchanged
+dependencies; genuine Continue, ordinary board Use and mouse Chess selection pass
+on final bytes. Initial stale-server cache is a local HARNESS failure resolved
+by restarting only that server; no further artifact change. A nonfatal Canvas
+triangulation error during initial village movement remains an unresolved
+presentation observation; final scoped use adds no new errors. No phone, round,
+all-world or performance acceptance claim. Push only; do not wait for Vercel.
+CONNECTOR-COMPOSITION has not begun.
+
+[Targeting evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/honest_targeting_20261029.json).
 
 ### FINISH-007/SOLID-FURNITURE (awaiting Rafa; Git receipt owns push status)
 

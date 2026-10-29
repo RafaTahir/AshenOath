@@ -1,0 +1,66 @@
+{
+  "ticket": "FINISH-005/HONEST-TARGETING",
+  "build_id": "honest-targeting-20261029-r2",
+  "baseline_commit": "16707bc8c88a8156f519b56f2badc2c9fa2e6c10",
+  "classification": "GAME",
+  "implementation": [
+    "Replace nearby-collider ancestry/proximity exemptions with target-descendant or explicit collision-object ownership. Continue ray checks after owned bodies and reject unrelated walls, including near-endpoint blockers.",
+    "Require both camera visibility and player reach for ordinary targets; preserve low-clue/player-eye behavior, shop fallback and intentional travel volumes.",
+    "Reject unavailable prompts and stale virtual target IDs; freshly validate the exact displayed target without selecting a replacement on Use.",
+    "Align Greyfen handling and seating prompts with their existing activation reach; explicitly associate common-table pieces with the table collision owner.",
+    "Retain focus scoring, quest priority, dwell, local indexing, remapped bindings, furniture solidity, character repairs, saves and content.",
+    "Apply the existing optional-companion focus policy to Bracken's field-trial invitation after it demonstrably crowds out the table during normal input. Keep the trial deliberately selectable."
+  ],
+  "native_verification": {
+    "tool": "Existing verify_interaction_visibility.gd extended only for the active contract",
+    "visibility": "PASS: clear/behind/blocked dialogue, ground clue versus wall/support, gate framing/range, vendor fallback, unrelated near-speaker collision, target-owned body, wall behind an owned body, explicit sibling owner versus arbitrary zone parent, endpoint blocker, hand/seat reach and both actual authored table meshes",
+    "visibility_log": "D:/Temp/AshenOath/honest-targeting-20261029/visibility.log",
+    "dispatch": "PASS via --dispatch-only: actual remapped F9 through InputRouter/session activates shown target once for the same event, stale virtual target rejected, current virtual target activates once, newly added wall and unavailable prompt reject activation",
+    "dispatch_log": "D:/Temp/AshenOath/honest-targeting-20261029/dispatch.log",
+    "optional_activity_focus": "PASS --optional-focus-only: examined board wins over incidental invitation, and deliberately examined invitation remains selectable",
+    "optional_activity_focus_log": "D:/Temp/AshenOath/honest-targeting-20261029/optional-focus.log",
+    "scope": "Isolated subsystem data; production actors, quests and saves are not mutated. Unchanged furniture collision sweeps and passed campaign/save checks are not repeated.",
+    "harness_failures": [
+      "Initial dispatch probe omitted the required GameState host constructor argument; corrected before successful execution",
+      "Successful dispatch assertions initially left the fixture's unattached ZoneResidencyService alive at shutdown; attached it to fixture ownership afterward. Cleanup-only change reviewed statically, not a claim of game memory acceptance.",
+      "Optional-focus helper was initially inserted inside another fixture method; parser rejected it before execution. Moved it to its own function; focused optional check then passed."
+    ]
+  },
+  "browser_verification": {
+    "browser": "Authorized in-app Chromium, isolated origin http://127.0.0.1:43739, normal mouse/keyboard only",
+    "retained_checks_on_initial_candidate": "Real mouse New Game; displayed Anwen Use opens her conversation; displayed Mira shop Use opens remedies without a purchase. These dependencies are unchanged by the r2 field-trial metadata correction.",
+    "observed_game_failure": "Initial candidate's field-trial invitation retains incidental focus near the game board. Owner corrected with existing optional-companion policy; necessary replacement artifact, not a driver-only re-export.",
+    "continuation": "Ordinary Quick Save at earned table approach confirms durable browser storage; Continue on r2 will reuse it without fabricated flags, teleportation or campaign replay",
+    "anwen_screenshot": "D:/Temp/AshenOath/honest-targeting-20261029/browser-anwen.png",
+    "shop_screenshot": "D:/Temp/AshenOath/honest-targeting-20261029/browser-shop.png",
+    "final_table_check": "PASS on r2: ordinary Continue restores the genuine quick save; normal movement/look selects Play Three Marks with Rook rather than the incidental invitation. Use requests Rook, then opens Three Marks after arrival. Mouse selects Chess and its board renders. No round played or rewards claimed.",
+    "final_table_screenshot": "D:/Temp/AshenOath/honest-targeting-20261029/browser-chess-r2.png",
+    "harness_reload_failure": "QA server caches HTML/root/pack manifest at startup. Reloading after replacing its on-disk candidate mixed identities and produced an opening-pack Retry. Restarted only the verified local server on the same origin; no runtime-code or artifact correction was needed for this failure.",
+    "other_observed_game_error": "Initial-candidate movement emitted a nonfatal 'Invalid polygon data, triangulation failed' Canvas error at 2026-10-29T10:17:08Z. Exact presentation owner not isolated in this targeting repair. Retained as an unresolved presentation obligation; no claim of an error-free whole-game run.",
+    "final_console": "No new warning/error entries after the byte-consistent r2 reload; console retains the earlier initial-candidate Canvas error. No fatal resource/runtime error observed on the final scoped route.",
+    "coverage_limits": "Barrel-table visibility covered natively with actual mesh, not a new browser visit. No chess-round, short-screen, physical-touch or phone acceptance claim.",
+    "cleanup": "Temporary tab closed, reference viewport reset, both verified task-created servers stopped; genuine isolated save preserved"
+  },
+  "compilation": "passed base content-pack export and production Web root export",
+  "package": {
+    "complete_directory_bytes_including_manifest": 162885942,
+    "artifact_transport_bytes": 162878226,
+    "decoded_artifact_bytes": 203026435,
+    "root_transport_sha256": "6c063fc0eb56db932beebdfacecceb5d53c68f7a121e40f9f58b9852861d15b6",
+    "root_decoded_sha256": "21df3707200549deef2c881c39f758e449dd68d147c01cd366385cc327909575",
+    "rebuilt_content_packs": ["base"],
+    "reused_content_packs": 7,
+    "integrity": "passed existing transport/decoded hashes, sizes and manifest checks; below 256 MiB with no Git file at 100 MiB",
+    "opening_required_balanced_potato_bytes": 97956245,
+    "replacement_reason": "r2 includes the demonstrated missing optional-activity priority metadata. Initial artifact preserved; unchanged native/dialogue/shop dependencies reused, not replayed."
+  },
+  "user_acceptance": "pending; mandatory FINISH acceptance remains 0/16",
+  "publication": "FINISH-005 Git receipt owns development/main push identity. No Vercel waiting or separate CLI deployment.",
+  "limitations": [
+    "No phone, all-world, whole-campaign, listening, sustained-performance or memory acceptance claimed",
+    "Construction, actor appearance and furniture changes from prior children preserved; not replayed as new verification",
+    "No gains in loading time or FPS claimed from this interaction repair"
+  ],
+  "unrelated_work": "Pre-existing prepared_actors.json line-ending/stat modification and both untracked directories preserved",
+  "next": "Stop after this child is pushed; CONNECTOR-COMPOSITION awaits authorization"
+}

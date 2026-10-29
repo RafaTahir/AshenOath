@@ -42,6 +42,7 @@ static func choose(host, action: Dictionary) -> void:
 func _build() -> void:
 	var invitation = Interactable.new()
 	invitation.setup("lr_trial", "story_activity", "Bracken's field trial")
+	invitation.set_meta("optional_companion_interaction", true)
 	invitation.position = START
 	invitation.build_collision(0.8)
 	add_child(invitation)

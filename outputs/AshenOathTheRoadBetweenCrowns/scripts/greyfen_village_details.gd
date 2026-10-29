@@ -84,6 +84,10 @@ func _point(id: String, prompt: String, position_value: Vector3, kind: String, w
 	var heights := {"container":0.55,"bucket":0.55,"bellows":0.63,"mechanism":0.8,"shutter":1.36,"knock":1.1,"seat":0.45}
 	area.set_meta("interaction_anchor", Vector3(0,float(heights.get(kind,0.9)),0))
 	area.set_meta("interaction_reach", 2.2)
+	if kind == "seat":
+		area.set_meta("interaction_reach", 0.35)
+	elif kind not in ["record", "dummy", "guide"]:
+		area.set_meta("interaction_hand_reach", 1.05)
 	area.set_meta("strict_interaction_visibility", true)
 	area.set_meta("detail_kind", kind)
 	area.set_meta("detail_text", words)
@@ -304,6 +308,9 @@ func _build_bell() -> void:
 func _build_common() -> void:
 	var pieces := _point("game_pieces","Set out the common-table pieces",Vector3(-5.8,0,11.05),"mechanism","Rook: The dark ones are yours if you like. Winning is optional; accusing the cups is traditional. The proper game board keeps its own result.")
 	pieces.set_meta("interaction_anchor", Vector3(0,1.04,0))
+	var table := game.zone_root.find_child("common_table", true, false) as Area3D
+	if table != null:
+		pieces.set_meta("interaction_collision_owner", pieces.get_path_to(table))
 	for index in range(6):
 		var piece := Work._rod(game,pieces,Vector3(-0.2+index*0.08,1.07,0),0.027,0.025,IRON if index%2==0 else LINEN)
 		pieces.get_node("PropState").bind_visual(piece,"position:z",0.0,float(index%2)*0.12)
