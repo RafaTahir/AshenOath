@@ -1,28 +1,28 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-29T05:56:20.6256721Z",
-  "build_id": "safe-connector-20261029",
-  "generated_from_commit": "a587888e7ba4e8807be64be6a33baa98b937a92d",
+  "generated_at_utc": "2026-10-29T06:28:59.6681548Z",
+  "build_id": "animation-lifecycle-20261029",
+  "generated_from_commit": "5f43ab75660997b1986cee59af9c7e389c1c02da",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\safe-connector-20261029\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\animation-lifecycle-20261029\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 160054920,
+  "total_bytes": 160056216,
   "packs": [
     {
       "id": "base",
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4429844,
-      "sha256": "a4ba181f0caca4a3e0f13458d30895e8e0c984d9802c7b579c53e762213afce5",
+      "bytes": 4430756,
+      "sha256": "84239c845e9c8f2a04485acab860d91d8fe083b471aa83297d93d6e12fe92b77",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 86266868,
@@ -32,7 +32,7 @@
     },
     {
       "id": "adjacent",
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2370980,
@@ -42,17 +42,17 @@
     },
     {
       "id": "campaign",
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
-      "bytes": 8678436,
-      "sha256": "00231388353d5597563e933967bea76d8a7641109a088863e4cf5d6d28317455",
+      "bytes": 8678820,
+      "sha256": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
       "status": "candidate_external",
-      "log": "../pack-closure-20261028-r2/runtime-packs/campaign.pck"
+      "log": "logs/pack-campaign.stdout.log"
     },
     {
       "id": "characters",
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 8999204,
@@ -62,7 +62,7 @@
     },
     {
       "id": "monsters",
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 20678316,
@@ -72,7 +72,7 @@
     },
     {
       "id": "audio",
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21302876,
@@ -82,7 +82,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7328396,
@@ -92,13 +92,13 @@
     }
   ],
   "errors": [],
-  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from responsive-preparation-20261029-r2. Re-exported owners: base. No assets, export ownership or visual settings changed.",
+  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from safe-connector-20261029. Re-exported owners: base, campaign. No assets, export ownership or visual settings changed.",
   "selected_web_export": {
-    "build_id": "safe-connector-20261029",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\safe-connector-20261029\\export",
-    "generated_from_commit": "a587888e7ba4e8807be64be6a33baa98b937a92d",
-    "artifacts_total_bytes": 162867617,
-    "root_pck_sha256": "bd1d24b724aea43bab7e94f3c2627598e49883ee3f4f115640077a47ca2cf6b0",
+    "build_id": "animation-lifecycle-20261029",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\animation-lifecycle-20261029\\export",
+    "generated_from_commit": "5f43ab75660997b1986cee59af9c7e389c1c02da",
+    "artifacts_total_bytes": 162874900,
+    "root_pck_sha256": "69173b367e9deae59d97e4f8be6b157cc5fceca6973f1be7f587d482fdee8728",
     "note": "Script-only repair; unchanged packs reused by their complete input scope."
   }
 }

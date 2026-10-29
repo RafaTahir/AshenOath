@@ -88,7 +88,8 @@ static func build_core_detail_stage(host: Node, zone_id: String, stage: String) 
 	builder.build_detail_stage(context, stage)
 	if owns_reads:
 		host._end_zone_world_reads()
-	return {"ok": true, "zone": canonical_id, "stage": stage}
+	var actors: Dictionary = preload("res://scripts/character_animation_driver.gd").zone_contract(host.zone_root)
+	return {"ok": bool(actors.ok), "errors": actors.errors, "zone": canonical_id, "stage": stage}
 
 static func registered_zones() -> Array[String]:
 	var result: Array[String] = []

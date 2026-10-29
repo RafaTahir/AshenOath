@@ -1,0 +1,60 @@
+{
+  "ticket": "FINISH-003/ANIMATION-LIFECYCLE",
+  "date_local": "2026-10-29",
+  "baseline_commit": "5f43ab75660997b1986cee59af9c7e389c1c02da",
+  "build_id": "animation-lifecycle-20261029",
+  "implementation": "complete_for_bounded_animation_ownership_and_readiness_repairs",
+  "compilation": "passed",
+  "developer_verification": "targeted_clock_contracts_native_skin_motion_and_browser_input_recovery_pass",
+  "user_acceptance": "pending_0_of_16_mandatory_FINISH_tickets",
+  "publication": "Matching FINISH-003 Git publication receipt owns commit/push status. Stop after development/main push; no Vercel polling/manual deployment.",
+  "changes": [
+    "Validate required idle/walk/run clips against actual retained skeleton bone targets at configuration; preserve existing clip resolution, skins and AnimationTree.",
+    "Reject duplicate skeleton playback owners. Failed reconfiguration stops/frees the old graph and life modifier and stops the timer instead of retaining stale playback.",
+    "Named/routine factories consume configuration results. Weak destination-bound actor registrations propagate failed or missing owners into build, opening Retry, cached activation and travel rollback contracts.",
+    "Register player, encounter rigs and actual Hart witnesses; routine movement requires a valid owner. Failed required bodies are not replaced with generic moving proxies.",
+    "Reconcile existing clocks on cache activation, retaining timer/frame/external policy, distance suspension and committed/dead state. Scheduled status reflects the actual clock and process eligibility.",
+    "Extend existing focused fixtures only; GPU skin readback is verification-only and does not run in gameplay. No new clips, body/material edits, save schema, gameplay balance or quality changes."
+  ],
+  "checks": [
+    {"name": "source_and_production_compilation", "result": "pass", "detail": "Game/driver/finale/fixture parser checks, changed base/campaign packs and Web production export. Static call-site and diff review completed."},
+    {"name": "shared_animation_lifecycle", "result": "pass", "log": "shared-final.log", "detail": "Independent shared-library rigs; real bone motion; single timer/frame/external clock; distance and cache suspension/resume; duplicate owner rejection; failed reconfiguration clears stale playback; missing bone binding prevents readiness and valid retry restores it; death survives suspension and legitimate restoration resumes."},
+    {"name": "animation_timer_rate", "result": "pass", "log": "timer.log", "detail": "Configured retained-style skeleton; staggered first interval 0.02 s followed by 0.1 s, distance suspend/resume and exclusive external ownership."},
+    {"name": "native_actor_skin_motion", "result": "pass", "log": "actors.log", "detail": "One graphical subsystem session on native 1280x720 Compatibility/ANGLE Intel HD 620. Actual bone transforms and baked skinned vertices change for all 15 registered opening actors and seven representative encounter rigs. Dialogue restores its exact previous clock; cached activation resumes the actor. Explicit subsystem staging is not an earned campaign or subjective animation approval."},
+    {"name": "campaign_actor_preparation", "result": "pass_with_existing_shutdown_warning", "log": "campaign-actors.log", "detail": "Eleven campaign destinations reach bounded ready and cancel without leaking active source ownership or changing durable story. Existing ObjectDB instances-leaked shutdown warning remains. No private-memory or leak-free certification is claimed."},
+    {"name": "final_package_browser", "result": "pass_for_input_and_dialogue_lifecycle_only", "detail": "Isolated final bytes at 127.0.0.1:43733 in in-app Chromium. Real mouse New Game, visible optional intro skip, ordinary keyboard movement, displayed Anwen Use, dialogue opening/closing and movement recovery. No console warnings/errors. No teleport, manufactured quest state, diagnostic overrides or save injection."},
+    {"name": "browser_presentation", "result": "GAME_failure_open_separate_owner", "detail": "Care-area dialogue composition is obstructed by nearby geometry/equipment; malformed head/hood shapes remain visible around the care area. Not accepted, not attributed to a proven exact mesh, and not claimed fixed by this lifecycle ticket."},
+    {"name": "package_integrity", "result": "pass", "detail": "17 deployed files including release manifest; matching transport/decoded hashes and shared budget. Changed base/root and campaign scripts rebuilt. Six unaffected content packs reused from safe-connector-20261029."}
+  ],
+  "native_skin_motion_actors": ["sister_anwen", "mira", "rook", "widow_elna", "blacksmith_tor", "farmer_toma", "walker_well", "walker_board", "shrine_pilgrim", "forge_helper", "kael", "saga_maren", "saga_nessa", "saga_jory", "injured_traveler", "captain_senn", "ghoulkin", "wychwood_stalker", "rootbound_colossus", "ashwing", "white_hart_avatar", "halvern_boss"],
+  "corrections": [
+    {"owner": "IMPLEMENTATION", "detail": "Explicit bool type added for a new dynamic-driver validity expression after the parser reported inference failure; subsequent compilation passed."},
+    {"owner": "HARNESS", "detail": "Additional death assertion initially called generic trigger_action rather than set_dead. Corrected the fixture API; focused recheck passed on unchanged candidate game code."},
+    {"owner": "HARNESS", "detail": "Initial local navigation preceded server initialization and returned connection refused; no engine run started in that tab. Server readiness confirmed and a fresh temporary tab reached the same candidate. The error-page tab could not be rebound through browser URL policy and was not bypassed."},
+    {"owner": "GAME", "detail": "Source-confirmed ignored factory configuration failures and stale graph ownership are repaired. The historical rigid-pose symptom is not claimed retrospectively attributed solely to missing bindings or idle restart."}
+  ],
+  "evidence_reuse": "Native 22-actor motion evidence precedes only the final invalid-driver timer guard and legacy Hart-wrapper registration corrections. These do not change valid rig bindings, graph motion or mesh data; final clock fixtures, compilation and browser startup/dialogue cover the delivered code. No second graphical readback session or unrelated passed campaign replay was performed.",
+  "package": {
+    "deployment_bytes": 162882616,
+    "transport_artifact_bytes_excluding_release_manifest": 162874900,
+    "decoded_artifact_bytes": 203023987,
+    "balanced_opening_download_bytes": 97952919,
+    "quality_opening_download_bytes": 105162801,
+    "max_deployment_bytes": 268435456,
+    "largest_git_artifact_bytes": 82260069,
+    "root_transport_sha256": "69173b367e9deae59d97e4f8be6b157cc5fceca6973f1be7f587d482fdee8728",
+    "root_decoded_sha256": "5be5f35ae6956302e6ecd25fe2981b1c0bb587db395b5bfc60c4558ac4d41e8a",
+    "note": "155.34 MiB deployed. Initial downloads remain about 97.95 MB; decoded totals are not runtime memory. No startup, FPS, transition or memory improvement is measured or claimed."
+  },
+  "evidence_root": "D:/Temp/AshenOath/animation-lifecycle-20261029",
+  "browser_capture": "D:/Temp/AshenOath/animation-lifecycle-20261029/browser-dialogue-recovery.png",
+  "build_logs": "D:/Projects/AshenOath/.release-gate/animation-lifecycle-20261029/logs",
+  "verification_reference": "https://docs.godotengine.org/en/4.6/classes/class_meshinstance3d.html#class-meshinstance3d-method-bake-mesh-from-current-skeleton-pose",
+  "cleanup": "Native/fixture/build processes finished. Successful game tab closed and server stopped. Failed initial temporary error tab is unmarked and subject to end-of-turn cleanup. Production-origin saves and unrelated tabs were untouched.",
+  "remaining_conditions": [
+    "Face/hood artifact ownership and care-area camera obstruction remain open GAME presentation work; no asset was guessed or deleted.",
+    "All clip/action combinations, full campaign/region returns, actual phone behavior, subjective motion/appearance, strict performance and sustained owned-process memory are not accepted by these focused checks.",
+    "Existing construction-fixture shutdown ObjectDB warning remains disclosed; no new profiling campaign or unrelated refactor was started."
+  ],
+  "next": "Push development and main through existing publisher; stop without Vercel waiting. Begin child 5 only after Rafa's next authorization."
+}

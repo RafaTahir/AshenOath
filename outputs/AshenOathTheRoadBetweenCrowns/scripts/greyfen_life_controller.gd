@@ -285,9 +285,9 @@ func _physics_process(delta: float) -> void:
 		var due := int(entry.get("decision_due_msec", now))
 		if now >= due:
 			entry.decision_due_msec = due + (floori(float(now - due) / decision_period) + 1) * decision_period
-			if entry.driver == null:
+			if not is_instance_valid(entry.driver) or not entry.driver.is_valid():
 				var hydrated_driver: Node = actor_node.find_child("CharacterAnimationDriver", true, false)
-				if hydrated_driver != null:
+				if is_instance_valid(hydrated_driver) and hydrated_driver.is_valid():
 					entry.driver = hydrated_driver
 			var render_distance: float = 8.0 if quality == "potato" else (18.0 if quality == "quality" else 16.0)
 			var was_distant: bool = bool(entry.get("distance_suspended", false))
@@ -298,7 +298,7 @@ func _physics_process(delta: float) -> void:
 				entry.face = actor_node.find_child("CharacterFaceDriver", true, false)
 			if is_instance_valid(entry.face):
 				entry.face.set_distance_suspended(distant)
-			if entry.driver != null:
+			if is_instance_valid(entry.driver) and entry.driver.is_valid():
 				entry.driver.character_root.set_meta("cast_viewer", player)
 			_update_reaction(entry, float(decision_period) / 1000.0)
 			var driver: Node = entry.driver
@@ -439,6 +439,9 @@ func _build_population(first := 0, count := -1) -> void:
 		host.zone_root.add_child(actor)
 		var spawn_started := Time.get_ticks_usec()
 		var driver = _make_skeletal_villager(actor, str(definition.id), i, float(definition.get("scale",1.0)))
+		if not is_instance_valid(driver) or not driver.is_valid():
+			actor.queue_free()
+			continue
 		var spawn_ms := float(Time.get_ticks_usec() - spawn_started) / 1000.0
 		var entry := _make_entry(definition.id, actor, definition.path, definition.speed, driver, false)
 		actors.append(entry)
@@ -473,6 +476,10 @@ func _enroll_named_npcs() -> void:
 func _update_actor(entry: Dictionary, delta: float) -> void:
 	var node: Node3D = entry.node
 	if not is_instance_valid(node): return
+	if not is_instance_valid(entry.driver) or not entry.driver.is_valid():
+		entry.motion_speed = 0.0
+		entry.travel_direction = Vector3.ZERO
+		return
 	if entry.has("table_restore"):
 		entry.table_seconds = float(entry.get("table_seconds",120.0)) - delta
 		if float(entry.table_seconds) <= 0.0 or player.global_position.distance_to(entry.get("table_point",node.global_position)) > 9.0:
@@ -1738,6 +1745,7 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 	var load_ms := float(Time.get_ticks_usec() - visual_started) / 1000.0
 	if mapped == null or mapped.name.ends_with("_placeholder"):
 		push_error("Rigged villager asset unavailable for %s" % role_id)
+		CharacterAnimationDriver.record_configuration(host.zone_root, role_id, null)
 		return null
 	mapped.name = "%s_rigged_human" % role_id
 	asset_helper.apply_normalized_scale(mapped, target_scale)
@@ -1767,7 +1775,10 @@ func _make_skeletal_villager(parent: Node3D, role_id: String, index: int, scale_
 		clips["work"] = "Idle"
 	elif family.contains("monk"):
 		clips["work"] = "Idle"
-	driver.configure(mapped, clips)
+	if not driver.configure(mapped, clips):
+		CharacterAnimationDriver.record_configuration(host.zone_root, role_id, driver)
+		return null
+	CharacterAnimationDriver.record_configuration(host.zone_root, role_id, driver)
 	load("res://scripts/grounded_feet_modifier.gd").install_npc(mapped, driver)
 	driver.set_update_rate_hz(30.0)
 	if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1":

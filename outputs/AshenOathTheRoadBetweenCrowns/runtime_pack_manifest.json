@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "safe-connector-20261029",
+  "release_id": "animation-lifecycle-20261029",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4429844,
-      "candidate_sha256": "a4ba181f0caca4a3e0f13458d30895e8e0c984d9802c7b579c53e762213afce5",
+      "candidate_bytes": 4430756,
+      "candidate_sha256": "84239c845e9c8f2a04485acab860d91d8fe083b471aa83297d93d6e12fe92b77",
       "contents": [
         "menu",
         "managers",
@@ -35,12 +35,12 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4429844,
-      "embedded_source_sha256": "a4ba181f0caca4a3e0f13458d30895e8e0c984d9802c7b579c53e762213afce5",
+      "embedded_source_bytes": 4430756,
+      "embedded_source_sha256": "84239c845e9c8f2a04485acab860d91d8fe083b471aa83297d93d6e12fe92b77",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "url": "packs/opening.pck?sha256=427bee7812ca1bc0dce00b75f2bac55520c67b4fe382206e1588601516764bec",
       "sha256": "427bee7812ca1bc0dce00b75f2bac55520c67b4fe382206e1588601516764bec",
       "bytes": 86266868,
@@ -61,10 +61,10 @@
       "cache_key": "427bee7812ca1bc0dce00b75f2bac55520c67b4fe382206e1588601516764bec"
     },
     "campaign": {
-      "version": "safe-connector-20261029",
-      "url": "packs/campaign.pck?sha256=00231388353d5597563e933967bea76d8a7641109a088863e4cf5d6d28317455",
-      "sha256": "00231388353d5597563e933967bea76d8a7641109a088863e4cf5d6d28317455",
-      "bytes": 8678436,
+      "version": "animation-lifecycle-20261029",
+      "url": "packs/campaign.pck?sha256=4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
+      "sha256": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
+      "bytes": 8678820,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,18 +73,18 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 8678436,
-      "candidate_sha256": "00231388353d5597563e933967bea76d8a7641109a088863e4cf5d6d28317455",
+      "candidate_bytes": 8678820,
+      "candidate_sha256": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "00231388353d5597563e933967bea76d8a7641109a088863e4cf5d6d28317455"
+      "cache_key": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12"
     },
     "characters": {
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "url": "packs/characters.pck?sha256=36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
       "sha256": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
       "bytes": 8999204,
@@ -105,7 +105,7 @@
       "cache_key": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f"
     },
     "monsters": {
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "url": "packs/monsters.pck?sha256=efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
       "sha256": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
       "bytes": 20678316,
@@ -127,7 +127,7 @@
       "cache_key": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c"
     },
     "audio": {
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "url": "packs/audio.pck?sha256=5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
       "sha256": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
       "bytes": 21302876,
@@ -148,7 +148,7 @@
       "cache_key": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca"
     },
     "quality_materials": {
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "url": "packs/quality_materials.pck?sha256=631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
       "sha256": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
       "bytes": 7328396,
@@ -169,7 +169,7 @@
       "cache_key": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba"
     },
     "adjacent": {
-      "version": "safe-connector-20261029",
+      "version": "animation-lifecycle-20261029",
       "url": "packs/adjacent.pck?sha256=5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
       "sha256": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
       "bytes": 2370980,
@@ -191,10 +191,10 @@
       "cache_key": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241"
     }
   },
-  "build_id": "safe-connector-20261029",
-  "generated_from_commit": "a587888e7ba4e8807be64be6a33baa98b937a92d",
-  "generated_at_utc": "2026-10-29T05:56:25.908823Z",
-  "total_bytes": 155625076,
+  "build_id": "animation-lifecycle-20261029",
+  "generated_from_commit": "5f43ab75660997b1986cee59af9c7e389c1c02da",
+  "generated_at_utc": "2026-10-29T06:29:04.976734Z",
+  "total_bytes": 155625460,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1"
 }

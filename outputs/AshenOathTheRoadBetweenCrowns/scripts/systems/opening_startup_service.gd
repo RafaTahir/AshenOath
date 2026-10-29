@@ -154,7 +154,9 @@ func _run_deferred_visual_roles(root: Node3D) -> void:
 		parent.add_child(visual)
 		if category == "characters" and actor_id != "":
 			parent.set_meta("character_variant_seed", actor_id)
-			_configure_npc_animation(visual, actor_id)
+			if not _configure_npc_animation(visual, actor_id):
+				visual.queue_free()
+				continue
 			CharacterPresentation.apply_npc(parent, actor_id)
 			parent.set_meta("character_deferred_hydrated", true)
 		marker.queue_free()
@@ -646,6 +648,11 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	if not _opening_presentation_present(prewarm_root):
 		_host.get_tree().paused = was_paused
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's scenery is incomplete. Select New Game to retry.")
+		return
+	preload("res://scripts/character_animation_driver.gd").record_configuration(prewarm_root, "kael", player.animation_driver)
+	var actors := preload("res://scripts/character_animation_driver.gd").zone_contract(prewarm_root)
+	if not bool(actors.ok):
+		_abort_opening_prewarm(prewarm_root, prewarm_service, "Greyfen's characters could not be animated. %s Select Retry to try again." % "; ".join(actors.errors))
 		return
 	_publish_web_opening_state("finalizing", "Finishing Greyfen's routes and characters...")
 	prewarm_service.build_navigation(prewarm_root)

@@ -490,8 +490,8 @@ func _world_prop_spec(id: String) -> Dictionary:
 		"vargan_ledger_choice": {"kind": "ledger", "state_key": "vargan_ledger_state"},
 	}.get(id, {})
 
-func _configure_npc_animation(mapped: Node3D, id: String) -> void:
-	_zone_construction()._configure_npc_animation(mapped, id)
+func _configure_npc_animation(mapped: Node3D, id: String) -> bool:
+	return _zone_construction()._configure_npc_animation(mapped, id)
 
 func _make_gate_marker(parent: Node3D, color: Color, scale_override: Vector3) -> void:
 	_zone_construction()._make_gate_marker(parent, color, scale_override)

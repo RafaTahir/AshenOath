@@ -11,9 +11,27 @@ func _initialize() -> void:
 func run() -> void:
 	var actor := Node3D.new()
 	root.add_child(actor)
+	var skeleton := Skeleton3D.new()
+	skeleton.name = "Skeleton3D"
+	skeleton.add_bone("root")
+	actor.add_child(skeleton)
+	var player := AnimationPlayer.new()
+	actor.add_child(player)
+	var library := AnimationLibrary.new()
+	var animation := Animation.new()
+	animation.length = 1.0
+	var track := animation.add_track(Animation.TYPE_POSITION_3D)
+	animation.track_set_path(track, NodePath("Skeleton3D:root"))
+	animation.position_track_insert_key(track, 0.0, Vector3.ZERO)
+	animation.position_track_insert_key(track, 1.0, Vector3.UP)
+	library.add_animation("Idle", animation)
+	player.add_animation_library("", library)
 	var driver := Driver.new()
 	actor.add_child(driver)
-	driver.character_root = actor
+	if not driver.configure(actor, {"idle":"Idle"}):
+		push_error("Timer fixture requires a configured animation owner")
+		quit(1)
+		return
 	driver.set_update_rate_hz(10.0)
 	driver.manual_tick_timer.start(0.02)
 	await create_timer(0.36).timeout

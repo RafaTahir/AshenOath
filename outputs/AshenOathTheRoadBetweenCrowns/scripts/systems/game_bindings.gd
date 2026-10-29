@@ -1137,7 +1137,7 @@ func _apply_greyfen_well_visual(visual: MeshInstance3D, pos: Vector3) -> void: _
 func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void: _systems["world"]._make_board_game_staging(area, id, size)
 func _make_board_game_chair(area: Node3D, position: Vector3, yaw: float, batch: MultiMeshInstance3D, first_index: int) -> void: _systems["world"]._make_board_game_chair(area, position, yaw, batch, first_index)
 func _world_prop_spec(id: String) -> Dictionary: return _systems["world"]._world_prop_spec(id)
-func _configure_npc_animation(mapped: Node3D, id: String) -> void: _systems["world"]._configure_npc_animation(mapped, id)
+func _configure_npc_animation(mapped: Node3D, id: String) -> bool: return _systems["world"]._configure_npc_animation(mapped, id)
 func _prepare_dialogue_presence(content: Dictionary) -> Dictionary: return _systems["dialogue"]._prepare_dialogue_presence(content)
 func _stage_dialogue_moment(area) -> void: _systems["dialogue"]._stage_dialogue_moment(area)
 func _on_dialogue_page_changed(_speaker: String, _speaker_id: String, _page_index: int, _total_pages: int) -> void: _systems["dialogue"]._on_dialogue_page_changed(_speaker, _speaker_id, _page_index, _total_pages)

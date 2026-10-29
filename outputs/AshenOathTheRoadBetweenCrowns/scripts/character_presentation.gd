@@ -34,6 +34,8 @@ static func make_hart_witness(helper: Node, position: Vector3) -> Node3D:
 	visual.add_child(driver)
 	if not driver.configure(visual, {"idle":"Idle", "dialogue":"Idle_2"}):
 		push_error("White Hart witness requires native idle animation")
+		root.free()
+		return null
 	driver.set_update_rate_hz(12.0)
 	return root
 

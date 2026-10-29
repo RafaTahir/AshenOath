@@ -1,5 +1,33 @@
 # FINISH-003 - Movement, Camera And Character Integrity
 
+## Director Child: Animation Lifecycle - 2026-10-29
+
+Bounded source repair: complete; compilation: passed; targeted developer checks:
+passed at the scope below; user acceptance: pending. Candidate
+`animation-lifecycle-20261029`, 162,882,616 bytes / 155.34 MiB. The FINISH-003 Git
+receipt owns push status; no Vercel waiting/manual deployment is authorized.
+
+Required idle/walk/run clips now bind real actor bones before a driver is valid.
+Configuration failure retires its graph and timer; duplicate skeleton owners are
+rejected. Named/routine factories propagate failure, and player/enemy/Hart witness
+owners register weak, destination-bound references. Existing readiness, Retry and
+rollback paths reject failed actors instead of allowing moving bind poses.
+Cached activation reconciles clocks without resetting valid playback or death
+state. No AnimationTree replacement, raw asset/skin edits or new clips.
+
+Clock/ownership fixtures pass. Native graphical readback on Intel HD 620/ANGLE
+confirms changing bones and skinned vertices for 15 opening actors plus seven
+encounter-rig representatives. Dialogue clock restoration and cache resume pass;
+eleven campaign destinations pass actor-aware preparation/cancellation. A known
+construction-fixture ObjectDB shutdown warning remains, not memory acceptance.
+Final-package browser New Game, ordinary movement, displayed Anwen Use and
+dialogue/input recovery pass without console warnings/errors. However, the care
+area has obstructed dialogue framing and malformed head/hood presentation. Those
+GAME defects remain open for the separate face/framing owner. This child is not
+a visual, all-animation, all-region, phone, performance or whole-ticket acceptance.
+
+[Bounded evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/animation_lifecycle_20261029.json).
+
 ## Blank World View Hotfix - 2026-10-27
 
 User report: the HUD is visible after loading, but the 3D world is blank.

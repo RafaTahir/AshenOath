@@ -859,12 +859,15 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 	elif id == "white_hart":
 		# Legacy encounter callbacks can also publish this interaction. They must
 		# supply the same stag, never an invisible speaker anchor.
-		if zone_root.find_child("WhiteHartWitnessDisplay", true, false) == null:
-			var witness: Node3D = CharacterPresentation.make_hart_witness(asset_helper, pos)
+		var witness: Node3D = zone_root.find_child("WhiteHartWitnessDisplay", true, false)
+		if witness == null:
+			witness = CharacterPresentation.make_hart_witness(asset_helper, pos)
 			if witness == null:
+				CharacterAnimationDriver.record_configuration(zone_root, id, null)
 				area.queue_free()
 				return null
 			zone_root.add_child(witness)
+		CharacterAnimationDriver.record_configuration(zone_root, "white_hart_witness", witness.find_child("HartWitnessAnimation", true, false))
 		area.set_meta("external_character_visual", "WhiteHartWitnessDisplay")
 	elif id.begins_with("covenant_"):
 		area.set_meta("external_story_visual", "covenant_record")
@@ -892,7 +895,13 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 		if mapped != null:
 			area.add_child(mapped)
 			area.set_meta("character_variant_seed", presentation_id)
-			_configure_npc_animation(mapped, presentation_id)
+			if not _configure_npc_animation(mapped, presentation_id):
+				area.queue_free()
+				return null
+		elif str(role) != "":
+			CharacterAnimationDriver.record_configuration(zone_root, presentation_id, null)
+			area.queue_free()
+			return null
 		elif id in ["assembly_choice", "witness_7"]:
 			_make_ledger_interaction_visual(area, Vector3.ONE)
 			var book := area.get_node("SealedCommandLedgerVisual") as Node3D
@@ -1118,6 +1127,9 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	zone_root.add_child(enemy)
 	enemy.global_position = pos
 	enemy.setup(id, enemy_defs.get(id, {}), player)
+	if not CharacterAnimationDriver.record_configuration(zone_root, "%s:%s" % [id, enemy.get_instance_id()], enemy.animation_driver):
+		enemy.queue_free()
+		return null
 	enemy.visible = true
 	enemy.encounter_slot = active_enemies.size()
 	enemy.setup_navigation(spatial_service)
@@ -2260,7 +2272,10 @@ func should_defer_character_role(_role: String, _actor_id: String) -> bool:
 	return false
 
 
-func _configure_npc_animation(mapped: Node3D, id: String) -> void:
+func _configure_npc_animation(mapped: Node3D, id: String) -> bool:
+	var existing := mapped.get_node_or_null("CharacterAnimationDriver")
+	if existing != null:
+		return CharacterAnimationDriver.record_configuration(zone_root, id, existing)
 	var clips := {
 		"idle": "Idle", "walk": "Walk", "walk_back": "Walk",
 		"strafe": "Walk", "run": "Sprint", "work": "Interact",
@@ -2297,7 +2312,10 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	var driver = CharacterAnimationDriver.new()
 	driver.name = "CharacterAnimationDriver"
 	mapped.add_child(driver)
-	driver.configure(mapped, clips)
+	if not driver.configure(mapped, clips):
+		CharacterAnimationDriver.record_configuration(zone_root, id, driver)
+		return false
+	CharacterAnimationDriver.record_configuration(zone_root, id, driver)
 	if id not in ["board_rook", "board_tor"]:
 		load("res://scripts/grounded_feet_modifier.gd").install_npc(mapped, driver)
 	# Non-player rigs do not own physics or combat timing. Drive them through a
@@ -2309,6 +2327,7 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> void:
 	# Castle and Record Hall performance samples.
 	var npc_animation_rate := 8.0
 	driver.set_update_rate_hz(npc_animation_rate)
+	return true
 
 
 func _make_ledger_interaction_visual(area: Node3D, scale_override: Vector3) -> void:

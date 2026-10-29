@@ -277,16 +277,25 @@ func make_hart_witness(context: ZoneBuildContext, position: Vector3 = Vector3(0,
 	var root: Node3D = context._host.CharacterPresentation.make_hart_witness(context._host.asset_helper, position)
 	if root != null:
 		context.add_node(root)
+		var driver := root.find_child("HartWitnessAnimation", true, false)
+		CharacterAnimationDriver.record_configuration(context.zone_root, "white_hart_witness", driver)
+	else:
+		CharacterAnimationDriver.record_configuration(context.zone_root, "white_hart_witness", null)
 	return root
 
-func configure_witness_animation(root: Node3D) -> void:
+func configure_witness_animation(root: Node3D) -> bool:
+	var existing := root.get_node_or_null("HartWitnessAnimation")
+	if existing != null:
+		return existing.is_valid()
 	var driver := CharacterAnimationDriver.new()
 	driver.name = "HartWitnessAnimation"
 	root.add_child(driver)
 	if not driver.configure(root, {"idle": "Idle", "dialogue": "Idle_2"}):
 		push_error("White Hart witness requires native idle animation")
-		return
+		driver.free()
+		return false
 	driver.set_update_rate_hz(12.0)
+	return true
 
 func _add_hart_antler_crown(root: Node3D, context: ZoneBuildContext) -> void:
 	var skeleton := _find_skeleton(root)

@@ -469,6 +469,12 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	# This finalizer owns the focused render audit once, before control. Do not
 	# repeat it here and again on a deferred first-playable frame.
 	host._finish_zone_runtime_finalize(zone_id, host.zone_root, host.spatial_service, host.active_enemies.duplicate(), navigation_pending)
+	preload("res://scripts/character_animation_driver.gd").record_configuration(host.zone_root, "kael", host.player.animation_driver)
+	var actors := preload("res://scripts/character_animation_driver.gd").zone_contract(host.zone_root)
+	if not bool(actors.ok):
+		rollback(zone_id, previous_zone_id, actors.errors)
+		host._recover_failed_zone_load(previous_zone_id)
+		return
 	if host.performance_budget_monitor != null:
 		var quality_preset = str(host.settings.settings.get("quality_preset", "balanced")) if host.settings != null else "balanced"
 		host.performance_budget_monitor.set_active_zone(host.current_zone_id, host.zone_root, host.player, quality_preset)

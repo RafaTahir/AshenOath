@@ -109,6 +109,8 @@ var story_dialogue_active := false
 var life_modifier
 var animation_graph
 var action_duration := 0.0
+var configured := false
+var bound_track_counts: Dictionary = {}
 static var _resolved_bindings: Dictionary = {}
 
 func _ready() -> void:
@@ -118,12 +120,14 @@ func _ready() -> void:
 	_reconcile_clock()
 
 func configure(root: Node3D, clips: Dictionary) -> bool:
+	_clear_playback()
 	character_root = root
 	clip_map = clips.duplicate()
 	resolved_clip_map.clear()
 	authored_directional_clips.clear()
 	contract_errors.clear()
 	animation_players.clear()
+	bound_track_counts.clear()
 	current_state = ""
 	action_active = false
 	dead = false
@@ -145,17 +149,16 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	last_locomotion_phase = -1.0
 	locomotion_phase_distance = 0.0
 	locomotion_step_index = 0
+	if not is_instance_valid(root):
+		return _fail_contract("character root is missing")
 	_collect_animation_players(root)
 	animation_player = animation_players[0] if not animation_players.is_empty() else null
 	skeleton = _find_type(root, "Skeleton3D") as Skeleton3D
 	if animation_player == null or skeleton == null or skeleton.get_bone_count() == 0:
-		contract_errors.append("missing AnimationPlayer or Skeleton3D")
-		contract_failed.emit(contract_errors[0])
-		return false
-	skeleton.set_meta("character_motion_owner", weakref(self))
-	var silhouette := skeleton.get_node_or_null("CharacterSilhouette")
-	if silhouette != null:
-		silhouette.bind_motion(self)
+		return _fail_contract("missing AnimationPlayer or Skeleton3D")
+	var previous: WeakRef = skeleton.get_meta("character_motion_owner") if skeleton.has_meta("character_motion_owner") else null
+	if previous != null and is_instance_valid(previous.get_ref()) and previous.get_ref() != self:
+		return _fail_contract("skeleton already has an animation owner")
 	var binding_key := var_to_str([clip_map, animation_player.get_animation_list()]).sha256_text()
 	if _resolved_bindings.has(binding_key):
 		resolved_clip_map = _resolved_bindings[binding_key].resolved.duplicate()
@@ -167,30 +170,113 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 				resolved_clip_map[state] = resolved
 		_resolved_bindings[binding_key] = {"resolved": resolved_clip_map.duplicate(), "directional": authored_directional_clips.duplicate()}
 	if not resolved_clip_map.has("idle"):
-		contract_errors.append("required idle clip is missing")
-		contract_failed.emit(contract_errors[0])
-		return false
+		return _fail_contract("required idle clip is missing")
+	for state: String in ["idle", "walk", "run"]:
+		if state != "idle" and not clip_map.has(state):
+			continue
+		var clip := StringName(resolved_clip_map.get(state, ""))
+		if clip == StringName():
+			return _fail_contract("required %s clip is missing" % state)
+		var bound := _bound_bone_tracks(clip)
+		bound_track_counts[state] = bound
+		if bound == 0:
+			return _fail_contract("%s clip '%s' has no tracks bound to the actor skeleton" % [state, clip])
 	# Resolve aliases once; AnimationPlayer now supplies libraries, never playback.
 	for state: String in STATE_ALIASES:
 		_clip_for(state)
 	var directions := {}
 	for state: String in ["walk_back", "run_back"]:
 		directions[state] = _playback_direction_for_state(state) > 0.0
-	if animation_graph != null and is_instance_valid(animation_graph.tree):
-		animation_graph.tree.free()
 	animation_graph = preload("res://scripts/systems/character_animation_graph.gd").new()
 	var graph_clips := {}
 	for state: String in resolved_clip_map:
 		if resolved_clip_map[state] != StringName():
 			graph_clips[state] = resolved_clip_map[state]
 	if not animation_graph.configure(self, animation_player, graph_clips, directions, locomotion_height_scale):
-		contract_errors.append("AnimationTree cannot bind its animation root")
-		contract_failed.emit(contract_errors.back())
-		return false
+		return _fail_contract("AnimationTree cannot bind its animation root")
+	configured = true
+	skeleton.set_meta("character_motion_owner", weakref(self))
+	var silhouette := skeleton.get_node_or_null("CharacterSilhouette")
+	if silhouette != null:
+		silhouette.bind_motion(self)
 	_ensure_life_modifier()
 	_reconcile_clock()
 	_play_state("idle", 0.0)
 	return true
+
+func _clear_playback() -> void:
+	configured = false
+	set_process(false)
+	if is_instance_valid(manual_tick_timer):
+		manual_tick_timer.stop()
+	if animation_graph != null and is_instance_valid(animation_graph.tree):
+		animation_graph.tree.active = false
+		animation_graph.tree.free()
+	animation_graph = null
+	if is_instance_valid(skeleton) and skeleton.has_meta("character_motion_owner"):
+		var reference: WeakRef = skeleton.get_meta("character_motion_owner")
+		if reference != null and reference.get_ref() == self:
+			skeleton.remove_meta("character_motion_owner")
+	if is_instance_valid(life_modifier):
+		life_modifier.free()
+	life_modifier = null
+
+func _fail_contract(reason: String) -> bool:
+	_clear_playback()
+	contract_errors.append(reason)
+	contract_failed.emit(reason)
+	return false
+
+func _bound_bone_tracks(clip: StringName) -> int:
+	var animation := animation_player.get_animation(clip)
+	var origin := animation_player.get_node_or_null(animation_player.root_node)
+	if animation == null or origin == null:
+		return 0
+	var bound := 0
+	for index in animation.get_track_count():
+		if not animation.track_is_enabled(index) or animation.track_get_key_count(index) == 0:
+			continue
+		if animation.track_get_type(index) not in [Animation.TYPE_POSITION_3D, Animation.TYPE_ROTATION_3D, Animation.TYPE_SCALE_3D]:
+			continue
+		var path := animation.track_get_path(index)
+		if path.get_subname_count() == 0:
+			continue
+		var target := origin if path.get_name_count() == 0 else origin.get_node_or_null(NodePath(path.get_concatenated_names()))
+		if target == skeleton and skeleton.find_bone(str(path.get_subname(0))) >= 0:
+			bound += 1
+	return bound
+
+static func record_configuration(zone: Node, actor_id: String, driver: Node) -> bool:
+	var errors: Dictionary = zone.get_meta("actor_animation_errors", {})
+	var valid: bool = is_instance_valid(driver) and driver.is_valid()
+	if not valid:
+		var report: Dictionary = driver.get_contract_report() if is_instance_valid(driver) else {}
+		errors[actor_id] = "Actor '%s': %s" % [actor_id, "; ".join(report.get("errors", ["animation driver is missing"]))]
+		zone.set_meta("actor_animation_errors", errors)
+		push_error(errors[actor_id])
+		return false
+	errors.erase(actor_id)
+	zone.set_meta("actor_animation_errors", errors)
+	var actors: Dictionary = zone.get_meta("actor_animation_owners", {})
+	actors[actor_id] = {"actor": weakref(driver.character_root), "driver": weakref(driver)}
+	zone.set_meta("actor_animation_owners", actors)
+	return true
+
+static func zone_contract(zone: Node, resume: bool = false) -> Dictionary:
+	var errors: Array[String] = []
+	for reason in zone.get_meta("actor_animation_errors", {}).values():
+		errors.append(str(reason))
+	var actors: Dictionary = zone.get_meta("actor_animation_owners", {})
+	for id in actors:
+		var actor: Node = actors[id].actor.get_ref()
+		if not is_instance_valid(actor) or actor.is_queued_for_deletion():
+			continue
+		var driver: Node = actors[id].driver.get_ref()
+		if not is_instance_valid(driver) or not driver.is_valid():
+			errors.append("Actor '%s' has no valid animation owner" % id)
+		elif resume:
+			driver._reconcile_clock()
+	return {"ok": errors.is_empty(), "errors": errors}
 
 func _process(delta: float) -> void:
 	if externally_ticked:
@@ -221,11 +307,11 @@ func _reconcile_clock() -> void:
 	for player: AnimationPlayer in animation_players:
 		player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 		player.active = false
-	if animation_graph != null:
+	if is_valid():
 		animation_graph.activate(distance_suspended)
-	set_process(not distance_suspended and not externally_ticked and not manual)
+	set_process(is_valid() and not distance_suspended and not externally_ticked and not manual)
 	if is_instance_valid(manual_tick_timer):
-		if distance_suspended or externally_ticked or manual_update_interval <= 0.0:
+		if not is_valid() or distance_suspended or externally_ticked or manual_update_interval <= 0.0:
 			manual_tick_timer.stop()
 		elif manual_tick_timer.is_stopped():
 			_start_manual_tick()
@@ -297,13 +383,22 @@ func set_update_rate_hz(rate_hz: float) -> void:
 	_reconcile_clock()
 
 func is_valid() -> bool:
-	return animation_player != null and skeleton != null and skeleton.get_bone_count() > 0 \
+	return configured and is_instance_valid(character_root) and is_instance_valid(animation_player) \
+		and is_instance_valid(skeleton) and skeleton.get_bone_count() > 0 \
+		and animation_graph != null and is_instance_valid(animation_graph.tree) \
 		and contract_errors.is_empty() and resolved_clip_map.has("idle")
 
 func is_evaluation_scheduled() -> bool:
 	# Manual mixers stay active but evaluate only explicit scheduled advances.
 	# Distance suspension disables both the schedule and mixer.
-	return is_valid() and not distance_suspended and animation_graph != null and animation_graph.scheduled()
+	if not is_valid() or distance_suspended or not is_inside_tree() or not can_process() or not animation_graph.scheduled():
+		return false
+	var timer_running := is_instance_valid(manual_tick_timer) and not manual_tick_timer.is_stopped()
+	if externally_ticked:
+		return not is_processing() and not timer_running
+	if manual_update_interval > 0.0:
+		return not is_processing() and timer_running
+	return is_processing() and not timer_running
 
 func set_distance_suspended(suspended: bool) -> void:
 	if distance_suspended == suspended:
@@ -323,7 +418,7 @@ func set_distance_suspended(suspended: bool) -> void:
 func _start_manual_tick(stagger_first_tick := false) -> void:
 	if manual_tick_timer == null or not is_instance_valid(manual_tick_timer):
 		return
-	if not is_inside_tree() or externally_ticked or distance_suspended or manual_update_interval <= 0.0:
+	if not is_valid() or not is_inside_tree() or externally_ticked or distance_suspended or manual_update_interval <= 0.0:
 		return
 	var delay := manual_update_interval
 	if stagger_first_tick:
@@ -640,6 +735,7 @@ func get_contract_report() -> Dictionary:
 		"valid": is_valid() and contract_errors.is_empty() and resolved_clip_map.has("idle"),
 		"states": resolved_clip_map.duplicate(),
 		"errors": contract_errors.duplicate(),
+		"bound_bone_tracks": bound_track_counts.duplicate(),
 		"current_state": current_state,
 		"playback_scale": current_playback_scale,
 		"locomotion_state": locomotion_state,

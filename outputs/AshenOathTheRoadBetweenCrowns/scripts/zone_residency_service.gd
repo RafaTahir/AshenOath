@@ -318,6 +318,7 @@ func restore_runtime(root: Node) -> void:
 			node.process_mode = int(node.get_meta("resident_process_mode"))
 			node.remove_meta("resident_process_mode")
 	root.remove_meta("resident_suspended_nodes")
+	preload("res://scripts/character_animation_driver.gd").zone_contract(root, true)
 
 func begin_preview(root: Node) -> void:
 	if root.has_meta("resident_visibility"): return

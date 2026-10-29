@@ -10,7 +10,9 @@ The approved ten-child roadmap supersedes the execution restrictions and
 source-complete assumptions in the dated delivery record below. Mandatory user
 acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
 
-**FINISH-014/SAFE-CONNECTOR-HANDOFF** is active following Rafa's Continue instruction.
+**FINISH-003/ANIMATION-LIFECYCLE** is active following Rafa's Continue instruction.
+Child 3 was pushed as `5f43ab7` to development and main; its remaining speed and
+coverage limitations stay recorded. This does not establish user acceptance.
 Child 2 was pushed as `a587888` to development and main. Continue authorizes
 the next child; it does not record user acceptance of earlier work.
 PACK-CLOSURE was pushed as `8603d80` to development and main; deployment waiting
@@ -28,8 +30,8 @@ child. No separate CLI deployment and no implied whole-game acceptance.
 | --- | --- | --- |
 | 1 | FINISH-016/PACK-CLOSURE | Implemented, compiled, developer-verified, pushed 8603d80; awaiting Rafa |
 | 2 | FINISH-001/RESPONSIVE-PREPARATION | Implemented/compiled, focused checks/partial browser coverage, pushed a587888; awaiting Rafa |
-| 3 | FINISH-014/SAFE-CONNECTOR-HANDOFF | Implemented/compiled, targeted native and normal-input browser round trip pass; FINISH-014 push receipt owns delivery; awaiting Rafa |
-| 4 | FINISH-003/ANIMATION-LIFECYCLE | Not started |
+| 3 | FINISH-014/SAFE-CONNECTOR-HANDOFF | Implemented/compiled, targeted native and normal-input browser round trip pass, pushed 5f43ab7; awaiting Rafa |
+| 4 | FINISH-003/ANIMATION-LIFECYCLE | Implemented/compiled; focused clock/ownership, 22-actor native skin-motion and browser input/dialogue recovery checks pass; FINISH-003 push receipt owns delivery; awaiting Rafa |
 | 5 | FINISH-003/FACE-ARTIFACT | Not started; actor/geometry identification required |
 | 6 | FINISH-007/SOLID-FURNITURE | Not started |
 | 7 | FINISH-005/HONEST-TARGETING | Not started |
@@ -98,6 +100,36 @@ reference-PC benchmarks, and not passing transition targets. All other pairs hav
 isolated geometry/gate evidence, not an earned browser traversal. Actual phone,
 FPS, sustained memory and campaign acceptance remain open. No Vercel waiting.
 See [child 3 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/safe_connector_20261029.json).
+
+Child 4 validates required idle/walk/run bindings against the retained skeleton
+and rejects duplicate playback owners. Failed configuration stops the prior
+graph and timer; invalid named/routine actors cannot become moving bind poses.
+Named, routine, enemy, player and Hart witness owners register weak references
+with their destination. Build/readiness and cached publication surface named
+failures through the existing Retry/rollback owners. Cached activation reconciles
+the existing clock without resetting a working clip or discarding action state.
+
+Focused fixtures pass timer/frame/external ownership, distance and cache resume,
+failed reconfiguration/retry, missing binding rejection, and death restoration.
+Native Intel HD 620 / ANGLE graphical readback confirms bone and skinned-vertex
+changes for 15 opening actors and seven representative encounter rigs, including
+Anwen, Tor, the pilgrim, Ranger Senn and the actual Hart. Dialogue restores its
+previous clock. This is isolated motion evidence, not an earned campaign or
+approval of gait, expressions or the separately unresolved face artifact.
+
+Candidate `animation-lifecycle-20261029`: **162,882,616 bytes / 155.34 MiB**.
+Base/root and campaign scripts compile; six unaffected packs are reused. Exact
+transport/decoded hashes and shared package-budget checks pass. Eleven campaign
+destinations also pass construction/cancellation with registered actor checks;
+their pre-existing ObjectDB shutdown warning remains disclosed.
+
+Normal mouse New Game, keyboard movement, displayed Anwen Use, dialogue open/close
+and input recovery are observed on the final package in isolated in-app Chromium,
+without console warnings/errors. Care-area dialogue framing is visibly obstructed,
+and malformed head/hood presentation remains a GAME defect. These observations
+are not a visual pass, not a reproduced root cause for earlier rigid poses and
+not permission to expand child 4 into the separate face/camera repair.
+See [child 4 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/animation_lifecycle_20261029.json).
 
 Existing strict startup/performance targets remain, including historical failures.
 This child establishes resource closure, not performance acceptance. Unlocalized

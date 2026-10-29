@@ -6,11 +6,50 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
-Rafa subsequently authorized continuing through child 3 and removed Vercel waiting:
+Rafa subsequently authorized continuing through child 4 and removed Vercel waiting:
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
 
-### FINISH-014/SAFE-CONNECTOR-HANDOFF (developer-verified; push receipt owns delivery)
+### FINISH-003/ANIMATION-LIFECYCLE (developer-verified; push receipt owns delivery)
+
+- Keep the existing AnimationTree, imported clips, prepared skins and cloud binding
+  fixes. Configuration now checks the actual required clip-to-skeleton targets,
+  rejects a second owner and tears down the old graph/timer on failed retry.
+- Named/routine factories respect failure and register actor-specific diagnostics
+  on their destination. Player/enemy/Hart witness drivers join the same weak-owner
+  ledger. Existing construction, opening Retry and travel rollback cannot declare
+  these failed actors ready. Invalid routines do not walk a bind pose.
+- Cached activation reconciles each retained driver's existing frame/timer/external
+  policy. A suspended or invalid driver is not reported as actively scheduled;
+  death and committed action state are not replaced with a forced idle restart.
+- Focused shared-animation and timer fixtures pass ownership, compatible bone
+  motion, suspension, cache resume, failed reconfiguration, invalid bindings,
+  readiness rejection, retry and death restoration. The timer fixture now uses a
+  genuinely configured rig. One added death check initially used the wrong generic
+  API; corrected to set_dead, passing on unchanged game code.
+- One native graphical subsystem session on Intel HD 620 / ANGLE passes bone and
+  skinned-mesh vertex readback for 15 opening actors and seven representative
+  encounter rigs. Dialogue restores the previous clock; cached return resumes it.
+  Readback is test-only, not added to gameplay, and establishes motion rather than
+  merely counting AnimationPlayers. It does not approve anatomy or animation feel.
+- Base/root and campaign compilation and package integrity pass for
+  `animation-lifecycle-20261029`: 162,882,616 bytes / 155.34 MiB. Six unaffected
+  packs are reused at unchanged input scope. Eleven campaign preparation/cancel
+  checks pass; their existing shutdown ObjectDB warning remains disclosed.
+- Final-package in-app Chromium mouse New Game, ordinary movement, displayed
+  Anwen Use, dialogue open/close and post-dialogue movement pass. No console
+  warnings/errors. Camera obstruction at the care area and malformed head/hood
+  presentation remain observed GAME defects, not accepted visuals or a claimed
+  face repair. Previous rigid-pose cause is not retrospectively declared proven.
+- User acceptance remains 0/16. No new animation library, character replacement
+  or performance claim is included. The QA server is stopped and the game tab
+  closed; the failed initial server-start tab is temporary/end-of-turn cleanup.
+  Stop after development/main push without waiting for Vercel; child 5 still
+  needs Rafa's authorization.
+
+[Child 4 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/animation_lifecycle_20261029.json).
+
+### FINISH-014/SAFE-CONNECTOR-HANDOFF (pushed 5f43ab7; awaiting Rafa)
 
 - Destination arrival and emergency fallback require actual, walkable collision
   owned by that destination. A foreign resident/preview floor cannot certify it.

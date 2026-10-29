@@ -475,6 +475,8 @@ func make_herb(id: String, pos: Vector3, color: Color) -> void:
 
 func validate() -> Dictionary:
 	var errors: Array[String] = []
+	if zone_root != null:
+		errors.append_array(preload("res://scripts/character_animation_driver.gd").zone_contract(zone_root).errors)
 	if ground_count < 1:
 		errors.append("missing ground")
 	if bounds_count < 1:
