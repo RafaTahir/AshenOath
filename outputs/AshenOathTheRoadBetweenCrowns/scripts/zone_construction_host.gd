@@ -973,6 +973,9 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 		GreyfenSocialPresentation.apply(area, id)
 		if type == "minigame":
 			_make_board_game_staging(area, id, size)
+			if not _make_board_game_solidity(area, size):
+				area.free()
+				return null
 	else:
 		table = MeshInstance3D.new()
 		table.name = "%s_VisibleProp" % id
@@ -2394,6 +2397,43 @@ func _label_for_interactable(id: String, prompt: String) -> String:
 	if id.begins_with("gate_"):
 		return prompt
 	return prompt.replace("Inspect ", "").replace("Gather ", "").replace("Take ", "")
+
+
+func _make_board_game_solidity(area: Node3D, size: Vector3) -> bool:
+	var visual := area.get_node_or_null("GreyfenSocialFurniture") as MeshInstance3D
+	if visual == null or visual.mesh == null:
+		push_error("Required solid board furniture is missing: " + str(area.name))
+		return false
+	# Exact static table/chair geometry leaves legroom and approach gaps intact;
+	# the presentation helper itself remains visual-only.
+	var fitted := visual.mesh.create_trimesh_shape()
+	if fitted == null:
+		push_error("Cannot build solid board furniture: " + str(area.name))
+		return false
+	fitted.backface_collision = true
+	var body := StaticBody3D.new()
+	body.name = "SolidFurniture"
+	body.collision_layer = 1
+	body.collision_mask = 1
+	body.set_meta("walkable_support", false)
+	area.add_child(body)
+	var shape := CollisionShape3D.new()
+	shape.name = "FittedTableAndChairs"
+	shape.shape = fitted
+	shape.transform = visual.transform
+	body.add_child(shape)
+	area.set_meta("interaction_anchor", Vector3(0, size.y + 0.18, 0))
+	var arrival := Marker3D.new()
+	arrival.name = "BoardGameOpponentApproach"
+	arrival.position = Vector3((1.0 if str(area.name) == "common_table" else -1.0) * (size.x * 0.5 + 1.0), 0, 0)
+	area.add_child(arrival)
+	var corner := Marker3D.new()
+	corner.name = "BoardGameOpponentCorner"
+	# Rook clears the north chair. Tor uses the reserved northern road instead
+	# of the care area or the too-narrow strip between the house and river.
+	corner.position = Vector3(arrival.position.x, 0, -size.z * 0.90 - 1.1) if str(area.name) == "common_table" else Vector3(0.0, area.position.y, -10.0) - area.position
+	area.add_child(corner)
+	return true
 
 
 func _make_board_game_staging(area: Node3D, id: String, size: Vector3) -> void:

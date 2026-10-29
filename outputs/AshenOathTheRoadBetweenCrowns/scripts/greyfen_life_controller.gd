@@ -293,7 +293,9 @@ func _physics_process(delta: float) -> void:
 			var was_distant: bool = bool(entry.get("distance_suspended", false))
 			var distance_limit: float = render_distance - 0.8 if was_distant else render_distance + 0.8
 			var distance_to_player: float = actor_node.global_position.distance_to(player.global_position)
-			var distant: bool = distance_to_player > distance_limit
+			# A requested table visit must finish crossing the village even when
+			# its route briefly leaves the ambient simulation radius.
+			var distant: bool = distance_to_player > distance_limit and not entry.has("table_restore")
 			if not entry.has("face") or not is_instance_valid(entry.face):
 				entry.face = actor_node.find_child("CharacterFaceDriver", true, false)
 			if is_instance_valid(entry.face):
@@ -556,7 +558,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		var final_target: Vector3 = host.validate_walkable_position(entry.path[int(entry.target)])
 		# Attention, crowd yielding and dialogue can stop someone away from the
 		# prior anchor. Start the next leg from their actual feet every time.
-		entry.route = spatial_service.build_route(node.global_position, final_target, 0.72) if spatial_service != null else [final_target]
+		entry.route = _routine_route(entry, final_target)
 		entry.route_index = 1 if entry.route.size() > 1 else 0
 		_set_agent_target(entry)
 	if entry.route.is_empty():
@@ -625,7 +627,9 @@ func _crowd_pace(entry: Dictionary, direction: Vector3, delta: float) -> float:
 		var lateral := (offset - direction * ahead).length()
 		if lateral < 0.60:
 			pace = minf(pace, smoothstep(0.60, 1.5, ahead))
-			if ahead < obstruction_distance and (str(entry.id) > str(other.id) or bool(other.get("activity_active", false)) or float(other.get("pause", 0.0)) > 0.0):
+			# Name ordering breaks ties between moving walkers, not an actor
+			# stopped by work or distance scheduling on the invitation route.
+			if ahead < obstruction_distance and (str(entry.id) > str(other.id) or float(other.get("motion_speed", 0.0)) < 0.05 or bool(other.get("activity_active", false)) or float(other.get("pause", 0.0)) > 0.0):
 				obstruction = other.node
 				obstruction_distance = ahead
 	# Attention and physical clearance are separate. A player beside a worker
@@ -697,6 +701,8 @@ func _brake_actor(entry: Dictionary, delta: float) -> void:
 func _move_actor(entry: Dictionary, direction: Vector3, speed: float, delta: float, remaining_distance: float = INF) -> void:
 	var node: Node3D = entry.node
 	var start: Vector3 = node.global_position
+	if entry.has("table_approach") and start.distance_to(entry.table_approach) < 0.55:
+		entry.erase("table_approach")
 	var step: float = _player_clear_step(start, direction, minf(speed * delta, remaining_distance))
 	if direction.length_squared() < 0.001 or step <= 0.00001:
 		entry.motion_speed = 0.0
@@ -961,6 +967,8 @@ func _apply_pending_routine(entry: Dictionary) -> void:
 		entry.pending_routine = {}
 		return
 	entry.pending_routine = {}
+	if not bool(pending.get("table_visit", false)):
+		entry.erase("table_approach")
 	entry.profile = pending.profile
 	entry.consequence_line = str(pending.get("line", ""))
 	entry.node.set_meta("life_occupation", str(entry.profile.get("occupation", "villager")))
@@ -974,8 +982,22 @@ func _apply_pending_routine(entry: Dictionary) -> void:
 	# The first leg begins where the person actually stopped, not where the
 	# new loop's last anchor happens to be. No teleport or stale route splice.
 	var destination: Vector3 = host.validate_walkable_position(entry.path[0])
-	entry.route = spatial_service.build_route(entry.node.global_position, destination, 0.72) if spatial_service != null else [destination]
+	entry.route = _routine_route(entry, destination)
 	entry.route_index = 1 if entry.route.size() > 1 else 0
+
+func _routine_route(entry: Dictionary, destination: Vector3) -> Array[Vector3]:
+	var start: Vector3 = entry.node.global_position
+	if spatial_service == null:
+		return [destination]
+	if not entry.has("table_approach"):
+		return spatial_service.build_route(start, destination, 0.72)
+	var corner: Vector3 = entry.table_approach
+	var first: Array[Vector3] = spatial_service.build_route(start, corner, 0.72)
+	var last: Array[Vector3] = spatial_service.build_route(corner, destination, 0.72)
+	if first.is_empty() or last.is_empty():
+		return []
+	first.append_array(last.slice(1))
+	return first
 
 func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 	var driver = entry.driver
@@ -1564,7 +1586,7 @@ func _update_gathering_routines() -> void:
 	var active := preload("res://scripts/greyfen_gathering.gd").active(host)
 	if active == gathering_staged: return
 	gathering_staged = active
-	var positions := {"rook":Vector3(-5.6,0,10.2), "blacksmith_tor":Vector3(-4.4,0,10.4), "sister_anwen":Vector3(-4.2,0,11.7), "mira":Vector3(-6.7,0,11.7), "saga_nessa":Vector3(-6.8,0,10.2)}
+	var positions := {"rook":Vector3(-7.6,0,9.3), "blacksmith_tor":Vector3(-3.2,0,9.3), "sister_anwen":Vector3(-4.2,0,8.5), "mira":Vector3(-6.5,0,8.5), "saga_nessa":Vector3(-5.4,0,8.2)}
 	for id: String in positions:
 		var entry := _world_actor(id)
 		if entry.is_empty(): continue
@@ -1582,15 +1604,17 @@ func _update_gathering_routines() -> void:
 		entry.route = []
 		_apply_pending_routine(entry)
 
-func request_table_visit(id: String, point: Vector3) -> bool:
+func request_table_visit(id: String, point: Vector3, approach: Vector3 = Vector3.INF) -> bool:
 	var entry := _world_actor(id)
 	if entry.is_empty() or Presence.protected(entry.node) or not entry.node.is_visible_in_tree() or host._story_has_active_combat(): return false
-	if entry.node.global_position.distance_to(point) <= 1.35:
+	if entry.node.global_position.distance_to(point) <= 0.35:
 		entry.pause = maxf(float(entry.pause),2.0)
 		return true
 	if not entry.has("table_restore"):
 		entry.table_restore = {"profile":entry.profile.duplicate(true),"path":entry.path.duplicate(),"spatial_override":true}
 		entry.table_point = point
+		if approach != Vector3.INF:
+			entry.table_approach = approach
 		entry.table_seconds = 120.0
 		var profile: Dictionary = entry.profile.duplicate(true)
 		profile["activity"] = "rest"

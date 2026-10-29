@@ -1,0 +1,68 @@
+{
+  "ticket": "FINISH-007/SOLID-FURNITURE",
+  "build_id": "solid-furniture-20261029",
+  "baseline_commit": "c523b85a0aae48ac24bbb67c3a53dea3cdfae237",
+  "classification": "GAME",
+  "implementation": [
+    "Construction-owned collision uses the exact existing table/chair mesh for common_table and barrel_board; visual presentation remains collision-free and furniture is not arrival ground.",
+    "Move the common bench and gathering anchors clear of solid furniture; raise existing game pieces and their Use anchor above the tabletop.",
+    "Use explicit outside arrival markers and finite authored corner legs for Rook and Tor, without teleporting or replacing navigation.",
+    "Keep invited opponents scheduled across ambient culling limits; let existing collision-checked detours handle stationary walkers regardless of name ordering. Preserve the player's right of way and the bounded routine restoration."
+  ],
+  "targeted_native_verification": {
+    "tool": "Existing verify_minigame_presentation.gd extended with --solid-furniture and scope-selecting rechecks",
+    "isolated_data": "D:/Temp/AshenOath/solid-furniture-20261029",
+    "physics": "32 actual player-capsule sweeps pass across two tables, four sides/four corners and two travel distances; unchanged sweeps not repeated",
+    "physics_log": "D:/Temp/AshenOath/solid-furniture-20261029/physics-initial.log",
+    "clearance": "Exact mesh ownership, outside arrival points, common bench, four retained house boundaries, above-table piece anchor and current spatial boundary contract pass",
+    "rook": "Actual movement reaches (-3.000911,0,11.16736); existing Chess selector renders 64 cells",
+    "rook_log": "D:/Temp/AshenOath/solid-furniture-20261029/road-approaches.log",
+    "tor": "Final actual movement reaches (4.576254,0,10.2994); existing Chess selector renders 64 cells; verifier PASS",
+    "tor_log": "D:/Temp/AshenOath/solid-furniture-20261029/stationary-yield.log",
+    "fixture_boundary": "Subsystem fixture arranges the player beside each table and uses existing internal game selection. This is not a normal-input or performance claim.",
+    "repaired_game_failures": [
+      "Original interior/house-obstructed approach; unsuitable care-area/narrow-bank alternatives rejected in favor of the reserved northern road",
+      "Invitation route suspended outside ambient radius",
+      "Stationary walker blocked lexical-priority detour"
+    ],
+    "corrected_harness_failures": [
+      "Explicit Godot Array annotation and current boundary authority instead of obsolete berm names",
+      "Skip assertions for excluded recheck scope; wait for deferred board grid cleanup",
+      "Place isolated fixture player beside the table rather than blocking the bridge"
+    ],
+    "historical_warning": "Earlier failed fixtures emitted ObjectDB shutdown warnings; no memory acceptance or whole-game leak claim is made"
+  },
+  "browser_verification": {
+    "browser": "Authorized in-app Chromium, isolated fresh origin http://127.0.0.1:43737, final exported bytes",
+    "observed": "Real mouse New Game, skip optional introduction, ordinary keyboard movement and camera look; common-table collision blocks travel, with clear-route movement away possible",
+    "use": "Ordinary Use attempted on displayed common-table social and game-piece actions; no normal-input Chess menu pass claimed",
+    "coverage_limit": "Nearby decorative/quest prompts retain priority during the bounded common-table approach. Full normal-input Chess activation, barrel-table visit and sitting remain unverified; native subsystem checks cover both arrivals and Chess. Broader targeting is child 7 and is not silently repaired or passed here.",
+    "console_warnings_errors": [],
+    "screenshot": "D:/Temp/AshenOath/solid-furniture-20261029/browser-common-table.png",
+    "driver_issue": "Viewport resized between observation/click; stabilized the authorized 1280x720 reference viewport on the same tab without reloading or changing game bytes",
+    "cleanup": "Temporary tab closed, viewport override reset, isolated server stopped; user saves untouched",
+    "performance": "Not measured; incidental preparation logs do not establish any retained timing/FPS gate"
+  },
+  "compilation": "passed base content-pack export and production Web root export",
+  "package": {
+    "complete_directory_bytes_including_manifest": 162885063,
+    "artifact_transport_bytes": 162877351,
+    "decoded_artifact_bytes": 203025203,
+    "root_transport_sha256": "ee6c12f116d9262da68a25a7ccc30f94fdc18ad15f17260c9dbeb6703e4a75cc",
+    "root_decoded_sha256": "430c79aafcaca6cb558b14f5594c286e14fc271e4ae67efe2a6e7d2fbfc235ed",
+    "rebuilt_content_packs": ["base"],
+    "reused_content_packs": 7,
+    "integrity": "passed existing transport/decoded hashes, sizes and manifest checks; below 256 MiB and no Git file at 100 MiB",
+    "opening_required_balanced_potato_bytes": 97955370,
+    "speed_claim": "none; headless fixture startup timings are not browser or performance acceptance"
+  },
+  "user_acceptance": "pending; mandatory FINISH acceptance remains 0/16",
+  "publication": "Existing FINISH-007 Git receipt owns development/main push identity. No Vercel waiting or separate CLI deployment.",
+  "limitations": [
+    "No sustained-performance, phone, listening, whole-campaign or all-world collision acceptance is claimed",
+    "Broader targeting belongs to child 7, not this furniture repair",
+    "Previous cleric rear correction and all retained assets, saves, character identities, quests, damage balance and visual presets preserved"
+  ],
+  "unrelated_work": "Pre-existing prepared_actors.json stat/line-ending modification and both untracked directories preserved",
+  "next": "Stop after pushing this child; HONEST-TARGETING awaits a subsequent Continue"
+}

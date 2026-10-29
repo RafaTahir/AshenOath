@@ -6,9 +6,34 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
-Rafa subsequently authorized continuing through child 5 and removed Vercel waiting:
+Rafa subsequently authorized continuing through child 6 and removed Vercel waiting:
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
+
+### FINISH-007/SOLID-FURNITURE (awaiting Rafa; Git receipt owns push status)
+
+Both existing game tables expose Chess through the current selector. Their
+authored table/chair meshes were visual-only; construction now owns exact static
+collision without adding it to GreyfenSocialPresentation. Native clothing/actor
+repairs remain retained. The overlapping common bench/gathering positions move
+clear, and finite opponent approach markers keep Rook off the table and Tor away
+from the existing house. No replacement navigation or interaction authority.
+The first fixture run passes 32 physical capsule sweeps but identifies Tor's house
+obstruction; an old fixed-name boundary assertion is a separate harness defect.
+Final native approach checks pass: Rook and Tor walk to their clear arrival
+markers and the existing selector renders Chess. Invited actors remain scheduled
+across ambient distance limits; the existing checked detour now handles stationary
+walkers independently of lexical priority. No teleport, timeout increase or global
+navigation replacement. Candidate `solid-furniture-20261029` compiles and passes
+package integrity at **162,885,063 complete deployed bytes**; seven unchanged
+packs are reused. Real mouse New Game and normal keyboard movement/common-table
+blocking are observed without console warnings/errors. Existing decorative/quest
+prompt priority limits the normal-input game check; Chess is covered natively,
+not claimed browser-passed. Barrel-table and bench use remain user-unverified.
+No performance gain or user acceptance claimed. Git pushes are the delivery
+boundary; no Vercel wait and no child 7 implementation in this delivery.
+
+[Furniture evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/solid_furniture_20261029.json).
 
 ### FINISH-003/FACE-ARTIFACT Rear Correction (awaiting Rafa)
 

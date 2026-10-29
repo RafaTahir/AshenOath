@@ -139,8 +139,12 @@ func open_table(area: Node3D) -> bool:
 		game.hud.toast("The table is here; its opponent is not available yet.")
 		return true
 	var person := "rook" if str(area.interaction_id) == "common_table" else "blacksmith_tor"
-	var target := area.global_position + Vector3(0.8,0,-0.65)
-	if not life.request_table_visit(person,target):
+	var arrival := area.get_node_or_null("BoardGameOpponentApproach") as Node3D
+	var corner := area.get_node_or_null("BoardGameOpponentCorner") as Node3D
+	if arrival == null:
+		game.hud.toast("The table's clear approach is not ready yet.")
+		return true
+	if not life.request_table_visit(person,arrival.global_position,corner.global_position if corner != null else Vector3.INF):
 		game.hud.toast(("Rook" if person == "rook" else "Tor") + " is coming over when the work allows. The shop stays open; use the board again when your opponent arrives.",5.0)
 		return true
 	return false
@@ -299,10 +303,12 @@ func _build_bell() -> void:
 
 func _build_common() -> void:
 	var pieces := _point("game_pieces","Set out the common-table pieces",Vector3(-5.8,0,11.05),"mechanism","Rook: The dark ones are yours if you like. Winning is optional; accusing the cups is traditional. The proper game board keeps its own result.")
+	pieces.set_meta("interaction_anchor", Vector3(0,1.04,0))
 	for index in range(6):
-		var piece := Work._rod(game,pieces,Vector3(-0.2+index*0.08,0.88,0),0.027,0.025,IRON if index%2==0 else LINEN)
+		var piece := Work._rod(game,pieces,Vector3(-0.2+index*0.08,1.07,0),0.027,0.025,IRON if index%2==0 else LINEN)
 		pieces.get_node("PropState").bind_visual(piece,"position:z",0.0,float(index%2)*0.12)
-	var seat := _point("common_seat","Sit beside the common table",Vector3(-4.55,0,11.7),"seat","A seat kept clear of the bridge road. Stand whenever you choose; nobody owes the table a game or a confidence.")
+	var seat := _point("common_seat","Sit beside the common table",Vector3(-3.0,0,13.0),"seat","A seat kept clear of the bridge road. Stand whenever you choose; nobody owes the table a game or a confidence.")
+	seat.rotation.y = PI * 0.5
 	_model(seat,"Bench.obj",0.45,Vector3.ZERO)
 	_point("challenges","Read the southern range challenges",Vector3(6.1,0,13.7),"record","Rook: steady hand, eight arrows. Tor: watch a complete pendulum swing. Elna: every distance counts. The untimed practice uses range arrows; your own equipment and ammunition are kept. Losses buy no grievance.")
 

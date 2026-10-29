@@ -1,5 +1,38 @@
 # FINISH-007 - Greyfen Completion
 
+## Director Child: Solid Furniture - 2026-10-29
+
+Active child only; not whole-Greyfen acceptance. Both `common_table` and
+`barrel_board` expose Chess through the existing shared game selector. Their
+authored mesh includes the table and chairs, but presentation alone had no solid
+body. Construction now adds exact static mesh collision under the interaction
+owner; the visual helper remains collision-free. No furniture artwork changes.
+
+The common bench and gathering anchors move out of the new solid footprint.
+Piece-handling anchors/meshes sit above the tabletop. Clear opponent arrival
+markers and an interruptible corner leg replace the former destination inside
+the table. Invited people keep moving beyond ambient culling range, then return
+to existing routine/culling rules after the bounded visit. Tor uses the reserved
+northern road rather than the house/care area; Rook clears the north chair.
+No teleport, increased timeouts, reward changes or replacement pathfinder.
+
+The initial 32 player-capsule collision sweeps passed. The final targeted native
+approach checks pass for both opponents and Chess selection. Invited people
+remain scheduled across the village; stationary walkers no longer defeat the
+existing collision-checked detour merely through name ordering. The original
+house route, a too-narrow alternative and the separate obsolete fixture/player
+placement assumptions are recorded, not relabeled as passes. Unchanged physical
+sweeps are not repeated. Candidate `solid-furniture-20261029` compiles and passes
+package integrity at **162,885,063 complete bytes**, reusing seven unchanged packs.
+The final normal-input browser check covers New Game, movement and common-table
+blocking with no console warnings/errors. Nearby decorative/quest prompt priority
+prevents a claimed normal-input Chess pass; the barrel-table/seat visit also
+remains unverified. Those observations are not substituted for user acceptance.
+See [bounded evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/solid_furniture_20261029.json).
+The FINISH-007 Git receipt owns publication status. Push development/main and
+stop without waiting for Vercel. HONEST-TARGETING has not begun. No performance
+gain is claimed.
+
 ## Current Implementation Delivery - 2026-10-26
 
 Candidate: `finish-implementation-20261026`, continued from published r14

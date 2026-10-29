@@ -1,28 +1,28 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-29T07:45:11.3808978Z",
-  "build_id": "cleric-rear-cleanup-20261029",
-  "generated_from_commit": "781aae40c251980b069e08ec6fccd928eea1d39c",
+  "generated_at_utc": "2026-10-29T09:46:04.2682096Z",
+  "build_id": "solid-furniture-20261029",
+  "generated_from_commit": "c523b85a0aae48ac24bbb67c3a53dea3cdfae237",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\cleric-rear-cleanup-20261029\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\solid-furniture-20261029\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 160055416,
+  "total_bytes": 160056760,
   "packs": [
     {
       "id": "base",
-      "version": "cleric-rear-cleanup-20261029",
+      "version": "solid-furniture-20261029",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4430916,
-      "sha256": "5f500dec659c52bd6d95cde3877b743e4e6e2ec5fdddefb10ad5667a01194729",
+      "bytes": 4432260,
+      "sha256": "810610db0ccbd285ea3dbaab2c4676cc5667a875f5e017c8c9076edf6ee5a710",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "cleric-rear-cleanup-20261029",
+      "version": "solid-furniture-20261029",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 86265908,
@@ -32,7 +32,7 @@
     },
     {
       "id": "adjacent",
-      "version": "cleric-rear-cleanup-20261029",
+      "version": "solid-furniture-20261029",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2370980,
@@ -42,7 +42,7 @@
     },
     {
       "id": "campaign",
-      "version": "cleric-rear-cleanup-20261029",
+      "version": "solid-furniture-20261029",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8678820,
@@ -52,7 +52,7 @@
     },
     {
       "id": "characters",
-      "version": "cleric-rear-cleanup-20261029",
+      "version": "solid-furniture-20261029",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 8999204,
@@ -62,7 +62,7 @@
     },
     {
       "id": "monsters",
-      "version": "cleric-rear-cleanup-20261029",
+      "version": "solid-furniture-20261029",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 20678316,
@@ -72,7 +72,7 @@
     },
     {
       "id": "audio",
-      "version": "cleric-rear-cleanup-20261029",
+      "version": "solid-furniture-20261029",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21302876,
@@ -82,7 +82,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "cleric-rear-cleanup-20261029",
+      "version": "solid-furniture-20261029",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7328396,
@@ -92,13 +92,13 @@
     }
   ],
   "errors": [],
-  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from face-artifact-20261029. Re-exported owners: base. Cleric runtime profile no longer attaches hood or mantle; silhouette reconfiguration retires obsolete owned layers. Base/root scripts rebuilt; all asset bytes, other roles, skins, clips, palettes and export ownership preserved. Seven unaffected content packs reused.",
+  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from cleric-rear-cleanup-20261029. Re-exported owners: base. Construction-owned fitted game-table and chair collision; clear bench, pieces and gathering anchors; bounded opponent approaches and stationary-crowd yielding. Existing artwork and seven content pack inputs unchanged.",
   "selected_web_export": {
-    "build_id": "cleric-rear-cleanup-20261029",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\cleric-rear-cleanup-20261029\\export",
-    "generated_from_commit": "781aae40c251980b069e08ec6fccd928eea1d39c",
-    "artifacts_total_bytes": 162874722,
-    "root_pck_sha256": "ddfd8c9aa9abc2e9b9f85f1a6b948ebf9bcd33fb5ca6a4f5e85edabe3924d67d",
-    "note": "Cleric runtime profile no longer attaches hood or mantle; silhouette reconfiguration retires obsolete owned layers. Base/root scripts rebuilt; all asset bytes, other roles, skins, clips, palettes and export ownership preserved. Seven unaffected content packs reused."
+    "build_id": "solid-furniture-20261029",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\solid-furniture-20261029\\export",
+    "generated_from_commit": "c523b85a0aae48ac24bbb67c3a53dea3cdfae237",
+    "artifacts_total_bytes": 162877351,
+    "root_pck_sha256": "ee6c12f116d9262da68a25a7ccc30f94fdc18ad15f17260c9dbeb6703e4a75cc",
+    "note": "Construction-owned fitted game-table and chair collision; clear bench, pieces and gathering anchors; bounded opponent approaches and stationary-crowd yielding. Existing artwork and seven content pack inputs unchanged."
   }
 }
