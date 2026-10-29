@@ -57,3 +57,29 @@ Godot review viewer (no journey/save service): run the pinned Godot executable w
 The existing published package is **242,429,964 bytes**, exceeding this brief's 104,857,600-byte boundary by **137,572,364 bytes**. The earlier repository policy is 256 MiB; this recovery explicitly retains the stricter brief as an additional hold. No claim is made that the new, unoptimized review GLB solves the full-game budget. Do not discard content, anatomy or quality to make that claim.
 
 Current branch: `codex/art-recovery-anwen`. Production, `web/`, runtime role registries and earned saves are unchanged by the review asset. The only gameplay-source correction is the identified ecology metadata key. All unaccepted art stays isolated. **This recovery remains unfinished.**
+
+## Facial study v003: bounded continuation, still REWORK
+
+This step changes Anwen's face only. The original v002 source and review export remain intact. Hair, garments, staff, other characters and production registries have not been revised in this step. No user input is needed to continue the outstanding art work.
+
+### Concrete improvement
+
+- The old flat iris discs were approximately 0.4 mm behind the front of the white eyeballs. That construction produced the visible white iris rings. Replaced the overlapping parts with curved, outward-facing eye surfaces, continuous hazel irises and pupils, bound to the existing eye controls. The rings are absent in both the new Blender renders and isolated Godot captures.
+- Added an editable `Anwen_ReferencePlanes_v003` relative shape: cheek/hollow/jowl relationships, lower-lid support, uneven brow, nose/ala structure, mouth-corner asymmetry and shallow age folds. This is a modest facial refinement, not a finished reference likeness.
+- Added bone-bound eyebrow strands with varied growth, taper and placement. The first evenly spaced version looked comb-like and was rejected. The retained refinement is better in Blender, but Godot still shows a stippled result that needs a runtime material/geometry pass.
+- Skin retains the licensed CC0 foundation, with restrained regional tone, spatial roughness and small-scale surface detail. The review baker now preserves linked roughness instead of replacing it with a constant.
+
+### Actual evidence and checks
+
+- Source: `models/C01_anwen_face_v003.blend`; generator: `tools/anwen_face_pass.py`. The original v002 file is unchanged.
+- Matched front, profile and three-quarter Blender views: `evidence/face_v003/before_*.png` and `after_*.png`. Both use the same additional subdivision support, camera, lighting, exposure and render settings. Hair is intentionally hidden in BOTH diagnostic views. `after_context.png` shows the unchanged hair, which still fails the reference.
+- Side-by-side, unretouched source renders: `evidence/face_v003/front_comparison.png`. The original supplied sheet remains the reference; no generated illustration is being presented as model evidence.
+- Baked review-only GLB: `outputs/AshenOathTheRoadBetweenCrowns/art_review/anwen_face_v003/anwen_review.glb`. **17,040,404 bytes, 180,960 triangles, one mesh/material, 76 joints.** This high-density face study is NOT a production LOD, a runtime budget pass or a replacement NPC.
+- Godot 4.6.3 import and review-script syntax check completed without corresponding errors. The isolated Compatibility review captured front/profile/rear/three-quarter views and exited normally; it never starts a journey or touches saves. Captures and the exact export identity are under `evidence/face_v003/godot/` and `identities.json`.
+- Export warnings remain: multiple image-node samplers and source vertices with more than four skin influences (exporter selects/normalizes four). Godot switched to ANGLE because of the Intel driver's OpenGL support warning. None of these is hidden or counted as art acceptance.
+- The initial background render was safely cancelled after an inward eye-winding defect was found. Corrected winding and triangle caps passed the outward-normal assertion; the replacement renders completed. The first brow layout was then visually rejected and refined. Retained logs identify the completed bake, renders, import and Godot capture.
+- No v003 full-body animation, expression/blink deformation, gameplay-lighting, campaign, Web-package, performance or production acceptance was run or claimed. The earlier v002 level evidence is historical, not proof of v003 appearance in Greyfen.
+
+### Review decision and precise continuation
+
+**Not accepted; the full-asset scores above are not raised.** Eye construction is improved, but the face still does not convincingly match the supplied individual. Godot reveals stippled brows and harsher skin/crease shading than the Blender portrait. The next bounded step is to resolve that facial runtime translation and continue the reference-specific orbital, brow, mouth and jaw likeness before rebuilding the pale pinned hair. Clothing, body deformation and staff contact remain subsequent Anwen work. Do not proceed to Ghoulkin, Bell-Eater, mass generation or publication.

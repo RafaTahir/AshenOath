@@ -17,7 +17,11 @@
       "in_engine_presentation": 2,
       "deformation_motion": 2
     },
-    "evidence_record": "evidence/identities.json"
+    "evidence_record": "evidence/identities.json",
+    "current_step": "v003 facial study rendered and baked; full asset remains rework",
+    "step_evidence": "evidence/face_v003/identities.json",
+    "step_review": "ANWEN_REVIEW.md#facial-study-v003-bounded-continuation-still-rework",
+    "next_action": "Resolve facial runtime brow/skin translation and continue reference likeness before pinned hair reconstruction"
   },
   "M01": {"status": "locked_until_C01_accepted", "user_accepted": false},
   "M05": {"status": "locked_until_M01_accepted", "user_accepted": false},

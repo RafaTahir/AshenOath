@@ -1,0 +1,80 @@
+{
+  "scope": "Facial study only. Not an optimized runtime NPC; not accepted.",
+  "source": "C01_anwen_face_v003.blend",
+  "mesh_count": 1,
+  "material_count": 1,
+  "triangles": 180960,
+  "joints": 76,
+  "files": [
+    {
+      "path": "art_source/art_recovery_v2/models/C01_anwen_face_v003.blend",
+      "bytes": 18361874,
+      "sha256": "55b09ba3069977ff45c97d9f2a601b9261c9681d7ebc13de986b82cb2c7984b7"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/art_review/anwen_face_v003/anwen_review.glb",
+      "bytes": 17040404,
+      "sha256": "b5c9ccbb832b7d91188cfe560ec014ee9f7ccbce29962888f72d741b385692ca"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/after_context.png",
+      "bytes": 978261,
+      "sha256": "f71ba73be3712c26f64533d6e974636ad42b00d1ba80f059dca983514cfba66f"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/after_front.png",
+      "bytes": 964069,
+      "sha256": "a3a8fd2d0d8aebcbbc0fc97d32e2f9c2d1cabbc6259332c7f55eefd3398137af"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/after_profile.png",
+      "bytes": 1047206,
+      "sha256": "bd5d13be368fdbc8403222dcb0e9e1fbe07b53d3a83c79496c3243b719cac446"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/after_quarter.png",
+      "bytes": 994410,
+      "sha256": "2bff033a55833cedec9720e9f07be43baa64f115935cf4143cbec63331e615d7"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/before_front.png",
+      "bytes": 961875,
+      "sha256": "4f13ebf93bb778544cf5d8c150d31f47a14914f074a15c04c3a9510e6a480ac2"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/before_profile.png",
+      "bytes": 1066882,
+      "sha256": "b7c8d30f87d282771a0243289349839558de4e3622b527b7ba93b5d40c0c1f79"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/before_quarter.png",
+      "bytes": 1000352,
+      "sha256": "aede64a2225252ce5ddf54f8ea53f7c82c22dbf26906e1a0a7f11b00887fa83a"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/front_comparison.png",
+      "bytes": 295984,
+      "sha256": "a34ea13057b9810d26fa4f1a5ade6527cd3cc3eae615dd5e51c4ab350a82380b"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/godot/front.png",
+      "bytes": 204058,
+      "sha256": "523f7b01c8881cfa09f82396e1d18cb0b52be87e2dd1131c5ac9924ef74b34d0"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/godot/profile.png",
+      "bytes": 280896,
+      "sha256": "4244b83b24180aeaade2da82003eef57b5a79077b1d68b1ee36abacd5ab00efc"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/godot/quarter.png",
+      "bytes": 218753,
+      "sha256": "6b618916405a0439d967188b8f39819ec1a72c5d00538b83ae3ac347f44fab0b"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/face_v003/godot/rear.png",
+      "bytes": 261282,
+      "sha256": "2bf1264b9f7732f5645a9bce9b1e34a84ed9f87d2844c434f074ce66c63e20d8"
+    }
+  ]
+}

@@ -3,6 +3,8 @@ extends SceneTree
 # Explicitly isolated review harness: no gameplay services, saves or rewards.
 const Fusion = preload("res://scripts/character_animation_fusion.gd")
 var out := "D:/Temp/AshenOath/art_recovery_v2/anwen_godot"
+var asset_path := "res://art_review/anwen/anwen_review.glb"
+var face_only := false
 
 class OrbitReview extends Node3D:
 	var camera: Camera3D
@@ -32,6 +34,10 @@ class OrbitReview extends Node3D:
 		camera.look_at(Vector3(0,1.03,0))
 
 func _initialize() -> void:
+	for arg: String in OS.get_cmdline_user_args():
+		if arg == "--face-only": face_only = true
+		if arg.begins_with("--asset="): asset_path = arg.trim_prefix("--asset=")
+		if arg.begins_with("--output-dir="): out = arg.trim_prefix("--output-dir=")
 	call_deferred("capture")
 
 func capture() -> void:
@@ -53,19 +59,22 @@ func capture() -> void:
 		light.position = pos
 		light.look_at(Vector3(0, 1, 0))
 		light.light_energy = 0.75 if pos.z > 0 else 0.4
-	var body: Node3D = load("res://art_review/anwen/anwen_review.glb").instantiate()
+	var body: Node3D = load(asset_path).instantiate()
 	stage.add_child(body)
-	var player: AnimationPlayer = Fusion.attach_shared_library(body)
-	preload("res://scripts/character_presentation.gd")._add_anwen_staff(body)
-	var driver: Node = preload("res://scripts/character_animation_driver.gd").new()
-	body.add_child(driver)
-	if not driver.configure(body, {"idle":"Idle", "walk":"Walk", "run":"Sprint"}):
-		push_error("Review actor could not acquire the existing animation owner")
-		quit(1)
-		return
-	driver.set_external_tick(true)
-	driver.set_locomotion(0.0, Vector3.ZERO, true)
-	driver.advance_external(0.25)
+	var player: AnimationPlayer = null
+	var driver: Node = null
+	if not face_only:
+		player = Fusion.attach_shared_library(body)
+		preload("res://scripts/character_presentation.gd")._add_anwen_staff(body)
+		driver = preload("res://scripts/character_animation_driver.gd").new()
+		body.add_child(driver)
+		if not driver.configure(body, {"idle":"Idle", "walk":"Walk", "run":"Sprint"}):
+			push_error("Review actor could not acquire the existing animation owner")
+			quit(1)
+			return
+		driver.set_external_tick(true)
+		driver.set_locomotion(0.0, Vector3.ZERO, true)
+		driver.advance_external(0.25)
 	var clips := player.get_animation_list() if player != null else PackedStringArray()
 	var idle := ""
 	var walk := ""
@@ -77,10 +86,12 @@ func capture() -> void:
 	cam.projection = Camera3D.PROJECTION_ORTHOGONAL
 	cam.size = 2.13
 	cam.make_current()
-	for label: String in {"front":0.0,"side":90.0,"rear":180.0,"quarter":35.0,"face":10.0}:
-		var a: float = deg_to_rad({"front":0.0,"side":90.0,"rear":180.0,"quarter":35.0,"face":10.0}[label])
-		var center := Vector3(0, 1.66 if label == "face" else 0.93, 0)
-		cam.size = 0.43 if label == "face" else 2.13
+	var views := {"front":0.0,"side":90.0,"rear":180.0,"quarter":35.0,"face":10.0}
+	if face_only: views = {"front":0.0,"profile":90.0,"quarter":25.0,"rear":180.0}
+	for label: String in views:
+		var a: float = deg_to_rad(float(views[label]))
+		var center := Vector3(0, 1.665 if face_only or label == "face" else 0.93, 0)
+		cam.size = 0.34 if face_only else 0.43 if label == "face" else 2.13
 		cam.position = center + Vector3(sin(a), 0.03, cos(a))*3
 		cam.look_at(center)
 		await process_frame
@@ -97,7 +108,7 @@ func capture() -> void:
 			await process_frame
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(out.path_join("walk_%02d.png" % frame))
-	var record := {"scope":"isolated Godot Compatibility art review; not live campaign acceptance", "idle_clip":idle, "walk_clip":walk, "clips":Array(clips), "accepted":false}
+	var record := {"scope":"isolated Godot Compatibility art review; not live campaign acceptance", "asset":asset_path,"asset_sha256":FileAccess.get_sha256(asset_path),"face_only":face_only,"idle_clip":idle, "walk_clip":walk, "clips":Array(clips), "accepted":false}
 	FileAccess.open(out.path_join("review.json"),FileAccess.WRITE).store_string(JSON.stringify(record,"\t"))
 	if "--interactive" in OS.get_cmdline_user_args():
 		var orbit := OrbitReview.new()

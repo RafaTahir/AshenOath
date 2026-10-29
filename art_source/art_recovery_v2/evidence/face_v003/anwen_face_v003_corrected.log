@@ -1,0 +1,14 @@
+00:04.484  blend            | Read blend: "D:\Projects\AshenOath\art_source\art_recovery_v2\models\C01_anwen_reconstruction_v002.blend"
+01:14.172  render           | Saved: 'D:\Projects\AshenOath\art_source\art_recovery_v2\evidence\face_v003\before_front.png'
+02:21.765  render           | Saved: 'D:\Projects\AshenOath\art_source\art_recovery_v2\evidence\face_v003\before_quarter.png'
+03:25.625  render           | Saved: 'D:\Projects\AshenOath\art_source\art_recovery_v2\evidence\face_v003\before_profile.png'
+04:35.250  render           | Saved: 'D:\Projects\AshenOath\art_source\art_recovery_v2\evidence\face_v003\after_front.png'
+05:48.859  render           | Saved: 'D:\Projects\AshenOath\art_source\art_recovery_v2\evidence\face_v003\after_quarter.png'
+06:56.515  render           | Saved: 'D:\Projects\AshenOath\art_source\art_recovery_v2\evidence\face_v003\after_profile.png'
+07:59.500  render           | Saved: 'D:\Projects\AshenOath\art_source\art_recovery_v2\evidence\face_v003\after_context.png'
+Info: No new files have been packed
+Info: Saved as "C01_anwen_face_v003.blend"
+FACE_STUDY_SOURCE D:\Projects\AshenOath\art_source\art_recovery_v2\models\C01_anwen_face_v003.blend
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

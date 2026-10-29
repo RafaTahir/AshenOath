@@ -1,0 +1,15 @@
+{
+  "status": "partial_facial_study_reviewed_rework_required",
+  "source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C01_anwen_face_v003.blend",
+  "previous_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C01_anwen_reconstruction_v002.blend",
+  "scope": "facial structure, eyes, eyebrows and skin only; hair/clothing not repaired",
+  "eye_iris_disc_removed": true,
+  "sculpt_shape_key": "Anwen_ReferencePlanes_v003",
+  "neutral_comparison": "same lighting/camera; hair deliberately absent in both scalp/face diagnostic views",
+  "checks": ["matched Blender front/quarter/profile renders", "review-only PBR bake", "Godot import", "review script syntax", "isolated Godot front/profile/quarter/rear capture"],
+  "observed_improvement": "White iris rings absent in source and Godot captures",
+  "remaining_failures": ["reference likeness not achieved", "stippled runtime brows", "harsh runtime skin/crease shading", "unchanged incorrect hair", "no expression/blink deformation proof", "review density is not a production LOD"],
+  "identity_record": "identities.json",
+  "production_changed": false,
+  "accepted": false
+}

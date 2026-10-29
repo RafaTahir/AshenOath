@@ -1,0 +1,10 @@
+{
+	"accepted": false,
+	"asset": "res://art_review/anwen_face_v003/anwen_review.glb",
+	"asset_sha256": "b5c9ccbb832b7d91188cfe560ec014ee9f7ccbce29962888f72d741b385692ca",
+	"clips": [],
+	"face_only": true,
+	"idle_clip": "",
+	"scope": "isolated Godot Compatibility art review; not live campaign acceptance",
+	"walk_clip": ""
+}
