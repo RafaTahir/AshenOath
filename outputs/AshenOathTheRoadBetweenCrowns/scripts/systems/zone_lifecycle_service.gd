@@ -538,10 +538,14 @@ func _finish_zone_runtime_finalize(zone_id: String, root: Node3D, service: Node,
 	for enemy in enemies:
 		if is_instance_valid(enemy):
 			_validate_zone_render_resources(enemy)
+	if not bool(root.get_meta("arrival_support_pending", false)):
+		_publish_zone_arrival(zone_id, root)
+	print("LOADING: zone_stage=runtime_finalized zone=%s navigation=%s ms=%d" % [zone_id, navigation_pending, Time.get_ticks_msec() - started])
+
+func _publish_zone_arrival(zone_id: String, root: Node3D) -> void:
 	StoryWorldDirector.decorate(_host, root, zone_id)
 	CovenantResolution.restore(_host)
 	_persist_story_action()
-	print("LOADING: zone_stage=runtime_finalized zone=%s navigation=%s ms=%d" % [zone_id, navigation_pending, Time.get_ticks_msec() - started])
 
 func _finish_prewarmed_greyfen_runtime() -> void:
 	# Compatibility for older prepared roots; new roots finish this under cover.
@@ -568,7 +572,9 @@ func _grounded_spawn_position(candidate: Vector3) -> Variant:
 	var excluded: Array[RID] = []
 	if player != null:
 		excluded.append(player.get_rid())
-	var hit := SpatialSurfaceContract.support_hit(_host.get_world_3d().direct_space_state, candidate + Vector3.UP * 6.0, candidate - Vector3.UP * 12.0, excluded)
+	if not is_instance_valid(zone_root):
+		return null
+	var hit := SpatialSurfaceContract.support_hit(_host.get_world_3d().direct_space_state, candidate + Vector3.UP * 6.0, candidate - Vector3.UP * 12.0, excluded, zone_root)
 	if hit.is_empty():
 		return null
 	return Vector3(candidate.x, float(hit.position.y) + 0.95, candidate.z)
@@ -704,6 +710,8 @@ func _release_active_spatial_service() -> void:
 		return
 	if current == greyfen_prewarm_spatial_service or route_spatial_cache.values().has(current):
 		return
+	if zone_runtime_coordinator != null and zone_runtime_coordinator.retains_source_spatial(current):
+		return
 	current.queue_free()
 
 func _defer_cached_zone_collision_disable(zone_id: String) -> void:
@@ -741,7 +749,7 @@ func _schedule_zone_autosave() -> void:
 	delay_timer.timeout.connect(func():
 		if opening_checkpoint_pending:
 			return
-		if not resource_shutdown_prepared and game_started and player != null and is_instance_valid(player) and current_zone_id == expected_zone and save_manager != null:
+		if not resource_shutdown_prepared and game_started and player != null and is_instance_valid(player) and current_zone_id == expected_zone and not zone_transition_pending and not zone_load_request_pending and not player.transition_locked and save_manager != null:
 			save_manager.autosave(_host)
 	)
 

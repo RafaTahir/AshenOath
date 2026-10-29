@@ -849,6 +849,7 @@ func _sync_camera_enemy_cache() -> void: _systems["zone_lifecycle"]._sync_camera
 func _bind_spatial_player_body() -> void: _systems["zone_lifecycle"]._bind_spatial_player_body()
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void: await _systems["zone_lifecycle"]._load_zone(zone_id, spawn_pos)
 func _advance_zone_transition() -> void: _systems["zone_lifecycle"]._advance_zone_transition()
+func _publish_zone_arrival(zone_id: String, root: Node3D) -> void: _systems["zone_lifecycle"]._publish_zone_arrival(zone_id, root)
 func _apply_zone_audio(zone_id: String) -> void: _systems["zone_lifecycle"]._apply_zone_audio(zone_id)
 func _schedule_deferred_zone_audio(zone_id: String, root: Node3D) -> void: _systems["zone_lifecycle"]._schedule_deferred_zone_audio(zone_id, root)
 func _finish_deferred_zone_audio(zone_id: String, root: Node3D) -> void: await _systems["zone_lifecycle"]._finish_deferred_zone_audio(zone_id, root)

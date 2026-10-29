@@ -10,7 +10,9 @@ The approved ten-child roadmap supersedes the execution restrictions and
 source-complete assumptions in the dated delivery record below. Mandatory user
 acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
 
-**FINISH-001/RESPONSIVE-PREPARATION** is active following Rafa's Continue instruction.
+**FINISH-014/SAFE-CONNECTOR-HANDOFF** is active following Rafa's Continue instruction.
+Child 2 was pushed as `a587888` to development and main. Continue authorizes
+the next child; it does not record user acceptance of earlier work.
 PACK-CLOSURE was pushed as `8603d80` to development and main; deployment waiting
 was explicitly withdrawn by Rafa. That instruction does not imply runtime acceptance.
 Development was fast-forwarded from
@@ -25,8 +27,8 @@ child. No separate CLI deployment and no implied whole-game acceptance.
 | Order | Child ticket | Current state |
 | --- | --- | --- |
 | 1 | FINISH-016/PACK-CLOSURE | Implemented, compiled, developer-verified, pushed 8603d80; awaiting Rafa |
-| 2 | FINISH-001/RESPONSIVE-PREPARATION | Implemented/compiled; focused checks and affected browser observations recorded; push receipt owns delivery; runtime acceptance pending |
-| 3 | FINISH-014/SAFE-CONNECTOR-HANDOFF | Not started |
+| 2 | FINISH-001/RESPONSIVE-PREPARATION | Implemented/compiled, focused checks/partial browser coverage, pushed a587888; awaiting Rafa |
+| 3 | FINISH-014/SAFE-CONNECTOR-HANDOFF | Implemented/compiled, targeted native and normal-input browser round trip pass; FINISH-014 push receipt owns delivery; awaiting Rafa |
 | 4 | FINISH-003/ANIMATION-LIFECYCLE | Not started |
 | 5 | FINISH-003/FACE-ARTIFACT | Not started; actor/geometry identification required |
 | 6 | FINISH-007/SOLID-FURNITURE | Not started |
@@ -68,6 +70,34 @@ input and interrupted UI preparation pass the focused fixture. The 100 ms budget
 controlled cold/warm timings and final reload/Continue remain unverified (browser
 controller timed out). No full FINISH contract or user acceptance is closed.
 See [child 2 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/responsive_preparation_20261029.json).
+
+Child 3 removes the assumed-height arrival success path. Destination support
+must come from the destination root, and nearest-safe recovery is re-probed.
+The source root/spatial owner survives until confirmation, including same-zone
+replacement. Failed arrivals roll back without committing prepared story facts,
+arrival objectives or unsupported saves; restored source support is checked too.
+The two-second missing-support watchdog is failure containment, not a relaxation
+of the retained 350/900 ms transition goals.
+
+Focused native fixtures pass owned-floor rejection, delayed/re-probed support,
+missing-destination rollback, same-zone rollback and save gating. All 14 physical
+connector pairs pass isolated bidirectional strip support and gate contracts.
+Eleven campaign destinations pass bounded construction/cancellation without
+changing durable story. Six real native collision/build crossings around Greyfen
+pass, including immediate returns. These fixtures are not an earned campaign or
+normal-input browser proof. The construction fixture reports an ObjectDB shutdown
+warning; sustained memory/performance and user acceptance remain open.
+
+Candidate `safe-connector-20261029`: **162,875,328 bytes / 155.33 MiB** including
+the release manifest. Base/root scripts were rebuilt; seven unchanged packs are
+reused byte-for-byte. Package transport/decoded hashes and budget checks pass.
+Normal mouse New Game and keyboard Greyfen -> Wychwood -> Greyfen pass in isolated
+in-app Chromium, with no console warnings/errors. Browser log observations were
+947.5 ms New Game handoff, 4,846.1 ms outward and 574.7 ms return: not controlled
+reference-PC benchmarks, and not passing transition targets. All other pairs have
+isolated geometry/gate evidence, not an earned browser traversal. Actual phone,
+FPS, sustained memory and campaign acceptance remain open. No Vercel waiting.
+See [child 3 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/safe_connector_20261029.json).
 
 Existing strict startup/performance targets remain, including historical failures.
 This child establishes resource closure, not performance acceptance. Unlocalized

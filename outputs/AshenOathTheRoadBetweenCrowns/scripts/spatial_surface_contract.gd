@@ -6,7 +6,7 @@ const SectorManifest = preload("res://scripts/world_sector_manifest.gd")
 const NO_RIVER := 999.0
 const DEFAULT_BRIDGE_BANK_OFFSET := 3.2
 
-static func support_hit(space: PhysicsDirectSpaceState3D, start: Vector3, end: Vector3, excluded: Array[RID] = []) -> Dictionary:
+static func support_hit(space: PhysicsDirectSpaceState3D, start: Vector3, end: Vector3, excluded: Array[RID] = [], owner: Node = null) -> Dictionary:
 	var query := PhysicsRayQueryParameters3D.create(start, end, 1)
 	var rejected: Array[RID] = excluded.duplicate()
 	query.exclude = rejected
@@ -19,7 +19,8 @@ static func support_hit(space: PhysicsDirectSpaceState3D, start: Vector3, end: V
 		var body := hit.get("collider") as CollisionObject3D
 		if body == null:
 			return {}
-		if bool(body.get_meta("walkable_support", true)) and hit.normal.y >= 0.7:
+		var owned := owner == null or body == owner or owner.is_ancestor_of(body)
+		if owned and bool(body.get_meta("walkable_support", true)) and hit.normal.y >= 0.7:
 			return hit
 		rejected.append(body.get_rid())
 		query.exclude = rejected

@@ -88,6 +88,8 @@ func _persist_story_action() -> void:
 		return
 	if zone_transition_pending or zone_load_request_pending or not pending_player_restore.is_empty():
 		return
+	if is_instance_valid(zone_root) and bool(zone_root.get_meta("arrival_support_pending", false)):
+		return
 	_collect_progression_rewards()
 	story_save_pending = false
 	save_manager.checkpoint(_host)

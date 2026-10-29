@@ -6,11 +6,47 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
-Rafa subsequently authorized continuing to child 2 and removed Vercel waiting:
+Rafa subsequently authorized continuing through child 3 and removed Vercel waiting:
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
 
-### FINISH-001/RESPONSIVE-PREPARATION (active)
+### FINISH-014/SAFE-CONNECTOR-HANDOFF (developer-verified; push receipt owns delivery)
+
+- Destination arrival and emergency fallback require actual, walkable collision
+  owned by that destination. A foreign resident/preview floor cannot certify it.
+  The old fallback that assigned y=0.95 without checking support is removed.
+- The previous root, enemies and spatial owner are retained until handoff succeeds,
+  including same-zone quality replacement. Failed destination support restores
+  that source and rechecks its collision before releasing control.
+- Arrival objectives, prepared story flags, consequence publication and autosave
+  scheduling wait for confirmed support. Unsupported roots block all save capture;
+  pending story persistence is retained, not silently discarded.
+- Existing native checks pass: support failure/recovery and save gating; both
+  directions of all 14 isolated connector strips and gate predicates; eleven
+  prepared/cancelled campaign destinations; six Greyfen-adjacent collision/build
+  crossings including immediate returns. Fixture placement is explicit and does
+  not establish earned campaign or ordinary browser-input acceptance.
+- The construction fixture's obsolete fixed-step assumption now awaits bounded
+  ready/failure. It pauses the source simulation while comparing durable state,
+  matching foreground travel preparation. Its shutdown ObjectDB warning remains
+  disclosed. No strict timing, FPS, memory or phone acceptance is claimed.
+- Source-aligned package `safe-connector-20261029` compiles and passes transport,
+  decoded-hash, pack and budget checks: 162,875,328 bytes / 155.33 MiB. Base/root
+  scripts were rebuilt; seven unaffected packs are identical to child 2.
+- Normal-input in-app Chromium New Game and Greyfen -> Wychwood -> Greyfen pass,
+  including immediate reversal and no console warnings/errors. Production saves
+  were untouched (dedicated localhost port 43731). The temporary tab is closed
+  and QA server stopped.
+- Browser log observations: New Game handoff 947.5 ms, outward transition 4,846.1
+  ms, return 574.7 ms. These are not controlled reference-PC measurements or a
+  performance pass. Other connector pairs retain isolated geometry/gate coverage,
+  not an earned all-regions browser journey. Phone/FPS/memory remain unverified.
+- The matching FINISH-014 push receipt owns delivery. Stop after push; no Vercel
+  polling and no animation-lifecycle work until Rafa authorizes the next child.
+
+[Child 3 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/safe_connector_20261029.json).
+
+### FINISH-001/RESPONSIVE-PREPARATION (pushed a587888; awaiting Rafa)
 
 - The opening core is now six separately scheduled prerequisites, preserving
   authored ground, river collision, Anwen and all three gates. Every continuation
@@ -36,8 +72,9 @@ No user acceptance is inferred from Continue or from successful compilation.
   unchanged dependencies; the final acknowledgement boundary is fixture-covered,
   not represented as a second browser run. Controlled startup/100 ms response,
   phone and strict performance acceptance remain unproven, not relaxed.
-- The QA server is stopped. Push development/main and stop without Vercel polling,
-  as instructed. No mandatory acceptance count changes and no child 3 work begins.
+- The QA server was stopped. Development/main were pushed as `a587888` without
+  Vercel polling. No mandatory acceptance count changed. Child 3 was authorized
+  subsequently and does not repeat these passed checks.
 
 [Child 2 evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/responsive_preparation_20261029.json).
 

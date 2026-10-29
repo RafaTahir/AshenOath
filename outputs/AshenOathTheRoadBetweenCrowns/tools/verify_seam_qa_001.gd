@@ -1,6 +1,15 @@
 extends SceneTree
 
 const WorldSectorManifest = preload("res://scripts/world_sector_manifest.gd")
+const Fixture = preload("res://tools/runtime_fixture.gd")
+
+class GateFacts extends RefCounted:
+	var earned := false
+	func is_unlocked(_id: String) -> bool: return earned
+	func is_active(_id: String) -> bool: return earned
+	func is_completed(_id: String) -> bool: return earned
+	func is_objective_done(_quest: String, _objective: String) -> bool: return earned
+	func get_flag(_id: String, _fallback: Variant = false) -> bool: return earned
 
 class ArrivalHost extends Node:
 	var game_started := false
@@ -17,6 +26,10 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	if "--support-contract-only" in OS.get_cmdline_user_args():
+		await _support_contract()
+		quit(0 if failures.is_empty() else 1)
+		return
 	if "--campaign-construction-only" in OS.get_cmdline_user_args():
 		await _campaign_construction_contract()
 		quit(0 if failures.is_empty() else 1)
@@ -107,9 +120,7 @@ func _run() -> void:
 func _connected_greyfen_contract() -> void:
 	var game = (load("res://scenes/main.tscn") as PackedScene).instantiate()
 	root.add_child(game)
-	await _frames(4)
-	game.call("_new_game")
-	if not await _wait_connected_playable(game,"greyfen"):
+	if not await Fixture.start(game):
 		_check(false,"Greyfen did not become playable")
 	else:
 		var observer = preload("res://scripts/production_observation_bridge.gd").new()
@@ -132,21 +143,21 @@ func _connected_greyfen_contract() -> void:
 func _campaign_construction_contract() -> void:
 	var game = (load("res://scenes/main.tscn") as PackedScene).instantiate()
 	root.add_child(game)
-	await _frames(4)
-	game.call("_new_game")
-	if await _wait_connected_playable(game, "greyfen"):
+	if await Fixture.start(game):
 		var service = game.seamless_world
 		service.cancel_preparation()
 		service._foreground = true
+		paused = true
 		for zone: String in ["deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road", "vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade"]:
 			var source_root: Node3D = game.zone_root
 			var source_enemies: Array = game.active_enemies.duplicate()
 			var source_spatial: Node = game.spatial_service
 			var story_before: Dictionary = game.story_state.save_state().duplicate(true)
 			service._begin_neighbor(zone)
-			for step in range(service._construction_steps() + 2):
+			var deadline := Time.get_ticks_msec() + 30000
+			while service._neighbor_scope != null and service._neighbor_state == "building" and Time.get_ticks_msec() < deadline:
 				service._advance_preparation()
-				_check(game.zone_root == source_root and game.spatial_service == source_spatial and game.active_enemies == source_enemies and game.current_zone_id == "greyfen" and not game.neighbor_building, "Prepared step leaked active-world ownership: %s/%d" % [zone, step])
+				_check(game.zone_root == source_root and game.spatial_service == source_spatial and game.active_enemies == source_enemies and game.current_zone_id == "greyfen" and not game.neighbor_building, "Prepared step leaked active-world ownership: %s/%d" % [zone, service._neighbor_step])
 				if service._neighbor_scope == null: break
 				await process_frame
 			_check(service._neighbor_state == "ready", "Campaign preparation failed: %s %s" % [zone, service.preparation_snapshot()])
@@ -163,6 +174,7 @@ func _campaign_construction_contract() -> void:
 		await _frames(3)
 		_check(not is_instance_valid(partial), "Partial preparation cancellation retained its root")
 		service._foreground = false
+		paused = false
 	else:
 		_check(false, "Greyfen did not become playable for construction checks")
 	for failure: String in failures: push_error(failure)
@@ -172,6 +184,137 @@ func _campaign_construction_contract() -> void:
 	game.finalize_resource_shutdown()
 	game.queue_free()
 	await _frames(24)
+
+func _support_contract() -> void:
+	var game = (load("res://scenes/main.tscn") as PackedScene).instantiate()
+	root.add_child(game)
+	if not await Fixture.start(game):
+		_check(false, "Greyfen did not become playable for support checks")
+		await Fixture.shutdown(game)
+		return
+	game.seamless_world.cancel_preparation()
+	game.seamless_world._foreground = true
+	game.set_process(false)
+	game.player.set_physics_process(false)
+	var coordinator = game.zone_runtime_coordinator
+	var source: Node3D = game.zone_root
+	var source_spatial: Node = game.spatial_service
+	var source_position: Vector3 = game.player.global_position
+	var before: Dictionary = game.story_state.save_state().duplicate(true)
+	# A neighboring/preview floor cannot certify the destination's support.
+	var foreign := StaticBody3D.new()
+	var shape := CollisionShape3D.new()
+	shape.shape = BoxShape3D.new()
+	(shape.shape as BoxShape3D).size = Vector3(4, 1, 4)
+	foreign.add_child(shape)
+	game.add_child(foreign)
+	foreign.position = Vector3(100, 0, 100)
+	await physics_frame
+	await process_frame
+	_check(game._grounded_spawn_position(Vector3(100, 1, 100)) == null, "Foreign floor certified destination support")
+	before = game.story_state.save_state().duplicate(true)
+	coordinator.begin_transition("greyfen", "greyfen", source_position)
+	coordinator._support_deadline_msec = Time.get_ticks_msec() + 2000
+	game.pending_spawn_position = Vector3(100, 1, 100)
+	game.zone_transition_pending = true
+	game.zone_transition_frames = 0
+	game.player.set_transition_locked(true)
+	for index in 3: coordinator.advance_transition()
+	_check(game.zone_transition_pending and game.player.transition_locked, "Unsupported arrival unlocked before recovery")
+	_check(game.story_state.save_state() == before, "Unsupported arrival published story changes")
+	coordinator.advance_transition()
+	_check(not game.zone_transition_pending and not game.player.transition_locked and coordinator._arrival_recovered, "Supported nearest-safe recovery did not finish")
+	_check(game._grounded_spawn_position(game.player.global_position) != null, "Nearest-safe recovery was not re-probed")
+	foreign.queue_free()
+	# Inject a missing destination without manufacturing any quest facts. The
+	# real rollback owner must preserve the source tree, spatial owner and save.
+	for same_zone: bool in [false, true]:
+		var target := "greyfen" if same_zone else "wychwood"
+		before = game.story_state.save_state().duplicate(true)
+		coordinator.begin_transition(target, "greyfen", source_position)
+		if same_zone:
+			game.zone_residency.suspend_runtime(source)
+			source.visible = false
+			source.position.y = -1000
+			source.process_mode = Node.PROCESS_MODE_DISABLED
+		else:
+			game._cache_route_zone("greyfen", source, game.active_enemies, game.active_zone_signature)
+			game._cache_route_spatial_service("greyfen", source_spatial)
+		game.zone_root = Node3D.new()
+		game.zone_root.name = "UnsupportedDestination"
+		game.add_child(game.zone_root)
+		game.zone_root.set_meta("prepared_story_flags", {"unsupported_arrival_must_not_commit": true})
+		game.zone_root.set_meta("arrival_support_pending", true)
+		_check(game.save_manager._save_is_gated(game), "Unsupported destination allowed save capture")
+		game.spatial_service = game.ZoneSpatialService.new()
+		game.add_child(game.spatial_service)
+		game.spatial_service.configure(target, game._river_center(target), game._zone_half_extents(target))
+		game.current_zone_id = target
+		game.pending_spawn_position = Vector3(100, 1, 100)
+		game.player.set_transition_locked(true)
+		game.zone_transition_pending = true
+		game.zone_transition_frames = 3
+		coordinator._support_deadline_msec = Time.get_ticks_msec() - 1
+		coordinator.advance_transition()
+		_check(game.zone_root == source and game.spatial_service == source_spatial and game.current_zone_id == "greyfen", "Failed destination lost its source: same_zone=%s" % same_zone)
+		_check(game.player.transition_locked, "Rollback skipped source support confirmation")
+		_check(game.save_manager._save_is_gated(game), "Unconfirmed source rollback allowed save capture")
+		await physics_frame
+		await process_frame
+		coordinator.advance_transition()
+		coordinator.advance_transition()
+		_check(not game.zone_transition_pending and not game.player.transition_locked, "Source did not resume after confirmed support")
+		_check(not bool(source.get_meta("arrival_support_pending", false)), "Confirmed source retained its save gate")
+		_check(game.story_state.save_state() == before, "Failed destination committed story or arrival facts")
+		_check(not source_spatial.is_queued_for_deletion(), "Rollback destroyed source spatial ownership")
+	await _connector_support_contract(game)
+	for failure: String in failures: push_error(failure)
+	print("SEAM SUPPORT CONTRACT: %s (owned support, delayed/re-probed fallback, failed destination and same-zone rollback; isolated fixture, not earned journey)" % ("PASS" if failures.is_empty() else "FAIL"))
+	await Fixture.shutdown(game)
+
+func _connector_support_contract(game: Node) -> void:
+	var pairs: Dictionary = {}
+	var facts := GateFacts.new()
+	for source: String in WorldSectorManifest.all_ids():
+		if WorldSectorManifest.connections(source).is_empty(): continue
+		var view := SubViewport.new()
+		view.own_world_3d = true
+		view.render_target_update_mode = SubViewport.UPDATE_DISABLED
+		root.add_child(view)
+		var destination := Node3D.new()
+		view.add_child(destination)
+		var spatial: Node3D = game.ZoneSpatialService.new()
+		destination.add_child(spatial)
+		spatial.configure(source, game._river_center(source), game._zone_half_extents(source))
+		var context := ZoneBuildContext.new(game, source)
+		context.own(destination, spatial)
+		_check(context.run_step(func(scope: ZoneBuildContext): preload("res://scripts/connected_route_geometry.gd").install(scope); return true), "Connector geometry construction failed: " + source)
+		await physics_frame
+		await process_frame
+		for edge: Dictionary in WorldSectorManifest.connections(source):
+			var target := str(edge.target)
+			var key := "|".join([source, target] if source < target else [target, source])
+			pairs[key] = true
+			_check(not WorldSectorManifest.connection_between(target, source).is_empty(), "Missing reciprocal connector: " + key)
+			facts.earned = false
+			if edge.has("requires_flag") or edge.has("requires_objective") or edge.has("requires_unlocked_quest"):
+				_check(not WorldSectorManifest.edge_available(edge, facts, facts), "Unmet gate was opened: %s -> %s" % [source, target])
+			facts.earned = true
+			_check(WorldSectorManifest.edge_available(edge, facts, facts), "Satisfied isolated gate stayed closed: %s -> %s" % [source, target])
+			var points := WorldSectorManifest.connector_points(edge)
+			for segment in range(points.size() - 1):
+				var samples := maxi(1, ceili(points[segment].distance_to(points[segment + 1])))
+				for step in range(samples + 1):
+					# Probe inside the strip, not its zero-area triangle boundary.
+					var fraction := clampf(float(step) / float(samples), 0.0001, 0.9999)
+					var point := points[segment].lerp(points[segment + 1], fraction)
+					var hit := SpatialSurfaceContract.support_hit(destination.get_world_3d().direct_space_state, point + Vector3.UP * 2, point + Vector3.DOWN * 2, [], destination)
+					_check(not hit.is_empty(), "Unsupported connector strip: %s -> %s segment=%d sample=%d" % [source, target, segment, step])
+		context.cancel()
+		view.queue_free()
+		await process_frame
+	_check(pairs.size() == 14, "Expected all 14 physical connector pairs, got %d" % pairs.size())
+	print("CONNECTOR SUPPORT: %d pairs checked in both directions (isolated geometry/gate contracts, not campaign traversal)" % pairs.size())
 
 func _wait_connected_playable(game: Node, target: String) -> bool:
 	var deadline := Time.get_ticks_msec()+180000

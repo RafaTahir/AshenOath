@@ -1,0 +1,65 @@
+{
+  "ticket": "FINISH-014/SAFE-CONNECTOR-HANDOFF",
+  "date_local": "2026-10-29",
+  "baseline_commit": "a587888e7ba4e8807be64be6a33baa98b937a92d",
+  "build_id": "safe-connector-20261029",
+  "implementation": "complete_for_bounded_support_handoff_repair",
+  "compilation": "passed",
+  "developer_verification": "targeted_native_contracts_and_normal_input_browser_round_trip_pass",
+  "user_acceptance": "pending_0_of_16_mandatory_FINISH_tickets",
+  "publication": "Matching FINISH-014 publication receipt owns commit/push. Push is the authorized delivery boundary; no Vercel wait or manual deployment.",
+  "changes": [
+    "Confirm walkable support from the destination root, not foreign resident/preview collision. Re-probe nearest-safe recovery instead of assigning a presumed floor height.",
+    "Retain the source root, enemies and spatial service through destination confirmation, including same-zone replacement. Restore and re-probe the source after failure.",
+    "Publish arrival facts, prepared flags, consequences, progression and autosave scheduling only after support. Unsupported roots also gate direct save capture and retain pending story persistence.",
+    "Keep the existing preparation scheduler, navigation/readiness requirements, shared downloads, routes, gates and renderer-safe retirement. The two-second failure watchdog does not replace 350/900 ms performance targets.",
+    "Update the existing travel fixture to await bounded ready/failure rather than an obsolete fixed construction-step count. No replacement QA framework."
+  ],
+  "checks": [
+    {"name": "compilation_and_static_diff", "result": "pass", "detail": "Coordinator/fixture parser checks, production base/root export and static changed-call-site/diff review."},
+    {"name": "support_contract", "result": "pass", "log": "support-r3.log", "detail": "Foreign floor rejected; delayed arrival stays locked and does not publish story; nearest-safe support re-probed; absent destination and same-zone replacement roll back to the retained root/spatial owner; source confirmation and save gates exercised."},
+    {"name": "connector_geometry_and_gates", "result": "pass", "log": "support-r3.log", "detail": "All 14 physical pairs, both directions: actual generated strip support sampled in isolated worlds, reciprocal definitions and unmet/met gate predicates. Uses isolated gate facts, not an earned journey or fabricated gameplay progress."},
+    {"name": "campaign_construction_cancellation", "result": "pass_with_shutdown_warning", "log": "construction-r2.log", "detail": "Eleven destinations reach bounded ready; active root/spatial/enemies remain owned by source; no durable story mutation while source is paused; full and partial cancellation release prepared roots. ObjectDB instances-leaked warning at shutdown remains disclosed, not a clean memory claim."},
+    {"name": "native_greyfen_connections", "result": "pass", "log": "crossings.log", "detail": "Greyfen/Wychwood, Greyfen/Deep Wood and Greyfen/Vargan Approach in both directions, with real collision sweeps and immediate return; no held transition locks or unsupported arrival. Explicit fixture placement is not normal-input or earned campaign proof."},
+    {"name": "zone_residency", "result": "pass", "log": "residency.log", "detail": "Existing cache activation, protected spatial owner, collider restoration and renderer-grace retirement checks."},
+    {"name": "browser_new_game_and_round_trip", "result": "pass", "detail": "Final exact package, isolated in-app Chromium at 127.0.0.1:43731. Real mouse New Game, optional intro skipped through its visible control, ordinary keyboard bridge/north-road traversal into Wychwood and immediate reverse to Greyfen. Grounded visible player and active destination HUD; no teleports, manufactured story flags, saved-game injection or runtime overrides. Console warning/error lists empty."},
+    {"name": "package_integrity", "result": "pass", "detail": "Complete 17-file deployment including release manifest; transport and decoded hashes, pack ownership/identity and shared budget pass. Seven unaffected packs reused byte-for-byte."}
+  ],
+  "corrections": [
+    {"owner": "HARNESS", "detail": "Initial verifier type inference error fixed before execution."},
+    {"owner": "HARNESS", "detail": "Initial support assertion included a pending source ambient update in its baseline; recaptured immediately before synchronous support checks. A ray exactly on a zero-area strip triangle edge was moved just inside that test sample. Corrected support run passed."},
+    {"owner": "HARNESS", "detail": "First campaign construction comparison included live source simulation; pausing it matches foreground travel construction and isolates destination writes. Bounded corrected run passes; shutdown ObjectDB warning remains."},
+    {"owner": "GAME", "detail": "Removed source-confirmed unsupported-height success and premature retirement/publication paths."},
+    {"owner": "PERFORMANCE LIMITATION", "detail": "Observed crossing delays remain above retained targets. This repair establishes safety and recovery, not speed compliance."}
+  ],
+  "observations_not_benchmarks": {
+    "browser_new_game_handoff_ms": 947.5,
+    "browser_greyfen_to_wychwood_ms": 4846.1,
+    "browser_immediate_return_ms": 574.7,
+    "native_fixture_outward_ms": {"wychwood": 2087.9, "deep_wood": 914.9, "vargan_approach": 553.5},
+    "native_fixture_return_ms": {"wychwood": 80.5, "deep_wood": 222.9, "vargan_approach": 241.5},
+    "note": "Existing engine transition-log intervals, uncontrolled fixture/browser conditions. Not navigation-to-control, sustained FPS, owned-process memory or reference-PC performance certification. No targets relaxed."
+  },
+  "package": {
+    "deployment_bytes": 162875328,
+    "transport_artifact_bytes_excluding_release_manifest": 162867617,
+    "decoded_artifact_bytes": 203018055,
+    "balanced_opening_download_bytes": 97945996,
+    "quality_opening_download_bytes": 105155878,
+    "max_deployment_bytes": 268435456,
+    "largest_git_artifact_bytes": 82260069,
+    "root_transport_sha256": "bd1d24b724aea43bab7e94f3c2627598e49883ee3f4f115640077a47ca2cf6b0",
+    "root_decoded_sha256": "2d3b598b1d7da467698d074b808618504a702a3e58bb4da7c7559f0b701d966f",
+    "note": "155.33 MiB deployed; about 39.18 seconds of transfer alone at 20 Mbps for Balanced opening. Decoded artifact totals are not runtime memory."
+  },
+  "evidence_root": "D:/Temp/AshenOath/safe-connector-20261029",
+  "browser_capture": "D:/Temp/AshenOath/safe-connector-20261029/browser-return.png",
+  "build_logs": "D:/Projects/AshenOath/.release-gate/safe-connector-20261029/logs",
+  "cleanup": "All focused Godot runs finished. Agent-created browser tab closed and dedicated server stopped. No production-origin saves or unrelated user tabs changed.",
+  "remaining_conditions": [
+    "All-region normal-input campaign traversal, actual phone behavior, strict transition/startup/FPS/private-memory acceptance remain unverified. Isolated contracts do not replace them.",
+    "Construction fixture shutdown ObjectDB warning requires retained memory/lifecycle follow-up; no new profiling campaign started under this ticket.",
+    "User acceptance remains pending. No animation-lifecycle, face, furniture, targeting, composition, opening-story or water-aftermath work was begun."
+  ],
+  "next": "Push development and main through existing Git publisher, stop without waiting for Vercel. Child 4 requires Rafa's next authorization."
+}

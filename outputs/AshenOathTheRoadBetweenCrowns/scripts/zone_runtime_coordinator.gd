@@ -25,6 +25,19 @@ var build_started_usec := 0
 var source_zone := ""
 var source_position := Vector3.ZERO
 var source_facing := 0.0
+const ARRIVAL_SUPPORT_TIMEOUT_MS := 2000
+var _support_deadline_msec := 0
+var _source_root: Node3D
+var _source_spatial: Node
+var _source_enemies: Array = []
+var _source_signature := -1
+var _previous_root: Node3D
+var _arrival_recovered := false
+var _prewarmed_runtime_pending := false
+var _restoring_source := false
+
+func retains_source_spatial(service: Node) -> bool:
+	return is_instance_valid(_source_root) and service == _source_spatial
 
 func _init(runtime_host: Node) -> void:
 	host = runtime_host
@@ -88,6 +101,11 @@ func begin_transition(zone_id: String, previous_zone: String, spawn_position: Ve
 	preload("res://scripts/greyfen_archery_range.gd").stop_activity(host)
 	preload("res://scripts/bracken_field_trial.gd").stop_activity(host)
 	source_zone = previous_zone
+	_source_root = host.zone_root
+	_source_spatial = host.spatial_service
+	_source_enemies = host.active_enemies.duplicate()
+	_source_signature = host.active_zone_signature
+	_restoring_source = false
 	if host != null and is_instance_valid(host.player):
 		source_position = host.player.global_position
 		source_facing = host.player.rotation.y
@@ -183,6 +201,10 @@ func dispose() -> void:
 	# its service references explicitly before the host is freed so a verifier or
 	# scene reload cannot retain a stale owner graph past shutdown.
 	host = null
+	_source_root = null
+	_source_spatial = null
+	_source_enemies.clear()
+	_previous_root = null
 	quest_manager = null
 	quest_presentation = null
 	quest_beats = null
@@ -209,6 +231,7 @@ func _node_count(root: Node) -> int:
 func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	_continuous_arrival = host.seamless_world.crossing_for(zone_id).duplicate() if host.seamless_world != null else {}
 	var previous_root: Node3D = host.zone_root
+	_previous_root = previous_root
 	if not _continuous_arrival.is_empty(): host.seamless_world.prepare_crossing_view()
 	if host.seamless_world != null: host.seamless_world.publish_prepared(zone_id)
 	if host.new_game_start_pending and not host.game_started:
@@ -247,7 +270,12 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			reused_zone = true
 		elif previous_zone_id == zone_id:
 			var stale_active = host.zone_root
-			host._retire_zone_root(stale_active)
+			# Keep same-zone quality reloads recoverable until the replacement
+			# has real collision support. The source remains scene-owned.
+			host.zone_residency.suspend_runtime(stale_active)
+			stale_active.visible = false
+			stale_active.process_mode = Node.PROCESS_MODE_DISABLED
+			stale_active.position = Vector3(0, -1000, 0)
 			host.zone_root = null
 		else:
 			host._cache_route_zone(previous_zone_id, host.zone_root, previous_enemies, host.active_zone_signature)
@@ -352,8 +380,6 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 				host.zone_runtime_coordinator.rollback(zone_id, previous_zone_id, build_validation.get("errors", []))
 			host._recover_failed_zone_load(previous_zone_id)
 			return
-		if composition_kind == "campaign":
-			host._apply_campaign_arrival(zone_id)
 		host._flush_environment_batches()
 		host._install_world_prop_controller(zone_id)
 		world_prop_controller_installed = true
@@ -372,14 +398,9 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	host.interaction_focus_dirty = true
 	host._sync_camera_enemy_cache()
 	if host.zone_root != null:
+		host.zone_root.set_meta("arrival_support_pending", true)
 		host.zone_root.set_meta("zone_resource_owner", "active")
 		host.zone_root.set_meta("zone_resource_id", zone_id)
-		if bool(host.zone_root.get_meta("prepared_arrival_pending",false)):
-			host.zone_root.remove_meta("prepared_arrival_pending")
-			if zone_id in host.ZoneCompositionRouter.CAMPAIGN_ZONES: host._apply_campaign_arrival(zone_id)
-		for flag_id: String in host.zone_root.get_meta("prepared_story_flags",{}):
-			host.story_state.set_flag(flag_id,host.zone_root.get_meta("prepared_story_flags")[flag_id])
-		host.zone_root.remove_meta("prepared_story_flags")
 		if reused_zone:
 			host.runtime_light_count = int(host.zone_root.get_meta("runtime_light_count",0))
 		else:
@@ -452,6 +473,9 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		var quality_preset = str(host.settings.settings.get("quality_preset", "balanced")) if host.settings != null else "balanced"
 		host.performance_budget_monitor.set_active_zone(host.current_zone_id, host.zone_root, host.player, quality_preset)
 	print("LOADING: zone_stage=budget_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0))
+	_support_deadline_msec = Time.get_ticks_msec() + ARRIVAL_SUPPORT_TIMEOUT_MS
+	_arrival_recovered = false
+	_prewarmed_runtime_pending = using_prewarmed_spatial
 	if host.player != null:
 		if not _continuous_arrival.is_empty():
 			host.player.global_basis = _continuous_arrival.basis
@@ -463,45 +487,15 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		if host.camera_rig != null:
 			if not _continuous_arrival.is_empty(): host.camera_rig.rebase_world(_continuous_arrival.transform)
 			else: host.camera_rig.reset_follow()
+		host.player.set_transition_locked(true)
+		host.zone_transition_frames = 0
+		host.zone_transition_pending = true
+		# A prepared root avoids an extra frame only when its own real collision
+		# already answers the arrival probe, never from an assumed floor height.
 		if using_prewarmed_spatial:
-			# This scene has already completed collision and navigation setup
-			# behind the menu. Do not wait for another rendered WebGL frame.
-			host.player.global_position = Vector3(safe_spawn.x, maxf(safe_spawn.y, 0.95), safe_spawn.z)
-			host.player.reset_physics_interpolation()
-			print("LOADING: handoff_phase=unlock_begin")
-			host.player.set_transition_locked(false)
-			print("LOADING: handoff_phase=unlock_end")
-			host.last_safe_player_position = host.player.global_position
-			host.zone_transition_pending = false
-			host.campaign_visual_prewarm_suspended = false
-			# Prepared runtime activation is part of readiness, not late gameplay work.
-			host._activate_prewarmed_player_runtime()
-			var elapsed_ms = float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0
-			host._record_loading_metrics({
-				"zone": host.current_zone_id,
-				"to_playable_ms": elapsed_ms,
-				"support_ready": true,
-				"velocity_reset": true
-			})
-			if host.zone_runtime_coordinator != null:
-				host.zone_runtime_coordinator.record_playable_transition(host.current_zone_id, elapsed_ms, true)
-			print("LOADING: zone=%s playable_ms=%.1f" % [host.current_zone_id, elapsed_ms])
-			host.loading_started_usec = 0
-			print("LOADING: handoff_phase=hide_loading_begin")
-			host.hud.hide_loading()
-			print("LOADING: handoff_phase=hide_loading_end")
-		else:
-			host.player.set_transition_locked(true)
-			host.zone_transition_frames = 0
-			host.zone_transition_pending = true
-	print("LOADING: handoff_phase=before_seamless")
-	if host.seamless_world != null:
-		host.seamless_world.complete_crossing(previous_root)
-		host.seamless_world.on_zone_activated(host.current_zone_id, safe_spawn)
-	print("LOADING: handoff_phase=after_seamless")
-	if host.game_started:
-		host._schedule_zone_autosave()
-	print("LOADING: handoff_phase=after_autosave")
+			var supported: Variant = host._grounded_spawn_position(safe_spawn)
+			if supported != null:
+				_complete_supported_arrival(supported)
 	if zone_id == "greyfen" and not host.opening_detail_pending \
 			and str(host.zone_root.get_meta("opening_build_profile", "")) in ["opening_fast", "opening_boot"] \
 			and not bool(host.zone_root.get_meta("opening_detail_complete", false)):
@@ -519,33 +513,69 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 var _continuous_arrival: Dictionary = {}
 
 func advance_transition() -> void:
+	if not host.zone_transition_pending:
+		return
 	host.zone_transition_frames += 1
 	if host.player == null or host.spatial_service == null:
 		return
 	var grounded: Variant = host._grounded_spawn_position(host.pending_spawn_position)
+	if grounded == null and host.zone_transition_frames > 3:
+		var recovery: Vector3 = host.spatial_service.nearest_safe(host.pending_spawn_position, host.spatial_service.bank_for(host.pending_spawn_position))
+		grounded = host._grounded_spawn_position(recovery)
+		_arrival_recovered = grounded != null
 	if grounded == null:
-		if host.zone_transition_frames > 3:
-			push_warning("Zone spawn support timed out; using validated recovery: %s" % host.current_zone_id)
-			grounded = host.spatial_service.nearest_safe(host.pending_spawn_position, host.spatial_service.bank_for(host.pending_spawn_position))
-			grounded.y = 0.95
-		else:
-			return
+		if Time.get_ticks_msec() >= _support_deadline_msec:
+			if _restoring_source:
+				host.zone_transition_pending = false
+				_restoring_source = false
+				host.hud.toast("The previous road has no supported arrival. Open Saved Journeys to restore a recorded journey.")
+				return
+			var failed_zone: String = host.current_zone_id
+			rollback(failed_zone, source_zone, ["No confirmed destination collision beneath the arrival or recovery position."])
+			host._record_loading_metrics({"zone": failed_zone, "support_ready": false, "error": "arrival_support_missing"})
+			host._recover_failed_zone_load(source_zone)
+		return
+	if host.zone_transition_frames < 2:
+		return
+	if _restoring_source:
+		_complete_source_recovery(grounded)
+		return
+	_complete_supported_arrival(grounded)
+
+func _complete_supported_arrival(grounded: Vector3) -> void:
+	var zone_id: String = host.current_zone_id
+	if _prewarmed_runtime_pending:
+		host._activate_prewarmed_player_runtime()
+		_prewarmed_runtime_pending = false
+	if zone_id in ZoneCompositionRouter.CAMPAIGN_ZONES:
+		host._apply_campaign_arrival(zone_id)
+	for flag_id: String in host.zone_root.get_meta("prepared_story_flags", {}):
+		host.story_state.set_flag(flag_id, host.zone_root.get_meta("prepared_story_flags")[flag_id])
+	host.zone_root.remove_meta("prepared_story_flags")
+	host.zone_root.remove_meta("prepared_arrival_pending")
+	host.zone_root.remove_meta("arrival_support_pending")
+	host._publish_zone_arrival(zone_id, host.zone_root)
+	host.active_zone_signature = host._zone_state_signature(zone_id)
+	sync_zone(zone_id)
+	host._refresh_tracker()
 	host.player.global_position = grounded
 	host.player.reset_physics_interpolation()
 	if host.camera_rig != null:
 		if _continuous_arrival.is_empty(): host.camera_rig.reset_follow()
 	host.player.rotation.y = host.pending_spawn_facing
 	host.player.velocity = Vector3.ZERO
-	if host.zone_transition_frames < 2:
-		return
 	host.player.set_transition_locked(false)
-	if not _continuous_arrival.is_empty():
+	if not _continuous_arrival.is_empty() and not _arrival_recovered:
 		host.player.velocity = _continuous_arrival.velocity
 		host.player.locomotion_velocity = Vector3(host.player.velocity.x,0,host.player.velocity.z)
 	_continuous_arrival = {}
 	host.last_safe_player_position = host.player.global_position
 	host.zone_transition_pending = false
 	host.campaign_visual_prewarm_suspended = false
+	if host.seamless_world != null:
+		host.seamless_world.complete_crossing(_previous_root)
+		host.seamless_world.on_zone_activated(zone_id, grounded)
+	_release_source()
 	var elapsed_ms = float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0
 	host._record_loading_metrics({
 		"zone": host.current_zone_id,
@@ -563,8 +593,25 @@ func advance_transition() -> void:
 	host._start_campaign_visual_prewarm()
 	host._schedule_deferred_visual_roles(host.zone_root)
 	host._schedule_deferred_zone_audio(host.current_zone_id, host.zone_root)
+	if host.game_started:
+		host._schedule_zone_autosave()
+
+func _release_source() -> void:
+	if is_instance_valid(_source_root) and _source_root != host.zone_root and not host.route_zone_cache.values().has(_source_root):
+		host._retire_zone_root(_source_root)
+	if is_instance_valid(_source_spatial) and _source_spatial != host.spatial_service and not host.route_spatial_cache.values().has(_source_spatial):
+		_source_spatial.queue_free()
+	_source_root = null
+	_source_spatial = null
+	_source_enemies.clear()
+	_previous_root = null
 
 func recover_failed_transition(previous_zone_id: String) -> void:
+	if is_instance_valid(_source_root) and not _source_root.is_queued_for_deletion():
+		if host.zone_root == _source_root:
+			host.zone_root = null
+		host._cache_route_zone(previous_zone_id, _source_root, _source_enemies, _source_signature)
+		host._cache_route_spatial_service(previous_zone_id, _source_spatial)
 	if host.audio != null:
 		host.audio.prepare_destination(previous_zone_id, host.story_state)
 	host.pending_player_restore.clear()
@@ -581,6 +628,7 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 	host._release_active_spatial_service()
 	if host.route_zone_cache.has(previous_zone_id) and is_instance_valid(host.route_zone_cache[previous_zone_id]):
 		host.zone_root = host._activate_cached_zone(previous_zone_id)
+		host.zone_root.set_meta("arrival_support_pending", true)
 		var cached_spatial_service: Node = host.route_spatial_cache.get(previous_zone_id)
 		if cached_spatial_service != null and is_instance_valid(cached_spatial_service):
 			host.route_spatial_cache.erase(previous_zone_id)
@@ -591,6 +639,10 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		host.active_zone_signature = int(host.route_zone_signatures.get(previous_zone_id, -1))
 		host.route_zone_signatures.erase(previous_zone_id)
 		host.current_zone_id = previous_zone_id
+		host.world_vfx = host.zone_root.get_node_or_null("WorldVFXController")
+		host.runtime_light_count = int(host.zone_root.get_meta("runtime_light_count", 0))
+		if host.asset_helper != null:
+			host.asset_helper.set_zone_scope(previous_zone_id)
 		activate(previous_zone_id, host.zone_root, true)
 		host._bind_spatial_player_body()
 		if host.camera_rig != null:
@@ -605,13 +657,22 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		host.interaction_focus_cache_valid = false
 		host._apply_zone_audio(previous_zone_id)
 	host._sync_camera_enemy_cache()
+	var restored := is_instance_valid(host.zone_root)
 	if host.player != null:
-		host.player.set_transition_locked(false)
+		host.player.set_transition_locked(true)
 		host.player.global_position = source_position if source_zone == previous_zone_id else host.last_safe_player_position
 		if source_zone == previous_zone_id:
 			host.player.rotation.y = source_facing
-		host.last_safe_player_position = host.player.global_position
 		host.player.velocity = Vector3.ZERO
+		host.player.reset_physics_interpolation()
+		if restored:
+			host.pending_spawn_position = host.player.global_position
+			host.pending_spawn_facing = host.player.rotation.y
+			host.zone_transition_frames = 0
+			host.zone_transition_pending = true
+			_support_deadline_msec = Time.get_ticks_msec() + ARRIVAL_SUPPORT_TIMEOUT_MS
+			_restoring_source = true
+			_arrival_recovered = false
 	if host.seamless_world != null and host.zone_root != null:
 		host.seamless_world.on_zone_activated(previous_zone_id, host.player.global_position if host.player != null else Vector3.ZERO)
 	if is_instance_valid(host.zone_root):
@@ -621,4 +682,21 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		host.performance_budget_monitor.set_active_zone(previous_zone_id, host.zone_root, host.player, quality_preset)
 	if host.hud != null:
 		host.hud.hide_loading()
-		host.hud.toast("The road will not open. You remain in %s." % host._zone_display_name(previous_zone_id))
+		host.hud.toast("The road will not open. You remain in %s." % host._zone_display_name(previous_zone_id) if restored else "No supported arrival. Open Saved Journeys to restore a recorded journey.")
+	_continuous_arrival = {}
+	_prewarmed_runtime_pending = false
+	_release_source()
+
+func _complete_source_recovery(grounded: Vector3) -> void:
+	host.zone_root.remove_meta("arrival_support_pending")
+	host.player.global_position = grounded
+	host.player.reset_physics_interpolation()
+	host.player.velocity = Vector3.ZERO
+	host.player.set_transition_locked(false)
+	host.last_safe_player_position = grounded
+	host.zone_transition_pending = false
+	_restoring_source = false
+	if host.camera_rig != null:
+		host.camera_rig.reset_follow()
+	if host.seamless_world != null:
+		host.seamless_world.on_zone_activated(host.current_zone_id, grounded)

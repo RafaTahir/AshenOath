@@ -94,6 +94,10 @@ func _has_valid_player(game) -> bool:
 func _save_is_gated(game) -> bool:
 	if not _pending_load.is_empty():
 		return true
+	if game != null and is_instance_valid(game):
+		var arrival_root: Node = game.get("zone_root")
+		if is_instance_valid(arrival_root) and bool(arrival_root.get_meta("arrival_support_pending", false)):
+			return true
 	return game != null and is_instance_valid(game) and game.has_method("_journey_load_pending") and bool(game.call("_journey_load_pending"))
 
 func is_load_pending() -> bool:

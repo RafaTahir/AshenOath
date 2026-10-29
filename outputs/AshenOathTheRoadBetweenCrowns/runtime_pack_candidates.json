@@ -1,28 +1,28 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-10-28T17:52:59.1570114Z",
-  "build_id": "responsive-preparation-20261029-r2",
-  "generated_from_commit": "8603d809ed7971480c81a11530a0a1c41ed6aa07",
+  "generated_at_utc": "2026-10-29T05:56:20.6256721Z",
+  "build_id": "safe-connector-20261029",
+  "generated_from_commit": "a587888e7ba4e8807be64be6a33baa98b937a92d",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\responsive-preparation-20261029-r2\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\safe-connector-20261029\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 160054392,
+  "total_bytes": 160054920,
   "packs": [
     {
       "id": "base",
-      "version": "responsive-preparation-20261029-r2",
+      "version": "safe-connector-20261029",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 4429316,
-      "sha256": "6ee555ff5e97871998c3618ff28e7e3a172b65816f7bd0522775904311bab9b3",
+      "bytes": 4429844,
+      "sha256": "a4ba181f0caca4a3e0f13458d30895e8e0c984d9802c7b579c53e762213afce5",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
     {
       "id": "opening",
-      "version": "responsive-preparation-20261029-r2",
+      "version": "safe-connector-20261029",
       "preset": "Runtime Pack Opening",
       "artifact": "opening.pck",
       "bytes": 86266868,
@@ -32,7 +32,7 @@
     },
     {
       "id": "adjacent",
-      "version": "responsive-preparation-20261029-r2",
+      "version": "safe-connector-20261029",
       "preset": "Runtime Pack Adjacent",
       "artifact": "adjacent.pck",
       "bytes": 2370980,
@@ -42,7 +42,7 @@
     },
     {
       "id": "campaign",
-      "version": "responsive-preparation-20261029-r2",
+      "version": "safe-connector-20261029",
       "preset": "Runtime Pack Campaign",
       "artifact": "campaign.pck",
       "bytes": 8678436,
@@ -52,7 +52,7 @@
     },
     {
       "id": "characters",
-      "version": "responsive-preparation-20261029-r2",
+      "version": "safe-connector-20261029",
       "preset": "Runtime Pack Characters",
       "artifact": "characters.pck",
       "bytes": 8999204,
@@ -62,7 +62,7 @@
     },
     {
       "id": "monsters",
-      "version": "responsive-preparation-20261029-r2",
+      "version": "safe-connector-20261029",
       "preset": "Runtime Pack Monsters",
       "artifact": "monsters.pck",
       "bytes": 20678316,
@@ -72,7 +72,7 @@
     },
     {
       "id": "audio",
-      "version": "responsive-preparation-20261029-r2",
+      "version": "safe-connector-20261029",
       "preset": "Runtime Pack Audio",
       "artifact": "audio.pck",
       "bytes": 21302876,
@@ -82,7 +82,7 @@
     },
     {
       "id": "quality_materials",
-      "version": "responsive-preparation-20261029-r2",
+      "version": "safe-connector-20261029",
       "preset": "Runtime Pack Quality Materials",
       "artifact": "quality_materials.pck",
       "bytes": 7328396,
@@ -92,13 +92,13 @@
     }
   ],
   "errors": [],
-  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from responsive-preparation-20261029. Re-exported owners: base. No assets, export ownership or visual settings changed.",
+  "reused_unchanged_pack_inputs": "Unchanged packs reused byte-for-byte from responsive-preparation-20261029-r2. Re-exported owners: base. No assets, export ownership or visual settings changed.",
   "selected_web_export": {
-    "build_id": "responsive-preparation-20261029-r2",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\responsive-preparation-20261029-r2\\export",
-    "generated_from_commit": "8603d809ed7971480c81a11530a0a1c41ed6aa07",
-    "artifacts_total_bytes": 162864644,
-    "root_pck_sha256": "f6c5af7b7eb1d5eec26ad52dd4c23e85bcb5a51a27ab899aecccc5317dd4bcd3",
-    "note": "Script-only responsive preparation repair; unchanged packs reused by input scope."
+    "build_id": "safe-connector-20261029",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\safe-connector-20261029\\export",
+    "generated_from_commit": "a587888e7ba4e8807be64be6a33baa98b937a92d",
+    "artifacts_total_bytes": 162867617,
+    "root_pck_sha256": "bd1d24b724aea43bab7e94f3c2627598e49883ee3f4f115640077a47ca2cf6b0",
+    "note": "Script-only repair; unchanged packs reused by their complete input scope."
   }
 }
