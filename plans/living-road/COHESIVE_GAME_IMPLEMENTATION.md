@@ -6,9 +6,38 @@ The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits
 for Rafa's acceptance. Existing systems and the seven cloud commits through
 `2620ab8` remain the baseline; this is not a replacement recovery program.
-Rafa subsequently authorized continuing through child 7 and removed Vercel waiting:
+Rafa subsequently authorized continuing through child 8 and removed Vercel waiting:
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
+
+### FINISH-013/CONNECTOR-COMPOSITION (awaiting Rafa; Git receipt owns push status)
+
+Continue from targeting delivery `d96d2d9`. Layer-isolated native gameplay-camera
+views identify the soil `Bank`/`BackSlope` in `ConnectedRoads/RoadTo_*`; hiding the
+frontier leaves the wedges, hiding the roads removes them. No frontier, boundary,
+material, lighting or character change is justified by this finding. Closing the
+ends alone leaves an oversized ridge and poor bend framing, so that first result
+is not the delivered repair. The final contour has lower rounded shoulders,
+ground-level runouts, identical crest stations and retained metre-scale soil UVs.
+Outer slopes use existing exact camera-only clearance without new player bodies.
+Keep the old arch on its existing piers, unchanged floors, gates and atlas.
+Final native approach/entry/bend/return/west captures pass the named composition
+review; 20 affected directional consumers and 60 capsule segments pass geometry/
+physics. The partly roof-obstructed east baseline does not establish east visual
+acceptance. A default-120s capture timeout and early fixture errors are disclosed,
+not performance passes; the bounded composition capture allowance changes no game
+deadline. Candidate `connector-composition-20261029` compiles and passes exact
+transport/decoded hash and package checks at **162,886,424 complete bytes**; seven
+unchanged packs reused. Normal-input in-app Chromium Continue and night Greyfen ->
+Wychwood -> Greyfen pass on those bytes, without captured console warnings/errors.
+Browser controller timeouts recover on the same tab. A mistaken return approach
+contacts the existing piers; ordinary movement/look clears it. Some gate/pier
+close-angle camera crowding and angle-dependent surface striping remain visible,
+not claimed fixed by the named soil repair. Temporary tab/server cleaned up and
+viewport reset. Source-aligned development/main pushes finish delivery; no Vercel
+waiting, no child 9, and parent user acceptance remains 0/16.
+
+[Connector evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/connector_composition_20261029.json).
 
 ### FINISH-005/HONEST-TARGETING (awaiting Rafa; Git receipt owns push status)
 
@@ -34,7 +63,7 @@ by restarting only that server; no further artifact change. A nonfatal Canvas
 triangulation error during initial village movement remains an unresolved
 presentation observation; final scoped use adds no new errors. No phone, round,
 all-world or performance acceptance claim. Push only; do not wait for Vercel.
-CONNECTOR-COMPOSITION has not begun.
+CONNECTOR-COMPOSITION follows this retained targeting baseline; see current section.
 
 [Targeting evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/honest_targeting_20261029.json).
 

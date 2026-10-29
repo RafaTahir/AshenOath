@@ -22,6 +22,24 @@ packs reused. No user acceptance inferred. A nonfatal Canvas triangulation error
 observed during initial village movement remains an unresolved presentation item;
 final r2 scoped use adds no new console errors. Do not repeat passed checks.
 
+**FINISH-013/CONNECTOR-COMPOSITION** continues targeting delivery `d96d2d9`.
+Native gameplay-camera component isolation identifies the `ConnectedRoads/RoadTo_*`
+soil `Bank`/`BackSlope` assembly, not the authored frontier or boundary berms.
+Its nearly six-metre ridges exposed tall triangular ends. Lower rounded shoulders
+now meet the existing ground at both ends, share crest stations without cracks,
+and retain the same soil material. Outer scenery has exact camera-only clearance.
+The stone arch/supports, connector floors, gates and route manifest are unchanged.
+Final native approach/bend/return and west views show the named wedge repaired;
+20 affected directional profiles and 60 centreline capsule sweeps pass. These are
+isolated technical checks, not full-world visual or performance acceptance.
+Candidate `connector-composition-20261029` compiles/packages at **162,886,424 bytes**,
+seven unchanged packs reused. Normal-input in-app Chromium Continue and the night
+Greyfen -> Wychwood -> Greyfen round trip pass on those exact bytes, with no captured
+console warnings/errors. Existing close-angle gate/pier camera crowding and some
+angle-dependent surface striping remain disclosed, not broadly repaired here.
+The FINISH-013 Git receipt owns push identity; do not wait for Vercel.
+Do not begin OPENING-PURPOSE in this delivery. Mandatory user acceptance stays 0/16.
+
 **FINISH-007/SOLID-FURNITURE** was pushed as `16707bc` and is implemented/compiled on
 `solid-furniture-20261029`; its Git receipt owns push status. Fitted table/chair
 collision, clear bench/gathering anchors and opponent approaches are retained.
@@ -38,7 +56,7 @@ both added cleric layers and retires stale owned attachments; native four-angle
 captures pass on `cleric-rear-cleanup-20261029`. Compilation and package integrity
 pass at 162,882,438 complete bytes. The FINISH-003 receipt owns push status.
 No appearance acceptance is inferred from the prior check. The next child after
-the current targeting delivery is CONNECTOR-COMPOSITION; not started.
+the current connector delivery is OPENING-PURPOSE; not started.
 Child 4 was pushed as `71c253a` to development/main; acceptance remains pending.
 Child 3 was pushed as `5f43ab7` to development and main; its remaining speed and
 coverage limitations stay recorded. This does not establish user acceptance.
@@ -64,7 +82,7 @@ child. No separate CLI deployment and no implied whole-game acceptance.
 | 5 | FINISH-003/FACE-ARTIFACT | Prior front-only repair rejected at rear; hood/mantle removal and stale-layer cleanup implemented, four-angle native captures pass; replacement build/push receipt owns delivery; awaiting Rafa |
 | 6 | FINISH-007/SOLID-FURNITURE | Implemented/compiled; 32 native capsule cases and opponent/Chess checks pass, partial normal-input browser coverage; Git receipt owns push status; awaiting Rafa |
 | 7 | FINISH-005/HONEST-TARGETING | Implemented/compiled, scoped native and normal-input dialogue/shop/board checks pass; final r2 package; Git receipt owns push; awaiting Rafa |
-| 8 | FINISH-013/CONNECTOR-COMPOSITION | Not started; mesh identification required |
+| 8 | FINISH-013/CONNECTOR-COMPOSITION | Implemented/compiled; named-wedge native views, 20 directional geometry cases and normal-input browser round trip pass; Git receipt owns push; awaiting Rafa |
 | 9 | FINISH-007/OPENING-PURPOSE | Not started |
 | 10 | FINISH-008/WATER-AFTERMATH | Not started |
 

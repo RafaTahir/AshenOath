@@ -1,5 +1,35 @@
 # FINISH-013 - Audiovisual Finish
 
+## Director Child: Connector Composition - 2026-10-29
+
+`FINISH-013/CONNECTOR-COMPOSITION` continues from `d96d2d9`. Native component
+isolation identifies the nearly six-metre soil banks in `ConnectedRoads/RoadTo_*`
+as the triangular defect. The frontier landscape, boundary berms and restored
+textures are not its owner. Replace only those oversized soil profiles with lower
+rounded shoulders and closed, ground-level runouts. Share crest stations, retain
+the soil material, and use existing exact camera-only outer-slope collision.
+The supported old arch, floor, gates, landmarks, route geometry and story/save
+authorities remain unchanged; stone-source connector walls remain unchanged.
+
+Final isolated native approach/entry/bend/return/west views show no exposed tall
+soil end or foreground soil wall. Twenty affected directional profiles and 60
+centreline capsule sweeps pass exact collider/ground/crest checks. Earlier end-only
+and camera-only versions were insufficient, not accepted candidates. A baseline
+capture timeout and fixture errors remain recorded. These are not benchmarks;
+all strict speed/memory requirements and user approval remain open. Candidate
+`connector-composition-20261029` compiles and passes package identity/size checks
+at **162,886,424 complete bytes**, seven unchanged packs reused. Normal-input
+in-app Chromium Continue and night Greyfen -> Wychwood -> Greyfen pass on exact
+final bytes, with no captured warning/error entries. Close-angle gate/pier camera
+crowding and some angle-dependent surface striping remain disclosed, not claimed
+fixed here. East's roof-obstructed fixed capture and all-world/phone appearance
+remain unverified. FINISH-013's Git receipt owns development/main push identity.
+
+The next child is OPENING-PURPOSE, not part of this delivery. Publish through Git
+only and stop after push; do not wait for Vercel. No whole FINISH-013 acceptance.
+
+[Scoped child evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/connector_composition_20261029.json).
+
 ## Current Implementation Delivery - 2026-10-26
 
 Candidate: `finish-implementation-20261026`, continued from published r14

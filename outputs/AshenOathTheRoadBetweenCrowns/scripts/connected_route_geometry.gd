@@ -5,6 +5,12 @@ static var _door_meshes: Dictionary = {}
 static var _meshes: Dictionary = {}
 static var _shapes: Dictionary = {}
 static var _landmark_box: BoxMesh
+const SOIL_SECTIONS := 6
+const SOIL_CROSS_SECTIONS := 6
+const SOIL_CREST_HEIGHT := 2.2
+
+static func soil_crest_height(station: int) -> float:
+	return SOIL_CREST_HEIGHT + sin(float(station) * 1.7) * 0.15
 
 static func open_authored_door(door: MeshInstance3D) -> void:
 	if door.mesh == null or door.mesh.get_surface_count() < 2 or door.has_meta("hinged_authored_door"): return
@@ -84,7 +90,9 @@ static func install(context: ZoneBuildContext) -> void:
 			var outer: PackedVector3Array = []
 			for i in range(side.size()):
 				var outward := (side[i]-points[i]).normalized()
-				crest.append(side[i]+outward*2.2+Vector3.UP*(4.5 if stone else 5.4+sin(float(i)*1.7)*0.35))
+				# The arch has its own masonry piers. Soil shoulders must not rise
+				# into six-metre wedges simply to reach its roof.
+				crest.append(side[i]+outward*2.2+Vector3.UP*(4.5 if stone else soil_crest_height(i)))
 				outer.append(side[i]+outward*5.5)
 			_strip(path,"Bank",side,crest,banks,true,"bank" if not stone else "")
 			_strip(path,"BackSlope",crest,outer,banks,false,"backslope" if not stone else "")
@@ -337,6 +345,7 @@ static func _strip(parent: Node3D, name: String, left: PackedVector3Array, right
 		_meshes[key] = weakref(mesh)
 	var visual := MeshInstance3D.new()
 	visual.name = name
+	visual.set_meta("connector_surface", name)
 	visual.mesh = mesh
 	visual.material_override = material
 	parent.add_child(visual)
@@ -352,22 +361,29 @@ static func _strip(parent: Node3D, name: String, left: PackedVector3Array, right
 		shape.shape = triangles
 		body.add_child(shape)
 		visual.add_child(body)
+	elif profile == "backslope":
+		# The outer bank is scenery, not extra player collision, but it still
+		# owns solid camera clearance at a bend or while looking back.
+		preload("res://scripts/camera_controller.gd").install_visual_clearance(visual)
 
 static func _build_contoured_strip(left: PackedVector3Array, right: PackedVector3Array, profile: String) -> ArrayMesh:
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var distance := 0.0
-	const CROSS_SECTIONS := 4
+	var soil := profile in ["bank", "backslope"]
+	var cross_sections := SOIL_CROSS_SECTIONS if soil else 4
 	for segment in range(left.size() - 1):
 		var length := left[segment].distance_to(left[segment + 1])
-		var sections := maxi(2, ceili(length / 1.4))
+		# Both faces of a bank use identical stations, including at the crest.
+		# Different inner/outer arc lengths must not open cracks in a curved runout.
+		var sections := SOIL_SECTIONS if soil else maxi(2, ceili(length / 1.4))
 		for section in sections:
-			for across in CROSS_SECTIONS:
+			for across in cross_sections:
 				var corners: Array[Vector3] = []
 				var uvs: Array[Vector2] = []
 				for corner: Vector2i in [Vector2i(0,0),Vector2i(1,0),Vector2i(1,1),Vector2i(0,1)]:
 					var u := float(section + corner.x) / sections
-					var v := float(across + corner.y) / CROSS_SECTIONS
+					var v := float(across + corner.y) / cross_sections
 					var inner := left[segment].lerp(left[segment + 1], u)
 					var outer := right[segment].lerp(right[segment + 1], u)
 					var point := inner.lerp(outer, v)
@@ -376,14 +392,20 @@ static func _build_contoured_strip(left: PackedVector3Array, right: PackedVector
 					if profile == "arch":
 						point.y += sin(v * PI) * 0.70
 					else:
-						var crest_weight := v if profile == "bank" else 1.0 - v
-						point.y += undulation * crest_weight
+						# Meet the existing ground at both ends instead of exposing a
+						# full-height triangular soil cut to the village/return camera.
+						var progress := (float(segment) + u) / float(left.size() - 1)
+						var runout := smoothstep(0.0, 1.0 / 3.0, progress) * smoothstep(0.0, 1.0 / 3.0, 1.0 - progress)
+						var crest_weight := smoothstep(0.0,1.0,v) if profile == "bank" else 1.0 - smoothstep(0.0,1.0,v)
+						var foot_height := inner.y if profile == "bank" else outer.y
+						point.y = lerpf(foot_height, ridge.y + undulation, crest_weight * runout)
 						var outward := outer - inner
 						outward.y = 0.0
 						# Never push a bank inward across the retained walkable edge.
 						point += outward.normalized() * sin(v * PI) * (0.10 + 0.10 * sin(point.x * 2.1 + point.z * 1.7))
 					corners.append(point)
-					uvs.append(Vector2(v * 2.0, distance + u * length) * 0.35)
+					# Retain the soil texture at metre scale, not stretched over a tall face.
+					uvs.append(Vector2(v * inner.distance_to(outer), distance + u * length) if soil else Vector2(v * 2.0, distance + u * length) * 0.35)
 				for vertex in [0,2,3,0,1,2]:
 					surface.set_uv(uvs[vertex])
 					surface.add_vertex(corners[vertex])

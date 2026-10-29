@@ -1,0 +1,86 @@
+{
+  "ticket": "FINISH-013/CONNECTOR-COMPOSITION",
+  "date": "2026-10-29",
+  "baseline_commit": "d96d2d9a50b016ca14d6b0333e41a59f023864e7",
+  "build_id": "connector-composition-20261029",
+  "implementation": "complete",
+  "compilation": "pass: base-pack export and production Web root export",
+  "publication": "FINISH-013 Git publication receipt owns push identity; no Vercel waiting",
+  "user_acceptance": "pending",
+  "mandatory_tickets_user_accepted": "0/16",
+  "diagnosis": {
+    "owner": "scripts/connected_route_geometry.gd: ConnectedRoads/RoadTo_*/Bank and BackSlope",
+    "cause": "Soil crest reached approximately 5.9 metres in a 2.2-metre horizontal shoulder and exposed full-height triangular terminal cuts.",
+    "isolation": "The same north gameplay-camera view loses the wedges when ConnectedRoads is hidden; they remain when the authored frontier or boundary berms are hidden.",
+    "not_changed": ["GreyfenAuthoredFrontier", "WeatheredLandscapeBoundary", "source textures", "global lighting", "characters", "stone-source connector walls"]
+  },
+  "retained_changes": [
+    "Lower rounded soil shoulders with ground-level runouts, leaving the arch on its existing masonry supports.",
+    "Shared six longitudinal and six cross-section stations, preventing cracks between the two bank faces.",
+    "Existing soil texture uses metre-scale UVs; no new or reduced-quality assets.",
+    "Existing camera visual-clearance helper owns exact outer-slope mesh on camera layer 64 only; no additional player support bodies.",
+    "Existing capture and horizon-verifier tools extended only for the affected owner."
+  ],
+  "preserved": ["connector centreline and width", "road floor/collision", "bridge-only crossings", "gate and availability logic", "story and saves", "population", "quality presets", "prior targeting and actor repairs"],
+  "checks": {
+    "native_identification": {
+      "result": "pass",
+      "renderer": "Godot 4.6.3 Compatibility/ANGLE, Intel HD 620, 1280x720",
+      "evidence": "D:/Temp/AshenOath/connector-composition-20261029/before/",
+      "scope": "Six fixed gameplay-camera compositions plus three component isolations; not earned normal-input traversal."
+    },
+    "native_final_views": {
+      "result": "pass_for_named_soil_wedge",
+      "evidence": "D:/Temp/AshenOath/connector-composition-20261029/final/",
+      "views": ["north_approach", "north_entry", "north_bend", "north_return", "west_approach"],
+      "scope": "No exposed tall soil terminal cut or bank covering the bend/return camera. Existing closed gate and architecture are not removed. Does not establish whole-world art approval."
+    },
+    "affected_geometry_physics": {
+      "result": "pass",
+      "directional_consumers": 20,
+      "centreline_capsule_segments": 60,
+      "evidence": "D:/Temp/AshenOath/connector-composition-20261029/profiles-final.log",
+      "assertions": ["finite bounded soil geometry", "closed ground-level terminal sections", "matched crest vertices", "exact collider faces", "camera-only outer-slope layer", "clear road capsule sweeps", "retained owned walkable ground"]
+    },
+    "browser_normal_input": {
+      "result": "pass_for_scoped_round_trip",
+      "browser": "Authorized in-app Chromium, 1280x720, isolated existing origin http://127.0.0.1:43739/",
+      "route": "Normal Continue from the prior genuine village save, ordinary movement over the bridge, north approach and dogleg, Wychwood arrival, immediate Greyfen return and exit back to the village road.",
+      "scope": "Nighttime route and repaired soil-bank readability on exact packaged bytes. No new journey, teleportation, manufactured flags or production saves. Not all-world, performance or actual-phone acceptance.",
+      "screenshots": ["D:/Temp/AshenOath/connector-composition-20261029/browser-north-approach.png", "D:/Temp/AshenOath/connector-composition-20261029/browser-wychwood-crossing.png", "D:/Temp/AshenOath/connector-composition-20261029/browser-greyfen-return.png"],
+      "console": "No captured warning/error entries; D:/Temp/AshenOath/connector-composition-20261029/browser-console.json",
+      "harness": "Initial DOM snapshot timed out and one click expired before dispatch. Screenshot confirmed the unchanged menu; normal Continue then succeeded on the same tab and bytes. A return-navigation overshoot contacted existing piers; ordinary camera/movement corrected the approach without changing the game.",
+      "cleanup": "Temporary tab closed, viewport reset, exact task-created server 21764 identity checked and stopped; isolated save retained."
+    },
+    "package_integrity": {
+      "result": "pass",
+      "complete_directory_bytes_including_manifest": 162886424,
+      "artifact_transport_bytes": 162878706,
+      "decoded_artifact_bytes": 203027003,
+      "root_transport_sha256": "23f5ba22807a621c81df7596d085299e99a77c979c4ee5b4a43b2a814206403c",
+      "root_decoded_sha256": "b307a4758803f2f22afda2e3cc05e444472b24c244a6809a7db8a5c28f94231e",
+      "rebuilt_content_packs": ["base"],
+      "reused_content_packs": 7,
+      "largest_deployed_file_bytes": 82259580,
+      "balanced_opening_transport_bytes": 97956725,
+      "budget_bytes": 268435456,
+      "log": ".release-gate/connector-composition-20261029/logs/package-check.stdout.log"
+    },
+    "static_diff": {"result": "reviewed; scoped source/fixture whitespace check passed; final publication diff recorded in Git"}
+  },
+  "unsuccessful_or_incomplete_checks": [
+    "Initial capture HARNESS variable inference error corrected before evidence collection.",
+    "Initial default-120s scene fixture timed out near first control. A bounded 180s composition-only allowance permits evidence capture but does not change any game deadline or meet startup targets.",
+    "Initial geometry fixture assumed a collision child before metadata was correctly installed; fixed guard/metadata and stopped its exact owned process pair.",
+    "End taper alone left the oversized ridge. Camera-only follow-up did not make that soil contour acceptable. Neither is the published candidate.",
+    "East fixed-camera baseline was partly obstructed by an existing house roof; no east visual pass is inferred."
+  ],
+  "limitations": [
+    "No controlled FPS, transition, startup or process-memory benchmark; no performance gain claimed.",
+    "No actual-phone, night, all-world visual or complete campaign acceptance.",
+    "Strict retained performance contracts remain unsatisfied or unverified as previously recorded.",
+    "The prior nonfatal Canvas triangulation observation remains separately unresolved; this soil-geometry change does not claim to fix it.",
+    "Existing gate/pier close-angle camera crowding and angle-dependent connector surface striping are not claimed repaired. The named oversized soil wedge is the bounded change, not a declaration that all connector presentation is perfect."
+  ],
+  "delivery_boundary": "Push development and main; Vercel automatic deployment, no provider waiting or manual deployment. Stop before child 9."
+}
