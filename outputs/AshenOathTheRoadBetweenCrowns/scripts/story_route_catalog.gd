@@ -57,7 +57,7 @@ const ROUTES := {
 	},
 	"main_blood_under_stone": {
 		"reach_castle":["vargan_approach", [], "Follow the military road to Vargan's outer gate.", "Find the authority behind the closure."],
-		"speak_guard":["vargan_court", ["vargan_gate_guard"], "The guard stands just inside the courtyard gate.", "Ask who ordered the road closed."],
+		"speak_guard":["vargan_court", ["vargan_steward"], "Merrow receives arrivals just inside the courtyard gate.", "Ask who ordered the road closed."],
 		"enter_courtyard":["vargan_court", [], "Pass through Vargan's outer gate.", "Follow the order into the castle."],
 		"castle_evidence_ready":["vargan_court", [], "Optional: compare the closure notice and traces of the old order.", "These corroborate the command; collecting three is not required for access or testimony."],
 		"evidence_mile_marker":["vargan_approach", [], "Read the worn marker on the military road.", "Compare what the road promised with what was ordered."],
@@ -104,7 +104,7 @@ const ROUTES := {
 		"dog_choice":["greyfen", ["farmer_toma"], "Return to Toma at the sheepfold.", "Choose how the fold will be protected."]
 	},
 	"side_bracken_rescue": {
-		"calm_hound":["greyfen", ["bracken"], "A black hound waits on the western verge of the north road.", "Give him room to stop pulling."],
+		"calm_hound":["greyfen", ["bracken"], "A young Hearthscale waits on the western verge of the north road.", "Give Bracken room to stop pulling."],
 		"release_strap":["greyfen", ["bracken"], "The strap is caught beside the discarded harness.", "Free the strap; no supplies or payment are needed."],
 		"companion_choice":["greyfen", ["bracken"], "Bracken is safe on the north-road verge.", "Offer a home, or leave him safe and return later."]
 	},

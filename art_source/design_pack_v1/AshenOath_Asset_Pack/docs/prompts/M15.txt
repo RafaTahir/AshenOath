@@ -1,0 +1,17 @@
+Use case: stylized-concept. Asset type: individual visual development and 3D modeling reference for the original grounded dark fantasy RPG ASHENOATH. Create one exceptionally polished high-resolution landscape 3:2 design sheet. Premium realistic game-character art, tangible physically believable materials, anatomically credible, detailed sculptural rendering with restrained painterly finish. This is an original design.
+
+Subject: Reed Choir. A squat amphibian roughly 1.5 metres wide, supported by two short front legs and powerful folded hind legs. Three soft resonance sacs rise along its back like uneven closed bellows, visibly connected to the chest rather than floating bulbs. The head is broad and flat with lateral copper-brown eyes, a simple closed mouth and paired nostril ridges. Pebbled olive skin becomes pale grey across the throat and belly. Dry reed fragments collect in a shallow groove behind the shoulders. The sacs are translucent only at their thinnest stretched edges, revealing no organs. Its body should look heavy, damp and capable of a sudden short hop.
+
+Silhouette: Very squat marsh amphibian with three expandable dorsal resonance sacs and oversized folded rear legs.
+
+Materials/textures: pebbled amphibian skin; stretched sac membrane; dry reeds; marsh water. Color palette: dull olive; pale throat grey; copper brown; reed tan.
+
+Scale reference in anatomy only, no rulers or extra figure: {"width_m":1.5,"resting_height_m":0.6,"inflated_height_m":1.2,"height_basis":"proposed design target"}.
+
+Composition: one large complete front three-quarter body view on left occupying about 55%, a smaller complete rear three-quarter body view in middle-right, a detailed close-up of the same head upper-right and one small signature anatomy detail lower-right. Multiple views of ONE identical creature design. Keep all body extremities, tails and wings fully inside frame. Adjust spacing for long or winged anatomy. Camera level without extreme foreshortening, model-reference stance, neutral expression. Clear separation and no overlaps. Seamless warm stone-grey backdrop, no landscape, no dramatic fog, no scene props.
+
+Art direction: grounded dark-fantasy naturalism, credible body weight and joints, irregular lived-in surfaces, visible wool weave, worn leather, worked metals or organic skin as relevant. Neutral broad studio light with readable shadows; restrained earthy local colors, strong silhouette. A subtly premium museum-catalogue presentation.
+
+Text (verbatim): "M15 / REED CHOIR". Small restrained top-left header only.
+
+Constraints: no copied franchise character, no cartoon, anime, toy or low-poly look; no neon bloom, no exaggerated superhero proportions, no extra limbs/fingers, no unnecessary ornamental spikes, no floating attachments or clothing intersecting faces. No decorative frame, no watermark. Only a restrained small top-left header using exact provided ID and NAME; no other text. This is premium production concept illustration, not a claim of an actual 3D model.

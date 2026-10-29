@@ -193,6 +193,15 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		preload("res://scripts/greyfen_village_details.gd").install(game)
 
 static func handle(game, area) -> void:
+	if area.has_meta("design_ecology"):
+		var sighting: Dictionary = area.get_meta("design_ecology")
+		game.story_state.record_evidence(str(area.interaction_id), {"zone":game.current_zone_id, "kind":"observed", "title":sighting.title, "text":sighting.observation})
+		game.story_save_pending = true
+		game.call_deferred("_persist_story_action")
+		game.audio.set_game_paused(true)
+		game.get_tree().paused = true
+		game.hud.show_dialogue({"name":sighting.title, "pages":[{"speaker":"Kael's field notes", "speaker_id":"narrator", "text":str(sighting.observation) + "\n\n" + str(sighting.connection)}], "actions":[{"type":"close", "label":"Leave it undisturbed"}]})
+		return
 	if str(area.interaction_id).begins_with("greyfen_detail:"):
 		var details: Node = preload("res://scripts/greyfen_village_details.gd").current(game)
 		if details != null: details.activate(str(area.interaction_id))
@@ -574,7 +583,7 @@ func _scene(id: String) -> void:
 		if not remembered.is_empty():
 			pages.append({"speaker":"The places you returned to", "speaker_id":"narrator", "text":"\n\n".join(remembered), "performance":{"framing":"two_shot", "emotion":"neutral"}})
 		if host.quests.is_completed("side_escort_04"):
-			pages.append({"speaker":"The relief crossing", "speaker_id":"narrator", "text":"Maren led the relief travelers across. Kael stayed through the last load. That present act and the abandoned escort remain different roads; nobody has recorded forgiveness on Maren's behalf."})
+			pages.append({"speaker":"The relief crossing", "speaker_id":"narrator", "text":"Nera led the relief travelers across. Kael stayed through the last load. That present act and the abandoned escort remain different roads; nobody has recorded forgiveness on Nera's behalf."})
 		content["pages"] = pages
 	var actor_id := "sister_anwen" if id.begins_with("aftermath_names_") else "blacksmith_tor" if id.begins_with("aftermath_work_") or id.begins_with("work_road_") else "mira" if id.begins_with("work_relief_") else "captain_senn" if id == "soldiers_stand_down" else "rook"
 	var scene_actor = host.zone_root.find_child(actor_id, true, false)
@@ -866,7 +875,7 @@ func _build_workers(root: Node3D) -> void:
 	var start := Vector3(-4.4, 0, -2.1)
 	worker_group.position = start.lerp(escort_target, 1.0 if _flag("mill_workers_rescued") else clampf(float(host.story_state.get_flag("mill_escort_progress", 0.0)), 0.0, 1.0))
 	for index in range(2):
-		var worker = host._make_role_visual("generic_villager_01" if index == 0 else "vargan_servant", "characters", Vector3.ONE)
+		var worker = host._make_role_visual("blacksmith_tor" if index == 0 else "saga_nessa", "characters", Vector3.ONE)
 		if worker != null:
 			# Actor facing belongs to a wrapper. Keep the imported body's grounding
 			# and source-forward correction intact beneath it.
@@ -880,7 +889,7 @@ func _build_workers(root: Node3D) -> void:
 			worker_group.add_child(body)
 			body.add_child(worker)
 			worker_bodies.append(body)
-			host._configure_npc_animation(worker, "mill_worker_%d" % index)
+			host._configure_npc_animation(worker, "blacksmith_tor" if index == 0 else "saga_nessa")
 			var driver = worker.get_node_or_null("CharacterAnimationDriver")
 			if driver != null:
 				driver.set_update_rate_hz(30.0)

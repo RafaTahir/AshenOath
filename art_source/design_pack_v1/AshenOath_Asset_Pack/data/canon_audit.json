@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "repository": "RafaTahir/AshenOath",
+  "ref": "codex/masterpiece-rebuild",
+  "commit_observed": "08e5ef4b21dd75c1c90708c307de51f9a3812da0",
+  "commit_date_utc": "2026-10-29T12:24:56Z",
+  "audit_method": "Read-only GitHub file and directory retrieval; no repository modifications or full clone.",
+  "characters_file": "characters.json",
+  "selected_cast": ["Sister Anwen", "Rook", "Mira Fen", "Blacksmith Tor", "Widow Elna", "Farmer Toma", "Captain Senn", "Lord Edric Vargan", "Record Keeper Vale", "Steward Merrow", "Nessa", "Nera"],
+  "hard_canon": [
+    "The game is about broken promises, denied witnesses and the practical work after confession.",
+    "The War of Three Crowns massacre was thirty-two years earlier: Vargan promised sanctuary; Greyfen barred its gate; shrine keepers hid the road; soldiers closed the retreat and killed those between the gates.",
+    "The White Hart freely promised concealment without bloodshed; that promise was violated. It is the sole complete supernatural witness and cannot lie, but complete recollection does not equal proportion or forgiveness.",
+    "Ghoulkin are scavenged human and animal vessels animated by incomplete denied memory; they are not complete resurrected victims or articulate revenge agents.",
+    "Halvern is a bounded memory of the sanctuary order, refusal and execution. His knowledge ends at death. Len is a repeated gate-and-lantern fragment, never a living consenting witness.",
+    "Bram Kett, Sella Vey and her twelve-year-old son Oren are the missing travelers; the opening explicitly avoids resurrecting them. They are not part of this twelve-living-NPC roster.",
+    "Recent road repairs uncovered tokens; Oren restored a name, Anwen's containment failed, and Vargan's recovery patrol arrived afterward. Do not invent a single mastermind who ordered every attack.",
+    "Anwen is46, Rook29, Senn54, Edric43. Senn was22 during the massacre. Edric suppressed the command ledger six years ago. Anwen's responsibility is present concealment, not ordering the original crime.",
+    "Food, care and safe departure cannot depend on assent. Compelled admissions may prove facts but do not supply magical consent. Documents cannot promise for people.",
+    "Four endings remain reachable with main-path records and the protagonist's voluntary responsibility: Witness, Mercy, Duty and Ash. Optional people share burdens, not ending unlock keys.",
+    "The current source calls the protagonist Kael, age38. The user's newer master prompt says Kyle. The pack avoids changing or depicting the player; implementation must resolve the established naming decision without silently renaming identifiers.",
+    "Senn may be in custody, exiled or executed. Proposed forward scenes must respect those states and never resurrect him for convenience."
+  ],
+  "art_canon": {
+    "materials": "Repaired cloth, worn ash timber, dull iron, warm linen. Vargan uses the same materials arranged symmetrically. Restored testimony is unbleached paper, not magic blue signage.",
+    "forms": ["cut cord", "folded name record", "open ring"],
+    "anwen": "Slate blue, pale hair, established staff, dull bell token,1.68m target",
+    "rook": "Narrow reed-green silhouette; doubled road knot",
+    "mira": "Olive work clothes and practical layers; tied root ribbon",
+    "tor": "Broad charcoal and leather; plain iron ring",
+    "elna": "Muted plum and ash grey; folded name packet",
+    "toma": "Ochre and grain-coloured cloth; flour-coloured packet",
+    "senn": "Worn blue-grey uniform; cut military oath ribbon",
+    "edric": "Symmetrical cool charcoal and oxblood; tarnished seal",
+    "new_visual_details": "Face, ethnicity/skin tone, hairstyle beyond pale Anwen, exact garment construction and most heights/ages are proposed art direction, not source-established facts."
+  },
+  "existing_monster_families": [
+    {"id":"ghoulkin","name":"Ghoulkin","height_m":1.63,"role":"skirmisher"},
+    {"id":"wychwood_stalker","name":"Wychwood Stalker","height_m":1.60,"role":"flanker"},
+    {"id":"wychwood_raider","name":"Wychwood Raider","height_m":1.86,"role":"feinter"},
+    {"id":"wychwood_brute","name":"Wychwood Brute","height_m":1.98,"role":"brute"},
+    {"id":"bog_wretch","name":"Bog Wretch","height_m":1.72,"role":"lurker"},
+    {"id":"gravebound_knight","name":"Gravebound Knight","height_m":1.88,"role":"sentinel"},
+    {"id":"bell_eater","name":"The Bell-Eater","height_m":3.80,"role":"boss"},
+    {"id":"rootbound_colossus","name":"Rootbound Colossus","height_m":4.40,"role":"boss"},
+    {"id":"ashwing","name":"Ashwing Carrion Drake","height_m":4.80,"role":"boss"},
+    {"id":"white_hart_avatar","name":"White Hart Avatar","height_m":3.60,"role":"boss / voluntary resolutions"}
+  ],
+  "monster_notes": [
+    "Bell-Eater: cemetery, consumes buried names, bell shockwave from graves, silence interrupts summons, phases chain sweep / grave slam / ghoulkin call.",
+    "Rootbound: memory clearing, readable root lanes with central gap, rupture exposes heart, soil fed by refugee ash.",
+    "Ashwing is explicitly a carrion DRAKE, nests above the ash-fed mill, directional wing pressure and ash breath, broken perch exposes it.",
+    "Bog Wretch guards the last frightened fragment absorbed by the marsh; ash exposes its memory core.",
+    "Stalker flanks and remembers traps; Raider feints toward bodies then lunges for tokens; Brute arrives last and breaks a route rather than pursuing indefinitely.",
+    "Visual review of current spectral monster derivatives remains pending in the source manifests; an inclusion authorization is not final visual approval."
+  ],
+  "sources": [
+    {"id":"S1","path":"STORY_ART_AND_SOUND_BIBLE.md","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/STORY_ART_AND_SOUND_BIBLE.md","use":"Eight principal NPC presentation identities, material language, performance constraints"},
+    {"id":"S2","path":"author_story_docs.py","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/author_story_docs.py","use":"Story bible, timeline, character arcs, consent rules, main-path and ending constraints"},
+    {"id":"S3","path":"outputs/AshenOathTheRoadBetweenCrowns/data/journal_people.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/data/journal_people.json","use":"Canonical names, aliases and bounded knowledge including Vale/Merrow"},
+    {"id":"S4","path":"outputs/AshenOathTheRoadBetweenCrowns/data/cast_life.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/data/cast_life.json","use":"Regional cast, work, schedules and persistent practical lives"},
+    {"id":"S5","path":"outputs/AshenOathTheRoadBetweenCrowns/data/regional_performances.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/data/regional_performances.json","use":"Nessa flour/scale/kettle/shelter stories; Nera rescue cord, warning posts and road handover"},
+    {"id":"S6","path":"outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/data/campaign_dialogue.json","use":"Vale admission and Merrow signature-for-grain terms; revised campaign"},
+    {"id":"S7","path":"outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/soul_character_role_manifest.json","use":"Anwen target scale, native rig and existing asset contracts; spectral approval status"},
+    {"id":"S8","path":"outputs/AshenOathTheRoadBetweenCrowns/data/voice_cast.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/data/voice_cast.json","use":"Presentation direction only; never ethnicity proof"},
+    {"id":"S9","path":"outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json","use":"Monster names, tactical roles, memory motivation and Senn/Halvern state"},
+    {"id":"S10","path":"outputs/AshenOathTheRoadBetweenCrowns/monster_family_manifest.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/monster_family_manifest.json","use":"Ten canonical monster families, target heights and rig/visual-review contracts"},
+    {"id":"S11","path":"outputs/AshenOathTheRoadBetweenCrowns/data/bosses.json","url":"https://github.com/RafaTahir/AshenOath/blob/codex/masterpiece-rebuild/outputs/AshenOathTheRoadBetweenCrowns/data/bosses.json","use":"Boss arenas, phase names and telegraphs"}
+  ]
+}

@@ -920,6 +920,8 @@ func _make_named_interactable(id: String, type: String, prompt: String, pos: Vec
 			mesh.material_override = _mat(color)
 			area.add_child(mesh)
 	var has_character_role: bool = str(role) != ""
+	if has_character_role:
+		preload("res://scripts/story_cast_profile.gd").register_actor(zone_root, area, presentation_id)
 	if type == "dialogue" and id not in ["notice_board", "white_hart"] and has_character_role and not should_defer_character_role(role, id):
 		CharacterPresentation.apply_npc(area, presentation_id)
 	if current_zone_id == "assembly" and id in ["witness_-7", "witness_-3", "witness_3"]:
@@ -1917,6 +1919,7 @@ func _publish_environment_5() -> void:
 		_upload_static_batch(crowns, crown_transforms, crown_colors)
 
 func _publish_environment_6() -> void:
+	_build_design_pack_ecology()
 	if not deadfall_batch_data.is_empty():
 		var deadfall_mesh := CylinderMesh.new()
 		deadfall_mesh.top_radius = 0.16
@@ -1925,6 +1928,35 @@ func _publish_environment_6() -> void:
 		deadfall_mesh.radial_segments = 7
 		var deadfalls := _make_multimesh_batch("DeadfallBatch", deadfall_mesh, deadfall_batch_data.size(), world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), Color(0.34, 0.25, 0.17), 0.0, false))
 		_upload_static_batch(deadfalls, deadfall_batch_data)
+
+func _build_design_pack_ecology() -> void:
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_ecology.json"))
+	if not data is Dictionary:
+		push_error("Required design-pack ecology data is unavailable")
+		return
+	for sighting: Dictionary in data.get("sightings", []):
+		if str(sighting.zone) != current_zone_id:
+			continue
+		var id := "design_ecology:" + str(sighting.role)
+		if zone_root.has_meta(id):
+			continue
+		var p: Array = sighting.position
+		var area: Node3D = _make_named_interactable(id, "story_activity", "Observe " + str(sighting.name), Vector3(float(p[0]), 0, float(p[2])), Color.WHITE)
+		if area == null:
+			continue
+		area.set_meta("design_ecology", sighting)
+		area.rotation_degrees.y = float(sighting.get("yaw", 0))
+		# The prompt stays on reachable ground; perched anatomy has an explicit
+		# vertical offset and never supplies a false bridge or walking surface.
+		for child: Node in area.get_children():
+			if child is Node3D and child.has_meta("character_animation_family"):
+				child.position.y += float(p[1])
+				var offset: Array = sighting.get("visual_offset", [0, 0, 0])
+				child.position += Vector3(float(offset[0]), float(offset[1]), float(offset[2]))
+		var driver := area.find_child("CharacterAnimationDriver", true, false)
+		if driver != null:
+			driver.set_meta("ecology_clip", str(sighting.get("clip", "Idle")))
+		zone_root.set_meta(id, true)
 
 
 func _apply_first_route_materials(root: Node) -> void:
@@ -2172,6 +2204,9 @@ func _prop_requires_collision(lower_name: String) -> bool:
 
 
 func _visual_role_for_legacy_character(role_name: String) -> String:
+	var authored_role := preload("res://scripts/story_cast_profile.gd").visual_role(role_name)
+	if authored_role != "":
+		return authored_role
 	var roles = {
 		"player_kael": "player_human",
 		"sister_anwen": "sister_anwen_human",
@@ -2212,6 +2247,11 @@ func _world_prop_spec(id: String) -> Dictionary:
 
 
 func _role_for_interactable(id: String) -> String:
+	if id.begins_with("design_ecology:"):
+		return id.trim_prefix("design_ecology:")
+	var authored_role := preload("res://scripts/story_cast_profile.gd").visual_role(id)
+	if authored_role != "":
+		return authored_role
 	var roles = {
 		"sister_anwen": "sister_anwen",
 		"mira": "mira_herbalist",
@@ -2219,7 +2259,7 @@ func _role_for_interactable(id: String) -> String:
 		"widow_elna": "widow_elna",
 		"blacksmith_tor": "blacksmith_tor",
 		"farmer_toma": "generic_villager_01",
-		"returned_soldier": "castle_guard",
+		"returned_soldier": "returned_soldier",
 		"edric": "castle_guard",
 		"vargan_gate_guard": "castle_guard",
 		"vargan_record_keeper": "castle_guard",
@@ -2285,7 +2325,15 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> bool:
 		"dialogue": "Idle_Talking", "hit": "Hit_Chest", "death": "Death01"
 	}
 	var family := str(mapped.get_meta("character_animation_family", "")).to_lower()
-	if family.contains("warrior"):
+	if family == "design_pack_native":
+		clips = {"idle":"Idle", "walk":"Walking", "walk_back":"Walking", "strafe":"Walking", "run":"Running", "work":"Interact", "dialogue":"Interact", "hit":"HitReact", "death":"Death"}
+		if id.begins_with("design_ecology:"):
+			var ecology_data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_ecology.json"))
+			if ecology_data is Dictionary:
+				for entry: Dictionary in ecology_data.get("sightings", []):
+					if str(entry.role) == id.trim_prefix("design_ecology:"):
+						clips["idle"] = str(entry.get("clip", "Idle"))
+	elif family.contains("warrior"):
 		clips.merge({"run": "Run", "work": "Idle_Weapon", "dialogue": "Idle", "hit": "RecieveHit", "death": "Death"}, true)
 	elif family.contains("cleric"):
 		clips.merge({"run": "Run", "work": "Idle_Weapon", "dialogue": "Idle", "hit": "RecieveHit", "death": "Death"}, true)
@@ -2319,7 +2367,7 @@ func _configure_npc_animation(mapped: Node3D, id: String) -> bool:
 		CharacterAnimationDriver.record_configuration(zone_root, id, driver)
 		return false
 	CharacterAnimationDriver.record_configuration(zone_root, id, driver)
-	if id not in ["board_rook", "board_tor"]:
+	if id not in ["board_rook", "board_tor"] and family != "design_pack_native":
 		load("res://scripts/grounded_feet_modifier.gd").install_npc(mapped, driver)
 	# Non-player rigs do not own physics or combat timing. Drive them through a
 	# phase-staggered manual clock so imported skin evaluation cannot wake every

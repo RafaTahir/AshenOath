@@ -4,8 +4,7 @@ const CharacterVisualContract = preload("res://scripts/character_visual_contract
 const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
 const StoryWardrobe = preload("res://scripts/story_wardrobe.gd")
 const CharacterSilhouette = preload("res://scripts/systems/character_silhouette.gd")
-const CLERIC_STAFF_PATH := "res://assets_external/characters/Cleric_Staff.fbx"
-const CLERIC_STAFF_TEXTURE_PATH := "res://assets_external/characters/Cleric_Staff_Texture.png"
+const CLERIC_STAFF_PATH := "res://assets_external/design_pack_v1/C01_ash_staff.glb"
 const FORGE_HAMMER_PATH := "res://assets/characters/forge_hammer.tscn"
 const OPENING_OCCUPATION_PROP_PATHS := [
 	"res://assets_external/environment/props/Bucket_Wooden_1.fbx",
@@ -32,7 +31,7 @@ static func make_hart_witness(helper: Node, position: Vector3) -> Node3D:
 	var driver = load("res://scripts/character_animation_driver.gd").new()
 	driver.name = "HartWitnessAnimation"
 	visual.add_child(driver)
-	if not driver.configure(visual, {"idle":"Idle", "dialogue":"Idle_2"}):
+	if not driver.configure(visual, {"idle":"Idle", "dialogue":"Interact"}):
 		push_error("White Hart witness requires native idle animation")
 		root.free()
 		return null
@@ -165,7 +164,8 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 			if native_anwen_staff != null:
 				native_anwen_staff.visible = false
 			_add_anwen_staff(owner)
-		_add_castle_role_equipment(owner, role)
+		if not bool(visual_target.get_meta("character_authored_silhouette", false)):
+			_add_castle_role_equipment(owner, role)
 		CharacterSilhouette.apply(visual_target, role, _variant_seed(owner, role))
 		if visual_target != owner:
 			_copy_identity_contract(owner, visual_target, role)
@@ -233,8 +233,6 @@ static func _add_occupation_equipment(owner: Node3D, role: String) -> void:
 		return
 	prop.name = "OccupationProp_%s" % role
 	prop.scale = Vector3.ONE * float(definition.get("scale", 1.0))
-	if str(definition.get("path", "")) == CLERIC_STAFF_PATH:
-		_apply_staff_materials(prop)
 	equipment.add_child(prop)
 	owner.set_meta("character_occupation_equipment", role)
 
@@ -364,21 +362,16 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	equipment.name = "AnwenStaffEquipment"
 	equipment.actor = owner
 	equipment.position = Vector3.ZERO
-	# The Universal hand bone points its local shaft axis toward the shoulder in
-	# the relaxed cleric pose. Flip the socket space once so the staff descends
-	# from the hand instead of rising behind the head; it still inherits the
-	# hand position and remains attached during animation.
-	equipment.rotation_degrees = Vector3(180.0, 0.0, 0.0)
+	# The authored staff origin is its grip; WorldOrientedEquipment keeps its
+	# upright shaft while the socket supplies the animated hand position.
+	equipment.rotation_degrees = Vector3.ZERO
 	attachment.add_child(equipment)
 	var modeled_staff := _instantiate_prop(CLERIC_STAFF_PATH)
 	if modeled_staff != null:
 		modeled_staff.name = "AnwenStaffModeled"
-		# The source is authored as a vertical staff with a broad ornamental head.
-		# Keep its full silhouette, but fit the hand prop to the Universal rig and
-		# keep the imported source's origin under the validated socket.
-		modeled_staff.scale = Vector3.ONE * 0.27
-		modeled_staff.position = Vector3(0.0, -0.28, 0.0)
-		_apply_staff_materials(modeled_staff)
+		# Keep the design's carved ashwood and worn bell, at authored scale.
+		modeled_staff.scale = Vector3.ONE
+		modeled_staff.position = Vector3.ZERO
 		equipment.add_child(modeled_staff)
 		return
 	# A missing staff source is an explicit runtime warning, not a fabricated
@@ -398,24 +391,6 @@ static func _instantiate_prop(path: String) -> Node3D:
 		mesh_instance.mesh = resource as Mesh
 		return mesh_instance
 	return null
-
-static func _apply_staff_materials(root: Node3D) -> void:
-	# The FBX material is not consistently preserved by the Compatibility
-	# importer. Assign the shipped staff atlas explicitly so the hand-held prop
-	# cannot become a white untextured pole in the browser.
-	var texture := ResourceLoader.load(CLERIC_STAFF_TEXTURE_PATH) as Texture2D
-	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := raw_mesh as MeshInstance3D
-		if mesh_instance == null or mesh_instance.mesh == null:
-			continue
-		for surface_index in range(mesh_instance.mesh.get_surface_count()):
-			var material := StandardMaterial3D.new()
-			material.albedo_texture = texture
-			material.albedo_color = Color.WHITE
-			material.roughness = 0.76
-			material.metallic = 0.04
-			material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-			mesh_instance.set_surface_override_material(surface_index, material)
 
 static func _add_castle_role_equipment(owner: Node3D, role: String) -> void:
 	var castle_role := role.to_lower()

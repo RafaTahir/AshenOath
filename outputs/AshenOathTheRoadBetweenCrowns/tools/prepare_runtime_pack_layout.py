@@ -241,10 +241,40 @@ def compile_layout(defer_environment=False):
         # Selecting a texture as a resource exports its remap and decoded
         # import. An include-filter path alone is not a loadable Texture2D.
         files[destination].add(texture)
+    design_path = PROJECT / "data/design_pack_assets.json"
+    designs = json.loads(design_path.read_text(encoding="utf-8")) if design_path.is_file() else {}
+    design_owners = {row["path"].removeprefix("res://"): "Runtime Pack " + row["owner"].capitalize()
+                     for row in designs.get("assets", {}).values()}
+    if designs:
+        design_owners[designs["staff"]["path"].removeprefix("res://")] = "Runtime Pack Opening"
+        for relative, destination in design_owners.items():
+            for name in sections:
+                files[name].discard("res://" + relative)
+                includes[name].discard(relative)
+            files[destination].add("res://" + relative)
+        for name in ROOT_NAMES:
+            includes[name].update({"data/design_pack_cast.json", "data/design_pack_assets.json", "data/design_pack_ecology.json"})
     # Root scripts use dynamic zone loading. Exclude transferred resources from
     # dependency expansion as well as from explicit selections.
     for name, section in sections.items():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        if designs:
+            # Retire previous bodies from delivery, not from recoverable source
+            # history. Shared animation libraries remain explicitly owned above.
+            for retired in ("characters_universal", "characters_ranger", "enemies", "monsters", "creatures", "animals"):
+                exclusions.add(f"assets_external/{retired}/*")
+            # Weapons share the old character directory; they are retained
+            # equipment, not bodies, and still have live player/VFX consumers.
+            exclusions.discard("assets_external/characters/*")
+            for body in (PROJECT / "assets_external/characters").rglob("*"):
+                if body.suffix.lower() in {".fbx", ".gltf", ".glb", ".obj"} and body.stem not in {"Sword", "Ranger_Bow", "Ranger_Arrow"}:
+                    exclusions.add(body.relative_to(PROJECT).as_posix())
+            exclusions.add("assets/companions/*")
+            for relative, destination in design_owners.items():
+                if name == destination:
+                    exclusions.discard(relative)
+                else:
+                    exclusions.add(relative)
         for texture, record in environment.items():
             relative = texture.removeprefix("res://")
             if name == "Runtime Pack " + record["owner"].capitalize():

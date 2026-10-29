@@ -31,6 +31,10 @@ static func inspect(root: Node, role_id: String) -> Dictionary:
 	var height_valid := has_bounds and absf(rendered_height - target_height) <= height_tolerance
 	var sockets := _socket_report(skeletons, spec.get("equipment_sockets", {}))
 	var required_socket_names := CharacterRoleSpec.required_sockets(role_id)
+	if str(root.get_meta("character_animation_family", "")) == "design_pack_native":
+		# Creature weapons are authored skinned geometry, not humanoid hand gear.
+		required_socket_names.erase("weapon")
+		required_socket_names.erase("offhand")
 	var sockets_valid := true
 	for socket_name in required_socket_names:
 		if not bool(sockets.get(socket_name, false)):

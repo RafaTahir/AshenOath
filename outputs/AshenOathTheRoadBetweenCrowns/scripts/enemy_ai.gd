@@ -1033,10 +1033,12 @@ func _try_build_mapped_body() -> bool:
 	mapped.name = "%s_visual" % enemy_id
 	mapped.set_meta("monster_family_role", visual_source)
 	mapped.set_meta("monster_behavior_profile", behavior_profile)
+	var design_body := bool(mapped.get_meta("character_authored_silhouette", false))
+	var native_design := str(mapped.get_meta("character_animation_family", "")) == "design_pack_native"
 	set_meta("camera_subject_height", CharacterRoleSpec.target_height(visual_source) * _mapped_enemy_scale().y)
 	set_meta("camera_subject_bounds", CharacterRoleSpec.encounter_camera_bounds(visual_source))
 	asset_helper.apply_normalized_scale(mapped, _mapped_enemy_scale().y)
-	if _is_wychwood_pack():
+	if _is_wychwood_pack() and not design_body:
 		var profile_scale: Vector3 = {
 			"ghoulkin": Vector3(0.82, 1.0, 0.86),
 			"wychwood_stalker": Vector3(0.70, 1.0, 0.78),
@@ -1044,14 +1046,14 @@ func _try_build_mapped_body() -> bool:
 			"wychwood_brute": Vector3(1.12, 1.0, 1.04)
 		}.get(enemy_id, Vector3.ONE)
 		mapped.scale *= profile_scale
-	if _is_wychwood_pack():
+	if _is_wychwood_pack() and not design_body:
 		_tint_authored_materials(mapped, {
 			"ghoulkin": Color(0.58, 0.62, 0.55),
 			"wychwood_stalker": Color(0.58, 0.48, 0.44),
 			"wychwood_raider": Color(0.60, 0.58, 0.48),
 			"wychwood_brute": Color(0.46, 0.52, 0.62),
 		}.get(enemy_id, Color.WHITE))
-	if is_boss and enemy_id not in ["white_hart_avatar", "captain_senn"]:
+	if is_boss and enemy_id not in ["white_hart_avatar", "captain_senn"] and not design_body:
 		_apply_boss_material(mapped)
 	visual_root.add_child(mapped)
 	if _is_wychwood_pack():
@@ -1059,14 +1061,20 @@ func _try_build_mapped_body() -> bool:
 		# scale, locomotion profile, and attack spacing. Do not add detached
 		# root-mounted anatomy on top of a valid animated body.
 		mapped.set_meta("monster_variant_profile", enemy_id)
-	if is_boss and enemy_id not in ["white_hart_avatar", "captain_senn"]:
+	if is_boss and enemy_id not in ["white_hart_avatar", "captain_senn"] and not design_body:
 		_add_boss_silhouette()
 	body_visual = _find_first_mesh(mapped)
 	base_body_scale = mapped.scale
 	animation_driver = CharacterAnimationDriver.new()
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
-	if skeleton_family_source:
+	if native_design:
+		animation_driver.configure(mapped, {
+			"idle":"Idle", "walk":"Walking", "run":"Running", "windup":"Windup",
+			"attack":"Attack", "attack_heavy":"AttackHeavy", "hit":"HitReact", "death":"Death",
+			"block":"Block", "dialogue":"Interact", "recovery":"Recovery"
+		})
+	elif skeleton_family_source:
 		_add_skeleton_impact_clip(mapped)
 		animation_driver.configure(mapped, {
 			"idle": "SkeletonArmature|Skeleton_Idle",
@@ -1150,16 +1158,16 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.set_update_rate_hz(12.0)
 	_ground_mapped_visual(mapped)
 	mapped.position.y += CharacterRoleSpec.ground_offset(visual_source)
-	if enemy_id in ["halvern_boss", "bandit", "captain_senn"]:
+	if enemy_id in ["halvern_boss", "bandit", "captain_senn"] and not native_design:
 		_attach_humanoid_sword("Halvern" if enemy_id == "halvern_boss" else "Bandit")
 		if enemy_id == "bandit" and visual_source == "bandit_tracker":
 			_attach_bandit_shield()
-	elif enemy_id == "bell_eater":
+	elif enemy_id == "bell_eater" and not native_design:
 		_attach_bell_eater_harness(mapped)
-	elif enemy_id == "rootbound_colossus":
+	elif enemy_id == "rootbound_colossus" and not native_design:
 		# The hunched chest surface sits well ahead of the imported chest pivot.
 		_attach_boss_identity_to_bone(mapped, "Chest", "RootboundHeartSocket", Vector3(0, 0, -1.48), true)
-	elif enemy_id == "ashwing":
+	elif enemy_id == "ashwing" and not native_design:
 		var authored_basis := boss_visual_root.basis
 		_attach_boss_identity_to_bone(mapped, "Body", "AshwingHarnessSocket", Vector3.ZERO)
 		boss_visual_root.basis = boss_visual_root.basis * authored_basis
@@ -1287,7 +1295,7 @@ func _configure_attack_contact_bone() -> void:
 	var skeleton: Skeleton3D = animation_driver.get_skeleton()
 	if skeleton == null:
 		return
-	var preferred := ["hand.r", "hand_r", "righthand", "right_hand", "mixamorig:righthand", "hand.l", "hand_l", "lefthand", "left_hand"]
+	var preferred := ["hand.r", "hand_r", "righthand", "right_hand", "mixamorig:righthand", "hand.l", "hand_l", "lefthand", "left_hand", "forearm.r", "forearm_r"]
 	for candidate in preferred:
 		var wanted: String = candidate.replace(".", "").replace(":", "").replace("_", "")
 		for index in range(skeleton.get_bone_count()):

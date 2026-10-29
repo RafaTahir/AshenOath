@@ -78,7 +78,7 @@ static func conversation(host, actor_id: String) -> Dictionary:
 	if actor_id == "blacksmith_tor" and host.quests.is_completed("saga_gre_q03"):
 		words += " Elna's latch shuts now. Quieter than her opinion of the old one."
 	if actor_id == "sister_anwen" and host.quests.is_completed("saga_gre_q02"):
-		words += " The warning rope works. You and Jory checked it; I can stop listening for the wrong bell for a little while."
+		words += " The warning rope works. You and Tor checked it; I can stop listening for the wrong bell for a little while."
 	return {"name":str(VOICES.get(actor_id, "Greyfen")), "pages":[{"speaker":str(VOICES.get(actor_id, "Greyfen")), "speaker_id":"narrator" if actor_id == "bracken" else actor_id, "text":words}], "actions":[{"type":"close", "label":"Share the moment"}]}
 
 func _process(delta: float) -> void:

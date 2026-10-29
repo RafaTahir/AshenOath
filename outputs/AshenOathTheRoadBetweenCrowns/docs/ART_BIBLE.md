@@ -3,18 +3,25 @@
 ## Retained Direction
 
 Grounded stylized fantasy: believable scale, construction, weight, anatomy and
-wear through retained optimized assets. This is not a mandate for photorealism,
-new purchases or another replacement pass. Repair named defects, not endless taste
-changes. Existing art, game content and visual settings remain.
+wear. The user-authorized Design Pack v1 cast replacement supersedes the older
+A-set/Ranger appearance lock. It does not replace the six worlds, equipment,
+audio, game content or visual settings, and is not a promise of photorealism.
 
 ## Identity and Silhouette
 
-- Preserve Kael/Anwen's A-set identities, Senn's Ranger and the actual White Hart.
-  Retain approved monster families and encounter dimensions.
+- Use C01-C12 for the twelve living supporting characters, M01-M20 for creature
+  bodies and P01 for Kael's redesign. Preserve Kael's identity, the Hart's story
+  authority and existing encounter dimensions. Old quest/actor keys remain save
+  compatibility identifiers, not additional people to spawn.
+- `data/design_pack_cast.json` owns the canonical roster and role consolidation.
+  `data/design_pack_assets.json` records the actual Blender exports and hashes.
+  Source masters and production notes live in `../../art_source/design_pack_v1/`.
 - Roles read through proportions, posture, equipment and occupation, not palette
   swaps alone. Preserve sockets, skins, weighted anatomy and legitimate action poses.
-- Regional palettes/named accents belong to `data/palettes.json` and existing
-  silhouette/identity helpers. Preserve legitimate grey hair and pale clothing.
+- Design-pack bodies carry their authored palettes and silhouettes. Do not apply
+  legacy whole-body tints or additional silhouette assemblies over them. Existing
+  regional palette data still supports UI, props and legacy source tooling.
+  Preserve legitimate grey hair and pale clothing.
 - Required surfaces retain authored materials/textures. Hit effects restore exact
   original bindings; shared identity materials remain immutable.
 - Reuse retained facial work and actual capability bindings. Compilation is not
@@ -48,7 +55,9 @@ events; preserve subtitles, browser unlock and focus/pause recovery.
 ## Resource Discipline and Approval
 
 Share immutable meshes, textures, rigs, clips and static batches. Preserve quality
-presets and population; do not hide late actors or scenery to manufacture results.
+presets and encounter population. Consolidating former living cast roles is an
+explicit narrative decision, not a performance claim. Do not hide late actors or
+scenery to manufacture results.
 Detailed nearby performances use existing scheduling. Keep licenses/provenance.
 Unused source FBX/OBJ removal requires indirect dependency and export ownership
 checks; inventory presence alone is not evidence of use.

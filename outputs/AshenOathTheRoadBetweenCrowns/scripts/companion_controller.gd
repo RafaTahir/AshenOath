@@ -3,7 +3,7 @@ extends CharacterBody3D
 const ID := "bracken"
 const QUEST := "side_bracken_rescue"
 const RESCUE_POSITION := Vector3(-2.0, 0.02, -11.0)
-const BODY := preload("res://assets/companions/bracken.scn")
+const BODY_PATH := "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb"
 const Interactable = preload("res://scripts/interactable.gd")
 const Surface = preload("res://scripts/spatial_surface_contract.gd")
 const CompanionPose = preload("res://scripts/companion_pose.gd")
@@ -175,12 +175,26 @@ func _ready() -> void:
 	shape.shape = capsule
 	shape.position.y = 0.35
 	add_child(shape)
-	visual = BODY.instantiate()
+	var body: PackedScene = load(BODY_PATH)
+	if body == null:
+		push_error("Bracken's authored Hearthscale body is unavailable: " + BODY_PATH)
+		return
+	visual = body.instantiate()
 	visual.name = "Visual"
 	visual.rotation.y = PI
+	visual.scale = Vector3.ONE * 0.62
 	add_child(visual)
-	clips = visual.get_meta("animation_clips", {})
 	animation_player = visual.find_child("AnimationPlayer", true, false)
+	if animation_player == null:
+		push_error("Bracken's Hearthscale animation player is unavailable")
+		return
+	clips = {"idle":"Idle", "walk":"Walking"}
+	for key: String in clips:
+		for clip: StringName in animation_player.get_animation_list():
+			if str(clip).get_file() == str(clips[key]):
+				clips[key] = str(clip)
+				animation_player.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
+				break
 	animation_player.play(str(clips.idle))
 	var skeleton := visual.find_child("Skeleton3D", true, false) as Skeleton3D
 	if skeleton == null:
@@ -725,7 +739,7 @@ static func apply_choice(host: Node, action: Dictionary) -> bool:
 		state.set_flag("bracken_rescued", true)
 		state.remember_companion_event("rescue", "greyfen")
 		host.quests.complete_objective(QUEST, "release_strap")
-		host.hud.toast("The strap falls away. The hound steps clear and waits.")
+		host.hud.toast("The strap falls away. The young Hearthscale steps clear and waits.")
 	else:
 		state.set_flag("bracken_home", "adopted" if step == "adopt" else "safe")
 		state.set_flag("bracken_home_zone", "greyfen")

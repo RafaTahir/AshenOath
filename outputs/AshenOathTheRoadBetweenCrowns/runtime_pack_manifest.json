@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "water-aftermath-20261029",
+  "release_id": "design-pack-v1-20261030",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "water-aftermath-20261029",
+      "version": "design-pack-v1-20261030",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4435044,
-      "candidate_sha256": "fcebbc0573cea7f1dd3884584354f1f0bd8ee1fd16697287cd73626f3eaeefd5",
+      "candidate_bytes": 4681508,
+      "candidate_sha256": "bf0149670aca63fac4ed4ea36e671d2645b8ab8b2b56a0af6d7c2787f54b35ed",
       "contents": [
         "menu",
         "managers",
@@ -35,15 +35,15 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4435044,
-      "embedded_source_sha256": "fcebbc0573cea7f1dd3884584354f1f0bd8ee1fd16697287cd73626f3eaeefd5",
+      "embedded_source_bytes": 4681508,
+      "embedded_source_sha256": "bf0149670aca63fac4ed4ea36e671d2645b8ab8b2b56a0af6d7c2787f54b35ed",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "water-aftermath-20261029",
-      "url": "packs/opening.pck?sha256=4b9c6f304c2b6760a0537ddae810a6f22f6888d774b7b288ef1c2e6e222510e9",
-      "sha256": "4b9c6f304c2b6760a0537ddae810a6f22f6888d774b7b288ef1c2e6e222510e9",
-      "bytes": 86265908,
+      "version": "design-pack-v1-20261030",
+      "url": "packs/opening.pck?sha256=61a06f879ec5e7b22f7877dc70db95fb2a346db8e3000a340c73d5d891ac081d",
+      "sha256": "61a06f879ec5e7b22f7877dc70db95fb2a346db8e3000a340c73d5d891ac081d",
+      "bytes": 96071736,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
         "base"
@@ -51,20 +51,20 @@
       "preload_priority": 10,
       "status": "streamed_web_candidate",
       "candidate_artifact": "opening.pck",
-      "candidate_bytes": 86265908,
-      "candidate_sha256": "4b9c6f304c2b6760a0537ddae810a6f22f6888d774b7b288ef1c2e6e222510e9",
+      "candidate_bytes": 96071736,
+      "candidate_sha256": "61a06f879ec5e7b22f7877dc70db95fb2a346db8e3000a340c73d5d891ac081d",
       "contents": [
         "greyfen",
         "opening_actors",
         "shared_opening_scenery"
       ],
-      "cache_key": "4b9c6f304c2b6760a0537ddae810a6f22f6888d774b7b288ef1c2e6e222510e9"
+      "cache_key": "61a06f879ec5e7b22f7877dc70db95fb2a346db8e3000a340c73d5d891ac081d"
     },
     "campaign": {
-      "version": "water-aftermath-20261029",
-      "url": "packs/campaign.pck?sha256=4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
-      "sha256": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
-      "bytes": 8678820,
+      "version": "design-pack-v1-20261030",
+      "url": "packs/campaign.pck?sha256=656e0acdbb5f991ba250d0d67c10a421e16e49078de940b9d440153c559c4b99",
+      "sha256": "656e0acdbb5f991ba250d0d67c10a421e16e49078de940b9d440153c559c4b99",
+      "bytes": 8691364,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -73,21 +73,21 @@
       "preload_priority": 20,
       "status": "streamed_web_candidate",
       "candidate_artifact": "campaign.pck",
-      "candidate_bytes": 8678820,
-      "candidate_sha256": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
+      "candidate_bytes": 8691364,
+      "candidate_sha256": "656e0acdbb5f991ba250d0d67c10a421e16e49078de940b9d440153c559c4b99",
       "contents": [
         "deep_woods",
         "long_road",
         "castle",
         "finale"
       ],
-      "cache_key": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12"
+      "cache_key": "656e0acdbb5f991ba250d0d67c10a421e16e49078de940b9d440153c559c4b99"
     },
     "characters": {
-      "version": "water-aftermath-20261029",
-      "url": "packs/characters.pck?sha256=36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
-      "sha256": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
-      "bytes": 8999204,
+      "version": "design-pack-v1-20261030",
+      "url": "packs/characters.pck?sha256=12b08767fe9a8568a04671cbe88771ddb9712e5274bc7af601392efd854bd0d7",
+      "sha256": "12b08767fe9a8568a04671cbe88771ddb9712e5274bc7af601392efd854bd0d7",
+      "bytes": 7567260,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -96,19 +96,19 @@
       "preload_priority": 30,
       "status": "streamed_web_candidate",
       "candidate_artifact": "characters.pck",
-      "candidate_bytes": 8999204,
-      "candidate_sha256": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
+      "candidate_bytes": 7567260,
+      "candidate_sha256": "12b08767fe9a8568a04671cbe88771ddb9712e5274bc7af601392efd854bd0d7",
       "contents": [
         "ranger_runtime",
         "universal_crowd_runtime"
       ],
-      "cache_key": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f"
+      "cache_key": "12b08767fe9a8568a04671cbe88771ddb9712e5274bc7af601392efd854bd0d7"
     },
     "monsters": {
-      "version": "water-aftermath-20261029",
-      "url": "packs/monsters.pck?sha256=efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
-      "sha256": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
-      "bytes": 20678316,
+      "version": "design-pack-v1-20261030",
+      "url": "packs/monsters.pck?sha256=48f3ad3b89c01a81e96961e110225450ea55338d46b4fd1323001e329eaf1c60",
+      "sha256": "48f3ad3b89c01a81e96961e110225450ea55338d46b4fd1323001e329eaf1c60",
+      "bytes": 92881828,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -117,20 +117,20 @@
       "preload_priority": 40,
       "status": "streamed_web_candidate",
       "candidate_artifact": "monsters.pck",
-      "candidate_bytes": 20678316,
-      "candidate_sha256": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
+      "candidate_bytes": 92881828,
+      "candidate_sha256": "48f3ad3b89c01a81e96961e110225450ea55338d46b4fd1323001e329eaf1c60",
       "contents": [
         "monster_families",
         "bosses",
         "animals"
       ],
-      "cache_key": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c"
+      "cache_key": "48f3ad3b89c01a81e96961e110225450ea55338d46b4fd1323001e329eaf1c60"
     },
     "audio": {
-      "version": "water-aftermath-20261029",
-      "url": "packs/audio.pck?sha256=5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
-      "sha256": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
-      "bytes": 21302876,
+      "version": "design-pack-v1-20261030",
+      "url": "packs/audio.pck?sha256=b101e25db1de6f399a1895ba02aa7fdbe829f40f6c94ba68212fe83ac3dfccbb",
+      "sha256": "b101e25db1de6f399a1895ba02aa7fdbe829f40f6c94ba68212fe83ac3dfccbb",
+      "bytes": 21315468,
       "entry_scene": "",
       "dependencies": [
         "base"
@@ -138,20 +138,20 @@
       "preload_priority": 50,
       "status": "streamed_web_candidate",
       "candidate_artifact": "audio.pck",
-      "candidate_bytes": 21302876,
-      "candidate_sha256": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
+      "candidate_bytes": 21315468,
+      "candidate_sha256": "b101e25db1de6f399a1895ba02aa7fdbe829f40f6c94ba68212fe83ac3dfccbb",
       "contents": [
         "ambience",
         "combat_cues",
         "voice_fallbacks"
       ],
-      "cache_key": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca"
+      "cache_key": "b101e25db1de6f399a1895ba02aa7fdbe829f40f6c94ba68212fe83ac3dfccbb"
     },
     "quality_materials": {
-      "version": "water-aftermath-20261029",
-      "url": "packs/quality_materials.pck?sha256=631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
-      "sha256": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
-      "bytes": 7328396,
+      "version": "design-pack-v1-20261030",
+      "url": "packs/quality_materials.pck?sha256=b16803c2f665f0711b58c3c62ceb3ce038865b22279331e924d58be844be98cf",
+      "sha256": "b16803c2f665f0711b58c3c62ceb3ce038865b22279331e924d58be844be98cf",
+      "bytes": 7340988,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -160,19 +160,19 @@
       "preload_priority": 60,
       "status": "streamed_web_candidate",
       "candidate_artifact": "quality_materials.pck",
-      "candidate_bytes": 7328396,
-      "candidate_sha256": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
+      "candidate_bytes": 7340988,
+      "candidate_sha256": "b16803c2f665f0711b58c3c62ceb3ce038865b22279331e924d58be844be98cf",
       "contents": [
         "opening_normal_maps",
         "opening_orm_maps"
       ],
-      "cache_key": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba"
+      "cache_key": "b16803c2f665f0711b58c3c62ceb3ce038865b22279331e924d58be844be98cf"
     },
     "adjacent": {
-      "version": "water-aftermath-20261029",
-      "url": "packs/adjacent.pck?sha256=5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
-      "sha256": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
-      "bytes": 2370980,
+      "version": "design-pack-v1-20261030",
+      "url": "packs/adjacent.pck?sha256=bde49ea485f80ae13f7cc82c8bb131b12b9f97cc2911d9e497a3cd72b8c48f95",
+      "sha256": "bde49ea485f80ae13f7cc82c8bb131b12b9f97cc2911d9e497a3cd72b8c48f95",
+      "bytes": 2383572,
       "entry_scene": "",
       "dependencies": [
         "base",
@@ -186,15 +186,15 @@
         "ruins"
       ],
       "candidate_artifact": "adjacent.pck",
-      "candidate_bytes": 2370980,
-      "candidate_sha256": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
-      "cache_key": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241"
+      "candidate_bytes": 2383572,
+      "candidate_sha256": "bde49ea485f80ae13f7cc82c8bb131b12b9f97cc2911d9e497a3cd72b8c48f95",
+      "cache_key": "bde49ea485f80ae13f7cc82c8bb131b12b9f97cc2911d9e497a3cd72b8c48f95"
     }
   },
-  "build_id": "water-aftermath-20261029",
-  "generated_from_commit": "08e5ef4b21dd75c1c90708c307de51f9a3812da0",
-  "generated_at_utc": "2026-10-29T12:49:41.436443Z",
-  "total_bytes": 155624500,
+  "build_id": "design-pack-v1-20261030",
+  "generated_from_commit": "da54aec937cdee6aa6191b9e5cbcc63108d58312",
+  "generated_at_utc": "2026-10-29T19:59:37.514230Z",
+  "total_bytes": 236252216,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1"
 }

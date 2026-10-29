@@ -10,7 +10,9 @@ static func validate(root: Node, require_animation: bool = true) -> Dictionary:
 		if mesh.skin != null or mesh.skeleton != NodePath(""):
 			skinned_meshes.append(mesh)
 	var bounds := _combined_bounds(root, skinned_meshes if not skinned_meshes.is_empty() else meshes)
-	var complete_bounds := bounds.size.y >= 1.35 and bounds.size.x >= 0.28 and bounds.size.z >= 0.16
+	var creature := str(root.get_meta("character_asset_family", "")) == "ashen_design_pack_monster"
+	var expected_height := float(root.get_meta("character_target_height", 1.72))
+	var complete_bounds := bounds.size.y >= (expected_height * 0.90 if creature else 1.35) and bounds.size.x >= 0.28 and bounds.size.z >= 0.16
 	var has_skin := false
 	for mesh in meshes:
 		if mesh.skin != null or mesh.skeleton != NodePath(""):

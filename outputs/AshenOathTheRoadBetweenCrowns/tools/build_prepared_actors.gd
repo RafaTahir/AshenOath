@@ -87,7 +87,7 @@ func _compile() -> void:
 		var normalized := source.to_lower()
 		var hair: String = helper._hair_path_for_role(role, true) if normalized.ends_with("/male_peasant.gltf") else ""
 		var assembly_key := source + "|" + owner + "|" + str(hair)
-		var variant_safe := normalized.contains("_atlas.gltf") or normalized.ends_with("male_ranger_runtime.gltf")
+		var variant_safe := normalized.contains("_atlas.gltf") or normalized.ends_with("male_ranger_runtime.gltf") or normalized.begins_with("res://assets_external/design_pack_v1/")
 		if templates.has(assembly_key):
 			entries[key] = {"path": templates[assembly_key], "source": source, "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
 			continue
@@ -185,7 +185,8 @@ func _compile_face_bindings(visual: Node3D, source: String) -> Dictionary:
 			var name := skeleton.get_bone_name(bone)
 			if name.begins_with("Face_"):
 				result[name] = {"skeleton":str(visual.get_path_to(skeleton)), "bone":name}
-	if source.get_file() in FACIAL_ASSEMBLIES and result.size() != 11:
+	var requires_face := source.get_file() in FACIAL_ASSEMBLIES or source.begins_with("res://assets_external/design_pack_v1/humans/")
+	if requires_face and result.size() != 11:
 		_failed("Required CAST facial rig missing: %s; controls=%s" % [source, str(result.keys())])
 	return result
 
@@ -197,6 +198,11 @@ func _own(node: Node, scene: Node) -> void:
 		_own(child, scene)
 
 func _owner(source: String, category: String) -> String:
+	if source.begins_with("res://assets_external/design_pack_v1/"):
+		var designs: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_assets.json"))
+		for record: Dictionary in designs.get("assets", {}).values():
+			if str(record.path) == source:
+				return str(record.owner)
 	var relative := source.trim_prefix("res://")
 	for section in presets.get_sections():
 		if str(presets.get_value(section, "name", "")) != "Runtime Pack Opening":

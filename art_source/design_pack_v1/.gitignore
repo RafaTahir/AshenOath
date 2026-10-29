@@ -1,0 +1,7 @@
+# Blender recovery copies are local authoring history, not runtime deliverables.
+*.blend1
+*.blend2
+__pycache__/
+# Runtime GLBs are tracked once in the game. Intermediate textures, exports
+# and authoring renders are reproducible from the scripts and packed masters.
+exports/

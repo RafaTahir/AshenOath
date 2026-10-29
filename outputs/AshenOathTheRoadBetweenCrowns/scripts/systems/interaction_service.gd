@@ -47,6 +47,12 @@ func _handle_interaction(area) -> void:
 			quests.complete_evidence("main_blood_under_stone", "evidence_ledger_fragment")
 			quests.complete_objective("main_blood_under_stone", "recover_ledger")
 		var dialogue_data = dialogue.get_dialogue(area.dialogue_id)
+		if area.interaction_id == "vargan_steward" and not bool(story_state.get_flag("castle_access_granted", false)):
+			# Intake now belongs to Merrow. Keep the original quest action and
+			# save keys so a legacy journey can still earn its gate audience.
+			var intake: Dictionary = dialogue.get_dialogue("vargan_gate_guard")
+			for intake_action: Dictionary in intake.get("actions", []):
+				dialogue_data.get_or_add("actions", []).append(intake_action.duplicate(true))
 		if area.interaction_id == "bracken":
 			for companion_action: Dictionary in dialogue_data.get("actions", []):
 				companion_action["companion_actor_instance"] = area.get_instance_id()
@@ -72,6 +78,9 @@ func _handle_interaction(area) -> void:
 		if not report_chosen:
 			preload("res://scripts/story_activity_director.gd").add_friend_invitation(_host, area, dialogue_data)
 			preload("res://scripts/story_activity_director.gd").add_personal_invitation(_host, area, dialogue_data)
+			var regional: Node = zone_root.get_node_or_null("StoryActivities/SixWorldStories")
+			if regional != null:
+				regional.append_cast_topics(area, dialogue_data)
 		for option: Dictionary in dialogue_data.get("actions", []):
 			if not _dialogue_action_available(option):
 				option["available"] = false
@@ -85,7 +94,9 @@ func _handle_interaction(area) -> void:
 		audio.set_dialogue_active(true)
 		audio.set_game_paused(true)
 		_host.get_tree().paused = true
+		var introduction_key := preload("res://scripts/story_cast_profile.gd").introduce(_host, str(area.interaction_id), dialogue_data)
 		hud.show_dialogue(_prepare_dialogue_presence(dialogue_data))
+		preload("res://scripts/story_cast_profile.gd").remember_introduction(_host, introduction_key)
 		# The displayed page owns its exact-text recording. A legacy scene-wide
 		# sequence here would cancel that page and could speak a different turn.
 	elif area.interaction_type == "clue":

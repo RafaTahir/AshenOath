@@ -205,7 +205,7 @@
     "motivation":"He calls control protection, even when the road's travelers pay for it."
   },
   "bandit": {
-    "name": "Road Bandit",
+    "name": "Roadbound Retainer",
     "health": 70,
     "damage": 14,
     "speed": 2.6,

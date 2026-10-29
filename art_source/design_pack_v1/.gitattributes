@@ -1,0 +1,6 @@
+# Preserve authored binary assets and the supplied reference document exactly.
+*.blend binary
+*.glb binary
+*.png binary
+*.jpg binary
+*.pdf binary

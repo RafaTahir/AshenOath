@@ -8,11 +8,13 @@ const WORK_PATH := "res://data/journal_work.json"
 const EVIDENCE_DETAILS_PATH := "res://data/journal_evidence_details.json"
 const ENEMIES_PATH := "res://data/enemies.json"
 const PREPARATION_PATH := "res://data/preparation_notes.json"
+const CastProfile = preload("res://scripts/story_cast_profile.gd")
 static var _people_data: Dictionary = {}
 static var _work_data: Dictionary = {}
 static var _evidence_details_data: Dictionary = {}
 static var _enemy_data: Dictionary = {}
 static var _preparation_data: Dictionary = {}
+static var _ecology_data: Dictionary = {}
 
 static func _catalog(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -139,7 +141,7 @@ static func recap_model(campaign: Dictionary, quests, state, zone_id: String) ->
 		recap.merge({"heading": "The road remains open", "promise": "The final choice and the return to Greyfen are recorded. Their consequences remain part of this journey.", "next_action": "Visit a known place or take up an unfinished task in the journal.", "destination_zone": zone_id, "destination_name": _zone_name(zone_id), "reason": "There is no new covenant or unseen obligation waiting to be selected for you."}, true)
 		return _finish_recap(recap)
 	if _flag_bool(state, "final_choice_completed") and tracked_escort:
-		recap["promise"] = "The covenant and the existing homecoming stand. Kael has chosen to continue the relief work; Maren's cooperation is not an unrecorded promise of forgiveness."
+		recap["promise"] = "The covenant and the existing homecoming stand. Kael has chosen to continue the relief work; Nera's cooperation is not an unrecorded promise of forgiveness."
 	var quest_id: String = str(quests.get_tracked_quest()) if quests != null else ""
 	if quest_id == "" and quests != null:
 		for chapter in campaign.get("chapters", []):
@@ -224,7 +226,27 @@ static func _people_entries(campaign: Dictionary, quests, state) -> Array[Dictio
 	for resolved in _resolved_outcomes(campaign, state):
 		if not covered_flags.has(str(resolved.flag)):
 			entries.append({"id": "commitment:" + str(resolved.id), "title": "Recorded commitment — " + str(resolved.title), "body": str(resolved.body)})
-	return entries
+	# The same person can own several retained quest keys. Keep one portrait
+	# with earned chapter accounts, rather than presenting aliases as twins.
+	var merged: Array[Dictionary] = []
+	var people: Dictionary = {}
+	for entry: Dictionary in entries:
+		var identity_id := CastProfile.canonical_identity(str(entry.id).trim_prefix("person:")) if str(entry.id).begins_with("person:") else ""
+		if identity_id == "":
+			merged.append(entry)
+			continue
+		if people.has(identity_id):
+			people[identity_id].body += "\n\n" + str(entry.body)
+		else:
+			entry.id = "person:" + identity_id
+			entry.title = CastProfile.display_name(identity_id, str(entry.title))
+			people[identity_id] = entry
+			merged.append(entry)
+	for identity_id: String in CastProfile.design_cast().get("introductions", {}):
+		if not _flag_bool(state, "design_cast_introduction:" + identity_id) or people.has(identity_id):
+			continue
+		merged.append({"id":"person:" + identity_id, "title":CastProfile.display_name(identity_id), "body":str(CastProfile.design_cast().introductions[identity_id]), "identified":true})
+	return merged
 
 static func _resolved_outcomes(campaign: Dictionary, state) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
@@ -578,6 +600,12 @@ static func creature_entries(campaign: Dictionary, quests, state) -> Array[Dicti
 		if weakness in ["iron_trap", "ash_bomb"]:
 			suggested.append(weakness)
 		entries.append({"id":"creature:" + id, "title":str(definition.get("name", id)), "body":body, "links":links, "suggested_items":suggested, "resolved":resolved, "approach":str(note.get("approach", "")), "preferred_blade":blade, "zones":_preparation_data.get("encounter_zones", {}).get(id, [])})
+	if _ecology_data.is_empty():
+		_ecology_data = _catalog("res://data/design_pack_ecology.json")
+	for sighting: Dictionary in _ecology_data.get("sightings", []):
+		if not _has_evidence(state, "design_ecology:" + str(sighting.role)):
+			continue
+		entries.append({"id":"creature:" + str(sighting.role), "title":str(sighting.name), "body":str(sighting.observation) + "\n\n" + str(sighting.connection), "links":[], "suggested_items":[], "resolved":false, "approach":"Leave room to observe without disturbing it.", "preferred_blade":"", "zones":[str(sighting.zone)]})
 	return entries
 
 static func _consent_text(value: String) -> String:

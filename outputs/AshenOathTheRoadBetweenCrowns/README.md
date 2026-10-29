@@ -25,6 +25,8 @@ acceptance remain user-owned.
 - [Retained art direction and identities](docs/ART_BIBLE.md)
 - [Runtime ownership boundaries](scripts/README_BOUNDARIES.md)
 - [Packaging and Git-based publication](WEB_DEPLOY.md)
+- [Design Pack v1 cast production and user checklist](../../art_source/design_pack_v1/PRODUCTION.md)
+- [Consolidated cast and regional introductions](../../art_source/design_pack_v1/STORY_ADAPTATION.md)
 
 Obsolete root milestone Markdown and stale root process logs are removed during
 release housekeeping. Their committed versions remain available in Git history.

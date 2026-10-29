@@ -95,7 +95,7 @@ static func _has_face_tracks(library: AnimationLibrary) -> bool:
 
 static func is_shared_body(path: String) -> bool:
 	var normalized := path.replace("\\", "/").to_lower()
-	return (normalized.contains("assets_external/characters_universal/") or normalized.contains("assets_external/characters_ranger/")) and (normalized.ends_with(".gltf") or normalized.ends_with(".glb"))
+	return (normalized.contains("assets_external/characters_universal/") or normalized.contains("assets_external/characters_ranger/") or normalized.begins_with("res://assets_external/design_pack_v1/humans/")) and (normalized.ends_with(".gltf") or normalized.ends_with(".glb"))
 
 static func _retarget_library(library: AnimationLibrary, target_root: Node3D, target_skeleton: Skeleton3D) -> void:
 	if library == null or target_root == null or target_skeleton == null:

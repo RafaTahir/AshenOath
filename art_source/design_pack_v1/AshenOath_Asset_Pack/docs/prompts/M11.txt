@@ -1,0 +1,17 @@
+Use case: stylized-concept. Asset type: individual visual development and 3D modeling reference for the original grounded dark fantasy RPG ASHENOATH. Create one exceptionally polished high-resolution landscape 3:2 design sheet. Premium realistic game-character art, tangible physically believable materials, anatomically credible, detailed sculptural rendering with restrained painterly finish. This is an original design.
+
+Subject: Glassmoth. A nocturnal moth with a 2.1-metre wingspan, four overlapping translucent wings and a compact furred body. The wing membranes are smoky pearl with large clear windows framed by dark, sharply organized veins. Thick charcoal thoracic hair protects the wing roots; six small legs fold neatly beneath the body. Two asymmetrical comb-like antennae are broad enough to identify it at game distance. The abdomen is pale and softly segmented, with dusty ochre scales gathering near the tip. Its face remains an insect head with compound eyes and a curled feeding tube. There are no skull patterns, human eyes or neon bioluminescent symbols.
+
+Silhouette: Large nocturnal moth; four translucent veined wings, compact furred body and comb-like antennae.
+
+Materials/textures: translucent veined membrane; charcoal thoracic hair; powdery scales; smooth chitin. Color palette: smoky pearl; charcoal; pale ochre; warm grey.
+
+Scale reference in anatomy only, no rulers or extra figure: {"wingspan_m":2.1,"body_length_m":0.7,"height_basis":"proposed design target"}.
+
+Composition: one large complete front three-quarter body view on left occupying about 55%, a smaller complete rear three-quarter body view in middle-right, a detailed close-up of the same head upper-right and one small signature anatomy detail lower-right. Multiple views of ONE identical creature design. Keep all body extremities, tails and wings fully inside frame. Adjust spacing for long or winged anatomy. Camera level without extreme foreshortening, model-reference stance, neutral expression. Clear separation and no overlaps. Seamless warm stone-grey backdrop, no landscape, no dramatic fog, no scene props.
+
+Art direction: grounded dark-fantasy naturalism, credible body weight and joints, irregular lived-in surfaces, visible wool weave, worn leather, worked metals or organic skin as relevant. Neutral broad studio light with readable shadows; restrained earthy local colors, strong silhouette. A subtly premium museum-catalogue presentation.
+
+Text (verbatim): "M11 / GLASSMOTH". Small restrained top-left header only.
+
+Constraints: no copied franchise character, no cartoon, anime, toy or low-poly look; no neon bloom, no exaggerated superhero proportions, no extra limbs/fingers, no unnecessary ornamental spikes, no floating attachments or clothing intersecting faces. No decorative frame, no watermark. Only a restrained small top-left header using exact provided ID and NAME; no other text. This is premium production concept illustration, not a claim of an actual 3D model.

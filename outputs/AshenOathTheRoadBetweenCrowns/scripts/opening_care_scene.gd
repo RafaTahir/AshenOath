@@ -3,8 +3,8 @@ extends Node3D
 ## An optional human moment. StoryState owns progress; these objects only
 ## present it, including after a cached Greyfen tree is reactivated.
 const Interactable = preload("res://scripts/interactable.gd")
-# The retained traveler atlas is opening-pack owned. AssetSpawnHelper resolves
-# it after opening readiness; parsing this coordinator must not load the body.
+# Elna's one opening-owned body is borrowed from the regional cast registry.
+# Parsing this coordinator must not load or duplicate it.
 const LAYER := "OpeningCareScene"
 const TIMBER := Color(0.26, 0.18, 0.12)
 const CLOTH := Color(0.37, 0.31, 0.27)
@@ -23,6 +23,8 @@ var hand_bone := -1
 var hinted := false
 var injured_actor: Node3D
 var injured_driver: Node
+var care_bench: Node3D
+var patient_owned := false
 
 static func install(game, root: Node3D) -> void:
 	var scene: Node = root.get_node_or_null(LAYER)
@@ -68,7 +70,7 @@ func build() -> void:
 		box(tray_area, "ShelfLeg", Vector3(x, 0.33, 0), Vector3(0.065, 0.66, 0.065), TIMBER)
 	box(tray_area, "CleanLinen", Vector3(0, 0.711, 0), Vector3(0.58, 0.015, 0.30), LINEN)
 	delivered_cup = make_cup(tray_area, Vector3(-0.12, 0.72, 0))
-	# The screen and supported bench give the seated traveler a clear location.
+	# The screen and supported bench give Elna's care a clear location.
 	for x: float in [-0.60, 0.60]:
 		box(tray_area, "ScreenPost", Vector3(x, 0.91, -0.54), Vector3(0.055, 1.82, 0.055), TIMBER)
 	box(tray_area, "ScreenCrossbar", Vector3(0, 1.79, -0.54), Vector3(1.28, 0.055, 0.055), TIMBER)
@@ -82,20 +84,13 @@ func build() -> void:
 	screen_shape.shape = screen_box
 	screen_clearance.add_child(screen_shape)
 	tray_area.add_child(screen_clearance)
-	injured_actor = Node3D.new()
-	injured_actor.name = "injured_traveler"
-	injured_actor.position = tray_area.position + Vector3(0.84, 0, -0.88)
-	add_child(injured_actor)
-	box(injured_actor, "SupportedCareBench", Vector3(0, 0.44, 0.12), Vector3(0.78, 0.10, 0.46), TIMBER)
+	care_bench = Node3D.new()
+	care_bench.name = "CareBenchAnchor"
+	care_bench.position = tray_area.position + Vector3(0.84, 0, -0.88)
+	add_child(care_bench)
+	box(care_bench, "SupportedCareBench", Vector3(0, 0.44, 0.12), Vector3(0.78, 0.10, 0.46), TIMBER)
 	for x: float in [-0.27, 0.27]:
-		box(injured_actor, "CareBenchLeg", Vector3(x, 0.21, 0.12), Vector3(0.075, 0.42, 0.40), TIMBER)
-	var traveler: Node3D = host.asset_helper.spawn_visual_role("villager_human", "characters", "injured_traveler")
-	if traveler != null:
-		injured_actor.add_child(traveler)
-		preload("res://scripts/character_identity_profile.gd").apply(traveler, "villager_human", "injured_traveler")
-		host._configure_npc_animation(traveler, "injured_traveler")
-		injured_driver = traveler.find_child("CharacterAnimationDriver", true, false)
-		if injured_driver != null: injured_driver.set_life_activity("sit")
+		box(care_bench, "CareBenchLeg", Vector3(x, 0.21, 0.12), Vector3(0.075, 0.42, 0.40), TIMBER)
 	coat_area = point("opening_coat_shelter", "Fold Oren's coat out of the weather", Vector3(1.3, 0, 0.6))
 	box(coat_area, "CoatBench", Vector3(0, 0.54, 0), Vector3(1.26, 0.08, 0.55), TIMBER)
 	for x: float in [-0.49, 0.49]:
@@ -118,6 +113,7 @@ func build() -> void:
 
 func refresh() -> void:
 	var early: bool = not host.quests.is_completed("main_road_of_crows")
+	_sync_patient(early and not flag("opening_cup_delivered"))
 	var carrying: bool = flag("opening_cup_carried") and not flag("opening_cup_delivered")
 	set_available(cup_area, early and not carrying and not flag("opening_cup_delivered"))
 	set_available(tray_area, carrying)
@@ -130,6 +126,35 @@ func refresh() -> void:
 	coat.rotation.y = 0.0 if flag("opening_coat_sheltered") else -0.22
 	coat.scale = Vector3(0.72, 1.7, 0.65) if flag("opening_coat_sheltered") else Vector3.ONE
 	host.interaction_focus_dirty = true
+
+func _sync_patient(needed: bool) -> void:
+	if not needed:
+		_release_patient()
+		return
+	if patient_owned:
+		return
+	injured_actor = preload("res://scripts/story_cast_profile.gd").registered_actor(host.zone_root, "elna")
+	if not is_instance_valid(injured_actor) or not is_instance_valid(care_bench):
+		return
+	if str(injured_actor.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
+		return
+	injured_actor.global_transform = care_bench.global_transform
+	injured_actor.set_meta("locomotion_owner", "opening_care")
+	injured_actor.set_meta("story_actor_alias", "injured_traveler")
+	injured_driver = injured_actor.find_child("CharacterAnimationDriver", true, false)
+	patient_owned = true
+
+func _release_patient() -> void:
+	if not patient_owned:
+		return
+	patient_owned = false
+	if is_instance_valid(injured_actor):
+		# Keep the actual person at the bench; her routine walks home from here.
+		injured_actor.remove_meta("locomotion_owner")
+		injured_actor.remove_meta("story_actor_alias")
+	if is_instance_valid(injured_driver):
+		injured_driver.set_life_activity("")
+	injured_driver = null
 
 func activate(id: String) -> void:
 	match id:
@@ -172,7 +197,9 @@ func show_scene(id: String, actor: Node3D = null) -> void:
 	host.audio.set_dialogue_active(true)
 	host.audio.set_game_paused(true)
 	host.get_tree().paused = true
+	var introduction_key := preload("res://scripts/story_cast_profile.gd").introduce(host, "anwen", content)
 	host.hud.show_dialogue(host._prepare_dialogue_presence(content))
+	preload("res://scripts/story_cast_profile.gd").remember_introduction(host, introduction_key)
 
 func _process(_delta: float) -> void:
 	if host == null or host.current_zone_id != "greyfen" or host.player == null:
@@ -204,6 +231,7 @@ func _process(_delta: float) -> void:
 	carried_cup.global_transform = Transform3D(Basis(Vector3.UP, carrier.global_rotation.y), hand_position + Vector3(0, -0.025, 0))
 
 func _exit_tree() -> void:
+	_release_patient()
 	clear_carried_cup()
 
 func clear_carried_cup() -> void:

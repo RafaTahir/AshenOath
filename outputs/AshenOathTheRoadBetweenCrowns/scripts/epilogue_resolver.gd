@@ -1,4 +1,4 @@
-﻿extends RefCounted
+extends RefCounted
 
 static func resolve(ending: String, state) -> Array[String]:
 	var cards: Array[String] = [_covenant_card(ending), _greyfen_card(state), _anwen_card(state), _vargan_card(state)]
@@ -78,14 +78,14 @@ static func living_road_cards(state) -> Array[String]:
 		var completed_relief := {}
 		for event: Dictionary in state.relationship_events("maren"):
 			completed_relief[str(event.id)] = true
-		var escort := "Maren recognized Kael from the different escort he abandoned. Her survival does not revise his departure or make her a witness to Vargan's massacre."
+		var escort := "Nera recognized Kael from the different escort he abandoned. Her survival does not revise his departure or make her a witness to Vargan's massacre."
 		if completed_relief.has("lr.saga.side_escort_04"):
 			escort += " She led the relief travelers while he stayed through the crossing. Cooperation is recorded; forgiveness is not assumed."
 		var correction := _flag(state, "side_escort_05_outcome")
 		if correction != "" and completed_relief.has("lr.saga.side_escort_05"):
 			escort += " His own correction is " + ("public." if correction == "public" else "held in protected custody.")
 		if completed_relief.has("lr.saga.side_escort_06"):
-			escort += " The relief handover and existing homecoming are complete. Maren keeps her own next journey."
+			escort += " The relief handover and existing homecoming are complete. Nera keeps her own next journey."
 		cards.append("THE ROAD HE LEFT\n" + escort)
 	return cards
 

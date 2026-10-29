@@ -1,0 +1,15 @@
+Use case: stylized-concept. Asset type: individual visual development and 3D modeling reference for the original grounded dark fantasy RPG ASHENOATH. Create one exceptionally polished high-resolution landscape 3:2 design sheet. Premium realistic game-character art, tangible physically believable materials, anatomically credible, detailed sculptural rendering with restrained painterly finish. This is an original design.
+
+Subject: Gravebound Knight. A 1.88-metre undead sentinel enclosed in practical, corroded dark iron armor over funerary linen and exhausted mail. The helmet is a narrow enclosed sallet with an empty recessed visor, not a grinning skull. Clay and root grit pack the joints; missing armor plates reveal bound linen around an insubstantial body rather than exposed viscera. One square shoulder plate and a tall battered shield create an unmistakable vertical silhouette. Its long straight sword has a functional crossguard and a nicked edge. Broken oath cords are tied at the belt in short, weighted lengths. The feet are planted and weight-bearing, with no floating parts or arbitrary magical jewelry.
+
+Silhouette: Upright armored sentinel; closed shoulder line, vertical blade and heavy asymmetrical shield.
+
+Materials: pitted dark iron, worn mail, burial linen, clay, oath cord. Palette: blue-black iron, dirty linen, cold clay, old rust.
+
+Composition: one large complete front three-quarter body view on left occupying about 55%, a smaller complete rear three-quarter body view in middle-right, a detailed close-up of the same head upper-right and one small signature anatomy detail lower-right. Multiple views of ONE identical creature design. Keep all body extremities, tails and wings fully inside frame. Adjust spacing for long or winged anatomy. Camera level without extreme foreshortening, model-reference stance, neutral expression. Clear separation and no overlaps. Seamless warm stone-grey backdrop, no landscape, no dramatic fog, no scene props.
+
+Art direction: grounded dark-fantasy naturalism, credible body weight and joints, irregular lived-in surfaces, visible wool weave, worn leather, worked metals or organic skin as relevant. Neutral broad studio light with readable shadows; restrained earthy local colors, strong silhouette. A subtly premium museum-catalogue presentation.
+
+Constraints: no copied franchise character, no cartoon, anime, toy or low-poly look; no neon bloom, no exaggerated superhero proportions, no extra limbs/fingers, no unnecessary ornamental spikes, no floating attachments or clothing intersecting faces. No decorative frame, no watermark. Only a restrained small top-left header using exact provided ID and NAME; no other text. This is premium production concept illustration, not a claim of an actual 3D model.
+
+Exact header text: "M04 / GRAVEBOUND KNIGHT".

@@ -145,10 +145,10 @@ func honor_view(actor_id: String = "") -> Dictionary:
 			if not entry is Dictionary or not Honor.DEEDS.has(str(entry.get("id", ""))):
 				continue
 			var canonical: Dictionary = Honor.DEEDS[str(entry.id)]
-			if actor != "" and actor not in canonical.get("known", []):
+			if actor != "" and not Honor.includes_actor(canonical.get("known", []), actor):
 				continue
 			score += int(canonical.weight)
-			grievance = grievance or actor in canonical.get("grievance", [])
+			grievance = grievance or Honor.includes_actor(canonical.get("grievance", []), actor)
 			deeds.append({"id":str(entry.id), "text":str(canonical.text), "weight":int(canonical.weight), "sequence":int(entry.get("sequence", 0))})
 	deeds.sort_custom(func(a: Dictionary, b: Dictionary): return int(a.sequence) < int(b.sequence))
 	score = clampi(score, -100, 100)

@@ -4,6 +4,10 @@ const CastProfile = preload("res://scripts/story_cast_profile.gd")
 
 static func attach(owner: Node3D, role: String, seed: String = "") -> void:
 	var profile := CastProfile.get_profile(role, seed)
+	if bool(owner.get_meta("character_authored_silhouette", false)):
+		if not profile.is_empty():
+			owner.set_meta("story_cast_identity", str(profile.id))
+		return
 	if profile.is_empty() or owner.find_child("StoryKeepsake", true, false) != null:
 		return
 	var skeleton: Skeleton3D

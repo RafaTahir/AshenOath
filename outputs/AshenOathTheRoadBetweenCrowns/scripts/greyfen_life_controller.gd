@@ -139,16 +139,18 @@ func enroll_region() -> void:
 	if str(preload("res://scripts/saga_catalog.gd").person_location("saga_maren", host.quests).zone) == zone_id:
 		definitions["saga_maren"] = {"profile":"maren"}
 	for id: String in definitions:
+		var definition: Dictionary = definitions[id]
+		var node := CastProfile.registered_actor(host.zone_root, id)
+		if node == null:
+			node = host.zone_root.find_child(str(definition.get("actor", id)), true, false) as Node3D
+		if not is_instance_valid(node) or not node.visible:
+			continue
 		var existing: Dictionary = {}
 		for candidate: Dictionary in actors:
-			if str(candidate.id) == id:
+			if candidate.node == node:
 				existing = candidate
 				break
 		if bool(existing.get("regional", false)):
-			continue
-		var definition: Dictionary = definitions[id]
-		var node := host.zone_root.find_child(str(definition.get("actor", id)), true, false) as Node3D
-		if not is_instance_valid(node) or not node.visible:
 			continue
 		var owned := str(node.get_meta("locomotion_owner", ""))
 		if owned != "" and owned != "greyfen_life":
@@ -180,7 +182,8 @@ func enroll_region() -> void:
 				restoration["line"] = str(routine.line)
 		entry["consequence_line"] = str(routine.line)
 		entry["target"] = 0
-		entry["alias_anchor"] = host.zone_root.find_child(id, true, false) if definition.has("actor") else null
+		var alias := host.zone_root.find_child(id, true, false) as Node3D
+		entry["alias_anchor"] = alias if alias != node and definition.has("actor") else null
 		var ambient := node.find_child("NpcAmbient", true, false)
 		if ambient != null:
 			ambient.process_mode = Node.PROCESS_MODE_DISABLED
@@ -410,12 +413,14 @@ func finish_opening_scene(reason: String = "skipped") -> void:
 	if not get_tree().paused and not host._journey_load_pending() and not host.zone_transition_pending and not host.zone_load_request_pending and get_parent() == host.zone_root:
 		host.input_router.begin_context("gameplay")
 		host._show_current_objective_guidance(7.0)
-		host.hud.toast("Anwen needs the northern road investigated. Maren's relief work can wait until you choose to help.", 7.0)
+		host.hud.toast("Anwen needs the northern road investigated. Nera's relief work can wait until you choose to help.", 7.0)
 	host.story_save_pending = true
 	host.call_deferred("_persist_story_action")
 
 func _build_population(first := 0, count := -1) -> void:
-	var population := 4 if quality == "potato" else (10 if quality == "quality" else 4)
+	# The twelve-person cast owns village life. Old crowd slots now enroll a
+	# present person; they must never manufacture another copy of that body.
+	var population := 4
 	var definitions := [
 		{"id":"walker_well","path":[Vector3(-12,0,8),Vector3(-5,0,5),Vector3(-8,0,-1)],"speed":1.05},
 		{"id":"walker_board","path":[Vector3(-11,0,-4),Vector3(-4,0,7),Vector3(1,0,8)],"speed":0.92},
@@ -432,20 +437,19 @@ func _build_population(first := 0, count := -1) -> void:
 	for i in range(first, end):
 		var actor_started := Time.get_ticks_usec()
 		var definition: Dictionary = definitions[i]
-		if host.zone_root.find_child("Routine_%s" % definition.id, true, false) != null:
+		var actor := CastProfile.registered_actor(host.zone_root, str(definition.id))
+		if actor == null or actors.any(func(entry): return entry.node == actor):
 			continue
 		definition.path = host.river_safe_path(definition.path,0.9)
-		var actor := Node3D.new()
-		actor.name = "Routine_%s" % definition.id
-		actor.position = host.validate_walkable_position(definition.path[0])
-		host.zone_root.add_child(actor)
 		var spawn_started := Time.get_ticks_usec()
-		var driver = _make_skeletal_villager(actor, str(definition.id), i, float(definition.get("scale",1.0)))
+		var driver = actor.find_child("CharacterAnimationDriver", true, false)
 		if not is_instance_valid(driver) or not driver.is_valid():
-			actor.queue_free()
 			continue
 		var spawn_ms := float(Time.get_ticks_usec() - spawn_started) / 1000.0
-		var entry := _make_entry(definition.id, actor, definition.path, definition.speed, driver, false)
+		var ambient := actor.find_child("NpcAmbient", true, false)
+		if ambient != null:
+			ambient.process_mode = Node.PROCESS_MODE_DISABLED
+		var entry := _make_entry(str(actor.name), actor, definition.path, definition.speed, driver, true)
 		actors.append(entry)
 		_configure_agent(entry)
 		if OS.get_environment("ASHEN_PROFILE_GREYFEN_ACTORS") == "1":
@@ -462,11 +466,10 @@ func _enroll_named_npcs() -> void:
 		"rook":{"path":[Vector3(-7.8,0,8.5),Vector3(-6.2,0,6.8),Vector3(-3.8,0,8.6)],"speed":0.62}
 	}
 	for id in named:
-		if actors.any(func(entry): return str(entry.id) == str(id)):
+		var node = host.zone_root.find_child(id,true,false)
+		if node == null or actors.any(func(entry): return str(entry.id) == str(id) or entry.node == node):
 			continue
 		named[id].path = host.river_safe_path(named[id].path,0.9)
-		var node = host.zone_root.find_child(id,true,false)
-		if node == null: continue
 		var ambient = node.find_child("NpcAmbient",true,false)
 		if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
 		var entry := _make_entry(id, node, named[id].path, named[id].speed, node.find_child("CharacterAnimationDriver",true,false), true)
@@ -1370,12 +1373,14 @@ func _end_social_exchange() -> void:
 
 func _world_actor(id: String) -> Dictionary:
 	for entry: Dictionary in actors:
-		if str(entry.id) == id and is_instance_valid(entry.node):
+		if CastProfile.same_person(str(entry.id), id) and is_instance_valid(entry.node):
 			return entry
 	if id == "player": return {}
 	var names: Array = ["edric_campaign", "edric_castle"] if id == "edric" else [id]
 	for actor_name: String in names:
-		var node := host.zone_root.find_child(actor_name, true, false) as Node3D
+		var node := CastProfile.registered_actor(host.zone_root, actor_name)
+		if node == null:
+			node = host.zone_root.find_child(actor_name, true, false) as Node3D
 		if not is_instance_valid(node) or not node.is_visible_in_tree() or str(node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]: continue
 		var driver := node.find_child("CharacterAnimationDriver", true, false)
 		if driver == null: continue
@@ -1407,7 +1412,8 @@ func _try_world_scene() -> void:
 			var distance: float = entry.node.global_position.distance_to(player.global_position)
 			near = near or (distance < 5.5 and Presence.can_see(entry.node, player, 6.0))
 			if distance > 24.0: ready = false
-			selected.append(entry)
+			if not selected.any(func(item): return item.node == entry.node):
+				selected.append(entry)
 		if scene.has("near"):
 			var point: Array = scene.near
 			near = player.global_position.distance_to(Vector3(point[0],point[1],point[2])) < 4.0
@@ -1471,6 +1477,11 @@ func _tick_world_scene(delta: float) -> void:
 		for record: Dictionary in social_scene.actors:
 			var entry: Dictionary = record.entry
 			var raw: Array = scene.get("stage", {}).get(str(entry.id), [])
+			if raw.is_empty():
+				for staged_id: String in scene.get("stage", {}):
+					if CastProfile.same_person(staged_id, str(entry.id)):
+						raw = scene.stage[staged_id]
+						break
 			if raw.size() == 3:
 				arrived = _world_walk_to(entry, Vector3(raw[0],raw[1],raw[2]), minf(delta,0.05)) and arrived
 		if not arrived: return
@@ -1496,7 +1507,7 @@ func _tick_world_scene(delta: float) -> void:
 		var current: Array = social_scene.turns[int(social_scene.index)]
 		var speaker: Node3D = player
 		for record: Dictionary in social_scene.actors:
-			if str(record.entry.id) == str(current[0]): speaker = record.entry.node
+			if CastProfile.same_person(str(record.entry.id), str(current[0])): speaker = record.entry.node
 		for record: Dictionary in social_scene.actors:
 			var actor: Node3D = record.entry.node
 			var focus: Node3D = speaker if actor != speaker else player
@@ -1530,7 +1541,7 @@ func _tick_world_scene(delta: float) -> void:
 		var entry: Dictionary = record.entry
 		_set_motion(entry, 0.0)
 		_face(entry.node, player.global_position, delta)
-		var speaking := str(entry.id) == str(turn[0])
+		var speaking := CastProfile.same_person(str(entry.id), str(turn[0]))
 		if is_instance_valid(entry.driver):
 			entry.driver.set_life_activity(str(scene.get("action", "idle")))
 			var station: Dictionary = entry.profile.get("workstation", {})

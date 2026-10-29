@@ -76,6 +76,16 @@ static func _has_word(words: String, candidates: Array) -> bool:
 	return false
 
 const SPECS := {
+	"silt_maw": {"height":0.62, "collision_height":0.52, "collision_radius":0.42, "lod":24.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"millback": {"height":1.15, "collision_height":0.9, "collision_radius":0.65, "lod":26.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"glassmoth": {"height":0.9, "collision_height":0.5, "collision_radius":0.28, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0, "airborne":true},
+	"knell_leech": {"height":0.58, "collision_height":0.46, "collision_radius":0.30, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"hearthscale": {"height":0.80, "collision_height":0.60, "collision_radius":0.45, "lod":26.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"gallows_weaver": {"height":1.3, "collision_height":0.8, "collision_radius":0.58, "lod":28.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"reed_choir": {"height":0.70, "collision_height":0.5, "collision_radius":0.40, "lod":24.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"inkblind": {"height":0.5, "collision_height":0.4, "collision_radius":0.30, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"cairn_mother": {"height":1.5, "collision_height":1.2, "collision_radius":0.7, "lod":32.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	"shroud_swimmer": {"height":0.32, "collision_height":0.22, "collision_radius":0.55, "lod":28.0, "required_sockets":[], "visual_forward_degrees":180.0, "airborne":true},
 	"captain_senn": {"height":1.75, "collision_height":1.64, "collision_radius":0.31, "lod":32.0, "visual_forward_degrees":180.0},
 	"player_human": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
 	"player_kael": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
@@ -138,13 +148,35 @@ const SPECS := {
 	"ashwing_creature": {"height": 2.40, "lod": 24.0, "required_sockets": [], "visual_forward_degrees": 180.0, "airborne": true},
 }
 
+const CAST_DIMENSIONS := {
+	"kael":"player_human", "anwen":"sister_anwen_human", "rook":"rook_human",
+	"mira":"mira_human", "tor":"villager_worker_human", "elna":"villager_female_human",
+	"toma":"villager_human", "senn":"captain_senn", "edric":"castle_guard_human",
+	"vale":"villager_female_human", "merrow":"castle_guard_human",
+	"nessa":"villager_female_human", "nera":"villager_hooded_human"
+}
+static var _cast_dimensions: Dictionary = {}
+
+static func _dimension_key(role: String) -> String:
+	if _cast_dimensions.is_empty():
+		_cast_dimensions = CAST_DIMENSIONS.duplicate()
+		var roster: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_cast.json"))
+		if roster is Dictionary:
+			for alias: String in roster.get("legacy_cast", {}):
+				var person := str(roster.legacy_cast[alias])
+				if CAST_DIMENSIONS.has(person):
+					_cast_dimensions[alias] = CAST_DIMENSIONS[person]
+	var creature_aliases := {"white_hart":"white_hart_boss", "halvern":"halvern_boss", "returned_soldier":"gravebound_knight", "bracken":"hearthscale", "bracken_companion":"hearthscale"}
+	return str(_cast_dimensions.get(role, creature_aliases.get(role, role)))
+
 static func for_role(role_id: String, seed: String = "") -> Dictionary:
 	var key := role_id.strip_edges().to_lower()
+	var dimensions := _dimension_key(key)
 	var result: Dictionary = DEFAULT_SPEC.duplicate(true)
-	if SPECS.has(key):
-		result.merge(SPECS[key], true)
+	if SPECS.has(dimensions):
+		result.merge(SPECS[dimensions], true)
 	result["role"] = key
-	result["known"] = SPECS.has(key)
+	result["known"] = SPECS.has(dimensions)
 	result["silhouette"] = silhouette_for_role(key, seed)
 	result["posture"] = str(result.silhouette.posture)
 	return result

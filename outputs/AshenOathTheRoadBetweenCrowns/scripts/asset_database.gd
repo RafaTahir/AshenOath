@@ -108,7 +108,7 @@ func get_runtime_policy(role_name: String, category: String = "") -> Dictionary:
 			"fallback_mode": "diagnostic_only" if required else "none",
 			"reason": "Required visual role has no runtime acceptance record." if required else "",
 		}
-	var inclusion_authorized := _has_spectral_inclusion(acceptance)
+	var inclusion_authorized := _has_spectral_inclusion(acceptance) or _has_design_pack_inclusion(acceptance)
 	# Runtime inclusion and visual review are separate. The user explicitly
 	# requested these registered derivatives in the game before visual sign-off.
 	var approved := bool(acceptance.get("export_eligible", false)) and (bool(acceptance.get("approved", false)) or inclusion_authorized)
@@ -133,6 +133,13 @@ func _has_spectral_inclusion(acceptance: Dictionary) -> bool:
 		and bool(acceptance.get("inclusion_authorized", false)) \
 		and str(acceptance.get("authorization_kind", "")) == "user_requested_creation_and_in_game_application" \
 		and model.begins_with("res://assets_external/") and model.contains("/spectral/") and model.ends_with(".gltf")
+
+func _has_design_pack_inclusion(acceptance: Dictionary) -> bool:
+	var model := str(acceptance.get("model", ""))
+	return str(acceptance.get("source_pack", "")) == "AshenOath_32_Asset_Design_Pack_v1" \
+		and bool(acceptance.get("inclusion_authorized", false)) \
+		and str(acceptance.get("authorization_kind", "")) == "user_requested_blender_cast_replacement" \
+		and model.begins_with("res://assets_external/design_pack_v1/") and model.ends_with(".glb")
 
 func get_assets_by_category(category: String) -> Array:
 	var results = []

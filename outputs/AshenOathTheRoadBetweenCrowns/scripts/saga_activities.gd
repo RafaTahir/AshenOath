@@ -8,6 +8,7 @@ const Records = preload("res://scripts/campaign_record_presentation.gd")
 const Encounters = preload("res://scripts/saga_encounters.gd")
 const WorkPresentation = preload("res://scripts/saga_work_presentation.gd")
 const Presence = preload("res://scripts/character_presence.gd")
+const CastProfile = preload("res://scripts/story_cast_profile.gd")
 var host
 var zone := ""
 var points: Dictionary = {}
@@ -69,6 +70,13 @@ func refresh() -> void:
 				location = {"zone":zone, "site":str(points[id].get_meta("saga_site", person.site))}
 		if str(location.zone) == zone and (zone != "ruins" or _late_road_open()):
 			var area := _point(id, "Speak with " + str(person.name), str(location.site), "person")
+			var present := CastProfile.registered_actor(host.zone_root, id)
+			if present != null and present != area:
+				area.set_meta("saga_topic_only", true)
+				area.set_meta("saga_alias_present", true)
+				area.set_meta("saga_actor_instance", present.get_instance_id())
+				area.global_position = present.global_position
+				continue
 			if str(area.get_meta("saga_site", "")) != str(location.site) and not bool(_work.get("escort", false)):
 				if str(area.get_meta("locomotion_owner", "")) != "relief_escort":
 					area.position = _site_position(str(location.site), id)
@@ -80,6 +88,7 @@ func refresh() -> void:
 					worker.set_meta("story_actor_alias", "saga_dain")
 					area.set_meta("saga_alias_present", true)
 					area.set_meta("saga_actor_instance", worker.get_instance_id())
+					CastProfile.register_actor(host.zone_root, area, id)
 				else:
 					area.set_meta("saga_alias_present", false)
 					if area.get_node_or_null("WorkProp") == null:
@@ -111,10 +120,8 @@ func refresh() -> void:
 			var completed := _point(id + ":after", "Read " + str(quest.title) + " - " + _outcome_name(id), aftermath_site, "aftermath")
 			if completed != null:
 				_dress_aftermath(completed, id)
-				if id in ["saga_gre_q05", "saga_roa_q05"]:
-					for escort_step: Array in quest.steps:
-						if str(escort_step[3]) == "escort":
-							_restore_escort(id, escort_step, completed)
+				# Named travelers return to their ordinary work after an earned
+				# arrival. Do not recreate anonymous bodies on every regional visit.
 			continue
 		if not host.quests.is_active(id):
 			_point(id + ":offer", "Read request: " + str(quest.title), str(quest.site), "record")
@@ -185,7 +192,7 @@ func refresh() -> void:
 			if mode == "escort":
 				_restore_escort(id, step, area)
 				if id == "side_escort_04" and _flag(id + ":escort_started"):
-					area.prompt = "Resume the crossing with Maren"
+					area.prompt = "Resume the crossing with Nera"
 	for id: String in Catalog.SECRETS:
 		var secret: Array = Catalog.SECRETS[id]
 		if str(secret[0]) == zone and _secret_available(secret):
@@ -200,8 +207,9 @@ func refresh() -> void:
 	for point: Node3D in points.values():
 		var wanted := bool(point.get_meta("saga_wanted", false))
 		point.visible = wanted
-		point.set_interaction_enabled(wanted)
-		if not wanted:
+		var topic_only := bool(point.get_meta("saga_topic_only", false))
+		point.set_interaction_enabled(wanted and not topic_only)
+		if not wanted or topic_only:
 			host._remove_interaction_candidate(point)
 	_sync_carried_work()
 	var companion: Node = host.zone_root.get_node_or_null("Bracken")
@@ -308,13 +316,17 @@ func _site_position(site: String, id: String) -> Vector3:
 	return result
 
 func _add_person(area: Node3D, person: Dictionary, id: String) -> void:
-	var visual: Node3D = host.asset_helper.spawn_visual_role(str(person.role), "characters", id)
+	var visual: Node3D = host.asset_helper.spawn_visual_role(CastProfile.visual_role(id, str(person.role)), "characters", id)
 	if visual == null:
 		push_error("Required saga person unavailable: " + id)
 		return
 	visual.name = "Person"
 	area.add_child(visual)
-	host._configure_npc_animation(visual, id)
+	if not host._configure_npc_animation(visual, id):
+		visual.queue_free()
+		push_error("Required saga person has no compatible playback: " + id)
+		return
+	CastProfile.register_actor(host.zone_root, area, id)
 	area.set_meta("saga_person", id)
 	area.set_meta("protected_optional_speaker", true)
 	load("res://scripts/character_presentation.gd").apply_npc(visual, id, false)
@@ -323,6 +335,27 @@ func _add_person(area: Node3D, person: Dictionary, id: String) -> void:
 	ambient.name = "NpcAmbient"
 	ambient.setup(id, host.player, host)
 	area.add_child(ambient)
+
+func append_cast_topics(actor: Node3D, content: Dictionary, exclude_id: String = "") -> void:
+	var identity_id := CastProfile.canonical_identity(str(actor.get_meta("story_cast_identity", actor.name)))
+	if identity_id == "":
+		return
+	var actions: Array = content.get("actions", [])
+	for id: String in Catalog.PEOPLE:
+		if id == exclude_id or CastProfile.canonical_identity(id) != identity_id:
+			continue
+		var point: Node3D = points.get(id)
+		if not is_instance_valid(point) or not bool(point.get_meta("saga_wanted", false)):
+			continue
+		var title := "The work here"
+		for quest_id: String in Catalog.QUESTS:
+			var quest: Dictionary = Catalog.QUESTS[quest_id]
+			if str(quest.get("actor", "")) == id and _quest_zone(quest_id) == zone and _available(quest):
+				title = str(quest.title)
+				if not host.quests.is_completed(quest_id):
+					break
+		actions.append({"type":"saga_action", "operation":"person_topic", "label":"About " + title, "area":point.get_instance_id()})
+	content["actions"] = actions
 
 func _add_work_prop(area: Node3D, kind: String) -> void:
 	var visual: Node3D
@@ -402,7 +435,7 @@ func _method_step(id: String, original: Array) -> Array:
 	if id == "saga_gre_q01" and outcome == "coerced":
 		step[5] = "Nessa accepts the corrected measure, not the threat. The household repays under fear of its address being exposed; this was not voluntary help."
 	if id == "saga_dep_q01" and outcome == "falsified":
-		step[5] = "Dain: 'You have marked the current fee paid when we both know it was taken twice. That is your entry, not my agreement.' The old command evidence is untouched."
+		step[5] = "Tor: 'You have marked the current fee paid when we both know it was taken twice. That is your entry, not my agreement.' The old command evidence is untouched."
 		if str(step[0]) == "settle_account":
 			step[5] = "Kael chose to falsify this current dispatch. The next load still needs the physical tag and false copy; no old command evidence changes."
 		if str(step[0]) == "mark_next_load":
@@ -477,7 +510,7 @@ func activate(id: String) -> void:
 		host.hud.toast("Check the marked place on foot. Reading a marker does not count as walking the route.")
 		return
 	if mode == "homecoming" and not _flag("aftermath_walk_completed"):
-		host.hud.toast("Finish your existing return: speak with Anwen, do the bench work and reflect at the road. Maren will wait at arrivals.")
+		host.hud.toast("Finish your existing return: speak with Anwen, do the bench work and reflect at the road. Nera will wait at arrivals.")
 		return
 	if mode == "signal" and (id.ends_with(":far") or id.ends_with(":near")):
 		host.hud.toast("Check the far marker on foot, then return to the near post.")
@@ -558,7 +591,7 @@ func _maren_greeting() -> String:
 	if host.quests.is_completed("side_escort_06"):
 		var outcome := str(host.story_state.get_flag("side_escort_06_outcome", ""))
 		var parting := "The next route is mine to choose. Supper can just be supper." if outcome == "company" else "The next route is mine to choose. We can work together without sharing the rest."
-		return str(Catalog.aftermath("side_escort_06", outcome)) + "\n\nMaren: '" + parting + "'"
+		return str(Catalog.aftermath("side_escort_06", outcome)) + "\n\nNera: '" + parting + "'"
 	if host.quests.is_completed("side_escort_05"):
 		return "You corrected your own account. Mine says what I gave it, and no more. There is still a load to hand over after your business in the glade."
 	if host.quests.is_completed("side_escort_04"):
@@ -581,6 +614,8 @@ func _nearby_speaker(id: String) -> String:
 func _open(area: Node3D, title: String, text: String, actions: Array, speaker_id: String = "narrator", recall: String = "", pages: Array = []) -> void:
 	_cancel_work()
 	var content := {"name":title, "pages":[{"speaker":str(Catalog.PEOPLE.get(speaker_id, {}).get("name", title)), "speaker_id":speaker_id, "text":text, "performance":load("res://scripts/story_scene_direction.gd").for_regional(speaker_id)}], "actions":actions}
+	if Catalog.PEOPLE.has(speaker_id):
+		append_cast_topics(area, content, speaker_id)
 	if not pages.is_empty():
 		content["pages"] = pages
 		for page: Dictionary in pages:
@@ -600,14 +635,25 @@ func _open(area: Node3D, title: String, text: String, actions: Array, speaker_id
 		load("res://scripts/story_performance.gd").begin(speaker, host.player, content, host.story_state)
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
+	var introduction_key := CastProfile.introduce(host, speaker_id, content) if speaker_id != "narrator" else ""
 	host.hud.show_dialogue(host._prepare_dialogue_presence(content))
+	CastProfile.remember_introduction(host, introduction_key)
 
 func choose(action: Dictionary) -> void:
 	var area := instance_from_id(int(action.get("area", 0))) as Node3D
+	if is_instance_valid(area) and bool(area.get_meta("saga_topic_only", false)):
+		var actor := instance_from_id(int(area.get_meta("saga_actor_instance", 0))) as Node3D
+		if not is_instance_valid(actor) or not host.zone_root.is_ancestor_of(actor) or not actor.is_visible_in_tree():
+			host._resume_game()
+			return
+		area.global_position = actor.global_position
 	if not _within_reach(area):
 		host._resume_game()
 		return
 	var operation := str(action.get("operation", ""))
+	if operation == "person_topic" and Catalog.PEOPLE.has(str(area.interaction_id)):
+		_open_person(area, str(area.interaction_id))
+		return
 	if operation == "honor" and Catalog.PEOPLE.has(str(area.get("interaction_id"))):
 		var person_id := str(area.get("interaction_id"))
 		_open(area, str(Catalog.PEOPLE[person_id].name), str(host.story_state.honor_view(person_id).reaction), [], person_id)
@@ -902,8 +948,17 @@ func scent_candidates() -> Array[Node3D]:
 
 func _within_reach(area: Node3D) -> bool:
 	if not is_instance_valid(area) or not is_instance_valid(host.player) or not is_ancestor_of(area) \
-		or not area.is_visible_in_tree() or not area.is_interaction_enabled():
+		or not area.is_visible_in_tree():
 		return false
+	if not area.is_interaction_enabled():
+		if not bool(area.get_meta("saga_topic_only", false)) or not bool(area.get_meta("saga_wanted", false)):
+			return false
+		var actor := instance_from_id(int(area.get_meta("saga_actor_instance", 0))) as Node3D
+		if not is_instance_valid(actor) or not host.zone_root.is_ancestor_of(actor) or not actor.is_visible_in_tree():
+			return false
+		if not Presence.can_see(host.player, actor, 4.0):
+			return false
+		area.global_position = actor.global_position
 	# This starts the encounter; requiring its guards to be gone first retires
 	# the challenge itself. Ordinary regional work remains unavailable in combat.
 	var encounter_start := str(area.get("interaction_id")) == "saga_senn_challenge"
@@ -927,7 +982,9 @@ func _restore_escort(id: String, step: Array, area: Node3D) -> void:
 	if _escort != null:
 		return
 	if id == "side_escort_04":
-		_escort = points.get("saga_maren")
+		_escort = CastProfile.registered_actor(host.zone_root, "saga_maren")
+		if _escort == null:
+			_escort = points.get("saga_maren")
 		if not is_instance_valid(_escort):
 			return
 		_escort.set_meta("locomotion_owner", "relief_escort")
@@ -939,20 +996,10 @@ func _restore_escort(id: String, step: Array, area: Node3D) -> void:
 			var restored := Vector3(float(position[0]), float(position[1]), float(position[2]))
 			_escort.position = host.spatial_service.validate_position(restored, 0.65) if host.spatial_service != null else restored
 		for index in range(2):
-			var name := "ReliefTraveler" + str(index)
-			var body := _escort.get_node_or_null(name) as Node3D
+			var actor_id := "farmer_toma" if index == 0 else "widow_elna"
+			var body := _escort_person(actor_id, _escort.position + Vector3(0, 0, 0.85 + float(index) * 0.85))
 			if body == null:
-				body = host.asset_helper.spawn_visual_role("villager_human", "characters", "relief_traveler_" + str(index)) as Node3D
-				if body == null:
-					push_error("Required relief traveler unavailable: " + name)
-					continue
-				body.name = name
-				body.position = Vector3(0, 0, 0.85 + float(index) * 0.85)
-				_escort.add_child(body)
-				host._configure_npc_animation(body, "relief_traveler_" + str(index))
-			var placed := body.global_transform
-			body.set_as_top_level(true)
-			body.global_transform = placed
+				continue
 			var saved_travelers: Variant = host.story_state.get_flag(id + ":travelers", [])
 			if saved_travelers is Array and index < saved_travelers.size() and saved_travelers[index] is Array and saved_travelers[index].size() == 3:
 				var row: Array = saved_travelers[index]
@@ -960,7 +1007,7 @@ func _restore_escort(id: String, step: Array, area: Node3D) -> void:
 				if host.spatial_service != null:
 					body.position = host.zone_root.to_global(host.spatial_service.validate_position(host.zone_root.to_local(body.global_position), 0.5))
 			_relief_travelers.append(body)
-			var driver := body.get_node_or_null("CharacterAnimationDriver")
+			var driver := body.find_child("CharacterAnimationDriver", true, false)
 			if driver != null:
 				_escort_drivers.append(driver)
 		var saved_trail: Variant = host.story_state.get_flag(id + ":trail", [])
@@ -973,21 +1020,38 @@ func _restore_escort(id: String, step: Array, area: Node3D) -> void:
 				_escort_trail.append(_relief_travelers[index].global_position)
 			_escort_trail.append(_escort.global_position)
 		return
-	_escort = Node3D.new()
-	_escort.name = "SagaTravelers" if id == "saga_gre_q05" else "FirstRoadTraveler"
-	add_child(_escort)
+	_escort = _escort_person("farmer_toma", area.position + Vector3(0.5, 0, 0))
+	if _escort == null:
+		return
 	var saved: Variant = host.story_state.get_flag(id + ":escort_position", null)
-	_escort.position = Vector3(float(saved[0]), float(saved[1]), float(saved[2])) if saved is Array and saved.size() == 3 else area.position + Vector3(0.5,0,0)
-	var count := 2 if id == "saga_gre_q05" else 1
-	for index in range(count):
-		var body := host.asset_helper.spawn_visual_role("villager_human" if index == 0 else "villager_female_human", "characters", id + "_traveler_" + str(index)) as Node3D
-		if body != null:
-			body.position.x = float(index) * 0.65
-			_escort.add_child(body)
-			host._configure_npc_animation(body, id + "_traveler_" + str(index))
-			var driver := body.get_node_or_null("CharacterAnimationDriver")
-			if driver != null:
-				_escort_drivers.append(driver)
+	if saved is Array and saved.size() == 3:
+		_escort.position = host.spatial_service.validate_position(Vector3(float(saved[0]), float(saved[1]), float(saved[2])), 0.65)
+	var leader := _escort.find_child("CharacterAnimationDriver", true, false)
+	if leader != null: _escort_drivers.append(leader)
+	if id == "saga_gre_q05":
+		var follower := _escort_person("rook", _escort.position + Vector3(0.6, 0, 0.9))
+		if follower != null:
+			_relief_travelers.append(follower)
+			var driver := follower.find_child("CharacterAnimationDriver", true, false)
+			if driver != null: _escort_drivers.append(driver)
+	for index in range(_relief_travelers.size() - 1, -1, -1):
+		_escort_trail.append(_relief_travelers[index].global_position)
+	_escort_trail.append(_escort.global_position)
+
+func _escort_person(actor_id: String, position: Vector3) -> Node3D:
+	var actor := CastProfile.registered_actor(host.zone_root, actor_id)
+	if actor == null:
+		actor = host._make_named_interactable(actor_id, "dialogue", "Speak with " + CastProfile.display_name(actor_id), position, Color.WHITE)
+	if actor != null:
+		actor.set_meta("locomotion_owner", "relief_escort")
+	return actor
+
+func _release_escort_ownership() -> void:
+	var members: Array[Node3D] = _relief_travelers.duplicate()
+	if is_instance_valid(_escort): members.append(_escort)
+	for member: Node3D in members:
+		if is_instance_valid(member) and str(member.get_meta("locomotion_owner", "")) == "relief_escort":
+			member.remove_meta("locomotion_owner")
 
 func _start_escort(id: String, step: Array, area: Node3D) -> void:
 	_restore_escort(id, step, area)
@@ -1119,6 +1183,7 @@ func _tick_escort(delta: float) -> void:
 		for driver: Node in _escort_drivers:
 			if is_instance_valid(driver):
 				driver.set_locomotion_motion(Vector3.ZERO, true)
+		_release_escort_ownership()
 		return
 	var target := _escort_path[_escort_index]
 	var offset := target - _escort.position
@@ -1137,7 +1202,7 @@ func _tick_escort(delta: float) -> void:
 		if (rear and heading > -0.65) or (not rear and heading < 0.65):
 			for driver: Node in _escort_drivers:
 				if is_instance_valid(driver): driver.set_locomotion_motion(Vector3.ZERO, true)
-			var hint := "Take your place behind the last traveler." if rear else "Check the approach ahead of Maren."
+			var hint := "Take your place behind the last traveler." if rear else "Check the approach ahead of Nera."
 			if _escort_hint != hint:
 				_escort_hint = hint
 				host.hud.toast(hint)
@@ -1148,7 +1213,7 @@ func _tick_escort(delta: float) -> void:
 		return
 	_escort.position = destination
 	_escort.rotation.y = atan2(-offset.x, -offset.z)
-	if str(_work.id) == "side_escort_04":
+	if not _relief_travelers.is_empty():
 		_follow_relief_trail()
 	for driver: Node in _escort_drivers:
 		if is_instance_valid(driver):
@@ -1180,12 +1245,13 @@ func _follow_relief_trail() -> void:
 			traveler.global_rotation.y = atan2(-motion.x, -motion.z)
 		traveler.global_position = target
 		stored.append([target.x, target.y, target.z])
-	host.story_state.flags["side_escort_04:travelers"] = stored
+	var quest_id := str(_work.get("id", "side_escort_04"))
+	host.story_state.flags[quest_id + ":travelers"] = stored
 	if trail_changed:
 		var trail: Array = []
 		for point: Vector3 in _escort_trail:
 			trail.append([point.x, point.y, point.z])
-		host.story_state.flags["side_escort_04:trail"] = trail
+		host.story_state.flags[quest_id + ":trail"] = trail
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_VISIBILITY_CHANGED and not is_visible_in_tree():
@@ -1196,5 +1262,6 @@ func _notification(what: int) -> void:
 
 func _exit_tree() -> void:
 	_cancel_work()
+	_release_escort_ownership()
 	if is_instance_valid(_carried):
 		_carried.queue_free()

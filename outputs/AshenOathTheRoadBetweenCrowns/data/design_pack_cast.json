@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+  "save_policy": "Legacy actor and objective keys remain earned. Canonical identities own presentation, not new rewards or invented knowledge.",
+  "cast": {
+    "kael": {"design":"P01", "name":"Kael", "role":"player_human"},
+    "anwen": {"design":"C01", "name":"Anwen", "role":"sister_anwen_human"},
+    "rook": {"design":"C02", "name":"Rook", "role":"rook_human"},
+    "mira": {"design":"C03", "name":"Mira", "role":"mira_human"},
+    "tor": {"design":"C04", "name":"Tor", "role":"blacksmith_tor"},
+    "elna": {"design":"C05", "name":"Elna", "role":"widow_elna"},
+    "toma": {"design":"C06", "name":"Toma", "role":"farmer_toma"},
+    "senn": {"design":"C07", "name":"Senn", "role":"captain_senn"},
+    "edric": {"design":"C08", "name":"Edric", "role":"lord_edric"},
+    "vale": {"design":"C09", "name":"Vale", "role":"vargan_record_keeper"},
+    "merrow": {"design":"C10", "name":"Merrow", "role":"vargan_steward"},
+    "nessa": {"design":"C11", "name":"Nessa", "role":"saga_nessa"},
+    "nera": {"design":"C12", "name":"Nera", "role":"saga_nera"}
+  },
+  "legacy_cast": {
+    "player":"kael", "player_kael":"kael", "player_human":"kael",
+    "sister_anwen":"anwen", "sister_anwen_human":"anwen", "shrine_pilgrim":"anwen",
+    "rook_human":"rook", "rook_smuggler":"rook", "walker_board":"rook",
+    "mira_human":"mira", "mira_herbalist":"mira",
+    "blacksmith_tor":"tor", "forge_helper":"tor", "jory":"tor", "saga_jory":"tor", "dain":"tor", "saga_dain":"tor", "mill_worker":"tor", "oris":"tor", "saga_oris":"tor",
+    "widow_elna":"elna", "walker_well":"elna", "ressa":"elna", "saga_ressa":"elna",
+    "farmer_toma":"toma", "iven":"toma", "saga_iven":"toma", "odran":"toma", "saga_odran":"toma",
+    "captain_senn":"senn", "road_ranger_human":"senn",
+    "lord_edric":"edric", "edric_vargan":"edric",
+    "vargan_record_keeper":"vale", "record_keeper_vale":"vale", "lysa":"vale", "saga_lysa":"vale",
+    "vargan_steward":"merrow", "steward_merrow":"merrow", "vargan_gate_guard":"merrow",
+    "vargan_patrol":"rook", "injured_traveler":"elna", "edric_castle":"edric", "edric_campaign":"edric",
+    "saga_nessa":"nessa", "vargan_servant":"nessa", "mill_second_worker":"nessa",
+    "saga_nera":"nera", "maren":"nera", "saga_maren":"nera",
+    "tavin":"rook", "saga_tavin":"rook",
+    "edda":"mira", "saga_edda":"mira", "maelin":"mira", "saga_maelin":"mira",
+    "witness_-7":"mira", "witness_-3":"rook", "witness_3":"anwen"
+  },
+  "introductions": {
+    "anwen":"Anwen notices the person waiting before she notices the weapon. The bell at her belt is worn smooth where a thumb has worried it. She offers care readily; promises made on another person's behalf are a different matter.",
+    "rook":"Rook closes his satchel before beginning a joke. Maps, household debts and the little games that make a journey bearable all pass through his hands. He will share a road more easily than the names of the people who use it.",
+    "mira":"Mira pauses long enough to separate a damaged leaf from the good ones. Her work crosses gardens, working woodland and the water that feeds them. She can disagree with a neighbor without deciding the neighbor is her enemy.",
+    "tor":"Tor looks first at the broken part. His apron carries the wear of forge work, bell repair and the tools he takes farther down the road. He distrusts repairs that look finished before they can carry their weight.",
+    "elna":"Elna makes room beside her, but does not offer every name she knows. Remembering the dead and making a usable home are both work. Neither gives a visitor permission to make her private life public.",
+    "toma":"Toma has the hands of someone who measures weather against a household's next meal. His fields depend on the forest paths and water beyond Greyfen. Gratitude has led him to protect things he does not entirely understand.",
+    "senn":"Senn studies the approach before he studies Kael. His coat and equipment are kept in order even where the road is not. He has made protection into a command, and will have to answer for what that command has cost.",
+    "edric":"Edric receives people with the assurance of a man whose stores still contain grain. His authority does useful things; that is why its conditions are difficult to refuse. Kael must examine both the protection and the price.",
+    "vale":"Vale keeps a finger beside the line under discussion. A copy, a witness and an inference are three different things to her. She preserves the people behind the records without pretending to know what they never told her.",
+    "merrow":"Merrow knows which door opens, which complaint waits, and who will carry the answer upstairs. His office stands between need and authority. The choice of what he records is never merely clerical.",
+    "nessa":"Nessa counts portions before counting payment. Bread connects the village kitchen to the mill workers and Castle servants who need it. She is generous with food, less generous with excuses for a missing delivery.",
+    "nera":"Nera checks a fastening before turning to Kael. She organizes relief journeys and keeps crossings useful for the people who must actually cross them. The road he once left is part of her history; it is not the whole of her life."
+  },
+  "chapter_responsibilities": {
+    "greyfen": {"anwen":"care and missing travelers", "tor":"forge and warning mechanism", "nessa":"bread and household supplies", "rook":"trade, leisure and disputed routes", "mira":"remedies and preparation", "elna":"private names and rebuilding", "toma":"fields and working trails", "nera":"relief arrival and the escort Kael abandoned"},
+    "wychwood": {"toma":"working grove, snares and safe trails", "mira":"woodland custom and water stewardship", "nera":"the former escort route, without invented knowledge"},
+    "deep_wood": {"tor":"mill repairs and rescue coordination", "elna":"cultivation and practical rebuilding", "nessa":"workers' supplies", "nera":"relief freight recovery"},
+    "long_road": {"nera":"crossing safety and relief leadership", "rook":"borrowed identity and witnessed supply practices", "senn":"control, responsibility and the existing fate decision"},
+    "vargan": {"edric":"material authority and its coercion", "merrow":"intake, complaints and conditional passage", "vale":"source comparison and bounded historical testimony", "toma":"garden work and a petition against coerced service", "nera":"her voluntary account and Kael's correction"},
+    "hartlands": {"mira":"seeds and habitat", "tor":"memorial craft without promises on others' behalf", "elna":"names offered or kept private", "nera":"relief handover and her freely chosen next journey"}
+  }
+}

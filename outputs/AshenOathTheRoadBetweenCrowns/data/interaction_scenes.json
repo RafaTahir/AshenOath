@@ -205,14 +205,14 @@
   },
   "opening_care_invitation": {
     "name": "Anwen",
-    "greeting": "A moment, hunter. The man behind that screen cannot reach his water.",
+    "greeting": "A moment, hunter. Elna has hurt her ankle. She cannot reach the water behind that screen.",
     "lines": [
-      "Anwen: The cup is on the step. Leave it on the linen by his hand, if you would.",
+      "Anwen: The cup is on the step. Leave it on the linen by her hand, if you would.",
       "Anwen: And that little coat on the bench belongs under the shelf. Oren will complain if I let the rain into his pockets."
     ],
     "variants": [
-      {"priority": 20, "conditions": {"opening_cup_delivered": true}, "greeting": "Thank you for the water. He has stopped trying to stand.", "lines": ["Anwen: Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot."]},
-      {"priority": 10, "conditions": {"opening_coat_sheltered": true}, "greeting": "You found a dry place for his coat. Thank you.", "lines": ["Anwen: The man behind the screen needs the cup on the step. Leave it on the linen by his hand, if you would."]}
+      {"priority": 20, "conditions": {"opening_cup_delivered": true}, "greeting": "Thank you for the water. Elna has agreed to rest a little longer.", "lines": ["Anwen: Would you move that little coat under the shelf? Oren left it here this morning. He said he would be too hot."]},
+      {"priority": 10, "conditions": {"opening_coat_sheltered": true}, "greeting": "You found a dry place for his coat. Thank you.", "lines": ["Anwen: Elna needs the cup on the step. Leave it on the linen by her hand, if you would."]}
     ],
     "actions": [
       {"type": "opening_care_account", "label": "Tell me about the missing travelers."},
@@ -221,10 +221,10 @@
   },
   "opening_care_water": {
     "name": "Anwen",
-    "greeting": "There. Close enough that he need not ask again.",
+    "greeting": "There. Close enough that she need not ask again.",
     "lines": [
       {"speaker": "Narrator", "speaker_id": "narrator", "text": "A hand comes beneath the screen. It steadies the cup against the wood before lifting it."},
-      "Kael: Was he with the missing cart?",
+      "Kael: Was Elna with the missing cart?",
       "Anwen: No. A fall on the south road. Not every hurt here is a sign, Kael. Some people only need water.",
       {"speaker": "Narrator", "speaker_id": "narrator", "text": "The cup comes back to the linen. For a moment, the breathing behind the screen is easier."}
     ],

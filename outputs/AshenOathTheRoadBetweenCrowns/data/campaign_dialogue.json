@@ -68,9 +68,11 @@
   },
   "captain_senn": {
     "name": "Captain Senn",
-    "greeting": "Put the sword down far enough that my men can see what surrender looks like.",
+    "greeting": "Keep the blade lowered. Those armored remnants still answer the road command. I stationed them here; I answer for that.",
     "lines": [
       "Senn: I was on that road. The first winter I wore a captain's coat, I could still smell the man who wore it before me.",
+      "Kael: You put the bound dead back on watch.",
+      "Senn: The living left. I called this keeping the crossing safe. An old command is easy to use when you refuse to ask what keeps obeying it.",
       "Senn: Halvern refused to close the retreat. They hanged him. I closed it after him.",
       "Kael: Now you take grain from travelers and call it repayment.",
       "Senn: I told the men those houses owed us. Then a boy came through carrying flour for his mother. I took that too.",
@@ -987,11 +989,11 @@
     "variants": []
   },
   "vargan_gate_guard": {
-    "name": "Vargan Gate Guard",
+    "name": "Merrow - gate intake",
     "greeting": "Keep the lane clear. That cart is carrying grain, not reinforcements.",
     "lines": [
       "Kael: I carry an account from Greyfen's road.",
-      "Guard: The steward wants every token brought inside. People argue less over a missing thing when no one can show it.",
+      "Merrow: Every token is to be brought inside. Those are my instructions, and I put my name to receiving them.",
       "Kael: Then you had better let me show it."
     ],
     "variants": [
@@ -1000,9 +1002,9 @@
         "conditions": {
           "castle_guard_suspicious": true
         },
-        "greeting": "The steward says a seal was broken. I can see why he is frightened.",
+        "greeting": "A seal was broken. I have entered it in the intake record, not closed the road over it.",
         "lines": [
-          "Guard: You may still leave by the gate. The road must carry people as well as orders."
+          "Merrow: You may still leave by the gate. The road must carry people as well as orders."
         ]
       }
     ],
@@ -1016,8 +1018,8 @@
           "castle_access_granted": true,
           "blood_under_stone_started": true
         },
-        "result": "The guard steps aside without lowering his hand from the sword.",
-        "preview": "The guard steps aside without lowering his hand from the sword.",
+        "result": "Merrow enters the testimony in the intake book and grants an audience.",
+        "preview": "Merrow enters the testimony in the intake book and grants an audience.",
         "cost": "This records an explicit promise or practical action. A record cannot supply someone else's consent."
       }
     ],
@@ -1038,7 +1040,7 @@
     "content_version": 2
   },
   "vargan_servant": {
-    "name": "Tired Castle Servant",
+    "name": "Nessa - the Castle kitchen",
     "greeting": "I set an extra place when the grain drivers are late. It does not get them here, but it keeps someone expecting them.",
     "lines": [
       "The archive lamps answer names cut from the old books. Start with the marks along the shelf. Not every answer has a voice."
@@ -1049,11 +1051,11 @@
     "variants": []
   },
   "vargan_patrol": {
-    "name": "Vargan Patrol Guard",
-    "greeting": "We were sent for the painted tokens after the creatures gathered. Two men did not come back.",
+    "name": "Rook - the patrol account",
+    "greeting": "I brought kitchen freight through here. A patrol left with empty sacks and came back two short. I saw the return, not what happened on their road.",
     "lines": [
-      "Kael: Did your orders include scratching out their names?",
-      "Guard: Contain the breach. Bring back every object. The paper did not say what to do when a child's name made the wire shake."
+      "Kael: What were they sent to collect?",
+      "Rook: Painted tokens, according to the intake notice. Vale can show you the order. I won't fill its gaps with something I didn't see."
     ],
     "actions": [],
     "voice": [],

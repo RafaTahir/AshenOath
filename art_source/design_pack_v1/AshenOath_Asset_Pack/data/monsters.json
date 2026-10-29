@@ -1,0 +1,1084 @@
+{
+  "schema_version": "1.0",
+  "pack": "AshenOath - Creature Design Pack",
+  "source_repository": "RafaTahir/AshenOath",
+  "source_ref": "codex/masterpiece-rebuild",
+  "source_commit_observed": "08e5ef4b21dd75c1c90708c307de51f9a3812da0",
+  "status": "Original visual designs and encounter proposals; not implemented or player-approved 3D assets.",
+  "proposal_scope": "The ten additional species expand optional local problems, ecology and corroborating evidence. They do not add mandatory ending unlock keys, replace existing main-path records, or change the four reachable endings. Their named regional placements and quest hooks are proposals, not assertions that those encounters already exist.",
+  "canon_policy": "Names, runtime identifiers, role, height and explicit existing memory rules are grounded in the retrieved repository. New visual designs and every new species are proposals. The White Hart remains the sole complete supernatural witness. Other creatures carry partial impressions or physical evidence, never omniscient testimony. Existing encounters marked peaceful_resolution=false are not silently given a peaceful ending.",
+  "source_files": [
+    "outputs/AshenOathTheRoadBetweenCrowns/data/enemies.json",
+    "outputs/AshenOathTheRoadBetweenCrowns/data/bosses.json",
+    "outputs/AshenOathTheRoadBetweenCrowns/monster_family_manifest.json"
+  ],
+  "monsters": [
+    {
+      "id": "M01",
+      "name": "Ghoulkin",
+      "runtime_id": "ghoulkin",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Low, wiry humanoid scavenger; long arms, compact ribs, oversized jaw and powerful haunches.",
+      "visual_description": "A wiry, long-armed humanoid scavenger, 1.63 metres upright but habitually crouched. Its oversized jaw grows naturally from a low wedge-shaped skull. The face is stretched living tissue rather than an exposed skull: small milk-grey eyes, broad flattened nose, split calloused lips. Thin charcoal hair grows unevenly along the spine and forearms. Peat-grey skin has bruised umber joints, dried mud in the folds and a subtle cold sheen. Powerful hands have four blunt digging fingers and a thumb; the feet remain plantigrade. A compact rib cage and strong haunches support its forward posture. No clothes, weapons, horns, viscera or ornamental spikes.",
+      "materials": [
+        "peat-stained skin",
+        "sparse coarse hair",
+        "blunt dirty keratin nails",
+        "cold wet mud"
+      ],
+      "palette": [
+        "peat grey",
+        "bruised umber",
+        "charcoal",
+        "milk grey"
+      ],
+      "scale": {
+        "height_m": 1.63,
+        "height_basis": "canonical runtime height",
+        "posture": "lower habitual crouch"
+      },
+      "region": [
+        "Greyfen cemetery",
+        "Wychwood road margins"
+      ],
+      "ecology": "Canonical memory-driven scavenger assembled from animal and human vessels. Its borrowed body follows erased names and abandons food for a name-bearing token; it is not an intact resurrected victim.",
+      "encounter_role": "Opening skirmisher that teaches short attack commitments and separation of a small pack.",
+      "telegraph": "The shoulder dips and the jaw opens before a short forward rake; a token attracts a clearly visible head turn before redirection.",
+      "counter": "Use the normal sword after the committed rake, avoid chasing the retreat, and control space between pack members. Preserve the existing normal-sword weakness.",
+      "nonviolent_resolution": "A proposed optional diversion with an already-understood token can avoid an incidental pack. Do not bypass mandatory existing combat objectives or consume unique evidence.",
+      "essential_world_function": "Connects the first disturbed graves to missing names through recoverable scraps and track direction. The player learns that evidence has physical effects in the world.",
+      "story_connection": "Partial denied memory is manifested in scavenging behavior. Any recovered token is physical evidence to bring to an existing investigator, not a complete account spoken by the creature.",
+      "rig_family": "BIPED_GHOUL; retain the existing humanoid contact contract where possible",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "crouch_scavenge",
+        "token_notice",
+        "rake_windup",
+        "rake_recover",
+        "pack_retreat"
+      ],
+      "accessibility": "Pair the shoulder dip with a coarse inhale and readable ground-distance cue; token attraction must be visible without relying on color.",
+      "model_notes": "Readable fingers and integrated jaw are critical. No disconnected face attachment. Treat visible humanity as fragmentary anatomy, not a named missing person's identity."
+    },
+    {
+      "id": "M02",
+      "name": "Wychwood Stalker",
+      "runtime_id": "wychwood_stalker",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Narrow predatory biped with long forearms, folded shoulders and an almost blade-thin profile.",
+      "visual_description": "A forest predator built around a low, folded bipedal frame, 1.60 metres at its alert height. The long forearms hang almost to the ground while narrow haunches fold beneath a deep but thin chest. Its head is a small forward wedge with dark recessed eyes, a blunt muzzle and short interlocking teeth. Moss-black coarse hair lies in directional bands across slate-green leathery skin, breaking up the body without turning it into foliage. Three long load-bearing fingers and a smaller opposing digit end in climbing claws. The shoulders rise into muscular ridges rather than horns. Healed trap scars cross one shin; no wings, antlers or costume pieces.",
+      "materials": [
+        "slate-green hide",
+        "coarse moss-black hair",
+        "worn climbing claws",
+        "healed scar tissue"
+      ],
+      "palette": [
+        "slate green",
+        "moss black",
+        "cold brown",
+        "dull ivory"
+      ],
+      "scale": {
+        "height_m": 1.6,
+        "height_basis": "canonical runtime height"
+      },
+      "region": [
+        "Wychwood",
+        "evidence trail beyond the road attack"
+      ],
+      "ecology": "Canonical flanker drawn to the hands that moved evidence after the road attack. It remembers trap placement and circles behind a witness.",
+      "encounter_role": "A pursuit predator that makes looking behind, trap placement and safe handling of evidence meaningful.",
+      "telegraph": "It stops circling, lowers its leading hand and fixes both shoulders toward the target before a lateral lunge.",
+      "counter": "Use iron traps in a new position after its first avoidance response; rotate to keep the creature in view and punish a failed committed lunge.",
+      "nonviolent_resolution": "Proposed incidental encounters may be evaded along open sightlines; do not add a quest-solving negotiation or give it reliable testimony.",
+      "essential_world_function": "Its route and fixation on disturbed objects help the player reconstruct where evidence was moved, rather than simply adding another forest fight.",
+      "story_connection": "Behavior corroborates physical disturbance at the road attack. It cannot identify a culprit through dialogue or reveal the complete buried history.",
+      "rig_family": "BIPED_STALKER; long-armed biped with specialized crouch and shoulder poses",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "circle_left",
+        "circle_right",
+        "rear_lunge",
+        "trap_inspect",
+        "trap_avoid",
+        "evidence_scent"
+      ],
+      "accessibility": "A sharp claw scrape and shoulder alignment mark the lunge; do not use invisible teleportation or an audio-only rear attack.",
+      "model_notes": "The silhouette must stay narrow at game distance. New proportions need a retargeting review against the retained rig rather than a promised drop-in replacement."
+    },
+    {
+      "id": "M03",
+      "name": "Bog Wretch",
+      "runtime_id": "bog_wretch",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Squat, wide-bellied marsh biped with a collapsed neck, dragging arms and a single protected chest core.",
+      "visual_description": "A 1.72-metre marsh revenant with an unusually broad pelvis, heavy lowered belly and long soft arms that brace its weight in the mud. Its face is small and recessed beneath a thick folded brow; the mouth is a horizontal slit with worn dark teeth. Waterlogged olive hide gathers into leathery breathing folds along the flanks. Thin root fibres bind the upper torso around a dim, solid amber core, visible only through a natural gap in the protective folds. Long webbed fingers contrast with broad short toes. Reed fragments adhere to the wet back but do not grow into decorative antlers. The creature feels heavy, frightened and physically damp.",
+      "materials": [
+        "waterlogged olive hide",
+        "peat-stained fibres",
+        "wet reed fragments",
+        "opaque amber core"
+      ],
+      "palette": [
+        "marsh olive",
+        "deep peat",
+        "mud grey",
+        "restrained amber"
+      ],
+      "scale": {
+        "height_m": 1.72,
+        "height_basis": "canonical runtime height"
+      },
+      "region": [
+        "Wychwood northern clearing",
+        "memory-rich watercourse roots"
+      ],
+      "ecology": "Canonical spirit that hides beside memory-rich roots and protects the last frightened impression absorbed by the marsh.",
+      "encounter_role": "Early boss whose protected core teaches exposure and a clear punish window.",
+      "telegraph": "The back contracts, both hands drag furrows toward the player and the torso visibly compresses before bog_reach.",
+      "counter": "Preserve the ash-bomb weakness: ash exposes its core and causes a retreat. Attack during the exposed interval, then reset outside the reach.",
+      "nonviolent_resolution": "None in the current canonical encounter; peaceful_resolution is false. Fearful presentation adds context without inventing a peaceful quest bypass.",
+      "essential_world_function": "The memory core is a required material link between the first investigation and the marsh's buried history.",
+      "story_connection": "Only a frightened memory fragment is available. Existing Hidden Memory, Exposed Root and Last Refuge phase semantics remain intact.",
+      "rig_family": "BIPED_BOG; broad body with belly and root attachments",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "bog_reach",
+        "root_hide",
+        "ash_recoil",
+        "core_exposed",
+        "last_refuge"
+      ],
+      "accessibility": "The exposed core changes silhouette and posture as well as brightness; avoid a color-only vulnerability signal.",
+      "model_notes": "Keep the core below the throat so it cannot read as an accidental object across the face. Root fibres must deform with the torso."
+    },
+    {
+      "id": "M04",
+      "name": "Gravebound Knight",
+      "runtime_id": "gravebound_knight",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Upright armored sentinel; closed shoulder line, vertical blade and heavy asymmetrical shield.",
+      "visual_description": "A 1.88-metre undead sentinel enclosed in practical, corroded dark iron armor over funerary linen and exhausted mail. The helmet is a narrow enclosed sallet with an empty recessed visor, not a grinning skull. Clay and root grit pack the joints; missing armor plates reveal bound linen around an insubstantial body rather than exposed viscera. One square shoulder plate and a tall battered shield create an unmistakable vertical silhouette. Its long straight sword has a functional crossguard and a nicked edge. Broken oath cords are tied at the belt in short, weighted lengths. The feet are planted and weight-bearing, with no floating parts or arbitrary magical jewelry.",
+      "materials": [
+        "pitted dark iron",
+        "worn mail",
+        "burial linen",
+        "clay",
+        "oath cord"
+      ],
+      "palette": [
+        "blue-black iron",
+        "dirty linen",
+        "cold clay",
+        "old rust"
+      ],
+      "scale": {
+        "height_m": 1.88,
+        "height_basis": "canonical runtime height"
+      },
+      "region": [
+        "Vargan Approach",
+        "sealed undercroft thresholds"
+      ],
+      "ecology": "Canonical undead sentinel convinced that obeying its order is the only way to keep the dead contained.",
+      "encounter_role": "Threshold guard that teaches patience, flank access and armor preparation.",
+      "telegraph": "The shield locks in place and the sword rises to a clearly held guard before a deliberately committed cut.",
+      "counter": "Preserve rot_oil as the weakness. Draw out the held attack, move around the shield and punish recovery without attacking continuously into guard.",
+      "nonviolent_resolution": "Optional threshold recognition is a proposal only; the canonical ordinary sentinel is not the same encounter as Halvern's peaceful testimony duel.",
+      "essential_world_function": "Makes sealed authority physically legible and distinguishes a rote enforced order from Halvern's deliberate refusal.",
+      "story_connection": "Tests an oath but does not authenticate the whole history. Halvern remains a separately named character with a distinct silhouette, voice and bounded memory.",
+      "rig_family": "BIPED_ARMORED; ordinary sentinel, separate from Halvern character asset",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "guard_raise",
+        "oath_test",
+        "shield_turn",
+        "sword_commit",
+        "guard_break"
+      ],
+      "accessibility": "Shield position and held blade angle communicate protection and attack direction without depending on spectral hue.",
+      "model_notes": "Model a clean visor interior and separate removable armor pieces. Do not reuse Halvern's named heraldry or face."
+    },
+    {
+      "id": "M05",
+      "name": "The Bell-Eater",
+      "runtime_id": "bell_eater",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Towering bowed biped; heavy hanging bell, narrow head, long chain-bearing arms and a broad load-bearing pelvis.",
+      "visual_description": "A 3.8-metre cemetery giant whose bowed humanlike frame carries the impossible weight of an old bronze chapel bell. The cracked bell hangs against the lower rib cage on a clearly engineered iron harness; its rim is chipped where the creature has bitten it. A small elongated head rises behind the collar, with a swollen resonant throat, closed pale eyes and heavy split lips. Long muscular arms carry loose working chains that visibly connect to the harness. Cold clay-grey flesh is stretched over the upper ribs but thickens around the hips and feet. Grave mud and green-black bronze patina provide texture; there are no ornamental horns, skull crowns or random dangling bones.",
+      "materials": [
+        "old bronze bell",
+        "forged iron harness",
+        "taut clay-grey flesh",
+        "grave mud",
+        "chain links"
+      ],
+      "palette": [
+        "grave grey",
+        "old bronze",
+        "green-black patina",
+        "umber"
+      ],
+      "scale": {
+        "height_m": 3.8,
+        "height_basis": "canonical runtime height"
+      },
+      "region": [
+        "Greyfen cemetery"
+      ],
+      "ecology": "Canonical undead boss that consumes buried names. The bell functions as a surviving local witness-object, never a replacement for the White Hart's complete testimony.",
+      "encounter_role": "Cemetery boss with Harnessed, Unchained and Hollow Bell phases.",
+      "telegraph": "Chain tension precedes the sweep; the bell visibly tilts before a grave-grown shockwave; both hands release outward before the Ghoulkin call.",
+      "counter": "Preserve moon_oil weakness and the silence interruption to summons. Respect the chain sweep, read the grave shockwave path and commit during the recovery after a slam.",
+      "nonviolent_resolution": "None in the current canonical encounter; peaceful_resolution is false.",
+      "essential_world_function": "Silencing the cemetery bell yields bell iron and the chapel key, making a major route and evidence transition tangible.",
+      "story_connection": "The names Greyfen buried shape the encounter. It does not narrate facts beyond its fragmented local memory.",
+      "rig_family": "GIANT_BIPED_BELL; secondary bell suspension and controlled chain joints",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "chain_sweep",
+        "bell_shockwave",
+        "grave_slam",
+        "ghoulkin_call",
+        "silenced_stagger",
+        "harness_release"
+      ],
+      "accessibility": "Bell sound is paired with visible harness tension and a stable shockwave edge; no mandatory audio-only timing.",
+      "model_notes": "The harness must make structural sense in all views. Chain collision should be deliberately simplified; gameplay timing cannot depend on uncontrolled cloth simulation."
+    },
+    {
+      "id": "M06",
+      "name": "Rootbound Colossus",
+      "runtime_id": "rootbound_colossus",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Broad, low-headed walking root mass; two pillar legs, long buttress arms and an exposed central heart seam.",
+      "visual_description": "A 4.4-metre giant formed from compacted roots and a split old trunk, with a believable load path through two short pillar legs and enormous buttress forearms. The head is a low blunt knot sunk between the shoulders, with two dark sensory hollows and no carved human face. Broad bark plates overlap across the chest; a vertical seam reveals a dense amber heartwood core only when opened. Fine root hairs gather near the feet, while larger load-bearing roots twist around hips and elbows. Ash is worked into the wood grain and moss collects in sheltered recesses. The crown is broken and broad, never a stag skull or decorative antler rack.",
+      "materials": [
+        "split heartwood",
+        "layered bark",
+        "compacted roots",
+        "ash-filled grain",
+        "sheltered moss"
+      ],
+      "palette": [
+        "weathered wood grey",
+        "deep forest green",
+        "ash black",
+        "heartwood amber"
+      ],
+      "scale": {
+        "height_m": 4.4,
+        "height_basis": "canonical runtime height"
+      },
+      "region": [
+        "Deep Wood memory clearing"
+      ],
+      "ecology": "Canonical spirit defending soil nourished by the ash of people Greyfen refused to name.",
+      "encounter_role": "Spatial boss whose root lanes and exposed-heart recovery teach deliberate repositioning.",
+      "telegraph": "The planted hand spreads distinct root ridges along the ground; the centre remains visibly open before the lane attack.",
+      "counter": "Preserve oathfire weakness and the readable central gap. Move between lanes, avoid the rupture, then attack the opened heart during the stagger.",
+      "nonviolent_resolution": "None in the current canonical encounter; peaceful_resolution is false.",
+      "essential_world_function": "Clears access to the reconstruction of the burned register and provides the oathwood core, so its defeat changes the investigation route.",
+      "story_connection": "Roots preserve material consequences and partial impressions of buried ash, not a complete speaking history.",
+      "rig_family": "GIANT_ROOT_BIPED; rigid bark plates over deforming root bundles",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "root_lanes",
+        "ground_rupture",
+        "heart_stagger",
+        "root_plant",
+        "bark_open",
+        "uproot"
+      ],
+      "accessibility": "Root lane spacing, raised geometry and dust direction carry the signal; avoid green-on-green-only indicators.",
+      "model_notes": "Preserve the centre-gap combat read. Dense root texture must not turn the body into a visually uniform noisy mass."
+    },
+    {
+      "id": "M07",
+      "name": "Ashwing Carrion Drake",
+      "runtime_id": "ashwing",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Heavy carrion drake with two hind legs, two forelimb wings, a hooked blunt head and a long balancing tail.",
+      "visual_description": "A great carrion drake, 4.8 metres in its canonical posed height, with two powerful hind legs and a pair of forelimbs extended into broad leathery wings. Its chest is deep, its hooked head blunt and scavenger-like, and its long tail balances a low perch. Charcoal scales grade into wrinkled bare throat skin and thin soot-brown wing membranes with visible load-bearing fingers. Pale ash cakes sheltered scale seams; the wing edges show repaired tears rather than ornamental tatters. An expandable throat pouch precedes breath attacks. The body has no separate extra pair of arms, no crown of horns and no bright jewel-like eyes. Everything supports flight, perching and carrion feeding.",
+      "materials": [
+        "charcoal scales",
+        "leathery wing membrane",
+        "bare throat skin",
+        "pale mill ash",
+        "worn keratin claws"
+      ],
+      "palette": [
+        "soot brown",
+        "charcoal",
+        "warm ash grey",
+        "dull copper"
+      ],
+      "scale": {
+        "height_m": 4.8,
+        "height_basis": "canonical runtime posed height",
+        "proposed_wingspan_m": 8.5,
+        "wingspan_status": "new model target requiring arena review"
+      },
+      "region": [
+        "Old Mill marsh edge",
+        "mill roof and perch"
+      ],
+      "ecology": "Canonical beast nesting above the mill where refugee ash became part of the harvest.",
+      "encounter_role": "A directional-pressure boss with perch destruction and grounded vulnerability.",
+      "telegraph": "The head aligns before ash breath, the forward wing raises before wing pressure, and both feet compress against the perch before a swoop.",
+      "counter": "Preserve oathfire weakness. Move out of the directed breath and wing lanes, break the perch, then exploit its exposed grounded recovery.",
+      "nonviolent_resolution": "None in the current canonical encounter; peaceful_resolution is false.",
+      "essential_world_function": "Breaks open the mill's physical concealment and yields drake ash and the mill seal, connecting the local food economy to the investigation.",
+      "story_connection": "Its nest and feeding remains expose evidence; the animal cannot explain what happened to the refugees.",
+      "rig_family": "DRAKE_WYVERN; two hind legs plus two wing forelimbs",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "perch",
+        "wing_blast",
+        "ash_breath",
+        "swoop",
+        "perch_break_fall",
+        "grounded_recover"
+      ],
+      "accessibility": "Directional wind debris and head alignment supplement audio. Keep breath haze from obscuring the floor and recovery window.",
+      "model_notes": "Wing membrane must have explicit tension lines and joint anatomy. Final wing dimensions must be verified against the existing arena and camera."
+    },
+    {
+      "id": "M08",
+      "name": "White Hart Avatar",
+      "runtime_id": "white_hart_avatar",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Tall, austere white stag; long vertical neck, clean legs and a broad anatomically coherent antler crown.",
+      "visual_description": "A great white stag, 3.6 metres at the canonical runtime height, with long weight-bearing legs, a deep cervine chest and a solemn, wholly animal face. Short ivory fur is stained grey around the hooves and lower flanks. Its antlers rise from plausible pedicles into broad, uneven tines, worn smooth along old contact points; they are neither tree branches nor a floating crown. Dark eyes are clear and watchful, with almost no emissive glow. Thin ash-like seams interrupt the flank fur as if an old wound had healed into the coat. The neck and shoulders carry real muscle beneath the softness. No armor, jewelry, human hands or extra eyes.",
+      "materials": [
+        "short ivory fur",
+        "weathered antler",
+        "black hoof",
+        "ash-grey scar seams"
+      ],
+      "palette": [
+        "warm ivory",
+        "bone beige",
+        "ash grey",
+        "deep brown-black"
+      ],
+      "scale": {
+        "height_m": 3.6,
+        "height_basis": "canonical runtime height; model bounds must specify antler inclusion"
+      },
+      "region": [
+        "White Hart Glade",
+        "the road's bound memory"
+      ],
+      "ecology": "The canonical sole complete supernatural witness, bound beneath the road. It cannot lie and must not be recast as a benevolent forest god.",
+      "encounter_role": "Final witness and moral culmination; physical confrontation and a peaceful resolution are both already supported.",
+      "telegraph": "A still head turn precedes a memory echo; the neck lowers and the front hoof marks the ground before the antler sweep.",
+      "counter": "Preserve moon_oil weakness for combat. The narrative route must respect truthful names and reject a false oath; do not reduce the finale to harvesting a boss drop.",
+      "nonviolent_resolution": "Witness and Mercy are releases accepted by the Hart; Duty is voluntary containment; Ash is destruction by force. Recovered human proof survives all four.",
+      "essential_world_function": "Provides the complete witness needed for the final oath and the road reopening; every earlier fragment gains context here.",
+      "story_connection": "The sole complete supernatural account is reserved for this encounter. Visual majesty must coexist with burden and limited agency.",
+      "rig_family": "CERVID_HART; quadruped with antler clearance and neck controls",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "witness_still",
+        "memory_echo",
+        "antler_sweep",
+        "mercy_lower",
+        "oath_refusal",
+        "road_reopening"
+      ],
+      "accessibility": "Memory effects must preserve the stag's outline and readable floor. Provide stable visual cues rather than strobing or rapidly flashing echoes.",
+      "model_notes": "Antler roots must be modeled as part of the skull structure. No generic forest deity iconography or radiant halo."
+    },
+    {
+      "id": "M09",
+      "name": "Silt-Maw",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Low, limbless burrower; broad shovel head, thick tapering body and a blunt tail.",
+      "visual_description": "A muscular limbless predator about 3.2 metres long, with the low wedge-shaped head of a digging amphibian and a thick body that tapers into a blunt steering tail. Slate-brown skin is divided by shallow annular folds; the upper surface is tough and sand-scoured while the belly is pale and smooth. Tiny protected eyes sit behind ridged nostrils. Two short lateral jaw plates fold shut into the shovel-shaped snout, concealing compact teeth until feeding. Fine tactile pores ring the nose. There are no frills, horns or tentacles. Wet sediment hangs naturally from the lower folds, making its mass and underground movement easy to understand.",
+      "materials": [
+        "sand-scoured skin",
+        "smooth pale belly",
+        "mud",
+        "small keratin jaw plates"
+      ],
+      "palette": [
+        "slate brown",
+        "silt grey",
+        "pale clay",
+        "near-black"
+      ],
+      "scale": {
+        "length_m": 3.2,
+        "body_height_m": 0.55,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Greyfen drainage banks",
+        "Old Mill sluice deposits"
+      ],
+      "ecology": "A proposed predator attracted to vibration and dense organic sediment; its burrows connect drainage routes that villagers thought were sealed.",
+      "encounter_role": "Burrow ambush with terrain reading and a route-repair objective.",
+      "telegraph": "A moving raised silt ridge slows and forms a circular mound before the snout breaks the surface.",
+      "counter": "Step off the vibrating plank route onto firm stone, bait an eruption at an empty marked point, then strike the exposed flank during its turn.",
+      "nonviolent_resolution": "Open the old sluice and guide it toward a deeper sediment bed, restoring drainage without killing it.",
+      "essential_world_function": "Its blocked burrow exposes a displaced drainage grate and a sealed packet, making water management and the movement of evidence one playable problem.",
+      "story_connection": "The packet supplies a bounded physical clue. The beast has no memory powers and knows no human secret.",
+      "rig_family": "SERPENT_BURROWER; spline body with jaw and soil-entry controls",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "burrow_enter",
+        "burrow_exit",
+        "vibration_listen",
+        "eruption",
+        "flank_turn",
+        "sluice_retreat"
+      ],
+      "accessibility": "Surface displacement and a persistent mound outline accompany vibration audio; no attack from entirely invisible ground.",
+      "model_notes": "The belly needs a continuous deformation-friendly topology. Underground movement can be represented by a controlled surface effect instead of rendering the whole buried mesh."
+    },
+    {
+      "id": "M10",
+      "name": "Millback",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Broad low freshwater crustacean; six walking legs, two compact working claws and a ridged oval carapace.",
+      "visual_description": "A broad freshwater crustacean roughly 2.4 metres across, held low above the riverbed on six jointed walking legs. Two compact front claws fold beneath a ridged oval carapace, giving it a heavy shield-like silhouette rather than a towering crab shape. The shell is dark mineral blue with limestone abrasion, worn brown growth rings and patches of attached river weed. Short stalked eyes retract into protected sockets. The mouthparts are small and practical; no monstrous human teeth. One shell edge is visibly polished by contact with the mill wheel. The legs have consistent joints and paddle-like terminal segments for pushing through fast water.",
+      "materials": [
+        "mineral-stained chitin",
+        "limestone abrasion",
+        "river weed",
+        "wet joint membrane"
+      ],
+      "palette": [
+        "mineral blue",
+        "chalk grey",
+        "river brown",
+        "dark olive"
+      ],
+      "scale": {
+        "width_m": 2.4,
+        "height_m": 0.8,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Old Mill sluice",
+        "Greyfen river crossings"
+      ],
+      "ecology": "A proposed scavenger that shelters in water pressure and collects dense organic scraps beneath its shell.",
+      "encounter_role": "Armor-facing puzzle around the working sluice and a moving wheel.",
+      "telegraph": "Both claws plant into the riverbed and the back lifts before a short sideways shove.",
+      "counter": "Avoid the frontal carapace, redirect water to expose the soft leg joints and attack only after its shove commits.",
+      "nonviolent_resolution": "Reopen a side channel and bait it with ordinary mill waste so the wheel can turn again.",
+      "essential_world_function": "Restoring the mill's water flow changes food production and opens an inspection route into the waste channel; recovered refuse can be compared with the mill evidence.",
+      "story_connection": "Its shelter records the mill's recent material use. It supplies corroboration through retained debris, never testimony.",
+      "rig_family": "CRUSTACEAN_EIGHT_APPENDAGES; six walking limbs plus two claws",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "side_shove",
+        "claw_brace",
+        "shell_lift",
+        "channel_enter",
+        "feeding_fold",
+        "current_resist"
+      ],
+      "accessibility": "Current direction uses visible foam and wheel motion. The vulnerable joint opening changes shape as well as color.",
+      "model_notes": "Keep exactly six walking legs and two claw limbs. Broad shell surfaces should remain readable at low texture detail."
+    },
+    {
+      "id": "M11",
+      "name": "Glassmoth",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Large nocturnal moth; four translucent veined wings, compact furred body and comb-like antennae.",
+      "visual_description": "A nocturnal moth with a 2.1-metre wingspan, four overlapping translucent wings and a compact furred body. The wing membranes are smoky pearl with large clear windows framed by dark, sharply organized veins. Thick charcoal thoracic hair protects the wing roots; six small legs fold neatly beneath the body. Two asymmetrical comb-like antennae are broad enough to identify it at game distance. The abdomen is pale and softly segmented, with dusty ochre scales gathering near the tip. Its face remains an insect head with compound eyes and a curled feeding tube. There are no skull patterns, human eyes or neon bioluminescent symbols.",
+      "materials": [
+        "translucent veined membrane",
+        "charcoal thoracic hair",
+        "powdery scales",
+        "smooth chitin"
+      ],
+      "palette": [
+        "smoky pearl",
+        "charcoal",
+        "pale ochre",
+        "warm grey"
+      ],
+      "scale": {
+        "wingspan_m": 2.1,
+        "body_length_m": 0.7,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Wychwood",
+        "Record Hall eaves"
+      ],
+      "ecology": "A proposed resin- and mineral-feeding nocturnal insect drawn to old sealing wax and certain damaged tree sap.",
+      "encounter_role": "Light-guided navigation and a short dust-pressure encounter that rewards restraint.",
+      "telegraph": "It folds the clear wing windows shut, raises the abdomen and shakes the antennae before releasing dust.",
+      "counter": "Move into a crosswind or behind solid cover; use a steady directed light to redirect flight without a permanent screen-blind effect.",
+      "nonviolent_resolution": "Move a lantern to a safe resin lure and lead the moth away from the record storage entrance.",
+      "essential_world_function": "Its attraction to a specific sealing wax helps locate a concealed record shipment and introduces a practical connection between the forest and archive trade.",
+      "story_connection": "A distinctive wax residue is an observable clue requiring human interpretation. The insect does not magically identify a forged document.",
+      "rig_family": "LEPIDOPTERA; four wing controls, six small legs, antenna secondary motion",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "hover",
+        "land",
+        "dust_windup",
+        "dust_release",
+        "light_follow",
+        "wing_fold"
+      ],
+      "accessibility": "Dust lowers contrast locally without obscuring the entire display. Avoid flashing-lantern mechanics.",
+      "model_notes": "Use carefully bounded transparency and opaque vein shapes; translucency is an appearance target requiring performance review."
+    },
+    {
+      "id": "M12",
+      "name": "Knell Leech",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Thick segmented annelid; flattened body, broad front suction disc and a smaller anchoring rear disc.",
+      "visual_description": "A thick, flattened leech roughly 1.8 metres long, with overlapping circular muscle bands and two clearly different suction discs. The broad front disc has a dense radial mouth whose small teeth appear only when the disc opens; the rear disc is a simple anchoring pad. Dull plum-black skin shines only on its wet lower edge, while the upper back is roughened by fine mineral grit. Pale pressure marks separate the rings. Tiny sensory pits run along the front third of the body; there are no eyes on stalks, limbs or decorative spikes. Its shape changes through believable muscular compression instead of stretching like rubber.",
+      "materials": [
+        "wet annelid skin",
+        "mineral grit",
+        "radial keratin mouthparts"
+      ],
+      "palette": [
+        "plum black",
+        "wet slate",
+        "pale mauve-grey",
+        "dirty ivory"
+      ],
+      "scale": {
+        "length_m": 1.8,
+        "width_m": 0.45,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Greyfen flooded crypt",
+        "undercroft drains"
+      ],
+      "ecology": "A proposed vibration-sensitive scavenger that gathers around resonant pipes and consumes organic material in old drains.",
+      "encounter_role": "Ceiling-to-floor ambush that teaches checking overhead and interrupting a latch before contact.",
+      "telegraph": "Its rear disc anchors and the body shortens into visible accordion folds before the front disc releases toward a target.",
+      "counter": "Break line of approach with a pillar or interrupt the exposed front disc during its windup. A short, readable latch escape replaces extended control loss.",
+      "nonviolent_resolution": "Drain the affected pipe run and redirect vibration to an empty sump, clearing a safe passage.",
+      "essential_world_function": "The infestation reveals a functioning drain beneath a supposedly sealed crypt, establishing a physical route by which objects were moved.",
+      "story_connection": "Resonance explains its proximity to the cemetery bell without making it a witness or magical lie detector.",
+      "rig_family": "ANNELID_LATCHER; segmented spline with two suction controls",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "rear_anchor",
+        "compress_windup",
+        "disc_lunge",
+        "latch_release",
+        "pipe_retreat"
+      ],
+      "accessibility": "Visible compression and dripping debris accompany the attack cue; provide a hold-input alternative for latch escape.",
+      "model_notes": "Mouth detail should remain non-graphic. Build the suction discs as coherent rings rather than disconnected floating teeth."
+    },
+    {
+      "id": "M13",
+      "name": "Hearthscale",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Low armored quadrupedal reptile; broad head, offset mineral back plates and a heavy tail.",
+      "visual_description": "A heavy four-legged reptile about 2.7 metres from nose to tail, with a broad closed snout, short muscular neck and strongly planted clawed feet. The back carries interlocking dark mineralized plates, large near the shoulders and smaller toward a thick tapering tail. Warm clay-orange skin is visible in flexible folds beneath the plates. The throat has a pair of broad heat-dispersing creases; the eyes are small and golden-brown. Scales are chipped and dulled by kiln rubble, with pale dust in the seams. It has no volcanic cracks, glowing lava veins or flames issuing from its body. Heat is conveyed through breath, posture and environment.",
+      "materials": [
+        "mineralized dorsal plates",
+        "clay-orange scale skin",
+        "kiln dust",
+        "worn claws"
+      ],
+      "palette": [
+        "charcoal stone",
+        "clay orange",
+        "pale kiln dust",
+        "brown gold"
+      ],
+      "scale": {
+        "length_m": 2.7,
+        "shoulder_height_m": 0.85,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Vargan Approach lime kilns",
+        "Old Mill ash yards"
+      ],
+      "ecology": "A proposed reptile that nests in retained industrial heat and swallows mineral fragments to aid digestion.",
+      "encounter_role": "Armor-direction and environmental temperature encounter around a working kiln.",
+      "telegraph": "Its throat creases open, the front feet brace and the tail lifts before a hot grit exhalation.",
+      "counter": "Stay out of the cone, force a turn around solid masonry and strike the unarmored lower flank after the exhalation.",
+      "nonviolent_resolution": "Move its heat source to an abandoned kiln using the vent controls, allowing workers to recover the active yard.",
+      "essential_world_function": "Reopening the kiln restores a local craft supply and reveals material residues needed to distinguish ordinary industrial ash from the mill's contested deposits.",
+      "story_connection": "The contrast between ash samples is investigable material evidence, not a new supernatural revelation.",
+      "rig_family": "QUADRUPED_REPTILE; heavy tail and throat expansion controls",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "heat_rest",
+        "throat_expand",
+        "grit_exhale",
+        "tail_brace",
+        "flank_turn",
+        "vent_follow"
+      ],
+      "accessibility": "Heat danger is marked by moving grit and visible bracing; avoid sustained shimmer that makes the entire screen difficult to read.",
+      "model_notes": "Dorsal plates must overlap in the direction of movement. Keep the thermal effect separate from base material readability."
+    },
+    {
+      "id": "M14",
+      "name": "Gallows Weaver",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "visual_qa_note": "The intended anatomy has eight small eyes. The generated sheet's small eye cluster does not reproduce that count exactly; reconcile the cluster to eight eyes during orthographic design and modeling. This concept sheet is not an anatomically locked 3D blueprint.",
+      "silhouette": "High-arched spider; eight long legs, compact cephalothorax and a heavy pear-shaped abdomen.",
+      "visual_description": "A large spider with a 2.6-metre leg spread, eight thin but mechanically credible legs and a pear-shaped abdomen marked with dull weathered bands. Its front body is compact and low, with eight small eyes clustered naturally above modest downward chelicerae. Fine dark bristles catch dew along the joints; the abdomen is softer, grey-brown and slightly wrinkled. Two rear spinnerets are visible beneath the body. Old cloth fibres and bark dust cling to the web around it, not to a costume on the creature. There are no human faces, skull markings, extra arms or huge exposed fangs. Its silhouette depends on arch and tension, not gore.",
+      "materials": [
+        "bristled chitin",
+        "soft abdominal skin",
+        "dew",
+        "silk"
+      ],
+      "palette": [
+        "weathered brown",
+        "slate grey",
+        "black bristle",
+        "pearl silk"
+      ],
+      "scale": {
+        "leg_spread_m": 2.6,
+        "body_height_m": 0.9,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Wychwood abandoned gallows track",
+        "Vargan roadside structures"
+      ],
+      "ecology": "A proposed ambush predator using old structures as web anchors; its feeding caches preserve objects entangled with prey.",
+      "encounter_role": "Anchor-cutting traversal and an arena whose geometry can be deliberately changed.",
+      "telegraph": "The front pair of legs lift and the abdomen contracts before a visible silk cast; a pounce begins with all rear legs compressing.",
+      "counter": "Cut clearly marked anchor strands to limit its overhead routes, sidestep the cast, and strike during landing recovery.",
+      "nonviolent_resolution": "Create an alternate anchored web path away from the road, then retrieve a cache after it relocates.",
+      "essential_world_function": "Reopens an old execution route and preserves a lost transport tag in silk, tying an optional encounter to a bounded human history.",
+      "story_connection": "The transport tag can corroborate a journey. The spider has no awareness of executions or supernatural guilt.",
+      "rig_family": "ARACHNID_EIGHT_LEGS; body suspension and paired leg cycles",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "web_climb",
+        "silk_cast",
+        "pounce",
+        "anchor_fail",
+        "cache_wrap",
+        "relocate"
+      ],
+      "accessibility": "Web anchors use consistent shapes and brightness. Include a reduced-arachnid presentation option only if the game's accessibility plan supports it; do not promise it exists.",
+      "model_notes": "Exactly eight legs. Webs need independent collision and readability controls rather than many tiny physical strands."
+    },
+    {
+      "id": "M15",
+      "name": "Reed Choir",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Very squat marsh amphibian with three expandable dorsal resonance sacs and oversized folded rear legs.",
+      "visual_description": "A squat amphibian roughly 1.5 metres wide, supported by two short front legs and powerful folded hind legs. Three soft resonance sacs rise along its back like uneven closed bellows, visibly connected to the chest rather than floating bulbs. The head is broad and flat with lateral copper-brown eyes, a simple closed mouth and paired nostril ridges. Pebbled olive skin becomes pale grey across the throat and belly. Dry reed fragments collect in a shallow groove behind the shoulders. The sacs are translucent only at their thinnest stretched edges, revealing no organs. Its body should look heavy, damp and capable of a sudden short hop.",
+      "materials": [
+        "pebbled amphibian skin",
+        "stretched sac membrane",
+        "dry reeds",
+        "marsh water"
+      ],
+      "palette": [
+        "dull olive",
+        "pale throat grey",
+        "copper brown",
+        "reed tan"
+      ],
+      "scale": {
+        "width_m": 1.5,
+        "resting_height_m": 0.6,
+        "inflated_height_m": 1.2,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Greyfen reed beds",
+        "Old Mill marsh"
+      ],
+      "ecology": "A proposed territorial amphibian whose low calls travel through flooded channels; choruses indicate connected water rather than supernatural speech.",
+      "encounter_role": "Timed pressure pulses and a navigational clue through marsh water routes.",
+      "telegraph": "The three sacs inflate in a fixed sequence before a broad pressure call; ripples travel outward from the feet.",
+      "counter": "Move behind solid reeds-and-bank cover before the final sac fills, or disturb the water at a safe alternate location to redirect attention.",
+      "nonviolent_resolution": "Reopen the blocked spawning channel and guide the chorus away from the settlement's crossing.",
+      "essential_world_function": "The chorus reveals which channels remain connected and lets the player trace a hidden water route; restoring spawning access changes village travel conditions.",
+      "story_connection": "A natural sound map helps locate the route used by people. The calls never repeat names or deliver human memories.",
+      "rig_family": "AMPHIBIAN_SQUAT; four limbs plus three controlled resonance sacs",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "sac_sequence",
+        "pressure_call",
+        "short_hop",
+        "water_listen",
+        "spawn_channel_enter"
+      ],
+      "accessibility": "Sac inflation and water rings duplicate the call timing; the encounter must be fully readable with sound muted.",
+      "model_notes": "Use controlled blend shapes for sacs with fixed maximum volume. Keep a different silhouette and locomotion from the upright Bog Wretch."
+    },
+    {
+      "id": "M16",
+      "name": "Inkblind",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Blind archive beetle; blunt armored wedge, six short legs, long feelers and two folding feeding palps.",
+      "visual_description": "A flightless beetle about 1.2 metres long, with a blunt wedge-shaped carapace that fits between storage shelves. Six short jointed legs hold the body close to the floor. Its head has no visible eyes; two long segmented feelers sweep ahead of a pair of folding brush-like feeding palps. Matte black-brown shell plates are polished at the edges by repeated contact with wood. Pale paper dust gathers around the mouth and front legs, while old ink stains mark the underside in irregular grey-blue patches. The back remains a continuous solid shield, with no oversized spikes, skull markings or decorative wings.",
+      "materials": [
+        "matte chitin",
+        "paper dust",
+        "ink-stained cuticle",
+        "fine feeding brushes"
+      ],
+      "palette": [
+        "black brown",
+        "paper cream",
+        "grey blue",
+        "warm wood brown"
+      ],
+      "scale": {
+        "length_m": 1.2,
+        "height_m": 0.35,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Record Hall stores",
+        "undercroft document vault"
+      ],
+      "ecology": "A proposed blind detritivore feeding on starch paste and damp paper rather than the written meaning of a document.",
+      "encounter_role": "Quiet navigation and document rescue under local pressure, with a visible feeding process.",
+      "telegraph": "Both antennae align on a vibration source and the palps close before a short head-first charge.",
+      "counter": "Stop moving on resonant shelving, use an ordinary paste lure, or sidestep a charge into an empty aisle. Do not create irreversible main-quest document loss.",
+      "nonviolent_resolution": "Set paste lures and dry the damaged storage bay, relocating the beetles while preserving the records.",
+      "essential_world_function": "Makes archive neglect a material problem and reveals a recently pasted false backing through selective feeding; the document still requires human examination.",
+      "story_connection": "Its damage pattern distinguishes materials and repair age, never truth or guilt. Critical evidence remains recoverable regardless of combat outcome.",
+      "rig_family": "INSECT_SIX_LEGS; compact beetle with antenna and palp controls",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "paste_feed",
+        "antenna_align",
+        "short_charge",
+        "lure_follow",
+        "shelf_hide"
+      ],
+      "accessibility": "Visible antenna motion and shelf vibration accompany hearing cues; document urgency should be forgiving and clearly communicated.",
+      "model_notes": "Keep exactly six legs and preserve the blind head design. Distinguish feeding brushes from aggressive mandibles."
+    },
+    {
+      "id": "M17",
+      "name": "Cairn Mother",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Massive slow mollusc with a low muscular foot and an irregular stone-encrusted spiral shell.",
+      "visual_description": "An enormous land mollusc, 3.5 metres long, whose muscular foot carries a heavy, low spiral shell. Mineral deposits have grown into broad uneven layers around the shell rather than a pile of balanced loose rocks. The exposed body is dark slate and finely pebbled, with a pale travelling edge pressed firmly to the ground. Two long upper feelers carry small dark eyes; two shorter lower feelers test the soil. Old lichen grows only on sheltered shell surfaces. The mouth is a modest fold beneath the head, not a ring of monstrous fangs. Its slow, continuous movement and visible load-bearing foot make the creature feel ancient and physical.",
+      "materials": [
+        "layered mineral shell",
+        "slate mollusc skin",
+        "lichen",
+        "damp soil"
+      ],
+      "palette": [
+        "stone grey",
+        "slate black",
+        "lichen sage",
+        "pale clay"
+      ],
+      "scale": {
+        "length_m": 3.5,
+        "shell_height_m": 1.9,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Hart Glade margins",
+        "abandoned Greyfen cairn paths"
+      ],
+      "ecology": "A proposed long-lived grazer that consumes lichen and mineral-rich soil; shell layers retain fragments embedded through years of travel.",
+      "encounter_role": "A moving obstruction and stewardship choice, with defensive rather than predatory aggression.",
+      "telegraph": "The feelers retract and the shell lowers before the creature pushes a wide defensive ring of soil outward.",
+      "counter": "Give it space, remain outside the broad push and avoid standing against its shell. Combat is possible but slow and materially wasteful.",
+      "nonviolent_resolution": "Restore its mineral feeding path and guide it away from the trail, then inspect a naturally loosened shell deposit.",
+      "essential_world_function": "Opens an old cairn route and provides a dated embedded boundary marker, making land use and the age of a disputed path visible.",
+      "story_connection": "The shell is a physical record of travel, not supernatural memory. It must never rival the White Hart as a complete witness.",
+      "rig_family": "MOLLUSC_GRAZER; foot deformation, neck and four feeler controls",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "graze",
+        "feeler_test",
+        "shell_lower",
+        "soil_push",
+        "withdraw",
+        "path_follow"
+      ],
+      "accessibility": "The slow shell drop provides ample visual warning. Do not require rapid repeated inputs or hidden damage checks to resolve peacefully.",
+      "model_notes": "Run is a faster crawl state for contract compatibility, not a sprint. Keep shell encrustations integrated and avoid impossible balancing stones."
+    },
+    {
+      "id": "M18",
+      "name": "Shroud Swimmer",
+      "runtime_id": null,
+      "canon_status": "new-proposal",
+      "design_status": "new species and optional quest proposal",
+      "silhouette": "Broad flat freshwater ray; diamond disc, long tapering tail and a pale folded underside.",
+      "visual_description": "A broad freshwater ray, 2.8 metres across, with a low diamond-shaped disc and a long unbarbed balancing tail. The upper skin is silt-brown with fine irregular speckling; its pale underside folds like damp cloth only at the flexible wing edges. Two raised eyes and paired breathing openings sit naturally above the head. The mouth and gill slits remain on the underside, anatomically separated from the eyes. Small scars and worn edges indicate years in shallow channels. It has no human face, cloth costume, hovering ghost aura or ornamental horns. Its wide pectoral fins undulate in a slow continuous wave that can become a sudden burst.",
+      "materials": [
+        "fine rough ray skin",
+        "pale flexible underside",
+        "silt",
+        "water sheen"
+      ],
+      "palette": [
+        "silt brown",
+        "pale grey",
+        "dark speckle",
+        "river green"
+      ],
+      "scale": {
+        "disc_width_m": 2.8,
+        "total_length_m": 4.0,
+        "height_basis": "proposed design target"
+      },
+      "region": [
+        "Old Mill deep pools",
+        "Greyfen flooded crossings"
+      ],
+      "ecology": "A proposed freshwater bottom feeder disturbed by dredging and trapped fishing gear; it buries itself under fine silt.",
+      "encounter_role": "Shallow-water displacement encounter with visible surface trails and a rescue alternative.",
+      "telegraph": "The buried disc raises a sharp diamond ridge and both wing tips curl before a forward sediment surge.",
+      "counter": "Move onto firm elevated footing, allow the surge to pass and approach from the side during its slow turn. Avoid punishing the player with unreadable underwater attacks.",
+      "nonviolent_resolution": "Cut the abandoned net and reopen its deep-water route, allowing it to leave the crossing.",
+      "essential_world_function": "A trapped net preserves a deliberately weighted cargo bundle; freeing the animal recovers the bundle and makes the crossing safe.",
+      "story_connection": "The bundle is a bounded piece of evidence about transport and disposal. The ray is ordinary fauna, not a spirit wearing a shroud.",
+      "rig_family": "RAY_AQUATIC; paired fin deformation and tail spline",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "silt_bury",
+        "disc_raise",
+        "sediment_surge",
+        "net_struggle",
+        "freed_swim"
+      ],
+      "accessibility": "Surface ridges and fin tips remain readable above water. Underwater haze must not hide the entire attack cue.",
+      "model_notes": "Walk and run map to slow and fast swim for the common state contract. The asset needs a dedicated aquatic controller, not a humanoid navigation assumption."
+    },
+    {
+      "id": "M19",
+      "name": "Wychwood Raider",
+      "runtime_id": "wychwood_raider",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Forward-leaning, narrow-waisted beast biped with long hooking hands and a high asymmetric shoulder line.",
+      "visual_description": "A 1.86-metre beast with a narrow waist, high forward shoulders and long hooking hands adapted to snatching objects. Its head has a blunt keratin-edged muzzle, small lateral dark eyes and a tight closed mouth, distinct from the Ghoulkin's oversized jaw. Sparse coarse brown hair breaks across olive-grey hide in irregular patches. One shoulder is visibly higher from old healed injury; the arms remain anatomically complete and balanced. Short, backward-folding ears sit close to the skull. The feet are broad and gripping. A few name-token cords are caught around one wrist as accidental trophies, not clothing or a fantasy bandit outfit. No weapons, armor, tusk crown or decorative horns.",
+      "materials": [
+        "olive-grey hide",
+        "coarse brown hair",
+        "keratin muzzle edge",
+        "caught cord fragments"
+      ],
+      "palette": [
+        "olive grey",
+        "coarse umber",
+        "dark keratin",
+        "faded cord beige"
+      ],
+      "scale": {
+        "height_m": 1.86,
+        "height_basis": "canonical runtime height"
+      },
+      "region": [
+        "Wychwood road evidence clearings"
+      ],
+      "ecology": "Canonical beast, not a human raider. It is drawn toward objects carrying a living person's name and feints toward the body before lunging for tokens.",
+      "encounter_role": "Feinter that teaches recognition of a false opening and protection of carried evidence.",
+      "telegraph": "One shoulder dips in a false body attack; the true grab follows only when the wrist opens and both feet commit forward.",
+      "counter": "Preserve normal-sword weakness. Hold through the first feint, sidestep the committed grab and punish the long recovery. Unique quest tokens remain recoverable.",
+      "nonviolent_resolution": "Proposed incidental diversion uses a duplicate ordinary name tag or established decoy; never sacrifice irreplaceable evidence or bypass a required encounter.",
+      "essential_world_function": "Makes the power of named personal objects active in play and creates a recoverable trail to a displaced token cache.",
+      "story_connection": "The cache helps reconstruct movement of objects after the road attack. The creature's attraction does not prove the guilt of a token's owner.",
+      "rig_family": "BIPED_RAIDER; long fingers and asymmetric but fully functional shoulder pose",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "body_feint",
+        "token_grab",
+        "grab_miss",
+        "cache_drop",
+        "decoy_notice"
+      ],
+      "accessibility": "The true grab uses an open hand and planted feet, not only a subtle timing difference or sound cue.",
+      "model_notes": "Keep the creature visibly nonhuman and unarmed. Token cords are small secondary props with controlled attachment, not face-obscuring geometry."
+    },
+    {
+      "id": "M20",
+      "name": "Wychwood Brute",
+      "runtime_id": "wychwood_brute",
+      "canon_status": "existing-name",
+      "design_status": "new visual interpretation",
+      "silhouette": "Very broad top-heavy beast biped; low head, block-like forearms, short thick legs and a continuous shoulder mound.",
+      "visual_description": "A 1.98-metre forest brute whose breadth matters more than height. A low heavy head sits forward beneath a continuous muscular shoulder mound; the thick neck nearly disappears into the torso. Its broad muzzle has two short worn lateral tusks, useful for pushing and breaking rather than forming a crown. Charcoal-olive hide is rough and folded over the shoulders, with paler stretched skin at the elbows and knees. Massive forearms end in blunt three-fingered load-bearing hands with an opposing thumb. Short powerful legs and broad feet make its centre of gravity credible. Embedded bark grit and healed impact scars communicate route-breaking work. No armor, club, chains or decorative spikes.",
+      "materials": [
+        "rough charcoal-olive hide",
+        "worn tusk keratin",
+        "bark grit",
+        "healed impact scars"
+      ],
+      "palette": [
+        "charcoal olive",
+        "dark umber",
+        "pale joint grey",
+        "worn ivory"
+      ],
+      "scale": {
+        "height_m": 1.98,
+        "height_basis": "canonical runtime height",
+        "proposed_shoulder_width_m": 1.25
+      },
+      "region": [
+        "Wychwood blocked clearing routes"
+      ],
+      "ecology": "Canonical beast carrying the weight of many bodies but one unfinished command. It arrives last, breaks the route and does not pursue beyond its clearing.",
+      "encounter_role": "Space-controlling heavy that tests commitment and route awareness rather than chase speed.",
+      "telegraph": "Both feet stamp into a wide base and the forearms pull together before a downward route-breaking slam.",
+      "counter": "Preserve ash_bomb weakness. Bait the slam into the intended breakable obstruction, step out of the impact lane and attack during the visible recovery.",
+      "nonviolent_resolution": "Avoiding the defended clearing may be possible in optional placement; do not invent a peaceful completion of an existing mandatory combat objective.",
+      "essential_world_function": "Turns blocked routes into part of the encounter and reveals what the obstruction concealed after the brute's committed attack.",
+      "story_connection": "Its repetitive unfinished command reflects fragmentary memory. It cannot name all the people whose weight it carries or explain the whole event.",
+      "rig_family": "BIPED_BRUTE; broad torso and short heavy limbs with planted contact poses",
+      "animation_list": [
+        "idle",
+        "walk",
+        "run",
+        "attack",
+        "hit",
+        "death",
+        "clearing_arrival",
+        "wide_plant",
+        "route_slam",
+        "obstruction_break",
+        "ash_stagger",
+        "boundary_stop"
+      ],
+      "accessibility": "Use a wide planted pose and visible impact lane before the slam. Camera shake should be optional and never required to read the attack.",
+      "model_notes": "Maintain a distinct low, wide silhouette from the towering Bell-Eater. Run is a short heavy surge, not a fast pursuing sprint."
+    }
+  ]
+}

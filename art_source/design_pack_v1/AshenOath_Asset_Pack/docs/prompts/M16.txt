@@ -1,0 +1,20 @@
+Use case: stylized-concept. Asset type: individual visual development and 3D modeling reference for the original grounded dark fantasy RPG ASHENOATH. Create one exceptionally polished high-resolution landscape 3:2 design sheet. Premium realistic game-character art, tangible physically believable materials, anatomically credible, detailed sculptural rendering with restrained painterly finish. This is an original design.
+
+Subject: Inkblind. A flightless beetle about 1.2 metres long, with a blunt wedge-shaped carapace that fits between storage shelves. Six short jointed legs hold the body close to the floor. Its head has no visible eyes; two long segmented feelers sweep ahead of a pair of folding brush-like feeding palps. Matte black-brown shell plates are polished at the edges by repeated contact with wood. Pale paper dust gathers around the mouth and front legs, while old ink stains mark the underside in irregular grey-blue patches. The back remains a continuous solid shield, with no oversized spikes, skull markings or decorative wings.
+
+Silhouette: Blind archive beetle; blunt armored wedge, six short legs, long feelers and two folding feeding palps.
+
+Materials/textures: matte chitin; paper dust; ink-stained cuticle; fine feeding brushes. Color palette: black brown; paper cream; grey blue; warm wood brown.
+
+Scale reference in anatomy only, no rulers or extra figure: {"length_m":1.2,"height_m":0.35,"height_basis":"proposed design target"}.
+
+Composition: one large complete front three-quarter body view on left occupying about 55%, a smaller complete rear three-quarter body view in middle-right, a detailed close-up of the same head upper-right and one small signature anatomy detail lower-right. Multiple views of ONE identical creature design. Keep all body extremities, tails and wings fully inside frame. Adjust spacing for long or winged anatomy. Camera level without extreme foreshortening, model-reference stance, neutral expression. Clear separation and no overlaps. Seamless warm stone-grey backdrop, no landscape, no dramatic fog, no scene props.
+
+Art direction: grounded dark-fantasy naturalism, credible body weight and joints, irregular lived-in surfaces, visible wool weave, worn leather, worked metals or organic skin as relevant. Neutral broad studio light with readable shadows; restrained earthy local colors, strong silhouette. A subtly premium museum-catalogue presentation.
+
+Text (verbatim): "M16 / INKBLIND". Small restrained top-left header only.
+
+Constraints: no copied franchise character, no cartoon, anime, toy or low-poly look; no neon bloom, no exaggerated superhero proportions, no extra limbs/fingers, no unnecessary ornamental spikes, no floating attachments or clothing intersecting faces. No decorative frame, no watermark. Only a restrained small top-left header using exact provided ID and NAME; no other text. This is premium production concept illustration, not a claim of an actual 3D model.
+
+REVISION 1 (image edit of generated original):
+Use case: precise-object-edit. Edit this M16 / INKBLIND reference sheet only to correct framing. Preserve exactly the creature design, blind head, six legs, two long antennae, feeding brushes, dark layered shell, all materials, studio background, typography and panel arrangement. The leftmost rear foot of the large primary body currently touches the left canvas edge. Reduce and reposition the entire large main view slightly so EVERY extremity of the main creature, including the left rear foot and both long antenna tips, is fully visible with at least a 4 percent clear background margin to all canvas edges. Retain the coherent smaller rear view and head/detail views. Keep landscape 3:2 and the existing text M16 / INKBLIND unchanged. No other changes.

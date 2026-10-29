@@ -1,0 +1,17 @@
+Use case: stylized-concept. Asset type: individual visual development and 3D modeling reference for the original grounded dark fantasy RPG ASHENOATH. Create one exceptionally polished high-resolution landscape 3:2 design sheet. Premium realistic game-character art, tangible physically believable materials, anatomically credible, detailed sculptural rendering with restrained painterly finish. This is an original design.
+
+Subject: Knell Leech. A thick, flattened leech roughly 1.8 metres long, with overlapping circular muscle bands and two clearly different suction discs. The broad front disc has a dense radial mouth whose small teeth appear only when the disc opens; the rear disc is a simple anchoring pad. Dull plum-black skin shines only on its wet lower edge, while the upper back is roughened by fine mineral grit. Pale pressure marks separate the rings. Tiny sensory pits run along the front third of the body; there are no eyes on stalks, limbs or decorative spikes. Its shape changes through believable muscular compression instead of stretching like rubber.
+
+Silhouette: Thick segmented annelid; flattened body, broad front suction disc and a smaller anchoring rear disc.
+
+Materials/textures: wet annelid skin; mineral grit; radial keratin mouthparts. Color palette: plum black; wet slate; pale mauve-grey; dirty ivory.
+
+Scale reference in anatomy only, no rulers or extra figure: {"length_m":1.8,"width_m":0.45,"height_basis":"proposed design target"}.
+
+Composition: one large complete front three-quarter body view on left occupying about 55%, a smaller complete rear three-quarter body view in middle-right, a detailed close-up of the same head upper-right and one small signature anatomy detail lower-right. Multiple views of ONE identical creature design. Keep all body extremities, tails and wings fully inside frame. Adjust spacing for long or winged anatomy. Camera level without extreme foreshortening, model-reference stance, neutral expression. Clear separation and no overlaps. Seamless warm stone-grey backdrop, no landscape, no dramatic fog, no scene props.
+
+Art direction: grounded dark-fantasy naturalism, credible body weight and joints, irregular lived-in surfaces, visible wool weave, worn leather, worked metals or organic skin as relevant. Neutral broad studio light with readable shadows; restrained earthy local colors, strong silhouette. A subtly premium museum-catalogue presentation.
+
+Text (verbatim): "M12 / KNELL LEECH". Small restrained top-left header only.
+
+Constraints: no copied franchise character, no cartoon, anime, toy or low-poly look; no neon bloom, no exaggerated superhero proportions, no extra limbs/fingers, no unnecessary ornamental spikes, no floating attachments or clothing intersecting faces. No decorative frame, no watermark. Only a restrained small top-left header using exact provided ID and NAME; no other text. This is premium production concept illustration, not a claim of an actual 3D model.

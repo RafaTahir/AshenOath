@@ -73,7 +73,7 @@ func present_page(entry: Dictionary) -> void:
 	if not speaking and id != "kael" and actor.has_method("is_interaction_enabled"):
 		var actor_id := str(actor.get("interaction_id"))
 		var supporting_speakers: Dictionary = {
-			"vargan_gate_guard":["vargan_gate_guard", "guard"],
+			"vargan_gate_guard":["vargan_steward", "merrow"],
 			"vargan_patrol":["vargan_patrol_guard", "guard"],
 			"vargan_steward":["steward_merrow", "merrow"],
 			"vargan_servant":["tired_castle_servant", "servant"],

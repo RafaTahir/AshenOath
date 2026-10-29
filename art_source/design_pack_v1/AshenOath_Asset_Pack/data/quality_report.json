@@ -1,0 +1,32 @@
+{
+  "status": "pass",
+  "image_count": 32,
+  "monsters": 20,
+  "characters": 12,
+  "all_images_decodable": true,
+  "all_ids_unique": true,
+  "all_prompts_present": true,
+  "all_dossiers_present": true,
+  "image_total_bytes": 87214386,
+  "pdf_pages": 42,
+  "scope": "File completeness and readability only; no runtime validation or user art approval.",
+  "pdf_validation": {
+    "pages": 42,
+    "art_dossier_pages": 32,
+    "all_pages_rendered": true,
+    "issues": [],
+    "pdf_bytes": 20308871
+  },
+  "catalogue_validation": {
+    "javascript_syntax": "pass",
+    "all_32_image_and_dossier_links": "pass",
+    "browser_interaction_test": "not performed: browser executable unavailable in environment"
+  },
+  "visual_qa_notes": [
+    {
+      "asset": "M14",
+      "note": "Illustrated eye cluster requires reconciliation to intended eight eyes during modeling; full note in monster dossier."
+    }
+  ],
+  "native_png_dimensions": "1536 x 1024 for every sheet"
+}

@@ -11,7 +11,7 @@ const DEEDS := {
 	"rook_privacy_broken":{"flag":"rook_disclosure", "value":"public", "requires":{"lr_rook_privacy":"promised"}, "memory":"lr.rook.privacy.broken", "group":"rook_privacy", "weight":-15, "text":"Published Rook's family mark after explicitly promising to keep it private.", "known":["rook"], "grievance":["rook"]},
 	"grain_help":{"flag":"saga_gre_q01:weigh_next_batch:part", "at_least":2, "group":"grain", "weight":2, "text":"Checked the next grain delivery with Nessa.", "known":["nessa", "toma"]},
 	"grain_coercion":{"flag":"saga_gre_q01_outcome", "value":"coerced", "group":"grain", "weight":-10, "text":"Threatened to expose a grain household's address to secure repayment.", "known":["nessa", "toma"], "grievance":["toma"]},
-	"bell_work":{"flag":"saga_gre_q02:sound_trial:part", "at_least":2, "weight":2, "text":"Helped restore and publicly test Jory's warning mechanism.", "known":["jory", "tor", "nessa"]},
+	"bell_work":{"flag":"saga_gre_q02:sound_trial:part", "at_least":2, "weight":2, "text":"Helped restore and publicly test Tor's warning mechanism.", "known":["jory", "tor", "nessa"]},
 	"arrivals_shelter":{"flag":"saga_gre_q05:post_terms:part", "at_least":2, "weight":5, "text":"Escorted the arriving travelers to unconditional shelter and delivered its supplies.", "known":["nessa", "anwen"]},
 	"friend_tor_hinge":{"flag":"lr_friend_tor_hinge", "value":"worked", "weight":2, "text":"Finished Tor's offered hinge work.", "known":["tor"]},
 	"friend_mira_garden":{"flag":"lr_friend_mira_garden", "value":"worked", "weight":2, "text":"Finished the shared work in Mira's garden.", "known":["mira"]},
@@ -24,7 +24,15 @@ const DEEDS := {
 }
 
 static func actor_key(id: String) -> String:
-	return str(ALIASES.get(id, id.trim_prefix("saga_")))
+	var key := str(ALIASES.get(id, id.trim_prefix("saga_")))
+	var person := preload("res://scripts/story_cast_profile.gd").canonical_identity(key)
+	return person if person != "" else key
+
+static func includes_actor(people: Array, actor: String) -> bool:
+	for person: String in people:
+		if actor_key(person) == actor:
+			return true
+	return false
 
 static func satisfied(state, rule: Dictionary) -> bool:
 	if rule.has("memory"):

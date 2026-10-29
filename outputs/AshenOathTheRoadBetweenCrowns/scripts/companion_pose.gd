@@ -12,9 +12,9 @@ var duration := 1.0
 func configure(rig: Skeleton3D) -> void:
 	for index in rig.get_bone_count():
 		match str(rig.get_bone_name(index)).replace("_", "."):
-			"Bone.003": head = index
-			"Bone.002": neck = index
-			"Bone.004": tail = index
+			"Head": head = index
+			"Neck": neck = index
+			"Tail0", "Tail.0": tail = index
 
 func pose(action: String, seconds: float) -> void:
 	kind = action

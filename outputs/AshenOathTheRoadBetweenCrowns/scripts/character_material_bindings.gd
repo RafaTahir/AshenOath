@@ -5,7 +5,7 @@ const BINDINGS := "character_expected_materials"
 static func capture(root: Node3D, source: String) -> bool:
 	var bindings: Array[Dictionary] = []
 	var errors: Array[String] = []
-	var atlas_required := source.to_lower().ends_with("_atlas.gltf")
+	var atlas_required := source.to_lower().ends_with("_atlas.gltf") or source.begins_with("res://assets_external/design_pack_v1/")
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
 		if mesh.mesh == null or str(mesh.name).to_lower().contains("shadow"):
 			continue

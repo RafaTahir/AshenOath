@@ -15,7 +15,8 @@ const HUMAN_ROLES := [
 const MONSTER_ROLES := [
 	"ghoulkin", "wychwood_stalker", "wychwood_raider", "wychwood_brute",
 	"ghoulkin_skeleton", "bog_wretch", "gravebound_knight", "bell_eater",
-	"rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar"
+	"rootbound_colossus", "ashwing", "halvern_boss", "white_hart_avatar",
+	"silt_maw", "millback", "glassmoth", "knell_leech", "hearthscale", "gallows_weaver", "reed_choir", "inkblind", "cairn_mother", "shroud_swimmer"
 ]
 
 static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dictionary:
@@ -47,7 +48,7 @@ static func apply(root: Node, role_id: String, variant_seed: String = "") -> Dic
 					role_is_monster_role(role),
 					_wash_strength(token, role)
 				))
-			elif not role_is_monster_role(role):
+			elif not role_is_monster_role(role) and not bool(root.get_meta("character_authored_silhouette", false)):
 				_apply_regional_cloth(mesh, index, source, profile)
 			surfaces += 1
 			if token.contains("head") or token.contains("skin") or token.contains("eyes") or token.contains("hair") or token.contains("skull") or token.contains("jaw") or token.contains("mouth") or token.contains("teeth"):
@@ -129,7 +130,7 @@ static func _native_monster_surface_count(root: Node) -> int:
 	return count
 
 static func _contains_complete_family(root: Node) -> bool:
-	if str(root.get_meta("character_asset_family", "")) in ["quaternius_animated_humanoid", "quaternius_ranger"]:
+	if str(root.get_meta("character_asset_family", "")) in ["quaternius_animated_humanoid", "quaternius_ranger", "ashen_design_pack_monster"]:
 		return true
 	for child in root.get_children():
 		if _contains_complete_family(child):

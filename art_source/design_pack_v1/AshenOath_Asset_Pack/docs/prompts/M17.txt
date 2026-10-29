@@ -1,0 +1,17 @@
+Use case: stylized-concept. Asset type: individual visual development and 3D modeling reference for the original grounded dark fantasy RPG ASHENOATH. Create one exceptionally polished high-resolution landscape 3:2 design sheet. Premium realistic game-character art, tangible physically believable materials, anatomically credible, detailed sculptural rendering with restrained painterly finish. This is an original design.
+
+Subject: Cairn Mother. An enormous land mollusc, 3.5 metres long, whose muscular foot carries a heavy, low spiral shell. Mineral deposits have grown into broad uneven layers around the shell rather than a pile of balanced loose rocks. The exposed body is dark slate and finely pebbled, with a pale travelling edge pressed firmly to the ground. Two long upper feelers carry small dark eyes; two shorter lower feelers test the soil. Old lichen grows only on sheltered shell surfaces. The mouth is a modest fold beneath the head, not a ring of monstrous fangs. Its slow, continuous movement and visible load-bearing foot make the creature feel ancient and physical.
+
+Silhouette: Massive slow mollusc with a low muscular foot and an irregular stone-encrusted spiral shell.
+
+Materials/textures: layered mineral shell; slate mollusc skin; lichen; damp soil. Color palette: stone grey; slate black; lichen sage; pale clay.
+
+Scale reference in anatomy only, no rulers or extra figure: {"length_m":3.5,"shell_height_m":1.9,"height_basis":"proposed design target"}.
+
+Composition: one large complete front three-quarter body view on left occupying about 55%, a smaller complete rear three-quarter body view in middle-right, a detailed close-up of the same head upper-right and one small signature anatomy detail lower-right. Multiple views of ONE identical creature design. Keep all body extremities, tails and wings fully inside frame. Adjust spacing for long or winged anatomy. Camera level without extreme foreshortening, model-reference stance, neutral expression. Clear separation and no overlaps. Seamless warm stone-grey backdrop, no landscape, no dramatic fog, no scene props.
+
+Art direction: grounded dark-fantasy naturalism, credible body weight and joints, irregular lived-in surfaces, visible wool weave, worn leather, worked metals or organic skin as relevant. Neutral broad studio light with readable shadows; restrained earthy local colors, strong silhouette. A subtly premium museum-catalogue presentation.
+
+Text (verbatim): "M17 / CAIRN MOTHER". Small restrained top-left header only.
+
+Constraints: no copied franchise character, no cartoon, anime, toy or low-poly look; no neon bloom, no exaggerated superhero proportions, no extra limbs/fingers, no unnecessary ornamental spikes, no floating attachments or clothing intersecting faces. No decorative frame, no watermark. Only a restrained small top-left header using exact provided ID and NAME; no other text. This is premium production concept illustration, not a claim of an actual 3D model.

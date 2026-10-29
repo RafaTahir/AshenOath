@@ -1,50 +1,1430 @@
 {
   "version": 1,
   "contract": "Finite nonmodal performances. Movement, camera, Use, quests, rewards and endings retain their owners. Wait on separation; resume unheard turns. Never conjure absent speakers.",
-  "direction_defaults": {"knowledge":"Only the present participants' observed work and the explicit recorded conditions on this scene. A quotation is never a summoned witness.","interruption":"Protected dialogue, danger, weapons, menus, absence and separation suspend playback. Release all presentation and navigation ownership; resume at the last fully heard turn.","consequence":"Completion remembers this exchange for the journal. Existing quest work, physical aftermath and optional services retain their own state and rewards.","performance":"Use the named occupation, existing hand stations when in reach, restrained gesture, listener gaze and approved audio only. Subtitle-only lines do not fake speech animation."},
+  "direction_defaults": {
+    "knowledge": "Only the present participants' observed work and the explicit recorded conditions on this scene. A quotation is never a summoned witness.",
+    "interruption": "Protected dialogue, danger, weapons, menus, absence and separation suspend playback. Release all presentation and navigation ownership; resume at the last fully heard turn.",
+    "consequence": "Completion remembers this exchange for the journal. Existing quest work, physical aftermath and optional services retain their own state and rewards.",
+    "performance": "Use the named occupation, existing hand stations when in reach, restrained gesture, listener gaze and approved audio only. Subtitle-only lines do not fake speech animation."
+  },
   "scenes": [
-    {"id":"gre_arrival","zone":"greyfen","kind":"anchor","actors":["saga_nessa"],"purpose":"An ordinary welcome has useful work behind it.","action":"bake","knowledge":"Nessa knows only the kitchen shortage.","consequence":"Existing flour and water work remains available.","unless":["evidence_report"],"turns":[["saga_nessa","Nessa","Mind the hot side. A loaf looks much the same before it burns your hand."],["player","Kael","Which side is the hot one?"],["saga_nessa","Nessa","The one I told you to mind. There is water by the care bench, if Anwen needs a hand."]]},
-    {"id":"gre_warning","zone":"greyfen","kind":"anchor","actors":["saga_jory","blacksmith_tor"],"purpose":"A warning belongs to people who can recognize it.","action":"check_rope","knowledge":"The ordinary repaired mechanism is tested, not the cemetery bell.","quests":["saga_gre_q02"],"stage":{"saga_jory":[-9,0,-6],"blacksmith_tor":[-8,0,-5.5]},"turns":[["saga_jory","Jory","Brake. Pin. Release. The watch answered the trial."],["blacksmith_tor","Tor","Check it with your eyes as well. A rope can lie to your fingers."],["saga_jory","Jory","Then I will leave the rhythm beside the post. For the ones who cannot hear it."]]},
-    {"id":"gre_company","zone":"greyfen","kind":"anchor","actors":["rook","saga_nessa"],"purpose":"Company without a debt or a mandatory win.","action":"rest","gathering":true,"turns":[["rook","Rook","I saved you the honest cup. The other one improves my chances."],["saga_nessa","Nessa","The cups are identical."],["rook","Rook","Not after I explain them. Sit, walk, lose at Three Marks. We can manage all three."]]},
-    {"id":"gre_renewal","zone":"greyfen","kind":"anchor","actors":["sister_anwen"],"purpose":"Protection has a practical offer and a cost.","action":"sort_supplies","when":{"renewal_announced":true},"unless":["final_choice_completed"],"walk":[[2,0,-5.8],[3.5,0,-6.4]],"turns":[["sister_anwen","Anwen","The renewed store would keep these blankets dry. I will not pretend that is nothing."],["player","Kael","And the names beneath the terms?"],["sister_anwen","Anwen","People, not ink. Let them hear the offer before anyone answers for them."]]},
-    {"id":"gre_home","zone":"greyfen","kind":"anchor","actors":["sister_anwen"],"purpose":"Homecoming is care and practical work, not absolution.","action":"care","when":{"final_choice_completed":true},"turns":[["sister_anwen","Anwen","The road brought you back. Set the cup there; there is still work to finish."],["player","Kael","I can stay for that."],["sister_anwen","Anwen","Then do that much. The bench and the road will still be here when we have spoken."]],"variants":[{"when":{"witness_consent_anwen":"refused"},"turns":[["sister_anwen","Anwen","You did not demand my oath. My refusal remains mine; it was not a threat you made."],["player","Kael","I have come back, not to ask again."],["sister_anwen","Anwen","Good. There is a cup to rinse and a bench that needs your hands."]]}]},
-    {"id":"wyc_work","zone":"wychwood","kind":"anchor","actors":["saga_iven"],"purpose":"The forest is someone's livelihood, not an enemy faction.","action":"check_rope","turns":[["saga_iven","Iven","Keep out from under that crown. Sound trunk, rotten branch."],["player","Kael","You stopped cutting."],["saga_iven","Iven","I stopped this cut. My supper still needs a fire. Edda would remind me if I forgot."]]},
-    {"id":"wyc_water_walk","zone":"wychwood","kind":"anchor","actors":["saga_edda"],"purpose":"Show the practical disagreement through wet stock and the water edge.","action":"sort_supplies","walk":[[6,0,10],[8,0,7.8]],"turns":[["saga_edda","Edda","Pick that end up. Hear it hiss? Wet through. Useless in the kiln."],["player","Kael","Then why keep it?"],["saga_edda","Edda","Because next week it will be dry. Iven wants the stack farther from the water. He is right. I am still allowed to complain about carrying it."]]},
-    {"id":"wyc_return","zone":"wychwood","kind":"anchor","actors":["saga_iven"],"purpose":"The chosen watercourse needs continuing ordinary attention.","action":"check_rope","quests":["saga_wyc_q05"],"turns":[["saga_iven","Iven","The pots are clear. The screen still catches leaves. I can manage leaves."],["player","Kael","Not everything ended with the Wretch."],["saga_iven","Iven","No. But we can see the work now."]],"variants":[{"when":{"saga_wyc_q05_outcome":"side_channel"},"turns":[["saga_iven","Iven","Your side channel keeps the work water separate. I checked the screen this morning."],["player","Kael","And the main run?"],["saga_iven","Iven","Still open. Two useful things, neither needing to own the other."]]}]},
-    {"id":"dep_work","zone":"burned_farmstead","kind":"anchor","actors":["saga_ressa"],"purpose":"Let Ressa demonstrate useful patience instead of explaining the region's theme.","action":"tend","walk":[[3.5,0,8],[1.7,0,10.5]],"turns":[["saga_ressa","Ressa","Hold the corner. Not like an enemy, Kael. It is a seed tray."],["player","Kael","I thought it was crooked."],["saga_ressa","Ressa","It is. I shall turn it round when Dain visits so he can stop advising me. Mind the clean fill; that took two trips."]]},
-    {"id":"dep_freight","zone":"old_mill","kind":"anchor","actors":["saga_dain"],"purpose":"Present survival is not a denial of historical responsibility.","action":"sort_supplies","turns":[["saga_dain","Dain","Sound boards left. Split ones for wedges. I will not charge you for learning the system."],["player","Kael","Who decides what goes back to work?"],["saga_dain","Dain","We should. With the old account beside the current one, not underneath it."]],"variants":[{"when":{"saga_dep_q01_outcome":"falsified"},"turns":[["saga_dain","Dain","I have kept the rejected-load slip. Your false dispatch does not make that fee disappear."],["player","Kael","You can still challenge the entry."],["saga_dain","Dain","I will. That is work you added, not a kindness I owe you."]]}]},
-    {"id":"dep_rebuild","zone":"old_mill","kind":"anchor","actors":["saga_dain","mill_second_worker"],"purpose":"Show the actual rebuilding choice through work.","action":"repair","quests":["saga_dep_q05"],"stage":{"saga_dain":[-4.5,0,11],"mill_second_worker":[-5.6,0,11]},"turns":[["saga_dain","Dain","Start under the new cover. Dry tools first."],["mill_second_worker","Worker","And a finish to the shift?"],["saga_dain","Dain","On the list. Beside what we agreed this place is for."]],"variants":[{"when":{"mill_operation":"closed"},"turns":[["saga_dain","Dain","The mill stays closed. We can use the shelter without pretending otherwise."],["mill_second_worker","Worker","These tools are for the new work, then."],["saga_dain","Dain","Exactly. Check the agreed use on the tray before you start."]]}]},
-    {"id":"roa_crossing","zone":"marsh_crossing","kind":"anchor","actors":["saga_nera"],"purpose":"Safety is a learned service, not ownership of passage.","action":"check_rope","walk":[[-4.4,0,9],[-5,0,6]],"turns":[["saga_nera","Nera","Stand on the pale stone. Not because it is lucky. Because it is firm."],["player","Kael","Do you say that to everyone?"],["saga_nera","Nera","Only the ones I want to reach the other side. So far, everyone."]]},
-    {"id":"roa_safety","zone":"bandit_road","kind":"anchor","actors":["captain_senn","saga_tavin"],"purpose":"Hear specific competing accounts while both men are present.","action":"check_supplies","unless":["senn_fate"],"stage":{"captain_senn":[6.7,0,2.8],"saga_tavin":[5.5,0,3.4]},"turns":[["captain_senn","Senn","Someone has to keep the crossing supplied."],["saga_tavin","Tavin","Rope, planks, hands. Not every name that passes us."],["captain_senn","Senn","You know what an empty store costs."],["saga_tavin","Tavin","I know. I used to count it for you."]]},
-    {"id":"roa_return","zone":"bandit_road","kind":"anchor","actors":["saga_tavin"],"purpose":"Demonstrate open passage through the work left behind; never summon absent Senn.","action":"sort_supplies","when":{"senn_fate":["testimony","exile","punished"]},"quests":["saga_roa_q05"],"turns":[["saga_tavin","Tavin","Someone went through before sunrise. Left a broken buckle, took a piece of cord."],["player","Kael","You let them?"],["saga_tavin","Tavin","That is what the tray is for. Spent half the morning trying not to count the cord. Nera says I will learn."]]},
-    {"id":"var_work","zone":"record_hall","kind":"anchor","actors":["saga_lysa","vargan_record_keeper"],"purpose":"Introduce clerks by the small, necessary task they are doing.","action":"read","stage":{"saga_lysa":[-3.8,0,7.8],"vargan_record_keeper":[-2.6,0,7.8]},"turns":[["saga_lysa","Lysa","I copied the stain as well. You said exactly."],["vargan_record_keeper","Vale","The words exactly. Not my tea."],["saga_lysa","Lysa","Then tell me which part the seal covers."],["vargan_record_keeper","Vale","There. Under the approval date. Leave the original beside it; we will need both hands to show the difference."]]},
-    {"id":"var_authority","zone":"record_hall","kind":"anchor","actors":["edric"],"purpose":"Show why people rely on Edric before confronting his conditions.","action":"read","walk":[[0,0,-11],[-1,0,-10]],"turns":[["edric","Edric","Look at the delivery date. Before the frost. The wagons did not wait for anyone to agree that winter was coming."],["player","Kael","The household names are beside the assent column."],["edric","Edric","Yes. And beside the sacks they received. If you mean to take my authority apart, begin by telling them who opens the store tomorrow."]]},
-    {"id":"var_after","zone":"record_hall","kind":"anchor","actors":["saga_lysa","vargan_record_keeper"],"purpose":"Aftermath preserves source limits, including Halvern's account.","action":"read","when":{"halvern_fate":["witness","released","destroyed"]},"turns":[["saga_lysa","Lysa","I left a space for the source."],["vargan_record_keeper","Vale","Good. A witness is not a room full of witnesses. Halvern's recorded outcome stands."],["saga_lysa","Lysa","And the households can challenge their supply copies?"],["vargan_record_keeper","Vale","If we keep the reply tray reachable. Start there."]],"variants":[{"when":{"halvern_fate":"destroyed"},"turns":[["saga_lysa","Lysa","No further answer can come from Halvern."],["vargan_record_keeper","Vale","Then do not fill the silence in his name. Keep the surviving account and its limits."],["saga_lysa","Lysa","And leave the reply tray open for living people."]]}]},
-    {"id":"har_work","zone":"ruins","kind":"anchor","actors":["saga_maelin","saga_oris"],"purpose":"Living work and remembrance have room beside each other.","action":"sort_seeds","stage":{"saga_maelin":[-1.2,0,4.8],"saga_oris":[-2.4,0,4.8]},"turns":[["saga_maelin","Maelin","The seed envelopes are not chisel rests."],["saga_oris","Oris","I thought that one was empty."],["saga_maelin","Maelin","It is for next spring. Empty is not useless."]]},
-    {"id":"har_care_walk","zone":"ruins","kind":"anchor","actors":["saga_oris"],"purpose":"Show a changed working habit and allow a quiet joke.","action":"repair","walk":[[-5,0,4.8],[-2.6,0,4.4]],"quests":["saga_har_q02"],"turns":[["saga_oris","Oris","The last stone on the rack. I kept walking past it yesterday, looking for another."],["player","Kael","Find one?"],["saga_oris","Oris","Maelin found me a bowl of supper instead. Terrible woman for interrupting a perfectly good worry."]]},
-    {"id":"har_after","zone":"hart_glade","kind":"anchor","actors":["player"],"purpose":"Attend to the changed grove without fabricating the Hart's presence or Kael's feelings.","action":"observe","when":{"final_choice_completed":true},"near":[5.4,0,9],"turns":[["player","Kael","The choice is made. The work in this place has not ended."]],"variants":[{"when":{"final_covenant":"ash"},"turns":[["player","Kael","The Hart is dead. No answer will come from it now. The living still have this place."]]},{"when":{"final_covenant":"witness"},"turns":[["player","Kael","The account can leave this glade. It is not a promise made for those who hear it."]]},{"when":{"final_covenant":"mercy"},"turns":[["player","Kael","The binding is released. Care will have to be offered, not collected."]]},{"when":{"final_covenant":"duty"},"turns":[["player","Kael","The binding remains under the chosen terms. That is an obligation to keep examining, not a final answer."]]}]},
-    {"id":"gre_exchange_before","zone":"greyfen","kind":"exchange","actors":["saga_nessa","rook"],"gathering":true,"purpose":"Establish shared humor.","action":"rest","turns":[["saga_nessa","Nessa","If that is another wager, carry the water first."],["rook","Rook","A cruel opening move."]]},
-    {"id":"gre_exchange_after","zone":"greyfen","kind":"exchange","actors":["saga_nessa","rook"],"gathering":true,"quests":["saga_gre_q04"],"purpose":"Remember the actual returned kettle without requiring victory.","action":"rest","turns":[["saga_nessa","Nessa","The kettle stays here this time."],["rook","Rook","I would never move a settled argument."]]},
-    {"id":"wyc_exchange_before","zone":"wychwood","kind":"exchange","actors":["saga_iven","saga_edda"],"stage":{"saga_iven":[-4.5,0,10.5],"saga_edda":[-3.4,0,10.5]},"purpose":"Workmates can disagree and still share a meal.","action":"sort_supplies","turns":[["saga_iven","Iven","That stack needs another day."],["saga_edda","Edda","Then the wood and I agree about something."]]},
-    {"id":"wyc_exchange_after","zone":"wychwood","kind":"exchange","actors":["saga_iven","saga_edda"],"quests":["saga_wyc_q05"],"stage":{"saga_iven":[7.7,0,-5.8],"saga_edda":[6.6,0,-5]},"purpose":"A cleared watercourse is visible work, not an abstract notice.","action":"check_rope","turns":[["saga_edda","Edda","Clear enough to see the bottom."],["saga_iven","Iven","And to see when it needs cleaning."]]},
-    {"id":"dep_exchange_before","zone":"old_mill","kind":"exchange","actors":["saga_dain","mill_second_worker"],"stage":{"saga_dain":[-3.6,0,7.5],"mill_second_worker":[-5.4,0,8.4]},"purpose":"Ordinary competence with a little teasing.","action":"sort_supplies","turns":[["saga_dain","Dain","Sound pieces on the left."],["mill_second_worker","Worker","Your left or the wagon's?"]]},
-    {"id":"dep_exchange_after","zone":"old_mill","kind":"exchange","actors":["saga_dain","mill_second_worker"],"quests":["saga_dep_q05"],"stage":{"saga_dain":[-4.5,0,11],"mill_second_worker":[-5.6,0,11]},"purpose":"A roof and a finite shift survive the resolution.","action":"repair","turns":[["mill_second_worker","Worker","No daylight through the cover."],["saga_dain","Dain","A roof with the decency to stay a roof."]]},
-    {"id":"roa_exchange_before","zone":"bandit_road","kind":"exchange","actors":["saga_tavin","captain_senn"],"unless":["senn_fate"],"stage":{"saga_tavin":[5.5,0,3.4],"captain_senn":[6.7,0,2.8]},"purpose":"Show disagreement before resolution, without inventing a fate.","action":"check_supplies","turns":[["saga_tavin","Tavin","Two coils missing. I wrote them down."],["captain_senn","Senn","Find the coils before you find a suspect."]]},
-    {"id":"roa_exchange_after","zone":"bandit_road","kind":"exchange","actors":["saga_tavin","captain_senn"],"when":{"senn_fate":"testimony"},"quests":["saga_roa_q05"],"stage":{"saga_tavin":[5.5,0,3.4],"captain_senn":[6.7,0,2.8]},"purpose":"Only the living, remaining captain speaks; other fates retain Tavin's return account.","action":"check_supplies","turns":[["saga_tavin","Tavin","Rope, planks, two short shifts. That is the repair list."],["captain_senn","Senn","No names beside the passage count. Leave it that way."]]},
-    {"id":"var_exchange_before","zone":"record_hall","kind":"exchange","actors":["saga_lysa","vargan_record_keeper"],"stage":{"saga_lysa":[-3.8,0,7.8],"vargan_record_keeper":[-2.6,0,7.8]},"purpose":"A clerk's care changes what a record can establish.","action":"read","turns":[["saga_lysa","Lysa","A tidy copy makes it look settled."],["vargan_record_keeper","Vale","That is why the source stays beside it."]]},
-    {"id":"var_exchange_after","zone":"record_hall","kind":"exchange","actors":["saga_lysa","vargan_record_keeper"],"quests":["saga_var_q01"],"stage":{"saga_lysa":[-3.8,0,7.8],"vargan_record_keeper":[-2.6,0,7.8]},"purpose":"Acknowledge the comparison without inventing testimony.","action":"read","turns":[["vargan_record_keeper","Vale","You left the altered words uncovered."],["saga_lysa","Lysa","I thought they had been hidden long enough."]]},
-    {"id":"har_exchange_before","zone":"ruins","kind":"exchange","actors":["saga_maelin","saga_oris"],"stage":{"saga_maelin":[-1.2,0,4.8],"saga_oris":[-2.4,0,4.8]},"purpose":"Care includes offering permission to stop.","action":"sort_seeds","turns":[["saga_maelin","Maelin","Put the chisel down. The bed does not need a stone tonight."],["saga_oris","Oris","I had almost convinced myself it did."]]},
-    {"id":"har_exchange_after","zone":"ruins","kind":"exchange","actors":["saga_maelin","saga_oris"],"quests":["saga_har_q02"],"stage":{"saga_maelin":[-1.2,0,4.8],"saga_oris":[-2.4,0,4.8]},"purpose":"A bounded promise leaves room for ordinary life.","action":"rest","turns":[["saga_oris","Oris","I stopped when I said I would."],["saga_maelin","Maelin","There. A promise that left time for supper."]]},
-    {"id":"escort_greyfen_arrival","zone":"greyfen","kind":"exchange","actors":["saga_maren"],"unless":["escort_abandonment_acknowledged"],"purpose":"Introduce an organizer doing her own work before her history with Kael is disclosed.","action":"sort_supplies","turns":[["saga_maren","Maren","Heavy end down first. No, the other heavy end. They never put a light one on these carts."],["player","Kael","Trouble with the wheel?"],["saga_maren","Maren","With the wheel, yes. Not with finding advice. I have enough of that."]]},
-    {"id":"escort_crossing_return","zone":"marsh_crossing","kind":"exchange","actors":["saga_nera"],"quests":["side_escort_04"],"purpose":"Ask for a concrete return report, without knowing Kael's private past.","action":"check_rope","turns":[["saga_nera","Nera","Last one all the way across?"],["player","Kael","Yes. Maren waited for him."],["saga_nera","Nera","Good. I will check the rope before the next load. You can tell her that much."]]}
+    {
+      "id": "gre_arrival",
+      "zone": "greyfen",
+      "kind": "anchor",
+      "actors": [
+        "saga_nessa"
+      ],
+      "purpose": "An ordinary welcome has useful work behind it.",
+      "action": "bake",
+      "knowledge": "Nessa knows only the kitchen shortage.",
+      "consequence": "Existing flour and water work remains available.",
+      "unless": [
+        "evidence_report"
+      ],
+      "turns": [
+        [
+          "saga_nessa",
+          "Nessa",
+          "Mind the hot side. A loaf looks much the same before it burns your hand."
+        ],
+        [
+          "player",
+          "Kael",
+          "Which side is the hot one?"
+        ],
+        [
+          "saga_nessa",
+          "Nessa",
+          "The one I told you to mind. There is water by the care bench, if Anwen needs a hand."
+        ]
+      ]
+    },
+    {
+      "id": "gre_warning",
+      "zone": "greyfen",
+      "kind": "anchor",
+      "actors": [
+        "blacksmith_tor",
+        "sister_anwen"
+      ],
+      "purpose": "A warning belongs to people who can recognize it.",
+      "action": "check_rope",
+      "knowledge": "The ordinary repaired mechanism is tested, not the cemetery bell.",
+      "quests": [
+        "saga_gre_q02"
+      ],
+      "stage": {
+        "blacksmith_tor": [
+          -9,
+          0,
+          -6
+        ],
+        "sister_anwen": [
+          -8,
+          0,
+          -5.5
+        ]
+      },
+      "turns": [
+        [
+          "blacksmith_tor",
+          "Tor",
+          "Brake. Pin. Release. The watch answered the trial."
+        ],
+        [
+          "sister_anwen",
+          "Anwen",
+          "I heard it from the care bench. What about the people who cannot hear it?"
+        ],
+        [
+          "blacksmith_tor",
+          "Tor",
+          "The rhythm is cut beside the post. Watch the arm: brake, pin, release. It should answer your eyes as honestly as your ears."
+        ]
+      ]
+    },
+    {
+      "id": "gre_company",
+      "zone": "greyfen",
+      "kind": "anchor",
+      "actors": [
+        "rook",
+        "saga_nessa"
+      ],
+      "purpose": "Company without a debt or a mandatory win.",
+      "action": "rest",
+      "gathering": true,
+      "turns": [
+        [
+          "rook",
+          "Rook",
+          "I saved you the honest cup. The other one improves my chances."
+        ],
+        [
+          "saga_nessa",
+          "Nessa",
+          "The cups are identical."
+        ],
+        [
+          "rook",
+          "Rook",
+          "Not after I explain them. Sit, walk, lose at Three Marks. We can manage all three."
+        ]
+      ]
+    },
+    {
+      "id": "gre_renewal",
+      "zone": "greyfen",
+      "kind": "anchor",
+      "actors": [
+        "sister_anwen"
+      ],
+      "purpose": "Protection has a practical offer and a cost.",
+      "action": "sort_supplies",
+      "when": {
+        "renewal_announced": true
+      },
+      "unless": [
+        "final_choice_completed"
+      ],
+      "walk": [
+        [
+          2,
+          0,
+          -5.8
+        ],
+        [
+          3.5,
+          0,
+          -6.4
+        ]
+      ],
+      "turns": [
+        [
+          "sister_anwen",
+          "Anwen",
+          "The renewed store would keep these blankets dry. I will not pretend that is nothing."
+        ],
+        [
+          "player",
+          "Kael",
+          "And the names beneath the terms?"
+        ],
+        [
+          "sister_anwen",
+          "Anwen",
+          "People, not ink. Let them hear the offer before anyone answers for them."
+        ]
+      ]
+    },
+    {
+      "id": "gre_home",
+      "zone": "greyfen",
+      "kind": "anchor",
+      "actors": [
+        "sister_anwen"
+      ],
+      "purpose": "Homecoming is care and practical work, not absolution.",
+      "action": "care",
+      "when": {
+        "final_choice_completed": true
+      },
+      "turns": [
+        [
+          "sister_anwen",
+          "Anwen",
+          "The road brought you back. Set the cup there; there is still work to finish."
+        ],
+        [
+          "player",
+          "Kael",
+          "I can stay for that."
+        ],
+        [
+          "sister_anwen",
+          "Anwen",
+          "Then do that much. The bench and the road will still be here when we have spoken."
+        ]
+      ],
+      "variants": [
+        {
+          "when": {
+            "witness_consent_anwen": "refused"
+          },
+          "turns": [
+            [
+              "sister_anwen",
+              "Anwen",
+              "You did not demand my oath. My refusal remains mine; it was not a threat you made."
+            ],
+            [
+              "player",
+              "Kael",
+              "I have come back, not to ask again."
+            ],
+            [
+              "sister_anwen",
+              "Anwen",
+              "Good. There is a cup to rinse and a bench that needs your hands."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wyc_work",
+      "zone": "wychwood",
+      "kind": "anchor",
+      "actors": [
+        "saga_iven"
+      ],
+      "purpose": "The forest is someone's livelihood, not an enemy faction.",
+      "action": "check_rope",
+      "turns": [
+        [
+          "saga_iven",
+          "Toma",
+          "Keep out from under that crown. Sound trunk, rotten branch."
+        ],
+        [
+          "player",
+          "Kael",
+          "You stopped cutting."
+        ],
+        [
+          "saga_iven",
+          "Toma",
+          "I stopped this cut. My supper still needs a fire. Mira would remind me if I forgot."
+        ]
+      ]
+    },
+    {
+      "id": "wyc_water_walk",
+      "zone": "wychwood",
+      "kind": "anchor",
+      "actors": [
+        "saga_edda"
+      ],
+      "purpose": "Show the practical disagreement through wet stock and the water edge.",
+      "action": "sort_supplies",
+      "walk": [
+        [
+          6,
+          0,
+          10
+        ],
+        [
+          8,
+          0,
+          7.8
+        ]
+      ],
+      "turns": [
+        [
+          "saga_edda",
+          "Mira",
+          "Pick that end up. Hear it hiss? Wet through. Useless in the kiln."
+        ],
+        [
+          "player",
+          "Kael",
+          "Then why keep it?"
+        ],
+        [
+          "saga_edda",
+          "Mira",
+          "Because next week it will be dry. Toma wants the stack farther from the water. He is right. I am still allowed to complain about carrying it."
+        ]
+      ]
+    },
+    {
+      "id": "wyc_return",
+      "zone": "wychwood",
+      "kind": "anchor",
+      "actors": [
+        "saga_iven"
+      ],
+      "purpose": "The chosen watercourse needs continuing ordinary attention.",
+      "action": "check_rope",
+      "quests": [
+        "saga_wyc_q05"
+      ],
+      "turns": [
+        [
+          "saga_iven",
+          "Toma",
+          "The pots are clear. The screen still catches leaves. I can manage leaves."
+        ],
+        [
+          "player",
+          "Kael",
+          "Not everything ended with the Wretch."
+        ],
+        [
+          "saga_iven",
+          "Toma",
+          "No. But we can see the work now."
+        ]
+      ],
+      "variants": [
+        {
+          "when": {
+            "saga_wyc_q05_outcome": "side_channel"
+          },
+          "turns": [
+            [
+              "saga_iven",
+              "Toma",
+              "Your side channel keeps the work water separate. I checked the screen this morning."
+            ],
+            [
+              "player",
+              "Kael",
+              "And the main run?"
+            ],
+            [
+              "saga_iven",
+              "Toma",
+              "Still open. Two useful things, neither needing to own the other."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dep_work",
+      "zone": "burned_farmstead",
+      "kind": "anchor",
+      "actors": [
+        "saga_ressa"
+      ],
+      "purpose": "Let Elna demonstrate useful patience instead of explaining the region's theme.",
+      "action": "tend",
+      "walk": [
+        [
+          3.5,
+          0,
+          8
+        ],
+        [
+          1.7,
+          0,
+          10.5
+        ]
+      ],
+      "turns": [
+        [
+          "saga_ressa",
+          "Elna",
+          "Hold the corner. Not like an enemy, Kael. It is a seed tray."
+        ],
+        [
+          "player",
+          "Kael",
+          "I thought it was crooked."
+        ],
+        [
+          "saga_ressa",
+          "Elna",
+          "It is. I shall turn it round when Tor visits so he can stop advising me. Mind the clean fill; that took two trips."
+        ]
+      ]
+    },
+    {
+      "id": "dep_freight",
+      "zone": "old_mill",
+      "kind": "anchor",
+      "actors": [
+        "saga_dain"
+      ],
+      "purpose": "Present survival is not a denial of historical responsibility.",
+      "action": "sort_supplies",
+      "turns": [
+        [
+          "saga_dain",
+          "Tor",
+          "Sound boards left. Split ones for wedges. I will not charge you for learning the system."
+        ],
+        [
+          "player",
+          "Kael",
+          "Who decides what goes back to work?"
+        ],
+        [
+          "saga_dain",
+          "Tor",
+          "We should. With the old account beside the current one, not underneath it."
+        ]
+      ],
+      "variants": [
+        {
+          "when": {
+            "saga_dep_q01_outcome": "falsified"
+          },
+          "turns": [
+            [
+              "saga_dain",
+              "Tor",
+              "I have kept the rejected-load slip. Your false dispatch does not make that fee disappear."
+            ],
+            [
+              "player",
+              "Kael",
+              "You can still challenge the entry."
+            ],
+            [
+              "saga_dain",
+              "Tor",
+              "I will. That is work you added, not a kindness I owe you."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dep_rebuild",
+      "zone": "old_mill",
+      "kind": "anchor",
+      "actors": [
+        "saga_dain",
+        "mill_second_worker"
+      ],
+      "purpose": "Show the actual rebuilding choice through work.",
+      "action": "repair",
+      "quests": [
+        "saga_dep_q05"
+      ],
+      "stage": {
+        "saga_dain": [
+          -4.5,
+          0,
+          11
+        ],
+        "mill_second_worker": [
+          -5.6,
+          0,
+          11
+        ]
+      },
+      "turns": [
+        [
+          "saga_dain",
+          "Tor",
+          "Start under the new cover. Dry tools first."
+        ],
+        [
+          "mill_second_worker",
+          "Worker",
+          "And a finish to the shift?"
+        ],
+        [
+          "saga_dain",
+          "Tor",
+          "On the list. Beside what we agreed this place is for."
+        ]
+      ],
+      "variants": [
+        {
+          "when": {
+            "mill_operation": "closed"
+          },
+          "turns": [
+            [
+              "saga_dain",
+              "Tor",
+              "The mill stays closed. We can use the shelter without pretending otherwise."
+            ],
+            [
+              "mill_second_worker",
+              "Worker",
+              "These tools are for the new work, then."
+            ],
+            [
+              "saga_dain",
+              "Tor",
+              "Exactly. Check the agreed use on the tray before you start."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "roa_crossing",
+      "zone": "marsh_crossing",
+      "kind": "anchor",
+      "actors": [
+        "saga_nera"
+      ],
+      "purpose": "Safety is a learned service, not ownership of passage.",
+      "action": "check_rope",
+      "walk": [
+        [
+          -4.4,
+          0,
+          9
+        ],
+        [
+          -5,
+          0,
+          6
+        ]
+      ],
+      "turns": [
+        [
+          "saga_nera",
+          "Nera",
+          "Stand on the pale stone. Not because it is lucky. Because it is firm."
+        ],
+        [
+          "player",
+          "Kael",
+          "Do you say that to everyone?"
+        ],
+        [
+          "saga_nera",
+          "Nera",
+          "Only the ones I want to reach the other side. So far, everyone."
+        ]
+      ]
+    },
+    {
+      "id": "roa_safety",
+      "zone": "bandit_road",
+      "kind": "anchor",
+      "actors": [
+        "captain_senn",
+        "saga_tavin"
+      ],
+      "purpose": "Hear specific competing accounts while both men are present.",
+      "action": "check_supplies",
+      "unless": [
+        "senn_fate"
+      ],
+      "stage": {
+        "captain_senn": [
+          6.7,
+          0,
+          2.8
+        ],
+        "saga_tavin": [
+          5.5,
+          0,
+          3.4
+        ]
+      },
+      "turns": [
+        [
+          "captain_senn",
+          "Senn",
+          "Someone has to keep the crossing supplied."
+        ],
+        [
+          "saga_tavin",
+          "Rook",
+          "Rope, planks, hands. Not every name that passes us."
+        ],
+        [
+          "captain_senn",
+          "Senn",
+          "You know what an empty store costs."
+        ],
+        [
+          "saga_tavin",
+          "Rook",
+          "I know. I used to count it for you."
+        ]
+      ]
+    },
+    {
+      "id": "roa_return",
+      "zone": "bandit_road",
+      "kind": "anchor",
+      "actors": [
+        "saga_tavin"
+      ],
+      "purpose": "Demonstrate open passage through the work left behind; never summon absent Senn.",
+      "action": "sort_supplies",
+      "when": {
+        "senn_fate": [
+          "testimony",
+          "exile",
+          "punished"
+        ]
+      },
+      "quests": [
+        "saga_roa_q05"
+      ],
+      "turns": [
+        [
+          "saga_tavin",
+          "Rook",
+          "Someone went through before sunrise. Left a broken buckle, took a piece of cord."
+        ],
+        [
+          "player",
+          "Kael",
+          "You let them?"
+        ],
+        [
+          "saga_tavin",
+          "Rook",
+          "That is what the tray is for. Spent half the morning trying not to count the cord. Nera says I will learn."
+        ]
+      ]
+    },
+    {
+      "id": "var_work",
+      "zone": "record_hall",
+      "kind": "anchor",
+      "actors": [
+        "vargan_record_keeper"
+      ],
+      "purpose": "Introduce Vale through the precise limits she places on a copy.",
+      "action": "read",
+      "stage": {
+        "vargan_record_keeper": [
+          -2.6,
+          0,
+          7.8
+        ]
+      },
+      "turns": [
+        [
+          "player",
+          "Kael",
+          "The stain is missing from your copy."
+        ],
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "The order is copied exactly. My tea has no legal standing."
+        ],
+        [
+          "player",
+          "Kael",
+          "And that mark beneath the seal?"
+        ],
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "There. Under the approval date. Leave the original beside it; we will need both hands to show the difference."
+        ]
+      ]
+    },
+    {
+      "id": "var_authority",
+      "zone": "record_hall",
+      "kind": "anchor",
+      "actors": [
+        "edric"
+      ],
+      "purpose": "Show why people rely on Edric before confronting his conditions.",
+      "action": "read",
+      "walk": [
+        [
+          0,
+          0,
+          -11
+        ],
+        [
+          -1,
+          0,
+          -10
+        ]
+      ],
+      "turns": [
+        [
+          "edric",
+          "Edric",
+          "Look at the delivery date. Before the frost. The wagons did not wait for anyone to agree that winter was coming."
+        ],
+        [
+          "player",
+          "Kael",
+          "The household names are beside the assent column."
+        ],
+        [
+          "edric",
+          "Edric",
+          "Yes. And beside the sacks they received. If you mean to take my authority apart, begin by telling them who opens the store tomorrow."
+        ]
+      ]
+    },
+    {
+      "id": "var_after",
+      "zone": "record_hall",
+      "kind": "anchor",
+      "actors": [
+        "vargan_record_keeper"
+      ],
+      "purpose": "Aftermath preserves source limits, including Halvern's account.",
+      "action": "read",
+      "when": {
+        "halvern_fate": [
+          "witness",
+          "released",
+          "destroyed"
+        ]
+      },
+      "turns": [
+        [
+          "player",
+          "Kael",
+          "You left a space for the source."
+        ],
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "A witness is not a room full of witnesses. Halvern's recorded outcome stands. I will not enlarge his account for a cleaner page."
+        ],
+        [
+          "player",
+          "Kael",
+          "And the households can challenge their supply copies?"
+        ],
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "If we keep the reply tray reachable. Start there."
+        ]
+      ],
+      "variants": [
+        {
+          "when": {
+            "halvern_fate": "destroyed"
+          },
+          "turns": [
+            [
+              "player",
+              "Kael",
+              "No further answer can come from Halvern."
+            ],
+            [
+              "vargan_record_keeper",
+              "Vale",
+              "Then do not fill the silence in his name. Keep the surviving account and its limits."
+            ],
+            [
+              "player",
+              "Kael",
+              "The living can still answer. Leave the reply tray where they can reach it."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "har_work",
+      "zone": "ruins",
+      "kind": "anchor",
+      "actors": [
+        "saga_maelin",
+        "saga_oris"
+      ],
+      "purpose": "Living work and remembrance have room beside each other.",
+      "action": "sort_seeds",
+      "stage": {
+        "saga_maelin": [
+          -1.2,
+          0,
+          4.8
+        ],
+        "saga_oris": [
+          -2.4,
+          0,
+          4.8
+        ]
+      },
+      "turns": [
+        [
+          "saga_maelin",
+          "Mira",
+          "The seed envelopes are not chisel rests."
+        ],
+        [
+          "saga_oris",
+          "Tor",
+          "I thought that one was empty."
+        ],
+        [
+          "saga_maelin",
+          "Mira",
+          "It is for next spring. Empty is not useless."
+        ]
+      ]
+    },
+    {
+      "id": "har_care_walk",
+      "zone": "ruins",
+      "kind": "anchor",
+      "actors": [
+        "saga_oris"
+      ],
+      "purpose": "Show a changed working habit and allow a quiet joke.",
+      "action": "repair",
+      "walk": [
+        [
+          -5,
+          0,
+          4.8
+        ],
+        [
+          -2.6,
+          0,
+          4.4
+        ]
+      ],
+      "quests": [
+        "saga_har_q02"
+      ],
+      "turns": [
+        [
+          "saga_oris",
+          "Tor",
+          "The last stone on the rack. I kept walking past it yesterday, looking for another."
+        ],
+        [
+          "player",
+          "Kael",
+          "Find one?"
+        ],
+        [
+          "saga_oris",
+          "Tor",
+          "Mira found me a bowl of supper instead. Terrible woman for interrupting a perfectly good worry."
+        ]
+      ]
+    },
+    {
+      "id": "har_after",
+      "zone": "hart_glade",
+      "kind": "anchor",
+      "actors": [
+        "player"
+      ],
+      "purpose": "Attend to the changed grove without fabricating the Hart's presence or Kael's feelings.",
+      "action": "observe",
+      "when": {
+        "final_choice_completed": true
+      },
+      "near": [
+        5.4,
+        0,
+        9
+      ],
+      "turns": [
+        [
+          "player",
+          "Kael",
+          "The choice is made. The work in this place has not ended."
+        ]
+      ],
+      "variants": [
+        {
+          "when": {
+            "final_covenant": "ash"
+          },
+          "turns": [
+            [
+              "player",
+              "Kael",
+              "The Hart is dead. No answer will come from it now. The living still have this place."
+            ]
+          ]
+        },
+        {
+          "when": {
+            "final_covenant": "witness"
+          },
+          "turns": [
+            [
+              "player",
+              "Kael",
+              "The account can leave this glade. It is not a promise made for those who hear it."
+            ]
+          ]
+        },
+        {
+          "when": {
+            "final_covenant": "mercy"
+          },
+          "turns": [
+            [
+              "player",
+              "Kael",
+              "The binding is released. Care will have to be offered, not collected."
+            ]
+          ]
+        },
+        {
+          "when": {
+            "final_covenant": "duty"
+          },
+          "turns": [
+            [
+              "player",
+              "Kael",
+              "The binding remains under the chosen terms. That is an obligation to keep examining, not a final answer."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gre_exchange_before",
+      "zone": "greyfen",
+      "kind": "exchange",
+      "actors": [
+        "saga_nessa",
+        "rook"
+      ],
+      "gathering": true,
+      "purpose": "Establish shared humor.",
+      "action": "rest",
+      "turns": [
+        [
+          "saga_nessa",
+          "Nessa",
+          "If that is another wager, carry the water first."
+        ],
+        [
+          "rook",
+          "Rook",
+          "A cruel opening move."
+        ]
+      ]
+    },
+    {
+      "id": "gre_exchange_after",
+      "zone": "greyfen",
+      "kind": "exchange",
+      "actors": [
+        "saga_nessa",
+        "rook"
+      ],
+      "gathering": true,
+      "quests": [
+        "saga_gre_q04"
+      ],
+      "purpose": "Remember the actual returned kettle without requiring victory.",
+      "action": "rest",
+      "turns": [
+        [
+          "saga_nessa",
+          "Nessa",
+          "The kettle stays here this time."
+        ],
+        [
+          "rook",
+          "Rook",
+          "I would never move a settled argument."
+        ]
+      ]
+    },
+    {
+      "id": "wyc_exchange_before",
+      "zone": "wychwood",
+      "kind": "exchange",
+      "actors": [
+        "saga_iven",
+        "saga_edda"
+      ],
+      "stage": {
+        "saga_iven": [
+          -4.5,
+          0,
+          10.5
+        ],
+        "saga_edda": [
+          -3.4,
+          0,
+          10.5
+        ]
+      },
+      "purpose": "Workmates can disagree and still share a meal.",
+      "action": "sort_supplies",
+      "turns": [
+        [
+          "saga_iven",
+          "Toma",
+          "That stack needs another day."
+        ],
+        [
+          "saga_edda",
+          "Mira",
+          "Then the wood and I agree about something."
+        ]
+      ]
+    },
+    {
+      "id": "wyc_exchange_after",
+      "zone": "wychwood",
+      "kind": "exchange",
+      "actors": [
+        "saga_iven",
+        "saga_edda"
+      ],
+      "quests": [
+        "saga_wyc_q05"
+      ],
+      "stage": {
+        "saga_iven": [
+          7.7,
+          0,
+          -5.8
+        ],
+        "saga_edda": [
+          6.6,
+          0,
+          -5
+        ]
+      },
+      "purpose": "A cleared watercourse is visible work, not an abstract notice.",
+      "action": "check_rope",
+      "turns": [
+        [
+          "saga_edda",
+          "Mira",
+          "Clear enough to see the bottom."
+        ],
+        [
+          "saga_iven",
+          "Toma",
+          "And to see when it needs cleaning."
+        ]
+      ]
+    },
+    {
+      "id": "dep_exchange_before",
+      "zone": "old_mill",
+      "kind": "exchange",
+      "actors": [
+        "saga_dain",
+        "mill_second_worker"
+      ],
+      "stage": {
+        "saga_dain": [
+          -3.6,
+          0,
+          7.5
+        ],
+        "mill_second_worker": [
+          -5.4,
+          0,
+          8.4
+        ]
+      },
+      "purpose": "Ordinary competence with a little teasing.",
+      "action": "sort_supplies",
+      "turns": [
+        [
+          "saga_dain",
+          "Tor",
+          "Sound pieces on the left."
+        ],
+        [
+          "mill_second_worker",
+          "Worker",
+          "Your left or the wagon's?"
+        ]
+      ]
+    },
+    {
+      "id": "dep_exchange_after",
+      "zone": "old_mill",
+      "kind": "exchange",
+      "actors": [
+        "saga_dain",
+        "mill_second_worker"
+      ],
+      "quests": [
+        "saga_dep_q05"
+      ],
+      "stage": {
+        "saga_dain": [
+          -4.5,
+          0,
+          11
+        ],
+        "mill_second_worker": [
+          -5.6,
+          0,
+          11
+        ]
+      },
+      "purpose": "A roof and a finite shift survive the resolution.",
+      "action": "repair",
+      "turns": [
+        [
+          "mill_second_worker",
+          "Worker",
+          "No daylight through the cover."
+        ],
+        [
+          "saga_dain",
+          "Tor",
+          "A roof with the decency to stay a roof."
+        ]
+      ]
+    },
+    {
+      "id": "roa_exchange_before",
+      "zone": "bandit_road",
+      "kind": "exchange",
+      "actors": [
+        "saga_tavin",
+        "captain_senn"
+      ],
+      "unless": [
+        "senn_fate"
+      ],
+      "stage": {
+        "saga_tavin": [
+          5.5,
+          0,
+          3.4
+        ],
+        "captain_senn": [
+          6.7,
+          0,
+          2.8
+        ]
+      },
+      "purpose": "Show disagreement before resolution, without inventing a fate.",
+      "action": "check_supplies",
+      "turns": [
+        [
+          "saga_tavin",
+          "Rook",
+          "Two coils missing. I wrote them down."
+        ],
+        [
+          "captain_senn",
+          "Senn",
+          "Find the coils before you find a suspect."
+        ]
+      ]
+    },
+    {
+      "id": "roa_exchange_after",
+      "zone": "bandit_road",
+      "kind": "exchange",
+      "actors": [
+        "saga_tavin",
+        "captain_senn"
+      ],
+      "when": {
+        "senn_fate": "testimony"
+      },
+      "quests": [
+        "saga_roa_q05"
+      ],
+      "stage": {
+        "saga_tavin": [
+          5.5,
+          0,
+          3.4
+        ],
+        "captain_senn": [
+          6.7,
+          0,
+          2.8
+        ]
+      },
+      "purpose": "Only the living, remaining captain speaks; other fates retain Rook's return account.",
+      "action": "check_supplies",
+      "turns": [
+        [
+          "saga_tavin",
+          "Rook",
+          "Rope, planks, two short shifts. That is the repair list."
+        ],
+        [
+          "captain_senn",
+          "Senn",
+          "No names beside the passage count. Leave it that way."
+        ]
+      ]
+    },
+    {
+      "id": "var_exchange_before",
+      "zone": "record_hall",
+      "kind": "exchange",
+      "actors": [
+        "vargan_record_keeper"
+      ],
+      "stage": {
+        "vargan_record_keeper": [
+          -2.6,
+          0,
+          7.8
+        ]
+      },
+      "purpose": "A clerk's care changes what a record can establish.",
+      "action": "read",
+      "turns": [
+        [
+          "player",
+          "Kael",
+          "A tidy copy makes it look settled."
+        ],
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "That is why the source stays beside it."
+        ]
+      ]
+    },
+    {
+      "id": "var_exchange_after",
+      "zone": "record_hall",
+      "kind": "exchange",
+      "actors": [
+        "vargan_record_keeper"
+      ],
+      "quests": [
+        "saga_var_q01"
+      ],
+      "stage": {
+        "vargan_record_keeper": [
+          -2.6,
+          0,
+          7.8
+        ]
+      },
+      "purpose": "Acknowledge the comparison without inventing testimony.",
+      "action": "read",
+      "turns": [
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "You left the altered words uncovered."
+        ],
+        [
+          "player",
+          "Kael",
+          "I thought they had been hidden long enough."
+        ]
+      ]
+    },
+    {
+      "id": "har_exchange_before",
+      "zone": "ruins",
+      "kind": "exchange",
+      "actors": [
+        "saga_maelin",
+        "saga_oris"
+      ],
+      "stage": {
+        "saga_maelin": [
+          -1.2,
+          0,
+          4.8
+        ],
+        "saga_oris": [
+          -2.4,
+          0,
+          4.8
+        ]
+      },
+      "purpose": "Care includes offering permission to stop.",
+      "action": "sort_seeds",
+      "turns": [
+        [
+          "saga_maelin",
+          "Mira",
+          "Put the chisel down. The bed does not need a stone tonight."
+        ],
+        [
+          "saga_oris",
+          "Tor",
+          "I had almost convinced myself it did."
+        ]
+      ]
+    },
+    {
+      "id": "har_exchange_after",
+      "zone": "ruins",
+      "kind": "exchange",
+      "actors": [
+        "saga_maelin",
+        "saga_oris"
+      ],
+      "quests": [
+        "saga_har_q02"
+      ],
+      "stage": {
+        "saga_maelin": [
+          -1.2,
+          0,
+          4.8
+        ],
+        "saga_oris": [
+          -2.4,
+          0,
+          4.8
+        ]
+      },
+      "purpose": "A bounded promise leaves room for ordinary life.",
+      "action": "rest",
+      "turns": [
+        [
+          "saga_oris",
+          "Tor",
+          "I stopped when I said I would."
+        ],
+        [
+          "saga_maelin",
+          "Mira",
+          "There. A promise that left time for supper."
+        ]
+      ]
+    },
+    {
+      "id": "escort_greyfen_arrival",
+      "zone": "greyfen",
+      "kind": "exchange",
+      "actors": [
+        "saga_maren"
+      ],
+      "unless": [
+        "escort_abandonment_acknowledged"
+      ],
+      "purpose": "Introduce an organizer doing her own work before her history with Kael is disclosed.",
+      "action": "sort_supplies",
+      "turns": [
+        [
+          "saga_maren",
+          "Nera",
+          "Heavy end down first. No, the other heavy end. They never put a light one on these carts."
+        ],
+        [
+          "player",
+          "Kael",
+          "Trouble with the wheel?"
+        ],
+        [
+          "saga_maren",
+          "Nera",
+          "With the wheel, yes. Not with finding advice. I have enough of that."
+        ]
+      ]
+    },
+    {
+      "id": "escort_crossing_return",
+      "zone": "marsh_crossing",
+      "kind": "exchange",
+      "actors": [
+        "saga_nera"
+      ],
+      "quests": [
+        "side_escort_04"
+      ],
+      "purpose": "Nera finishes the crossing she led without turning practical help into absolution.",
+      "action": "check_rope",
+      "turns": [
+        [
+          "saga_nera",
+          "Nera",
+          "Last one on firm ground. I counted people before crates this time too."
+        ],
+        [
+          "player",
+          "Kael",
+          "I stayed at the rear until you waved us through."
+        ],
+        [
+          "saga_nera",
+          "Nera",
+          "You did. That was the job, and it is finished. Help me dry the rope before we discuss the next one."
+        ]
+      ]
+    }
   ],
   "reflections": [
-    {"id":"greyfen","scene":"gre_arrival","title":"Greyfen: useful hands","text":"A hot loaf, a care bench, work someone was doing before Kael arrived. The missing travelers leave a place in this ordinary life."},
-    {"id":"wychwood","scene":"wyc_water_walk","title":"Wychwood: two worries","text":"Edda spoke of water and winter in the same breath. The forest supplies a livelihood; a livelihood can still damage it."},
-    {"id":"deep_woods","scene":"dep_freight","title":"Deep Woods: separate accounts","text":"Dain set current work beside the old account. The mill's usefulness does not settle its history. The recorded freight method remains part of this journey."},
-    {"id":"long_road","scene":"roa_crossing","title":"The Long Road: firm ground","text":"Nera gave a practical reason for the pale stone. Useful guidance need not be a claim upon the person who follows it."},
-    {"id":"castle","scene":"var_work","title":"Castle Vargan: the source beside it","text":"Lysa and Vale kept the source beside the cleaner copy. A useful institution must leave people able to question its account."},
-    {"id":"hartlands","scene":"har_after","title":"Hartlands: what remains","text":"Kael stood beside the changed grove. The chosen outcome does not finish the living work."},
-    {"id":"homecoming","scene":"gre_home","flag":"aftermath_walk_completed","title":"Homecoming: an offered place","text":"The return conversation, bench work and road reflection are complete. Kael returned to practical care. No new oath or unchosen affection has been supplied on anyone's behalf."}
+    {
+      "id": "greyfen",
+      "scene": "gre_arrival",
+      "title": "Greyfen: useful hands",
+      "text": "A hot loaf, a care bench, work someone was doing before Kael arrived. The missing travelers leave a place in this ordinary life."
+    },
+    {
+      "id": "wychwood",
+      "scene": "wyc_water_walk",
+      "title": "Wychwood: two worries",
+      "text": "Mira spoke of water and winter in the same breath. The forest supplies a livelihood; a livelihood can still damage it."
+    },
+    {
+      "id": "deep_woods",
+      "scene": "dep_freight",
+      "title": "Deep Woods: separate accounts",
+      "text": "Tor set current work beside the old account. The mill's usefulness does not settle its history. The recorded freight method remains part of this journey."
+    },
+    {
+      "id": "long_road",
+      "scene": "roa_crossing",
+      "title": "The Long Road: firm ground",
+      "text": "Nera gave a practical reason for the pale stone. Useful guidance need not be a claim upon the person who follows it."
+    },
+    {
+      "id": "castle",
+      "scene": "var_work",
+      "title": "Castle Vargan: the source beside it",
+      "text": "Vale kept the source beside the cleaner copy. A useful institution must leave people able to question its account."
+    },
+    {
+      "id": "hartlands",
+      "scene": "har_after",
+      "title": "Hartlands: what remains",
+      "text": "Kael stood beside the changed grove. The chosen outcome does not finish the living work."
+    },
+    {
+      "id": "homecoming",
+      "scene": "gre_home",
+      "flag": "aftermath_walk_completed",
+      "title": "Homecoming: an offered place",
+      "text": "The return conversation, bench work and road reflection are complete. Kael returned to practical care. No new oath or unchosen affection has been supplied on anyone's behalf."
+    }
   ]
 }

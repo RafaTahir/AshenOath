@@ -324,10 +324,12 @@ func _apply_runtime_policy_metadata(root: Node3D, role_name: String, policy: Dic
 	root.set_meta("runtime_role", role_name)
 	root.set_meta("runtime_role_policy", policy.duplicate(true))
 	root.set_meta("runtime_release_blocked", bool(policy.get("release_blocked", false)))
-	root.set_meta("runtime_visual_approved", bool(policy.get("approved", false)))
+	root.set_meta("runtime_visual_approved", bool(policy.get("visual_reviewed", false)))
+	root.set_meta("runtime_inclusion_authorized", bool(policy.get("approved", false)))
 	root.set_meta("runtime_asset_path", selected_path)
 	root.set_meta("runtime_fallback_used", is_required_fallback)
-	root.set_meta("runtime_role_state", "diagnostic_fallback" if is_required_fallback else ("approved" if bool(policy.get("approved", false)) else "optional"))
+	var included_state := "approved" if bool(policy.get("visual_reviewed", false)) else "authorized_pending_review"
+	root.set_meta("runtime_role_state", "diagnostic_fallback" if is_required_fallback else (included_state if bool(policy.get("approved", false)) else "optional"))
 
 func _record_runtime_role_use(role_name: String, category: String, path: String, policy: Dictionary) -> void:
 	var key := "%s:%s" % [category, role_name.to_lower()]
@@ -359,6 +361,20 @@ func _record_runtime_role_failure(role_name: String, category: String, path: Str
 
 func _compose_player_body(outfit_root: Node3D, outfit_path: String, role_name: String, variant_seed: String = "") -> Node3D:
 	var normalized_path := outfit_path.replace("\\", "/").to_lower()
+	if normalized_path.begins_with("res://assets_external/design_pack_v1/humans/"):
+		outfit_root.set_meta("character_composite", true)
+		outfit_root.set_meta("character_rig_layer_count", 1)
+		outfit_root.set_meta("character_identity", role_name.to_lower())
+		outfit_root.set_meta("character_base_path", outfit_path)
+		outfit_root.set_meta("character_outfit_path", outfit_path)
+		outfit_root.set_meta("character_hair_path", "baked:design_pack_v1")
+		# The retained bind skeleton shares clips, not the former costume/identity.
+		outfit_root.set_meta("character_asset_family", "quaternius_animated_humanoid")
+		outfit_root.set_meta("character_animation_family", "universal_animation_library_2")
+		outfit_root.set_meta("character_prebaked_identity", true)
+		outfit_root.set_meta("character_authored_silhouette", true)
+		outfit_root.set_meta("character_design_pack", "AshenOath_32_Asset_Design_Pack_v1")
+		return outfit_root
 	var is_opening_assembly := normalized_path.contains("/characters_universal/runtime/") and normalized_path.ends_with("_atlas.gltf")
 	if is_opening_assembly:
 		outfit_root.set_meta("character_composite", true)
@@ -1016,6 +1032,13 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
 	preload("res://scripts/spectral_monster_presentation.gd").prepare(root, path)
+	var authored_creature := path.begins_with("res://assets_external/design_pack_v1/creatures/")
+	if authored_creature:
+		root.set_meta("character_prebaked_identity", true)
+		root.set_meta("character_authored_silhouette", true)
+		root.set_meta("character_asset_family", "ashen_design_pack_monster")
+		root.set_meta("character_animation_family", "design_pack_native")
+		root.set_meta("character_design_pack", "AshenOath_32_Asset_Design_Pack_v1")
 	var character := category in ["characters", "enemies"] and _has_skeleton(root)
 	if character:
 		var valid := CharacterMaterialBindings.restore(root) if root.has_meta(CharacterMaterialBindings.BINDINGS) else CharacterMaterialBindings.capture(root, path)
@@ -1041,6 +1064,8 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 			push_error("Required prepared actor material is incomplete: %s (%s)" % [role_name, path])
 			return
 	_finalize_asset_root(root, role_name)
+	if path.begins_with("res://assets_external/design_pack_v1/"):
+		root.set_meta("source_forward_positive_z", true)
 	if not prepared and CharacterAnimationFusion.is_shared_body(path):
 		# Retain both the imported source and immutable retargeted variants with
 		# this helper; actor AnimationPlayers own independent playback state.

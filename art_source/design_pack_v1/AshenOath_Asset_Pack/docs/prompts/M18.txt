@@ -1,0 +1,17 @@
+Use case: stylized-concept. Asset type: individual visual development and 3D modeling reference for the original grounded dark fantasy RPG ASHENOATH. Create one exceptionally polished high-resolution landscape 3:2 design sheet. Premium realistic game-character art, tangible physically believable materials, anatomically credible, detailed sculptural rendering with restrained painterly finish. This is an original design.
+
+Subject: Shroud Swimmer. A broad freshwater ray, 2.8 metres across, with a low diamond-shaped disc and a long unbarbed balancing tail. The upper skin is silt-brown with fine irregular speckling; its pale underside folds like damp cloth only at the flexible wing edges. Two raised eyes and paired breathing openings sit naturally above the head. The mouth and gill slits remain on the underside, anatomically separated from the eyes. Small scars and worn edges indicate years in shallow channels. It has no human face, cloth costume, hovering ghost aura or ornamental horns. Its wide pectoral fins undulate in a slow continuous wave that can become a sudden burst.
+
+Silhouette: Broad flat freshwater ray; diamond disc, long tapering tail and a pale folded underside.
+
+Materials/textures: fine rough ray skin; pale flexible underside; silt; water sheen. Color palette: silt brown; pale grey; dark speckle; river green.
+
+Scale reference in anatomy only, no rulers or extra figure: {"disc_width_m":2.8,"total_length_m":4,"height_basis":"proposed design target"}.
+
+Composition: one large complete front three-quarter body view on left occupying about 55%, a smaller complete rear three-quarter body view in middle-right, a detailed close-up of the same head upper-right and one small signature anatomy detail lower-right. Multiple views of ONE identical creature design. Keep all body extremities, tails and wings fully inside frame. Adjust spacing for long or winged anatomy. Camera level without extreme foreshortening, model-reference stance, neutral expression. Clear separation and no overlaps. Seamless warm stone-grey backdrop, no landscape, no dramatic fog, no scene props.
+
+Art direction: grounded dark-fantasy naturalism, credible body weight and joints, irregular lived-in surfaces, visible wool weave, worn leather, worked metals or organic skin as relevant. Neutral broad studio light with readable shadows; restrained earthy local colors, strong silhouette. A subtly premium museum-catalogue presentation.
+
+Text (verbatim): "M18 / SHROUD SWIMMER". Small restrained top-left header only.
+
+Constraints: no copied franchise character, no cartoon, anime, toy or low-poly look; no neon bloom, no exaggerated superhero proportions, no extra limbs/fingers, no unnecessary ornamental spikes, no floating attachments or clothing intersecting faces. No decorative frame, no watermark. Only a restrained small top-left header using exact provided ID and NAME; no other text. This is premium production concept illustration, not a claim of an actual 3D model.

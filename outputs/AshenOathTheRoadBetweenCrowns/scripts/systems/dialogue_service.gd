@@ -340,7 +340,7 @@ func _finish_covenant_if_ready() -> void:
 
 func _prepare_dialogue_presence(content: Dictionary) -> Dictionary:
 	var result: Dictionary = content.duplicate(true)
-	var aliases := {"anwen":"sister_anwen", "senn":"captain_senn", "tor":"blacksmith_tor", "elna":"widow_elna", "edric":"edric_campaign", "record_keeper_vale":"vargan_record_keeper", "vale":"vargan_record_keeper", "guard":"vargan_gate_guard"}
+	var aliases := {"anwen":"sister_anwen", "senn":"captain_senn", "tor":"blacksmith_tor", "elna":"widow_elna", "edric":"edric_campaign", "record_keeper_vale":"vargan_record_keeper", "vale":"vargan_record_keeper", "guard":"vargan_steward", "merrow":"vargan_steward"}
 	for page: Dictionary in result.get("pages", []):
 		var id := str(page.get("speaker_id", "narrator"))
 		if id in ["player", "kael", "narrator", ""]:

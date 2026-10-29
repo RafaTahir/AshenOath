@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "images": [
+    {
+      "id": "M01",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-ca4a58ab-6e1a-4364-a7e1-4f238034b892.png",
+      "final_sha256": "36488e216f94a42a0c07342384cfbf569ce1682ad6943ed2c4c5bb57540f89f6",
+      "initial_prompt_file": "docs/prompts/M01.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected original result: complete front and rear bodies, integrated face, strong silhouette and material detail. Illustrated reference; exact anatomy across views remains a modeling decision.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M02",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-6524df3f-5a54-449a-8973-54b988e5ee39.png",
+      "final_sha256": "8c9e883d996177eff0fe3ff08ab9d430a046bdd15685956a56c1771c7352dbef",
+      "initial_prompt_file": "docs/prompts/M02.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected generated sheet: coherent front/rear design, complete body, readable material and face studies; final modeling still requires orthographic reconciliation.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M03",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-4787a474-7018-4486-9515-0cfb133e9e23.png",
+      "final_sha256": "e19417e97207700d29757645bd94269a36e646478e02fa052522dee36a13fdd1",
+      "initial_prompt_file": "docs/prompts/M03.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected generated sheet: coherent front/rear design, complete body, readable material and face studies; final modeling still requires orthographic reconciliation.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M04",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-643deed2-adeb-47ac-84fa-58b628809dd3.png",
+      "final_sha256": "74d554fd7324176b867700a7095a52145dadf5e71442ae4d66449ded1af84189",
+      "initial_prompt_file": "docs/prompts/M04.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: complete coherent front/rear forms, readable face/material detail and structurally legible equipment. Concept views require modeling reconciliation.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M05",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-3c1adb80-6604-428f-b474-df6e98fdfe87.png",
+      "final_sha256": "efb0162abbc9a44125ae22b8132c33c062d00691e2e7d6a932e61a2cb1188a24",
+      "initial_prompt_file": "docs/prompts/M05.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: complete coherent front/rear forms, readable face/material detail and structurally legible equipment. Concept views require modeling reconciliation.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M06",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-71b24ba5-f457-496a-b612-0c20db9b3942.png",
+      "final_sha256": "98c17a67082fb4060652b702144d4042ac6c558f3a4f4a5e0001814e6fe3fedf",
+      "initial_prompt_file": "docs/prompts/M06.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: complete front/rear forms, layered bark, root load paths and heart seam are coherent; model-production reference only.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M07",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-752f8ff5-7e5b-44d8-97d1-f7aa602f407f.png",
+      "final_sha256": "0b509522e74a655c83d6d7dc5c7e90aad7ddccb63bbbbcc06bfb0375e6e24c84",
+      "initial_prompt_file": "docs/prompts/M07.txt",
+      "correction_prompt_files": [
+        "docs/prompts/M07_correction.txt"
+      ],
+      "assistant_visual_review": "Original generation had an extra pair of walking forelegs; corrected using image_gen edit. Inspected final: exactly two hind legs and two wing forelimbs in both body views, intact tail and face.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M08",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-15d246f3-ced4-48d4-bc31-c9c40115cca2.png",
+      "final_sha256": "6b131d32c633b6de92d3918059d3766434892e1295484cd9acd4053deec2b227",
+      "initial_prompt_file": "docs/prompts/M08.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: four weight-bearing cervid limbs, coherent antler roots, intact large-view antlers, consistent scar-seam design and clear face.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M09",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-c9b14525-8a6a-4597-be2f-96473c18468e.png",
+      "final_sha256": "7aca1f16080c0124840ab28c934c2e8286328e62c63a134e680ebe4960383c1b",
+      "initial_prompt_file": "docs/prompts/M09.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: complete limbless body and blunt tail, coherent shovel head and jaw-plate detail, consistent rear view.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M10",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-69808c76-8dae-4cf8-9134-63c7152d3935.png",
+      "final_sha256": "8825fc1076644d5c70222bb76a778ea95521bbc55e558e1264ac7fae302aa1a9",
+      "initial_prompt_file": "docs/prompts/M10.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: broad low shell, six walking limbs plus two front claws, visible joints, coherent rear silhouette and material detail.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M11",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-338ab7ce-0aca-4ce0-903c-21c08de85bb4.png",
+      "final_sha256": "8f4ac625a04ad8909a2dc64bdaae1a9e8ca0f589480071864758859818aac265",
+      "initial_prompt_file": "docs/prompts/M11.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted: distinct coherent creature, complete main body, consistent secondary view and material detail; no obvious extra limbs or unintended clipping.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M12",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-8ed68d8a-4388-405c-9d0c-a04627b43179.png",
+      "final_sha256": "676bcedda6383e037a8e18bb0445c51fd5c1dfaffccf8585f0684343d69dc5b2",
+      "initial_prompt_file": "docs/prompts/M12.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted: distinct coherent creature, complete main body, consistent secondary view and material detail; no obvious extra limbs or unintended clipping.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M13",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-184825e5-f59d-434f-a0a2-75b23e1991c7.png",
+      "final_sha256": "bd94edadae8f0e2df99c6f0075403e8462d7f3d78e5f9a49717f6f2446a76a18",
+      "initial_prompt_file": "docs/prompts/M13.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted: coherent armored quadruped, complete four-legged body and tail, consistent materials and secondary views.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M14",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-6748676d-04e2-4e7a-a8fb-52aa362048a3.png",
+      "final_sha256": "6219c60d76514815dda9262390b1195be4a08b1b71912f95acb1572fb3504492",
+      "initial_prompt_file": "docs/prompts/M14.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted concept reference: eight articulated legs, complete primary body and consistent rear shell/spinnerets. Small eye cluster requires final anatomy reconciliation during modeling.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M15",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-ea2e03bf-5fa5-459f-91c5-675b60c63ad2.png",
+      "final_sha256": "a13089f9d351a76278e1f8c571ec778f85cc1b3d37292210085c5781b99555fa",
+      "initial_prompt_file": "docs/prompts/M15.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted: complete four-limb amphibian, three connected resonance sacs, consistent materials and secondary views.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M16",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-7b0a3d86-7413-4485-8786-7f8fed72667b.png",
+      "final_sha256": "d334b8dfa395cf8cabb3baaa94c741a757f1c3fface11854d3e175ca043757c3",
+      "initial_prompt_file": "docs/prompts/M16.txt",
+      "correction_prompt_files": [
+        "docs/prompts/M16_correction.txt"
+      ],
+      "assistant_visual_review": "Accepted after framing revision: all primary-view feet and both antenna tips now fully visible. Blind head and material identity retained.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M17",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-1e3fa704-6ff0-4b22-b265-418252cf3e67.png",
+      "final_sha256": "a9f0f48f0723a53ecb3519e1a7a708ba4208206620d6f499ef0aa770c5db2c14",
+      "initial_prompt_file": "docs/prompts/M17.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted: coherent spiral shell, complete load-bearing mollusc foot and four feelers, distinct material surfaces and secondary views.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M18",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-a2896cc2-f058-452a-a4bd-30080e846f6f.png",
+      "final_sha256": "ea3a9fd830ccbe832b4f5bc21f2c222e0c10ddc23ea1014ff700726e8fcf0ecd",
+      "initial_prompt_file": "docs/prompts/M18.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted: complete ray disc and unbarbed tail, believable dorsal eyes/spiracles and separate ventral mouth/gills, coherent secondary view.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M19",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-d55aab9f-2555-4fba-a977-22fbf336f999.png",
+      "final_sha256": "4f996672395e6e61710f67c88d3abcc28c0593c6ae05aa726024acc3a8c29d12",
+      "initial_prompt_file": "docs/prompts/M19.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted: complete nonhuman biped with hooking hands and restrained token-cord prop, consistent head/material identity in all views.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "M20",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-5e27af5e-2f35-4751-b296-1f4e9c34fc98.png",
+      "final_sha256": "2a830da6085b2dac850a3e9ee45937b41631bcb4b455f88cd650d70dc1563f26",
+      "initial_prompt_file": "docs/prompts/M20.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Accepted: complete low/wide beast biped, short paired tusks, heavy coherent joints and load-bearing hands, consistent rear and detail views.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C01",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-cf366188-e993-44d8-9542-b4099b8b84c1.png",
+      "final_sha256": "c9eda409afa435df230f76a694ccac6eac550cffd0e744b67d6eb070e995d912",
+      "initial_prompt_file": "docs/prompts/C01.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected rendered result for complete framing, readable identity and gross anatomy.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C02",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-349c2520-907f-4197-8974-3a99325edfc8.png",
+      "final_sha256": "1f814db65a488c2bca1c94179d181a4b4ccf97c87178790cf62789aca5b4a5df",
+      "initial_prompt_file": "docs/prompts/C02.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected generated sheet: distinct young curly-haired face, consistent front/rear/portrait identity, readable materials and full boots; isolated road knot and map case. Concept reference, not a rigged model.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C03",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-3adc8a61-5a7d-47f0-a087-822115117252.png",
+      "final_sha256": "5d20e1e1a1a55c405aa627affa899af0fec6ad7d6c92143ec7676e721d25e2b4",
+      "initial_prompt_file": "docs/prompts/C03.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected generated sheet: consistent identity and materials across front/rear/portrait, full feet and hands, isolated root and measure study; suitable concept illustration. Not a rigged model.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C04",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-70466d32-d590-4d8b-aba0-b17bd89a244b.png",
+      "final_sha256": "70117e35919d4d03b3897efa15f29d2eaaa7bd6dc3fd07c0404c3027825bc94e",
+      "initial_prompt_file": "docs/prompts/C04.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: consistent broad dark-skinned older smith, realistic apron and hammer, unobscured face, complete boots, isolated tool and ring.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C05",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-6f6798ab-1075-49f7-901e-3fa2b83b159e.png",
+      "final_sha256": "b939f04cf61311a9f4047a3af4941782f0deb59c9d3b717aec56b6de7b384973",
+      "initial_prompt_file": "docs/prompts/C05.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: visibly older woman, distinct face and smaller build, plum/grey costume and folded packet, coherent rear and portrait views, complete boots.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C06",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-faa0a6a7-4b98-4984-9789-79289b949efd.png",
+      "final_sha256": "aaa0e20a4865161d6b19d86d8defb9c25699a5ff19cc76cea6758ce034b42ba9",
+      "initial_prompt_file": "docs/prompts/C06.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: rangy tired father, distinct reddish hair and freckles, coherent ochre layers, complete body views. Receipt is illustrative texture, not authoritative readable dialogue.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C07",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-cf6639b4-826c-4900-b68a-bbd075591000.png",
+      "final_sha256": "2ff15da48746c6e8dcb6e0f936fcc161e837358e11c0f4c19eba3a64803336f3",
+      "initial_prompt_file": "docs/prompts/C07.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: older veteran distinct from other men, worn blue-grey uniform and cut ribbon, unobscured face, complete body and isolated blade/scabbard studies.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C08",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-79c468e8-ab50-411f-a8fd-229c794012ea.png",
+      "final_sha256": "b34a050993040ff3ace9ff3549e0a98c80c36ca63171863e1c97e93ff2629d8c",
+      "initial_prompt_file": "docs/prompts/C08.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: distinct controlled middle-aged lord, coherent charcoal/oxblood precise tailoring, seal study, unobscured face and complete boots.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C09",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-5ce13971-b758-42ac-a507-51eaa3b46b84.png",
+      "final_sha256": "ef0482604a3f29383227d0a5a305df1796bde67754e501a20ca90641343462be",
+      "initial_prompt_file": "docs/prompts/C09.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: distinct mature dark-skinned woman with close silver coils, indigo/tabard and cuff ties, archival paper/key study, full-body and portrait coherence.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C10",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-7b6a2901-31a7-45b7-bd67-a415df6e0b0e.png",
+      "final_sha256": "7724af7f9af582383d9d56277f2971e8fa5532613979dc9ad83c35afdc5f74e4",
+      "initial_prompt_file": "docs/prompts/C10.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: stocky ordinary administrator, receding crown and moustache distinct in cast, consistent tobacco/green coat and tally board/key props; complete body views and clear portrait.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C11",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-52c6d5a0-1a3b-4ed7-957f-cc719d176d6a.png",
+      "final_sha256": "0601b89d1abfc1b2bc732dcae4059afd36936e46bbc93d352dda71d97a37d1d0",
+      "initial_prompt_file": "docs/prompts/C11.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected: full-bodied strong younger baker with copper hair, warm distinct face, terracotta/indigo/apron costume, full peel/boots visible, coherent rear view and bread peel/weight prop study.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    },
+    {
+      "id": "C12",
+      "generator": "built-in image_gen",
+      "source_generated_filename": "exec-fbd55508-bdfd-4aae-8b71-830633249f16.png",
+      "final_sha256": "ecab36423f9bb73c684e57a84055a293001085d877e7ae602c53850a1b8f89bf",
+      "initial_prompt_file": "docs/prompts/C12.txt",
+      "correction_prompt_files": [],
+      "assistant_visual_review": "Inspected rendered result for complete framing, readable identity and gross anatomy.",
+      "human_art_approval": "pending",
+      "interpretation_note": "Illustrated views are production guidance and require reconciliation before modeling."
+    }
+  ]
+}

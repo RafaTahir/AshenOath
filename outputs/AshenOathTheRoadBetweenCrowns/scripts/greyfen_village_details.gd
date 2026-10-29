@@ -224,10 +224,10 @@ func _build_kitchen() -> void:
 	_model(pot,"Pot_1.obj",0.24,Vector3(0,0.75,0))
 	var cover := _model(pot,"Pot_1_Lid.obj",0.07,Vector3(0,0.98,0))
 	if cover != null: pot.get_node("PropState").bind_visual(cover,"position",cover.position,cover.position + Vector3(0.28,0.14,0))
-	var ties := _point("cart_ties", "Check Rook's food-cart ties", Vector3(-5.85,0,9.55), "mechanism", "The food cart has sacks tied low to keep its axle steady. Maren's relief load carries a marked brace and covered medicine: a different arrival, with a different account.")
+	var ties := _point("cart_ties", "Check Rook's food-cart ties", Vector3(-5.85,0,9.55), "mechanism", "The food cart has sacks tied low to keep its axle steady. Nera's relief load carries a marked brace and covered medicine: a different arrival, with a different account.")
 	var knot := Work._rod(game,ties,Vector3(0,0.8,0),0.07,0.08,LINEN)
 	ties.get_node("PropState").bind_visual(knot,"rotation:z",0.0,0.35)
-	_point("delivery_slips","Read the kitchen delivery slips",Vector3(-4.0,0,8.15),"record","Nessa counts households, not promises: three evening measures, one reserved for a late traveler. Rook's flour and Maren's relief supplies have separate entries. A copied figure is an observation; discovering who altered it belongs to the grain investigation.")
+	_point("delivery_slips","Read the kitchen delivery slips",Vector3(-4.0,0,8.15),"record","Nessa counts households, not promises: three evening measures, one reserved for a late traveler. Rook's flour and Nera's relief supplies have separate entries. A copied figure is an observation; discovering who altered it belongs to the grain investigation.")
 
 func _build_well() -> void:
 	var well := _point("well_bucket","Lower the well bucket",Vector3(-7.0,0,-0.5),"bucket","The rope runs over the beam. A scored rim marks where the bucket rests. A loose cover is part of this well, not a second cache somewhere on the road.")
@@ -296,12 +296,12 @@ func _build_care() -> void:
 	linen.get_node("PropState").bind_visual(cloth,"scale:x",1.0,0.5)
 
 func _build_bell() -> void:
-	var bell := _point("bell_rope","Demonstrate Jory's warning rhythm",Vector3(-10.3,0,-6.65),"mechanism","Three short strokes, then a pause. Jory has cut the same rhythm into the board for anyone who cannot hear it. A warning mechanism does not decide a grave's fate.")
+	var bell := _point("bell_rope","Demonstrate Tor's warning rhythm",Vector3(-10.3,0,-6.65),"mechanism","Three short strokes, then a pause. Tor has cut the same rhythm into the board for anyone who cannot hear it. A warning mechanism does not decide a grave's fate.")
 	var rope := Work._rod(game,bell,Vector3(0,0.80,0),0.014,0.9,LINEN)
 	bell.get_node("PropState").bind_visual(rope,"position:y",0.80,0.62)
 	for index in range(3): _box(bell,Vector3(-0.14+index*0.10,0.40,0.06),Vector3(0.035,0.11,0.025),LINEN)
 	_box(bell,Vector3(0.25,0.36,0.06),Vector3(0.18,0.025,0.025),LINEN)
-	var catch := _point("bell_catch","Examine the bell-frame catch",Vector3(-11.45,0,-6.8),"mechanism","A newer pin holds the brake; the older catch has a concealed seam. Jory's existing bell-founder clue concerns that seam. Demonstrating the rope neither completes the repair nor claims the compartment.")
+	var catch := _point("bell_catch","Examine the bell-frame catch",Vector3(-11.45,0,-6.8),"mechanism","A newer pin holds the brake; the older catch has a concealed seam. Tor's existing bell-founder clue concerns that seam. Demonstrating the rope neither completes the repair nor claims the compartment.")
 	var pin := Work._rod(game,catch,Vector3(0,0.85,0),0.018,0.12,IRON)
 	catch.get_node("PropState").bind_visual(pin,"rotation:z",0.0,0.35)
 
@@ -422,7 +422,7 @@ func _read(title: String, text_value: String, actions: Array = []) -> void:
 
 func _demonstrate_bell(area: Node3D) -> void:
 	if not game.quests.is_completed("saga_gre_q02"):
-		game.hud.toast("Jory: Brake first, pin second. Help finish the warning mechanism before ringing it.",5.0)
+		game.hud.toast("Tor: Brake first, pin second. Help finish the warning mechanism before ringing it.",5.0)
 		return
 	var bell: Node3D = game.zone_root.find_child("WarningBell",true,false)
 	var brake: Node3D = game.zone_root.find_child("BellBrake",true,false)

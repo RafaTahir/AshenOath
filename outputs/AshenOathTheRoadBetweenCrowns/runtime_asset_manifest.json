@@ -3,7 +3,7 @@
   "ticket": "ASSET-005",
   "program": "SOUL-REBUILD",
   "policy": "free_cc0_only",
-  "status": "audited_pending_visual_acceptance",
+  "status": "design_pack_cast_authored_runtime_acceptance_pending",
   "source_of_truth": true,
   "source_packs": [
     {
@@ -101,6 +101,142 @@
         "ashwing",
         "white_hart"
       ]
+    },
+    {
+      "id": "AshenOath_32_Asset_Design_Pack_v1",
+      "status": "user_authorized_blender_cast_replacement",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "runtime_roles": [
+        "anwen",
+        "ashwing",
+        "ashwing_boss",
+        "ashwing_creature",
+        "bandit",
+        "bandit_deserter",
+        "bandit_tracker",
+        "bell_eater",
+        "bell_eater_boss",
+        "blacksmith_tor",
+        "bog_wretch",
+        "bog_wretch_creature",
+        "bracken",
+        "bracken_companion",
+        "cairn_mother",
+        "captain_senn",
+        "castle_guard",
+        "castle_guard_human",
+        "dain",
+        "edda",
+        "edric",
+        "edric_campaign",
+        "edric_castle",
+        "edric_vargan",
+        "elna",
+        "farmer_toma",
+        "forge_helper",
+        "gallows_weaver",
+        "generic_villager_01",
+        "generic_villager_02",
+        "ghoul_brute_real",
+        "ghoul_gaunt_real",
+        "ghoul_stalker_real",
+        "ghoulkin",
+        "ghoulkin_creature",
+        "ghoulkin_skeleton",
+        "glassmoth",
+        "gravebound_knight",
+        "gravebound_knight_creature",
+        "guard",
+        "halvern",
+        "halvern_boss",
+        "hearthscale",
+        "injured_traveler",
+        "inkblind",
+        "iven",
+        "jory",
+        "kael",
+        "knell_leech",
+        "lord_edric",
+        "lysa",
+        "maelin",
+        "maren",
+        "merrow",
+        "mill_second_worker",
+        "mill_worker",
+        "millback",
+        "mira",
+        "mira_herbalist",
+        "mira_human",
+        "nera",
+        "nessa",
+        "odran",
+        "orc_skull_real",
+        "oris",
+        "player",
+        "player_human",
+        "player_kael",
+        "record_keeper_vale",
+        "reed_choir",
+        "ressa",
+        "returned_soldier",
+        "road_ranger",
+        "road_ranger_human",
+        "rook",
+        "rook_human",
+        "rook_smuggler",
+        "rootbound_colossus",
+        "rootbound_colossus_boss",
+        "saga_dain",
+        "saga_edda",
+        "saga_iven",
+        "saga_jory",
+        "saga_lysa",
+        "saga_maelin",
+        "saga_maren",
+        "saga_nera",
+        "saga_nessa",
+        "saga_odran",
+        "saga_oris",
+        "saga_ressa",
+        "saga_tavin",
+        "senn",
+        "shrine_pilgrim",
+        "shroud_swimmer",
+        "silt_maw",
+        "sister_anwen",
+        "sister_anwen_human",
+        "steward_merrow",
+        "tavin",
+        "toma",
+        "tor",
+        "traveler",
+        "vale",
+        "vargan_gate_guard",
+        "vargan_patrol",
+        "vargan_record_keeper",
+        "vargan_servant",
+        "vargan_steward",
+        "villager",
+        "villager_female_human",
+        "villager_hooded_human",
+        "villager_human",
+        "villager_worker_human",
+        "walker_board",
+        "walker_well",
+        "white_hart",
+        "white_hart_avatar",
+        "white_hart_boss",
+        "widow_elna",
+        "witness_-3",
+        "witness_-7",
+        "witness_3",
+        "wychwood_brute",
+        "wychwood_brute_creature",
+        "wychwood_raider",
+        "wychwood_raider_creature",
+        "wychwood_stalker",
+        "wychwood_stalker_creature"
+      ]
     }
   ],
   "shared_runtime_files": [
@@ -112,804 +248,3403 @@
   ],
   "roles": {
     "bracken_companion": {
-      "display_name": "Bracken",
-      "family": "living_companion",
-      "source_pack": "quaternius_animated_animals_lowpoly",
-      "source_url": "https://opengameart.org/sites/default/files/Animal%20Pack%20Vol.2%20by%20%40Quaternius.zip",
-      "license_file": "res://assets_external/licenses/Quaternius_Animated_Animals_CC0.txt",
-      "model": "res://assets/companions/bracken.scn",
-      "status": "release_authorized_user_review_pending",
-      "approved": true,
-      "release_authorized": true,
+      "display_name": "bracken_companion",
+      "model": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
       "visual_reviewed": false,
       "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "target_height_m": 0.78,
-      "required_clips": [
-        "DogArmature|Idle",
-        "DogArmature|Walking"
-      ],
-      "build_ledger": "res://assets/companions/bracken_build.json",
-      "runtime_files": [
-        {
-          "path": "res://assets/companions/bracken.scn",
-          "bytes": 52398,
-          "sha256": "3a9664f97b927a14d9dcf2e77f051cc9649cb09f2c88966c69faa1293384ae4f"
-        }
-      ],
-      "notes": "User explicitly authorized the retained Bracken for release during the 2026-10-27 release repair plan. Approval here authorizes inclusion, not visual review or runtime acceptance. Original complete skinned Dog; not the Black Dog Contract."
-    },
-    "bandit_deserter": {
-      "display_name": "Road Deserter",
-      "family": "human_enemy",
-      "source_pack": "quaternius_modular_character_outfits_fantasy",
-      "status": "approved_runtime",
-      "approved": true,
-      "export_eligible": true,
-      "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
-      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
-      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
-      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
-      "target_height_m": 1.75,
-      "runtime_files": [
-        {
-          "path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
-          "bytes": 35984,
-          "sha256": "8be821b71152120f4a9516e732690318b68d5342cbd114847b67da5ef1baca64"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.bin",
-          "bytes": 1993880,
-          "sha256": "985ab2e38a0d59fbf318788b1d154b9568e414cb9c7a6827c243b9c7b8dd1639"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png",
-          "bytes": 2037323,
-          "sha256": "f22a8f798bb7232386805add6ac58db0cf506702eac6a61ab4cdfa1c202ce686"
-        }
-      ],
-      "approval_evidence": "WORLD_002_BANDIT_FRONTIER_20260930.md; native body/animation, real-input guard defeat and testimony, gameplay-distance day/night and earned-aftermath review. Final campaign/browser/performance certification remains separate."
-    },
-    "bandit_tracker": {
-      "display_name": "Road Tracker",
-      "family": "human_enemy",
-      "source_pack": "quaternius_modular_character_outfits_fantasy",
-      "status": "approved_runtime",
-      "approved": true,
-      "export_eligible": true,
-      "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
-      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
-      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
-      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
-      "target_height_m": 1.7,
-      "runtime_files": [
-        {
-          "path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
-          "bytes": 35772,
-          "sha256": "a0baa9fc1b778ad116dedfd730bd269a9367d0df1a4e6094c4a1b425a1ead76b"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.bin",
-          "bytes": 1938112,
-          "sha256": "eb21c8c182c81a11f18fc0f1c0b3a0d8890a4b2bea3177d668683d6d20877dbf"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png",
-          "bytes": 2038174,
-          "sha256": "17760978251d0b979c6b0c543ba956ae69d77eb8da39a7c8cc0c5a6acd1bc8c7"
-        }
-      ],
-      "approval_evidence": "WORLD_002_BANDIT_FRONTIER_20260930.md; native body/animation, real-input guard defeat and testimony, gameplay-distance day/night and earned-aftermath review. Final campaign/browser/performance certification remains separate."
-    },
-    "road_ranger_human": {
-      "display_name": "Captain Senn",
-      "family": "human",
-      "source_pack": "quaternius_modular_character_outfits_fantasy",
-      "status": "approved_runtime",
-      "approved": true,
-      "export_eligible": true,
-      "fallback_mode": "none",
-      "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
-      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
-      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
-      "target_height_m": 1.75,
-      "triangle_budget": 20000,
-      "texture_budget": 1024,
+      "status": "authored_pending_user_acceptance",
       "required_clips": [
         "Idle",
-        "Walk",
-        "Run",
-        "ReceiveHit",
-        "Death"
-      ],
-      "equipment_sockets": [
-        "Head",
-        "Hand.R",
-        "Hand.L",
-        "Sword.Back",
-        "Bow.Hand",
-        "Quiver.Back"
+        "Walking",
+        "Running"
       ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
-          "bytes": 54079,
-          "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"
-        },
-        {
-          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin",
-          "bytes": 1746884,
-          "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"
-        },
-        {
-          "path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png",
-          "bytes": 840454,
-          "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"
-        },
-        {
-          "path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
-          "bytes": 940081,
-          "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"
-        },
-        {
-          "path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png",
-          "bytes": 786403,
-          "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"
+          "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+          "bytes": 6004004,
+          "sha256": "6decf8eecca00eaea0e882aa352382cb1089888d071510a64838a78227e94e40"
         }
       ],
-      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres"
+      "design_id": "M13"
+    },
+    "bandit_deserter": {
+      "display_name": "bandit_deserter",
+      "model": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+          "bytes": 6000344,
+          "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af"
+        }
+      ],
+      "design_id": "M04"
+    },
+    "bandit_tracker": {
+      "display_name": "bandit_tracker",
+      "model": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+          "bytes": 6000344,
+          "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af"
+        }
+      ],
+      "design_id": "M04"
+    },
+    "road_ranger_human": {
+      "display_name": "road_ranger_human",
+      "model": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+          "bytes": 1434472,
+          "sha256": "a2ada6d15539db90c3b8ca2a84e46b354c40db406ec14f1b06e2e5599f57043c"
+        }
+      ],
+      "design_id": "C07"
     },
     "halvern": {
-      "display_name": "Halvern, Gravebound Knight",
-      "family": "human_boss",
-      "source_pack": "quaternius_modular_character_outfits_fantasy",
-      "status": "reviewed_complete_body_and_hand_weapon_20260926",
-      "approved": true,
+      "display_name": "halvern",
+      "model": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
-      "source_url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
-      "license_file": "res://assets_external/licenses/Quaternius_Modular_Character_Outfits_Fantasy_CC0.txt",
-      "animation_source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
-          "bytes": 54079,
-          "sha256": "8eea71448ca41108589c7d13e9261de92b7068df8166b6e54bf29e6f1e530dbe"
-        },
-        {
-          "path": "res://assets_external/characters_ranger/Male_Ranger_Runtime.bin",
-          "bytes": 1746884,
-          "sha256": "5bbb0d42cb324c6c27ce00417e68a876d92978f07d161f83590f0d7c0570eff6"
-        },
-        {
-          "path": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png",
-          "bytes": 840454,
-          "sha256": "220dd4fabbfecce9847e876e2e2b02327315c08aac096d4648b62d5c53716c90"
-        },
-        {
-          "path": "res://assets_external/characters_ranger/T_Ranger_Normal_1K.png",
-          "bytes": 940081,
-          "sha256": "a4daa2410b007ad9fe7e15ac7ecc1e579ab08aafa3725ba3f158c5a24c68b540"
-        },
-        {
-          "path": "res://assets_external/characters_ranger/T_Ranger_ORM_1K.png",
-          "bytes": 786403,
-          "sha256": "76cfba43d6748a79a7ea26184415e4810731f6e4b207c3c84a6b1a084b49bd9f"
-        },
-        {
-          "path": "res://assets_external/characters/Sword.fbx",
-          "bytes": 30540,
-          "sha256": "6318f52dd847cc9c5ca4136a92acc08fe38276261a0ade8a1ada42d9ba88f0ea"
+          "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+          "bytes": 6000344,
+          "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af"
         }
       ],
-      "visual_evidence": "Development_Gallery/screenshots/BOSS-006_01_Halvern_TheGate_20260926_132908.png",
-      "blocked_reason": ""
+      "design_id": "M04"
     },
     "kael": {
-      "display_name": "Kael",
-      "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "opening_single_material_a_set",
-      "approved": true,
+      "display_name": "kael",
+      "model": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
-      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
-          "bytes": 35594,
-          "sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.bin",
-          "bytes": 1176080,
-          "sha256": "3bdc20f6ddf3861f984408ff42af64ccf2e9c8993700c783859aea2e14a743a1"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png",
-          "bytes": 1231404,
-          "sha256": "c9494c06134cc2e7dff2558307efe49e677b9a35127dfbdd70f5315ae9ea3101"
+          "path": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+          "bytes": 1550576,
+          "sha256": "3f0aeff37b5222464736814c03cc47a277fa89d6ebdf2c2bbd63522e18eea15a"
         }
       ],
-      "blocked_reason": "",
-      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
+      "design_id": "P01"
     },
     "anwen": {
-      "display_name": "Sister Anwen",
-      "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "opening_single_material_a_set",
-      "approved": true,
+      "display_name": "anwen",
+      "model": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
-      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
-          "bytes": 36847,
-          "sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.bin",
-          "bytes": 1445612,
-          "sha256": "1d5c8314084cab3ea95f1efde3daa9ee22bc8ee95a4697801405bbe4f35729db"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png",
-          "bytes": 1207791,
-          "sha256": "36a470db2bda34b853ebfd57307ecc86af0ba198067a9285fc1b33e95b29632d"
+          "path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+          "bytes": 1809712,
+          "sha256": "cd0c69e3f6c7780d5b64e597046bc7a94e30e3c7672c32aee77cc8a4a294e157"
         }
       ],
-      "blocked_reason": "",
-      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
+      "design_id": "C01"
     },
     "villager": {
-      "display_name": "Greyfen villager",
-      "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "opening_single_material_crowd",
-      "approved": true,
+      "display_name": "villager",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
-      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-      "model_family": "res://assets_external/characters_universal/{Male_Peasant,Female_Peasant}_and_native_head_hair.gltf",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
-          "bytes": 35627,
-          "sha256": "4e570daddc32d5d65512913249478b01afa2c0df193f485d3f474b3145c9e81e"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.bin",
-          "bytes": 1176080,
-          "sha256": "3bdc20f6ddf3861f984408ff42af64ccf2e9c8993700c783859aea2e14a743a1"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png",
-          "bytes": 1250672,
-          "sha256": "608c6c6acc4987dcfe92c01589131d9981e2e9711e78e093295640fb1e17518d"
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
         }
       ],
-      "blocked_reason": "",
-      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
+      "design_id": "C06"
     },
     "guard": {
-      "display_name": "Vargan guard",
-      "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "opening_single_material_crowd",
-      "approved": true,
+      "display_name": "guard",
+      "model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
-      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
-          "bytes": 35633,
-          "sha256": "f221a14a0dcea56db70e1822eb4f06f3ecff581c49e5ef145aee0b9642392ceb"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.bin",
-          "bytes": 1155296,
-          "sha256": "c8ef3367e3e9d628458e00c9b84620e93a68c22e5950d7cccdf91450bd055d00"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png",
-          "bytes": 1241900,
-          "sha256": "920aaef0d1ee27e63c15bedb68a307c893fc417ab6494e90b854e58cbd7f79d7"
+          "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+          "bytes": 1863548,
+          "sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240"
         }
       ],
-      "blocked_reason": "",
-      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
+      "design_id": "C10"
     },
     "traveler": {
-      "display_name": "Road traveler",
-      "family": "human",
-      "source_pack": "quaternius_universal_base_characters",
-      "status": "opening_single_material_crowd",
-      "approved": true,
+      "display_name": "traveler",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
-      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
-          "bytes": 35633,
-          "sha256": "54739fadbd5e4f3f398a07c78094adae7ddb9ad3a28b8b67e785fdd6c0ddf6f8"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.bin",
-          "bytes": 1155296,
-          "sha256": "c8ef3367e3e9d628458e00c9b84620e93a68c22e5950d7cccdf91450bd055d00"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png",
-          "bytes": 1249644,
-          "sha256": "06641f7bfa0ab6fb90e0aa07e64da1899d7d185b3859f255759c80102c85f80c"
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
         }
       ],
-      "blocked_reason": "",
-      "notes": "Complete clothed Universal body assembly with one shared skeleton, native face anatomy, deterministic palette variation, and 1K maps."
+      "design_id": "C02"
     },
     "ghoulkin": {
-      "display_name": "Ghoulkin",
-      "family": "monster",
-      "source_pack": "ashenoath_spectral_bestiary",
-      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "display_name": "ghoulkin",
+      "model": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
       "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
-      "model_family": "Spectral Pallbearer, Thorn Veil, Oathless Shade and Hollow Crown; retained independent rigs",
-      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-      "additional_license_files": [
-        "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt"
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
       ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.bin",
-          "bytes": 1205908,
-          "sha256": "52e0f62da839c86a9b87356278b03ee1ec0c5820bef48a76833f2e9b3bd4a307"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
-          "bytes": 34721,
-          "sha256": "733183d562531956035b52d3c8a6dd318fa4605dcff9d711f5db049b97769548"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Stalker_Spectral.bin",
-          "bytes": 1569544,
-          "sha256": "71655a749a3661f3bce00e49bae04fb01f3a829beee671037f37db821cc3bd52"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
-          "bytes": 522534,
-          "sha256": "0f862c68612231cfcd182d5f5e42029b4441e7d9436eb7b6ef5495ebd4aa2750"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Raider_Spectral.bin",
-          "bytes": 1581860,
-          "sha256": "aa67af73a2cce10f4df4afa393b62179f313a3defc1b2fc5ea9d3cf2cf6e9575"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
-          "bytes": 522360,
-          "sha256": "fd6e2ab158a09c7473a100eb91d205c5f6d780ff0ffcae50f2fe651954c951f6"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Brute_Spectral.bin",
-          "bytes": 1515336,
-          "sha256": "091d5efa1dd7dbb4a54293c734b8a7c79ca3c7868e5a549e873814c97a860c8b"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
-          "bytes": 520674,
-          "sha256": "51ea119741c57e6d3b02897368e27512f6aabad16d977ace1678a9c23457f06a"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+          "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+          "bytes": 6402112,
+          "sha256": "8eb08909214c5fa23b84a734d16d7179aaadb8d480ce423d6a9cfca3a879138e"
         }
       ],
-      "blocked_reason": "",
-      "notes": "Inclusion authorized explicitly by the user; pending visual review is recorded separately from runtime eligibility.",
-      "visual_reviewed": false,
-      "visual_review": "pending_user_review",
-      "inclusion_authorized": true,
-      "authorization_kind": "user_requested_creation_and_in_game_application",
-      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
-      "runtime_acceptance": "requires_current_checks",
-      "provenance": {
-        "source": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf",
-        "source_sha256": "612046dd227c5a4a8324c903198b5e4cad46afa15c0e43ca77871eb120824f39",
-        "source_pack": "quaternius_universal_base_characters",
-        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "license_sha256": "7e32fb16ba0aa1d9f15fd5ce95e8da395ef67cbaf5b681b249d495016482dced",
-        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
-        "authored_changes": [
-          "bone-local gaunt anatomy",
-          "surface furrows",
-          "spectral vertex coloration",
-          "skinned torn veils and chest filaments"
-        ],
-        "rig_and_animation_contract": "unchanged"
-      },
-      "family_members": [
-        {
-          "enemy_id": "ghoulkin",
-          "role": "ghoulkin_creature",
-          "model": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
-          "source": "res://assets_external/characters_universal/runtime/Ghoulkin_Authored_Atlas.gltf"
-        },
-        {
-          "enemy_id": "wychwood_stalker",
-          "role": "wychwood_stalker_creature",
-          "model": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
-          "source": "res://assets_external/enemies/ultimate_monsters/Demon.gltf"
-        },
-        {
-          "enemy_id": "wychwood_raider",
-          "role": "wychwood_raider_creature",
-          "model": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
-          "source": "res://assets_external/enemies/ultimate_monsters/Orc.gltf"
-        },
-        {
-          "enemy_id": "wychwood_brute",
-          "role": "wychwood_brute_creature",
-          "model": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
-          "source": "res://assets_external/enemies/ultimate_monsters/BlueDemon.gltf"
-        }
-      ]
+      "design_id": "M01"
     },
     "bell_eater": {
-      "display_name": "The Bell-Eater",
-      "family": "monster_boss",
-      "source_pack": "ashenoath_spectral_bestiary",
-      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "display_name": "bell_eater",
+      "model": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
       "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
-      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.bin",
-          "bytes": 1494160,
-          "sha256": "b8181e864648923a92171deaea646abae2cb31105503575def9fc605abbc15b7"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
-          "bytes": 33209,
-          "sha256": "31f89ce10a1672830a6e6a9a19b657764e361a957125ac54c703958e02fc7c94"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+          "path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+          "bytes": 6575332,
+          "sha256": "8f692e03741345b12cb800664c4b28b6e025e3ef175b1a0b5cbff71782692ece"
         }
       ],
-      "notes": "Inclusion authorized explicitly by the user; pending visual review is recorded separately from runtime eligibility.",
-      "blocked_reason": "",
-      "visual_reviewed": false,
-      "visual_review": "pending_user_review",
-      "inclusion_authorized": true,
-      "authorization_kind": "user_requested_creation_and_in_game_application",
-      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
-      "runtime_acceptance": "requires_current_checks",
-      "provenance": {
-        "source": "res://assets_external/characters_universal/runtime/BellEater_Playfix.glb",
-        "source_sha256": "8367ee17b8825065467412aee29448a5f33f52422b9e58635609200ab3d3334e",
-        "source_pack": "quaternius_universal_base_characters",
-        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "license_sha256": "7e32fb16ba0aa1d9f15fd5ce95e8da395ef67cbaf5b681b249d495016482dced",
-        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
-        "authored_changes": [
-          "bone-local gaunt anatomy",
-          "surface furrows",
-          "spectral vertex coloration",
-          "skinned torn veils and chest filaments"
-        ],
-        "rig_and_animation_contract": "unchanged"
-      }
+      "design_id": "M05"
     },
     "rootbound_colossus": {
-      "display_name": "Rootbound Colossus",
-      "family": "monster_boss",
-      "source_pack": "ashenoath_spectral_bestiary",
-      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "display_name": "rootbound_colossus",
+      "model": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
       "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
-      "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/enemies/spectral/Rootbound_Spectral.bin",
-          "bytes": 5857380,
-          "sha256": "6a1ade6073665cd2dbc23bfa64e7af65c116dc916fe53cc1002f822d751a1dee"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
-          "bytes": 1048683,
-          "sha256": "82842e437ca95790fd726b5f90891e8be1f2357cb4f499cef092bbdb53b9f0bc"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+          "path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+          "bytes": 5937500,
+          "sha256": "aedb08eeeaad8a7b99a878a9d04b8bd8da9be0ec9f07c1141dea79f30f1f9852"
         }
       ],
-      "notes": "Inclusion authorized explicitly by the user; pending visual review is recorded separately from runtime eligibility.",
-      "blocked_reason": "",
-      "visual_reviewed": false,
-      "visual_review": "pending_user_review",
-      "inclusion_authorized": true,
-      "authorization_kind": "user_requested_creation_and_in_game_application",
-      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
-      "runtime_acceptance": "requires_current_checks",
-      "provenance": {
-        "source": "res://assets_external/enemies/ultimate_monsters/Creep.glb",
-        "source_sha256": "8abe19342e4cc60d569c863e6954ec147847289502ac807d42bb288a0c9d71ec",
-        "source_pack": "quaternius_ultimate_monsters",
-        "source_url": "https://quaternius.com/packs/ultimatemonsters.html",
-        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Monsters_Mirror_CC0.txt",
-        "license_sha256": "c26720908f6b927032e29e4d26d8c0c787b10240ce434e39290b7b730da981eb",
-        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
-        "authored_changes": [
-          "bone-local gaunt anatomy",
-          "surface furrows",
-          "spectral vertex coloration",
-          "skinned torn veils and chest filaments"
-        ],
-        "rig_and_animation_contract": "unchanged"
-      }
+      "design_id": "M06"
     },
     "bog_wretch": {
-      "display_name": "Bog Wretch",
-      "family": "monster",
-      "source_pack": "ashenoath_spectral_bestiary",
-      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "display_name": "bog_wretch",
+      "model": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
       "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
-      "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.bin",
-          "bytes": 1488496,
-          "sha256": "7c6983404b16129e9b603d870147bced07164fcd664880c3b35a86a1ff0230cb"
-        },
-        {
-          "path": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
-          "bytes": 33221,
-          "sha256": "9b56326509d5c500bc3a0e1101f357253c3ab20a7d43b95e91a9033c26412b90"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+          "path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+          "bytes": 6275772,
+          "sha256": "996d8957135263e837c8fd0d659abce2b91d7333420cae7d825c71a1e8537d94"
         }
       ],
-      "blocked_reason": "",
-      "notes": "Inclusion authorized explicitly by the user; pending visual review is recorded separately from runtime eligibility.",
-      "visual_reviewed": false,
-      "visual_review": "pending_user_review",
-      "inclusion_authorized": true,
-      "authorization_kind": "user_requested_creation_and_in_game_application",
-      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
-      "runtime_acceptance": "requires_current_checks",
-      "provenance": {
-        "source": "res://assets_external/characters_universal/runtime/BogWretch_Playfix.glb",
-        "source_sha256": "609030e399c459309ff458b9b49c59e6ff9d4a598335208edb1dad0afe88bc6a",
-        "source_pack": "quaternius_universal_base_characters",
-        "source_url": "https://quaternius.com/packs/universalbasecharacters.html",
-        "license_file": "res://assets_external/licenses/Quaternius_Universal_Base_Characters_CC0.txt",
-        "license_sha256": "7e32fb16ba0aa1d9f15fd5ce95e8da395ef67cbaf5b681b249d495016482dced",
-        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
-        "authored_changes": [
-          "bone-local gaunt anatomy",
-          "surface furrows",
-          "spectral vertex coloration",
-          "skinned torn veils and chest filaments"
-        ],
-        "rig_and_animation_contract": "unchanged"
-      }
+      "design_id": "M03"
     },
     "gravebound_knight": {
-      "display_name": "Gravebound Knight",
-      "family": "monster",
-      "source_pack": "ashenoath_spectral_bestiary",
-      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "display_name": "gravebound_knight",
+      "model": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
       "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
-      "source_url": "https://opengameart.org/content/animated-monsters-pack",
-      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/enemies/spectral/Gravebound_Spectral.bin",
-          "bytes": 325036,
-          "sha256": "7d2afc53ce5ad3f6663d0c2b70815ee447c543532cc62af4fda15f06ce858370"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
-          "bytes": 96350,
-          "sha256": "5f39234d0c70bc1959ccdc580a7f48326623e2e6320a89d73bb6e60c8b16cc2b"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+          "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+          "bytes": 6000344,
+          "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af"
         }
       ],
-      "blocked_reason": "",
-      "visual_reviewed": false,
-      "visual_review": "pending_user_review",
-      "inclusion_authorized": true,
-      "authorization_kind": "user_requested_creation_and_in_game_application",
-      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
-      "runtime_acceptance": "requires_current_checks",
-      "provenance": {
-        "source": "res://assets_external/enemies/Skeleton.fbx",
-        "source_sha256": "be0a5992b677e563c6c9601e76fdcb9d50e91c195aebb1eb70604fbfe8fb26d5",
-        "source_pack": "quaternius_lowpoly_animated_monsters",
-        "source_url": "https://opengameart.org/content/animated-monsters-pack",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "license_sha256": "c685483e08b5c8deb0083292e4eab1535a8daee50fed2ce0a5bf28091cf268a3",
-        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
-        "authored_changes": [
-          "bone-local gaunt anatomy",
-          "surface furrows",
-          "spectral vertex coloration",
-          "skinned torn veils and chest filaments"
-        ],
-        "rig_and_animation_contract": "unchanged"
-      },
-      "notes": "Inclusion authorized explicitly by the user; pending visual review is recorded separately from runtime eligibility."
+      "design_id": "M04"
     },
     "ashwing": {
-      "display_name": "Ashwing Carrion Drake",
-      "family": "monster",
-      "source_pack": "ashenoath_spectral_bestiary",
-      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "display_name": "ashwing",
+      "model": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
       "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
-      "source_url": "https://opengameart.org/content/animated-monsters-pack",
-      "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/enemies/spectral/Ashwing_Spectral.bin",
-          "bytes": 556432,
-          "sha256": "c78f0bf0843fd95a4ffdeb3b88eb80ea8a0604e88ba4a606726254195d210a82"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
-          "bytes": 164734,
-          "sha256": "cb7db4c600c6db7f8237ee542e8d718fdaa572e2a577fb8a1531de1d42123425"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+          "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+          "bytes": 6241348,
+          "sha256": "f9199fc65a7bed7bb42aa0da6f46200fb9048563c23704ad9a578f357893ae53"
         }
       ],
-      "notes": "Inclusion authorized explicitly by the user; pending visual review is recorded separately from runtime eligibility.",
-      "blocked_reason": "",
-      "visual_reviewed": false,
-      "visual_review": "pending_user_review",
-      "inclusion_authorized": true,
-      "authorization_kind": "user_requested_creation_and_in_game_application",
-      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
-      "runtime_acceptance": "requires_current_checks",
-      "provenance": {
-        "source": "res://assets_external/enemies/Ashwing_Playfix.glb",
-        "source_sha256": "b6bad819a4d5215d50d980614064cca975415d13714d30394b90a7c65285099e",
-        "source_pack": "quaternius_lowpoly_animated_monsters",
-        "source_url": "https://opengameart.org/content/animated-monsters-pack",
-        "license_file": "res://assets_external/licenses/quaternius_lowpoly_animated_monsters/License.txt",
-        "license_sha256": "c685483e08b5c8deb0083292e4eab1535a8daee50fed2ce0a5bf28091cf268a3",
-        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
-        "authored_changes": [
-          "bone-local gaunt anatomy",
-          "surface furrows",
-          "spectral vertex coloration",
-          "skinned torn veils and chest filaments"
-        ],
-        "rig_and_animation_contract": "unchanged"
-      }
+      "design_id": "M07"
     },
     "white_hart": {
-      "display_name": "White Hart Avatar",
-      "family": "monster",
-      "source_pack": "ashenoath_spectral_bestiary",
-      "status": "spectral_inclusion_authorized_visual_review_pending",
+      "display_name": "white_hart",
+      "model": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
       "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
       "export_eligible": true,
       "fallback_mode": "none",
-      "model": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
-      "source_url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
-      "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Animals_CC0.txt",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
       "runtime_files": [
         {
-          "path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.bin",
-          "bytes": 1994644,
-          "sha256": "a3c50d083d1977149690456af9db89f14388f1f7c611c74e52af2cbc29cb2045"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
-          "bytes": 682684,
-          "sha256": "cc40fa426fedc8fa3e80142f1d6117ff2f900da51b0be0eb44efe643f6d3278d"
-        },
-        {
-          "path": "res://assets_external/enemies/spectral/spectral_surface.png",
-          "bytes": 340345,
-          "sha256": "fb813dad1bcc109c920c60603ff822d053909c0b2c8a51dee2c6b46e2ff3fbec"
+          "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+          "bytes": 6278076,
+          "sha256": "6c8890721da9ab09848597a0d82a405f4dd73a66a88f189c55b48f87faf3426c"
         }
       ],
-      "blocked_reason": "",
-      "visual_reviewed": false,
-      "visual_review": "pending_user_review",
+      "design_id": "M08"
+    },
+    "player": {
+      "display_name": "player",
+      "model": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
       "inclusion_authorized": true,
-      "authorization_kind": "user_requested_creation_and_in_game_application",
-      "authorization_request": "Build for me asset packs for monsters that are more the witcher-esque so we can use it instead of the monster assets we have now. Then apply them straight into the game",
-      "runtime_acceptance": "requires_current_checks",
-      "provenance": {
-        "source": "res://assets_external/enemies/WhiteHart_Stag.glb",
-        "source_sha256": "6da8ff2a2a1c8cb467c3e2b8838b2a9128ad90ade3dc3d5ee81b3dea5e764de5",
-        "source_pack": "quaternius_ultimate_animated_animals",
-        "source_url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
-        "license_file": "res://assets_external/licenses/Quaternius_Ultimate_Animals_CC0.txt",
-        "license_sha256": "3f02da5aa208454bdad0bee95671467206606f5aa32d7b8eb387779ee2f18602",
-        "build_ledger": "res://assets_external/enemies/spectral/SPECTRAL_BESTIARY_BUILD.json",
-        "authored_changes": [
-          "bone-local gaunt anatomy",
-          "surface furrows",
-          "spectral vertex coloration",
-          "skinned torn veils and chest filaments"
-        ],
-        "rig_and_animation_contract": "unchanged"
-      },
-      "notes": "Inclusion authorized explicitly by the user; pending visual review is recorded separately from runtime eligibility."
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+          "bytes": 1550576,
+          "sha256": "3f0aeff37b5222464736814c03cc47a277fa89d6ebdf2c2bbd63522e18eea15a"
+        }
+      ],
+      "design_id": "P01"
+    },
+    "player_kael": {
+      "display_name": "player_kael",
+      "model": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+          "bytes": 1550576,
+          "sha256": "3f0aeff37b5222464736814c03cc47a277fa89d6ebdf2c2bbd63522e18eea15a"
+        }
+      ],
+      "design_id": "P01"
+    },
+    "player_human": {
+      "display_name": "player_human",
+      "model": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+          "bytes": 1550576,
+          "sha256": "3f0aeff37b5222464736814c03cc47a277fa89d6ebdf2c2bbd63522e18eea15a"
+        }
+      ],
+      "design_id": "P01"
+    },
+    "sister_anwen": {
+      "display_name": "sister_anwen",
+      "model": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+          "bytes": 1809712,
+          "sha256": "cd0c69e3f6c7780d5b64e597046bc7a94e30e3c7672c32aee77cc8a4a294e157"
+        }
+      ],
+      "design_id": "C01"
+    },
+    "sister_anwen_human": {
+      "display_name": "sister_anwen_human",
+      "model": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+          "bytes": 1809712,
+          "sha256": "cd0c69e3f6c7780d5b64e597046bc7a94e30e3c7672c32aee77cc8a4a294e157"
+        }
+      ],
+      "design_id": "C01"
+    },
+    "shrine_pilgrim": {
+      "display_name": "shrine_pilgrim",
+      "model": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+          "bytes": 1809712,
+          "sha256": "cd0c69e3f6c7780d5b64e597046bc7a94e30e3c7672c32aee77cc8a4a294e157"
+        }
+      ],
+      "design_id": "C01"
+    },
+    "witness_3": {
+      "display_name": "witness_3",
+      "model": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+          "bytes": 1809712,
+          "sha256": "cd0c69e3f6c7780d5b64e597046bc7a94e30e3c7672c32aee77cc8a4a294e157"
+        }
+      ],
+      "design_id": "C01"
+    },
+    "rook": {
+      "display_name": "rook",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
+        }
+      ],
+      "design_id": "C02"
+    },
+    "rook_smuggler": {
+      "display_name": "rook_smuggler",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
+        }
+      ],
+      "design_id": "C02"
+    },
+    "rook_human": {
+      "display_name": "rook_human",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
+        }
+      ],
+      "design_id": "C02"
+    },
+    "walker_board": {
+      "display_name": "walker_board",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
+        }
+      ],
+      "design_id": "C02"
+    },
+    "vargan_patrol": {
+      "display_name": "vargan_patrol",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
+        }
+      ],
+      "design_id": "C02"
+    },
+    "tavin": {
+      "display_name": "tavin",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
+        }
+      ],
+      "design_id": "C02"
+    },
+    "saga_tavin": {
+      "display_name": "saga_tavin",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
+        }
+      ],
+      "design_id": "C02"
+    },
+    "witness_-3": {
+      "display_name": "witness_-3",
+      "model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+          "bytes": 1755308,
+          "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518"
+        }
+      ],
+      "design_id": "C02"
+    },
+    "mira": {
+      "display_name": "mira",
+      "model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+          "bytes": 1590016,
+          "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c"
+        }
+      ],
+      "design_id": "C03"
+    },
+    "mira_herbalist": {
+      "display_name": "mira_herbalist",
+      "model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+          "bytes": 1590016,
+          "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c"
+        }
+      ],
+      "design_id": "C03"
+    },
+    "mira_human": {
+      "display_name": "mira_human",
+      "model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+          "bytes": 1590016,
+          "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c"
+        }
+      ],
+      "design_id": "C03"
+    },
+    "edda": {
+      "display_name": "edda",
+      "model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+          "bytes": 1590016,
+          "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c"
+        }
+      ],
+      "design_id": "C03"
+    },
+    "saga_edda": {
+      "display_name": "saga_edda",
+      "model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+          "bytes": 1590016,
+          "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c"
+        }
+      ],
+      "design_id": "C03"
+    },
+    "maelin": {
+      "display_name": "maelin",
+      "model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+          "bytes": 1590016,
+          "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c"
+        }
+      ],
+      "design_id": "C03"
+    },
+    "saga_maelin": {
+      "display_name": "saga_maelin",
+      "model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+          "bytes": 1590016,
+          "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c"
+        }
+      ],
+      "design_id": "C03"
+    },
+    "witness_-7": {
+      "display_name": "witness_-7",
+      "model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+          "bytes": 1590016,
+          "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c"
+        }
+      ],
+      "design_id": "C03"
+    },
+    "tor": {
+      "display_name": "tor",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "blacksmith_tor": {
+      "display_name": "blacksmith_tor",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "villager_worker_human": {
+      "display_name": "villager_worker_human",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "forge_helper": {
+      "display_name": "forge_helper",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "jory": {
+      "display_name": "jory",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "saga_jory": {
+      "display_name": "saga_jory",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "dain": {
+      "display_name": "dain",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "saga_dain": {
+      "display_name": "saga_dain",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "mill_worker": {
+      "display_name": "mill_worker",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "oris": {
+      "display_name": "oris",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "saga_oris": {
+      "display_name": "saga_oris",
+      "model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+          "bytes": 1389076,
+          "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de"
+        }
+      ],
+      "design_id": "C04"
+    },
+    "elna": {
+      "display_name": "elna",
+      "model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+          "bytes": 1677520,
+          "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2"
+        }
+      ],
+      "design_id": "C05"
+    },
+    "widow_elna": {
+      "display_name": "widow_elna",
+      "model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+          "bytes": 1677520,
+          "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2"
+        }
+      ],
+      "design_id": "C05"
+    },
+    "generic_villager_02": {
+      "display_name": "generic_villager_02",
+      "model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+          "bytes": 1677520,
+          "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2"
+        }
+      ],
+      "design_id": "C05"
+    },
+    "villager_female_human": {
+      "display_name": "villager_female_human",
+      "model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+          "bytes": 1677520,
+          "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2"
+        }
+      ],
+      "design_id": "C05"
+    },
+    "walker_well": {
+      "display_name": "walker_well",
+      "model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+          "bytes": 1677520,
+          "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2"
+        }
+      ],
+      "design_id": "C05"
+    },
+    "ressa": {
+      "display_name": "ressa",
+      "model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+          "bytes": 1677520,
+          "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2"
+        }
+      ],
+      "design_id": "C05"
+    },
+    "saga_ressa": {
+      "display_name": "saga_ressa",
+      "model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+          "bytes": 1677520,
+          "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2"
+        }
+      ],
+      "design_id": "C05"
+    },
+    "injured_traveler": {
+      "display_name": "injured_traveler",
+      "model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+          "bytes": 1677520,
+          "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2"
+        }
+      ],
+      "design_id": "C05"
+    },
+    "toma": {
+      "display_name": "toma",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
+        }
+      ],
+      "design_id": "C06"
+    },
+    "farmer_toma": {
+      "display_name": "farmer_toma",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
+        }
+      ],
+      "design_id": "C06"
+    },
+    "generic_villager_01": {
+      "display_name": "generic_villager_01",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
+        }
+      ],
+      "design_id": "C06"
+    },
+    "villager_human": {
+      "display_name": "villager_human",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
+        }
+      ],
+      "design_id": "C06"
+    },
+    "iven": {
+      "display_name": "iven",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
+        }
+      ],
+      "design_id": "C06"
+    },
+    "saga_iven": {
+      "display_name": "saga_iven",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
+        }
+      ],
+      "design_id": "C06"
+    },
+    "odran": {
+      "display_name": "odran",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
+        }
+      ],
+      "design_id": "C06"
+    },
+    "saga_odran": {
+      "display_name": "saga_odran",
+      "model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+          "bytes": 1531900,
+          "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f"
+        }
+      ],
+      "design_id": "C06"
+    },
+    "senn": {
+      "display_name": "senn",
+      "model": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+          "bytes": 1434472,
+          "sha256": "a2ada6d15539db90c3b8ca2a84e46b354c40db406ec14f1b06e2e5599f57043c"
+        }
+      ],
+      "design_id": "C07"
+    },
+    "captain_senn": {
+      "display_name": "captain_senn",
+      "model": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+          "bytes": 1434472,
+          "sha256": "a2ada6d15539db90c3b8ca2a84e46b354c40db406ec14f1b06e2e5599f57043c"
+        }
+      ],
+      "design_id": "C07"
+    },
+    "road_ranger": {
+      "display_name": "road_ranger",
+      "model": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+          "bytes": 1434472,
+          "sha256": "a2ada6d15539db90c3b8ca2a84e46b354c40db406ec14f1b06e2e5599f57043c"
+        }
+      ],
+      "design_id": "C07"
+    },
+    "edric": {
+      "display_name": "edric",
+      "model": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+          "bytes": 1710728,
+          "sha256": "b544aebd6e00ca4fffec7ee739a642e0f1e3ddde451d9547eb9e658ecf39eb9a"
+        }
+      ],
+      "design_id": "C08"
+    },
+    "lord_edric": {
+      "display_name": "lord_edric",
+      "model": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+          "bytes": 1710728,
+          "sha256": "b544aebd6e00ca4fffec7ee739a642e0f1e3ddde451d9547eb9e658ecf39eb9a"
+        }
+      ],
+      "design_id": "C08"
+    },
+    "edric_castle": {
+      "display_name": "edric_castle",
+      "model": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+          "bytes": 1710728,
+          "sha256": "b544aebd6e00ca4fffec7ee739a642e0f1e3ddde451d9547eb9e658ecf39eb9a"
+        }
+      ],
+      "design_id": "C08"
+    },
+    "edric_campaign": {
+      "display_name": "edric_campaign",
+      "model": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+          "bytes": 1710728,
+          "sha256": "b544aebd6e00ca4fffec7ee739a642e0f1e3ddde451d9547eb9e658ecf39eb9a"
+        }
+      ],
+      "design_id": "C08"
+    },
+    "edric_vargan": {
+      "display_name": "edric_vargan",
+      "model": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+          "bytes": 1710728,
+          "sha256": "b544aebd6e00ca4fffec7ee739a642e0f1e3ddde451d9547eb9e658ecf39eb9a"
+        }
+      ],
+      "design_id": "C08"
+    },
+    "vale": {
+      "display_name": "vale",
+      "model": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+          "bytes": 1680824,
+          "sha256": "301163838a26a7f7c90e134794daa1d136527734bd65dc546f9d19bc6d3f5943"
+        }
+      ],
+      "design_id": "C09"
+    },
+    "vargan_record_keeper": {
+      "display_name": "vargan_record_keeper",
+      "model": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+          "bytes": 1680824,
+          "sha256": "301163838a26a7f7c90e134794daa1d136527734bd65dc546f9d19bc6d3f5943"
+        }
+      ],
+      "design_id": "C09"
+    },
+    "record_keeper_vale": {
+      "display_name": "record_keeper_vale",
+      "model": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+          "bytes": 1680824,
+          "sha256": "301163838a26a7f7c90e134794daa1d136527734bd65dc546f9d19bc6d3f5943"
+        }
+      ],
+      "design_id": "C09"
+    },
+    "lysa": {
+      "display_name": "lysa",
+      "model": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+          "bytes": 1680824,
+          "sha256": "301163838a26a7f7c90e134794daa1d136527734bd65dc546f9d19bc6d3f5943"
+        }
+      ],
+      "design_id": "C09"
+    },
+    "saga_lysa": {
+      "display_name": "saga_lysa",
+      "model": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+          "bytes": 1680824,
+          "sha256": "301163838a26a7f7c90e134794daa1d136527734bd65dc546f9d19bc6d3f5943"
+        }
+      ],
+      "design_id": "C09"
+    },
+    "merrow": {
+      "display_name": "merrow",
+      "model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+          "bytes": 1863548,
+          "sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240"
+        }
+      ],
+      "design_id": "C10"
+    },
+    "vargan_steward": {
+      "display_name": "vargan_steward",
+      "model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+          "bytes": 1863548,
+          "sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240"
+        }
+      ],
+      "design_id": "C10"
+    },
+    "castle_guard": {
+      "display_name": "castle_guard",
+      "model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+          "bytes": 1863548,
+          "sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240"
+        }
+      ],
+      "design_id": "C10"
+    },
+    "castle_guard_human": {
+      "display_name": "castle_guard_human",
+      "model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+          "bytes": 1863548,
+          "sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240"
+        }
+      ],
+      "design_id": "C10"
+    },
+    "steward_merrow": {
+      "display_name": "steward_merrow",
+      "model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+          "bytes": 1863548,
+          "sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240"
+        }
+      ],
+      "design_id": "C10"
+    },
+    "vargan_gate_guard": {
+      "display_name": "vargan_gate_guard",
+      "model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+          "bytes": 1863548,
+          "sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240"
+        }
+      ],
+      "design_id": "C10"
+    },
+    "nessa": {
+      "display_name": "nessa",
+      "model": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+          "bytes": 1576052,
+          "sha256": "141544d3523011544ccd502b1101fa7760b2ecaad068d05d928ec82cf88d1fd9"
+        }
+      ],
+      "design_id": "C11"
+    },
+    "saga_nessa": {
+      "display_name": "saga_nessa",
+      "model": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+          "bytes": 1576052,
+          "sha256": "141544d3523011544ccd502b1101fa7760b2ecaad068d05d928ec82cf88d1fd9"
+        }
+      ],
+      "design_id": "C11"
+    },
+    "vargan_servant": {
+      "display_name": "vargan_servant",
+      "model": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+          "bytes": 1576052,
+          "sha256": "141544d3523011544ccd502b1101fa7760b2ecaad068d05d928ec82cf88d1fd9"
+        }
+      ],
+      "design_id": "C11"
+    },
+    "mill_second_worker": {
+      "display_name": "mill_second_worker",
+      "model": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+          "bytes": 1576052,
+          "sha256": "141544d3523011544ccd502b1101fa7760b2ecaad068d05d928ec82cf88d1fd9"
+        }
+      ],
+      "design_id": "C11"
+    },
+    "nera": {
+      "display_name": "nera",
+      "model": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+          "bytes": 1813052,
+          "sha256": "cbcdb167ae6247fe31bb0bd05810104b6543f070ace8e6ab75e99c119e00ca2b"
+        }
+      ],
+      "design_id": "C12"
+    },
+    "saga_nera": {
+      "display_name": "saga_nera",
+      "model": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+          "bytes": 1813052,
+          "sha256": "cbcdb167ae6247fe31bb0bd05810104b6543f070ace8e6ab75e99c119e00ca2b"
+        }
+      ],
+      "design_id": "C12"
+    },
+    "villager_hooded_human": {
+      "display_name": "villager_hooded_human",
+      "model": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+          "bytes": 1813052,
+          "sha256": "cbcdb167ae6247fe31bb0bd05810104b6543f070ace8e6ab75e99c119e00ca2b"
+        }
+      ],
+      "design_id": "C12"
+    },
+    "maren": {
+      "display_name": "maren",
+      "model": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+          "bytes": 1813052,
+          "sha256": "cbcdb167ae6247fe31bb0bd05810104b6543f070ace8e6ab75e99c119e00ca2b"
+        }
+      ],
+      "design_id": "C12"
+    },
+    "saga_maren": {
+      "display_name": "saga_maren",
+      "model": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walk"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+          "bytes": 1813052,
+          "sha256": "cbcdb167ae6247fe31bb0bd05810104b6543f070ace8e6ab75e99c119e00ca2b"
+        }
+      ],
+      "design_id": "C12"
+    },
+    "ghoulkin_creature": {
+      "display_name": "ghoulkin_creature",
+      "model": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+          "bytes": 6402112,
+          "sha256": "8eb08909214c5fa23b84a734d16d7179aaadb8d480ce423d6a9cfca3a879138e"
+        }
+      ],
+      "design_id": "M01"
+    },
+    "ghoulkin_skeleton": {
+      "display_name": "ghoulkin_skeleton",
+      "model": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+          "bytes": 6402112,
+          "sha256": "8eb08909214c5fa23b84a734d16d7179aaadb8d480ce423d6a9cfca3a879138e"
+        }
+      ],
+      "design_id": "M01"
+    },
+    "ghoul_gaunt_real": {
+      "display_name": "ghoul_gaunt_real",
+      "model": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+          "bytes": 6402112,
+          "sha256": "8eb08909214c5fa23b84a734d16d7179aaadb8d480ce423d6a9cfca3a879138e"
+        }
+      ],
+      "design_id": "M01"
+    },
+    "wychwood_stalker": {
+      "display_name": "wychwood_stalker",
+      "model": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+          "bytes": 6183316,
+          "sha256": "b97414deff8c6ebea45a7c971384a931449ae59c60956e0f51668129915f8b4d"
+        }
+      ],
+      "design_id": "M02"
+    },
+    "wychwood_stalker_creature": {
+      "display_name": "wychwood_stalker_creature",
+      "model": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+          "bytes": 6183316,
+          "sha256": "b97414deff8c6ebea45a7c971384a931449ae59c60956e0f51668129915f8b4d"
+        }
+      ],
+      "design_id": "M02"
+    },
+    "ghoul_stalker_real": {
+      "display_name": "ghoul_stalker_real",
+      "model": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+          "bytes": 6183316,
+          "sha256": "b97414deff8c6ebea45a7c971384a931449ae59c60956e0f51668129915f8b4d"
+        }
+      ],
+      "design_id": "M02"
+    },
+    "bog_wretch_creature": {
+      "display_name": "bog_wretch_creature",
+      "model": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+          "bytes": 6275772,
+          "sha256": "996d8957135263e837c8fd0d659abce2b91d7333420cae7d825c71a1e8537d94"
+        }
+      ],
+      "design_id": "M03"
+    },
+    "gravebound_knight_creature": {
+      "display_name": "gravebound_knight_creature",
+      "model": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+          "bytes": 6000344,
+          "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af"
+        }
+      ],
+      "design_id": "M04"
+    },
+    "halvern_boss": {
+      "display_name": "halvern_boss",
+      "model": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+          "bytes": 6000344,
+          "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af"
+        }
+      ],
+      "design_id": "M04"
+    },
+    "returned_soldier": {
+      "display_name": "returned_soldier",
+      "model": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+          "bytes": 6000344,
+          "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af"
+        }
+      ],
+      "design_id": "M04"
+    },
+    "bandit": {
+      "display_name": "bandit",
+      "model": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+          "bytes": 6000344,
+          "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af"
+        }
+      ],
+      "design_id": "M04"
+    },
+    "bell_eater_boss": {
+      "display_name": "bell_eater_boss",
+      "model": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+          "bytes": 6575332,
+          "sha256": "8f692e03741345b12cb800664c4b28b6e025e3ef175b1a0b5cbff71782692ece"
+        }
+      ],
+      "design_id": "M05"
+    },
+    "rootbound_colossus_boss": {
+      "display_name": "rootbound_colossus_boss",
+      "model": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+          "bytes": 5937500,
+          "sha256": "aedb08eeeaad8a7b99a878a9d04b8bd8da9be0ec9f07c1141dea79f30f1f9852"
+        }
+      ],
+      "design_id": "M06"
+    },
+    "ashwing_creature": {
+      "display_name": "ashwing_creature",
+      "model": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+          "bytes": 6241348,
+          "sha256": "f9199fc65a7bed7bb42aa0da6f46200fb9048563c23704ad9a578f357893ae53"
+        }
+      ],
+      "design_id": "M07"
+    },
+    "ashwing_boss": {
+      "display_name": "ashwing_boss",
+      "model": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+          "bytes": 6241348,
+          "sha256": "f9199fc65a7bed7bb42aa0da6f46200fb9048563c23704ad9a578f357893ae53"
+        }
+      ],
+      "design_id": "M07"
+    },
+    "white_hart_avatar": {
+      "display_name": "white_hart_avatar",
+      "model": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+          "bytes": 6278076,
+          "sha256": "6c8890721da9ab09848597a0d82a405f4dd73a66a88f189c55b48f87faf3426c"
+        }
+      ],
+      "design_id": "M08"
+    },
+    "white_hart_boss": {
+      "display_name": "white_hart_boss",
+      "model": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+          "bytes": 6278076,
+          "sha256": "6c8890721da9ab09848597a0d82a405f4dd73a66a88f189c55b48f87faf3426c"
+        }
+      ],
+      "design_id": "M08"
+    },
+    "silt_maw": {
+      "display_name": "silt_maw",
+      "model": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+          "bytes": 4226032,
+          "sha256": "92bdf89d9f3eb6e0f3e90f34e22ee818d80e39c43d2c54c70d60fca937ce87ca"
+        }
+      ],
+      "design_id": "M09"
+    },
+    "millback": {
+      "display_name": "millback",
+      "model": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+          "bytes": 4372508,
+          "sha256": "b619a18689232e12837668beef3b806f784a97fd24a5db222c8a76ed33c645ce"
+        }
+      ],
+      "design_id": "M10"
+    },
+    "glassmoth": {
+      "display_name": "glassmoth",
+      "model": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+          "bytes": 4716412,
+          "sha256": "419bdb9335ff8b0914c2e900864833669f6db3554d65c7172e80a346bd317d57"
+        }
+      ],
+      "design_id": "M11"
+    },
+    "knell_leech": {
+      "display_name": "knell_leech",
+      "model": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+          "bytes": 4167004,
+          "sha256": "cf954b8f19f213fe1ff33f4df2d29955e2e9f086d57b291ca5b4b2f787e51948"
+        }
+      ],
+      "design_id": "M12"
+    },
+    "hearthscale": {
+      "display_name": "hearthscale",
+      "model": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+          "bytes": 6004004,
+          "sha256": "6decf8eecca00eaea0e882aa352382cb1089888d071510a64838a78227e94e40"
+        }
+      ],
+      "design_id": "M13"
+    },
+    "bracken": {
+      "display_name": "bracken",
+      "model": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+          "bytes": 6004004,
+          "sha256": "6decf8eecca00eaea0e882aa352382cb1089888d071510a64838a78227e94e40"
+        }
+      ],
+      "design_id": "M13"
+    },
+    "gallows_weaver": {
+      "display_name": "gallows_weaver",
+      "model": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+          "bytes": 4972884,
+          "sha256": "4dcb1e8e3d85ab22942d60d7a334971f9c7cd1c06d8babfefd94b63d6353ae19"
+        }
+      ],
+      "design_id": "M14"
+    },
+    "reed_choir": {
+      "display_name": "reed_choir",
+      "model": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+          "bytes": 6253416,
+          "sha256": "01ae6f30c17e79f1d323dec3e4c82f1f43bada81d4020fe5c6d8ace73d3ecdcf"
+        }
+      ],
+      "design_id": "M15"
+    },
+    "inkblind": {
+      "display_name": "inkblind",
+      "model": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+          "bytes": 4147288,
+          "sha256": "42384de89575168d4f8665fd2a153aeed2f121cfc6542393600db9ed5e0e0eba"
+        }
+      ],
+      "design_id": "M16"
+    },
+    "cairn_mother": {
+      "display_name": "cairn_mother",
+      "model": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+          "bytes": 5727916,
+          "sha256": "71e4c3d4883f344e828643eed2e8de137fbcd0a364b0a9ea06c3034b70ce09a2"
+        }
+      ],
+      "design_id": "M17"
+    },
+    "shroud_swimmer": {
+      "display_name": "shroud_swimmer",
+      "model": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+          "bytes": 4834624,
+          "sha256": "ef93c28eba404d3ea28d53271194704522f6c270beffe48be23909b8ba9231db"
+        }
+      ],
+      "design_id": "M18"
+    },
+    "wychwood_raider": {
+      "display_name": "wychwood_raider",
+      "model": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+          "bytes": 6232920,
+          "sha256": "b4304b746ecfba4c1f2b75c963886ceed563170f0c10ca5b6d9d45ba62d150fd"
+        }
+      ],
+      "design_id": "M19"
+    },
+    "wychwood_raider_creature": {
+      "display_name": "wychwood_raider_creature",
+      "model": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+          "bytes": 6232920,
+          "sha256": "b4304b746ecfba4c1f2b75c963886ceed563170f0c10ca5b6d9d45ba62d150fd"
+        }
+      ],
+      "design_id": "M19"
+    },
+    "wychwood_brute": {
+      "display_name": "wychwood_brute",
+      "model": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+          "bytes": 6243532,
+          "sha256": "a1044a7eb55e074de4dba29ef34e271b8ae2105fc0ee659b5d39dfbc9dc0512e"
+        }
+      ],
+      "design_id": "M20"
+    },
+    "wychwood_brute_creature": {
+      "display_name": "wychwood_brute_creature",
+      "model": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+          "bytes": 6243532,
+          "sha256": "a1044a7eb55e074de4dba29ef34e271b8ae2105fc0ee659b5d39dfbc9dc0512e"
+        }
+      ],
+      "design_id": "M20"
+    },
+    "ghoul_brute_real": {
+      "display_name": "ghoul_brute_real",
+      "model": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+          "bytes": 6243532,
+          "sha256": "a1044a7eb55e074de4dba29ef34e271b8ae2105fc0ee659b5d39dfbc9dc0512e"
+        }
+      ],
+      "design_id": "M20"
+    },
+    "orc_skull_real": {
+      "display_name": "orc_skull_real",
+      "model": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+      "license_file": "res://assets_external/design_pack_v1/PROVENANCE.md",
+      "approved": false,
+      "inclusion_authorized": true,
+      "authorization_kind": "user_requested_blender_cast_replacement",
+      "visual_reviewed": false,
+      "runtime_acceptance": "unverified",
+      "export_eligible": true,
+      "fallback_mode": "none",
+      "status": "authored_pending_user_acceptance",
+      "required_clips": [
+        "Idle",
+        "Walking",
+        "Running"
+      ],
+      "runtime_files": [
+        {
+          "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+          "bytes": 6243532,
+          "sha256": "a1044a7eb55e074de4dba29ef34e271b8ae2105fc0ee659b5d39dfbc9dc0512e"
+        }
+      ],
+      "design_id": "M20"
     }
   },
   "authored_environment_derivatives": [

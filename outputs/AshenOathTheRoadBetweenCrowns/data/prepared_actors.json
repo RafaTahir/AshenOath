@@ -1,1192 +1,2362 @@
 {
-	"ashwing_boss|res://assets_external/enemies/spectral/Ashwing_Spectral.gltf": {
+	"anwen|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_anatomy_basecolor.png"
 			},
 			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
 				"surface": 1,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
+		"role": "anwen",
+		"source": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+		"variant_safe": true
+	},
+	"ashwing_boss|res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb": {
+		"animation_resources": [],
+		"material_bindings": [
 			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
-				"surface": 2,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
-				"surface": 3,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/SpectralVeil",
+				"mesh": "M07_Rig/Skeleton3D/M07_Ashwing_Carrion_Drake_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "EyeArmature/Skeleton3D/Eyes",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "EyeArmature/Skeleton3D/Eyes",
-				"surface": 1,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake_M07_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/f659d86683e80a8aa25a6193.scn",
+		"path": "res://assets_external/characters_prepared/monsters/1f7e54e03f6e264c9ff42813.scn",
 		"role": "ashwing_boss",
-		"source": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+		"variant_safe": true
 	},
-	"ashwing_creature|res://assets_external/enemies/spectral/Ashwing_Spectral.gltf": {
+	"ashwing_creature|res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
+				"mesh": "M07_Rig/Skeleton3D/M07_Ashwing_Carrion_Drake_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
-				"surface": 1,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
-				"surface": 2,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
-				"surface": 3,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "EyeArmature/Skeleton3D/Eyes",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "EyeArmature/Skeleton3D/Eyes",
-				"surface": 1,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake_M07_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/f659d86683e80a8aa25a6193.scn",
+		"path": "res://assets_external/characters_prepared/monsters/1f7e54e03f6e264c9ff42813.scn",
 		"role": "ashwing_creature",
-		"source": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+		"variant_safe": true
 	},
-	"ashwing|res://assets_external/enemies/spectral/Ashwing_Spectral.gltf": {
+	"ashwing|res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
+				"mesh": "M07_Rig/Skeleton3D/M07_Ashwing_Carrion_Drake_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
-				"surface": 1,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
-				"surface": 2,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/Dragon",
-				"surface": 3,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "DragonArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "EyeArmature/Skeleton3D/Eyes",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "EyeArmature/Skeleton3D/Eyes",
-				"surface": 1,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake_M07_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/f659d86683e80a8aa25a6193.scn",
+		"path": "res://assets_external/characters_prepared/monsters/1f7e54e03f6e264c9ff42813.scn",
 		"role": "ashwing",
-		"source": "res://assets_external/enemies/spectral/Ashwing_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+		"variant_safe": true
 	},
-	"bandit_deserter|res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf": {
+	"bandit_deserter|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Bandit_deserter_Combined",
+				"mesh": "M04_Rig/Skeleton3D/M04_Gravebound_Knight_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight_M04_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/87acc6e5f0410dcadfeb5574.scn",
+		"path": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
 		"role": "bandit_deserter",
-		"source": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
 		"variant_safe": true
 	},
-	"bandit_tracker|res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf": {
+	"bandit_tracker|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Bandit_tracker_Combined",
+				"mesh": "M04_Rig/Skeleton3D/M04_Gravebound_Knight_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight_M04_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/350ee96c81c6ab862c360b37.scn",
+		"path": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
 		"role": "bandit_tracker",
-		"source": "res://assets_external/characters_universal/runtime/Bandit_Tracker_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
 		"variant_safe": true
 	},
-	"bandit|res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf": {
+	"bandit|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Bandit_deserter_Combined",
+				"mesh": "M04_Rig/Skeleton3D/M04_Gravebound_Knight_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight_M04_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/87acc6e5f0410dcadfeb5574.scn",
+		"path": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
 		"role": "bandit",
-		"source": "res://assets_external/characters_universal/runtime/Bandit_Deserter_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
 		"variant_safe": true
 	},
-	"bell_eater_boss|res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf": {
+	"bell_eater_boss|res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
+				"mesh": "M05_Rig/Skeleton3D/M05_Bell_Eater_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater_M05_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/a976086c0e07eaddf051077f.scn",
+		"path": "res://assets_external/characters_prepared/monsters/54231b1314fe455ab60b9d77.scn",
 		"role": "bell_eater_boss",
-		"source": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
 		"variant_safe": true
 	},
-	"bell_eater|res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf": {
+	"bell_eater|res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
+				"mesh": "M05_Rig/Skeleton3D/M05_Bell_Eater_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater_M05_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/a976086c0e07eaddf051077f.scn",
+		"path": "res://assets_external/characters_prepared/monsters/54231b1314fe455ab60b9d77.scn",
 		"role": "bell_eater",
-		"source": "res://assets_external/characters_universal/runtime/spectral/BellEater_Spectral_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
 		"variant_safe": true
 	},
-	"blacksmith_tor|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
+	"blacksmith_tor|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_worker_Combined",
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/3213391611858c6dfe5d5c95.scn",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"role": "blacksmith_tor",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"variant_safe": true
 	},
-	"bog_wretch_creature|res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf": {
+	"bog_wretch_creature|res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
+				"mesh": "M03_Rig/Skeleton3D/M03_Bog_Wretch_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch_M03_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/cc729845df7a3535cc82dd78.scn",
+		"path": "res://assets_external/characters_prepared/monsters/b7ba76fa9ecf7af2932916c3.scn",
 		"role": "bog_wretch_creature",
-		"source": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
 		"variant_safe": true
 	},
-	"bog_wretch|res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf": {
+	"bog_wretch|res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
+				"mesh": "M03_Rig/Skeleton3D/M03_Bog_Wretch_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch_M03_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/cc729845df7a3535cc82dd78.scn",
+		"path": "res://assets_external/characters_prepared/monsters/b7ba76fa9ecf7af2932916c3.scn",
 		"role": "bog_wretch",
-		"source": "res://assets_external/characters_universal/runtime/spectral/BogWretch_Spectral_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
 		"variant_safe": true
 	},
-	"castle_guard_human|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
+	"bracken_companion|res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_worker_Combined",
+				"mesh": "M13_Rig/Skeleton3D/M13_Hearthscale_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale_M13_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/3213391611858c6dfe5d5c95.scn",
+		"path": "res://assets_external/characters_prepared/opening/c261a9a645913615e5e58e3f.scn",
+		"role": "bracken_companion",
+		"source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+		"variant_safe": true
+	},
+	"bracken|res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M13_Rig/Skeleton3D/M13_Hearthscale_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale_M13_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/c261a9a645913615e5e58e3f.scn",
+		"role": "bracken",
+		"source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+		"variant_safe": true
+	},
+	"cairn_mother|res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M17_Rig/Skeleton3D/M17_Cairn_Mother_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother_M17_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/278595ed8d6f43fe46e39d74.scn",
+		"role": "cairn_mother",
+		"source": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+		"variant_safe": true
+	},
+	"captain_senn|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C07_Captain_Senn_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn_C07_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C07_Captain_Senn_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn_C07_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
+		"role": "captain_senn",
+		"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+		"variant_safe": true
+	},
+	"castle_guard_human|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
 		"role": "castle_guard_human",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"variant_safe": true
 	},
-	"castle_guard|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
+	"castle_guard|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_worker_Combined",
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_basecolor.png"
 			}
 		],
-		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/3213391611858c6dfe5d5c95.scn",
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
 		"role": "castle_guard",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"variant_safe": true
 	},
-	"generic_villager_01|res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf": {
+	"dain|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_male_Combined",
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/3970a445a6ff8bffd64a23eb.scn",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "dain",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"edda|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
+		"role": "edda",
+		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+		"variant_safe": true
+	},
+	"edric_campaign|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
+		"role": "edric_campaign",
+		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+		"variant_safe": true
+	},
+	"edric_castle|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
+		"role": "edric_castle",
+		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+		"variant_safe": true
+	},
+	"edric_vargan|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
+		"role": "edric_vargan",
+		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+		"variant_safe": true
+	},
+	"edric|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
+		"role": "edric",
+		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+		"variant_safe": true
+	},
+	"elna|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+		"role": "elna",
+		"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+		"variant_safe": true
+	},
+	"farmer_toma|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+		"role": "farmer_toma",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+		"variant_safe": true
+	},
+	"forge_helper|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "forge_helper",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"gallows_weaver|res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M14_Rig/Skeleton3D/M14_Gallows_Weaver_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver_M14_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/2933affd98209470461dfb24.scn",
+		"role": "gallows_weaver",
+		"source": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+		"variant_safe": true
+	},
+	"generic_villager_01|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
 		"role": "generic_villager_01",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"variant_safe": true
 	},
-	"generic_villager_02|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+	"generic_villager_02|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_female_Combined",
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
 		"role": "generic_villager_02",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
 		"variant_safe": true
 	},
-	"ghoul_brute_real|res://assets_external/enemies/Skeleton.fbx": {
+	"ghoul_brute_real|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
+				"mesh": "M20_Rig/Skeleton3D/M20_Wychwood_Brute_Skinned",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute_M20_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"path": "res://assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
 		"role": "ghoul_brute_real",
-		"source": "res://assets_external/enemies/Skeleton.fbx",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+		"variant_safe": true
 	},
-	"ghoul_gaunt_real|res://assets_external/enemies/Skeleton.fbx": {
+	"ghoul_gaunt_real|res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
+				"mesh": "M01_Rig/Skeleton3D/M01_Ghoulkin_Skinned",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin_M01_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"path": "res://assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
 		"role": "ghoul_gaunt_real",
-		"source": "res://assets_external/enemies/Skeleton.fbx",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+		"variant_safe": true
 	},
-	"ghoul_stalker_real|res://assets_external/enemies/Skeleton.fbx": {
+	"ghoul_stalker_real|res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
+				"mesh": "M02_Rig/Skeleton3D/M02_Wychwood_Stalker_Skinned",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker_M02_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"path": "res://assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn",
 		"role": "ghoul_stalker_real",
-		"source": "res://assets_external/enemies/Skeleton.fbx",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+		"variant_safe": true
 	},
-	"ghoulkin_creature|res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf": {
+	"ghoulkin_creature|res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
+				"mesh": "M01_Rig/Skeleton3D/M01_Ghoulkin_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin_M01_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/89e7bf646f779431c45d288c.scn",
+		"path": "res://assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
 		"role": "ghoulkin_creature",
-		"source": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
 		"variant_safe": true
 	},
-	"ghoulkin_skeleton|res://assets_external/enemies/Skeleton.fbx": {
+	"ghoulkin_skeleton|res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
+				"mesh": "M01_Rig/Skeleton3D/M01_Ghoulkin_Skinned",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin_M01_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"path": "res://assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
 		"role": "ghoulkin_skeleton",
-		"source": "res://assets_external/enemies/Skeleton.fbx",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+		"variant_safe": true
 	},
-	"ghoulkin|res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf": {
+	"ghoulkin|res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Ghoulkin_authored_Combined",
+				"mesh": "M01_Rig/Skeleton3D/M01_Ghoulkin_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin_M01_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/89e7bf646f779431c45d288c.scn",
+		"path": "res://assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
 		"role": "ghoulkin",
-		"source": "res://assets_external/characters_universal/runtime/spectral/Ghoulkin_Spectral_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
 		"variant_safe": true
 	},
-	"gravebound_knight_creature|res://assets_external/enemies/spectral/Gravebound_Spectral.gltf": {
+	"glassmoth|res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
+				"mesh": "M11_Rig/Skeleton3D/M11_Glassmoth_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth_M11_basecolor.png"
 			},
 			{
-				"mesh": "SkeletonArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"mesh": "M11_Rig/Skeleton3D/M11_Glassmoth_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth_M11_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/e0e38f506b60255737c7e7ef.scn",
+		"path": "res://assets_external/characters_prepared/monsters/095b7a187a44dc0010ec1c27.scn",
+		"role": "glassmoth",
+		"source": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+		"variant_safe": true
+	},
+	"gravebound_knight_creature|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M04_Rig/Skeleton3D/M04_Gravebound_Knight_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight_M04_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
 		"role": "gravebound_knight_creature",
-		"source": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+		"variant_safe": true
 	},
-	"gravebound_knight|res://assets_external/enemies/spectral/Gravebound_Spectral.gltf": {
+	"gravebound_knight|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
+				"mesh": "M04_Rig/Skeleton3D/M04_Gravebound_Knight_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "SkeletonArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight_M04_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/e0e38f506b60255737c7e7ef.scn",
+		"path": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
 		"role": "gravebound_knight",
-		"source": "res://assets_external/enemies/spectral/Gravebound_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+		"variant_safe": true
 	},
-	"halvern_boss|res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf": {
+	"guard|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Acc_Pauldron",
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_anatomy_basecolor.png"
 			},
 			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms",
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
 				"surface": 1,
-				"texture": "res://assets_external/characters_universal/T_Regular_Male_Dark_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms_Bracer",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body_Belt_1",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body_Belt_2",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Feet_Boots",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Head_Hood",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Legs",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Eyebrows",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Eyes",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Eye_Brown.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SuperHero_Male",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Superhero_Male_Dark_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Hair_SimpleParted",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_basecolor.png"
 			}
 		],
 		"owner": "characters",
-		"path": "res://assets_external/characters_prepared/characters/2fd5f546eaa091e7c7a70355.scn",
+		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+		"role": "guard",
+		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+		"variant_safe": true
+	},
+	"halvern_boss|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M04_Rig/Skeleton3D/M04_Gravebound_Knight_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight_M04_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
 		"role": "halvern_boss",
-		"source": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+		"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
 		"variant_safe": true
 	},
-	"lord_edric|res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf": {
+	"halvern|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_male_Combined",
+				"mesh": "M04_Rig/Skeleton3D/M04_Gravebound_Knight_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight_M04_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
+		"role": "halvern",
+		"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+		"variant_safe": true
+	},
+	"hearthscale|res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M13_Rig/Skeleton3D/M13_Hearthscale_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale_M13_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/3970a445a6ff8bffd64a23eb.scn",
+		"path": "res://assets_external/characters_prepared/opening/c261a9a645913615e5e58e3f.scn",
+		"role": "hearthscale",
+		"source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+		"variant_safe": true
+	},
+	"injured_traveler|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+		"role": "injured_traveler",
+		"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+		"variant_safe": true
+	},
+	"inkblind|res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M16_Rig/Skeleton3D/M16_Inkblind_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M16_Inkblind_M16_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/ff6b5532b47b5f567d0e0e40.scn",
+		"role": "inkblind",
+		"source": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+		"variant_safe": true
+	},
+	"iven|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+		"role": "iven",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+		"variant_safe": true
+	},
+	"jory|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "jory",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"kael|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/P01_Kael_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/P01_Kael_P01_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/P01_Kael_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/P01_Kael_P01_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
+		"role": "kael",
+		"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+		"variant_safe": true
+	},
+	"knell_leech|res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M12_Rig/Skeleton3D/M12_Knell_Leech_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech_M12_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/519e2aed32e63781ce1a2d2f.scn",
+		"role": "knell_leech",
+		"source": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+		"variant_safe": true
+	},
+	"lord_edric|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C08_Lord_Edric_Vargan_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan_C08_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
 		"role": "lord_edric",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
 		"variant_safe": true
 	},
-	"mira_herbalist|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+	"lysa|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_female_Combined",
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+		"role": "lysa",
+		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+		"variant_safe": true
+	},
+	"maelin|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
+		"role": "maelin",
+		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+		"variant_safe": true
+	},
+	"maren|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+		"role": "maren",
+		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+		"variant_safe": true
+	},
+	"merrow|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+		"role": "merrow",
+		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+		"variant_safe": true
+	},
+	"mill_second_worker|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C11_Nessa_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C11_Nessa_C11_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C11_Nessa_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C11_Nessa_C11_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
+		"role": "mill_second_worker",
+		"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+		"variant_safe": true
+	},
+	"mill_worker|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "mill_worker",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"millback|res://assets_external/design_pack_v1/creatures/M10_Millback.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M10_Rig/Skeleton3D/M10_Millback_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M10_Millback_M10_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/dba592f95e6445d8f28a5632.scn",
+		"role": "millback",
+		"source": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+		"variant_safe": true
+	},
+	"mira_herbalist|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"role": "mira_herbalist",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"variant_safe": true
 	},
-	"mira_human|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+	"mira_human|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_female_Combined",
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"role": "mira_human",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"variant_safe": true
 	},
-	"orc_skull_real|res://assets_external/enemies/Skeleton.fbx": {
+	"mira|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "SkeletonArmature/Skeleton3D/Cylinder_001",
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
 				"surface": 0,
-				"texture": ""
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
+		"role": "mira",
+		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+		"variant_safe": true
+	},
+	"nera|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+		"role": "nera",
+		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+		"variant_safe": true
+	},
+	"nessa|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C11_Nessa_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C11_Nessa_C11_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C11_Nessa_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C11_Nessa_C11_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
+		"role": "nessa",
+		"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+		"variant_safe": true
+	},
+	"odran|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+		"role": "odran",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+		"variant_safe": true
+	},
+	"orc_skull_real|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M20_Rig/Skeleton3D/M20_Wychwood_Brute_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute_M20_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/12c638d6ec77174991000180.scn",
+		"path": "res://assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
 		"role": "orc_skull_real",
-		"source": "res://assets_external/enemies/Skeleton.fbx",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+		"variant_safe": true
 	},
-	"player_human|res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf": {
+	"oris|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Kael_Combined",
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/a79a76f0274d841ea6a6bc6f.scn",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "oris",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"player_human|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/P01_Kael_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/P01_Kael_P01_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/P01_Kael_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/P01_Kael_P01_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
 		"role": "player_human",
-		"source": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
 		"variant_safe": true
 	},
-	"player_kael|res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf": {
+	"player_kael|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Kael_Combined",
+				"mesh": "Armature/Skeleton3D/P01_Kael_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/P01_Kael_P01_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/P01_Kael_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/P01_Kael_P01_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/a79a76f0274d841ea6a6bc6f.scn",
+		"path": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
 		"role": "player_kael",
-		"source": "res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
 		"variant_safe": true
 	},
-	"road_ranger_human|res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf": {
+	"player|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Acc_Pauldron",
+				"mesh": "Armature/Skeleton3D/P01_Kael_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
+				"texture": "res://assets_external/design_pack_v1/humans/P01_Kael_P01_anatomy_basecolor.png"
 			},
 			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms",
+				"mesh": "Armature/Skeleton3D/P01_Kael_Skinned",
 				"surface": 1,
-				"texture": "res://assets_external/characters_universal/T_Regular_Male_Dark_BaseColor_1K.png"
+				"texture": "res://assets_external/design_pack_v1/humans/P01_Kael_P01_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
+		"role": "player",
+		"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+		"variant_safe": true
+	},
+	"record_keeper_vale|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_anatomy_basecolor.png"
 			},
 			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms_Bracer",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body_Belt_1",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body_Belt_2",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Feet_Boots",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Head_Hood",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Legs",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Eyebrows",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Eyes",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Eye_Brown.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SuperHero_Male",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Superhero_Male_Dark_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Hair_SimpleParted",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png"
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_basecolor.png"
 			}
 		],
 		"owner": "characters",
-		"path": "res://assets_external/characters_prepared/characters/2fd5f546eaa091e7c7a70355.scn",
+		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+		"role": "record_keeper_vale",
+		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+		"variant_safe": true
+	},
+	"reed_choir|res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M15_Rig/Skeleton3D/M15_Reed_Choir_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir_M15_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/8d80b59eddd1733dc24b9d1f.scn",
+		"role": "reed_choir",
+		"source": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+		"variant_safe": true
+	},
+	"ressa|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+		"role": "ressa",
+		"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+		"variant_safe": true
+	},
+	"returned_soldier|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M04_Rig/Skeleton3D/M04_Gravebound_Knight_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight_M04_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
+		"role": "returned_soldier",
+		"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+		"variant_safe": true
+	},
+	"road_ranger_human|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C07_Captain_Senn_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn_C07_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C07_Captain_Senn_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn_C07_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
 		"role": "road_ranger_human",
-		"source": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
 		"variant_safe": true
 	},
-	"road_ranger|res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf": {
+	"road_ranger|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Acc_Pauldron",
+				"mesh": "Armature/Skeleton3D/C07_Captain_Senn_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn_C07_anatomy_basecolor.png"
 			},
 			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms",
+				"mesh": "Armature/Skeleton3D/C07_Captain_Senn_Skinned",
 				"surface": 1,
-				"texture": "res://assets_external/characters_universal/T_Regular_Male_Dark_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Arms_Bracer",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body_Belt_1",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Body_Belt_2",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Feet_Boots",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Head_Hood",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Male_Ranger_Legs",
-				"surface": 0,
-				"texture": "res://assets_external/characters_ranger/T_Ranger_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Eyebrows",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Eyes",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Eye_Brown.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/SuperHero_Male",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Superhero_Male_Dark_1K.png"
-			},
-			{
-				"mesh": "Armature/Skeleton3D/Hair_SimpleParted",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/T_Hair_1_BaseColor_1K.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn_C07_basecolor.png"
 			}
 		],
 		"owner": "characters",
-		"path": "res://assets_external/characters_prepared/characters/2fd5f546eaa091e7c7a70355.scn",
+		"path": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
 		"role": "road_ranger",
-		"source": "res://assets_external/characters_ranger/Male_Ranger_Runtime.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
 		"variant_safe": true
 	},
-	"rook_human|res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf": {
+	"rook_human|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_hooded_Combined",
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/720b6f6a6ed5ac38e4945f37.scn",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"role": "rook_human",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"variant_safe": true
 	},
-	"rook_smuggler|res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf": {
+	"rook_smuggler|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_hooded_Combined",
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/720b6f6a6ed5ac38e4945f37.scn",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"role": "rook_smuggler",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"variant_safe": true
 	},
-	"rootbound_colossus_boss|res://assets_external/enemies/spectral/Rootbound_Spectral.gltf": {
+	"rook|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Creep/Skeleton3D/Body_lod0",
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
 			},
 			{
-				"mesh": "Creep/Skeleton3D/SpectralVeil",
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+		"role": "rook",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"variant_safe": true
+	},
+	"rootbound_colossus_boss|res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M06_Rig/Skeleton3D/M06_Rootbound_Colossus_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus_M06_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/e30b8fa6154b9393cab0c7ae.scn",
+		"path": "res://assets_external/characters_prepared/monsters/a35a2660e935cd9714969a25.scn",
 		"role": "rootbound_colossus_boss",
-		"source": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+		"variant_safe": true
 	},
-	"rootbound_colossus|res://assets_external/enemies/spectral/Rootbound_Spectral.gltf": {
+	"rootbound_colossus|res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Creep/Skeleton3D/Body_lod0",
+				"mesh": "M06_Rig/Skeleton3D/M06_Rootbound_Colossus_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "Creep/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus_M06_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/e30b8fa6154b9393cab0c7ae.scn",
+		"path": "res://assets_external/characters_prepared/monsters/a35a2660e935cd9714969a25.scn",
 		"role": "rootbound_colossus",
-		"source": "res://assets_external/enemies/spectral/Rootbound_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+		"variant_safe": true
 	},
-	"sister_anwen_human|res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf": {
+	"saga_dain|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Anwen_Combined",
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/81ada4e6403bb686318c8743.scn",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "saga_dain",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"saga_edda|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
+		"role": "saga_edda",
+		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+		"variant_safe": true
+	},
+	"saga_iven|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+		"role": "saga_iven",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+		"variant_safe": true
+	},
+	"saga_jory|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "saga_jory",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"saga_lysa|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+		"role": "saga_lysa",
+		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+		"variant_safe": true
+	},
+	"saga_maelin|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
+		"role": "saga_maelin",
+		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+		"variant_safe": true
+	},
+	"saga_maren|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+		"role": "saga_maren",
+		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+		"variant_safe": true
+	},
+	"saga_nera|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+		"role": "saga_nera",
+		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+		"variant_safe": true
+	},
+	"saga_nessa|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C11_Nessa_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C11_Nessa_C11_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C11_Nessa_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C11_Nessa_C11_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
+		"role": "saga_nessa",
+		"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+		"variant_safe": true
+	},
+	"saga_odran|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+		"role": "saga_odran",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+		"variant_safe": true
+	},
+	"saga_oris|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "saga_oris",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"saga_ressa|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+		"role": "saga_ressa",
+		"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+		"variant_safe": true
+	},
+	"saga_tavin|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+		"role": "saga_tavin",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"variant_safe": true
+	},
+	"senn|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C07_Captain_Senn_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn_C07_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C07_Captain_Senn_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn_C07_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
+		"role": "senn",
+		"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+		"variant_safe": true
+	},
+	"shrine_pilgrim|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
+		"role": "shrine_pilgrim",
+		"source": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+		"variant_safe": true
+	},
+	"shroud_swimmer|res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M18_Rig/Skeleton3D/M18_Shroud_Swimmer_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer_M18_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/3de8e7a438d51d6a9ffa7e04.scn",
+		"role": "shroud_swimmer",
+		"source": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+		"variant_safe": true
+	},
+	"silt_maw|res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M09_Rig/Skeleton3D/M09_Silt_Maw_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw_M09_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/a7339a4811b4f65ff472dfe5.scn",
+		"role": "silt_maw",
+		"source": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+		"variant_safe": true
+	},
+	"sister_anwen_human|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
 		"role": "sister_anwen_human",
-		"source": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
 		"variant_safe": true
 	},
-	"sister_anwen|res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf": {
+	"sister_anwen|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Anwen_Combined",
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/81ada4e6403bb686318c8743.scn",
+		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
 		"role": "sister_anwen",
-		"source": "res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
 		"variant_safe": true
 	},
-	"villager_female_human|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
+	"steward_merrow|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_female_Combined",
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+		"role": "steward_merrow",
+		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+		"variant_safe": true
+	},
+	"tavin|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+		"role": "tavin",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"variant_safe": true
+	},
+	"toma|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+		"role": "toma",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+		"variant_safe": true
+	},
+	"tor|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+		"role": "tor",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"variant_safe": true
+	},
+	"traveler|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+		"role": "traveler",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"variant_safe": true
+	},
+	"vale|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+		"role": "vale",
+		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+		"variant_safe": true
+	},
+	"vargan_gate_guard|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+		"role": "vargan_gate_guard",
+		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+		"variant_safe": true
+	},
+	"vargan_patrol|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+		"role": "vargan_patrol",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"variant_safe": true
+	},
+	"vargan_record_keeper|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C09_Record_Keeper_Vale_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale_C09_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+		"role": "vargan_record_keeper",
+		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+		"variant_safe": true
+	},
+	"vargan_servant|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C11_Nessa_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C11_Nessa_C11_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C11_Nessa_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C11_Nessa_C11_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
+		"role": "vargan_servant",
+		"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+		"variant_safe": true
+	},
+	"vargan_steward|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C10_Steward_Merrow_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow_C10_basecolor.png"
+			}
+		],
+		"owner": "characters",
+		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+		"role": "vargan_steward",
+		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+		"variant_safe": true
+	},
+	"villager_female_human|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
 		"role": "villager_female_human",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
 		"variant_safe": true
 	},
-	"villager_hooded_human|res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf": {
+	"villager_hooded_human|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_hooded_Combined",
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C12_Nera_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C12_Nera_C12_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/720b6f6a6ed5ac38e4945f37.scn",
+		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
 		"role": "villager_hooded_human",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Hooded_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
 		"variant_safe": true
 	},
-	"villager_human|res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf": {
+	"villager_human|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_male_Combined",
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/3970a445a6ff8bffd64a23eb.scn",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
 		"role": "villager_human",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"variant_safe": true
 	},
-	"villager_worker_human|res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf": {
+	"villager_worker_human|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "Armature/Skeleton3D/Villager_worker_Combined",
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C04_Blacksmith_Tor_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor_C04_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/3213391611858c6dfe5d5c95.scn",
+		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"role": "villager_worker_human",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Worker_Atlas.gltf",
+		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"variant_safe": true
 	},
-	"white_hart_avatar|res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf": {
+	"villager|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "AnimalArmature/Skeleton3D/Head/Stag_Horns",
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_anatomy_basecolor.png"
 			},
 			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
+				"mesh": "Armature/Skeleton3D/C06_Farmer_Toma_Skinned",
 				"surface": 1,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 2,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 3,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 4,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			}
-		],
-		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/6851a3530bd16f67f3dcbb36.scn",
-		"role": "white_hart_avatar",
-		"source": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
-		"variant_safe": false
-	},
-	"white_hart_boss|res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf": {
-		"animation_resources": [],
-		"material_bindings": [
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Head/Stag_Horns",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 1,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 2,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 3,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/Stag",
-				"surface": 4,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "AnimalArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			}
-		],
-		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/6851a3530bd16f67f3dcbb36.scn",
-		"role": "white_hart_boss",
-		"source": "res://assets_external/enemies/spectral/WhiteHart_Spectral.gltf",
-		"variant_safe": false
-	},
-	"widow_elna|res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf": {
-		"animation_resources": [],
-		"material_bindings": [
-			{
-				"mesh": "Armature/Skeleton3D/Villager_female_Combined",
-				"surface": 0,
-				"texture": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma_C06_basecolor.png"
 			}
 		],
 		"owner": "opening",
-		"path": "res://assets_external/characters_prepared/opening/15e119b62b11b0f979de166a.scn",
-		"role": "widow_elna",
-		"source": "res://assets_external/characters_universal/runtime/Villager_Female_Atlas.gltf",
+		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+		"role": "villager",
+		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"variant_safe": true
 	},
-	"wychwood_brute_creature|res://assets_external/enemies/spectral/Brute_Spectral.gltf": {
+	"walker_board|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "CharacterArmature/Skeleton3D/BlueDemon",
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
 			},
 			{
-				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+		"role": "walker_board",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"variant_safe": true
+	},
+	"walker_well|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+		"role": "walker_well",
+		"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+		"variant_safe": true
+	},
+	"white_hart_avatar|res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M08_Rig/Skeleton3D/M08_White_Hart_Avatar_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar_M08_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/529569b32519914e86e514c5.scn",
+		"path": "res://assets_external/characters_prepared/monsters/882b182b58b1daeaf7c8846b.scn",
+		"role": "white_hart_avatar",
+		"source": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+		"variant_safe": true
+	},
+	"white_hart_boss|res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M08_Rig/Skeleton3D/M08_White_Hart_Avatar_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar_M08_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/882b182b58b1daeaf7c8846b.scn",
+		"role": "white_hart_boss",
+		"source": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+		"variant_safe": true
+	},
+	"white_hart|res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M08_Rig/Skeleton3D/M08_White_Hart_Avatar_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar_M08_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/882b182b58b1daeaf7c8846b.scn",
+		"role": "white_hart",
+		"source": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+		"variant_safe": true
+	},
+	"widow_elna|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C05_Widow_Elna_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna_C05_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+		"role": "widow_elna",
+		"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+		"variant_safe": true
+	},
+	"witness_-3|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C02_Rook_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C02_Rook_C02_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+		"role": "witness_-3",
+		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"variant_safe": true
+	},
+	"witness_-7|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "Armature/Skeleton3D/C03_Mira_Fen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen_C03_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
+		"role": "witness_-7",
+		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+		"variant_safe": true
+	},
+	"witness_3|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_anatomy_basecolor.png"
+			},
+			{
+				"mesh": "C01_Anwen_Rig/Skeleton3D/C01_Anwen_Skinned",
+				"surface": 1,
+				"texture": "res://assets_external/design_pack_v1/humans/C01_Anwen_C01_basecolor.png"
+			}
+		],
+		"owner": "opening",
+		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
+		"role": "witness_3",
+		"source": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+		"variant_safe": true
+	},
+	"wychwood_brute_creature|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
+		"animation_resources": [],
+		"material_bindings": [
+			{
+				"mesh": "M20_Rig/Skeleton3D/M20_Wychwood_Brute_Skinned",
+				"surface": 0,
+				"texture": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute_M20_basecolor.png"
+			}
+		],
+		"owner": "monsters",
+		"path": "res://assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
 		"role": "wychwood_brute_creature",
-		"source": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+		"variant_safe": true
 	},
-	"wychwood_brute|res://assets_external/enemies/spectral/Brute_Spectral.gltf": {
+	"wychwood_brute|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "CharacterArmature/Skeleton3D/BlueDemon",
+				"mesh": "M20_Rig/Skeleton3D/M20_Wychwood_Brute_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute_M20_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/529569b32519914e86e514c5.scn",
+		"path": "res://assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
 		"role": "wychwood_brute",
-		"source": "res://assets_external/enemies/spectral/Brute_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+		"variant_safe": true
 	},
-	"wychwood_raider_creature|res://assets_external/enemies/spectral/Raider_Spectral.gltf": {
+	"wychwood_raider_creature|res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "CharacterArmature/Skeleton3D/Orc",
+				"mesh": "M19_Rig/Skeleton3D/M19_Wychwood_Raider_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider_M19_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/3953da30e9b97d80ba006e4f.scn",
+		"path": "res://assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn",
 		"role": "wychwood_raider_creature",
-		"source": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+		"variant_safe": true
 	},
-	"wychwood_raider|res://assets_external/enemies/spectral/Raider_Spectral.gltf": {
+	"wychwood_raider|res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "CharacterArmature/Skeleton3D/Orc",
+				"mesh": "M19_Rig/Skeleton3D/M19_Wychwood_Raider_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider_M19_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/3953da30e9b97d80ba006e4f.scn",
+		"path": "res://assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn",
 		"role": "wychwood_raider",
-		"source": "res://assets_external/enemies/spectral/Raider_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+		"variant_safe": true
 	},
-	"wychwood_stalker_creature|res://assets_external/enemies/spectral/Stalker_Spectral.gltf": {
+	"wychwood_stalker_creature|res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "CharacterArmature/Skeleton3D/Demon",
+				"mesh": "M02_Rig/Skeleton3D/M02_Wychwood_Stalker_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker_M02_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/4221561c477d26a888fbce6b.scn",
+		"path": "res://assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn",
 		"role": "wychwood_stalker_creature",
-		"source": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+		"variant_safe": true
 	},
-	"wychwood_stalker|res://assets_external/enemies/spectral/Stalker_Spectral.gltf": {
+	"wychwood_stalker|res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb": {
 		"animation_resources": [],
 		"material_bindings": [
 			{
-				"mesh": "CharacterArmature/Skeleton3D/Demon",
+				"mesh": "M02_Rig/Skeleton3D/M02_Wychwood_Stalker_Skinned",
 				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
-			},
-			{
-				"mesh": "CharacterArmature/Skeleton3D/SpectralVeil",
-				"surface": 0,
-				"texture": "res://assets_external/enemies/spectral/spectral_surface.png"
+				"texture": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker_M02_basecolor.png"
 			}
 		],
 		"owner": "monsters",
-		"path": "res://assets_external/characters_prepared/monsters/4221561c477d26a888fbce6b.scn",
+		"path": "res://assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn",
 		"role": "wychwood_stalker",
-		"source": "res://assets_external/enemies/spectral/Stalker_Spectral.gltf",
-		"variant_safe": false
+		"source": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+		"variant_safe": true
 	}
 }

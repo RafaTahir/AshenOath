@@ -66,6 +66,14 @@ static func apply(root: Node3D, role: String, seed: String = "") -> Dictionary:
 func configure(body: Node3D, role: String, seed: String, skeleton: Skeleton3D, skeleton_to_body: Transform3D) -> void:
 	visual = body
 	profile = RoleSpec.silhouette_for_role(role, seed)
+	if bool(body.get_meta("character_authored_silhouette", false)):
+		# Proportions and costume are skinned in Blender. Keep rest posture only;
+		# applying the former role scale/accessories would reshape the new body twice.
+		profile.shoulder_width = 1.0
+		profile.head_scale = 1.0
+		profile.torso_length = 1.0
+		profile.hunch = 0.0
+		profile.layers = []
 	profile.shoulder_width = clampf(float(profile.shoulder_width), 0.85, 1.25)
 	profile.head_scale = clampf(float(profile.head_scale), 0.88, 1.12)
 	profile.torso_length = clampf(float(profile.torso_length), 0.92, 1.08)

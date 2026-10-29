@@ -455,8 +455,8 @@
       "context": "campaign_dialogue.captain_senn.actions.5"
     },
     "campaign_dialogue.captain_senn.greeting": {
-      "source": "Put the sword down far enough that my men can see what surrender looks like.",
-      "text": "Put the sword down far enough that my men can see what surrender looks like.",
+      "source": "Keep the blade lowered. Those armored remnants still answer the road command. I stationed them here; I answer for that.",
+      "text": "Keep the blade lowered. Those armored remnants still answer the road command. I stationed them here; I answer for that.",
       "speaker": "",
       "context": "campaign_dialogue.captain_senn"
     },
@@ -467,24 +467,36 @@
       "context": "campaign_dialogue.captain_senn.lines"
     },
     "campaign_dialogue.captain_senn.lines.1": {
+      "source": "Kael: You put the bound dead back on watch.",
+      "text": "Kael: You put the bound dead back on watch.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.lines"
+    },
+    "campaign_dialogue.captain_senn.lines.2": {
+      "source": "Senn: The living left. I called this keeping the crossing safe. An old command is easy to use when you refuse to ask what keeps obeying it.",
+      "text": "Senn: The living left. I called this keeping the crossing safe. An old command is easy to use when you refuse to ask what keeps obeying it.",
+      "speaker": "",
+      "context": "campaign_dialogue.captain_senn.lines"
+    },
+    "campaign_dialogue.captain_senn.lines.3": {
       "source": "Senn: Halvern refused to close the retreat. They hanged him. I closed it after him.",
       "text": "Senn: Halvern refused to close the retreat. They hanged him. I closed it after him.",
       "speaker": "",
       "context": "campaign_dialogue.captain_senn.lines"
     },
-    "campaign_dialogue.captain_senn.lines.2": {
+    "campaign_dialogue.captain_senn.lines.4": {
       "source": "Kael: Now you take grain from travelers and call it repayment.",
       "text": "Kael: Now you take grain from travelers and call it repayment.",
       "speaker": "",
       "context": "campaign_dialogue.captain_senn.lines"
     },
-    "campaign_dialogue.captain_senn.lines.3": {
+    "campaign_dialogue.captain_senn.lines.5": {
       "source": "Senn: I told the men those houses owed us. Then a boy came through carrying flour for his mother. I took that too.",
       "text": "Senn: I told the men those houses owed us. Then a boy came through carrying flour for his mother. I took that too.",
       "speaker": "",
       "context": "campaign_dialogue.captain_senn.lines"
     },
-    "campaign_dialogue.captain_senn.lines.4": {
+    "campaign_dialogue.captain_senn.lines.6": {
       "source": "Kael: Tell me about the order. Then we deal with what you did this week.",
       "text": "Kael: Tell me about the order. Then we deal with what you did this week.",
       "speaker": "",
@@ -1493,20 +1505,20 @@
       "context": "campaign_dialogue.report_decision.actions.0"
     },
     "campaign_dialogue.report_decision.actions.0.label": {
-      "source": "Give Anwen the token privately. Stay to protect those who speak.",
-      "text": "Give Anwen the token privately. Stay to protect those who speak.",
+      "source": "Give Anwen the evidence privately. Stay to protect those who speak.",
+      "text": "Give Anwen the evidence privately. Stay to protect those who speak.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.actions.0"
     },
     "campaign_dialogue.report_decision.actions.0.preview": {
-      "source": "Anwen recognizes the older name and agrees to open the account. Kael stays to help protect its living witnesses.",
-      "text": "Anwen recognizes the older name and agrees to open the account. Kael stays to help protect its living witnesses.",
+      "source": "Anwen receives the recovered evidence in private. Kael stays to help protect its living witnesses; their consent to speak remains their own.",
+      "text": "Anwen receives the recovered evidence in private. Kael stays to help protect its living witnesses; their consent to speak remains their own.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.actions.0"
     },
     "campaign_dialogue.report_decision.actions.0.result": {
-      "source": "Anwen recognizes the older name and agrees to open the account. Kael stays to help protect its living witnesses.",
-      "text": "Anwen recognizes the older name and agrees to open the account. Kael stays to help protect its living witnesses.",
+      "source": "Anwen receives the recovered evidence in private. Kael stays to help protect its living witnesses; their consent to speak remains their own.",
+      "text": "Anwen receives the recovered evidence in private. Kael stays to help protect its living witnesses; their consent to speak remains their own.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.actions.0"
     },
@@ -1523,14 +1535,14 @@
       "context": "campaign_dialogue.report_decision.actions.1"
     },
     "campaign_dialogue.report_decision.actions.1.preview": {
-      "source": "The token and wire are pinned beneath the contract. Some doors close; somebody brings dry cloth to cover the token. Kael remains responsible for the people newly visible.",
-      "text": "The token and wire are pinned beneath the contract. Some doors close; somebody brings dry cloth to cover the token. Kael remains responsible for the people newly visible.",
+      "source": "The recovered account is posted beneath the contract. Some doors close. Public evidence does not grant permission to publish a witness's private story.",
+      "text": "The recovered account is posted beneath the contract. Some doors close. Public evidence does not grant permission to publish a witness's private story.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.actions.1"
     },
     "campaign_dialogue.report_decision.actions.1.result": {
-      "source": "The token and wire are pinned beneath the contract. Some doors close; somebody brings dry cloth to cover the token. Kael remains responsible for the people newly visible.",
-      "text": "The token and wire are pinned beneath the contract. Some doors close; somebody brings dry cloth to cover the token. Kael remains responsible for the people newly visible.",
+      "source": "The recovered account is posted beneath the contract. Some doors close. Public evidence does not grant permission to publish a witness's private story.",
+      "text": "The recovered account is posted beneath the contract. Some doors close. Public evidence does not grant permission to publish a witness's private story.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.actions.1"
     },
@@ -1541,8 +1553,8 @@
       "context": "campaign_dialogue.report_decision.actions.2"
     },
     "campaign_dialogue.report_decision.actions.2.label": {
-      "source": "Keep the token. Make protected copies and stay with the investigation.",
-      "text": "Keep the token. Make protected copies and stay with the investigation.",
+      "source": "Keep the evidence. Make protected copies and stay with the investigation.",
+      "text": "Keep the evidence. Make protected copies and stay with the investigation.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.actions.2"
     },
@@ -1559,30 +1571,66 @@
       "context": "campaign_dialogue.report_decision.actions.2"
     },
     "campaign_dialogue.report_decision.greeting": {
-      "source": "Anwen puts three empty cups beside the coat Oren left. Rook waits by the door.",
-      "text": "Anwen puts three empty cups beside the coat Oren left. Rook waits by the door.",
+      "source": "Tell me what you found. If some of it is still unknown, say so.",
+      "text": "Tell me what you found. If some of it is still unknown, say so.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision"
     },
     "campaign_dialogue.report_decision.lines.0": {
-      "source": "Kael: The creatures gathered their belongings. Someone alive bound the token afterward and tried to remove it.",
-      "text": "Kael: The creatures gathered their belongings. Someone alive bound the token afterward and tried to remove it.",
+      "source": "Kael: The pack is dead. Here is what I could establish on the road.",
+      "text": "Kael: The pack is dead. Here is what I could establish on the road.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.lines"
     },
-    "campaign_dialogue.report_decision.lines.1": {
-      "source": "Anwen: I recognize the old carving. You can give it to me, show the village, or keep it while we make copies.",
-      "text": "Anwen: I recognize the old carving. You can give it to me, show the village, or keep it while we make copies.",
+    "campaign_dialogue.report_decision.lines.1.text": {
+      "source": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.",
+      "text": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.1"
+    },
+    "campaign_dialogue.report_decision.lines.2.text": {
+      "source": "Kael: Red thread bound the black feathers.",
+      "text": "Kael: Red thread bound the black feathers.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.2"
+    },
+    "campaign_dialogue.report_decision.lines.3.text": {
+      "source": "Anwen: My knot. I tied that thread for Sella.",
+      "text": "Anwen: My knot. I tied that thread for Sella.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.3"
+    },
+    "campaign_dialogue.report_decision.lines.4.text": {
+      "source": "Kael: Oren's wooden crow had his name scraped away.",
+      "text": "Kael: Oren's wooden crow had his name scraped away.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.4"
+    },
+    "campaign_dialogue.report_decision.lines.5.text": {
+      "source": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.",
+      "text": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.5"
+    },
+    "campaign_dialogue.report_decision.lines.6.text": {
+      "source": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.",
+      "text": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.",
+      "speaker": "",
+      "context": "campaign_dialogue.report_decision.lines.6"
+    },
+    "campaign_dialogue.report_decision.lines.7": {
+      "source": "Anwen: Give me what you found, show the village, or keep it while we make copies. Do not fill the gaps for anyone.",
+      "text": "Anwen: Give me what you found, show the village, or keep it while we make copies. Do not fill the gaps for anyone.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.lines"
     },
-    "campaign_dialogue.report_decision.lines.2": {
-      "source": "Rook: If you show it, show the people behind it a way to stay safe as well.",
-      "text": "Rook: If you show it, show the people behind it a way to stay safe as well.",
+    "campaign_dialogue.report_decision.lines.8": {
+      "source": "Anwen: A public account is not permission to speak for the people behind it.",
+      "text": "Anwen: A public account is not permission to speak for the people behind it.",
       "speaker": "",
       "context": "campaign_dialogue.report_decision.lines"
     },
-    "campaign_dialogue.report_decision.lines.3": {
+    "campaign_dialogue.report_decision.lines.9": {
       "source": "Kael: I will stay. The payment ends the hunt. It does not settle what I now know.",
       "text": "Kael: I will stay. The payment ends the hunt. It does not settle what I now know.",
       "speaker": "",
@@ -1715,14 +1763,14 @@
       "context": "campaign_dialogue.vargan_gate_guard.actions.0"
     },
     "campaign_dialogue.vargan_gate_guard.actions.0.preview": {
-      "source": "The guard steps aside without lowering his hand from the sword.",
-      "text": "The guard steps aside without lowering his hand from the sword.",
+      "source": "Merrow enters the testimony in the intake book and grants an audience.",
+      "text": "Merrow enters the testimony in the intake book and grants an audience.",
       "speaker": "",
       "context": "campaign_dialogue.vargan_gate_guard.actions.0"
     },
     "campaign_dialogue.vargan_gate_guard.actions.0.result": {
-      "source": "The guard steps aside without lowering his hand from the sword.",
-      "text": "The guard steps aside without lowering his hand from the sword.",
+      "source": "Merrow enters the testimony in the intake book and grants an audience.",
+      "text": "Merrow enters the testimony in the intake book and grants an audience.",
       "speaker": "",
       "context": "campaign_dialogue.vargan_gate_guard.actions.0"
     },
@@ -1739,8 +1787,8 @@
       "context": "campaign_dialogue.vargan_gate_guard.lines"
     },
     "campaign_dialogue.vargan_gate_guard.lines.1": {
-      "source": "Guard: The steward wants every token brought inside. People argue less over a missing thing when no one can show it.",
-      "text": "Guard: The steward wants every token brought inside. People argue less over a missing thing when no one can show it.",
+      "source": "Merrow: Every token is to be brought inside. Those are my instructions, and I put my name to receiving them.",
+      "text": "Merrow: Every token is to be brought inside. Those are my instructions, and I put my name to receiving them.",
       "speaker": "",
       "context": "campaign_dialogue.vargan_gate_guard.lines"
     },
@@ -1751,20 +1799,20 @@
       "context": "campaign_dialogue.vargan_gate_guard.lines"
     },
     "campaign_dialogue.vargan_gate_guard.name": {
-      "source": "Vargan Gate Guard",
-      "text": "Vargan Gate Guard",
+      "source": "Merrow - gate intake",
+      "text": "Merrow - gate intake",
       "speaker": "",
       "context": "campaign_dialogue.vargan_gate_guard"
     },
     "campaign_dialogue.vargan_gate_guard.variants.0.greeting": {
-      "source": "The steward says a seal was broken. I can see why he is frightened.",
-      "text": "The steward says a seal was broken. I can see why he is frightened.",
+      "source": "A seal was broken. I have entered it in the intake record, not closed the road over it.",
+      "text": "A seal was broken. I have entered it in the intake record, not closed the road over it.",
       "speaker": "",
       "context": "campaign_dialogue.vargan_gate_guard.variants.0"
     },
     "campaign_dialogue.vargan_gate_guard.variants.0.lines.0": {
-      "source": "Guard: You may still leave by the gate. The road must carry people as well as orders.",
-      "text": "Guard: You may still leave by the gate. The road must carry people as well as orders.",
+      "source": "Merrow: You may still leave by the gate. The road must carry people as well as orders.",
+      "text": "Merrow: You may still leave by the gate. The road must carry people as well as orders.",
       "speaker": "",
       "context": "campaign_dialogue.vargan_gate_guard.variants.0.lines"
     },
@@ -1865,26 +1913,26 @@
       "context": "campaign_dialogue.vargan_ledger_choice"
     },
     "campaign_dialogue.vargan_patrol.greeting": {
-      "source": "We were sent for the painted tokens after the creatures gathered. Two men did not come back.",
-      "text": "We were sent for the painted tokens after the creatures gathered. Two men did not come back.",
+      "source": "I brought kitchen freight through here. A patrol left with empty sacks and came back two short. I saw the return, not what happened on their road.",
+      "text": "I brought kitchen freight through here. A patrol left with empty sacks and came back two short. I saw the return, not what happened on their road.",
       "speaker": "",
       "context": "campaign_dialogue.vargan_patrol"
     },
     "campaign_dialogue.vargan_patrol.lines.0": {
-      "source": "Kael: Did your orders include scratching out their names?",
-      "text": "Kael: Did your orders include scratching out their names?",
+      "source": "Kael: What were they sent to collect?",
+      "text": "Kael: What were they sent to collect?",
       "speaker": "",
       "context": "campaign_dialogue.vargan_patrol.lines"
     },
     "campaign_dialogue.vargan_patrol.lines.1": {
-      "source": "Guard: Contain the breach. Bring back every object. The paper did not say what to do when a child's name made the wire shake.",
-      "text": "Guard: Contain the breach. Bring back every object. The paper did not say what to do when a child's name made the wire shake.",
+      "source": "Rook: Painted tokens, according to the intake notice. Vale can show you the order. I won't fill its gaps with something I didn't see.",
+      "text": "Rook: Painted tokens, according to the intake notice. Vale can show you the order. I won't fill its gaps with something I didn't see.",
       "speaker": "",
       "context": "campaign_dialogue.vargan_patrol.lines"
     },
     "campaign_dialogue.vargan_patrol.name": {
-      "source": "Vargan Patrol Guard",
-      "text": "Vargan Patrol Guard",
+      "source": "Rook - the patrol account",
+      "text": "Rook - the patrol account",
       "speaker": "",
       "context": "campaign_dialogue.vargan_patrol"
     },
@@ -1931,8 +1979,8 @@
       "context": "campaign_dialogue.vargan_servant.lines"
     },
     "campaign_dialogue.vargan_servant.name": {
-      "source": "Tired Castle Servant",
-      "text": "Tired Castle Servant",
+      "source": "Nessa - the Castle kitchen",
+      "text": "Nessa - the Castle kitchen",
       "speaker": "",
       "context": "campaign_dialogue.vargan_servant"
     },
@@ -3887,8 +3935,8 @@
       "context": "dialogue.bracken_rescue.actions.0"
     },
     "dialogue.bracken_rescue.greeting": {
-      "source": "A black hound braces against a strap caught in the roadside roots. Beside him lies a travelling harness with its owner's name worn away.",
-      "text": "A black hound braces against a strap caught in the roadside roots. Beside him lies a travelling harness with its owner's name worn away.",
+      "source": "A young Hearthscale braces his plated forelegs against a strap caught in the roadside roots. A traveling harness lies beside him, its owner's name worn away. Tor calls these warm-stone scavengers good company when they choose it.",
+      "text": "A young Hearthscale braces his plated forelegs against a strap caught in the roadside roots. A traveling harness lies beside him, its owner's name worn away. Tor calls these warm-stone scavengers good company when they choose it.",
       "speaker": "",
       "context": "dialogue.bracken_rescue"
     },
@@ -3947,8 +3995,8 @@
       "context": "dialogue.bracken_rescue.variants.1.actions.0"
     },
     "dialogue.bracken_rescue.variants.1.greeting": {
-      "source": "The hound has stayed on Greyfen's quiet verge. There is water here, and no strap to pull him back.",
-      "text": "The hound has stayed on Greyfen's quiet verge. There is water here, and no strap to pull him back.",
+      "source": "The Hearthscale has stayed on Greyfen's sun-warmed verge. There is water here, and no strap to pull him back.",
+      "text": "The Hearthscale has stayed on Greyfen's sun-warmed verge. There is water here, and no strap to pull him back.",
       "speaker": "",
       "context": "dialogue.bracken_rescue.variants.1"
     },
@@ -3977,8 +4025,8 @@
       "context": "dialogue.bracken_rescue.variants.2.actions.1"
     },
     "dialogue.bracken_rescue.variants.2.greeting": {
-      "source": "The loose strap drops into the grass. The hound could leave, but takes a careful step toward Kael instead.",
-      "text": "The loose strap drops into the grass. The hound could leave, but takes a careful step toward Kael instead.",
+      "source": "The loose strap drops into the grass. The small plated creature could leave, but takes a careful step toward Kael instead.",
+      "text": "The loose strap drops into the grass. The small plated creature could leave, but takes a careful step toward Kael instead.",
       "speaker": "",
       "context": "dialogue.bracken_rescue.variants.2"
     },
@@ -5116,9 +5164,27 @@
       "speaker": "",
       "context": "dialogue.sister_anwen.actions.2"
     },
+    "dialogue.sister_anwen.actions.3.cost": {
+      "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
+      "text": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.actions.3"
+    },
     "dialogue.sister_anwen.actions.3.label": {
-      "source": "I will follow the cart. Keep his coat here.",
-      "text": "I will follow the cart. Keep his coat here.",
+      "source": "Will you speak for your own part, without the seal?",
+      "text": "Will you speak for your own part, without the seal?",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.actions.3"
+    },
+    "dialogue.sister_anwen.actions.3.preview": {
+      "source": "The decision is recorded. Nobody else can make it for Anwen.",
+      "text": "The decision is recorded. Nobody else can make it for Anwen.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.actions.3"
+    },
+    "dialogue.sister_anwen.actions.3.result": {
+      "source": "The decision is recorded. Nobody else can make it for Anwen.",
+      "text": "The decision is recorded. Nobody else can make it for Anwen.",
       "speaker": "",
       "context": "dialogue.sister_anwen.actions.3"
     },
@@ -5129,8 +5195,8 @@
       "context": "dialogue.sister_anwen.actions.4"
     },
     "dialogue.sister_anwen.actions.4.label": {
-      "source": "Will you speak for your own part, without the seal?",
-      "text": "Will you speak for your own part, without the seal?",
+      "source": "Give me the book. I will not demand your oath.",
+      "text": "Give me the book. I will not demand your oath.",
       "speaker": "",
       "context": "dialogue.sister_anwen.actions.4"
     },
@@ -5146,30 +5212,6 @@
       "speaker": "",
       "context": "dialogue.sister_anwen.actions.4"
     },
-    "dialogue.sister_anwen.actions.5.cost": {
-      "source": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
-      "text": "This records an explicit promise or practical action. A record cannot supply someone else's consent.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.actions.5"
-    },
-    "dialogue.sister_anwen.actions.5.label": {
-      "source": "Give me the book. I will not demand your oath.",
-      "text": "Give me the book. I will not demand your oath.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.actions.5"
-    },
-    "dialogue.sister_anwen.actions.5.preview": {
-      "source": "The decision is recorded. Nobody else can make it for Anwen.",
-      "text": "The decision is recorded. Nobody else can make it for Anwen.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.actions.5"
-    },
-    "dialogue.sister_anwen.actions.5.result": {
-      "source": "The decision is recorded. Nobody else can make it for Anwen.",
-      "text": "The decision is recorded. Nobody else can make it for Anwen.",
-      "speaker": "",
-      "context": "dialogue.sister_anwen.actions.5"
-    },
     "dialogue.sister_anwen.greeting": {
       "source": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
       "text": "Mind the cup on the step. The man from the south road needs it more than I need a clean floor.",
@@ -5177,8 +5219,8 @@
       "context": "dialogue.sister_anwen"
     },
     "dialogue.sister_anwen.lines.0": {
-      "source": "Kael: I read the road notice. Three missing.",
-      "text": "Kael: I read the road notice. Three missing.",
+      "source": "Kael: Three people missing?",
+      "text": "Kael: Three people missing?",
       "speaker": "",
       "context": "dialogue.sister_anwen.lines"
     },
@@ -5189,24 +5231,30 @@
       "context": "dialogue.sister_anwen.lines"
     },
     "dialogue.sister_anwen.lines.2": {
+      "source": "Anwen: Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
+      "text": "Anwen: Take the north road into Wychwood. Look for their cart, then bring me what you find. They have people waiting here.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.lines"
+    },
+    "dialogue.sister_anwen.lines.3": {
       "source": "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
       "text": "Anwen: They found old wooden tokens where the road was being repaired. Sella asked me to read one. I did.",
       "speaker": "",
       "context": "dialogue.sister_anwen.lines"
     },
-    "dialogue.sister_anwen.lines.3": {
+    "dialogue.sister_anwen.lines.4": {
       "source": "Kael: What happened when you read it?",
       "text": "Kael: What happened when you read it?",
       "speaker": "",
       "context": "dialogue.sister_anwen.lines"
     },
-    "dialogue.sister_anwen.lines.4": {
+    "dialogue.sister_anwen.lines.5": {
       "source": "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
       "text": "Anwen: The candles went out. I sent them away while I found a rite I thought would keep them safe.",
       "speaker": "",
       "context": "dialogue.sister_anwen.lines"
     },
-    "dialogue.sister_anwen.lines.5": {
+    "dialogue.sister_anwen.lines.6": {
       "source": "Anwen: If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
       "text": "Anwen: If you find red thread around black feathers, keep it intact. I tied it. I owe you that much before you go.",
       "speaker": "",
@@ -5381,30 +5429,36 @@
       "context": "dialogue.sister_anwen.variants.5.actions.2"
     },
     "dialogue.sister_anwen.variants.5.greeting": {
-      "source": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
-      "text": "That is Oren's carving. Turn it over. The older name is beneath his paint.",
+      "source": "You brought the account to me. We can speak here without putting anyone's name on the board.",
+      "text": "You brought the account to me. We can speak here without putting anyone's name on the board.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.5"
     },
-    "dialogue.sister_anwen.variants.5.lines.0": {
-      "source": "Kael: You sent them out carrying something the shrine had erased.",
-      "text": "Kael: You sent them out carrying something the shrine had erased.",
+    "dialogue.sister_anwen.variants.5.lines.0.text": {
+      "source": "Anwen: That is Oren's carving. Turn it over. The older name is beneath his paint.",
+      "text": "Anwen: That is Oren's carving. Turn it over. The older name is beneath his paint.",
       "speaker": "",
-      "context": "dialogue.sister_anwen.variants.5.lines"
+      "context": "dialogue.sister_anwen.variants.5.lines.0"
     },
-    "dialogue.sister_anwen.variants.5.lines.1": {
-      "source": "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
-      "text": "Anwen: I thought new burial thread would quiet it. Someone bound it again with Vargan wire.",
+    "dialogue.sister_anwen.variants.5.lines.1.text": {
+      "source": "Anwen: That burial thread is mine. I thought it would quiet what they were carrying.",
+      "text": "Anwen: That burial thread is mine. I thought it would quiet what they were carrying.",
       "speaker": "",
-      "context": "dialogue.sister_anwen.variants.5.lines"
+      "context": "dialogue.sister_anwen.variants.5.lines.1"
     },
-    "dialogue.sister_anwen.variants.5.lines.2": {
+    "dialogue.sister_anwen.variants.5.lines.2.text": {
+      "source": "Kael: Someone bound it again with Vargan wire. I found the binding on the road.",
+      "text": "Kael: Someone bound it again with Vargan wire. I found the binding on the road.",
+      "speaker": "",
+      "context": "dialogue.sister_anwen.variants.5.lines.2"
+    },
+    "dialogue.sister_anwen.variants.5.lines.3": {
       "source": "Kael: The pack is dead. The people hiding this are alive.",
       "text": "Kael: The pack is dead. The people hiding this are alive.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.5.lines"
     },
-    "dialogue.sister_anwen.variants.5.lines.3": {
+    "dialogue.sister_anwen.variants.5.lines.4": {
       "source": "Anwen: Take your payment if you must. I need help I have no right to order.",
       "text": "Anwen: Take your payment if you must. I need help I have no right to order.",
       "speaker": "",
@@ -5447,8 +5501,8 @@
       "context": "dialogue.sister_anwen.variants.6.actions.2"
     },
     "dialogue.sister_anwen.variants.6.greeting": {
-      "source": "I saw the token on the board. Rook has moved his bedding from the window.",
-      "text": "I saw the token on the board. Rook has moved his bedding from the window.",
+      "source": "I saw your account on the board. Rook has moved his bedding from the window.",
+      "text": "I saw your account on the board. Rook has moved his bedding from the window.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.6"
     },
@@ -5507,22 +5561,22 @@
       "context": "dialogue.sister_anwen.variants.7.actions.2"
     },
     "dialogue.sister_anwen.variants.7.greeting": {
-      "source": "Keep your hand closed if you need to. I recognize the shape through your glove.",
-      "text": "Keep your hand closed if you need to. I recognize the shape through your glove.",
+      "source": "Keep the originals if you need to. We can work from the account you choose to share.",
+      "text": "Keep the originals if you need to. We can work from the account you choose to share.",
       "speaker": "",
       "context": "dialogue.sister_anwen.variants.7"
     },
-    "dialogue.sister_anwen.variants.7.lines.0": {
+    "dialogue.sister_anwen.variants.7.lines.0.text": {
       "source": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
       "text": "Anwen: Oren painted over a refugee's token. Sella wanted the first name restored.",
       "speaker": "",
-      "context": "dialogue.sister_anwen.variants.7.lines"
+      "context": "dialogue.sister_anwen.variants.7.lines.0"
     },
-    "dialogue.sister_anwen.variants.7.lines.1": {
-      "source": "Kael: Someone alive tried to take it from the pack.",
-      "text": "Kael: Someone alive tried to take it from the pack.",
+    "dialogue.sister_anwen.variants.7.lines.1.text": {
+      "source": "Kael: Someone alive left drag marks beside the creatures' tracks.",
+      "text": "Kael: Someone alive left drag marks beside the creatures' tracks.",
       "speaker": "",
-      "context": "dialogue.sister_anwen.variants.7.lines"
+      "context": "dialogue.sister_anwen.variants.7.lines.1"
     },
     "dialogue.sister_anwen.variants.7.lines.2": {
       "source": "Anwen: Then leaving now would leave a witness carrying something dangerous. I am asking you to stay.",
@@ -7919,26 +7973,26 @@
       "context": "interaction_scenes.opening_care_coat"
     },
     "interaction_scenes.opening_care_invitation.actions.0.label": {
-      "source": "I'll help here for a moment.",
-      "text": "I'll help here for a moment.",
+      "source": "Tell me about the missing travelers.",
+      "text": "Tell me about the missing travelers.",
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation.actions.0"
     },
     "interaction_scenes.opening_care_invitation.actions.1.label": {
-      "source": "Tell me about the missing travelers.",
-      "text": "Tell me about the missing travelers.",
+      "source": "I'll help here for a moment. (Optional)",
+      "text": "I'll help here for a moment. (Optional)",
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation.actions.1"
     },
     "interaction_scenes.opening_care_invitation.greeting": {
-      "source": "A moment, hunter. The man behind that screen cannot reach his water.",
-      "text": "A moment, hunter. The man behind that screen cannot reach his water.",
+      "source": "A moment, hunter. Elna has hurt her ankle. She cannot reach the water behind that screen.",
+      "text": "A moment, hunter. Elna has hurt her ankle. She cannot reach the water behind that screen.",
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation"
     },
     "interaction_scenes.opening_care_invitation.lines.0": {
-      "source": "Anwen: The cup is on the step. Leave it on the linen by his hand, if you would.",
-      "text": "Anwen: The cup is on the step. Leave it on the linen by his hand, if you would.",
+      "source": "Anwen: The cup is on the step. Leave it on the linen by her hand, if you would.",
+      "text": "Anwen: The cup is on the step. Leave it on the linen by her hand, if you would.",
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation.lines"
     },
@@ -7955,8 +8009,8 @@
       "context": "interaction_scenes.opening_care_invitation"
     },
     "interaction_scenes.opening_care_invitation.variants.0.greeting": {
-      "source": "Thank you for the water. He has stopped trying to stand.",
-      "text": "Thank you for the water. He has stopped trying to stand.",
+      "source": "Thank you for the water. Elna has agreed to rest a little longer.",
+      "text": "Thank you for the water. Elna has agreed to rest a little longer.",
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation.variants.0"
     },
@@ -7973,14 +8027,14 @@
       "context": "interaction_scenes.opening_care_invitation.variants.1"
     },
     "interaction_scenes.opening_care_invitation.variants.1.lines.0": {
-      "source": "Anwen: The man behind the screen needs the cup on the step. Leave it on the linen by his hand, if you would.",
-      "text": "Anwen: The man behind the screen needs the cup on the step. Leave it on the linen by his hand, if you would.",
+      "source": "Anwen: Elna needs the cup on the step. Leave it on the linen by her hand, if you would.",
+      "text": "Anwen: Elna needs the cup on the step. Leave it on the linen by her hand, if you would.",
       "speaker": "",
       "context": "interaction_scenes.opening_care_invitation.variants.1.lines"
     },
     "interaction_scenes.opening_care_water.greeting": {
-      "source": "There. Close enough that he need not ask again.",
-      "text": "There. Close enough that he need not ask again.",
+      "source": "There. Close enough that she need not ask again.",
+      "text": "There. Close enough that she need not ask again.",
       "speaker": "",
       "context": "interaction_scenes.opening_care_water"
     },
@@ -7991,8 +8045,8 @@
       "context": "interaction_scenes.opening_care_water.lines.0"
     },
     "interaction_scenes.opening_care_water.lines.1": {
-      "source": "Kael: Was he with the missing cart?",
-      "text": "Kael: Was he with the missing cart?",
+      "source": "Kael: Was Elna with the missing cart?",
+      "text": "Kael: Was Elna with the missing cart?",
       "speaker": "",
       "context": "interaction_scenes.opening_care_water.lines"
     },
@@ -9959,8 +10013,8 @@
       "context": "quests.main_road_of_crows.objectives.drag_marks"
     },
     "quests.main_road_of_crows.objectives.evidence_ready.text": {
-      "source": "Find why the missing travelers carried old tokens.",
-      "text": "Find why the missing travelers carried old tokens.",
+      "source": "Follow the north road into Wychwood and investigate the travelers' broken cart.",
+      "text": "Follow the north road into Wychwood and investigate the travelers' broken cart.",
       "speaker": "",
       "context": "quests.main_road_of_crows.objectives.evidence_ready"
     },
@@ -9977,8 +10031,8 @@
       "context": "quests.main_road_of_crows.objectives.oren"
     },
     "quests.main_road_of_crows.objectives.return_village.text": {
-      "source": "Return with the account. Decide who receives the evidence.",
-      "text": "Return with the account. Decide who receives the evidence.",
+      "source": "Return to Anwen or the village notice board. Decide who receives the evidence you found.",
+      "text": "Return to Anwen or the village notice board. Decide who receives the evidence you found.",
       "speaker": "",
       "context": "quests.main_road_of_crows.objectives.return_village"
     },
@@ -10115,8 +10169,8 @@
       "context": "quests.side_black_dog"
     },
     "quests.side_bracken_rescue.objectives.calm_hound.text": {
-      "source": "Let the caught hound settle beside Greyfen's north road.",
-      "text": "Let the caught hound settle beside Greyfen's north road.",
+      "source": "Let Bracken, the caught young Hearthscale, settle beside Greyfen's north road.",
+      "text": "Let Bracken, the caught young Hearthscale, settle beside Greyfen's north road.",
       "speaker": "",
       "context": "quests.side_bracken_rescue.objectives.calm_hound"
     },

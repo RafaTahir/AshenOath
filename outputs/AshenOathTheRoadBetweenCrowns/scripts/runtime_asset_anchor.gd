@@ -1,9 +1,7 @@
 extends Node
 
-## Runtime asset anchor retained for scene compatibility. The small opening
-## character layers and the shared animation library are deliberately anchored
-## in the root PCK so the first playable Greyfen frame cannot race a streamed
-## character pack. Larger role variants remain streamed.
+## Runtime asset anchor retained for scene compatibility. Character bodies
+## are owned by the opening/prepared-actor dependency records, not menu preloads.
 
 # These small opening facade meshes are dependencies of Greyfen's first
 # frame. Keeping them anchored in the root PCK prevents a streamed-pack race
@@ -14,16 +12,6 @@ const OPENING_CRITICAL_ENVIRONMENT = [
 	preload("res://assets_external/environment/village/Wall_Plaster_Window_Wide_Flat.obj"),
 	preload("res://assets_external/environment/village/Wall_Plaster_Straight_Base.obj"),
 	preload("res://assets_external/environment/village/Prop_Chimney.obj"),
-]
-
-# Kael, Anwen, and the first Greyfen crowd are part of the opening handoff.
-# Keep their small Universal source layers in the root PCK so a cold browser
-# never has to wait for a non-critical character download before it can render
-# the menu or publish the first playable frame. Ranger and later variants stay
-# in the streamed character pack.
-const OPENING_CRITICAL_CHARACTERS = [
-	preload("res://assets_external/characters_universal/runtime/Kael_A_Set_Atlas.gltf"),
-	preload("res://assets_external/characters_universal/runtime/Anwen_A_Set_Atlas.gltf"),
 ]
 
 # The Universal bodies share this neutral, non-root-motion library. It is

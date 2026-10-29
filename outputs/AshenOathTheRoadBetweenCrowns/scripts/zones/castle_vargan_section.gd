@@ -107,12 +107,13 @@ func _build_courtyard_workplaces(context: ZoneBuildContext) -> bool:
 	return true
 
 func _build_courtyard_people(context: ZoneBuildContext) -> bool:
-	context.make_named_interactable("vargan_gate_guard", "dialogue", "Speak to the gate guard", Vector3(-2.7, 0, 10.5), Color(0.28, 0.30, 0.33))
-	context.make_named_interactable("vargan_steward", "dialogue", "Speak to the castle steward", Vector3(2.5, 0, -4), Color(0.30, 0.25, 0.20))
+	# Merrow owns intake and the complaint desk; the legacy guard topic is
+	# offered on this same person rather than creating a second Merrow.
+	context.make_named_interactable("vargan_steward", "dialogue", "Speak to Merrow at the gate", Vector3(-2.7, 0, 10.5), Color(0.30, 0.25, 0.20))
 	var quality := context.quality_preset()
 	if quality != "potato":
-		context.make_named_interactable("vargan_servant", "dialogue", "Speak to the tired servant", Vector3(-8, 0, 4), Color(0.27, 0.22, 0.18))
-		var patrol = context.make_named_interactable("vargan_patrol", "dialogue", "Hail the patrolling guard", Vector3(9, 0, -2), Color(0.25, 0.27, 0.30))
+		context.make_named_interactable("vargan_servant", "dialogue", "Ask Nessa about the kitchens", Vector3(-8, 0, 4), Color(0.27, 0.22, 0.18))
+		var patrol = context.make_named_interactable("vargan_patrol", "dialogue", "Ask Rook about the patrol", Vector3(9, 0, -2), Color(0.25, 0.27, 0.30))
 		if patrol != null:
 			var routine := CastlePatrol.new()
 			routine.name = "CastleGuardPatrolRoutine"

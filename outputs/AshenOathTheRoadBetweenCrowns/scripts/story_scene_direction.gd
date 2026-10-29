@@ -5,7 +5,7 @@ static func opening_arrival() -> Array[Dictionary]:
 	return [
 		{"actor":"sister_anwen", "speaker":"Anwen", "seconds":15.0, "activity":"care", "text":"Easy. You are across the bridge now. Nessa has the kitchen open; Tor will see to the cart. Kael, stay a moment. People are coming down that road with less than they left with."},
 		{"actor":"blacksmith_tor", "speaker":"Tor", "seconds":14.0, "activity":"forge", "text":"The axle can be braced. Not pretty, but it will bring the load home. Whatever is keeping the northern carts out there, we cannot mend it here at the forge."},
-		{"actor":"saga_maren", "speaker":"Maren", "seconds":16.0, "activity":"check_rope", "text":"Keep the heavy sacks over the sound wheel. No one walks the last stretch alone. ... Kael? I remember you. We can speak when this load is safe. These people need a road they can trust first."},
+		{"actor":"saga_maren", "speaker":"Nera", "seconds":16.0, "activity":"check_rope", "text":"Keep the heavy sacks over the sound wheel. No one walks the last stretch alone. ... Kael? I remember you. We can speak when this load is safe. These people need a road they can trust first."},
 	]
 
 const SCENES := {
