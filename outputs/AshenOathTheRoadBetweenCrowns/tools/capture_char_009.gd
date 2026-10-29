@@ -122,16 +122,28 @@ func _face_isolation(output: String) -> void:
 			visual.free()
 			continue
 		var face := visual.find_child("CharacterFaceDriver", true, false)
-		var hood := visual.find_child("SilhouetteEquipment_hood", true, false) as Node3D
-		if face == null or face.head_modifier == null or hood == null:
-			push_error("Face capture requires the face driver and fitted hood: " + str(spec[1]))
+		if face == null or face.head_modifier == null:
+			push_error("Face capture requires the native face driver: " + str(spec[1]))
 			failures += 1
 			visual.free()
 			continue
+		var skeleton := driver.skeleton as Skeleton3D
+		for retired: String in ["hood", "mantle"]:
+			if visual.find_child("SilhouetteEquipment_" + retired, true, false) != null:
+				push_error("Retired cleric shape remains: " + str(spec[1]) + "/" + retired)
+				failures += 1
+			var stale := BoneAttachment3D.new()
+			stale.name = "SilhouetteEquipment_" + retired
+			stale.set_meta("silhouette_layer", retired)
+			skeleton.add_child(stale)
+		CharacterPresentation.apply_npc(visual, str(spec[1]), false)
+		for retired: String in ["hood", "mantle"]:
+			if visual.find_child("SilhouetteEquipment_" + retired, true, false) != null:
+				push_error("Stale cleric shape survived reconfiguration: " + retired)
+				failures += 1
 		if face != null and face.update_timer != null:
 			# Explicit samples must not be replaced by a random blink/gaze tick.
 			face.update_timer.stop()
-		var skeleton := driver.skeleton as Skeleton3D
 		var head := skeleton.find_bone("head")
 		if head < 0:
 			head = skeleton.find_bone("Head")
@@ -150,19 +162,16 @@ func _face_isolation(output: String) -> void:
 				face.head_modifier.look_yaw = 0.24 if state == "gaze" else 0.0
 				face.head_modifier.blink_closure = 1.0 if state == "blink" else 0.0
 			await create_timer(0.35).timeout
-			for view: String in ["front", "side"]:
-				camera.position = Vector3(0, 1.53, -2.2) if view == "front" else Vector3(2.2, 1.53, 0)
+			for view: String in ["front", "side", "back", "rear_quarter"]:
+				camera.position = {"front":Vector3(0,1.53,-2.2), "side":Vector3(2.2,1.53,0), "back":Vector3(0,1.53,2.2), "rear_quarter":Vector3(1.56,1.53,1.56)}[view]
 				camera.look_at(Vector3(0, 1.45, 0))
 				camera.fov = 38.0
-				for with_hood: bool in [true, false]:
-					if hood != null:
-						hood.visible = with_hood
-					await _frames(2)
-					await RenderingServer.frame_post_draw
-					var path := output.path_join("%s_%s_%s_%s.png" % [spec[1],state,view,"hood" if with_hood else "bare"])
-					var image := root.get_texture().get_image()
-					if image == null or image.save_png(path) != OK:
-						failures += 1
+				await _frames(2)
+				await RenderingServer.frame_post_draw
+				var path := output.path_join("%s_%s_%s_native.png" % [spec[1],state,view])
+				var image := root.get_texture().get_image()
+				if image == null or image.save_png(path) != OK:
+					failures += 1
 			if head >= 0:
 				print("FACE_STATE ", spec[1], " ", state, " head_scale=", skeleton.get_bone_pose_scale(head))
 		visual.free()

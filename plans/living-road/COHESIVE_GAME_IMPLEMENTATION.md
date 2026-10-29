@@ -10,7 +10,24 @@ Rafa subsequently authorized continuing through child 5 and removed Vercel waiti
 push development/main, do not poll hosting or perform a separate deployment.
 No user acceptance is inferred from Continue or from successful compilation.
 
-### FINISH-003/FACE-ARTIFACT (confirmed hood repair; awaiting Rafa)
+### FINISH-003/FACE-ARTIFACT Rear Correction (awaiting Rafa)
+
+Rafa's rear-view screenshot demonstrates that the previous front opening left
+an unwanted shell/cape. Remove both `hood` and `mantle` from the cleric recipe,
+keeping native anatomy, hair, clothing, staff, palettes and animation. Do not
+modify other professions or delete retained assets. Reconfiguration retires only
+obsolete silhouette-owned attachments. The existing capture now checks stale
+layer retirement and front/side/back/rear-quarter views across five face/motion
+states for Anwen and the pilgrim. Native capture passes; rear views show the
+reported shapes absent. Build `cleric-rear-cleanup-20261029` replaces the previous
+candidate through base/root exports, then development/main pushes. No browser
+replay, campaign, benchmark, Vercel wait or next-child work is part of this fix.
+Compilation/package/push identity is recorded in the linked evidence/receipt;
+formal FINISH acceptance remains 0/16.
+
+[Rear correction evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/cleric_rear_cleanup_20261029.json).
+
+### FINISH-003/FACE-ARTIFACT First Repair (historical; rear view rejected)
 
 - Isolated Anwen and `shrine_pilgrim` role captures identify the added
   `SilhouetteEquipment_hood/FittedLayer/RoleShape_hood` as the covering geometry.

@@ -95,12 +95,20 @@ func configure(body: Node3D, role: String, seed: String, skeleton: Skeleton3D, s
 			var point := skeleton_frame * skeleton.get_bone_global_rest(index).origin
 			shoulders.append({"bone":index, "offset":lateral * (point.x - center.x) * (float(profile.shoulder_width) - 1.0)})
 	var palette := Palette.colors(role, seed, str(body.get_meta("character_region", "")))
-	var layers: Array[String] = []
+	var requested_layers: Array[String] = []
 	for requested: String in profile.layers:
 		var names: Array = ["apron_bib", "apron_skirt"] if requested == "apron" else [requested]
 		for layer: String in names:
-			if _attach_layer(skeleton, layer, palette):
-				layers.append(layer)
+			requested_layers.append(layer)
+	# Reconfiguration must retire only this owner's obsolete attachments, including
+	# the removed cleric hood/mantle on retained or serialized assemblies.
+	for child in skeleton.get_children():
+		if child.has_meta("silhouette_layer") and str(child.get_meta("silhouette_layer")) not in requested_layers:
+			child.free()
+	var layers: Array[String] = []
+	for layer: String in requested_layers:
+		if _attach_layer(skeleton, layer, palette):
+			layers.append(layer)
 	profile["layers_attached"] = layers
 	profile["region"] = str(palette.region)
 	profile["identity"] = str(palette.id)

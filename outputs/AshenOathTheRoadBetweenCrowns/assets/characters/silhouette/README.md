@@ -16,7 +16,7 @@ no separate per-frame actor scan or competing animation clock is introduced.
 |---|---:|---:|---:|---:|---|---|
 | Blacksmith | 1.25 | 0.98 | 0.92 | 10 degrees | worked | Two-part apron, stowed/working hammer |
 | Ranger | 0.85 | 1.08 | 1.04 | 5 degrees | coiled | Cloak, hip satchel |
-| Cleric | 0.90 | 1.12 | 0.94 | 16 degrees | weary | Hood, mantle, existing staff |
+| Cleric | 0.90 | 1.12 | 0.94 | 16 degrees | weary | Native clothing and existing staff; no added hood/mantle |
 | Guard | 1.18 | 0.88 | 1.08 | 0 degrees | guarded | Helmet, two shoulder pads |
 
 Nobles, workers and scholars have additional bounded profiles. Ordinary crowds
@@ -32,11 +32,12 @@ cloth/hood cuts and exact generated geometry. The working apron adapts the
 retained cloak cloth; the hood excludes Monk's separate face. No extra face,
 replacement body, downloaded model or duplicate texture is introduced.
 
-The cleric hood has a deliberately open face/hairline and a 0.34 x 0.30 m
-fitted crown. The original Monk robe group was closed across the face even
-after excluding its separate face object; the compiler now removes that cloth
-panel before fitting. This preserves Anwen's native face/hair and the pilgrim's
-native face rather than covering them with a second head-sized shell.
+The retained hood mesh is no longer attached to clerics. Opening its front did
+not resolve the unwanted rear shell reported by the user. Both that hood and
+the added mantle are removed from this role; native heads, hair, clothing and
+staffs remain. Reconfiguration also removes obsolete silhouette-owned layers.
+Other roles retain their own cloak/mantle recipes. The mesh stays in the asset
+library, not on Anwen or pilgrims.
 
 Layers use BoneAttachment3D on actual chest, head, shoulder and hip bones.
 The smith's stowed hammer yields to the existing held work hammer. Anwen and
@@ -53,8 +54,9 @@ recovery recognizes this exact shader and still requires its bound atlas.
 
 ## User-Run Mask Review
 
-No graphical verification has been run for this implementation. When authorized,
-run the following from the project using a graphical Compatibility renderer:
+The focused 2026-10-29 front/side/rear character captures do not establish
+20 m role-mask acceptance. When authorized, run the following from the project
+using a graphical Compatibility renderer:
 
 ```powershell
 & 'D:\Temp\AshenOath\godot-4.6.3\Godot_v4.6.3-stable_win64_console.exe' --path . --rendering-method gl_compatibility --script tools/verify_silhouette.gd -- --output-dir=D:/Temp/AshenOath/silhouette

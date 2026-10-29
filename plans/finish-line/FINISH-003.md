@@ -1,5 +1,31 @@
 # FINISH-003 - Movement, Camera And Character Integrity
 
+## Face Artifact Rear-View Correction - 2026-10-29
+
+Rafa's new screenshot rejects the retained rear hood shell and added mantle.
+The prior front-opening repair was insufficient; its historical evidence below
+is not current appearance approval. Clerics now use their native clothing and
+existing staff without either added shape. Anwen's original A-set head/hair,
+body, colours, proportions and animation remain; the pilgrim retains its native
+body. Other roles' cloak/mantle recipes are unchanged.
+
+Silhouette reconfiguration removes only obsolete silhouette-owned attachments,
+preventing retained assemblies from keeping these retired shapes. The existing
+capture checks initial absence and removal of stale hood/mantle nodes, then
+captures front, side, back and rear-quarter views in neutral, blink, speech,
+gaze and walking states. The isolated native run passes; inspected rear views
+show native hair/clothing without the reported shell/cape. No new browser or
+campaign run is needed for this bounded layer-removal check.
+
+Candidate `cleric-rear-cleanup-20261029` compiled through the existing base/root
+export path; seven unchanged packs reused. Package hash/size checks pass at
+162,882,438 bytes including the manifest, below 256 MiB. Publication and final
+package identity belong to its FINISH-003 receipt and linked evidence. User acceptance remains pending;
+this correction does not begin SOLID-FURNITURE or establish phone/performance
+acceptance.
+
+[Rear-view correction evidence](../../outputs/AshenOathTheRoadBetweenCrowns/release_reports/cleric_rear_cleanup_20261029.json).
+
 ## Director Child: Face Artifact - 2026-10-29
 
 The confirmed GAME defect is the added cleric hood, not missing native anatomy.

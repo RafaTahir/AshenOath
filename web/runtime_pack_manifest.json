@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "face-artifact-20261029",
+  "release_id": "cleric-rear-cleanup-20261029",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -16,7 +16,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "face-artifact-20261029",
+      "version": "cleric-rear-cleanup-20261029",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -25,8 +25,8 @@
       "preload_priority": 0,
       "status": "embedded_current_pck",
       "candidate_artifact": "base.pck",
-      "candidate_bytes": 4430756,
-      "candidate_sha256": "84239c845e9c8f2a04485acab860d91d8fe083b471aa83297d93d6e12fe92b77",
+      "candidate_bytes": 4430916,
+      "candidate_sha256": "5f500dec659c52bd6d95cde3877b743e4e6e2ec5fdddefb10ad5667a01194729",
       "contents": [
         "menu",
         "managers",
@@ -35,12 +35,12 @@
       ],
       "embedded_artifact": "index.pck",
       "embedded_source_artifact": "base.pck",
-      "embedded_source_bytes": 4430756,
-      "embedded_source_sha256": "84239c845e9c8f2a04485acab860d91d8fe083b471aa83297d93d6e12fe92b77",
+      "embedded_source_bytes": 4430916,
+      "embedded_source_sha256": "5f500dec659c52bd6d95cde3877b743e4e6e2ec5fdddefb10ad5667a01194729",
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "face-artifact-20261029",
+      "version": "cleric-rear-cleanup-20261029",
       "url": "packs/opening.pck?sha256=4b9c6f304c2b6760a0537ddae810a6f22f6888d774b7b288ef1c2e6e222510e9",
       "sha256": "4b9c6f304c2b6760a0537ddae810a6f22f6888d774b7b288ef1c2e6e222510e9",
       "bytes": 86265908,
@@ -61,7 +61,7 @@
       "cache_key": "4b9c6f304c2b6760a0537ddae810a6f22f6888d774b7b288ef1c2e6e222510e9"
     },
     "campaign": {
-      "version": "face-artifact-20261029",
+      "version": "cleric-rear-cleanup-20261029",
       "url": "packs/campaign.pck?sha256=4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
       "sha256": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12",
       "bytes": 8678820,
@@ -84,7 +84,7 @@
       "cache_key": "4f1e70e06d0266de9bd1d0ad5759cfe9606f37fc77ade765d85bf50e7f994a12"
     },
     "characters": {
-      "version": "face-artifact-20261029",
+      "version": "cleric-rear-cleanup-20261029",
       "url": "packs/characters.pck?sha256=36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
       "sha256": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f",
       "bytes": 8999204,
@@ -105,7 +105,7 @@
       "cache_key": "36b2075cb63c75f234bf98f11617886ae96007670a305605ff0d93cfcdf6f46f"
     },
     "monsters": {
-      "version": "face-artifact-20261029",
+      "version": "cleric-rear-cleanup-20261029",
       "url": "packs/monsters.pck?sha256=efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
       "sha256": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c",
       "bytes": 20678316,
@@ -127,7 +127,7 @@
       "cache_key": "efbc7d60d8d972f305ea1bb4bc728b6faa29adfac819c673311909fe3d07293c"
     },
     "audio": {
-      "version": "face-artifact-20261029",
+      "version": "cleric-rear-cleanup-20261029",
       "url": "packs/audio.pck?sha256=5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
       "sha256": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca",
       "bytes": 21302876,
@@ -148,7 +148,7 @@
       "cache_key": "5d1bae5c3e7826653fb50a05a2b65e4716a146c9ba4e59a4856cca40935780ca"
     },
     "quality_materials": {
-      "version": "face-artifact-20261029",
+      "version": "cleric-rear-cleanup-20261029",
       "url": "packs/quality_materials.pck?sha256=631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
       "sha256": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba",
       "bytes": 7328396,
@@ -169,7 +169,7 @@
       "cache_key": "631c6b00cffa40debadce8b6ddbf8ac0f81200aca48c77f521cf3218c35816ba"
     },
     "adjacent": {
-      "version": "face-artifact-20261029",
+      "version": "cleric-rear-cleanup-20261029",
       "url": "packs/adjacent.pck?sha256=5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
       "sha256": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241",
       "bytes": 2370980,
@@ -191,9 +191,9 @@
       "cache_key": "5ecfb25c9955d6c4cbbd5c0e410aa5265dc44716732f807cc99abc20f209c241"
     }
   },
-  "build_id": "face-artifact-20261029",
-  "generated_from_commit": "71c253a4392143b38ba4d003862774450f74e073",
-  "generated_at_utc": "2026-10-29T07:18:05.314122Z",
+  "build_id": "cleric-rear-cleanup-20261029",
+  "generated_from_commit": "781aae40c251980b069e08ec6fccd928eea1d39c",
+  "generated_at_utc": "2026-10-29T07:45:14.781789Z",
   "total_bytes": 155624500,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1"

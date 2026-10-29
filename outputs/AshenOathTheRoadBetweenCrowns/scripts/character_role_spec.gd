@@ -37,7 +37,7 @@ const POSTURES := {
 const SILHOUETTES := {
 	"blacksmith": {"shoulder_width":1.25, "head_scale":0.98, "torso_length":0.92, "hunch":10.0, "posture":"worked", "layers":["apron", "smith_tool"]},
 	"ranger": {"shoulder_width":0.85, "head_scale":1.08, "torso_length":1.04, "hunch":5.0, "posture":"coiled", "layers":["cloak", "satchel"]},
-	"cleric": {"shoulder_width":0.90, "head_scale":1.12, "torso_length":0.94, "hunch":16.0, "posture":"weary", "layers":["hood", "mantle", "walking_stick"]},
+	"cleric": {"shoulder_width":0.90, "head_scale":1.12, "torso_length":0.94, "hunch":16.0, "posture":"weary", "layers":["walking_stick"]},
 	"guard": {"shoulder_width":1.18, "head_scale":0.88, "torso_length":1.08, "hunch":0.0, "posture":"guarded", "layers":["helmet", "pauldron_left", "pauldron_right"]},
 	"noble": {"shoulder_width":1.06, "head_scale":0.96, "torso_length":1.06, "hunch":0.0, "posture":"noble", "layers":["mantle"]},
 	"worker": {"shoulder_width":1.10, "head_scale":1.04, "torso_length":0.96, "hunch":7.0, "posture":"worked", "layers":["satchel"]},

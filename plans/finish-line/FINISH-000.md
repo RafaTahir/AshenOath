@@ -11,8 +11,12 @@ source-complete assumptions in the dated delivery record below. Mandatory user
 acceptance remains **0/16**. Historical Recovery acceptance is a different contract.
 
 **FINISH-003/FACE-ARTIFACT** is the current delivery following Rafa's Continue.
-The shared closed-hood defect is repaired, compiled and targeted-checked on
-`face-artifact-20261029`; the FINISH-003 push receipt owns delivery status. The
+Rafa's rear-view screenshot rejects the residual hood shell/mantle in the prior
+`face-artifact-20261029` candidate, pushed as `781aae4`. The correction removes
+both added cleric layers and retires stale owned attachments; native four-angle
+captures pass on `cleric-rear-cleanup-20261029`. Compilation and package integrity
+pass at 162,882,438 complete bytes. The FINISH-003 receipt owns push status.
+No appearance acceptance is inferred from the prior check. The
 next child is SOLID-FURNITURE, not started pending another Continue.
 Child 4 was pushed as `71c253a` to development/main; acceptance remains pending.
 Child 3 was pushed as `5f43ab7` to development and main; its remaining speed and
@@ -36,7 +40,7 @@ child. No separate CLI deployment and no implied whole-game acceptance.
 | 2 | FINISH-001/RESPONSIVE-PREPARATION | Implemented/compiled, focused checks/partial browser coverage, pushed a587888; awaiting Rafa |
 | 3 | FINISH-014/SAFE-CONNECTOR-HANDOFF | Implemented/compiled, targeted native and normal-input browser round trip pass, pushed 5f43ab7; awaiting Rafa |
 | 4 | FINISH-003/ANIMATION-LIFECYCLE | Implemented/compiled; scoped native/browser checks pass, pushed 71c253a; awaiting Rafa |
-| 5 | FINISH-003/FACE-ARTIFACT | Confirmed shared closed hood repaired/compiled; paired role captures and final-package Anwen dialogue checked; FINISH-003 push receipt owns delivery; awaiting Rafa |
+| 5 | FINISH-003/FACE-ARTIFACT | Prior front-only repair rejected at rear; hood/mantle removal and stale-layer cleanup implemented, four-angle native captures pass; replacement build/push receipt owns delivery; awaiting Rafa |
 | 6 | FINISH-007/SOLID-FURNITURE | Not started |
 | 7 | FINISH-005/HONEST-TARGETING | Not started |
 | 8 | FINISH-013/CONNECTOR-COMPOSITION | Not started; mesh identification required |

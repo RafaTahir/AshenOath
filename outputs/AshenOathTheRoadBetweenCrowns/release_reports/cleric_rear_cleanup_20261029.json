@@ -1,0 +1,39 @@
+{
+  "ticket": "FINISH-003/FACE-ARTIFACT",
+  "build_id": "cleric-rear-cleanup-20261029",
+  "baseline_commit": "781aae40c251980b069e08ec6fccd928eea1d39c",
+  "classification": "GAME",
+  "user_evidence": "Rear-view screenshot shows the residual hood shell and added mantle; the prior front-only correction is insufficient.",
+  "implementation": "Remove both hood and mantle from the cleric runtime recipe, retaining native heads/hair, bodies/clothes, materials, proportions and staffs. Remove obsolete silhouette-owned layers on reconfiguration; leave other roles and native attachments untouched.",
+  "developer_verification": {
+    "tool": "Existing capture_char_009 --face-isolation, extended to back/rear-quarter views and stale attachment retirement",
+    "actors": ["sister_anwen", "shrine_pilgrim"],
+    "views": ["front", "side", "back", "rear_quarter"],
+    "states": ["neutral", "blink", "speech", "gaze", "walk"],
+    "contract_result": "pass; neither retired layer initially attached and deliberately stale nodes removed on presentation reapplication",
+    "appearance_observation": "Rear/rear-quarter images show native hair/clothing, with neither the added head shell nor cape. Original facial appearance remains visible.",
+    "renderer": "Intel HD Graphics 620, Compatibility through ANGLE, 1280x720",
+    "log": "D:/Temp/AshenOath/cleric-rear-cleanup-20261029/capture.log",
+    "images": "D:/Temp/AshenOath/cleric-rear-cleanup-20261029/views",
+    "browser_campaign_benchmarks": "not run; unchanged checks not repeated",
+    "errors": [],
+    "warning": "Known native OpenGL driver warning; Godot selected ANGLE"
+  },
+  "static_review": "Changed ownership/selection paths and diff reviewed; no save or asset modifications",
+  "compilation": "passed base content pack and production Web root export",
+  "package": {
+    "complete_directory_bytes_including_manifest": 162882438,
+    "artifact_transport_bytes": 162874722,
+    "decoded_artifact_bytes": 203023251,
+    "root_transport_sha256": "ddfd8c9aa9abc2e9b9f85f1a6b948ebf9bcd33fb5ca6a4f5e85edabe3924d67d",
+    "root_decoded_sha256": "bf57e10a840f11c15a13bb0889d283575fefe932ea70a03036c045f4ba5ccc45",
+    "rebuilt_content_packs": ["base"],
+    "reused_content_packs": 7,
+    "integrity": "passed existing hash/size/manifest check; below 256 MiB and no individual Git file at 100 MiB"
+  },
+  "user_acceptance": "pending",
+  "publication": "FINISH-003 Git receipt owns development/main push status; do not wait for Vercel",
+  "limitations": ["Phone appearance, all lighting and full-campaign appearance remain user-owned; no performance gain claimed", "Care-area furniture, targeting and approach-dependent camera crowding remain separate recorded obligations"],
+  "unrelated_work": "Pre-existing prepared_actors.json stat/line-ending change and both untracked directories preserved",
+  "next": "Stop after this correction is pushed; SOLID-FURNITURE not started"
+}
