@@ -21,6 +21,28 @@ $ProjectRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $RepositoryRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent (Split-Path -Parent $ProjectRoot)))
 $GeneratedRoot = Join-Path $RepositoryRoot ".release-gate"
 $WebRoot = Join-Path $RepositoryRoot "web"
+$ArtGatePath = Join-Path $RepositoryRoot 'art_source/art_recovery_v2/quality_gate.json'
+if (Test-Path -LiteralPath $ArtGatePath) {
+    $ArtGate = Get-Content -LiteralPath $ArtGatePath -Raw | ConvertFrom-Json
+    if ($ArtGate.status -ne 'user_accepted_for_publication') {
+        throw "Art-quality production hold: $($ArtGate.reason) Review slices locally; do not package/publish rejected assets. Gate: $ArtGatePath"
+    }
+    foreach ($AssetId in $ArtGate.required_asset_ids) {
+        $Review = $ArtGate.$AssetId
+        if (-not $Review -or -not $Review.user_accepted) { throw "Missing user art acceptance: $AssetId" }
+        foreach ($Category in $ArtGate.required_categories) {
+            if ([int]$Review.scores.$Category -lt [int]$ArtGate.minimum_visual_score) {
+                throw "Art gate failed: $AssetId / $Category"
+            }
+        }
+        foreach ($View in $ArtGate.required_evidence) {
+            $Evidence = $Review.evidence_paths.$View
+            if (-not $Evidence -or -not (Test-Path -LiteralPath $Evidence -PathType Leaf)) {
+                throw "Missing art evidence: $AssetId / $View"
+            }
+        }
+    }
+}
 $DeploymentPolicy = Get-Content -LiteralPath (Join-Path $ProjectRoot 'data/deployment_policy.json') -Raw | ConvertFrom-Json
 if ($Publish -and $SkipWebCopy) { throw "-Publish requires the generated web transport to be copied." }
 if ($Publish -and (-not $PublishPaths.Count -or $Ticket -notmatch '^(LR|OPT)-\d{3}$')) { throw "-Publish requires a supported ticket ID and explicit -PublishPaths for authored source." }
@@ -190,6 +212,12 @@ Copy-Item -LiteralPath $runtimeManifest -Destination (Join-Path $ExportRoot "run
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_web_runtime_manifest.py"), $ExportRoot, "--runtime-pack-manifest", $runtimeManifest, "--source-commit", $SourceCommit, "--compress-wasm") "web-manifest"
 
 $releaseManifest = Get-Content -LiteralPath (Join-Path $ExportRoot "release_manifest.json") -Raw | ConvertFrom-Json
+if ($ArtGate -and $ArtGate.full_release_max_bytes) {
+    $RecoveryBytes = [int64]((Get-ChildItem -LiteralPath $ExportRoot -File -Recurse | Measure-Object -Property Length -Sum).Sum)
+    if ($RecoveryBytes -ge [int64]$ArtGate.full_release_max_bytes) {
+        throw "Art-recovery package is $RecoveryBytes bytes; it must be strictly below $($ArtGate.full_release_max_bytes) bytes. Preserve content and report the deficit; do not publish."
+    }
+}
 $candidate.selected_web_export = [ordered]@{
     build_id = $BuildId
     artifact_directory = $ExportRoot

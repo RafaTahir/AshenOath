@@ -1,0 +1,28 @@
+{
+	"accepted": false,
+	"clips": [
+		"Death01",
+		"Directional_RunLeft",
+		"Directional_RunRight",
+		"Directional_WalkBack",
+		"Hit_Chest",
+		"Hit_Head",
+		"Idle",
+		"Idle_Talking",
+		"Idle_Torch",
+		"Interact",
+		"Jump_Start",
+		"Roll",
+		"Sitting_Idle",
+		"Sitting_Talking",
+		"Spell_Simple_Idle",
+		"Sprint",
+		"Sword_Attack",
+		"Sword_Attack_RM",
+		"Sword_Idle",
+		"Walk"
+	],
+	"idle_clip": "Idle",
+	"scope": "isolated Godot Compatibility art review; not live campaign acceptance",
+	"walk_clip": "Walk"
+}

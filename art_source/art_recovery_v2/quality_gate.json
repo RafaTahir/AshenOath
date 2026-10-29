@@ -1,0 +1,28 @@
+{
+  "status": "production_hold",
+  "reason": "User rejected the design-pack production milestone. Technical compilation cannot approve its visual quality.",
+  "minimum_visual_score": 4,
+  "required_asset_ids": ["P01", "C01", "C02", "C03", "C04", "C05", "C06", "C07", "C08", "C09", "C10", "C11", "C12", "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08", "M09", "M10", "M11", "M12", "M13", "M14", "M15", "M16", "M17", "M18", "M19", "M20"],
+  "required_categories": ["reference_fidelity", "anatomy_structure", "materials_craftsmanship", "distinctive_identity", "in_engine_presentation", "deformation_motion"],
+  "required_evidence": ["reference", "front", "side", "rear", "three_quarter", "detail", "blender_turntable", "godot_level", "animation_preview"],
+  "current_slice": "C01",
+  "C01": {
+    "status": "rework_failed_internal_visual_review",
+    "user_accepted": false,
+    "scores": {
+      "reference_fidelity": 2,
+      "anatomy_structure": 3,
+      "materials_craftsmanship": 2,
+      "distinctive_identity": 2,
+      "in_engine_presentation": 2,
+      "deformation_motion": 2
+    },
+    "evidence_record": "evidence/identities.json"
+  },
+  "M01": {"status": "locked_until_C01_accepted", "user_accepted": false},
+  "M05": {"status": "locked_until_M01_accepted", "user_accepted": false},
+  "remaining_roster": "rejected_prototypes_do_not_mass_regenerate",
+  "full_release_max_bytes": 104857600,
+  "published_baseline_bytes": 242429964,
+  "published_baseline_overage_bytes": 137572364
+}

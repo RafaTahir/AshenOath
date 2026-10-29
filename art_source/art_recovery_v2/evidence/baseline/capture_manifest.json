@@ -1,0 +1,431 @@
+{
+	"C01": {
+		"bounds": "[P: (-0.831941, -0.006744, -0.263066), S: (1.663882, 1.801709, 0.455942)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+		"sha256": "cd0c69e3f6c7780d5b64e597046bc7a94e30e3c7672c32aee77cc8a4a294e157",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C01_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C01_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C01_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C01_side.png"
+		}
+	},
+	"C02": {
+		"bounds": "[P: (-0.899415, -0.003968, -0.189537), S: (1.798829, 1.891642, 0.357078)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C02_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C02_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C02_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C02_side.png"
+		}
+	},
+	"C03": {
+		"bounds": "[P: (-0.831941, -0.006744, -0.219757), S: (1.663882, 1.7796, 0.403405)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+		"sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C03_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C03_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C03_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C03_side.png"
+		}
+	},
+	"C04": {
+		"bounds": "[P: (-0.899415, -0.003968, -0.182285), S: (1.798829, 1.814044, 0.379891)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+		"sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C04_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C04_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C04_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C04_side.png"
+		}
+	},
+	"C05": {
+		"bounds": "[P: (-0.831941, -0.006744, -0.215049), S: (1.663882, 1.7796, 0.38259)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+		"sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C05_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C05_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C05_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C05_side.png"
+		}
+	},
+	"C06": {
+		"bounds": "[P: (-0.899415, -0.003968, -0.183072), S: (1.798829, 1.820891, 0.350613)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+		"sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C06_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C06_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C06_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C06_side.png"
+		}
+	},
+	"C07": {
+		"bounds": "[P: (-0.899415, -0.003968, -0.233449), S: (1.798829, 1.820891, 0.42324)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+		"sha256": "a2ada6d15539db90c3b8ca2a84e46b354c40db406ec14f1b06e2e5599f57043c",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C07_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C07_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C07_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C07_side.png"
+		}
+	},
+	"C08": {
+		"bounds": "[P: (-0.899415, -0.003968, -0.234833), S: (1.798829, 1.820891, 0.402373)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+		"sha256": "b544aebd6e00ca4fffec7ee739a642e0f1e3ddde451d9547eb9e658ecf39eb9a",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C08_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C08_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C08_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C08_side.png"
+		}
+	},
+	"C09": {
+		"bounds": "[P: (-0.831941, -0.006744, -0.215049), S: (1.663882, 1.778701, 0.38259)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+		"sha256": "301163838a26a7f7c90e134794daa1d136527734bd65dc546f9d19bc6d3f5943",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C09_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C09_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C09_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C09_side.png"
+		}
+	},
+	"C10": {
+		"bounds": "[P: (-0.899415, -0.003968, -0.197662), S: (1.798829, 1.814044, 0.414628)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+		"sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C10_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C10_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C10_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C10_side.png"
+		}
+	},
+	"C11": {
+		"bounds": "[P: (-0.831941, -0.006744, -0.215049), S: (1.663882, 1.7796, 0.423977)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+		"sha256": "141544d3523011544ccd502b1101fa7760b2ecaad068d05d928ec82cf88d1fd9",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C11_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C11_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C11_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C11_side.png"
+		}
+	},
+	"C12": {
+		"bounds": "[P: (-0.831941, -0.006744, -0.21976), S: (1.663882, 1.7796, 0.387301)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+		"sha256": "cbcdb167ae6247fe31bb0bd05810104b6543f070ace8e6ab75e99c119e00ca2b",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/C12_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/C12_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/C12_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/C12_side.png"
+		}
+	},
+	"M01": {
+		"bounds": "[P: (-0.676384, 0.0, -0.209545), S: (1.352767, 1.635906, 0.667279)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+		"sha256": "8eb08909214c5fa23b84a734d16d7179aaadb8d480ce423d6a9cfca3a879138e",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M01_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M01_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M01_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M01_side.png"
+		}
+	},
+	"M02": {
+		"bounds": "[P: (-0.602963, 0.0, -0.16617), S: (1.205926, 1.604684, 0.69807)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+		"sha256": "b97414deff8c6ebea45a7c971384a931449ae59c60956e0f51668129915f8b4d",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M02_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M02_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M02_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M02_side.png"
+		}
+	},
+	"M03": {
+		"bounds": "[P: (-0.696044, -0.033195, -0.30523), S: (1.392088, 1.712773, 0.902779)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+		"sha256": "996d8957135263e837c8fd0d659abce2b91d7333420cae7d825c71a1e8537d94",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M03_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M03_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M03_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M03_side.png"
+		}
+	},
+	"M04": {
+		"bounds": "[P: (-0.6844, 0.0, -0.233027), S: (1.496269, 1.945, 0.656573)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+		"sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M04_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M04_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M04_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M04_side.png"
+		}
+	},
+	"M05": {
+		"bounds": "[P: (-1.529135, 0.0, -0.465298), S: (3.05827, 3.80881, 1.605298)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+		"sha256": "8f692e03741345b12cb800664c4b28b6e025e3ef175b1a0b5cbff71782692ece",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M05_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M05_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M05_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M05_side.png"
+		}
+	},
+	"M06": {
+		"bounds": "[P: (-1.936839, 0.0, -0.692887), S: (3.873677, 4.398629, 1.686149)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+		"sha256": "aedb08eeeaad8a7b99a878a9d04b8bd8da9be0ec9f07c1141dea79f30f1f9852",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M06_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M06_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M06_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M06_side.png"
+		}
+	},
+	"M07": {
+		"bounds": "[P: (-4.25492, 0.059266, -3.597069), S: (8.509705, 4.169018, 5.111923)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+		"sha256": "f9199fc65a7bed7bb42aa0da6f46200fb9048563c23704ad9a578f357893ae53",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M07_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M07_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M07_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M07_side.png"
+		}
+	},
+	"M08": {
+		"bounds": "[P: (-0.94596, -0.001, -1.152444), S: (1.891664, 3.59654, 2.707675)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+		"sha256": "6c8890721da9ab09848597a0d82a405f4dd73a66a88f189c55b48f87faf3426c",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M08_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M08_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M08_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M08_side.png"
+		}
+	},
+	"M09": {
+		"bounds": "[P: (-0.329538, -0.150108, -1.583048), S: (0.660392, 0.7407, 3.223939)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+		"sha256": "92bdf89d9f3eb6e0f3e90f34e22ee818d80e39c43d2c54c70d60fca937ce87ca",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M09_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M09_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M09_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M09_side.png"
+		}
+	},
+	"M10": {
+		"bounds": "[P: (-1.075, -0.023583, -0.977909), S: (2.15, 1.063583, 2.492688)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+		"sha256": "b619a18689232e12837668beef3b806f784a97fd24a5db222c8a76ed33c645ce",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M10_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M10_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M10_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M10_side.png"
+		}
+	},
+	"M11": {
+		"bounds": "[P: (-1.064794, 0.033848, -0.663882), S: (2.128806, 1.161491, 1.246032)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+		"sha256": "419bdb9335ff8b0914c2e900864833669f6db3554d65c7172e80a346bd317d57",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M11_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M11_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M11_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M11_side.png"
+		}
+	},
+	"M12": {
+		"bounds": "[P: (-0.245, -0.076087, -0.900863), S: (0.49, 0.59256, 1.674863)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+		"sha256": "cf954b8f19f213fe1ff33f4df2d29955e2e9f086d57b291ca5b4b2f787e51948",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M12_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M12_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M12_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M12_side.png"
+		}
+	},
+	"M13": {
+		"bounds": "[P: (-0.682, 0.010817, -1.988908), S: (1.364, 0.766072, 2.766674)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+		"sha256": "6decf8eecca00eaea0e882aa352382cb1089888d071510a64838a78227e94e40",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M13_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M13_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M13_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M13_side.png"
+		}
+	},
+	"M14": {
+		"bounds": "[P: (-1.212098, 0.090206, -1.063118), S: (2.424309, 0.949794, 2.246465)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+		"sha256": "4dcb1e8e3d85ab22942d60d7a334971f9c7cd1c06d8babfefd94b63d6353ae19",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M14_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M14_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M14_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M14_side.png"
+		}
+	},
+	"M15": {
+		"bounds": "[P: (-0.844013, 0.00302, -0.690751), S: (1.687692, 1.12698, 1.469629)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+		"sha256": "01ae6f30c17e79f1d323dec3e4c82f1f43bada81d4020fe5c6d8ace73d3ecdcf",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M15_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M15_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M15_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M15_side.png"
+		}
+	},
+	"M16": {
+		"bounds": "[P: (-0.59125, -0.01297, -0.543923), S: (1.1825, 0.58497, 1.315454)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+		"sha256": "42384de89575168d4f8665fd2a153aeed2f121cfc6542393600db9ed5e0e0eba",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M16_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M16_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M16_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M16_side.png"
+		}
+	},
+	"M17": {
+		"bounds": "[P: (-0.735247, -0.02, -1.764377), S: (1.480835, 1.904592, 3.32537)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+		"sha256": "71e4c3d4883f344e828643eed2e8de137fbcd0a364b0a9ea06c3034b70ce09a2",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M17_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M17_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M17_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M17_side.png"
+		}
+	},
+	"M18": {
+		"bounds": "[P: (-1.4, 0.023, -2.920439), S: (2.8, 0.278504, 3.860439)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+		"sha256": "ef93c28eba404d3ea28d53271194704522f6c270beffe48be23909b8ba9231db",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M18_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M18_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M18_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M18_side.png"
+		}
+	},
+	"M19": {
+		"bounds": "[P: (-0.792985, 0.0, -0.21615), S: (1.58597, 1.865906, 0.668199)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+		"sha256": "b4304b746ecfba4c1f2b75c963886ceed563170f0c10ca5b6d9d45ba62d150fd",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M19_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M19_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M19_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M19_side.png"
+		}
+	},
+	"M20": {
+		"bounds": "[P: (-1.05793, 0.0, -0.295105), S: (2.115861, 1.988684, 0.810661)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+		"sha256": "a1044a7eb55e074de4dba29ef34e271b8ae2105fc0ee659b5d39dfbc9dc0512e",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/M20_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/M20_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/M20_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/M20_side.png"
+		}
+	},
+	"P01": {
+		"bounds": "[P: (-0.899415, -0.003968, -0.19397), S: (1.798829, 1.820891, 0.361511)]",
+		"level_lighting_reviewed": false,
+		"motion_reviewed": false,
+		"path": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+		"sha256": "3f0aeff37b5222464736814c03cc47a277fa89d6ebdf2c2bbd63522e18eea15a",
+		"views": {
+			"front": "D:/Temp/AshenOath/art_recovery_v2/audit/P01_front.png",
+			"quarter": "D:/Temp/AshenOath/art_recovery_v2/audit/P01_quarter.png",
+			"rear": "D:/Temp/AshenOath/art_recovery_v2/audit/P01_rear.png",
+			"side": "D:/Temp/AshenOath/art_recovery_v2/audit/P01_side.png"
+		}
+	}
+}

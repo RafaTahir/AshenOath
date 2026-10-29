@@ -1,0 +1,161 @@
+{
+  "status": "REWORK_NOT_ACCEPTED",
+  "files": {
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C01_anwen_reconstruction_v002.blend": {
+      "bytes": 12162708,
+      "sha256": "2990f4132a012d8ab7574c0a6997d113ea729c6a972e5b42017f1653940a994a"
+    },
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\exports\\Anwen_AshGrey_Hair.png": {
+      "bytes": 3338764,
+      "sha256": "ce01558b77aad7fb9d671ba69683ad139600a6e9ea4d0dec7ec2bed6f53e117c"
+    },
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\exports\\face.png": {
+      "bytes": 889034,
+      "sha256": "18530a995fa17ab090114abc8704bca2259900348608bc3c7d5076c6a58c4641"
+    },
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\exports\\front.png": {
+      "bytes": 838170,
+      "sha256": "1a1ab945c8442bc950b9e111406289d34a3644464b51640d36825a9aef5562d6"
+    },
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\exports\\quarter.png": {
+      "bytes": 864342,
+      "sha256": "204708420fedb7547be6de68e3de7a7fae76bd8687a8c6e97e2922b14a67883c"
+    },
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\exports\\rear.png": {
+      "bytes": 852050,
+      "sha256": "d4d70bdaa01ca1df3d59d5259fb0562a334b2ffe08b293b18e5ca951975cea0c"
+    },
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\exports\\side.png": {
+      "bytes": 824240,
+      "sha256": "fdab3cf01b113f355e2ab5f90c1117b5564b809df45ebc78b296dd1193cb0975"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\face.png": {
+      "bytes": 158708,
+      "sha256": "324ea21b045fe0a97a4d318368a3e89724e8d8248d8425aef46cd0fc506c91e6"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\front.png": {
+      "bytes": 143859,
+      "sha256": "db8fab7299d44f0edc4809606a51ccd02aa112f68ee11244abfed20b01a25887"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\greyfen_game_camera.png": {
+      "bytes": 934665,
+      "sha256": "550dde7b92cc4d4b19f0c8403134baea1d166cb38bb20283adafeade22d2ff75"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\greyfen_portrait.png": {
+      "bytes": 940104,
+      "sha256": "00941e799e738dc72d43bfdbb17010711dd36c2aaf5c0dd4984cc3f30dbe4869"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\quarter.png": {
+      "bytes": 119341,
+      "sha256": "9d34895b24f67fbf484d77aa37417a0c56f0055314f408e848d1081c5959fb54"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\rear.png": {
+      "bytes": 131607,
+      "sha256": "adda3e6fec0d9daa771166b4748cdec10d09eba0863e135fea27795b693ccfa9"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\side.png": {
+      "bytes": 119618,
+      "sha256": "9d8f1b667d2285ece2ca979f5a18c243324714f853af9291cc60fee2b2970173"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_00.png": {
+      "bytes": 136764,
+      "sha256": "dfb2d23885e2c7bd7aa91bacaf9111751ad57dcb4f56e0559a17a6135865439c"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_01.png": {
+      "bytes": 137682,
+      "sha256": "74fff6ccbcbb654e5b8985772a2376f169f1ad35668f1cd932568b05e68ae27d"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_02.png": {
+      "bytes": 138542,
+      "sha256": "342fe07db154197389acb9d7f2d2d924cab10b5c5e74ba3d553e78a4c09133e0"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_03.png": {
+      "bytes": 137488,
+      "sha256": "55fe66f77e30b952adbd1306231e3e7140a0f256089ba706c74c4c2b3a21cd0d"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_04.png": {
+      "bytes": 137256,
+      "sha256": "4518b1786ce95f55bdefc80bdb013ec1b893e4cd4a3b5dc3e928090d5196042d"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_05.png": {
+      "bytes": 134910,
+      "sha256": "e575c41921498522fe9a251c2abc33bfab7f3d3dae1b929ef42319b187907040"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_06.png": {
+      "bytes": 133970,
+      "sha256": "a0e05cda8cd2a2c13f47609f0ae3502ca8164301aa2515dbb7e856af67dcb666"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_07.png": {
+      "bytes": 133177,
+      "sha256": "66bbbea133320755d7397b858e20a9857620610f0a2474d5e24c8663b5eacb03"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_08.png": {
+      "bytes": 133800,
+      "sha256": "6bdf8e9cb6c104ec0e0ebd0d541e65080a0a74aff17a12b1e7be39828ebc6972"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_09.png": {
+      "bytes": 135021,
+      "sha256": "b8f046ccce708e02c7b9999cd9142dbce494287fbc3f127d1f0896302af6c658"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_10.png": {
+      "bytes": 135847,
+      "sha256": "2030afed215fd0a3b24163d33bc57c616a7f4588c1aa90b3063085590df653bc"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_11.png": {
+      "bytes": 135298,
+      "sha256": "d62344d7f6595f9eaa46fc0d882895b1c9e81403bdd22299362a67e703e5686a"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_12.png": {
+      "bytes": 133728,
+      "sha256": "c46cd11a313fed9d7769b40f553db6ee5d66d593920e8715d88b7c92eefd7688"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_13.png": {
+      "bytes": 131245,
+      "sha256": "7652258453465c86b4ee4f5c9ea879d2cc90c4355bb69eeb5243e3b75074cf65"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_14.png": {
+      "bytes": 129661,
+      "sha256": "493d813720fa7780a1f0241e5771c6857e385e3be33a8ae9a7fbbc35e3deaad3"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_15.png": {
+      "bytes": 128817,
+      "sha256": "17c9259e82f814dfb58bf1a32c5df8841582d779575a3be0c131813e46a7397f"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_16.png": {
+      "bytes": 126832,
+      "sha256": "ff80210ea984aa6a19de331d2b9d4bff30cae5c4ae6a5372dff40053ba98cd48"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_17.png": {
+      "bytes": 125422,
+      "sha256": "cdec6bc4f40f82af179c88c70b98c0003ce69e044a369f77541e8c3fb674206f"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_18.png": {
+      "bytes": 123961,
+      "sha256": "809a35db49df5057ab0188d157097908d020496fd0df8c1d2e636cbb9791908d"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_19.png": {
+      "bytes": 123029,
+      "sha256": "c7a19aae89d4409f499cad9f1b1b6cf12d1a57663cb818226aa6467aeb22a86f"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_20.png": {
+      "bytes": 121685,
+      "sha256": "0a424cb60049cdeb6f3fd15671a763c12f9459a0b6d5860f5179b85017c31627"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_21.png": {
+      "bytes": 121172,
+      "sha256": "ff2af01601c3c7a7a3fa766ed2c841e05ee7e2e9d052e47d177889df538029d2"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_22.png": {
+      "bytes": 121211,
+      "sha256": "03fb69289289515784026adfaf2610025d417f1ad5f86996b3065ab7ab71b4ad"
+    },
+    "D:\\Temp\\AshenOath\\art_recovery_v2\\anwen_godot\\walk_23.png": {
+      "bytes": 122221,
+      "sha256": "1482f09f918224a8e1ec589843408827df914abc3167e6efd0a02d1ca0937196"
+    },
+    "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\anwen\\anwen_review.glb": {
+      "bytes": 22668420,
+      "sha256": "3f1faa1cf26ab80c774b8cc8fd25ca9b80a6df48b906a6fbb5e01cbe87b6be84"
+    }
+  }
+}

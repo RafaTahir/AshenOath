@@ -1,0 +1,5 @@
+upstream/** -text
+*.blend binary
+*.png binary
+*.jpg binary
+*.gif binary

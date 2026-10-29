@@ -1,0 +1,3320 @@
+{
+  "C01_anwen_v001": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C01_anwen_v001.blend",
+    "meshes": [
+      {
+        "name": "C01_Anwen_Skinned",
+        "vertices": 17010,
+        "materials": [
+          "C01_PrivateAnatomyAtlas",
+          "C01_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8319412469863892,
+            -0.19287537038326263,
+            -0.006743737030774355
+          ],
+          [
+            0.8319412469863892,
+            0.2630663216114044,
+            1.794965147972107
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "C01_Anwen_Rig",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "Anwen_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C01_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C01_Anwen.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C01_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C01_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C01_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C02_Rook": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C02_Rook.blend",
+    "meshes": [
+      {
+        "name": "C02_Rook_Skinned",
+        "vertices": 16249,
+        "materials": [
+          "C02_PrivateAnatomyAtlas",
+          "C02_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8994146585464478,
+            -0.16754083335399628,
+            -0.00396758783608675
+          ],
+          [
+            0.8994147777557373,
+            0.18953682482242584,
+            1.8876748085021973
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "C02_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C02_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C02_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C02_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C02_Rook.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "Kael_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C03_Mira_Fen": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C03_Mira_Fen.blend",
+    "meshes": [
+      {
+        "name": "C03_Mira_Fen_Skinned",
+        "vertices": 13605,
+        "materials": [
+          "C03_PrivateAnatomyAtlas",
+          "C03_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8319412469863892,
+            -0.18364807963371277,
+            -0.006743737030774355
+          ],
+          [
+            0.8319412469863892,
+            0.2197573035955429,
+            1.77285635471344
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "Anwen_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C03_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C03_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C03_Mira_Fen.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C03_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C03_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C04_Blacksmith_Tor": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C04_Blacksmith_Tor.blend",
+    "meshes": [
+      {
+        "name": "C04_Blacksmith_Tor_Skinned",
+        "vertices": 10802,
+        "materials": [
+          "C04_PrivateAnatomyAtlas",
+          "C04_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8994146585464478,
+            -0.19760571420192719,
+            -0.00396758783608675
+          ],
+          [
+            0.8994147777557373,
+            0.18228496611118317,
+            1.8100768327713013
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "Anwen_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C04_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C04_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C04_Blacksmith_Tor.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C04_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C04_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "Kael_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C05_Widow_Elna": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C05_Widow_Elna.blend",
+    "meshes": [
+      {
+        "name": "C05_Widow_Elna_Skinned",
+        "vertices": 14421,
+        "materials": [
+          "C05_PrivateAnatomyAtlas",
+          "C05_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8319412469863892,
+            -0.16754087805747986,
+            -0.006743737030774355
+          ],
+          [
+            0.8319412469863892,
+            0.21504884958267212,
+            1.77285635471344
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "Anwen_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C05_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C05_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C05_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C05_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C05_Widow_Elna.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C06_Farmer_Toma": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C06_Farmer_Toma.blend",
+    "meshes": [
+      {
+        "name": "C06_Farmer_Toma_Skinned",
+        "vertices": 12187,
+        "materials": [
+          "C06_PrivateAnatomyAtlas",
+          "C06_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8994146585464478,
+            -0.16754083335399628,
+            -0.00396758783608675
+          ],
+          [
+            0.8994147777557373,
+            0.18307197093963623,
+            1.8169234991073608
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "C06_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C06_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C06_Farmer_Toma.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C06_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C06_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "Kael_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C07_Captain_Senn": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C07_Captain_Senn.blend",
+    "meshes": [
+      {
+        "name": "C07_Captain_Senn_Skinned",
+        "vertices": 11930,
+        "materials": [
+          "C07_PrivateAnatomyAtlas",
+          "C07_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8994146585464478,
+            -0.18979087471961975,
+            -0.00396758783608675
+          ],
+          [
+            0.8994147777557373,
+            0.2334490716457367,
+            1.8169234991073608
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "C07_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C07_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C07_Captain_Senn.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C07_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C07_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "Kael_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C08_Lord_Edric_Vargan": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C08_Lord_Edric_Vargan.blend",
+    "meshes": [
+      {
+        "name": "C08_Lord_Edric_Vargan_Skinned",
+        "vertices": 15910,
+        "materials": [
+          "C08_PrivateAnatomyAtlas",
+          "C08_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8994146585464478,
+            -0.16754083335399628,
+            -0.00396758783608675
+          ],
+          [
+            0.8994147777557373,
+            0.23483262956142426,
+            1.8169234991073608
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "C08_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C08_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C08_Lord_Edric_Vargan.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C08_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C08_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "Kael_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C09_Record_Keeper_Vale": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C09_Record_Keeper_Vale.blend",
+    "meshes": [
+      {
+        "name": "C09_Record_Keeper_Vale_Skinned",
+        "vertices": 14591,
+        "materials": [
+          "C09_PrivateAnatomyAtlas",
+          "C09_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8319412469863892,
+            -0.16754087805747986,
+            -0.006743737030774355
+          ],
+          [
+            0.8319412469863892,
+            0.21504884958267212,
+            1.771957278251648
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "Anwen_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C09_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C09_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C09_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C09_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C09_Record_Keeper_Vale.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C10_Steward_Merrow": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C10_Steward_Merrow.blend",
+    "meshes": [
+      {
+        "name": "C10_Steward_Merrow_Skinned",
+        "vertices": 14019,
+        "materials": [
+          "C10_PrivateAnatomyAtlas",
+          "C10_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8994146585464478,
+            -0.21696600317955017,
+            -0.00396758783608675
+          ],
+          [
+            0.8994147777557373,
+            0.19766178727149963,
+            1.8100768327713013
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "C10_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C10_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C10_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C10_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C10_Steward_Merrow.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "Kael_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C11_Nessa": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C11_Nessa.blend",
+    "meshes": [
+      {
+        "name": "C11_Nessa_Skinned",
+        "vertices": 12737,
+        "materials": [
+          "C11_PrivateAnatomyAtlas",
+          "C11_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8319412469863892,
+            -0.20892807841300964,
+            -0.006743737030774355
+          ],
+          [
+            0.8319412469863892,
+            0.21504884958267212,
+            1.77285635471344
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "Anwen_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C11_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C11_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C11_Nessa.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C11_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C11_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "C12_Nera": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\C12_Nera.blend",
+    "meshes": [
+      {
+        "name": "C12_Nera_Skinned",
+        "vertices": 17418,
+        "materials": [
+          "C12_PrivateAnatomyAtlas",
+          "C12_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8319412469863892,
+            -0.16754087805747986,
+            -0.006743737030774355
+          ],
+          [
+            0.8319412469863892,
+            0.21975989639759064,
+            1.77285635471344
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "Anwen_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C12_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C12_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C12_Nera.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C12_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "C12_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M01_Ghoulkin": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M01_Ghoulkin.blend",
+    "meshes": [
+      {
+        "name": "M01_Ghoulkin_Skinned",
+        "vertices": 33636,
+        "materials": [
+          "M01_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.6763836145401001,
+            -0.4577335715293884,
+            0.0
+          ],
+          [
+            0.6763836145401001,
+            0.2095452845096588,
+            1.6359055042266846
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -163.5905303955078,
+            -163.5905303955078,
+            0.0
+          ],
+          [
+            163.5905303955078,
+            163.5905303955078,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M01_Rig",
+        "bones": 14,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M01_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M01_Ghoulkin.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M01_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M01_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M02_Wychwood_Stalker": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M02_Wychwood_Stalker.blend",
+    "meshes": [
+      {
+        "name": "M02_Wychwood_Stalker_Skinned",
+        "vertices": 31536,
+        "materials": [
+          "M02_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.6029627919197083,
+            -0.5319002270698547,
+            0.0
+          ],
+          [
+            0.6029627919197083,
+            0.16616995632648468,
+            1.6046839952468872
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -160.4683837890625,
+            -160.4683837890625,
+            0.0
+          ],
+          [
+            160.4683837890625,
+            160.4683837890625,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M02_Rig",
+        "bones": 14,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M02_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M02_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M02_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M02_Wychwood_Stalker.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M03_Bog_Wretch": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M03_Bog_Wretch.blend",
+    "meshes": [
+      {
+        "name": "M03_Bog_Wretch_Skinned",
+        "vertices": 32074,
+        "materials": [
+          "M03_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.6960442066192627,
+            -0.5975492596626282,
+            -0.0331951268017292
+          ],
+          [
+            0.6960442066192627,
+            0.3052300214767456,
+            1.6795780658721924
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -171.27732849121094,
+            -171.27732849121094,
+            0.0
+          ],
+          [
+            171.27732849121094,
+            171.27732849121094,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M03_Rig",
+        "bones": 14,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M03_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M03_Bog_Wretch.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M03_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M03_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M04_Gravebound_Knight": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M04_Gravebound_Knight.blend",
+    "meshes": [
+      {
+        "name": "M04_Gravebound_Knight_Skinned",
+        "vertices": 28986,
+        "materials": [
+          "M04_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.6844000220298767,
+            -0.4235467314720154,
+            0.0
+          ],
+          [
+            0.8118687272071838,
+            0.23302659392356873,
+            1.9449999332427979
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -194.5,
+            -194.5,
+            0.0
+          ],
+          [
+            194.5,
+            194.5,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M04_Rig",
+        "bones": 14,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M04_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M04_Gravebound_Knight.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M04_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M04_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M05_Bell_Eater": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M05_Bell_Eater.blend",
+    "meshes": [
+      {
+        "name": "M05_Bell_Eater_Skinned",
+        "vertices": 35803,
+        "materials": [
+          "M05_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -1.5291348695755005,
+            -1.1399999856948853,
+            0.0
+          ],
+          [
+            1.5291348695755005,
+            0.4652981162071228,
+            3.8088104724884033
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -380.8810729980469,
+            -380.8810729980469,
+            0.0
+          ],
+          [
+            380.8810729980469,
+            380.8810729980469,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M05_Rig",
+        "bones": 14,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M05_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M05_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M05_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M05_The_Bell_Eater.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M06_Rootbound_Colossus": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M06_Rootbound_Colossus.blend",
+    "meshes": [
+      {
+        "name": "M06_Rootbound_Colossus_Skinned",
+        "vertices": 27101,
+        "materials": [
+          "M06_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -1.9368387460708618,
+            -0.9932624697685242,
+            0.0
+          ],
+          [
+            1.9368387460708618,
+            0.6928869485855103,
+            4.398629188537598
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -439.86285400390625,
+            -439.86285400390625,
+            0.0
+          ],
+          [
+            439.86285400390625,
+            439.86285400390625,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M06_Rig",
+        "bones": 14,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M06_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M06_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M06_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M06_Rootbound_Colossus.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M07_Ashwing_Carrion_Drake": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M07_Ashwing_Carrion_Drake.blend",
+    "meshes": [
+      {
+        "name": "M07_Ashwing_Carrion_Drake_Skinned",
+        "vertices": 29082,
+        "materials": [
+          "M07_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -4.254920482635498,
+            -1.5148545503616333,
+            0.05926627665758133
+          ],
+          [
+            4.254783630371094,
+            3.5970685482025146,
+            4.228283882141113
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -850.9703979492188,
+            -850.9703979492188,
+            0.0
+          ],
+          [
+            850.9703979492188,
+            850.9703979492188,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M07_Rig",
+        "bones": 28,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M07_Ashwing_Carrion_Drake.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M07_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M07_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M07_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M08_White_Hart_Avatar": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M08_White_Hart_Avatar.blend",
+    "meshes": [
+      {
+        "name": "M08_White_Hart_Avatar_Skinned",
+        "vertices": 28770,
+        "materials": [
+          "M08_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.9459596276283264,
+            -1.555230975151062,
+            -0.000999998301267624
+          ],
+          [
+            0.9457045793533325,
+            1.1524438858032227,
+            3.5955402851104736
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -359.65399169921875,
+            -359.65399169921875,
+            0.0
+          ],
+          [
+            359.65399169921875,
+            359.65399169921875,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M08_Rig",
+        "bones": 20,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M08_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M08_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M08_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M08_White_Hart_Avatar.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M09_Silt_Maw": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M09_Silt_Maw.blend",
+    "meshes": [
+      {
+        "name": "M09_Silt_Maw_Skinned",
+        "vertices": 8116,
+        "materials": [
+          "M09_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.32953768968582153,
+            -1.640891432762146,
+            -0.1501082181930542
+          ],
+          [
+            0.3308539390563965,
+            1.58304762840271,
+            0.5905916094779968
+          ]
+        ],
+        "modifiers": [
+          [
+            "Authored skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -322.3938903808594,
+            -322.3938903808594,
+            0.0
+          ],
+          [
+            322.3938903808594,
+            322.3938903808594,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M09_Rig",
+        "bones": 10,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M09_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M09_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M09_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M09_Silt_Maw.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M10_Millback": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M10_Millback.blend",
+    "meshes": [
+      {
+        "name": "M10_Millback_Skinned",
+        "vertices": 7619,
+        "materials": [
+          "M10_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -1.0750000476837158,
+            -1.5147796869277954,
+            -0.0235825777053833
+          ],
+          [
+            1.0750000476837158,
+            0.977908730506897,
+            1.0399999618530273
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -249.26885986328125,
+            -249.26885986328125,
+            0.0
+          ],
+          [
+            249.26885986328125,
+            249.26885986328125,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M10_Rig",
+        "bones": 20,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M10_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M10_Millback.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M10_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M10_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M11_Glassmoth": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M11_Glassmoth.blend",
+    "meshes": [
+      {
+        "name": "M11_Glassmoth_Skinned",
+        "vertices": 11361,
+        "materials": [
+          "M11_SurfaceAtlas",
+          "M11_ThinWingMembrane"
+        ],
+        "bounds": [
+          [
+            -1.0647937059402466,
+            -0.5821504592895508,
+            0.03384782746434212
+          ],
+          [
+            1.0640125274658203,
+            0.6638816595077515,
+            1.1953390836715698
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -212.880615234375,
+            -212.880615234375,
+            0.0
+          ],
+          [
+            212.880615234375,
+            212.880615234375,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M11_Rig",
+        "bones": 20,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M11_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M11_Glassmoth.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M11_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M11_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M12_Knell_Leech": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M12_Knell_Leech.blend",
+    "meshes": [
+      {
+        "name": "M12_Knell_Leech_Skinned",
+        "vertices": 7278,
+        "materials": [
+          "M12_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.24500000476837158,
+            -0.7739999890327454,
+            -0.07608658075332642
+          ],
+          [
+            0.24500000476837158,
+            0.9008625745773315,
+            0.5164732933044434
+          ]
+        ],
+        "modifiers": [
+          [
+            "Authored skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -167.4862518310547,
+            -167.4862518310547,
+            0.0
+          ],
+          [
+            167.4862518310547,
+            167.4862518310547,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M12_Rig",
+        "bones": 10,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M12_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M12_Knell_Leech.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M12_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M12_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M13_Hearthscale": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M13_Hearthscale.blend",
+    "meshes": [
+      {
+        "name": "M13_Hearthscale_Skinned",
+        "vertices": 27423,
+        "materials": [
+          "M13_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.6820000410079956,
+            -0.7777661681175232,
+            0.010816933587193489
+          ],
+          [
+            0.6820000410079956,
+            1.9889081716537476,
+            0.7768892645835876
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -276.6674499511719,
+            -276.6674499511719,
+            0.0
+          ],
+          [
+            276.6674499511719,
+            276.6674499511719,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M13_Rig",
+        "bones": 15,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M13_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M13_Hearthscale.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M13_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M13_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M14_Gallows_Weaver": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M14_Gallows_Weaver.blend",
+    "meshes": [
+      {
+        "name": "M14_Gallows_Weaver_Skinned",
+        "vertices": 16041,
+        "materials": [
+          "M14_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -1.2120983600616455,
+            -1.1833469867706299,
+            0.0902056097984314
+          ],
+          [
+            1.2122104167938232,
+            1.0631182193756104,
+            1.0399999618530273
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -242.43087768554688,
+            -242.43087768554688,
+            0.0
+          ],
+          [
+            242.43087768554688,
+            242.43087768554688,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M14_Rig",
+        "bones": 20,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M14_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M14_Gallows_Weaver.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M14_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M14_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M15_Reed_Choir": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M15_Reed_Choir.blend",
+    "meshes": [
+      {
+        "name": "M15_Reed_Choir_Skinned",
+        "vertices": 29504,
+        "materials": [
+          "M15_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8440131545066833,
+            -0.7788775563240051,
+            0.003020215779542923
+          ],
+          [
+            0.8436790108680725,
+            0.6907511353492737,
+            1.1299999952316284
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -168.7692108154297,
+            -168.7692108154297,
+            0.0
+          ],
+          [
+            168.7692108154297,
+            168.7692108154297,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M15_Rig",
+        "bones": 17,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M15_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M15_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M15_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M15_Reed_Choir.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M16_Inkblind": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M16_Inkblind.blend",
+    "meshes": [
+      {
+        "name": "M16_Inkblind_Skinned",
+        "vertices": 5386,
+        "materials": [
+          "M16_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.5912500023841858,
+            -0.7715314626693726,
+            -0.012970425188541412
+          ],
+          [
+            0.5912500023841858,
+            0.5439227819442749,
+            0.5720000267028809
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -131.54542541503906,
+            -131.54542541503906,
+            0.0
+          ],
+          [
+            131.54542541503906,
+            131.54542541503906,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M16_Rig",
+        "bones": 16,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M16_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M16_Inkblind.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M16_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M16_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M17_Cairn_Mother": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M17_Cairn_Mother.blend",
+    "meshes": [
+      {
+        "name": "M17_Cairn_Mother_Skinned",
+        "vertices": 28168,
+        "materials": [
+          "M17_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.7352471947669983,
+            -1.5609931945800781,
+            -0.019999995827674866
+          ],
+          [
+            0.7455876469612122,
+            1.7643765211105347,
+            1.884591817855835
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -332.5369567871094,
+            -332.5369567871094,
+            0.0
+          ],
+          [
+            332.5369567871094,
+            332.5369567871094,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M17_Rig",
+        "bones": 8,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M17_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M17_Cairn_Mother.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M17_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M17_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M18_Shroud_Swimmer": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M18_Shroud_Swimmer.blend",
+    "meshes": [
+      {
+        "name": "M18_Shroud_Swimmer_Skinned",
+        "vertices": 14947,
+        "materials": [
+          "M18_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -1.399999976158142,
+            -0.9399999976158142,
+            0.023000001907348633
+          ],
+          [
+            1.399999976158142,
+            2.9204392433166504,
+            0.30150359869003296
+          ]
+        ],
+        "modifiers": [
+          [
+            "Authored skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -386.0439147949219,
+            -386.0439147949219,
+            0.0
+          ],
+          [
+            386.0439147949219,
+            386.0439147949219,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M18_Rig",
+        "bones": 13,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M18_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M18_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M18_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M18_Shroud_Swimmer.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M19_Wychwood_Raider": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M19_Wychwood_Raider.blend",
+    "meshes": [
+      {
+        "name": "M19_Wychwood_Raider_Skinned",
+        "vertices": 31536,
+        "materials": [
+          "M19_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -0.7929849028587341,
+            -0.45204904675483704,
+            0.0
+          ],
+          [
+            0.7929849028587341,
+            0.2161499559879303,
+            1.86590576171875
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -186.590576171875,
+            -186.590576171875,
+            0.0
+          ],
+          [
+            186.590576171875,
+            186.590576171875,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M19_Rig",
+        "bones": 14,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M19_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M19_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M19_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M19_Wychwood_Raider.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "M20_Wychwood_Brute": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\M20_Wychwood_Brute.blend",
+    "meshes": [
+      {
+        "name": "M20_Wychwood_Brute_Skinned",
+        "vertices": 31549,
+        "materials": [
+          "M20_SurfaceAtlas"
+        ],
+        "bounds": [
+          [
+            -1.0579304695129395,
+            -0.5155557990074158,
+            0.0
+          ],
+          [
+            1.0579304695129395,
+            0.2951053977012634,
+            1.9886844158172607
+          ]
+        ],
+        "modifiers": [
+          [
+            "C01 skin",
+            "ARMATURE"
+          ]
+        ]
+      },
+      {
+        "name": "STUDIO_NotRuntime",
+        "vertices": 4,
+        "materials": [
+          "StudioFloor"
+        ],
+        "bounds": [
+          [
+            -211.58609008789062,
+            -211.58609008789062,
+            0.0
+          ],
+          [
+            211.58609008789062,
+            211.58609008789062,
+            0.0
+          ]
+        ],
+        "modifiers": []
+      }
+    ],
+    "rigs": [
+      {
+        "name": "M20_Rig",
+        "bones": 14,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "textures": [
+      {
+        "name": "M20_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M20_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M20_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "M20_Wychwood_Brute.png",
+        "size": [
+          1536,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  },
+  "P01_Kael": {
+    "source": "D:\\Projects\\AshenOath\\art_source\\design_pack_v1\\models\\P01_Kael.blend",
+    "meshes": [
+      {
+        "name": "P01_Kael_Skinned",
+        "vertices": 13485,
+        "materials": [
+          "P01_PrivateAnatomyAtlas",
+          "P01_AuthoredClothesAtlas"
+        ],
+        "bounds": [
+          [
+            -0.8994146585464478,
+            -0.16754083335399628,
+            -0.00396758783608675
+          ],
+          [
+            0.8994147777557373,
+            0.19397009909152985,
+            1.8169234991073608
+          ]
+        ],
+        "modifiers": [
+          [
+            "Armature",
+            "ARMATURE"
+          ]
+        ]
+      }
+    ],
+    "rigs": [
+      {
+        "name": "Armature",
+        "bones": 76,
+        "pose": "POSE"
+      }
+    ],
+    "actions": [],
+    "textures": [
+      {
+        "name": "Kael_A_Set_Atlas.png",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "P01_AnatomyBasecolor",
+        "size": [
+          2048,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "P01_basecolor",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "P01_normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      },
+      {
+        "name": "P01_orm",
+        "size": [
+          1024,
+          1024
+        ],
+        "packed": true
+      }
+    ]
+  }
+}

@@ -1938,7 +1938,8 @@ func _build_design_pack_ecology() -> void:
 		if str(sighting.zone) != current_zone_id:
 			continue
 		var id := "design_ecology:" + str(sighting.role)
-		if zone_root.has_meta(id):
+		var publication_key := id.replace(":", "_")
+		if zone_root.has_meta(publication_key):
 			continue
 		var p: Array = sighting.position
 		var area: Node3D = _make_named_interactable(id, "story_activity", "Observe " + str(sighting.name), Vector3(float(p[0]), 0, float(p[2])), Color.WHITE)
@@ -1956,7 +1957,7 @@ func _build_design_pack_ecology() -> void:
 		var driver := area.find_child("CharacterAnimationDriver", true, false)
 		if driver != null:
 			driver.set_meta("ecology_clip", str(sighting.get("clip", "Idle")))
-		zone_root.set_meta(id, true)
+		zone_root.set_meta(publication_key, true)
 
 
 func _apply_first_route_materials(root: Node) -> void:
