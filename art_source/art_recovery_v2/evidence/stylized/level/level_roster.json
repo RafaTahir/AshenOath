@@ -1,0 +1,305 @@
+{
+	"accepted": false,
+	"assets": [
+		{
+			"accepted": false,
+			"id": "C01",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
+			"prepared_sha256": "995e43d83db77718463e12afcbaad4b7ca1b14e90f17926df89ff53777091ca4",
+			"source": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+			"source_sha256": "a6e18399b256b95dbd35e826d7880d786440364d9f48416f0028787f8f46757a"
+		},
+		{
+			"accepted": false,
+			"id": "M01",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
+			"prepared_sha256": "e1f35248fe99881c306bd841915da77e6c5962ee3523e8935ba11ed0e5d5aa48",
+			"source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+			"source_sha256": "64fcbc53d7b17994d04f3d353238ce3ac8892c2a704f50f4c2254cf85c84edf4"
+		},
+		{
+			"accepted": false,
+			"id": "M05",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/54231b1314fe455ab60b9d77.scn",
+			"prepared_sha256": "acae0e6eb475f50b028ff57b39d71f867c3d73e6d3c28de5ff5c156544a1474b",
+			"source": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+			"source_sha256": "e8a7af42da10405b6b193a203db9b725e1b7f6fd28effb3f99285e119feda317"
+		},
+		{
+			"accepted": false,
+			"id": "C04",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
+			"prepared_sha256": "8cbf23a2211dfdfc1caff4b5dc00acbad1c185210d07e49938288f35344b1b4d",
+			"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+			"source_sha256": "8a9359e933f04819a47ad1409fcf200067ba8ddd9ddc37ddbbcb6e2863e2a583"
+		},
+		{
+			"accepted": false,
+			"id": "C02",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+			"prepared_sha256": "67157ffb1233aed2d2ad19c3b28ff2e08235b17a8aec41ffee03c31f1e440fbb",
+			"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+			"source_sha256": "66ae4c8281553fa8edb168f488c5323951628b2eb2451406682a15f9bbf8b1b8"
+		},
+		{
+			"accepted": false,
+			"id": "C03",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
+			"prepared_sha256": "4fd3df2b4756411e6e2d31b8c1b62a4e5946427cb14e996290609076be3efc5b",
+			"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+			"source_sha256": "c99d6c43f98c7975cec87be0f154a2a10bff2c24fdfb498f1796e72eb581c45f"
+		},
+		{
+			"accepted": false,
+			"id": "C11",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
+			"prepared_sha256": "7baae929ac28c773669905c9820fc6aea86046193c7ee58c6c926437ffc1264d",
+			"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+			"source_sha256": "d14fab9b2f433b9cab5380772d8c6157eac2a20591f2a280ca26b9ea379f0305"
+		},
+		{
+			"accepted": false,
+			"id": "C05",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+			"prepared_sha256": "bd39cabbf7ffb7e8b513bd6a877275d1482c8011b66a84655871aac3bddda443",
+			"source": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+			"source_sha256": "af4775c69faa2d0b5b543559a2ddfc56fa01302143becb88d87af0d2e2c7f222"
+		},
+		{
+			"accepted": false,
+			"id": "C06",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+			"prepared_sha256": "c93d8c9cadeedd9de66372fd5f2f85cfdc99da44a79ce4fc6e2fd65a8c0fd5bb",
+			"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+			"source_sha256": "8edf4c8c4f7816efd148264d3ee03c42a43c2ac46bfea9cb2892b13d7c7668e7"
+		},
+		{
+			"accepted": false,
+			"id": "C12",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+			"prepared_sha256": "712e0f13e384313bb39878d32b442365655f61594d34b8562477d48372ad87f2",
+			"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+			"source_sha256": "a8ccf84fb1e80e3406dead62de9d89a9158bedfc55244335eb1c0ed11cf5453e"
+		},
+		{
+			"accepted": false,
+			"id": "C07",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
+			"prepared_sha256": "a84b8359abaee7a972f6b50dee266de42e36e38b9c09179ccf0599835f623c6e",
+			"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+			"source_sha256": "da4a826b7c1bd726408473981c6e33d2b404828014412d347be38646472b1284"
+		},
+		{
+			"accepted": false,
+			"id": "C08",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
+			"prepared_sha256": "cd852fb3ed25f34d632a8216b9c2498aa51a4828ad4f1a5398d6e76aa949d935",
+			"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+			"source_sha256": "ed43cb946850852f5801d93839234bba649ba37b30b1241b0e49bac3dee2dbae"
+		},
+		{
+			"accepted": false,
+			"id": "C09",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+			"prepared_sha256": "02e2524576abe395c9041f448ab94a397f58798bf709e9dc5a26ef02855e9e83",
+			"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+			"source_sha256": "551118d217688cbf9f172a8b3a36edeeec734b0b8f88ff7c8ddc07e86402262b"
+		},
+		{
+			"accepted": false,
+			"id": "C10",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+			"prepared_sha256": "128b4681b35b567647dd166c8e4c3051c6b541d3c029595613c1e3385563cce4",
+			"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+			"source_sha256": "675ffc91e7ea9c27a91037d0ee6ce3d91b6e2ed41203496724b745e7c94096a4"
+		},
+		{
+			"accepted": false,
+			"id": "P01",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
+			"prepared_sha256": "49948a8ebce8ad5b0ccff421e12c06d2712f18f346298429ca57712ab6881778",
+			"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+			"source_sha256": "c8eca735354efa0ffb8b31aab22bb3d2fe14d3b3485d414690e599d835845851"
+		},
+		{
+			"accepted": false,
+			"id": "M02",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn",
+			"prepared_sha256": "6563449c6288dc0d28a6d944da0de79860e2b394ed1c9f831f458f5b7a9be22d",
+			"source": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+			"source_sha256": "5c5a32c7a3451693a64ee6f48d5a98c7ab9d6a43ca94f3ae4c0d2788cb02f88e"
+		},
+		{
+			"accepted": false,
+			"id": "M19",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn",
+			"prepared_sha256": "81bd3a84c5c74a5c005ccc74465b6a3562103739435f5e3e4530552ee6e9a323",
+			"source": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+			"source_sha256": "e684e121d89b2d9d5fa20b911ddf7c297380e156d76e43d7590d3d8b00f9cd8e"
+		},
+		{
+			"accepted": false,
+			"id": "M20",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
+			"prepared_sha256": "2c7340f261c5fc155c887899618d573c6455ede47ffa33c898ed06c8d03219b1",
+			"source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+			"source_sha256": "166e37507ad4e11f831bb42e2096258df5a9ce7634fd180955b357beaefaf2c5"
+		},
+		{
+			"accepted": false,
+			"id": "M03",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/b7ba76fa9ecf7af2932916c3.scn",
+			"prepared_sha256": "ae93b52bef1127340b86a3cea489ceb89b7ab196fc83139cd1a347c0cf4cc65d",
+			"source": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+			"source_sha256": "01504f243886547732550b7fd015617553571004f08235cb37bee24e12a3d53e"
+		},
+		{
+			"accepted": false,
+			"id": "M04",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
+			"prepared_sha256": "cf3046e302eae5496a70186c7e9d55d6ebdc22270e982c6a20e724ca9d3170ee",
+			"source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+			"source_sha256": "c950e021b807282f3bd8ce4025471a17ffed13f72e6040f31577220c2c2ea39e"
+		},
+		{
+			"accepted": false,
+			"id": "M06",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/a35a2660e935cd9714969a25.scn",
+			"prepared_sha256": "308acc1533bd1fdbec742fa917cf863eb42aab36e5282c714542e4b7978b9fe6",
+			"source": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+			"source_sha256": "6db195946719fd194b5b4e3a0f716d01871bf63ede4b0a0bf46be763221a64c5"
+		},
+		{
+			"accepted": false,
+			"id": "M08",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/882b182b58b1daeaf7c8846b.scn",
+			"prepared_sha256": "9c838d29f9cbc2bae26408e592dae22a058588ba8696bad11a668f62165199ab",
+			"source": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+			"source_sha256": "8d3b9a23a624b82aa4a1ea7ee597360cd6ac4bb3a185da72533c46b9d36615bf"
+		},
+		{
+			"accepted": false,
+			"id": "M13",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/c261a9a645913615e5e58e3f.scn",
+			"prepared_sha256": "41fba20f7cb6356608620eb115162f96fa970642e783644ed7e9e0f1f8779e08",
+			"source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+			"source_sha256": "0b54e64300b837ac03d6389949a909880cb009f55d209720e1c0f3aa56880a9b"
+		},
+		{
+			"accepted": false,
+			"id": "M07",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/1f7e54e03f6e264c9ff42813.scn",
+			"prepared_sha256": "96aae0ec82818bb33958e4f2bb3fd984826b0dcf74ba20fa977764c077adb1a7",
+			"source": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+			"source_sha256": "36af7cdca991930b89a27c99a70430f9d4fd7268a7482906967527ee3e364cf2"
+		},
+		{
+			"accepted": false,
+			"id": "M11",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/095b7a187a44dc0010ec1c27.scn",
+			"prepared_sha256": "6c6d6dc10ab778e03b724ec5426e7a441fd90ac5c05f9f913d2a9f429a052a70",
+			"source": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+			"source_sha256": "e8f95a4ccf3fe2d31280489261a1d8f2ad92cb5ce54828de12bb69eef43f8a71"
+		},
+		{
+			"accepted": false,
+			"id": "M09",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/a7339a4811b4f65ff472dfe5.scn",
+			"prepared_sha256": "da36950eb7e96f68935c5714089d248fc80000d0dd2aec899715ff87bd20f23b",
+			"source": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+			"source_sha256": "ca62875231eac7d5fcfa2e967a6b2259c3be762c2292d37c77e0cc1bf36fb40a"
+		},
+		{
+			"accepted": false,
+			"id": "M10",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/dba592f95e6445d8f28a5632.scn",
+			"prepared_sha256": "6c6007e11fbbc064f3e1472c575aa587893d04ca6778e9d6ed47e8507f4fb38c",
+			"source": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+			"source_sha256": "314b873c2d34f876f5c00294be42bfe133b611a40ea64d8263b07cb2bad31dc6"
+		},
+		{
+			"accepted": false,
+			"id": "M12",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/519e2aed32e63781ce1a2d2f.scn",
+			"prepared_sha256": "3b83d12578a442eabbab6ba72b7cabbb50d722a069a9dc0027b362dc5d4bbaae",
+			"source": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+			"source_sha256": "998d751634aa2a2663f3003c65f7cf2eebeee33fbb082ef1bc7b500f0bf57b88"
+		},
+		{
+			"accepted": false,
+			"id": "M14",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/2933affd98209470461dfb24.scn",
+			"prepared_sha256": "1c6896bfe1cf4ca8af187f32bf86ca43f6523930e890cd7b519bb63f9b2923ac",
+			"source": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+			"source_sha256": "3c8e07b774f36bbe1b5c93a81f820b3632ac2ad4bf720cb573802ee241ec8973"
+		},
+		{
+			"accepted": false,
+			"id": "M15",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/opening/8d80b59eddd1733dc24b9d1f.scn",
+			"prepared_sha256": "af73d997a57b1cf4d67b39104ff7a64be02e4860bf9a4889c0ebbe4f4c7059ac",
+			"source": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+			"source_sha256": "c6edd25e93242d1b1f7f1bdebd1e5951b240ed489c0b17f0e817813023454fb8"
+		},
+		{
+			"accepted": false,
+			"id": "M16",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/ff6b5532b47b5f567d0e0e40.scn",
+			"prepared_sha256": "75dfa66fc85e2c38e684260c9810de08ab685e2b1af8f4940264bfc59e7a6163",
+			"source": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+			"source_sha256": "407afdc70d2be466fd55fe334b29badd97f184ccbababb991e58d242718e17fa"
+		},
+		{
+			"accepted": false,
+			"id": "M17",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/278595ed8d6f43fe46e39d74.scn",
+			"prepared_sha256": "47b2cfbba63f82cb37d5344832720744a5abf1bd4b9bfeff8a8f29ca228f0220",
+			"source": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+			"source_sha256": "94611817794027bb82cfa87926623f74e374e32091af2e9d259994f0cd2423c6"
+		},
+		{
+			"accepted": false,
+			"id": "M18",
+			"journey_started": false,
+			"prepared": "res://assets_external/characters_prepared/monsters/3de8e7a438d51d6a9ffa7e04.scn",
+			"prepared_sha256": "28c53bca89932ba5887dec0aa9ded27e85d0b878dd8269197817bc1f7eae73e9",
+			"source": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+			"source_sha256": "23670cf364e7819d71668c67a6da8a4ca868e077f1cfdf98d009abe89bd4b683"
+		}
+	],
+	"journey_started": false,
+	"scope": "Prepared art turntable in actual Greyfen lighting, fixed street camera; NOT actual NPC placement, encounter or dialogue framing acceptance",
+	"user_directory": "D:/Temp/AshenOath/stylized_review/appdata/Godot/app_userdata/AshenOath_Anwen_ArtReview_20261030"
+}

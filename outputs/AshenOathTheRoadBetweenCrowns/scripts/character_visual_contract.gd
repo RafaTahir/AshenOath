@@ -10,6 +10,9 @@ static func validate(root: Node, require_animation: bool = true) -> Dictionary:
 		if mesh.skin != null or mesh.skeleton != NodePath(""):
 			skinned_meshes.append(mesh)
 	var bounds := _combined_bounds(root, skinned_meshes if not skinned_meshes.is_empty() else meshes)
+	if root is Node3D and root.has_meta("authored_bind_source_transform") and root.get_meta("prepared_source_bounds", null) is AABB:
+		var source: Transform3D = root.get_meta("authored_bind_source_transform")
+		bounds = root.transform * source.affine_inverse() * (root.get_meta("prepared_source_bounds") as AABB)
 	var creature := str(root.get_meta("character_asset_family", "")) == "ashen_design_pack_monster"
 	var expected_height := float(root.get_meta("character_target_height", 1.72))
 	var complete_bounds := bounds.size.y >= (expected_height * 0.90 if creature else 1.35) and bounds.size.x >= 0.28 and bounds.size.z >= 0.16

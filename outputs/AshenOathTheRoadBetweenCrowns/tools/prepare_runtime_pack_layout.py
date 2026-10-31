@@ -258,6 +258,9 @@ def compile_layout(defer_environment=False):
     # dependency expansion as well as from explicit selections.
     for name, section in sections.items():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        # Art review derivatives are deliberately unapproved, high-density
+        # inspection assets. They never belong to any production pack.
+        exclusions.update({"art_review/*", "art_review/**/*"})
         if designs:
             # Retire previous bodies from delivery, not from recoverable source
             # history. Shared animation libraries remain explicitly owned above.

@@ -30,6 +30,12 @@ var shift_target := 0.0
 var next_shift := 0.0
 var idle_rng := RandomNumberGenerator.new()
 var humanoid := false
+var anwen_staff_pose := false
+var staff_equipment: Node3D
+var staff_weight := 0.0
+var staff_tip := Vector3.ZERO
+var staff_planted := false
+var garment_arm_clearance := 0.0
 
 func configure(body: Node3D, motion: Node) -> void:
 	actor = body
@@ -38,6 +44,18 @@ func configure(body: Node3D, motion: Node) -> void:
 	var skeleton := get_parent() as Skeleton3D
 	if skeleton == null:
 		return
+	var source: Node = skeleton
+	while source != null:
+		if source.has_meta("garment_arm_clearance_m"):
+			garment_arm_clearance = clampf(float(source.get_meta("garment_arm_clearance_m")), 0.0, 0.14)
+			break
+		if source == actor:
+			break
+		source = source.get_parent()
+	anwen_staff_pose = preload("res://scripts/character_presentation.gd").uses_fitted_anwen_staff(skeleton, actor)
+	if anwen_staff_pose:
+		staff_equipment = actor.find_child("AnwenStaffEquipment", true, false) as Node3D
+		staff_weight = 1.0
 	pelvis = skeleton.find_bone("pelvis")
 	for side: String in ["l", "r"]:
 		var thigh := skeleton.find_bone("thigh_" + side)
@@ -78,6 +96,8 @@ func _process_modification() -> void:
 		ambient_weight = 0.0
 		if is_instance_valid(tool):
 			tool.visible = false
+		if anwen_staff_pose and is_instance_valid(staff_equipment) and not bool(driver.distance_suspended):
+			staff_equipment.visible = false
 		return
 	var delta := minf(get_process_delta_time(), 0.05)
 	elapsed += delta
@@ -88,6 +108,15 @@ func _process_modification() -> void:
 	var effective := activity if activity != "" else carried_activity
 	var requested := effective != "" and near and not bool(driver.story_dialogue_active)
 	_ambient_pose(skeleton, delta, near, effective)
+	if humanoid and near and garment_arm_clearance > 0.0 and not bool(driver.story_dialogue_active) and float(driver.current_speed_mps) > 0.08 and effective in ["", "idle", "watch", "lookout", "walk", "travel"]:
+		var across := actor.global_basis.x.normalized()
+		var clearance := garment_arm_clearance * actor.global_basis.get_scale().y * clampf(float(driver.current_speed_mps) / 0.6, 0.0, 1.0)
+		for arm: Dictionary in arms:
+			var shoulder := _world(skeleton, int(arm.upper))
+			var side := signf((shoulder - actor.global_position).dot(across))
+			_solve_arm(skeleton, arm, _world(skeleton, int(arm.hand)) + across * side * clearance)
+	if anwen_staff_pose:
+		_staff_pose(skeleton, delta, effective)
 	_update_tool(effective, requested)
 	creature_weight = move_toward(creature_weight, creature_amount if near and not bool(driver.story_dialogue_active) else 0.0, delta*3.0)
 	if creature_weight > 0.001:
@@ -248,7 +277,51 @@ func _creature_pose(skeleton: Skeleton3D) -> void:
 func _world(skeleton: Skeleton3D, bone: int) -> Vector3:
 	return (skeleton.global_transform * skeleton.get_bone_global_pose(bone)).origin
 
-func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_target: Variant = null, elbow_direction: Vector3 = Vector3.ZERO) -> void:
+func _staff_pose(skeleton: Skeleton3D, delta: float, effective: String) -> void:
+	if not is_instance_valid(staff_equipment):
+		staff_equipment = actor.find_child("AnwenStaffEquipment", true, false) as Node3D
+	if not is_instance_valid(staff_equipment):
+		return
+	var holding := effective in ["", "idle", "watch", "lookout", "remember", "rest"]
+	staff_weight = move_toward(staff_weight, 1.0 if holding else 0.0, delta * 5.0)
+	staff_equipment.visible = holding
+	if not holding:
+		staff_planted = false
+		return
+	var forward: Vector3 = driver.get_visible_forward()
+	var right := forward.cross(Vector3.UP).normalized()
+	var scale := actor.global_basis.get_scale().y
+	var moving := float(driver.current_speed_mps) > 0.08
+	var phase := fposmod(float(driver.animation_graph.gait_phase), 1.0) if driver.animation_graph != null else 0.0
+	var desired_tip := actor.global_position - right * 0.36 * scale + forward * (0.16 if moving else 0.05) * scale
+	if not moving:
+		staff_tip = desired_tip
+		staff_planted = false
+	elif phase < 0.55:
+		if not staff_planted or staff_tip.distance_to(desired_tip) > scale:
+			staff_tip = desired_tip
+		staff_planted = true
+	else:
+		var swing := (phase - 0.55) / 0.45
+		staff_tip = staff_tip.lerp(desired_tip, minf(1.0, delta * 12.0))
+		staff_planted = false
+	var lift := sin((phase - 0.55) / 0.45 * PI) * 0.07 * scale if moving and phase >= 0.55 else 0.0
+	# The shaft crosses the curled palm, perpendicular to the finger axes.
+	var wrist := Basis(-Vector3.UP, forward, (-Vector3.UP).cross(forward)).orthonormalized()
+	var grip := staff_tip + Vector3.UP * (0.93 * scale + lift)
+	var goal := grip - wrist * Vector3(0, 0.045, -0.012) * scale
+	for arm: Dictionary in arms:
+		if float(arm.side) < 0:
+			_solve_arm(skeleton, arm, _world(skeleton, int(arm.hand)).lerp(goal, staff_weight), wrist, Vector3.ZERO, staff_weight)
+	if not bool(driver.story_dialogue_active):
+		for finger: String in ["index", "middle", "ring", "pinky"]:
+			for joint: String in ["01", "02", "03"]:
+				var bone := skeleton.find_bone("%s_%s_r" % [finger, joint])
+				if bone >= 0:
+					var relaxed := skeleton.get_bone_rest(bone).basis.get_rotation_quaternion() * Quaternion(Vector3.RIGHT, 0.12)
+					skeleton.set_bone_pose_rotation(bone, skeleton.get_bone_pose_rotation(bone).slerp(relaxed, staff_weight))
+
+func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_target: Variant = null, elbow_direction: Vector3 = Vector3.ZERO, wrist_weight: float = -1.0) -> void:
 	var shoulder := _world(skeleton, int(arm.upper))
 	var elbow := _world(skeleton, int(arm.lower))
 	var hand := _world(skeleton, int(arm.hand))
@@ -291,4 +364,4 @@ func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_targ
 	skeleton.set_bone_pose_rotation(int(arm.lower), ((local_turn * lower_parent_basis).inverse() * lower_turn * local_turn * lower_basis).orthonormalized().get_rotation_quaternion())
 	if wrist_target is Basis:
 		var desired := ((lower_turn * local_turn * hand_parent_basis).inverse() * frame.inverse() * (wrist_target as Basis)).orthonormalized().get_rotation_quaternion()
-		skeleton.set_bone_pose_rotation(int(arm.hand), skeleton.get_bone_pose_rotation(int(arm.hand)).slerp(desired, pose_weight))
+		skeleton.set_bone_pose_rotation(int(arm.hand), skeleton.get_bone_pose_rotation(int(arm.hand)).slerp(desired, pose_weight if wrist_weight < 0 else wrist_weight))

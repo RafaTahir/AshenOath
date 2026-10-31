@@ -366,6 +366,23 @@
           if (manifestDigest !== String(release?.runtime_pack_manifest?.sha256 || '').toLowerCase()) throw new Error('Runtime manifest hash mismatch');
           const manifest = JSON.parse(new TextDecoder().decode(manifestPayload));
           if (String(manifest?.release_id || '') !== SHELL_BUILD_ID) throw new Error('Runtime manifest release mismatch');
+          // Git/upload limits concern encoded files, not decoded PCK buffers.
+          // Bound each download to its exact release-inventory size and hash.
+          const artifacts = new Map((release.artifacts || []).map(entry =>
+            [new URL(entry.path, window.location.href).href, entry]));
+          for (const [id, pack] of Object.entries(manifest.packs || {})) {
+            if (String(pack.status || '').startsWith('embedded')) continue;
+            if (!Number.isSafeInteger(pack.bytes) || pack.bytes <= 0) throw new Error(`Invalid pack size: ${id}`);
+            const url = new URL(pack.url, window.location.href);
+            if (url.origin !== window.location.origin) throw new Error('External pack origin rejected');
+            url.search = '';
+            url.hash = '';
+            const artifact = artifacts.get(url.href);
+            if (!artifact || (artifact.decoded_bytes ?? artifact.bytes) !== pack.bytes ||
+                String(artifact.decoded_sha256 ?? artifact.sha256).toLowerCase() !== String(pack.sha256).toLowerCase()) {
+              throw new Error(`Pack release-inventory mismatch: ${id}`);
+            }
+          }
           return manifest;
       }
       function getPackManifest() {
@@ -407,7 +424,7 @@
           const manifest = await getPackManifest();
           const pack = manifest?.packs?.[id];
           if (!pack?.url || !/^[a-f0-9]{64}$/.test(pack.sha256)) throw new Error(`Missing pack identity: ${id}`);
-          if (!Number.isSafeInteger(pack.bytes) || pack.bytes <= 0 || pack.bytes >= 104857600) throw new Error(`Invalid pack size: ${id}`);
+          if (!Number.isSafeInteger(pack.bytes) || pack.bytes <= 0) throw new Error(`Invalid pack size: ${id}`);
           if (expected && (expected.sha256 !== pack.sha256 || expected.bytes !== pack.bytes || expected.version !== pack.version)) throw new Error(`Pack contract mismatch: ${id}`);
           const url = new URL(pack.url, window.location.href);
           if (url.origin !== window.location.origin) throw new Error('External pack origin rejected');
@@ -465,6 +482,7 @@
         } catch (error) {
           if (packCache && packUrl && !controller.signal.aborted && packOperations.get(id) === operation) await packCache.delete(packUrl).catch(() => {});
           if (packOperations.get(id) === operation) {
+            if (!controller.signal.aborted) console.error(`Runtime pack ${id} failed:`, error);
             window.__ashenOathPreloadedPacks[id] = { state: controller.signal.aborted ? 'cancelled' : 'failed', error: String(error) };
             if (id === 'opening') {
               bootMetrics.opening_prefetch_state = 'failed';

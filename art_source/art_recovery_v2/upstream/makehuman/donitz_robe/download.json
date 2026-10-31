@@ -1,0 +1,51 @@
+{
+  "source": "https://files2.makehumancommunity.org/asset_packs/suits02/suits02_cc0.zip",
+  "catalog": "https://static.makehumancommunity.org/assets/assetpacks/suits02.html",
+  "files": [
+    {
+      "member": "clothes/donitz_monk_robe_hood_off/Monks_Hood_Off.obj",
+      "bytes": 392410,
+      "crc32": "01359f40"
+    },
+    {
+      "member": "clothes/donitz_monk_robe_hood_off/monks_robe_brown.mhmat",
+      "bytes": 900,
+      "crc32": "b71b5d66"
+    },
+    {
+      "member": "clothes/donitz_monk_robe_hood_off/donitz_monk_robe_hood_off.mhclo",
+      "bytes": 273606,
+      "crc32": "ee221b14"
+    },
+    {
+      "member": "clothes/donitz_monk_robe_hood_down/monks_robe_brown.mhmat",
+      "bytes": 900,
+      "crc32": "b71b5d66"
+    },
+    {
+      "member": "clothes/donitz_monk_robe_hood_down/Monks_Hood_Down.obj",
+      "bytes": 387834,
+      "crc32": "f2c144bc"
+    },
+    {
+      "member": "clothes/donitz_monk_robe_hood_down/donitz_monk_robe_hood_down.mhclo",
+      "bytes": 269910,
+      "crc32": "53e009b7"
+    },
+    {
+      "member": "clothes/donitz_monk_robe/Monks_Robe.obj",
+      "bytes": 877212,
+      "crc32": "a9b34251"
+    },
+    {
+      "member": "clothes/donitz_monk_robe/monks_robe_brown.mhmat",
+      "bytes": 900,
+      "crc32": "b71b5d66"
+    },
+    {
+      "member": "clothes/donitz_monk_robe/donitz_monk_robe.mhclo",
+      "bytes": 623419,
+      "crc32": "cf82e9d2"
+    }
+  ]
+}

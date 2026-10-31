@@ -1,0 +1,38 @@
+{
+	"accepted": false,
+	"action_midpoint_views": [
+		"action_Interact.png",
+		"action_Sword_Attack.png",
+		"action_Sword_Attack_RM.png"
+	],
+	"asset": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+	"asset_sha256": "a6e18399b256b95dbd35e826d7880d786440364d9f48416f0028787f8f46757a",
+	"authored_material_contract": true,
+	"clips": [
+		"Death01",
+		"Directional_RunLeft",
+		"Directional_RunRight",
+		"Directional_WalkBack",
+		"Hit_Chest",
+		"Hit_Head",
+		"Idle",
+		"Idle_Talking",
+		"Idle_Torch",
+		"Interact",
+		"Jump_Start",
+		"Roll",
+		"Sitting_Idle",
+		"Sitting_Talking",
+		"Spell_Simple_Idle",
+		"Sprint",
+		"Sword_Attack",
+		"Sword_Attack_RM",
+		"Sword_Idle",
+		"Walk"
+	],
+	"framing_source": "skin-aware authored bind bounds / square art viewport",
+	"idle_clip": "Idle",
+	"scope": "isolated native/shared clip art preview, not gameplay acceptance",
+	"walk_clip": "Walk",
+	"walk_cycle_seconds": 1.33333337306976
+}

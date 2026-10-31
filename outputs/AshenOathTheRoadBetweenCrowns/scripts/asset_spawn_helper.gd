@@ -69,6 +69,8 @@ var _reported_blocked_roles: Dictionary = {}
 var resource_prewarm_error := ""
 var _resource_prewarm_status: Error = OK
 var _required_environment_textures: Dictionary = {}
+var _authored_bind_bounds: Dictionary = {}
+var _authored_bind_bounds_loaded := false
 
 func begin_resource_attempt() -> void:
 	# Retire only this helper's old claims. A new destination must not poll an
@@ -1032,6 +1034,7 @@ func _finalize_asset_root(root: Node3D, role_name: String = "") -> void:
 
 func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", category: String = "") -> void:
 	preload("res://scripts/spectral_monster_presentation.gd").prepare(root, path)
+	_apply_authored_bind_bounds(root, path)
 	var authored_creature := path.begins_with("res://assets_external/design_pack_v1/creatures/")
 	if authored_creature:
 		root.set_meta("character_prebaked_identity", true)
@@ -1081,6 +1084,45 @@ func _prepare_spawned_asset(root: Node3D, path: String, role_name: String = "", 
 		root.set_meta("character_role_contract", CharacterRoleContract.inspect(root, role_name))
 		if not bool(report.valid):
 			push_error("Incomplete skeletal visual for %s: %s" % [role_name,str(report)])
+
+func _apply_authored_bind_bounds(root: Node3D, path: String) -> void:
+	if not path.begins_with("res://assets_external/design_pack_v1/") or root.has_meta("authored_bind_source_transform"):
+		return
+	if not _authored_bind_bounds_loaded:
+		_authored_bind_bounds_loaded = true
+		var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_assets.json"))
+		if manifest is Dictionary:
+			for entry: Dictionary in manifest.get("assets", {}).values():
+				var profile: Dictionary = entry.get("authored_bind_bounds", {})
+				if not profile.is_empty():
+					_authored_bind_bounds[str(entry.path)] = profile
+	var profile: Dictionary = _authored_bind_bounds.get(path, {})
+	if profile.is_empty():
+		return
+	var p: Array = profile.get("position", [])
+	var s: Array = profile.get("size", [])
+	if p.size() != 3 or s.size() != 3:
+		push_error("Invalid authored character bounds: " + path)
+		return
+	var bounds := AABB(Vector3(p[0], p[1], p[2]), Vector3(s[0], s[1], s[2]))
+	if not bounds.position.is_finite() or not bounds.size.is_finite() or bounds.size.x <= 0.0 or bounds.size.y <= 0.0 or bounds.size.z <= 0.0:
+		push_error("Nonfinite or empty authored character bounds: " + path)
+		return
+	# Exported skin vertices and inverse binds already include the source rig
+	# frame. Raw mesh AABBs can count that frame a second time in Godot.
+	root.set_meta("authored_bind_source_transform", root.transform)
+	root.set_meta("prepared_source_bounds", bounds)
+	root.set_meta("garment_arm_clearance_m", clampf(float(profile.get("garment_arm_clearance_m", 0.0)), 0.0, 0.14))
+	for mesh: MeshInstance3D in _collect_meshes(root):
+		var transform := mesh.transform
+		var current := mesh.get_parent()
+		while current != null:
+			if current is Node3D:
+				transform = current.transform * transform
+			if current == root:
+				break
+			current = current.get_parent()
+		mesh.custom_aabb = transform.affine_inverse() * bounds.grow(bounds.size.y * 0.15)
 
 func _apply_universal_character_material_budget(root: Node3D, path: String) -> void:
 	if not path.to_lower().contains("/characters_universal/"):

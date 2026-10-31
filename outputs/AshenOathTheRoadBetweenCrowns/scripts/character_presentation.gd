@@ -362,15 +362,21 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	equipment.name = "AnwenStaffEquipment"
 	equipment.actor = owner
 	equipment.position = Vector3.ZERO
+	var fitted_staff := uses_fitted_anwen_staff(skeleton, owner)
 	# The authored staff origin is its grip; WorldOrientedEquipment keeps its
 	# upright shaft while the socket supplies the animated hand position.
 	equipment.rotation_degrees = Vector3.ZERO
+	if fitted_staff:
+		equipment.position = Vector3(0, 0.045, -0.012)
+		equipment.rotation_degrees.z = 90.0
 	attachment.add_child(equipment)
 	var modeled_staff := _instantiate_prop(CLERIC_STAFF_PATH)
 	if modeled_staff != null:
 		modeled_staff.name = "AnwenStaffModeled"
 		# Keep the design's carved ashwood and worn bell, at authored scale.
 		modeled_staff.scale = Vector3.ONE
+		if fitted_staff:
+			modeled_staff.scale.y = 0.93 / 0.86
 		modeled_staff.position = Vector3.ZERO
 		equipment.add_child(modeled_staff)
 		return
@@ -378,6 +384,19 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	# replacement. The cleric remains playable and the asset gate reports the
 	# missing optional prop for the next build.
 	push_warning("Anwen staff source could not be loaded: %s" % CLERIC_STAFF_PATH)
+
+static func uses_fitted_anwen_staff(skeleton: Skeleton3D, owner: Node) -> bool:
+	var node: Node = skeleton.get_parent()
+	while node != null:
+		if node.has_meta("anwen_staff_pose"):
+			return bool(node.get_meta("anwen_staff_pose"))
+		var extras: Variant = node.get_meta("extras", {})
+		if extras is Dictionary and extras.has("anwen_staff_pose"):
+			return bool(extras.anwen_staff_pose)
+		if node == owner:
+			break
+		node = node.get_parent()
+	return false
 
 static func _instantiate_prop(path: String) -> Node3D:
 	if path.is_empty() or not ResourceLoader.exists(path):

@@ -1,0 +1,123 @@
+{
+  "status": "compiled_private_review_release_blocked",
+  "build_id": "private-stylized-24369b7da1de",
+  "baseline_commit": "5f92ac0ee9509f75624a1b6f4fed6a8380bbbcc8",
+  "source_dirty": true,
+  "source_snapshot": "D:\\Temp\\AshenOath\\stylized_review\\project",
+  "ledger_sha256": "24369b7da1de2c4e9802045b6706de7541794831a67ed6a4828ddb163e5ba3d8",
+  "export": "D:\\Temp\\AshenOath\\stylized_review\\export",
+  "files": [
+    {
+      "path": "engine\\82412abd2882bcc7f5c2bf5f\\index.audio.position.worklet.js",
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    {
+      "path": "engine\\82412abd2882bcc7f5c2bf5f\\index.audio.worklet.js",
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    {
+      "path": "engine\\82412abd2882bcc7f5c2bf5f\\index.js",
+      "bytes": 78364,
+      "sha256": "7e714b686d29e8b88277330bf325f057530f4198ef6e3654cd6d5ea534ebba8a"
+    },
+    {
+      "path": "engine\\82412abd2882bcc7f5c2bf5f\\index.wasm",
+      "bytes": 9018207,
+      "sha256": "a83457a66ac04fe369e0c14450fc91fe15aed469a7091f6b7864a6e5d0057a49"
+    },
+    {
+      "path": "index.html",
+      "bytes": 33566,
+      "sha256": "2aa7ad6c27d9e7a5ba2568e1d1737e113dbf5a056e083f07a71feddad966c57a"
+    },
+    {
+      "path": "index.pck",
+      "bytes": 4825397,
+      "sha256": "a8dd0a021a2e75509be23b370df56b106f8cdf4cdcabcbf9fbf7eb7e9adeba8b"
+    },
+    {
+      "path": "index.png",
+      "bytes": 21443,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+    },
+    {
+      "path": "menu-background.png",
+      "bytes": 1718419,
+      "sha256": "6a792c6892a6d8ab440c8f17e496b8b969da45ce10d6f8d8de1114d6559d2239"
+    },
+    {
+      "path": "packs\\adjacent.pck",
+      "bytes": 2167822,
+      "sha256": "fbfd81c3a8bc0fbeff924ede4bcef60bd65ab2af3703bfced90e36b978cf055f"
+    },
+    {
+      "path": "packs\\audio.pck",
+      "bytes": 18233509,
+      "sha256": "35de7ab55828b6834c0a2b7ba4d7577269b021140cfe11213bd23066454aaef5"
+    },
+    {
+      "path": "packs\\campaign.pck",
+      "bytes": 8233800,
+      "sha256": "ab064033c68eb4e6e6fa1b82b510c569392690b2527235cccd87bc67e78a3b7e"
+    },
+    {
+      "path": "packs\\characters.pck",
+      "bytes": 17332707,
+      "sha256": "a85063fc436245a22648b8b1551c3e8921829b451546b86ae992bb6fb3f3d043"
+    },
+    {
+      "path": "packs\\monsters.pck",
+      "bytes": 50496641,
+      "sha256": "0fd5063823e67eda18a3596e1e06abafa8444838833ca89f1dc57940c2ec7316"
+    },
+    {
+      "path": "packs\\opening.pck",
+      "bytes": 110802973,
+      "sha256": "04b2783d52e9c54db2d33147f190ca92b7e90b08470f573797ec9f10ad0a55c9"
+    },
+    {
+      "path": "packs\\quality_materials.pck",
+      "bytes": 7217095,
+      "sha256": "9014b37a926c48298efc107b9482bc2f2fb8d349816bb8936a8ea40dacdfeeca"
+    },
+    {
+      "path": "release_manifest.json",
+      "bytes": 7724,
+      "sha256": "00e4f761d42752bfc5103586e1b1889d8663824cf0a7f3ef30dc8daee883d8cd"
+    },
+    {
+      "path": "runtime_pack_manifest.json",
+      "bytes": 7562,
+      "sha256": "4221182c310e6c0e50029a098eba7db27ad05dd5af3139067c8a655871fb46fa"
+    }
+  ],
+  "total_bytes": 230205500,
+  "identity_integrity": "passed encoded/decoded hashes, encodings and runtime-pack graph on these exact bytes",
+  "strict_release_validation": "failed_budget",
+  "budget_failures": [
+    "Git file must be below 104857600 bytes: packs/opening.pck (110802973)",
+    "Recovery ceiling requires below 104857600 bytes; complete private export is 230205500"
+  ],
+  "release_eligible": false,
+  "runtime_acceptance": "unverified",
+  "user_accepted": false,
+  "publication_authorized": false,
+  "recovery_ceiling_bytes": 104857600,
+  "recovery_ceiling_excess_bytes": 125347901,
+  "ordinary_tooling_ceiling_bytes": 268435456,
+  "deployment_warning_bytes": 209715200,
+  "git_file_limit_bytes": 104857600,
+  "budget_conflict": "Unresolved. Local review is not permission to commit oversized files or publish.",
+  "shell_delivery_repair": {
+    "date": "2026-10-31",
+    "cause": "Browser rejected decoded opening PCK at obsolete 100 MiB runtime threshold before issuing a request",
+    "repair": "Require exact release-inventory decoded size and SHA-256; publication/Git limits unchanged",
+    "shell_sha256": "2aa7ad6c27d9e7a5ba2568e1d1737e113dbf5a056e083f07a71feddad966c57a",
+    "preserved_baseline": "D:/Temp/AshenOath/stylized_review/shell-fix-before-20261031",
+    "packs_and_engine_unchanged": true,
+    "http_delivery": "passed gzip header, complete decoded size 115281584 and decoded opening SHA-256 89d480ed84084226e418675114fdcb207090df27a5c162900bde0993e90a7f25",
+    "browser_gameplay_verification": "not run"
+  }
+}
