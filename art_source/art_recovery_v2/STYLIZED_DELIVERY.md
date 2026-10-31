@@ -1,5 +1,45 @@
 # Private Stylized Snapshot
 
+## Live Candidate Authorization, 2026-10-31
+
+The user's later instruction explicitly requests the current roster in the live
+game, lossless repair of the oversized Web file, integration into `main`, and
+push for Vercel's automatic Git deployment. This supersedes the private-only
+publication hold; it does not convert implementation into visual/gameplay
+acceptance. All 33 candidates remain unaccepted pending the user's checks.
+
+The production source now uses the exact current roster GLBs and texture bytes
+at the existing design-pack paths. The opening's 49 external texture resources
+receive a separate `opening_materials` pack, mounted before `opening` through
+the existing dependency manager. No world, quest, population, texture resolution,
+geometry or visual preset is removed or reduced by this partition.
+
+The current shared 256-MiB deployment policy and strict individual Git-file
+limit apply to this authorized release. The former 100-MiB aggregate recovery
+ceiling remains historical evidence rather than being silently used to cut
+content. The release build enforces the current policy on the exact export.
+Source and package compilation are allowed; no gameplay, browser QA or benchmark
+is included. Publication is by Git push, not a separate CLI deployment.
+
+The Vercel management API returned HTTP 403 while attempting to confirm its
+automatic-domain setting. No provider setting was changed; the authorized
+repository push is independent of that unavailable management credential.
+
+The production build `cast-live-20261031-77a0e8e` passed compilation and the
+existing encoded/decoded artifact, pack-graph and size checks. The complete Web
+directory is **224,496,475 bytes (214.10 MiB)**. Its largest file is
+`packs/opening.pck`: **94,555,311 bytes**, below the strict individual Git limit.
+`packs/opening_materials.pck` is **16,292,264 bytes**. The 200-MiB warning remains
+visible. Balanced initial transport is **126,562,178 bytes**; this partition is
+not a measured loading-speed, FPS or memory improvement.
+
+The synchronized Web directory matches the export's complete file inventory and
+encoded hashes. Prior Web files are preserved under
+`D:/Projects/AshenOath/.release-gate/cast-live-20261031-01/previous-web`.
+`live_release_receipt.json` records the package identity. Local `main` remains
+attached to the preserved rollback worktree; GitHub `main` can fast-forward to
+this source/artifact history without modifying that worktree.
+
 ## Source Branch Publication
 
 On 2026-10-31 the user authorized committing and pushing this work to

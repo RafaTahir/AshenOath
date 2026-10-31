@@ -1,0 +1,88 @@
+{
+  "build_id": "cast-live-20261031-77a0e8e",
+  "source": {
+    "git_commit": "77a0e8e663d8c8df62e5ae8525e5472e271274d7",
+    "dirty": true
+  },
+  "package_bytes": 224496475,
+  "deployment_policy": {
+    "id": "vercel-git-256mib-v1",
+    "max_deployment_bytes": 268435456,
+    "warning_deployment_bytes": 209715200,
+    "max_git_file_bytes": 104857600,
+    "deployment_method": "vercel_git_staged_production",
+    "hosting_plan": "hobby",
+    "limit_basis": "Internal working ceiling, not a Vercel capacity guarantee; every candidate requires successful staged deployment and artifact verification."
+  },
+  "release_manifest_sha256": "868fa1752b2511a23203d992c1cd76c1bd28b9e9b6f33faf1c161a05f14b1cd9",
+  "root_pck": {
+    "path": "index.pck",
+    "bytes": 4825739,
+    "sha256": "709fd4205deac131216c53feb7c765af1ab5ac385de44df358cdd6c6450421b9",
+    "content_encoding": "gzip",
+    "decoded_bytes": 8222480,
+    "decoded_sha256": "2a314f0a87f7e3177d09db5f409fb086cbd022cec7083577264e46bc7785679e"
+  },
+  "largest_file": {
+    "path": "packs/opening.pck",
+    "bytes": 94555311,
+    "sha256": "65fdbfca86fddcaa453b29ee5e0ca6c8bd2031f6a73f89e9457b85bb474e2381",
+    "content_encoding": "gzip",
+    "decoded_bytes": 98681592,
+    "decoded_sha256": "175b0b6d5d701cad3610d9e65debb34c448afd2b01588bbf41fc6fdf4d028eb3"
+  },
+  "opening_materials": {
+    "path": "packs/opening_materials.pck",
+    "bytes": 16292264,
+    "sha256": "890dc684acb1ac8832652fd8b1bb699429117a9274f022d55c5400d1ad4f9d9c",
+    "content_encoding": "gzip",
+    "decoded_bytes": 16681836,
+    "decoded_sha256": "3d86578d725017d57ba3ee44ecac665f7e165dbaa772fc5cee962a563aaf01eb"
+  },
+  "size_summary": {
+    "transport_artifact_bytes": 224488141,
+    "decoded_artifact_bytes": 266978222,
+    "opening_required_balanced_potato": {
+      "paths": [
+        "engine/82412abd2882bcc7f5c2bf5f/index.audio.position.worklet.js",
+        "engine/82412abd2882bcc7f5c2bf5f/index.audio.worklet.js",
+        "engine/82412abd2882bcc7f5c2bf5f/index.js",
+        "engine/82412abd2882bcc7f5c2bf5f/index.wasm",
+        "index.html",
+        "index.pck",
+        "index.png",
+        "menu-background.png",
+        "packs/opening.pck",
+        "packs/opening_materials.pck",
+        "runtime_pack_manifest.json"
+      ],
+      "transport_bytes": 126562178
+    },
+    "opening_required_quality": {
+      "paths": [
+        "engine/82412abd2882bcc7f5c2bf5f/index.audio.position.worklet.js",
+        "engine/82412abd2882bcc7f5c2bf5f/index.audio.worklet.js",
+        "engine/82412abd2882bcc7f5c2bf5f/index.js",
+        "engine/82412abd2882bcc7f5c2bf5f/index.wasm",
+        "index.html",
+        "index.pck",
+        "index.png",
+        "menu-background.png",
+        "packs/opening.pck",
+        "packs/opening_materials.pck",
+        "packs/quality_materials.pck",
+        "runtime_pack_manifest.json"
+      ],
+      "transport_bytes": 133779367
+    },
+    "note": "Opening dependency totals exclude the release manifest and optional background downloads; not measured network traffic or runtime memory.",
+    "runtime_memory_bytes": null
+  },
+  "checks": "Compilation and encoded/decoded package identities, encodings, inventory and runtime-pack graph passed; synchronized Web encoded files match",
+  "runtime_acceptance": "unverified; no gameplay/browser QA/benchmark run",
+  "user_accepted_assets": 0,
+  "publication_authorized": true,
+  "deployment_method": "Git push to main; no manual CLI deployment; no wait for Vercel",
+  "vercel_management_api": "HTTP 403 forbidden; no setting changed or deployment completion claimed",
+  "previous_web": "D:/Projects/AshenOath/.release-gate/cast-live-20261031-01/previous-web"
+}
