@@ -517,6 +517,9 @@
         return packOperations.get('opening')?.promise || null;
       }
       window.__ashenOathRequestPack('opening');
+      void getPackManifest().then(manifest => {
+        if (manifest.packs?.opening_materials) window.__ashenOathRequestPack('opening_materials');
+      }).catch(() => {});
       window.__ashenOathBeginOpeningPackMount = mountOpeningPackAfterReady;
       window.__ashenOathStart = async () => {
         if (started || failed) return;

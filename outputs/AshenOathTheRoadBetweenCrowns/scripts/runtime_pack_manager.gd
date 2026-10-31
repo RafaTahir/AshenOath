@@ -45,6 +45,8 @@ var _background_mount_frame := -1
 
 func required_startup_packs() -> Array[String]:
 	var ids: Array[String] = STARTUP_PACK_IDS.duplicate()
+	if manifest.get("packs", {}).has("opening_materials"):
+		ids.insert(1, "opening_materials")
 	if quality_preset == "quality":
 		ids.append("quality_materials")
 	return ids

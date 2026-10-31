@@ -11,7 +11,8 @@
     "characters": "Runtime Pack Characters",
     "monsters": "Runtime Pack Monsters",
     "audio": "Runtime Pack Audio",
-    "adjacent": "Runtime Pack Adjacent"
+    "adjacent": "Runtime Pack Adjacent",
+    "opening_materials": "Runtime Pack Opening Materials"
   },
   "max_deployment_bytes": 268435456,
   "packs": {
@@ -46,7 +47,8 @@
       "bytes": 96071736,
       "entry_scene": "res://scenes/zones/greyfen_gameplay.tscn",
       "dependencies": [
-        "base"
+        "base",
+        "opening_materials"
       ],
       "preload_priority": 10,
       "status": "streamed_web_candidate",
@@ -189,6 +191,21 @@
       "candidate_bytes": 2383572,
       "candidate_sha256": "bde49ea485f80ae13f7cc82c8bb131b12b9f97cc2911d9e497a3cd72b8c48f95",
       "cache_key": "bde49ea485f80ae13f7cc82c8bb131b12b9f97cc2911d9e497a3cd72b8c48f95"
+    },
+    "opening_materials": {
+      "version": "pending-build",
+      "url": "",
+      "sha256": "",
+      "bytes": 0,
+      "entry_scene": "",
+      "dependencies": [
+        "base"
+      ],
+      "preload_priority": 5,
+      "status": "awaiting_source_aligned_build",
+      "contents": [
+        "opening_character_textures"
+      ]
     }
   },
   "build_id": "design-pack-v1-20261030",

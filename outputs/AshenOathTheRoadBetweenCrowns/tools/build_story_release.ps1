@@ -7,6 +7,7 @@ param(
     [switch]$BuildVoices,
     [switch]$FinalizeExistingVoices,
     [switch]$DialogueVoicesOnly,
+    [switch]$CharacterAssetsOnly,
     [switch]$Publish,
     [string]$PublishMessage = "",
     [string]$Ticket = "",
@@ -24,10 +25,11 @@ $WebRoot = Join-Path $RepositoryRoot "web"
 $ArtGatePath = Join-Path $RepositoryRoot 'art_source/art_recovery_v2/quality_gate.json'
 if (Test-Path -LiteralPath $ArtGatePath) {
     $ArtGate = Get-Content -LiteralPath $ArtGatePath -Raw | ConvertFrom-Json
-    if ($ArtGate.status -ne 'user_accepted_for_publication') {
+    $CandidateAuthorization = $ArtGate.status -eq 'user_authorized_candidate_publication' -and $ArtGate.publication_authorized -eq $true
+    if ($ArtGate.status -ne 'user_accepted_for_publication' -and -not $CandidateAuthorization) {
         throw "Art-quality production hold: $($ArtGate.reason) Review slices locally; do not package/publish rejected assets. Gate: $ArtGatePath"
     }
-    foreach ($AssetId in $ArtGate.required_asset_ids) {
+    if (-not $CandidateAuthorization) { foreach ($AssetId in $ArtGate.required_asset_ids) {
         $Review = $ArtGate.$AssetId
         if (-not $Review -or -not $Review.user_accepted) { throw "Missing user art acceptance: $AssetId" }
         foreach ($Category in $ArtGate.required_categories) {
@@ -41,7 +43,7 @@ if (Test-Path -LiteralPath $ArtGatePath) {
                 throw "Missing art evidence: $AssetId / $View"
             }
         }
-    }
+    } }
 }
 $DeploymentPolicy = Get-Content -LiteralPath (Join-Path $ProjectRoot 'data/deployment_policy.json') -Raw | ConvertFrom-Json
 if ($Publish -and $SkipWebCopy) { throw "-Publish requires the generated web transport to be copied." }
@@ -57,6 +59,7 @@ function Assert-Within([string]$Path, [string]$Root) {
 }
 
 function Invoke-BuildProcess([string]$Executable, [string[]]$Arguments, [string]$LogName) {
+    if ($Executable -eq $GodotPath) { $Arguments = @('--log-file', (Join-Path $LogRoot ($LogName + '.engine.log'))) + $Arguments }
     $quoted = @($Arguments | ForEach-Object { '"' + $_.Replace('"', '\"') + '"' })
     $stdout = Join-Path $LogRoot ($LogName + ".stdout.log")
     $stderr = Join-Path $LogRoot ($LogName + ".stderr.log")
@@ -110,9 +113,12 @@ public static class AshenOathBuildPower {
 '@
 [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483649) | Out-Null
 try {
+if (-not $CharacterAssetsOnly) {
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog.py")) "source-catalog"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_dialogue.py")) "runtime-dialogue"
+}
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py"), "--defer-environment") "pack-layout"
+if (-not $CharacterAssetsOnly) {
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_story_score.py")) "story-score"
 $DesignPackCast = Test-Path (Join-Path $ProjectRoot "data/design_pack_assets.json")
 if (-not $DesignPackCast) {
@@ -124,19 +130,22 @@ if ($BuildVoices) {
     if ($DialogueVoicesOnly) { $VoiceArguments += "--dialogue-only" }
     Invoke-BuildProcess $PythonPath $VoiceArguments "story-voices"
 }
-Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import") "import"
+}
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import", "--quit") "import"
 # EnemyAI is demand-loaded after the menu, so editor import alone can miss a
 # parser failure that disables every encounter. Compile it without running it.
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--check-only", "--script", "res://scripts/enemy_ai.gd") "enemy-runtime-compile"
 foreach ($script in @("greyfen_life_controller", "story_state", "hud")) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--check-only", "--script", "res://scripts/$script.gd") ("compile-" + $script)
 }
+if (-not $CharacterAssetsOnly) {
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "split_prepared_audio.gd")) "prepared-audio-split"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_audio.gd"), "--", "--approved-arrangements") "approved-arrangements"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd")) "prepared-zone-geometry"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"
 if (-not $DesignPackCast) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_bracken_asset.gd")) "bracken-asset"
+}
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_environment_dependencies.gd")) "environment-material-dependencies"
@@ -149,6 +158,7 @@ Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack
 $packs = @(
     @{ id = "base"; preset = "Runtime Pack Base" },
     @{ id = "opening"; preset = "Runtime Pack Opening" },
+    @{ id = "opening_materials"; preset = "Runtime Pack Opening Materials" },
     @{ id = "adjacent"; preset = "Runtime Pack Adjacent" },
     @{ id = "campaign"; preset = "Runtime Pack Campaign" },
     @{ id = "characters"; preset = "Runtime Pack Characters" },

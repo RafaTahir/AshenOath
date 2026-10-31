@@ -58,6 +58,16 @@ def compile_layout(defer_environment=False):
     adjacent_options = sections[adjacent] + ".options"
     if not config.has_section(adjacent_options):
         config[adjacent_options] = {"variant/extensions_support": "false"}
+    materials = "Runtime Pack Opening Materials"
+    if materials not in sections:
+        index = max(int(s.split(".")[1]) for s in config.sections() if "." in s) + 1
+        section = f"preset.{index}"
+        config[section] = dict(config[sections["Runtime Pack Opening"]])
+        config[section]["name"] = json.dumps(materials)
+        config[section]["export_files"] = "PackedStringArray()"
+        config[section]["include_filter"] = '""'
+        config[section + ".options"] = {"variant/extensions_support": "false"}
+        sections[materials] = section
     includes = {n: set(json.loads(config[s].get("include_filter", '""')).split(",")) - {""}
                 for n, s in sections.items()}
     files = {n: set(selected_files(config[s].get("export_files", "PackedStringArray()")))
@@ -335,6 +345,41 @@ def compile_layout(defer_environment=False):
         config[section]["include_filter"] = json.dumps(",".join(sorted(includes[name])))
         config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in sorted(files[name])) + ")"
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(exclusions)))
+    # Move complete imported texture resources, never resample or recompress
+    # their pixels. The opening mounts only after this dependency is ready.
+    material_files = set()
+    runtime_assets = json.loads((PROJECT / "runtime_asset_manifest.json").read_text(encoding="utf-8-sig"))
+    for role, record in runtime_assets.get("roles", {}).items():
+        asset_id = record.get("design_id")
+        if designs.get("assets", {}).get(asset_id, {}).get("owner") != "opening":
+            continue
+        for resource in record.get("runtime_files", []):
+            resource_path = resource["path"]
+            if resource_path.startswith("res://assets_external/design_pack_v1/") and Path(resource_path).suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"}:
+                if not (PROJECT / resource_path.removeprefix("res://")).is_file():
+                    raise ValueError(f"Opening material is missing: {role}: {resource_path}")
+                material_files.add(resource_path)
+    if not material_files:
+        raise ValueError("Opening material partition has no declared texture resources")
+    for name, section in sections.items():
+        selected = set(selected_files(config[section]["export_files"]))
+        included = set(json.loads(config[section]["include_filter"]).split(",")) - {""}
+        excluded = set(json.loads(config[section]["exclude_filter"]).split(",")) - {""}
+        if name == materials:
+            selected = material_files.copy()
+            included.clear()
+        else:
+            selected.difference_update(material_files)
+        for resource_path in material_files:
+            relative = resource_path.removeprefix("res://")
+            included.discard(relative)
+            if name == materials:
+                excluded.discard(relative)
+            else:
+                excluded.add(relative)
+        config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in sorted(selected)) + ")"
+        config[section]["include_filter"] = json.dumps(",".join(sorted(included)))
+        config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
     with path.open("w", encoding="utf-8", newline="\n") as output:
         config.write(output, space_around_delimiters=False)
 
@@ -347,6 +392,14 @@ def compile_layout(defer_environment=False):
         "contents": ["wychwood", "cemetery_layers", "ruins"],
     })
     manifest["packs"]["opening"]["contents"] = ["greyfen", "opening_actors", "shared_opening_scenery"]
+    manifest["packs"].setdefault("opening_materials", {
+        "version": "pending-build", "url": "", "sha256": "", "bytes": 0,
+        "entry_scene": "", "dependencies": ["base"], "preload_priority": 5,
+        "status": "awaiting_source_aligned_build", "contents": ["opening_character_textures"],
+    })
+    dependencies = manifest["packs"]["opening"].setdefault("dependencies", [])
+    if "opening_materials" not in dependencies:
+        dependencies.append("opening_materials")
     for record in environment.values():
         for consumer in record["consumers"]:
             if consumer != record["owner"]:
@@ -365,6 +418,7 @@ def compile_layout(defer_environment=False):
                 if owner not in dependencies:
                     dependencies.append(owner)
     manifest.setdefault("pack_presets", {})["adjacent"] = adjacent
+    manifest["pack_presets"]["opening_materials"] = materials
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"Prepared {len(sections)} export presets with an adjacent-world pack")
 
