@@ -5,6 +5,7 @@ signal action_finished(action_name: String)
 signal contract_failed(reason: String)
 signal locomotion_step(side: StringName)
 signal activity_contact(event: String, position: Vector3)
+signal terminal_state_changed(dead: bool)
 
 const STATE_ALIASES := {
 	"idle": ["idle", "idlesword", "idleweapon", "attackingidle"],
@@ -202,6 +203,13 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	_ensure_life_modifier()
 	_reconcile_clock()
 	_play_state("idle", 0.0)
+	var face_reference: WeakRef = skeleton.get_meta("character_face_owner") if skeleton.has_meta("character_face_owner") else null
+	var face: Node = face_reference.get_ref() if face_reference != null else null
+	if not is_instance_valid(face):
+		face = character_root.find_child("CharacterFaceDriver", true, false)
+	if face != null and face.has_method("bind_motion"):
+		face.bind_motion(self)
+	terminal_state_changed.emit(false)
 	return true
 
 func _clear_playback() -> void:
@@ -650,11 +658,13 @@ func reset_for_journey_restore() -> void:
 		skeleton.reset_bone_poses()
 	action_active = true
 	stop_action("idle", 0.0)
+	terminal_state_changed.emit(false)
 
 func set_dead() -> void:
 	if dead:
 		return
 	dead = true
+	terminal_state_changed.emit(true)
 	clear_life_activity()
 	current_state = "death"
 	action_active = true
