@@ -525,7 +525,10 @@ func advance_transition() -> void:
 	if host.player == null or host.spatial_service == null:
 		return
 	var grounded: Variant = host._grounded_spawn_position(host.pending_spawn_position)
-	if grounded == null and host.zone_transition_frames > 3:
+	_arrival_recovered = false
+	# A slow first frame can consume the wall-time budget before the collision
+	# grace elapses. Probe the existing recovery point before declaring failure.
+	if grounded == null and (host.zone_transition_frames > 3 or Time.get_ticks_msec() >= _support_deadline_msec):
 		var recovery: Vector3 = host.spatial_service.nearest_safe(host.pending_spawn_position, host.spatial_service.bank_for(host.pending_spawn_position))
 		grounded = host._grounded_spawn_position(recovery)
 		_arrival_recovered = grounded != null
