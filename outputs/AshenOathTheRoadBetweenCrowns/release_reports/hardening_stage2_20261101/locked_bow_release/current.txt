@@ -1,0 +1,3 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+LOCKED BOW RELEASE: PASS checks=108 roles=11 (actual release/camera/projectile/combat, world and actor blockers, free/training, clearance/range/ammo/cancel)

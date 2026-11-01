@@ -2,6 +2,13 @@ extends RefCounted
 ## Stateless narrow-phase queries for the actual finite, low creature bodies.
 ## Capsules retain their existing combat path in CombatManager.
 
+static func aim_point_for(actor: Node3D) -> Vector3:
+	for child: Node in actor.get_children():
+		if child is CollisionShape3D and not child.disabled and (child.shape is CapsuleShape3D or child.shape is CylinderShape3D):
+			return child.global_position
+	var bounds: AABB = actor.get_meta("camera_subject_bounds", AABB(Vector3.ZERO, Vector3(0, 1.84, 0)))
+	return actor.global_transform * bounds.get_center()
+
 static func cylinder_for(actor: Node3D) -> CollisionShape3D:
 	for child: Node in actor.get_children():
 		if child is CollisionShape3D and child.shape is CylinderShape3D and not child.disabled:

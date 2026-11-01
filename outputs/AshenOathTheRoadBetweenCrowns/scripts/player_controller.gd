@@ -25,6 +25,7 @@ const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const CharacterMaterialBindings = preload("res://scripts/character_material_bindings.gd")
 const EquipmentLoadout = preload("res://scripts/equipment_loadout.gd")
+const CombatBodyQuery = preload("res://scripts/combat_body_query.gd")
 
 var walk_speed = 3.4
 var run_speed = 5.3
@@ -880,6 +881,9 @@ func _cancel_bow() -> void:
 func bow_has_arrow() -> bool:
 	return (training_range != null and is_instance_valid(training_range.get_ref())) or get_selected_arrow_count() > 0
 
+func is_bow_training_active() -> bool:
+	return training_range != null and is_instance_valid(training_range.get_ref())
+
 func is_bow_pose_active() -> bool:
 	if input_source != null and not input_source.is_gameplay_context(): return false
 	return can_control and not transition_locked and weapon_mode == "bow" and equipment_loadout.bow_drawn and not equipment_loadout.is_transitioning() and beam_cast_state == BEAM_STATE_IDLE and dodge_time <= 0.0 and hurt_react_time <= 0.0
@@ -941,11 +945,7 @@ func _release_bow() -> void:
 
 static func locked_bow_aim_point(actor: Node3D) -> Vector3:
 	# Presentation bounds may include limbs behind the actual damage body.
-	for child in actor.get_children():
-		if child is CollisionShape3D and (child.shape is CapsuleShape3D or child.shape is CylinderShape3D) and not child.disabled:
-			return child.global_position
-	var bounds: AABB = actor.get_meta("camera_subject_bounds", AABB(Vector3.ZERO, Vector3(0, 1.84, 0)))
-	return actor.global_transform * bounds.get_center()
+	return CombatBodyQuery.aim_point_for(actor)
 
 func get_arrow_origin() -> Vector3:
 	# SkeletonModifier poses are restored after publication. Keep the rendered

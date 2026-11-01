@@ -1,0 +1,40 @@
+{
+  "status": "pass",
+  "scope": "Actual Player release -> Camera solution -> ArrowProjectile -> CombatManager; ten finite cylinder roles and one capsule; free/training, world/actor interception, clearance, range, ammo/cancel checks. Geometry fixture; browser/actual native-P01 checks remain separate.",
+  "checks": [
+    {
+      "name": "current",
+      "status": "pass",
+      "checks": 108,
+      "log": "current.txt",
+      "sha256": "999cc93eccfb4494cd033fb532da245d29f117e065a9130d0e0047204101d7f2"
+    },
+    {
+      "name": "camera-action-edges",
+      "status": "pass",
+      "checks": 98,
+      "log": "camera-action-edges.txt",
+      "sha256": "e86a1ffd83078a2e0f52521db7c6ffe483fe0441ecb8809fb3fa717849d4155d"
+    },
+    {
+      "name": "cylinder-occlusion",
+      "status": "pass",
+      "checks": 179,
+      "log": "cylinder-occlusion.txt",
+      "sha256": "db5d05c7e01d7addaa44a666e79d1346f2793f6ae48d430ab9f830e9f9ca24b2"
+    },
+    {
+      "name": "locked-bow-capsule",
+      "status": "pass",
+      "checks": null,
+      "log": "locked-bow-capsule.txt",
+      "sha256": "63a4e38a8a921644d5d2a77ef373d241d3efa5c9ee4f4bc930e4a04a0ac88f67"
+    }
+  ],
+  "sources": {
+    "scripts/camera_controller.gd": "7a16b6c31e5f90f1dbd02f276ee8c995224899cfc894ba5cfac5d59eab93cfb6",
+    "scripts/player_controller.gd": "ca2fc654be41bb96663c4ce24beda3997d0b3a7140258fd61f3a212b7e80b0f4",
+    "scripts/combat_body_query.gd": "e7924478f90e592e2cad24bbf3880eff64df9cfa44e461e4cd77244a453a0824",
+    "tools/verify_locked_bow_release.gd": "5a4f2210b142c5a0c43928789688179606dcfe42c41e82efd2fce37deb7a03f3"
+  }
+}

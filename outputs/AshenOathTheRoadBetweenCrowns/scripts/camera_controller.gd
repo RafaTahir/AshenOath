@@ -1,5 +1,7 @@
 extends Node3D
 
+const CombatBodyQuery = preload("res://scripts/combat_body_query.gd")
+
 var _query_scratch = preload("res://scripts/physics_query_scratch.gd").new()
 var _visibility_batch := false
 var _visibility_results: Dictionary = {}
@@ -733,18 +735,27 @@ func restore_activity_view(saved: Dictionary) -> void:
 		target.set_camera_close_view(is_first_person())
 
 func training_aim_direction(origin: Vector3) -> Vector3:
-	return bow_aim_solution(origin, 30.0).direction
+	return bow_aim_solution(origin, 30.0, false).direction
 
-func bow_aim_solution(origin: Vector3, reach: float) -> Dictionary:
+func bow_aim_solution(origin: Vector3, reach: float, allow_locked_target: bool = true) -> Dictionary:
 	if not is_instance_valid(camera):
 		return {"direction": get_flat_forward(), "point": origin + get_flat_forward() * reach, "blocked": false}
 	var screen := camera.get_viewport().get_visible_rect().size * 0.5
 	var ray_origin := camera.project_ray_origin(screen)
 	var view_direction := camera.project_ray_normal(screen)
 	var endpoint := ray_origin + view_direction * (reach + ray_origin.distance_to(origin))
-	var query: PhysicsRayQueryParameters3D = _query_scratch.ray(ray_origin, endpoint, 1 | 128)
+	var training := is_instance_valid(target) and target.has_method("is_bow_training_active") and bool(target.call("is_bow_training_active"))
+	var intended: Node3D = get_locked_combat_target() if allow_locked_target and not training else null
+	var shooter_exclusions: Array[RID] = []
 	if target is CollisionObject3D:
-		query.exclude = [(target as CollisionObject3D).get_rid()]
+		shooter_exclusions.append((target as CollisionObject3D).get_rid())
+	var aimed_exclusions: Array[RID] = shooter_exclusions.duplicate()
+	if is_instance_valid(intended):
+		endpoint = CombatBodyQuery.aim_point_for(intended)
+		if intended is CollisionObject3D:
+			aimed_exclusions.append((intended as CollisionObject3D).get_rid())
+	var query: PhysicsRayQueryParameters3D = _query_scratch.ray(ray_origin, endpoint, 1 | 128)
+	query.exclude = aimed_exclusions
 	query.collide_with_areas = false
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if not hit.is_empty(): endpoint = hit.position
@@ -766,6 +777,7 @@ func bow_aim_solution(origin: Vector3, reach: float) -> Dictionary:
 	query.from = eye
 	query.to = origin
 	query.collision_mask = 1
+	query.exclude = shooter_exclusions
 	blocked = blocked or not get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 	return {"direction": direction, "point": endpoint, "blocked": blocked, "obstructed": obstructed}
 

@@ -1,0 +1,4 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+CYLINDER OCCLUSION MATRIX: PASS checks=41 (production resolvers; padded origins, real body intervals and adjacent walls)
+CYLINDER COMBAT: PASS checks=179 roles=10
