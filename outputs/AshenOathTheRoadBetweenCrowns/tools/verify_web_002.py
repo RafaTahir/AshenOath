@@ -2,6 +2,7 @@ import argparse
 import fnmatch
 import re
 from pathlib import Path
+from web_release_contract import hud_identity_errors
 
 
 REQUIRED_ZONES = {
@@ -54,7 +55,6 @@ def main() -> int:
     qa_preset = preset_block(preset, "Web QA Browser")
     router = (project / "scripts" / "zone_composition_router.gd").read_text(encoding="utf-8")
     campaign_router = (project / "scripts" / "zones" / "campaign_section.gd").read_text(encoding="utf-8")
-    hud = (project / "scripts" / "hud.gd").read_text(encoding="utf-8")
     failures: list[str] = []
 
     web_preset_names = re.findall(
@@ -91,14 +91,7 @@ def main() -> int:
             failures.append(f"runtime resource missing: {runtime}")
     if "data/*.json" not in preset:
         failures.append("campaign data wildcard is absent from the Web preset")
-    label = re.search(r'const MENU_BUILD_LABEL = "([^"]+)"', hud)
-    release_identity = label.group(1) if label else ""
-    if (
-        not label
-        or not any(ticket in release_identity for ticket in ("WEB-002", "RELEASE-001", "RELEASE-003", "RECOVERY-004"))
-        or "ASHENOATH.VERCEL.APP" not in release_identity
-    ):
-        failures.append("visible release candidate identity is missing")
+    failures.extend(hud_identity_errors(project))
 
     if failures:
         for failure in failures:

@@ -151,6 +151,7 @@ if (-not $DesignPackCast) {
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_environment_dependencies.gd")) "environment-material-dependencies"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "prepared-actor-pack-layout"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "runtime_pack_validation.py"), (Join-Path $ProjectRoot "runtime_pack_manifest.json")) "runtime-pack-graph"
 
 # Opening and campaign packs carry zone scripts and base carries scripts/data.
 # They must never be reused from an earlier release: load_resource_pack can
@@ -217,19 +218,10 @@ if (@(Get-ChildItem -LiteralPath $ResourceCheckRoot -Force).Count -gt 0) {
 # Mount only exported files so authored resources cannot hide missing content.
 # This instantiates resources without running a world, before gzip transport.
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ResourceCheckRoot, "--main-pack", (Join-Path $ExportRoot "index.pck"), "--script", (Join-Path $PSScriptRoot "verify_prepared_actor_package.gd"), "--", "--pack-dir", $PackRoot) "prepared-actor-package"
-Copy-Item -LiteralPath (Join-Path $ProjectRoot "assets_external/ui/greyfen_menu_stylized.png") -Destination (Join-Path $ExportRoot "menu-background.png") -Force
-
-$externalRoot = Join-Path $ExportRoot "packs"
-New-Item -ItemType Directory -Force -Path $externalRoot | Out-Null
-foreach ($pack in $packs) {
-    if ($pack.id -ne "base") {
-        Copy-Item -LiteralPath (Join-Path $PackRoot ($pack.id + ".pck")) -Destination (Join-Path $externalRoot ($pack.id + ".pck")) -Force
-    }
-}
 Copy-Item -LiteralPath $runtimeManifest -Destination (Join-Path $ExportRoot "runtime_pack_manifest.json") -Force
 # Existing hosting serves index.wasm with Content-Encoding: gzip. The builder
 # preserves that format, injects the shell build/cache identity and writes hashes.
-Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_web_runtime_manifest.py"), $ExportRoot, "--runtime-pack-manifest", $runtimeManifest, "--source-commit", $SourceCommit, "--compress-wasm") "web-manifest"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_web_runtime_manifest.py"), $ExportRoot, "--runtime-pack-manifest", $runtimeManifest, "--pack-dir", $PackRoot, "--source-commit", $SourceCommit, "--compress-wasm") "web-manifest"
 
 $releaseManifest = Get-Content -LiteralPath (Join-Path $ExportRoot "release_manifest.json") -Raw | ConvertFrom-Json
 if ($ArtGate -and $ArtGate.full_release_max_bytes) {

@@ -25,16 +25,14 @@ if not exist "%PYTHON%" (
 set "PACK_DIR=%ASHEN_OATH_PACK_DIRECTORY%"
 if not defined PACK_DIR set "PACK_DIR=%PROJECT_DIR%\.release-gate\runtime-packs"
 set "MISSING_PACK="
-for %%P in (opening campaign characters monsters audio quality_materials) do (
-  if not exist "%PACK_DIR%\%%P.pck" set "MISSING_PACK=1"
-)
+if not exist "%PACK_DIR%\runtime_pack_candidates.json" set "MISSING_PACK=1"
 rem Rebuild packs by default so an export cannot silently reuse stale source content.
 rem Set ASHEN_OATH_REUSE_PACKS=1 only for an intentional local iteration.
 if not defined ASHEN_OATH_REUSE_PACKS set "MISSING_PACK=1"
 if defined MISSING_PACK (
   echo Building the verified runtime packs...
   powershell -ExecutionPolicy Bypass -File "%PROJECT_DIR%\tools\build_runtime_packs.ps1" -OutputDirectory "%PACK_DIR%" -Force
-  if errorlevel 1 exit /b %errorlevel%
+  if errorlevel 1 exit /b 1
 )
 
 if not exist "%PACK_DIR%\runtime_pack_candidates.json" (
@@ -44,6 +42,8 @@ if not exist "%PACK_DIR%\runtime_pack_candidates.json" (
 )
 
 "%PYTHON%" "%PROJECT_DIR%\tools\sync_runtime_pack_manifest.py" "%PROJECT_DIR%\runtime_pack_manifest.json" "%PACK_DIR%\runtime_pack_candidates.json"
+if errorlevel 1 exit /b %errorlevel%
+"%PYTHON%" "%PROJECT_DIR%\tools\runtime_pack_artifacts.py" "%PROJECT_DIR%\runtime_pack_manifest.json" "%PACK_DIR%"
 if errorlevel 1 exit /b %errorlevel%
 
 rem An existing candidate must never be removed by the export command.
@@ -57,14 +57,9 @@ rem Export the embedded PCK only after external pack hashes are synchronized.
 "%GODOT%" --headless --path "%PROJECT_DIR%" --export-release "Web Browser" "%OUT_DIR%\index.html"
 if errorlevel 1 exit /b %errorlevel%
 
-if not exist "%OUT_DIR%\packs" mkdir "%OUT_DIR%\packs"
-for %%P in (opening campaign characters monsters audio quality_materials) do (
-  copy /Y "%PACK_DIR%\%%P.pck" "%OUT_DIR%\packs\%%P.pck" >nul
-  if errorlevel 1 exit /b %errorlevel%
-)
 copy /Y "%PROJECT_DIR%\runtime_pack_manifest.json" "%OUT_DIR%\runtime_pack_manifest.json" >nul
 if errorlevel 1 exit /b %errorlevel%
-"%PYTHON%" "%PROJECT_DIR%\tools\build_web_runtime_manifest.py" "%OUT_DIR%" --runtime-pack-manifest "%PROJECT_DIR%\runtime_pack_manifest.json" --compress-wasm
+"%PYTHON%" "%PROJECT_DIR%\tools\build_web_runtime_manifest.py" "%OUT_DIR%" --runtime-pack-manifest "%PROJECT_DIR%\runtime_pack_manifest.json" --pack-dir "%PACK_DIR%" --compress-wasm
 if errorlevel 1 exit /b %errorlevel%
 
 "%PYTHON%" "%PROJECT_DIR%\tools\verify_web_export.py" "%OUT_DIR%"

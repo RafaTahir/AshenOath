@@ -11,6 +11,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from runtime_pack_validation import require_valid_pack_graph
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -453,9 +454,6 @@ def compile_layout(defer_environment=False):
         config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in sorted(selected)) + ")"
         config[section]["include_filter"] = json.dumps(",".join(sorted(included)))
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
-    with path.open("w", encoding="utf-8", newline="\n") as output:
-        config.write(output, space_around_delimiters=False)
-
     manifest_path = PROJECT / "runtime_pack_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
     manifest["packs"].setdefault("adjacent", {
@@ -492,6 +490,10 @@ def compile_layout(defer_environment=False):
                     dependencies.append(owner)
     manifest.setdefault("pack_presets", {})["adjacent"] = adjacent
     manifest["pack_presets"]["opening_materials"] = materials
+    # Validate the complete generated graph before either tracked output changes.
+    require_valid_pack_graph(manifest)
+    with path.open("w", encoding="utf-8", newline="\n") as output:
+        config.write(output, space_around_delimiters=False)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"Prepared {len(sections)} export presets with an adjacent-world pack")
 

@@ -17,6 +17,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 from deployment_policy import POLICY, check_budget, check_file_size, size_summary
+from runtime_pack_artifacts import copy_runtime_pack_artifacts, copy_shell_assets
+from runtime_pack_validation import require_valid_pack_graph
 
 
 RELEASE_MANIFEST = "release_manifest.json"
@@ -276,6 +278,7 @@ def inspect_packaged_export(export_dir: Path) -> dict:
     if manifest["root_pck"] != by_path["index.pck"] or manifest["runtime_pack_manifest"] != by_path["runtime_pack_manifest.json"]:
         raise ValueError("Release identity references do not match artifact records")
     runtime = json.loads((export_dir / "runtime_pack_manifest.json").read_text(encoding="utf-8-sig"))
+    require_valid_pack_graph(runtime)
     if runtime["release_id"] != manifest["build_id"]:
         raise ValueError("Runtime and release build identities differ")
     if runtime.get("max_deployment_bytes") != POLICY["max_deployment_bytes"] or runtime.get("deployment_policy_id") != POLICY["id"]:
@@ -332,6 +335,7 @@ def inject_shell_identity(html_path: Path, build_id: str) -> None:
 
 def build_manifest(export_dir: Path, runtime_manifest_path: Path, source_commit: str = "", engine: dict | None = None) -> dict:
     runtime = json.loads(runtime_manifest_path.read_text(encoding="utf-8-sig"))
+    require_valid_pack_graph(runtime)
     build_id = str(runtime.get("release_id") or runtime.get("build_id") or "").strip()
     if not build_id:
         raise ValueError("runtime pack manifest has no release identity")
@@ -453,6 +457,7 @@ def main() -> int:
     parser.add_argument("--source-commit", default="")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--compress-wasm", action="store_true")
+    parser.add_argument("--pack-dir", type=Path, help="Copy and verify every external manifest pack and required shell assets before packaging")
     parser.add_argument("--check-existing", action="store_true", help="Read-only package identity/size inspection; no game execution")
     args = parser.parse_args()
     export_dir = args.export_dir.resolve()
@@ -474,6 +479,11 @@ def main() -> int:
     if not source_commit:
         source_commit = git_value(Path(__file__).resolve().parents[3], "rev-parse", "HEAD")
     try:
+        runtime = json.loads(runtime_manifest.read_text(encoding="utf-8-sig"))
+        require_valid_pack_graph(runtime)
+        if args.pack_dir:
+            copy_runtime_pack_artifacts(export_dir, runtime, args.pack_dir)
+            copy_shell_assets(export_dir, Path(__file__).resolve().parents[1])
         optimize_menu_png(export_dir)
         if args.compress_wasm:
             compress_wasm(export_dir / "index.wasm")

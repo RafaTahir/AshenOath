@@ -2,6 +2,8 @@ import argparse
 import json
 import re
 from pathlib import Path
+from web_release_contract import hosting_errors, hud_identity_errors
+from verify_web_preset_parity import validate as validate_preset_parity
 
 
 def fail(message: str, failures: list[str]) -> None:
@@ -20,7 +22,6 @@ def main() -> int:
     failures: list[str] = []
     preset = (project / "export_presets.cfg").read_text(encoding="utf-8")
     project_settings = (project / "project.godot").read_text(encoding="utf-8")
-    hud = (project / "scripts" / "hud.gd").read_text(encoding="utf-8")
 
     preset_names = re.findall(r'^name="([^"]+)"$', preset, re.MULTILINE)
     if preset_names.count("Web Browser") != 1 or preset_names.count("Web QA Browser") != 1:
@@ -41,59 +42,23 @@ def main() -> int:
             fail(f"export does not exclude {excluded}", failures)
     if '"res://scripts/world_vfx_controller.gd"' not in preset:
         fail("export omits the runtime world VFX controller", failures)
-    # Runtime assets may be owned by the opening/character/monster packs. The
-    # production preset must still declare every mapped source somewhere, but
-    # placing all opening skins in the root PCK defeats staged boot.
-    for runtime_character in (
-        "Male_Peasant.gltf",
-        "Female_Peasant.gltf",
-        "Male_Head.gltf",
-        "Female_Head.gltf",
-        "Hair_Buns.gltf",
-        "Hair_Buzzed.gltf",
-        "Hair_SimpleParted.gltf",
-        "Skeleton.fbx",
-        "Dragon.fbx",
-        "Wolf.fbx",
-    ):
-        if runtime_character not in preset:
-            fail(f"export presets omit mapped runtime character: {runtime_character}", failures)
+    # The prepared catalog owns current runtime actors. A retired source name
+    # appearing only in an exclusion is not proof of exported actor coverage.
+    try:
+        validate_preset_parity(project / "export_presets.cfg")
+    except (OSError, ValueError, KeyError) as error:
+        fail(f"runtime ownership: {error}", failures)
     if 'renderer/rendering_method="gl_compatibility"' not in project_settings:
         fail("project is not using the Compatibility renderer", failures)
     if 'viewport_width=1280' not in project_settings or 'viewport_height=720' not in project_settings:
         fail("gameplay viewport is not native 1280x720", failures)
-    build_label = re.search(r'const MENU_BUILD_LABEL = "([^"]+)"', hud)
-    label_text = build_label.group(1) if build_label else ""
-    has_release_identity = any(
-        marker in label_text for marker in ("CANDIDATE", "ROADMAP MILESTONE", "RELEASE-001", "RELEASE-003")
-    )
-    if not build_label or not has_release_identity or "ASHENOATH.VERCEL.APP" not in label_text:
-        fail("visible menu build identifier is missing candidate/milestone/release identity and production identity", failures)
-
     vercel = json.loads((root / "vercel.json").read_text(encoding="utf-8"))
-    header_rules = vercel.get("headers", [])
-    runtime_rule = next(
-        (rule for rule in header_rules if "index.pck" in rule.get("source", "")), None
-    )
-    if not runtime_rule:
-        fail("Vercel has no stable-runtime cache rule", failures)
-    else:
-        cache = next(
-            (
-                item.get("value", "").lower()
-                for item in runtime_rule.get("headers", [])
-                if item.get("key", "").lower() == "cache-control"
-            ),
-            "",
-        )
-        if "no-cache" not in cache or "must-revalidate" not in cache:
-            fail("Godot runtime files must use no-cache, must-revalidate", failures)
-    if vercel.get("outputDirectory") != "web":
-        fail("Vercel production output must remain tracked web/", failures)
+    for error in hud_identity_errors(project) + hosting_errors(vercel):
+        fail(error, failures)
 
     if failures:
         return 1
-    print("WEB-001: PASS - preset, renderer, payload filters, build ID, and hosting headers")
+    print("WEB-001: PASS - preset, renderer, payload filters, menu identity, and effective hosting headers")
     return 0
 
 
