@@ -1,0 +1,180 @@
+{
+  "status": "CONTACT_OUTCOME_EQUIVALENT",
+  "case_count": 9,
+  "strikes_per_graph": 18,
+  "all_36_real_inputs_accepted": true,
+  "all_36_strikes_damage_27_6": true,
+  "exact_emitted_contact_marker_equivalence": true,
+  "maximum_emitted_contact_marker_difference_m": 0.0,
+  "maximum_active_attack_marker_difference_m": 0.010671590635445165,
+  "maximum_post_attack_marker_difference_m": 0.011952256807504204,
+  "all_contact_records_equal": true,
+  "rows": [
+    {
+      "case": "heading_0_unlocked",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_0_unlocked",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_0_locked",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_0_locked",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_90_unlocked",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_90_unlocked",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_90_locked",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_90_locked",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_180_unlocked",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_180_unlocked",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_180_locked",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_180_locked",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_-90_unlocked",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_-90_unlocked",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_-90_locked",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "heading_-90_locked",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "browser_initial_north_then_locked_east",
+      "strike": 1,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 1,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    },
+    {
+      "case": "browser_initial_north_then_locked_east",
+      "strike": 2,
+      "baseline_damage": 27.6,
+      "current_damage": 27.6,
+      "samples": 5,
+      "maximum_emitted_contact_marker_difference_m": 0.0,
+      "contact_records_equal": true
+    }
+  ],
+  "errors": [],
+  "comparison_file": "comparison.json",
+  "comparison_sha256": "8d47b96ad3b5d23ef1131e143cb97e5afbb381e8c3757c2caaf11a941259044e",
+  "note": "The original full-frame trajectory comparison remains false at1mm: non-emitted-contact marker samples differ up to11.95mm, including active-attack samples. The cause of that non-contact drift is not isolated. Every emitted contact record (markers, phase, graph state/rate, LOS, minimum distance, result and health) is exactly identical between graph versions. No blanket pose equivalence or browser acceptance claimed."
+}

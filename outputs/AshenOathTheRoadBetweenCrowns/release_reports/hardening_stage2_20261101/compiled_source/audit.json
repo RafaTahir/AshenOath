@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "label": "H2_aim",
+  "expected_commit": "3c28bdc0144f3e4e1cb5f1234047a74f6c5d0c32",
+  "export_root": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\export",
+  "build_id": "hardening-stage2-20261101",
+  "release_manifest_sha256": "c29a60e65de8c28f697f410b288917150527f53ef5f3ea35836685684b5b3786",
+  "root_pck": {
+    "transport": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\export\\index.pck",
+    "transport_bytes": 4930735,
+    "transport_sha256": "1879d28a35fa5543241c5f3e5262285e024e678de6006f6ca891c4f993f39b36",
+    "decoded": "D:\\Temp\\AshenOath\\h2_aim_pack_source_audit\\index.raw.pck",
+    "decoded_bytes": 8701232,
+    "decoded_sha256": "359590959d4d11c53808555433ff624d5db41f7ad4a6126391b13b5dd632471a"
+  },
+  "script_count": 10,
+  "compiled_token_count": 69222,
+  "statement_indentation_boundaries": 8107,
+  "comparison": {
+    "path": "D:\\Temp\\AshenOath\\h2_aim_pack_source_audit\\comparison.json",
+    "sha256": "f0bcf5330122d3a6ee5c633e33aba58e3b3432e9f9c380ea73f8e86714e65b61"
+  },
+  "pack_override_check": {
+    "path": "D:\\Temp\\AshenOath\\h2_aim_pack_source_audit\\mounted_hashes.json",
+    "sha256": "3102991d8d6f2e8bce3f66142d15e80441d48dd5d1d2100e774762949a8627b9",
+    "pack_count": 9
+  },
+  "raw_packs": [
+    {
+      "id": "base",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\base.pck",
+      "bytes": 5493644,
+      "sha256": "99974f067a89f0421419bb3828ffaf81ca0ce3ded2021ca0d0039f42a84d7309"
+    },
+    {
+      "id": "opening",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\opening.pck",
+      "bytes": 89753080,
+      "sha256": "e4d7317cd78b03f69ae5fb9baaae2a08df087f1fddb363160bc893c16c9f4a5d"
+    },
+    {
+      "id": "opening_materials",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\opening_materials.pck",
+      "bytes": 16702580,
+      "sha256": "2e0cc9aebb43c1591deb036458c6bd3da64dc463841b87f1e49aae942e865d15"
+    },
+    {
+      "id": "adjacent",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\adjacent.pck",
+      "bytes": 3231584,
+      "sha256": "64120ead9310c724c1aa7a10654c7833cf3179570dd0b817636e8298b932b759"
+    },
+    {
+      "id": "characters",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\characters.pck",
+      "bytes": 9365120,
+      "sha256": "e86af289cf73fefc67b9347aa4f1561064e01cfdef3ea7ba2588c0b8ff69c1ea"
+    },
+    {
+      "id": "monsters",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\monsters.pck",
+      "bytes": 39952012,
+      "sha256": "626750a5ebe09bb861bb1edc37863cc84b1f98c08c1273039d68d5402066a938"
+    },
+    {
+      "id": "campaign",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\campaign.pck",
+      "bytes": 9997892,
+      "sha256": "adeb89b3bda0b5d6b720323b058ed48a69fb39d986b8b7e9093252e2889cbc64"
+    },
+    {
+      "id": "audio",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\audio.pck",
+      "bytes": 21347596,
+      "sha256": "8ac598144ad8bd197635d1c4185bef9c1194aba22335aa4a3784eff8058416a1"
+    },
+    {
+      "id": "quality_materials",
+      "path": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\runtime-packs\\quality_materials.pck",
+      "bytes": 7373116,
+      "sha256": "9efdfa55283a5f53360fa36c4ef6c534d1c3ee42dd1d2cb4b04ca0aab0981661"
+    }
+  ],
+  "data_resources": [
+    {
+      "path": "data/native_attack_profiles.json",
+      "sha256": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+      "packed_matches_frozen_bytes": true,
+      "frozen_matches_expected_commit_lf": true
+    }
+  ],
+  "isolated_child_profile": "D:\\Temp\\AshenOath\\h2_aim_pack_source_audit\\profile",
+  "execution": "FileAccess/map/token inspection only; no models, world, browser, save, source import or production edit"
+}

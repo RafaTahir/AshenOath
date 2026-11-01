@@ -1,0 +1,306 @@
+{
+  "status": "GEOMETRY_DIAGNOSED",
+  "quality": "balanced",
+  "foliage_density": 1,
+  "enemy_position": [
+    4.59999990463257,
+    0.0,
+    -5.30000019073486
+  ],
+  "failed_seeds": [
+    {
+      "seed": [
+        3.0,
+        0.0,
+        6.19999980926514
+      ],
+      "camera_visible": false,
+      "muzzle_clear": false,
+      "blockers": [
+        {
+          "class": "StaticBody3D",
+          "layer": 1,
+          "name": "RiverBankBarrier_3",
+          "path": "/root/AshenOath/wychwood/LivingRiverSection/RiverBankBarrier_3",
+          "position": [
+            3.57739162445068,
+            0.988786339759827,
+            2.05000019073486
+          ],
+          "shape_class": "BoxShape3D",
+          "shape_data": "(19.3, 1.48, 0.34)",
+          "shape_index": 0,
+          "shape_owner": "/root/AshenOath/wychwood/LivingRiverSection/RiverBankBarrier_3/@CollisionShape3D@111",
+          "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (12.35, 0.74, 1.88)]",
+          "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (12.35, 0.74, 1.88)]"
+        },
+        {
+          "class": "StaticBody3D",
+          "layer": 1,
+          "name": "RiverBankBarrier_3",
+          "path": "/root/AshenOath/wychwood/LivingRiverSection/RiverBankBarrier_3",
+          "position": [
+            3.57739162445068,
+            1.45848202705383,
+            2.05000019073486
+          ],
+          "shape_class": "BoxShape3D",
+          "shape_data": "(19.3, 1.48, 0.34)",
+          "shape_index": 0,
+          "shape_owner": "/root/AshenOath/wychwood/LivingRiverSection/RiverBankBarrier_3/@CollisionShape3D@111",
+          "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (12.35, 0.74, 1.88)]",
+          "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (12.35, 0.74, 1.88)]"
+        }
+      ],
+      "endpoint_world_overlaps": []
+    },
+    {
+      "seed": [
+        3.0,
+        0.0,
+        4.0
+      ],
+      "camera_visible": false,
+      "muzzle_clear": false,
+      "blockers": [
+        {
+          "class": "StaticBody3D",
+          "layer": 1,
+          "name": "RiverBankBarrier_3",
+          "path": "/root/AshenOath/wychwood/LivingRiverSection/RiverBankBarrier_3",
+          "position": [
+            3.33548355102539,
+            1.0145206451416,
+            2.04999995231628
+          ],
+          "shape_class": "BoxShape3D",
+          "shape_data": "(19.3, 1.48, 0.34)",
+          "shape_index": 0,
+          "shape_owner": "/root/AshenOath/wychwood/LivingRiverSection/RiverBankBarrier_3/@CollisionShape3D@111",
+          "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (12.35, 0.74, 1.88)]",
+          "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (12.35, 0.74, 1.88)]"
+        },
+        {
+          "class": "StaticBody3D",
+          "layer": 1,
+          "name": "RiverBankBarrier_3",
+          "path": "/root/AshenOath/wychwood/LivingRiverSection/RiverBankBarrier_3",
+          "position": [
+            3.33548355102539,
+            1.46758532524109,
+            2.04999995231628
+          ],
+          "shape_class": "BoxShape3D",
+          "shape_data": "(19.3, 1.48, 0.34)",
+          "shape_index": 0,
+          "shape_owner": "/root/AshenOath/wychwood/LivingRiverSection/RiverBankBarrier_3/@CollisionShape3D@111",
+          "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (12.35, 0.74, 1.88)]",
+          "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (12.35, 0.74, 1.88)]"
+        }
+      ],
+      "endpoint_world_overlaps": []
+    }
+  ],
+  "candidate_count": 34,
+  "clear_candidate_count": 15,
+  "selected_candidates": [
+    {
+      "actual_bow_solution": "{ \"direction\": (0.986831, -0.161357, 0.011324), \"point\": (2.735497, 0.0, -5.18851), \"blocked\": false, \"obstructed\": false }",
+      "aim_body_center": [
+        4.59999990463257,
+        0.88620001077652,
+        -5.30000019073486
+      ],
+      "camera_rays": [
+        {
+          "from": [
+            -6.00000047683716,
+            1.05020987987518,
+            -5.30000019073486
+          ],
+          "hit": {},
+          "to": [
+            4.59999990463257,
+            0.879999995231628,
+            -5.30000019073486
+          ]
+        },
+        {
+          "from": [
+            -6.00000047683716,
+            1.48020994663239,
+            -5.30000019073486
+          ],
+          "hit": {},
+          "to": [
+            4.59999990463257,
+            1.41999995708466,
+            -5.30000019073486
+          ]
+        }
+      ],
+      "camera_visible": true,
+      "distance": 10.6000003814697,
+      "endpoint_world_overlaps": [],
+      "eye": [
+        -6.00000047683716,
+        1.6200098991394,
+        -5.30000019073486
+      ],
+      "eye_to_muzzle_clear": true,
+      "eye_to_muzzle_hit": {},
+      "floor": {
+        "class": "StaticBody3D",
+        "layer": 1,
+        "name": "@StaticBody3D@91",
+        "path": "/root/AshenOath/wychwood/@StaticBody3D@91",
+        "position": [
+          -6.00000047683716,
+          -7.45058059692383e-08,
+          -5.30000019073486
+        ],
+        "shape_class": "BoxShape3D",
+        "shape_data": "(19.3, 0.16, 15.3)",
+        "shape_index": 0,
+        "shape_owner": "/root/AshenOath/wychwood/@StaticBody3D@91/@CollisionShape3D@92",
+        "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-12.35, -0.08, -9.35)]",
+        "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-12.35, -0.08, -9.35)]"
+      },
+      "grounded": [
+        -6.00000047683716,
+        0.000209925492526963,
+        -5.30000019073486
+      ],
+      "muzzle": [
+        -5.03192234039307,
+        1.2700514793396,
+        -5.27763938903809
+      ],
+      "muzzle_clear": true,
+      "muzzle_hit": {
+        "class": "CharacterBody3D",
+        "layer": 1,
+        "name": "@CharacterBody3D@289",
+        "path": "/root/AshenOath/wychwood/@CharacterBody3D@289",
+        "position": [
+          4.26000070571899,
+          0.899749636650085,
+          -5.29921102523804
+        ],
+        "shape_class": "CapsuleShape3D",
+        "shape_data": "radius=0.34000000357628 height=1.64999997615814",
+        "shape_index": 0,
+        "shape_owner": "/root/AshenOath/wychwood/@CharacterBody3D@289/@CollisionShape3D@291",
+        "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.6, 0.8862, -5.3)]",
+        "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.6, 0.0, -5.3)]"
+      },
+      "occupied": false,
+      "requested": [
+        -6.00000047683716,
+        0.0,
+        -5.30000019073486
+      ],
+      "valid_floor": true
+    },
+    {
+      "actual_bow_solution": "{ \"direction\": (0.986615, -0.161265, 0.024171), \"point\": (1.735497, 0.0, -5.085385), \"blocked\": false, \"obstructed\": false }",
+      "aim_body_center": [
+        4.59999990463257,
+        0.88620001077652,
+        -5.30000019073486
+      ],
+      "camera_rays": [
+        {
+          "from": [
+            -7.00000047683716,
+            1.05020987987518,
+            -5.30000019073486
+          ],
+          "hit": {},
+          "to": [
+            4.59999990463257,
+            0.879999995231628,
+            -5.30000019073486
+          ]
+        },
+        {
+          "from": [
+            -7.00000047683716,
+            1.48020994663239,
+            -5.30000019073486
+          ],
+          "hit": {},
+          "to": [
+            4.59999990463257,
+            1.41999995708466,
+            -5.30000019073486
+          ]
+        }
+      ],
+      "camera_visible": true,
+      "distance": 11.6000003814697,
+      "endpoint_world_overlaps": [],
+      "eye": [
+        -7.00000047683716,
+        1.6200098991394,
+        -5.30000019073486
+      ],
+      "eye_to_muzzle_clear": true,
+      "eye_to_muzzle_hit": {},
+      "floor": {
+        "class": "StaticBody3D",
+        "layer": 1,
+        "name": "@StaticBody3D@91",
+        "path": "/root/AshenOath/wychwood/@StaticBody3D@91",
+        "position": [
+          -7.00000047683716,
+          -7.45058059692383e-08,
+          -5.30000019073486
+        ],
+        "shape_class": "BoxShape3D",
+        "shape_data": "(19.3, 0.16, 15.3)",
+        "shape_index": 0,
+        "shape_owner": "/root/AshenOath/wychwood/@StaticBody3D@91/@CollisionShape3D@92",
+        "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-12.35, -0.08, -9.35)]",
+        "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-12.35, -0.08, -9.35)]"
+      },
+      "grounded": [
+        -7.00000047683716,
+        0.000209925492526963,
+        -5.30000019073486
+      ],
+      "muzzle": [
+        -6.03910875320435,
+        1.27078175544739,
+        -5.27585744857788
+      ],
+      "muzzle_clear": true,
+      "muzzle_hit": {
+        "class": "CharacterBody3D",
+        "layer": 1,
+        "name": "@CharacterBody3D@289",
+        "path": "/root/AshenOath/wychwood/@CharacterBody3D@289",
+        "position": [
+          4.26000070571899,
+          0.898490309715271,
+          -5.29922866821289
+        ],
+        "shape_class": "CapsuleShape3D",
+        "shape_data": "radius=0.34000000357628 height=1.64999997615814",
+        "shape_index": 0,
+        "shape_owner": "/root/AshenOath/wychwood/@CharacterBody3D@289/@CollisionShape3D@291",
+        "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.6, 0.8862, -5.3)]",
+        "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (4.6, 0.0, -5.3)]"
+      },
+      "occupied": false,
+      "requested": [
+        -7.00000047683716,
+        0.0,
+        -5.30000019073486
+      ],
+      "valid_floor": true
+    }
+  ],
+  "limitations": "Actual authored Wychwood + native P01/M19; imported disposable replay seed; actors' physics ticks paused after load, colliders/content retained. Native Balanced. Diagnostic repositioning, not browser acceptance. Geometry-clear candidates do not imply browser arrow-hit acceptance; actual camera aim direction needs separate verification.",
+  "raw_sha256": "6ba61f21ba966919767ecee04c35e3bf0edcf032751ce77ed482bdadc2153768"
+}

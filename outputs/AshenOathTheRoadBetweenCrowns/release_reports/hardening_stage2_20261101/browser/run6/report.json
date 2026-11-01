@@ -1,0 +1,1708 @@
+{
+  "schema_version": 1,
+  "kind": "focused_browser_functional",
+  "label": "candidate",
+  "started_at": "2026-11-01T19:31:34.494Z",
+  "export_root": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\export",
+  "build_id": "hardening-stage2-20261101",
+  "source": {
+    "git_commit": "3c28bdc0144f3e4e1cb5f1234047a74f6c5d0c32",
+    "dirty": true
+  },
+  "release_manifest_sha256": "c29a60e65de8c28f697f410b288917150527f53ef5f3ea35836685684b5b3786",
+  "harness_sha256": "cc0e1473ec067ae302dff006a9c8b06231770fcad3255c5f5dd47b981274d4a7",
+  "observation_mode": "production_read_only",
+  "gameplay_input": "Chromium mouse/keyboard/touch and file picker",
+  "limits": [
+    "No gameplay mutation API",
+    "No performance thresholds or hardware/mobile-device certification",
+    "Imported fixtures are test journeys, not earned campaign progression"
+  ],
+  "cases": [
+    {
+      "name": "touch-combat-bow",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "input": "touch",
+      "status": "pass",
+      "events": [
+        {
+          "event": "ui_click",
+          "text": "Saved Journeys",
+          "at": 1793561553089,
+          "point": {
+            "x": 476.87500190734863,
+            "y": 268.25000667571993
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Import a Save File",
+          "at": 1793561554637,
+          "point": {
+            "x": 476.87500190734863,
+            "y": 199.99998378753645
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Hardening Combat touch bow\nManual save 1 (replay)\nReady\nWychwood · Road of Crows\nSave time not recorded\nNext: Investigate the broken cart and roadside\nReplay journey",
+          "at": 1793561557180,
+          "point": {
+            "x": 476.87500190734863,
+            "y": 149.00000381469744
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Load This Journey",
+          "at": 1793561558103,
+          "point": {
+            "x": 476.87500190734863,
+            "y": 387.50000667572
+          }
+        },
+        {
+          "event": "combat_fixture_loaded",
+          "journey_id": "hardening-combat-touch-bow",
+          "replay": true,
+          "zone": "wychwood",
+          "wave_progress": 3,
+          "asset_id": "M19",
+          "settings": {
+            "camera_shake": 1,
+            "custom_bindings": {},
+            "fullscreen": false,
+            "gamepad_deadzone": 0.16,
+            "gamepad_invert_x": false,
+            "gamepad_invert_y": false,
+            "high_contrast": false,
+            "master_volume": 0.85,
+            "quality_preset": "balanced",
+            "reduced_motion": false,
+            "subtitle_scale": 1
+          },
+          "player": {
+            "x": -6,
+            "y": 0.000208213925361633,
+            "z": -5.29999923706055
+          },
+          "enemy": {
+            "active": true,
+            "boss_phase": 1,
+            "dead": false,
+            "health": 75,
+            "id": "wychwood_raider",
+            "pending_attack_time": 0,
+            "position": {
+              "x": 4.59999990463257,
+              "y": 0,
+              "z": -5.30000019073486
+            }
+          },
+          "note": "Disposable imported test progression; not earned campaign progress"
+        },
+        {
+          "event": "ui_click",
+          "text": "Bow",
+          "at": 1793561574056,
+          "point": {
+            "x": 476.87500190734863,
+            "y": 385.25000667572
+          }
+        },
+        {
+          "event": "combat_input",
+          "action": "switch_to_bow",
+          "input": "trusted touch controls",
+          "at": 1793561574061
+        },
+        {
+          "event": "combat_input",
+          "action": "target_lock",
+          "input": "trusted touch controls",
+          "at": 1793561575870,
+          "attempt": 1
+        },
+        {
+          "event": "combat_input",
+          "action": "bow_draw_start",
+          "input": "trusted touch controls",
+          "at": 1793561576370,
+          "arrows_before": 12,
+          "target_health": 75,
+          "fixture_distance": 10.599999904632613,
+          "draw_start_distance": 10.599999904632613
+        },
+        {
+          "event": "combat_input",
+          "action": "bow_release",
+          "input": "trusted touch controls",
+          "at": 1793561577912
+        },
+        {
+          "event": "combat_locked_bow_projectile_hit",
+          "weapon": "bow",
+          "locked_target": "wychwood_raider",
+          "fixture_distance": 10.599999904632613,
+          "draw_start_distance": 10.599999904632613,
+          "arrows_before": 12,
+          "arrows_after": 11,
+          "target_health_before": 75,
+          "target_health_after": 47,
+          "player_position": {
+            "x": -6,
+            "y": 0.000208213925361633,
+            "z": -5.29999923706055
+          },
+          "enemy_position": {
+            "x": 4.59999990463257,
+            "y": 0,
+            "z": -5.30000019073486
+          }
+        },
+        {
+          "event": "combat_functional_pass",
+          "phase": "bow",
+          "evidence": {
+            "device": "touch",
+            "phase": "bow",
+            "target": "wychwood_raider",
+            "melee": {},
+            "bow": {
+              "weapon": "bow",
+              "locked_target": "wychwood_raider",
+              "fixture_distance": 10.599999904632613,
+              "draw_start_distance": 10.599999904632613,
+              "arrows_before": 12,
+              "arrows_after": 11,
+              "target_health_before": 75,
+              "target_health_after": 47,
+              "player_position": {
+                "x": -6,
+                "y": 0.000208213925361633,
+                "z": -5.29999923706055
+              },
+              "enemy_position": {
+                "x": 4.59999990463257,
+                "y": 0,
+                "z": -5.30000019073486
+              }
+            },
+            "interruption": {
+              "status": "not_sampled"
+            }
+          },
+          "limits": [
+            "Imported replay fixture, not earned campaign progression",
+            "This phase verifies only its recorded actual inputs; no locked-melee claim",
+            "Finite-cylinder, contact-window and buffer boundaries remain covered by permanent native fixtures",
+            "No FPS or device certification; interruption sampling remains explicit"
+          ]
+        }
+      ],
+      "screenshots": [
+        "D:\\Temp\\AshenOath\\hardening-h2-aim-touch-bow\\report_evidence\\touch-combat-bow-imported-slot.png",
+        "D:\\Temp\\AshenOath\\hardening-h2-aim-touch-bow\\report_evidence\\touch-combat-bow-combat-locked-bow-result.png"
+      ],
+      "console": [
+        {
+          "type": "log",
+          "text": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org",
+          "at": 1793561499282
+        },
+        {
+          "type": "log",
+          "text": "OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL",
+          "at": 1793561501744
+        },
+        {
+          "type": "log",
+          "text": "Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support.",
+          "at": 1793561502417
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_main_menu",
+          "at": 1793561505302
+        },
+        {
+          "type": "warn",
+          "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+          "at": 1793561505318
+        },
+        {
+          "type": "log",
+          "text": "LOADING: runtime ready total=1273ms environment=0ms services=1190ms",
+          "at": 1793561505319
+        },
+        {
+          "type": "log",
+          "text": "LOADING: usable_menu_ready ms=6474",
+          "at": 1793561505558
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening_materials bytes=16702580",
+          "at": 1793561506088
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening_materials",
+          "at": 1793561506089
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening bytes=89753080",
+          "at": 1793561508637
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=opening",
+          "at": 1793561508638
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack mounted id=opening",
+          "at": 1793561508645
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm begin",
+          "at": 1793561515835
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_begin",
+          "at": 1793561515878
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'sister_anwen_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561516298
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561516299
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_complete ms=577 ok=true",
+          "at": 1793561516454
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'reed_choir' uses an explicit diagnostic fallback: ",
+          "at": 1793561517095
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561517096
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'player_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561517453
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561517454
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'mira_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561517772
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561517772
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'rook_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561517813
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561517814
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'widow_elna' uses an explicit diagnostic fallback: ",
+          "at": 1793561517851
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561517852
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'blacksmith_tor' uses an explicit diagnostic fallback: ",
+          "at": 1793561517893
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561517894
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'farmer_toma' uses an explicit diagnostic fallback: ",
+          "at": 1793561517948
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561517949
+        },
+        {
+          "type": "log",
+          "text": "LOADING: opening_world_render_ready",
+          "at": 1793561552477
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarmed total=36599ms build=577ms world=756ms player=346ms",
+          "at": 1793561552479
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_requested slot=manual_1 source=primary",
+          "at": 1793561558115
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_prepared destination=wychwood",
+          "at": 1793561558116
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=adjacent bytes=3231584",
+          "at": 1793561558622
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=adjacent",
+          "at": 1793561558625
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=characters bytes=9365120",
+          "at": 1793561559089
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=characters",
+          "at": 1793561559090
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=monsters bytes=39952012",
+          "at": 1793561560376
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=monsters",
+          "at": 1793561560377
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=wychwood prewarm=false cached=false",
+          "at": 1793561560562
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'wychwood_raider_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793561561106
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561561107
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'wychwood_brute_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793561561276
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561561277
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'glassmoth' uses an explicit diagnostic fallback: ",
+          "at": 1793561561424
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561561425
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)",
+          "at": 1793561561563
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=1021.1",
+          "at": 1793561561570
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=1025.9",
+          "at": 1793561561573
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'player_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561561597
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561561598
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=1",
+          "at": 1793561561683
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=1135.8",
+          "at": 1793561561683
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_wychwood_tension",
+          "at": 1793561561687
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=wychwood playable_ms=9450.4",
+          "at": 1793561570000
+        },
+        {
+          "type": "log",
+          "text": "MOBILE_TOUCH: ready landscape=true viewport=(1280.0, 720.0)",
+          "at": 1793561570125
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_ghoulkin_combat",
+          "at": 1793561570425
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_wychwood_tension",
+          "at": 1793561571225
+        }
+      ],
+      "dom_input": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 268.25,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561552930.4001
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 268.25,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561552938.6
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 268.25,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561553085.5
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 268.25,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561553085.9001
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561553373.4001
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561553375.3
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561553944.7002
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561553965.7002
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 199.99998474121094,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561554510.4001
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 199.99998474121094,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561554510.8
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 199.99998474121094,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561554632.1
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 199.99998474121094,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561554634.9001
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561555169.6
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561555171.1
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561555431.7002
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561555433.3
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561555699.5
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561555702.2002
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561555964.4001
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561555966.2002
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561556228.1
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561556229.9001
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561556492.1
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561556494.1
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 149,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561557053.1
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 149,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561557053.6
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 149,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561557176.3
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 149,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561557177.1
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 387.5,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561557961.6
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 387.5,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561557961.8
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 387.5,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561558100.3
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 387.5,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561558100.9001
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 796,
+          "y": 36,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561573163.9001
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 796,
+          "y": 36,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561573171.4001
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 796,
+          "y": 36,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561573344.2002
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 796,
+          "y": 36,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561573344.6
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 385.25,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561573913.9001
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 385.25,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561573914.2002
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 385.25,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561574046.3
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 385.25,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561574046.8
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 860,
+          "y": 432,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561575186.3
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 860,
+          "y": 432,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561575186.5
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 860,
+          "y": 432,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561575864.2002
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 860,
+          "y": 432,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561575864.8
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 796,
+          "y": 496,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561576194.4001
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 796,
+          "y": 496,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561576195.9001
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 796,
+          "y": 496,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561576357.3
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 796,
+          "y": 496,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561576359.5
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 860,
+          "y": 496,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561576494.1
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 860,
+          "y": 496,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561576494.4001
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 860,
+          "y": 496,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561577910.3
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 860,
+          "y": 496,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561577910.6
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 924,
+          "y": 36,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561578749.9001
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 924,
+          "y": 36,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561578750.1
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 924,
+          "y": 36,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561578895.8
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 924,
+          "y": 36,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793561578896.1
+        }
+      ],
+      "started_at": "2026-11-01T19:31:36.379Z",
+      "finished_at": "2026-11-01T19:33:00.350Z"
+    }
+  ],
+  "requests": [
+    {
+      "path": "index.html",
+      "at": 1793561496896,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "menu-background.png",
+      "at": 1793561496937,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "release_manifest.json",
+      "at": 1793561496977,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.js",
+      "at": 1793561496986,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "runtime_pack_manifest.json",
+      "at": 1793561497000,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+      "at": 1793561497517,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "index.pck",
+      "at": 1793561497526,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "packs/opening.pck",
+      "at": 1793561497538,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "packs/opening_materials.pck",
+      "at": 1793561497626,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "favicon.ico",
+      "at": 1793561497642,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+      "at": 1793561505676,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+      "at": 1793561505679,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "packs/adjacent.pck",
+      "at": 1793561558225,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "packs/characters.pck",
+      "at": 1793561558243,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    },
+    {
+      "path": "packs/monsters.pck",
+      "at": 1793561558641,
+      "scenario": "touch-combat-bow",
+      "fault": null
+    }
+  ],
+  "status": "pass",
+  "combat_module": {
+    "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\hardening_combat_cases.mjs",
+    "sha256": "b998395db57e78468a0949c06572b3033ba1947e2d19dad56072cac2f16a01a4",
+    "phase": "bow"
+  },
+  "browser": {
+    "executable": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "version": "Chrome/156.0.8078.74",
+    "headless": false
+  },
+  "finished_at": "2026-11-01T19:33:02.326Z",
+  "runtime_errors": [],
+  "profile": null
+}

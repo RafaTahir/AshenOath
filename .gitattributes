@@ -1,2 +1,7 @@
 # Certified Web exports must survive Git checkout byte-for-byte.
 web/** -text
+# Captured verification artifacts keep the bytes used by their evidence hashes.
+outputs/AshenOathTheRoadBetweenCrowns/release_reports/hardening_stage2_20261101/** -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/release_reports/hardening_stage3_20261101/** -text whitespace=cr-at-eol
+# Engine log evidence retains its original bytes, including diagnostic spaces.
+outputs/AshenOathTheRoadBetweenCrowns/release_reports/**/*.txt -text whitespace=cr-at-eol,-blank-at-eol

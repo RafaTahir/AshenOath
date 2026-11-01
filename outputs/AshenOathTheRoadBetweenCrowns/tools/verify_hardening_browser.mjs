@@ -2,6 +2,7 @@
 // node tools/verify_hardening_browser.mjs --export ../../web --report D:/Temp/AshenOath/hardening/report.json
 // --scenario smoke|metadata|cold|all|combat --mode desktop|touch|both --label candidate|baseline
 // combat is opt-in; all retains the save/loading suite.
+// combat requires --combat-phase light|heavy|bow; run each phase/viewport in a fresh invocation.
 // --fault metadata_headers_stall|metadata_body_stall selects one metadata case.
 // --inspect validates inputs and candidate transport without launching Chromium.
 import puppeteer from 'puppeteer-core';
@@ -23,9 +24,12 @@ for (let i = 2; i < process.argv.length; i++) {
 const exportRoot = resolve(options.export || '../../web');
 const scenario = String(options.scenario || 'all');
 const mode = String(options.mode || 'both');
+const combatPhase = String(options['combat-phase'] || '');
 const metadataFaults = options.fault ? [String(options.fault)] : ['metadata_headers_stall', 'metadata_body_stall'];
 assert(['all', 'smoke', 'metadata', 'cold', 'combat'].includes(scenario), 'Invalid --scenario');
 assert(['both', 'desktop', 'touch'].includes(mode), 'Invalid --mode');
+if (scenario === 'combat') assert(['light', 'heavy', 'bow'].includes(combatPhase),
+  'Combat requires --combat-phase light|heavy|bow. Run each phase/viewport in a fresh process/profile; combined combat reloads are not supported.');
 assert(metadataFaults.every(kind => ['metadata_headers_stall', 'metadata_body_stall'].includes(kind)), 'Invalid --fault');
 const timeoutMs = Number(options.timeout || 180000);
 assert(Number.isFinite(timeoutMs) && timeoutMs >= 30000, '--timeout must be at least 30000 ms');
@@ -56,7 +60,7 @@ let combatModule;
 if (scenario === 'combat') {
   const moduleUrl = new URL('./hardening_combat_cases.mjs', import.meta.url);
   report.combat_module = { path: fileURLToPath(moduleUrl),
-    sha256: createHash('sha256').update(readFileSync(moduleUrl)).digest('hex') };
+    sha256: createHash('sha256').update(readFileSync(moduleUrl)).digest('hex'), phase: combatPhase };
   combatModule = await import(moduleUrl.href);
   assert.equal(typeof combatModule.runCombatCase, 'function', 'Combat module must export runCombatCase');
 }
@@ -594,7 +598,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
         zone_load_request_pending: s.zone_load_request_pending, player: s.player, camera: s.camera,
         ui: s.ui, dialogue: s.dialogue, input: s.input, runtime_packs: s.runtime_packs,
         gates: s.gates, interactions: s.interactions, focus: s.focus,
-        enemies: s.enemies, inventory: s.inventory };
+        enemies: s.enemies, inventory: s.inventory, settings: s.settings };
       const phase = JSON.stringify([s.zone, s.ready, s.paused, s.ui?.active_menu, s.ui?.loading_visible, s.new_game_ready]);
       if (phase !== cache.phase) { cache.phase = phase; console.log(`HARDENING STATE: ${result.name} ${phase}`); }
     } catch { /* Ignore non-observation payloads. */ }
@@ -609,13 +613,14 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
       set(value) { result = value; if (value?.read_only) window.__HARDENING_ROUTE_OBSERVATION__(value); } });
     // Passive capture observes delivery only. Never preventDefault, synthesize
     // DOM events or call a gameplay function to make an input check pass.
-    for (const name of ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'mousedown', 'mousemove', 'mouseup']) {
+    for (const name of ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'mousedown', 'mousemove', 'mouseup', 'keydown', 'keyup']) {
       window.addEventListener(name, event => {
         const point = event.changedTouches?.[0] || event;
         const rect = event.target?.getBoundingClientRect?.();
         window.__HARDENING_DOM_INPUT__({ type: event.type, trusted: event.isTrusted,
           target: event.target?.id || event.target?.tagName, x: point.clientX, y: point.clientY,
           pointer_type: event.pointerType, touches: event.touches?.length,
+          key: event.key, code: event.code, repeat: event.repeat,
           movement_x: event.movementX, movement_y: event.movementY,
           fires_touch_events: event.sourceCapabilities?.firesTouchEvents,
           focused: document.hasFocus(), platform: navigator.platform,
@@ -699,8 +704,8 @@ try {
       const helpers = { observe, waitFor, stableGameplay, clickButton, tap, startFinger,
         pause, importFixture, screenshot, event, sleep };
       for (const touch of mode === 'both' ? [false, true] : [mode === 'touch']) {
-        await runCase(`${touch ? 'touch' : 'desktop'}-combat`, touch,
-          (page, viewport) => combatModule.runCombatCase({ page, viewport, touch, helpers, source }));
+        await runCase(`${touch ? 'touch' : 'desktop'}-combat-${combatPhase}`, touch,
+          (page, viewport) => combatModule.runCombatCase({ page, viewport, touch, helpers, source, phase: combatPhase }));
       }
     }
     assert.equal(runtimeErrors.length, 0, `Engine/browser errors: ${runtimeErrors.join('\n')}`);

@@ -1,0 +1,278 @@
+{
+  "status": "RECORDED",
+  "contact_equivalent": false,
+  "all_inputs_accepted": true,
+  "all_current_strikes_damage": true,
+  "configuration": {
+    "project": "D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns",
+    "godot": "C:/Users/User/.cache/codex-runtimes/godot-4.6.3/Godot_v4.6.3-stable_win64_console.exe",
+    "current_commit": "adbef16270b4bbf729ad12a7c263ed0fe6f77dc8",
+    "baseline_commit": "f452e21",
+    "graphs": {
+      "baseline": {
+        "path": "D:\\Temp\\AshenOath\\native_blade_contact_compare\\baseline_graph.gd",
+        "sha256": "b3325fe84a12a9b6d0ee305f707bff5c6c8a8972038e9a89ba643526edebbed7"
+      },
+      "current": {
+        "path": "D:\\Temp\\AshenOath\\native_blade_contact_compare\\current_graph.gd",
+        "sha256": "60bb5ff56cc600713f385027b6319fc9ce00879deaddf284191a0e9f786f8513"
+      }
+    }
+  },
+  "cases": [
+    {
+      "case": "heading_0_unlocked",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.0021818792222880264,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.003341263598875429,
+          "contact_equivalent": false
+        }
+      ]
+    },
+    {
+      "case": "heading_0_locked",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.0022557747488595307,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.0013866888202836553,
+          "contact_equivalent": false
+        }
+      ]
+    },
+    {
+      "case": "heading_90_unlocked",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.0026169032754984715,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.002428502388430098,
+          "contact_equivalent": false
+        }
+      ]
+    },
+    {
+      "case": "heading_90_locked",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.00211887697940022,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.0015793769258230532,
+          "contact_equivalent": false
+        }
+      ]
+    },
+    {
+      "case": "heading_180_unlocked",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.0012973289197226482,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.0009322424389451854,
+          "contact_equivalent": true
+        }
+      ]
+    },
+    {
+      "case": "heading_180_locked",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.006494832391412273,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.008034263537273382,
+          "contact_equivalent": false
+        }
+      ]
+    },
+    {
+      "case": "heading_-90_unlocked",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.009173518958901613,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.009766542300922986,
+          "contact_equivalent": false
+        }
+      ]
+    },
+    {
+      "case": "heading_-90_locked",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.010051371936949176,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.009743021767960122,
+          "contact_equivalent": false
+        }
+      ]
+    },
+    {
+      "case": "browser_initial_north_then_locked_east",
+      "baseline_lock_established": true,
+      "current_lock_established": true,
+      "strikes": [
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 1,
+          "current_contact_samples": 1,
+          "maximum_marker_delta_m": 0.008704866497940342,
+          "contact_equivalent": false
+        },
+        {
+          "baseline_damage": 27.6,
+          "current_damage": 27.6,
+          "baseline_accepted": true,
+          "current_accepted": true,
+          "baseline_contact_samples": 5,
+          "current_contact_samples": 5,
+          "maximum_marker_delta_m": 0.011952256807504204,
+          "contact_equivalent": false
+        }
+      ]
+    }
+  ],
+  "evidence_sha256": {
+    "baseline.json": "3fbce2c9424b85daafdc5784580ade619455520af30b794900c5212ef3f2a155",
+    "baseline.log": "42568f111d9d47a8c3d9de0f27dde65e62f0777ccd979282b52b7578c074dd11",
+    "baseline_graph.gd": "b3325fe84a12a9b6d0ee305f707bff5c6c8a8972038e9a89ba643526edebbed7",
+    "config.json": "3142cf40d898447322ec847339331dd1fcd061643977c63a75ef1ece5f692e52",
+    "current.json": "af8c7eef9c26aecf5a8544e86c32461a23fd10c418a30d8977166cb5ad80d62a",
+    "current.log": "a531775e2db7fec5bf6350c25698840bc932bc3ab01aa26bba153ff7038b3811",
+    "current_graph.gd": "60bb5ff56cc600713f385027b6319fc9ce00879deaddf284191a0e9f786f8513",
+    "diagnostic.gd": "6fa9b4ac9cff105c22548b8a23771699af1f32f307766b9f6ff12d8dc9bff085"
+  },
+  "limits": "Model-backed diagnostic only, not browser/hardware/gameplay acceptance. Missing baseline/current contact remains explicit."
+}

@@ -1,0 +1,13 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+NATIVE BLADE CONTACT DIAGNOSTIC: RECORDED cases=9 errors=0 output=D:\Temp\AshenOath\native_blade_contact_compare\baseline.json
+WARNING: Runtime visual role 'player_human' uses an explicit diagnostic fallback: 
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _record_runtime_role_use (res://scripts/asset_spawn_helper.gd:352)
+       [1] _spawn_from_entry (res://scripts/asset_spawn_helper.gd:253)
+       [2] spawn_visual_role (res://scripts/asset_spawn_helper.gd:240)
+       [3] _try_build_mapped_body (res://scripts/player_controller.gd:1747)
+       [4] _build_body (res://scripts/player_controller.gd:1362)
+       [5] _ready (res://scripts/player_controller.gd:215)
+       [6] _run (D:/Temp/AshenOath/native_blade_contact_compare/diagnostic.gd:62)

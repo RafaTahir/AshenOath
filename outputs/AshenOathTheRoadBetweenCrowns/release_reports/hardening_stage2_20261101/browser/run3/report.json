@@ -1,0 +1,1515 @@
+{
+  "schema_version": 1,
+  "kind": "focused_browser_functional",
+  "label": "candidate",
+  "started_at": "2026-11-01T19:26:34.736Z",
+  "export_root": "D:\\Temp\\AO_H2_aim\\.release-gate\\hardening-stage2\\export",
+  "build_id": "hardening-stage2-20261101",
+  "source": {
+    "git_commit": "3c28bdc0144f3e4e1cb5f1234047a74f6c5d0c32",
+    "dirty": true
+  },
+  "release_manifest_sha256": "c29a60e65de8c28f697f410b288917150527f53ef5f3ea35836685684b5b3786",
+  "harness_sha256": "cc0e1473ec067ae302dff006a9c8b06231770fcad3255c5f5dd47b981274d4a7",
+  "observation_mode": "production_read_only",
+  "gameplay_input": "Chromium mouse/keyboard/touch and file picker",
+  "limits": [
+    "No gameplay mutation API",
+    "No performance thresholds or hardware/mobile-device certification",
+    "Imported fixtures are test journeys, not earned campaign progression"
+  ],
+  "cases": [
+    {
+      "name": "desktop-combat-heavy",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "input": "keyboard_mouse",
+      "status": "pass",
+      "events": [
+        {
+          "event": "ui_click",
+          "text": "Saved Journeys",
+          "at": 1793561253174,
+          "point": {
+            "x": 996,
+            "y": 249
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Import a Save File",
+          "at": 1793561254605,
+          "point": {
+            "x": 992,
+            "y": 335
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Hardening Combat desktop heavy\nManual save 1 (replay)\nReady\nWychwood · Road of Crows\nSave time not recorded\nNext: Investigate the broken cart and roadside\nReplay journey",
+          "at": 1793561257050,
+          "point": {
+            "x": 992,
+            "y": 170
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Load This Journey",
+          "at": 1793561258670,
+          "point": {
+            "x": 992,
+            "y": 213
+          }
+        },
+        {
+          "event": "combat_fixture_loaded",
+          "journey_id": "hardening-combat-desktop-heavy",
+          "replay": true,
+          "zone": "wychwood",
+          "wave_progress": 3,
+          "asset_id": "M19",
+          "settings": {
+            "camera_shake": 1,
+            "custom_bindings": {},
+            "fullscreen": false,
+            "gamepad_deadzone": 0.16,
+            "gamepad_invert_x": false,
+            "gamepad_invert_y": false,
+            "high_contrast": false,
+            "master_volume": 0.85,
+            "quality_preset": "balanced",
+            "reduced_motion": false,
+            "subtitle_scale": 1
+          },
+          "player": {
+            "x": 4.59999990463257,
+            "y": 0.000208213925361633,
+            "z": -4
+          },
+          "enemy": {
+            "active": true,
+            "boss_phase": 1,
+            "dead": false,
+            "health": 75,
+            "id": "wychwood_raider",
+            "pending_attack_time": 0,
+            "position": {
+              "x": 4.59999990463257,
+              "y": 0,
+              "z": -5.30000019073486
+            }
+          },
+          "note": "Disposable imported test progression; not earned campaign progress"
+        },
+        {
+          "event": "combat_input",
+          "action": "heavy",
+          "input": "keyboard_mouse",
+          "at": 1793561276596
+        },
+        {
+          "event": "combat_heavy_recovery_observed",
+          "cooldown": 0.5,
+          "stamina": 78,
+          "engine_timestamp": 77634,
+          "enemy_health": 26.7
+        },
+        {
+          "event": "combat_heavy_damage",
+          "before": 75,
+          "after": 26.7,
+          "observed_cooldown": 0.5,
+          "stamina_before": 100,
+          "minimum_stamina": 78
+        },
+        {
+          "event": "combat_functional_pass",
+          "phase": "heavy",
+          "evidence": {
+            "device": "desktop",
+            "phase": "heavy",
+            "target": "wychwood_raider",
+            "melee": {
+              "heavy": {
+                "before": 75,
+                "after": 26.7,
+                "observed_cooldown": 0.5,
+                "stamina_before": 100,
+                "minimum_stamina": 78
+              }
+            },
+            "bow": {},
+            "interruption": {
+              "status": "not_sampled"
+            }
+          },
+          "limits": [
+            "Imported replay fixture, not earned campaign progression",
+            "This phase verifies only its recorded actual inputs; no locked-melee claim",
+            "Finite-cylinder, contact-window and buffer boundaries remain covered by permanent native fixtures",
+            "No FPS or device certification; interruption sampling remains explicit"
+          ]
+        }
+      ],
+      "screenshots": [
+        "D:\\Temp\\AshenOath\\hardening-h2-aim-desktop-heavy\\report_evidence\\desktop-combat-heavy-imported-slot.png",
+        "D:\\Temp\\AshenOath\\hardening-h2-aim-desktop-heavy\\report_evidence\\desktop-combat-heavy-combat-native-melee-result.png"
+      ],
+      "console": [
+        {
+          "type": "log",
+          "text": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org",
+          "at": 1793561199664
+        },
+        {
+          "type": "log",
+          "text": "OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL",
+          "at": 1793561202443
+        },
+        {
+          "type": "log",
+          "text": "Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support.",
+          "at": 1793561203188
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_main_menu",
+          "at": 1793561206276
+        },
+        {
+          "type": "warn",
+          "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+          "at": 1793561206297
+        },
+        {
+          "type": "log",
+          "text": "LOADING: runtime ready total=1301ms environment=0ms services=1202ms",
+          "at": 1793561206299
+        },
+        {
+          "type": "log",
+          "text": "LOADING: usable_menu_ready ms=7144",
+          "at": 1793561206597
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening_materials bytes=16702580",
+          "at": 1793561206960
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening_materials",
+          "at": 1793561206961
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening bytes=89753080",
+          "at": 1793561209297
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=opening",
+          "at": 1793561209299
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack mounted id=opening",
+          "at": 1793561209299
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm begin",
+          "at": 1793561216317
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_begin",
+          "at": 1793561216349
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'sister_anwen_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561216802
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561216802
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_complete ms=577 ok=true",
+          "at": 1793561216927
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'reed_choir' uses an explicit diagnostic fallback: ",
+          "at": 1793561217524
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561217525
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'player_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561217788
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561217789
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'mira_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561218007
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561218007
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'rook_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561218039
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561218040
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'widow_elna' uses an explicit diagnostic fallback: ",
+          "at": 1793561218066
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561218066
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'blacksmith_tor' uses an explicit diagnostic fallback: ",
+          "at": 1793561218095
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561218096
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'farmer_toma' uses an explicit diagnostic fallback: ",
+          "at": 1793561218141
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561218141
+        },
+        {
+          "type": "log",
+          "text": "LOADING: opening_world_render_ready",
+          "at": 1793561252525
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarmed total=36176ms build=577ms world=689ms player=236ms",
+          "at": 1793561252525
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_requested slot=manual_1 source=primary",
+          "at": 1793561258687
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_prepared destination=wychwood",
+          "at": 1793561258689
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=adjacent bytes=3231584",
+          "at": 1793561259756
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=adjacent",
+          "at": 1793561259757
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=characters bytes=9365120",
+          "at": 1793561260401
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=characters",
+          "at": 1793561260406
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=monsters bytes=39952012",
+          "at": 1793561261661
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=monsters",
+          "at": 1793561261661
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=wychwood prewarm=false cached=false",
+          "at": 1793561261838
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'wychwood_raider_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793561262407
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561262408
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'wychwood_brute_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793561262731
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561262745
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'glassmoth' uses an explicit diagnostic fallback: ",
+          "at": 1793561263234
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561263234
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=wychwood reused=false visible=true position=(0.0, 0.0, 0.0)",
+          "at": 1793561263452
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=1640.2",
+          "at": 1793561263458
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=1646.3",
+          "at": 1793561263464
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'player_human' uses an explicit diagnostic fallback: ",
+          "at": 1793561263501
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793561263503
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=wychwood navigation=true ms=2",
+          "at": 1793561263627
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=1810.3",
+          "at": 1793561263628
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_wychwood_tension",
+          "at": 1793561263634
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=wychwood playable_ms=10404.4",
+          "at": 1793561272225
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_ghoulkin_combat",
+          "at": 1793561275114
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_wychwood_tension",
+          "at": 1793561275356
+        }
+      ],
+      "dom_input": [
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253037.3
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253038.8
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253066.7
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253067.5
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253170
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253170.2
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253721.8
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253724.9001
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253985.3
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561253987.1
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": -4,
+          "movement_y": 86,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561254513.6
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": -4,
+          "movement_y": 86,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561254513.9001
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561254514.3
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561254514.4001
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561254602.2
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561254602.4001
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561255117.4001
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561255118.8
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561255376.9001
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561255379.4001
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561255638.6
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561255640.7
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561255903.3
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561255905.2
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561256167.4001
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561256169
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561256437.1
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561256438.7
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": -165,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561256947.7
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "movement_x": 0,
+          "movement_y": -165,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561256947.9001
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561256948.4001
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561256948.6
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561257047.5
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561257047.6
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 43,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561258576.3
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 43,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561258576.4001
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561258576.7
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561258576.8
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561258667.6
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561258667.7
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 640,
+          "y": 396,
+          "pointer_type": "mouse",
+          "movement_x": -352,
+          "movement_y": 183,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561276730.8
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 640,
+          "y": 396,
+          "movement_x": -352,
+          "movement_y": 183,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561276733.8
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 640,
+          "y": 396,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561276742.6
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 640,
+          "y": 396,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561276743.8
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 640,
+          "y": 396,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "pointer_lock_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561276939.4001
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 640,
+          "y": 396,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "pointer_lock_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561276939.6
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Escape",
+          "code": "Escape",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "pointer_lock_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561277265.5
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Escape",
+          "code": "Escape",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793561277560.9001
+        }
+      ],
+      "started_at": "2026-11-01T19:26:36.649Z",
+      "finished_at": "2026-11-01T19:27:59.114Z"
+    }
+  ],
+  "requests": [
+    {
+      "path": "index.html",
+      "at": 1793561197163,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "menu-background.png",
+      "at": 1793561197211,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.js",
+      "at": 1793561197213,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "release_manifest.json",
+      "at": 1793561197245,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+      "at": 1793561197858,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "index.pck",
+      "at": 1793561197860,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "runtime_pack_manifest.json",
+      "at": 1793561197924,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "favicon.ico",
+      "at": 1793561197957,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "packs/opening.pck",
+      "at": 1793561197983,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "packs/opening_materials.pck",
+      "at": 1793561197985,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+      "at": 1793561206710,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+      "at": 1793561206711,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "packs/adjacent.pck",
+      "at": 1793561259270,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "packs/characters.pck",
+      "at": 1793561259288,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    },
+    {
+      "path": "packs/monsters.pck",
+      "at": 1793561259290,
+      "scenario": "desktop-combat-heavy",
+      "fault": null
+    }
+  ],
+  "status": "pass",
+  "combat_module": {
+    "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\hardening_combat_cases.mjs",
+    "sha256": "b998395db57e78468a0949c06572b3033ba1947e2d19dad56072cac2f16a01a4",
+    "phase": "heavy"
+  },
+  "browser": {
+    "executable": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "version": "Chrome/156.0.8078.74",
+    "headless": false
+  },
+  "finished_at": "2026-11-01T19:28:01.831Z",
+  "runtime_errors": [],
+  "profile": null
+}

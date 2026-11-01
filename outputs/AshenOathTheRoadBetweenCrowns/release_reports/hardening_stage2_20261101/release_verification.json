@@ -1,0 +1,573 @@
+{
+  "schema_version": 1,
+  "stage": 2,
+  "build_id": "hardening-stage2-20261101",
+  "previous_release_commit": "f452e21f05d2ed2a6107899c87a02abb348e3c2c",
+  "frozen_runtime_source": {
+    "git_commit": "3c28bdc0144f3e4e1cb5f1234047a74f6c5d0c32",
+    "dirty": true
+  },
+  "verification_status": "pass",
+  "checks": {
+    "native_attack_profiles": {
+      "status": "pass",
+      "sources": 20,
+      "policy": "hash-bound resolved source and clip; 120Hz canonical-probe calibration or declared authored apex",
+      "profile_sha256": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94"
+    },
+    "native_strike_regressions": {
+      "status": "pass",
+      "coverage": [
+        "complete Attack from windup",
+        "unchanged damage/recovery clocks",
+        "immediate fitted tail",
+        "20/30/60/144Hz physics cases",
+        "independent12/30Hz animation timers",
+        "repeated same-rig parries",
+        "consecutive phase3boss strikes",
+        "completed miss tails",
+        "death/stagger/cancel ownership"
+      ]
+    },
+    "fallback_contact_visuals": {
+      "status": "agent_visual_check_pass",
+      "sources": [
+        "M03",
+        "M20"
+      ],
+      "user_acceptance": "not_claimed",
+      "evidence": "native_contact"
+    },
+    "finite_wildlife_combat": {
+      "status": "pass",
+      "checks": 179,
+      "roles": 10,
+      "occlusion_and_width_cases": 41,
+      "coverage": [
+        "authored finite dimensions",
+        "cap and overhead misses",
+        "body hits",
+        "origin straddling",
+        "clipped wall endpoints",
+        "Euclidean corner grazes",
+        "transforms",
+        "single-hit guards",
+        "humanoid capsule compatibility"
+      ]
+    },
+    "oil_damage_matrix": {
+      "status": "pass",
+      "checks": 357,
+      "definitions": 13,
+      "bonus": "existing15 awarded once; literal/tag matches preserved"
+    },
+    "real_input_attack_buffer": {
+      "status": "pass",
+      "checks": 45,
+      "modes": [
+        "Story",
+        "Standard",
+        "Veteran"
+      ],
+      "input": "actual InputRouter mouse press/release sequences"
+    },
+    "npc_clearance": {
+      "status": "pass",
+      "checks": 12,
+      "coverage": [
+        "floor",
+        "low/tall obstacles",
+        "bridge deck",
+        "player exclusion",
+        "authored exclusions"
+      ]
+    },
+    "existing_blade_and_locked_bow_regressions": "pass; blade fixture now explicitly supplies its existing drawn-sword precondition",
+    "prepackaging_bundle": {
+      "status": "pass",
+      "suites": 8,
+      "runtime_script_and_data_hashes_unchanged_during_bundle": 399,
+      "evidence": "regressions"
+    },
+    "packaging": {
+      "status": "pass",
+      "source_commit": "3c28bdc0144f3e4e1cb5f1234047a74f6c5d0c32",
+      "total_web_bytes_including_manifest": 203199405,
+      "file_count": 18,
+      "decoded_candidate_packs": 9,
+      "prepared_actor_scenes": 33,
+      "omitted_source_scenes": 32,
+      "base_visible_profiles": 20,
+      "environment_texture_closure": 36,
+      "source_dependency_ledger_textures": 37,
+      "manifest_sha256": "c29a60e65de8c28f697f410b288917150527f53ef5f3ea35836685684b5b3786",
+      "strict_report": "strict_export.json",
+      "package_resource_checks": "package_checks.json",
+      "pack_completeness_negative_fixtures": 10
+    },
+    "browser_scope": "Exact-candidate real combat input at both requested viewports against an ordinary native M19 campaign enemy; all ten wildlife shapes and low boundaries use the production-resolver physics matrix because those roles have no ordinary enemy spawn definitions. No invented enemies, gameplay mutation APIs, physical-phone or FPS certification.",
+    "independent_diff_review": {
+      "status": "pass",
+      "range": "f452e21..8270caad",
+      "findings": "No concrete P1/P2 regression in native timing/interruption ownership, finite geometry/LOS, buffers, clearance or profile base ownership."
+    },
+    "browser_fixture_diagnostics": "Old8270candidate failed fixed-position M20 seeds around the authored witness tree and later M19 input runs exposed confirmed Camera render/physics edge loss. The source fix has a permanent98-check regression and old-source57-failure control. All old browser reports remain local diagnostics and are excluded from selected-candidate acceptance; case6 was deliberately interrupted while native regression work began. Later actual-world ray probe identified the two south-bank bow seeds crossing authored RiverBankBarrier_3; same-bank(-6,1,-5.3) verified clear. Actual firing did not call the old aim helper, so source3c28 wires shared centres into Camera;108 real-release/projectile checks pass. Six fresh phases must pass the newly built manifest; old980 reports are not final acceptance.",
+    "camera_action_edges": {
+      "status": "pass",
+      "checks": 98,
+      "old_source_failed_assertions": 57,
+      "coverage": [
+        "actual Router and Camera",
+        "1/2/4 physics ticks per render",
+        "1/3 renders per snapshot",
+        "keyboard/touch",
+        "lock/cycle/zoom",
+        "held/released single press",
+        "pause/context guards",
+        "real LOS",
+        "continuous look remains rendered"
+      ],
+      "evidence": "camera_edges",
+      "source_commit": "adbef16270b4bbf729ad12a7c263ed0fe6f77dc8"
+    },
+    "compiled_source_identity": {
+      "status": "pass",
+      "scripts": 10,
+      "tokens": 69222,
+      "indentation_boundaries": 8107,
+      "raw_pack_overrides_verified": 9,
+      "profile_json_byte_closure": "pass",
+      "evidence": "compiled_source"
+    },
+    "native_player_contact_differential": {
+      "status": "contact_outcome_equivalent",
+      "baseline": "f452e21",
+      "current": "adbef162",
+      "actual_native_P01_bones": 76,
+      "real_input_strikes": 36,
+      "damage_each": 27.6,
+      "cases_per_graph": 9,
+      "all_emitted_contact_records_exactly_equal": true,
+      "full_frame_pose_equivalence": false,
+      "maximum_noncontact_trace_difference_m": 0.011952256807504204,
+      "scope": "Actual player native rig, authored sword and production markers/Router/Camera/CombatManager; modeled M19 capsule only; full browser locked-East miss not reproduced. No claim of whole-pose equality.",
+      "evidence": "native_player_contact"
+    },
+    "browser_isolation": "Six fresh headed browser profiles: desktop/touch \u00d7 light/heavy/bow. No campaign progress claimed; passing phases must share selected release-manifest SHA.",
+    "native_player_heavy_contact_differential": {
+      "status": "contact_outcome_equivalent",
+      "baseline": "f452e21",
+      "current": "adbef162",
+      "cases_per_graph": 9,
+      "real_heavy_inputs": 36,
+      "hits_per_graph": 17,
+      "identical_intentional_off_angle_miss_per_graph": 1,
+      "aligned_cardinal_hits_per_graph": 16,
+      "damage_each_hit": 48.3,
+      "stamina_after_each_input": 78,
+      "all_emitted_contact_records_exactly_equal": true,
+      "full_frame_pose_equivalence": false,
+      "scope": "Actual native P01 and production Router/Camera/CombatManager with modeled M19 capsule at1.6m,60Hz. Browser/world observations recorded separately; no blanket pose equivalence.",
+      "evidence": "native_player_heavy_contact",
+      "maximum_full_frame_marker_difference_m": 0.02426951417820621
+    },
+    "actual_locked_bow_release": {
+      "status": "pass",
+      "checks": 108,
+      "body_roles": 11,
+      "path": "Player release -> Camera solution -> actual ArrowProjectile -> CombatManager",
+      "coverage": [
+        "ten low cylinders and capsule",
+        "world wall and intervening actor",
+        "muzzle block and behind-muzzle guard",
+        "shooter-only eye/muzzle clearance",
+        "free/training compatibility",
+        "range/ammo/cancel",
+        "transformed body/bounds point"
+      ],
+      "independent_source_review": "pass",
+      "evidence": "locked_bow_release"
+    },
+    "browser_acceptance": {
+      "status": "pass",
+      "cases": 6,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          960,
+          540
+        ]
+      ],
+      "observed_quality_both": "Balanced",
+      "headed_browser": "Chrome156.0.8078.74",
+      "light_damage_both": 27.6,
+      "heavy_damage_both": 48.3,
+      "heavy_stamina_spend_both": 22,
+      "locked_bow_damage_both": 28,
+      "arrow_count_both": [
+        12,
+        11
+      ],
+      "locked_bow_distance_m": 10.6,
+      "runtime_errors": [],
+      "console": "24 known visual-role classification warning/stack lines per report; no unexpected ERROR/OOM/context loss; not console-clean. Classification repair belongs to Release3.",
+      "browser_interruption": "inconclusive/not_sampled; deterministic native fixtures are timing authority",
+      "scope": "Fresh profile per phase, actual mouse/keyboard/touch and Import file picker; no physical-device/FPS certification or locked-melee browser claim.",
+      "harness_sha256": "cc0e1473ec067ae302dff006a9c8b06231770fcad3255c5f5dd47b981274d4a7",
+      "module_sha256": "b998395db57e78468a0949c06572b3033ba1947e2d19dad56072cac2f16a01a4"
+    }
+  },
+  "transport": {
+    "stage": 2,
+    "build_id": "hardening-stage2-20261101",
+    "source": {
+      "git_commit": "3c28bdc0144f3e4e1cb5f1234047a74f6c5d0c32",
+      "dirty": true
+    },
+    "status": "pass",
+    "file_count": 18,
+    "total_web_bytes_including_manifest": 203199405,
+    "decoded_pack_count": 9,
+    "decoded_pack_bytes": 203216624,
+    "copied": true,
+    "committed_verified": false,
+    "release_manifest_sha256": "c29a60e65de8c28f697f410b288917150527f53ef5f3ea35836685684b5b3786",
+    "files": {
+      "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+        "bytes": 2973,
+        "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+        "bytes": 7298,
+        "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.js",
+        "bytes": 78364,
+        "sha256": "7e714b686d29e8b88277330bf325f057530f4198ef6e3654cd6d5ea534ebba8a",
+        "content_encoding": "gzip",
+        "decoded_bytes": 315759,
+        "decoded_sha256": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.wasm": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+        "bytes": 9382282,
+        "sha256": "b86a73db5739d710bfbaaad9c0877d8d9f61069723bb16e8252371da8a8c6a01",
+        "content_encoding": "gzip",
+        "decoded_bytes": 37700666,
+        "decoded_sha256": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6"
+      },
+      "index.html": {
+        "path": "index.html",
+        "bytes": 35466,
+        "sha256": "278575c93ebb5d91f7ca0eed552804b40e51ff7e5f1cbe12c2ce7dd921e40878"
+      },
+      "index.pck": {
+        "path": "index.pck",
+        "bytes": 4930735,
+        "sha256": "1879d28a35fa5543241c5f3e5262285e024e678de6006f6ca891c4f993f39b36",
+        "content_encoding": "gzip",
+        "decoded_bytes": 8701232,
+        "decoded_sha256": "359590959d4d11c53808555433ff624d5db41f7ad4a6126391b13b5dd632471a"
+      },
+      "index.png": {
+        "path": "index.png",
+        "bytes": 21443,
+        "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+      },
+      "menu-background.png": {
+        "path": "menu-background.png",
+        "bytes": 1718419,
+        "sha256": "6a792c6892a6d8ab440c8f17e496b8b969da45ce10d6f8d8de1114d6559d2239"
+      },
+      "packs/adjacent.pck": {
+        "path": "packs/adjacent.pck",
+        "bytes": 2988099,
+        "sha256": "50dc85f7c6736377b167f5a5718a82fe60bd89e00e052cd3731679b393472251",
+        "content_encoding": "gzip",
+        "decoded_bytes": 3231584,
+        "decoded_sha256": "64120ead9310c724c1aa7a10654c7833cf3179570dd0b817636e8298b932b759"
+      },
+      "packs/audio.pck": {
+        "path": "packs/audio.pck",
+        "bytes": 18239045,
+        "sha256": "bcf5c549aaeded411de78c7f87e7e28e9a1c5bd6a5355dae7c020e06daad8838",
+        "content_encoding": "gzip",
+        "decoded_bytes": 21347596,
+        "decoded_sha256": "8ac598144ad8bd197635d1c4185bef9c1194aba22335aa4a3784eff8058416a1"
+      },
+      "packs/campaign.pck": {
+        "path": "packs/campaign.pck",
+        "bytes": 9235201,
+        "sha256": "812723da15b081e5827ff3c5cedf484ec7e6931d67e7d82e2dd45dac489ee9c6",
+        "content_encoding": "gzip",
+        "decoded_bytes": 9997892,
+        "decoded_sha256": "adeb89b3bda0b5d6b720323b058ed48a69fb39d986b8b7e9093252e2889cbc64"
+      },
+      "packs/characters.pck": {
+        "path": "packs/characters.pck",
+        "bytes": 9113692,
+        "sha256": "7f58a67db07c33e67996be30f38b5bc660cbfd3afc66215cf9a1e9a3e578e0c2",
+        "content_encoding": "gzip",
+        "decoded_bytes": 9365120,
+        "decoded_sha256": "e86af289cf73fefc67b9347aa4f1561064e01cfdef3ea7ba2588c0b8ff69c1ea"
+      },
+      "packs/monsters.pck": {
+        "path": "packs/monsters.pck",
+        "bytes": 38686959,
+        "sha256": "76802ea42c4f8aa057ea0a62c9d41e70f89fa1e9d3a95dfe86de09062acc5bac",
+        "content_encoding": "gzip",
+        "decoded_bytes": 39952012,
+        "decoded_sha256": "626750a5ebe09bb861bb1edc37863cc84b1f98c08c1273039d68d5402066a938"
+      },
+      "packs/opening.pck": {
+        "path": "packs/opening.pck",
+        "bytes": 85219607,
+        "sha256": "cf829e4c65bea1d351dc71b7cc04b07b2ea224bb4aefff62f1f76beec02f3d69",
+        "content_encoding": "gzip",
+        "decoded_bytes": 89753080,
+        "decoded_sha256": "e4d7317cd78b03f69ae5fb9baaae2a08df087f1fddb363160bc893c16c9f4a5d"
+      },
+      "packs/opening_materials.pck": {
+        "path": "packs/opening_materials.pck",
+        "bytes": 16299418,
+        "sha256": "956fcf43382a47648b09e5e516a930a10c9fced7c31eed4958626df7c6d3b90e",
+        "content_encoding": "gzip",
+        "decoded_bytes": 16702580,
+        "decoded_sha256": "2e0cc9aebb43c1591deb036458c6bd3da64dc463841b87f1e49aae942e865d15"
+      },
+      "packs/quality_materials.pck": {
+        "path": "packs/quality_materials.pck",
+        "bytes": 7223664,
+        "sha256": "96dd44c46cc0236eb1de3f447196da5aa5d580cda33f6a5e517231636452e1d2",
+        "content_encoding": "gzip",
+        "decoded_bytes": 7373116,
+        "decoded_sha256": "9efdfa55283a5f53360fa36c4ef6c534d1c3ee42dd1d2cb4b04ca0aab0981661"
+      },
+      "runtime_pack_manifest.json": {
+        "path": "runtime_pack_manifest.json",
+        "bytes": 8410,
+        "sha256": "34efe3ef8ba4a3081b70b5907f1c9862f2980cc8e7d52bb24606517c3172d836"
+      },
+      "release_manifest.json": {
+        "bytes": 8330,
+        "sha256": "c29a60e65de8c28f697f410b288917150527f53ef5f3ea35836685684b5b3786"
+      }
+    }
+  },
+  "browser_evidence": [
+    {
+      "report": "browser/run1/report.json",
+      "sha256": "ed100aa598067f29bd814d4fe71d15bfd922e2d60b5afae7ad8767a995d44bd8",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "desktop-combat-light",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "input": "keyboard_mouse",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run1/desktop-combat-light-1-desktop-combat-light-imported-slot.png",
+          "sha256": "386512596f06ee877a5319286b62fc975eba220726b1740ecf1b79395b110fdb",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-combat-light-2-desktop-combat-light-combat-native-light-result.png",
+          "sha256": "fbc79100cd8300f4de088ed9462e25a53c4b1d063f6cbcebf3cd8256f9560e55",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run2/report.json",
+      "sha256": "ad7db1066ede53d2c60dc385f6b14d194fb23a2a3977a058c3482ec740abbad1",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "touch-combat-light",
+          "viewport": {
+            "width": 960,
+            "height": 540
+          },
+          "input": "touch",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run2/touch-combat-light-1-touch-combat-light-imported-slot.png",
+          "sha256": "e7b3ec2dcdefdc6cd3c93ff9cccbaf661cdbb940a03a28bfa89e5ca10dca480f",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-combat-light-2-touch-combat-light-combat-native-light-result.png",
+          "sha256": "509e2c690409f348a34b128cee4df7bfae181f4015da91736164bf5daf4a2128",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run3/report.json",
+      "sha256": "76be12ba32401e7433ec7bc292857c2830117caf94f5c43e97cfcd6185ae4d73",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "desktop-combat-heavy",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "input": "keyboard_mouse",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run3/desktop-combat-heavy-1-desktop-combat-heavy-imported-slot.png",
+          "sha256": "d3b0d9d368d597848dbc38754de5812cc83b5b5508045dc02829fabac54571af",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run3/desktop-combat-heavy-2-desktop-combat-heavy-combat-native-melee-result.png",
+          "sha256": "94e9f0e3d6405157772248c912cf4159e352d8ebadbee43248e2a5c40b65acf9",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run4/report.json",
+      "sha256": "214a124af77b74d7ee6e8c9c46f68ed98df208d5df89848eabb12b1487c73de7",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "touch-combat-heavy",
+          "viewport": {
+            "width": 960,
+            "height": 540
+          },
+          "input": "touch",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run4/touch-combat-heavy-1-touch-combat-heavy-imported-slot.png",
+          "sha256": "99213f44de5a9d3f11766130b1cd6747e380136a9eef94666ae0b2855cf76b0c",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run4/touch-combat-heavy-2-touch-combat-heavy-combat-native-melee-result.png",
+          "sha256": "509e2c690409f348a34b128cee4df7bfae181f4015da91736164bf5daf4a2128",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run5/report.json",
+      "sha256": "a815d128c8169ca8ce568c9d90932ee92de440e081a49a517ee5b4f59bec994c",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "desktop-combat-bow",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "input": "keyboard_mouse",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run5/desktop-combat-bow-1-desktop-combat-bow-imported-slot.png",
+          "sha256": "27408c15ef2e35a5a0c59eb6edb8f8bb8baf918ff9a0197bb485150bdc515073",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run5/desktop-combat-bow-2-desktop-combat-bow-combat-locked-bow-result.png",
+          "sha256": "fbc79100cd8300f4de088ed9462e25a53c4b1d063f6cbcebf3cd8256f9560e55",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run6/report.json",
+      "sha256": "cc634513a046638d8a5bfb296c026cbbcba4e9e59b35f6892566ee3338b6ef2c",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "touch-combat-bow",
+          "viewport": {
+            "width": 960,
+            "height": 540
+          },
+          "input": "touch",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run6/touch-combat-bow-1-touch-combat-bow-imported-slot.png",
+          "sha256": "ee2448f4299f7871d82da950e413763ebbd62e2f81d2079f114e8d90fe9d7316",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/touch-combat-bow-2-touch-combat-bow-combat-locked-bow-result.png",
+          "sha256": "509e2c690409f348a34b128cee4df7bfae181f4015da91736164bf5daf4a2128",
+          "case_status": "pass"
+        }
+      ]
+    }
+  ],
+  "harness_sources": [
+    {
+      "path": "tools/hardening_harness_versions/cc0e/verify_hardening_browser.mjs",
+      "sha256": "cc0e1473ec067ae302dff006a9c8b06231770fcad3255c5f5dd47b981274d4a7"
+    }
+  ],
+  "combat_module_sources": [
+    {
+      "path": "tools/hardening_harness_versions/cc0e/hardening_combat_cases.mjs",
+      "sha256": "b998395db57e78468a0949c06572b3033ba1947e2d19dad56072cac2f16a01a4"
+    }
+  ],
+  "publication": {
+    "authorized": true,
+    "method": "git_triggered_vercel",
+    "development_branch": "codex/art-recovery-anwen",
+    "production_branch": "main",
+    "git_status_at_recording": "awaiting_artifact_commit_and_push",
+    "provider_deployment_observed": false
+  },
+  "acceptance": {
+    "agent_regression_qa": "pass",
+    "user_acceptance": "not_claimed",
+    "physical_phone_coverage": false,
+    "performance_certification": false
+  },
+  "compatibility": {
+    "save_version": 13,
+    "save_format_changed": false,
+    "art_direction_and_content_preserved": true,
+    "damage_and_telegraph_recovery_values_preserved": true,
+    "deployment_configuration_preserved": true
+  },
+  "replay_note": "Previously imported replay copies whose flag was discarded need reimporting from the original export; names are not used to infer replay status."
+}
