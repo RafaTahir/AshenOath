@@ -68,6 +68,7 @@ func _run() -> void:
 	_check(face.head_modifier.active, "Live conversation could not override frustum culling")
 	camera.position.x = 0
 	face.set_conversation_active(false)
+	_prime_transients(face, camera)
 	motion.set_dead()
 	for _index in range(10):
 		motion.advance_external(0.2)
@@ -92,7 +93,30 @@ func _run() -> void:
 	_check(terminal_events.count(true) == 1, "Repeated death duplicated terminal state changes")
 	_check(face.head_modifier.emotion == emotion_before and face.head_modifier.speech_amount == 0.0 and face.head_modifier.gesture_time == 0.0, "Dead face accepted expression/speech/gesture writes")
 	_check(motion.current_state == "death" and motion.active_action_clip == &"Death", "Face reconciliation changed terminal clip authority")
+	# Restore the exact cached face, before a timer callback can conceal stale
+	# blink/gaze/speech state. A replacement face would not test this contract.
+	var cached_face_id := face.get_instance_id()
+	motion.reset_for_journey_restore()
+	_check(face.get_instance_id() == cached_face_id, "Restore replaced the cached face instead of resetting its delivery state")
+	_check_transients_cleared(face)
+	_check(face.head_modifier.active and not face.update_timer.paused, "Same cached face did not resume after restore")
+	_prime_transients(face, camera)
+	face.set_distance_suspended(true)
+	motion.set_dead()
+	motion.reset_for_journey_restore()
+	_check_transients_cleared(face)
+	_check(not face.head_modifier.active and face.update_timer.paused, "Same-face restore bypassed its live distance budget")
+	face.set_distance_suspended(false)
+	_prime_transients(face, camera)
+	actor.visible = false
+	motion.set_dead()
+	motion.reset_for_journey_restore()
+	_check_transients_cleared(face)
+	_check(not face.head_modifier.active and face.update_timer.paused, "Same-face restore bypassed actor visibility")
+	actor.visible = true
+	_check(face.head_modifier.active and not face.update_timer.paused, "Same restored face did not resume when visible again")
 	# A newly attached face must observe an already-dead motion owner immediately.
+	motion.set_dead()
 	face.free()
 	face = FaceDriver.new()
 	face.name = "CharacterFaceDriver"
@@ -140,6 +164,34 @@ func _clip(rotation: Quaternion) -> Animation:
 	animation.track_insert_key(track, 0.0, rotation)
 	animation.track_insert_key(track, 0.5, rotation)
 	return animation
+
+func _prime_transients(face: Node, target: Node3D) -> void:
+	face.set_conversation_active(true)
+	face.set_focus_target(target)
+	face.update_accumulator = 0.07
+	face.attention_elapsed = 5.9
+	face.look_offset = 0.6
+	face.blink_remaining = 0.06
+	face.next_blink = 0.001
+	face.head_modifier.look_yaw = 0.2
+	face.head_modifier.look_pitch = 0.1
+	face.head_modifier.current_yaw = 0.18
+	face.head_modifier.current_pitch = face.head_modifier.emotion_pitch + 0.08
+	face.head_modifier.current_roll = face.head_modifier.emotion_roll + 0.05
+	face.head_modifier.blink_closure = 0.9
+	face.head_modifier.speech_amount = 0.8
+	face.head_modifier.current_speech = 0.7
+	face.head_modifier.gesture_time = 0.3
+	face.head_modifier.gesture_kind = "remember"
+
+func _check_transients_cleared(face: Node) -> void:
+	_check(not face.conversation_active and face.focus_target == null and face.focus_refresh_remaining == 0.0, "Restore retained a stale conversation/focus target")
+	_check(face.update_accumulator == 0.0 and face.attention_elapsed == 0.0 and face.look_offset == 0.0, "Restore retained attention/gaze timing")
+	_check(face.blink_remaining == 0.0 and face.next_blink >= 1.8, "Restore retained a partial or immediately due blink")
+	_check(face.head_modifier.look_yaw == 0.0 and face.head_modifier.look_pitch == 0.0 and face.head_modifier.current_yaw == 0.0, "Restore retained modifier gaze")
+	_check(face.head_modifier.blink_closure == 0.0 and face.head_modifier.speech_amount == 0.0 and face.head_modifier.current_speech == 0.0, "Restore retained modifier blink/speech delivery")
+	_check(face.head_modifier.gesture_time == 0.0 and face.head_modifier.gesture_kind == "", "Restore retained a previous gesture")
+	_check(is_equal_approx(face.head_modifier.current_pitch, face.head_modifier.emotion_pitch) and is_equal_approx(face.head_modifier.current_roll, face.head_modifier.emotion_roll), "Restore lost the authored expression or retained nod/roll drift")
 
 func _check(valid: bool, detail: String) -> void:
 	if not valid:
