@@ -1,12 +1,15 @@
 param(
     [string]$OutputDirectory = "",
     [string]$GodotPath = "",
-    [switch]$Force
+    [switch]$Force,
+    [string]$PythonPath = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 )
 
 $ErrorActionPreference = "Stop"
 $Project = Split-Path -Parent $PSScriptRoot
 $RepoRoot = Split-Path -Parent (Split-Path -Parent $Project)
+& $PythonPath (Join-Path $PSScriptRoot "runtime_pack_validation.py") (Join-Path $Project "runtime_pack_manifest.json")
+if ($LASTEXITCODE -ne 0) { throw "Runtime pack dependency graph is invalid; no packs were exported." }
 
 $SourceCommit = ""
 try { $SourceCommit = (git -C $RepoRoot rev-parse HEAD).Trim() } catch {}

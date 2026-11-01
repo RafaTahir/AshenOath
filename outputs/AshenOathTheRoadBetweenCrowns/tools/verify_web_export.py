@@ -7,6 +7,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from deployment_policy import POLICY
+from runtime_pack_validation import validate_pack_graph
 
 MAX_TOTAL_MB = POLICY["max_deployment_bytes"] / (1024 * 1024)
 MAX_PCK_MB = 60.0
@@ -55,7 +56,7 @@ def decoded_pck(path: Path) -> bytes:
 
 
 def verify_pack_files(export_dir: Path, manifest: dict) -> list[str]:
-    failures = []
+    failures = validate_pack_graph(manifest)
     if not isinstance(manifest, dict):
         return ["runtime manifest must be an object"]
     packs = manifest.get("packs")
@@ -66,13 +67,6 @@ def verify_pack_files(export_dir: Path, manifest: dict) -> list[str]:
         if not isinstance(pack, dict):
             failures.append(f"{pack_id}: invalid pack definition")
             continue
-        dependencies = pack.get("dependencies", [])
-        if not isinstance(dependencies, list) or any(not isinstance(item, str) for item in dependencies):
-            failures.append(f"{pack_id}: dependencies must be a list of pack IDs")
-            dependencies = []
-        for dependency in dependencies:
-            if dependency not in packs:
-                failures.append(f"{pack_id}: unknown dependency {dependency}")
         url = str(pack.get("url", ""))
         embedded = str(pack.get("status", "")).startswith("embedded")
         if not url:
@@ -104,26 +98,6 @@ def verify_pack_files(export_dir: Path, manifest: dict) -> list[str]:
             failures.append(f"{pack_id}: pack byte count differs from runtime manifest")
         if hashlib.sha256(payload).hexdigest() != str(pack.get("sha256", "")).lower():
             failures.append(f"{pack_id}: pack SHA-256 differs from runtime manifest")
-    visited, visiting = set(), set()
-
-    def visit(pack_id):
-        if pack_id in visiting:
-            failures.append(f"{pack_id}: cyclic pack dependency")
-            return
-        if pack_id in visited:
-            return
-        visiting.add(pack_id)
-        pack = packs.get(pack_id)
-        dependencies = pack.get("dependencies", []) if isinstance(pack, dict) else []
-        if isinstance(dependencies, list):
-            for dependency in dependencies:
-                if isinstance(dependency, str) and dependency in packs:
-                    visit(dependency)
-        visiting.remove(pack_id)
-        visited.add(pack_id)
-
-    for pack_id in packs:
-        visit(pack_id)
     return failures
 
 

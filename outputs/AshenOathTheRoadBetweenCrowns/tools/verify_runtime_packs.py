@@ -7,6 +7,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from runtime_pack_validation import validate_pack_graph
 
 
 def main() -> int:
@@ -22,10 +23,16 @@ def main() -> int:
     except (OSError, json.JSONDecodeError) as exc:
         print(f"RUNTIME PACKS: FAIL ({exc})")
         return 1
+    errors.extend(validate_pack_graph(manifest))
+    if not isinstance(manifest, dict):
+        manifest = {}
     packs = manifest.get("packs", {})
-    if not isinstance(packs, dict) or not packs:
-        errors.append("packs must be a non-empty object")
-    max_bytes = int(manifest.get("max_deployment_bytes", 0))
+    if not isinstance(packs, dict):
+        packs = {}
+    try:
+        max_bytes = int(manifest.get("max_deployment_bytes", 0))
+    except (TypeError, ValueError):
+        max_bytes = 0
     from deployment_policy import POLICY
     if max_bytes <= 0 or max_bytes > POLICY["max_deployment_bytes"]:
         errors.append("deployment budget must be positive and within the shared policy")
@@ -36,10 +43,10 @@ def main() -> int:
         for key in ("version", "url", "sha256", "bytes", "entry_scene", "dependencies", "preload_priority", "status"):
             if key not in pack:
                 errors.append(f"{pack_id}: missing {key}")
-        for dependency in pack.get("dependencies", []):
-            if dependency not in packs:
-                errors.append(f"{pack_id}: unknown dependency {dependency}")
-        declared_bytes = int(pack.get("bytes", 0))
+        try:
+            declared_bytes = int(pack.get("bytes", 0))
+        except (TypeError, ValueError):
+            declared_bytes = -1
         if declared_bytes < 0:
             errors.append(f"{pack_id}: invalid decoded byte count")
         digest = str(pack.get("sha256", ""))

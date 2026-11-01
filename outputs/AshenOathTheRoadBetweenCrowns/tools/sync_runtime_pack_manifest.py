@@ -6,6 +6,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from deployment_policy import POLICY
+from runtime_pack_validation import require_valid_pack_graph
 
 
 def read_json(path: Path) -> dict:
@@ -35,6 +36,7 @@ def main() -> int:
     args = parser.parse_args()
 
     manifest = read_json(args.manifest)
+    require_valid_pack_graph(manifest)
     candidates = read_json(args.candidates)
     candidate_by_id = {str(item["id"]): item for item in candidates.get("packs", [])}
     failures = []

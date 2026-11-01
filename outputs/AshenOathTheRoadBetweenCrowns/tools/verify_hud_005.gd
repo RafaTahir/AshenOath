@@ -1,6 +1,7 @@
 extends SceneTree
 
 const HUD = preload("res://scripts/hud.gd")
+const HUDState = preload("res://scripts/hud/hud_state.gd")
 
 var failures := 0
 
@@ -17,7 +18,7 @@ func _initialize() -> void:
 	check(_contains_label(hud.menu_layer, hud.MENU_BUILD_LABEL), "Menu does not render its declared build identity")
 	for label in ["New Game", "Continue", "Controls", "Settings", "Credits", "Quit"]:
 		check(_button(hud.menu_layer, label) != null, "Main menu action is missing: %s" % label)
-	check("RECOVERY-004" in hud.MENU_BUILD_LABEL and "PRE-ALPHA" in hud.MENU_BUILD_LABEL and "NATIVE 720P" in hud.MENU_BUILD_LABEL and not "RELEASE-003" in hud.MENU_BUILD_LABEL, "Menu build identity is stale")
+	check(hud.MENU_BUILD_LABEL == HUDState.MENU_BUILD_LABEL and "ASHEN OATH" in hud.MENU_BUILD_LABEL, "Menu product identity disagrees with its HUD contract")
 	hud.show_exit_notice()
 	check(_contains_label(hud.menu_layer, "cannot close a browser tab"), "Browser-safe exit notice is missing")
 	hud.hide_menus()
