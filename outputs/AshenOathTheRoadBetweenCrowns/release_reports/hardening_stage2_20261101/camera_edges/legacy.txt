@@ -1,0 +1,60 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+CAMERA ACTION EDGES: FAIL checks=98 legacy_source=D:\Temp\AshenOath\camera_edge_regression\legacy_camera.gd (actual Router/Camera; 1/2/4 physics steps per render, 1/3 renders per snapshot; keyboard/touch; hold/release/cycle/zoom/pause/context/LOS)
+keyboard physics2/render1: one press must acquire the nearest visible target
+keyboard physics2/render1: holding must not toggle a second time
+keyboard physics2/render1: release must not toggle
+keyboard physics2/render1: next-target edge must survive catch-up ticks exactly once
+keyboard physics2/render1: previous-target edge must survive catch-up ticks exactly once
+keyboard physics2/render1: second lock press must unlock exactly once
+keyboard physics2/render3: one press must acquire the nearest visible target
+keyboard physics2/render3: holding must not toggle a second time
+keyboard physics2/render3: release must not toggle
+keyboard physics2/render3: next-target edge must survive catch-up ticks exactly once
+keyboard physics2/render3: previous-target edge must survive catch-up ticks exactly once
+keyboard physics2/render3: second lock press must unlock exactly once
+keyboard physics4/render1: one press must acquire the nearest visible target
+keyboard physics4/render1: holding must not toggle a second time
+keyboard physics4/render1: release must not toggle
+keyboard physics4/render1: next-target edge must survive catch-up ticks exactly once
+keyboard physics4/render1: previous-target edge must survive catch-up ticks exactly once
+keyboard physics4/render1: second lock press must unlock exactly once
+keyboard physics4/render3: one press must acquire the nearest visible target
+keyboard physics4/render3: holding must not toggle a second time
+keyboard physics4/render3: release must not toggle
+keyboard physics4/render3: next-target edge must survive catch-up ticks exactly once
+keyboard physics4/render3: previous-target edge must survive catch-up ticks exactly once
+keyboard physics4/render3: second lock press must unlock exactly once
+touch physics2/render1: one press must acquire the nearest visible target
+touch physics2/render1: holding must not toggle a second time
+touch physics2/render1: release must not toggle
+touch physics2/render1: next-target edge must survive catch-up ticks exactly once
+touch physics2/render1: previous-target edge must survive catch-up ticks exactly once
+touch physics2/render1: second lock press must unlock exactly once
+touch physics2/render1: one touch zoom edge must apply one authored step
+touch physics2/render1: held touch zoom must not add steps
+touch physics2/render3: one press must acquire the nearest visible target
+touch physics2/render3: holding must not toggle a second time
+touch physics2/render3: release must not toggle
+touch physics2/render3: next-target edge must survive catch-up ticks exactly once
+touch physics2/render3: previous-target edge must survive catch-up ticks exactly once
+touch physics2/render3: second lock press must unlock exactly once
+touch physics2/render3: one touch zoom edge must apply one authored step
+touch physics2/render3: held touch zoom must not add steps
+touch physics4/render1: one press must acquire the nearest visible target
+touch physics4/render1: holding must not toggle a second time
+touch physics4/render1: release must not toggle
+touch physics4/render1: next-target edge must survive catch-up ticks exactly once
+touch physics4/render1: previous-target edge must survive catch-up ticks exactly once
+touch physics4/render1: second lock press must unlock exactly once
+touch physics4/render1: one touch zoom edge must apply one authored step
+touch physics4/render1: held touch zoom must not add steps
+touch physics4/render3: one press must acquire the nearest visible target
+touch physics4/render3: holding must not toggle a second time
+touch physics4/render3: release must not toggle
+touch physics4/render3: next-target edge must survive catch-up ticks exactly once
+touch physics4/render3: previous-target edge must survive catch-up ticks exactly once
+touch physics4/render3: second lock press must unlock exactly once
+touch physics4/render3: one touch zoom edge must apply one authored step
+touch physics4/render3: held touch zoom must not add steps
+The same real target must lock after the world obstruction is removed

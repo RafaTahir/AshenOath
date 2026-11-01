@@ -1,0 +1,16 @@
+{
+  "legacy_commit": "8270caadada040ca30bf39a7fded43f175b837f1",
+  "legacy_expected_failure": true,
+  "legacy_exit_code": 1,
+  "current_exit_code": 0,
+  "sources": {
+    "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\camera_controller.gd": "05d2db34914b83f9c2db2e192b91bc61921aa751222cd50d3ada1d9b92dfd7e6",
+    "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_camera_action_edges.gd": "1df1f178632ca786999090fec7f5172ca5346337634422f51ce8f84b8da71c8f",
+    "D:\\Temp\\AshenOath\\camera_edge_regression\\legacy_camera.gd": "0c4d02d54956296926fd7f00cc898312d3cbd1a842aa33606abe5bf1874b8543"
+  },
+  "logs": {
+    "D:\\Temp\\AshenOath\\camera_edge_regression\\current.log": "26c723ac12203a9b9f1fa5b32fbe413a5c10a5152178ebdc1964535d3ce2222d",
+    "D:\\Temp\\AshenOath\\camera_edge_regression\\legacy.log": "359ed51c6e52c735aa177a01073879de1b73f601cae7577b20a4d0fb247d89f7"
+  },
+  "limitations": "Synthetic input events/actual production Router+Camera; resource-free view-framing stubs only; no browser/hardware acceptance"
+}

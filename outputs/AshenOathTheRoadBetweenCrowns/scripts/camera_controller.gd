@@ -210,6 +210,14 @@ func _bow_aim_sensitivity() -> float:
 		return 0.65 * float(target.call("get_bow_aim_sensitivity"))
 	return 1.0
 
+func _physics_process(_delta: float) -> void:
+	if target == null or get_tree().paused or not _gameplay_camera_active():
+		return
+	# InputRouter publishes one snapshot per physics tick before this callback.
+	# A rendered frame may follow several ticks, so discrete edges must be read
+	# here before the next snapshot replaces them. Look and framing stay below.
+	_apply_discrete_camera_actions()
+
 func _process(delta: float) -> void:
 	if target == null or get_tree().paused or not _gameplay_camera_active():
 		return
@@ -623,7 +631,7 @@ func get_flat_forward() -> Vector3:
 func get_flat_right() -> Vector3:
 	return Basis(Vector3.UP, yaw).x.normalized()
 
-func _apply_keyboard_camera(delta: float) -> void:
+func _apply_discrete_camera_actions() -> void:
 	if _action_just_pressed("target_lock"):
 		if _locked_combat_target == null:
 			_set_locked_combat_target(_cached_combat_focus if is_instance_valid(_cached_combat_focus) and _is_valid_combat_target(_cached_combat_focus) else _nearest_combat_focus())
@@ -634,13 +642,16 @@ func _apply_keyboard_camera(delta: float) -> void:
 			_cycle_combat_target(1)
 		elif _action_just_pressed("target_previous"):
 			_cycle_combat_target(-1)
-	var look := _look_input()
 	if input_source != null and str(input_source.active_device) == "touch":
-		_apply_mouse_motion(input_source.consume_touch_look_delta() * 2.0)
 		if _action_just_pressed("camera_zoom_in"):
 			adjust_zoom(-ZOOM_STEP)
 		elif _action_just_pressed("camera_zoom_out"):
 			adjust_zoom(ZOOM_STEP)
+
+func _apply_keyboard_camera(delta: float) -> void:
+	var look := _look_input()
+	if input_source != null and str(input_source.active_device) == "touch":
+		_apply_mouse_motion(input_source.consume_touch_look_delta() * 2.0)
 	var steady := _bow_aim_sensitivity()
 	var turn := look.x
 	var tilt := look.y

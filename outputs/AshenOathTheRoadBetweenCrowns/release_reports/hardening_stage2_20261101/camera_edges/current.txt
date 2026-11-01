@@ -1,0 +1,3 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+CAMERA ACTION EDGES: PASS checks=98 legacy_source= (actual Router/Camera; 1/2/4 physics steps per render, 1/3 renders per snapshot; keyboard/touch; hold/release/cycle/zoom/pause/context/LOS)
