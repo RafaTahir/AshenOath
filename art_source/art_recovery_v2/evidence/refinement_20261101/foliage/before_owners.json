@@ -1,0 +1,3352 @@
+{
+	"camera": "[X: (-1.0, 0.0, 0.0), Y: (0.0, 0.996815, 0.079745), Z: (-0.0, 0.079745, -0.996815), O: (2.00484, 1.08192, -10.51562)]",
+	"journey_not_started": true,
+	"owners": [
+		{
+			"bounds": "[P: (-0.923476, -0.234695, -0.974389), S: (1.914845, 1.581786, 1.965141)]",
+			"class": "MeshInstance3D",
+			"distance": 2.52752947807312,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "Leaves_TwistedTree",
+					"resource": "res://assets_external/environment/forest/Bush_Common.obj::StandardMaterial3D_jrx6o",
+					"surface": 0,
+					"surface_name": "Leaves_TwistedTree",
+					"texture": "res://assets_external/environment/forest/Leaves_TwistedTree_C.png",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets_external/environment/forest/Bush_Common.obj",
+			"mesh_name": "",
+			"metadata": "[&\"character_region\", &\"runtime_role\", &\"runtime_role_policy\", &\"runtime_release_blocked\", &\"runtime_visual_approved\", &\"runtime_inclusion_authorized\", &\"runtime_asset_path\", &\"runtime_fallback_used\", &\"runtime_role_state\", &\"validated_material\", &\"character_role_spec\", &\"source_forward_positive_z\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GreyfenShrineGardenWest",
+			"screen_max": "(369.1555, 1578.649)",
+			"screen_min": "(-3531.061, -90.15329)",
+			"world_center": "(4.181245, 0.584008, -9.330815)"
+		},
+		{
+			"bounds": "[P: (-0.275, -0.329748, -0.052308), S: (0.55, 0.689748, 0.139616)]",
+			"class": "MeshInstance3D",
+			"distance": 3.84720492362976,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.340000003576279,
+						0.0350000001490116,
+						0.0299999993294477,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/HangingClothDrape_157",
+			"screen_max": "(71.81255, 350.8384)",
+			"screen_min": "(-104.1521, 186.6542)",
+			"world_center": "(4.85, 1.265126, -7.9325)"
+		},
+		{
+			"bounds": "[P: (-0.475528, -0.5, -0.404509), S: (0.951056, 1.0, 0.904508)]",
+			"class": "MeshInstance3D",
+			"distance": 4.1404881477356,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						0.479999989271164,
+						0.140000000596046,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "SphereMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MeshInstance3D@438",
+			"screen_max": "(217.0044, 446.9401)",
+			"screen_min": "(195.7958, 425.3572)",
+			"world_center": "(4.45, 0.39, -7.246658)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 4.14348459243774,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.418400019407272,
+						0.363600015640259,
+						0.314900010824203,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@361",
+			"screen_max": "(136.015, 543.1483)",
+			"screen_min": "(-5.643692, 460.7371)",
+			"world_center": "(4.85, 0.1536, -7.65)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 4.18026876449585,
+			"instance": 8,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@441",
+			"screen_max": "(225.0967, 506.7116)",
+			"screen_min": "(190.9863, 442.972)",
+			"world_center": "(4.45, 0.17, -7.25)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 4.69664573669434,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.499600023031235,
+						0.485400021076202,
+						0.44539999961853,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/WorldPropBatch_plaster_3_3_3",
+			"screen_max": "(19.16218, 614.4205)",
+			"screen_min": "(-834.6835, 516.1905)",
+			"world_center": "(6.0, 0.1, -8.25)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 4.87791299819946,
+			"instance": 1,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@441",
+			"screen_max": "(428.1378, 469.6853)",
+			"screen_min": "(71.98856, 458.8892)",
+			"world_center": "(4.65, 0.047, -6.55)"
+		},
+		{
+			"bounds": "[P: (-1.0, 0.0, 0.0), S: (2.0, 3.0, 0.064046)]",
+			"class": "MeshInstance3D",
+			"distance": 4.99704647064209,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.720000028610229,
+						0.75,
+						0.699999988079071,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "MI_WoodTrim",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets_external/environment/village/Wall_Arch.obj",
+			"mesh_name": "",
+			"metadata": "[&\"character_region\", &\"runtime_role\", &\"runtime_role_policy\", &\"runtime_release_blocked\", &\"runtime_visual_approved\", &\"runtime_inclusion_authorized\", &\"runtime_asset_path\", &\"runtime_fallback_used\", &\"runtime_role_state\", &\"validated_material\", &\"character_role_spec\", &\"source_forward_positive_z\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GreyfenShrineStoneArch",
+			"screen_max": "(278.3383, 537.2739)",
+			"screen_min": "(-732.2183, -201.0123)",
+			"world_center": "(6.0, 1.665, -7.571267)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 5.11493062973022,
+			"instance": 5,
+			"materials": [
+				{
+					"albedo": [
+						0.401000022888184,
+						0.346199989318848,
+						0.303300023078918,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@410",
+			"screen_max": "(132.6651, 493.8728)",
+			"screen_min": "(25.87135, 434.1203)",
+			"world_center": "(5.5, 0.1472, -6.9)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 5.22664260864258,
+			"instance": 8,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/AuthoredDetailBatch_instance_colors",
+			"screen_max": "(267.4211, 451.7519)",
+			"screen_min": "(199.1109, 445.7399)",
+			"world_center": "(4.957846, 0.1, -6.316403)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MeshInstance3D",
+			"distance": 5.25664138793945,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.540000021457672,
+						0.5,
+						0.419999986886978,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[&\"visual_name\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/RoadCrowsShrineSnappedToken/RoadCrowsShrineSnappedTokenBoneHalfA",
+			"screen_max": "(118.1974, 470.7458)",
+			"screen_min": "(56.50478, 454.2073)",
+			"world_center": "(5.575825, 0.12, -6.779969)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MeshInstance3D",
+			"distance": 5.27739763259888,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.300000011920929,
+						0.0350000001490116,
+						0.0280000008642673,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[&\"visual_name\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/RoadCrowsShrineSnappedToken/RoadCrowsShrineSnappedTokenRedThread",
+			"screen_max": "(78.58006, 467.0467)",
+			"screen_min": "(35.7151, 456.5946)",
+			"world_center": "(5.694953, 0.144, -6.861262)"
+		},
+		{
+			"bounds": "[P: (-1.18, 0.02, -0.82), S: (2.36, 1.81, 1.64)]",
+			"class": "MeshInstance3D",
+			"distance": 5.32404708862305,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.680000007152557,
+						0.680000007152557,
+						0.620000004768372,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "medieval_brick",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.699999988079071,
+						0.709999978542328,
+						0.660000026226044,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 1,
+					"surface_name": "plaster",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.370000004768372,
+						0.270000010728836,
+						0.189999997615814,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 2,
+					"surface_name": "timber",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.389999985694885,
+						0.180000007152557,
+						0.170000001788139,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_roof_tiles_balanced",
+					"resource": "",
+					"surface": 3,
+					"surface_name": "roof_tiles",
+					"texture": "res://assets_external/textures/runtime/roof_tiles_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.28999999165535,
+						0.560000002384186,
+						0.5,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 4,
+					"surface_name": "glazing",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.423529416322708,
+						0.450980395078659,
+						0.427450984716415,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_metal_balanced",
+					"resource": "",
+					"surface": 5,
+					"surface_name": "metal",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets_external/environment/village/GreyfenShrine_Authored.res",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GreyfenAuthoredOathstone",
+			"screen_max": "(264.6873, 538.7964)",
+			"screen_min": "(-517.1371, 145.2016)",
+			"world_center": "(6.0, 0.925, -7.0)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 5.41132736206055,
+			"instance": 5,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/AuthoredDetailBatch_instance_colors",
+			"screen_max": "(218.753, 451.1005)",
+			"screen_min": "(172.2749, 445.0941)",
+			"world_center": "(5.247047, 0.1, -6.295854)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MeshInstance3D",
+			"distance": 5.44334411621094,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.479999989271164,
+						0.449999988079071,
+						0.379999995231628,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[&\"visual_name\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/RoadCrowsShrineSnappedToken/RoadCrowsShrineSnappedTokenBoneHalfB",
+			"screen_max": "(104.1262, 465.3285)",
+			"screen_min": "(53.05309, 451.2026)",
+			"world_center": "(5.737006, 0.12, -6.671706)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 5.46536922454834,
+			"instance": 7,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/AuthoredDetailBatch_instance_colors",
+			"screen_max": "(149.0474, 458.664)",
+			"screen_min": "(86.12995, 452.8003)",
+			"world_center": "(5.608868, 0.1, -6.525994)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 5.65085315704346,
+			"instance": 6,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/AuthoredDetailBatch_instance_colors",
+			"screen_max": "(119.1012, 456.7079)",
+			"screen_min": "(71.65012, 450.5801)",
+			"world_center": "(5.82112, 0.1, -6.465433)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 5.79239225387573,
+			"instance": 4,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/AuthoredDetailBatch_instance_colors",
+			"screen_max": "(201.3691, 444.0017)",
+			"screen_min": "(142.6618, 438.9604)",
+			"world_center": "(5.591953, 0.1, -6.074865)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 6.23384094238281,
+			"instance": 9,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/AuthoredDetailBatch_instance_colors",
+			"screen_max": "(25.39001, 462.6451)",
+			"screen_min": "(-9.64386, 420.9348)",
+			"world_center": "(6.55, 0.16, -6.35)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 6.72482681274414,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.193599998950958,
+						0.131999999284744,
+						0.0791999995708466,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/shrine_prayer/ShrineBenchSupports",
+			"screen_max": "(9.154587, 467.5222)",
+			"screen_min": "(-102.5026, 397.5068)",
+			"world_center": "(7.088, 0.21, -6.2)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 7.21243381500244,
+			"instance": 1,
+			"materials": [
+				{
+					"albedo": [
+						0.418400019407272,
+						0.363600015640259,
+						0.314900010824203,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@361",
+			"screen_max": "(56.47762, 444.0705)",
+			"screen_min": "(-5.263672, 403.3738)",
+			"world_center": "(7.2, 0.1512, -5.6)"
+		},
+		{
+			"bounds": "[P: (-1.2, -0.06, -0.35), S: (2.4, 0.12, 0.7)]",
+			"class": "MeshInstance3D",
+			"distance": 7.41139602661133,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.31360000371933,
+						0.252000004053116,
+						0.199200004339218,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/shrine_prayer/shrine_prayer_VisibleProp",
+			"screen_max": "(41.09055, 410.3867)",
+			"screen_min": "(-417.733, 381.0425)",
+			"world_center": "(8.0, 0.48, -6.2)"
+		},
+		{
+			"bounds": "[P: (-0.41, -0.5, 0.0), S: (0.82, 1.0, 0.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 7.73847198486328,
+			"instance": 38,
+			"materials": [
+				{
+					"albedo": [
+						0.720000028610229,
+						0.800000011920929,
+						0.670000016689301,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "World_grass_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "QuadMesh",
+					"texture": "res://assets_external/textures/runtime/grass_tuft.png",
+					"texture_size": "(512.0, 512.0)",
+					"transparency": 2,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GrassBatch",
+			"screen_max": "(100.6282, 434.0668)",
+			"screen_min": "(63.5141, 359.4588)",
+			"world_center": "(7.322505, 0.306143, -4.947442)"
+		},
+		{
+			"bounds": "[P: (-0.41, -0.5, 0.0), S: (0.82, 1.0, 0.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 7.89451932907104,
+			"instance": 36,
+			"materials": [
+				{
+					"albedo": [
+						0.720000028610229,
+						0.800000011920929,
+						0.670000016689301,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "World_grass_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "QuadMesh",
+					"texture": "res://assets_external/textures/runtime/grass_tuft.png",
+					"texture_size": "(512.0, 512.0)",
+					"transparency": 2,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GrassBatch",
+			"screen_max": "(134.8034, 424.014)",
+			"screen_min": "(36.69067, 383.9373)",
+			"world_center": "(7.413415, 0.196391, -4.833487)"
+		},
+		{
+			"bounds": "[P: (-0.41, -0.5, 0.0), S: (0.82, 1.0, 0.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 7.98308849334717,
+			"instance": 37,
+			"materials": [
+				{
+					"albedo": [
+						0.720000028610229,
+						0.800000011920929,
+						0.670000016689301,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "World_grass_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "QuadMesh",
+					"texture": "res://assets_external/textures/runtime/grass_tuft.png",
+					"texture_size": "(512.0, 512.0)",
+					"transparency": 2,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GrassBatch",
+			"screen_max": "(136.5839, 429.3233)",
+			"screen_min": "(23.43708, 364.7149)",
+			"world_center": "(7.489974, 0.273422, -4.771981)"
+		},
+		{
+			"bounds": "[P: (-2.453319, 0.02, -2.22), S: (4.906637, 3.65, 4.256619)]",
+			"class": "MeshInstance3D",
+			"distance": 10.1152276992798,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.670000016689301,
+						0.649999976158142,
+						0.589999973773956,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "medieval_brick",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.779999971389771,
+						0.639999985694885,
+						0.479999989271164,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 1,
+					"surface_name": "plaster",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.779999971389771,
+						0.540000021457672,
+						0.340000003576279,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 2,
+					"surface_name": "timber",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.819999992847443,
+						0.519999980926514,
+						0.389999985694885,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_roof_tiles_balanced",
+					"resource": "",
+					"surface": 3,
+					"surface_name": "roof_tiles",
+					"texture": "res://assets_external/textures/runtime/roof_tiles_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.159999996423721,
+						0.219999998807907,
+						0.239999994635582,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 4,
+					"surface_name": "glazing",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.423529416322708,
+						0.450980395078659,
+						0.427450984716415,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_metal_balanced",
+					"resource": "",
+					"surface": 5,
+					"surface_name": "metal",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets_external/environment/village/GreyfenHouse_Authored_2.res",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/DressedVillageHouse_EastLane/AuthoredHouse",
+			"screen_max": "(582.1736, 398.0686)",
+			"screen_min": "(137.1297, 97.14225)",
+			"world_center": "(5.6, 1.845, -1.09169)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 10.5234107971191,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.360400050878525,
+						0.328799992799759,
+						0.297500044107437,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@364",
+			"screen_max": "(167.3544, 391.6123)",
+			"screen_min": "(142.0659, 267.3312)",
+			"world_center": "(8.7, 0.85, -2.4)"
+		},
+		{
+			"bounds": "[P: (-0.475528, -0.5, -0.404509), S: (0.951056, 1.0, 0.904508)]",
+			"class": "MeshInstance3D",
+			"distance": 10.5457210540771,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						0.449999988079071,
+						0.140000000596046,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "SphereMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[&\"world_prop_kind\", &\"world_prop_id\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MeshInstance3D@363",
+			"screen_max": "(157.4843, 270.9088)",
+			"screen_min": "(144.1782, 257.0795)",
+			"world_center": "(8.7, 1.75, -2.395226)"
+		},
+		{
+			"bounds": "[P: (-0.899415, -0.003968, -0.234764), S: (1.79883, 1.814045, 0.460062)]",
+			"class": "MeshInstance3D",
+			"distance": 10.7653722763062,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "Blacksmith_Tor_C04_PrivateAnatomyAtlas",
+					"resource": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn::StandardMaterial3D_j8tn2",
+					"surface": 0,
+					"surface_name": "Blacksmith_Tor_C04_PrivateAnatomyAtlas",
+					"texture": "res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
+					"texture_size": "(1024.0, 512.0)",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				},
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "Blacksmith_Tor_C04_AuthoredClothesAtlas",
+					"resource": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn::StandardMaterial3D_8xnxq",
+					"surface": 1,
+					"surface_name": "Blacksmith_Tor_C04_AuthoredClothesAtlas",
+					"texture": "res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				},
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "Blacksmith_Tor_MI_Peasant",
+					"resource": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn::StandardMaterial3D_1md05",
+					"surface": 2,
+					"surface_name": "Blacksmith_Tor_MI_Peasant",
+					"texture": "res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				},
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "Blacksmith_Tor_MI_Regular_Male",
+					"resource": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn::StandardMaterial3D_mg541",
+					"surface": 3,
+					"surface_name": "Blacksmith_Tor_MI_Regular_Male",
+					"texture": "res://assets_external/design_pack_v1/humans/textures/color_efb12074ef2149a2f554ddb649fa66acb6e471d36995adc6ed9e765a8944e8fa.png",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				},
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "C04_TailoredPalette_PBR",
+					"resource": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn::StandardMaterial3D_2823r",
+					"surface": 4,
+					"surface_name": "C04_TailoredPalette_PBR",
+					"texture": "res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
+					"texture_size": "(112.0, 16.0)",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn::ArrayMesh_4qdf4",
+			"mesh_name": "C04_Blacksmith_Tor_Kael_Combined_003",
+			"metadata": "[&\"silhouette_original_aabb\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/blacksmith_tor/blacksmith_tor/Armature/Skeleton3D/C04_MotionFittedAssembly",
+			"screen_max": "(153.3407, 397.2725)",
+			"screen_min": "(-21.0363, 260.7878)",
+			"world_center": "(9.5, 0.87, -2.79092)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.009, -0.5), S: (1.0, 0.018, 1.0)]",
+			"class": "MeshInstance3D",
+			"distance": 10.8082790374756,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.0179999992251396,
+						0.0140000004321337,
+						0.00999999977648258,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "CylinderMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[&\"visual_name\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/blacksmith_tor/CharacterContactShadow",
+			"screen_max": "(117.6285, 395.5451)",
+			"screen_min": "(26.82957, 390.3973)",
+			"world_center": "(9.5, 0.028, -2.8)"
+		},
+		{
+			"bounds": "[P: (-0.085, -0.035, -0.0325), S: (0.17, 0.07, 0.065)]",
+			"class": "MeshInstance3D",
+			"distance": 10.9008226394653,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.25,
+						0.259999990463257,
+						0.270000010728836,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "res://assets/characters/forge_hammer.tscn::Iron",
+					"surface": 0,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets/characters/forge_hammer_head.res",
+			"mesh_name": "ChamferedJoinery_(0.17, 0.07, 0.065)",
+			"metadata": "[&\"silhouette_original_aabb\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/blacksmith_tor/blacksmith_tor/Armature/Skeleton3D/OccupationEquipmentSocket/OccupationEquipment/OccupationProp_blacksmith_tor/ForgedHead",
+			"screen_max": "(77.63222, 334.8799)",
+			"screen_min": "(61.17325, 321.1771)",
+			"world_center": "(9.593536, 0.882828, -2.692573)"
+		},
+		{
+			"bounds": "[P: (-0.022825, -0.0125, -0.024), S: (0.045651, 0.025, 0.048)]",
+			"class": "MeshInstance3D",
+			"distance": 10.9319267272949,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.25,
+						0.259999990463257,
+						0.270000010728836,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "res://assets/characters/forge_hammer.tscn::Iron",
+					"surface": 0,
+					"surface_name": "CylinderMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets/characters/forge_hammer.tscn::Collar",
+			"mesh_name": "",
+			"metadata": "[&\"silhouette_original_aabb\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/blacksmith_tor/blacksmith_tor/Armature/Skeleton3D/OccupationEquipmentSocket/OccupationEquipment/OccupationProp_blacksmith_tor/HeadCollar",
+			"screen_max": "(69.42345, 329.7351)",
+			"screen_min": "(62.88586, 324.8269)",
+			"world_center": "(9.637546, 0.892564, -2.691744)"
+		},
+		{
+			"bounds": "[P: (-0.019, -0.17, -0.019), S: (0.038, 0.34, 0.038)]",
+			"class": "MeshInstance3D",
+			"distance": 11.0071048736572,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.219999998807907,
+						0.119999997317791,
+						0.0649999976158142,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "res://assets/characters/forge_hammer.tscn::Wood",
+					"surface": 0,
+					"surface_name": "CylinderMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets/characters/forge_hammer.tscn::Handle",
+			"mesh_name": "",
+			"metadata": "[&\"silhouette_original_aabb\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/blacksmith_tor/blacksmith_tor/Armature/Skeleton3D/OccupationEquipmentSocket/OccupationEquipment/OccupationProp_blacksmith_tor/Handle",
+			"screen_max": "(72.09293, 330.0161)",
+			"screen_min": "(44.26289, 321.0125)",
+			"world_center": "(9.743357, 0.915972, -2.689749)"
+		},
+		{
+			"bounds": "[P: (-0.019021, -0.065, -0.02), S: (0.038042, 0.13, 0.04)]",
+			"class": "MeshInstance3D",
+			"distance": 11.0707349777222,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.129999995231628,
+						0.0750000029802322,
+						0.0399999991059303,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "res://assets/characters/forge_hammer.tscn::Leather",
+					"surface": 0,
+					"surface_name": "CylinderMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets/characters/forge_hammer.tscn::Grip",
+			"mesh_name": "",
+			"metadata": "[&\"silhouette_original_aabb\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/blacksmith_tor/blacksmith_tor/Armature/Skeleton3D/OccupationEquipmentSocket/OccupationEquipment/OccupationProp_blacksmith_tor/LeatherGrip",
+			"screen_max": "(58.12977, 326.9323)",
+			"screen_min": "(44.9102, 321.1298)",
+			"world_center": "(9.832314, 0.935651, -2.688073)"
+		},
+		{
+			"bounds": "[P: (-0.073612, -0.525, -0.085), S: (0.147224, 1.05, 0.17)]",
+			"class": "MeshInstance3D",
+			"distance": 11.2238206863403,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.135000005364418,
+						0.0780000016093254,
+						0.0439999997615814,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "CylinderMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@Node3D@448/@MeshInstance3D@450",
+			"screen_max": "(290.0319, 377.0258)",
+			"screen_min": "(209.6695, 362.992)",
+			"world_center": "(8.2, 0.18, -1.2)"
+		},
+		{
+			"bounds": "[P: (-0.073612, -0.525, -0.085), S: (0.147224, 1.05, 0.17)]",
+			"class": "MeshInstance3D",
+			"distance": 11.2437295913696,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.135000005364418,
+						0.0780000016093254,
+						0.0439999997615814,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "CylinderMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@Node3D@448/@MeshInstance3D@451",
+			"screen_max": "(277.5925, 369.0819)",
+			"screen_min": "(195.7284, 355.3859)",
+			"world_center": "(8.355303, 0.31, -1.269145)"
+		},
+		{
+			"bounds": "[P: (-0.073612, -0.525, -0.085), S: (0.147224, 1.05, 0.17)]",
+			"class": "MeshInstance3D",
+			"distance": 11.2854661941528,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.135000005364418,
+						0.0780000016093254,
+						0.0439999997615814,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "CylinderMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@Node3D@448/@MeshInstance3D@452",
+			"screen_max": "(265.7634, 378.0122)",
+			"screen_min": "(182.6035, 363.7179)",
+			"world_center": "(8.510605, 0.18, -1.33829)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 11.3545064926147,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.470600008964539,
+						0.462199985980988,
+						0.428000032901764,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@297",
+			"screen_max": "(248.997, 382.5224)",
+			"screen_min": "(165.1511, 285.0134)",
+			"world_center": "(8.7, 0.78, -1.35)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 11.6189422607422,
+			"instance": 1,
+			"materials": [
+				{
+					"albedo": [
+						0.499600023031235,
+						0.485400021076202,
+						0.44539999961853,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/WorldPropBatch_plaster_3_3_3",
+			"screen_max": "(109.6481, 395.6229)",
+			"screen_min": "(-95.72174, 377.01)",
+			"world_center": "(10.5, 0.1, -2.65)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 12.0220994949341,
+			"instance": 3,
+			"materials": [
+				{
+					"albedo": [
+						0.401000022888184,
+						0.346199989318848,
+						0.303300023078918,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@410",
+			"screen_max": "(1.943588, 396.6952)",
+			"screen_min": "(-84.80324, 358.202)",
+			"world_center": "(11.1, 0.2304, -2.7)"
+		},
+		{
+			"bounds": "[P: (-1.45, 0.0, -1.352742), S: (3.247, 1.6, 3.422742)]",
+			"class": "MeshInstance3D",
+			"distance": 12.9929265975952,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "res://assets_external/environment/props/GreyfenForgeWork_Authored.res::StandardMaterial3D_2fp4b",
+					"surface": 0,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				},
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "",
+					"resource": "res://assets_external/environment/props/GreyfenForgeWork_Authored.res::StandardMaterial3D_bfjrb",
+					"surface": 1,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "res://assets_external/environment/props/GreyfenForgeWork_Authored.res",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GreyfenBlacksmithStoneShop/BlacksmithFittedWork",
+			"screen_max": "(278.079, 392.4691)",
+			"screen_min": "(-125.7226, 274.3351)",
+			"world_center": "(10.6735, 0.8, -0.841371)"
+		},
+		{
+			"bounds": "[P: (-1.96, 0.02, -1.54), S: (3.94, 3.83, 4.26)]",
+			"class": "MeshInstance3D",
+			"distance": 13.0838346481323,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.660000026226044,
+						0.620000004768372,
+						0.550000011920929,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "medieval_brick",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.769999980926514,
+						0.689999997615814,
+						0.569999992847443,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 1,
+					"surface_name": "plaster",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.419999986886978,
+						0.310000002384186,
+						0.209999993443489,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 2,
+					"surface_name": "timber",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.400000005960464,
+						0.259999990463257,
+						0.200000002980232,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_roof_tiles_balanced",
+					"resource": "",
+					"surface": 3,
+					"surface_name": "roof_tiles",
+					"texture": "res://assets_external/textures/runtime/roof_tiles_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.159999996423721,
+						0.219999998807907,
+						0.239999994635582,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 4,
+					"surface_name": "glazing",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.423529416322708,
+						0.450980395078659,
+						0.427450984716415,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_metal_balanced",
+					"resource": "",
+					"surface": 5,
+					"surface_name": "metal",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets_external/environment/village/GreyfenForge_Authored.res",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GreyfenBlacksmithStoneShop/BlacksmithAuthoredForge",
+			"screen_max": "(322.2383, 392.8741)",
+			"screen_min": "(-177.2262, 96.35915)",
+			"world_center": "(10.51, 1.935, -0.61)"
+		},
+		{
+			"bounds": "[P: (-64.0, 0.0, -94.0), S: (130.0, 7.2, 141.0)]",
+			"class": "MeshInstance3D",
+			"distance": 13.2644138336182,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "GreyfenAdjoiningGround",
+					"resource": "res://assets_external/environment/forest/GreyfenFrontier_Authored.res::StandardMaterial3D_a6jl7",
+					"surface": 0,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/forest_ground_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				},
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "GreyfenDestinationTrack",
+					"resource": "res://assets_external/environment/forest/GreyfenFrontier_Authored.res::StandardMaterial3D_77dno",
+					"surface": 1,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/wet_mud_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "res://assets_external/environment/forest/GreyfenFrontier_Authored.res",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/GreyfenAuthoredFrontier/VillageAdjoiningLandscape",
+			"screen_max": "(1322.135, 324.1075)",
+			"screen_min": "(-21.36513, 249.5726)",
+			"world_center": "(1.0, 3.6, -23.5)"
+		},
+		{
+			"bounds": "[P: (-21.0, -0.24, 2.619718), S: (42.0, 0.104, 0.428996)]",
+			"class": "MeshInstance3D",
+			"distance": 13.5591316223145,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.0750000029802322,
+						0.119999997317791,
+						0.0949999988079071,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBankWetness_North",
+			"screen_max": "(1664.559, 372.0276)",
+			"screen_min": "(-205.9811, 365.7094)",
+			"world_center": "(0.0, -0.188, 2.834216)"
+		},
+		{
+			"bounds": "[P: (-19.10333, -0.193, 2.89532), S: (39.65333, 0.00001, 0.193858)]",
+			"class": "MeshInstance3D",
+			"distance": 13.6282815933228,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.219999998807907,
+						0.379999995231628,
+						0.360000014305115,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverShoreFoam_North",
+			"screen_max": "(1560.597, 368.7838)",
+			"screen_min": "(-168.8155, 367.9944)",
+			"world_center": "(0.723333, -0.192995, 2.992249)"
+		},
+		{
+			"bounds": "[P: (-21.0, 0.0, -1.701871), S: (42.0, 0.00001, 3.386883)]",
+			"class": "MeshInstance3D",
+			"distance": 15.1981077194214,
+			"instance": 0,
+			"materials": [
+				{
+					"class": "ShaderMaterial",
+					"name": "",
+					"resource": "",
+					"shader": "",
+					"surface": 0,
+					"surface_name": ""
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[&\"water_role\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/FlowingRiverWater",
+			"screen_max": "(1650.303, 371.2429)",
+			"screen_min": "(-194.2094, 359.5057)",
+			"world_center": "(0.0, -0.239995, 4.49157)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 15.2087574005127,
+			"instance": 4,
+			"materials": [
+				{
+					"albedo": [
+						0.401000022888184,
+						0.346199989318848,
+						0.303300023078918,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@410",
+			"screen_max": "(244.3741, 364.7309)",
+			"screen_min": "(216.4346, 344.0052)",
+			"world_center": "(10.7, 0.2088, 1.9318)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 15.4058055877686,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBoxBatch_river_boxes",
+			"screen_max": "(1641.92, 439.6429)",
+			"screen_min": "(-187.288, 407.3488)",
+			"world_center": "(0.0, -1.72, 4.5)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 16.3061027526855,
+			"instance": 2,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@400",
+			"screen_max": "(43.19889, 375.9617)",
+			"screen_min": "(-317.1573, 373.3543)",
+			"world_center": "(15.0, 0.052, -0.72)"
+		},
+		{
+			"bounds": "[P: (-0.475528, -0.5, -0.475528), S: (0.951056, 1.0, 0.951057)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 16.4306659698486,
+			"instance": 8,
+			"materials": [
+				{
+					"albedo": [
+						0.140000000596046,
+						0.170000001788139,
+						0.150000005960464,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "SphereMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBankStoneBatch",
+			"screen_max": "(240.9638, 366.308)",
+			"screen_min": "(134.0371, 342.1514)",
+			"world_center": "(12.0, 0.18, 2.494)"
+		},
+		{
+			"bounds": "[P: (-20.57, -0.193, 5.90603), S: (39.65334, 0.00001, 0.198808)]",
+			"class": "MeshInstance3D",
+			"distance": 16.7965145111084,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.219999998807907,
+						0.379999995231628,
+						0.360000014305115,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverShoreFoam_South",
+			"screen_max": "(1445.17, 358.6201)",
+			"screen_min": "(30.86681, 358.0775)",
+			"world_center": "(-0.743332, -0.192995, 6.005434)"
+		},
+		{
+			"bounds": "[P: (-21.0, -0.24, 5.958793), S: (42.0, 0.104, 0.412557)]",
+			"class": "MeshInstance3D",
+			"distance": 16.8486614227295,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.0750000029802322,
+						0.119999997317791,
+						0.0949999988079071,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBankWetness_South",
+			"screen_max": "(1458.12, 360.1406)",
+			"screen_min": "(-35.52361, 355.3984)",
+			"world_center": "(0.0, -0.188, 6.165071)"
+		},
+		{
+			"bounds": "[P: (-4.4, 0.0225, -1.676739), S: (8.8, 0.00001, 3.422774)]",
+			"class": "MeshInstance3D",
+			"distance": 16.9262084960938,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.639999985694885,
+						0.610000014305115,
+						0.560000002384186,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_cobblestone_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/cobblestone_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "res://assets_external/environment/prepared/greyfen_PavedRoadCastle.res",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/Gameplay_greyfen/PavedRoadCastle",
+			"screen_max": "(220.112, 381.7495)",
+			"screen_min": "(-522.2665, 362.6877)",
+			"world_center": "(15.2, 0.044505, 0.034648)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 17.2097053527832,
+			"instance": 3,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@400",
+			"screen_max": "(118.5248, 367.8878)",
+			"screen_min": "(-194.3902, 365.7356)",
+			"world_center": "(15.0, 0.052, 0.72)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 17.8363838195801,
+			"instance": 14,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBoxBatch_river_boxes",
+			"screen_max": "(109.2315, 361.3111)",
+			"screen_min": "(102.7948, 330.9546)",
+			"world_center": "(14.0, 0.34, 2.664)"
+		},
+		{
+			"bounds": "[P: (-0.475528, -0.5, -0.475528), S: (0.951056, 1.0, 0.951057)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 19.4980316162109,
+			"instance": 10,
+			"materials": [
+				{
+					"albedo": [
+						0.140000000596046,
+						0.170000001788139,
+						0.150000005960464,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "SphereMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBankStoneBatch",
+			"screen_max": "(51.19495, 367.4408)",
+			"screen_min": "(-83.27026, 341.1868)",
+			"world_center": "(16.5, 0.18, 2.494)"
+		},
+		{
+			"bounds": "[P: (-0.475528, -0.5, -0.475528), S: (0.951056, 1.0, 0.951057)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 20.5036239624023,
+			"instance": 9,
+			"materials": [
+				{
+					"albedo": [
+						0.140000000596046,
+						0.170000001788139,
+						0.150000005960464,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "SphereMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBankStoneBatch",
+			"screen_max": "(281.1868, 352.4458)",
+			"screen_min": "(211.0788, 336.3744)",
+			"world_center": "(13.4, 0.18, 6.506)"
+		},
+		{
+			"bounds": "[P: (-0.23, 0.0, -0.09), S: (0.46, 0.92, 0.18)]",
+			"class": "MeshInstance3D",
+			"distance": 20.5798053741455,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.479999989271164,
+						0.490000009536743,
+						0.449999988079071,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/CemeteryBeveledHeadstone_4",
+			"screen_max": "(219.0014, 351.6704)",
+			"screen_min": "(195.6739, 318.7391)",
+			"world_center": "(14.2, 0.46, 6.05)"
+		},
+		{
+			"bounds": "[P: (-0.1, 0.0, -0.05), S: (0.2, 0.0, 0.1)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 20.7423076629639,
+			"instance": 13,
+			"materials": [
+				{
+					"albedo": [
+						0.159999996423721,
+						0.230000004172325,
+						0.100000001490116,
+						0.939999997615814
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "QuadMesh",
+					"transparency": 1,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverMotionController/RiverFloatingLeafBatch",
+			"screen_max": "(121.5255, 362.6017)",
+			"screen_min": "(110.5614, 362.2834)",
+			"world_center": "(15.8109, -0.216685, 4.91)"
+		},
+		{
+			"bounds": "[P: (-0.1, 0.0, -0.05), S: (0.2, 0.0, 0.1)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 20.7504100799561,
+			"instance": 6,
+			"materials": [
+				{
+					"albedo": [
+						0.159999996423721,
+						0.230000004172325,
+						0.100000001490116,
+						0.939999997615814
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "QuadMesh",
+					"transparency": 1,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverMotionController/RiverFloatingLeafBatch",
+			"screen_max": "(114.2661, 362.9764)",
+			"screen_min": "(103.1909, 362.6538)",
+			"world_center": "(15.92268, -0.218902, 4.82)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 21.4158744812012,
+			"instance": 15,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBoxBatch_river_boxes",
+			"screen_max": "(182.4353, 350.8229)",
+			"screen_min": "(177.854, 327.0561)",
+			"world_center": "(15.2, 0.34, 6.336)"
+		},
+		{
+			"bounds": "[P: (-3.8, 0.0, -4.24), S: (8.0, 0.9, 0.38)]",
+			"class": "MeshInstance3D",
+			"distance": 21.4261283874512,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.529999971389771,
+						0.519999980926514,
+						0.469999998807907,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[&\"fitted_collision\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/CemeteryFittedBoundary/CemeteryNorthWallFittedVisual",
+			"screen_max": "(369.9118, 349.5501)",
+			"screen_min": "(92.41436, 319.0417)",
+			"world_center": "(14.2, 0.45, 7.09)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 21.8276767730713,
+			"instance": 2,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@373",
+			"screen_max": "(210.0153, 324.5721)",
+			"screen_min": "(187.1875, 321.8532)",
+			"world_center": "(15.1, 0.78, 6.945)"
+		},
+		{
+			"bounds": "[P: (-3.412289, 0.0225, -3.393309), S: (6.788675, 0.00001, 7.061195)]",
+			"class": "MeshInstance3D",
+			"distance": 22.0308437347412,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.639999985694885,
+						0.610000014305115,
+						0.560000002384186,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_cobblestone_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/cobblestone_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets_external/environment/prepared/greyfen_road_45082159d0aa627f792b9879.res",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MeshInstance3D@365",
+			"screen_max": "(420.769, 353.2246)",
+			"screen_min": "(55.8316, 340.4689)",
+			"world_center": "(13.68205, 0.047505, 8.137289)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.0792560577393,
+			"instance": 2,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@384",
+			"screen_max": "(213.6752, 348.1451)",
+			"screen_min": "(184.8498, 346.0848)",
+			"world_center": "(15.25, 0.06, 7.12)"
+		},
+		{
+			"bounds": "[P: (-0.23, 0.0, -0.09), S: (0.46, 0.92, 0.18)]",
+			"class": "MeshInstance3D",
+			"distance": 22.1680068969727,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.479999989271164,
+						0.490000009536743,
+						0.449999988079071,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/CemeteryBeveledHeadstone_2",
+			"screen_max": "(161.6042, 350.6634)",
+			"screen_min": "(137.7356, 318.586)",
+			"world_center": "(16.2, 0.46, 6.5)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.1713237762451,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@398",
+			"screen_max": "(184.8533, 333.5139)",
+			"screen_min": "(177.0452, 294.5519)",
+			"world_center": "(15.63, 1.05, 6.975)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.2619972229004,
+			"instance": 1,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@398",
+			"screen_max": "(189.8505, 297.0402)",
+			"screen_min": "(174.8511, 289.269)",
+			"world_center": "(15.63, 1.67, 7.08)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.4318771362305,
+			"instance": 2,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@398",
+			"screen_max": "(170.7768, 333.5139)",
+			"screen_min": "(162.8215, 294.5519)",
+			"world_center": "(16.05, 1.05, 6.975)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.5215015411377,
+			"instance": 3,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@398",
+			"screen_max": "(175.8719, 297.0402)",
+			"screen_min": "(160.6172, 289.269)",
+			"world_center": "(16.05, 1.67, 7.08)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.6972122192383,
+			"instance": 4,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@398",
+			"screen_max": "(156.7003, 333.5139)",
+			"screen_min": "(148.5977, 294.5519)",
+			"world_center": "(16.47, 1.05, 6.975)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.7343425750732,
+			"instance": 13,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@469",
+			"screen_max": "(210.6432, 329.127)",
+			"screen_min": "(191.3893, 326.8069)",
+			"world_center": "(15.6, 0.62, 7.7)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.7404842376709,
+			"instance": 12,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@469",
+			"screen_max": "(204.745, 348.0388)",
+			"screen_min": "(198.223, 323.4108)",
+			"world_center": "(15.6, 0.38, 7.7)"
+		},
+		{
+			"bounds": "[P: (9.967003, 0.0505, 6.89908), S: (8.023802, 0.00001, 3.880471)]",
+			"class": "MeshInstance3D",
+			"distance": 22.782787322998,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.683249950408936,
+						0.68149995803833,
+						0.677299976348877,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_wet_mud_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/wet_mud_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/TerrainPatchBatch_-9223371755668630399",
+			"screen_max": "(420.4978, 347.8541)",
+			"screen_min": "(101.5586, 341.5276)",
+			"world_center": "(13.9789, 0.050505, 8.839315)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.7857933044434,
+			"instance": 5,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@398",
+			"screen_max": "(161.8933, 297.0402)",
+			"screen_min": "(146.3833, 289.269)",
+			"world_center": "(16.47, 1.67, 7.08)"
+		},
+		{
+			"bounds": "[P: (-0.09, -0.109748, -0.052308), S: (0.18, 0.249748, 0.139616)]",
+			"class": "MeshInstance3D",
+			"distance": 22.9102630615234,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.300000011920929,
+						0.0299999993294477,
+						0.025000000372529,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 2,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/HangingClothDrape_173",
+			"screen_max": "(198.7634, 337.0526)",
+			"screen_min": "(189.0723, 328.8501)",
+			"world_center": "(15.85, 0.465126, 7.7275)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 22.9527778625488,
+			"instance": 3,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@373",
+			"screen_max": "(149.4075, 324.5721)",
+			"screen_min": "(126.4532, 321.8532)",
+			"world_center": "(16.9, 0.78, 6.945)"
+		},
+		{
+			"bounds": "[P: (-0.19, 0.005, -0.17), S: (0.38, 0.135, 0.34)]",
+			"class": "MeshInstance3D",
+			"distance": 22.9955101013184,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.529999971389771,
+						0.519999980926514,
+						0.469999998807907,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res::StandardMaterial3D_6qfrg",
+					"surface": 0,
+					"surface_name": "masonry",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.25,
+						0.280000001192093,
+						0.270000010728836,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res::StandardMaterial3D_pk511",
+					"surface": 1,
+					"surface_name": "iron",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res",
+			"mesh_name": "",
+			"metadata": "[&\"clue_identity\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/grave_soldier/CemeteryMemorialEvidence",
+			"screen_max": "(189.4115, 346.84)",
+			"screen_min": "(168.1494, 341.8717)",
+			"world_center": "(16.2, 0.1205, 7.55)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 23.0754642486572,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@388",
+			"screen_max": "(152.7227, 326.1481)",
+			"screen_min": "(144.3074, 312.0591)",
+			"world_center": "(16.79, 0.9, 7.2)"
+		},
+		{
+			"bounds": "[P: (-0.5, -1.0, -0.5), S: (1.0, 2.0, 1.0)]",
+			"class": "MeshInstance3D",
+			"distance": 23.2761631011963,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.259999990463257,
+						0.239999994635582,
+						0.200000002980232,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "CapsuleMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/massacre_iron/@MeshInstance3D@202",
+			"screen_max": "(233.1837, 346.7072)",
+			"screen_min": "(219.4392, 333.2397)",
+			"world_center": "(15.4, 0.2125, 8.5)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 23.2774105072021,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.435800045728683,
+						0.430299997329712,
+						0.40190002322197,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@389",
+			"screen_max": "(155.0489, 349.3219)",
+			"screen_min": "(121.7879, 300.9031)",
+			"world_center": "(17.1, 0.72, 7.2)"
+		},
+		{
+			"bounds": "[P: (-2.170506, 0.057, -2.540855), S: (5.730506, 0.04, 5.896344)]",
+			"class": "MeshInstance3D",
+			"distance": 23.3064060211182,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.430000007152557,
+						0.379999995231628,
+						0.310000002384186,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_wet_mud_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "earth",
+					"texture": "res://assets_external/textures/runtime/wet_mud_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "res://assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/CemeteryFittedGraveEarth",
+			"screen_max": "(383.2684, 349.3819)",
+			"screen_min": "(89.52713, 338.8259)",
+			"world_center": "(14.69475, 0.077, 9.007318)"
+		},
+		{
+			"bounds": "[P: (-0.475528, -0.5, -0.475528), S: (0.951056, 1.0, 0.951057)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 23.3067569732666,
+			"instance": 11,
+			"materials": [
+				{
+					"albedo": [
+						0.140000000596046,
+						0.170000001788139,
+						0.150000005960464,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "SphereMesh",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBankStoneBatch",
+			"screen_max": "(133.3128, 353.1281)",
+			"screen_min": "(48.03383, 335.7632)",
+			"world_center": "(17.9, 0.18, 6.506)"
+		},
+		{
+			"bounds": "[P: (-1.75, 0.0, -2.025), S: (3.6, 3.73, 4.05)]",
+			"class": "MeshInstance3D",
+			"distance": 23.9407424926758,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.529999971389771,
+						0.519999980926514,
+						0.469999998807907,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "masonry",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.280000001192093,
+						0.189999997615814,
+						0.129999995231628,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 1,
+					"surface_name": "timber",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.370000004768372,
+						0.239999994635582,
+						0.200000002980232,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_roof_tiles_balanced",
+					"resource": "",
+					"surface": 2,
+					"surface_name": "roof",
+					"texture": "res://assets_external/textures/runtime/roof_tiles_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/CrowChapelAuthoredArchitecture",
+			"screen_max": "(261.0596, 351.4734)",
+			"screen_min": "(30.21431, 217.1219)",
+			"world_center": "(17.1, 1.865, 8.05)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 24.0873603820801,
+			"instance": 17,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/LivingRiverSection/RiverBoxBatch_river_boxes",
+			"screen_max": "(43.46523, 350.8229)",
+			"screen_min": "(38.0233, 327.0561)",
+			"world_center": "(19.2, 0.34, 6.336)"
+		},
+		{
+			"bounds": "[P: (3.91, 0.0, -3.875), S: (0.38, 0.9, 1.45)]",
+			"class": "MeshInstance3D",
+			"distance": 24.2597484588623,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.529999971389771,
+						0.519999980926514,
+						0.469999998807907,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_medieval_brick_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "",
+					"texture": "res://assets_external/textures/runtime/medieval_brick_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[&\"fitted_collision\"]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/CemeteryFittedBoundary/CemeteryEastWallNorthFittedVisual",
+			"screen_max": "(145.4075, 349.5501)",
+			"screen_min": "(89.37134, 318.6994)",
+			"world_center": "(18.1, 0.45, 7.625)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 24.3626365661621,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.401000022888184,
+						0.392599999904633,
+						0.36420002579689,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/WorldPropBatch_plaster_3_3_2",
+			"screen_max": "(168.1755, 348.417)",
+			"screen_min": "(111.4238, 314.2963)",
+			"world_center": "(17.77, 0.52, 8.05)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 24.3970279693604,
+			"instance": 11,
+			"materials": [
+				{
+					"albedo": [
+						0.389400005340576,
+						0.346199989318848,
+						0.309100031852722,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@357",
+			"screen_max": "(75.19878, 344.5047)",
+			"screen_min": "(62.52758, 317.4377)",
+			"world_center": "(19.0, 0.55, 6.98)"
+		},
+		{
+			"bounds": "[P: (-0.93, 0.0, -0.63), S: (1.86, 2.89, 1.26)]",
+			"class": "MeshInstance3D",
+			"distance": 24.4320316314697,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.280000001192093,
+						0.189999997615814,
+						0.129999995231628,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "timber",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				},
+				{
+					"albedo": [
+						0.370000004768372,
+						0.239999994635582,
+						0.200000002980232,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_roof_tiles_balanced",
+					"resource": "",
+					"surface": 1,
+					"surface_name": "roof",
+					"texture": "res://assets_external/textures/runtime/roof_tiles_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/CemeteryBellFrame/CemeteryBellHouseHood",
+			"screen_max": "(278.8452, 345.5517)",
+			"screen_min": "(194.6717, 257.9599)",
+			"world_center": "(15.75, 1.445, 9.68)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 24.443868637085,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.374900013208389,
+						0.366499990224838,
+						0.342160016298294,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_plaster_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/plaster_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/WorldPropBatch_plaster_2_2_2",
+			"screen_max": "(262.6038, 349.5501)",
+			"screen_min": "(82.32086, 337.1143)",
+			"world_center": "(17.05, 0.11, 8.725)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 24.5778064727783,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						1.0,
+						1.0,
+						1.0,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"transparency": 0,
+					"vertex_color_albedo": true
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@385",
+			"screen_max": "(146.199, 317.8398)",
+			"screen_min": "(110.5758, 314.7563)",
+			"world_center": "(18.11, 0.98, 8.05)"
+		},
+		{
+			"bounds": "[P: (-0.5, -0.5, -0.5), S: (1.0, 1.0, 1.0)]",
+			"class": "MultiMeshInstance3D",
+			"distance": 24.6310920715332,
+			"instance": 0,
+			"materials": [
+				{
+					"albedo": [
+						0.345900028944016,
+						0.331699997186661,
+						0.307360023260117,
+						1.0
+					],
+					"class": "StandardMaterial3D",
+					"cull_mode": 0,
+					"name": "World_timber_balanced",
+					"resource": "",
+					"surface": 0,
+					"surface_name": "BoxMesh",
+					"texture": "res://assets_external/textures/runtime/timber_albedo.jpg",
+					"texture_size": "(1024.0, 1024.0)",
+					"transparency": 0,
+					"vertex_color_albedo": false
+				}
+			],
+			"mesh": "",
+			"mesh_name": "",
+			"metadata": "[]",
+			"node": "/root/@SubViewport@2/AshenOath/greyfen/@MultiMeshInstance3D@386",
+			"screen_max": "(145.3523, 348.3583)",
+			"screen_min": "(106.7666, 291.9913)",
+			"world_center": "(18.19, 0.86, 8.05)"
+		}
+	]
+}

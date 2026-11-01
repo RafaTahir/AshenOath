@@ -1,0 +1,193 @@
+{
+  "id": "M03",
+  "baseline_runtime": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M03_Bog_Wretch.glb",
+  "baseline_sha256": "01504f243886547732550b7fd015617553571004f08235cb37bee24e12a3d53e",
+  "baseline_layered_master": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M03_Bog_Wretch_stylized.blend",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_timing_skin_v004.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M03\\M03_refined.glb",
+  "changes": [
+    "Hanging lower abdomen and broad waterlogged jaw with fitted uneven mouth",
+    "Wet hide, drier root ligatures and amber tissue receive separate responses",
+    "Native-inspected final surface uses subtle stochastic pores in place of repeating directional skin grain",
+    "Removed inherited diagonal skin albedo lattice; retained mean palette with subtle filtered non-periodic grain. All geometry, skinning, UVs and clip bytes unchanged."
+  ],
+  "before_bounds": [
+    [
+      -0.9488054513931274,
+      0.9488049149513245
+    ],
+    [
+      -0.20817503333091736,
+      0.15650495886802673
+    ],
+    [
+      -2.1420419216156006e-08,
+      1.7200000286102295
+    ]
+  ],
+  "after_bounds": [
+    [
+      -0.9488055109977722,
+      0.9488049149513245
+    ],
+    [
+      -0.21975214779376984,
+      0.15650497376918793
+    ],
+    [
+      -2.2351741790771484e-08,
+      1.720000147819519
+    ]
+  ],
+  "actions": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "rendered_views": [
+    "front",
+    "quarter",
+    "side",
+    "rear"
+  ],
+  "limitations": "Retained adapted action library, not a new species-specific performance; final regional/user visual acceptance pending.",
+  "user_accepted": false,
+  "previous_finishing_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined.blend",
+  "source_sha256": "2993a8fbb014e4a7a6e4a02f932d90535521b2338bb22bfa66ca4e82439c8ee8",
+  "runtime_sha256": "d16fb0239fb4a7ecec044fa011fe847db7bee5516ccb94b27da6630a7b78c8d5",
+  "source_render_scope": "Final textured Workbench source views; current native engine views evaluate the normal/ORM shading",
+  "previous_surface_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_surface_v002.blend",
+  "timing_verification": {
+    "baseline_durations": {
+      "Attack": 0.75,
+      "AttackHeavy": 0.9583333134651184,
+      "Block": 1.625,
+      "Death": 1.5833333730697632,
+      "Feed": 1.9583333730697632,
+      "HitReact": 0.875,
+      "Idle": 2.0833332538604736,
+      "Interact": 1.7083333730697632,
+      "Investigate": 2.0833332538604736,
+      "Recovery": 0.375,
+      "Running": 1.7083333730697632,
+      "Sleep": 0.375,
+      "Threaten": 1.7083333730697632,
+      "Walking": 2.7083332538604736,
+      "Windup": 0.375
+    },
+    "final_durations": {
+      "Attack": 0.75,
+      "AttackHeavy": 0.9583333134651184,
+      "Block": 1.625,
+      "Death": 1.5833333730697632,
+      "Feed": 1.9583333730697632,
+      "HitReact": 0.875,
+      "Idle": 2.0833332538604736,
+      "Interact": 1.7083333730697632,
+      "Investigate": 2.0833332538604736,
+      "Recovery": 0.375,
+      "Running": 1.7083333730697632,
+      "Sleep": 0.375,
+      "Threaten": 1.7083333730697632,
+      "Walking": 2.7083332538604736,
+      "Windup": 0.375
+    },
+    "source_fps": 24,
+    "sampled_pose_bytes_preserved": true
+  },
+  "previous_skin_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_timing_v003.blend",
+  "skin_albedo_finish_v004": {
+    "id": "M03",
+    "material": "M03_WaterloggedOliveHide",
+    "image_size": [
+      256,
+      256
+    ],
+    "old_image_sha256": "134c69a07f16496728ba98cb0feba0ad4266048d6977778932bc35896ef7589c",
+    "new_image_sha256": "9b842a967088b28cd22315cc67437936b3ae9e86006ac55ec5585c7f3aa3f5a4",
+    "old_mean_rgb8": [
+      71.14686584472656,
+      68.84980773925781,
+      45.904022216796875
+    ],
+    "new_mean_rgb8": [
+      71.14698791503906,
+      68.85145568847656,
+      45.910430908203125
+    ],
+    "mean_rgb_delta_normalized": [
+      4.787071078431372e-07,
+      6.462545955882353e-06,
+      2.5132123161764705e-05
+    ],
+    "maximum_mean_channel_delta_rgb8": 0.00640869140625,
+    "noise": "Seeded Gaussian-filtered stationary luminance noise; 0.65 encoded-RGB-byte standard deviation; old channel ratios retained",
+    "old_runtime": {
+      "path": "D:\\Temp\\AshenOath\\skin_refinement_20261101\\before\\M03_refined_before_skin_v004.glb",
+      "bytes": 2577624,
+      "sha256": "907bdfff3b9f060b23b79deab0febc2959a2419b1eebe62c6bce9295c64acd68"
+    },
+    "new_runtime": {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M03\\M03_refined.glb",
+      "bytes": 2602640,
+      "sha256": "d16fb0239fb4a7ecec044fa011fe847db7bee5516ccb94b27da6630a7b78c8d5"
+    },
+    "old_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_timing_v003.blend",
+    "new_source": {
+      "path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_timing_skin_v004.blend",
+      "bytes": 3743142,
+      "sha256": "2993a8fbb014e4a7a6e4a02f932d90535521b2338bb22bfa66ca4e82439c8ee8"
+    },
+    "non_image_buffer_views_preserved": 1966,
+    "all_other_image_payloads_preserved": true,
+    "all_geometry_skin_uv_node_accessor_and_animation_json_and_payloads_identical": true,
+    "clips_preserved": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "native_visual_acceptance": "Pending main integration/import and fresh current-hash captures"
+  },
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M03_Bog_Wretch.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery",
+  "final_source_views": {
+    "paths": {
+      "front": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M03\\front.png",
+      "side": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M03\\side.png",
+      "rear": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M03\\rear.png",
+      "quarter": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M03\\quarter.png"
+    },
+    "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_timing_skin_v004.blend",
+    "source_sha256": "2993a8fbb014e4a7a6e4a02f932d90535521b2338bb22bfa66ca4e82439c8ee8",
+    "renderer": "Blender Workbench TEXTURE / studio light; actual Base Color image nodes active; not PBR or Godot",
+    "pose": "Retained Idle at frame 8 / 24 FPS; NLA muted for review only",
+    "master_file_unchanged": true
+  },
+  "source_view_renderer": "Blender Workbench TEXTURE / studio light; actual Base Color image nodes active; not PBR or Godot",
+  "source_view_scope": "Current v004 packed skin albedo, retained Idle pose, four source angles; Workbench TEXTURE preview only, not PBR/Godot."
+}

@@ -1,0 +1,193 @@
+{
+  "id": "M19",
+  "baseline_runtime": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M19_Wychwood_Raider.glb",
+  "baseline_sha256": "e684e121d89b2d9d5fa20b911ddf7c297380e156d76e43d7590d3d8b00f9cd8e",
+  "baseline_layered_master": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M19_Wychwood_Raider_stylized.blend",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_skin_v004.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M19\\M19_refined.glb",
+  "changes": [
+    "Lean waist, injured shoulder crest, longer hooked fingertips and an asymmetric mouth",
+    "Sparse rough hide with directional microstructure; wet eyes and dry cord",
+    "Native-inspected final surface uses subtle stochastic pores in place of repeating directional skin grain",
+    "Removed inherited diagonal skin albedo lattice; retained mean palette with subtle filtered non-periodic grain. All geometry, skinning, UVs and clip bytes unchanged."
+  ],
+  "before_bounds": [
+    [
+      -1.0114085674285889,
+      1.0114086866378784
+    ],
+    [
+      -0.147718608379364,
+      0.1640675812959671
+    ],
+    [
+      -2.859160304069519e-07,
+      1.8599995374679565
+    ]
+  ],
+  "after_bounds": [
+    [
+      -1.0114085674285889,
+      1.0114086866378784
+    ],
+    [
+      -0.147718608379364,
+      0.1640675812959671
+    ],
+    [
+      -2.859160304069519e-07,
+      1.8599995374679565
+    ]
+  ],
+  "actions": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "rendered_views": [
+    "front",
+    "quarter",
+    "side",
+    "rear"
+  ],
+  "limitations": "Retained adapted action library, not a new species-specific performance; final regional/user visual acceptance pending.",
+  "user_accepted": false,
+  "previous_finishing_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined.blend",
+  "source_sha256": "82c53ecf8e0f6223386567aaa8dbb77779551560746e2640a764bef450ea0323",
+  "runtime_sha256": "6e99822ef4efb0f7bbfdd6bbdc3c2dcdf22c474deae214183dfe4517b4ea15b8",
+  "source_render_scope": "Final textured Workbench source views; current native engine views evaluate the normal/ORM shading",
+  "previous_surface_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_surface_v002.blend",
+  "timing_verification": {
+    "baseline_durations": {
+      "Attack": 0.4583333432674408,
+      "AttackHeavy": 0.7083333134651184,
+      "Block": 1.625,
+      "Death": 1.5833333730697632,
+      "Feed": 2.0833332538604736,
+      "HitReact": 0.875,
+      "Idle": 1.375,
+      "Interact": 1.7083333730697632,
+      "Investigate": 2.0833332538604736,
+      "Recovery": 0.375,
+      "Running": 0.8333333134651184,
+      "Sleep": 0.375,
+      "Threaten": 1.7083333730697632,
+      "Walking": 1.2916666269302368,
+      "Windup": 0.375
+    },
+    "final_durations": {
+      "Attack": 0.4583333432674408,
+      "AttackHeavy": 0.7083333134651184,
+      "Block": 1.625,
+      "Death": 1.5833333730697632,
+      "Feed": 2.0833332538604736,
+      "HitReact": 0.875,
+      "Idle": 1.375,
+      "Interact": 1.7083333730697632,
+      "Investigate": 2.0833332538604736,
+      "Recovery": 0.375,
+      "Running": 0.8333333134651184,
+      "Sleep": 0.375,
+      "Threaten": 1.7083333730697632,
+      "Walking": 1.2916666269302368,
+      "Windup": 0.375
+    },
+    "source_fps": 24,
+    "sampled_pose_bytes_preserved": true
+  },
+  "previous_skin_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_v003.blend",
+  "skin_albedo_finish_v004": {
+    "id": "M19",
+    "material": "M19_OliveGreyHide",
+    "image_size": [
+      256,
+      256
+    ],
+    "old_image_sha256": "4e29eda8011f48e90ce6790830c3ec89084b9d014e06290ca0e52f93921158ee",
+    "new_image_sha256": "fad09498bf72210f7b097bb2f61a612a24e2ceb9d776cfd062e2824886c72d30",
+    "old_mean_rgb8": [
+      71.14686584472656,
+      68.84980773925781,
+      50.49070739746094
+    ],
+    "new_mean_rgb8": [
+      71.14852905273438,
+      68.84368896484375,
+      50.493194580078125
+    ],
+    "mean_rgb_delta_normalized": [
+      6.522384344362745e-06,
+      -2.3995193780637254e-05,
+      9.75365732230392e-06
+    ],
+    "maximum_mean_channel_delta_rgb8": 0.0061187744140625,
+    "noise": "Seeded Gaussian-filtered stationary luminance noise; 0.65 encoded-RGB-byte standard deviation; old channel ratios retained",
+    "old_runtime": {
+      "path": "D:\\Temp\\AshenOath\\skin_refinement_20261101\\before\\M19_refined_before_skin_v004.glb",
+      "bytes": 2408112,
+      "sha256": "0d46107f982f02f6a5f919bf289425865126ee4ef1aa98dd22c3bbb259b30cdb"
+    },
+    "new_runtime": {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M19\\M19_refined.glb",
+      "bytes": 2433836,
+      "sha256": "6e99822ef4efb0f7bbfdd6bbdc3c2dcdf22c474deae214183dfe4517b4ea15b8"
+    },
+    "old_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_v003.blend",
+    "new_source": {
+      "path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_skin_v004.blend",
+      "bytes": 3400554,
+      "sha256": "82c53ecf8e0f6223386567aaa8dbb77779551560746e2640a764bef450ea0323"
+    },
+    "non_image_buffer_views_preserved": 1960,
+    "all_other_image_payloads_preserved": true,
+    "all_geometry_skin_uv_node_accessor_and_animation_json_and_payloads_identical": true,
+    "clips_preserved": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "native_visual_acceptance": "Pending main integration/import and fresh current-hash captures"
+  },
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M19_Wychwood_Raider.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery",
+  "final_source_views": {
+    "paths": {
+      "front": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M19\\front.png",
+      "side": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M19\\side.png",
+      "rear": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M19\\rear.png",
+      "quarter": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M19\\quarter.png"
+    },
+    "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_skin_v004.blend",
+    "source_sha256": "82c53ecf8e0f6223386567aaa8dbb77779551560746e2640a764bef450ea0323",
+    "renderer": "Blender Workbench TEXTURE / studio light; actual Base Color image nodes active; not PBR or Godot",
+    "pose": "Retained Idle at frame 8 / 24 FPS; NLA muted for review only",
+    "master_file_unchanged": true
+  },
+  "source_view_renderer": "Blender Workbench TEXTURE / studio light; actual Base Color image nodes active; not PBR or Godot",
+  "source_view_scope": "Current v004 packed skin albedo, retained Idle pose, four source angles; Workbench TEXTURE preview only, not PBR/Godot."
+}

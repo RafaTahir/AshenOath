@@ -1,0 +1,193 @@
+{
+  "id": "M05",
+  "baseline_runtime": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M05_Bell_Eater.glb",
+  "baseline_sha256": "e8a7af42da10405b6b193a203db9b725e1b7f6fd28effb3f99285e119feda317",
+  "baseline_layered_master": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M05_Bell_Eater_stylized_v003.blend",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_skin_v004.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M05\\M05_refined.glb",
+  "changes": [
+    "Load-bearing nape/shoulder asymmetry under the retained bell",
+    "Cast-bronze grain, worn iron, dry leather harness and clay skin separate clearly",
+    "Native-inspected final surface uses subtle stochastic pores in place of repeating directional skin grain",
+    "Removed inherited diagonal skin albedo lattice; retained mean palette with subtle filtered non-periodic grain. All geometry, skinning, UVs and clip bytes unchanged."
+  ],
+  "before_bounds": [
+    [
+      -2.1793408393859863,
+      2.1793410778045654
+    ],
+    [
+      -1.6037174463272095,
+      0.35403236746788025
+    ],
+    [
+      -3.557652235031128e-07,
+      3.799999952316284
+    ]
+  ],
+  "after_bounds": [
+    [
+      -2.1793408393859863,
+      2.1793410778045654
+    ],
+    [
+      -1.6037174463272095,
+      0.35403236746788025
+    ],
+    [
+      -3.5762786865234375e-07,
+      3.799999952316284
+    ]
+  ],
+  "actions": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "rendered_views": [
+    "front",
+    "quarter",
+    "side",
+    "rear"
+  ],
+  "limitations": "Retained adapted action library, not a new species-specific performance; final regional/user visual acceptance pending.",
+  "user_accepted": false,
+  "previous_finishing_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined.blend",
+  "source_sha256": "0af7be554a19a02fbcc45d4d3a9009b13fd55e06cdc33e75b64737f226fcf32a",
+  "runtime_sha256": "2465b86fa473ab76b52cc6107fa5df2e92cee0b91edafec83e68319fc6a2e87e",
+  "source_render_scope": "Final textured Workbench source views; current native engine views evaluate the normal/ORM shading",
+  "previous_surface_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_surface_v002.blend",
+  "timing_verification": {
+    "baseline_durations": {
+      "Attack": 0.6666666865348816,
+      "AttackHeavy": 0.7083333134651184,
+      "Block": 1.625,
+      "Death": 2.25,
+      "Feed": 2.0833332538604736,
+      "HitReact": 1.0833333730697632,
+      "Idle": 1.7083333730697632,
+      "Interact": 1.7083333730697632,
+      "Investigate": 2.0833332538604736,
+      "Recovery": 0.375,
+      "Running": 1.25,
+      "Sleep": 0.375,
+      "Threaten": 1.7083333730697632,
+      "Walking": 1.9583333730697632,
+      "Windup": 0.375
+    },
+    "final_durations": {
+      "Attack": 0.6666666865348816,
+      "AttackHeavy": 0.7083333134651184,
+      "Block": 1.625,
+      "Death": 2.25,
+      "Feed": 2.0833332538604736,
+      "HitReact": 1.0833333730697632,
+      "Idle": 1.7083333730697632,
+      "Interact": 1.7083333730697632,
+      "Investigate": 2.0833332538604736,
+      "Recovery": 0.375,
+      "Running": 1.25,
+      "Sleep": 0.375,
+      "Threaten": 1.7083333730697632,
+      "Walking": 1.9583333730697632,
+      "Windup": 0.375
+    },
+    "source_fps": 24,
+    "sampled_pose_bytes_preserved": true
+  },
+  "previous_skin_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_v003.blend",
+  "skin_albedo_finish_v004": {
+    "id": "M05",
+    "material": "M05_ClaySkin",
+    "image_size": [
+      256,
+      256
+    ],
+    "old_image_sha256": "8bdb1622c0b994b63d4a971278f2e4ab5a8e2fdd3437aa51d6fc457ab5c53dc7",
+    "new_image_sha256": "0f5e3116608045e3feb233b646cb274b43113306c40c1ef172cbc31717f072df",
+    "old_mean_rgb8": [
+      98.68533325195312,
+      91.80097961425781,
+      80.32522583007812
+    ],
+    "new_mean_rgb8": [
+      98.68499755859375,
+      91.80181884765625,
+      80.32452392578125
+    ],
+    "mean_rgb_delta_normalized": [
+      -1.3164445465686274e-06,
+      3.291111366421569e-06,
+      -2.752565870098039e-06
+    ],
+    "maximum_mean_channel_delta_rgb8": 0.0008392333984375,
+    "noise": "Seeded Gaussian-filtered stationary luminance noise; 0.65 encoded-RGB-byte standard deviation; old channel ratios retained",
+    "old_runtime": {
+      "path": "D:\\Temp\\AshenOath\\skin_refinement_20261101\\before\\M05_refined_before_skin_v004.glb",
+      "bytes": 2970388,
+      "sha256": "95f487f7df9838566f0d9da1c9f7a472c0f05b8ff099e13e4e1b5b4798186b31"
+    },
+    "new_runtime": {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M05\\M05_refined.glb",
+      "bytes": 2996248,
+      "sha256": "2465b86fa473ab76b52cc6107fa5df2e92cee0b91edafec83e68319fc6a2e87e"
+    },
+    "old_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_v003.blend",
+    "new_source": {
+      "path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_skin_v004.blend",
+      "bytes": 3863781,
+      "sha256": "0af7be554a19a02fbcc45d4d3a9009b13fd55e06cdc33e75b64737f226fcf32a"
+    },
+    "non_image_buffer_views_preserved": 1915,
+    "all_other_image_payloads_preserved": true,
+    "all_geometry_skin_uv_node_accessor_and_animation_json_and_payloads_identical": true,
+    "clips_preserved": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "native_visual_acceptance": "Pending main integration/import and fresh current-hash captures"
+  },
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M05_Bell_Eater.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery",
+  "final_source_views": {
+    "paths": {
+      "front": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M05\\front.png",
+      "side": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M05\\side.png",
+      "rear": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M05\\rear.png",
+      "quarter": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M05\\quarter.png"
+    },
+    "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_skin_v004.blend",
+    "source_sha256": "0af7be554a19a02fbcc45d4d3a9009b13fd55e06cdc33e75b64737f226fcf32a",
+    "renderer": "Blender Workbench TEXTURE / studio light; actual Base Color image nodes active; not PBR or Godot",
+    "pose": "Retained Idle at frame 8 / 24 FPS; NLA muted for review only",
+    "master_file_unchanged": true
+  },
+  "source_view_renderer": "Blender Workbench TEXTURE / studio light; actual Base Color image nodes active; not PBR or Godot",
+  "source_view_scope": "Current v004 packed skin albedo, retained Idle pose, four source angles; Workbench TEXTURE preview only, not PBR/Godot."
+}

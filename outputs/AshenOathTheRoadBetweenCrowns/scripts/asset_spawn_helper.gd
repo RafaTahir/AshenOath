@@ -62,6 +62,7 @@ var mesh_cache: Dictionary = {}
 var material_cache: Dictionary = {}
 var resource_cache: Dictionary = {}
 var repaired_mesh_cache: Dictionary = {}
+var foliage_alpha_cache: Dictionary = {}
 var pending_role_resources: Dictionary = {}
 var prepared_animation_libraries: Dictionary = {}
 var runtime_role_diagnostics: Dictionary = {}
@@ -203,6 +204,7 @@ func clear_runtime_caches() -> void:
 	material_cache.clear()
 	resource_cache.clear()
 	repaired_mesh_cache.clear()
+	foliage_alpha_cache.clear()
 	tree_source_cache.clear()
 	_path_owners.clear()
 	prepared_animation_libraries.clear()
@@ -1170,6 +1172,41 @@ func _has_skeleton(root: Node) -> bool:
 			return true
 	return false
 
+func _environment_foliage_cutout(path: String, surface_name: String, source: Material) -> Material:
+	# Imported OBJ/MTL foliage can retain its RGBA atlas while losing the
+	# opacity mode. Keep the immutable source binding and texture shared; only
+	# the helper-owned material variant enables the authored leaf silhouette.
+	if not path.begins_with("res://assets_external/environment/forest/"):
+		return source
+	var material := source as StandardMaterial3D
+	if material == null or material.albedo_texture == null:
+		return source
+	var label := (surface_name + " " + material.resource_name).to_lower()
+	if not (label.contains("leaf") or label.contains("leaves")):
+		return source
+	var texture := material.albedo_texture
+	if not foliage_alpha_cache.has(texture):
+		# CompressedTexture2D can report has_alpha() false for an RGBA import.
+		# Inspect its retained image once, without changing the atlas or mips.
+		var image := texture.get_image()
+		if image != null and image.is_compressed():
+			image.decompress()
+		foliage_alpha_cache[texture] = image != null and image.detect_alpha() != Image.ALPHA_NONE
+	if not bool(foliage_alpha_cache[texture]):
+		return source
+	if material.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR and material.cull_mode == BaseMaterial3D.CULL_DISABLED:
+		return source
+	var key := "foliage_cutout:" + path + ":" + surface_name + ":" + str(source.get_instance_id())
+	if material_cache.has(key):
+		return material_cache[key]
+	var cutout := material.duplicate(false) as StandardMaterial3D
+	cutout.resource_name = material.resource_name + "_AuthoredCutout"
+	cutout.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+	cutout.alpha_scissor_threshold = 0.5
+	cutout.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material_cache[key] = cutout
+	return cutout
+
 func _apply_safe_materials(root: Node3D, path: String) -> void:
 	var fallback: StandardMaterial3D = null
 	var authored_stag_palette := path.ends_with("/WhiteHart_Stag.glb")
@@ -1209,6 +1246,15 @@ func _apply_safe_materials(root: Node3D, path: String) -> void:
 					if surface_index not in authored_surfaces:
 						authored_surfaces.append(surface_index)
 				var surface_material: Material = mesh.surface_get_material(surface_index)
+				var surface_label := (mesh as ArrayMesh).surface_get_name(surface_index) if mesh is ArrayMesh else ""
+				var foliage_material := _environment_foliage_cutout(path, surface_label, surface_material)
+				if foliage_material != surface_material:
+					if local_mesh == null:
+						local_mesh = mesh.duplicate(false) as Mesh
+						mesh_instance.mesh = local_mesh
+						mesh = local_mesh
+					mesh.surface_set_material(surface_index, foliage_material)
+					surface_material = foliage_material
 				if surface_material == null or (surface_index not in authored_surfaces and not authored_stag_palette and _is_default_white_material(surface_material)):
 					if fallback == null:
 						fallback = _fallback_material_for_path(path)

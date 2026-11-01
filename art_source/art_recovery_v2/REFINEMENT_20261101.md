@@ -129,3 +129,7 @@ Human faces, hair, shared boot foundations and broad apron/tabard surfaces remai
 Compilation, static resource checks, source views and isolated native clips are separate observations. Regional encounters, gameplay-camera clearance, combat/interaction feel, saves, phone behavior, listening and reference-PC FPS/memory are not certified here. No candidate is marked user-accepted.
 
 Source/native/prepared art checks and catalog/dependency ownership are complete. Packaging and publication are recorded below after their exact byte/hash and Git checks. Existing publication authorization remains in force.
+
+## Foliage material correction
+
+A prepared-scene inspection traced the red/black cards to `GreyfenShrineGardenWest`, using the RGBA `Leaves_TwistedTree_C.png` atlas through an opaque Bush material. The runtime helper now shares a cached, two-sided alpha-scissor variant for qualifying environment foliage. Source meshes/materials/textures and wood/character bindings stay unchanged; repeated bushes share the repaired mesh. Compressed textures required retained-image alpha detection because `has_alpha()` returned false. Both focused fixtures and the corrected C01 scene proof pass. [Before](evidence/refinement_20261101/foliage/before.png) · [After](evidence/refinement_20261101/foliage/after.png) · [Fixture](evidence/refinement_20261101/foliage/cutout_fixture.json).
