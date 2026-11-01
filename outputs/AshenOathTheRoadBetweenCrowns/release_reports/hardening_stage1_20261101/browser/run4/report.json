@@ -1,0 +1,679 @@
+{
+  "schema_version": 1,
+  "kind": "focused_browser_functional",
+  "label": "candidate",
+  "started_at": "2026-11-01T14:00:53.986Z",
+  "export_root": "D:\\Temp\\AO_H1_retry\\.release-gate\\hardening-stage1\\export",
+  "build_id": "hardening-stage1-20261101",
+  "source": {
+    "git_commit": "ca73b37126dfad61ed7674c4cc929bbdb82e2c7f",
+    "dirty": true
+  },
+  "release_manifest_sha256": "79bc4032a74e8555ab2298e36b6c1c97b56928f57fc31a0a67604ef9f321ee58",
+  "harness_sha256": "47ef1aa96351fee06e4c198b37138bd259bab923a9ebfa3756ba9430d434c914",
+  "observation_mode": "production_read_only",
+  "gameplay_input": "Chromium mouse/keyboard/touch and file picker",
+  "limits": [
+    "No gameplay mutation API",
+    "No performance thresholds or hardware/mobile-device certification",
+    "Imported fixtures are test journeys, not earned campaign progression"
+  ],
+  "cases": [
+    {
+      "name": "touch-metadata_headers_stall",
+      "viewport": {
+        "width": 960,
+        "height": 540
+      },
+      "input": "touch",
+      "status": "pass",
+      "events": [
+        {
+          "event": "ui_click",
+          "text": "Retry preparation",
+          "at": 1793541678966,
+          "point": {
+            "x": 476.87500190734863,
+            "y": 293.75000667571993
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "New Game",
+          "at": 1793541780012,
+          "point": {
+            "x": 476.87500190734863,
+            "y": 107.00000095367444
+          }
+        },
+        {
+          "event": "metadata_retry_recovered",
+          "stalled_requests": 1
+        }
+      ],
+      "screenshots": [
+        "D:\\Temp\\AshenOath\\hardening-h1-retry-touch-headers-headed\\report_evidence\\touch-metadata_headers_stall-metadata-failed.png",
+        "D:\\Temp\\AshenOath\\hardening-h1-retry-touch-headers-headed\\report_evidence\\touch-metadata_headers_stall-new-game.png"
+      ],
+      "console": [
+        {
+          "type": "log",
+          "text": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org",
+          "at": 1793541664344
+        },
+        {
+          "type": "log",
+          "text": "OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL",
+          "at": 1793541667900
+        },
+        {
+          "type": "log",
+          "text": "Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support.",
+          "at": 1793541669753
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_main_menu",
+          "at": 1793541675754
+        },
+        {
+          "type": "warn",
+          "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+          "at": 1793541675796
+        },
+        {
+          "type": "log",
+          "text": "LOADING: runtime ready total=2609ms environment=0ms services=2432ms",
+          "at": 1793541675796
+        },
+        {
+          "type": "log",
+          "text": "LOADING: usable_menu_ready ms=12301",
+          "at": 1793541676339
+        },
+        {
+          "type": "error",
+          "text": "Runtime pack opening failed: Error: Runtime metadata request timed out; retry this journey",
+          "at": 1793541677317
+        },
+        {
+          "type": "error",
+          "text": "Runtime pack opening_materials failed: Error: Runtime metadata request timed out; retry this journey",
+          "at": 1793541677317
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack error id=opening_materials reason=Browser pack download failed; retry this journey",
+          "at": 1793541677323
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack error id=opening reason=Browser pack download failed; retry this journey",
+          "at": 1793541677325
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening_materials bytes=16696740",
+          "at": 1793541683502
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening_materials",
+          "at": 1793541683503
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening bytes=89747240",
+          "at": 1793541688491
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=opening",
+          "at": 1793541688493
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack mounted id=opening",
+          "at": 1793541688493
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm begin",
+          "at": 1793541702774
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_begin",
+          "at": 1793541702917
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'sister_anwen_human' uses an explicit diagnostic fallback: ",
+          "at": 1793541703769
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541703771
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_complete ms=1183 ok=true",
+          "at": 1793541704069
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'reed_choir' uses an explicit diagnostic fallback: ",
+          "at": 1793541704548
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541704548
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'player_human' uses an explicit diagnostic fallback: ",
+          "at": 1793541705215
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541705216
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'mira_human' uses an explicit diagnostic fallback: ",
+          "at": 1793541705729
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541705730
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'rook_human' uses an explicit diagnostic fallback: ",
+          "at": 1793541705851
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541705852
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'widow_elna' uses an explicit diagnostic fallback: ",
+          "at": 1793541705939
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541705940
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'blacksmith_tor' uses an explicit diagnostic fallback: ",
+          "at": 1793541706056
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541706058
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'farmer_toma' uses an explicit diagnostic fallback: ",
+          "at": 1793541706141
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541706142
+        },
+        {
+          "type": "log",
+          "text": "LOADING: opening_world_render_ready",
+          "at": 1793541779027
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarmed total=76155ms build=1183ms world=713ms player=600ms",
+          "at": 1793541779028
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_handoff prewarmed=true cached_zones=1",
+          "at": 1793541780072
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=cache_clear elapsed=50.0",
+          "at": 1793541780074
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_menu_begin",
+          "at": 1793541780116
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_menu_end",
+          "at": 1793541780135
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=quest_begin",
+          "at": 1793541780140
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=quest_end",
+          "at": 1793541780223
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=state_ready elapsed=158.8",
+          "at": 1793541780231
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=zone_dispatch elapsed=162.5",
+          "at": 1793541780233
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=load_zone_begin",
+          "at": 1793541780234
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=greyfen prewarm=true cached=false",
+          "at": 1793541780236
+        },
+        {
+          "type": "log",
+          "text": "LOADING: cached_zone_activated id=greyfen valid=true",
+          "at": 1793541780322
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=cache_activated elapsed=237.4",
+          "at": 1793541780323
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'saga_nera' uses an explicit diagnostic fallback: ",
+          "at": 1793541780686
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541780764
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'saga_nessa' uses an explicit diagnostic fallback: ",
+          "at": 1793541780771
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793541780772
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)",
+          "at": 1793541782719
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=2669.4",
+          "at": 1793541782721
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=2686.0",
+          "at": 1793541782722
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_greyfen_explore",
+          "at": 1793541782788
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=25",
+          "at": 1793541786419
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=4817.2",
+          "at": 1793541786421
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=greyfen playable_ms=4862.4",
+          "at": 1793541786424
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=load_zone_end",
+          "at": 1793541786430
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=ready elapsed=4974.3",
+          "at": 1793541786432
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=zone_return elapsed=4974.3",
+          "at": 1793541786434
+        },
+        {
+          "type": "log",
+          "text": "MOBILE_TOUCH: ready landscape=true viewport=(1280.0, 720.0)",
+          "at": 1793541787652
+        }
+      ],
+      "dom_input": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 293.75,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541678792.7
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 293.75,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541678799.5
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 293.75,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541678955.5
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 293.75,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541678955.8
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 853,
+          "y": 535,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541778177.2
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 853,
+          "y": 535,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541778183.6
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 107,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541779799.6
+        },
+        {
+          "type": "touchstart",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 107,
+          "touches": 1,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541779800
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 107,
+          "pointer_type": "touch",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541779989.7
+        },
+        {
+          "type": "touchend",
+          "trusted": true,
+          "target": "canvas",
+          "x": 476.875,
+          "y": 107,
+          "touches": 0,
+          "fires_touch_events": true,
+          "focused": true,
+          "platform": "Android",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 960,
+            "height": 540
+          },
+          "at": 1793541779990.4
+        }
+      ],
+      "started_at": "2026-11-01T14:00:57.120Z",
+      "finished_at": "2026-11-01T14:04:34.863Z"
+    }
+  ],
+  "requests": [
+    {
+      "path": "index.html",
+      "at": 1793541662074,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "menu-background.png",
+      "at": 1793541662131,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.js",
+      "at": 1793541662149,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "release_manifest.json",
+      "at": 1793541662250,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "runtime_pack_manifest.json",
+      "at": 1793541662285,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": "metadata_headers_stall",
+      "closed_at": 1793541677352
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+      "at": 1793541662416,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "index.pck",
+      "at": 1793541662426,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "favicon.ico",
+      "at": 1793541662771,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+      "at": 1793541676503,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+      "at": 1793541676505,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "release_manifest.json",
+      "at": 1793541679005,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "runtime_pack_manifest.json",
+      "at": 1793541679108,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "packs/opening_materials.pck",
+      "at": 1793541679211,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    },
+    {
+      "path": "packs/opening.pck",
+      "at": 1793541679216,
+      "scenario": "touch-metadata_headers_stall",
+      "fault": null
+    }
+  ],
+  "status": "pass",
+  "browser": {
+    "executable": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "version": "Chrome/156.0.8078.74",
+    "headless": false
+  },
+  "finished_at": "2026-11-01T14:04:50.902Z",
+  "runtime_errors": [],
+  "profile_cleanup_error": "Error: EPERM, Permission denied: \\\\?\\D:\\Temp\\AshenOath\\hardening-browser\\run-1793541653962-10204\\chromium-profile '\\\\?\\D:\\Temp\\AshenOath\\hardening-browser\\run-1793541653962-10204\\chromium-profile'",
+  "profile": "D:\\Temp\\AshenOath\\hardening-browser\\run-1793541653962-10204\\chromium-profile"
+}

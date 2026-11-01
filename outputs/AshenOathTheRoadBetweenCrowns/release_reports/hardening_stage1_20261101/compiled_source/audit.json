@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "expected_commit": "ca73b37126dfad61ed7674c4cc929bbdb82e2c7f",
+  "export_root": "D:\\Temp\\AO_H1_retry\\.release-gate\\hardening-stage1\\export",
+  "build_id": "hardening-stage1-20261101",
+  "release_manifest_sha256": "79bc4032a74e8555ab2298e36b6c1c97b56928f57fc31a0a67604ef9f321ee58",
+  "root_pck": {
+    "transport": "D:\\Temp\\AO_H1_retry\\.release-gate\\hardening-stage1\\export\\index.pck",
+    "transport_bytes": 4915347,
+    "transport_sha256": "209b68c97175e919ab77e5f9c1e8a753772d162fc3691a11776be1b66961c0f1",
+    "decoded": "D:\\Temp\\AshenOath\\h1_retry_pack_source_audit\\index.raw.pck",
+    "decoded_bytes": 8665032,
+    "decoded_sha256": "5f21d755ac7d108289a9431375cda00e312fa898e61298e83be9f700d601fe73"
+  },
+  "script_count": 7,
+  "compiled_token_count": 44169,
+  "statement_indentation_boundaries": 5472,
+  "comparison": {
+    "path": "D:\\Temp\\AshenOath\\h1_retry_pack_source_audit\\comparison.json",
+    "sha256": "f1d05b0c2b1685e1db56ca38ebf074ecd273a97e63dbafed6fa9a9b969807d51"
+  },
+  "pack_override_check": {
+    "path": "D:\\Temp\\AshenOath\\h1_retry_pack_source_audit\\mounted_hashes.json",
+    "sha256": "a9f1d57c41a38106dac674d09a848376c077a6f0aee6e36a0b854d887462ed14"
+  },
+  "coordinator_patch": {
+    "compiled_sha256": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+    "frozen_source_sha256": "d2d343d1b750973f085e0872af37e9b3a2516f401fa5e20fbc7d6122953150eb",
+    "new_reset_arrival_recovered_each_primary_probe_before_fallback": true,
+    "new_probe_recovery_before_timeout_rollback": true,
+    "preexisting_restoring_source_reset_at_transition_begin": true
+  },
+  "execution": "FileAccess/map/token inspection only; no models, world, Chrome, save, source import or production edit"
+}

@@ -1,0 +1,131 @@
+[
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"mount": "actual_root_index"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "base"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "opening"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "opening_materials"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "adjacent"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "characters"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "monsters"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "campaign"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "audio"
+	},
+	{
+		"hashes": {
+			"scripts/hud/hud_input.gdc": "1357f5bcecadc860c89b291974515729d1578321fcadf0bf05e5089cbb145b66",
+			"scripts/hud/hud_lifecycle.gdc": "d8d3be0295c638958801ffbc9c9ac1ab2999c0599b5d913492c458328cc27bfa",
+			"scripts/input_router.gdc": "cdddcc6c7d3ab4b5d78be3818d393a1839d385d3be5ac2b72dc74404056d4a1b",
+			"scripts/mobile_touch_controls.gdc": "fcec2c116fa16a5d85c50d2971dd1065e4a5e8f412083a303728e5e41d9096f6",
+			"scripts/player_controller.gdc": "8974565419bc1b3225e62268bbe4d5a894eef475519e9b20ed3a35a1722f3699",
+			"scripts/systems/hud_coordinator.gdc": "cdea2e44cd07ac27e49ec9e3314aab1165382ea0e7ab80b661c4316b293e0422",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64"
+		},
+		"matches_actual_root": true,
+		"mount": "quality_materials"
+	}
+]

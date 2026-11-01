@@ -1,0 +1,1070 @@
+{
+  "schema_version": 1,
+  "kind": "focused_browser_functional",
+  "label": "candidate",
+  "started_at": "2026-11-01T13:00:29.732Z",
+  "export_root": "D:\\Temp\\AO_H1_retry\\.release-gate\\hardening-stage1\\export",
+  "build_id": "hardening-stage1-20261101",
+  "source": {
+    "git_commit": "ca73b37126dfad61ed7674c4cc929bbdb82e2c7f",
+    "dirty": true
+  },
+  "release_manifest_sha256": "79bc4032a74e8555ab2298e36b6c1c97b56928f57fc31a0a67604ef9f321ee58",
+  "harness_sha256": "47ef1aa96351fee06e4c198b37138bd259bab923a9ebfa3756ba9430d434c914",
+  "observation_mode": "production_read_only",
+  "gameplay_input": "Chromium mouse/keyboard/touch and file picker",
+  "limits": [
+    "No gameplay mutation API",
+    "No performance thresholds or hardware/mobile-device certification",
+    "Imported fixtures are test journeys, not earned campaign progression"
+  ],
+  "cases": [
+    {
+      "name": "desktop-physical-cold-travel",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "input": "keyboard_mouse",
+      "status": "pass",
+      "events": [
+        {
+          "event": "ui_click",
+          "text": "Saved Journeys",
+          "at": 1793538173996,
+          "point": {
+            "x": 996,
+            "y": 249
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Import a Save File",
+          "at": 1793538175464,
+          "point": {
+            "x": 992,
+            "y": 335
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Hardening Replay cold-gate-desktop\nManual save 1 (replay)\nReady\nGreyfen · Road of Crows\nSave time not recorded\nNext: Take the north road into Wychwood\nReplay journey",
+          "at": 1793538178380,
+          "point": {
+            "x": 992,
+            "y": 170
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Load This Journey",
+          "at": 1793538180085,
+          "point": {
+            "x": 992,
+            "y": 213
+          }
+        },
+        {
+          "event": "physical_travel_cancelled",
+          "source": {
+            "x": 5.47651863098145,
+            "y": 0.032753299921751,
+            "z": -23.9586639404297
+          },
+          "shared_download_may_continue": true
+        },
+        {
+          "event": "physical_travel_retry_loading",
+          "at": 1793538204313
+        },
+        {
+          "event": "physical_cold_travel_arrived",
+          "hold_after_travel_ui_ms": 42077,
+          "zone": "wychwood",
+          "input": "WASD"
+        }
+      ],
+      "screenshots": [
+        "D:\\Temp\\AshenOath\\hardening-h1-retry-desktop-cold\\report_evidence\\desktop-physical-cold-travel-imported-slot.png",
+        "D:\\Temp\\AshenOath\\hardening-h1-retry-desktop-cold\\report_evidence\\desktop-physical-cold-travel-physical-travel-loading.png",
+        "D:\\Temp\\AshenOath\\hardening-h1-retry-desktop-cold\\report_evidence\\desktop-physical-cold-travel-physical-travel-cancelled.png",
+        "D:\\Temp\\AshenOath\\hardening-h1-retry-desktop-cold\\report_evidence\\desktop-physical-cold-travel-physical-travel-22s-source-preserved.png",
+        "D:\\Temp\\AshenOath\\hardening-h1-retry-desktop-cold\\report_evidence\\desktop-physical-cold-travel-physical-cold-arrival.png"
+      ],
+      "console": [
+        {
+          "type": "log",
+          "text": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org",
+          "at": 1793538036384
+        },
+        {
+          "type": "log",
+          "text": "OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL",
+          "at": 1793538039793
+        },
+        {
+          "type": "log",
+          "text": "Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support.",
+          "at": 1793538041004
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_main_menu",
+          "at": 1793538049060
+        },
+        {
+          "type": "warn",
+          "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+          "at": 1793538049154
+        },
+        {
+          "type": "log",
+          "text": "LOADING: runtime ready total=4232ms environment=0ms services=3784ms",
+          "at": 1793538049156
+        },
+        {
+          "type": "log",
+          "text": "LOADING: usable_menu_ready ms=14510",
+          "at": 1793538050830
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening_materials bytes=16696740",
+          "at": 1793538051268
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening_materials",
+          "at": 1793538051278
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening bytes=89747240",
+          "at": 1793538081482
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=opening",
+          "at": 1793538081483
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack mounted id=opening",
+          "at": 1793538081484
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm begin",
+          "at": 1793538108219
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_begin",
+          "at": 1793538108722
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'sister_anwen_human' uses an explicit diagnostic fallback: ",
+          "at": 1793538111159
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538111160
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_complete ms=3340 ok=true",
+          "at": 1793538111988
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'reed_choir' uses an explicit diagnostic fallback: ",
+          "at": 1793538113465
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538113471
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'player_human' uses an explicit diagnostic fallback: ",
+          "at": 1793538114970
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538114971
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'mira_human' uses an explicit diagnostic fallback: ",
+          "at": 1793538116105
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538116107
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'rook_human' uses an explicit diagnostic fallback: ",
+          "at": 1793538116176
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538116177
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'widow_elna' uses an explicit diagnostic fallback: ",
+          "at": 1793538116259
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538116259
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'blacksmith_tor' uses an explicit diagnostic fallback: ",
+          "at": 1793538116326
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538116327
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'farmer_toma' uses an explicit diagnostic fallback: ",
+          "at": 1793538116403
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538116404
+        },
+        {
+          "type": "log",
+          "text": "LOADING: opening_world_render_ready",
+          "at": 1793538173160
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarmed total=64516ms build=3340ms world=1870ms player=1503ms",
+          "at": 1793538173161
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_requested slot=manual_1 source=primary",
+          "at": 1793538180107
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_prepared destination=greyfen",
+          "at": 1793538180111
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=greyfen prewarm=false cached=false",
+          "at": 1793538180329
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'saga_nera' uses an explicit diagnostic fallback: ",
+          "at": 1793538181122
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538181123
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'saga_nessa' uses an explicit diagnostic fallback: ",
+          "at": 1793538181156
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538181157
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)",
+          "at": 1793538181838
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=1519.7",
+          "at": 1793538181847
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=1533.0",
+          "at": 1793538181860
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_greyfen_explore",
+          "at": 1793538181886
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'player_human' uses an explicit diagnostic fallback: ",
+          "at": 1793538182621
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538182622
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=true ms=1",
+          "at": 1793538182772
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=2446.1",
+          "at": 1793538182772
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=greyfen playable_ms=4653.8",
+          "at": 1793538184982
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=characters bytes=9359280",
+          "at": 1793538190659
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=characters",
+          "at": 1793538190660
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=monsters bytes=39946172",
+          "at": 1793538192427
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=monsters",
+          "at": 1793538192428
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=adjacent bytes=3225744",
+          "at": 1793538236569
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=adjacent",
+          "at": 1793538236569
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_wychwood_tension",
+          "at": 1793538236580
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'ghoulkin_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793538238444
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538238444
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'ghoulkin_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793538238652
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538238655
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'wychwood_stalker_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793538238775
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538238776
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'wychwood_raider_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793538239110
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538239112
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'wychwood_brute_creature' uses an explicit diagnostic fallback: ",
+          "at": 1793538239311
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538239312
+        },
+        {
+          "type": "error",
+          "text": "WARNING: Runtime visual role 'glassmoth' uses an explicit diagnostic fallback: ",
+          "at": 1793538239762
+        },
+        {
+          "type": "error",
+          "text": "   at: push_warning (core/variant/variant_utility.cpp:1034)",
+          "at": 1793538239763
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=wychwood prewarm=false cached=true",
+          "at": 1793538240181
+        },
+        {
+          "type": "log",
+          "text": "LOADING: cached_zone_activated id=wychwood valid=true",
+          "at": 1793538240191
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=cache_activated elapsed=36069.0",
+          "at": 1793538240191
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=wychwood reused=true visible=true position=(0.0, 0.0, 0.0)",
+          "at": 1793538240202
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=36089.2",
+          "at": 1793538240210
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=36100.1",
+          "at": 1793538240221
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=wychwood navigation=false ms=2",
+          "at": 1793538240247
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=36127.1",
+          "at": 1793538240248
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=wychwood playable_ms=42132.5",
+          "at": 1793538246275
+        }
+      ],
+      "dom_input": [
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538173860.3
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538173862.1
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538173863.5
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538173864
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538173987.9001
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 249,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538173988.2
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": -4,
+          "movement_y": 86,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538175361.1
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": -4,
+          "movement_y": 86,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538175361.3
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538175361.8
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538175362.1
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538175460.5
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538175461.1
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": -165,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538178258.4001
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "movement_x": 0,
+          "movement_y": -165,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538178258.6
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538178261.1
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538178262.3
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538178371.9001
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 170,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538178372.1
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 43,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538179970
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 43,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538179970.3
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538179973.3
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538179973.9001
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538180078.4001
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793538180079
+        }
+      ],
+      "started_at": "2026-11-01T13:00:32.250Z",
+      "finished_at": "2026-11-01T13:04:09.715Z"
+    }
+  ],
+  "requests": [
+    {
+      "path": "index.html",
+      "at": 1793538032828,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "menu-background.png",
+      "at": 1793538032916,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.js",
+      "at": 1793538032939,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "release_manifest.json",
+      "at": 1793538032967,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "runtime_pack_manifest.json",
+      "at": 1793538033001,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+      "at": 1793538033771,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "index.pck",
+      "at": 1793538033775,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "favicon.ico",
+      "at": 1793538033880,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "packs/opening_materials.pck",
+      "at": 1793538033993,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "packs/opening.pck",
+      "at": 1793538033999,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+      "at": 1793538053810,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+      "at": 1793538053954,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "packs/adjacent.pck",
+      "at": 1793538189450,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": "cold_hold",
+      "released_at": 1793538236322,
+      "closed_at": 1793538236480
+    },
+    {
+      "path": "packs/characters.pck",
+      "at": 1793538189538,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    },
+    {
+      "path": "packs/monsters.pck",
+      "at": 1793538189547,
+      "scenario": "desktop-physical-cold-travel",
+      "fault": null
+    }
+  ],
+  "status": "pass",
+  "browser": {
+    "executable": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "version": "Chrome/156.0.8078.74",
+    "headless": true
+  },
+  "finished_at": "2026-11-01T13:04:12.000Z",
+  "runtime_errors": [],
+  "profile": null
+}

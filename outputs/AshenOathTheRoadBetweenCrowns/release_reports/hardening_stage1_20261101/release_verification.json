@@ -1,0 +1,541 @@
+{
+  "schema_version": 1,
+  "stage": 1,
+  "build_id": "hardening-stage1-20261101",
+  "previous_release_commit": "861c40cbb286847f3528cefd587cfc42a85a0b90",
+  "frozen_runtime_source": {
+    "git_commit": "ca73b37126dfad61ed7674c4cc929bbdb82e2c7f",
+    "dirty": true
+  },
+  "verification_status": "pass",
+  "checks": {
+    "maintained_story_builder": "pass; frozen ca73b371 source; all nine packs exported",
+    "metadata_source_function_regressions": {
+      "status": "pass",
+      "tests": 21
+    },
+    "existing_save_durability_regressions": {
+      "status": "pass",
+      "tests": 5
+    },
+    "replay_import_round_trip": {
+      "status": "pass",
+      "cases": 8,
+      "checks": 249,
+      "storage": "in-memory"
+    },
+    "travel_wait_ownership_deadlines": {
+      "status": "pass",
+      "coverage": [
+        "both preparation loops",
+        "more than 900 fast frames",
+        "30-second preparation",
+        "readiness at 120-second boundary",
+        "explicit failure",
+        "superseded request",
+        "paused source recovery"
+      ]
+    },
+    "strict_web_export": {
+      "status": "pass",
+      "files": 18,
+      "total_including_release_manifest": 203175016
+    },
+    "decoded_candidate_packs": {
+      "status": "pass",
+      "count": 9,
+      "checks": [
+        "PCK magic",
+        "exact byte sizes",
+        "SHA256",
+        "recorded total"
+      ]
+    },
+    "exported_resource_closure": {
+      "status": "pass",
+      "prepared_actors": 33,
+      "omitted_standalone_sources": 32,
+      "environment_textures": 36
+    },
+    "independent_frozen_source_review": "pass; seven exported compiled scripts match ca73b371 across44169tokens/5472statementboundaries; allninepackmountspreservehashes",
+    "legacy_aggregate_gates": "Repairs are scheduled in stage 3. The old PACK-003-only candidate validator rejects the current schema; raw artifacts were independently checked without bypassing byte/hash assertions.",
+    "browser_scope": "Only passing exact-candidate reports attached to this release count as observed browser acceptance. Isolated Chromium profiles; no physical-phone or performance certification.",
+    "arrival_support_recovery": {
+      "status": "pass",
+      "checks": 51,
+      "two_second_deadline_preserved": true,
+      "old_source_failures": 13,
+      "current_primary_recovery_flag": "reset each probe",
+      "evidence": "arrival_regression"
+    },
+    "failed_candidate": "The original b404752 candidate passed save/metadata checks but failed delayed physical arrival; it remained local. Its compiled audit is retained under failed_candidate_b404752_compiled_source. The selected ca73b371 export corrects recovery-before-timeout and requires fresh full browser acceptance.",
+    "touch_input_scope": "Browser acceptance uses real anchored touch-stick press steering and touch buttons/file-picker. Held touchMove is retained as a separate desktop-emulation diagnostic; drag support, physical phones and performance are not certified. Exact full-game native centered-touch/drag dispatch also passed without production input changes.",
+    "browser_report_aggregation": "Accepted successes share the identical selected manifest/source. The archived47ef harness and currentc84c harness differ only by guarded real cinematic Skip navigation. Original report statuses and failed/incomplete attempts remain preserved. The desktopAll startupfailure provides no passing cold evidence; separate fresh-process cold cases pass bothviewports.",
+    "observed_generic_browser_diagnostic": {
+      "message": "Condition !is_inside_tree at can_process after real OpeningSceneSkip press",
+      "count": 1,
+      "source": "touch-body headed report",
+      "classification": "baseline HUD control removed synchronously during its GUI input dispatch",
+      "functional_impact": "Skip completed and ordinary control restored; no story choice, save or load failed",
+      "not_console_clean": true,
+      "follow_up": "Minimal deferred-control-removal fix and regression assigned to release3"
+    }
+  },
+  "transport": {
+    "stage": 1,
+    "build_id": "hardening-stage1-20261101",
+    "source": {
+      "git_commit": "ca73b37126dfad61ed7674c4cc929bbdb82e2c7f",
+      "dirty": true
+    },
+    "status": "pass",
+    "file_count": 18,
+    "total_web_bytes_including_manifest": 203175016,
+    "decoded_pack_count": 9,
+    "decoded_pack_bytes": 203146248,
+    "copied": true,
+    "committed_verified": false,
+    "release_manifest_sha256": "79bc4032a74e8555ab2298e36b6c1c97b56928f57fc31a0a67604ef9f321ee58",
+    "files": {
+      "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+        "bytes": 2973,
+        "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+        "bytes": 7298,
+        "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.js",
+        "bytes": 78364,
+        "sha256": "7e714b686d29e8b88277330bf325f057530f4198ef6e3654cd6d5ea534ebba8a",
+        "content_encoding": "gzip",
+        "decoded_bytes": 315759,
+        "decoded_sha256": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.wasm": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+        "bytes": 9382282,
+        "sha256": "b86a73db5739d710bfbaaad9c0877d8d9f61069723bb16e8252371da8a8c6a01",
+        "content_encoding": "gzip",
+        "decoded_bytes": 37700666,
+        "decoded_sha256": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6"
+      },
+      "index.html": {
+        "path": "index.html",
+        "bytes": 35466,
+        "sha256": "cdb81a55fa2479c00601b480142c13783db6b7aaef37f1a7a9224b5458587f8d"
+      },
+      "index.pck": {
+        "path": "index.pck",
+        "bytes": 4915347,
+        "sha256": "209b68c97175e919ab77e5f9c1e8a753772d162fc3691a11776be1b66961c0f1",
+        "content_encoding": "gzip",
+        "decoded_bytes": 8665032,
+        "decoded_sha256": "5f21d755ac7d108289a9431375cda00e312fa898e61298e83be9f700d601fe73"
+      },
+      "index.png": {
+        "path": "index.png",
+        "bytes": 21443,
+        "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+      },
+      "menu-background.png": {
+        "path": "menu-background.png",
+        "bytes": 1718419,
+        "sha256": "6a792c6892a6d8ab440c8f17e496b8b969da45ce10d6f8d8de1114d6559d2239"
+      },
+      "packs/adjacent.pck": {
+        "path": "packs/adjacent.pck",
+        "bytes": 2986970,
+        "sha256": "c701be8485594c829be1ec2e77544077ca7189c345ec963f3441d97799944012",
+        "content_encoding": "gzip",
+        "decoded_bytes": 3225744,
+        "decoded_sha256": "50bee0b73f2ad9ea13c8a1fb96dd014d70d434a84553a4013d25a1a2d2e3f569"
+      },
+      "packs/audio.pck": {
+        "path": "packs/audio.pck",
+        "bytes": 18238025,
+        "sha256": "02dd58ea29a28c64b3b38810b6cb27751fa2a2d160edba176359f11be6807b1b",
+        "content_encoding": "gzip",
+        "decoded_bytes": 21341756,
+        "decoded_sha256": "6288fdcc5aeafd4df3e82cb6cd8f8d08850525ed9ddfb6d555d49c77e92b681c"
+      },
+      "packs/campaign.pck": {
+        "path": "packs/campaign.pck",
+        "bytes": 9234062,
+        "sha256": "12ff7ddf895b5b318f96f6cb9617c6a79b364957c823f0d2bd01396c06afe6da",
+        "content_encoding": "gzip",
+        "decoded_bytes": 9992052,
+        "decoded_sha256": "b71d052f0cfdd6695e883e16af92b015c9bb3bba23be713b932af44374bace83"
+      },
+      "packs/characters.pck": {
+        "path": "packs/characters.pck",
+        "bytes": 9112542,
+        "sha256": "7891154882a2346c6ddd586ac11c1a84fd8d778d5fb7017be6aa7978e6c9639a",
+        "content_encoding": "gzip",
+        "decoded_bytes": 9359280,
+        "decoded_sha256": "fda756cd7e83317f8ebfec4d768e3f55dfec643979c4f569bd8d79e8488fd2c5"
+      },
+      "packs/monsters.pck": {
+        "path": "packs/monsters.pck",
+        "bytes": 38685791,
+        "sha256": "c361420fbfe524981d4d1cca17d91a9567bac9223dd549cbb3f2e0fb36561f8d",
+        "content_encoding": "gzip",
+        "decoded_bytes": 39946172,
+        "decoded_sha256": "dfcc23beb9bf993d2b36ccfa1b0e119eefde137e432ce278db4187d08ad9e856"
+      },
+      "packs/opening.pck": {
+        "path": "packs/opening.pck",
+        "bytes": 85218511,
+        "sha256": "c7bd48bec6743182f338ccaa7e2d7beb49d34739f7aaa20df68f3c0903ee9df0",
+        "content_encoding": "gzip",
+        "decoded_bytes": 89747240,
+        "decoded_sha256": "8b0ef3cd77473c87b0e173d775688aca910276ac8e98adb97e8db55bff1aff0a"
+      },
+      "packs/opening_materials.pck": {
+        "path": "packs/opening_materials.pck",
+        "bytes": 16298248,
+        "sha256": "bed36b73464c6d4ce86283d44f83011a75a4fc85ea53518c8a4230380af393dc",
+        "content_encoding": "gzip",
+        "decoded_bytes": 16696740,
+        "decoded_sha256": "89d98d4d7323281a5270f484d434f9bc300faa14c6502f4f5718a3dbc513518b"
+      },
+      "packs/quality_materials.pck": {
+        "path": "packs/quality_materials.pck",
+        "bytes": 7222535,
+        "sha256": "431022a96a6a140e7ba493be0ad1db1a1733c1110e9bd8298029aaae2c6e53d1",
+        "content_encoding": "gzip",
+        "decoded_bytes": 7367276,
+        "decoded_sha256": "1c137036aabe5c76d8690647dd573cadab6953f341b142cde770885259794ac7"
+      },
+      "runtime_pack_manifest.json": {
+        "path": "runtime_pack_manifest.json",
+        "bytes": 8410,
+        "sha256": "aaf2355fa23069811edd81b5b38f9423248d799ad4a4e3c3ea00c66b8206a380"
+      },
+      "release_manifest.json": {
+        "bytes": 8330,
+        "sha256": "79bc4032a74e8555ab2298e36b6c1c97b56928f57fc31a0a67604ef9f321ee58"
+      }
+    }
+  },
+  "browser_evidence": [
+    {
+      "report": "browser/run1/report.json",
+      "sha256": "9a5c6a2c3e4b83366b154af620dcdf5e63d388610c452e00d7ed627463b797b4",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "desktop-physical-cold-travel",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "input": "keyboard_mouse",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run1/desktop-physical-cold-travel-1-desktop-physical-cold-travel-imported-slot.png",
+          "sha256": "400bb9cb95f76c93719867c12e94eebd9277fd6472a122996c581961cb1daaea",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-physical-cold-travel-2-desktop-physical-cold-travel-physical-travel-loading.png",
+          "sha256": "1a4db9edbc91670955d11296c5f10aafc4ca5e389a778e53f028b80a8f0cf4a8",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-physical-cold-travel-3-desktop-physical-cold-travel-physical-travel-cancelled.png",
+          "sha256": "c6c4775db1f150d61b47c0c5911f5d288a2c4b512bba3caa6394cbef1b298ff3",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-physical-cold-travel-4-desktop-physical-cold-travel-physical-travel-22s-source-preserved.png",
+          "sha256": "658a0ee0927a67ce535476adcc58c3de37ca2c0413a99ce599a8e0f88fd1164e",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-physical-cold-travel-5-desktop-physical-cold-travel-physical-cold-arrival.png",
+          "sha256": "46f6f7f51e15af4f5e775f9ea8de962de8fa90a4f16b87c7d6f2503119b85f41",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run2/report.json",
+      "sha256": "138074e0080ef68cd848199dbfef8ee9b5b2419e6dfebfbdcbb98e4db218da71",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "touch-physical-cold-travel",
+          "viewport": {
+            "width": 960,
+            "height": 540
+          },
+          "input": "touch",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run2/touch-physical-cold-travel-1-touch-physical-cold-travel-imported-slot.png",
+          "sha256": "98a2c2b7be10af8a64af1164b8641ffba876b26fcc259ea3e940ef788900556e",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-physical-cold-travel-2-touch-physical-cold-travel-physical-travel-loading.png",
+          "sha256": "68cad40e83ddbd4ea4a3223cca7d0febfc3fb145e88ffc1583c76136f273e8a7",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-physical-cold-travel-3-touch-physical-cold-travel-physical-travel-cancelled.png",
+          "sha256": "728f3bef68dbfab077bd177353609adb2c9625445db087d1ccdede42b5b50f8b",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-physical-cold-travel-4-touch-physical-cold-travel-physical-travel-22s-source-preserved.png",
+          "sha256": "a7d88f18fb54f5af281678ff21e431f122036f5994c004a4b41d683acae79c3a",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-physical-cold-travel-5-touch-physical-cold-travel-physical-cold-arrival.png",
+          "sha256": "5884965485079f1a07c4713d729b1fed0aed8a046390d94c4639cb654b7148c5",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run3/report.json",
+      "sha256": "540db84e6c697cabcf4036542a60aab49a6f3cb5144ecc660cdaf47fd2694eb6",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "touch-smoke",
+          "viewport": {
+            "width": 960,
+            "height": 540
+          },
+          "input": "touch",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run3/touch-smoke-1-touch-smoke-new-game.png",
+          "sha256": "5736b71c01a169fcf221fd5d65238208fcd642036268aa56b85eb49f29b8baa2",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run3/touch-smoke-2-touch-smoke-paused-save.png",
+          "sha256": "cb587843bdf80288d176da0237e9309cbb2ebd7fb427983d2ddd689049f73258",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run3/touch-smoke-3-touch-smoke-continued.png",
+          "sha256": "661fa33da2fc4c68019542c1929ba85c154b4e3027c54d663e12e1e07091a72a",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run3/touch-smoke-4-touch-smoke-imported-slot.png",
+          "sha256": "0aea932a0a801adfed084296ef2e0cf3b8ee8f3d4b602d1409ba7153860ab822",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run3/touch-smoke-5-touch-smoke-replay-isolated.png",
+          "sha256": "cb587843bdf80288d176da0237e9309cbb2ebd7fb427983d2ddd689049f73258",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run4/report.json",
+      "sha256": "cf0cc24c2086928dc05a38ecf0ad2fc496f20d00fcaadbadaf434c46554d3b2f",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "touch-metadata_headers_stall",
+          "viewport": {
+            "width": 960,
+            "height": 540
+          },
+          "input": "touch",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run4/touch-metadata_headers_stall-1-touch-metadata_headers_stall-metadata-failed.png",
+          "sha256": "4bccfe18511c06d9cd25e0d584a1c0a22294043ce81efaee94f8176b522a73f6",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run4/touch-metadata_headers_stall-2-touch-metadata_headers_stall-new-game.png",
+          "sha256": "4faba2b7c771bac993104fc56d414e15a2c32315f51533a47ac412e41b0fba94",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run5/report.json",
+      "sha256": "74ebbeb6fdda3acb773ad9bfeb4f6324f4a904578e926f0e18b0386eb90e045e",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "touch-metadata_body_stall",
+          "viewport": {
+            "width": 960,
+            "height": 540
+          },
+          "input": "touch",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run5/touch-metadata_body_stall-1-touch-metadata_body_stall-metadata-failed.png",
+          "sha256": "4bccfe18511c06d9cd25e0d584a1c0a22294043ce81efaee94f8176b522a73f6",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run5/touch-metadata_body_stall-2-touch-metadata_body_stall-new-game.png",
+          "sha256": "d129018145cbc59a5851892254e1ce249806a4bbbed1152680c502bea0469cbc",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run6/report.json",
+      "sha256": "33c15e8cf4b9072753aa970b1c60305b6017407988c3d9f79c9239f6082f77cb",
+      "original_report_status": "fail",
+      "accepted_cases": [
+        {
+          "name": "desktop-smoke",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "input": "keyboard_mouse",
+          "status": "pass"
+        },
+        {
+          "name": "desktop-metadata_headers_stall",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "input": "keyboard_mouse",
+          "status": "pass"
+        },
+        {
+          "name": "desktop-metadata_body_stall",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "input": "keyboard_mouse",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [
+        {
+          "name": "desktop-physical-cold-travel",
+          "status": "fail",
+          "error": "Error: Timed out: main menu prepared for physical-travel fixture (240000 ms functional bound)"
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "browser/run6/desktop-smoke-1-desktop-smoke-new-game.png",
+          "sha256": "0d6b7dd11cf7b18470b546cababb5c7b40bd1516776056981cd8e329101820dd",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-smoke-2-desktop-smoke-paused-save.png",
+          "sha256": "db5d171cc9bf866d167608abafb62db7d8892b639e13d00156ef75597c620a86",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-smoke-3-desktop-smoke-continued.png",
+          "sha256": "d190d9585af1e819000266356c136f1674292fd74b51a35c213c45018e4aac1c",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-smoke-4-desktop-smoke-imported-slot.png",
+          "sha256": "36e4483648af93d1038296d3fe56a8b00faa950c30980b2f460eef9bf15da02a",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-smoke-5-desktop-smoke-replay-isolated.png",
+          "sha256": "405f6b3c69a360038e768f39d7b6234d2d73874667c490b468afc30ff7b0644e",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-metadata_headers_stall-1-desktop-metadata_headers_stall-metadata-failed.png",
+          "sha256": "463fb3d2c0576dfcc2f329ed7ef84b80aee1b37f221765937b9ab4db6509cab4",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-metadata_headers_stall-2-desktop-metadata_headers_stall-new-game.png",
+          "sha256": "3fbbb93e5c6c9ba54f1f2380993db8123476d0c0ade75ac56af4b707fb852b8b",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-metadata_body_stall-1-desktop-metadata_body_stall-metadata-failed.png",
+          "sha256": "463fb3d2c0576dfcc2f329ed7ef84b80aee1b37f221765937b9ab4db6509cab4",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-metadata_body_stall-2-desktop-metadata_body_stall-new-game.png",
+          "sha256": "c9c8662e014f11cff6a906beb0b2e0e154c6ec611f6dba95dc7ea2f8ab9d5a2b",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run6/desktop-physical-cold-travel-1-desktop-physical-cold-travel-failure.png",
+          "sha256": "636c3b7ecea7b419638dc8887ca107851172cebb20ebb9dc7572fd75532a2a52",
+          "case_status": "fail"
+        }
+      ]
+    }
+  ],
+  "harness_sources": [
+    {
+      "path": "tools/hardening_harness_versions/47ef/verify_hardening_browser.mjs",
+      "sha256": "47ef1aa96351fee06e4c198b37138bd259bab923a9ebfa3756ba9430d434c914"
+    },
+    {
+      "path": "tools/verify_hardening_browser.mjs",
+      "sha256": "c84c78e62ac89bc3c3c4b4e8870b200fa42efc01b75ac861fd142d7297884a86"
+    }
+  ],
+  "publication": {
+    "authorized": true,
+    "method": "git_triggered_vercel",
+    "development_branch": "codex/art-recovery-anwen",
+    "production_branch": "main",
+    "git_status_at_recording": "awaiting_artifact_commit_and_push",
+    "provider_deployment_observed": false
+  },
+  "acceptance": {
+    "agent_regression_qa": "pass",
+    "user_acceptance": "not_claimed",
+    "physical_phone_coverage": false,
+    "performance_certification": false
+  },
+  "compatibility": {
+    "save_version": 13,
+    "save_format_changed": false,
+    "art_direction_and_content_preserved": true,
+    "damage_and_telegraph_recovery_values_preserved": true,
+    "deployment_configuration_preserved": true
+  },
+  "replay_note": "Previously imported replay copies whose flag was discarded need reimporting from the original export; names are not used to infer replay status."
+}

@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "scope": "Shared export/import-cache drift ruled out for the six audited input and HUD scripts only; this does not diagnose Web-only touch movement failure.",
+  "build_id": "hardening-stage1-20261101",
+  "frozen_commit": "b404752ac96f5aefcb63aedb2bc7d5f82697d37c",
+  "failed_touch_report": "D:\\Temp\\AshenOath\\hardening-h1-touch-3\\report.json",
+  "failed_touch_report_sha256": "4c90a8dd291259dc0c4c0db9aafa4d7c378c96c8d0ad4931b004f7723760fcc7",
+  "release_manifest_sha256": "1dbe076bc1d35bc9f4cdf44fc4450df92f6a93e46a18e3efbedc1f8c5ca845d9",
+  "transport_root_pck_sha256": "28ccb3dafadf435ed038267290786d9b849443c1b140f4c647a32efea5190d6f",
+  "decoded_root_pck_sha256": "715cc1178b542359799f311cdebd887b316fe62844cb16bba4a1b7243e9fc58e",
+  "comparison": {
+    "path": "D:\\Temp\\AshenOath\\h1_pack_source_audit\\comparison.json",
+    "sha256": "f7ee516681a62dfe2e6dd4fc12ec5c4b964c02f64e59bfd61b71870a2c138253",
+    "script_count": 6,
+    "token_count": 38766,
+    "statement_indentation_boundaries": 4840
+  },
+  "pack_override_check": {
+    "path": "D:\\Temp\\AshenOath\\h1_pack_source_audit\\mounted_hashes.json",
+    "sha256": "4e576b9387dd37e2f4bd49432424330d82b9a45d1b4c8f32b3871c7504089c9e",
+    "mounts": [
+      "actual_root_index",
+      "base",
+      "opening",
+      "opening_materials",
+      "adjacent",
+      "characters",
+      "monsters",
+      "campaign",
+      "audio",
+      "quality_materials"
+    ]
+  },
+  "compiled_mobile_input_order": {
+    "activate_touch_line": 236,
+    "record_down_touch_line": 244,
+    "begin_touch_line": 245,
+    "activation_precedes_ownership": true
+  },
+  "execution": "Decoded copies and temporary external scripts only; resource loading/map inspection, no browser, world, user save, production source edit or source import."
+}
