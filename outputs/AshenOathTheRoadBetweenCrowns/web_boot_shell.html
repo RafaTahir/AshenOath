@@ -246,6 +246,7 @@
         if (failed || bootMetrics.menu_ready_ms) return;
         failed = true;
         window.clearTimeout(startupDeadline);
+        manifestAttempt?.controller.abort(new Error('Game startup stopped'));
         document.getElementById('error-message').textContent = message;
         errorPanel.hidden = false;
         loading.hidden = true;
@@ -353,13 +354,31 @@
       const packOperations = new Map();
       let filesystemReadyResolve;
       const filesystemReady = new Promise(resolve => { filesystemReadyResolve = resolve; });
-      let manifestPromise = null;
-      async function readPackManifest() {
-          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache' });
+      const MANIFEST_TIMEOUT_MS = 15000;
+      let manifestAttempt = null;
+      function awaitWithAbort(promise, signal) {
+        return new Promise((resolve, reject) => {
+          const cancelled = () => {
+            signal.removeEventListener('abort', cancelled);
+            reject(signal.reason || new Error('Pack operation cancelled'));
+          };
+          signal.addEventListener('abort', cancelled, { once: true });
+          Promise.resolve(promise).then(value => {
+            signal.removeEventListener('abort', cancelled);
+            resolve(value);
+          }, error => {
+            signal.removeEventListener('abort', cancelled);
+            reject(error);
+          });
+          if (signal.aborted) cancelled();
+        });
+      }
+      async function readPackManifest(signal) {
+          const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache', signal });
           if (!releaseResponse.ok) throw new Error(`release manifest HTTP ${releaseResponse.status}`);
           const release = await releaseResponse.json();
           if (String(release?.build_id || '') !== SHELL_BUILD_ID) throw new Error('Page/release identity mismatch');
-          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache' });
+          const manifestResponse = await fetch('runtime_pack_manifest.json', { cache: 'no-cache', signal });
           if (!manifestResponse.ok) throw new Error(`runtime pack manifest HTTP ${manifestResponse.status}`);
           const manifestPayload = await manifestResponse.arrayBuffer();
           const manifestDigest = await sha256Hex(manifestPayload);
@@ -386,8 +405,22 @@
           return manifest;
       }
       function getPackManifest() {
-        if (!manifestPromise) manifestPromise = readPackManifest().catch(error => { manifestPromise = null; throw error; });
-        return manifestPromise;
+        if (manifestAttempt) return manifestAttempt.promise;
+        // Metadata owns this controller. A cancelled pack only stops its own
+        // wait, leaving other packs and the opening-material prefetch intact.
+        const attempt = { controller: new AbortController(), promise: null };
+        const timeout = window.setTimeout(() => {
+          attempt.controller.abort(new Error('Runtime metadata request timed out; retry this journey'));
+        }, MANIFEST_TIMEOUT_MS);
+        manifestAttempt = attempt;
+        // The race also bounds body reads and hashing if their implementation
+        // does not settle promptly when Fetch receives the abort signal.
+        attempt.promise = awaitWithAbort(readPackManifest(attempt.controller.signal), attempt.controller.signal)
+          .catch(error => {
+            if (manifestAttempt === attempt) manifestAttempt = null;
+            throw error;
+          }).finally(() => window.clearTimeout(timeout));
+        return attempt.promise;
       }
       async function readPackBody(response, id, operation, bytes) {
         if (!response.body?.getReader) return response.arrayBuffer();
@@ -421,7 +454,7 @@
         const timeout = window.setTimeout(() => controller.abort(), 90000);
         let packCache = null, packUrl = '';
         try {
-          const manifest = await getPackManifest();
+          const manifest = await awaitWithAbort(getPackManifest(), controller.signal);
           const pack = manifest?.packs?.[id];
           if (!pack?.url || !/^[a-f0-9]{64}$/.test(pack.sha256)) throw new Error(`Missing pack identity: ${id}`);
           if (!Number.isSafeInteger(pack.bytes) || pack.bytes <= 0) throw new Error(`Invalid pack size: ${id}`);

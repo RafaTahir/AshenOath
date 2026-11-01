@@ -18,6 +18,7 @@ const DEPLOYMENT_POLICY_PATH := "res://data/deployment_policy.json"
 const MAX_RETRIES := 2
 const CHUNK_SIZE := 1024 * 1024
 const MAX_CONCURRENT_DOWNLOADS := 3
+const PREPARATION_TIMEOUT_MSEC := 120000
 # Greyfen's geometry and materials must mount before its covered preparation.
 # Campaign content remains independent of the first playable settlement.
 const STARTUP_PACK_IDS: Array[String] = ["base", "opening"]

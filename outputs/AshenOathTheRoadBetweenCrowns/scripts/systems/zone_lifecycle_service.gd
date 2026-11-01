@@ -2,6 +2,8 @@ extends "res://scripts/systems/game_bindings.gd"
 ## Owns zone lifecycle operations; configure() injects dependencies.
 signal zone_changed(zone_id: String)
 
+const RuntimePacks = preload("res://scripts/runtime_pack_manager.gd")
+
 func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	if zone_transition_pending or zone_load_request_pending:
 		return
@@ -138,12 +140,16 @@ func _finish_travel_download() -> void:
 	_host.get_tree().paused = neighbor_crossing_was_paused
 	audio.set_game_paused(neighbor_crossing_was_paused)
 
+func _pack_wait_now_msec() -> int:
+	return Time.get_ticks_msec()
+
 func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial: int) -> void:
-	for _frame in range(900):
+	var deadline := _pack_wait_now_msec() + RuntimePacks.PREPARATION_TIMEOUT_MSEC
+	while true:
 		await _host.get_tree().process_frame
 		if request_serial != zone_pack_request_serial or not campaign_pack_waiting:
 			return
-		if neighbor_crossing_pending: hud.update_journey_load_progress(zone_id,runtime_packs.zone_pack_progress(zone_id),"Downloading verified destination content...")
+		# Mounted content wins at the deadline; stale work never owns recovery.
 		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id):
 			campaign_pack_waiting = false
 			_finish_travel_download()
@@ -151,17 +157,20 @@ func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial
 				hud.hide_loading()
 			_load_zone(zone_id, spawn_pos)
 			return
-		if runtime_packs != null and not runtime_packs.zone_pack_failures(zone_id).is_empty():
+		if runtime_packs == null or not runtime_packs.zone_pack_failures(zone_id).is_empty():
 			break
+		if _pack_wait_now_msec() >= deadline:
+			break
+		if neighbor_crossing_pending: hud.update_journey_load_progress(zone_id,runtime_packs.zone_pack_progress(zone_id),"Downloading verified destination content...")
 	campaign_pack_waiting = false
 	_recover_failed_pack_load("The road pack could not be prepared. Your current location remains open; use the crossing to retry.")
 
 func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial: int, encounter_packs: Array[String] = []) -> void:
-	for _frame in range(900):
+	var deadline := _pack_wait_now_msec() + RuntimePacks.PREPARATION_TIMEOUT_MSEC
+	while true:
 		await _host.get_tree().process_frame
 		if request_serial != zone_pack_request_serial or not opening_pack_waiting:
 			return
-		if neighbor_crossing_pending: hud.update_journey_load_progress(zone_id,runtime_packs.zone_pack_progress(zone_id,encounter_packs),"Downloading verified destination content...")
 		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id, encounter_packs):
 			opening_pack_waiting = false
 			_finish_travel_download()
@@ -169,8 +178,11 @@ func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial:
 				hud.hide_loading()
 			_load_zone(zone_id, spawn_pos)
 			return
-		if runtime_packs != null and not runtime_packs.zone_pack_failures(zone_id, encounter_packs).is_empty():
+		if runtime_packs == null or not runtime_packs.zone_pack_failures(zone_id, encounter_packs).is_empty():
 			break
+		if _pack_wait_now_msec() >= deadline:
+			break
+		if neighbor_crossing_pending: hud.update_journey_load_progress(zone_id,runtime_packs.zone_pack_progress(zone_id,encounter_packs),"Downloading verified destination content...")
 	opening_pack_waiting = false
 	_recover_failed_pack_load("The opening pack could not be prepared. Your current location remains open; use the crossing to retry.")
 

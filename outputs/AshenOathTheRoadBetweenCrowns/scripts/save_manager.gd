@@ -1252,7 +1252,8 @@ func import_save_text(content: String, target_slot: String = "") -> bool:
 		return false
 	var data := migrate_save_data(raw)
 	data["slot_name"] = _safe_slot_name(str(raw.get("slot_name", "Imported journey")))
-	data["replay_session"] = false
+	# Moving a replay between devices must retain its separate automatic saves.
+	# Migration already validates this flag and defaults older campaign saves.
 	if not _write_atomic(slot_path(destination), data):
 		operation_finished.emit(destination, "import", false, "The import could not be saved. Existing journeys are unchanged.")
 		return false

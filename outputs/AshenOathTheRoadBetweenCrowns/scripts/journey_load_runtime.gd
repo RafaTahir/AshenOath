@@ -1,6 +1,7 @@
 extends RefCounted
 
-const PREPARATION_TIMEOUT_MSEC := 120000
+const RuntimePacks = preload("res://scripts/runtime_pack_manager.gd")
+const PREPARATION_TIMEOUT_MSEC := RuntimePacks.PREPARATION_TIMEOUT_MSEC
 const Journal = preload("res://scripts/story_journal.gd")
 const Continuity = preload("res://scripts/journey_continuity_coordinator.gd")
 
