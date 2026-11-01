@@ -22,6 +22,9 @@ if not exist "%PYTHON%" (
   exit /b 1
 )
 
+"%PYTHON%" "%PROJECT_DIR%\tools\verify_native_attack_profiles.py" --project "%PROJECT_DIR%"
+if errorlevel 1 exit /b %errorlevel%
+
 set "PACK_DIR=%ASHEN_OATH_PACK_DIRECTORY%"
 if not defined PACK_DIR set "PACK_DIR=%PROJECT_DIR%\.release-gate\runtime-packs"
 set "MISSING_PACK="

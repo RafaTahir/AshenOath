@@ -8,6 +8,8 @@ param(
 $ErrorActionPreference = "Stop"
 $Project = Split-Path -Parent $PSScriptRoot
 $RepoRoot = Split-Path -Parent (Split-Path -Parent $Project)
+& $PythonPath (Join-Path $PSScriptRoot "verify_native_attack_profiles.py") --project $Project
+if ($LASTEXITCODE -ne 0) { throw "Native attack profiles are invalid; no packs were exported." }
 & $PythonPath (Join-Path $PSScriptRoot "runtime_pack_validation.py") (Join-Path $Project "runtime_pack_manifest.json")
 if ($LASTEXITCODE -ne 0) { throw "Runtime pack dependency graph is invalid; no packs were exported." }
 
