@@ -1,0 +1,29 @@
+{
+  "runtime_source": "122154580d20abd5889e5a8ef1514b585f165397",
+  "steps": [
+    {
+      "name": "native-attack-profiles",
+      "status": "pass",
+      "stdout": "NATIVE ATTACK PROFILES: PASS (20 hash-bound sources; visual acceptance required: M03,M20)\n",
+      "stderr": ""
+    },
+    {
+      "name": "runtime-pack-graph",
+      "status": "pass",
+      "stdout": "PACK GRAPH: PASS\n",
+      "stderr": ""
+    },
+    {
+      "name": "prepared-actor-package",
+      "status": "pass",
+      "stdout": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\n\nPREPARED ACTOR PACKAGE: PASS (33 compiled scenes; 32 omitted source scenes; no gameplay)\n",
+      "stderr": ""
+    },
+    {
+      "name": "environment-material-dependencies",
+      "status": "pass",
+      "stdout": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org\n\nENVIRONMENT DEPENDENCIES: 37 textures from selected environment resources\n",
+      "stderr": ""
+    }
+  ]
+}

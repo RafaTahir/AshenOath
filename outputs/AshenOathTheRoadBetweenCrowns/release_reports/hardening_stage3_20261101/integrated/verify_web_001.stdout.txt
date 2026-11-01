@@ -1,0 +1,1 @@
+WEB-001: PASS - preset, renderer, payload filters, menu identity, and effective hosting headers

@@ -1,0 +1,15 @@
+test_artifact_path_escapes_are_rejected_even_in_metadata_mode (__main__.CandidateValidation.test_artifact_path_escapes_are_rejected_even_in_metadata_mode) ... ok
+test_cli_accepts_current_schema2_and_fails_corrupted_artifact (__main__.CandidateValidation.test_cli_accepts_current_schema2_and_fails_corrupted_artifact) ... ok
+test_current_schema2_without_ticket_checks_all_nine_decoded_artifacts (__main__.CandidateValidation.test_current_schema2_without_ticket_checks_all_nine_decoded_artifacts) ... ok
+test_decoded_current_policy_is_distinct_from_historical_budget (__main__.CandidateValidation.test_decoded_current_policy_is_distinct_from_historical_budget) ... ok
+test_duplicate_ids_and_artifacts_are_rejected (__main__.CandidateValidation.test_duplicate_ids_and_artifacts_are_rejected) ... ok
+test_historical_pack003_schema1_and_implicit_schema_remain_supported (__main__.CandidateValidation.test_historical_pack003_schema1_and_implicit_schema_remain_supported) ... ok
+test_invalid_size_hash_and_total_metadata_are_rejected (__main__.CandidateValidation.test_invalid_size_hash_and_total_metadata_are_rejected) ... ok
+test_missing_required_artifact_fails_but_optional_metadata_mode_is_preserved (__main__.CandidateValidation.test_missing_required_artifact_fails_but_optional_metadata_mode_is_preserved) ... ok
+test_unknown_schema_and_invalid_lists_are_rejected (__main__.CandidateValidation.test_unknown_schema_and_invalid_lists_are_rejected) ... ok
+test_wrong_size_hash_and_magic_each_fail (__main__.CandidateValidation.test_wrong_size_hash_and_magic_each_fail) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.379s
+
+OK

@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "kind": "fresh_batch_export",
+  "selected_for_publication": false,
+  "acceptance_name": "final-verified",
+  "output": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\batch-export-final-verified",
+  "build_id": "dev-122154580d20",
+  "source": {
+    "git_commit": "122154580d20abd5889e5a8ef1514b585f165397",
+    "dirty": true
+  },
+  "total_bytes": 203206857,
+  "main_candidate": "hardening-stage3-20261101",
+  "child_exit_code": 0,
+  "batch_source_sha256": "9ad23b08d694f4900c6ebbe6e6cba5d9370f8ae38fa491a233a745cd4d6511c5",
+  "stdout_log": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\batch-final-verified.stdout.log",
+  "stderr_log": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\batch-final-verified.stderr.log",
+  "note": "Independent batch acceptance candidate; named story-builder candidate remains selected."
+}

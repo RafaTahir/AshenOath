@@ -1,0 +1,15 @@
+test_addressed_engine_layout_retains_all_required_files (__main__.PackCompleteness.test_addressed_engine_layout_retains_all_required_files) ... ok
+test_conflicting_ownership_fails (__main__.PackCompleteness.test_conflicting_ownership_fails) ... ok
+test_corrupt_pack_fails (__main__.PackCompleteness.test_corrupt_pack_fails) ... ok
+test_dependency_cycle_fails (__main__.PackCompleteness.test_dependency_cycle_fails) ... ok
+test_engine_path_escape_and_mismatch_fail (__main__.PackCompleteness.test_engine_path_escape_and_mismatch_fail) ... ok
+test_escape_fails (__main__.PackCompleteness.test_escape_fails) ... ok
+test_invalid_manifest_fails (__main__.PackCompleteness.test_invalid_manifest_fails) ... ok
+test_missing_pack_fails (__main__.PackCompleteness.test_missing_pack_fails) ... ok
+test_unknown_dependency_fails (__main__.PackCompleteness.test_unknown_dependency_fails) ... ok
+test_valid_pack_passes (__main__.PackCompleteness.test_valid_pack_passes) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.242s
+
+OK

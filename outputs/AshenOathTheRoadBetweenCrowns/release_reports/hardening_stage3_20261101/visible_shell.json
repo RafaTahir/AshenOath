@@ -1,0 +1,15 @@
+{
+  "kind": "read_only_shell_text_audit",
+  "captured_at": "2026-11-01T20:59:11.535Z",
+  "release_manifest_sha256": "59bcfde47826d56a89ee4d415619d16b2f8780d96150b8771d7d36bf5158d2d5",
+  "profile": "D:\\Temp\\AshenOath\\hardening-browser\\run-1793566675163-11864\\chromium-profile",
+  "title": "Ashen Oath: The Road Between Crowns",
+  "visible_text": "",
+  "viewport": {
+    "width": 960,
+    "height": 540
+  },
+  "url": "http://127.0.0.1:10585/index.html?observe=1&touch=1",
+  "visible_obsolete_ticket": false,
+  "source_obsolete_ticket": false
+}

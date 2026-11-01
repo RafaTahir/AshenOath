@@ -1,0 +1,2217 @@
+{
+  "schema_version": 1,
+  "kind": "focused_browser_functional",
+  "label": "candidate",
+  "started_at": "2026-11-01T20:53:42.960Z",
+  "export_root": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\export",
+  "build_id": "hardening-stage3-20261101",
+  "source": {
+    "git_commit": "122154580d20abd5889e5a8ef1514b585f165397",
+    "dirty": true
+  },
+  "release_manifest_sha256": "59bcfde47826d56a89ee4d415619d16b2f8780d96150b8771d7d36bf5158d2d5",
+  "harness_sha256": "cc0e1473ec067ae302dff006a9c8b06231770fcad3255c5f5dd47b981274d4a7",
+  "observation_mode": "production_read_only",
+  "gameplay_input": "Chromium mouse/keyboard/touch and file picker",
+  "limits": [
+    "No gameplay mutation API",
+    "No performance thresholds or hardware/mobile-device certification",
+    "Imported fixtures are test journeys, not earned campaign progression"
+  ],
+  "cases": [
+    {
+      "name": "desktop-smoke",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "input": "keyboard_mouse",
+      "status": "pass",
+      "events": [
+        {
+          "event": "ui_click",
+          "text": "New Game",
+          "at": 1793566517176,
+          "point": {
+            "x": 996,
+            "y": 74
+          }
+        },
+        {
+          "event": "opening_intro_skip",
+          "control": "OpeningSceneSkip",
+          "label": "Skip introduction",
+          "input": "focused Enter"
+        },
+        {
+          "event": "movement",
+          "input": "KeyW",
+          "before": {
+            "x": 0,
+            "y": 0.000208213925361633,
+            "z": 9.80000019073486
+          },
+          "after": {
+            "x": 0,
+            "y": 0.0327533073723316,
+            "z": 9.17666816711426
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Quick Save",
+          "at": 1793566531948,
+          "point": {
+            "x": 992,
+            "y": 210
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Continue",
+          "at": 1793566556501,
+          "point": {
+            "x": 996,
+            "y": 142
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Quick Save",
+          "at": 1793566612406,
+          "point": {
+            "x": 992,
+            "y": 210
+          }
+        },
+        {
+          "event": "campaign_baseline_durable",
+          "files": {
+            "ashen_oath_autosave.json": "d680cf2d85c8d06699a2a117cfa15b2b5408f799d177ae801a68bd38e720ab4e",
+            "ashen_oath_autosave.json.bak": "fa161c7ec32cb6a6d8067e1007acee7048a73181918aaed273459424d201686f",
+            "ashen_oath_checkpoint.json": "fa161c7ec32cb6a6d8067e1007acee7048a73181918aaed273459424d201686f",
+            "ashen_oath_save.json": "7a2c4cf0bce955105670a53fa38cbb4ba8a882125f0c808efd27a81c01ffce72",
+            "ashen_oath_save.json.bak": "fee70aea4382c2a1ee8a24eb57caffca4409e144cc5c33c79ff9b0fecb687043"
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Saved Journeys",
+          "at": 1793566627840,
+          "point": {
+            "x": 992,
+            "y": 278
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Import a Save File",
+          "at": 1793566629448,
+          "point": {
+            "x": 992,
+            "y": 335
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Hardening Replay desktop\nManual save 1 (replay)\nReady\nGreyfen · Road of Crows\nSaved 2026-11-01 20:55:31 UTC\nNext: Hear Anwen's account of the missing travelers.\nReplay journey",
+          "at": 1793566636196,
+          "point": {
+            "x": 992,
+            "y": 186
+          }
+        },
+        {
+          "event": "campaign_unchanged_after_import"
+        },
+        {
+          "event": "ui_click",
+          "text": "Load This Journey",
+          "at": 1793566640237,
+          "point": {
+            "x": 992,
+            "y": 213
+          }
+        },
+        {
+          "event": "ui_click",
+          "text": "Quick Save",
+          "at": 1793566651761,
+          "point": {
+            "x": 992,
+            "y": 210
+          }
+        },
+        {
+          "event": "durable_replay_isolation",
+          "journey_id": "hardening-replay-desktop"
+        }
+      ],
+      "screenshots": [
+        "D:\\Temp\\AshenOath\\hardening-h3-final-desktop-smoke\\report_evidence\\desktop-smoke-new-game.png",
+        "D:\\Temp\\AshenOath\\hardening-h3-final-desktop-smoke\\report_evidence\\desktop-smoke-paused-save.png",
+        "D:\\Temp\\AshenOath\\hardening-h3-final-desktop-smoke\\report_evidence\\desktop-smoke-continued.png",
+        "D:\\Temp\\AshenOath\\hardening-h3-final-desktop-smoke\\report_evidence\\desktop-smoke-imported-slot.png",
+        "D:\\Temp\\AshenOath\\hardening-h3-final-desktop-smoke\\report_evidence\\desktop-smoke-replay-isolated.png"
+      ],
+      "console": [
+        {
+          "type": "log",
+          "text": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org",
+          "at": 1793566450811
+        },
+        {
+          "type": "log",
+          "text": "OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL",
+          "at": 1793566452272
+        },
+        {
+          "type": "log",
+          "text": "Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support.",
+          "at": 1793566452974
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_main_menu",
+          "at": 1793566456362
+        },
+        {
+          "type": "warn",
+          "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+          "at": 1793566456391
+        },
+        {
+          "type": "log",
+          "text": "LOADING: runtime ready total=1787ms environment=0ms services=1667ms",
+          "at": 1793566456392
+        },
+        {
+          "type": "log",
+          "text": "LOADING: usable_menu_ready ms=6143",
+          "at": 1793566456779
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening_materials bytes=16704436",
+          "at": 1793566458108
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening_materials",
+          "at": 1793566458108
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening bytes=89754920",
+          "at": 1793566460827
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=opening",
+          "at": 1793566460837
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack mounted id=opening",
+          "at": 1793566460838
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm begin",
+          "at": 1793566468137
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_begin",
+          "at": 1793566468185
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarm build_complete ms=1291 ok=true",
+          "at": 1793566469477
+        },
+        {
+          "type": "log",
+          "text": "LOADING: opening_world_render_ready",
+          "at": 1793566511237
+        },
+        {
+          "type": "log",
+          "text": "LOADING: Greyfen prewarmed total=43040ms build=1291ms world=680ms player=514ms",
+          "at": 1793566511238
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_handoff prewarmed=true cached_zones=1",
+          "at": 1793566518776
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=cache_clear elapsed=23.9",
+          "at": 1793566518776
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_menu_begin",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=hide_menu_end",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=quest_begin",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=quest_end",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=state_ready elapsed=65.9",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=zone_dispatch elapsed=66.5",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=load_zone_begin",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=greyfen prewarm=true cached=false",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: cached_zone_activated id=greyfen valid=true",
+          "at": 1793566518777
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=cache_activated elapsed=100.9",
+          "at": 1793566518778
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=greyfen reused=true visible=true position=(0.0, 0.0, 0.0)",
+          "at": 1793566518778
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=561.3",
+          "at": 1793566518779
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=567.9",
+          "at": 1793566518779
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_greyfen_explore",
+          "at": 1793566518779
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=false ms=2",
+          "at": 1793566518780
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=1006.0",
+          "at": 1793566518780
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=greyfen playable_ms=1016.4",
+          "at": 1793566518780
+        },
+        {
+          "type": "log",
+          "text": "LOADING: handoff_phase=load_zone_end",
+          "at": 1793566518780
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=ready elapsed=1030.4",
+          "at": 1793566518780
+        },
+        {
+          "type": "log",
+          "text": "LOADING: new_game_stage=zone_return elapsed=1030.4",
+          "at": 1793566518780
+        },
+        {
+          "type": "log",
+          "text": "Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org",
+          "at": 1793566548443
+        },
+        {
+          "type": "log",
+          "text": "OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL",
+          "at": 1793566550706
+        },
+        {
+          "type": "log",
+          "text": "Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support.",
+          "at": 1793566551181
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_main_menu",
+          "at": 1793566554903
+        },
+        {
+          "type": "log",
+          "text": "LOADING: runtime ready total=1718ms environment=0ms services=1608ms",
+          "at": 1793566554923
+        },
+        {
+          "type": "log",
+          "text": "LOADING: usable_menu_ready ms=6983",
+          "at": 1793566555240
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening_materials bytes=16704436",
+          "at": 1793566555306
+        },
+        {
+          "type": "log",
+          "text": "LOADING: background_pack mounted id=opening_materials",
+          "at": 1793566555307
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack preloaded id=opening bytes=89754920",
+          "at": 1793566555998
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack_ready source=signal id=opening",
+          "at": 1793566555999
+        },
+        {
+          "type": "log",
+          "text": "LOADING: startup_pack mounted id=opening",
+          "at": 1793566556000
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_requested slot=quick source=primary",
+          "at": 1793566556530
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_prepared destination=greyfen",
+          "at": 1793566556531
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=greyfen prewarm=false cached=false",
+          "at": 1793566562006
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)",
+          "at": 1793566565896
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=3909.4",
+          "at": 1793566565900
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=3917.8",
+          "at": 1793566565909
+        },
+        {
+          "type": "log",
+          "text": "AUDIO: music_state_greyfen_explore",
+          "at": 1793566565919
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=true ms=2",
+          "at": 1793566566964
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=4973.6",
+          "at": 1793566566965
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=greyfen playable_ms=30361.0",
+          "at": 1793566592353
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_requested slot=manual_1 source=primary",
+          "at": 1793566640253
+        },
+        {
+          "type": "log",
+          "text": "JOURNEY: load_prepared destination=greyfen",
+          "at": 1793566640255
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_begin id=greyfen prewarm=false cached=false",
+          "at": 1793566640579
+        },
+        {
+          "type": "log",
+          "text": "ZONE_COMPOSITION: id=greyfen reused=false visible=true position=(0.0, 0.0, 0.0)",
+          "at": 1793566641423
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=systems_synced elapsed=851.3",
+          "at": 1793566641428
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=visual_applied elapsed=859.7",
+          "at": 1793566641437
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=runtime_finalized zone=greyfen navigation=true ms=1",
+          "at": 1793566641453
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone_stage=budget_ready elapsed=876.8",
+          "at": 1793566641454
+        },
+        {
+          "type": "log",
+          "text": "LOADING: zone=greyfen playable_ms=9832.2",
+          "at": 1793566650410
+        }
+      ],
+      "dom_input": [
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 74,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566516415.5
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 74,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566516418
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 74,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566516426.6
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 74,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566516427.3
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 74,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566517168.7
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 74,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566517169.1
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Enter",
+          "code": "Enter",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566520766.6
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Enter",
+          "code": "Enter",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566520774.3
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "w",
+          "code": "KeyW",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566529288
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "w",
+          "code": "KeyW",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "pointer_lock_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566529896.7
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Escape",
+          "code": "Escape",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "pointer_lock_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566530657
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Escape",
+          "code": "Escape",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566531283.1
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566531829.2
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566531830.5
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566531838.3
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566531839.1
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566531937
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566531937.4
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 142,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566556353.8
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 142,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566556355
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 142,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566556356
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 142,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566556356.6
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 142,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566556491.3
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 996,
+          "y": 142,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566556491.9001
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Escape",
+          "code": "Escape",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566607087.7002
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Escape",
+          "code": "Escape",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566608013.7002
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": -4,
+          "movement_y": 68,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566612283.9001
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": -4,
+          "movement_y": 68,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566612284.1
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566612290
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566612290.6
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566612397
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566612397.4001
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 278,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 68,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566627705.1
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 278,
+          "movement_x": 0,
+          "movement_y": 68,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566627705.8
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 278,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566627706.3
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 278,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566627706.4001
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 278,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566627831.7002
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 278,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566627832.6
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566628402
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566628453.9001
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566628746.7002
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566628801.7002
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 57,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566629340.1
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": 0,
+          "movement_y": 57,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566629340.6
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566629341.8
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566629342.3
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566629442.4001
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 335,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566629442.6
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566633927.8
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566633968.7002
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566634253.1
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566634295.1
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566634567.2002
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566634602.6
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566634891.1
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566634936.6
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566635198.2002
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566635230.1
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566635501.6
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Tab",
+          "code": "Tab",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566635546.6
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 186,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": -149,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566636066.6
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 186,
+          "movement_x": 0,
+          "movement_y": -149,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566636067.4001
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 186,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566636069.1
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 186,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566636070.5
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 186,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566636186.5
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 186,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566636188.3
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 27,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566640116.7002
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 27,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566640117.3
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566640118.4001
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "DIV",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566640118.8
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566640227
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 213,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566640227.2002
+        },
+        {
+          "type": "keydown",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Escape",
+          "code": "Escape",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566650991
+        },
+        {
+          "type": "keyup",
+          "trusted": true,
+          "target": "canvas",
+          "key": "Escape",
+          "code": "Escape",
+          "repeat": false,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566651099.4001
+        },
+        {
+          "type": "pointermove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": -3,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566651632.5
+        },
+        {
+          "type": "mousemove",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": 0,
+          "movement_y": -3,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566651633.1
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566651633.6
+        },
+        {
+          "type": "mousedown",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566651633.9001
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "pointer_type": "mouse",
+          "movement_x": 0,
+          "movement_y": 0,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566651755.8
+        },
+        {
+          "type": "mouseup",
+          "trusted": true,
+          "target": "canvas",
+          "x": 992,
+          "y": 210,
+          "movement_x": 0,
+          "movement_y": 0,
+          "fires_touch_events": false,
+          "focused": true,
+          "platform": "Win32",
+          "active_element": "canvas",
+          "target_rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 720
+          },
+          "at": 1793566651756.1
+        }
+      ],
+      "started_at": "2026-11-01T20:53:48.160Z",
+      "finished_at": "2026-11-01T20:57:38.347Z"
+    }
+  ],
+  "requests": [
+    {
+      "path": "index.html",
+      "at": 1793566428666,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "menu-background.png",
+      "at": 1793566428698,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.js",
+      "at": 1793566428712,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "release_manifest.json",
+      "at": 1793566428749,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+      "at": 1793566428776,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "index.pck",
+      "at": 1793566428793,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "runtime_pack_manifest.json",
+      "at": 1793566428803,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "packs/opening.pck",
+      "at": 1793566428861,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "packs/opening_materials.pck",
+      "at": 1793566428867,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "favicon.ico",
+      "at": 1793566446327,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+      "at": 1793566456957,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+      "at": 1793566457156,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "index.html",
+      "at": 1793566546018,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "release_manifest.json",
+      "at": 1793566546589,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+      "at": 1793566546680,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "index.pck",
+      "at": 1793566546698,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "runtime_pack_manifest.json",
+      "at": 1793566546751,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "favicon.ico",
+      "at": 1793566546831,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+      "at": 1793566555360,
+      "scenario": "desktop-smoke",
+      "fault": null
+    },
+    {
+      "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+      "at": 1793566555416,
+      "scenario": "desktop-smoke",
+      "fault": null
+    }
+  ],
+  "status": "pass",
+  "browser": {
+    "executable": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "version": "Chrome/156.0.8078.74",
+    "headless": false
+  },
+  "finished_at": "2026-11-01T20:57:40.856Z",
+  "runtime_errors": [],
+  "profile": null
+}

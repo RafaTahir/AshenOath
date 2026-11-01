@@ -1,0 +1,1 @@
+WEB PRESET PARITY: PASS (current catalog and static resource selection only)

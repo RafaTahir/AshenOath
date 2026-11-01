@@ -1,0 +1,26 @@
+test_batch_child_failure_returns_nonzero_without_export_or_source_write (__main__.ArtifactCopy.test_batch_child_failure_returns_nonzero_without_export_or_source_write) ... ok
+test_gzip_source_is_validated_as_decoded_bytes (__main__.ArtifactCopy.test_gzip_source_is_validated_as_decoded_bytes) ... ok
+test_manifest_copy_includes_split_and_future_packs_but_not_embedded_base (__main__.ArtifactCopy.test_manifest_copy_includes_split_and_future_packs_but_not_embedded_base) ... ok
+test_missing_corrupt_or_wrong_hash_input_does_not_copy_partial_output (__main__.ArtifactCopy.test_missing_corrupt_or_wrong_hash_input_does_not_copy_partial_output) ... ok
+test_required_shell_asset_is_copied_and_missing_asset_fails (__main__.ArtifactCopy.test_required_shell_asset_is_copied_and_missing_asset_fails) ... ok
+test_unsafe_source_and_destination_paths_are_rejected (__main__.ArtifactCopy.test_unsafe_source_and_destination_paths_are_rejected) ... ok
+test_builder_rejects_cycle_before_changing_shell (__main__.GraphValidation.test_builder_rejects_cycle_before_changing_shell) ... ok
+test_diamond_and_embedded_dependencies_are_valid (__main__.GraphValidation.test_diamond_and_embedded_dependencies_are_valid) ... ok
+test_layout_invalid_generated_graph_leaves_both_outputs_untouched (__main__.GraphValidation.test_layout_invalid_generated_graph_leaves_both_outputs_untouched) ... ok
+test_malformed_unknown_and_cycles_are_rejected (__main__.GraphValidation.test_malformed_unknown_and_cycles_are_rejected) ... ok
+test_package_inspector_rejects_hash_valid_cyclic_graph (__main__.GraphValidation.test_package_inspector_rejects_hash_valid_cyclic_graph) ... ok
+test_runtime_validator_reports_malformed_graph_and_numeric_fields_without_traceback (__main__.GraphValidation.test_runtime_validator_reports_malformed_graph_and_numeric_fields_without_traceback) ... ok
+test_sync_rejects_cycle_before_writing_manifest_or_candidate (__main__.GraphValidation.test_sync_rejects_cycle_before_writing_manifest_or_candidate) ... ok
+test_valid_package_inspection_passes (__main__.GraphValidation.test_valid_package_inspection_passes) ... ok
+test_current_catalog_preset_parity_passes (__main__.WebContracts.test_current_catalog_preset_parity_passes) ... ok
+test_current_hud_identity_needs_no_ticket_or_hostname (__main__.WebContracts.test_current_hud_identity_needs_no_ticket_or_hostname) ... ok
+test_current_separate_header_rules_combine_and_queries_do_not_change_policy (__main__.WebContracts.test_current_separate_header_rules_combine_and_queries_do_not_change_policy) ... ok
+test_extra_qa_resource_missing_duplicate_actor_or_missing_quality_maps_fails (__main__.WebContracts.test_extra_qa_resource_missing_duplicate_actor_or_missing_quality_maps_fails) ... ok
+test_later_header_overrides_and_bad_encoding_are_rejected (__main__.WebContracts.test_later_header_overrides_and_bad_encoding_are_rejected) ... ok
+test_missing_inconsistent_or_unrendered_hud_label_fails (__main__.WebContracts.test_missing_inconsistent_or_unrendered_hud_label_fails) ... ok
+test_wrong_runtime_policy_and_host_output_are_rejected (__main__.WebContracts.test_wrong_runtime_policy_and_host_output_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 10.062s
+
+OK

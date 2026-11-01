@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "stage": 3,
+  "build_id": "hardening-stage3-20261101",
+  "previous_release_commit": "0905d5c3357c97d70e7f6538d80415e086cb32f0",
+  "frozen_runtime_source": {
+    "git_commit": "122154580d20abd5889e5a8ef1514b585f165397",
+    "dirty": true
+  },
+  "verification_status": "pass",
+  "checks": {
+    "integrated": {
+      "status": "pass",
+      "checks": 22,
+      "unit_tests": 64,
+      "skipped": 0,
+      "source_commit": "5a89d5598de948eb2ba9eb2938451b3537cef4ef",
+      "evidence": "integrated",
+      "coverage": [
+        "two builder AST checks",
+        "21 release-tool fixtures",
+        "11 real-child batch tests including7negative crash boundaries",
+        "10 schema2candidate fixtures",
+        "4 design policy fixtures",
+        "8 production policy fixtures",
+        "10 pack completeness fixtures",
+        "current Web001/002/preset parity",
+        "shared graph and production resource ownership/exclusions",
+        "native source profile hashes",
+        "face terminal and actor lifecycle",
+        "opening Skip actual native GUIinput",
+        "native attack timing merge guard"
+      ]
+    },
+    "face_actor_integration": {
+      "status": "pass",
+      "checks": 143,
+      "models": 3,
+      "eligible_faces": 2,
+      "viewport_sizes": [
+        [
+          1280,
+          720
+        ],
+        [
+          960,
+          540
+        ]
+      ]
+    },
+    "opening_skip": {
+      "status": "pass",
+      "checks": 29,
+      "activations": 5,
+      "scope": "Actual GUI input; no can_process errors"
+    },
+    "compiled_source": {
+      "status": "pass",
+      "scripts": 13,
+      "tokens": 78875,
+      "indentation_boundaries": 9239,
+      "raw_pack_overrides": 9,
+      "profile_json_byte_closure": "pass",
+      "evidence": "compiled_source",
+      "reader_diagnostic": "Temporary comparator corrected to explicitUTF8; extracted bytes unchanged; false CP1252 failure preserved separately."
+    },
+    "packaging": {
+      "status": "pass",
+      "files": 18,
+      "total_web_bytes_including_manifest": 203206996,
+      "raw_packs": 9,
+      "external_packs": 8,
+      "prepared_actors": 33,
+      "omitted_source_scenes": 32,
+      "base_visible_profiles": 20,
+      "environment_texture_closure": 36,
+      "source_dependency_ledger_textures": 37,
+      "manifest_sha256": "59bcfde47826d56a89ee4d415619d16b2f8780d96150b8771d7d36bf5158d2d5"
+    },
+    "fresh_final_batch": {
+      "status": "pass",
+      "source_sha256": "9ad23b08d694f4900c6ebbe6e6cba5d9370f8ae38fa491a233a745cd4d6511c5",
+      "child_exit_code": 0,
+      "total_bytes": 203206857,
+      "source": {
+        "git_commit": "122154580d20abd5889e5a8ef1514b585f165397",
+        "dirty": true
+      },
+      "selected_for_publication": false,
+      "evidence": "batch_export"
+    },
+    "tooling_only_followup": {
+      "source_commit": "5a89d5598de948eb2ba9eb2938451b3537cef4ef",
+      "runtime_source_unchanged_from": "122154580d20abd5889e5a8ef1514b585f165397",
+      "purpose": "Catch signed Windows crash exits; actual final batch export uses this exact script SHA; runtime scripts/data/resources unchanged.",
+      "evidence": "crash_exit_guard"
+    },
+    "compatibility": "No new save fields/version, gameplay damage/telegraph/recovery values, content/art direction or deployment configuration changes. Authorization metadata classification fixed without visual-approval flags.",
+    "browser_acceptance": {
+      "status": "pass",
+      "cases": 2,
+      "viewports": [
+        [
+          1280,
+          720
+        ],
+        [
+          960,
+          540
+        ]
+      ],
+      "browser": "headed Chrome156.0.8078.74",
+      "harness_sha256": "cc0e1473ec067ae302dff006a9c8b06231770fcad3255c5f5dd47b981274d4a7",
+      "runtime_errors": [],
+      "console_warnings_or_errors": 0,
+      "obsolete_ticket_text": false,
+      "metadata_kind_warnings": 0,
+      "coverage": [
+        "actual NewGame OpeningSkip desktopEnter/touchbutton",
+        "real movement",
+        "QuickSave",
+        "browser reload andContinue",
+        "restoredcontrol",
+        "actual filepicker replayimport/load/quicksave",
+        "durablecampaign/replay namespace isolation"
+      ],
+      "physical_phone_or_FPS_certification": false
+    }
+  },
+  "transport": {
+    "stage": 3,
+    "build_id": "hardening-stage3-20261101",
+    "source": {
+      "git_commit": "122154580d20abd5889e5a8ef1514b585f165397",
+      "dirty": true
+    },
+    "status": "pass",
+    "file_count": 18,
+    "total_web_bytes_including_manifest": 203206996,
+    "decoded_pack_count": 9,
+    "decoded_pack_bytes": 203233408,
+    "copied": true,
+    "committed_verified": false,
+    "release_manifest_sha256": "59bcfde47826d56a89ee4d415619d16b2f8780d96150b8771d7d36bf5158d2d5",
+    "files": {
+      "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+        "bytes": 2973,
+        "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+        "bytes": 7298,
+        "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.js": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.js",
+        "bytes": 78364,
+        "sha256": "7e714b686d29e8b88277330bf325f057530f4198ef6e3654cd6d5ea534ebba8a",
+        "content_encoding": "gzip",
+        "decoded_bytes": 315759,
+        "decoded_sha256": "e3f56ee40e6f84371053db06692cfac15e2c8659547b11c6b2dfa1996dabd981"
+      },
+      "engine/ea08705dbfbb01b8706ac563/index.wasm": {
+        "path": "engine/ea08705dbfbb01b8706ac563/index.wasm",
+        "bytes": 9382282,
+        "sha256": "b86a73db5739d710bfbaaad9c0877d8d9f61069723bb16e8252371da8a8c6a01",
+        "content_encoding": "gzip",
+        "decoded_bytes": 37700666,
+        "decoded_sha256": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6"
+      },
+      "index.html": {
+        "path": "index.html",
+        "bytes": 35466,
+        "sha256": "2005be89faed02e9c299e84468c736baddfab6d89ff173348a58187104b10203"
+      },
+      "index.pck": {
+        "path": "index.pck",
+        "bytes": 4935505,
+        "sha256": "09b9cef75a7b9e9f3848a7d1e868972bed3ea06b77647158041d45496ad0a384",
+        "content_encoding": "gzip",
+        "decoded_bytes": 8706624,
+        "decoded_sha256": "a40f2dde89d5d8e9314d0f2246f21bb74e13adec7560074cca730416f390a00a"
+      },
+      "index.png": {
+        "path": "index.png",
+        "bytes": 21443,
+        "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+      },
+      "menu-background.png": {
+        "path": "menu-background.png",
+        "bytes": 1718419,
+        "sha256": "6a792c6892a6d8ab440c8f17e496b8b969da45ce10d6f8d8de1114d6559d2239"
+      },
+      "packs/adjacent.pck": {
+        "path": "packs/adjacent.pck",
+        "bytes": 2988456,
+        "sha256": "61b24cd0eab1f0716ce51561d7e446c74cbad814fa1e7fcfb774fe87fb906cec",
+        "content_encoding": "gzip",
+        "decoded_bytes": 3233440,
+        "decoded_sha256": "ea5c932be74c9a4b3d0c7a271b1c077605db037a85a910ec2a1d33c8a8d9a932"
+      },
+      "packs/audio.pck": {
+        "path": "packs/audio.pck",
+        "bytes": 18239424,
+        "sha256": "f400979a017d8856c3dca441761d1f978cb383b110fef4af8e8dc585187a5f11",
+        "content_encoding": "gzip",
+        "decoded_bytes": 21349452,
+        "decoded_sha256": "6e53a57cd095b84d6377d46b5671110f55d2867b31ba478e58574a52460964a3"
+      },
+      "packs/campaign.pck": {
+        "path": "packs/campaign.pck",
+        "bytes": 9235555,
+        "sha256": "c68580f8acbbe15300c72bc7551d422bb35bcfa4c3173fcac392085d33c4770d",
+        "content_encoding": "gzip",
+        "decoded_bytes": 9999748,
+        "decoded_sha256": "def6d8f068f2aaa1386a0efeb69b50fab99549ef7ceab34e3e0a740b43d774d8"
+      },
+      "packs/characters.pck": {
+        "path": "packs/characters.pck",
+        "bytes": 9114029,
+        "sha256": "bfcae17eaf0c605791b878e49c835629e1abfe2653a3411230f245bd5e77bbf4",
+        "content_encoding": "gzip",
+        "decoded_bytes": 9366976,
+        "decoded_sha256": "ded6bb12656014b7a25577cae5213ee7329bc35309d8529b2895cef7876fb0ed"
+      },
+      "packs/monsters.pck": {
+        "path": "packs/monsters.pck",
+        "bytes": 38687309,
+        "sha256": "9d1f49284a68b4ede53a8d662a416d7618a78488f6f60a6c875449176bd28cdc",
+        "content_encoding": "gzip",
+        "decoded_bytes": 39953868,
+        "decoded_sha256": "d86ad97f4fff98004a8cffbab05ee85cb44df067b301953a28462a18794c2fa2"
+      },
+      "packs/opening.pck": {
+        "path": "packs/opening.pck",
+        "bytes": 85219954,
+        "sha256": "97440ee63fe5da1b332e109597a8e516850fd4f07da8a371704c8eec5811f6f9",
+        "content_encoding": "gzip",
+        "decoded_bytes": 89754920,
+        "decoded_sha256": "9387d969affa50c72e5cba103edbb09b5404608c51dfc1278799fca4b718707a"
+      },
+      "packs/opening_materials.pck": {
+        "path": "packs/opening_materials.pck",
+        "bytes": 16299770,
+        "sha256": "d4ab53189c6f6bce82c918a383879357ac15ab97c4a5cb2cb6c2eaed38e9a377",
+        "content_encoding": "gzip",
+        "decoded_bytes": 16704436,
+        "decoded_sha256": "3c404d52856b8f12e210943ccd09329133043afbdeac3b6ee2de7d8aac2edb3a"
+      },
+      "packs/quality_materials.pck": {
+        "path": "packs/quality_materials.pck",
+        "bytes": 7224009,
+        "sha256": "03ac3086cd71e1f76be237d018113d81f8e7b2310bcc519e6847a8459f34095e",
+        "content_encoding": "gzip",
+        "decoded_bytes": 7374972,
+        "decoded_sha256": "3faa2becf3f4090d6df2d3ac3bfd0fd23407ec7db4b8bd18c6d9dce30719d85e"
+      },
+      "runtime_pack_manifest.json": {
+        "path": "runtime_pack_manifest.json",
+        "bytes": 8410,
+        "sha256": "0944cbc97f77903740203c4f2912b5722286b31415fd59145027d384cdd070fb"
+      },
+      "release_manifest.json": {
+        "bytes": 8330,
+        "sha256": "59bcfde47826d56a89ee4d415619d16b2f8780d96150b8771d7d36bf5158d2d5"
+      }
+    }
+  },
+  "browser_evidence": [
+    {
+      "report": "browser/run1/report.json",
+      "sha256": "4748d1f6fe5f236fba100e8e02c01de891072b22873a1316cd5a4ce0b544f403",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "desktop-smoke",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "input": "keyboard_mouse",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run1/desktop-smoke-1-desktop-smoke-new-game.png",
+          "sha256": "93dc74bbf011101bb923268056d03735bb7866f525ba4bd87ff6668a5bf3bc69",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-smoke-2-desktop-smoke-paused-save.png",
+          "sha256": "5b4acae2147ba0d55106df46c27b8bbe8305e26f9fec714ba61690a3ba7b38e5",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-smoke-3-desktop-smoke-continued.png",
+          "sha256": "6061c873a0d835e6e35412403343a3dc7051dd7ed23a0e6e32ce05fde2b3ca04",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-smoke-4-desktop-smoke-imported-slot.png",
+          "sha256": "36e4483648af93d1038296d3fe56a8b00faa950c30980b2f460eef9bf15da02a",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run1/desktop-smoke-5-desktop-smoke-replay-isolated.png",
+          "sha256": "405f6b3c69a360038e768f39d7b6234d2d73874667c490b468afc30ff7b0644e",
+          "case_status": "pass"
+        }
+      ]
+    },
+    {
+      "report": "browser/run2/report.json",
+      "sha256": "c4b5ace00c52e29df7bff66a7e58e25dfeab3c86ff9c23eb489375449d4bd68b",
+      "original_report_status": "pass",
+      "accepted_cases": [
+        {
+          "name": "touch-smoke",
+          "viewport": {
+            "width": 960,
+            "height": 540
+          },
+          "input": "touch",
+          "status": "pass"
+        }
+      ],
+      "failed_or_incomplete_cases": [],
+      "screenshots": [
+        {
+          "path": "browser/run2/touch-smoke-1-touch-smoke-new-game.png",
+          "sha256": "383f9e2042d12f98e8c697b2e9a754045b5ccd2a34863e1fc2997e9fa67c5d97",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-smoke-2-touch-smoke-paused-save.png",
+          "sha256": "cb587843bdf80288d176da0237e9309cbb2ebd7fb427983d2ddd689049f73258",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-smoke-3-touch-smoke-continued.png",
+          "sha256": "c8867ac38fcefbb8d20e07e03336d3e6f746fda509a933fdd152a9b368122ab7",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-smoke-4-touch-smoke-imported-slot.png",
+          "sha256": "e8511d6a50cc4cdf5f46ae64fbb44ed4d98c8ec895a33ca29e6fb62b6cefde73",
+          "case_status": "pass"
+        },
+        {
+          "path": "browser/run2/touch-smoke-5-touch-smoke-replay-isolated.png",
+          "sha256": "cb587843bdf80288d176da0237e9309cbb2ebd7fb427983d2ddd689049f73258",
+          "case_status": "pass"
+        }
+      ]
+    }
+  ],
+  "harness_sources": [
+    {
+      "path": "tools/hardening_harness_versions/cc0e/verify_hardening_browser.mjs",
+      "sha256": "cc0e1473ec067ae302dff006a9c8b06231770fcad3255c5f5dd47b981274d4a7"
+    }
+  ],
+  "combat_module_sources": [],
+  "publication": {
+    "authorized": true,
+    "method": "git_triggered_vercel",
+    "development_branch": "codex/art-recovery-anwen",
+    "production_branch": "main",
+    "git_status_at_recording": "awaiting_artifact_commit_and_push",
+    "provider_deployment_observed": false
+  },
+  "acceptance": {
+    "agent_regression_qa": "pass",
+    "user_acceptance": "not_claimed",
+    "physical_phone_coverage": false,
+    "performance_certification": false
+  },
+  "compatibility": {
+    "save_version": 13,
+    "save_format_changed": false,
+    "art_direction_and_content_preserved": true,
+    "damage_and_telegraph_recovery_values_preserved": true,
+    "deployment_configuration_preserved": true
+  },
+  "replay_note": "Previously imported replay copies whose flag was discarded need reimporting from the original export; names are not used to infer replay status."
+}

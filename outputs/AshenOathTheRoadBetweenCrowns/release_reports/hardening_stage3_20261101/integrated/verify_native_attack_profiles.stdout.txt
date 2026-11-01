@@ -1,0 +1,1 @@
+NATIVE ATTACK PROFILES: PASS (20 hash-bound sources; visual acceptance required: M03,M20)

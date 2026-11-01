@@ -1,0 +1,10 @@
+{
+  "ticket": "RUNTIME-001",
+  "scope": "production",
+  "status": "pass",
+  "required_files": 23,
+  "runtime_roles": 129,
+  "blocked_roles": [],
+  "authorized_pending_review_roles": 129,
+  "errors": []
+}

@@ -1,0 +1,6 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+FACE ACTOR MODEL role=bandit_deserter prepared=res://assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn bones=65 face_root=/root/FaceFixture_bandit motion_root=/root/FaceFixture_bandit/visual_root/bandit_visual death=Death
+FACE ACTOR MODEL role=wychwood_raider prepared=res://assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn bones=65 face_root=/root/FaceFixture_wychwood_raider motion_root=/root/FaceFixture_wychwood_raider/visual_root/wychwood_raider_visual death=Death
+FACE ACTOR MODEL role=player prepared=res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn bones=76 face_root=/root/CachedPlayerFaceFixture/@Node3D@16 motion_root=/root/CachedPlayerFaceFixture/@Node3D@16/player_kael_visual death=Death01
+FACE ACTOR INTEGRATION: PASS checks=143 models=3 eligible_faces=2 (world bandit eligibility control, native raider, cached player; 1280x720 and 960x540; no world/save)

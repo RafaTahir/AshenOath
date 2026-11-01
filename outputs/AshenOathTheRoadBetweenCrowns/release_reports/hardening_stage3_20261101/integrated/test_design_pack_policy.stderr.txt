@@ -1,0 +1,9 @@
+test_both_registered_authorization_kinds_preserve_review_flags (__main__.DesignPackPolicy.test_both_registered_authorization_kinds_preserve_review_flags) ... ok
+test_current_design_role_schema_checks_local_hashes_without_fabricating_download_url (__main__.DesignPackPolicy.test_current_design_role_schema_checks_local_hashes_without_fabricating_download_url) ... ok
+test_design_identity_and_exported_artifact_hashes_remain_required (__main__.DesignPackPolicy.test_design_identity_and_exported_artifact_hashes_remain_required) ... ok
+test_invalid_authorization_flags_source_and_model_scope_cannot_borrow_inclusion (__main__.DesignPackPolicy.test_invalid_authorization_flags_source_and_model_scope_cannot_borrow_inclusion) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.168s
+
+OK

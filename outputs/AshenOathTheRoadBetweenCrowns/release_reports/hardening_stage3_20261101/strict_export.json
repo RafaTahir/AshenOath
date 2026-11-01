@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "export_dir": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\export",
+  "runtime_manifest": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\export\\runtime_pack_manifest.json",
+  "file_count": 18,
+  "total_bytes": 203206996,
+  "total_megabytes": 193.793,
+  "limits": {
+    "total_megabytes": 256.0,
+    "pck_megabytes": 60.0
+  },
+  "extras": [
+    "menu-background.png"
+  ],
+  "nested_files": [
+    "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js",
+    "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js",
+    "engine/ea08705dbfbb01b8706ac563/index.js",
+    "engine/ea08705dbfbb01b8706ac563/index.wasm",
+    "packs/adjacent.pck",
+    "packs/audio.pck",
+    "packs/campaign.pck",
+    "packs/characters.pck",
+    "packs/monsters.pck",
+    "packs/opening.pck",
+    "packs/opening_materials.pck",
+    "packs/quality_materials.pck"
+  ],
+  "failures": [],
+  "files": {
+    "engine/ea08705dbfbb01b8706ac563/index.audio.position.worklet.js": {
+      "bytes": 2973,
+      "megabytes": 0.003,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+    },
+    "engine/ea08705dbfbb01b8706ac563/index.audio.worklet.js": {
+      "bytes": 7298,
+      "megabytes": 0.007,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+    },
+    "engine/ea08705dbfbb01b8706ac563/index.js": {
+      "bytes": 78364,
+      "megabytes": 0.075,
+      "sha256": "7e714b686d29e8b88277330bf325f057530f4198ef6e3654cd6d5ea534ebba8a"
+    },
+    "engine/ea08705dbfbb01b8706ac563/index.wasm": {
+      "bytes": 9382282,
+      "megabytes": 8.948,
+      "sha256": "b86a73db5739d710bfbaaad9c0877d8d9f61069723bb16e8252371da8a8c6a01"
+    },
+    "index.html": {
+      "bytes": 35466,
+      "megabytes": 0.034,
+      "sha256": "2005be89faed02e9c299e84468c736baddfab6d89ff173348a58187104b10203"
+    },
+    "index.pck": {
+      "bytes": 4935505,
+      "megabytes": 4.707,
+      "sha256": "09b9cef75a7b9e9f3848a7d1e868972bed3ea06b77647158041d45496ad0a384"
+    },
+    "index.png": {
+      "bytes": 21443,
+      "megabytes": 0.02,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+    },
+    "menu-background.png": {
+      "bytes": 1718419,
+      "megabytes": 1.639,
+      "sha256": "6a792c6892a6d8ab440c8f17e496b8b969da45ce10d6f8d8de1114d6559d2239"
+    },
+    "packs/adjacent.pck": {
+      "bytes": 2988456,
+      "megabytes": 2.85,
+      "sha256": "61b24cd0eab1f0716ce51561d7e446c74cbad814fa1e7fcfb774fe87fb906cec"
+    },
+    "packs/audio.pck": {
+      "bytes": 18239424,
+      "megabytes": 17.394,
+      "sha256": "f400979a017d8856c3dca441761d1f978cb383b110fef4af8e8dc585187a5f11"
+    },
+    "packs/campaign.pck": {
+      "bytes": 9235555,
+      "megabytes": 8.808,
+      "sha256": "c68580f8acbbe15300c72bc7551d422bb35bcfa4c3173fcac392085d33c4770d"
+    },
+    "packs/characters.pck": {
+      "bytes": 9114029,
+      "megabytes": 8.692,
+      "sha256": "bfcae17eaf0c605791b878e49c835629e1abfe2653a3411230f245bd5e77bbf4"
+    },
+    "packs/monsters.pck": {
+      "bytes": 38687309,
+      "megabytes": 36.895,
+      "sha256": "9d1f49284a68b4ede53a8d662a416d7618a78488f6f60a6c875449176bd28cdc"
+    },
+    "packs/opening.pck": {
+      "bytes": 85219954,
+      "megabytes": 81.272,
+      "sha256": "97440ee63fe5da1b332e109597a8e516850fd4f07da8a371704c8eec5811f6f9"
+    },
+    "packs/opening_materials.pck": {
+      "bytes": 16299770,
+      "megabytes": 15.545,
+      "sha256": "d4ab53189c6f6bce82c918a383879357ac15ab97c4a5cb2cb6c2eaed38e9a377"
+    },
+    "packs/quality_materials.pck": {
+      "bytes": 7224009,
+      "megabytes": 6.889,
+      "sha256": "03ac3086cd71e1f76be237d018113d81f8e7b2310bcc519e6847a8459f34095e"
+    },
+    "release_manifest.json": {
+      "bytes": 8330,
+      "megabytes": 0.008,
+      "sha256": "59bcfde47826d56a89ee4d415619d16b2f8780d96150b8771d7d36bf5158d2d5"
+    },
+    "runtime_pack_manifest.json": {
+      "bytes": 8410,
+      "megabytes": 0.008,
+      "sha256": "0944cbc97f77903740203c4f2912b5722286b31415fd59145027d384cdd070fb"
+    }
+  }
+}

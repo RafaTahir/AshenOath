@@ -1,0 +1,8 @@
+{
+  "transport": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\export\\index.pck",
+  "transport_bytes": 4935505,
+  "transport_sha256": "09b9cef75a7b9e9f3848a7d1e868972bed3ea06b77647158041d45496ad0a384",
+  "decoded": "D:\\Temp\\AshenOath\\h3_pack_source_audit\\index.raw.pck",
+  "decoded_bytes": 8706624,
+  "decoded_sha256": "a40f2dde89d5d8e9314d0f2246f21bb74e13adec7560074cca730416f390a00a"
+}

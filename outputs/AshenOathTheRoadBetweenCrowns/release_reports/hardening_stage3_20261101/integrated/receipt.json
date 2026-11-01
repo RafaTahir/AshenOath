@@ -1,0 +1,680 @@
+{
+    "schema_version":  1,
+    "kind":  "hardening_stage3_integrated_regression",
+    "started_at_utc":  "2026-11-01T20:43:13.5057540Z",
+    "finished_at_utc":  "2026-11-01T20:44:10.4764710Z",
+    "repository":  "D:\\Projects\\AshenOath",
+    "project":  "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+    "source_commit":  "5a89d5598de948eb2ba9eb2938451b3537cef4ef",
+    "status":  "pass",
+    "failure":  null,
+    "unit_tests_expected":  64,
+    "unit_tests_completed":  64,
+    "run_directory":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z",
+    "python":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "godot":  "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+    "checks":  [
+                   {
+                       "name":  "build_runtime_packs_ast",
+                       "kind":  "powershell_ast",
+                       "executable":  null,
+                       "arguments":  [
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_runtime_packs.ps1"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:14.2294725Z",
+                       "exit_code":  0,
+                       "expected_count":  0,
+                       "actual_count":  0,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "PowerShell AST: PASS"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\build_runtime_packs_ast.stdout.log",
+                       "stderr_log":  null,
+                       "engine_log":  null,
+                       "elapsed_seconds":  0
+                   },
+                   {
+                       "name":  "build_story_release_ast",
+                       "kind":  "powershell_ast",
+                       "executable":  null,
+                       "arguments":  [
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_story_release.ps1"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:14.2872156Z",
+                       "exit_code":  0,
+                       "expected_count":  0,
+                       "actual_count":  0,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "PowerShell AST: PASS"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\build_story_release_ast.stdout.log",
+                       "stderr_log":  null,
+                       "engine_log":  null,
+                       "elapsed_seconds":  0
+                   },
+                   {
+                       "name":  "test_release_tools",
+                       "kind":  "unittest",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\test_release_tools.py",
+                                         "-v"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:14.3322559Z",
+                       "exit_code":  0,
+                       "expected_count":  21,
+                       "actual_count":  21,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "test_batch_child_failure_returns_nonzero_without_export_or_source_write (__main__.ArtifactCopy.test_batch_child_failure_returns_nonzero_without_export_or_source_write) ... ok",
+                                       "test_required_shell_asset_is_copied_and_missing_asset_fails (__main__.ArtifactCopy.test_required_shell_asset_is_copied_and_missing_asset_fails) ... ok",
+                                       "test_valid_package_inspection_passes (__main__.GraphValidation.test_valid_package_inspection_passes) ... ok",
+                                       "test_current_catalog_preset_parity_passes (__main__.WebContracts.test_current_catalog_preset_parity_passes) ... ok",
+                                       "test_extra_qa_resource_missing_duplicate_actor_or_missing_quality_maps_fails (__main__.WebContracts.test_extra_qa_resource_missing_duplicate_actor_or_missing_quality_maps_fails) ... ok",
+                                       "test_missing_inconsistent_or_unrendered_hud_label_fails (__main__.WebContracts.test_missing_inconsistent_or_unrendered_hud_label_fails) ... ok",
+                                       "Ran 21 tests in 10.062s",
+                                       "OK"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_release_tools.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_release_tools.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  10.851
+                   },
+                   {
+                       "name":  "test_export_batch",
+                       "kind":  "unittest",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\test_export_batch.py",
+                                         "-v"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:25.2081633Z",
+                       "exit_code":  0,
+                       "expected_count":  11,
+                       "actual_count":  11,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "test_artifact_failure_stops_before_export (__main__.ExportBatch.test_artifact_failure_stops_before_export) ... ok",
+                                       "test_godot_failure_stops_before_packaging (__main__.ExportBatch.test_godot_failure_stops_before_packaging) ... ok",
+                                       "test_native_profile_validator_failure_stops_the_batch (__main__.ExportBatch.test_native_profile_validator_failure_stops_the_batch) ... ok",
+                                       "test_pack_builder_exe_failure_stops_before_python_and_export (__main__.ExportBatch.test_pack_builder_exe_failure_stops_before_python_and_export) ... ok",
+                                       "test_packager_failure_stops_before_verification (__main__.ExportBatch.test_packager_failure_stops_before_verification) ... ok",
+                                       "test_sync_failure_stops_before_artifact_validation (__main__.ExportBatch.test_sync_failure_stops_before_artifact_validation) ... ok",
+                                       "test_verifier_failure_cannot_report_ready (__main__.ExportBatch.test_verifier_failure_cannot_report_ready) ... ok",
+                                       "Ran 11 tests in 11.041s",
+                                       "OK"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_export_batch.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_export_batch.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  11.342
+                   },
+                   {
+                       "name":  "test_pack_candidates",
+                       "kind":  "unittest",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\test_pack_candidates.py",
+                                         "-v"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:36.5673991Z",
+                       "exit_code":  0,
+                       "expected_count":  10,
+                       "actual_count":  10,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "test_cli_accepts_current_schema2_and_fails_corrupted_artifact (__main__.CandidateValidation.test_cli_accepts_current_schema2_and_fails_corrupted_artifact) ... ok",
+                                       "test_missing_required_artifact_fails_but_optional_metadata_mode_is_preserved (__main__.CandidateValidation.test_missing_required_artifact_fails_but_optional_metadata_mode_is_preserved) ... ok",
+                                       "test_wrong_size_hash_and_magic_each_fail (__main__.CandidateValidation.test_wrong_size_hash_and_magic_each_fail) ... ok",
+                                       "Ran 10 tests in 1.379s",
+                                       "OK"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_pack_candidates.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_pack_candidates.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  1.712
+                   },
+                   {
+                       "name":  "test_design_pack_policy",
+                       "kind":  "unittest",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\test_design_pack_policy.py",
+                                         "-v"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:38.2896462Z",
+                       "exit_code":  0,
+                       "expected_count":  4,
+                       "actual_count":  4,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "Ran 4 tests in 0.168s",
+                                       "OK"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_design_pack_policy.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_design_pack_policy.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  0.5
+                   },
+                   {
+                       "name":  "test_runtime_production_policy",
+                       "kind":  "unittest",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\test_runtime_production_policy.py",
+                                         "-v"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:38.7997466Z",
+                       "exit_code":  0,
+                       "expected_count":  8,
+                       "actual_count":  8,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "Ran 8 tests in 0.112s",
+                                       "OK"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_runtime_production_policy.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_runtime_production_policy.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  0.425
+                   },
+                   {
+                       "name":  "test_web_pack_completeness",
+                       "kind":  "unittest",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\test_web_pack_completeness.py",
+                                         "-v"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:39.2356408Z",
+                       "exit_code":  0,
+                       "expected_count":  10,
+                       "actual_count":  10,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "test_conflicting_ownership_fails (__main__.PackCompleteness.test_conflicting_ownership_fails) ... ok",
+                                       "test_corrupt_pack_fails (__main__.PackCompleteness.test_corrupt_pack_fails) ... ok",
+                                       "test_dependency_cycle_fails (__main__.PackCompleteness.test_dependency_cycle_fails) ... ok",
+                                       "test_engine_path_escape_and_mismatch_fail (__main__.PackCompleteness.test_engine_path_escape_and_mismatch_fail) ... ok",
+                                       "test_escape_fails (__main__.PackCompleteness.test_escape_fails) ... ok",
+                                       "test_invalid_manifest_fails (__main__.PackCompleteness.test_invalid_manifest_fails) ... ok",
+                                       "test_missing_pack_fails (__main__.PackCompleteness.test_missing_pack_fails) ... ok",
+                                       "test_unknown_dependency_fails (__main__.PackCompleteness.test_unknown_dependency_fails) ... ok",
+                                       "test_valid_pack_passes (__main__.PackCompleteness.test_valid_pack_passes) ... ok",
+                                       "Ran 10 tests in 0.242s",
+                                       "OK"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_web_pack_completeness.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\test_web_pack_completeness.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  0.717
+                   },
+                   {
+                       "name":  "verify_web_001",
+                       "kind":  "python_gate",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_web_001.py",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "D:\\Projects\\AshenOath"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:39.9770374Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "WEB-001: PASS - preset, renderer, payload filters, menu identity, and effective hosting headers"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_web_001.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_web_001.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  1.101
+                   },
+                   {
+                       "name":  "verify_web_002",
+                       "kind":  "python_gate",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_web_002.py",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:41.0915599Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "WEB-002: PASS - 13 released campaign zones and browser runtime resources are exportable"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_web_002.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_web_002.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  0.619
+                   },
+                   {
+                       "name":  "verify_web_preset_parity",
+                       "kind":  "python_gate",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_web_preset_parity.py"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:41.7212128Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "WEB PRESET PARITY: PASS (current catalog and static resource selection only)"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_web_preset_parity.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_web_preset_parity.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  0.654
+                   },
+                   {
+                       "name":  "runtime_pack_validation",
+                       "kind":  "python_gate",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\runtime_pack_validation.py",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\runtime_pack_manifest.json"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:42.3912763Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "PACK GRAPH: PASS"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\runtime_pack_validation.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\runtime_pack_validation.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  0.316
+                   },
+                   {
+                       "name":  "verify_runtime_packs",
+                       "kind":  "python_gate",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_runtime_packs.py",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--json-report",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\runtime-packs.json"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:42.7184235Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "RUNTIME PACKS: PASS (9 packs, 256 MB deployment budget)"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_runtime_packs.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_runtime_packs.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  0.225
+                   },
+                   {
+                       "name":  "verify_runtime_required_components",
+                       "kind":  "python_gate",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_runtime_required_components.py",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--production",
+                                         "--json-report",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\runtime-required-production.json"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:42.9578174Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "RUNTIME-001 VERIFIER: PASS (23 components, 129 roles, 0 explicit visual fallbacks)"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_runtime_required_components.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_runtime_required_components.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  8.03
+                   },
+                   {
+                       "name":  "verify_native_attack_profiles",
+                       "kind":  "python_gate",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                       "arguments":  [
+                                         "-B",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_native_attack_profiles.py",
+                                         "--project",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:51.0095286Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "NATIVE ATTACK PROFILES: PASS (20 hash-bound sources; visual acceptance required: M03,M20)"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_native_attack_profiles.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_native_attack_profiles.stderr.log",
+                       "engine_log":  "",
+                       "elapsed_seconds":  0.483
+                   },
+                   {
+                       "name":  "verify_design_pack_policy",
+                       "kind":  "native_fixture",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+                       "arguments":  [
+                                         "--headless",
+                                         "--path",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--script",
+                                         "res://tools/verify_design_pack_policy.gd",
+                                         "--log-file",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_design_pack_policy.godot.log"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:51.5328324Z",
+                       "exit_code":  0,
+                       "expected_count":  30,
+                       "actual_count":  30,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "DESIGN PACK POLICY: PASS checks=30 (actual database; no art/world; visual review remains pending)"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_design_pack_policy.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_design_pack_policy.stderr.log",
+                       "engine_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_design_pack_policy.godot.log",
+                       "elapsed_seconds":  1.178
+                   },
+                   {
+                       "name":  "verify_spectral_asset_policy",
+                       "kind":  "native_fixture",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+                       "arguments":  [
+                                         "--headless",
+                                         "--path",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--script",
+                                         "res://tools/verify_spectral_asset_policy.gd",
+                                         "--log-file",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_spectral_asset_policy.godot.log"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:52.7464922Z",
+                       "exit_code":  0,
+                       "expected_count":  9,
+                       "actual_count":  9,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "SPECTRAL ASSET POLICY: PASS checks=9 failures=0"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_spectral_asset_policy.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_spectral_asset_policy.stderr.log",
+                       "engine_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_spectral_asset_policy.godot.log",
+                       "elapsed_seconds":  0.969
+                   },
+                   {
+                       "name":  "verify_runtime_asset_policy",
+                       "kind":  "native_fixture",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+                       "arguments":  [
+                                         "--headless",
+                                         "--path",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--script",
+                                         "res://tools/verify_runtime_asset_policy.gd",
+                                         "--log-file",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_runtime_asset_policy.godot.log"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:43:53.7524872Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "RUNTIME ASSET POLICY: PASS - included roles, pending visual review and diagnostic fallback metadata are explicit"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_runtime_asset_policy.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_runtime_asset_policy.stderr.log",
+                       "engine_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_runtime_asset_policy.godot.log",
+                       "elapsed_seconds":  6.209
+                   },
+                   {
+                       "name":  "verify_face_terminal_state",
+                       "kind":  "native_fixture",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+                       "arguments":  [
+                                         "--headless",
+                                         "--path",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--script",
+                                         "res://tools/verify_face_terminal_state.gd",
+                                         "--log-file",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_face_terminal_state.godot.log"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:44:00.0343863Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "FACE TERMINAL: PASS (one head bone; death, eligibility, rebinding and restore; no art/world)"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_face_terminal_state.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_face_terminal_state.stderr.log",
+                       "engine_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_face_terminal_state.godot.log",
+                       "elapsed_seconds":  0.841
+                   },
+                   {
+                       "name":  "verify_face_actor_integration",
+                       "kind":  "native_fixture",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+                       "arguments":  [
+                                         "--headless",
+                                         "--path",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--script",
+                                         "res://tools/verify_face_actor_integration.gd",
+                                         "--log-file",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_face_actor_integration.godot.log"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:44:00.9275028Z",
+                       "exit_code":  0,
+                       "expected_count":  143,
+                       "actual_count":  143,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "FACE ACTOR INTEGRATION: PASS checks=143 models=3 eligible_faces=2 (world bandit eligibility control, native raider, cached player; 1280x720 and 960x540; no world/save)"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_face_actor_integration.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_face_actor_integration.stderr.log",
+                       "engine_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_face_actor_integration.godot.log",
+                       "elapsed_seconds":  5.255
+                   },
+                   {
+                       "name":  "verify_opening_skip_input",
+                       "kind":  "native_fixture",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+                       "arguments":  [
+                                         "--headless",
+                                         "--path",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--script",
+                                         "res://tools/verify_opening_skip_input.gd",
+                                         "--log-file",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_opening_skip_input.godot.log"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:44:06.2386335Z",
+                       "exit_code":  0,
+                       "expected_count":  29,
+                       "actual_count":  29,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "OPENING SKIP INPUT: PASS checks=29 activations=5 (actual touch and focused Enter; 1280x720 canvas, 1280/960 display; no world/choices)"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_opening_skip_input.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_opening_skip_input.stderr.log",
+                       "engine_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_opening_skip_input.godot.log",
+                       "elapsed_seconds":  2.189
+                   },
+                   {
+                       "name":  "verify_native_attack_timing",
+                       "kind":  "native_fixture",
+                       "executable":  "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+                       "arguments":  [
+                                         "--headless",
+                                         "--path",
+                                         "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+                                         "--script",
+                                         "res://tools/verify_native_attack_timing.gd",
+                                         "--log-file",
+                                         "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_native_attack_timing.godot.log"
+                                     ],
+                       "started_at_utc":  "2026-11-01T20:44:08.4581889Z",
+                       "exit_code":  0,
+                       "expected_count":  null,
+                       "actual_count":  null,
+                       "skipped":  0,
+                       "passed":  true,
+                       "errors":  [
+
+                                  ],
+                       "summary":  [
+                                       "NATIVE ATTACK TIMING: PASS; full Attack, unchanged contact/recovery clocks, split steps, interruption ownership, ten finite cylinder dimensions and deterministic calibration policy"
+                                   ],
+                       "stdout_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_native_attack_timing.stdout.log",
+                       "stderr_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_native_attack_timing.stderr.log",
+                       "engine_log":  "D:\\Projects\\AshenOath\\.release-gate\\hardening-stage3-integrated\\20261101T204313213Z\\verify_native_attack_timing.godot.log",
+                       "elapsed_seconds":  1.828
+                   }
+               ],
+    "source_sha256":  {
+                          "scripts/character_animation_driver.gd":  "2c8f23f458bd49bc286b72d1c60a5d79b704cefa0ac2d85c291f9ca889ab7f9a",
+                          "scripts/character_face_driver.gd":  "9e332e535679a7dd54594f91363fcf9fe69b1bf1227d3fe02a8e23d639c11500",
+                          "scripts/asset_database.gd":  "1c94d4192e934264370d06caa443c1ccaaca1ff52989893ceefdf6d3e208eea3",
+                          "scripts/hud/dialogue_panel.gd":  "0a4f463edc4d0d5d988dbda6c269d02c1eb30deec4f7e9f229ca16841c61b9a4",
+                          "Export_Web_Build.bat":  "9ad23b08d694f4900c6ebbe6e6cba5d9370f8ae38fa491a233a745cd4d6511c5",
+                          "tools/build_runtime_packs.ps1":  "fdbe8f7aa35db36b73903ff1d2e7d06292efa0836fbd6c730ef115fc66a92437",
+                          "tools/build_story_release.ps1":  "6ceee466c511172acf687163ee3059243bdaa442f5c8f126eac58c5a11d4f550",
+                          "tools/runtime_pack_validation.py":  "108d04bbbe1929c4c54354bd1e447618967b6137973ab9ba9512c33a17741f1e",
+                          "tools/runtime_pack_artifacts.py":  "4bf322fed897af3a8641b677a6c6e5015575c9a379da8496d44a9780b81ce2c3",
+                          "tools/prepare_runtime_pack_layout.py":  "ac426418504752518682d1ed3fb93bde8ddc838c0672bb2f9ddda25da49dfd4e",
+                          "tools/build_web_runtime_manifest.py":  "8cdcbb5acd0ddb8c9a7654fa4d748c257be3851f37a44753099cd1949539d049",
+                          "tools/verify_pack_candidates.py":  "ebabe0cc702a9e949e8a7fcfe3227b3434ee8d701a7d4810cfcb04a0bf5f6bc9",
+                          "tools/verify_runtime_required_components.py":  "f89e159b423e067eb7880427135b59ebfcdb5d4aa62fb7942042c5aa45dda34c",
+                          "tools/verify_runtime_asset_policy.gd":  "4572cdfb741b5292f51bce7db61e7108f5290f7fb8935fb475f6d61842929d98",
+                          "tools/verify_web_001.py":  "163458f00f9800ebe60905167b13d5911a4190f534b7c51abed015ee19962eef",
+                          "tools/verify_web_002.py":  "7e4b60e75c1ee08b9e8beabd2cbebbabca25c147ead57a5ecc06b2a6ec93e49c",
+                          "tools/verify_web_preset_parity.py":  "d5d1711f8dd1f3244c3869d1873bb9c7fea23ba0e26374882141d99c9c950586",
+                          "tools/verify_face_terminal_state.gd":  "7ff45a757c9db38ed72d64eabbeb819cf4aa8cacbe45562faa3f2e03046a86cd",
+                          "tools/verify_face_actor_integration.gd":  "0a3300d12fd4759b7e83049db222d08b66fef418b79c756d5992a4330ee5be88",
+                          "tools/verify_opening_skip_input.gd":  "6d09130b34fac3ed2cc5aab50c320ab148cf95af6a09bff4e90ddbaa8987419d",
+                          "tools/verify_native_attack_timing.gd":  "491d359a8b02ba814f9ea4cb54f2d087536a59c4263c6df50f182826d37ff945",
+                          "tools/verify_native_attack_profiles.py":  "fad1295b0ec2edb5b6f985ddbe59e7b49fc1bf3f957fab9864b4258b1f6f73ed",
+                          "data/native_attack_profiles.json":  "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+                          "runtime_asset_manifest.json":  "c60093c1308547d97c275fa26c915c09225fce2519bfe431cecad4deb319108d",
+                          "runtime_pack_manifest.json":  "34efe3ef8ba4a3081b70b5907f1c9862f2980cc8e7d52bb24606517c3172d836",
+                          "export_presets.cfg":  "101823a1e0cc344cace545cd00a8e4e87362606c634f7a8ecebff41769916285"
+                      },
+    "scope":  "Sequential static and native fixtures only; no editor/import, world journey, browser, packaging, Git mutation or publication. Model-backed policy/face fixtures run in separate processes."
+}

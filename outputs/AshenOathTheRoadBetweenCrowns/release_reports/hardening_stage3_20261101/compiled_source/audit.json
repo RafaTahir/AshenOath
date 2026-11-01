@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "label": "H3",
+  "expected_commit": "122154580d20abd5889e5a8ef1514b585f165397",
+  "export_root": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\export",
+  "build_id": "hardening-stage3-20261101",
+  "release_manifest_sha256": "59bcfde47826d56a89ee4d415619d16b2f8780d96150b8771d7d36bf5158d2d5",
+  "root_pck": {
+    "transport": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\export\\index.pck",
+    "transport_bytes": 4935505,
+    "transport_sha256": "09b9cef75a7b9e9f3848a7d1e868972bed3ea06b77647158041d45496ad0a384",
+    "decoded": "D:\\Temp\\AshenOath\\h3_pack_source_audit\\index.raw.pck",
+    "decoded_bytes": 8706624,
+    "decoded_sha256": "a40f2dde89d5d8e9314d0f2246f21bb74e13adec7560074cca730416f390a00a"
+  },
+  "script_count": 13,
+  "compiled_token_count": 78875,
+  "statement_indentation_boundaries": 9239,
+  "comparison": {
+    "path": "D:\\Temp\\AshenOath\\h3_pack_source_audit\\comparison.json",
+    "sha256": "a82ca03f7503d22983dfcd2426e70c747d324ccb85e3a53121e5045be7524ce0"
+  },
+  "pack_override_check": {
+    "path": "D:\\Temp\\AshenOath\\h3_pack_source_audit\\mounted_hashes.json",
+    "sha256": "8199421bd7904475b6a444a57772283a89d35b7b3de8f2c6fd3967faadd8e99c",
+    "pack_count": 9
+  },
+  "raw_packs": [
+    {
+      "id": "base",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\base.pck",
+      "bytes": 5495596,
+      "sha256": "6d3955c8d8adb9917d24fe2c08e061656041d987e6a2e96789821648eb5c6bd4"
+    },
+    {
+      "id": "opening",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\opening.pck",
+      "bytes": 89754920,
+      "sha256": "9387d969affa50c72e5cba103edbb09b5404608c51dfc1278799fca4b718707a"
+    },
+    {
+      "id": "opening_materials",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\opening_materials.pck",
+      "bytes": 16704436,
+      "sha256": "3c404d52856b8f12e210943ccd09329133043afbdeac3b6ee2de7d8aac2edb3a"
+    },
+    {
+      "id": "adjacent",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\adjacent.pck",
+      "bytes": 3233440,
+      "sha256": "ea5c932be74c9a4b3d0c7a271b1c077605db037a85a910ec2a1d33c8a8d9a932"
+    },
+    {
+      "id": "characters",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\characters.pck",
+      "bytes": 9366976,
+      "sha256": "ded6bb12656014b7a25577cae5213ee7329bc35309d8529b2895cef7876fb0ed"
+    },
+    {
+      "id": "monsters",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\monsters.pck",
+      "bytes": 39953868,
+      "sha256": "d86ad97f4fff98004a8cffbab05ee85cb44df067b301953a28462a18794c2fa2"
+    },
+    {
+      "id": "campaign",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\campaign.pck",
+      "bytes": 9999748,
+      "sha256": "def6d8f068f2aaa1386a0efeb69b50fab99549ef7ceab34e3e0a740b43d774d8"
+    },
+    {
+      "id": "audio",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\audio.pck",
+      "bytes": 21349452,
+      "sha256": "6e53a57cd095b84d6377d46b5671110f55d2867b31ba478e58574a52460964a3"
+    },
+    {
+      "id": "quality_materials",
+      "path": "D:\\Temp\\AO_H3_release\\.release-gate\\hardening-stage3\\runtime-packs\\quality_materials.pck",
+      "bytes": 7374972,
+      "sha256": "3faa2becf3f4090d6df2d3ac3bfd0fd23407ec7db4b8bd18c6d9dce30719d85e"
+    }
+  ],
+  "data_resources": [
+    {
+      "path": "data/native_attack_profiles.json",
+      "sha256": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+      "packed_matches_frozen_bytes": true,
+      "frozen_matches_expected_commit_lf": true
+    }
+  ],
+  "isolated_child_profile": "D:\\Temp\\AshenOath\\h3_pack_source_audit\\profile",
+  "execution": "FileAccess/map/token inspection only; no models, world, browser, save, source import or production edit"
+}

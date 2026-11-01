@@ -1,0 +1,201 @@
+[
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"mount": "actual_root_index"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "base"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "opening"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "opening_materials"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "adjacent"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "characters"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "monsters"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "campaign"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "audio"
+	},
+	{
+		"hashes": {
+			"data/native_attack_profiles.json": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+			"scripts/asset_database.gdc": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+			"scripts/camera_controller.gdc": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+			"scripts/character_animation_driver.gdc": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+			"scripts/character_face_driver.gdc": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+			"scripts/combat_body_query.gdc": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+			"scripts/combat_manager.gdc": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+			"scripts/enemy_ai.gdc": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+			"scripts/hud/dialogue_panel.gdc": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+			"scripts/native_attack_profiles.gdc": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+			"scripts/player_controller.gdc": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+			"scripts/systems/character_animation_graph.gdc": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+			"scripts/zone_runtime_coordinator.gdc": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+			"scripts/zone_spatial_service.gdc": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53"
+		},
+		"matches_actual_root": true,
+		"mount": "quality_materials"
+	}
+]

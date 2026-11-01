@@ -1,0 +1,9 @@
+WARNING: Runtime visual role 'bell_eater_boss' uses an explicit diagnostic fallback: Injected policy rejection for verifier negative coverage
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _record_runtime_role_use (res://scripts/asset_spawn_helper.gd:352)
+       [1] _spawn_from_entry (res://scripts/asset_spawn_helper.gd:253)
+       [2] spawn_visual_role (res://scripts/asset_spawn_helper.gd:240)
+       [3] _verify_diagnostic_fallback (res://tools/verify_runtime_asset_policy.gd:48)
+       [4] _initialize (res://tools/verify_runtime_asset_policy.gd:15)
+       [5] _verify_included_roles (res://tools/verify_runtime_asset_policy.gd:34)

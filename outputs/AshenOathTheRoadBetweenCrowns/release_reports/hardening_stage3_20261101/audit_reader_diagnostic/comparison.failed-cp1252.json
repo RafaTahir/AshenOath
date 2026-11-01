@@ -1,0 +1,229 @@
+{
+  "status": "FAIL",
+  "scope": "Actual decoded root PCK compiled tokens vs complete frozen 122154580d20abd5889e5a8ef1514b585f165397 source token streams; every token line/type/identifier/literal/operator and statement indentation column",
+  "format_reference": "https://raw.githubusercontent.com/godotengine/godot/4.6.3-stable/modules/gdscript/gdscript_tokenizer.h",
+  "scripts": [
+    {
+      "path": "scripts/character_animation_driver.gd",
+      "frozen_source_sha256": "2c8f23f458bd49bc286b72d1c60a5d79b704cefa0ac2d85c291f9ca889ab7f9a",
+      "frozen_source_sha256_lf": "443c7419789ea45fda636332427acae9b81145a432eb8cdfdd5c69cceb98ba1c",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "cb7c27c061c17eebcced300d49e63a443b6b017c70b17ee2af4fab0ef538d540",
+      "packed_tokens": 6168,
+      "frozen_lexical_tokens": 6175,
+      "normalized_unary_numbers": 7,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 862,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/combat_manager.gd",
+      "frozen_source_sha256": "5531327a6ee4f2f8599dfb44e89837b3c891a9633f010b72c8f944cd75a2fa2f",
+      "frozen_source_sha256_lf": "5d5cedd44aff38ee0555c8c5bd790474d031c232420acf2ae8df30bd308d83fe",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "c09cc5139e5d297b709688fd740e01990cb1a49f343a3ef2b2732ab4cf2c9213",
+      "packed_tokens": 3454,
+      "frozen_lexical_tokens": 3458,
+      "normalized_unary_numbers": 4,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 343,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/enemy_ai.gd",
+      "frozen_source_sha256": "531e479b64eb5d1c0f9939ca30834a8ddf9bfde9527c2182a27c059a0eed185c",
+      "frozen_source_sha256_lf": "1e70702b9de7af7a56176d145ddc762017603e52716e5f0d0773bde8db3501c2",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "574f3458ac9dd9ad6c445a119eac024c630715eda4d760637b260300ce87042c",
+      "packed_tokens": 16260,
+      "frozen_lexical_tokens": 16309,
+      "normalized_unary_numbers": 49,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 1953,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/player_controller.gd",
+      "frozen_source_sha256": "2f8bcdf1d6e178622716458d96a472eee68a9276c7395b4e0764553a96ef7b5a",
+      "frozen_source_sha256_lf": "026052740712f158fa33ca3692b3558e707bf6eed0fca04a459498545bfa6c5a",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "4389665c58e774e03444c87c5192911136b4f03f5f85af23dae711d3e9e86e3f",
+      "packed_tokens": 20024,
+      "frozen_lexical_tokens": 20125,
+      "normalized_unary_numbers": 101,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 2448,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/systems/character_animation_graph.gd",
+      "frozen_source_sha256": "d4500ab2f24599c16876b525f906bc8fa05779a12965a2cb80045fffe84d68bb",
+      "frozen_source_sha256_lf": "60bb5ff56cc600713f385027b6319fc9ce00879deaddf284191a0e9f786f8513",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "17c914ecdb762416d1ef67c81d0876f78e0300924408eb00498ea5a5d09c9dff",
+      "packed_tokens": 1553,
+      "frozen_lexical_tokens": 1553,
+      "normalized_unary_numbers": 0,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 175,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/zone_spatial_service.gd",
+      "frozen_source_sha256": "a3b26b1dcb8a10b7133dee89874c47eb23abb1e8673524d7f5eccbb5adf8fa0c",
+      "frozen_source_sha256_lf": "093780e85a1580c6016e219afc859d3a1d80a05334d0163e520d1ab4551deea7",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "9a30a99ddf67dafa5d385e59b73f0d25873f1e000f3d60060a575c9eb6f5aa53",
+      "packed_tokens": 4897,
+      "frozen_lexical_tokens": 4927,
+      "normalized_unary_numbers": 30,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 454,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/combat_body_query.gd",
+      "frozen_source_sha256": "17c18b0377f341a755a01aaf451d482bb410d04a2e1fa835d5415b5d836a8255",
+      "frozen_source_sha256_lf": "e7924478f90e592e2cad24bbf3880eff64df9cfa44e461e4cd77244a453a0824",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "8f03a813f6e6df509b0051de6aa56190b1cbe688c78190cd4bc945ae487511a6",
+      "packed_tokens": 1809,
+      "frozen_lexical_tokens": 1809,
+      "normalized_unary_numbers": 0,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 160,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/native_attack_profiles.gd",
+      "frozen_source_sha256": "ae7483aa2acc2dce3ccccce21345752895dda308ae88bafb02e804c00c5a0939",
+      "frozen_source_sha256_lf": "242a66f9fb2edd523feebe96bf98e07aaec660dd343a219a815f7460d63c5c62",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "d970496020d0a2bfaaf06a0f08a50cde8a52c98b3d22130c9bbda95a23337a68",
+      "packed_tokens": 712,
+      "frozen_lexical_tokens": 714,
+      "normalized_unary_numbers": 2,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 57,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/zone_runtime_coordinator.gd",
+      "frozen_source_sha256": "d2d343d1b750973f085e0872af37e9b3a2516f401fa5e20fbc7d6122953150eb",
+      "frozen_source_sha256_lf": "e15303828250585ae5a4d7588b5479312c17718b799092597805317a3678224b",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "6d61d5c356d572c2ae37b807f666395a79046f99cb3d1f5ac3ef5056bb861d64",
+      "packed_tokens": 5403,
+      "frozen_lexical_tokens": 5409,
+      "normalized_unary_numbers": 6,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 632,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/camera_controller.gd",
+      "frozen_source_sha256": "7d9d13b5f5f635036f5cfafdc391b36fd866426ba66b13e414bb4a7a36f34274",
+      "frozen_source_sha256_lf": "ee90526f0e0a17ac8b54f3406a9a52332b93199a84f274f02761843ec598b296",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "f0e95c3ca74262ff2f214f86f1f159c3dc1e72b3e67b6f858c6f39941c690024",
+      "packed_tokens": 9040,
+      "frozen_lexical_tokens": 9076,
+      "normalized_unary_numbers": 36,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 1033,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/character_face_driver.gd",
+      "frozen_source_sha256": "9e332e535679a7dd54594f91363fcf9fe69b1bf1227d3fe02a8e23d639c11500",
+      "frozen_source_sha256_lf": "22131e5b8cca13dc7a06053496173b1ba7496235b9d1d8b8d7dd58aecac68d84",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "d4ec81371f7bc8269194c5007ba7699474c281d8a890ac3d639c0cfefd2582a8",
+      "packed_tokens": 2652,
+      "frozen_lexical_tokens": 2659,
+      "normalized_unary_numbers": 7,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 333,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/asset_database.gd",
+      "frozen_source_sha256": "1c94d4192e934264370d06caa443c1ccaaca1ff52989893ceefdf6d3e208eea3",
+      "frozen_source_sha256_lf": "3638d4f7d40bf3f743ea89c5bf71053eb00f439c60e897b0e682774b67448b64",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "208ee5120eb8a48daf48b50f4689e46b41910a8ce6c05ef9031d12a994940ee0",
+      "packed_tokens": 1757,
+      "frozen_lexical_tokens": 1757,
+      "normalized_unary_numbers": 0,
+      "tokens_match": true,
+      "differences": [],
+      "indentation_boundaries": 185,
+      "indentation_matches": true,
+      "indentation_differences": []
+    },
+    {
+      "path": "scripts/hud/dialogue_panel.gd",
+      "frozen_source_sha256": "0a4f463edc4d0d5d988dbda6c269d02c1eb30deec4f7e9f229ca16841c61b9a4",
+      "frozen_source_sha256_lf": "14d86b246039048d327290b7dcae8e5098453792c46b5a201bb2f1a98e02114d",
+      "frozen_matches_expected_commit_lf": true,
+      "compiled_sha256": "a321f9ce820d6b25390dcadad41869c79fcc335b8fcb0e4e9c8b9f0ddcbf73eb",
+      "packed_tokens": 5146,
+      "frozen_lexical_tokens": 5152,
+      "normalized_unary_numbers": 6,
+      "tokens_match": false,
+      "differences": [
+        {
+          "token_index": 697,
+          "packed": [
+            102,
+            3,
+            " \u00e2\u20ac\u201d Ask more"
+          ],
+          "frozen": [
+            102,
+            3,
+            " \u2014 Ask more"
+          ]
+        },
+        {
+          "token_index": 3588,
+          "packed": [
+            431,
+            3,
+            "Kael \u00e2\u20ac\u201d recorded decision"
+          ],
+          "frozen": [
+            431,
+            3,
+            "Kael \u2014 recorded decision"
+          ]
+        }
+      ],
+      "indentation_boundaries": 604,
+      "indentation_matches": true,
+      "indentation_differences": []
+    }
+  ]
+}

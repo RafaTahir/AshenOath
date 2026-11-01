@@ -1,0 +1,13 @@
+test_approved_role (__main__.ProductionRolePolicyTests.test_approved_role) ... ok
+test_diagnostic_fallback_rejected_even_when_approved (__main__.ProductionRolePolicyTests.test_diagnostic_fallback_rejected_even_when_approved) ... ok
+test_explicit_spectral_inclusion_does_not_claim_visual_review (__main__.ProductionRolePolicyTests.test_explicit_spectral_inclusion_does_not_claim_visual_review) ... ok
+test_missing_or_malformed_roles (__main__.ProductionRolePolicyTests.test_missing_or_malformed_roles) ... ok
+test_release_runner_selects_production_mode (__main__.ProductionRolePolicyTests.test_release_runner_selects_production_mode) ... ok
+test_spectral_authorization_cannot_override_scope_and_provenance (__main__.ProductionRolePolicyTests.test_spectral_authorization_cannot_override_scope_and_provenance) ... ok
+test_spectral_inclusion_preserves_source_and_license_hash_checks (__main__.ProductionRolePolicyTests.test_spectral_inclusion_preserves_source_and_license_hash_checks) ... ok
+test_unapproved_and_ineligible_roles (__main__.ProductionRolePolicyTests.test_unapproved_and_ineligible_roles) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.112s
+
+OK
