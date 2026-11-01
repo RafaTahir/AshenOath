@@ -18,6 +18,7 @@ CSC = Path(os.environ.get("WINDIR", "C:/Windows")) / "Microsoft.NET/Framework64/
 PINNED_PYTHON = Path("C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe")
 EXIT_CODES = {"packs": 41, "sync": 42, "artifacts": 43, "godot": 44,
               "package": 45, "verify": 46, "native_profiles": 47}
+CRASH_STATUS = -1073741819  # Windows NTSTATUS 0xC0000005, as reported by CMD.
 TOOLS = {"sync_runtime_pack_manifest.py": "sync", "runtime_pack_artifacts.py": "artifacts",
          "build_web_runtime_manifest.py": "package", "verify_web_export.py": "verify",
          "verify_native_attack_profiles.py": "native_profiles"}
@@ -48,8 +49,10 @@ class DisposableChild {
         File.AppendAllText(Environment.GetEnvironmentVariable("BATCH_FIXTURE_LOG"), stage + "\n");
         File.WriteAllLines(Path.Combine(Environment.GetEnvironmentVariable("BATCH_FIXTURE_ROOT"), stage + ".args"), args);
         Console.WriteLine("DISPOSABLE CHILD: " + stage);
-        if (Environment.GetEnvironmentVariable("BATCH_FIXTURE_FAIL") == stage)
-            return stage == "packs" ? 41 : 44;
+        if (Environment.GetEnvironmentVariable("BATCH_FIXTURE_FAIL") == stage) {
+            string exitOverride = Environment.GetEnvironmentVariable("BATCH_FIXTURE_EXIT");
+            return exitOverride == null ? (stage == "packs" ? 41 : 44) : int.Parse(exitOverride);
+        }
         if (stage == "godot") {
             string html = args[args.Length - 1];
             Directory.CreateDirectory(Path.GetDirectoryName(html));
@@ -70,7 +73,7 @@ with Path(os.environ["BATCH_FIXTURE_LOG"]).open("a", encoding="utf-8") as log:
 (root / (stage + ".args.json")).write_text(json.dumps(sys.argv[1:]), encoding="utf-8")
 print("DISPOSABLE CHILD:", stage)
 if os.environ.get("BATCH_FIXTURE_FAIL") == stage:
-    raise SystemExit({code})
+    raise SystemExit(int(os.environ.get("BATCH_FIXTURE_EXIT", {code})))
 out = Path(os.environ["ASHEN_OATH_WEB_DIRECTORY"])
 if stage in ["package", "verify"]:
     (out / (stage + ".marker")).write_text("completed", encoding="ascii")
@@ -122,6 +125,7 @@ class ExportBatch(unittest.TestCase):
                         ASHEN_OATH_PACK_DIRECTORY=str(self.raw_packs), ASHEN_OATH_WEB_DIRECTORY=str(self.output),
                         BATCH_FIXTURE_ROOT=str(self.root), BATCH_FIXTURE_LOG=str(self.log))
         self.env.pop("BATCH_FIXTURE_FAIL", None)
+        self.env.pop("BATCH_FIXTURE_EXIT", None)
         self.production_before = {path: path.read_bytes() for path in [PROJECT / "Export_Web_Build.bat", PROJECT / "runtime_pack_manifest.json"]}
         self.raw_before = {path: path.read_bytes() for path in self.raw_packs.iterdir()}
         self.addCleanup(self._assert_sources_unchanged)
@@ -158,10 +162,11 @@ class ExportBatch(unittest.TestCase):
         self.assertEqual(self.raw_packs.resolve(), Path(package[package.index("--pack-dir") + 1]).resolve())
         self.assertIn("--compress-wasm", package)
 
-    def _assert_child_failure(self, stage):
+    def _assert_child_failure(self, stage, expected_exit=None):
         # unittest gives each case a fresh project, pack set and output path.
         result = self.run_batch(stage)
-        self.assertEqual(EXIT_CODES[stage], result.returncode, result.stdout + result.stderr)
+        expected_exit = EXIT_CODES[stage] if expected_exit is None else expected_exit
+        self.assertEqual(expected_exit & 0xffffffff, result.returncode & 0xffffffff, result.stdout + result.stderr)
         self.assertEqual(STAGES[:STAGES.index(stage) + 1], self.calls())
         self.assertNotIn("Web build ready:", result.stdout)
         if STAGES.index(stage) < STAGES.index("godot"):
@@ -189,6 +194,25 @@ class ExportBatch(unittest.TestCase):
     @unittest.skipUnless("native_profiles" in STAGES, "Native-profile hook activates after the Stage 2 merge")
     def test_native_profile_validator_failure_stops_the_batch(self):
         self._assert_child_failure("native_profiles")
+
+    def test_negative_native_status_stops_every_child_boundary(self):
+        # CMD's `if errorlevel 1` excludes signed negative NTSTATUS values.
+        # Fresh fixtures preserve source/raw packs and detect every later child.
+        for stage in [*STAGES, "packs"]:
+            with self.subTest(stage=stage):
+                fixture = ExportBatch("test_success_control_preserves_raw_pack_and_output_environment")
+                fixture.setUp()
+                try:
+                    fixture.env["BATCH_FIXTURE_EXIT"] = str(CRASH_STATUS)
+                    if stage == "packs":
+                        fixture.test_pack_builder_exe_failure_stops_before_python_and_export()
+                    else:
+                        fixture._assert_child_failure(stage, CRASH_STATUS)
+                finally:
+                    try:
+                        fixture._assert_sources_unchanged()
+                    finally:
+                        fixture.doCleanups()
 
     def test_pack_builder_exe_failure_stops_before_python_and_export(self):
         self.env.pop("ASHEN_OATH_REUSE_PACKS")

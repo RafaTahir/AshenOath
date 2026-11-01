@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "source_files": 2,
+  "hashes": {
+    "Export_Web_Build.bat": "9ad23b08d694f4900c6ebbe6e6cba5d9370f8ae38fa491a233a745cd4d6511c5",
+    "tools/test_export_batch.py": "7db809f40acbd99902563831e0eedfd96464a38822e4bf62a66d33a8567c0cab"
+  },
+  "test_methods": 11,
+  "negative_child_boundaries": 6,
+  "negative_builder_control": 1,
+  "skipped": 0,
+  "all_unit_exit": 0,
+  "native_engine_launched": false,
+  "frozen_candidate_modified": false,
+  "before_log": "D:\\Temp\\AshenOath\\stage3_batch_crash_guard_20261102\\negative-before.log",
+  "after_log": "D:\\Temp\\AshenOath\\stage3_batch_crash_guard_20261102\\all-goto-final.log",
+  "pack_builder_guard": "outside parenthesized block; goto skip plus single nonzero check; positive41 and negativeNTSTATUS map1",
+  "tiny_controls": "D:\\Temp\\AshenOath\\stage3_batch_crash_guard_20261102\\goto-controls.json"
+}

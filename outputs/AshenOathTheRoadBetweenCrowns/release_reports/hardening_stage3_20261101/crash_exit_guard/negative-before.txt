@@ -1,0 +1,155 @@
+test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) ... 
+  test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='native_profiles') ... FAIL
+  test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='sync') ... FAIL
+  test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='artifacts') ... FAIL
+  test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='godot') ... FAIL
+  test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='package') ... FAIL
+  test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='verify') ... FAIL
+  test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='packs') ... FAIL
+
+======================================================================
+FAIL: test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='native_profiles')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 210, in test_negative_native_status_stops_every_child_boundary
+    fixture._assert_child_failure(stage, CRASH_STATUS)
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 169, in _assert_child_failure
+    self.assertEqual(expected_exit & 0xffffffff, result.returncode & 0xffffffff, result.stdout + result.stderr)
+AssertionError: 3221225477 != 0 : DISPOSABLE CHILD: native_profiles
+DISPOSABLE CHILD: sync
+DISPOSABLE CHILD: artifacts
+DISPOSABLE CHILD: godot
+DISPOSABLE CHILD: package
+DISPOSABLE CHILD: verify
+
+Web build ready:
+D:\Temp\AshenOath\export batch fixture rep0d2i5\fresh web candidate
+Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.
+
+
+======================================================================
+FAIL: test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='sync')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 210, in test_negative_native_status_stops_every_child_boundary
+    fixture._assert_child_failure(stage, CRASH_STATUS)
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 169, in _assert_child_failure
+    self.assertEqual(expected_exit & 0xffffffff, result.returncode & 0xffffffff, result.stdout + result.stderr)
+AssertionError: 3221225477 != 0 : DISPOSABLE CHILD: native_profiles
+DISPOSABLE CHILD: sync
+DISPOSABLE CHILD: artifacts
+DISPOSABLE CHILD: godot
+DISPOSABLE CHILD: package
+DISPOSABLE CHILD: verify
+
+Web build ready:
+D:\Temp\AshenOath\export batch fixture xm6rlyjd\fresh web candidate
+Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.
+
+
+======================================================================
+FAIL: test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='artifacts')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 210, in test_negative_native_status_stops_every_child_boundary
+    fixture._assert_child_failure(stage, CRASH_STATUS)
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 169, in _assert_child_failure
+    self.assertEqual(expected_exit & 0xffffffff, result.returncode & 0xffffffff, result.stdout + result.stderr)
+AssertionError: 3221225477 != 0 : DISPOSABLE CHILD: native_profiles
+DISPOSABLE CHILD: sync
+DISPOSABLE CHILD: artifacts
+DISPOSABLE CHILD: godot
+DISPOSABLE CHILD: package
+DISPOSABLE CHILD: verify
+
+Web build ready:
+D:\Temp\AshenOath\export batch fixture zveegbqq\fresh web candidate
+Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.
+
+
+======================================================================
+FAIL: test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='godot')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 210, in test_negative_native_status_stops_every_child_boundary
+    fixture._assert_child_failure(stage, CRASH_STATUS)
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 169, in _assert_child_failure
+    self.assertEqual(expected_exit & 0xffffffff, result.returncode & 0xffffffff, result.stdout + result.stderr)
+AssertionError: 3221225477 != 0 : DISPOSABLE CHILD: native_profiles
+DISPOSABLE CHILD: sync
+DISPOSABLE CHILD: artifacts
+DISPOSABLE CHILD: godot
+DISPOSABLE CHILD: package
+DISPOSABLE CHILD: verify
+
+Web build ready:
+D:\Temp\AshenOath\export batch fixture he62tjso\fresh web candidate
+Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.
+
+
+======================================================================
+FAIL: test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='package')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 210, in test_negative_native_status_stops_every_child_boundary
+    fixture._assert_child_failure(stage, CRASH_STATUS)
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 169, in _assert_child_failure
+    self.assertEqual(expected_exit & 0xffffffff, result.returncode & 0xffffffff, result.stdout + result.stderr)
+AssertionError: 3221225477 != 0 : DISPOSABLE CHILD: native_profiles
+DISPOSABLE CHILD: sync
+DISPOSABLE CHILD: artifacts
+DISPOSABLE CHILD: godot
+DISPOSABLE CHILD: package
+DISPOSABLE CHILD: verify
+
+Web build ready:
+D:\Temp\AshenOath\export batch fixture xnvcibvk\fresh web candidate
+Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.
+
+
+======================================================================
+FAIL: test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='verify')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 210, in test_negative_native_status_stops_every_child_boundary
+    fixture._assert_child_failure(stage, CRASH_STATUS)
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 169, in _assert_child_failure
+    self.assertEqual(expected_exit & 0xffffffff, result.returncode & 0xffffffff, result.stdout + result.stderr)
+AssertionError: 3221225477 != 0 : DISPOSABLE CHILD: native_profiles
+DISPOSABLE CHILD: sync
+DISPOSABLE CHILD: artifacts
+DISPOSABLE CHILD: godot
+DISPOSABLE CHILD: package
+DISPOSABLE CHILD: verify
+
+Web build ready:
+D:\Temp\AshenOath\export batch fixture jkjcpr34\fresh web candidate
+Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.
+
+
+======================================================================
+FAIL: test_negative_native_status_stops_every_child_boundary (__main__.ExportBatch.test_negative_native_status_stops_every_child_boundary) (stage='packs')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 208, in test_negative_native_status_stops_every_child_boundary
+    fixture.test_pack_builder_exe_failure_stops_before_python_and_export()
+  File "D:\Projects\AshenOath\outputs\AshenOathTheRoadBetweenCrowns\tools\test_export_batch.py", line 218, in test_pack_builder_exe_failure_stops_before_python_and_export
+    self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+AssertionError: 1 != 0 : DISPOSABLE CHILD: native_profiles
+Building the verified runtime packs...
+DISPOSABLE CHILD: packs
+DISPOSABLE CHILD: sync
+DISPOSABLE CHILD: artifacts
+DISPOSABLE CHILD: godot
+DISPOSABLE CHILD: package
+DISPOSABLE CHILD: verify
+
+Web build ready:
+D:\Temp\AshenOath\export batch fixture l806h1x1\fresh web candidate
+Upload the contents of this folder to Vercel, Netlify, Cloudflare Pages, or itch.io.
+
+
+----------------------------------------------------------------------
+Ran 1 test in 16.130s
+
+FAILED (failures=7)

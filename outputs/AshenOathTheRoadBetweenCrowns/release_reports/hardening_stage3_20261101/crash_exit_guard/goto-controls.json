@@ -1,0 +1,34 @@
+[
+  {
+    "pack_child_exit": 41,
+    "batch_exit": 1,
+    "calls": [
+      "native_profiles",
+      "packs"
+    ],
+    "ready": false
+  },
+  {
+    "pack_child_exit": -1073741819,
+    "batch_exit": 1,
+    "calls": [
+      "native_profiles",
+      "packs"
+    ],
+    "ready": false
+  },
+  {
+    "pack_child_exit": 0,
+    "batch_exit": 0,
+    "calls": [
+      "native_profiles",
+      "packs",
+      "sync",
+      "artifacts",
+      "godot",
+      "package",
+      "verify"
+    ],
+    "ready": true
+  }
+]

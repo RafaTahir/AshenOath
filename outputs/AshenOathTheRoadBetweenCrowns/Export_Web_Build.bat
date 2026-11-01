@@ -24,6 +24,7 @@ if not exist "%PYTHON%" (
 
 "%PYTHON%" "%PROJECT_DIR%\tools\verify_native_attack_profiles.py" --project "%PROJECT_DIR%"
 if errorlevel 1 exit /b %errorlevel%
+if not errorlevel 0 exit /b %errorlevel%
 
 set "PACK_DIR=%ASHEN_OATH_PACK_DIRECTORY%"
 if not defined PACK_DIR set "PACK_DIR=%PROJECT_DIR%\.release-gate\runtime-packs"
@@ -32,11 +33,11 @@ if not exist "%PACK_DIR%\runtime_pack_candidates.json" set "MISSING_PACK=1"
 rem Rebuild packs by default so an export cannot silently reuse stale source content.
 rem Set ASHEN_OATH_REUSE_PACKS=1 only for an intentional local iteration.
 if not defined ASHEN_OATH_REUSE_PACKS set "MISSING_PACK=1"
-if defined MISSING_PACK (
-  echo Building the verified runtime packs...
-  powershell -ExecutionPolicy Bypass -File "%PROJECT_DIR%\tools\build_runtime_packs.ps1" -OutputDirectory "%PACK_DIR%" -Force
-  if errorlevel 1 exit /b 1
-)
+if not defined MISSING_PACK goto :runtime_packs_ready
+echo Building the verified runtime packs...
+powershell -ExecutionPolicy Bypass -File "%PROJECT_DIR%\tools\build_runtime_packs.ps1" -OutputDirectory "%PACK_DIR%" -Force
+if not "%errorlevel%"=="0" exit /b 1
+:runtime_packs_ready
 
 if not exist "%PACK_DIR%\runtime_pack_candidates.json" (
   echo Runtime pack candidate manifest was not produced:
@@ -46,8 +47,10 @@ if not exist "%PACK_DIR%\runtime_pack_candidates.json" (
 
 "%PYTHON%" "%PROJECT_DIR%\tools\sync_runtime_pack_manifest.py" "%PROJECT_DIR%\runtime_pack_manifest.json" "%PACK_DIR%\runtime_pack_candidates.json"
 if errorlevel 1 exit /b %errorlevel%
+if not errorlevel 0 exit /b %errorlevel%
 "%PYTHON%" "%PROJECT_DIR%\tools\runtime_pack_artifacts.py" "%PROJECT_DIR%\runtime_pack_manifest.json" "%PACK_DIR%"
 if errorlevel 1 exit /b %errorlevel%
+if not errorlevel 0 exit /b %errorlevel%
 
 rem An existing candidate must never be removed by the export command.
 if exist "%OUT_DIR%\index.pck" (
@@ -59,14 +62,18 @@ mkdir "%OUT_DIR%"
 rem Export the embedded PCK only after external pack hashes are synchronized.
 "%GODOT%" --headless --path "%PROJECT_DIR%" --export-release "Web Browser" "%OUT_DIR%\index.html"
 if errorlevel 1 exit /b %errorlevel%
+if not errorlevel 0 exit /b %errorlevel%
 
 copy /Y "%PROJECT_DIR%\runtime_pack_manifest.json" "%OUT_DIR%\runtime_pack_manifest.json" >nul
 if errorlevel 1 exit /b %errorlevel%
+if not errorlevel 0 exit /b %errorlevel%
 "%PYTHON%" "%PROJECT_DIR%\tools\build_web_runtime_manifest.py" "%OUT_DIR%" --runtime-pack-manifest "%PROJECT_DIR%\runtime_pack_manifest.json" --pack-dir "%PACK_DIR%" --compress-wasm
 if errorlevel 1 exit /b %errorlevel%
+if not errorlevel 0 exit /b %errorlevel%
 
 "%PYTHON%" "%PROJECT_DIR%\tools\verify_web_export.py" "%OUT_DIR%"
 if errorlevel 1 exit /b %errorlevel%
+if not errorlevel 0 exit /b %errorlevel%
 
 echo.
 echo Web build ready:
