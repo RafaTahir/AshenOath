@@ -66,7 +66,36 @@ func _on_terminal_state_changed(dead: bool) -> void:
 		# Disable additive ownership without touching the sampled death pose.
 		head_modifier.speech_amount = 0.0
 		head_modifier.gesture_time = 0.0
+	if not dead:
+		_reset_transient_face_state()
+		_refresh_screen_budget(0.0)
+		return
 	_reconcile_face_eligibility()
+
+func _reset_transient_face_state() -> void:
+	# A cached face survives journey restore. Clear delivery from the previous
+	# session without writing bones or replacing the authored expression recipe.
+	conversation_active = false
+	focus_target = null
+	focus_refresh_remaining = 0.0
+	screen_refresh_remaining = 0.0
+	update_accumulator = 0.0
+	attention_elapsed = 0.0
+	look_offset = 0.0
+	blink_remaining = 0.0
+	next_blink = 1.8 + float(absi(role_id.hash()) % 180) / 100.0
+	if is_instance_valid(head_modifier):
+		head_modifier.set_expression(expression)
+		head_modifier.look_yaw = 0.0
+		head_modifier.look_pitch = 0.0
+		head_modifier.current_yaw = 0.0
+		head_modifier.current_pitch = head_modifier.emotion_pitch
+		head_modifier.current_roll = head_modifier.emotion_roll
+		head_modifier.blink_closure = 0.0
+		head_modifier.speech_amount = 0.0
+		head_modifier.current_speech = 0.0
+		head_modifier.gesture_time = 0.0
+		head_modifier.gesture_kind = ""
 
 func _reconcile_face_eligibility() -> void:
 	face_tick_eligible = valid and is_inside_tree() and is_instance_valid(character_root) and character_root.is_visible_in_tree() \
