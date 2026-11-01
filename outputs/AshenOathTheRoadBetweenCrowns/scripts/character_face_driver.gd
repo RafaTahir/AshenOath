@@ -30,19 +30,76 @@ var attention_elapsed := 0.0
 var screen_refresh_remaining := 0.0
 var screen_interval := 1.0 / 15.0
 var face_on_screen := true
+var motion_driver: Node
+var terminal_dead := false
+var face_tick_eligible := false
+var face_pose_eligible := false
+var expression_dirty := true
+
+func _ready() -> void:
+	_refresh_screen_budget(0.0)
+
+func bind_motion(motion: Node) -> void:
+	if motion_driver != motion:
+		if is_instance_valid(motion_driver) and motion_driver.is_connected("terminal_state_changed", _on_terminal_state_changed):
+			motion_driver.disconnect("terminal_state_changed", _on_terminal_state_changed)
+		motion_driver = motion
+	if is_instance_valid(motion_driver) and motion_driver.has_signal("terminal_state_changed"):
+		if not motion_driver.is_connected("terminal_state_changed", _on_terminal_state_changed):
+			motion_driver.connect("terminal_state_changed", _on_terminal_state_changed)
+		terminal_dead = bool(motion_driver.get("dead"))
+	_reconcile_face_eligibility()
+
+func _bind_skeleton_motion() -> void:
+	if not is_instance_valid(head_modifier):
+		return
+	var owner_skeleton := head_modifier.get_parent()
+	if not owner_skeleton.has_meta("character_motion_owner"):
+		return
+	var reference: WeakRef = owner_skeleton.get_meta("character_motion_owner")
+	if reference != null and is_instance_valid(reference.get_ref()):
+		bind_motion(reference.get_ref())
+
+func _on_terminal_state_changed(dead: bool) -> void:
+	terminal_dead = dead
+	if dead and is_instance_valid(head_modifier):
+		# Disable additive ownership without touching the sampled death pose.
+		head_modifier.speech_amount = 0.0
+		head_modifier.gesture_time = 0.0
+	_reconcile_face_eligibility()
+
+func _reconcile_face_eligibility() -> void:
+	face_tick_eligible = valid and is_inside_tree() and is_instance_valid(character_root) and character_root.is_visible_in_tree() \
+		and not terminal_dead and not distance_suspended
+	face_pose_eligible = face_tick_eligible and (face_on_screen or conversation_active)
+	if is_instance_valid(head_modifier):
+		head_modifier.active = face_pose_eligible
+		if face_pose_eligible and expression_dirty:
+			_apply_expression()
+	if update_timer != null:
+		# Offscreen living actors still poll visibility; pausing that timer would
+		# leave them unable to notice their return to the camera frustum.
+		update_timer.paused = not face_tick_eligible
+		update_timer.wait_time = _tick_interval()
+		if face_tick_eligible and is_inside_tree() and update_timer.is_stopped():
+			update_timer.start()
+
+func _on_root_visibility_changed() -> void:
+	screen_refresh_remaining = 0.0
+	_refresh_screen_budget(0.0)
 
 func set_conversation_active(value: bool) -> void:
 	conversation_active = value
 	screen_refresh_remaining = 0.0
-	if value and head_modifier != null:
-		head_modifier.active = not distance_suspended
-	if update_timer != null:
-		update_timer.wait_time = _tick_interval()
+	_refresh_screen_budget(0.0)
 
 func _tick_interval() -> float:
 	return 1.0 / 30.0 if conversation_active else maxf(screen_interval, 1.0 / 30.0)
 
 func _refresh_screen_budget(step: float) -> void:
+	if not is_instance_valid(character_root) or not character_root.is_inside_tree():
+		_reconcile_face_eligibility()
+		return
 	screen_refresh_remaining -= step
 	if screen_refresh_remaining > 0.0 and not conversation_active:
 		return
@@ -55,12 +112,12 @@ func _refresh_screen_budget(step: float) -> void:
 		face_on_screen = conversation_active or camera.is_position_in_frustum(eye)
 		distance = camera.global_position.distance_to(eye)
 	screen_interval = 0.25 if not face_on_screen else (1.0 / 30.0 if distance < 4.0 else (1.0 / 15.0 if distance < 8.0 else 0.125))
-	if head_modifier != null:
-		head_modifier.active = not distance_suspended and face_on_screen
+	_reconcile_face_eligibility()
 
 func set_speech_amount(value: float) -> void:
+	_reconcile_face_eligibility()
 	if head_modifier != null:
-		head_modifier.speech_amount = clampf(value, 0.0, 1.0)
+		head_modifier.speech_amount = clampf(value, 0.0, 1.0) if face_pose_eligible else 0.0
 
 const NATIVE_MONSTER_ROLES := [
 	"ghoulkin",
@@ -77,14 +134,30 @@ const NATIVE_MONSTER_ROLES := [
 ]
 
 func configure(root: Node3D, role: String) -> bool:
+	if character_root == root and role_id == role and valid and is_instance_valid(head_modifier):
+		_bind_skeleton_motion()
+		_refresh_screen_budget(0.0)
+		return valid
+	bind_motion(null)
 	if update_timer != null:
 		update_timer.stop()
 	if is_instance_valid(head_modifier):
+		head_modifier.active = false
 		head_modifier.blink_closure = 0.0
 		head_modifier.speech_amount = 0.0
+		var previous_skeleton := head_modifier.get_parent()
+		var previous_owner: WeakRef = previous_skeleton.get_meta("character_face_owner") if previous_skeleton.has_meta("character_face_owner") else null
+		if previous_owner != null and previous_owner.get_ref() == self:
+			previous_skeleton.remove_meta("character_face_owner")
+	if is_instance_valid(character_root) and character_root.visibility_changed.is_connected(_on_root_visibility_changed):
+		character_root.visibility_changed.disconnect(_on_root_visibility_changed)
+	terminal_dead = false
 	head_modifier = null
 	character_root = root
+	if not root.visibility_changed.is_connected(_on_root_visibility_changed):
+		root.visibility_changed.connect(_on_root_visibility_changed)
 	role_id = role
+	expression_dirty = true
 	eye_meshes.clear()
 	brow_meshes.clear()
 	base_eye_scales.clear()
@@ -124,6 +197,9 @@ func configure(root: Node3D, role: String) -> bool:
 			skeleton = candidate as Skeleton3D
 			break
 	if skeleton != null:
+		# The face may live on a gameplay parent while motion owns its visual
+		# child. Register their exact shared skeleton rather than searching peers.
+		skeleton.set_meta("character_face_owner", weakref(self))
 		head_modifier = skeleton.get_node_or_null("StoryHeadModifier") as StoryHeadModifier
 		if head_modifier == null:
 			head_modifier = StoryHeadModifier.new()
@@ -141,6 +217,8 @@ func configure(root: Node3D, role: String) -> bool:
 		update_timer.timeout.connect(_on_update_timer_timeout)
 		add_child(update_timer)
 	update_timer.wait_time = _tick_interval()
+	_bind_skeleton_motion()
+	_refresh_screen_budget(0.0)
 	if valid:
 		var phase_delay := float(absi((role_id + str(root.get_instance_id())).hash()) % 1000) / 1000.0 * update_interval
 		if is_inside_tree():
@@ -150,19 +228,19 @@ func configure(root: Node3D, role: String) -> bool:
 	return valid
 
 func _start_update_timer(delay: float) -> void:
-	if update_timer != null and valid and is_inside_tree():
+	_reconcile_face_eligibility()
+	if update_timer != null and face_tick_eligible and is_inside_tree():
 		update_timer.start(delay)
 
 func _on_update_timer_timeout() -> void:
-	if not valid or not is_instance_valid(character_root):
-		return
-	if distance_suspended:
+	_reconcile_face_eligibility()
+	if not face_tick_eligible:
 		return
 	var step := update_timer.wait_time if update_timer != null else update_interval
 	_refresh_screen_budget(step)
 	update_timer.wait_time = _tick_interval()
 	attention_elapsed += step
-	if not face_on_screen:
+	if not face_pose_eligible:
 		return
 	if (focus_target == null or not is_instance_valid(focus_target)) and role_id not in NATIVE_MONSTER_ROLES:
 		focus_refresh_remaining -= step
@@ -191,7 +269,7 @@ func _on_update_timer_timeout() -> void:
 	# One head owner supplies gentle idle scanning as well as directed gaze.
 	# Conversation, greeting nods and explicit focus retain their authored view.
 	if not conversation_active and role_id not in NATIVE_MONSTER_ROLES and (head_modifier == null or head_modifier.gesture_time <= 0.0):
-		var motion_ref: WeakRef = head_modifier.get_parent().get_meta("character_motion_owner", null) if head_modifier != null else null
+		var motion_ref: WeakRef = head_modifier.get_parent().get_meta("character_motion_owner") if head_modifier != null and head_modifier.get_parent().has_meta("character_motion_owner") else null
 		var motion: Node = motion_ref.get_ref() if motion_ref != null else null
 		if is_instance_valid(motion) and not motion.has_active_action() and not motion.story_dialogue_active and motion.presentation_state in ["", "life:idle", "life:rest", "life:watch", "life:lookout"] and float(motion.current_speed_mps) < 0.08:
 			wanted_look += sin(attention_elapsed * 0.38 + float(absi(role_id.hash()) % 17)) * 0.24
@@ -210,15 +288,9 @@ func _on_update_timer_timeout() -> void:
 			next_blink = 2.2 + float(absi((role_id + str(Time.get_ticks_msec())).hash()) % 220) / 100.0
 
 func set_distance_suspended(suspended: bool) -> void:
-	if distance_suspended == suspended:
-		return
 	distance_suspended = suspended
-	if head_modifier != null:
-		head_modifier.active = not suspended and (face_on_screen or conversation_active)
-	if update_timer != null:
-		update_timer.paused = suspended
-	if not suspended:
-		screen_refresh_remaining = 0.0
+	screen_refresh_remaining = 0.0
+	_refresh_screen_budget(0.0)
 
 func _apply_eye_look() -> void:
 	if head_modifier != null:
@@ -248,14 +320,18 @@ func set_focus_target(target: Node3D) -> void:
 	focus_refresh_remaining = 0.75
 
 func set_expression(value: String) -> void:
-	if expression == value and head_modifier != null and head_modifier.emotion == value:
-		return
+	if expression != value or (head_modifier != null and head_modifier.emotion != value):
+		expression_dirty = true
 	expression = value
+	_reconcile_face_eligibility()
+
+func _apply_expression() -> void:
+	expression_dirty = false
 	if head_modifier != null:
-		head_modifier.set_expression(value)
+		head_modifier.set_expression(expression)
 	# Imported brow meshes can express a subtle attitude; connected-face rigs
 	# use the native head pose above rather than synthetic replacement anatomy.
-	var brow_tilt := float({"stern":0.06, "concerned":-0.045, "grieving":-0.035, "wry":0.025}.get(value, 0.0))
+	var brow_tilt := float({"stern":0.06, "concerned":-0.045, "grieving":-0.035, "wry":0.025}.get(expression, 0.0))
 	for index in range(brow_meshes.size()):
 		var brow := brow_meshes[index]
 		if is_instance_valid(brow):
@@ -265,5 +341,6 @@ func set_expression(value: String) -> void:
 				brow.rotation = rotation_value
 
 func play_story_gesture(kind: String) -> void:
-	if head_modifier != null:
+	_reconcile_face_eligibility()
+	if head_modifier != null and face_pose_eligible:
 		head_modifier.gesture(kind)
