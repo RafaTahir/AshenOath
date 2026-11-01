@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "id": "asset-refinement-20261101",
+  "status": "compiled_resource_and_art_verified_ready_for_authorized_git_publication",
+  "source_commit": "43345934540360cf09a88bdb3c9dd967b762ba6d",
+  "source_dirty_at_build": true,
+  "cast_assets": 33,
+  "scenery_sources": 28,
+  "scenery_roles": 33,
+  "held_equipment_entries": 13,
+  "vector_assets": 7,
+  "world_resources_rebaked_changed": 36,
+  "checks": {
+    "native_and_prepared_art_identities": 33,
+    "journey_started": false,
+    "embedded_clip_durations_preserved": 311,
+    "packed_compiled_actors": 33,
+    "standalone_actor_scenes_safely_omitted": 32,
+    "new_arrow_packed": true,
+    "packed_foliage_alpha_and_mesh_sharing": "passed",
+    "encoded_inventory_hashes_and_gzip_integrity": "passed",
+    "export_web_identity": "exact"
+  },
+  "package": {
+    "files_including_manifest": 18,
+    "bytes_including_manifest": 202808687,
+    "mib": 193.41343593597412,
+    "largest_file": "packs/opening.pck",
+    "largest_file_bytes": 85218530,
+    "deployment_max_bytes": 268435456,
+    "individual_file_max_bytes": 104857600,
+    "warning_threshold_exceeded": false,
+    "release_manifest_sha256": "054403bcf1ae1aca8304291c3f8b20248663ddfdcd30d636c3549856abd48df6",
+    "runtime_pack_count": 9
+  },
+  "publication": {
+    "authorization": "User requested improvements and push",
+    "delivery": "Git to development and main; automatic Vercel integration",
+    "provider_build_outcome": "not polled"
+  },
+  "limits": [
+    "Retained stylized foundations include simplified faces/hair/aprons and inherited creature articulation limitations.",
+    "Art/static package checks do not establish regional gameplay, phone, listening, saves or reference-PC performance acceptance.",
+    "No candidate is marked user accepted."
+  ]
+}

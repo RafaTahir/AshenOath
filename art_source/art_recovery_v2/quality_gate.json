@@ -557,9 +557,12 @@
     "user_accepted": 0,
     "scope": "retained 33-cast Blender finishing masters; scenery, held props, icons and effects recorded alongside",
     "evidence": "evidence/refinement_20261101",
-    "status": "native_and_prepared_art_verified_package_pending",
+    "status": "packaged_candidate_user_review_pending",
     "native_inspected": 33,
     "prepared_art_staged": 33,
-    "journey_started": false
+    "journey_started": false,
+    "package_verified": true,
+    "package_bytes": 202808687,
+    "build_id": "asset-refinement-20261101"
   }
 }

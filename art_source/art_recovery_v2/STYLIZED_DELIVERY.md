@@ -1,3 +1,7 @@
+# Current asset refinement - 2026-11-01
+
+The user-requested asset pass is complete and locally packaged. See [dated delivery](REFINEMENT_20261101.md) and the current roster. This candidate supersedes historical private/cast deliveries below; user acceptance remains unrecorded. Git publication is authorized.
+
 # Private Stylized Snapshot
 
 ## Live Candidate Authorization, 2026-10-31

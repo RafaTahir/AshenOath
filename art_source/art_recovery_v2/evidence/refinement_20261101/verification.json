@@ -6,7 +6,7 @@
       "runtime_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C01\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
-      "prepared_sha256": "4278435ec4d9228933add136d58651287c1941024908e672fe6bfb1f7c283e72"
+      "prepared_sha256": "bf0b7a8db96c2c86f7524a84e428b30ca0940fedb769de81edc96b3049780a98"
     },
     {
       "id": "M01",
@@ -27,84 +27,84 @@
       "runtime_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C04\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
-      "prepared_sha256": "cc13206e4e60ed18a977ab1c75056a399cfd51c2ffa3804a4481b250663d7df5"
+      "prepared_sha256": "216c88cafa4173e3cc0571253545074763116cfcbab155732b283b8ca2e4ca6f"
     },
     {
       "id": "C02",
       "runtime_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C02\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
-      "prepared_sha256": "206f3f776a6ddc29306a412871a80683808eeb528ea990ef524cd3383f08f35f"
+      "prepared_sha256": "979c04b4645230f364cfac9744ae4c8d55045e5712cc3d996ca262d3324f4705"
     },
     {
       "id": "C03",
       "runtime_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C03\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
-      "prepared_sha256": "3a215e203ccd0a10dfd55a700a5527821a85799d3d1afef7ae7b7e7dc006f70e"
+      "prepared_sha256": "36519cd2a53f166606555f2db0b92c265312268c75f4357ebce261c7b7db3b69"
     },
     {
       "id": "C11",
       "runtime_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C11\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
-      "prepared_sha256": "d2f474e62389442d28ac97d0ae48fe3a5ed91a1770cc3bbfbcd689124a019828"
+      "prepared_sha256": "e11ea317786da03290f59d5c5dea3f8136090b642a3b7068993653e6ef80c6a7"
     },
     {
       "id": "C05",
       "runtime_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C05\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
-      "prepared_sha256": "cffff8a5c5830fb1af12d7508a40a15024e4ea86de2802e151a101adad25205e"
+      "prepared_sha256": "cb581b04d1c8d9a19afcad8019ef3fd3dadbda509988ffe1af5bef38c34bb53a"
     },
     {
       "id": "C06",
       "runtime_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C06\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
-      "prepared_sha256": "ba910d4a3fa7280ee8e73fbf2ef5b702d0ca88220cd88fa0302261aa4f7e20a2"
+      "prepared_sha256": "c8fdc7458b7505642a7c18170e733c20d99b140299af33a866c74af46e30042c"
     },
     {
       "id": "C12",
       "runtime_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C12\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
-      "prepared_sha256": "98cda0f2e03c5fe50dcf3621fb2236edbe749591fbac842b23f868cca3b99c14"
+      "prepared_sha256": "c2bb8ab5cf0438f957188424286e34b41ab5129784714166ea552cba38362ab4"
     },
     {
       "id": "C07",
       "runtime_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C07\\review.json",
       "prepared": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
-      "prepared_sha256": "a9fa89e97898c8b356e31721aa07304608b6dddf1e8454066f3fa1717b482c92"
+      "prepared_sha256": "1ab81067f316382e9555456f1916eab75eeed63eaa5f23b3adc8bc41e2fabf6e"
     },
     {
       "id": "C08",
       "runtime_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C08\\review.json",
       "prepared": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
-      "prepared_sha256": "bd515011b91a25862cfb302223dfd04debf5fdd10a9fabe76dc7b1a5c34398ee"
+      "prepared_sha256": "7f505f2ba9a8052c59770b42e68ae1569574d06ca15535f582164a38861f2980"
     },
     {
       "id": "C09",
       "runtime_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C09\\review.json",
       "prepared": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
-      "prepared_sha256": "6b4a195101d76664af21cd6619c5a36cdc9b965c7594b2a4cd5e3e4c4c8fcbf1"
+      "prepared_sha256": "1aca17742d2b9a45647147ae5b0f4b67a6e7abddf32e0f96eab1f14b1f561790"
     },
     {
       "id": "C10",
       "runtime_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C10\\review.json",
       "prepared": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
-      "prepared_sha256": "49cb9e8e83bd24c16fc4bee0c844216807373db52a4c70b7236055afdcc8886f"
+      "prepared_sha256": "9014d1f683a3fbdc8f6ec350159f8a6cb1a966c8ff1479407336e87daf4f5ba8"
     },
     {
       "id": "P01",
       "runtime_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
       "native_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\P01\\review.json",
       "prepared": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
-      "prepared_sha256": "0ae666cc2d8b7416caafa73a4ef7877f35facd4b413a7cd1b67139abe0679982"
+      "prepared_sha256": "37ae5738ab5769a716d9ae2c3ed65e14a887391ae99e27482603f6391b642c51"
     },
     {
       "id": "M02",
