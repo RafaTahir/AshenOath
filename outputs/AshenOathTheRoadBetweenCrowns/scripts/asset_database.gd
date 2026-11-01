@@ -123,13 +123,13 @@ func get_runtime_policy(role_name: String, category: String = "") -> Dictionary:
 	var inclusion_authorized := _has_spectral_inclusion(acceptance) or _has_design_pack_inclusion(acceptance)
 	# Runtime inclusion and visual review are separate. The user explicitly
 	# requested these registered derivatives in the game before visual sign-off.
-	var approved := bool(acceptance.get("export_eligible", false)) and (bool(acceptance.get("approved", false)) or inclusion_authorized)
+	var approved := _explicit_true(acceptance.get("export_eligible", false)) and (_explicit_true(acceptance.get("approved", false)) or inclusion_authorized)
 	return {
 		"required": required,
 		"known": true,
 		"approved": approved,
 		"inclusion_authorized": inclusion_authorized,
-		"visual_reviewed": bool(acceptance.get("visual_reviewed", false)),
+		"visual_reviewed": _explicit_true(acceptance.get("visual_reviewed", false)),
 		"status": str(acceptance.get("status", "unknown")),
 		"release_blocked": required and not approved,
 		"fallback_mode": "none" if approved or not required else "diagnostic_only",
@@ -149,9 +149,16 @@ func _has_spectral_inclusion(acceptance: Dictionary) -> bool:
 func _has_design_pack_inclusion(acceptance: Dictionary) -> bool:
 	var model := str(acceptance.get("model", ""))
 	return str(acceptance.get("source_pack", "")) == "AshenOath_32_Asset_Design_Pack_v1" \
-		and bool(acceptance.get("inclusion_authorized", false)) \
-		and str(acceptance.get("authorization_kind", "")) == "user_requested_blender_cast_replacement" \
-		and model.begins_with("res://assets_external/design_pack_v1/") and model.ends_with(".glb")
+		and _explicit_true(acceptance.get("inclusion_authorized", false)) \
+		and _explicit_true(acceptance.get("export_eligible", false)) \
+		and typeof(acceptance.get("approved")) == TYPE_BOOL and typeof(acceptance.get("visual_reviewed")) == TYPE_BOOL \
+		and str(acceptance.get("authorization_kind", "")) in ["user_requested_blender_cast_replacement", "user_requested_live_roster_release"] \
+		and model.begins_with("res://assets_external/design_pack_v1/") and model.ends_with(".glb") \
+		and not ".." in model.trim_prefix("res://").split("/") and not "." in model.trim_prefix("res://").split("/") \
+		and not "" in model.trim_prefix("res://").split("/") and not model.contains("\\") and not model.trim_prefix("res://").contains(":")
+
+func _explicit_true(value: Variant) -> bool:
+	return typeof(value) == TYPE_BOOL and value == true
 
 func get_assets_by_category(category: String) -> Array:
 	var results = []
