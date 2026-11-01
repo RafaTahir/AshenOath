@@ -63,9 +63,13 @@ func show_opening_scene_skip(skip: Callable) -> void:
 
 func hide_opening_scene_skip() -> void:
 	if not is_instance_valid(hud_root): return
-	var button := hud_root.get_node_or_null("OpeningSceneSkip")
+	var button := hud_root.get_node_or_null("OpeningSceneSkip") as Button
 	if button != null:
-		hud_root.remove_child(button)
+		# A touch pressed callback still belongs to native GUI dispatch. Keep the
+		# retiring control in-tree until that dispatch finishes its process checks.
+		button.hide()
+		button.release_focus()
+		button.name = "RetiringOpeningSceneSkip"
 		button.queue_free()
 
 func get_dialogue_topic_seen_keys() -> Array[String]:
