@@ -1,0 +1,26 @@
+{
+  "id": "C01_ash_staff_refined",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\equipment\\C01_ash_staff_refined.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\C01_ash_staff.glb",
+  "runtime_sha256": "b8ab07b0f5a14323498b2276d9e1d102337d37e444218de910f303bf3209a333",
+  "source_sha256": "b1bf2a3d7073f633b5324d32556df1610c238df3e4020a677a1b4b41b0cb4bf8",
+  "changes": [
+    "Retained grip-origin, exact fitting box and wood/leather material slots",
+    "Worn end/lashing arrises and restrained longitudinal ash grain, fine leather texture and distinct roughness",
+    "No staff sockets, reach or hand orientation changed"
+  ],
+  "bounds_blender": [
+    [
+      -0.0222316887229681,
+      -0.02222583442926407,
+      -0.8600000143051147
+    ],
+    [
+      0.024036940187215805,
+      0.022260000929236412,
+      0.6499999761581421
+    ]
+  ],
+  "triangles": 1240,
+  "user_accepted": false
+}

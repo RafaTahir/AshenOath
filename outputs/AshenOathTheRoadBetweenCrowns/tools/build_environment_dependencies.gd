@@ -28,12 +28,27 @@ func _initialize() -> void:
 			if path in selections or _matches(relative, includes):
 				_collect(path, owner)
 	var records: Dictionary = {}
+	var actor_consumers := {}
+	var actor_catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/prepared_actors.json"))
+	for actor: Dictionary in actor_catalog.values():
+		for dependency: String in actor.get("resource_dependencies", []):
+			var owners: Array = actor_consumers.get(dependency, [])
+			if str(actor.owner) not in owners:
+				owners.append(str(actor.owner))
+			actor_consumers[dependency] = owners
 	var paths := textures.keys()
 	paths.sort()
 	for path: String in paths:
 		var consumers: Array = textures[path]
+		for actor_owner: String in actor_consumers.get(path, []):
+			if actor_owner not in consumers:
+				consumers.append(actor_owner)
 		consumers.sort()
-		var owner := "opening" if "opening" in consumers else ("adjacent" if "adjacent" in consumers else "campaign")
+		var owner := "campaign"
+		for preferred: String in ["opening", "characters", "monsters", "adjacent", "campaign"]:
+			if preferred in consumers:
+				owner = preferred
+				break
 		records[path] = {"owner": owner, "consumers": consumers}
 	_retire_previous_selections(config, records)
 	if not errors.is_empty():
@@ -105,10 +120,8 @@ func _collect(path: String, owner: String) -> void:
 		errors.append("Environment dependency missing: %s (consumer %s)" % [path, owner])
 		return
 	if path.get_extension().to_lower() in ["png", "jpg", "jpeg", "webp", "svg"]:
-		# Actor atlases and quality-dependent PBR channels retain their existing
-		# catalog owners; this ledger closes imported environment kit materials.
-		if not path.begins_with(PREFIX):
-			return
+		# Environment resources can retain an atlas from a retired actor family.
+		# Record actual references; active actor owners are reconciled above.
 		var consumers: Array = textures.get(path, [])
 		if owner not in consumers:
 			consumers.append(owner)

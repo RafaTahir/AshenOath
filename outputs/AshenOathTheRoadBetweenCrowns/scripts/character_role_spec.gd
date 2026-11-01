@@ -76,16 +76,20 @@ static func _has_word(words: String, candidates: Array) -> bool:
 	return false
 
 const SPECS := {
-	"silt_maw": {"height":0.62, "collision_height":0.52, "collision_radius":0.42, "lod":24.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	# Preserve body length when the refined jaw adds depth below the old sole.
+	"silt_maw": {"height":0.65305743, "collision_height":0.52, "collision_radius":0.42, "lod":24.0, "required_sockets":[], "visual_forward_degrees":180.0},
 	"millback": {"height":1.15, "collision_height":0.9, "collision_radius":0.65, "lod":26.0, "required_sockets":[], "visual_forward_degrees":180.0},
 	"glassmoth": {"height":0.9, "collision_height":0.5, "collision_radius":0.28, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0, "airborne":true},
 	"knell_leech": {"height":0.58, "collision_height":0.46, "collision_radius":0.30, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0},
 	"hearthscale": {"height":0.80, "collision_height":0.60, "collision_radius":0.45, "lod":26.0, "required_sockets":[], "visual_forward_degrees":180.0},
 	"gallows_weaver": {"height":1.3, "collision_height":0.8, "collision_radius":0.58, "lod":28.0, "required_sockets":[], "visual_forward_degrees":180.0},
 	"reed_choir": {"height":0.70, "collision_height":0.5, "collision_radius":0.40, "lod":24.0, "required_sockets":[], "visual_forward_degrees":180.0},
-	"inkblind": {"height":0.5, "collision_height":0.4, "collision_radius":0.30, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0},
+	# Shell seating adds height; compensate the visual scale, keeping collision.
+	"inkblind": {"height":0.53655974, "collision_height":0.4, "collision_radius":0.30, "lod":22.0, "required_sockets":[], "visual_forward_degrees":180.0},
 	"cairn_mother": {"height":1.5, "collision_height":1.2, "collision_radius":0.7, "lod":32.0, "required_sockets":[], "visual_forward_degrees":180.0},
-	"shroud_swimmer": {"height":0.32, "collision_height":0.22, "collision_radius":0.55, "lod":28.0, "required_sockets":[], "visual_forward_degrees":180.0, "airborne":true},
+	# The refined ray has a cambered body. Compensate visual normalization so
+	# its existing wingspan/depth and collision footprint stay the same.
+	"shroud_swimmer": {"height":0.56232453, "collision_height":0.22, "collision_radius":0.55, "lod":28.0, "required_sockets":[], "visual_forward_degrees":180.0, "airborne":true},
 	"captain_senn": {"height":1.75, "collision_height":1.64, "collision_radius":0.31, "lod":32.0, "visual_forward_degrees":180.0},
 	"player_human": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},
 	"player_kael": {"height": 1.78, "collision_height": 1.65, "collision_radius": 0.32, "lod": 22.0, "visual_forward_degrees": 180.0},

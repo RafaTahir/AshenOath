@@ -1,0 +1,22 @@
+{
+  "resource": "res://assets_external/environment/forest/RockPath_Round_Small_1.obj",
+  "roles": [
+    "forest_path_rock"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\RockPath_Round_Small_1\\RockPath_Round_Small_1.obj",
+  "source_sha256": "f4f35c75a1f8479328070912cbca58f4e4eaccfdd30b24627c6c6356ceea3eeb",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\RockPath_Round_Small_1.blend",
+  "runtime_sha256": "4eb20ea3ebea271893fcd79cc5a816160fd3c932b5a7ad8442969723e99d2d97",
+  "change": "Trail-stone edge transitions retain the existing walkable height.",
+  "before_triangles": 998,
+  "after_triangles": 1564,
+  "bounds_drift": 5.960464477539063e-08,
+  "material_slots": {
+    "RockPath_Round_Small_1": [
+      "PathRocks"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

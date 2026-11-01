@@ -3,6 +3,7 @@ extends Node
 const CURATED_RUNTIME_PATH = "res://curated_runtime_assets.json"
 const VISUAL_UPGRADE_PATH = "res://visual_upgrade_manifest.json"
 const RUNTIME_ACCEPTANCE_PATH = "res://runtime_asset_manifest.json"
+const PreparedActorCatalog = preload("res://scripts/prepared_actor_catalog.gd")
 
 var manifest = {}
 var role_mapping = {}
@@ -60,7 +61,7 @@ func get_asset_for_role(role_name: String) -> Dictionary:
 		var entry = roles[group].get(role_name)
 		if typeof(entry) == TYPE_DICTIONARY:
 			var path = str(entry.get("path", ""))
-			if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+			if _role_resource_exists(role_name, path):
 				var resolved: Dictionary = entry.duplicate(true)
 				resolved["group"] = group
 				return _with_runtime_acceptance(role_name, resolved)
@@ -70,13 +71,13 @@ func get_asset_for_role(role_name: String) -> Dictionary:
 func has_asset_for_role(role_name: String) -> bool:
 	var entry = get_asset_for_role(role_name)
 	var path = str(entry.get("path", ""))
-	return path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path))
+	return _role_resource_exists(role_name, path)
 
 func get_visual_asset_for_role(role_name: String) -> Dictionary:
 	var found = _find_visual_entry(role_name)
 	if typeof(found) == TYPE_DICTIONARY:
 		var path = str(found.get("path", ""))
-		if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+		if _role_resource_exists(role_name, path):
 			return _with_runtime_acceptance(role_name, found)
 		return _with_runtime_acceptance(role_name, _placeholder_entry(role_name, str(found.get("group", "")), found))
 	return _with_runtime_acceptance(role_name, _placeholder_entry(role_name, "", {}))
@@ -84,7 +85,18 @@ func get_visual_asset_for_role(role_name: String) -> Dictionary:
 func has_visual_asset_for_role(role_name: String) -> bool:
 	var entry = get_visual_asset_for_role(role_name)
 	var path = str(entry.get("path", ""))
-	return path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path))
+	return _role_resource_exists(role_name, path)
+
+func _role_resource_exists(role_name: String, source: String) -> bool:
+	if source.is_empty():
+		return false
+	if ResourceLoader.exists(source) or FileAccess.file_exists(source):
+		return true
+	# Compiled actors retain their authored source identity in the manifests,
+	# while the export only needs the self-contained prepared scene.
+	var prepared := PreparedActorCatalog.entry(role_name, source)
+	var path := str(prepared.get("path", source))
+	return ResourceLoader.exists(path) or FileAccess.file_exists(path)
 
 func get_visual_upgrade_roles() -> Dictionary:
 	return visual_upgrade.get("roles", {})
@@ -164,7 +176,7 @@ func _path_for_role(role_name: String, allowed_exts: Array) -> String:
 	if path == "":
 		return ""
 	var ext = path.get_extension().to_lower()
-	if allowed_exts.has("." + ext) and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+	if allowed_exts.has("." + ext) and _role_resource_exists(role_name, path):
 		return path
 	return ""
 

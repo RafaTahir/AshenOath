@@ -1,6 +1,7 @@
 extends RefCounted
 
 const Records = preload("res://scripts/campaign_record_presentation.gd")
+const Craft = preload("res://scripts/prop_craft_geometry.gd")
 const WOOD := Color(0.27,0.17,0.09)
 const IRON := Color(0.20,0.23,0.22)
 const LINEN := Color(0.65,0.62,0.48)
@@ -485,8 +486,7 @@ static func _record(parent: Node3D, pos: Vector3) -> void:
 		parent.add_child(record)
 
 static func _plank(game, parent: Node3D, pos: Vector3, size: Vector3, color: Color = WOOD) -> MeshInstance3D:
-	var mesh := BoxMesh.new()
-	mesh.size = size
+	var mesh := Craft.box(size)
 	return _mesh(game,parent,mesh,pos,color)
 
 static func _rod(game, parent: Node3D, pos: Vector3, radius: float, height: float, color: Color) -> MeshInstance3D:
@@ -500,7 +500,7 @@ static func _rod(game, parent: Node3D, pos: Vector3, radius: float, height: floa
 static func _mesh(game, parent: Node3D, mesh: Mesh, pos: Vector3, color: Color) -> MeshInstance3D:
 	var node := MeshInstance3D.new()
 	node.mesh = mesh
-	node.material_override = game._mat(color)
+	node.material_override = Craft.material(color, "iron" if color == IRON else ("cloth" if color == LINEN else "timber"), game._mat(color))
 	node.position = pos
 	parent.add_child(node)
 	return node

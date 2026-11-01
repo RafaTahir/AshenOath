@@ -41,7 +41,11 @@ func _process(delta: float) -> void:
 		elif kind == "wheel":
 			node.rotation_degrees.x = base.x + wind_time * 22.0
 		elif kind == "flame":
-			node.scale.y = 1.0 + wave * 0.12
+			# Flame meshes are fitted to wicks, lamps and braziers with authored
+			# local scales. Replacing that scale with 1 made tiny flames grow into
+			# tall blocks as soon as ambient motion began.
+			var base_scale: Vector3 = node.get_meta("motion_base_scale", Vector3.ONE)
+			node.scale.y = base_scale.y * (1.0 + wave * 0.12)
 			node.rotation_degrees.z = base.z + wave * 4.0
 		else:
 			node.rotation_degrees.z = base.z + wave * wind_strength * float(node.get_meta("motion_amount", 3.0))
@@ -50,6 +54,8 @@ func _collect(root: Node) -> void:
 	if root is Node3D and root.has_meta("motion_type"):
 		var node := root as Node3D
 		node.set_meta("motion_base", node.rotation_degrees)
+		if not node.has_meta("motion_base_scale"):
+			node.set_meta("motion_base_scale", node.scale)
 		tracked.append(node)
 		if bool(node.get_meta("wildlife_reactive", false)):
 			wildlife[node.get_instance_id()] = {"home": node.position, "away": Vector3.ZERO, "flight": 0.0, "quiet": 0.0}

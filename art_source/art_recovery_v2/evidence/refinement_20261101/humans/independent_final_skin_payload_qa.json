@@ -1,0 +1,45 @@
+{
+  "scope": "Final shared-runtime proof against immutable pre-skin embedded candidates; all geometry, skin and clip arrays preserved through texture surgery and image extraction",
+  "assets": [
+    {
+      "id": "M01",
+      "runtime_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
+      "pre_skin_runtime_sha256": "2f8a9610b79f27c281aa697e3ec7f95b99b0dc9dc609f84f9829ca3044945b73",
+      "all_accessor_arrays_identical": 2109,
+      "mesh_skin_animation_definitions_and_joint_hierarchy_identical": true,
+      "maximum_mean_rgb8_delta": 0.0027923583984375
+    },
+    {
+      "id": "M03",
+      "runtime_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
+      "pre_skin_runtime_sha256": "907bdfff3b9f060b23b79deab0febc2959a2419b1eebe62c6bce9295c64acd68",
+      "all_accessor_arrays_identical": 1966,
+      "mesh_skin_animation_definitions_and_joint_hierarchy_identical": true,
+      "maximum_mean_rgb8_delta": 0.00640869140625
+    },
+    {
+      "id": "M05",
+      "runtime_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+      "pre_skin_runtime_sha256": "95f487f7df9838566f0d9da1c9f7a472c0f05b8ff099e13e4e1b5b4798186b31",
+      "all_accessor_arrays_identical": 1915,
+      "mesh_skin_animation_definitions_and_joint_hierarchy_identical": true,
+      "maximum_mean_rgb8_delta": 0.0008392333984375
+    },
+    {
+      "id": "M19",
+      "runtime_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
+      "pre_skin_runtime_sha256": "0d46107f982f02f6a5f919bf289425865126ee4ef1aa98dd22c3bbb259b30cdb",
+      "all_accessor_arrays_identical": 1960,
+      "mesh_skin_animation_definitions_and_joint_hierarchy_identical": true,
+      "maximum_mean_rgb8_delta": 0.0061187744140625
+    },
+    {
+      "id": "M20",
+      "runtime_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+      "pre_skin_runtime_sha256": "45687dd9c32a5276b5d5f7b336600a51147fb845ad2cc05fe03134794ba4afac",
+      "all_accessor_arrays_identical": 1910,
+      "mesh_skin_animation_definitions_and_joint_hierarchy_identical": true,
+      "maximum_mean_rgb8_delta": 0.003021240234375
+    }
+  ]
+}

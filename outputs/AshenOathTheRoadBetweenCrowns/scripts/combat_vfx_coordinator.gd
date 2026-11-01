@@ -41,7 +41,7 @@ func launch_arrow(parent: Node3D, origin: Vector3, direction: Vector3, distance:
 	_add_arrow_mesh(arrow)
 
 func _add_arrow_mesh(parent: Node3D) -> void:
-	var model: PackedScene = load("res://assets_external/characters/Ranger_Arrow.fbx")
+	var model: PackedScene = load("res://assets/characters/kael_arrow.glb")
 	if model == null: return
 	var visual := model.instantiate() as Node3D
 	preload("res://scripts/arrow_visual.gd").attach(parent, visual, true)

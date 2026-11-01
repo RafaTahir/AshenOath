@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/props/WeaponStand.obj",
+  "roles": [
+    "castle_weapon_stand"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\WeaponStand\\WeaponStand.obj",
+  "source_sha256": "d4198d9cb0a58b280b251e5911cbddc5920afa3ea86f3d56fd5a8644efdf8564",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\WeaponStand.blend",
+  "runtime_sha256": "9e6fd9adedd7ab17ce8333b0e7e744f7606fde5b8681a986ccf0998cd38da882",
+  "change": "Rack, foot and arm edges clarify the stored-equipment silhouette.",
+  "before_triangles": 2084,
+  "after_triangles": 4892,
+  "bounds_drift": 1.1920928955078125e-07,
+  "material_slots": {
+    "WeaponStand_Cube.081": [
+      "MI_Trim_Furniture",
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

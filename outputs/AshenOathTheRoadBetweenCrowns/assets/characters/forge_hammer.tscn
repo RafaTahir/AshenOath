@@ -1,4 +1,6 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/characters/forge_hammer_head.res" id="1_head"]
 
 [sub_resource type="StandardMaterial3D" id="Wood"]
 albedo_color = Color(0.22, 0.12, 0.065, 1)
@@ -9,6 +11,10 @@ albedo_color = Color(0.25, 0.26, 0.27, 1)
 metallic = 0.65
 roughness = 0.7
 
+[sub_resource type="StandardMaterial3D" id="Leather"]
+albedo_color = Color(0.13, 0.075, 0.04, 1)
+roughness = 0.94
+
 [sub_resource type="CylinderMesh" id="Handle"]
 material = SubResource("Wood")
 top_radius = 0.016
@@ -16,9 +22,19 @@ bottom_radius = 0.019
 height = 0.34
 radial_segments = 8
 
-[sub_resource type="BoxMesh" id="Head"]
+[sub_resource type="CylinderMesh" id="Grip"]
+material = SubResource("Leather")
+top_radius = 0.019
+bottom_radius = 0.020
+height = 0.13
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="Collar"]
 material = SubResource("Iron")
-size = Vector3(0.17, 0.07, 0.065)
+top_radius = 0.022
+bottom_radius = 0.024
+height = 0.025
+radial_segments = 10
 
 [node name="ForgeHammer" type="Node3D"]
 
@@ -28,4 +44,13 @@ mesh = SubResource("Handle")
 
 [node name="ForgedHead" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.23, 0)
-mesh = SubResource("Head")
+mesh = ExtResource("1_head")
+material_override = SubResource("Iron")
+
+[node name="LeatherGrip" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.025, 0)
+mesh = SubResource("Grip")
+
+[node name="HeadCollar" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.183, 0)
+mesh = SubResource("Collar")

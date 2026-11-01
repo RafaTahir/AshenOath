@@ -1,0 +1,15 @@
+{
+  "id": "M20",
+  "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+  "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M20\\review.json",
+  "views": [
+    "front",
+    "side",
+    "rear",
+    "quarter",
+    "walk_04",
+    "action_Attack"
+  ],
+  "layout_version": 3,
+  "resampling": "Aspect preserved; no retouching"
+}

@@ -1,0 +1,110 @@
+{
+  "id": "M11",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M11\\M11_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M11\\M11_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M11_Glassmoth.glb",
+  "input_sha256": "e8f95a4ccf3fe2d31280489261a1d8f2ad92cb5ce54828de12bb69eef43f8a71",
+  "changes": [
+    "Camber each of four separately controlled membrane wings",
+    "Increase thorax continuity",
+    "Retain bounded translucent membranes and native wing controls"
+  ],
+  "metrics_before": {
+    "triangles": 13542,
+    "vertices": 12725,
+    "meshes": 1,
+    "geometry_sha256": "5c35623271bef97bd607229c0d4d655b45fb92f27b398b2367639657a461f49c",
+    "bounds_blender_z_up": [
+      [
+        -1.0660617351531982,
+        -0.6212512254714966,
+        0.033847637474536896
+      ],
+      [
+        1.0660617351531982,
+        0.7045105695724487,
+        1.1230000257492065
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 13542,
+    "vertices": 12725,
+    "meshes": 1,
+    "geometry_sha256": "f7a640a9b022128dd4fb1fb411662b2914db8f9337e2af4da0d2d54875fcbc57",
+    "bounds_blender_z_up": [
+      [
+        -1.0660617351531982,
+        -0.6212512254714966,
+        0.033847637474536896
+      ],
+      [
+        1.0660617351531982,
+        0.7045105695724487,
+        1.129665732383728
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 20,
+    "images": 1,
+    "triangles": 13542
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M11\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M11\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M11\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M11\\quarter.png"
+  ],
+  "source_sha256": "620ced3c9c3058ca84c4bc7d05671ee5be7da7c1022677eda8ac48dce117e9cc",
+  "runtime_sha256": "d7b736d05199d3048048c19c17205f1348870a46fff8e2ff1cd4229ff9fdd734",
+  "runtime_bytes": 2525004,
+  "rig_signature": "0fe540ebd67871949ec455689b1b29749127dd669a20ab573bf9490f88f0fc3b",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M11_Glassmoth.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

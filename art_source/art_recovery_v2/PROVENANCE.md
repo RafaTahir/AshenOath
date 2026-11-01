@@ -1,5 +1,27 @@
 # Review-only source provenance
 
+## Current visual refinement — 2026-11-01
+
+The user requested asset-by-asset improvements in the existing game, retaining
+the current direction, followed by a push. This authorizes publication of the
+refined candidates; it does not record final user visual or gameplay acceptance.
+Earlier publication holds below are historical.
+
+The dated `refinement_20261101` masters begin with the exact retained runtime
+models. Original layered masters, licensed foundations, textures and clips remain
+preserved. New costume construction, creature finishing, shared procedural props,
+the hunting arrow, surface maps and vector icons are project-authored. No new
+third-party asset, purchase or license substitution was introduced. Existing
+foundation notices continue to apply. Current identities and per-asset changes
+are recorded in `stylized_roster.json` and `evidence/refinement_20261101/`.
+
+The final human exports retain the baseline image pixels and material bindings;
+new details add one small palette surface per character. Creature finishes retain
+the existing skeletons and adapted action libraries. Exact duration and sampled
+joint-position comparisons are recorded separately from rendered art inspection.
+The finishing masters are editable derivatives of baked runtime surfaces, while
+the earlier high-resolution layered masters remain available for deeper rework.
+
 The user's 2026-10-31 source-push authorization permits the current candidates,
 their editable sources, evidence and cleared dependencies on the art-recovery
 branch. It does not grant visual acceptance or production Web publication.

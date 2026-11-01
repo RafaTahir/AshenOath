@@ -1,0 +1,22 @@
+{
+  "resource": "res://assets_external/environment/props/Torch_Metal.obj",
+  "roles": [
+    "torch"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Torch_Metal\\Torch_Metal.obj",
+  "source_sha256": "6723fcce073f066c506f5cb63758fdb21c70c351e5b4a4f0155122fa23b32cb5",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Torch_Metal.blend",
+  "runtime_sha256": "4fe1107d017f6d0b94c5aee0187c8a04559c0946b2274eb1253f1132f182affc",
+  "change": "Cup and iron-bracket edges distinguish the torch fitting.",
+  "before_triangles": 970,
+  "after_triangles": 1898,
+  "bounds_drift": 1.584339770488441e-08,
+  "material_slots": {
+    "Torch_Metal_Plane.008": [
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

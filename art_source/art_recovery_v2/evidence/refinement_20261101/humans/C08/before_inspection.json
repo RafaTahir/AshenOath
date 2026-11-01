@@ -1,0 +1,31 @@
+{
+  "id": "C08",
+  "current": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\humans\\C08_Lord_Edric_Vargan.glb",
+  "sha256": "ed43cb946850852f5801d93839234bba649ba37b30b1241b0e49bac3dee2dbae",
+  "source_surfaces": [
+    {
+      "mesh": "C08_MotionFittedAssembly",
+      "vertices": 16919,
+      "polygons": 27556,
+      "materials": [
+        "Lord_Edric_Vargan_C08_PrivateAnatomyAtlas",
+        "Lord_Edric_Vargan_C08_AuthoredClothesAtlas",
+        "Lord_Edric_Vargan_MI_Peasant",
+        "Lord_Edric_Vargan_MI_Regular_Male"
+      ],
+      "bounds": [
+        [
+          -0.8994144201278687,
+          -0.1675407737493515,
+          -0.003967864904552698
+        ],
+        [
+          0.8994148969650269,
+          0.20292942225933075,
+          1.8168909549713135
+        ]
+      ]
+    }
+  ],
+  "actions": []
+}

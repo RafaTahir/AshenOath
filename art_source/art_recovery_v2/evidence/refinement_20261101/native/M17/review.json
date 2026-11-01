@@ -1,0 +1,36 @@
+{
+	"accepted": false,
+	"action_midpoint_views": [
+		"action_Attack.png",
+		"action_AttackHeavy.png",
+		"action_Block.png",
+		"action_HitReact.png",
+		"action_Interact.png"
+	],
+	"asset": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+	"asset_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+	"authored_material_contract": true,
+	"clips": [
+		"Attack",
+		"AttackHeavy",
+		"Block",
+		"Death",
+		"Feed",
+		"HitReact",
+		"Idle",
+		"Interact",
+		"Investigate",
+		"Recovery",
+		"Running",
+		"Sleep",
+		"Threaten",
+		"Walking",
+		"Windup"
+	],
+	"framing_source": "skin-aware authored bind bounds / square art viewport",
+	"idle_clip": "Idle",
+	"owned_locomotion": false,
+	"scope": "isolated native/shared clip art preview, not gameplay acceptance",
+	"walk_clip": "Walking",
+	"walk_cycle_seconds": 1.16666662693024
+}

@@ -2,6 +2,7 @@ extends MultiMeshInstance3D
 
 const COUNT := 12
 static var shared_mesh: SphereMesh
+static var surface_meshes: Dictionary = {}
 static var materials: Dictionary = {}
 var particles: Array[Dictionary] = []
 var remaining := 0.0
@@ -18,8 +19,12 @@ func restart(point: Vector3, normal: Vector3, travel: Vector3, surface: String, 
 	if multimesh == null:
 		multimesh = MultiMesh.new()
 		multimesh.transform_format = MultiMesh.TRANSFORM_3D
-		multimesh.mesh = shared_mesh
+		multimesh.mesh = _mesh_for_surface(surface)
 		multimesh.instance_count = COUNT
+	else:
+		# Pooled bursts can be reused on another surface. Keep the same instance
+		# count and physics while making splinters, sparks and chips distinct.
+		multimesh.mesh = _mesh_for_surface(surface)
 	var key := surface + str(reduce_flashes)
 	if not materials.has(key):
 		var material := StandardMaterial3D.new()
@@ -63,3 +68,19 @@ func _physics_process(delta: float) -> void:
 		var size := float(particle.scale) * smoothstep(0.0, duration * 0.5, remaining)
 		var orientation := Basis(Quaternion(Vector3.UP,(particle.velocity as Vector3).normalized()))
 		multimesh.set_instance_transform(index,Transform3D(orientation.scaled(Vector3(0.55,1.4,0.55)*size),particle.position))
+
+static func _mesh_for_surface(surface: String) -> Mesh:
+	if surface == "flesh":
+		return shared_mesh
+	if surface_meshes.has(surface):
+		return surface_meshes[surface]
+	var chip := PrismMesh.new()
+	# Low-poly fragments share a mesh per surface and retain the existing
+	# 12-instance burst budget. Long axis follows the particle's actual velocity.
+	match surface:
+		"metal": chip.size = Vector3(0.007, 0.033, 0.006)
+		"wood": chip.size = Vector3(0.013, 0.029, 0.008)
+		"foliage": chip.size = Vector3(0.024, 0.017, 0.004)
+		_: chip.size = Vector3(0.019, 0.016, 0.014)
+	surface_meshes[surface] = chip
+	return chip

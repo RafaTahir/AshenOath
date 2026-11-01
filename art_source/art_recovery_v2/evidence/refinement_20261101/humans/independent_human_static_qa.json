@@ -1,0 +1,99 @@
+{
+  "scope": "Independent read-only human GLB, source, image-pixel, material-binding and cost review; no Blender/Godot execution",
+  "passed": true,
+  "human_assets": 13,
+  "human_surfaces": 67,
+  "retained_image_references_with_identical_rgba_pixels": 121,
+  "source_mesh_counts_preserved": true,
+  "retained_triangle_counts_preserved": true,
+  "new_palette_surfaces_per_asset": 1,
+  "maximum_skin_weight_sum_error": 1.2e-07,
+  "human_resources": {
+    "unique_images": 62,
+    "encoded_image_bytes": 33566870,
+    "decoded_rgba8_bytes_without_mips": 222574592,
+    "shared_glb_bytes": 24146180
+  },
+  "all_33_resources": {
+    "unique_images": 154,
+    "encoded_image_bytes": 54025744,
+    "shared_glb_bytes": 61991840,
+    "combined_bytes": 116017584,
+    "decoded_rgba8_bytes_without_mips": 305152000,
+    "duplicate_encoded_or_pixel_payloads": 0,
+    "finalized_cost_metadata_matches": true
+  },
+  "runtime_identity": [
+    {
+      "id": "C01",
+      "runtime_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
+      "source_sha256": "f5ba593193ffb024d9430ed6ebddffa6989ecde7306a88f4f191d9b383248ad2"
+    },
+    {
+      "id": "C04",
+      "runtime_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+      "source_sha256": "0e9e60478abea683d36ddd9d7f0bd6d226920aca0856d7f11c8fd63dfb5bad07"
+    },
+    {
+      "id": "C02",
+      "runtime_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
+      "source_sha256": "e05ad31a76e35e6c24c32782f9573ceb95144f3a88557992b5c48324e554949d"
+    },
+    {
+      "id": "C03",
+      "runtime_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+      "source_sha256": "353d4d9dcd9cc140dc1af251c92fc728fb31f220f5d633a731a9b24f56c754f4"
+    },
+    {
+      "id": "C11",
+      "runtime_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+      "source_sha256": "4c7c977400a8cf1c54674ab2203b430e97b819150671f25488cff7d254ccf061"
+    },
+    {
+      "id": "C05",
+      "runtime_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+      "source_sha256": "a5b804251a0880a26c3f9134f90f2d169b691dfee5061895e4c4b8c89406d8fa"
+    },
+    {
+      "id": "C06",
+      "runtime_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+      "source_sha256": "1568952c4395f448bb76ed8154cfebe4ae8c48aaadf22eb4166781cc32a1eb6b"
+    },
+    {
+      "id": "C12",
+      "runtime_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+      "source_sha256": "21ba449c19c9992a6d4eb2e64dee44dd3059c0bcb1a2538d84e4755afb2b5083"
+    },
+    {
+      "id": "C07",
+      "runtime_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+      "source_sha256": "620a3217d7f61472d34595c3a3e47c98172ee5eb067c8c67b7a403ddf9ca2493"
+    },
+    {
+      "id": "C08",
+      "runtime_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+      "source_sha256": "9e4aac025db2d21f17efc3ae706c27d61160c99fb3518f29b2078480f2bbb9ea"
+    },
+    {
+      "id": "C09",
+      "runtime_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+      "source_sha256": "dbd56d5292fd2de38eb99788a04eb270e0126be8bd5c66965869dd4135feb6ec"
+    },
+    {
+      "id": "C10",
+      "runtime_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+      "source_sha256": "e6348c7434d49613ec67022efbc386d4f88c7206c860ef10e74282637b88c03e"
+    },
+    {
+      "id": "P01",
+      "runtime_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
+      "source_sha256": "11ff046733c419ab3b59b980a6dca14359154dc160cf409e005994f8fc6b28ba"
+    }
+  ],
+  "limits": [
+    "Modest retained-surface vertex duplication is introduced by export; retained triangles and material bindings are preserved, not binary-identical geometry.",
+    "Decoded image totals do not measure runtime memory, GPU residency, or simultaneous scene population.",
+    "No visible material/motion/region acceptance is established by static analysis."
+  ],
+  "resource_identity_phase": "Pre-final-creature-albedo-fixes historical snapshot; final identities/costs in independent_final_runtime_qa.json"
+}

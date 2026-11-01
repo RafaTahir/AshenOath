@@ -1,0 +1,117 @@
+{
+  "id": "M12",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M12\\v002\\M12_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M12\\v002\\M12_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+  "input_path": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M12_Knell_Leech.glb",
+  "input_sha256": "998d751634aa2a2663f3003c65f7cf2eebeee33fbb082ef1bc7b500f0bf57b88",
+  "changes": [
+    "Repair inherited half-turn tube-frame discontinuities using retained UV-ring correspondence",
+    "Enlarge anterior suction cup relative to body",
+    "Unequal longitudinal contraction and low belly",
+    "Smooth moist skin and retained recessed tooth topology"
+  ],
+  "metrics_before": {
+    "triangles": 13410,
+    "vertices": 7278,
+    "meshes": 1,
+    "geometry_sha256": "0afa1dc97e505d5dfe30a1dae72a83dcacfff2871efa314b7e199c476324e55c",
+    "bounds_blender_z_up": [
+      [
+        -0.26704996824264526,
+        -0.7740001678466797,
+        0.01799999363720417
+      ],
+      [
+        0.26704996824264526,
+        0.9008629322052002,
+        0.4278607666492462
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 13410,
+    "vertices": 7278,
+    "meshes": 1,
+    "geometry_sha256": "a12d30817a8bd075e873373f096c6c6797383b2b43461d5d6164546513f88a3d",
+    "bounds_blender_z_up": [
+      [
+        -0.2937549650669098,
+        -0.7740001678466797,
+        0.01799999363720417
+      ],
+      [
+        0.2937549650669098,
+        0.9008629322052002,
+        0.4278607666492462
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 10,
+    "images": 1,
+    "triangles": 13410
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M12\\v002\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M12\\v002\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M12\\v002\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M12\\v002\\quarter.png"
+  ],
+  "source_sha256": "598e28361362b2e72e74057e3c06ec59f1ec5f5807a3b2e4b7e5b91030dbaa6a",
+  "runtime_sha256": "6a5e405b4e56d7de84d1f41ab40f2d9052b1a317598d41dc560878ef857eab16",
+  "runtime_bytes": 1888816,
+  "rig_signature": "096ab3aa95a1d9e725065a89a2952778abda3621b87559b0574498f750477c0f",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "tube_frame_repair": {
+    "rings_realigned": 49,
+    "ring_vertices": 37,
+    "retained_ring_count": 97,
+    "method": "UV-row correspondence; half-turn ring reindexing with matched skin weights; no added geometry"
+  },
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M12_Knell_Leech.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

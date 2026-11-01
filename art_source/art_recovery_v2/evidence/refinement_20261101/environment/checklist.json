@@ -1,0 +1,696 @@
+{
+  "assets": [
+    {
+      "resource": "res://assets_external/environment/forest/Bush_Common.obj",
+      "roles": [
+        "forest_bush"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Bush_Common\\Bush_Common.obj",
+      "source_sha256": "276478abbd84d9f324c069d594ce5b24e7a80a91a12094acb76897e925988b96",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Bush_Common.blend",
+      "runtime_sha256": "09f180f39a461f9f3d81a0f154ace41e2e2c12f90a5bb9890e9865dbc056f18d",
+      "change": "Gently cupped foliage cards catch light across leaf clusters; retain two-sided atlas UVs.",
+      "before_triangles": 900,
+      "after_triangles": 1800,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "Bush_Common": [
+          "Leaves_TwistedTree"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/forest/CommonTree_5.obj",
+      "roles": [
+        "forest_tree_secondary"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\CommonTree_5\\CommonTree_5.obj",
+      "source_sha256": "702d3a16c00ecca99083ae5a481d09bdf5560264f6f358bfb4e6dfd3874de675",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\CommonTree_5.blend",
+      "runtime_sha256": "8137a19ac572de1a4056859b27f6a1a1ec67e6b825928a17e8e28fe937b61434",
+      "change": "Trunk branch normals blend within limbs; leaf cards stay flat.",
+      "before_triangles": 3182,
+      "after_triangles": 3182,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "CommonTree_5": [
+          "Bark_NormalTree",
+          "Leaves_NormalTree"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/forest/RockPath_Round_Small_1.obj",
+      "roles": [
+        "forest_path_rock"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\RockPath_Round_Small_1\\RockPath_Round_Small_1.obj",
+      "source_sha256": "f4f35c75a1f8479328070912cbca58f4e4eaccfdd30b24627c6c6356ceea3eeb",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\RockPath_Round_Small_1.blend",
+      "runtime_sha256": "4eb20ea3ebea271893fcd79cc5a816160fd3c932b5a7ad8442969723e99d2d97",
+      "change": "Trail-stone edge transitions retain the existing walkable height.",
+      "before_triangles": 998,
+      "after_triangles": 1564,
+      "bounds_drift": 5.960464477539063e-08,
+      "material_slots": {
+        "RockPath_Round_Small_1": [
+          "PathRocks"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/forest/Rock_Medium_1.obj",
+      "roles": [
+        "forest_rock"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Rock_Medium_1\\Rock_Medium_1.obj",
+      "source_sha256": "da420f20792dc0223d9f28790fc1dc3624ffe5fa247b04dc8bfbabb4a1a5ff13",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Rock_Medium_1.blend",
+      "runtime_sha256": "f05753da4ac24609bd711d1662c3ff1d4fa172d684a373cde76d1fdb9fed5578",
+      "change": "Restrained chipped arrises keep the broad rock facets.",
+      "before_triangles": 342,
+      "after_triangles": 682,
+      "bounds_drift": 2.384185791015625e-07,
+      "material_slots": {
+        "Rock_Medium_1": [
+          "Rocks"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/forest/TwistedTree_2.obj",
+      "roles": [
+        "forest_tree"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\TwistedTree_2\\TwistedTree_2.obj",
+      "source_sha256": "a90f263707278d79fd0e3f8c641f3042a789fc64ea2b4accb0b843d73e4b1e27",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\TwistedTree_2.blend",
+      "runtime_sha256": "2341e173fcda354242962bc1bc14494c18cf8fb1190bea9f3a5310882e38d74a",
+      "change": "Angle-aware trunk normals join bark around bends; leaf cards stay flat.",
+      "before_triangles": 9134,
+      "after_triangles": 9134,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "TwistedTree_2": [
+          "Bark_TwistedTree",
+          "Leaves_TwistedTree"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/forest/TwistedTree_4.obj",
+      "roles": [
+        "forest_tree_variant"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\TwistedTree_4\\TwistedTree_4.obj",
+      "source_sha256": "05d82da5c28711391ef64a908e4537113b92cb8203b06e1d72e8cd296d701d0a",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\TwistedTree_4.blend",
+      "runtime_sha256": "c0fc395a551f9bed723a5310a1ecaacd37ac3e824cb0f1c936b716ea4586d70a",
+      "change": "Angle-aware trunk normals join bark around bends; leaf cards stay flat.",
+      "before_triangles": 9600,
+      "after_triangles": 9600,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "TwistedTree_4": [
+          "Bark_TwistedTree",
+          "Leaves_TwistedTree"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Anvil.obj",
+      "roles": [
+        "blacksmith_shop"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Anvil\\Anvil.obj",
+      "source_sha256": "c9b1b663962f5dcc7b2ff9b999b6d1347849fdbed730395b2d24782bce76a85f",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Anvil.blend",
+      "runtime_sha256": "887d3d221f07797df67dc6f1d0c543a59fa2e731f249fe14838774483bf9969c",
+      "change": "Soft forge-worn horn, heel and working-face arrises; broad planes retain weight.",
+      "before_triangles": 750,
+      "after_triangles": 1216,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "Anvil_Cube.025": [
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Barrel.obj",
+      "roles": [
+        "barrel"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Barrel\\Barrel.obj",
+      "source_sha256": "57532d8fe5a5e93c469f8e87b1de58f37ff0075ae3a290ed9d4c95ec01a7f631",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Barrel.blend",
+      "runtime_sha256": "94c67212b643e6df63bafdceec07e11b29b65a3a4f0a6786f05cb9bbc7d0fd3c",
+      "change": "Hoop and stave-rim edge catches; barrel facets retain their coopered construction.",
+      "before_triangles": 824,
+      "after_triangles": 1400,
+      "bounds_drift": 2.9802322387695312e-08,
+      "material_slots": {
+        "Barrel_Cylinder": [
+          "MI_Trim_Furniture",
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Bench.obj",
+      "roles": [
+        "castle_bench"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Bench\\Bench.obj",
+      "source_sha256": "dd8d3c1b186efab2e49060bee2f6d27964113e39134309b9cf1e705de68791ba",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Bench.blend",
+      "runtime_sha256": "9401f15a118004678cdb3bb6ded70ab7163876cade1664f4b262502217e0abe9",
+      "change": "Worn seat edges and relieved trestle corners.",
+      "before_triangles": 404,
+      "after_triangles": 984,
+      "bounds_drift": 2.9802322387695312e-08,
+      "material_slots": {
+        "Bench_Cube.011": [
+          "MI_Trim_Furniture",
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Bookcase_2.obj",
+      "roles": [
+        "castle_bookcase"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Bookcase_2\\Bookcase_2.obj",
+      "source_sha256": "8d6bbfb9ed47b7fb4143fef6e9ea116c8a9e6e434225e5ba9ada71e2e1679d03",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Bookcase_2.blend",
+      "runtime_sha256": "0bf07d92675b91987fd1b475fd4fd7c077c2a80fdb5b976f98bb217b13adf4f9",
+      "change": "Shelf lips and upright frame edges separate from book spines.",
+      "before_triangles": 2148,
+      "after_triangles": 4676,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "Bookcase_2_Cube.168": [
+          "MI_Trim_Furniture",
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Chair_1.obj",
+      "roles": [
+        "castle_chair"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Chair_1\\Chair_1.obj",
+      "source_sha256": "1154620b56007cf66f0d4804ccdf9c8395bdfa3f8c2b9c3a94c04a8e61442033",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Chair_1.blend",
+      "runtime_sha256": "062287ffe7da97029c47feb1418848034e850aade0500c7b4aa11fc12aa6dd16",
+      "change": "Seat, back rail and leg arrises gain restrained hand-worn corners.",
+      "before_triangles": 496,
+      "after_triangles": 1296,
+      "bounds_drift": 5.960464477539063e-08,
+      "material_slots": {
+        "Chair_1_Cube.180": [
+          "MI_Trim_Furniture",
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Crate_Metal.obj",
+      "roles": [
+        "crate"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Crate_Metal\\Crate_Metal.obj",
+      "source_sha256": "a44affedb0bc0d03b86045515a2f7bb84e4e91ed44d19865971aadf48ed3024e",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Crate_Metal.blend",
+      "runtime_sha256": "6c12a56ce9845261207b5eaf2978a09bfa2d6a4a8a339aea3f5f44298cb00c0d",
+      "change": "Packing slats and reinforcing iron corners catch light separately.",
+      "before_triangles": 2738,
+      "after_triangles": 5054,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "Crate_Metal_Cube.035": [
+          "MI_Trim_Furniture",
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Lantern_Wall.obj",
+      "roles": [
+        "castle_lantern"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Lantern_Wall\\Lantern_Wall.obj",
+      "source_sha256": "7acff034e0ad398f533c9f78af0f27a1798b906280091eea2b960bc7a2568a2f",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Lantern_Wall.blend",
+      "runtime_sha256": "b78de08c2f8e4da96a91816c1657d6f398c7ff6954eff58d35c7f4af1b742f8c",
+      "change": "Forged frame and cap edges read around retained glass panels.",
+      "before_triangles": 2822,
+      "after_triangles": 6780,
+      "bounds_drift": 4.0978193283081055e-08,
+      "material_slots": {
+        "Lantern_Wall_Cube.018": [
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Stall_Cart_Empty.obj",
+      "roles": [
+        "cart"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Stall_Cart_Empty\\Stall_Cart_Empty.obj",
+      "source_sha256": "c9ceb94ed2af18245354208b6cbec2c9002ac8e05281e98b29e1579da34ce103",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Stall_Cart_Empty.blend",
+      "runtime_sha256": "4c3e213ea331f0ce38c9fb9cba6a26623ebf12292839b0948bd48122704e1ad3",
+      "change": "Cart bed, wheel joinery and stall frame corners retain atlas detail.",
+      "before_triangles": 3936,
+      "after_triangles": 7916,
+      "bounds_drift": 5.960464477539063e-08,
+      "material_slots": {
+        "Stall_Cart_Empty_Cylinder.094": [
+          "MI_Trim_Metal",
+          "MI_Trim_Furniture",
+          "MI_Banner"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Table_Large.obj",
+      "roles": [
+        "castle_table"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Table_Large\\Table_Large.obj",
+      "source_sha256": "55cab222b49f8ea477b703846e6e4abdcb18b4fe846fa97ed277f91914ad0001",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Table_Large.blend",
+      "runtime_sha256": "18570c9558c9718d616c4fd33393f05bd70370df2575f8a1d1409b314badcf04",
+      "change": "Tabletop and leg corners soften while the supporting footprint stays fixed.",
+      "before_triangles": 986,
+      "after_triangles": 2102,
+      "bounds_drift": 1.1641532182693481e-10,
+      "material_slots": {
+        "Table_Large_Cube.084": [
+          "MI_Trim_Furniture",
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/Torch_Metal.obj",
+      "roles": [
+        "torch"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Torch_Metal\\Torch_Metal.obj",
+      "source_sha256": "6723fcce073f066c506f5cb63758fdb21c70c351e5b4a4f0155122fa23b32cb5",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Torch_Metal.blend",
+      "runtime_sha256": "4fe1107d017f6d0b94c5aee0187c8a04559c0946b2274eb1253f1132f182affc",
+      "change": "Cup and iron-bracket edges distinguish the torch fitting.",
+      "before_triangles": 970,
+      "after_triangles": 1898,
+      "bounds_drift": 1.584339770488441e-08,
+      "material_slots": {
+        "Torch_Metal_Plane.008": [
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/props/WeaponStand.obj",
+      "roles": [
+        "castle_weapon_stand"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\WeaponStand\\WeaponStand.obj",
+      "source_sha256": "d4198d9cb0a58b280b251e5911cbddc5920afa3ea86f3d56fd5a8644efdf8564",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\WeaponStand.blend",
+      "runtime_sha256": "9e6fd9adedd7ab17ce8333b0e7e744f7606fde5b8681a986ccf0998cd38da882",
+      "change": "Rack, foot and arm edges clarify the stored-equipment silhouette.",
+      "before_triangles": 2084,
+      "after_triangles": 4892,
+      "bounds_drift": 1.1920928955078125e-07,
+      "material_slots": {
+        "WeaponStand_Cube.081": [
+          "MI_Trim_Furniture",
+          "MI_Trim_Metal"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Balcony_Cross_Straight.obj",
+      "roles": [
+        "shrine"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Balcony_Cross_Straight\\Balcony_Cross_Straight.obj",
+      "source_sha256": "e487d14c083096cef88258a34316940e5ff6ea5e493aaa6ea9585d25f8ee644c",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Balcony_Cross_Straight.blend",
+      "runtime_sha256": "66733d7042f8140d15e46ea679adb56e0dda4411e75cce706184fffab5dda1f2",
+      "change": "Cross-braced shrine timber has relieved beam ends and junction edges.",
+      "before_triangles": 132,
+      "after_triangles": 292,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "Balcony_Cross_Straight": [
+          "MI_WoodTrim"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Door_1_Flat.obj",
+      "roles": [
+        "castle_door"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Door_1_Flat\\Door_1_Flat.obj",
+      "source_sha256": "3b4648fcf95e078f1aa4e5cece8c73aa80139e31c94548e3b178c7440db87224",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Door_1_Flat.blend",
+      "runtime_sha256": "041e1ffde633b65cfa752aa67fdddd11da6563295eb2e7f05c4f80f59518a222",
+      "change": "Door-leaf and surround arrises retain existing hinged surface ownership.",
+      "before_triangles": 314,
+      "after_triangles": 606,
+      "bounds_drift": 3.725290298461914e-09,
+      "material_slots": {
+        "Door_1_Flat": [
+          "MI_WoodTrim",
+          "MI_WindowGlass"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Prop_Chimney.obj",
+      "roles": [
+        "greyfen_chimney"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Prop_Chimney\\Prop_Chimney.obj",
+      "source_sha256": "37f81fa34a61843ab570b8d4a96697863d32fd3e8744ad2df51be3ef8f94bcdf",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Prop_Chimney.blend",
+      "runtime_sha256": "10a21b11c9195c3abf107d77c0efb99d2ff349dce28be6f5b10d6a9c19d44663",
+      "change": "Chimney cap and exposed masonry corners catch grazing light.",
+      "before_triangles": 618,
+      "after_triangles": 1328,
+      "bounds_drift": 6.223643822522718e-11,
+      "material_slots": {
+        "Prop_Chimney": [
+          "MI_RockTrim",
+          "MI_Brick"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Prop_WoodenFence_Single.obj",
+      "roles": [
+        "fence"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Prop_WoodenFence_Single\\Prop_WoodenFence_Single.obj",
+      "source_sha256": "3107b933b169ffa7c8936c1d86ee283d6286a99f4048ed6096d89c475a7376a1",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Prop_WoodenFence_Single.blend",
+      "runtime_sha256": "523d41362a69e0090f9ae4e17507a40d36ebfff73f76cda17cb889497bca0e39",
+      "change": "Fence posts and rails receive visibly worked timber edges.",
+      "before_triangles": 40,
+      "after_triangles": 120,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "Prop_WoodenFence_Single": [
+          "MI_WoodTrim"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Roof_2x4_RoundTile.obj",
+      "roles": [
+        "tavern"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Roof_2x4_RoundTile\\Roof_2x4_RoundTile.obj",
+      "source_sha256": "6b95e1522aeca4ee595adaf03042a81cd301f100353d1d101cd759a41a1c7310",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Roof_2x4_RoundTile.blend",
+      "runtime_sha256": "de5c60a53796d7169c1cb468603ad33995167e5422734d62488ca042550661d9",
+      "change": "Roof eave and hard tile ends gain subtle edge separation.",
+      "before_triangles": 1112,
+      "after_triangles": 2352,
+      "bounds_drift": 2.384185791015625e-07,
+      "material_slots": {
+        "Roof_2x4_RoundTile": [
+          "MI_WoodTrim",
+          "MI_RoundTiles"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Roof_RoundTiles_8x10.obj",
+      "roles": [
+        "greyfen_roof",
+        "castle_roof"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Roof_RoundTiles_8x10\\Roof_RoundTiles_8x10.obj",
+      "source_sha256": "bfcc5f419f0fc36bb93f9b2861f8cb2e15982c53ac3278fabba7adc1b845a733",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Roof_RoundTiles_8x10.blend",
+      "runtime_sha256": "fd23e5bfd03035e4a4cb44498b0151aa4b4e59726ca23b1879b6772f64f3b8bb",
+      "change": "Large roof eave and hard tile ends retain round tile profiles.",
+      "before_triangles": 4480,
+      "after_triangles": 8942,
+      "bounds_drift": 4.76837158203125e-07,
+      "material_slots": {
+        "Roof_RoundTiles_8x10": [
+          "MI_WoodTrim",
+          "MI_RoundTiles"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Wall_Arch.obj",
+      "roles": [
+        "ruins_pillar",
+        "castle_arch"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_Arch\\Wall_Arch.obj",
+      "source_sha256": "6a69bce3df0af6d4cb1c122ab995e143ae174685cef6a105e76d8d6ed9363f2e",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_Arch.blend",
+      "runtime_sha256": "8842848c669d622500d9e5d84544f8692d1c6405ee3e15009bf14195745c0ee7",
+      "change": "Arch opening, pier arrises and masonry returns gain depth at grazing light.",
+      "before_triangles": 196,
+      "after_triangles": 420,
+      "bounds_drift": 2.957222022814676e-09,
+      "material_slots": {
+        "Wall_Arch": [
+          "MI_WoodTrim"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Wall_Plaster_Door_Flat.obj",
+      "roles": [
+        "greyfen_house",
+        "greyfen_door_facade"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_Plaster_Door_Flat\\Wall_Plaster_Door_Flat.obj",
+      "source_sha256": "4d630ef8180073e8fc782c0de8a4b75adfb54a232fa2fa3b4ed427d201b8a396",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_Plaster_Door_Flat.blend",
+      "runtime_sha256": "e7812f10c74ac3cb217a79fa956c8d8dae798c6c32e3bcff7e6ca6c59c396e93",
+      "change": "Doorway returns and plaster/timber corners gain a narrow reveal.",
+      "before_triangles": 92,
+      "after_triangles": 156,
+      "bounds_drift": 2.9802322387695312e-08,
+      "material_slots": {
+        "Wall_Plaster_Door_Flat": [
+          "MI_WoodTrim",
+          "MI_Plaster",
+          "MI_RockTrim"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Wall_Plaster_Straight_Base.obj",
+      "roles": [
+        "greyfen_wall_facade"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_Plaster_Straight_Base\\Wall_Plaster_Straight_Base.obj",
+      "source_sha256": "74c064faa434280a12594747390839148d787b98340b9910015e9514e8352ad4",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_Plaster_Straight_Base.blend",
+      "runtime_sha256": "571b94422e85fccae2f7f5c40a71c3bbe5e4bf5edf973d77fc8c83a80c7f1a6d",
+      "change": "Plaster base and supporting timber arrises gain a narrow reveal.",
+      "before_triangles": 64,
+      "after_triangles": 108,
+      "bounds_drift": 2.9802322387695312e-08,
+      "material_slots": {
+        "Wall_Plaster_Straight_Base": [
+          "MI_WoodTrim",
+          "MI_Plaster",
+          "MI_Brick"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Wall_Plaster_Window_Wide_Flat.obj",
+      "roles": [
+        "greyfen_window_facade"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_Plaster_Window_Wide_Flat\\Wall_Plaster_Window_Wide_Flat.obj",
+      "source_sha256": "d6af5a06df296fb627db60f592bfe286e5769fd19826726146426a3719351086",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_Plaster_Window_Wide_Flat.blend",
+      "runtime_sha256": "796343856e6e32049bcc9c41de5fc0486dd0b76dc191662cc53c857f8f565a0d",
+      "change": "Window reveal and supporting timber corners gain readable thickness.",
+      "before_triangles": 96,
+      "after_triangles": 140,
+      "bounds_drift": 2.9802322387695312e-08,
+      "material_slots": {
+        "Wall_Plaster_Window_Wide_Flat": [
+          "MI_Plaster",
+          "MI_Brick",
+          "MI_WoodTrim"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    },
+    {
+      "resource": "res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj",
+      "roles": [
+        "cemetery_gravestone",
+        "ruins_wall",
+        "castle_wall"
+      ],
+      "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_UnevenBrick_Straight\\Wall_UnevenBrick_Straight.obj",
+      "source_sha256": "bd889d0c2ee182e73d52953a6e82764e77e740b6862daa12da4875b3896fbea0",
+      "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_UnevenBrick_Straight.blend",
+      "runtime_sha256": "6cd58dbe4e23b417e5e23542023f07e8a601164dba5eebb2fe2c407811c6e289",
+      "change": "Exposed ruin/castle masonry edges soften without rounding whole stones.",
+      "before_triangles": 56,
+      "after_triangles": 92,
+      "bounds_drift": 0.0,
+      "material_slots": {
+        "Wall_UnevenBrick_Straight": [
+          "MI_WoodTrim",
+          "MI_Plaster",
+          "MI_UnevenBrick"
+        ]
+      },
+      "texture_pixels_changed": false,
+      "collision_changed": false,
+      "user_accepted": false
+    }
+  ],
+  "complete": true,
+  "date": "2026-11-01",
+  "scope": "28 unique curated scenery resources / 33 aliases plus shared procedural work props and ambient/completion effects",
+  "runtime_obj_sources_stable": true,
+  "summary": {
+    "before_unique_source_triangles": 49514,
+    "after_unique_source_triangles": 78732,
+    "max_aabb_drift": 4.76837158203125e-07,
+    "new_image_bytes": 0,
+    "mtl_bytes_and_usemtl_name_order_preserved": true
+  },
+  "shared_owner_changes": [
+    {
+      "file": "scripts/prop_craft_geometry.gd",
+      "change": "44-triangle cached chamfered joinery with exact bounds and one surface; shared palette-preserving timber/iron/cloth response"
+    },
+    {
+      "file": "scripts/saga_work_presentation.gd",
+      "change": "Regional work planks use shared joinery; material separation for iron/cloth/timber"
+    },
+    {
+      "file": "scripts/greyfen_village_details.gd",
+      "change": "Kitchen/well/forge/bell/home/care/cemetery joinery retains existing MultiMesh cells while receiving the shared mesh and material response"
+    },
+    {
+      "file": "scripts/world_vfx_controller.gd",
+      "change": "Shared open completion annulus replaces solid cylinder slab, no shadow; same timing and pulse cap"
+    },
+    {
+      "file": "scripts/world_motion_controller.gd",
+      "change": "Cache authored local scale and apply relative flame flicker instead of overwriting flame height with approximately 1.0"
+    }
+  ],
+  "checks": {
+    "blender_four_views_per_asset": true,
+    "source_mtl_bytes_verified_unchanged": true,
+    "export_usemtl_names_order_verified": true,
+    "source_fitting_bounds_verified": true,
+    "godot_targeted_fixture": ".release-gate/verify_prop_refinement.log",
+    "fixture_result": "passed: script compilation, joinery bounds/one surface/cache, material separation, ring inner hole, original flame scale retained"
+  },
+  "limitations": [
+    "Blender Workbench views establish mesh/atlas inspection only; main owns native combined art captures and production compilation.",
+    "Unique scenery source topology increases by 29,218 triangles; repeated in-world cost and FPS have not been benchmarked.",
+    "No collision/layout/population/light-budget change; no journey, browser or phone acceptance claimed.",
+    "World material library water profile left unchanged; no uninspected material substitution."
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "id": "M14",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M14\\v002\\M14_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M14\\v002\\M14_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M14_Gallows_Weaver.glb",
+  "input_sha256": "3c8e07b774f36bbe1b5c93a81f820b3632ac2ad4bf720cb573802ee241ec8973",
+  "changes": [
+    "Rear-heavy abdomen and more compact front body",
+    "Give existing leg tubes fusiform femurs and tapered tibiae around retained bone axes",
+    "Lift leg arches subtly while preserving foot coordinates",
+    "Dark keratin response with restrained abdomen highlights"
+  ],
+  "metrics_before": {
+    "triangles": 19999,
+    "vertices": 11392,
+    "meshes": 1,
+    "geometry_sha256": "3a5159e123d88abac96d1ebfc11e734155a77debe53f69507ea330cdc2a504eb",
+    "bounds_blender_z_up": [
+      [
+        -1.212098479270935,
+        -1.0036760568618774,
+        0.09024540334939957
+      ],
+      [
+        1.2119190692901611,
+        1.0631184577941895,
+        1.025004506111145
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 19999,
+    "vertices": 11392,
+    "meshes": 1,
+    "geometry_sha256": "eb87e2bd2e37ddd06817a9b5db68c056b01661c9a19e6eaa0d8e839be0f9466d",
+    "bounds_blender_z_up": [
+      [
+        -1.2106271982192993,
+        -1.0173943042755127,
+        0.09123345464468002
+      ],
+      [
+        1.2107270956039429,
+        1.0618066787719727,
+        1.0362216234207153
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 20,
+    "images": 1,
+    "triangles": 19999
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M14\\v002\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M14\\v002\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M14\\v002\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M14\\v002\\quarter.png"
+  ],
+  "source_sha256": "3c919c413f5bfee765962e95414f1b4d7c689b4b4a53e8aee1c247fa2d48e983",
+  "runtime_sha256": "27e6a29f5368231233719d7bc58b3d1a3a1187f80c15bb836f0fbd02a8daf2a0",
+  "runtime_bytes": 2385740,
+  "rig_signature": "ae310f9ed93a67edddb256713afa3be0ccfff10bb1954f8467af89ea0c6cae3b",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "tube_frame_repair": null,
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M14_Gallows_Weaver.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

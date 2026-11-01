@@ -1,0 +1,102 @@
+{
+  "scope": "Independent static animation-accessor and animated-joint world-position comparison against immutable pre-refinement runtime GLBs; not visible motion acceptance",
+  "assets": [
+    {
+      "id": "M01",
+      "clips": 15,
+      "max_duration_delta_seconds": 0.0,
+      "max_sampled_joint_position_delta_m": 2.106781458238685e-06,
+      "worst_sample": [
+        "HitReact",
+        0
+      ],
+      "joint_pose_samples": 4875,
+      "runtime_sha256": "4d40e837e8c786512b2f7199d2cac003729c5eee93a60319d520f22d53d2df19"
+    },
+    {
+      "id": "M05",
+      "clips": 15,
+      "max_duration_delta_seconds": 0.0,
+      "max_sampled_joint_position_delta_m": 2.6037623489894554e-06,
+      "worst_sample": [
+        "Recovery",
+        0
+      ],
+      "joint_pose_samples": 4875,
+      "runtime_sha256": "bca2dbeacf49f36f6d938d58e11f22f28801c613526070dc5021749d976f17d6"
+    },
+    {
+      "id": "M02",
+      "clips": 15,
+      "max_duration_delta_seconds": 0.0,
+      "max_sampled_joint_position_delta_m": 9.996815535467736e-07,
+      "worst_sample": [
+        "Death",
+        0.25
+      ],
+      "joint_pose_samples": 4125,
+      "runtime_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+    },
+    {
+      "id": "M19",
+      "clips": 15,
+      "max_duration_delta_seconds": 0.0,
+      "max_sampled_joint_position_delta_m": 1.0924704699308918e-06,
+      "worst_sample": [
+        "AttackHeavy",
+        0.25
+      ],
+      "joint_pose_samples": 4875,
+      "runtime_sha256": "01cff3539dc97aac3c8cc7ed6ac2825c3fd9a5f5a313d5feba0ffd84d45698bb"
+    },
+    {
+      "id": "M20",
+      "clips": 15,
+      "max_duration_delta_seconds": 0.0,
+      "max_sampled_joint_position_delta_m": 1.2730989841114865e-06,
+      "worst_sample": [
+        "Walking",
+        0.75
+      ],
+      "joint_pose_samples": 4875,
+      "runtime_sha256": "ab95aa47fa0c235698ccc6e0651a19074ebc0f640046398bc0a7a1d397aba74f"
+    },
+    {
+      "id": "M03",
+      "clips": 15,
+      "max_duration_delta_seconds": 0.0,
+      "max_sampled_joint_position_delta_m": 9.716497810895314e-07,
+      "worst_sample": [
+        "Attack",
+        0.5
+      ],
+      "joint_pose_samples": 4875,
+      "runtime_sha256": "a2b15cab2171ff57b79aa59bba2757485662fb02939219e6cd66e4ca626cf379"
+    },
+    {
+      "id": "M04",
+      "clips": 15,
+      "max_duration_delta_seconds": 0.0,
+      "max_sampled_joint_position_delta_m": 1.7336282292492642e-06,
+      "worst_sample": [
+        "Windup",
+        1
+      ],
+      "joint_pose_samples": 4875,
+      "runtime_sha256": "0dc7f5beb25cf27500f2fb8c599cd189226f532f4cc3d8e5545c06127d3c95ed"
+    },
+    {
+      "id": "M06",
+      "clips": 15,
+      "max_duration_delta_seconds": 0.0,
+      "max_sampled_joint_position_delta_m": 1.0752275148857074e-06,
+      "worst_sample": [
+        "AttackHeavy",
+        0.25
+      ],
+      "joint_pose_samples": 1050,
+      "runtime_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+    }
+  ],
+  "resource_identity_phase": "Pre-final-creature-albedo-fixes historical snapshot; final identities/costs in independent_final_runtime_qa.json"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "M08",
+  "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
+  "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M08\\review.json",
+  "views": [
+    "front",
+    "side",
+    "rear",
+    "quarter",
+    "walk_04",
+    "action_Interact"
+  ],
+  "layout_version": 2,
+  "resampling": "Aspect preserved; no retouching"
+}

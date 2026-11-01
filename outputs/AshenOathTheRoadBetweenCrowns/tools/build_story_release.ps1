@@ -207,6 +207,15 @@ $candidateJson = ($candidate | ConvertTo-Json -Depth 8) + [System.Environment]::
 $runtimeManifest = Join-Path $ProjectRoot "runtime_pack_manifest.json"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "sync_runtime_pack_manifest.py"), $runtimeManifest, $candidatePath, "--build-id", $BuildId, "--source-commit", $SourceCommit) "pack-manifest"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--export-release", "Web Browser", (Join-Path $ExportRoot "index.html")) "web-production"
+$ResourceCheckRoot = Assert-Within (Join-Path $OutputDirectory "isolated-resource-check") $OutputDirectory
+New-Item -ItemType Directory -Force -Path $ResourceCheckRoot | Out-Null
+if (@(Get-ChildItem -LiteralPath $ResourceCheckRoot -Force).Count -gt 0) {
+    throw "Packed resource check requires an empty isolated directory: $ResourceCheckRoot"
+}
+# The Web root exports the full script dependency graph, unlike standalone base.
+# Mount only exported files so authored resources cannot hide missing content.
+# This instantiates resources without running a world, before gzip transport.
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ResourceCheckRoot, "--main-pack", (Join-Path $ExportRoot "index.pck"), "--script", (Join-Path $PSScriptRoot "verify_prepared_actor_package.gd"), "--", "--pack-dir", $PackRoot) "prepared-actor-package"
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "assets_external/ui/greyfen_menu_stylized.png") -Destination (Join-Path $ExportRoot "menu-background.png") -Force
 
 $externalRoot = Join-Path $ExportRoot "packs"

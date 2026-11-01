@@ -1,0 +1,86 @@
+[
+  {
+    "id": "M07",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M07_Ashwing_Carrion_Drake.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M08",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M08_White_Hart_Avatar.glb",
+    "clips": 26,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M09",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M09_Silt_Maw.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M10",
+    "baseline": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M10_Millback.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M11",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M11_Glassmoth.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M12",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M12_Knell_Leech.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M13",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M13_Hearthscale.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M14",
+    "baseline": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M14_Gallows_Weaver.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M15",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M15_Reed_Choir.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M16",
+    "baseline": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M16_Inkblind.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M17",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M17_Cairn_Mother.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  },
+  {
+    "id": "M18",
+    "baseline": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M18_Shroud_Swimmer.glb",
+    "clips": 15,
+    "durations_equal": true,
+    "issues": {}
+  }
+]

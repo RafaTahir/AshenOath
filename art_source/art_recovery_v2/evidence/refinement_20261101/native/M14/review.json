@@ -1,0 +1,36 @@
+{
+	"accepted": false,
+	"action_midpoint_views": [
+		"action_Attack.png",
+		"action_AttackHeavy.png",
+		"action_Block.png",
+		"action_HitReact.png",
+		"action_Interact.png"
+	],
+	"asset": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+	"asset_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
+	"authored_material_contract": true,
+	"clips": [
+		"Attack",
+		"AttackHeavy",
+		"Block",
+		"Death",
+		"Feed",
+		"HitReact",
+		"Idle",
+		"Interact",
+		"Investigate",
+		"Recovery",
+		"Running",
+		"Sleep",
+		"Threaten",
+		"Walking",
+		"Windup"
+	],
+	"framing_source": "skin-aware authored bind bounds / square art viewport",
+	"idle_clip": "Idle",
+	"owned_locomotion": false,
+	"scope": "isolated native/shared clip art preview, not gameplay acceptance",
+	"walk_clip": "Walking",
+	"walk_cycle_seconds": 1.16666662693024
+}

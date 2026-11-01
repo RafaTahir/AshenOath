@@ -1,0 +1,117 @@
+{
+  "id": "M09",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M09\\v002\\M09_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M09\\v002\\M09_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+  "input_path": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\before-integration\\runtime\\assets_external\\design_pack_v1\\creatures\\M09_Silt_Maw.glb",
+  "input_sha256": "ca62875231eac7d5fcfa2e967a6b2259c3be762c2292d37c77e0cc1bf36fb40a",
+  "changes": [
+    "Repair inherited half-turn tube-frame discontinuities using retained UV-ring correspondence",
+    "Broaden anterior shovel/jaw mass",
+    "Flatten digging belly and vary body contraction",
+    "Wet low-roughness skin differentiates it from terrestrial species"
+  ],
+  "metrics_before": {
+    "triangles": 15728,
+    "vertices": 9396,
+    "meshes": 1,
+    "geometry_sha256": "b5eebba6c616c78ecc3f9edff0c535821d9edb860b5fa013653d5755e3935f87",
+    "bounds_blender_z_up": [
+      [
+        -0.41328155994415283,
+        -1.6490691900253296,
+        0.02500000037252903
+      ],
+      [
+        0.4132756292819977,
+        1.5856847763061523,
+        0.5238851308822632
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 15728,
+    "vertices": 9396,
+    "meshes": 1,
+    "geometry_sha256": "329a301329c7f6696ac9a9d4dea72022c50a37b952c630c3b1dc08afc17aa9ab",
+    "bounds_blender_z_up": [
+      [
+        -0.48255789279937744,
+        -1.6490691900253296,
+        -0.001599969924427569
+      ],
+      [
+        0.48357588052749634,
+        1.5856847763061523,
+        0.5238851308822632
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 10,
+    "images": 1,
+    "triangles": 15728
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M09\\v002\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M09\\v002\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M09\\v002\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M09\\v002\\quarter.png"
+  ],
+  "source_sha256": "efc53539d5d88eab4872374af74286077f1ac648080f55af03c82d2b1fdfb1bf",
+  "runtime_sha256": "42a3207ec7749346b5fa8d69fd40e90d91becd86932682f77ac4d2279e5cc095",
+  "runtime_bytes": 2113608,
+  "rig_signature": "0a3a661d3d80238357bfe39855910dfd6c165c2f90b3bf5671b567ea68b1f90d",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "tube_frame_repair": {
+    "rings_realigned": 46,
+    "ring_vertices": 37,
+    "retained_ring_count": 97,
+    "method": "UV-row correspondence; half-turn ring reindexing with matched skin weights; no added geometry"
+  },
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M09_Silt_Maw.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

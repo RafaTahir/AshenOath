@@ -1,0 +1,22 @@
+{
+  "resource": "res://assets_external/environment/village/Balcony_Cross_Straight.obj",
+  "roles": [
+    "shrine"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Balcony_Cross_Straight\\Balcony_Cross_Straight.obj",
+  "source_sha256": "e487d14c083096cef88258a34316940e5ff6ea5e493aaa6ea9585d25f8ee644c",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Balcony_Cross_Straight.blend",
+  "runtime_sha256": "66733d7042f8140d15e46ea679adb56e0dda4411e75cce706184fffab5dda1f2",
+  "change": "Cross-braced shrine timber has relieved beam ends and junction edges.",
+  "before_triangles": 132,
+  "after_triangles": 292,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "Balcony_Cross_Straight": [
+      "MI_WoodTrim"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

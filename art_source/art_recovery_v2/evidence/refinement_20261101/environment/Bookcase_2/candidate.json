@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/props/Bookcase_2.obj",
+  "roles": [
+    "castle_bookcase"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Bookcase_2\\Bookcase_2.obj",
+  "source_sha256": "8d6bbfb9ed47b7fb4143fef6e9ea116c8a9e6e434225e5ba9ada71e2e1679d03",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Bookcase_2.blend",
+  "runtime_sha256": "0bf07d92675b91987fd1b475fd4fd7c077c2a80fdb5b976f98bb217b13adf4f9",
+  "change": "Shelf lips and upright frame edges separate from book spines.",
+  "before_triangles": 2148,
+  "after_triangles": 4676,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "Bookcase_2_Cube.168": [
+      "MI_Trim_Furniture",
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

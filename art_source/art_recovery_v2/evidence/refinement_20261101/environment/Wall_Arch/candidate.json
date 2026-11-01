@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/village/Wall_Arch.obj",
+  "roles": [
+    "ruins_pillar",
+    "castle_arch"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_Arch\\Wall_Arch.obj",
+  "source_sha256": "6a69bce3df0af6d4cb1c122ab995e143ae174685cef6a105e76d8d6ed9363f2e",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_Arch.blend",
+  "runtime_sha256": "8842848c669d622500d9e5d84544f8692d1c6405ee3e15009bf14195745c0ee7",
+  "change": "Arch opening, pier arrises and masonry returns gain depth at grazing light.",
+  "before_triangles": 196,
+  "after_triangles": 420,
+  "bounds_drift": 2.957222022814676e-09,
+  "material_slots": {
+    "Wall_Arch": [
+      "MI_WoodTrim"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

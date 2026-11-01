@@ -1,0 +1,111 @@
+{
+  "id": "M17",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M17\\M17_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M17\\M17_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M17_Cairn_Mother.glb",
+  "input_sha256": "94611817794027bb82cfa87926623f74e374e32091af2e9d259994f0cd2423c6",
+  "changes": [
+    "Broaden and flatten muscular sole",
+    "Unequal mineral shelves on the actual spiral",
+    "Separate coarse stone response from living sole in vertex values"
+  ],
+  "metrics_before": {
+    "triangles": 33999,
+    "vertices": 18353,
+    "meshes": 1,
+    "geometry_sha256": "9d43e917c462217b2db42e9c8049157fd8ef28a1e12918740a64c436b37e82f7",
+    "bounds_blender_z_up": [
+      [
+        -0.7352471947669983,
+        -1.5609931945800781,
+        0.014999615028500557
+      ],
+      [
+        0.7455876469612122,
+        1.7643765211105347,
+        1.893847107887268
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 33999,
+    "vertices": 18353,
+    "meshes": 1,
+    "geometry_sha256": "92a4345ed0f7ec89e57ca4cef008c9719f1b75348b09a969087f50ed1809a62c",
+    "bounds_blender_z_up": [
+      [
+        -0.7352471947669983,
+        -1.5609931945800781,
+        0.014999615028500557
+      ],
+      [
+        0.7455876469612122,
+        1.7643765211105347,
+        1.9051063060760498
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 8,
+    "images": 1,
+    "triangles": 33999
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M17\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M17\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M17\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M17\\quarter.png"
+  ],
+  "source_sha256": "b3bf9044f15c4118fd4cd540eb667e2bd591098ab360b54d456ec73e08e080d0",
+  "runtime_sha256": "d1dc1c6dac1a92abe36c08dffd4213084ed36e9d45a4cdc9d5d79e1604710225",
+  "runtime_bytes": 2777880,
+  "rig_signature": "0045748e2aa6692db06930232c3e59c5f150b2f8f01112a3ec834fb0a84a0432",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "tube_frame_repair": null,
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M17_Cairn_Mother.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

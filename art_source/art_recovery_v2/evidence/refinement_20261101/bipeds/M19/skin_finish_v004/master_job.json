@@ -1,0 +1,9 @@
+{
+  "id": "M19",
+  "material": "M19_OliveGreyHide",
+  "old_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_v003.blend",
+  "old_source_sha256": "7bfca36639971388da0efba7b31e93c044bae2ee5e8e788b1dfa52d8ad92eafb",
+  "new_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_skin_v004.blend",
+  "new_png": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M19\\skin_finish_v004\\M19_skin_albedo_filtered.png",
+  "new_png_sha256": "fad09498bf72210f7b097bb2f61a612a24e2ceb9d776cfd062e2824886c72d30"
+}

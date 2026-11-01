@@ -1,0 +1,22 @@
+{
+  "resource": "res://assets_external/environment/forest/Rock_Medium_1.obj",
+  "roles": [
+    "forest_rock"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Rock_Medium_1\\Rock_Medium_1.obj",
+  "source_sha256": "da420f20792dc0223d9f28790fc1dc3624ffe5fa247b04dc8bfbabb4a1a5ff13",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Rock_Medium_1.blend",
+  "runtime_sha256": "f05753da4ac24609bd711d1662c3ff1d4fa172d684a373cde76d1fdb9fed5578",
+  "change": "Restrained chipped arrises keep the broad rock facets.",
+  "before_triangles": 342,
+  "after_triangles": 682,
+  "bounds_drift": 2.384185791015625e-07,
+  "material_slots": {
+    "Rock_Medium_1": [
+      "Rocks"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

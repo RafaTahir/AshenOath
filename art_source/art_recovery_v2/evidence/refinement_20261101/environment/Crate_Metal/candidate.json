@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/props/Crate_Metal.obj",
+  "roles": [
+    "crate"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Crate_Metal\\Crate_Metal.obj",
+  "source_sha256": "a44affedb0bc0d03b86045515a2f7bb84e4e91ed44d19865971aadf48ed3024e",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Crate_Metal.blend",
+  "runtime_sha256": "6c12a56ce9845261207b5eaf2978a09bfa2d6a4a8a339aea3f5f44298cb00c0d",
+  "change": "Packing slats and reinforcing iron corners catch light separately.",
+  "before_triangles": 2738,
+  "after_triangles": 5054,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "Crate_Metal_Cube.035": [
+      "MI_Trim_Furniture",
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

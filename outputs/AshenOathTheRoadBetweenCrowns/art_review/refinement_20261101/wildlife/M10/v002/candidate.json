@@ -1,0 +1,111 @@
+{
+  "id": "M10",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M10\\v002\\M10_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M10\\v002\\M10_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M10_Millback.glb",
+  "input_sha256": "314b873c2d34f876f5c00294be42bfe133b611a40ea64d8263b07cb2bad31dc6",
+  "changes": [
+    "Extend supported carapace rearward over the exposed dorsal abdomen",
+    "Seat soft dorsal tissue beneath the protective crown and set working claws lower",
+    "Polished shell response with retained atlas and native claws"
+  ],
+  "metrics_before": {
+    "triangles": 11910,
+    "vertices": 7201,
+    "meshes": 1,
+    "geometry_sha256": "1d2696872390aacf003ad130dff8a8b8b29aff68ad7570428a895aba977d77d7",
+    "bounds_blender_z_up": [
+      [
+        -1.0750001668930054,
+        -1.3006420135498047,
+        -0.019573742523789406
+      ],
+      [
+        1.075000286102295,
+        0.9779089689254761,
+        0.8631999492645264
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 11910,
+    "vertices": 7201,
+    "meshes": 1,
+    "geometry_sha256": "90c2591d658e1a5119798c82acc790dfd9f6430c6c35c2736a1ce541d557ff9f",
+    "bounds_blender_z_up": [
+      [
+        -1.0750001668930054,
+        -1.3006420135498047,
+        -0.019573742523789406
+      ],
+      [
+        1.075000286102295,
+        1.0328001976013184,
+        0.8530279397964478
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 20,
+    "images": 1,
+    "triangles": 11910
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M10\\v002\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M10\\v002\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M10\\v002\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M10\\v002\\quarter.png"
+  ],
+  "source_sha256": "30fbce1387cfd3bd47dc18987d314d5c16f1955a700f958a3db6db29277dff0f",
+  "runtime_sha256": "2e890e3977a172b3a032a400395946e9d4c7f7c4dd781a300ba864add6a6c130",
+  "runtime_bytes": 2029976,
+  "rig_signature": "2fdc254d8a7f8d6041e3f6ab327ffbc1f5b4c6ee6ebb9821242d87178982f28d",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "tube_frame_repair": null,
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M10_Millback.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

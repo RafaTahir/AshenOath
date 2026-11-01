@@ -1,0 +1,115 @@
+{
+  "id": "M04",
+  "baseline_runtime": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M04_Gravebound_Knight.glb",
+  "baseline_sha256": "c950e021b807282f3bd8ce4025471a17ffed13f72e6040f31577220c2c2ea39e",
+  "baseline_layered_master": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M04_Gravebound_armour_v002.blend",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M04_refined_timing_v004.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M04\\M04_refined.glb",
+  "changes": [
+    "Visor projection retained; armor edges receive a small angle-limited bevel",
+    "Pitted steel, matte funerary linen and a visibly readable steel reflection",
+    "Retained pitted-iron albedo lifted from near-black for readable armor, shield and sword; linen unchanged",
+    "Native-inspected final surface uses subtle stochastic pores in place of repeating directional skin grain",
+    "Retained pitted-iron albedo lifted from near-black for readable armor, shield and sword; linen unchanged",
+    "Native-inspected final surface uses subtle stochastic pores in place of repeating directional skin grain"
+  ],
+  "before_bounds": [
+    [
+      -0.9169901013374329,
+      0.9514350295066833
+    ],
+    [
+      -0.8519281148910522,
+      0.22878511250019073
+    ],
+    [
+      -1.8207356333732605e-07,
+      1.9467800855636597
+    ]
+  ],
+  "after_bounds": [
+    [
+      -0.916826069355011,
+      0.9514349699020386
+    ],
+    [
+      -0.8519280552864075,
+      0.22878511250019073
+    ],
+    [
+      -1.8207356333732605e-07,
+      1.9467800855636597
+    ]
+  ],
+  "actions": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "rendered_views": [
+    "front",
+    "quarter",
+    "side",
+    "rear"
+  ],
+  "limitations": "Retained adapted action library, not a new species-specific performance; final regional/user visual acceptance pending.",
+  "user_accepted": false,
+  "previous_finishing_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M04_refined.blend",
+  "source_sha256": "a2de72ab16e248cb600869a7d2c65d147ebdd079a720b0f1be27ce64088b6f62",
+  "runtime_sha256": "0c6c6f79dc62284c8856b2aefbdf331049e5cfdf6b25b92a846c90ae7d19e217",
+  "source_render_scope": "Final textured Workbench source views; current native engine views evaluate the normal/ORM shading",
+  "previous_surface_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M04_refined_surface_v002.blend",
+  "timing_verification": {
+    "baseline_durations": {
+      "Attack": 0.5416666865348816,
+      "AttackHeavy": 0.75,
+      "Block": 1.5,
+      "Death": 1.5833333730697632,
+      "Feed": 2.0833332538604736,
+      "HitReact": 0.875,
+      "Idle": 1.5833333730697632,
+      "Interact": 1.7083333730697632,
+      "Investigate": 2.0833332538604736,
+      "Recovery": 1.1666666269302368,
+      "Running": 0.8333333134651184,
+      "Sleep": 0.375,
+      "Threaten": 1.7083333730697632,
+      "Walking": 1.375,
+      "Windup": 0.375
+    },
+    "final_durations": {
+      "Attack": 0.5416666865348816,
+      "AttackHeavy": 0.75,
+      "Block": 1.5,
+      "Death": 1.5833333730697632,
+      "Feed": 2.0833332538604736,
+      "HitReact": 0.875,
+      "Idle": 1.5833333730697632,
+      "Interact": 1.7083333730697632,
+      "Investigate": 2.0833332538604736,
+      "Recovery": 1.1666666269302368,
+      "Running": 0.8333333134651184,
+      "Sleep": 0.375,
+      "Threaten": 1.7083333730697632,
+      "Walking": 1.375,
+      "Windup": 0.375
+    },
+    "source_fps": 24,
+    "sampled_pose_bytes_preserved": true
+  },
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M04_Gravebound_Knight.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

@@ -1,0 +1,44 @@
+{
+  "cast_count": 33,
+  "shared_resource_costs": {
+    "scope": "2026-11-01 final finishing exports; not process memory or complete Web payload",
+    "embedded_finish_exports_bytes": 155955024,
+    "compiled_glbs_plus_unique_images_bytes": 115824274,
+    "saved_bytes": 40130750,
+    "unique_images": 154,
+    "decoded_rgba8_images_no_mips_bytes": 305152000,
+    "not_process_memory_or_performance_measurement": true
+  },
+  "refreshed_noncast_runtime_files": [],
+  "refreshed_world_derivatives": [
+    "res://assets_external/environment/village/CourtyardService_Authored.res",
+    "res://assets_external/environment/props/GreyfenForgeWork_Authored.res",
+    "res://assets/landscape/bridge_stone_pier.res",
+    "res://assets_external/environment/village/Cemetery_boundary_Authored.res",
+    "res://assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+    "res://assets_external/environment/village/Cemetery_memory_window_Authored.res",
+    "res://assets_external/environment/village/Cemetery_grave_harl_Authored.res",
+    "res://assets_external/environment/village/Cemetery_grave_child_Authored.res",
+    "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res",
+    "res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res",
+    "res://assets_external/environment/village/Cemetery_chapel_Authored.res",
+    "res://assets_external/environment/village/Cemetery_bell_frame_Authored.res",
+    "res://assets_external/environment/village/Cemetery_bell_Authored.res",
+    "res://assets_external/environment/village/Cemetery_grave_rows_Authored.res",
+    "res://assets_external/environment/props/GreyfenSocial_common_table.res",
+    "res://assets_external/environment/props/GreyfenSocial_barrel_board.res",
+    "res://assets_external/environment/props/GreyfenSocial_mira_apothecary.res",
+    "res://assets_external/environment/village/FarmsteadWest_Authored.res",
+    "res://assets_external/environment/village/FarmsteadEast_Authored.res",
+    "res://assets_external/environment/village/RoadCheckpoint_Authored.res",
+    "res://assets_external/environment/props/RecordArchive_Authored.res",
+    "res://assets_external/environment/village/AssemblyCourt_Authored.res"
+  ],
+  "staff": {
+    "path": "res://assets_external/design_pack_v1/C01_ash_staff.glb",
+    "bytes": 231112,
+    "sha256": "b8ab07b0f5a14323498b2276d9e1d102337d37e444218de910f303bf3209a333",
+    "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\equipment\\C01_ash_staff_refined_candidate.json"
+  },
+  "user_accepted": false
+}

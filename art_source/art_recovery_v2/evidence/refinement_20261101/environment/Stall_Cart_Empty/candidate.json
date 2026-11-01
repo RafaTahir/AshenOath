@@ -1,0 +1,24 @@
+{
+  "resource": "res://assets_external/environment/props/Stall_Cart_Empty.obj",
+  "roles": [
+    "cart"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Stall_Cart_Empty\\Stall_Cart_Empty.obj",
+  "source_sha256": "c9ceb94ed2af18245354208b6cbec2c9002ac8e05281e98b29e1579da34ce103",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Stall_Cart_Empty.blend",
+  "runtime_sha256": "4c3e213ea331f0ce38c9fb9cba6a26623ebf12292839b0948bd48122704e1ad3",
+  "change": "Cart bed, wheel joinery and stall frame corners retain atlas detail.",
+  "before_triangles": 3936,
+  "after_triangles": 7916,
+  "bounds_drift": 5.960464477539063e-08,
+  "material_slots": {
+    "Stall_Cart_Empty_Cylinder.094": [
+      "MI_Trim_Metal",
+      "MI_Trim_Furniture",
+      "MI_Banner"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

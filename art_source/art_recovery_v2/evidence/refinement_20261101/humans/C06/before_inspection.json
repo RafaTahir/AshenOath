@@ -1,0 +1,31 @@
+{
+  "id": "C06",
+  "current": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\humans\\C06_Farmer_Toma.glb",
+  "sha256": "8edf4c8c4f7816efd148264d3ee03c42a43c2ac46bfea9cb2892b13d7c7668e7",
+  "source_surfaces": [
+    {
+      "mesh": "C06_MotionFittedAssembly",
+      "vertices": 16383,
+      "polygons": 26916,
+      "materials": [
+        "Farmer_Toma_C06_PrivateAnatomyAtlas",
+        "Farmer_Toma_C06_AuthoredClothesAtlas",
+        "Farmer_Toma_MI_Peasant",
+        "Farmer_Toma_MI_Regular_Male"
+      ],
+      "bounds": [
+        [
+          -0.8994144201278687,
+          -0.1675407737493515,
+          -0.003967864904552698
+        ],
+        [
+          0.8994148969650269,
+          0.19584862887859344,
+          1.8190838098526
+        ]
+      ]
+    }
+  ],
+  "actions": []
+}

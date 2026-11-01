@@ -1,0 +1,36 @@
+{
+	"accepted": false,
+	"action_midpoint_views": [
+		"action_Attack.png",
+		"action_AttackHeavy.png",
+		"action_Block.png",
+		"action_HitReact.png",
+		"action_Interact.png"
+	],
+	"asset": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+	"asset_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+	"authored_material_contract": true,
+	"clips": [
+		"Attack",
+		"AttackHeavy",
+		"Block",
+		"Death",
+		"Feed",
+		"HitReact",
+		"Idle",
+		"Interact",
+		"Investigate",
+		"Recovery",
+		"Running",
+		"Sleep",
+		"Threaten",
+		"Walking",
+		"Windup"
+	],
+	"framing_source": "skin-aware authored bind bounds / square art viewport",
+	"idle_clip": "Idle",
+	"owned_locomotion": false,
+	"scope": "isolated native/shared clip art preview, not gameplay acceptance",
+	"walk_clip": "Walking",
+	"walk_cycle_seconds": 2.25
+}

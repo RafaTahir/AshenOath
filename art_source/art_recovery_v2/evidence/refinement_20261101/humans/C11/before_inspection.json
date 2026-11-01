@@ -1,0 +1,31 @@
+{
+  "id": "C11",
+  "current": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\humans\\C11_Nessa.glb",
+  "sha256": "d14fab9b2f433b9cab5380772d8c6157eac2a20591f2a280ca26b9ea379f0305",
+  "source_surfaces": [
+    {
+      "mesh": "C11_MotionFittedAssembly",
+      "vertices": 15985,
+      "polygons": 22565,
+      "materials": [
+        "Nessa_C11_PrivateAnatomyAtlas",
+        "Nessa_C11_AuthoredClothesAtlas",
+        "Nessa_MI_Peasant",
+        "Nessa_MI_Peasant.001"
+      ],
+      "bounds": [
+        [
+          -0.8319412469863892,
+          -0.28690487146377563,
+          -0.0067438287660479546
+        ],
+        [
+          0.8319414854049683,
+          0.18159496784210205,
+          1.7742506265640259
+        ]
+      ]
+    }
+  ],
+  "actions": []
+}

@@ -1,0 +1,142 @@
+{
+  "scope": "Ten primary-agent human refinements; C08-C10 handled by delegated wildlife agent with the same tool",
+  "assets": [
+    {
+      "id": "P01",
+      "glb_bytes": 10639512,
+      "blend_bytes": 10254458,
+      "added_vertices": 1136,
+      "primitives": 6,
+      "meshes": 1,
+      "sha256": "6fa6264a67186dfa80cf407f8b98f2c57b8495669af1653966644c8a7af870f7",
+      "changes": [
+        "76 genuine garment boundary segments finished with 3.6 mm rounded welt; UV seams excluded",
+        "Volumetric fitted leather pouch with shaped bottom, overlapping flap, brass fastening, rounded welt and two anchored belt loops",
+        "Two recessed aged-brass shoulder fasteners on the existing ranger cowl"
+      ]
+    },
+    {
+      "id": "C01",
+      "glb_bytes": 7889688,
+      "blend_bytes": 7256403,
+      "added_vertices": 4940,
+      "primitives": 5,
+      "meshes": 4,
+      "sha256": "c247082c89a392ec27af1c2fe5e7cf8850c0860e0b1f932c4493500865ba1354",
+      "changes": [
+        "393 genuine garment boundary segments finished with 3.6 mm rounded welt; UV seams excluded",
+        "Volumetric fitted leather pouch with shaped bottom, overlapping flap, brass fastening, rounded welt and two anchored belt loops",
+        "Paired small shawl fastening pins; preserved retained facial study, brows, hair and bell"
+      ]
+    },
+    {
+      "id": "C02",
+      "glb_bytes": 8096492,
+      "blend_bytes": 7691009,
+      "added_vertices": 1308,
+      "primitives": 5,
+      "meshes": 1,
+      "sha256": "12e308bcf75a65070482b4fbc23cd667e74217f43fda0300fa96d44a36a77551",
+      "changes": [
+        "94 genuine garment boundary segments finished with 3.6 mm rounded welt; UV seams excluded",
+        "Fitted cylindrical map case behind the belt, with linen roll, two brass end bands and leather retaining straps"
+      ]
+    },
+    {
+      "id": "C03",
+      "glb_bytes": 5076012,
+      "blend_bytes": 4657877,
+      "added_vertices": 1591,
+      "primitives": 5,
+      "meshes": 1,
+      "sha256": "e961c22658fec522fe0eb7d1c051307cb4b179198b884521f538bfa28c791308",
+      "changes": [
+        "96 genuine garment boundary segments finished with 3.6 mm rounded welt; UV seams excluded",
+        "Three modest dried herb sprigs tucked into a sewn waist keeper; stem and leaf geometry, no billboard",
+        "Shaped leather apron pocket with rounded stitched edge and paired riveted apron anchors"
+      ]
+    },
+    {
+      "id": "C04",
+      "glb_bytes": 7947896,
+      "blend_bytes": 7526410,
+      "added_vertices": 1320,
+      "primitives": 5,
+      "meshes": 1,
+      "sha256": "ce82f237d6d0ec7d0fd340e5a91344f7d2df23188589f547c2c9aaa8e80ff6a2",
+      "changes": [
+        "76 genuine garment boundary segments finished with 4.0 mm rounded welt; UV seams excluded",
+        "Smith's stitched work pocket, reinforced apron anchors and compact forged tongs secured through a leather keeper"
+      ]
+    },
+    {
+      "id": "C05",
+      "glb_bytes": 7354924,
+      "blend_bytes": 6791438,
+      "added_vertices": 557,
+      "primitives": 5,
+      "meshes": 1,
+      "sha256": "957ca2bba86d49b5f6e898417b733e358bacfdcd85aeee8f70cee980ab0c55b6",
+      "changes": [
+        "Paired small shawl brooches with a sagging bronze closure chain; stitched modest skirt repair patch"
+      ]
+    },
+    {
+      "id": "C06",
+      "glb_bytes": 8179096,
+      "blend_bytes": 7768058,
+      "added_vertices": 1370,
+      "primitives": 5,
+      "meshes": 1,
+      "sha256": "8379e8642475ceb889ab9b66b33246adb059d3ac8e63c38e0df863cf35ececa8",
+      "changes": [
+        "94 genuine garment boundary segments finished with 3.4 mm rounded welt; UV seams excluded",
+        "Volumetric fitted linen seed bag with shaped bottom, overlapping flap, brass fastening, rounded welt and two anchored leather belt loops",
+        "Linen seed bag secured to the rope belt with leather keeper loops and two loose tied cords"
+      ]
+    },
+    {
+      "id": "C07",
+      "glb_bytes": 10661056,
+      "blend_bytes": 10271088,
+      "added_vertices": 1172,
+      "primitives": 6,
+      "meshes": 1,
+      "sha256": "2f55e3498d8d010c87f6e45e96e5452ba5f50c75158b6fe0d264b81ef3af155d",
+      "changes": [
+        "76 genuine garment boundary segments finished with 4.0 mm rounded welt; UV seams excluded",
+        "Volumetric fitted leather pouch with shaped bottom, overlapping flap, brass fastening, rounded welt and two anchored belt loops",
+        "Six ordered forged-iron cowl rivets, reinforced armor boundaries and a fitted command-kit belt pouch"
+      ]
+    },
+    {
+      "id": "C11",
+      "glb_bytes": 5086104,
+      "blend_bytes": 4702323,
+      "added_vertices": 541,
+      "primitives": 5,
+      "meshes": 1,
+      "sha256": "50ff7ade22daa9056bec8a2e6934dd00152b26983d8132a2d21e54895087b5cc",
+      "changes": [
+        "Canvas apron work pocket, fitted sewn waist tie and paired reinforced bib anchors; copper braid retained"
+      ]
+    },
+    {
+      "id": "C12",
+      "glb_bytes": 4953620,
+      "blend_bytes": 4545615,
+      "added_vertices": 1497,
+      "primitives": 5,
+      "meshes": 1,
+      "sha256": "f65a3e5a8d81708dbcb52e0a5a87210056a2496c4a6c0eae93bf7e6cae8f0358",
+      "changes": [
+        "96 genuine garment boundary segments finished with 3.6 mm rounded welt; UV seams excluded",
+        "Volumetric fitted leather pouch with shaped bottom, overlapping flap, brass fastening, rounded welt and two anchored leather belt loops",
+        "Six small fitted bodice lacing eyelets, a scarf fastening and practical rear relief-kit pouch"
+      ]
+    }
+  ],
+  "total_glb_bytes": 75884400,
+  "total_added_vertices": 15432,
+  "checks": "Exact editable-source/runtime hashes, all source views, required UV/albedo/skinning and primitive inventory pass. Source view inspection recorded; native checks owned by root."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "M04",
+  "runtime_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M04_refined_timing_v004.blend",
+  "clip_count": 15,
+  "maximum_duration_delta_seconds": 0.0,
+  "joint_samples": 4875,
+  "maximum_joint_world_position_delta_m": 1.6967191154985646e-06,
+  "scope": "Independent static post-albedo-export timing and sampled joint-position comparison; not visible motion approval"
+}

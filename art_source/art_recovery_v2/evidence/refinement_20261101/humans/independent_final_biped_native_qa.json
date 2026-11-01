@@ -1,0 +1,101 @@
+{
+  "scope": "Final current-hash native art findings following five skin albedo fixes and the M04 packed-image repair; not user acceptance",
+  "assets": [
+    {
+      "id": "M01",
+      "runtime_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
+      "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M01\\review.json",
+      "inspected_views": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Attack"
+      ],
+      "findings": "Inherited diagonal skin albedo lattice is absent; mean palette retained; no new missing textures, anatomy crop or pose regression visible in inspected samples.",
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\M01_native_six.png"
+    },
+    {
+      "id": "M03",
+      "runtime_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
+      "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M03\\review.json",
+      "inspected_views": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Attack"
+      ],
+      "findings": "Inherited diagonal skin albedo lattice is absent; mean palette retained; no new missing textures, anatomy crop or pose regression visible in inspected samples.",
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\M03_native_six.png"
+    },
+    {
+      "id": "M05",
+      "runtime_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+      "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M05\\review.json",
+      "inspected_views": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Attack"
+      ],
+      "findings": "Inherited diagonal skin albedo lattice is absent; mean palette retained; no new missing textures, anatomy crop or pose regression visible in inspected samples.",
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\M05_native_six.png"
+    },
+    {
+      "id": "M19",
+      "runtime_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
+      "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M19\\review.json",
+      "inspected_views": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Attack"
+      ],
+      "findings": "Inherited diagonal skin albedo lattice is absent; mean palette retained; no new missing textures, anatomy crop or pose regression visible in inspected samples.",
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\M19_native_six.png"
+    },
+    {
+      "id": "M20",
+      "runtime_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+      "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M20\\review.json",
+      "inspected_views": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Attack"
+      ],
+      "findings": "Inherited diagonal skin albedo lattice is absent; mean palette retained; no new missing textures, anatomy crop or pose regression visible in inspected samples.",
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\M20_native_six.png"
+    },
+    {
+      "id": "M04",
+      "runtime_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
+      "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M04\\review.json",
+      "inspected_views": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Attack"
+      ],
+      "findings": "Armor now reads as blue steel instead of black; visor, sword, shield and plate edges remain legible; FuneraryLinen remains nonmetallic and rough; sampled poses remain fully framed.",
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\M04_native_six.png"
+    }
+  ],
+  "new_material_pose_or_framing_defects_found": false,
+  "limits": [
+    "Retained adapted motions and component-based creature anatomy remain; sampled art views do not establish species-specific performance or gameplay.",
+    "Human baseline image preservation applies to 121 retained human image references; six creature assets received intentional albedo repairs."
+  ],
+  "user_accepted": false
+}

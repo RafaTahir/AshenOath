@@ -5,8 +5,8 @@
     "P01": {
       "path": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
       "owner": "opening",
-      "sha256": "c8eca735354efa0ffb8b31aab22bb3d2fe14d3b3485d414690e599d835845851",
-      "bytes": 1111864,
+      "sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
+      "bytes": 1325004,
       "baseline_blender_report": {
         "id": "P01",
         "name": "Kael",
@@ -33,28 +33,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8994145668087318,
-          -0.003967679748832493,
-          -0.21184975745539258
+          -0.8994148808993716,
+          -0.003968038182141457,
+          -0.21184968779993224
         ],
         "size": [
-          1.798829520700755,
-          1.8250331691050574,
-          0.37939057792472153
+          1.7988298885456786,
+          1.8250336218589505,
+          0.37939024914733177
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "c8eca735354efa0ffb8b31aab22bb3d2fe14d3b3485d414690e599d835845851"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\P01_Kael_stylized_v002_motionfit_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\P01_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\P01_Kael.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\P01\\candidate.json"
     },
     "C01": {
       "path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
       "owner": "opening",
-      "sha256": "a6e18399b256b95dbd35e826d7880d786440364d9f48416f0028787f8f46757a",
-      "bytes": 2590048,
+      "sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
+      "bytes": 2982208,
       "baseline_blender_report": {
         "id": "C01",
         "status": "source_model_draft",
@@ -89,28 +91,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.831962530320698,
-          -0.006930015591932446,
-          -0.18574140096587494
+          -0.8319625545864983,
+          -0.00692984769748587,
+          -0.1857413763522459
         ],
         "size": [
-          1.6639252489589067,
-          1.807034154623595,
-          0.36106945363342957
+          1.663925527111656,
+          1.8070336638816822,
+          0.36106945952872105
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "a6e18399b256b95dbd35e826d7880d786440364d9f48416f0028787f8f46757a"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C01_anwen_stylized_v044.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C01_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C01_Anwen.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C01\\candidate.json"
     },
     "C02": {
       "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
       "owner": "opening",
-      "sha256": "66ae4c8281553fa8edb168f488c5323951628b2eb2451406682a15f9bbf8b1b8",
-      "bytes": 1469844,
+      "sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
+      "bytes": 1730700,
       "baseline_blender_report": {
         "id": "C02",
         "name": "Rook",
@@ -136,28 +140,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8994144475993593,
-          -0.003967679748832493,
-          -0.19491153991398055
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.19491147365912265
         ],
         "size": [
-          1.7988294014913824,
-          1.822484237751951,
-          0.36245236038330947
+          1.798829769336356,
+          1.822484689636608,
+          0.36245203500652223
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "66ae4c8281553fa8edb168f488c5323951628b2eb2451406682a15f9bbf8b1b8"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C02_Rook_stylized_v003_motionfit_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C02_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C02_Rook.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C02\\candidate.json"
     },
     "C03": {
       "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
       "owner": "opening",
-      "sha256": "c99d6c43f98c7975cec87be0f154a2a10bff2c24fdfb498f1796e72eb581c45f",
-      "bytes": 1277196,
+      "sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+      "bytes": 1549112,
       "baseline_blender_report": {
         "id": "C03",
         "name": "Mira_Fen",
@@ -185,29 +191,31 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8319412328722303,
-          -0.006743903652793901,
-          -0.1721042181159592
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.17210379935174083
         ],
         "size": [
-          1.6638827136575354,
-          1.7809947680289369,
-          0.3643073529935249
+          1.6638829918113327,
+          1.780994333375914,
+          0.3643063896747857
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "c99d6c43f98c7975cec87be0f154a2a10bff2c24fdfb498f1796e72eb581c45f",
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
         "garment_arm_clearance_m": 0.1
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C03_Mira_Fen_stylized_v002_motionfit_v001_motionfit_v003_motionfit_v004.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C03_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C03_Mira_Fen.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C03\\candidate.json"
     },
     "C04": {
       "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
       "owner": "opening",
-      "sha256": "8a9359e933f04819a47ad1409fcf200067ba8ddd9ddc37ddbbcb6e2863e2a583",
-      "bytes": 1335408,
+      "sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+      "bytes": 1593020,
       "baseline_blender_report": {
         "id": "C04",
         "name": "Blacksmith_Tor",
@@ -234,29 +242,31 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8994144475993593,
-          -0.003967679748832493,
-          -0.23476414251976846
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.23476407244243325
         ],
         "size": [
-          1.7988294014913824,
-          1.814044341188311,
-          0.4600620335530238
+          1.798829769336356,
+          1.8140447915997224,
+          0.4600619146821181
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "8a9359e933f04819a47ad1409fcf200067ba8ddd9ddc37ddbbcb6e2863e2a583",
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
         "garment_arm_clearance_m": 0.1
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C04_Blacksmith_Tor_stylized_v002_motionfit_v001_motionfit_v002_motionfit_v003_motionfit_v004.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C04_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C04_Blacksmith_Tor.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C04\\candidate.json"
     },
     "C05": {
       "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
       "owner": "opening",
-      "sha256": "af4775c69faa2d0b5b543559a2ddfc56fa01302143becb88d87af0d2e2c7f222",
-      "bytes": 3411368,
+      "sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+      "bytes": 3794792,
       "baseline_blender_report": {
         "id": "C05",
         "name": "Widow_Elna",
@@ -283,28 +293,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8319412328722303,
-          -0.006743903652793901,
-          -0.167255186505404
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.1672547985611091
         ],
         "size": [
-          1.6638827136575354,
-          1.7809947680289369,
-          0.351345066424216
+          1.6638829918113327,
+          1.780994333375914,
+          0.3513447462841781
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "af4775c69faa2d0b5b543559a2ddfc56fa01302143becb88d87af0d2e2c7f222"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C05_Widow_Elna_stylized_v003_motionfit_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C05_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C05_Widow_Elna.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C05\\candidate.json"
     },
     "C06": {
       "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
       "owner": "opening",
-      "sha256": "8edf4c8c4f7816efd148264d3ee03c42a43c2ac46bfea9cb2892b13d7c7668e7",
-      "bytes": 1504748,
+      "sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+      "bytes": 1774668,
       "baseline_blender_report": {
         "id": "C06",
         "name": "Farmer_Toma",
@@ -331,28 +343,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8994144475993593,
-          -0.003967679748832493,
-          -0.19584868823751933
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.19584862122243543
         ],
         "size": [
-          1.7988294014913824,
-          1.8230515552426452,
-          0.3633895087068483
+          1.798829769336356,
+          1.823052006989258,
+          0.363389182569835
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "8edf4c8c4f7816efd148264d3ee03c42a43c2ac46bfea9cb2892b13d7c7668e7"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C06_Farmer_Toma_stylized_v002_motionfit_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C06_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C06_Farmer_Toma.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C06\\candidate.json"
     },
     "C07": {
       "path": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
       "owner": "characters",
-      "sha256": "da4a826b7c1bd726408473981c6e33d2b404828014412d347be38646472b1284",
-      "bytes": 1133228,
+      "sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+      "bytes": 1351564,
       "baseline_blender_report": {
         "id": "C07",
         "name": "Captain_Senn",
@@ -380,28 +394,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8994145668087318,
-          -0.003967679748832493,
-          -0.2192196417309868
+          -0.8994148808993716,
+          -0.003968038182141457,
+          -0.21921957768625347
         ],
         "size": [
-          1.798829520700755,
-          1.8167517021922728,
-          0.3867604622003157
+          1.7988298885456786,
+          1.8167521532906692,
+          0.386760139033653
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "da4a826b7c1bd726408473981c6e33d2b404828014412d347be38646472b1284"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C07_Captain_Senn_stylized_v003_motionfit_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C07_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C07_Captain_Senn.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C07\\candidate.json"
     },
     "C08": {
       "path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
       "owner": "characters",
-      "sha256": "ed43cb946850852f5801d93839234bba649ba37b30b1241b0e49bac3dee2dbae",
-      "bytes": 1551496,
+      "sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+      "bytes": 1828876,
       "baseline_blender_report": {
         "id": "C08",
         "name": "Lord_Edric_Vargan",
@@ -429,28 +445,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8994144475993593,
-          -0.003967679748832493,
-          -0.20292945003427212
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.20292944517778014
         ],
         "size": [
-          1.7988294014913824,
-          1.8208586978733607,
-          0.37047027050360104
+          1.798829769336356,
+          1.820859150396343,
+          0.3704700065251797
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "ed43cb946850852f5801d93839234bba649ba37b30b1241b0e49bac3dee2dbae"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C08_Lord_Edric_Vargan_stylized_v002_motionfit_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C08_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C08_Lord_Edric_Vargan.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C08\\candidate.json"
     },
     "C09": {
       "path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
       "owner": "characters",
-      "sha256": "551118d217688cbf9f172a8b3a36edeeec734b0b8f88ff7c8ddc07e86402262b",
-      "bytes": 1246352,
+      "sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+      "bytes": 1384804,
       "baseline_blender_report": {
         "id": "C09",
         "name": "Record_Keeper_Vale",
@@ -478,29 +496,31 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8319412328722303,
-          -0.006743903652793901,
-          -0.167255186505404
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.1672547985611091
         ],
         "size": [
-          1.6638827136575354,
-          1.7807179640946154,
-          0.3561144173236097
+          1.6638829918113327,
+          1.7807175301512195,
+          0.3561134731328286
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "551118d217688cbf9f172a8b3a36edeeec734b0b8f88ff7c8ddc07e86402262b",
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
         "garment_arm_clearance_m": 0.1
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C09_Record_Keeper_Vale_stylized_v002_motionfit_v001_motionfit_v003_motionfit_v004.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C09_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C09_Record_Keeper_Vale.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C09\\candidate.json"
     },
     "C10": {
       "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
       "owner": "characters",
-      "sha256": "675ffc91e7ea9c27a91037d0ee6ce3d91b6e2ed41203496724b745e7c94096a4",
-      "bytes": 1601616,
+      "sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+      "bytes": 1885436,
       "baseline_blender_report": {
         "id": "C10",
         "name": "Steward_Merrow",
@@ -527,28 +547,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8994144475993593,
-          -0.003967679748832493,
-          -0.25824243585831247
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.25824235328796763
         ],
         "size": [
-          1.7988294014913824,
-          1.8208586978733523,
-          0.5036184507087558
+          1.798829769336356,
+          1.8208591503963378,
+          0.5036183976432693
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "675ffc91e7ea9c27a91037d0ee6ce3d91b6e2ed41203496724b745e7c94096a4"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C10_Steward_Merrow_stylized_v002_motionfit_v001_motionfit_v002.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C10_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C10_Steward_Merrow.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C10\\candidate.json"
     },
     "C11": {
       "path": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
       "owner": "opening",
-      "sha256": "d14fab9b2f433b9cab5380772d8c6157eac2a20591f2a280ca26b9ea379f0305",
-      "bytes": 1318748,
+      "sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+      "bytes": 1502736,
       "baseline_blender_report": {
         "id": "C11",
         "name": "Nessa",
@@ -576,29 +598,31 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8319412328722303,
-          -0.006743903652793901,
-          -0.18159492683680906
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.18159480405117198
         ],
         "size": [
-          1.6638827136575354,
-          1.780994768028928,
-          0.46849987719656716
+          1.6638829918113327,
+          1.7809943333755858,
+          0.46849976816439964
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "d14fab9b2f433b9cab5380772d8c6157eac2a20591f2a280ca26b9ea379f0305",
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
         "garment_arm_clearance_m": 0.1
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C11_Nessa_stylized_v002_motionfit_v001_motionfit_v002_motionfit_v003_motionfit_v004.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C11_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C11_Nessa.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C11\\candidate.json"
     },
     "C12": {
       "path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
       "owner": "opening",
-      "sha256": "a8ccf84fb1e80e3406dead62de9d89a9158bedfc55244335eb1c0ed11cf5453e",
-      "bytes": 1187756,
+      "sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+      "bytes": 1443260,
       "baseline_blender_report": {
         "id": "C12",
         "name": "Nera",
@@ -627,28 +651,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.8319412328722303,
-          -0.006743903652793901,
-          -0.16725520140656416
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.16725481346227097
         ],
         "size": [
-          1.6638827136575354,
-          1.7756543113991392,
-          0.33479566524648585
+          1.6638829918113327,
+          1.7756538775914201,
+          0.33479480286152813
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "a8ccf84fb1e80e3406dead62de9d89a9158bedfc55244335eb1c0ed11cf5453e"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C12_Nera_stylized_v003_motionfit_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C12_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C12_Nera.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C12\\candidate.json"
     },
     "M01": {
       "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
       "owner": "monsters",
-      "sha256": "64fcbc53d7b17994d04f3d353238ce3ac8892c2a704f50f4c2254cf85c84edf4",
-      "bytes": 1811080,
+      "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
+      "bytes": 1941652,
       "baseline_blender_report": {
         "id": "M01",
         "name": "Ghoulkin",
@@ -680,28 +706,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.9338694353352752,
-          5.3431487721102776e-08,
-          -0.15274324926807187
+          -0.9338698563641634,
+          -1.1567418319067099e-07,
+          -0.15274317611240096
         ],
         "size": [
-          1.8677387261237328,
-          1.6300002682169505,
-          0.3010722522836615
+          1.8677394550062032,
+          1.6299568011965258,
+          0.31610481952307296
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "64fcbc53d7b17994d04f3d353238ce3ac8892c2a704f50f4c2254cf85c84edf4"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M01_Ghoulkin_stylized.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M01_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M01_Ghoulkin.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M01\\candidate.json"
     },
     "M02": {
       "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
       "owner": "monsters",
-      "sha256": "5c5a32c7a3451693a64ee6f48d5a98c7ab9d6a43ca94f3ae4c0d2788cb02f88e",
-      "bytes": 1770372,
+      "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
+      "bytes": 1777228,
       "baseline_blender_report": {
         "id": "M02",
         "name": "Wychwood_Stalker",
@@ -733,28 +761,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.6994989496518077,
-          -3.566314976314582e-08,
-          -0.1815542133116799
+          -0.6994987692460932,
+          3.4466735305470725e-08,
+          -0.1815542632233743
         ],
         "size": [
-          1.3989978993036154,
-          1.6000000418182403,
-          0.9026476322202086
+          1.3989975384921864,
+          1.6000000062472401,
+          0.9026474652488815
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "5c5a32c7a3451693a64ee6f48d5a98c7ab9d6a43ca94f3ae4c0d2788cb02f88e"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M02_Stalker_creature_v002.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M02_refined_timing_v003.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M02_Wychwood_Stalker.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M02\\candidate.json"
     },
     "M03": {
       "path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
       "owner": "monsters",
-      "sha256": "01504f243886547732550b7fd015617553571004f08235cb37bee24e12a3d53e",
-      "bytes": 1752868,
+      "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
+      "bytes": 1885396,
       "baseline_blender_report": {
         "id": "M03",
         "name": "Bog_Wretch",
@@ -786,28 +816,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.9488047895036572,
-          4.688152874594824e-08,
-          -0.15650499854637104
+          -0.9488054812381107,
+          -2.0972779497016994e-07,
+          -0.15650492550592
         ],
         "size": [
-          1.8976095219199611,
-          1.7200002418456628,
-          0.3646800238711551
+          1.8976104889282615,
+          1.72000002662849,
+          0.37625713251358295
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "01504f243886547732550b7fd015617553571004f08235cb37bee24e12a3d53e"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M03_Bog_Wretch_stylized.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M03_Bog_Wretch.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M03\\candidate.json"
     },
     "M04": {
       "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
       "owner": "monsters",
-      "sha256": "c950e021b807282f3bd8ce4025471a17ffed13f72e6040f31577220c2c2ea39e",
-      "bytes": 1985020,
+      "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
+      "bytes": 2620992,
       "baseline_blender_report": {
         "id": "M04",
         "name": "Gravebound_Knight",
@@ -839,28 +871,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.9169897305147916,
-          -6.012024670106233e-08,
-          -0.22878488025563018
+          -0.9168259380738812,
+          -3.937675359597051e-07,
+          -0.22878498402358335
         ],
         "size": [
-          1.8684248144176645,
-          1.9467800216439142,
-          1.0807127427602092
+          1.8682609363029576,
+          1.9467800538126125,
+          1.080713219513266
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "c950e021b807282f3bd8ce4025471a17ffed13f72e6040f31577220c2c2ea39e"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M04_Gravebound_armour_v002.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M04_refined_timing_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M04_Gravebound_Knight.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M04\\candidate.json"
     },
     "M05": {
       "path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
       "owner": "monsters",
-      "sha256": "e8a7af42da10405b6b193a203db9b725e1b7f6fd28effb3f99285e119feda317",
-      "bytes": 2204596,
+      "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+      "bytes": 2314140,
       "baseline_blender_report": {
         "id": "M05",
         "name": "Bell_Eater",
@@ -892,28 +926,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -2.179339835502972,
-          -2.4175074475864183e-07,
-          -0.3540324488216254
+          -2.179340766588867,
+          -6.268044427544053e-07,
+          -0.35403226135055155
         ],
         "size": [
-          4.358680314139805,
-          3.800000509712763,
-          1.9577497755351758
+          4.358681403445887,
+          3.8000005331480247,
+          1.9577498108917526
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "e8a7af42da10405b6b193a203db9b725e1b7f6fd28effb3f99285e119feda317"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M05_Bell_Eater_stylized_v003.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M05_Bell_Eater.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M05\\candidate.json"
     },
     "M06": {
       "path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
       "owner": "monsters",
-      "sha256": "6db195946719fd194b5b4e3a0f716d01871bf63ede4b0a0bf46be763221a64c5",
-      "bytes": 5714176,
+      "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee",
+      "bytes": 6375916,
       "baseline_blender_report": {
         "id": "M06",
         "name": "Rootbound_Colossus",
@@ -945,28 +981,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -1.9871428622726865,
-          0.004817345889822779,
-          -0.6566475601827834
+          -1.9475834654465642,
+          0.004817713607956083,
+          -0.656647556230569
         ],
         "size": [
-          3.9551419090071596,
-          4.39563161692868,
-          1.7711333316443856
+          3.952188085486183,
+          4.395630878443169,
+          1.771133246103501
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "6db195946719fd194b5b4e3a0f716d01871bf63ede4b0a0bf46be763221a64c5"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M06_Rootbound_bark_v002.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M06_refined_timing_v003.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M06_Rootbound_Colossus.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M06\\candidate.json"
     },
     "M07": {
       "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
       "owner": "monsters",
-      "sha256": "36af7cdca991930b89a27c99a70430f9d4fd7268a7482906967527ee3e364cf2",
-      "bytes": 1923900,
+      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+      "bytes": 2097816,
       "baseline_blender_report": {
         "id": "M07",
         "name": "Ashwing_Carrion_Drake",
@@ -998,28 +1036,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -4.255001313998733,
-          0.0599581060586929,
-          -3.5978797487439422
+          -4.255001790583045,
+          0.059957563213626504,
+          -3.5978787345398104
         ],
         "size": [
-          8.509865775733738,
-          4.168201427541837,
-          5.113208749854625
+          8.509866710626255,
+          4.151676731916755,
+          5.113207568330971
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "36af7cdca991930b89a27c99a70430f9d4fd7268a7482906967527ee3e364cf2"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M07_Ashwing_Carrion_Drake_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M07\\M07_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M07_Ashwing_Carrion_Drake.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M07\\candidate.json"
     },
     "M08": {
       "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
       "owner": "monsters",
-      "sha256": "8d3b9a23a624b82aa4a1ea7ee597360cd6ac4bb3a185da72533c46b9d36615bf",
-      "bytes": 1153592,
+      "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
+      "bytes": 1158008,
       "baseline_blender_report": {
         "id": "M08",
         "name": "White_Hart_Avatar",
@@ -1051,28 +1091,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.7146228038016168,
-          0.5612116272682365,
-          -1.3443824861972407
+          -0.703903772363953,
+          0.5612116365493366,
+          -1.3443827377231679
         ],
         "size": [
-          1.429245476860201,
-          3.038788753004307,
-          2.6887646024301466
+          1.4078073605591979,
+          3.0387891815058796,
+          2.688764454002704
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "8d3b9a23a624b82aa4a1ea7ee597360cd6ac4bb3a185da72533c46b9d36615bf"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M08_White_Hart_Avatar_stylized_v005.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M08\\M08_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M08_White_Hart_Avatar.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M08\\candidate.json"
     },
     "M09": {
       "path": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
       "owner": "monsters",
-      "sha256": "ca62875231eac7d5fcfa2e967a6b2259c3be762c2292d37c77e0cc1bf36fb40a",
-      "bytes": 869416,
+      "sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26",
+      "bytes": 1036332,
       "baseline_blender_report": {
         "id": "M09",
         "name": "Silt_Maw",
@@ -1104,28 +1146,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.4132815611329853,
-          0.025000021234381567,
-          -1.5856846341542128
+          -0.4825578950610379,
+          -0.001599795945034417,
+          -1.585684861307649
         ],
         "size": [
-          0.8265571916037887,
-          0.49888515574156983,
-          3.2347530591122298
+          0.9661337778549486,
+          0.5254849324074891,
+          3.234753935222572
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "ca62875231eac7d5fcfa2e967a6b2259c3be762c2292d37c77e0cc1bf36fb40a"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M09_Silt_Maw_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M09\\v002\\M09_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M09_Silt_Maw.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M09\\v002\\candidate.json"
     },
     "M10": {
       "path": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
       "owner": "monsters",
-      "sha256": "314b873c2d34f876f5c00294be42bfe133b611a40ea64d8263b07cb2bad31dc6",
-      "bytes": 889536,
+      "sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5",
+      "bytes": 949016,
       "baseline_blender_report": {
         "id": "M10",
         "name": "Millback",
@@ -1157,28 +1201,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -1.0750002187125411,
-          -0.01957356352066389,
-          -0.9779087529876985
+          -1.0750001816367334,
+          -0.019573774511726236,
+          -1.032800154485565
         ],
         "size": [
-          2.1500003727010117,
-          0.8827735773986648,
-          2.278550180671373
+          2.150000589037357,
+          0.8726017089441054,
+          2.33344226786703
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "314b873c2d34f876f5c00294be42bfe133b611a40ea64d8263b07cb2bad31dc6"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M10_Millback_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M10\\v002\\M10_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M10_Millback.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M10\\v002\\candidate.json"
     },
     "M11": {
       "path": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
       "owner": "monsters",
-      "sha256": "e8f95a4ccf3fe2d31280489261a1d8f2ad92cb5ce54828de12bb69eef43f8a71",
-      "bytes": 1251284,
+      "sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e",
+      "bytes": 1356200,
       "baseline_blender_report": {
         "id": "M11",
         "name": "Glassmoth",
@@ -1210,28 +1256,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -1.0660618370824735,
-          0.033847798230892547,
-          -0.7045103673567515
+          -1.0660617390601117,
+          0.03384760236058715,
+          -0.7045105466712216
         ],
         "size": [
-          2.132123674164947,
-          1.089152215262096,
-          1.325761648480094
+          2.132123468755906,
+          1.095818207702744,
+          1.3257619066259758
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "e8f95a4ccf3fe2d31280489261a1d8f2ad92cb5ce54828de12bb69eef43f8a71"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M11_Glassmoth_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M11\\M11_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M11_Glassmoth.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M11\\candidate.json"
     },
     "M12": {
       "path": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
       "owner": "monsters",
-      "sha256": "998d751634aa2a2663f3003c65f7cf2eebeee33fbb082ef1bc7b500f0bf57b88",
-      "bytes": 719760,
+      "sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1",
+      "bytes": 809404,
       "baseline_blender_report": {
         "id": "M12",
         "name": "Knell_Leech",
@@ -1263,28 +1311,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.26704998600529967,
-          0.01800002715990111,
-          -0.9008626177410323
+          -0.29375495168842397,
+          0.017999985448132715,
+          -0.9008629279757312
         ],
         "size": [
-          0.5340999720105893,
-          0.40986079712429413,
-          1.67486257498194
+          0.5875099033768147,
+          0.4098607912149902,
+          1.6748630924361327
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "998d751634aa2a2663f3003c65f7cf2eebeee33fbb082ef1bc7b500f0bf57b88"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M12_Knell_Leech_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M12\\v002\\M12_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M12_Knell_Leech.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M12\\v002\\candidate.json"
     },
     "M13": {
       "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
       "owner": "opening",
-      "sha256": "0b54e64300b837ac03d6389949a909880cb009f55d209720e1c0f3aa56880a9b",
-      "bytes": 1555644,
+      "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+      "bytes": 1703908,
       "baseline_blender_report": {
         "id": "M13",
         "name": "Hearthscale",
@@ -1316,28 +1366,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.7892791959676391,
-          0.010760007723785464,
-          -1.944924196764762
+          -0.7892792497172404,
+          0.010760108778636113,
+          -1.9449246396255946
         ],
         "size": [
-          1.578558332330641,
-          0.7454233455378994,
-          2.722587128241302
+          1.5785585041511099,
+          0.7578263225856833,
+          2.7225876844460863
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "0b54e64300b837ac03d6389949a909880cb009f55d209720e1c0f3aa56880a9b"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M13_Hearthscale_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M13\\M13_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M13_Hearthscale.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M13\\candidate.json"
     },
     "M14": {
       "path": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
       "owner": "monsters",
-      "sha256": "3c8e07b774f36bbe1b5c93a81f820b3632ac2ad4bf720cb573802ee241ec8973",
-      "bytes": 1205316,
+      "sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
+      "bytes": 1297024,
       "baseline_blender_report": {
         "id": "M14",
         "name": "Gallows_Weaver",
@@ -1369,28 +1421,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -1.2120981155307669,
-          0.09024527238338483,
-          -1.0631184278182138
+          -1.210627386622005,
+          0.09123322021935751,
+          -1.0618066908717414
         ],
         "size": [
-          2.4240169672565655,
-          0.9347593234533247,
-          2.0667939039307885
+          2.4213543348276887,
+          0.9449885072919373,
+          2.079201077296844
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "3c8e07b774f36bbe1b5c93a81f820b3632ac2ad4bf720cb573802ee241ec8973"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M14_Gallows_Weaver_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M14\\v002\\M14_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M14_Gallows_Weaver.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M14\\v002\\candidate.json"
     },
     "M15": {
       "path": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
       "owner": "opening",
-      "sha256": "c6edd25e93242d1b1f7f1bdebd1e5951b240ed489c0b17f0e817813023454fb8",
-      "bytes": 2988696,
+      "sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
+      "bytes": 3259856,
       "baseline_blender_report": {
         "id": "M15",
         "name": "Reed_Choir",
@@ -1422,28 +1476,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.844013170655362,
-          0.003020131628776253,
-          -0.6907511378943265
+          -0.8440129697280057,
+          0.0030200773207633693,
+          -0.6907511672363023
         ],
         "size": [
-          1.6876921977641701,
-          1.0527995849108693,
-          1.469628751252332
+          1.6876917502648507,
+          1.0443773245852153,
+          1.4696289625483248
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "c6edd25e93242d1b1f7f1bdebd1e5951b240ed489c0b17f0e817813023454fb8"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M15_Reed_Choir_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M15\\M15_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M15_Reed_Choir.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M15\\candidate.json"
     },
     "M16": {
       "path": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
       "owner": "monsters",
-      "sha256": "407afdc70d2be466fd55fe334b29badd97f184ccbababb991e58d242718e17fa",
-      "bytes": 602520,
+      "sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
+      "bytes": 638424,
       "baseline_blender_report": {
         "id": "M16",
         "name": "Inkblind",
@@ -1475,28 +1531,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.5912500336191374,
-          -0.011414022234434166,
-          -0.543922797382662
+          -0.5912499394403778,
+          -0.011414077159595368,
+          -0.5660000863709909
         ],
         "size": [
-          1.1825000730407003,
-          0.5147740632708467,
-          1.3154542865124592
+          1.1824997994296131,
+          0.5524140707344906,
+          1.3375316947540459
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "407afdc70d2be466fd55fe334b29badd97f184ccbababb991e58d242718e17fa"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M16_Inkblind_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M16\\v002\\M16_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M16_Inkblind.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M16\\v002\\candidate.json"
     },
     "M17": {
       "path": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
       "owner": "monsters",
-      "sha256": "94611817794027bb82cfa87926623f74e374e32091af2e9d259994f0cd2423c6",
-      "bytes": 1465924,
+      "sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+      "bytes": 1615332,
       "baseline_blender_report": {
         "id": "M17",
         "name": "Cairn_Mother",
@@ -1528,28 +1586,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -0.7352471947669983,
-          0.01499962596079333,
-          -1.7643765114762624
+          -0.7352471947698981,
+          0.01499959687805524,
+          -1.7643765274960481
         ],
         "size": [
-          1.4808348417282104,
-          1.878847457414756,
-          3.3253696724968247
+          1.4808348417343447,
+          1.890106725029025,
+          3.3253697729945086
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "94611817794027bb82cfa87926623f74e374e32091af2e9d259994f0cd2423c6"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M17_Cairn_Mother_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M17\\M17_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M17_Cairn_Mother.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M17\\candidate.json"
     },
     "M18": {
       "path": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
       "owner": "monsters",
-      "sha256": "23670cf364e7819d71668c67a6da8a4ca868e077f1cfdf98d009abe89bd4b683",
-      "bytes": 1130352,
+      "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
+      "bytes": 1235028,
       "baseline_blender_report": {
         "id": "M18",
         "name": "Shroud_Swimmer",
@@ -1581,28 +1641,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -1.4000000970367248,
-          0.023323309363359683,
-          -2.9204390958888684
+          -1.4000000547751574,
+          0.05801952617678125,
+          -2.9204385623594726
         ],
         "size": [
-          2.8000001940734496,
-          0.2816766710602415,
-          3.860439505529368
+          2.799999940024254,
+          0.4949803207869677,
+          3.860438932048889
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "23670cf364e7819d71668c67a6da8a4ca868e077f1cfdf98d009abe89bd4b683"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M18_Shroud_Swimmer_stylized_v001.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M18\\v003\\M18_contact_repaired_v003.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M18_Shroud_Swimmer.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M18\\v003\\candidate.json"
     },
     "M19": {
       "path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
       "owner": "monsters",
-      "sha256": "e684e121d89b2d9d5fa20b911ddf7c297380e156d76e43d7590d3d8b00f9cd8e",
-      "bytes": 1767668,
+      "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
+      "bytes": 1897900,
       "baseline_blender_report": {
         "id": "M19",
         "name": "Wychwood_Raider",
@@ -1634,28 +1696,30 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -1.0114084743509064,
-          3.857738835481601e-08,
-          -0.1640676652003417
+          -1.0114085271150837,
+          -4.821231483984577e-07,
+          -0.16406770221245473
         ],
         "size": [
-          2.022816910016231,
-          1.860000335462706,
-          0.31178632639772225
+          2.0228169283018085,
+          1.8599999843669097,
+          0.31178636430865503
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "e684e121d89b2d9d5fa20b911ddf7c297380e156d76e43d7590d3d8b00f9cd8e"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M19_Wychwood_Raider_stylized.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M19_Wychwood_Raider.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M19\\candidate.json"
     },
     "M20": {
       "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
       "owner": "monsters",
-      "sha256": "166e37507ad4e11f831bb42e2096258df5a9ce7634fd180955b357beaefaf2c5",
-      "bytes": 1746832,
+      "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+      "bytes": 1876176,
       "baseline_blender_report": {
         "id": "M20",
         "name": "Wychwood_Brute",
@@ -1687,22 +1751,24 @@
       },
       "authored_bind_bounds": {
         "position": [
-          -1.0933873950772166,
-          -3.866339709862394e-08,
-          -0.21202278319355386
+          -1.093387805856079,
+          -1.2569194358303524e-07,
+          -0.21202274218429945
         ],
         "size": [
-          2.186774914986765,
-          1.9799997413336432,
-          0.39249633742505
+          2.1867755703885665,
+          1.9720798667325385,
+          0.3924963930126658
         ],
-        "space": "exported world bind pose; skin-aware, not raw mesh AABB",
-        "asset_sha256": "166e37507ad4e11f831bb42e2096258df5a9ce7634fd180955b357beaefaf2c5"
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M20_Wychwood_Brute_stylized_v002.blend",
-      "status": "user_authorized_release_candidate"
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M20_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M20_Wychwood_Brute.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M20\\candidate.json"
     }
   },
   "roles": {
@@ -1838,8 +1904,9 @@
   },
   "staff": {
     "path": "res://assets_external/design_pack_v1/C01_ash_staff.glb",
-    "bytes": 18404,
-    "sha256": "5843b421d9eeb71f9a9c3b1f02fc7898665b2750aa82907e01e63a86537381d9"
+    "bytes": 231112,
+    "sha256": "b8ab07b0f5a14323498b2276d9e1d102337d37e444218de910f303bf3209a333",
+    "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\equipment\\C01_ash_staff_refined_candidate.json"
   },
   "private_review_only": false
 }

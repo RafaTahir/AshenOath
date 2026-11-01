@@ -1,0 +1,703 @@
+{
+  "assets": [
+    {
+      "id": "C01",
+      "runtime": {
+        "bytes": 2982208,
+        "sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387"
+      },
+      "bounds": {
+        "position": [
+          -0.8319625545864983,
+          -0.00692984769748587,
+          -0.1857413763522459
+        ],
+        "size": [
+          1.663925527111656,
+          1.8070336638816822,
+          0.36106945952872105
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387"
+      }
+    },
+    {
+      "id": "M01",
+      "runtime": {
+        "bytes": 1941652,
+        "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+      },
+      "bounds": {
+        "position": [
+          -0.9338698563641634,
+          -1.1567418319067099e-07,
+          -0.15274317611240096
+        ],
+        "size": [
+          1.8677394550062032,
+          1.6299568011965258,
+          0.31610481952307296
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+      }
+    },
+    {
+      "id": "M05",
+      "runtime": {
+        "bytes": 2314140,
+        "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+      },
+      "bounds": {
+        "position": [
+          -2.179340766588867,
+          -6.268044427544053e-07,
+          -0.35403226135055155
+        ],
+        "size": [
+          4.358681403445887,
+          3.8000005331480247,
+          1.9577498108917526
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+      }
+    },
+    {
+      "id": "C04",
+      "runtime": {
+        "bytes": 1593020,
+        "sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7"
+      },
+      "bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.23476407244243325
+        ],
+        "size": [
+          1.798829769336356,
+          1.8140447915997224,
+          0.4600619146821181
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+        "garment_arm_clearance_m": 0.1
+      }
+    },
+    {
+      "id": "C02",
+      "runtime": {
+        "bytes": 1730700,
+        "sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7"
+      },
+      "bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.19491147365912265
+        ],
+        "size": [
+          1.798829769336356,
+          1.822484689636608,
+          0.36245203500652223
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7"
+      }
+    },
+    {
+      "id": "C03",
+      "runtime": {
+        "bytes": 1549112,
+        "sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e"
+      },
+      "bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.17210379935174083
+        ],
+        "size": [
+          1.6638829918113327,
+          1.780994333375914,
+          0.3643063896747857
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+        "garment_arm_clearance_m": 0.1
+      }
+    },
+    {
+      "id": "C11",
+      "runtime": {
+        "bytes": 1502736,
+        "sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85"
+      },
+      "bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.18159480405117198
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7809943333755858,
+          0.46849976816439964
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+        "garment_arm_clearance_m": 0.1
+      }
+    },
+    {
+      "id": "C05",
+      "runtime": {
+        "bytes": 3794792,
+        "sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae"
+      },
+      "bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.1672547985611091
+        ],
+        "size": [
+          1.6638829918113327,
+          1.780994333375914,
+          0.3513447462841781
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae"
+      }
+    },
+    {
+      "id": "C06",
+      "runtime": {
+        "bytes": 1774668,
+        "sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93"
+      },
+      "bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.19584862122243543
+        ],
+        "size": [
+          1.798829769336356,
+          1.823052006989258,
+          0.363389182569835
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93"
+      }
+    },
+    {
+      "id": "C12",
+      "runtime": {
+        "bytes": 1443260,
+        "sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632"
+      },
+      "bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.16725481346227097
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7756538775914201,
+          0.33479480286152813
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632"
+      }
+    },
+    {
+      "id": "C07",
+      "runtime": {
+        "bytes": 1351564,
+        "sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281"
+      },
+      "bounds": {
+        "position": [
+          -0.8994148808993716,
+          -0.003968038182141457,
+          -0.21921957768625347
+        ],
+        "size": [
+          1.7988298885456786,
+          1.8167521532906692,
+          0.386760139033653
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281"
+      }
+    },
+    {
+      "id": "C08",
+      "runtime": {
+        "bytes": 1828876,
+        "sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06"
+      },
+      "bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.20292944517778014
+        ],
+        "size": [
+          1.798829769336356,
+          1.820859150396343,
+          0.3704700065251797
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06"
+      }
+    },
+    {
+      "id": "C09",
+      "runtime": {
+        "bytes": 1384804,
+        "sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b"
+      },
+      "bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.1672547985611091
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7807175301512195,
+          0.3561134731328286
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+        "garment_arm_clearance_m": 0.1
+      }
+    },
+    {
+      "id": "C10",
+      "runtime": {
+        "bytes": 1885436,
+        "sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7"
+      },
+      "bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.25824235328796763
+        ],
+        "size": [
+          1.798829769336356,
+          1.8208591503963378,
+          0.5036183976432693
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7"
+      }
+    },
+    {
+      "id": "P01",
+      "runtime": {
+        "bytes": 1325004,
+        "sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8"
+      },
+      "bounds": {
+        "position": [
+          -0.8994148808993716,
+          -0.003968038182141457,
+          -0.21184968779993224
+        ],
+        "size": [
+          1.7988298885456786,
+          1.8250336218589505,
+          0.37939024914733177
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8"
+      }
+    },
+    {
+      "id": "M02",
+      "runtime": {
+        "bytes": 1777228,
+        "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+      },
+      "bounds": {
+        "position": [
+          -0.6994987692460932,
+          3.4466735305470725e-08,
+          -0.1815542632233743
+        ],
+        "size": [
+          1.3989975384921864,
+          1.6000000062472401,
+          0.9026474652488815
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+      }
+    },
+    {
+      "id": "M19",
+      "runtime": {
+        "bytes": 1897900,
+        "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+      },
+      "bounds": {
+        "position": [
+          -1.0114085271150837,
+          -4.821231483984577e-07,
+          -0.16406770221245473
+        ],
+        "size": [
+          2.0228169283018085,
+          1.8599999843669097,
+          0.31178636430865503
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+      }
+    },
+    {
+      "id": "M20",
+      "runtime": {
+        "bytes": 1876176,
+        "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+      },
+      "bounds": {
+        "position": [
+          -1.093387805856079,
+          -1.2569194358303524e-07,
+          -0.21202274218429945
+        ],
+        "size": [
+          2.1867755703885665,
+          1.9720798667325385,
+          0.3924963930126658
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+      }
+    },
+    {
+      "id": "M03",
+      "runtime": {
+        "bytes": 1885396,
+        "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+      },
+      "bounds": {
+        "position": [
+          -0.9488054812381107,
+          -2.0972779497016994e-07,
+          -0.15650492550592
+        ],
+        "size": [
+          1.8976104889282615,
+          1.72000002662849,
+          0.37625713251358295
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+      }
+    },
+    {
+      "id": "M04",
+      "runtime": {
+        "bytes": 2620992,
+        "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+      },
+      "bounds": {
+        "position": [
+          -0.9168259380738812,
+          -3.937675359597051e-07,
+          -0.22878498402358335
+        ],
+        "size": [
+          1.8682609363029576,
+          1.9467800538126125,
+          1.080713219513266
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+      }
+    },
+    {
+      "id": "M06",
+      "runtime": {
+        "bytes": 6375916,
+        "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+      },
+      "bounds": {
+        "position": [
+          -1.9475834654465642,
+          0.004817713607956083,
+          -0.656647556230569
+        ],
+        "size": [
+          3.952188085486183,
+          4.395630878443169,
+          1.771133246103501
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+      }
+    },
+    {
+      "id": "M08",
+      "runtime": {
+        "bytes": 1158008,
+        "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+      },
+      "bounds": {
+        "position": [
+          -0.703903772363953,
+          0.5612116365493366,
+          -1.3443827377231679
+        ],
+        "size": [
+          1.4078073605591979,
+          3.0387891815058796,
+          2.688764454002704
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+      }
+    },
+    {
+      "id": "M13",
+      "runtime": {
+        "bytes": 1703908,
+        "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+      },
+      "bounds": {
+        "position": [
+          -0.7892792497172404,
+          0.010760108778636113,
+          -1.9449246396255946
+        ],
+        "size": [
+          1.5785585041511099,
+          0.7578263225856833,
+          2.7225876844460863
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+      }
+    },
+    {
+      "id": "M07",
+      "runtime": {
+        "bytes": 2097816,
+        "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+      },
+      "bounds": {
+        "position": [
+          -4.255001790583045,
+          0.059957563213626504,
+          -3.5978787345398104
+        ],
+        "size": [
+          8.509866710626255,
+          4.151676731916755,
+          5.113207568330971
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+      }
+    },
+    {
+      "id": "M11",
+      "runtime": {
+        "bytes": 1356200,
+        "sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+      },
+      "bounds": {
+        "position": [
+          -1.0660617390601117,
+          0.03384760236058715,
+          -0.7045105466712216
+        ],
+        "size": [
+          2.132123468755906,
+          1.095818207702744,
+          1.3257619066259758
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+      }
+    },
+    {
+      "id": "M09",
+      "runtime": {
+        "bytes": 1036332,
+        "sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+      },
+      "bounds": {
+        "position": [
+          -0.4825578950610379,
+          -0.001599795945034417,
+          -1.585684861307649
+        ],
+        "size": [
+          0.9661337778549486,
+          0.5254849324074891,
+          3.234753935222572
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+      }
+    },
+    {
+      "id": "M10",
+      "runtime": {
+        "bytes": 949016,
+        "sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+      },
+      "bounds": {
+        "position": [
+          -1.0750001816367334,
+          -0.019573774511726236,
+          -1.032800154485565
+        ],
+        "size": [
+          2.150000589037357,
+          0.8726017089441054,
+          2.33344226786703
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+      }
+    },
+    {
+      "id": "M12",
+      "runtime": {
+        "bytes": 809404,
+        "sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+      },
+      "bounds": {
+        "position": [
+          -0.29375495168842397,
+          0.017999985448132715,
+          -0.9008629279757312
+        ],
+        "size": [
+          0.5875099033768147,
+          0.4098607912149902,
+          1.6748630924361327
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+      }
+    },
+    {
+      "id": "M14",
+      "runtime": {
+        "bytes": 1297024,
+        "sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+      },
+      "bounds": {
+        "position": [
+          -1.210627386622005,
+          0.09123322021935751,
+          -1.0618066908717414
+        ],
+        "size": [
+          2.4213543348276887,
+          0.9449885072919373,
+          2.079201077296844
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+      }
+    },
+    {
+      "id": "M15",
+      "runtime": {
+        "bytes": 3259856,
+        "sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+      },
+      "bounds": {
+        "position": [
+          -0.8440129697280057,
+          0.0030200773207633693,
+          -0.6907511672363023
+        ],
+        "size": [
+          1.6876917502648507,
+          1.0443773245852153,
+          1.4696289625483248
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+      }
+    },
+    {
+      "id": "M16",
+      "runtime": {
+        "bytes": 638424,
+        "sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+      },
+      "bounds": {
+        "position": [
+          -0.5912499394403778,
+          -0.011414077159595368,
+          -0.5660000863709909
+        ],
+        "size": [
+          1.1824997994296131,
+          0.5524140707344906,
+          1.3375316947540459
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+      }
+    },
+    {
+      "id": "M17",
+      "runtime": {
+        "bytes": 1615332,
+        "sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+      },
+      "bounds": {
+        "position": [
+          -0.7352471947698981,
+          0.01499959687805524,
+          -1.7643765274960481
+        ],
+        "size": [
+          1.4808348417343447,
+          1.890106725029025,
+          3.3253697729945086
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+      }
+    },
+    {
+      "id": "M18",
+      "runtime": {
+        "bytes": 1235028,
+        "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+      },
+      "bounds": {
+        "position": [
+          -1.4000000547751574,
+          0.05801952617678125,
+          -2.9204385623594726
+        ],
+        "size": [
+          2.799999940024254,
+          0.4949803207869677,
+          3.860438932048889
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+      }
+    }
+  ],
+  "scope": "authored derivative integration; not gameplay/performance approval",
+  "user_accepted": false
+}

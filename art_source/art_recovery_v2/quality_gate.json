@@ -1,6 +1,6 @@
 {
   "status": "user_authorized_candidate_publication",
-  "reason": "2026-10-31: user explicitly requested the current live game update, lossless Web partitioning, main integration and push. This authorizes candidate publication, not unperformed visual or gameplay acceptance.",
+  "reason": "2026-11-01: user requested all visual game assets improved one by one and pushed; current direction retained. Publication authorization does not assert final visual/gameplay acceptance.",
   "publication_authorized": true,
   "minimum_visual_score": 4,
   "continuation_policy": "Approved grounded-stylized best-effort production of all 33 candidates, one asset at a time. Inspect actual geometry and presentation, disclose remaining limitations and continue without numerical or per-character approval stops. Final user acceptance is required before publication.",
@@ -99,9 +99,9 @@
     "godot_level",
     "animation_preview"
   ],
-  "current_slice": "private_roster_delivered_awaiting_user",
+  "current_slice": "asset_refinement_20261101",
   "C01": {
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "scores": {
       "reference_fidelity": 2,
@@ -131,34 +131,34 @@
     "latest_trial_retained_as_production_candidate": false,
     "next_action": "Finish the v044 runtime atlas correction, record current exact derivative identity and inspect its affected garment view. Continue directly to M01, then M05 and the remaining approved roster, without numerical or per-character approval stops. Final user acceptance and production hold remain separate.",
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C01_anwen_stylized_v044.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C01_Anwen.glb",
-      "runtime_sha256": "a6e18399b256b95dbd35e826d7880d786440364d9f48416f0028787f8f46757a",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C01_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C01_Anwen.glb",
+      "runtime_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "M01": {
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M01_Ghoulkin_stylized.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M01_Ghoulkin.glb",
-      "runtime_sha256": "64fcbc53d7b17994d04f3d353238ce3ac8892c2a704f50f4c2254cf85c84edf4",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M01_refined_timing_skin_v004.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M01_Ghoulkin.glb",
+      "runtime_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "M05": {
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "historical_review_status": "queued_after_M01_candidate",
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M05_Bell_Eater_stylized_v003.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M05_Bell_Eater.glb",
-      "runtime_sha256": "e8a7af42da10405b6b193a203db9b725e1b7f6fd28effb3f99285e119feda317",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_skin_v004.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M05_Bell_Eater.glb",
+      "runtime_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "remaining_roster": "queued_for_individual_grounded_stylized_authoring_not_primitive_mass_regeneration",
@@ -181,350 +181,350 @@
   },
   "M16": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M16_Inkblind_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M16_Inkblind.glb",
-      "runtime_sha256": "407afdc70d2be466fd55fe334b29badd97f184ccbababb991e58d242718e17fa",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M16\\v002\\M16_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M16_Inkblind.glb",
+      "runtime_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "M17": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M17_Cairn_Mother_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M17_Cairn_Mother.glb",
-      "runtime_sha256": "94611817794027bb82cfa87926623f74e374e32091af2e9d259994f0cd2423c6",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M17\\M17_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M17_Cairn_Mother.glb",
+      "runtime_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "M18": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M18_Shroud_Swimmer_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M18_Shroud_Swimmer.glb",
-      "runtime_sha256": "23670cf364e7819d71668c67a6da8a4ca868e077f1cfdf98d009abe89bd4b683",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M18\\v003\\M18_contact_repaired_v003.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M18_Shroud_Swimmer.glb",
+      "runtime_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C04": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C04_Blacksmith_Tor_stylized_v002_motionfit_v001_motionfit_v002_motionfit_v003_motionfit_v004.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C04_Blacksmith_Tor.glb",
-      "runtime_sha256": "8a9359e933f04819a47ad1409fcf200067ba8ddd9ddc37ddbbcb6e2863e2a583",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C04_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C04_Blacksmith_Tor.glb",
+      "runtime_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C02": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C02_Rook_stylized_v003_motionfit_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C02_Rook.glb",
-      "runtime_sha256": "66ae4c8281553fa8edb168f488c5323951628b2eb2451406682a15f9bbf8b1b8",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C02_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C02_Rook.glb",
+      "runtime_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C03": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C03_Mira_Fen_stylized_v002_motionfit_v001_motionfit_v003_motionfit_v004.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C03_Mira_Fen.glb",
-      "runtime_sha256": "c99d6c43f98c7975cec87be0f154a2a10bff2c24fdfb498f1796e72eb581c45f",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C03_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C03_Mira_Fen.glb",
+      "runtime_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C11": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C11_Nessa_stylized_v002_motionfit_v001_motionfit_v002_motionfit_v003_motionfit_v004.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C11_Nessa.glb",
-      "runtime_sha256": "d14fab9b2f433b9cab5380772d8c6157eac2a20591f2a280ca26b9ea379f0305",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C11_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C11_Nessa.glb",
+      "runtime_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C05": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C05_Widow_Elna_stylized_v003_motionfit_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C05_Widow_Elna.glb",
-      "runtime_sha256": "af4775c69faa2d0b5b543559a2ddfc56fa01302143becb88d87af0d2e2c7f222",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C05_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C05_Widow_Elna.glb",
+      "runtime_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C06": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C06_Farmer_Toma_stylized_v002_motionfit_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C06_Farmer_Toma.glb",
-      "runtime_sha256": "8edf4c8c4f7816efd148264d3ee03c42a43c2ac46bfea9cb2892b13d7c7668e7",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C06_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C06_Farmer_Toma.glb",
+      "runtime_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C12": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C12_Nera_stylized_v003_motionfit_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C12_Nera.glb",
-      "runtime_sha256": "a8ccf84fb1e80e3406dead62de9d89a9158bedfc55244335eb1c0ed11cf5453e",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C12_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C12_Nera.glb",
+      "runtime_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C07": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C07_Captain_Senn_stylized_v003_motionfit_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C07_Captain_Senn.glb",
-      "runtime_sha256": "da4a826b7c1bd726408473981c6e33d2b404828014412d347be38646472b1284",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C07_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C07_Captain_Senn.glb",
+      "runtime_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C08": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C08_Lord_Edric_Vargan_stylized_v002_motionfit_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C08_Lord_Edric_Vargan.glb",
-      "runtime_sha256": "ed43cb946850852f5801d93839234bba649ba37b30b1241b0e49bac3dee2dbae",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C08_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C08_Lord_Edric_Vargan.glb",
+      "runtime_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C09": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C09_Record_Keeper_Vale_stylized_v002_motionfit_v001_motionfit_v003_motionfit_v004.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C09_Record_Keeper_Vale.glb",
-      "runtime_sha256": "551118d217688cbf9f172a8b3a36edeeec734b0b8f88ff7c8ddc07e86402262b",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C09_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C09_Record_Keeper_Vale.glb",
+      "runtime_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "C10": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\C10_Steward_Merrow_stylized_v002_motionfit_v001_motionfit_v002.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\C10_Steward_Merrow.glb",
-      "runtime_sha256": "675ffc91e7ea9c27a91037d0ee6ce3d91b6e2ed41203496724b745e7c94096a4",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C10_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C10_Steward_Merrow.glb",
+      "runtime_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "P01": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\P01_Kael_stylized_v002_motionfit_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\humans\\P01_Kael.glb",
-      "runtime_sha256": "c8eca735354efa0ffb8b31aab22bb3d2fe14d3b3485d414690e599d835845851",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\P01_tailored_v001.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\P01_Kael.glb",
+      "runtime_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "M20": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M20_Wychwood_Brute_stylized_v002.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M20_Wychwood_Brute.glb",
-      "runtime_sha256": "166e37507ad4e11f831bb42e2096258df5a9ce7634fd180955b357beaefaf2c5",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M20_refined_timing_skin_v004.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M20_Wychwood_Brute.glb",
+      "runtime_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "M13": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M13_Hearthscale_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M13_Hearthscale.glb",
-      "runtime_sha256": "0b54e64300b837ac03d6389949a909880cb009f55d209720e1c0f3aa56880a9b",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M13\\M13_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M13_Hearthscale.glb",
+      "runtime_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "M07": {
     "historical_review_status": "not_previously_reviewed",
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false,
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M07_Ashwing_Carrion_Drake_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M07_Ashwing_Carrion_Drake.glb",
-      "runtime_sha256": "36af7cdca991930b89a27c99a70430f9d4fd7268a7482906967527ee3e364cf2",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M07\\M07_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M07_Ashwing_Carrion_Drake.glb",
+      "runtime_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     }
   },
   "M02": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M02_Stalker_creature_v002.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M02_Wychwood_Stalker.glb",
-      "runtime_sha256": "5c5a32c7a3451693a64ee6f48d5a98c7ab9d6a43ca94f3ae4c0d2788cb02f88e",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M02_refined_timing_v003.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M02_Wychwood_Stalker.glb",
+      "runtime_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M19": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M19_Wychwood_Raider_stylized.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M19_Wychwood_Raider.glb",
-      "runtime_sha256": "e684e121d89b2d9d5fa20b911ddf7c297380e156d76e43d7590d3d8b00f9cd8e",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_skin_v004.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M19_Wychwood_Raider.glb",
+      "runtime_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M03": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M03_Bog_Wretch_stylized.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M03_Bog_Wretch.glb",
-      "runtime_sha256": "01504f243886547732550b7fd015617553571004f08235cb37bee24e12a3d53e",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_timing_skin_v004.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M03_Bog_Wretch.glb",
+      "runtime_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M04": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M04_Gravebound_armour_v002.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M04_Gravebound_Knight.glb",
-      "runtime_sha256": "c950e021b807282f3bd8ce4025471a17ffed13f72e6040f31577220c2c2ea39e",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M04_refined_timing_v004.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M04_Gravebound_Knight.glb",
+      "runtime_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M06": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M06_Rootbound_bark_v002.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M06_Rootbound_Colossus.glb",
-      "runtime_sha256": "6db195946719fd194b5b4e3a0f716d01871bf63ede4b0a0bf46be763221a64c5",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M06_refined_timing_v003.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M06_Rootbound_Colossus.glb",
+      "runtime_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M08": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M08_White_Hart_Avatar_stylized_v005.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M08_White_Hart_Avatar.glb",
-      "runtime_sha256": "8d3b9a23a624b82aa4a1ea7ee597360cd6ac4bb3a185da72533c46b9d36615bf",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M08\\M08_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M08_White_Hart_Avatar.glb",
+      "runtime_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M11": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M11_Glassmoth_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M11_Glassmoth.glb",
-      "runtime_sha256": "e8f95a4ccf3fe2d31280489261a1d8f2ad92cb5ce54828de12bb69eef43f8a71",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M11\\M11_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M11_Glassmoth.glb",
+      "runtime_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M09": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M09_Silt_Maw_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M09_Silt_Maw.glb",
-      "runtime_sha256": "ca62875231eac7d5fcfa2e967a6b2259c3be762c2292d37c77e0cc1bf36fb40a",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M09\\v002\\M09_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M09_Silt_Maw.glb",
+      "runtime_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M10": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M10_Millback_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M10_Millback.glb",
-      "runtime_sha256": "314b873c2d34f876f5c00294be42bfe133b611a40ea64d8263b07cb2bad31dc6",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M10\\v002\\M10_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M10_Millback.glb",
+      "runtime_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M12": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M12_Knell_Leech_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M12_Knell_Leech.glb",
-      "runtime_sha256": "998d751634aa2a2663f3003c65f7cf2eebeee33fbb082ef1bc7b500f0bf57b88",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M12\\v002\\M12_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M12_Knell_Leech.glb",
+      "runtime_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M14": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M14_Gallows_Weaver_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M14_Gallows_Weaver.glb",
-      "runtime_sha256": "3c8e07b774f36bbe1b5c93a81f820b3632ac2ad4bf720cb573802ee241ec8973",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M14\\v002\\M14_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M14_Gallows_Weaver.glb",
+      "runtime_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "M15": {
     "active_candidate": {
-      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M15_Reed_Choir_stylized_v001.blend",
-      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M15_Reed_Choir.glb",
-      "runtime_sha256": "c6edd25e93242d1b1f7f1bdebd1e5951b240ed489c0b17f0e817813023454fb8",
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M15\\M15_refined_20261101.blend",
+      "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M15_Reed_Choir.glb",
+      "runtime_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
       "record": "stylized_roster.json",
-      "inspection_scope": "Source views, isolated native poses and prepared art staging; not regional encounter, gameplay, performance or final visual acceptance"
+      "inspection_scope": "2026-11-01 Blender finish; current native engine captures recorded separately"
     },
-    "status": "private_candidate_delivered_awaiting_user",
+    "status": "refined_live_candidate_user_review_pending",
     "user_accepted": false
   },
   "current_reason": "Combined private candidates delivered; final user visual/gameplay acceptance is still required.",
@@ -549,5 +549,17 @@
     "initial_balanced_download_bytes": 126516202,
     "initial_quality_download_bytes": 133733297,
     "shell_delivery_repair": "2026-10-31: removed the decoded-pack 100 MiB rejection in favor of exact release-inventory identity; unchanged packs; HTTP delivery verified, gameplay unverified."
+  },
+  "current_refinement": {
+    "id": "asset-refinement-20261101",
+    "authored": 33,
+    "integrated": 33,
+    "user_accepted": 0,
+    "scope": "retained 33-cast Blender finishing masters; scenery, held props, icons and effects recorded alongside",
+    "evidence": "evidence/refinement_20261101",
+    "status": "native_and_prepared_art_verified_package_pending",
+    "native_inspected": 33,
+    "prepared_art_staged": 33,
+    "journey_started": false
   }
 }

@@ -1,0 +1,185 @@
+{
+  "id": "M18",
+  "status": "contact_repaired_candidate_pending_native_inspection",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M18\\v003\\M18_contact_repaired_v003.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M18\\v003\\M18_contact_repaired_v003.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M18\\v002\\M18_refined_20261101.glb",
+  "input_sha256": "822dbb1f9dd45456c8bd47d89894b65e4c7da03798e44e6d4122fd0694ee2741",
+  "parent_revision": "v002",
+  "parent_candidate_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M18\\v002\\candidate.json",
+  "original_input_sha256": "23670cf364e7819d71668c67a6da8a4ca868e077f1cfdf98d009abe89bd4b683",
+  "original_input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M18_Shroud_Swimmer.glb",
+  "source_sha256": "df611f11c58a97af0dc88362a3b02143bb5ed11fa163b9face67bca472d632a4",
+  "runtime_sha256": "ce4da6564856b7c76d41e93fbf32c6ccdd68db47c09104f0af8e5ca1db5a8de5",
+  "runtime_bytes": 2398596,
+  "changes": [
+    "Conform eye/socket/lid complexes to the retained dorsal surface, flattening protrusion into a low seated eye dome",
+    "Seat the two retained spiracle patches flush against dorsal tissue",
+    "Conform and flatten the pale mouth to the underside with a 3mm embedded attachment",
+    "Preserve v002 disc camber, every X/Z coordinate, tail, rig, clips, UVs, weights and all material/image payloads"
+  ],
+  "contact_vertex_counts": {
+    "eye_complex": 2136,
+    "spiracles": 824,
+    "mouth": 415
+  },
+  "unaltered_binary_bytes": 2218464,
+  "binary_bytes": 2299464,
+  "non_contact_geometry_unchanged": true,
+  "planform_byte_exact": true,
+  "disc_camber_byte_exact": true,
+  "animations_and_materials_byte_exact": true,
+  "surgical_glb_patch": true,
+  "blender_export_performed": false,
+  "parent_bounds": {
+    "position": [
+      -1.4000000547751574,
+      0.041323328935230635,
+      -2.9204385623594726
+    ],
+    "size": [
+      2.799999940024254,
+      0.5116765180285183,
+      3.860438932048889
+    ],
+    "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights"
+  },
+  "authored_bind_bounds": {
+    "position": [
+      -1.4000000547751574,
+      0.05801952617678125,
+      -2.9204385623594726
+    ],
+    "size": [
+      2.799999940024254,
+      0.4949803207869677,
+      3.860438932048889
+    ],
+    "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights"
+  },
+  "metrics_before": {
+    "triangles": 20000,
+    "vertices": 12282,
+    "meshes": 1,
+    "skin_aware_bounds": {
+      "position": [
+        -1.4000000547751574,
+        0.041323328935230635,
+        -2.9204385623594726
+      ],
+      "size": [
+        2.799999940024254,
+        0.5116765180285183,
+        3.860438932048889
+      ],
+      "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights"
+    }
+  },
+  "metrics_after": {
+    "triangles": 20000,
+    "vertices": 12282,
+    "meshes": 1,
+    "skin_aware_bounds": {
+      "position": [
+        -1.4000000547751574,
+        0.05801952617678125,
+        -2.9204385623594726
+      ],
+      "size": [
+        2.799999940024254,
+        0.4949803207869677,
+        3.860438932048889
+      ],
+      "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights"
+    }
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "clip_durations": {
+      "Attack": 1.0416666666666667,
+      "AttackHeavy": 1.4166666666666667,
+      "Block": 1,
+      "Death": 1.7083333333333333,
+      "Feed": 3.2083333333333335,
+      "HitReact": 0.5833333333333334,
+      "Idle": 4,
+      "Interact": 2,
+      "Investigate": 2.7916666666666665,
+      "Recovery": 0.7916666666666666,
+      "Running": 0.7083333333333334,
+      "Sleep": 4.583333333333333,
+      "Threaten": 2.2916666666666665,
+      "Walking": 1.1666666666666667,
+      "Windup": 0.7083333333333334
+    },
+    "joints": 13,
+    "images": 1,
+    "triangles": 20000
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M18\\v003\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M18\\v003\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M18\\v003\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M18\\v003\\quarter.png"
+  ],
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "user_accepted": false,
+  "integrated": false,
+  "limitations": [
+    "Contact-only repair of retained simplified anatomy; no new eye/gill topology or aquatic controller.",
+    "Studio previews require main-owned native shader/motion inspection; no gameplay approval."
+  ],
+  "original_input_historical_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M18_Shroud_Swimmer.glb",
+  "editable_import_metrics": {
+    "triangles": 20000,
+    "vertices": 12282,
+    "meshes": 1,
+    "geometry_sha256": "23b29e645f0d4263dac1677ed991fa855c33a1a3ecf48c3495d5ed345317bb62",
+    "bounds_blender_z_up": [
+      [
+        -1.4000003337860107,
+        -0.9400004148483276,
+        0.058019526302814484
+      ],
+      [
+        1.4000000953674316,
+        2.920438051223755,
+        0.5529998540878296
+      ]
+    ]
+  },
+  "studio_four_views_inspected": true
+}

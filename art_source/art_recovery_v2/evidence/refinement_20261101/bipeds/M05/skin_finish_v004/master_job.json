@@ -1,0 +1,9 @@
+{
+  "id": "M05",
+  "material": "M05_ClaySkin",
+  "old_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_v003.blend",
+  "old_source_sha256": "b6fb2074a0fedf02f4606c5cdd9af74068e5443ab857a0af11f8201cb7be90fc",
+  "new_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_skin_v004.blend",
+  "new_png": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M05\\skin_finish_v004\\M05_skin_albedo_filtered.png",
+  "new_png_sha256": "0f5e3116608045e3feb233b646cb274b43113306c40c1ef172cbc31717f072df"
+}

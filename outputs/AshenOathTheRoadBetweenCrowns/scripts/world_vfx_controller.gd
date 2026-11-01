@@ -9,6 +9,7 @@ var elapsed := 0.0
 var update_accumulator := 0.0
 var shared_mote_mesh: SphereMesh
 var shared_mote_material: StandardMaterial3D
+var shared_pulse_mesh: ArrayMesh
 const UPDATE_INTERVAL := 1.0 / 10.0
 
 func configure(active_zone: String, quality_preset: String) -> void:
@@ -39,12 +40,12 @@ func pulse_interaction(world_position: Vector3, color: Color = Color(0.72, 0.84,
 		return
 	var pulse := MeshInstance3D.new()
 	pulse.name = "InteractionCompletionPulse"
-	var mesh := CylinderMesh.new()
-	mesh.top_radius = 0.5
-	mesh.bottom_radius = 0.5
-	mesh.height = 0.012
-	mesh.radial_segments = 20 if quality == "potato" else 32
-	pulse.mesh = mesh
+	# A hollow, surface-following mark leaves the completed object visible.
+	# Shared annulus geometry also avoids a cylinder's unused wall/bottom faces.
+	if shared_pulse_mesh == null:
+		shared_pulse_mesh = _make_pulse_ring(20 if quality == "potato" else 32)
+	pulse.mesh = shared_pulse_mesh
+	pulse.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	pulse.scale = Vector3(0.18, 0.01, 0.18)
 	var material := StandardMaterial3D.new()
 	material.albedo_color = Color(color.r, color.g, color.b, 0.42)
@@ -53,6 +54,7 @@ func pulse_interaction(world_position: Vector3, color: Color = Color(0.72, 0.84,
 	material.emission = color
 	material.emission_energy_multiplier = 0.34
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	pulse.material_override = material
 	add_child(pulse)
 	var elevated := Vector3(world_position.x, world_position.y + 0.06, world_position.z)
@@ -65,6 +67,28 @@ func pulse_interaction(world_position: Vector3, color: Color = Color(0.72, 0.84,
 		active_pulses = maxi(0, active_pulses - 1)
 		pulse.queue_free()
 	)
+
+func _make_pulse_ring(segments: int) -> ArrayMesh:
+	var vertices := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var indices := PackedInt32Array()
+	for index in range(segments):
+		var angle := TAU * float(index) / float(segments)
+		for radius in [0.41, 0.5]:
+			vertices.append(Vector3(cos(angle) * radius, 0, sin(angle) * radius))
+			normals.append(Vector3.UP)
+		var a := index * 2
+		var b := ((index + 1) % segments) * 2
+		indices.append_array(PackedInt32Array([a, b, a + 1, a + 1, b, b + 1]))
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	mesh.resource_name = "SharedInteractionCompletionRing"
+	return mesh
 
 func budget_snapshot() -> Dictionary:
 	return {"quality": quality, "motes": mote_positions.size(), "active_pulses": active_pulses}

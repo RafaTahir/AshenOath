@@ -1,0 +1,9 @@
+{
+  "id": "M01",
+  "material": "M01_PeatSkin",
+  "old_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M01_refined_timing_v003.blend",
+  "old_source_sha256": "a08a2ca236f84e3cd67669720128a3a0302492e980f93661c1907fca0981edb6",
+  "new_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M01_refined_timing_skin_v004.blend",
+  "new_png": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M01\\skin_finish_v004\\M01_skin_albedo_filtered.png",
+  "new_png_sha256": "f000cf478ca45fa2cf626e83290e5862749f495b5f0dee728873ac7bc90bcef3"
+}

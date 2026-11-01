@@ -7,6 +7,7 @@ const Interactable = preload("res://scripts/interactable.gd")
 const Prop = preload("res://scripts/interactive_world_prop.gd")
 const Presence = preload("res://scripts/character_presence.gd")
 const Work = preload("res://scripts/saga_work_presentation.gd")
+const Craft = preload("res://scripts/prop_craft_geometry.gd")
 const OWNER := "GreyfenVillageDetails"
 const WOOD := Color(0.29, 0.21, 0.13)
 const IRON := Color(0.23, 0.25, 0.24)
@@ -189,8 +190,7 @@ func _box(parent: Node3D, point: Vector3, size: Vector3, color: Color = WOOD, mo
 
 func _flush_static() -> void:
 	for entry: Dictionary in _static.values():
-		var mesh := BoxMesh.new()
-		mesh.size = Vector3.ONE
+		var mesh := Craft.box()
 		var batches: Dictionary = {}
 		for transform: Transform3D in entry.transforms:
 			var cell := Vector2i(floori(transform.origin.x / 8.0), floori(transform.origin.z / 8.0))
@@ -202,7 +202,7 @@ func _flush_static() -> void:
 			batch.multimesh.transform_format = MultiMesh.TRANSFORM_3D
 			batch.multimesh.mesh = mesh
 			batch.multimesh.instance_count = transforms.size()
-			batch.material_override = game._mat(entry.color)
+			batch.material_override = Craft.material(entry.color, "iron" if entry.color == IRON else ("cloth" if entry.color == LINEN else "timber"), game._mat(entry.color))
 			add_child(batch)
 			for index in transforms.size(): batch.multimesh.set_instance_transform(index, transforms[index])
 	_static.clear()

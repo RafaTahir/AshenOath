@@ -1,0 +1,105 @@
+{
+  "id": "M18",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M18\\v002\\M18_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M18\\v002\\M18_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M18_Shroud_Swimmer.glb",
+  "input_sha256": "23670cf364e7819d71668c67a6da8a4ca868e077f1cfdf98d009abe89bd4b683",
+  "changes": [
+    "Thicken central ray disc through a continuous camber field",
+    "Seat eyes into the dorsal body and raise flexible outer fins",
+    "Bend unbarbed tail into a soft aquatic curve while retaining all controls"
+  ],
+  "metrics_before": {
+    "triangles": 20000,
+    "vertices": 12214,
+    "meshes": 1,
+    "bounds_blender_z_up": [
+      [
+        -1.3999998569488525,
+        -0.9400005340576172,
+        0.023323306813836098
+      ],
+      [
+        1.3999998569488525,
+        2.920438766479492,
+        0.304999977350235
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 20000,
+    "vertices": 12214,
+    "meshes": 1,
+    "bounds_blender_z_up": [
+      [
+        -1.3999998569488525,
+        -0.9400005340576172,
+        0.041323307901620865
+      ],
+      [
+        1.3999998569488525,
+        2.920438766479492,
+        0.5529999136924744
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 13,
+    "images": 1,
+    "triangles": 20000
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M18\\v002\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M18\\v002\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M18\\v002\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M18\\v002\\quarter.png"
+  ],
+  "source_sha256": "5366578e8a351384c47c26cfcb75561b27862b39de01b2bc2ce8491d85669b6e",
+  "runtime_sha256": "822dbb1f9dd45456c8bd47d89894b65e4c7da03798e44e6d4122fd0694ee2741",
+  "runtime_bytes": 2398508,
+  "rig_signature": "7f2ee3a72d7b845e53be5dc8b60cabb8308cef8cad7731b935d4bd073b215af6",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "M13",
+  "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+  "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M13\\review.json",
+  "views": [
+    "front",
+    "side",
+    "rear",
+    "quarter",
+    "walk_04",
+    "action_Interact"
+  ],
+  "layout_version": 2,
+  "resampling": "Aspect preserved; no retouching"
+}

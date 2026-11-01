@@ -1,0 +1,112 @@
+{
+  "id": "M06",
+  "baseline_runtime": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M06_Rootbound_Colossus.glb",
+  "baseline_sha256": "6db195946719fd194b5b4e3a0f716d01871bf63ede4b0a0bf46be763221a64c5",
+  "baseline_layered_master": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\M06_Rootbound_bark_v002.blend",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M06_refined_timing_v003.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M06\\M06_refined.glb",
+  "changes": [
+    "Asymmetric shallow bark planes interrupt the round arm/trunk silhouette",
+    "Directional bark fissures and roughness, smoother exposed old heartwood",
+    "Native-inspected final surface uses subtle stochastic pores in place of repeating directional skin grain"
+  ],
+  "before_bounds": [
+    [
+      -1.9871426820755005,
+      1.9679988622665405
+    ],
+    [
+      -1.1144856214523315,
+      0.6566475033760071
+    ],
+    [
+      0.004818177781999111,
+      4.400448799133301
+    ]
+  ],
+  "after_bounds": [
+    [
+      -1.9475836753845215,
+      2.0046043395996094
+    ],
+    [
+      -1.1144856214523315,
+      0.6566475033760071
+    ],
+    [
+      0.0048181782476603985,
+      4.400448799133301
+    ]
+  ],
+  "actions": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "rendered_views": [
+    "front",
+    "quarter",
+    "side",
+    "rear"
+  ],
+  "limitations": "Retained adapted action library, not a new species-specific performance; final regional/user visual acceptance pending.",
+  "user_accepted": false,
+  "previous_finishing_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M06_refined.blend",
+  "source_sha256": "33c50abae5ef4ca6acb0ab87983d4fcf733e998d3fcb425aaf84ca660a35f358",
+  "runtime_sha256": "bd2eabec62e9b010b602682ed7265e5ce6e9795d113df54393f598253cf84b78",
+  "source_render_scope": "Final textured Workbench source views; current native engine views evaluate the normal/ORM shading",
+  "previous_surface_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M06_refined_surface_v002.blend",
+  "timing_verification": {
+    "baseline_durations": {
+      "Attack": 1.0416666269302368,
+      "AttackHeavy": 1.4166666269302368,
+      "Block": 1.0,
+      "Death": 1.7083333730697632,
+      "Feed": 3.2083332538604736,
+      "HitReact": 0.5833333134651184,
+      "Idle": 4.0,
+      "Interact": 2.0,
+      "Investigate": 2.7916667461395264,
+      "Recovery": 0.7916666865348816,
+      "Running": 0.7083333134651184,
+      "Sleep": 4.583333492279053,
+      "Threaten": 2.2916667461395264,
+      "Walking": 1.1666666269302368,
+      "Windup": 0.7083333134651184
+    },
+    "final_durations": {
+      "Attack": 1.0416666269302368,
+      "AttackHeavy": 1.4166666269302368,
+      "Block": 1.0,
+      "Death": 1.7083333730697632,
+      "Feed": 3.2083332538604736,
+      "HitReact": 0.5833333134651184,
+      "Idle": 4.0,
+      "Interact": 2.0,
+      "Investigate": 2.7916667461395264,
+      "Recovery": 0.7916666865348816,
+      "Running": 0.7083333134651184,
+      "Sleep": 4.583333492279053,
+      "Threaten": 2.2916667461395264,
+      "Walking": 1.1666666269302368,
+      "Windup": 0.7083333134651184
+    },
+    "source_fps": 24,
+    "sampled_pose_bytes_preserved": true
+  },
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M06_Rootbound_Colossus.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

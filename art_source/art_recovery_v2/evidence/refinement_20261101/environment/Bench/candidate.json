@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/props/Bench.obj",
+  "roles": [
+    "castle_bench"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Bench\\Bench.obj",
+  "source_sha256": "dd8d3c1b186efab2e49060bee2f6d27964113e39134309b9cf1e705de68791ba",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Bench.blend",
+  "runtime_sha256": "9401f15a118004678cdb3bb6ded70ab7163876cade1664f4b262502217e0abe9",
+  "change": "Worn seat edges and relieved trestle corners.",
+  "before_triangles": 404,
+  "after_triangles": 984,
+  "bounds_drift": 2.9802322387695312e-08,
+  "material_slots": {
+    "Bench_Cube.011": [
+      "MI_Trim_Furniture",
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

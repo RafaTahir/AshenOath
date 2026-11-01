@@ -1,6 +1,12 @@
 {
   "schema_version": 1,
   "textures": {
+    "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.png": {
+      "consumers": [
+        "adjacent"
+      ],
+      "owner": "adjacent"
+    },
     "res://assets_external/environment/forest/Bark_NormalTree.png": {
       "consumers": [
         "opening"
@@ -189,6 +195,32 @@
     },
     "res://assets_external/environment/village/T_WoodTrim_Roughness.png": {
       "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/textures/runtime/cobblestone_albedo.jpg": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/textures/runtime/forest_ground_albedo.jpg": {
+      "consumers": [
+        "campaign",
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/textures/runtime/medieval_brick_albedo.jpg": {
+      "consumers": [
+        "opening"
+      ],
+      "owner": "opening"
+    },
+    "res://assets_external/textures/runtime/wet_mud_albedo.jpg": {
+      "consumers": [
+        "campaign",
         "opening"
       ],
       "owner": "opening"

@@ -249,10 +249,10 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 	var diagnostic_fallback := fallback_category in ["characters", "enemies"] and bool(runtime_policy.get("release_blocked", false))
 	if diagnostic_fallback:
 		_record_runtime_role_use(role_name, fallback_category, path, runtime_policy)
-	if path != "" and (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
+	var prepared := PreparedActorCatalog.entry(role_name, path, variant_seed) if not building_prepared_assets else {}
+	var selected_path := str(prepared.get("path", path))
+	if selected_path != "" and (ResourceLoader.exists(selected_path) or FileAccess.file_exists(selected_path)):
 		var profile_started := Time.get_ticks_usec()
-		var prepared := PreparedActorCatalog.entry(role_name, path, variant_seed) if not building_prepared_assets else {}
-		var selected_path := str(prepared.get("path", path))
 		var resource = _load_cached_resource(selected_path)
 		if not prepared.is_empty() and resource == null:
 			push_error("Required prepared actor is missing: %s (%s)" % [role_name, selected_path])
@@ -668,6 +668,8 @@ func prewarm_roles(role_names: Array) -> Dictionary:
 			continue
 		var entry: Dictionary = database.get_asset_for_role(role)
 		var path := str(entry.get("path", ""))
+		var prepared := PreparedActorCatalog.entry(role, path) if not building_prepared_assets else {}
+		path = str(prepared.get("path", path))
 		if path == "" or not (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
 			missing.append(role)
 			continue

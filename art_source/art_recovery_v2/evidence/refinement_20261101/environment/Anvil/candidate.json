@@ -1,0 +1,22 @@
+{
+  "resource": "res://assets_external/environment/props/Anvil.obj",
+  "roles": [
+    "blacksmith_shop"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Anvil\\Anvil.obj",
+  "source_sha256": "c9b1b663962f5dcc7b2ff9b999b6d1347849fdbed730395b2d24782bce76a85f",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Anvil.blend",
+  "runtime_sha256": "887d3d221f07797df67dc6f1d0c543a59fa2e731f249fe14838774483bf9969c",
+  "change": "Soft forge-worn horn, heel and working-face arrises; broad planes retain weight.",
+  "before_triangles": 750,
+  "after_triangles": 1216,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "Anvil_Cube.025": [
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

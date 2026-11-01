@@ -1,0 +1,24 @@
+{
+  "resource": "res://assets_external/environment/village/Wall_Plaster_Straight_Base.obj",
+  "roles": [
+    "greyfen_wall_facade"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_Plaster_Straight_Base\\Wall_Plaster_Straight_Base.obj",
+  "source_sha256": "74c064faa434280a12594747390839148d787b98340b9910015e9514e8352ad4",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_Plaster_Straight_Base.blend",
+  "runtime_sha256": "571b94422e85fccae2f7f5c40a71c3bbe5e4bf5edf973d77fc8c83a80c7f1a6d",
+  "change": "Plaster base and supporting timber arrises gain a narrow reveal.",
+  "before_triangles": 64,
+  "after_triangles": 108,
+  "bounds_drift": 2.9802322387695312e-08,
+  "material_slots": {
+    "Wall_Plaster_Straight_Base": [
+      "MI_WoodTrim",
+      "MI_Plaster",
+      "MI_Brick"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

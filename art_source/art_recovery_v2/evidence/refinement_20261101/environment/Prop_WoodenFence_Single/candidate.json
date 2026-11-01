@@ -1,0 +1,22 @@
+{
+  "resource": "res://assets_external/environment/village/Prop_WoodenFence_Single.obj",
+  "roles": [
+    "fence"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Prop_WoodenFence_Single\\Prop_WoodenFence_Single.obj",
+  "source_sha256": "3107b933b169ffa7c8936c1d86ee283d6286a99f4048ed6096d89c475a7376a1",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Prop_WoodenFence_Single.blend",
+  "runtime_sha256": "523d41362a69e0090f9ae4e17507a40d36ebfff73f76cda17cb889497bca0e39",
+  "change": "Fence posts and rails receive visibly worked timber edges.",
+  "before_triangles": 40,
+  "after_triangles": 120,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "Prop_WoodenFence_Single": [
+      "MI_WoodTrim"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

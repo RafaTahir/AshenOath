@@ -1,0 +1,36 @@
+{
+	"accepted": false,
+	"action_midpoint_views": [
+		"action_Attack.png",
+		"action_AttackHeavy.png",
+		"action_Block.png",
+		"action_HitReact.png",
+		"action_Interact.png"
+	],
+	"asset": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+	"asset_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
+	"authored_material_contract": true,
+	"clips": [
+		"Attack",
+		"AttackHeavy",
+		"Block",
+		"Death",
+		"Feed",
+		"HitReact",
+		"Idle",
+		"Interact",
+		"Investigate",
+		"Recovery",
+		"Running",
+		"Sleep",
+		"Threaten",
+		"Walking",
+		"Windup"
+	],
+	"framing_source": "skin-aware authored bind bounds / square art viewport",
+	"idle_clip": "Idle",
+	"owned_locomotion": false,
+	"scope": "isolated native/shared clip art preview, not gameplay acceptance",
+	"walk_clip": "Walking",
+	"walk_cycle_seconds": 4.83333349227905
+}

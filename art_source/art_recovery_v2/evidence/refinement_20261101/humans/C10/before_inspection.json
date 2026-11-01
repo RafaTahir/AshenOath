@@ -1,0 +1,31 @@
+{
+  "id": "C10",
+  "current": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\humans\\C10_Steward_Merrow.glb",
+  "sha256": "675ffc91e7ea9c27a91037d0ee6ce3d91b6e2ed41203496724b745e7c94096a4",
+  "source_surfaces": [
+    {
+      "mesh": "C10_MotionFittedAssembly",
+      "vertices": 17513,
+      "polygons": 27992,
+      "materials": [
+        "Steward_Merrow_C10_PrivateAnatomyAtlas",
+        "Steward_Merrow_C10_AuthoredClothesAtlas",
+        "Steward_Merrow_MI_Peasant",
+        "Steward_Merrow_MI_Regular_Male"
+      ],
+      "bounds": [
+        [
+          -0.8994144201278687,
+          -0.24537600576877594,
+          -0.003967864904552698
+        ],
+        [
+          0.8994148969650269,
+          0.2582423686981201,
+          1.8168909549713135
+        ]
+      ]
+    }
+  ],
+  "actions": []
+}

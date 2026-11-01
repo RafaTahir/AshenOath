@@ -1,0 +1,31 @@
+{
+  "id": "C09",
+  "current": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\humans\\C09_Record_Keeper_Vale.glb",
+  "sha256": "551118d217688cbf9f172a8b3a36edeeec734b0b8f88ff7c8ddc07e86402262b",
+  "source_surfaces": [
+    {
+      "mesh": "C09_MotionFittedAssembly",
+      "vertices": 15095,
+      "polygons": 21170,
+      "materials": [
+        "Record_Keeper_Vale_C09_PrivateAnatomyAtlas",
+        "Record_Keeper_Vale_C09_AuthoredClothesAtlas",
+        "Record_Keeper_Vale_MI_Peasant",
+        "Record_Keeper_Vale_MI_Peasant.001"
+      ],
+      "bounds": [
+        [
+          -0.8319412469863892,
+          -0.188859224319458,
+          -0.0067438287660479546
+        ],
+        [
+          0.8319414854049683,
+          0.1672552078962326,
+          1.773973822593689
+        ]
+      ]
+    }
+  ],
+  "actions": []
+}

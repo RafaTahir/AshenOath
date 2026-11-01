@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/village/Prop_Chimney.obj",
+  "roles": [
+    "greyfen_chimney"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Prop_Chimney\\Prop_Chimney.obj",
+  "source_sha256": "37f81fa34a61843ab570b8d4a96697863d32fd3e8744ad2df51be3ef8f94bcdf",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Prop_Chimney.blend",
+  "runtime_sha256": "10a21b11c9195c3abf107d77c0efb99d2ff349dce28be6f5b10d6a9c19d44663",
+  "change": "Chimney cap and exposed masonry corners catch grazing light.",
+  "before_triangles": 618,
+  "after_triangles": 1328,
+  "bounds_drift": 6.223643822522718e-11,
+  "material_slots": {
+    "Prop_Chimney": [
+      "MI_RockTrim",
+      "MI_Brick"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

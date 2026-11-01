@@ -1,0 +1,110 @@
+{
+  "id": "M07",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M07\\M07_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M07\\M07_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M07_Ashwing_Carrion_Drake.glb",
+  "input_sha256": "36af7cdca991930b89a27c99a70430f9d4fd7268a7482906967527ee3e364cf2",
+  "changes": [
+    "Narrow hooked cranial planes and angular sternum",
+    "Camber retained skinned membranes between wing supports",
+    "Retain two-leg/two-wing anatomy and all native state actions"
+  ],
+  "metrics_before": {
+    "triangles": 33999,
+    "vertices": 20954,
+    "meshes": 1,
+    "geometry_sha256": "1cde3cf3c547490a23fb3fd805e0feffe397ce685c690c3a30cf32e7c9d8ab72",
+    "bounds_blender_z_up": [
+      [
+        -4.255002021789551,
+        -1.5153290033340454,
+        0.05995771661400795
+      ],
+      [
+        4.2548651695251465,
+        3.5978786945343018,
+        4.228159427642822
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 33999,
+    "vertices": 20954,
+    "meshes": 1,
+    "geometry_sha256": "bd59b21a69f02491854fcb50b91bcea2d787c6e1765224b45ae89ff9e5a9d280",
+    "bounds_blender_z_up": [
+      [
+        -4.255002021789551,
+        -1.5153290033340454,
+        0.05995771661400795
+      ],
+      [
+        4.2548651695251465,
+        3.5978786945343018,
+        4.211633682250977
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 28,
+    "images": 1,
+    "triangles": 33999
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M07\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M07\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M07\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M07\\quarter.png"
+  ],
+  "source_sha256": "cd0c21cc46a50645f70e1ec6a96fc78ea458055aefb7b04077b30be41f359afe",
+  "runtime_sha256": "82f045efea94bd7208c854ed9c515f9c077847cc09f2fdb32ab66e59af9c1e51",
+  "runtime_bytes": 3212996,
+  "rig_signature": "21481ebe79cb2e5ce61a9438a238968003d2471d48fba78bb74bfa0a03b4fce9",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M07_Ashwing_Carrion_Drake.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

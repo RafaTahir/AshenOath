@@ -1,0 +1,60 @@
+{
+  "scope": "Current regenerated outputs; additional diagnostics retain untouched historical provenance rather than restamping it",
+  "changed_output_source_fingerprints_checked": 165,
+  "changed_output_errors": [],
+  "changed_outputs_all_current": true,
+  "all_inventory_fingerprints_examined": 219,
+  "untouched_historical_fingerprint_differences": [
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_black_feathers_Evidence.res",
+      "source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "expected": "b426248c749635f3fcacac6b91b29273b63059ef57bd03fffa628fe766a49b3e"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_black_feathers_Evidence.res",
+      "source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "expected": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_claw_marks_Evidence.res",
+      "source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "expected": "b426248c749635f3fcacac6b91b29273b63059ef57bd03fffa628fe766a49b3e"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_claw_marks_Evidence.res",
+      "source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "expected": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_corpse_Evidence.res",
+      "source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "expected": "b426248c749635f3fcacac6b91b29273b63059ef57bd03fffa628fe766a49b3e"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_corpse_Evidence.res",
+      "source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "expected": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_oren_token_Evidence.res",
+      "source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "expected": "b426248c749635f3fcacac6b91b29273b63059ef57bd03fffa628fe766a49b3e"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_oren_token_Evidence.res",
+      "source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "expected": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_tracks_Evidence.res",
+      "source": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "expected": "b426248c749635f3fcacac6b91b29273b63059ef57bd03fffa628fe766a49b3e"
+    },
+    {
+      "output": "res://assets_external/environment/forest/Wychwood_tracks_Evidence.res",
+      "source": "res://assets_external/characters_universal/runtime/Villager_Male_Atlas.gltf",
+      "expected": "7039f60e180bcf8c1d699790e5cc578ef8d287e26e878ce4f7495d0549c36544"
+    }
+  ],
+  "untouched_records_modified": false
+}

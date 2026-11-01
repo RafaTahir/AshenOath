@@ -1,0 +1,9 @@
+{
+  "id": "M20",
+  "material": "M20_CharcoalOliveHide",
+  "old_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M20_refined_timing_v003.blend",
+  "old_source_sha256": "c9e84fad2bf57daf59d800dfca4018c321d0d2257369e470ef1099fa2ac4bebf",
+  "new_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M20_refined_timing_skin_v004.blend",
+  "new_png": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M20\\skin_finish_v004\\M20_skin_albedo_filtered.png",
+  "new_png_sha256": "c948a3aba1dec9769d2265cb980c8c57bf90ddd44ea3addb7671a536e949ace1"
+}

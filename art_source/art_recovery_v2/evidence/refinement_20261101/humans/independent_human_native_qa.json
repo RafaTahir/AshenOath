@@ -1,0 +1,194 @@
+{
+  "scope": "Current-hash isolated native art captures: four angles, one walk phase and Interact midpoint; not campaign/performance/user approval",
+  "assets": [
+    {
+      "id": "C01",
+      "runtime_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C01_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C04",
+      "runtime_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C04_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C02",
+      "runtime_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C02_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C03",
+      "runtime_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C03_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C11",
+      "runtime_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C11_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C05",
+      "runtime_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C05_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C06",
+      "runtime_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C06_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C12",
+      "runtime_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C12_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C07",
+      "runtime_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C07_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C08",
+      "runtime_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C08_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C09",
+      "runtime_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C09_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "C10",
+      "runtime_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\C10_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    },
+    {
+      "id": "P01",
+      "runtime_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
+      "views_inspected": [
+        "front",
+        "side",
+        "rear",
+        "quarter",
+        "walk_04",
+        "action_Interact"
+      ],
+      "sheet": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\native_qa\\P01_native_six.png",
+      "findings": "No missing textures, new disconnected added parts, or head/foot cropping observed in these art samples."
+    }
+  ],
+  "nonblocking_limits": [
+    "C03/C04/C11 retain voluminous adapted apron silhouettes from the baseline; source fit was not replaced.",
+    "Small rear ledgers and clasps are deliberately subtle and low contrast at full-body viewing distance.",
+    "C01 retains fine baseline face/neck grain; no retained human image pixels were recolored."
+  ],
+  "material_pose_framing_regressions_found": false,
+  "user_accepted": false
+}

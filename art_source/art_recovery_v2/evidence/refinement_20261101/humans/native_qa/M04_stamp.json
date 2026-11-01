@@ -1,0 +1,15 @@
+{
+  "id": "M04",
+  "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
+  "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M04\\review.json",
+  "views": [
+    "front",
+    "side",
+    "rear",
+    "quarter",
+    "walk_04",
+    "action_Attack"
+  ],
+  "layout_version": 3,
+  "resampling": "Aspect preserved; no retouching"
+}

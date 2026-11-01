@@ -1,0 +1,158 @@
+[
+  {
+    "path": "assets_external/characters/Sword.fbx",
+    "objects": [
+      {
+        "name": "Sword",
+        "dimensions": [
+          0.7711480855941772,
+          0.22855481505393982,
+          4.35252046585083
+        ],
+        "materials": [
+          {
+            "name": "Metal",
+            "color": [
+              0.4969184696674347,
+              0.4969184696674347,
+              0.4969184696674347,
+              1.0
+            ],
+            "metallic": 0.0,
+            "textures": [],
+            "faces": 32
+          },
+          {
+            "name": "Red",
+            "color": [
+              0.14239774644374847,
+              0.015501611866056919,
+              0.006905713118612766,
+              1.0
+            ],
+            "metallic": 0.0,
+            "textures": [],
+            "faces": 40
+          },
+          {
+            "name": "Gold",
+            "color": [
+              0.6500004529953003,
+              0.28360170125961304,
+              0.0492156520485878,
+              1.0
+            ],
+            "metallic": 0.0,
+            "textures": [],
+            "faces": 156
+          },
+          {
+            "name": "Brown",
+            "color": [
+              0.10653173178434372,
+              0.04656227305531502,
+              0.020490841940045357,
+              1.0
+            ],
+            "metallic": 0.0,
+            "textures": [],
+            "faces": 24
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "path": "assets_external/characters/Ranger_Bow.fbx",
+    "objects": [
+      {
+        "name": "Ranger_Bow",
+        "dimensions": [
+          0.7427879571914673,
+          0.3079754710197449,
+          3.0680580139160156
+        ],
+        "materials": [
+          {
+            "name": "Ranger_Bow",
+            "color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "metallic": 1.0,
+            "textures": [],
+            "faces": 662
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "path": "assets_external/characters/Ranger_Arrow.fbx",
+    "objects": [
+      {
+        "name": "Ranger_Bow",
+        "dimensions": [
+          0.7427879571914673,
+          0.3079754710197449,
+          3.0680580139160156
+        ],
+        "materials": [
+          {
+            "name": "Ranger_Bow",
+            "color": [
+              0.800000011920929,
+              0.800000011920929,
+              0.800000011920929,
+              1.0
+            ],
+            "metallic": 1.0,
+            "textures": [],
+            "faces": 662
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "path": "assets_external/design_pack_v1/C01_ash_staff.glb",
+    "objects": [
+      {
+        "name": "C01_AshStaff",
+        "dimensions": [
+          0.04626862704753876,
+          0.04448583722114563,
+          1.5099999904632568
+        ],
+        "materials": [
+          {
+            "name": "C01_StaffAshWood",
+            "color": [
+              0.12999999523162842,
+              0.07900000363588333,
+              0.03500000014901161,
+              1.0
+            ],
+            "metallic": 0.0,
+            "textures": [],
+            "faces": 476
+          },
+          {
+            "name": "C01_StaffGrip",
+            "color": [
+              0.054999999701976776,
+              0.03700000047683716,
+              0.023000000044703484,
+              1.0
+            ],
+            "metallic": 0.0,
+            "textures": [],
+            "faces": 212
+          }
+        ]
+      }
+    ]
+  }
+]

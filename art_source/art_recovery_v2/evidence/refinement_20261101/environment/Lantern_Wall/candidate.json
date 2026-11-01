@@ -1,0 +1,22 @@
+{
+  "resource": "res://assets_external/environment/props/Lantern_Wall.obj",
+  "roles": [
+    "castle_lantern"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Lantern_Wall\\Lantern_Wall.obj",
+  "source_sha256": "7acff034e0ad398f533c9f78af0f27a1798b906280091eea2b960bc7a2568a2f",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Lantern_Wall.blend",
+  "runtime_sha256": "b78de08c2f8e4da96a91816c1657d6f398c7ff6954eff58d35c7f4af1b742f8c",
+  "change": "Forged frame and cap edges read around retained glass panels.",
+  "before_triangles": 2822,
+  "after_triangles": 6780,
+  "bounds_drift": 4.0978193283081055e-08,
+  "material_slots": {
+    "Lantern_Wall_Cube.018": [
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

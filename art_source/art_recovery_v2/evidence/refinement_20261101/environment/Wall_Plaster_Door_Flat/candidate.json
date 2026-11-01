@@ -1,0 +1,25 @@
+{
+  "resource": "res://assets_external/environment/village/Wall_Plaster_Door_Flat.obj",
+  "roles": [
+    "greyfen_house",
+    "greyfen_door_facade"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_Plaster_Door_Flat\\Wall_Plaster_Door_Flat.obj",
+  "source_sha256": "4d630ef8180073e8fc782c0de8a4b75adfb54a232fa2fa3b4ed427d201b8a396",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_Plaster_Door_Flat.blend",
+  "runtime_sha256": "e7812f10c74ac3cb217a79fa956c8d8dae798c6c32e3bcff7e6ca6c59c396e93",
+  "change": "Doorway returns and plaster/timber corners gain a narrow reveal.",
+  "before_triangles": 92,
+  "after_triangles": 156,
+  "bounds_drift": 2.9802322387695312e-08,
+  "material_slots": {
+    "Wall_Plaster_Door_Flat": [
+      "MI_WoodTrim",
+      "MI_Plaster",
+      "MI_RockTrim"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

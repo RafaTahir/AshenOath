@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/props/Barrel.obj",
+  "roles": [
+    "barrel"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Barrel\\Barrel.obj",
+  "source_sha256": "57532d8fe5a5e93c469f8e87b1de58f37ff0075ae3a290ed9d4c95ec01a7f631",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Barrel.blend",
+  "runtime_sha256": "94c67212b643e6df63bafdceec07e11b29b65a3a4f0a6786f05cb9bbc7d0fd3c",
+  "change": "Hoop and stave-rim edge catches; barrel facets retain their coopered construction.",
+  "before_triangles": 824,
+  "after_triangles": 1400,
+  "bounds_drift": 2.9802322387695312e-08,
+  "material_slots": {
+    "Barrel_Cylinder": [
+      "MI_Trim_Furniture",
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

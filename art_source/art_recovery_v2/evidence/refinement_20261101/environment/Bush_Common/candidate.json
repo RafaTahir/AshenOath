@@ -1,0 +1,22 @@
+{
+  "resource": "res://assets_external/environment/forest/Bush_Common.obj",
+  "roles": [
+    "forest_bush"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Bush_Common\\Bush_Common.obj",
+  "source_sha256": "276478abbd84d9f324c069d594ce5b24e7a80a91a12094acb76897e925988b96",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Bush_Common.blend",
+  "runtime_sha256": "09f180f39a461f9f3d81a0f154ace41e2e2c12f90a5bb9890e9865dbc056f18d",
+  "change": "Gently cupped foliage cards catch light across leaf clusters; retain two-sided atlas UVs.",
+  "before_triangles": 900,
+  "after_triangles": 1800,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "Bush_Common": [
+      "Leaves_TwistedTree"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

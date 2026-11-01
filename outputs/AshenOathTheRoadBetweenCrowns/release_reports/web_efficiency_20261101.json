@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "id": "web-efficiency-20261101",
+  "generated_at_utc": "2026-11-01T03:13:29.301888+00:00",
+  "status": "locally_packaged_resource_verified_not_published",
+  "build_id": "web-efficiency-20261101-r2",
+  "before_build_id": "cast-live-20261031-77a0e8e",
+  "before_bytes": 224496475,
+  "after_bytes": 198694544,
+  "saved_bytes": 25801931,
+  "saved_percent": 11.493245495280048,
+  "packs": [
+    {
+      "path": "packs/adjacent.pck",
+      "before_bytes": 2167923,
+      "after_bytes": 3042242,
+      "saved_bytes": -874319
+    },
+    {
+      "path": "packs/audio.pck",
+      "before_bytes": 18233614,
+      "after_bytes": 18233623,
+      "saved_bytes": -9
+    },
+    {
+      "path": "index.pck",
+      "before_bytes": 4825739,
+      "after_bytes": 4834923,
+      "saved_bytes": -9184
+    },
+    {
+      "path": "packs/campaign.pck",
+      "before_bytes": 8233902,
+      "after_bytes": 8233922,
+      "saved_bytes": -20
+    },
+    {
+      "path": "packs/characters.pck",
+      "before_bytes": 11576584,
+      "after_bytes": 8985719,
+      "saved_bytes": 2590865
+    },
+    {
+      "path": "packs/monsters.pck",
+      "before_bytes": 50496751,
+      "after_bytes": 37125154,
+      "saved_bytes": 13371597
+    },
+    {
+      "path": "packs/opening.pck",
+      "before_bytes": 94555311,
+      "after_bytes": 83832276,
+      "saved_bytes": 10723035
+    },
+    {
+      "path": "packs/opening_materials.pck",
+      "before_bytes": 16292264,
+      "after_bytes": 16292283,
+      "saved_bytes": -19
+    },
+    {
+      "path": "packs/quality_materials.pck",
+      "before_bytes": 7217189,
+      "after_bytes": 7217209,
+      "saved_bytes": -20
+    }
+  ],
+  "removed_redundant_actor_scenes": [
+    {
+      "pack": "characters",
+      "path": ".godot/imported/C07_Captain_Senn.glb-9317659e353ddaa1c78f071b6953551b.scn",
+      "bytes": 518294
+    },
+    {
+      "pack": "characters",
+      "path": ".godot/imported/C08_Lord_Edric_Vargan.glb-e5d57d7e7ffbd3810b2474e2342bf9d8.scn",
+      "bytes": 752282
+    },
+    {
+      "pack": "characters",
+      "path": ".godot/imported/C09_Record_Keeper_Vale.glb-c3782f67b0dfcdac107418c26f2310bb.scn",
+      "bytes": 595442
+    },
+    {
+      "pack": "characters",
+      "path": ".godot/imported/C10_Steward_Merrow.glb-5f6a2edbf14c5db6b4ba363b31d96d61.scn",
+      "bytes": 765394
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M01_Ghoulkin.glb-024289169e90d2c5af009edc680812e7.scn",
+      "bytes": 798613
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M02_Wychwood_Stalker.glb-65590617ff8e91621c83684c0a19db2f.scn",
+      "bytes": 1337166
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M03_Bog_Wretch.glb-cd7dcf25885632475ff1c9645fd3ed5d.scn",
+      "bytes": 775309
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M04_Gravebound_Knight.glb-c24ead684c5b6ffbc4cfc2396a4ba9a9.scn",
+      "bytes": 738750
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M05_Bell_Eater.glb-d38f7118cc59ae12a19eb6ef8a8304af.scn",
+      "bytes": 914749
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M06_Rootbound_Colossus.glb-cba24bd2860be6ac9ad8c41bfb4f09a9.scn",
+      "bytes": 1949824
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M07_Ashwing_Carrion_Drake.glb-870f52719e7b0c917d0cf3e869443a0b.scn",
+      "bytes": 1056011
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M08_White_Hart_Avatar.glb-228123d9e785121d5079fe3ec535d430.scn",
+      "bytes": 604141
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M09_Silt_Maw.glb-c94ee20a419109e4e4e1b94bc37b8433.scn",
+      "bytes": 440811
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M10_Millback.glb-c8a052cb1baf9f918c2d8eb22c6aa0ea.scn",
+      "bytes": 380345
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M11_Glassmoth.glb-2bd5fae60d6c4f68e5a8d91342311401.scn",
+      "bytes": 449003
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M12_Knell_Leech.glb-ac3cfdb4b29f939c66aed8ee20bc6b32.scn",
+      "bytes": 387555
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M14_Gallows_Weaver.glb-4bda48c9e3f7c0ef6f320a2f1006e434.scn",
+      "bytes": 545503
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M16_Inkblind.glb-e337a93255d90789d2632059d2e39fe4.scn",
+      "bytes": 250357
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M17_Cairn_Mother.glb-8c43386428296c6401fe05731439db82.scn",
+      "bytes": 827308
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M18_Shroud_Swimmer.glb-8d7713e58772e783024b6b0559024eea.scn",
+      "bytes": 576032
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M19_Wychwood_Raider.glb-9271bc2e98c72691813011bb05de5b64.scn",
+      "bytes": 760005
+    },
+    {
+      "pack": "monsters",
+      "path": ".godot/imported/M20_Wychwood_Brute.glb-98b90569a4e97d0e5c8cec1b27e0085d.scn",
+      "bytes": 790703
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/C01_Anwen.glb-309a810b6b4f850b0d0e4e766cb764fb.scn",
+      "bytes": 1291866
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/C02_Rook.glb-07a90aec14baeef71f8107848bfd07d1.scn",
+      "bytes": 720362
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/C03_Mira_Fen.glb-4d294c0163196716076a647d1788f00c.scn",
+      "bytes": 618050
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/C04_Blacksmith_Tor.glb-de62de8bdcfeb570891790a2f36f8ee0.scn",
+      "bytes": 633912
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/C05_Widow_Elna.glb-44ab41819901491e3d039e42c6c669b2.scn",
+      "bytes": 1786328
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/C06_Farmer_Toma.glb-8b8a2812faa91a14cc341a24c78100fa.scn",
+      "bytes": 736991
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/C11_Nessa.glb-45d46724876c90d3eb9473951f7f6690.scn",
+      "bytes": 633524
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/C12_Nera.glb-6b06a6e9550d9d778e0c5c67ce8056ce.scn",
+      "bytes": 563649
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/M15_Reed_Choir.glb-427f557e0eed637b138e3146ce0fc5ec.scn",
+      "bytes": 3363675
+    },
+    {
+      "pack": "opening",
+      "path": ".godot/imported/P01_Kael.glb-ac778c5a2da4b613ac523066a828d015.scn",
+      "bytes": 507097
+    }
+  ],
+  "removed_unused_imported_textures": [
+    {
+      "pack": "index",
+      "path": ".godot/imported/button_brown.png-dd217619632f06b1384640a8e6f724dd.ctex",
+      "bytes": 272
+    },
+    {
+      "pack": "index",
+      "path": ".godot/imported/icon.svg-7c8e6dfe2213e2029f33175ecfc9166b.ctex",
+      "bytes": 782
+    },
+    {
+      "pack": "index",
+      "path": ".godot/imported/panel_brown.png-e2466a17af1d19ceb00e8d105ad99fb5.ctex",
+      "bytes": 240
+    }
+  ],
+  "retained_texture_payloads_identical": 209,
+  "forbidden_authoring_payloads": [],
+  "recompiled_actor_semantic_signatures_identical": 13,
+  "validation": {
+    "package_integrity": "pass",
+    "web_export": "pass",
+    "isolated_packed_actor_and_dependency_gate": "pass",
+    "compiled_actors": 33,
+    "pack_completeness_unit_tests": 10,
+    "gameplay_and_visual_acceptance": "not_run_user_owned",
+    "publication": "not_requested"
+  }
+}

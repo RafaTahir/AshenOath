@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/props/Table_Large.obj",
+  "roles": [
+    "castle_table"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Table_Large\\Table_Large.obj",
+  "source_sha256": "55cab222b49f8ea477b703846e6e4abdcb18b4fe846fa97ed277f91914ad0001",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Table_Large.blend",
+  "runtime_sha256": "18570c9558c9718d616c4fd33393f05bd70370df2575f8a1d1409b314badcf04",
+  "change": "Tabletop and leg corners soften while the supporting footprint stays fixed.",
+  "before_triangles": 986,
+  "after_triangles": 2102,
+  "bounds_drift": 1.1641532182693481e-10,
+  "material_slots": {
+    "Table_Large_Cube.084": [
+      "MI_Trim_Furniture",
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

@@ -1,0 +1,26 @@
+{
+  "id": "Kael_hunting_arrow",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\equipment\\Kael_hunting_arrow.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets\\characters\\kael_arrow.glb",
+  "runtime_sha256": "85d596f7c69e013506a34aead6ad54b19e6a4564b01f15dc73e48865cf31fd5a",
+  "source_sha256": "2f2f3d1e55993bad629cc9587c708434a0e3f5abdedf09251f16dae2a4ec3ff5",
+  "changes": [
+    "Actual shaft, seated forged broadhead, three matte feather vanes, bindings and split nock replace the malformed bow-as-arrow source",
+    "Local +Y tip after glTF export; 2.6 source-unit length retains .30 quiver scale and .76m ArrowVisual normalization",
+    "Project-authored mesh/materials; no external textures or licensed components added"
+  ],
+  "bounds_blender": [
+    [
+      -0.04399999976158142,
+      -0.05645959824323654,
+      -1.2999999523162842
+    ],
+    [
+      0.06300000101327896,
+      0.05355960130691528,
+      1.2999999523162842
+    ]
+  ],
+  "triangles": 176,
+  "user_accepted": false
+}

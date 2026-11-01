@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/forest/TwistedTree_2.obj",
+  "roles": [
+    "forest_tree"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\TwistedTree_2\\TwistedTree_2.obj",
+  "source_sha256": "a90f263707278d79fd0e3f8c641f3042a789fc64ea2b4accb0b843d73e4b1e27",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\TwistedTree_2.blend",
+  "runtime_sha256": "2341e173fcda354242962bc1bc14494c18cf8fb1190bea9f3a5310882e38d74a",
+  "change": "Angle-aware trunk normals join bark around bends; leaf cards stay flat.",
+  "before_triangles": 9134,
+  "after_triangles": 9134,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "TwistedTree_2": [
+      "Bark_TwistedTree",
+      "Leaves_TwistedTree"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

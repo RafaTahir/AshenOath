@@ -171,8 +171,9 @@ var bow_quiver_attachment: BoneAttachment3D
 const BOW_MAX_DRAW := 1.0
 const BOW_RANGE := 24.0
 const MODELED_SWORD_PATH := "res://assets_external/characters/Sword.fbx"
+const HeldPropGeometry = preload("res://scripts/held_prop_geometry.gd")
 const MODELED_BOW_PATH := "res://assets_external/characters/Ranger_Bow.fbx"
-const MODELED_ARROW_PATH := "res://assets_external/characters/Ranger_Arrow.fbx"
+const MODELED_ARROW_PATH := "res://assets/characters/kael_arrow.glb"
 
 const BEAM_STATE_IDLE := ""
 const BEAM_STATE_SHEATHING := "sheathing"
@@ -1582,19 +1583,17 @@ func _build_bow_visual() -> void:
 	quiver_parent.add_child(bow_quiver_visual)
 	var quiver := MeshInstance3D.new()
 	quiver.name = "KaelArrowQuiver"
-	var quiver_mesh := CylinderMesh.new()
-	quiver_mesh.top_radius = 0.08
-	quiver_mesh.bottom_radius = 0.06
-	quiver_mesh.height = 0.60
-	quiver_mesh.radial_segments = 8
-	quiver.mesh = quiver_mesh
+	quiver.mesh = HeldPropGeometry.vessel(.08,.06,.60,.008,16)
 	quiver.material_override = _mat(Color(0.12, 0.07, 0.035))
 	bow_quiver_visual.add_child(quiver)
 	var modeled_arrow := _instantiate_modeled_prop(MODELED_ARROW_PATH)
 	if modeled_arrow != null:
 		modeled_arrow.name = "KaelQuiverArrow"
 		modeled_arrow.scale = Vector3.ONE * 0.30
-		modeled_arrow.position = Vector3(0.0, -0.18, 0.0)
+		# Seat the point toward the closed base and expose the fletching at the
+		# open rim. Nocked/projectile orientation remains owned by ArrowVisual.
+		modeled_arrow.rotation_degrees.x = 180.0
+		modeled_arrow.position = Vector3(0.0, 0.10, 0.0)
 		_prepare_modeled_prop(modeled_arrow, Color(0.58, 0.42, 0.24))
 		modeled_arrow.set_meta("equipment_visual_source", MODELED_ARROW_PATH)
 		bow_quiver_visual.add_child(modeled_arrow)
@@ -1645,6 +1644,7 @@ func _prepare_modeled_prop(root: Node3D, fallback_color: Color) -> void:
 				var fitted := material.duplicate() as StandardMaterial3D
 				fitted.albedo_color = fallback_color
 				fitted.roughness = 0.75
+				fitted.metallic = 0.0
 				mesh_instance.set_surface_override_material(surface_index, fitted)
 
 func _build_sheathed_sword() -> void:
@@ -1987,19 +1987,28 @@ func _attach_modeled_sword(oathblade: Node3D, blade_id: String = "steel") -> boo
 		if canonical_blade == null:
 			canonical_blade = mesh_instance
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-		# The imported FBX carries named materials, but their source values are
-		# too dark for the browser lighting profile. Keep the authored mesh and
-		# replace only the presentation material with a readable blade finish.
-		mesh_instance.material_override = finish
+		# Keep the blade readable while retaining leather grip, painted leather
+		# and brass fittings as separate physical surfaces. The prior whole-mesh
+		# override turned all four authored slots into the blade's steel/cyan.
 		if mesh_instance.mesh.get_surface_count() == 0:
 			mesh_instance.material_override = _metal_mat(Color(0.72, 0.78, 0.82))
 		else:
+			mesh_instance.material_override = null
 			for surface_index in range(mesh_instance.mesh.get_surface_count()):
-				var material := mesh_instance.get_surface_override_material(surface_index)
-				if material == null:
-					material = mesh_instance.mesh.surface_get_material(surface_index)
-				if material == null:
-					mesh_instance.set_surface_override_material(surface_index, _metal_mat(Color(0.72, 0.78, 0.82)))
+				var source := mesh_instance.get_active_material(surface_index) as StandardMaterial3D
+				var label := source.resource_name.to_lower() if source != null else "metal"
+				if source == null or label.contains("metal") or label.contains("steel") or label.contains("blade"):
+					mesh_instance.set_surface_override_material(surface_index, finish)
+				elif label.contains("gold") or label.contains("brass"):
+					var fitting := source.duplicate() as StandardMaterial3D
+					fitting.metallic = .72
+					fitting.roughness = .46
+					mesh_instance.set_surface_override_material(surface_index, fitting)
+				elif label.contains("brown") or label.contains("red") or label.contains("leather"):
+					var grip := source.duplicate() as StandardMaterial3D
+					grip.metallic = 0.0
+					grip.roughness = .88
+					mesh_instance.set_surface_override_material(surface_index, grip)
 	if canonical_blade != null:
 		# Keep the imported geometry as the single source of truth while exposing
 		# the stable blade contract used by contact, visuals, and release gates.

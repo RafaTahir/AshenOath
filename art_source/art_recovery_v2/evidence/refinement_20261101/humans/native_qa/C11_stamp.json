@@ -1,0 +1,15 @@
+{
+  "id": "C11",
+  "sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+  "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\C11\\review.json",
+  "views": [
+    "front",
+    "side",
+    "rear",
+    "quarter",
+    "walk_04",
+    "action_Interact"
+  ],
+  "layout_version": 2,
+  "resampling": "Aspect preserved; no retouching"
+}

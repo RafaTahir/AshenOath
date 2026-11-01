@@ -1,0 +1,24 @@
+{
+  "resource": "res://assets_external/environment/village/Roof_RoundTiles_8x10.obj",
+  "roles": [
+    "greyfen_roof",
+    "castle_roof"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Roof_RoundTiles_8x10\\Roof_RoundTiles_8x10.obj",
+  "source_sha256": "bfcc5f419f0fc36bb93f9b2861f8cb2e15982c53ac3278fabba7adc1b845a733",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Roof_RoundTiles_8x10.blend",
+  "runtime_sha256": "fd23e5bfd03035e4a4cb44498b0151aa4b4e59726ca23b1879b6772f64f3b8bb",
+  "change": "Large roof eave and hard tile ends retain round tile profiles.",
+  "before_triangles": 4480,
+  "after_triangles": 8942,
+  "bounds_drift": 4.76837158203125e-07,
+  "material_slots": {
+    "Roof_RoundTiles_8x10": [
+      "MI_WoodTrim",
+      "MI_RoundTiles"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

@@ -1,0 +1,110 @@
+{
+  "id": "M15",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M15\\M15_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M15\\M15_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M15_Reed_Choir.glb",
+  "input_sha256": "c6edd25e93242d1b1f7f1bdebd1e5951b240ed489c0b17f0e817813023454fb8",
+  "changes": [
+    "Broader amphibian jaw",
+    "Set dorsal sac junctions closer to torso",
+    "Retain inflation morphs, leg chains and native clips"
+  ],
+  "metrics_before": {
+    "triangles": 52960,
+    "vertices": 32663,
+    "meshes": 1,
+    "geometry_sha256": "c58d6ab37d8b16e39f8e8a88f90992004e9fc08346a4eac6f3dcc73e9b9e6065",
+    "bounds_blender_z_up": [
+      [
+        -0.8440129160881042,
+        -0.7788777947425842,
+        0.0030201047193259
+      ],
+      [
+        0.8436787724494934,
+        0.6907511949539185,
+        1.0558197498321533
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 52960,
+    "vertices": 32663,
+    "meshes": 1,
+    "geometry_sha256": "3712a0e70add84922b924c929d4c2580cfc8ea63c315301b48a31f93568bb9a3",
+    "bounds_blender_z_up": [
+      [
+        -0.8440129160881042,
+        -0.7788777947425842,
+        0.0030201047193259
+      ],
+      [
+        0.8436787724494934,
+        0.6907511949539185,
+        1.0473973751068115
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 17,
+    "images": 1,
+    "triangles": 52960
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M15\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M15\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M15\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M15\\quarter.png"
+  ],
+  "source_sha256": "1b95937ebc31a0ca4e06cb13d97edae2d1ecaccf57f71cef5c2723b2d9049e15",
+  "runtime_sha256": "a2a8f66362f9c8b9a1a0176d7a175a3e15dcf2a86ad22ae7b109e0706f843be7",
+  "runtime_bytes": 4396360,
+  "rig_signature": "b1a25926b349b047d8a52d4a6f8c124441c2e362fcadd812fbdc075c8e3fe633",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M15_Reed_Choir.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

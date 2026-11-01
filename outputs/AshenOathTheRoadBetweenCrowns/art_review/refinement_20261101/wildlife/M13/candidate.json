@@ -1,0 +1,110 @@
+{
+  "id": "M13",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M13\\M13_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M13\\M13_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M13_Hearthscale.glb",
+  "input_sha256": "0b54e64300b837ac03d6389949a909880cb009f55d209720e1c0f3aa56880a9b",
+  "changes": [
+    "Broaden low snout and lower jaw planes",
+    "Give existing shoulder plates slight unequal lift",
+    "Retain native quadruped/tail rig and original shield topology"
+  ],
+  "metrics_before": {
+    "triangles": 20000,
+    "vertices": 18289,
+    "meshes": 1,
+    "geometry_sha256": "9613dcbbb2f3481d0f1b6ffcf961bc57d240469017ffd5bc6e0b02acabb94fd2",
+    "bounds_blender_z_up": [
+      [
+        -0.7892792820930481,
+        -0.7776631116867065,
+        0.010759890079498291
+      ],
+      [
+        0.7892792224884033,
+        1.9449244737625122,
+        0.7561834454536438
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 20000,
+    "vertices": 18289,
+    "meshes": 1,
+    "geometry_sha256": "fb8abb70c1b2fb0b599fad363a96b0dbbb59ac47575b5b24d368179f5723120f",
+    "bounds_blender_z_up": [
+      [
+        -0.7892792820930481,
+        -0.7776631116867065,
+        0.010759890079498291
+      ],
+      [
+        0.7892792224884033,
+        1.9449244737625122,
+        0.7685864567756653
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 15,
+    "images": 1,
+    "triangles": 20000
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M13\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M13\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M13\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M13\\quarter.png"
+  ],
+  "source_sha256": "9e7771f18250aab8622fbad31c268e386a1fdae7df24aff2321dd068ba936dfb",
+  "runtime_sha256": "3b51ab3b5feaf0d32b76c7343da540193fc58b625b43a735e9c50aee6b7884cf",
+  "runtime_bytes": 2865696,
+  "rig_signature": "9f2863cbaef63840d9cea55a93298a40271b51133a4a05a6f80225061d3bf769",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M13_Hearthscale.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

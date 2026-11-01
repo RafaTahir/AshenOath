@@ -1,0 +1,15 @@
+{
+  "id": "M05",
+  "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+  "review": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\native\\M05\\review.json",
+  "views": [
+    "front",
+    "side",
+    "rear",
+    "quarter",
+    "walk_04",
+    "action_Attack"
+  ],
+  "layout_version": 3,
+  "resampling": "Aspect preserved; no retouching"
+}

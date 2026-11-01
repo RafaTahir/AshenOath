@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-01",
+  "status": "implemented_native_art_inspected_user_acceptance_pending",
+  "assets": [
+    {
+      "id": "C01_staff",
+      "change": "Exact original grip box; worn shaft/lashing arrises; ash-grain and leather albedo/normal maps; distinct roughness",
+      "before": {
+        "path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\equipment\\C01_ash_staff_before.glb",
+        "bytes": 18404,
+        "sha256": "5843b421d9eeb71f9a9c3b1f02fc7898665b2750aa82907e01e63a86537381d9"
+      },
+      "after": {
+        "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\C01_ash_staff.glb",
+        "bytes": 231112,
+        "sha256": "b8ab07b0f5a14323498b2276d9e1d102337d37e444218de910f303bf3209a333"
+      },
+      "before_triangles": 688,
+      "after_triangles": 1240
+    },
+    {
+      "id": "Kael_arrow",
+      "change": "Actual straight shaft, seated forged broadhead, three feather vanes, bindings and split nock replace erroneous whole-bow-as-arrow input",
+      "before": {
+        "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters\\Ranger_Arrow.fbx",
+        "bytes": 48412,
+        "sha256": "c44d7ea8683160ee75c9c62a2a697740f32717ce61e2722ec4d078de37775116"
+      },
+      "after": {
+        "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets\\characters\\kael_arrow.glb",
+        "bytes": 15928,
+        "sha256": "85d596f7c69e013506a34aead6ad54b19e6a4564b01f15dc73e48865cf31fd5a"
+      },
+      "after_triangles": 176,
+      "contract": "2.6 source units; quiver scale .30; ArrowVisual normalizes .76m and owns projectile/nocked alignment"
+    },
+    {
+      "id": "forge_hammer",
+      "change": "44-triangle chamfered head, fitted metal collar and leather grip inside original full fitting box",
+      "resources": [
+        {
+          "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets\\characters\\forge_hammer.tscn",
+          "bytes": 1505,
+          "sha256": "beb88feae14185124a83ed546909ee39663c42ee82c35c5825886de417ee1f37"
+        },
+        {
+          "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets\\characters\\forge_hammer_head.res",
+          "bytes": 4334,
+          "sha256": "9a9722835d9ece19f41ad0dae978bbfb9396fe8af397eadb4f3b0cd61a0d3708"
+        }
+      ]
+    },
+    {
+      "id": "player_sword_steel_and_oathblade",
+      "change": "Preserve Metal, Red, Gold and Brown source slots. Blade gets previous readable steel/cyan; brass fittings gain metal response; red/brown grips remain matte. No mesh/markers/reach/socket changes."
+    },
+    {
+      "id": "player_bow",
+      "change": "Existing white-material fallback now makes the recolored bow nonmetallic wood instead of retaining metallic=1."
+    },
+    {
+      "id": "quiver",
+      "change": "Open rim, interior wall and closed bottom replace solid capped cylinder; point-down .78m arrow seats into bottom and exposes feathers above rim."
+    },
+    {
+      "id": "activity_rope",
+      "change": "Two twisted rope plies in existing coil envelope, cached single surface."
+    },
+    {
+      "id": "activity_bowl",
+      "change": "Open rim, walls and interior floor, original .20 x .10 x .20 fitting box."
+    },
+    {
+      "id": "activity_bread",
+      "change": "Low oval scored flatbread replaces plain rectangular board; original .20 x .025 x .32 fitting dimensions plus .15mm score relief."
+    },
+    {
+      "id": "activity_cloth",
+      "change": "Double-sided gently folded linen sheet replaces solid tapered cylinder; original hand socket retained."
+    },
+    {
+      "id": "Vargan_spear",
+      "change": "Faceted forged leaf head with central ridge, existing .10 x .22 x .06 head fitting box and shaft/grip."
+    },
+    {
+      "id": "Vargan_shield",
+      "change": "Shallow dish, bound metal rim and rounded brass boss; existing wrist frame and fitting envelope."
+    },
+    {
+      "id": "Vargan_record_books",
+      "change": "Inset parchment page block, chamfered leather covers, bound spine and brass clasp; both clerk and steward dimensions and held transforms retained."
+    }
+  ],
+  "source_files": [
+    "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\held_prop_geometry.gd",
+    "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_presentation.gd",
+    "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\player_controller.gd",
+    "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\combat_vfx_coordinator.gd"
+  ],
+  "native_art": {
+    "tool": "tools/review_equipment_20261101.gd",
+    "views_per_prop": 3,
+    "props": 13,
+    "sheet": "native_inventory.jpg",
+    "scope": "Native Compatibility/ANGLE material/geometry stage; no journey or gameplay camera claimed",
+    "log": ".release-gate/native-equipment-capture-20261101.log"
+  },
+  "checks": {
+    "resource_fixture": "tools/verify_equipment_20261101.gd",
+    "result": "passed fresh raw GLBs, .76m actual arrow, vessel bounds, hammer, and independent cyan/metal/brass/leather sword slots",
+    "geometry_fixture": ".release-gate/verify_held_props.log",
+    "no_editor_import_run_by_subagent": true
+  },
+  "global_integration_required": [
+    "Refresh data/design_pack_assets.json separate staff entry bytes/hash.",
+    "Include new kael_arrow.glb and forge_hammer_head.res in local package ownership.",
+    "Final editor import/production export and package validation are main-owned."
+  ],
+  "limitations": [
+    "Work remains grounded-stylized best effort; no user visual acceptance or bespoke performance claim.",
+    "Native inspection is a neutral prop stage, not actual regional encounters, gameplay or phone/performance acceptance."
+  ]
+}

@@ -4,6 +4,8 @@ const CharacterVisualContract = preload("res://scripts/character_visual_contract
 const CharacterIdentityProfile = preload("res://scripts/character_identity_profile.gd")
 const StoryWardrobe = preload("res://scripts/story_wardrobe.gd")
 const CharacterSilhouette = preload("res://scripts/systems/character_silhouette.gd")
+const Craft = preload("res://scripts/prop_craft_geometry.gd")
+const HeldProps = preload("res://scripts/held_prop_geometry.gd")
 const CLERIC_STAFF_PATH := "res://assets_external/design_pack_v1/C01_ash_staff.glb"
 const FORGE_HAMMER_PATH := "res://assets/characters/forge_hammer.tscn"
 const OPENING_OCCUPATION_PROP_PATHS := [
@@ -70,26 +72,33 @@ static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
 	if not _activity_meshes.has(style):
 		var mesh: Mesh
 		if style == "rope":
-			var coil := TorusMesh.new()
-			coil.inner_radius = 0.07
-			coil.outer_radius = 0.105
-			coil.rings = 12
-			coil.ring_segments = 5
-			mesh = coil
+			mesh = HeldProps.rope()
 		elif style == "bread":
-			var board := BoxMesh.new()
-			board.size = Vector3(0.20,0.025,0.32)
-			mesh = board
+			# A low oval flatbread retains the former board's exact fitting box.
+			var loaf := SphereMesh.new()
+			loaf.radius = 0.5
+			loaf.height = 1.0
+			loaf.radial_segments = 32
+			loaf.rings = 12
+			var arrays := loaf.get_mesh_arrays()
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
+			for index in vertices.size():
+				vertices[index] *= Vector3(.20,.025,.32)
+				normals[index] = (normals[index] / Vector3(.20,.025,.32)).normalized()
+			arrays[Mesh.ARRAY_VERTEX] = vertices
+			arrays[Mesh.ARRAY_NORMAL] = normals
+			arrays[Mesh.ARRAY_TANGENT] = null
+			var flatbread := ArrayMesh.new()
+			flatbread.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+			mesh = flatbread
+		elif style == "cloth":
+			mesh = HeldProps.cloth()
 		else:
-			var vessel := CylinderMesh.new()
-			vessel.top_radius = 0.10 if style == "bowl" else 0.055
-			vessel.bottom_radius = 0.065 if style == "bowl" else 0.11
-			vessel.height = 0.10 if style == "bowl" else 0.23
-			vessel.radial_segments = 12
-			mesh = vessel
+			mesh = HeldProps.vessel(.10 if style == "bowl" else .055, .065 if style == "bowl" else .11, .10 if style == "bowl" else .23)
 		_activity_meshes[style] = mesh
 		var material := StandardMaterial3D.new()
-		material.albedo_color = Color(0.55,0.58,0.53) if style == "cloth" else Color(0.36,0.25,0.14)
+		material.albedo_color = Color(0.55,0.58,0.53) if style == "cloth" else (Color(.47,.28,.13) if style == "bread" else Color(0.36,0.25,0.14))
 		material.roughness = 0.95
 		_activity_materials[style] = material
 	var visual := MeshInstance3D.new()
@@ -97,6 +106,12 @@ static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
 	visual.material_override = _activity_materials[style]
 	visual.position.y = -0.08
 	grip.add_child(visual)
+	if style == "bread":
+		var scores := MeshInstance3D.new()
+		scores.name = "ScoredFlatbreadCrust"
+		scores.mesh = HeldProps.bread_scores()
+		scores.material_override = _mat(Color(.64,.42,.20),.94)
+		visual.add_child(scores)
 	return hand
 
 class WorldOrientedEquipment extends Node3D:
@@ -472,23 +487,16 @@ static func _add_spear(parent: Node3D) -> void:
 	parent.add_child(shaft)
 	var spearhead := MeshInstance3D.new()
 	spearhead.name = "VarganPatrolSpearhead"
-	var spear_mesh := PrismMesh.new()
-	spear_mesh.size = Vector3(0.10, 0.22, 0.06)
-	spearhead.mesh = spear_mesh
+	spearhead.mesh = HeldProps.spearhead()
 	spearhead.position = Vector3(0.13, -0.08, 0.0)
 	spearhead.rotation_degrees = Vector3(0.0, 0.0, -12.0)
-	spearhead.material_override = _mat(Color("6f624b"), 0.42)
+	spearhead.material_override = _mat(Color("6f624b"), 0.42, 0.72)
 	parent.add_child(spearhead)
 
 static func _add_shield(parent: Node3D) -> void:
 	var shield := MeshInstance3D.new()
 	shield.name = "VarganGuardShield"
-	var shield_mesh := CylinderMesh.new()
-	shield_mesh.top_radius = 0.22
-	shield_mesh.bottom_radius = 0.22
-	shield_mesh.height = 0.055
-	shield_mesh.radial_segments = 10
-	shield.mesh = shield_mesh
+	shield.mesh = HeldProps.shield()
 	# The parent is the actual wrist BoneAttachment3D. Keep the shield close to
 	# that socket; a large downward offset follows the hand basis upward on the
 	# imported Universal rig and makes the prop float behind the shoulder.
@@ -497,29 +505,52 @@ static func _add_shield(parent: Node3D) -> void:
 	shield.scale = Vector3(1.0, 1.12, 1.0)
 	shield.material_override = _mat(Color("3d4852"), 0.55)
 	parent.add_child(shield)
+	var rim := MeshInstance3D.new()
+	rim.name = "VarganGuardShieldBoundRim"
+	var rim_mesh := TorusMesh.new()
+	rim_mesh.inner_radius = .202
+	rim_mesh.outer_radius = .22
+	rim_mesh.rings = 16
+	rim_mesh.ring_segments = 4
+	rim.mesh = rim_mesh
+	rim.material_override = _mat(Color("4e5556"),.48,.72)
+	shield.add_child(rim)
 	var boss := MeshInstance3D.new()
 	boss.name = "VarganGuardShieldBoss"
-	var boss_mesh := CylinderMesh.new()
-	boss_mesh.top_radius = 0.07
-	boss_mesh.bottom_radius = 0.07
-	boss_mesh.height = 0.09
-	boss_mesh.radial_segments = 8
+	var boss_mesh := SphereMesh.new()
+	boss_mesh.radius = .07
+	boss_mesh.height = .09
+	boss_mesh.radial_segments = 12
+	boss_mesh.rings = 5
 	boss.mesh = boss_mesh
 	boss.position = Vector3(0.0, -0.015, -0.092)
 	boss.rotation_degrees = Vector3(90.0, 0.0, 0.0)
-	boss.material_override = _mat(Color("9c7845"), 0.45)
+	boss.material_override = _mat(Color("9c7845"), 0.45, 0.66)
 	parent.add_child(boss)
 
 static func _add_record_book(parent: Node3D, steward: bool) -> void:
 	var book := MeshInstance3D.new()
 	book.name = "VarganRecordBook"
-	var book_mesh := BoxMesh.new()
-	book_mesh.size = Vector3(0.26, 0.055, 0.34 if steward else 0.28)
-	book.mesh = book_mesh
+	var length := .34 if steward else .28
+	book.mesh = Craft.box(Vector3(.246,.039,length-.012))
 	book.position = Vector3(0.0, -0.25, -0.04)
 	book.rotation_degrees = Vector3(12.0, 0.0, -18.0)
-	book.material_override = _mat(Color("5b281e") if not steward else Color("6c4f29"), 0.72)
+	book.material_override = _mat(Color("b2a486"), .94)
 	parent.add_child(book)
+	var leather := _mat(Color("5b281e") if not steward else Color("6c4f29"), .82)
+	for sign_value in [-1.0,1.0]:
+		var cover := MeshInstance3D.new()
+		cover.name = "RecordLeatherCover"
+		cover.mesh = Craft.box(Vector3(.26,.008,length))
+		cover.position.y = sign_value * .0235
+		cover.material_override = leather
+		book.add_child(cover)
+	var spine := MeshInstance3D.new()
+	spine.name = "RecordBoundSpine"
+	spine.mesh = Craft.box(Vector3(.012,.047,length))
+	spine.position.x = -.124
+	spine.material_override = leather
+	book.add_child(spine)
 	var clasp := MeshInstance3D.new()
 	clasp.name = "VarganRecordBookClasp"
 	var clasp_mesh := BoxMesh.new()
@@ -527,7 +558,7 @@ static func _add_record_book(parent: Node3D, steward: bool) -> void:
 	clasp.mesh = clasp_mesh
 	clasp.position = Vector3(0.11, -0.25, -0.04)
 	clasp.rotation_degrees = book.rotation_degrees
-	clasp.material_override = _mat(Color("a1854e"), 0.35)
+	clasp.material_override = _mat(Color("a1854e"), 0.35, 0.66)
 	parent.add_child(clasp)
 
 static func _find_bone_index(skeleton: Skeleton3D, aliases: Array[String]) -> int:
@@ -548,10 +579,14 @@ static func _find_skeleton(root: Node) -> Skeleton3D:
 			return found
 	return null
 
-static func _mat(color: Color, roughness: float) -> StandardMaterial3D:
+static func _mat(color: Color, roughness: float, metallic: float = 0.0) -> StandardMaterial3D:
+	var key := "fitting:%s:%s:%s" % [color.to_html(),roughness,metallic]
+	if _activity_materials.has(key): return _activity_materials[key]
 	var material = StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = roughness
+	material.metallic = metallic
+	_activity_materials[key] = material
 	return material
 
 static func _find_named_node(root: Node, node_name: String) -> Node3D:

@@ -1,0 +1,3723 @@
+[
+  {
+    "path": "res://assets/landscape/bridge_stone_pier.res",
+    "bytes": 121188,
+    "sha256": "ecfa5bec2c46e355450590b6755b2d8bd1b0e4badf9d71b88a10f058cde52c01",
+    "class": "ArrayMesh",
+    "triangles": 5456,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.515002012252808,
+          5.84845611228957e-06,
+          -0.455005139112473
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          1.03000807762146,
+          1.71600067615509,
+          0.91001945734024
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets/landscape/far_terrain.res",
+    "bytes": 14116,
+    "sha256": "a4ce6a79b96cc2ca6f0ebc4d2c1d1f123d789e0fce36cb09e72f2893e379d2f1",
+    "class": "ArrayMesh",
+    "triangles": 512,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.70000004768372,
+          0.0,
+          -2.70000004768372
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          5.40000009536743,
+          7.80027532577515,
+          5.40000009536743
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/BanditFrontier_Authored.res",
+    "bytes": 29216,
+    "sha256": "25acd9093488889891a4b5d2f46f77d4545abcb63a9590643cf9c80d32ccbc3f",
+    "class": "ArrayMesh",
+    "triangles": 1680,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -240.0,
+          0.0,
+          -240.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          480.0,
+          9.0,
+          480.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Campaign_bandit_road_Landscape.res",
+    "bytes": 13950,
+    "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+    "class": "ArrayMesh",
+    "triangles": 768,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -31.0,
+          -0.0599999986588955,
+          -24.5
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          62.0,
+          3.49124264717102,
+          43.5
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res",
+    "bytes": 6909,
+    "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+    "class": "ArrayMesh",
+    "triangles": 304,
+    "surfaces": 3,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -26.0,
+          -0.0599999986588955,
+          -21.5
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          52.0,
+          3.24646592140198,
+          35.5
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Campaign_deep_wood_Landscape.res",
+    "bytes": 3998,
+    "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+    "class": "ArrayMesh",
+    "triangles": 144,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -26.0,
+          -0.0599999986588955,
+          -21.5
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          52.0,
+          3.24646592140198,
+          35.5
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+    "bytes": 23761,
+    "sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
+    "class": "ArrayMesh",
+    "triangles": 1354,
+    "surfaces": 5,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -26.0,
+          -0.0599999986588955,
+          -21.5
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          52.0,
+          3.24646592140198,
+          35.5
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/GreyfenFrontier_Authored.res",
+    "bytes": 40831,
+    "sha256": "fd9ac033b74f7655ac70817939bfdb82873bed631fdefe143f399b8cea74b086",
+    "class": "ArrayMesh",
+    "triangles": 3464,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -64.0,
+          0.0,
+          -94.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          130.0,
+          7.19999980926514,
+          141.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/HartAftermath_ash_Authored.res",
+    "bytes": 4182,
+    "sha256": "6faabbf4bef316ad7efc7f477c78322a08ad36bd09ab9c3bbdf57c81f2c5971c",
+    "class": "ArrayMesh",
+    "triangles": 108,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.50927782058716,
+          0.0489999987185001,
+          -14.8000001907349
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          9.01855564117432,
+          0.630980670452118,
+          6.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/HartAftermath_duty_Authored.res",
+    "bytes": 18333,
+    "sha256": "8585e0782d721a72f57e9d7b9a0cadf9c1ec035fb33de393e233ce22f0a8672d",
+    "class": "ArrayMesh",
+    "triangles": 2412,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.50927782058716,
+          0.0489999987185001,
+          -14.8000001907349
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          9.01855564117432,
+          2.05599999427795,
+          6.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/HartAftermath_mercy_Authored.res",
+    "bytes": 5941,
+    "sha256": "af91f589c7479abce053ea10d48449c3854186d8506dcd9bf075658dac946546",
+    "class": "ArrayMesh",
+    "triangles": 180,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.50927782058716,
+          0.0489999987185001,
+          -14.8000001907349
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          9.01855564117432,
+          0.749652147293091,
+          6.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/HartAftermath_witness_Authored.res",
+    "bytes": 3617,
+    "sha256": "0ad8ca711a831fe3dbab622b733473e6ad1149cde8fd2030b4546d6ccf6354d1",
+    "class": "ArrayMesh",
+    "triangles": 108,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.50927782058716,
+          0.0489999987185001,
+          -14.8000001907349
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          9.01855564117432,
+          2.05599999427795,
+          6.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/HartLandscape_Authored.res",
+    "bytes": 4680,
+    "sha256": "41e86d6f87a332a1a4d8c5380378ea8b68e847ad000aea2e52003f6c9cc91e92",
+    "class": "ArrayMesh",
+    "triangles": 204,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -26.0,
+          -0.0799999982118607,
+          -25.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          52.0,
+          3.07999992370605,
+          44.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/HartWitnessStones_Authored.res",
+    "bytes": 2082,
+    "sha256": "2d8e26ba93ed95e962d553e1151220f0cf876e8708e575e4329edaef561836bc",
+    "class": "ArrayMesh",
+    "triangles": 32,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -5.875,
+          0.0260000005364418,
+          -10.438157081604
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          11.75,
+          2.67400002479553,
+          0.476314544677734
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/HartWoodland_Authored.res",
+    "bytes": 55293,
+    "sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
+    "class": "ArrayMesh",
+    "triangles": 2432,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -68.0,
+          0.0264999996870756,
+          -88.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          138.0,
+          7.99999952316284,
+          148.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Wychwood_black_feathers_Evidence.res",
+    "bytes": 7123,
+    "sha256": "8c1ff56d4d04f2505d9c3163d8c4daf7d9dc476016cfafa7ca5666409b872b88",
+    "class": "ArrayMesh",
+    "triangles": 280,
+    "surfaces": 3,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.231000006198883,
+          0.00350672099739313,
+          -0.310987889766693
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.532973170280457,
+          0.0234932787716389,
+          0.660474300384521
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Wychwood_claw_marks_Evidence.res",
+    "bytes": 5884,
+    "sha256": "95d597a30a3cb1634f00aa81c5ba0ed00293521e5fcc61fa4a9ea474c207107a",
+    "class": "ArrayMesh",
+    "triangles": 256,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.333274573087692,
+          0.00600000005215406,
+          -0.104208216071129
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.666482925415039,
+          0.0655544623732567,
+          0.268416434526443
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Wychwood_corpse_Evidence.res",
+    "bytes": 375134,
+    "sha256": "2cfd4932c2a0c2fc5d66a047dc32cbfce325650c6169c0d64eba26bf8b91711d",
+    "class": "ArrayMesh",
+    "triangles": 18915,
+    "surfaces": 3,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.496895730495453,
+          0.0,
+          -1.00959229469299
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          1.1404812335968,
+          0.360843479633331,
+          2.01918458938599
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Wychwood_oren_token_Evidence.res",
+    "bytes": 5980,
+    "sha256": "e7973711f844698addad371e390edfedad0d073088089f2416dc9a5b5d2ff02e",
+    "class": "ArrayMesh",
+    "triangles": 268,
+    "surfaces": 3,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.129999995231628,
+          0.0096309008076787,
+          -0.159999996423721
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.334333300590515,
+          0.0420895740389824,
+          0.319999992847443
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/forest/Wychwood_tracks_Evidence.res",
+    "bytes": 6192,
+    "sha256": "b716dc99a195c840df8fa79b67d11128a39685554b84b59fca70102e6e6c8e67",
+    "class": "ArrayMesh",
+    "triangles": 288,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.275000005960464,
+          0.0020000000949949,
+          -0.889999985694885
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.550000011920929,
+          0.0020000000949949,
+          1.73000001907349
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/AshMillCartTrack.res",
+    "bytes": 746,
+    "sha256": "0332be727eb0141ce10933d51b866a7e2c839d202140e3dde6396eeb4719b1b3",
+    "class": "ArrayMesh",
+    "triangles": 32,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.82322525978088,
+          0.0,
+          -14.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          3.64645051956177,
+          9.99999974737875e-06,
+          28.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/AshMillYard.res",
+    "bytes": 818,
+    "sha256": "0babf3605fb04d7cb1bbf652c335029fd355253be07d309bb904e90b85c65e57",
+    "class": "ArrayMesh",
+    "triangles": 32,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.14952993392944,
+          0.0,
+          -1.5
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.29905986785889,
+          9.99999974737875e-06,
+          3.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/campaign_road_26027ed518485fcfab505677.res",
+    "bytes": 1315,
+    "sha256": "e52eefc2135f4fd93b1c1c870ec0bb4d382c52055aa94896f3e5d906108f47fd",
+    "class": "ArrayMesh",
+    "triangles": 108,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.01344895362854,
+          0.0199999995529652,
+          -13.6389999389648
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          4.02653312683105,
+          9.99999974737875e-06,
+          27.6550140380859
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/campaign_road_5e12549532442500739a84bc.res",
+    "bytes": 1782,
+    "sha256": "69d0289ad0ecb9005d59cf99793bf6fe7b3e72241fc9f57f0d288f6052f864cd",
+    "class": "ArrayMesh",
+    "triangles": 176,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.61638760566711,
+          0.025000000372529,
+          -16.6440029144287
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          5.23458099365234,
+          9.99999974737875e-06,
+          33.5035552978516
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/campaign_road_8c9b119bb042642cd4c1a6d4.res",
+    "bytes": 1756,
+    "sha256": "576f5d6fcd7cbf32f79619e70aabe1573ddeefd3bb1b90dc8f50b89981f8b446",
+    "class": "ArrayMesh",
+    "triangles": 200,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.01825189590454,
+          0.025000000372529,
+          -15.6389999389648
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.03703308105469,
+          9.99999974737875e-06,
+          31.3161392211914
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/campaign_road_c682b279edf18ce77694f25b.res",
+    "bytes": 898,
+    "sha256": "7dd495c18f4b60826e7df745f373ca845a808461535623ac9acb7a11908a82f7",
+    "class": "ArrayMesh",
+    "triangles": 48,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -6.00054311752319,
+          0.0175000000745058,
+          -1.38115549087524
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          11.9513130187988,
+          9.99999974737875e-06,
+          2.72250580787659
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/farm_ramp.res",
+    "bytes": 628,
+    "sha256": "8d96a6857b44c167d22c7999f75a3ad6bb0739b5317a85e6a4a08206aa3f03f1",
+    "class": "ArrayMesh",
+    "triangles": 12,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.800000011920929,
+          -0.0599999986588955,
+          -0.949999988079071
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          1.60000002384186,
+          0.46000000834465,
+          1.89999997615814
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_PavedRoadCastle.res",
+    "bytes": 1224,
+    "sha256": "b2f8a43a816522b08e7cc270db9266744d3a910a27cd59eac1f4c0efff136762",
+    "class": "ArrayMesh",
+    "triangles": 80,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.40000009536743,
+          0.0225000008940697,
+          -1.67673897743225
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.80000019073486,
+          9.99999974737875e-06,
+          3.42277431488037
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_PavedRoadMain.res",
+    "bytes": 3414,
+    "sha256": "d3c8843d2828df7122d5b39b1a99c9a2017e9ac5e26b944ce8d2da2cb87a3893",
+    "class": "ArrayMesh",
+    "triangles": 272,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.1670024394989,
+          0.0199999995529652,
+          -15.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          4.33433675765991,
+          9.99999974737875e-06,
+          30.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_PavedRoadVillage.res",
+    "bytes": 1781,
+    "sha256": "aea0035334dd033a5ce60ae255bb2256711de65523184d0073e4b7ab1a3d69ff",
+    "class": "ArrayMesh",
+    "triangles": 128,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -7.0,
+          0.0199999995529652,
+          -1.56547975540161
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          14.0,
+          9.99999974737875e-06,
+          3.10795450210571
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_ground.res",
+    "bytes": 16732,
+    "sha256": "42c5fbbcc0672ff6d2e0146f84f39d958aff9c508915aa2ab8f53a95fa0a9c98",
+    "class": "ArrayMesh",
+    "triangles": 1464,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -21.0,
+          -0.300000011920929,
+          -17.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          42.0,
+          0.306000024080276,
+          34.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_road_116b0afc15efd0b75a8238f1.res",
+    "bytes": 911,
+    "sha256": "a098154c0df41c10bd23fe77aaae75a606cc5c00820a560b23b33681f7b19570",
+    "class": "ArrayMesh",
+    "triangles": 50,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -3.36558675765991,
+          0.0225000008940697,
+          -3.34485983848572
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          6.77292156219482,
+          9.99999974737875e-06,
+          7.06240653991699
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_road_21c8e3fa58721508e970d9dc.res",
+    "bytes": 779,
+    "sha256": "01dc626cc31eaf959a75efd77c10ef9a4fa7a67cd6d743f84bcee52ec79bdec0",
+    "class": "ArrayMesh",
+    "triangles": 30,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.01189041137695,
+          0.0225000008940697,
+          -1.15109515190125
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.02897930145264,
+          9.99999974737875e-06,
+          2.34453463554382
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_road_29d3d91e5833e8933a24cddb.res",
+    "bytes": 1381,
+    "sha256": "9e05727d2fff267cb4a4e03a7cb1a4776b3a542ed574405c03e0668dc78f7a0e",
+    "class": "ArrayMesh",
+    "triangles": 114,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.11412119865417,
+          0.0199999995529652,
+          -14.6389999389648
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          4.22785949707031,
+          9.99999974737875e-06,
+          29.4374122619629
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_road_3abd52c34bb467ae34f12b98.res",
+    "bytes": 795,
+    "sha256": "80ba50c910e15929b99382a1391d8971844d694767b3a714f42fe675e5d32e1c",
+    "class": "ArrayMesh",
+    "triangles": 36,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.40692567825317,
+          0.0225000008940697,
+          -1.49883151054382
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.80600166320801,
+          9.99999974737875e-06,
+          3.04998636245728
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_road_45082159d0aa627f792b9879.res",
+    "bytes": 905,
+    "sha256": "53bbc794532b114041b687abc1faeb93a4ab9cecce6b1546a0acce83457c0221",
+    "class": "ArrayMesh",
+    "triangles": 50,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -3.41228914260864,
+          0.0225000008940697,
+          -3.39330911636353
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          6.78867530822754,
+          9.99999974737875e-06,
+          7.06119537353516
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_road_7295b847002bf5cf0b117588.res",
+    "bytes": 961,
+    "sha256": "df1a25831f6b6059f0ade8f3d26e22af6f1cb6f51fe8f18228008841528fbeda",
+    "class": "ArrayMesh",
+    "triangles": 54,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -6.9776439666748,
+          0.0199999995529652,
+          -1.30303072929382
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          13.9787044525146,
+          9.99999974737875e-06,
+          2.60930514335632
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/greyfen_road_8da9c53fc24f9c67018c17f9.res",
+    "bytes": 773,
+    "sha256": "f112af71976ffa40ffde068252c037595f27fe3fe260f0980c1009033235e3aa",
+    "class": "ArrayMesh",
+    "triangles": 30,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.01878833770752,
+          0.0225000008940697,
+          -1.2223938703537
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.01773548126221,
+          9.99999974737875e-06,
+          2.49190545082092
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/mill_ramp.res",
+    "bytes": 628,
+    "sha256": "0bb6ae88005b7cbb0712bf7f561cd99fc63e13bff0c931a715245fbf5e075fc7",
+    "class": "ArrayMesh",
+    "triangles": 12,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.29999995231628,
+          -0.0599999986588955,
+          -0.949999988079071
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.59999990463257,
+          0.539999961853027,
+          1.89999997615814
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/mill_ridge.res",
+    "bytes": 916,
+    "sha256": "ded0a3eb0c458358f162ace81df1785ccb758e505cda99017a96efef1f5db7e9",
+    "class": "ArrayMesh",
+    "triangles": 24,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -25.0,
+          -0.0799999982118607,
+          -21.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          50.0,
+          3.38579320907593,
+          4.5
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/record_ceiling.res",
+    "bytes": 921,
+    "sha256": "3aa280d89534ce7a6069eeaa084960799feae56ff208ad08abad1a0063400687",
+    "class": "ArrayMesh",
+    "triangles": 32,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -16.0,
+          5.55000019073486,
+          -18.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          32.0,
+          1.64999961853027,
+          36.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/record_floor.res",
+    "bytes": 405,
+    "sha256": "0c801acd7188ebf065b08cbdd2f96f5767f093af03042d171d6247e0135c5448",
+    "class": "ArrayMesh",
+    "triangles": 2,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -16.0,
+          0.0140000004321337,
+          -18.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          32.0,
+          9.99999974737875e-06,
+          36.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/record_ribs.res",
+    "bytes": 4611,
+    "sha256": "78c39cefda24e21dbe81ea75f0986cf740dbf804a8815a9463f0a5c0e4b080d5",
+    "class": "ArrayMesh",
+    "triangles": 340,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -16.0,
+          0.0,
+          -15.1800003051758
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          32.0,
+          7.23000001907349,
+          24.3600006103516
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/record_walls.res",
+    "bytes": 801,
+    "sha256": "7d83b0b5f7137baf788141b00aed2b46a4d8ffdc459c51a4dad74ae5afd99da8",
+    "class": "ArrayMesh",
+    "triangles": 36,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -16.0,
+          0.0,
+          -18.0
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          32.0,
+          7.19999980926514,
+          36.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/undercroft_roof_collision.res",
+    "bytes": 9458,
+    "sha256": "2a6bf8e56ac3c60f3ac7f9bc5694ed15ded25c03cf714dcb39a580e672b640f4",
+    "class": "ConcavePolygonShape3D",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": "2a070177334a1a6e268d6c64637817d9378908704aee85a2007aa6b23bc2784d"
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_2776fb0e22764ac82b5f238e.res",
+    "bytes": 4424,
+    "sha256": "0cc76d8fb4e331bef5f3c28a572d66fa4ffef5764fe8d7f7b2ed45a6fc2d191d",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07393014431,
+          -0.254999995231628,
+          -1.49115765094757
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.14786028862,
+          0.508266568183899,
+          2.98231530189514
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_2f4b22917ac27e105cbc3456.res",
+    "bytes": 4399,
+    "sha256": "c55fcc106a78d55df274aadc4305d05d2a0c966cb16c9f0133e994e02551bf5e",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07788896560669,
+          -0.254999995231628,
+          -1.49786388874054
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15577793121338,
+          0.502343952655792,
+          2.99572777748108
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_30fe5d5a1e49c2f538cab7e7.res",
+    "bytes": 4420,
+    "sha256": "71bdcc2dd43082db3e9ea7baae5f4eae1aad90200e5242d062978df070831673",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07710075378418,
+          -0.254999995231628,
+          -1.49786388874054
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15420150756836,
+          0.512829542160034,
+          2.99572777748108
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_3a400f71370bd716f04ba60a.res",
+    "bytes": 4402,
+    "sha256": "d8d06c6f2d2069a8bf2037b883042f888b5edcb34fc1cdd88d47129c7716135a",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07799816131592,
+          -0.254999995231628,
+          -1.49786388874054
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15599632263184,
+          0.511937618255615,
+          2.99572777748108
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_41db862dcd185e435cd8bfff.res",
+    "bytes": 4446,
+    "sha256": "9438f4e4001c761346deb0276c826c510fe5f8f1ae582ed93612987fbc95e16e",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07756745815277,
+          -0.254999995231628,
+          -1.49115765094757
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15513491630554,
+          0.512829542160034,
+          2.98231530189514
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_460e2699c80096097909f78b.res",
+    "bytes": 4406,
+    "sha256": "4c03fb0c2e4b32b93d1663ec58c60c054a922cd2d146c293b791dbdf85a53d2d",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07425975799561,
+          -0.254999995231628,
+          -1.49786388874054
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.14851951599121,
+          0.513064384460449,
+          2.99572777748108
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_5e60ae1e3af43248a4626e7b.res",
+    "bytes": 4429,
+    "sha256": "31061d655e3762b87eb53e473dd9be62222f68f12ecce3e05b1f9ca884e8038d",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07693421840668,
+          -0.254999995231628,
+          -1.49786388874054
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15386843681335,
+          0.510406374931335,
+          2.99572777748108
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_670deab240a36d8472a84238.res",
+    "bytes": 4427,
+    "sha256": "522539fe7870b270717c024fd4fc0149ffede939b635466fe82944b1b8873ce8",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07799816131592,
+          -0.254999995231628,
+          -1.49115765094757
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15599632263184,
+          0.502343952655792,
+          2.98231530189514
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_6bbbd750374b48994ce10cd8.res",
+    "bytes": 4439,
+    "sha256": "f0cda19a41f022dabdef728a4ee848870fd39526de5754020c367e807d24acc7",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07710075378418,
+          -0.254999995231628,
+          -1.49115765094757
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15420150756836,
+          0.498679578304291,
+          2.98231530189514
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_87af2a7e43a212d54258edb4.res",
+    "bytes": 4417,
+    "sha256": "d735e20a096e09e0074456a9c343617467b539b6f8c38312f053de3820b2b64f",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07756745815277,
+          -0.254999995231628,
+          -1.49786388874054
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15513491630554,
+          0.498679578304291,
+          2.99572777748108
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_a2651b47383a9a7b7db3df64.res",
+    "bytes": 4456,
+    "sha256": "c77a4b4164eec515b955e0b69357dc1a9c52880b0abe8cb4573d9a56611b40f3",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07693421840668,
+          -0.254999995231628,
+          -1.49115765094757
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15386843681335,
+          0.505561113357544,
+          2.98231530189514
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_a83695df70ef5045299b6f55.res",
+    "bytes": 4424,
+    "sha256": "17007fdacc2de19d87505d56c2b5d28d4f5a94f1b92a8feebcd7ebae757d72c1",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07625114917755,
+          -0.254999995231628,
+          -1.49786388874054
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.1525022983551,
+          0.505561113357544,
+          2.99572777748108
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_acbe4fe81ea7cb4efd8a1aef.res",
+    "bytes": 4401,
+    "sha256": "994fdd30f57e78b85ae463a9a1deee7519fe802de08c80801e8434e4a4db2a27",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07393014431,
+          -0.254999995231628,
+          -1.49786388874054
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.14786028862,
+          0.508266568183899,
+          2.99572777748108
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_ae36504e79756f108f95bc5d.res",
+    "bytes": 4424,
+    "sha256": "f31d204d5914ec4710dfd7d1f01af12e6210d3b9062faaeca668a118dca217e6",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07788896560669,
+          -0.254999995231628,
+          -1.49115765094757
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.15577793121338,
+          0.511937618255615,
+          2.98231530189514
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_bb65f4d8d59535b2e675bfee.res",
+    "bytes": 4412,
+    "sha256": "3d47f342080326dba148e93fb7fc3a4833398756b80c21025273f683774ce5e6",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07425975799561,
+          -0.254999995231628,
+          -1.49115765094757
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.14851951599121,
+          0.494641363620758,
+          2.98231530189514
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_berm_e67c58d7fd3b3888caf4f562.res",
+    "bytes": 4442,
+    "sha256": "07c5879062ebaf74d78dc4e911fc055d50fbd9d61ec2a9cf1b0cfef0e22eef62",
+    "class": "ArrayMesh",
+    "triangles": 160,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.07625114917755,
+          -0.254999995231628,
+          -1.49115765094757
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.1525022983551,
+          0.510406374931335,
+          2.98231530189514
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_canopy_2.8_12.res",
+    "bytes": 544,
+    "sha256": "a724d847e2995685cc570bd7314180d8637991cfd50961b23e5f27d444a13be5",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_canopy_2.8_6.res",
+    "bytes": 396,
+    "sha256": "3b91ca194a97d9c026d9912bf56e497dbce5830b76ebf485887d2125c564542d",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_canopy_2.8_9.res",
+    "bytes": 472,
+    "sha256": "2c9efac254993dc14a396d48a18daa63d58eb13f2f28231f3e6323b8a14d9b2e",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_canopy_4.4_4.res",
+    "bytes": 342,
+    "sha256": "daf3f29027fbbe33de4bef86e576bc5b3785c3e81eeaade5f08f879bf06f3641",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_canopy_4.4_7.res",
+    "bytes": 425,
+    "sha256": "c7800426bf11de6217d87a25017347cc91bb8a80b12e4c9256a1b5bcc73b313f",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_canopy_4.4_9.res",
+    "bytes": 472,
+    "sha256": "7803ce49ee54feba151a7f059c0a0dd6409c95d7abbf16d3f799df1742d08737",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_clearing.res",
+    "bytes": 1521,
+    "sha256": "34dcac5e69b863cc686983bb452a140358e60d51a6b5fcdd443b2a851bacc8f4",
+    "class": "ArrayMesh",
+    "triangles": 60,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.80084323883057,
+          0.0590000003576279,
+          -10.207763671875
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          9.68950653076172,
+          9.99999974737875e-06,
+          7.1363353729248
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_floor_12.res",
+    "bytes": 490,
+    "sha256": "99bec3893c0810aceab2fa0cc7faa287d95acb4309cf547152da8a42e6881107",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_floor_20.res",
+    "bytes": 564,
+    "sha256": "bfa5a4ff67a6dce04c0d4678fcce405d6238fa77f13e934fb0c5d414046e3d5b",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_floor_28.res",
+    "bytes": 621,
+    "sha256": "dbc9f84258733142a79e0f597b0181b49f084deb5fc63d3c71e8af304c892423",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_floor_edge_-1.0_0.res",
+    "bytes": 1819,
+    "sha256": "789080a35e2d28578ae43c208aecff7d1141ae353a64a3b6d45a2420f6eb2a12",
+    "class": "ArrayMesh",
+    "triangles": 70,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -5.25472116470337,
+          0.0659999996423721,
+          -14.4681844711304
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.59824633598328,
+          9.99999974737875e-06,
+          11.495099067688
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_floor_edge_-1.0_1.res",
+    "bytes": 1816,
+    "sha256": "61a5599c013246ba12a376a5995f2fa95992ca8da70e8d813b4c14a7ccd069a7",
+    "class": "ArrayMesh",
+    "triangles": 70,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -5.28621912002563,
+          0.0659999996423721,
+          2.6029999256134
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.96938824653625,
+          9.99999974737875e-06,
+          12.1620216369629
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_floor_edge_1.0_0.res",
+    "bytes": 1838,
+    "sha256": "16a23de4861b0ebaae9bafc1d672ce9d2a0e664a842eec47d2b7db6665ec7a65",
+    "class": "ArrayMesh",
+    "triangles": 70,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          2.57155084609985,
+          0.0659999996423721,
+          -14.097936630249
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.77583885192871,
+          9.99999974737875e-06,
+          11.4358358383179
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_floor_edge_1.0_1.res",
+    "bytes": 1818,
+    "sha256": "c79402b31bb05cc7c0b3d99d59aa6739ded272ba93eaa7deaf256e026e4be728",
+    "class": "ArrayMesh",
+    "triangles": 70,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          2.3072783946991,
+          0.0659999996423721,
+          2.97324705123901
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.97726893424988,
+          9.99999974737875e-06,
+          12.1027584075928
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_ground_24440ef7142d7a2e86e75301.res",
+    "bytes": 20830,
+    "sha256": "8b1693316cbbdc76934f2240f7a5cde2fafd35b17b764a2a210e18af28fb2233",
+    "class": "ArrayMesh",
+    "triangles": 1844,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -9.64999961853027,
+          -0.0799999982118607,
+          -7.65000009536743
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          19.2999992370605,
+          0.159999996423721,
+          15.3000001907349
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_ground_7a1d236025430c5f0b075966.res",
+    "bytes": 21170,
+    "sha256": "27abe0bdb9586848989bce862ac6de3270492ff649fb3d8a0f3ff57afde7e6c2",
+    "class": "ArrayMesh",
+    "triangles": 1844,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -9.64999961853027,
+          -0.0799999982118607,
+          -7.65000009536743
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          19.2999992370605,
+          0.159999996423721,
+          15.3000001907349
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_ground_97e1aaba8103e6c6b63ff42e.res",
+    "bytes": 20288,
+    "sha256": "f8c46eb8b8fd86c49881e0cffa0554902347664566395601d24808f0b0f61e8e",
+    "class": "ArrayMesh",
+    "triangles": 1844,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -9.64999961853027,
+          -0.0799999982118607,
+          -7.65000009536743
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          19.2999992370605,
+          0.159999996423721,
+          15.3000001907349
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_ground_b6be8cae87d83c7e1e94e9b3.res",
+    "bytes": 5539,
+    "sha256": "5f7158322e63f6af6fdde939343d63cd2bec7af293cea4cbb4423617dd872dd6",
+    "class": "ArrayMesh",
+    "triangles": 448,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.70000004768372,
+          -0.0799999982118607,
+          -6.09999990463257
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          5.40000009536743,
+          0.159999996423721,
+          12.1999998092651
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_ground_cec50136ab7a3d90f3ccc7b4.res",
+    "bytes": 5991,
+    "sha256": "c947606bbf9fdf9e926486a551e59271f14105d4eb4380dab361d9f5b3612cc6",
+    "class": "ArrayMesh",
+    "triangles": 448,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.70000004768372,
+          -0.0799999982118607,
+          -6.09999990463257
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          5.40000009536743,
+          0.159999996423721,
+          12.1999998092651
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_ground_fd32d51aec9471ed5aa94b2a.res",
+    "bytes": 20280,
+    "sha256": "77fda1fff3dccf10fe381156139b3009d7b7eb165974e2fa9b1216db5a20923c",
+    "class": "ArrayMesh",
+    "triangles": 1844,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -9.64999961853027,
+          -0.0799999982118607,
+          -7.65000009536743
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          19.2999992370605,
+          0.159999996423721,
+          15.3000001907349
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_layby.res",
+    "bytes": 1340,
+    "sha256": "3f154ab5825338bee0d38f3409f60a51f0de1b27b2b0210c39102610f9e4508f",
+    "class": "ArrayMesh",
+    "triangles": 48,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          0.699999988079071,
+          0.0610000006854534,
+          -9.55344867706299
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          10.6800003051758,
+          9.99999974737875e-06,
+          3.21698379516602
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_path_rocks.res",
+    "bytes": 490826,
+    "sha256": "d8517ea6da52405e002f463da6cfe791709cb6cb3a40d2fd0c8f246d44353f40",
+    "class": "ArrayMesh",
+    "triangles": 25024,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.0157413482666,
+          0.0439999997615814,
+          -12.5157423019409
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.00407028198242,
+          0.0999999940395355,
+          24.9243488311768
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_road_4ee280b665d6d29e55380adb.res",
+    "bytes": 1014,
+    "sha256": "f14dabf20f4555a632500c88708d7ba5239c786f56b9e2624a337bd137d25cd5",
+    "class": "ArrayMesh",
+    "triangles": 60,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -7.94422626495361,
+          0.0199999995529652,
+          -1.53362131118774
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          15.9608583450317,
+          9.99999974737875e-06,
+          3.00611209869385
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_road_513b1d4c500169fff02e05d5.res",
+    "bytes": 1244,
+    "sha256": "e890bc2df80f4d5aa48eae7e5cc7aee51eb2497c62b6b28e9bb01d18574c94a2",
+    "class": "ArrayMesh",
+    "triangles": 90,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -12.0170774459839,
+          0.0199999995529652,
+          -1.8180924654007
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          23.9731330871582,
+          9.99999974737875e-06,
+          3.71195960044861
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_understory_10.res",
+    "bytes": 512,
+    "sha256": "6f0eb4deaf8d4963905919025a75640eaa09eb9e36e3581ac148c7dac60769e5",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_understory_16.res",
+    "bytes": 658,
+    "sha256": "511ed276fd755965133352f8742bd7d0704dd58883751a02758a42133a4e202f",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_understory_22.res",
+    "bytes": 801,
+    "sha256": "8c0a6b6e2f8155463aeceb1cb870679442b5bb177ca685cdc86d1dbfc28ad654",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/prepared/wychwood_winding_path.res",
+    "bytes": 4453,
+    "sha256": "2a291266e42087b17d4e4fc26f84ae7b3a87dde3a2283e42b5c59000d17caa59",
+    "class": "ArrayMesh",
+    "triangles": 208,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.22159910202026,
+          0.0570000000298023,
+          -10.5
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.44815444946289,
+          9.99867916107178e-06,
+          27.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/CampaignRecord_mill_burned_Authored.res",
+    "bytes": 61929,
+    "sha256": "4a68e67d1a90e9fa50dd7872dad2276c10214413a0ffceec86ab8ea2c8f078ed",
+    "class": "ArrayMesh",
+    "triangles": 2762,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.450000017881393,
+          0.479999989271164,
+          -0.359999984502792
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.899999976158142,
+          1.23499989509583,
+          0.720000028610229
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/CampaignRecord_mill_exposed_Authored.res",
+    "bytes": 111660,
+    "sha256": "20f61e8786b3476038f91e6de1258aeb1e566e0e2bb3bb05d14ac77be1fd71f9",
+    "class": "ArrayMesh",
+    "triangles": 5522,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.450000017881393,
+          0.479999989271164,
+          -0.359999984502792
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          1.59900403022766,
+          1.23499989509583,
+          0.720000028610229
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/CampaignRecord_mill_pending_Authored.res",
+    "bytes": 61923,
+    "sha256": "8cd1fe23a2ac352f5e771b73895630abbd3278c7c1dc5f18339b6f53c10a35dc",
+    "class": "ArrayMesh",
+    "triangles": 2762,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.450000017881393,
+          0.479999989271164,
+          -0.359999984502792
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.899999976158142,
+          1.23499989509583,
+          0.720000028610229
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/CampaignRecord_mill_preserved_Authored.res",
+    "bytes": 52355,
+    "sha256": "fc62f6369fa6aca30a77106b2e76430e4f1ca17afc046e44d78ae5421028adf5",
+    "class": "ArrayMesh",
+    "triangles": 2346,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.450000017881393,
+          0.479999989271164,
+          -0.359999984502792
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.899999976158142,
+          1.22499990463257,
+          0.720000028610229
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/CampaignRecord_register_mira_Authored.res",
+    "bytes": 50766,
+    "sha256": "5a302d3dbe5bab9e9ffd56eefe0698ff3ff24c96a39e0019038220f6953ffade",
+    "class": "ArrayMesh",
+    "triangles": 2812,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.400000005960464,
+          0.044999998062849,
+          -0.330000013113022
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.799999952316284,
+          0.824999988079071,
+          0.660000026226044
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/CampaignRecord_register_rook_Authored.res",
+    "bytes": 61936,
+    "sha256": "c3264301ce5b6cbcfc9f94fb8e09efd9f6480c2c6b28aabd200a8ded0cda5dd7",
+    "class": "ArrayMesh",
+    "triangles": 2762,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.450000017881393,
+          0.400000005960464,
+          -0.359999984502792
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.899999976158142,
+          1.23500001430511,
+          0.720000028610229
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/GreyfenForgeWork_Authored.res",
+    "bytes": 148038,
+    "sha256": "52c52bdc4fb77e1adc58afe20b8da3656ae33d5587ce4419112716ae6d90d82b",
+    "class": "ArrayMesh",
+    "triangles": 12234,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.45000004768372,
+          0.0,
+          -1.35274195671082
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          3.24700021743774,
+          1.60000002384186,
+          3.42274188995361
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/GreyfenSocial_barrel_board.res",
+    "bytes": 105767,
+    "sha256": "3985471b41fd7e86712b849caa65346e7cb155f0516b7df0b20131581bd579d8",
+    "class": "ArrayMesh",
+    "triangles": 4694,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.10000002384186,
+          0.0,
+          -1.75999999046326
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.20000004768372,
+          1.39999997615814,
+          3.51999998092651
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/GreyfenSocial_common_table.res",
+    "bytes": 105705,
+    "sha256": "6c0322321bdc345430d7aa5373ed9d3908ca23532aa3551058bf26d44f43820a",
+    "class": "ArrayMesh",
+    "triangles": 4694,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.39999997615814,
+          0.0,
+          -2.02999997138977
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.79999995231628,
+          1.39999997615814,
+          4.05999994277954
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/GreyfenSocial_mira_apothecary.res",
+    "bytes": 83054,
+    "sha256": "e7e0ccfcf7bc48d87aa666f8e0ed52b15d58c1540b2c04228c3769d972f28213",
+    "class": "ArrayMesh",
+    "triangles": 4618,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.0349999666214,
+          0.0,
+          -0.76500004529953
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.0699999332428,
+          2.45000004768372,
+          1.52999997138977
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/props/RecordArchive_Authored.res",
+    "bytes": 2256537,
+    "sha256": "e456f4ba01b81d96f751313a176e2bb81567ff198e6913ca3ee6b808496cc467",
+    "class": "ArrayMesh",
+    "triangles": 127710,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -9.30052947998047,
+          0.0,
+          -15.8400001525879
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          18.6010589599609,
+          2.15000009536743,
+          26.4381065368652
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/AshMill_Authored.res",
+    "bytes": 59294,
+    "sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
+    "class": "ArrayMesh",
+    "triangles": 4271,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.67000007629395,
+          0.0,
+          -2.80999994277954
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.90999984741211,
+          4.24349975585938,
+          6.15999984741211
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/AssemblyCourt_Authored.res",
+    "bytes": 590680,
+    "sha256": "e6b154c9c6b4dd694316f12bdd9e356613a401eebe51ec8fa681beba91dde4da",
+    "class": "ArrayMesh",
+    "triangles": 36362,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -17.8999996185303,
+          0.0,
+          -34.4000015258789
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          35.7999992370605,
+          5.5,
+          39.0300025939941
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_bell_Authored.res",
+    "bytes": 11684,
+    "sha256": "837ba40d4c970d47c971cbe813501e478e4999617e0945117a3175b47f89da58",
+    "class": "ArrayMesh",
+    "triangles": 432,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.310000002384186,
+          -0.25,
+          -0.310000002384186
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.620000004768372,
+          0.509999990463257,
+          0.620000004768372
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_bell_frame_Authored.res",
+    "bytes": 33400,
+    "sha256": "96342ac7f8b34cfd836d198e6c10dceb62ffcaccf28c51d7df7fdde63be551e2",
+    "class": "ArrayMesh",
+    "triangles": 2064,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.930000007152557,
+          0.0,
+          -0.630000054836273
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          1.86000001430511,
+          2.89000010490417,
+          1.26000022888184
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_boundary_Authored.res",
+    "bytes": 16014,
+    "sha256": "646e966184b5cc96cd9ca9eef107c2530ca2b75d78b25d90f10c34c51c68486a",
+    "class": "ArrayMesh",
+    "triangles": 920,
+    "surfaces": 4,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -3.79999995231628,
+          0.0,
+          -4.24000024795532
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.09000015258789,
+          0.899999976158142,
+          7.58000040054321
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_chapel_Authored.res",
+    "bytes": 52052,
+    "sha256": "b6c058190b7ecc1fcb01f1eba2aef34d63b902a4424e6d23e92f3e02cc13cf20",
+    "class": "ArrayMesh",
+    "triangles": 3080,
+    "surfaces": 3,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.75000011920929,
+          0.0,
+          -2.02500009536743
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          3.60000038146973,
+          3.73000025749207,
+          4.05000019073486
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res",
+    "bytes": 2570,
+    "sha256": "26447a7d303ea35eb04102c37fe82ca27163d51eb7f9d697e5224c0f662da0b5",
+    "class": "ArrayMesh",
+    "triangles": 16,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.849076747894287,
+          0.0,
+          -0.413549304008484
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          1.674076795578,
+          0.0399999991059303,
+          0.863231301307678
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_grave_child_Authored.res",
+    "bytes": 2844,
+    "sha256": "5d2a7ecd50e0978b37697ee9dab40671dbd1065bdd6796cc3e8b8b164fcfc4a4",
+    "class": "ArrayMesh",
+    "triangles": 60,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.189999997615814,
+          0.00499999895691872,
+          -0.170000001788139
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.379999995231628,
+          0.145999997854233,
+          0.340000003576279
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+    "bytes": 4641,
+    "sha256": "6d5ea3a0b8431c5d5dd387dfa9449eea1d58774eb90e576e318111488178c489",
+    "class": "ArrayMesh",
+    "triangles": 96,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.17050623893738,
+          0.0570000000298023,
+          -2.54085493087769
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          5.73050594329834,
+          0.0400000028312206,
+          5.89634418487549
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_grave_harl_Authored.res",
+    "bytes": 11723,
+    "sha256": "fdcbc7abbe0a30410cc985155ba57a9ba3043ca08f78a1db7daf6d3c54241eb2",
+    "class": "ArrayMesh",
+    "triangles": 444,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.189999997615814,
+          0.00499999895691872,
+          -0.170000001788139
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.379999995231628,
+          0.314199984073639,
+          0.340000003576279
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_grave_rows_Authored.res",
+    "bytes": 6701,
+    "sha256": "2824379c0b269eab8e9893afa4e582543c5e07d3de2a2f5ae4f7812479694b5d",
+    "class": "ArrayMesh",
+    "triangles": 216,
+    "surfaces": 1,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.35806238651276,
+          0.0020000000949949,
+          -1.38197755813599
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          1.71151304244995,
+          0.610000014305115,
+          2.17724657058716
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res",
+    "bytes": 2591,
+    "sha256": "4ff445ed233ab3ad9a04114c8be05fe6540285414df7d2d7b92d797e956fee35",
+    "class": "ArrayMesh",
+    "triangles": 36,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.189999997615814,
+          0.00499999895691872,
+          -0.170000001788139
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.379999995231628,
+          0.135000005364418,
+          0.340000003576279
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Cemetery_memory_window_Authored.res",
+    "bytes": 3951,
+    "sha256": "bf29d17c29b85544350a258a29d9837be0f4b7d6f25c183f6a24b25930e5e5ad",
+    "class": "ArrayMesh",
+    "triangles": 118,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.0485000014305115,
+          -0.432500004768372,
+          -0.3125
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          0.067500002682209,
+          0.861579954624176,
+          0.625
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/CourtyardService_Authored.res",
+    "bytes": 273075,
+    "sha256": "a00865b08bf3270044a28b57ae1ee0ba3c2b80959f41a10cd9aaa88008725e00",
+    "class": "ArrayMesh",
+    "triangles": 16726,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -9.39199924468994,
+          0.0,
+          -6.79200029373169
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          25.1839981079102,
+          1.10000002384186,
+          14.9839992523193
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/FarmsteadEast_Authored.res",
+    "bytes": 33915,
+    "sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+    "class": "ArrayMesh",
+    "triangles": 2156,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.90000009536743,
+          0.0,
+          -2.30864238739014
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          6.0000057220459,
+          3.65522861480713,
+          4.65769195556641
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/FarmsteadRuins_Authored.res",
+    "bytes": 24164,
+    "sha256": "c24c8b047f2a84c4b79f2638c892f0b9155209a798e399f91e5beedb06d4b314",
+    "class": "ArrayMesh",
+    "triangles": 1550,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -3.10000562667847,
+          0.0,
+          -2.30864238739014
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          6.0000057220459,
+          3.65522861480713,
+          4.65769195556641
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/FarmsteadWest_Authored.res",
+    "bytes": 34282,
+    "sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+    "class": "ArrayMesh",
+    "triangles": 2168,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -3.10000562667847,
+          0.0,
+          -2.40000009536743
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          6.20000553131104,
+          3.65522861480713,
+          4.80000019073486
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/GreyfenForge_Authored.res",
+    "bytes": 32451,
+    "sha256": "f6b4026143f8c5b30917cd36487739df43463f3fc9377bf72f92ae56cf35ce73",
+    "class": "ArrayMesh",
+    "triangles": 426,
+    "surfaces": 6,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.96000003814697,
+          0.0199999995529652,
+          -1.53999996185303
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          3.94000005722046,
+          3.82999992370605,
+          4.26000022888184
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/GreyfenFrontages_Authored.res",
+    "bytes": 5756,
+    "sha256": "221ffe768161d6d40bbbac87881bdadc31417b7c88224066e1dec082e2719eca",
+    "class": "ArrayMesh",
+    "triangles": 168,
+    "surfaces": 3,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -12.2147054672241,
+          0.0640000030398369,
+          -11.7372961044312
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          27.5062065124512,
+          0.0349999964237213,
+          21.5772972106934
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/GreyfenHouse_Authored.res",
+    "bytes": 218435,
+    "sha256": "d0cda085f0c129404eceb230f0c12974ca01b009360a01530e47fa906b9d71af",
+    "class": "ArrayMesh",
+    "triangles": 4632,
+    "surfaces": 6,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.45331859588623,
+          0.0199999995529652,
+          -2.16000008583069
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          4.90663719177246,
+          3.65000009536743,
+          4.19661998748779
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/GreyfenHouse_Authored_1.res",
+    "bytes": 220791,
+    "sha256": "1d02a4fbd42c0b35ca7bb0b454c428e813065b093516fc24024a83e089bf3a45",
+    "class": "ArrayMesh",
+    "triangles": 4670,
+    "surfaces": 6,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.45331859588623,
+          0.0199999995529652,
+          -2.45000004768372
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          4.90663719177246,
+          3.65000009536743,
+          4.48661994934082
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/GreyfenHouse_Authored_2.res",
+    "bytes": 219303,
+    "sha256": "b6b4c8f25f8f4dbf2e51895d5d5c8fb8f7ab84675e1a6bf26eb5ec866b159188",
+    "class": "ArrayMesh",
+    "triangles": 4646,
+    "surfaces": 6,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.45331859588623,
+          0.0199999995529652,
+          -2.22000002861023
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          4.90663719177246,
+          3.65000009536743,
+          4.25661945343018
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/GreyfenHouse_Authored_3.res",
+    "bytes": 222155,
+    "sha256": "f6fecb2d39523374b3783816b57e90a3c4ce93dcc88c0a4f347d82958c69e24c",
+    "class": "ArrayMesh",
+    "triangles": 4692,
+    "surfaces": 6,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.45331859588623,
+          0.0199999995529652,
+          -2.16000008583069
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          4.90663719177246,
+          3.65000009536743,
+          4.19661998748779
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/GreyfenShrine_Authored.res",
+    "bytes": 13131,
+    "sha256": "5bf8aa1cec17a2a557c859a020b3bd096aecfd8a6dfb624c0d60c47d70b7710b",
+    "class": "ArrayMesh",
+    "triangles": 113,
+    "surfaces": 6,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.17999994754791,
+          0.0199999995529652,
+          -0.819999992847443
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.35999989509583,
+          1.81000006198883,
+          1.63999998569489
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/GreyfenWell_Authored.res",
+    "bytes": 16555,
+    "sha256": "0d9fde12c1ab3ea805b72f50612868a8d481f91600b4d9d96dced19f01109163",
+    "class": "ArrayMesh",
+    "triangles": 166,
+    "surfaces": 6,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -0.910000026226044,
+          0.0299999993294477,
+          -1.01999998092651
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          1.82000005245209,
+          1.99000000953674,
+          1.84741914272308
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/RoadCheckpoint_Authored.res",
+    "bytes": 63047,
+    "sha256": "85e660c2250bb4d32353b9007ca639dd9a2ff0670871d212c91a0236151393dc",
+    "class": "ArrayMesh",
+    "triangles": 4450,
+    "surfaces": 4,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -12.6999998092651,
+          0.0,
+          -10.7749996185303
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          27.9500007629395,
+          3.78500008583069,
+          9.17499923706055
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/UndercroftVault_Authored.res",
+    "bytes": 45145,
+    "sha256": "30d390d85e1cda811e8a59feabedf29205c0c9f6c3ea792ca1aae6505c0086b4",
+    "class": "ArrayMesh",
+    "triangles": 3172,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -14.04625415802,
+          0.0,
+          -15.5
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          28.09250831604,
+          5.84999990463257,
+          31.0
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": false,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_cistern_Authored.res",
+    "bytes": 9830,
+    "sha256": "8143b7d91cf80f729fffc9634fd8909a7586a3b626078d5a3c2082024deaee1c",
+    "class": "ArrayMesh",
+    "triangles": 428,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.10999989509583,
+          0.0,
+          -2.07999992370605
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          4.21999979019165,
+          1.26999998092651,
+          4.15999984741211
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_curtain_Authored.res",
+    "bytes": 9298,
+    "sha256": "39dda90a0c4b6c7fd23d90ab88c4ff074e6a7d70649bc991fd82bed25058859c",
+    "class": "ArrayMesh",
+    "triangles": 500,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -5.90000009536743,
+          0.0,
+          -0.824999988079071
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          11.8000001907349,
+          7.09999990463257,
+          1.64999997615814
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_door_Authored.res",
+    "bytes": 16964,
+    "sha256": "fd3119162252717852636b1d4b0df1af4fe5bdef9ddc8712bb25da748c362434",
+    "class": "ArrayMesh",
+    "triangles": 882,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -1.25,
+          0.0,
+          -0.21000000834465
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          2.5,
+          3.0,
+          0.329999983310699
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_forge_Authored.res",
+    "bytes": 76493,
+    "sha256": "e8964925a0b135cad6cd4ceeb5cd9ae0bbb93323dfd4530549b4b0bd2b1f6cbb",
+    "class": "ArrayMesh",
+    "triangles": 4806,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -3.20000004768372,
+          -0.00499999523162842,
+          -2.5
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          6.40000009536743,
+          4.95499992370605,
+          4.8600001335144
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_gatehouse_Authored.res",
+    "bytes": 71228,
+    "sha256": "05c9e3484a600d1c4b4207f1214a03411190651b916ab0f265b84f2500c4979a",
+    "class": "ArrayMesh",
+    "triangles": 4992,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -9.56999969482422,
+          0.0,
+          -1.87999999523163
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          19.1399993896484,
+          8.17500019073486,
+          3.75999999046326
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_keep_Authored.res",
+    "bytes": 28857,
+    "sha256": "ffbacb8086451655d4da6ccfe5b1230ac88ec676f51e1b9ed2ecbb0f8c755a5b",
+    "class": "ArrayMesh",
+    "triangles": 2164,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -6.19999980926514,
+          0.0,
+          -2.25
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          12.3999996185303,
+          10.0500001907349,
+          4.72499990463257
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_record_entry_Authored.res",
+    "bytes": 96786,
+    "sha256": "509a599f501a1b7570a835ce7232bc97d38d3773e65c9553114c449d413796c7",
+    "class": "ArrayMesh",
+    "triangles": 6006,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -4.09999990463257,
+          0.0,
+          -2.95000004768372
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          8.19999980926514,
+          5.25,
+          3.4449999332428
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_stable_Authored.res",
+    "bytes": 103596,
+    "sha256": "c82d692e4e864ce29086bfa062120b748ff3bace75db43a6fd787438a88195cc",
+    "class": "ArrayMesh",
+    "triangles": 6512,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -3.90000009536743,
+          0.0,
+          -5.40000009536743
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          7.80000019073486,
+          5.5,
+          10.8000001907349
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://assets_external/environment/village/Vargan_tower_Authored.res",
+    "bytes": 19519,
+    "sha256": "d5f98ba74357527ff19eaa093aa8504f634e476d8fa2a78707c28ace33a562c9",
+    "class": "ArrayMesh",
+    "triangles": 1444,
+    "surfaces": 2,
+    "bounds": {
+      "position": {
+        "type": "Vector3",
+        "values": [
+          -2.67499995231628,
+          0.0,
+          -2.67499995231628
+        ]
+      },
+      "size": {
+        "type": "Vector3",
+        "values": [
+          5.34999990463257,
+          1.15000009536743,
+          5.34999990463257
+        ]
+      },
+      "type": "AABB"
+    },
+    "changed": true,
+    "collision_faces_sha256": null
+  },
+  {
+    "path": "res://data/prepared_static_batches.res",
+    "bytes": 5427,
+    "sha256": "62986d8433397a30e7c3db2a390befddfe6629c939b62bfc122745c70d4905f2",
+    "class": "Resource",
+    "triangles": 0,
+    "surfaces": 0,
+    "bounds": null,
+    "changed": false,
+    "collision_faces_sha256": null
+  }
+]

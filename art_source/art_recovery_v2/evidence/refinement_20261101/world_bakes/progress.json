@@ -1,0 +1,136 @@
+[
+  {
+    "step": "house-0",
+    "script": "res://tools/build_greyfen_house.gd",
+    "args": [
+      "--variant=0"
+    ],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\house-0.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\house-0-engine.log",
+    "tool_sha256": "518be4696c89d682aeebfe179a23a9d5fb1e0faf70cd22b9b29030090cfc720b"
+  },
+  {
+    "step": "house-1",
+    "script": "res://tools/build_greyfen_house.gd",
+    "args": [
+      "--variant=1"
+    ],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\house-1.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\house-1-engine.log",
+    "tool_sha256": "518be4696c89d682aeebfe179a23a9d5fb1e0faf70cd22b9b29030090cfc720b"
+  },
+  {
+    "step": "house-2",
+    "script": "res://tools/build_greyfen_house.gd",
+    "args": [
+      "--variant=2"
+    ],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\house-2.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\house-2-engine.log",
+    "tool_sha256": "518be4696c89d682aeebfe179a23a9d5fb1e0faf70cd22b9b29030090cfc720b"
+  },
+  {
+    "step": "house-3",
+    "script": "res://tools/build_greyfen_house.gd",
+    "args": [
+      "--variant=3"
+    ],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\house-3.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\house-3-engine.log",
+    "tool_sha256": "518be4696c89d682aeebfe179a23a9d5fb1e0faf70cd22b9b29030090cfc720b"
+  },
+  {
+    "step": "build_record_archive",
+    "script": "res://tools/build_record_archive.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_record_archive.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_record_archive-engine.log",
+    "tool_sha256": "817fb67034bd8982720be8516accd2a3ff9ef460f44ca95bf0550ed7d0082bc7"
+  },
+  {
+    "step": "build_vargan_architecture",
+    "script": "res://tools/build_vargan_architecture.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_vargan_architecture.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_vargan_architecture-engine.log",
+    "tool_sha256": "065e2ea5c4329bb95b466b3f8f69604817167507c6c2ee4efcb1bc83b6496422"
+  },
+  {
+    "step": "build_assembly_court",
+    "script": "res://tools/build_assembly_court.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_assembly_court.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_assembly_court-engine.log",
+    "tool_sha256": "dda0f713c182417aea547adac14bde4aae1bce70fc5ade6ea70c03dad290e9fa"
+  },
+  {
+    "step": "build_campaign_wilds",
+    "script": "res://tools/build_campaign_wilds.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_campaign_wilds.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_campaign_wilds-engine.log",
+    "tool_sha256": "89112145507eb915095e20a149418b7017f3ef52b4af988f180b67429c1933da"
+  },
+  {
+    "step": "build_cemetery_architecture",
+    "script": "res://tools/build_cemetery_architecture.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_cemetery_architecture.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_cemetery_architecture-engine.log",
+    "tool_sha256": "149357940d041333279763a9e473100c050ac3509ce974fd0245d6abfbd164e0"
+  },
+  {
+    "step": "build_courtyard_service",
+    "script": "res://tools/build_courtyard_service.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_courtyard_service.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_courtyard_service-engine.log",
+    "tool_sha256": "3d8fd4635ac8ee3ed0d93565a46719d16f823f2aeca275bd76615ba586eed24d"
+  },
+  {
+    "step": "build_greyfen_forge_work",
+    "script": "res://tools/build_greyfen_forge_work.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_greyfen_forge_work.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_greyfen_forge_work-engine.log",
+    "tool_sha256": "b30b6824a596560dabdfde60df0ae1c0d6491555b3851140dbde588ab709f7c6"
+  },
+  {
+    "step": "build_greyfen_social",
+    "script": "res://tools/build_greyfen_social.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_greyfen_social.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_greyfen_social-engine.log",
+    "tool_sha256": "b88dcbd35876547140d2aef7607ed43306fa644ee39975f602fe50132001cec7"
+  },
+  {
+    "step": "build_landscape_foundations",
+    "script": "res://tools/build_landscape_foundations.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_landscape_foundations.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_landscape_foundations-engine.log",
+    "tool_sha256": "c85298dd1999d939943172a390f1db241862f112f3309230fae0034b551f9642"
+  },
+  {
+    "step": "build_prepared_zone_geometry",
+    "script": "res://tools/build_prepared_zone_geometry.gd",
+    "args": [],
+    "exit_code": 0,
+    "log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_prepared_zone_geometry.log",
+    "engine_log": "D:\\Projects\\AshenOath\\.release-gate\\asset-refinement-20261101\\world-bakes\\build_prepared_zone_geometry-engine.log",
+    "tool_sha256": "6a93a4aa5a731856c1d9229b9b1ecf31afcb5def141e9e9677d0fe45479aed91"
+  }
+]

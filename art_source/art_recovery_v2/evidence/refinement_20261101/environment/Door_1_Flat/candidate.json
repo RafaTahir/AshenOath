@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/village/Door_1_Flat.obj",
+  "roles": [
+    "castle_door"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Door_1_Flat\\Door_1_Flat.obj",
+  "source_sha256": "3b4648fcf95e078f1aa4e5cece8c73aa80139e31c94548e3b178c7440db87224",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Door_1_Flat.blend",
+  "runtime_sha256": "041e1ffde633b65cfa752aa67fdddd11da6563295eb2e7f05c4f80f59518a222",
+  "change": "Door-leaf and surround arrises retain existing hinged surface ownership.",
+  "before_triangles": 314,
+  "after_triangles": 606,
+  "bounds_drift": 3.725290298461914e-09,
+  "material_slots": {
+    "Door_1_Flat": [
+      "MI_WoodTrim",
+      "MI_WindowGlass"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

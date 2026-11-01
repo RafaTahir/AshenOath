@@ -1,0 +1,64 @@
+{
+  "id": "M19",
+  "material": "M19_OliveGreyHide",
+  "image_size": [
+    256,
+    256
+  ],
+  "old_image_sha256": "4e29eda8011f48e90ce6790830c3ec89084b9d014e06290ca0e52f93921158ee",
+  "new_image_sha256": "fad09498bf72210f7b097bb2f61a612a24e2ceb9d776cfd062e2824886c72d30",
+  "old_mean_rgb8": [
+    71.14686584472656,
+    68.84980773925781,
+    50.49070739746094
+  ],
+  "new_mean_rgb8": [
+    71.14852905273438,
+    68.84368896484375,
+    50.493194580078125
+  ],
+  "mean_rgb_delta_normalized": [
+    6.522384344362745e-06,
+    -2.3995193780637254e-05,
+    9.75365732230392e-06
+  ],
+  "maximum_mean_channel_delta_rgb8": 0.0061187744140625,
+  "noise": "Seeded Gaussian-filtered stationary luminance noise; 0.65 encoded-RGB-byte standard deviation; old channel ratios retained",
+  "old_runtime": {
+    "path": "D:\\Temp\\AshenOath\\skin_refinement_20261101\\before\\M19_refined_before_skin_v004.glb",
+    "bytes": 2408112,
+    "sha256": "0d46107f982f02f6a5f919bf289425865126ee4ef1aa98dd22c3bbb259b30cdb"
+  },
+  "new_runtime": {
+    "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\bipeds\\M19\\M19_refined.glb",
+    "bytes": 2433836,
+    "sha256": "6e99822ef4efb0f7bbfdd6bbdc3c2dcdf22c474deae214183dfe4517b4ea15b8"
+  },
+  "old_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_v003.blend",
+  "new_source": {
+    "path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_skin_v004.blend",
+    "bytes": 3400554,
+    "sha256": "82c53ecf8e0f6223386567aaa8dbb77779551560746e2640a764bef450ea0323"
+  },
+  "non_image_buffer_views_preserved": 1960,
+  "all_other_image_payloads_preserved": true,
+  "all_geometry_skin_uv_node_accessor_and_animation_json_and_payloads_identical": true,
+  "clips_preserved": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "native_visual_acceptance": "Pending main integration/import and fresh current-hash captures"
+}

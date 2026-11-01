@@ -1,0 +1,35 @@
+# Blender 5.2.3 LTS MTL File: 'Wall_Plaster_Window_Wide_Flat.blend'
+# www.blender.org
+
+newmtl MI_Brick
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/T_Brick_BaseColor.png
+map_Ns D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/T_Brick_Roughness.png
+map_Bump -bm 1.000000 D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/T_Brick_Normal.png
+
+newmtl MI_Plaster
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/T_Plaster_BaseColor.png
+map_Bump -bm 1.000000 D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/T_Plaster_Normal.png
+
+newmtl MI_WoodTrim
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/T_WoodTrim_BaseColor.png
+map_Ns D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/T_WoodTrim_Roughness.png
+map_Bump -bm 1.000000 D:/Projects/AshenOath/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/T_WoodTrim_Normal.png

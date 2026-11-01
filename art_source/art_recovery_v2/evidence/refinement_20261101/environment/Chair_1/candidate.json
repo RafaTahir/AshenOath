@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/props/Chair_1.obj",
+  "roles": [
+    "castle_chair"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Chair_1\\Chair_1.obj",
+  "source_sha256": "1154620b56007cf66f0d4804ccdf9c8395bdfa3f8c2b9c3a94c04a8e61442033",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Chair_1.blend",
+  "runtime_sha256": "062287ffe7da97029c47feb1418848034e850aade0500c7b4aa11fc12aa6dd16",
+  "change": "Seat, back rail and leg arrises gain restrained hand-worn corners.",
+  "before_triangles": 496,
+  "after_triangles": 1296,
+  "bounds_drift": 5.960464477539063e-08,
+  "material_slots": {
+    "Chair_1_Cube.180": [
+      "MI_Trim_Furniture",
+      "MI_Trim_Metal"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

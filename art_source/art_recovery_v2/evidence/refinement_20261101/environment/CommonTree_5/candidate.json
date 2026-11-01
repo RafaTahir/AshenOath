@@ -1,0 +1,23 @@
+{
+  "resource": "res://assets_external/environment/forest/CommonTree_5.obj",
+  "roles": [
+    "forest_tree_secondary"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\CommonTree_5\\CommonTree_5.obj",
+  "source_sha256": "702d3a16c00ecca99083ae5a481d09bdf5560264f6f358bfb4e6dfd3874de675",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\CommonTree_5.blend",
+  "runtime_sha256": "8137a19ac572de1a4056859b27f6a1a1ec67e6b825928a17e8e28fe937b61434",
+  "change": "Trunk branch normals blend within limbs; leaf cards stay flat.",
+  "before_triangles": 3182,
+  "after_triangles": 3182,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "CommonTree_5": [
+      "Bark_NormalTree",
+      "Leaves_NormalTree"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

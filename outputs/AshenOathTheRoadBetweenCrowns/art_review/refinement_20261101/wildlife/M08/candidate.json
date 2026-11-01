@@ -1,0 +1,130 @@
+{
+  "id": "M08",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M08\\M08_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M08\\M08_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M08_White_Hart_Avatar.glb",
+  "input_sha256": "8d3b9a23a624b82aa4a1ea7ee597360cd6ac4bb3a185da72533c46b9d36615bf",
+  "changes": [
+    "Refine bounded shoulder rise and neck/head width on the native stag",
+    "Preserve antler attachment, hoof placement and ivory identity",
+    "Separate horn/hoof/coat response through retained material values"
+  ],
+  "metrics_before": {
+    "triangles": 3670,
+    "vertices": 7864,
+    "meshes": 2,
+    "bounds_blender_z_up": [
+      [
+        -0.7146226167678833,
+        -1.34438157081604,
+        0.5612116456031799
+      ],
+      [
+        0.7146224975585938,
+        1.344382643699646,
+        3.6000003814697266
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 3670,
+    "vertices": 7864,
+    "meshes": 2,
+    "bounds_blender_z_up": [
+      [
+        -0.703903317451477,
+        -1.3443816900253296,
+        0.5612116456031799
+      ],
+      [
+        0.703903079032898,
+        1.344382643699646,
+        3.6000003814697266
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "Attack_Headbutt",
+      "Attack_Kick",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Eating",
+      "Feed",
+      "Gallop",
+      "Gallop_Jump",
+      "HitReact",
+      "Idle",
+      "Idle_2",
+      "Idle_Headlow",
+      "Idle_HitReact1",
+      "Idle_HitReact2",
+      "Interact",
+      "Investigate",
+      "Jump_toIdle",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walk",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 38,
+    "images": 1,
+    "triangles": 3670
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M08\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M08\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M08\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M08\\quarter.png"
+  ],
+  "source_sha256": "5af2b6d5919db4edbd74f4442b0d929368e812d61dd66c5a044ebc5ff6f377a7",
+  "runtime_sha256": "6b547b8fa5142fdb46ad00f478a09727a1f63af0bb63f6ad9fff4adfeb4eb349",
+  "runtime_bytes": 2407224,
+  "rig_signature": "6fd02466a7ecbd4f824fd55afc772931ec59b6e51d7a256144d91cbb956a0e16",
+  "retained_clips": [
+    "Attack",
+    "Attack_Headbutt",
+    "Attack_Kick",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Eating",
+    "Feed",
+    "Gallop",
+    "Gallop_Jump",
+    "HitReact",
+    "Idle",
+    "Idle_2",
+    "Idle_Headlow",
+    "Idle_HitReact1",
+    "Idle_HitReact2",
+    "Interact",
+    "Investigate",
+    "Jump_toIdle",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walk",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M08_White_Hart_Avatar.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

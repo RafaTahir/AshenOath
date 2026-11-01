@@ -1,0 +1,24 @@
+{
+  "resource": "res://assets_external/environment/village/Wall_Plaster_Window_Wide_Flat.obj",
+  "roles": [
+    "greyfen_window_facade"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_Plaster_Window_Wide_Flat\\Wall_Plaster_Window_Wide_Flat.obj",
+  "source_sha256": "d6af5a06df296fb627db60f592bfe286e5769fd19826726146426a3719351086",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_Plaster_Window_Wide_Flat.blend",
+  "runtime_sha256": "796343856e6e32049bcc9c41de5fc0486dd0b76dc191662cc53c857f8f565a0d",
+  "change": "Window reveal and supporting timber corners gain readable thickness.",
+  "before_triangles": 96,
+  "after_triangles": 140,
+  "bounds_drift": 2.9802322387695312e-08,
+  "material_slots": {
+    "Wall_Plaster_Window_Wide_Flat": [
+      "MI_Plaster",
+      "MI_Brick",
+      "MI_WoodTrim"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

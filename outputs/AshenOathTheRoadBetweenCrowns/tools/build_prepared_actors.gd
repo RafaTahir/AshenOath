@@ -30,6 +30,7 @@ func _refresh_library_ownership() -> void:
 		var pending: Array[String] = [str(entry.path)]
 		var visited: Dictionary = {}
 		var libraries: Array[String] = []
+		var source_scenes: Array[String] = []
 		while not pending.is_empty():
 			var resource_path: String = pending.pop_back()
 			if visited.has(resource_path):
@@ -37,6 +38,8 @@ func _refresh_library_ownership() -> void:
 			visited[resource_path] = true
 			if resource_path.begins_with(OUTPUT + "animations/") and resource_path.ends_with(".res"):
 				libraries.append(resource_path)
+			if resource_path.get_extension().to_lower() in ["glb", "gltf", "fbx", "dae"]:
+				source_scenes.append(resource_path)
 			for encoded: String in ResourceLoader.get_dependencies(resource_path):
 				var dependency := ""
 				for component: String in encoded.split("::"):
@@ -51,6 +54,13 @@ func _refresh_library_ownership() -> void:
 					pending.append(dependency)
 		libraries.sort()
 		entry.animation_resources = libraries
+		var dependencies: Array = visited.keys()
+		dependencies.erase(str(entry.path))
+		dependencies.sort()
+		entry.resource_dependencies = dependencies
+		source_scenes.sort()
+		entry.source_scene_dependencies = source_scenes
+		entry.compiled_sha256 = FileAccess.get_sha256(str(entry.path))
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	if file == null:
 		push_error("Cannot record prepared actor animation ownership.")

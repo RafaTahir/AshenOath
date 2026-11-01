@@ -1,0 +1,32 @@
+{
+  "id": "C07",
+  "current": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\humans\\C07_Captain_Senn.glb",
+  "sha256": "da4a826b7c1bd726408473981c6e33d2b404828014412d347be38646472b1284",
+  "source_surfaces": [
+    {
+      "mesh": "C07_MotionFittedAssembly",
+      "vertices": 12344,
+      "polygons": 18466,
+      "materials": [
+        "Captain_Senn_C07_PrivateAnatomyAtlas",
+        "Captain_Senn_C07_AuthoredClothesAtlas",
+        "Captain_Senn_MI_Ranger",
+        "Captain_Senn_MI_Regular_Male",
+        "Captain_Senn_MI_Peasant"
+      ],
+      "bounds": [
+        [
+          -0.8994145393371582,
+          -0.1675407737493515,
+          -0.003967864904552698
+        ],
+        [
+          0.8994148969650269,
+          0.21921959519386292,
+          1.81278395652771
+        ]
+      ]
+    }
+  ],
+  "actions": []
+}

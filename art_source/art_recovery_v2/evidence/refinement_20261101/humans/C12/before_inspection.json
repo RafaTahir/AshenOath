@@ -1,0 +1,31 @@
+{
+  "id": "C12",
+  "current": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\humans\\C12_Nera.glb",
+  "sha256": "a8ccf84fb1e80e3406dead62de9d89a9158bedfc55244335eb1c0ed11cf5453e",
+  "source_surfaces": [
+    {
+      "mesh": "C12_MotionFittedAssembly",
+      "vertices": 14380,
+      "polygons": 19994,
+      "materials": [
+        "Nera_C12_PrivateAnatomyAtlas",
+        "Nera_C12_AuthoredClothesAtlas",
+        "Nera_MI_Peasant",
+        "Nera_MI_Peasant.001"
+      ],
+      "bounds": [
+        [
+          -0.8319412469863892,
+          -0.16754043102264404,
+          -0.0067438287660479546
+        ],
+        [
+          0.8319414854049683,
+          0.1672552227973938,
+          1.7689101696014404
+        ]
+      ]
+    }
+  ],
+  "actions": []
+}

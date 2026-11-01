@@ -1,0 +1,187 @@
+{
+  "scope": "Independent source/shared-runtime/production-copy/image and per-surface required-channel check for all 20 creatures; no engine run",
+  "assets": [
+    {
+      "id": "M01",
+      "source_sha256": "a08a2ca236f84e3cd67669720128a3a0302492e980f93661c1907fca0981edb6",
+      "runtime_sha256": "4d40e837e8c786512b2f7199d2cac003729c5eee93a60319d520f22d53d2df19",
+      "meshes": 1,
+      "surfaces": 4,
+      "images": 12,
+      "clips": 15
+    },
+    {
+      "id": "M05",
+      "source_sha256": "b6fb2074a0fedf02f4606c5cdd9af74068e5443ab857a0af11f8201cb7be90fc",
+      "runtime_sha256": "bca2dbeacf49f36f6d938d58e11f22f28801c613526070dc5021749d976f17d6",
+      "meshes": 1,
+      "surfaces": 5,
+      "images": 15,
+      "clips": 15
+    },
+    {
+      "id": "M02",
+      "source_sha256": "d800305041336303f94aa051729b86f203827da91fd0719070212aa196b9738b",
+      "runtime_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 3,
+      "clips": 15
+    },
+    {
+      "id": "M19",
+      "source_sha256": "7bfca36639971388da0efba7b31e93c044bae2ee5e8e788b1dfa52d8ad92eafb",
+      "runtime_sha256": "01cff3539dc97aac3c8cc7ed6ac2825c3fd9a5f5a313d5feba0ffd84d45698bb",
+      "meshes": 1,
+      "surfaces": 5,
+      "images": 15,
+      "clips": 15
+    },
+    {
+      "id": "M20",
+      "source_sha256": "c9e84fad2bf57daf59d800dfca4018c321d0d2257369e470ef1099fa2ac4bebf",
+      "runtime_sha256": "ab95aa47fa0c235698ccc6e0651a19074ebc0f640046398bc0a7a1d397aba74f",
+      "meshes": 1,
+      "surfaces": 5,
+      "images": 15,
+      "clips": 15
+    },
+    {
+      "id": "M03",
+      "source_sha256": "68882d5849425b033d48395fe3c4f1b9b50f3ee18904a534004e97a21f00d307",
+      "runtime_sha256": "a2b15cab2171ff57b79aa59bba2757485662fb02939219e6cd66e4ca626cf379",
+      "meshes": 1,
+      "surfaces": 6,
+      "images": 18,
+      "clips": 15
+    },
+    {
+      "id": "M04",
+      "source_sha256": "186e2e1b0b436ecef77879d7a868542a60a3f8f4fad0312fea57cca5d65b884b",
+      "runtime_sha256": "0dc7f5beb25cf27500f2fb8c599cd189226f532f4cc3d8e5545c06127d3c95ed",
+      "meshes": 1,
+      "surfaces": 2,
+      "images": 6,
+      "clips": 15
+    },
+    {
+      "id": "M06",
+      "source_sha256": "33c50abae5ef4ca6acb0ab87983d4fcf733e998d3fcb425aaf84ca660a35f358",
+      "runtime_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee",
+      "meshes": 1,
+      "surfaces": 2,
+      "images": 6,
+      "clips": 15
+    },
+    {
+      "id": "M08",
+      "source_sha256": "5af2b6d5919db4edbd74f4442b0d929368e812d61dd66c5a044ebc5ff6f377a7",
+      "runtime_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
+      "meshes": 2,
+      "surfaces": 2,
+      "images": 1,
+      "clips": 26
+    },
+    {
+      "id": "M13",
+      "source_sha256": "9e7771f18250aab8622fbad31c268e386a1fdae7df24aff2321dd068ba936dfb",
+      "runtime_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M07",
+      "source_sha256": "cd0c21cc46a50645f70e1ec6a96fc78ea458055aefb7b04077b30be41f359afe",
+      "runtime_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M11",
+      "source_sha256": "620ced3c9c3058ca84c4bc7d05671ee5be7da7c1022677eda8ac48dce117e9cc",
+      "runtime_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e",
+      "meshes": 1,
+      "surfaces": 2,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M09",
+      "source_sha256": "efc53539d5d88eab4872374af74286077f1ac648080f55af03c82d2b1fdfb1bf",
+      "runtime_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M10",
+      "source_sha256": "30fbce1387cfd3bd47dc18987d314d5c16f1955a700f958a3db6db29277dff0f",
+      "runtime_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M12",
+      "source_sha256": "598e28361362b2e72e74057e3c06ec59f1ec5f5807a3b2e4b7e5b91030dbaa6a",
+      "runtime_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M14",
+      "source_sha256": "3c919c413f5bfee765962e95414f1b4d7c689b4b4a53e8aee1c247fa2d48e983",
+      "runtime_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M15",
+      "source_sha256": "1b95937ebc31a0ca4e06cb13d97edae2d1ecaccf57f71cef5c2723b2d9049e15",
+      "runtime_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M16",
+      "source_sha256": "08293b641e555b5da0d5efa474d01dd0a67bbd07adf79a95dab5d2b8a2780bf0",
+      "runtime_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M17",
+      "source_sha256": "b3bf9044f15c4118fd4cd540eb667e2bd591098ab360b54d456ec73e08e080d0",
+      "runtime_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    },
+    {
+      "id": "M18",
+      "source_sha256": "5366578e8a351384c47c26cfcb75561b27862b39de01b2bc2ce8491d85669b6e",
+      "runtime_sha256": "3519e5fa7badf6f859bf40d362cd076d66e4d590118b85df134e4413b01b10d7",
+      "meshes": 1,
+      "surfaces": 1,
+      "images": 1,
+      "clips": 15
+    }
+  ],
+  "passed": true,
+  "resource_identity_phase": "Pre-final-creature-albedo-fixes historical snapshot; final identities/costs in independent_final_runtime_qa.json"
+}

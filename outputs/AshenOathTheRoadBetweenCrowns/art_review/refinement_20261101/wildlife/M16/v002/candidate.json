@@ -1,0 +1,111 @@
+{
+  "id": "M16",
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M16\\v002\\M16_refined_20261101.blend",
+  "runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M16\\v002\\M16_refined_20261101.glb",
+  "destination_resource": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+  "input_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\stylized\\runtime_shared\\creatures\\M16_Inkblind.glb",
+  "input_sha256": "407afdc70d2be466fd55fe334b29badd97f184ccbababb991e58d242718e17fa",
+  "changes": [
+    "Lift and extend existing protective shield over the exposed soft dorsal abdomen",
+    "Broaden blind feeding head and give retained leg tubes tapered profiles",
+    "Retain antenna/brush/leg chains without adding eyes"
+  ],
+  "metrics_before": {
+    "triangles": 6610,
+    "vertices": 4376,
+    "meshes": 1,
+    "geometry_sha256": "de419492dc34d3285f6f486067aa12256e0056982fbddd4af1719e02ea4d1364",
+    "bounds_blender_z_up": [
+      [
+        -0.5912500023841858,
+        -0.7715315818786621,
+        -0.011414148844778538
+      ],
+      [
+        0.591249942779541,
+        0.5439228415489197,
+        0.5033600330352783
+      ]
+    ]
+  },
+  "metrics_after": {
+    "triangles": 6610,
+    "vertices": 4376,
+    "meshes": 1,
+    "geometry_sha256": "22b407d572faf0190ff18ed136bf52a2d29cfb36ba58ace161153995809ecc58",
+    "bounds_blender_z_up": [
+      [
+        -0.5912500023841858,
+        -0.7715315818786621,
+        -0.011414148844778538
+      ],
+      [
+        0.591249942779541,
+        0.5660001039505005,
+        0.5410000085830688
+      ]
+    ]
+  },
+  "export_metrics": {
+    "animations": [
+      "Attack",
+      "AttackHeavy",
+      "Block",
+      "Death",
+      "Feed",
+      "HitReact",
+      "Idle",
+      "Interact",
+      "Investigate",
+      "Recovery",
+      "Running",
+      "Sleep",
+      "Threaten",
+      "Walking",
+      "Windup"
+    ],
+    "joints": 16,
+    "images": 1,
+    "triangles": 6610
+  },
+  "views": [
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M16\\v002\\front.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M16\\v002\\side.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M16\\v002\\rear.png",
+    "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\wildlife\\M16\\v002\\quarter.png"
+  ],
+  "source_sha256": "08293b641e555b5da0d5efa474d01dd0a67bbd07adf79a95dab5d2b8a2780bf0",
+  "runtime_sha256": "9f110e7b85f04d82ec55045c022b48b64e49ca323d01fe9c247e74f9dc53c8ed",
+  "runtime_bytes": 1729096,
+  "rig_signature": "a8e7473bcd9bcbeaaf405048e87dfcf2fcb80f8eb34f45fa152ddcb1a31ddf1f",
+  "retained_clips": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "texture_policy": "Original image bindings retained and embedded",
+  "tube_frame_repair": null,
+  "user_accepted": false,
+  "integrated": false,
+  "gameplay_tested": false,
+  "limitations": [
+    "Tailored retained-mesh refinement, not complete anatomical reconstruction.",
+    "Existing animation keys retained; rig fitting and in-game articulation require inspection.",
+    "Workbench studio previews show silhouette/texture; do not establish final level lighting or performance."
+  ],
+  "compiled_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M16_Inkblind.glb",
+  "published_resource_path": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+  "embedded_export_scope": "Local review intermediate; the editable master and losslessly shared compiled runtime are retained for delivery"
+}

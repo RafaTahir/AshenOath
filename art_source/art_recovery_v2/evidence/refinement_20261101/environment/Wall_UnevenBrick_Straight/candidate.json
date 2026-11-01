@@ -1,0 +1,26 @@
+{
+  "resource": "res://assets_external/environment/village/Wall_UnevenBrick_Straight.obj",
+  "roles": [
+    "cemetery_gravestone",
+    "ruins_wall",
+    "castle_wall"
+  ],
+  "source_baseline": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\environment\\Wall_UnevenBrick_Straight\\Wall_UnevenBrick_Straight.obj",
+  "source_sha256": "bd889d0c2ee182e73d52953a6e82764e77e740b6862daa12da4875b3896fbea0",
+  "editable_source": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\environment\\Wall_UnevenBrick_Straight.blend",
+  "runtime_sha256": "6cd58dbe4e23b417e5e23542023f07e8a601164dba5eebb2fe2c407811c6e289",
+  "change": "Exposed ruin/castle masonry edges soften without rounding whole stones.",
+  "before_triangles": 56,
+  "after_triangles": 92,
+  "bounds_drift": 0.0,
+  "material_slots": {
+    "Wall_UnevenBrick_Straight": [
+      "MI_WoodTrim",
+      "MI_Plaster",
+      "MI_UnevenBrick"
+    ]
+  },
+  "texture_pixels_changed": false,
+  "collision_changed": false,
+  "user_accepted": false
+}

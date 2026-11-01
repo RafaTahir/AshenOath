@@ -1,0 +1,24 @@
+{
+  "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_skin_v004.blend",
+  "source_sha256": "0af7be554a19a02fbcc45d4d3a9009b13fd55e06cdc33e75b64737f226fcf32a",
+  "packed_image_sha256": "0f5e3116608045e3feb233b646cb274b43113306c40c1ef172cbc31717f072df",
+  "actions_preserved": [
+    "Attack",
+    "AttackHeavy",
+    "Block",
+    "Death",
+    "Feed",
+    "HitReact",
+    "Idle",
+    "Interact",
+    "Investigate",
+    "Recovery",
+    "Running",
+    "Sleep",
+    "Threaten",
+    "Walking",
+    "Windup"
+  ],
+  "bone_names_preserved": true,
+  "fps": 24
+}
