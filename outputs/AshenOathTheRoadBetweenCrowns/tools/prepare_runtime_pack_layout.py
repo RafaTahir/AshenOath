@@ -118,6 +118,7 @@ def compile_layout(defer_environment=False):
     files = {n: set(selected_files(config[s].get("export_files", "PackedStringArray()")))
              for n, s in sections.items()}
     for name in ROOT_NAMES:
+        includes[name].add("data/native_attack_profiles.json")
         includes[name].update({"scripts/systems/*.gd", "scripts/hud/*.gd", "scripts/systems/method_ownership.json"})
         files[name].update({
             "res://scripts/systems/character_silhouette.gd",
@@ -367,6 +368,9 @@ def compile_layout(defer_environment=False):
             exclusions.discard(SILHOUETTE_DIRECTORY + "*")
         if name not in ROOT_NAMES:
             exclusions.update({"scripts/systems/*", "scripts/hud/*"})
+            exclusions.add("data/native_attack_profiles.json")
+        else:
+            exclusions.discard("data/native_attack_profiles.json")
         if name == "Runtime Pack Campaign":
             exclusions.discard(CHAPTER_ART)
         else:

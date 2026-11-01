@@ -1,5 +1,7 @@
 extends Node
 
+const BodyQuery = preload("res://scripts/combat_body_query.gd")
+
 var _query_scratch = preload("res://scripts/physics_query_scratch.gd").new()
 
 signal enemy_hit(name: String, amount: float)
@@ -44,18 +46,25 @@ func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dicti
 	for enemy in enemies + civilians:
 		if not is_instance_valid(enemy) or enemy.get("dead") == true or _blade_hit_ids.has(enemy.get_instance_id()) or bool(enemy.get_meta("story_surrender_protected", false)) or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
-		var target: Vector3 = enemy.global_position + Vector3(0, 0.9, 0)
+		var cylinder := BodyQuery.cylinder_for(enemy)
+		var target: Vector3 = cylinder.global_position if cylinder != null else enemy.global_position + Vector3(0, 0.9, 0)
 		if target.distance_to(player.global_position + Vector3(0, 0.9, 0)) > reach + 0.85:
 			continue
 		var closest := blade_tip
 		var contact_distance := INF
-		for height in [0.35, 0.72, 1.08, 1.42]:
-			var body_point: Vector3 = enemy.global_position + Vector3(0, height, 0)
-			var candidate := _closest_sweep_point(body_point, previous_base, previous_tip, blade_base, blade_tip)
-			var candidate_distance: float = body_point.distance_to(candidate)
-			if candidate_distance < contact_distance:
-				contact_distance = candidate_distance
-				closest = candidate
+		if cylinder != null:
+			var hit := BodyQuery.sweep_hit(cylinder, previous_base, previous_tip, blade_base, blade_tip, 0.78 if heavy else 0.66)
+			if not hit.is_empty():
+				contact_distance = float(hit.distance)
+				closest = hit.body_point
+		else:
+			for height in [0.35, 0.72, 1.08, 1.42]:
+				var body_point: Vector3 = enemy.global_position + Vector3(0, height, 0)
+				var candidate := _closest_sweep_point(body_point, previous_base, previous_tip, blade_base, blade_tip)
+				var candidate_distance: float = body_point.distance_to(candidate)
+				if candidate_distance < contact_distance:
+					contact_distance = candidate_distance
+					closest = candidate
 		if contact_distance <= (0.78 if heavy else 0.66) and _has_contact_line(player, enemy, closest):
 			candidates.append({"enemy": enemy, "point": closest, "contact_distance": contact_distance, "score": contact_distance + player.global_position.distance_to(target) * 0.08})
 	candidates.sort_custom(func(a, b): return float(a.score) < float(b.score))
@@ -210,16 +219,24 @@ func resolve_oathfire_cast(enemies: Array, cast: Dictionary) -> Array:
 	for enemy in enemies:
 		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
-		var body := _body_segment(enemy)
-		var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
-		var target: Vector3 = points[1]
-		var offset: Vector3 = target - origin
-		var along = offset.dot(forward)
-		if along <= 0.0 or along > beam_length:
-			continue
-		var nearest = origin + forward * along
-		if target.distance_to(nearest) > width + float(body.radius):
-			continue
+		var cylinder := BodyQuery.cylinder_for(enemy)
+		var target: Vector3
+		if cylinder != null:
+			var hit := BodyQuery.cast_hit(cylinder, origin, endpoint, width)
+			if hit.is_empty():
+				continue
+			target = hit.body_point
+		else:
+			var body := _body_segment(enemy)
+			var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
+			target = points[1]
+			var offset: Vector3 = target - origin
+			var along = offset.dot(forward)
+			if along <= 0.0 or along > beam_length:
+				continue
+			var nearest = origin + forward * along
+			if target.distance_to(nearest) > width + float(body.radius):
+				continue
 		enemy.apply_damage(damage, "oathfire")
 		enemy_hit.emit(enemy.display_name, damage)
 		impact.emit(target, true)
@@ -243,16 +260,28 @@ func resolve_arrow_shot(enemies: Array, cast: Dictionary) -> Dictionary:
 	for enemy in enemies:
 		if not is_instance_valid(enemy) or enemy.get("dead") == true or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
 			continue
-		var body := _body_segment(enemy)
-		var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
-		var target: Vector3 = points[1]
-		var offset := target - origin
-		var along := offset.dot(forward)
-		if along <= 0.0 or along > length or along >= best_along:
-			continue
-		var nearest := origin + forward * along
-		if target.distance_to(nearest) > width + float(body.radius):
-			continue
+		var cylinder := BodyQuery.cylinder_for(enemy)
+		var target: Vector3
+		var along: float
+		if cylinder != null:
+			var hit := BodyQuery.cast_hit(cylinder, origin, endpoint, width)
+			if hit.is_empty():
+				continue
+			target = hit.body_point
+			along = float(hit.along)
+			if along >= best_along:
+				continue
+		else:
+			var body := _body_segment(enemy)
+			var points := Geometry3D.get_closest_points_between_segments(origin, endpoint, body.start, body.end)
+			target = points[1]
+			var offset := target - origin
+			along = offset.dot(forward)
+			if along <= 0.0 or along > length or along >= best_along:
+				continue
+			var nearest := origin + forward * along
+			if target.distance_to(nearest) > width + float(body.radius):
+				continue
 		best_enemy = enemy
 		best_along = along
 		best_point = target

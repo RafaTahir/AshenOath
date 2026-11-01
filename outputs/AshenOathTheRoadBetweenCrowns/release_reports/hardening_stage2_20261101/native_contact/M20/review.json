@@ -1,0 +1,112 @@
+{
+	"agent_visual_observation": "All six start/contact/tail quarter and side frames inspected: clear forward contact, continuous tail withdrawal and retained authored texture bindings.",
+	"checks_passed": true,
+	"clip": "Attack",
+	"clip_seconds": 0.833333313465118,
+	"contact_clock": {
+		"external": false,
+		"interval": 0.0833333333333333,
+		"suspended": false
+	},
+	"contact_count": 1,
+	"contact_fraction": 0.7,
+	"enemy": "wychwood_brute",
+	"errors": [],
+	"fallback_reason": "endpoint_minimum",
+	"frames": [
+		{
+			"action_duration": 1.02857142857143,
+			"action_elapsed": 0.0,
+			"graph_state": "attack",
+			"images": [
+				"D:/Temp/AshenOath/asset_refinement_20261101/stage2_native_attack_profiles/visual/M20/start_quarter.png",
+				"D:/Temp/AshenOath/asset_refinement_20261101/stage2_native_attack_profiles/visual/M20/start_side.png"
+			],
+			"label": "start",
+			"probe": [
+				0.195798709988594,
+				1.44087159633636,
+				-0.253377467393875
+			],
+			"rate": 0.810185165868865,
+			"state": "attack"
+		},
+		{
+			"action_duration": 1.37,
+			"action_elapsed": 0.72,
+			"graph_state": "attack",
+			"images": [
+				"D:/Temp/AshenOath/asset_refinement_20261101/stage2_native_attack_profiles/visual/M20/contact_quarter.png",
+				"D:/Temp/AshenOath/asset_refinement_20261101/stage2_native_attack_profiles/visual/M20/contact_side.png"
+			],
+			"label": "contact",
+			"probe": [
+				-0.101968333125114,
+				0.866660296916962,
+				-1.4708936214447
+			],
+			"rate": 0.384615375445439,
+			"state": "attack"
+		},
+		{
+			"action_duration": 1.37,
+			"action_elapsed": 0.97,
+			"graph_state": "attack",
+			"images": [
+				"D:/Temp/AshenOath/asset_refinement_20261101/stage2_native_attack_profiles/visual/M20/tail_quarter.png",
+				"D:/Temp/AshenOath/asset_refinement_20261101/stage2_native_attack_profiles/visual/M20/tail_side.png"
+			],
+			"label": "tail",
+			"probe": [
+				-0.151554778218269,
+				0.934976816177368,
+				-1.30980384349823
+			],
+			"rate": 0.384615375445439,
+			"state": "attack"
+		}
+	],
+	"id": "M20",
+	"material_bindings": [
+		{
+			"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
+			"surface": 0,
+			"texture": "res://assets_external/design_pack_v1/creatures/textures/color_c948a3aba1dec9769d2265cb980c8c57bf90ddd44ea3addb7671a536e949ace1.png"
+		},
+		{
+			"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
+			"surface": 1,
+			"texture": "res://assets_external/design_pack_v1/creatures/textures/color_025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466.png"
+		},
+		{
+			"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
+			"surface": 2,
+			"texture": "res://assets_external/design_pack_v1/creatures/textures/color_380ac3f990018a1017a62cae7036ff344033101f149e196480c140e2265cca57.png"
+		},
+		{
+			"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
+			"surface": 3,
+			"texture": "res://assets_external/design_pack_v1/creatures/textures/color_962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81.png"
+		},
+		{
+			"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
+			"surface": 4,
+			"texture": "res://assets_external/design_pack_v1/creatures/textures/color_2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e.png"
+		}
+	],
+	"profile_method": "declared_recovery_boundary_fallback",
+	"profile_sha256": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+	"received_damage": 7.0,
+	"recovery_seconds": 0.65,
+	"reference_geometry": "Grey capsule = canonical defender at (0,0,-1.2); amber sphere = actual _attack_contact_point(); neither is shipped anatomy",
+	"scope": "isolated production Enemy.setup, native contact and actual 12 Hz tail; no journey/save",
+	"source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+	"source_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+	"tail_clock": {
+		"external": false,
+		"interval": 0.0833333333333333,
+		"suspended": false
+	},
+	"visual_acceptance": "agent_visual_check_pass; user_acceptance_pending",
+	"windup_seconds": 0.72
+}

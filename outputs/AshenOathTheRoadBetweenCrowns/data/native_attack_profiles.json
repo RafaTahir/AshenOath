@@ -1,0 +1,514 @@
+{
+  "policy": "native_attack_contact_v1",
+  "profiles": {
+    "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
+      "calibration_enemy": "ghoulkin",
+      "calibration_role": "ghoulkin_creature",
+      "clip": "Attack",
+      "contact_fraction": 0.352727272343044,
+      "duration_seconds": 1.83333337306976,
+      "id": "M01",
+      "method": "sampled_earliest_minimum_120hz",
+      "minimum_distance_m": 0.587241,
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "hand_r",
+      "probe_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 94,
+      "sample_window": [
+        0.280000001192093,
+        0.699999988079071
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "source_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+    },
+    "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb": {
+      "calibration_enemy": "wychwood_stalker",
+      "calibration_role": "wychwood_stalker_creature",
+      "clip": "Attack",
+      "contact_fraction": 0.86260872426601,
+      "duration_seconds": 4.79166650772095,
+      "id": "M02",
+      "method": "sampled_earliest_minimum_120hz",
+      "minimum_distance_m": 0.602964,
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Hand.R",
+      "probe_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 576,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+      "source_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+    },
+    "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb": {
+      "calibration_enemy": "bog_wretch",
+      "calibration_role": "bog_wretch_creature",
+      "clip": "Attack",
+      "contact_fraction": 0.7,
+      "duration_seconds": 0.75,
+      "fallback_reason": "endpoint_minimum",
+      "id": "M03",
+      "method": "declared_recovery_boundary_fallback",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "hand_r",
+      "probe_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requires_visual_acceptance": true,
+      "sample_count": 39,
+      "sample_window": [
+        0.280000001192093,
+        0.699999988079071
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+      "source_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+    },
+    "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
+      "calibration_enemy": "gravebound_knight",
+      "calibration_role": "gravebound_knight_creature",
+      "clip": "Attack",
+      "contact_fraction": 0.587692297598314,
+      "duration_seconds": 0.541666686534882,
+      "id": "M04",
+      "method": "sampled_earliest_minimum_120hz",
+      "minimum_distance_m": 0.241076,
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "hand_r",
+      "probe_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 29,
+      "sample_window": [
+        0.280000001192093,
+        0.699999988079071
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "source_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+    },
+    "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb": {
+      "calibration_enemy": "bell_eater",
+      "calibration_role": "bell_eater_boss",
+      "clip": "Attack",
+      "contact_fraction": 0.292500000819564,
+      "duration_seconds": 0.666666686534882,
+      "id": "M05",
+      "method": "sampled_earliest_minimum_120hz",
+      "minimum_distance_m": 1.30766,
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "hand_r",
+      "probe_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 35,
+      "sample_window": [
+        0.280000001192093,
+        0.699999988079071
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+      "source_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+    },
+    "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb": {
+      "calibration_enemy": "rootbound_colossus",
+      "calibration_role": "rootbound_colossus_boss",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M06",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -6.60540848684832e-08,
+        0.557392120361328,
+        0.111477054655552
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+      "source_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+    },
+    "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb": {
+      "calibration_enemy": "ashwing",
+      "calibration_role": "ashwing_boss",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M07",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -4.38714202743995e-08,
+        0.501597821712494,
+        0.00796178169548512
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+      "source_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+    },
+    "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb": {
+      "calibration_enemy": "white_hart_avatar",
+      "calibration_role": "white_hart_boss",
+      "clip": "Attack",
+      "contact_fraction": 0.336842096809535,
+      "duration_seconds": 0.791666686534882,
+      "id": "M08",
+      "method": "sampled_earliest_minimum_120hz",
+      "minimum_distance_m": 0.614529,
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        5.94371840634267e-07,
+        0.817830085754395,
+        0.32713770866394
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 97,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+      "source_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+    },
+    "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb": {
+      "calibration_enemy": "silt_maw",
+      "calibration_role": "silt_maw",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M09",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -3.74932014324258e-08,
+        0.466418027877808,
+        0.016195259988308
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+      "source_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+    },
+    "res://assets_external/design_pack_v1/creatures/M10_Millback.glb": {
+      "calibration_enemy": "millback",
+      "calibration_role": "millback",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M10",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -8.41798382111847e-08,
+        0.427808105945587,
+        -0.103264011442661
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+      "source_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+    },
+    "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb": {
+      "calibration_enemy": "glassmoth",
+      "calibration_role": "glassmoth",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M11",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -1.4454433028277e-07,
+        0.699999094009399,
+        0.0933332294225693
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+      "source_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+    },
+    "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb": {
+      "calibration_enemy": "knell_leech",
+      "calibration_role": "knell_leech",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M12",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -3.06749257106276e-08,
+        0.409082025289536,
+        0.0252521187067032
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+      "source_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+    },
+    "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb": {
+      "calibration_enemy": "hearthscale",
+      "calibration_role": "hearthscale",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M13",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        4.8032166688472e-08,
+        0.54942399263382,
+        1.63741145087215e-08
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+      "source_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+    },
+    "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb": {
+      "calibration_enemy": "gallows_weaver",
+      "calibration_role": "gallows_weaver",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M14",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -1.27816122130753e-07,
+        0.40983983874321,
+        -0.0989267453551292
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+      "source_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+    },
+    "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb": {
+      "calibration_enemy": "reed_choir",
+      "calibration_role": "reed_choir",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M15",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        7.56505045274025e-08,
+        0.865340948104858,
+        2.57891716870517e-08
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+      "source_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+    },
+    "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb": {
+      "calibration_enemy": "inkblind",
+      "calibration_role": "inkblind",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M16",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -6.82497969251017e-08,
+        0.59194415807724,
+        -0.0785853788256645
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+      "source_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+    },
+    "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb": {
+      "calibration_enemy": "cairn_mother",
+      "calibration_role": "cairn_mother",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M17",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -2.30088488706315e-07,
+        0.706164121627808,
+        0.188310459256172
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+      "source_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+    },
+    "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb": {
+      "calibration_enemy": "shroud_swimmer",
+      "calibration_role": "shroud_swimmer",
+      "clip": "Attack",
+      "contact_fraction": 0.5,
+      "duration_seconds": 1.04166662693024,
+      "id": "M18",
+      "method": "authored_procedural_apex",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "Head",
+      "probe_offset": [
+        -4.37311520329331e-08,
+        0.510318398475647,
+        -0.015009356662631
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 126,
+      "sample_window": [
+        0.0,
+        1.0
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+      "source_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+    },
+    "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb": {
+      "calibration_enemy": "wychwood_raider",
+      "calibration_role": "wychwood_raider_creature",
+      "clip": "Attack",
+      "contact_fraction": 0.643636356946851,
+      "duration_seconds": 0.458333343267441,
+      "id": "M19",
+      "method": "sampled_earliest_minimum_120hz",
+      "minimum_distance_m": 0.321321,
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "hand_r",
+      "probe_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requires_visual_acceptance": false,
+      "sample_count": 25,
+      "sample_window": [
+        0.280000001192093,
+        0.699999988079071
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+      "source_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+    },
+    "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
+      "calibration_enemy": "wychwood_brute",
+      "calibration_role": "wychwood_brute_creature",
+      "clip": "Attack",
+      "contact_fraction": 0.7,
+      "duration_seconds": 0.833333313465118,
+      "fallback_reason": "endpoint_minimum",
+      "id": "M20",
+      "method": "declared_recovery_boundary_fallback",
+      "policy": "native_attack_contact_v1",
+      "probe_bone": "hand_r",
+      "probe_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requires_visual_acceptance": true,
+      "sample_count": 43,
+      "sample_window": [
+        0.280000001192093,
+        0.699999988079071
+      ],
+      "sampling_hz": 120,
+      "source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "source_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+    }
+  },
+  "schema_version": 1
+}

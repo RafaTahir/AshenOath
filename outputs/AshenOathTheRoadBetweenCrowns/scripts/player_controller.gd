@@ -798,7 +798,7 @@ func _handle_combat_input() -> void:
 	if attack_cooldown > 0.0:
 		if light_pressed or heavy_pressed:
 			buffered_attack = "heavy" if heavy_pressed else "light"
-			attack_buffer_time = 0.18
+			attack_buffer_time = get_attack_buffer_duration()
 		return
 	if buffered_attack != "":
 		light_pressed = buffered_attack == "light"
@@ -940,9 +940,9 @@ func _release_bow() -> void:
 	if input_source != null: input_source.rumble(0.16, 0.10, 0.07)
 
 static func locked_bow_aim_point(actor: Node3D) -> Vector3:
-	# Presentation bounds may include limbs behind the actual damage capsule.
+	# Presentation bounds may include limbs behind the actual damage body.
 	for child in actor.get_children():
-		if child is CollisionShape3D and child.shape is CapsuleShape3D and not child.disabled:
+		if child is CollisionShape3D and (child.shape is CapsuleShape3D or child.shape is CylinderShape3D) and not child.disabled:
 			return child.global_position
 	var bounds: AABB = actor.get_meta("camera_subject_bounds", AABB(Vector3.ZERO, Vector3(0, 1.84, 0)))
 	return actor.global_transform * bounds.get_center()

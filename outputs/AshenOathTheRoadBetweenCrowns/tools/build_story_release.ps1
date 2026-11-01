@@ -113,6 +113,7 @@ public static class AshenOathBuildPower {
 '@
 [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483649) | Out-Null
 try {
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "verify_native_attack_profiles.py"), "--project", $ProjectRoot) "native-attack-profiles"
 if (-not $CharacterAssetsOnly) {
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_source_catalog.py")) "source-catalog"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_dialogue.py")) "runtime-dialogue"

@@ -16,6 +16,7 @@ const CharacterRoleSpec = preload("res://scripts/character_role_spec.gd")
 const CombatFeedback = preload("res://scripts/combat_feedback.gd")
 const CharacterAnimationDriver = preload("res://scripts/character_animation_driver.gd")
 const MotionStep = preload("res://scripts/systems/character_motion_step.gd")
+const NativeAttackProfiles = preload("res://scripts/native_attack_profiles.gd")
 # The role manifest owns the Ashwing source selected at runtime; do not pull
 # the large optional enemy asset into the browser boot dependency graph here.
 
@@ -99,6 +100,8 @@ var ambient_target := Vector3.INF
 var ambient_cycle := 0
 var had_player_contact := false
 var native_face: Node
+var native_attack_profile: Dictionary = {}
+var native_attack_tail_active := false
 var presence_home_yaw := 0.0
 var presence_clock := 0.0
 var heard_cue_deadline := 0
@@ -424,7 +427,7 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 	if parry_exposed_time > 0.0:
 		final_damage += 8.0
 		parry_exposed_time = 0.0
-	if source_tag == weakness or source_tag == tag:
+	if source_tag == weakness or source_tag == tag or (source_tag == "spirit" and weakness == "moon_oil") or (source_tag == "undead" and weakness == "rot_oil"):
 		final_damage += 15.0
 	if enemy_id == "captain_senn":
 		final_damage = minf(final_damage, maxf(0.0, health_component.health - 1.0))
@@ -436,6 +439,7 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 	hit_flash_time = 0.12
 	stagger_time = max(stagger_time, 0.16)
 	if animation_driver != null:
+		native_attack_tail_active = false
 		animation_driver.trigger_action("hit")
 
 func slow(seconds: float) -> void:
@@ -446,6 +450,7 @@ func slow(seconds: float) -> void:
 func set_encounter_active(value: bool) -> void:
 	encounter_active = value
 	if not value:
+		native_attack_tail_active = false
 		if animation_driver != null:
 			animation_driver.set_external_tick(false)
 		# A suspended strike must not reserve the encounter's attack lane or
@@ -483,6 +488,7 @@ func is_encounter_active() -> bool:
 	return encounter_active
 
 func stagger(seconds: float = 0.7) -> void:
+	native_attack_tail_active = false
 	if animation_driver != null:
 		animation_driver.set_external_tick(false)
 	stagger_time = max(stagger_time, seconds)
@@ -535,8 +541,10 @@ func _resolve_attack() -> void:
 	var story_encounter := get_node_or_null("StoryEncounterPreparation")
 	if story_encounter != null and story_encounter.has_method("blocks_attack") and story_encounter.blocks_attack(boss_attack):
 		attack_recovery_time = maxf(attack_recovery_time, 0.9)
+		_fit_native_attack_tail()
 		special_attack_resolved.emit(self, boss_attack, attack_trace_end, special_radius, 0.0, false)
 		return
+	_fit_native_attack_tail()
 	var special_contact := is_boss and boss_attack != "" and _special_attack_hits_player(boss_attack, special_radius)
 	var melee_contact := player_contact.distance_to(last_attack_contact) <= contact_radius and _has_attack_line()
 	if not melee_contact and not special_contact:
@@ -566,6 +574,21 @@ func _strike_recovery() -> float:
 	return 0.48 if is_boss else 0.42
 
 func _start_attack_animation() -> void:
+	if not native_attack_profile.is_empty():
+		# EnemyAI still owns the unchanged telegraph/contact clock. Reach the
+		# calibrated pose of the complete strike exactly when that clock expires.
+		var fraction := float(native_attack_profile.contact_fraction)
+		# The physics recovery clock can expire between animation timer ticks.
+		# Only a completed contact's old tail may yield to this authorized swing;
+		# action priority and unfinished telegraphs remain protected.
+		if native_attack_tail_active and animation_driver.action_active and animation_driver.current_state == "attack":
+			animation_driver.set_external_tick(true)
+			animation_driver.advance_external(maxf(0.0, animation_driver.action_duration - animation_driver.action_elapsed))
+		native_attack_tail_active = false
+		animation_driver.set_external_tick(true)
+		if not animation_driver.trigger_action("attack", 1.0, 0.10, false, windup_time / fraction, true):
+			animation_driver.set_external_tick(false)
+		return
 	var clip: StringName = animation_driver.get_clip_for_state("windup")
 	# The retained Skeleton clip reaches its strike at 85% of its authored
 	# length. Preserve the telegraph clock and leave uncalibrated families alone.
@@ -574,7 +597,13 @@ func _start_attack_animation() -> void:
 	if not animation_driver.trigger_action("windup", 1.0, 0.10, false, duration):
 		animation_driver.set_external_tick(false)
 
+func _fit_native_attack_tail() -> void:
+	if native_attack_profile.is_empty() or animation_driver == null or not animation_driver.action_active or animation_driver.current_state != "attack":
+		return
+	native_attack_tail_active = animation_driver.fit_action_tail(float(native_attack_profile.contact_fraction), attack_recovery_time)
+
 func _cancel_pending_strike() -> void:
+	native_attack_tail_active = false
 	var had_strike: bool = pending_attack_time > 0.0 or windup_time > 0.0
 	pending_attack_time = 0.0
 	windup_time = 0.0
@@ -889,6 +918,9 @@ func get_tactical_state() -> Dictionary:
 
 func _on_died() -> void:
 	dead = true
+	native_attack_tail_active = false
+	pending_attack_time = 0.0
+	windup_time = 0.0
 	death_pose_time = 1.0
 	_hide_windup_marker()
 	_release_attack_token()
@@ -963,7 +995,7 @@ func _on_health_changed(current: float, maximum: float) -> void:
 func _build_body(color: Color) -> void:
 	add_to_group("enemies")
 	var collision = CollisionShape3D.new()
-	var shape = CapsuleShape3D.new()
+	var shape: Shape3D
 	var role_spec := CharacterRoleSpec.for_role(enemy_id)
 	var collision_height := 3.30 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_height", 1.15))
 	var collision_radius := 0.78 if enemy_id == "white_hart_avatar" else float(role_spec.get("collision_radius", 0.35))
@@ -980,10 +1012,21 @@ func _build_body(color: Color) -> void:
 			"ashwing": 0.66,
 			"halvern_boss": 0.50,
 		}.get(enemy_id, collision_radius)
-	shape.height = collision_height
-	shape.radius = collision_radius
+	# A vertical capsule cannot represent a body lower than its diameter:
+	# Godot silently expands it into a sphere. Finite cylinders preserve these
+	# low/wide roles' authored height and footprint instead.
+	if collision_height < collision_radius * 2.0:
+		var cylinder := CylinderShape3D.new()
+		cylinder.radius = collision_radius
+		cylinder.height = collision_height
+		shape = cylinder
+	else:
+		var capsule := CapsuleShape3D.new()
+		capsule.radius = collision_radius
+		capsule.height = collision_height
+		shape = capsule
 	collision.shape = shape
-	collision.position.y = shape.height * 0.5 + shape.radius * 0.18
+	collision.position.y = collision_height * 0.5 + collision_radius * 0.18
 	add_child(collision)
 	visual_root = Node3D.new()
 	visual_root.name = "visual_root"
@@ -1172,6 +1215,20 @@ func _try_build_mapped_body() -> bool:
 		_attach_boss_identity_to_bone(mapped, "Body", "AshwingHarnessSocket", Vector3.ZERO)
 		boss_visual_root.basis = boss_visual_root.basis * authored_basis
 	_configure_attack_contact_bone()
+	if native_design and not _configure_native_attack_profile(mapped):
+		mapped.queue_free()
+		return false
+	return true
+
+func _configure_native_attack_profile(mapped: Node3D) -> bool:
+	var source := str(mapped.get_meta("prepared_actor_source", mapped.get_meta("runtime_asset_path", "")))
+	var clip: StringName = animation_driver.get_clip_for_state("attack")
+	var animation: Animation = animation_driver.get_animation_player().get_animation(clip)
+	if animation != null:
+		native_attack_profile = NativeAttackProfiles.for_source(source, str(clip), animation.length)
+	if native_attack_profile.is_empty():
+		push_error("Native attack timing is missing or stale: %s (%s; %s)" % [enemy_id, source, clip])
+		return false
 	return true
 
 func _add_spectral_antler_crown(mapped: Node3D) -> void:

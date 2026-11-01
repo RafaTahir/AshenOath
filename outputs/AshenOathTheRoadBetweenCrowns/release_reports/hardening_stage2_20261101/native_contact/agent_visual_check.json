@@ -1,0 +1,83 @@
+{
+	"actors": [
+		{
+			"contact_count": 1,
+			"contact_fraction": 0.7,
+			"frames": [
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M03\\start_quarter.png",
+					"sha256": "72eed2a0de4e107ca0be66850cf1d0a8ba68fd573741a597311ffd4ae4a0a7c6"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M03\\start_side.png",
+					"sha256": "8f8134664305ed012fb15e03aa7ad60090a2d3316cb696e03dbf41256a449f5d"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M03\\contact_quarter.png",
+					"sha256": "fed347ea3453021eb5e3956e72b7cdc48646eb8bbcfacf2bc11782cf52321aaf"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M03\\contact_side.png",
+					"sha256": "19e76adf242f15cf309bad7b80c3f0a2c4659dbf3b371f5b0cb2a0df3a805e5b"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M03\\tail_quarter.png",
+					"sha256": "367b3dc731481326bc38163f0521580d5e93042d1fd1abc274c5a9010338c8f2"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M03\\tail_side.png",
+					"sha256": "ee0e3e0a0240da23d36eba9b548fa826e1c2087b8d15f179a57d2154692b8dcb"
+				}
+			],
+			"id": "M03",
+			"method": "declared_recovery_boundary_fallback",
+			"recovery_seconds": 0.48,
+			"review_path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M03\\review.json",
+			"review_sha256": "6f437c449a24b1194d4ccebd0e3f639a19ab82ab465337c90cdc68755b352c08",
+			"source_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
+			"windup_seconds": 0.6
+		},
+		{
+			"contact_count": 1,
+			"contact_fraction": 0.7,
+			"frames": [
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M20\\start_quarter.png",
+					"sha256": "2bce2498eaf3c2545a720429d32dbc578540b01ffbbc202a80a9261d4d22c64c"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M20\\start_side.png",
+					"sha256": "4928a1e032da1b2bb655f64884c645099629f1982e52a30cc84dcd6363b0e14b"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M20\\contact_quarter.png",
+					"sha256": "2dba8f336b01a66e01d49743ddde94b99a1566895b637c71d5b8f900a6ae305b"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M20\\contact_side.png",
+					"sha256": "648f2d730c5cf63c15e7bdc677daf8199bba8fa76fd6e44bd5f520772432a3c1"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M20\\tail_quarter.png",
+					"sha256": "37c0d9fef8dd670e364f7ec6737ec30cdf24ef72bcfe81cf42e4f73e6412ccc2"
+				},
+				{
+					"path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M20\\tail_side.png",
+					"sha256": "d19a9d2a4ccba0688af7831a3434f14516ebcfd225286c9ecae8b0b8add362b9"
+				}
+			],
+			"id": "M20",
+			"method": "declared_recovery_boundary_fallback",
+			"recovery_seconds": 0.65,
+			"review_path": "D:\\Temp\\AshenOath\\asset_refinement_20261101\\stage2_native_attack_profiles\\visual\\M20\\review.json",
+			"review_sha256": "c940ad956eb3d7a261d63d8e55c89b9616e33f8b9d5f15aafdef5307659e9777",
+			"source_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+			"windup_seconds": 0.72
+		}
+	],
+	"inspection": "All six unmodified rendered views per actor inspected: start, contact and native 12 Hz tail from quarter and side. Visible guarded start becomes a clear forward strike into the canonical defender and then begins withdrawing. Contact and authored anatomy remain continuous; no material or alpha loss seen. Grey capsule and amber probe are explicitly labelled reference geometry.",
+	"profile_sha256": "e4c2466078ae7dc1e7a111b4f9feafe3f065ac1506f46af62fa78dac483dba94",
+	"scope": "Targeted plan fallback QA for M03 and M20; agent inspection only; no manifest approval or user acceptance change",
+	"status": "agent_visual_check_pass",
+	"user_review_status": "user_acceptance_pending"
+}

@@ -1,6 +1,7 @@
 // Focused production-UI functional checks; no FPS, memory or hardware certification.
 // node tools/verify_hardening_browser.mjs --export ../../web --report D:/Temp/AshenOath/hardening/report.json
-// --scenario smoke|metadata|cold|all --mode desktop|touch|both --label candidate|baseline
+// --scenario smoke|metadata|cold|all|combat --mode desktop|touch|both --label candidate|baseline
+// combat is opt-in; all retains the save/loading suite.
 // --fault metadata_headers_stall|metadata_body_stall selects one metadata case.
 // --inspect validates inputs and candidate transport without launching Chromium.
 import puppeteer from 'puppeteer-core';
@@ -10,6 +11,7 @@ import { createReadStream, existsSync, mkdirSync, openSync, closeSync, readSync,
 import { resolve, join, dirname, extname, sep } from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 
 const options = {};
@@ -22,7 +24,7 @@ const exportRoot = resolve(options.export || '../../web');
 const scenario = String(options.scenario || 'all');
 const mode = String(options.mode || 'both');
 const metadataFaults = options.fault ? [String(options.fault)] : ['metadata_headers_stall', 'metadata_body_stall'];
-assert(['all', 'smoke', 'metadata', 'cold'].includes(scenario), 'Invalid --scenario');
+assert(['all', 'smoke', 'metadata', 'cold', 'combat'].includes(scenario), 'Invalid --scenario');
 assert(['both', 'desktop', 'touch'].includes(mode), 'Invalid --mode');
 assert(metadataFaults.every(kind => ['metadata_headers_stall', 'metadata_body_stall'].includes(kind)), 'Invalid --fault');
 const timeoutMs = Number(options.timeout || 180000);
@@ -50,6 +52,14 @@ const report = {
     'Imported fixtures are test journeys, not earned campaign progression'],
   cases: [], requests: [], status: 'running',
 };
+let combatModule;
+if (scenario === 'combat') {
+  const moduleUrl = new URL('./hardening_combat_cases.mjs', import.meta.url);
+  report.combat_module = { path: fileURLToPath(moduleUrl),
+    sha256: createHash('sha256').update(readFileSync(moduleUrl)).digest('hex') };
+  combatModule = await import(moduleUrl.href);
+  assert.equal(typeof combatModule.runCombatCase, 'function', 'Combat module must export runCombatCase');
+}
 
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8',
   '.wasm': 'application/wasm', '.json': 'application/json; charset=utf-8', '.png': 'image/png' };
@@ -583,7 +593,8 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
         paused: s.paused, new_game_ready: s.new_game_ready, transition_pending: s.transition_pending,
         zone_load_request_pending: s.zone_load_request_pending, player: s.player, camera: s.camera,
         ui: s.ui, dialogue: s.dialogue, input: s.input, runtime_packs: s.runtime_packs,
-        gates: s.gates, interactions: s.interactions, focus: s.focus };
+        gates: s.gates, interactions: s.interactions, focus: s.focus,
+        enemies: s.enemies, inventory: s.inventory };
       const phase = JSON.stringify([s.zone, s.ready, s.paused, s.ui?.active_menu, s.ui?.loading_visible, s.new_game_ready]);
       if (phase !== cache.phase) { cache.phase = phase; console.log(`HARDENING STATE: ${result.name} ${phase}`); }
     } catch { /* Ignore non-observation payloads. */ }
@@ -682,6 +693,14 @@ try {
         await runCase(`${touch ? 'touch' : 'desktop'}-physical-cold-travel`, touch,
           (page, viewport) => cold(page, viewport, touch, source),
           () => armFault('cold_hold', new URL(packs.packs.adjacent.url, origin).pathname.replace(/^\//, '')));
+      }
+    }
+    if (scenario === 'combat') {
+      const helpers = { observe, waitFor, stableGameplay, clickButton, tap, startFinger,
+        pause, importFixture, screenshot, event, sleep };
+      for (const touch of mode === 'both' ? [false, true] : [mode === 'touch']) {
+        await runCase(`${touch ? 'touch' : 'desktop'}-combat`, touch,
+          (page, viewport) => combatModule.runCombatCase({ page, viewport, touch, helpers, source }));
       }
     }
     assert.equal(runtimeErrors.length, 0, `Engine/browser errors: ${runtimeErrors.join('\n')}`);

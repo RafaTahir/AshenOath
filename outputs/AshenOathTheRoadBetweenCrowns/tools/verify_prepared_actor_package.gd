@@ -5,6 +5,9 @@ extends SceneTree
 var failures: Array[String] = []
 
 func _initialize() -> void:
+	# Contact calibration must be available before any external pack mounts.
+	var profile_data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/native_attack_profiles.json")) if FileAccess.file_exists("res://data/native_attack_profiles.json") else null
+	_check(profile_data is Dictionary and profile_data.get("profiles", {}).size() == 20, "Base pack must own all twenty native contact profiles")
 	var args := OS.get_cmdline_user_args()
 	var index := args.find("--pack-dir")
 	if index < 0 or index + 1 >= args.size():

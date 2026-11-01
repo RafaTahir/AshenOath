@@ -1,0 +1,87 @@
+{
+  "project": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+  "source_files": 399,
+  "changed_sources": [],
+  "results": [
+    {
+      "fixture": "verify_native_attack_timing.gd",
+      "exit_code": 0,
+      "error_lines": [],
+      "passed": true,
+      "seconds": 5.547,
+      "summary": [
+        "NATIVE ATTACK TIMING: PASS; full Attack, unchanged contact/recovery clocks, split steps, interruption ownership, ten finite cylinder dimensions and deterministic calibration policy"
+      ]
+    },
+    {
+      "fixture": "verify_cylinder_occlusion.gd",
+      "exit_code": 0,
+      "error_lines": [],
+      "passed": true,
+      "seconds": 4.234,
+      "summary": [
+        "CYLINDER OCCLUSION MATRIX: PASS checks=41 (production resolvers; padded origins, real body intervals and adjacent walls)",
+        "CYLINDER COMBAT: PASS checks=179 roles=10"
+      ]
+    },
+    {
+      "fixture": "verify_oil_weakness_damage.gd",
+      "exit_code": 0,
+      "error_lines": [],
+      "passed": true,
+      "seconds": 3.547,
+      "summary": [
+        "OIL WEAKNESS DAMAGE: PASS checks=357 definitions=13"
+      ]
+    },
+    {
+      "fixture": "verify_story_attack_buffer.gd",
+      "exit_code": 0,
+      "error_lines": [],
+      "passed": true,
+      "seconds": 13.359,
+      "summary": [
+        "STORY ATTACK BUFFER: PASS checks=45 real_router_edges=true"
+      ]
+    },
+    {
+      "fixture": "verify_low_obstacle_clearance.gd",
+      "exit_code": 0,
+      "error_lines": [],
+      "passed": true,
+      "seconds": 1.391,
+      "summary": [
+        "LOW OBSTACLE CLEARANCE: PASS checks=12"
+      ]
+    },
+    {
+      "fixture": "verify_blade_strike_window.gd",
+      "exit_code": 0,
+      "error_lines": [],
+      "passed": true,
+      "seconds": 3.015,
+      "summary": [
+        "BLADE STRIKE WINDOW: PASS"
+      ]
+    },
+    {
+      "fixture": "verify_combat_002.gd",
+      "exit_code": 0,
+      "error_lines": [],
+      "passed": true,
+      "seconds": 3.954,
+      "summary": [
+        "LOCKED BOW CAPSULE VERIFIER: PASS"
+      ]
+    },
+    {
+      "fixture": "verify_native_attack_profiles.py",
+      "exit_code": 0,
+      "passed": true,
+      "summary": [
+        "NATIVE ATTACK PROFILES: PASS (20 hash-bound sources; visual acceptance required: M03,M20)"
+      ]
+    }
+  ],
+  "passed": true
+}

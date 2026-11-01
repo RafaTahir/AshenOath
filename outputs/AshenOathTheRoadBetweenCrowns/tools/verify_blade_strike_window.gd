@@ -31,6 +31,8 @@ func _run() -> void:
 	stage.add_child(enemy)
 	stage.add_child(combat)
 	player.can_control = true
+	# The geometry-only controller skips _ready; exercise a drawn, usable blade.
+	player.equipment_loadout.set_sword_drawn(true)
 	player.blade_base_marker = Marker3D.new()
 	player.blade_tip_marker = Marker3D.new()
 	player.add_child(player.blade_base_marker)

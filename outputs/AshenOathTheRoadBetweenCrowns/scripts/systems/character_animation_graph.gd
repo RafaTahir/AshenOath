@@ -126,6 +126,9 @@ func transition(logical: String, blend: float, restart: bool = false) -> void:
 		return
 	var current := str(playback.get_current_node())
 	if current == next and playback.is_playing():
+		# A queued logical transition may not have published yet. A restart of
+		# the live node still owns that branch's playback rate immediately.
+		active_state = next
 		if restart:
 			playback.start(next, true)
 		return

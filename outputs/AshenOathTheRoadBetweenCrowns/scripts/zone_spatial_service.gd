@@ -242,7 +242,7 @@ func validate_runtime_segment(start: Vector3, destination: Vector3, clearance: f
 		return false
 	var shape := _get_probe_shape(radius, 1.65)
 	var query: PhysicsShapeQueryParameters3D = _query_scratch.shape_query(shape)
-	query.transform = Transform3D(Basis.IDENTITY, Vector3(start.x, maxf(start.y, 0.0) + 0.14 + shape.height * 0.5 + radius, start.z))
+	query.transform = Transform3D(Basis.IDENTITY, Vector3(start.x, maxf(start.y, 0.0) + 0.14 + shape.height * 0.5, start.z))
 	query.motion = Vector3(destination.x, maxf(destination.y, 0.0), destination.z) - Vector3(start.x, maxf(start.y, 0.0), start.z)
 	var excluded: Array[RID] = []
 	if is_instance_valid(player_body):
@@ -373,11 +373,9 @@ func _is_position_occupied_with_ignore(position: Vector3, radius: float, height:
 	# report every location as occupied and collapses all props to a fallback
 	# recovery anchor during zone construction.
 	var floor_clearance := 0.14
-	# Godot's capsule height includes the cylindrical portion in some imported
-	# physics paths, so account for the hemispheres explicitly when positioning
-	# the query center. This keeps the actual lower extent above the floor too,
-	# rather than only the nominal `height` value.
-	query.transform = Transform3D(Basis.IDENTITY, Vector3(position.x, maxf(position.y, 0.0) + floor_clearance + shape.height * 0.5 + radius, position.z))
+	# CapsuleShape3D.height already includes both hemispheres. Adding radius
+	# again lifts the feet probe above low props that direct-position NPCs hit.
+	query.transform = Transform3D(Basis.IDENTITY, Vector3(position.x, maxf(position.y, 0.0) + floor_clearance + shape.height * 0.5, position.z))
 	query.collision_mask = 1
 	query.collide_with_areas = false
 	query.collide_with_bodies = true

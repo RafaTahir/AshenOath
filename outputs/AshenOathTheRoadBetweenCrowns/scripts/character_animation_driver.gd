@@ -490,7 +490,7 @@ func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground:
 	current_playback_scale = target_playback_scale
 	_play_state(state, 0.16)
 
-func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10, force: bool = false, duration: float = 0.0) -> bool:
+func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time: float = 0.10, force: bool = false, duration: float = 0.0, reset_timed_mixer: bool = false) -> bool:
 	if not is_valid() or dead:
 		return false
 	if action_active:
@@ -515,9 +515,33 @@ func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time
 	target_playback_scale = animation_player.get_animation(clip).length / duration if duration > 0.0 else clampf(playback_scale, 0.55, 1.45)
 	current_playback_scale = target_playback_scale
 	action_duration = duration if duration > 0.0 else animation_player.get_animation(clip).length / maxf(target_playback_scale, 0.01)
+	if reset_timed_mixer and animation_graph.playback != null:
+		# A calibrated contact clock cannot inherit a pending fade/reset from
+		# the prior swing. Other action callers retain their existing blending.
+		animation_graph.playback.stop()
+		animation_graph.advance(0.0)
 	animation_graph.transition(action_name, blend_time, true)
 	animation_graph.set_action_rate(current_playback_scale)
+	if reset_timed_mixer:
+		animation_graph.advance(0.0)
+		animation_graph.advance(0.0)
 	action_started.emit(action_name)
+	return true
+
+func fit_action_tail(contact_fraction: float, seconds: float) -> bool:
+	# The gameplay owner has reached contact. Continue this same clip from its
+	# sampled contact pose; only its remaining playback rate and finish change.
+	if not is_valid() or dead or distance_suspended or not action_active or action_looping or active_action_clip == StringName():
+		return false
+	if not is_finite(contact_fraction) or contact_fraction <= 0.0 or contact_fraction >= 1.0 or not is_finite(seconds) or seconds <= 0.0:
+		return false
+	var animation := animation_player.get_animation(active_action_clip)
+	if animation == null:
+		return false
+	target_playback_scale = animation.length * (1.0 - contact_fraction) / seconds
+	current_playback_scale = target_playback_scale
+	action_duration = action_elapsed + seconds
+	animation_graph.set_action_rate(current_playback_scale)
 	return true
 
 func stop_action(recover_state: String = "idle", blend_time: float = 0.10) -> void:
