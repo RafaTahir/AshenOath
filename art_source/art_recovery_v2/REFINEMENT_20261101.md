@@ -64,15 +64,15 @@ The [roster](stylized_roster.json) owns current source/runtime paths, hashes and
 
 | C12 Nera | Garment edge finish, bodice eyelets, scarf fastening and rear relief-kit pouch. | [source](models/refinement_20261101/humans/C12_tailored_v001.blend) · [candidate](evidence/refinement_20261101/humans/C12/candidate.json) · [native](evidence/refinement_20261101/native/C12/review.json) |
 
-| M01 Ghoulkin | Connected jaw/mouth/teeth, tapered flank and forearm ridge; skin finish pending.* Debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M01_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M01/candidate.json) · [native](evidence/refinement_20261101/native/M01/review.json) |
+| M01 Ghoulkin | Connected jaw/mouth/teeth, tapered flank and forearm ridge; final debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M01_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M01/candidate.json) · [native](evidence/refinement_20261101/native/M01/review.json) |
 
 | M02 Wychwood Stalker | Forearm/head projection and restored tangent-normal response on the retained Creep rig. | [source](models/refinement_20261101/bipeds/M02_refined_timing_v003.blend) · [candidate](evidence/refinement_20261101/bipeds/M02/candidate.json) · [native](evidence/refinement_20261101/native/M02/review.json) |
 
-| M03 Bog Wretch | Hanging abdomen, waterlogged jaw and fitted uneven mouth; skin finish pending.* Debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M03_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M03/candidate.json) · [native](evidence/refinement_20261101/native/M03/review.json) |
+| M03 Bog Wretch | Hanging abdomen, waterlogged jaw and fitted uneven mouth; final debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M03_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M03/candidate.json) · [native](evidence/refinement_20261101/native/M03/review.json) |
 
-| M04 Gravebound Knight | Armor-edge bevels, pitted steel/linen separation and iron-readability finish; final capture pending.† | [source](models/refinement_20261101/bipeds/M04_refined_timing_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M04/candidate.json) · [native](evidence/refinement_20261101/native/M04/review.json) |
+| M04 Gravebound Knight | Armor-edge bevels, pitted steel/linen separation and iron-readability finish; final native capture verified. | [source](models/refinement_20261101/bipeds/M04_refined_timing_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M04/candidate.json) · [native](evidence/refinement_20261101/native/M04/review.json) |
 
-| M05 Bell Eater | Bell-loaded nape/shoulder, distinct bronze/iron/harness/clay skin; skin finish pending.* Debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M05_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M05/candidate.json) · [native](evidence/refinement_20261101/native/M05/review.json) |
+| M05 Bell Eater | Bell-loaded nape/shoulder, distinct bronze/iron/harness/clay skin; final debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M05_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M05/candidate.json) · [native](evidence/refinement_20261101/native/M05/review.json) |
 
 | M06 Rootbound Colossus | Uneven bark planes, fissure normals and distinct exposed-heartwood response. | [source](models/refinement_20261101/bipeds/M06_refined_timing_v003.blend) · [candidate](evidence/refinement_20261101/bipeds/M06/candidate.json) · [native](evidence/refinement_20261101/native/M06/review.json) |
 
@@ -98,19 +98,19 @@ The [roster](stylized_roster.json) owns current source/runtime paths, hashes and
 
 | M17 Cairn Mother | Broader muscular sole and unequal mineral shelves; inherited shell cleft/coarse spiral remain. | [source](models/refinement_20261101/wildlife/M17/M17_refined_20261101.blend) · [candidate](../../outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M17/candidate.json) · [native](evidence/refinement_20261101/native/M17/review.json) |
 
-| M18 Shroud Swimmer | Thicker cambered disc, seated eyes, raised fin edges and curved unbarbed tail; final finish pending.† | [source](models/refinement_20261101/wildlife/M18/v003/M18_contact_repaired_v003.blend) · [candidate](../../outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M18/v003/candidate.json) · [native](evidence/refinement_20261101/native/M18/review.json) |
+| M18 Shroud Swimmer | Thicker cambered disc, seated eyes, raised fin edges and curved unbarbed tail; final native and prepared views verified. | [source](models/refinement_20261101/wildlife/M18/v003/M18_contact_repaired_v003.blend) · [candidate](../../outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M18/v003/candidate.json) · [native](evidence/refinement_20261101/native/M18/review.json) |
 
-| M19 Wychwood Raider | Lean waist, uneven shoulder, hooked fingers and asymmetric mouth; skin finish pending.* Debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M19_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M19/candidate.json) · [native](evidence/refinement_20261101/native/M19/review.json) |
+| M19 Wychwood Raider | Lean waist, uneven shoulder, hooked fingers and asymmetric mouth; final debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M19_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M19/candidate.json) · [native](evidence/refinement_20261101/native/M19/review.json) |
 
-| M20 Wychwood Brute | Heavy jaw/shoulder mass, fitted mouth and coarse hide/tusk response; skin finish pending.* Debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M20_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M20/candidate.json) · [native](evidence/refinement_20261101/native/M20/review.json) |
-
-
-
-\* **Texture-only finishing in progress:** M01, M03, M05, M19 and M20 retain diagonal banding inherited from baseline skin albedos. The current repair changes the skin image while preserving geometry, UVs, joints, weights, timing and other image payloads. Earlier captures do not establish the replacement bytes. [Finish tool](tools/finish_biped_skin_20261101.py).
+| M20 Wychwood Brute | Heavy jaw/shoulder mass, fitted mouth and coarse hide/tusk response; final debanded skin retains its original mean palette. | [source](models/refinement_20261101/bipeds/M20_refined_timing_skin_v004.blend) · [candidate](evidence/refinement_20261101/bipeds/M20/candidate.json) · [native](evidence/refinement_20261101/native/M20/review.json) |
 
 
 
-† M04 and M18 require native evidence for their latest finishing revisions. Source, candidate and native hashes must agree before the package record is finalized.
+**Texture-only skin finish verified:** M01, M03, M05, M19 and M20 use filtered non-periodic skin albedos with their original mean palettes. Geometry, UVs, joints, weights, timing and other image payloads are preserved. Final SHA-matched native captures record the replacement bytes. [Finish tool](tools/finish_biped_skin_20261101.py).
+
+
+
+M04 and M18 have final SHA-matched source, candidate, native and prepared art records. Their latest finishing revisions are included in the verified package. These checks do not mark either candidate user-accepted.
 
 
 
