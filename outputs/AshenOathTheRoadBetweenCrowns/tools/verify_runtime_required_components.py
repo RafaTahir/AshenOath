@@ -70,7 +70,10 @@ FORBIDDEN_RUNTIME_TOKENS = (
 def resource_path(project: Path, value: str) -> Path | None:
     if not value.startswith("res://"):
         return None
-    return project / Path(value.removeprefix("res://"))
+    relative = value.removeprefix("res://")
+    if "\\" in relative or any(part in {"", ".", ".."} or ":" in part for part in relative.split("/")):
+        return None
+    return project / Path(relative)
 
 
 def digest(path: Path) -> str:
@@ -112,6 +115,31 @@ def has_spectral_inclusion(role: dict[str, Any]) -> bool:
         and hash_record(provenance.get("source_sha256")) and hash_record(provenance.get("license_sha256"))
 
 
+def has_design_pack_inclusion(role: dict[str, Any]) -> bool:
+    model = str(role.get("model", ""))
+    return role.get("source_pack") == "AshenOath_32_Asset_Design_Pack_v1" \
+        and role.get("inclusion_authorized") is True and role.get("export_eligible") is True \
+        and role.get("authorization_kind") in {"user_requested_blender_cast_replacement", "user_requested_live_roster_release"} \
+        and type(role.get("approved")) is bool and type(role.get("visual_reviewed")) is bool \
+        and model.startswith("res://assets_external/design_pack_v1/") and model.endswith(".glb") \
+        and resource_path(Path("."), model) is not None
+
+
+def check_design_identity(project: Path, role_id: str, role: dict[str, Any], errors: list[str]) -> None:
+    ledger = load_json(project / "data/design_pack_assets.json", errors)
+    assets = ledger.get("assets", {})
+    record = assets.get(str(role.get("design_id", "")), {}) if isinstance(assets, dict) else {}
+    model = role.get("model", "")
+    if not isinstance(record, dict) or record.get("path") != model:
+        errors.append(f"authorized role {role_id} does not match its design identity")
+        return
+    path = resource_path(project, model)
+    if path is None or not path.is_file() or digest(path) != record.get("sha256") or path.stat().st_size != record.get("bytes"):
+        errors.append(f"authorized role {role_id} design source size/SHA-256 is stale or missing")
+    if role.get("license_file") != "res://assets_external/design_pack_v1/PROVENANCE.md":
+        errors.append(f"authorized role {role_id} must retain the design pack provenance license")
+
+
 def check_artifact(
     project: Path,
     role_id: str,
@@ -150,11 +178,13 @@ def check_role(
     if not isinstance(role, dict):
         errors.append(f"role {role_id} must be an object")
         return
-    for key in ("family", "status", "approved", "export_eligible"):
+    design_inclusion = has_design_pack_inclusion(role)
+    for key in (("status", "approved", "export_eligible") if design_inclusion else ("family", "status", "approved", "export_eligible")):
         if key not in role:
             errors.append(f"role {role_id} is missing {key}")
-    inclusion_authorized = has_spectral_inclusion(role)
-    approved = bool(role.get("approved", False)) or inclusion_authorized
+    spectral_inclusion = has_spectral_inclusion(role)
+    inclusion_authorized = spectral_inclusion or design_inclusion
+    approved = role.get("approved") is True or inclusion_authorized
     export_eligible = role.get("export_eligible")
     if approved and export_eligible is not True:
         errors.append(f"approved role {role_id} must be export_eligible")
@@ -175,17 +205,21 @@ def check_role(
         else:
             for artifact in artifacts:
                 check_artifact(project, role_id, artifact, errors)
-        if not str(role.get("source_url", "")).startswith("https://"):
+        if not design_inclusion and not str(role.get("source_url", "")).startswith("https://"):
             errors.append(f"approved role {role_id} has no HTTPS source URL")
-        if inclusion_authorized:
+        if design_inclusion:
+            # Locally authored derivatives retain the identity ledger, model
+            # hash and provenance file instead of inventing a download URL.
+            check_design_identity(project, role_id, role, errors)
+        if spectral_inclusion:
             provenance = role["provenance"]
             source_path = resource_path(project, provenance["source"])
             if source_path is None or not source_path.is_file() or digest(source_path) != provenance["source_sha256"]:
                 errors.append(f"authorized role {role_id} retained source SHA-256 is stale or missing")
             if license_path is None or not license_path.is_file() or digest(license_path) != provenance["license_sha256"]:
                 errors.append(f"authorized role {role_id} retained license SHA-256 is stale or missing")
-            if not any(isinstance(item, dict) and item.get("path") == model_value for item in artifacts or []):
-                errors.append(f"authorized role {role_id} runtime_files do not bind its model")
+        if inclusion_authorized and not any(isinstance(item, dict) and item.get("path") == model_value for item in artifacts or []):
+            errors.append(f"authorized role {role_id} runtime_files do not bind its model")
     else:
         reason = str(role.get("blocked_reason", "")).strip()
         fallback_value = str(role.get("fallback", ""))
@@ -256,7 +290,7 @@ def check_runtime_policy_rules(manifest: dict[str, Any], errors: list[str]) -> N
     for role_id, role in roles.items():
         if not isinstance(role, dict):
             continue
-        approved = bool(role.get("approved", False)) or has_spectral_inclusion(role)
+        approved = role.get("approved") is True or has_spectral_inclusion(role) or has_design_pack_inclusion(role)
         if approved and role.get("fallback_mode", "none") != "none":
             errors.append(f"approved role {role_id} must have fallback_mode none")
         if not approved and role.get("fallback_mode") != "diagnostic_only":
@@ -273,8 +307,8 @@ def check_production_roles(manifest: dict[str, Any], errors: list[str]) -> None:
         if not isinstance(role, dict):
             errors.append(f"production role {role_id} must be an object")
             continue
-        if (role.get("approved") is not True and not has_spectral_inclusion(role)) or role.get("export_eligible") is not True:
-            errors.append(f"production role {role_id} is not approved for export")
+        if (role.get("approved") is not True and not has_spectral_inclusion(role) and not has_design_pack_inclusion(role)) or role.get("export_eligible") is not True:
+            errors.append(f"production role {role_id} is neither approved nor explicitly authorized for export")
         if role.get("fallback_mode") != "none":
             errors.append(f"production role {role_id} must not use diagnostic fallback")
 
@@ -284,7 +318,7 @@ def main() -> int:
     parser.add_argument("project", nargs="?", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--json-report", type=Path)
     parser.add_argument("--production", action="store_true",
-                        help="Reject every unapproved or diagnostic-only runtime role")
+                        help="Reject unauthorized or diagnostic-only roles; inclusion does not assert visual approval")
     args = parser.parse_args()
     project = args.project.resolve()
     errors: list[str] = []
@@ -334,6 +368,7 @@ def main() -> int:
         "required_files": len(REQUIRED_FILES),
         "runtime_roles": len(roles) if isinstance(roles, dict) else 0,
         "blocked_roles": blocked,
+        "authorized_pending_review_roles": sum(has_design_pack_inclusion(role) and role.get("approved") is False and role.get("visual_reviewed") is False for role in roles.values() if isinstance(role, dict)) if isinstance(roles, dict) else 0,
         "errors": errors,
     }
     report_path = args.json_report or project / ".release-gate" / "runtime_required_components.json"
