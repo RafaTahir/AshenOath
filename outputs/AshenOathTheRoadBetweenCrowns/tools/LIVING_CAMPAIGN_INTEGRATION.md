@@ -14,6 +14,67 @@ authored checkpoint `e0c0c51`). Find the exact checkpoint with
 below describe earlier gates; this section supersedes their implementation TODOs.
 No canonical checkout, export or deployment was changed by this worktree.
 
+### Actual-input acceptance harness (authored; native execution pending)
+
+`tools/run_community_acceptance.py` freezes the committed project settings,
+generated class cache, harness, seed and complete PCK inputs. It configures a new
+custom user directory and redirected APPDATA/LOCALAPPDATA **before** starting the
+pinned Godot 4.6.3 process. It mounts root and secondary packs from the script,
+never `--main-pack`; timeout cleanup targets only its owned process tree. Input
+hashes, output images, engine errors and the exact expected task coverage are
+checked by the runner. `--prepare-only` freezes the fixture without starting an
+engine. Source-only Python checks pass **8 tests**; GDScript parser and native
+execution are explicitly **unrun** until the shared engine slot and built assets
+are available. No touch-input or physical-phone acceptance is claimed.
+
+`tools/verify_community_world_input.gd` uses real keyboard/mouse events after
+Continue, visible menu focus, actual E interactions and walking. Its live physics
+queries and AStar path planning are read-only. It never sets flags, completes an
+objective, invokes an action callback, moves the player directly, freezes an
+actor, changes the clock or patches input ownership. It covers two-way physical
+arrival/return, interrupted trestle work, real work duration, choices followed by
+enacted aftermath, the carried first load, interrupted ferry, Quick Save / Main
+Menu / Continue, actual consent answers and withdrawal, morning/evening waits,
+and all available actors with eight-NPC/ten-total visible-skeleton assertions.
+
+Run these four cases separately at each requested viewport; each case earns six
+tasks and their union is the exact fifteen authored work tasks:
+
+| Case | Explicit boundary seed | Branch and availability coverage |
+| --- | --- | --- |
+| `lantern_crossing` | Old Mill west approach, `main_empty_tables` active before arrival | Central kitchen, public crossing |
+| `lantern_ferry` | Same boundary in a fresh profile | Household parcels, ferry and interruption |
+| `hearth_distributed` | Undercroft north approach, `main_house_many_names` active before arrival | Distributed records; Senn testimony, cooperative Edric, introduced Nera with no active escort: all twelve across two shifts |
+| `hearth_protected` | Same boundary in a fresh profile | Protected records; Senn, Edric and Nera unavailable according to saved outcomes |
+
+Seeds are explicit test setup before startup, not progression earned by this
+harness. Supply a raw disposable version-13 campaign save with revision 2, the
+proper completed preceding chain, no completed starting-chapter objectives and
+no tested work/choices already awarded. The runner rejects a legacy/missing marker,
+wrong region, replay seed, pre-awarded work or an incorrect cast matrix. It never
+reads or modifies the real user profile. Root must prepare these boundary fixtures
+and full PCKs before native execution; this source checkpoint does not fabricate
+a passing save or claim native coverage.
+
+Example from the game directory (paths refer to isolated release artifacts):
+
+```powershell
+python tools/run_community_acceptance.py --case lantern_crossing `
+  --seed-save <boundary-save.json> --root-pack <root.pck> --packs <runtime-packs> `
+  --class-cache <global_script_class_cache.cfg> --viewport desktop --prepare-only
+```
+
+The `touch` viewport is 960×540 and `desktop` is 1280×720. This harness still
+drives keyboard/mouse input at either size; genuine touch-control QA is separate.
+
+Source review correction `bbab27c`: PlayerController's root is at its feet. The
+public crossing now accepts the actual .185 m deck height; ferry feet rest at
+.25 m over its .24 m deck rather than floating .95 m above it. Safe bank recovery
+uses .02 m. Added synthetic tests cover low-foot entry, far-bank appearance,
+side-footway and channel detours, complete traversal, and ferry support height;
+these additions are unrun pending the serialized small-engine slot. The public
+crossing summary no longer attributes work to an unavailable Nera (caption-only).
+
 Implemented source:
 
 - `community_section.gd` constructs Lantern Reach and Hearthward from retained
