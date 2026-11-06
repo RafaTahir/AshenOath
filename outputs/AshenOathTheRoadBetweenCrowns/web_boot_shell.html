@@ -591,7 +591,9 @@
             controller.signal.removeEventListener('abort', abortWait);
           }
           if (controller.signal.aborted || failed || packOperations.get(id) !== operation) return null;
-          engine.copyToFS(metadata.path, payload);
+          // Only verified, private pack buffers may transfer their ownership.
+          // Other engine callers retain copy semantics, including file imports.
+          engine.copyToFS(metadata.path, payload, engine.supportsOwnedPackBuffers === true);
           const detail = { ...metadata, state: 'preloaded', progress: 1 };
           window.__ashenOathPreloadedPacks[id] = detail;
           if (id === 'opening') {

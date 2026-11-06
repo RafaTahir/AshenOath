@@ -105,7 +105,8 @@ function harness(options = {}) {
     document: { hidden: true, getElementById: () => ({}) }, errorPanel: {}, loading: {},
     updateAudioNotice() {}, setBootState() {}, reload: { focus() {} },
     CustomEvent: class { constructor(type, init) { this.type = type; this.detail = init.detail; } },
-    engine: { copyToFS: (path, bytes) => copied.push({ path, bytes: new Uint8Array(bytes) }), requestQuit() {} },
+    engine: { supportsOwnedPackBuffers: options.ownedBuffers === true,
+      copyToFS: (path, bytes, owned) => copied.push({ path, bytes: new Uint8Array(bytes), owned }), requestQuit() {} },
     console: { error: (...values) => errors.push(values) },
     fetch: (url, init) => {
       const request = { url: String(url), path: new URL(url, window.location.href).pathname, ...init };
@@ -191,6 +192,17 @@ test('the complete source shell scripts parse', () => {
   assert.ok(scripts.length > 0);
   for (const [, source] of scripts) new vm.Script(source, { filename: 'web_boot_shell.html' });
 });
+
+for (const ownedBuffers of [false, true]) {
+  test(`verified pack ownership requires explicit engine capability: ${ownedBuffers}`, async () => {
+    const h = harness({ ownedBuffers });
+    h.request('campaign');
+    await flush();
+    assert.equal(h.state('campaign').state, 'preloaded');
+    assert.equal(h.copied[0].owned, ownedBuffers);
+    assert.equal(digest(h.copied[0].bytes), h.data.manifest.packs.campaign.sha256);
+  });
+}
 
 test('concurrent packs share one validated manifest and retain successful metadata', async () => {
   const h = harness();

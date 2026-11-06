@@ -19,6 +19,7 @@ from urllib.parse import urlsplit
 from deployment_policy import POLICY, check_budget, check_file_size, size_summary
 from runtime_pack_artifacts import copy_runtime_pack_artifacts, copy_shell_assets
 from runtime_pack_validation import require_valid_pack_graph
+from web_engine_owned_buffers import enable_owned_pack_buffers
 
 
 RELEASE_MANIFEST = "release_manifest.json"
@@ -188,7 +189,7 @@ def compress_engine_script(path: Path) -> None:
     payload = path.read_bytes()
     if payload.startswith(b"\x1f\x8b"):
         payload = gzip.decompress(payload)
-    payload.decode("utf-8")
+    payload = enable_owned_pack_buffers(payload)
     # Keep unchanged engine URLs/cache identity stable across story-only builds.
     packed = gzip.compress(payload, compresslevel=9, mtime=0)
     if gzip.decompress(packed) != payload:
