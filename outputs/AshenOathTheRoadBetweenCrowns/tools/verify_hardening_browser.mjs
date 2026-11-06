@@ -287,9 +287,11 @@ async function enterMenu(page, touch) {
     if (first.ui.active_menu === 'startup') {
       assert(!first.ui.buttons?.some(b => b.enabled && /^(New Game|Continue|Settings)$/.test(b.text)),
         'Unready menu actions exposed during loading');
-      await screenshot(page, 'loading-first');
-      await sleep(9000);
-      if ((await observe(page))?.ui?.active_menu === 'startup') await screenshot(page, 'loading-artwork-next');
+      if (!options['no-loading-captures']) {
+        await screenshot(page, 'loading-first');
+        await sleep(9000);
+        if ((await observe(page))?.ui?.active_menu === 'startup') await screenshot(page, 'loading-artwork-next');
+      }
       event({ event: 'loading_menu_actions_withheld' });
     }
   }
@@ -298,7 +300,7 @@ async function enterMenu(page, touch) {
   await waitFor(async () => {
     const s = await observe(page);
     const retry = s?.ui?.buttons?.some(b => b.enabled && /Retry/i.test(b.text));
-    if (scenario === 'startup' && s?.ui?.active_menu === 'startup' && Date.now() >= nextLoadingCapture) {
+    if (scenario === 'startup' && !options['no-loading-captures'] && s?.ui?.active_menu === 'startup' && Date.now() >= nextLoadingCapture) {
       await screenshot(page, `loading-stage-${++loadingCapture}`);
       nextLoadingCapture = Date.now() + 12000;
     }
@@ -308,6 +310,7 @@ async function enterMenu(page, touch) {
     event({ event: 'menu_reached', startup: await page.evaluate(() => ({
       navigation_ms: performance.now(), boot: window.__ashenOathBoot, opening: window.__ashenOathOpeningState,
       light_loops: window.__ashenBoundedLightLoops || null,
+      visibility: { hidden: document.hidden, focused: document.hasFocus(), history: window.__ashenTestVisibility || [] },
     })) });
     if (!currentCase.graphics) {
       currentCase.graphics = await page.evaluate(() => {
@@ -645,6 +648,20 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
   const result = currentCase;
   const context = await browser.createBrowserContext();
   const page = await context.newPage();
+  if (scenario === 'startup') {
+    // A background/occluded desktop pauses preparation. Measure an uninterrupted
+    // foreground launch, as the existing touch driver does, not time spent hidden.
+    const focus = await page.createCDPSession();
+    await focus.send('Emulation.setFocusEmulationEnabled', { enabled: true });
+    currentCase.focus_mode = 'foreground_emulated';
+    currentCase.loading_captures = !options['no-loading-captures'];
+    await page.evaluateOnNewDocument(() => {
+      const record = () => window.__ashenTestVisibility.push({ ms: performance.now(), hidden: document.hidden, focused: document.hasFocus() });
+      window.__ashenTestVisibility = [];
+      record();
+      document.addEventListener('visibilitychange', record);
+    });
+  }
   if (options['light-loop-candidate']) {
     const source = readFileSync(resolve('web_boot_shell.html'), 'utf8').match(/<script id="ashen-bounded-light-loops">([\s\S]*?)<\/script>/)?.[1];
     assert(source, 'Bounded light loop source is missing');

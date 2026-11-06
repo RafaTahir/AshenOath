@@ -1,10 +1,10 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-11-06T16:25:13.7668181Z",
-  "build_id": "startup-speed-20261107",
-  "generated_from_commit": "420593e80aa6737eb8c5db62543d1dc016cace24",
+  "generated_at_utc": "2026-11-06T18:34:38.8606186Z",
+  "build_id": "startup-half-r4-20261107",
+  "generated_from_commit": "3c05bdf1c8da7d16b394f98984b1d15a0deaf0cb",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\startup-speed-20261107\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
@@ -18,7 +18,8 @@
       "bytes": 5624244,
       "sha256": "897263bfdbabb03f52d52c1450795eee813d1e285c9daca77d8a3e3753b58a9a",
       "status": "candidate_external",
-      "log": "logs/pack-base.stdout.log"
+      "log": "logs/pack-base.stdout.log",
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "opening",
@@ -28,7 +29,8 @@
       "bytes": 73978140,
       "sha256": "80c1e03a6545cfaf0861b77af461be6639d0f17e157dd66532c83256270e291f",
       "status": "candidate_external",
-      "log": "logs/pack-opening.stdout.log"
+      "log": "logs/pack-opening.stdout.log",
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "campaign",
@@ -38,7 +40,8 @@
       "bytes": 7599096,
       "sha256": "b327a871f34932ba4b74efbca4b5b450e0902aadae755dddaca33340d747f3b7",
       "status": "candidate_external",
-      "log": "logs/pack-campaign.stdout.log"
+      "log": "logs/pack-campaign.stdout.log",
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "characters",
@@ -49,7 +52,7 @@
       "sha256": "d04b1b6d9eee1d96acef25b330d98d9c6b572f7a0e6e9d5673ea3e73e3dbe340",
       "status": "candidate_external",
       "log": "logs/pack-characters.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "monsters",
@@ -60,7 +63,7 @@
       "sha256": "11101b6e5f086db9350e15c94b28371f2b82b01d2f2acbc5e66138bfc508ba73",
       "status": "candidate_external",
       "log": "logs/pack-monsters.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "audio",
@@ -71,7 +74,7 @@
       "sha256": "192bbd2ce578f40d56874dd1afe06ab40b0bfc1d27104b7795b2f3873d856a10",
       "status": "candidate_external",
       "log": "logs/pack-audio.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "adjacent",
@@ -81,7 +84,8 @@
       "bytes": 3235760,
       "sha256": "2ad24d19fa685b4d25533c7078603ee3c1dcf84a22b3650e6d889338d43b66c4",
       "status": "candidate_external",
-      "log": "logs/pack-adjacent.stdout.log"
+      "log": "logs/pack-adjacent.stdout.log",
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "quality_materials",
@@ -92,7 +96,7 @@
       "sha256": "0568a1aa7ac5628bbc5abd77a9a38a335de9a48036706eb23ac9a402b0a7e8c9",
       "status": "candidate_external",
       "log": "logs/pack-quality_materials.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c01",
@@ -103,7 +107,7 @@
       "sha256": "0babda10bcec1515177a5e7fa4e47d063549ca1a35a9bc0e360c6c0ff8b0668b",
       "status": "candidate_external",
       "log": "logs/pack-actor_c01.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c02",
@@ -114,7 +118,7 @@
       "sha256": "66575189fc59322513ac82b814ad6e9dd8d5c9a2fe9de17d9c7ccbc8fac5af69",
       "status": "candidate_external",
       "log": "logs/pack-actor_c02.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c03",
@@ -125,7 +129,7 @@
       "sha256": "bc9411097cc4876225ba939fac34c6cac0e0fc353ccf6a41b889f35fc9d185d2",
       "status": "candidate_external",
       "log": "logs/pack-actor_c03.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c04",
@@ -136,7 +140,7 @@
       "sha256": "33ca573de967bfa0a59b964a882ce566975873e80983483d794d5ffb284dce76",
       "status": "candidate_external",
       "log": "logs/pack-actor_c04.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c05",
@@ -147,7 +151,7 @@
       "sha256": "d20b6dcaa60f7099785c5675f8e638366eac1871500200e4dff14a3439e13e70",
       "status": "candidate_external",
       "log": "logs/pack-actor_c05.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c06",
@@ -158,7 +162,7 @@
       "sha256": "a02e29ba7b7056e351f5b3028f80b261be5db1f9f602423f60e6e7a17405e94d",
       "status": "candidate_external",
       "log": "logs/pack-actor_c06.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c07",
@@ -169,7 +173,7 @@
       "sha256": "92ae96bc53617e2a1f0268138111b99814aa8640b44f575c1a6a2080727855cd",
       "status": "candidate_external",
       "log": "logs/pack-actor_c07.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c08",
@@ -180,7 +184,7 @@
       "sha256": "3ec37b39ccd07e7bc1cfe3c92a25a35abd96df23d96b1bf7132bf9983001d00b",
       "status": "candidate_external",
       "log": "logs/pack-actor_c08.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c09",
@@ -191,7 +195,7 @@
       "sha256": "388303da283be5fd3900be84e00a337f9284db2ec4df5cac5c19103b8c6b8bfe",
       "status": "candidate_external",
       "log": "logs/pack-actor_c09.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c10",
@@ -202,7 +206,7 @@
       "sha256": "a1ada7be842972e18a2bef86dab655d05e362fac5bf9b27a50c65fa9d5926d67",
       "status": "candidate_external",
       "log": "logs/pack-actor_c10.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c11",
@@ -213,7 +217,7 @@
       "sha256": "4c504a67957635f10f9edcd7e65bb6c351301029246b35a3fb879697b656a296",
       "status": "candidate_external",
       "log": "logs/pack-actor_c11.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_c12",
@@ -224,7 +228,7 @@
       "sha256": "9dcf045da6ee9541a22bbbc4cd430f53b1e85d8dcafa0d937af655fbe0ea26f7",
       "status": "candidate_external",
       "log": "logs/pack-actor_c12.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m01",
@@ -235,7 +239,7 @@
       "sha256": "b062800f63baa733da69b13c427015384177086f4f2ceb554994c0b60e09bab7",
       "status": "candidate_external",
       "log": "logs/pack-actor_m01.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m02",
@@ -246,7 +250,7 @@
       "sha256": "71848f5a6eab23808e6639745ddd299ed239d96a9ea7702afc4406ea3330dc72",
       "status": "candidate_external",
       "log": "logs/pack-actor_m02.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m03",
@@ -257,7 +261,7 @@
       "sha256": "830a56c97b14eed9bd04787875d39a9268b6c558229b1c99738ce73f9433791d",
       "status": "candidate_external",
       "log": "logs/pack-actor_m03.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m04",
@@ -268,7 +272,7 @@
       "sha256": "9af919a7422eee1b823f23b820492bccd8d3a6f7dd37273c3d3c6550fce0e3ec",
       "status": "candidate_external",
       "log": "logs/pack-actor_m04.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m05",
@@ -279,7 +283,7 @@
       "sha256": "142388b822a0ba29f1287397ce908a4a72b061b574e9f3632108d6e6afda67c2",
       "status": "candidate_external",
       "log": "logs/pack-actor_m05.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m06",
@@ -290,7 +294,7 @@
       "sha256": "49177d62fb1545bd2bef67b89be6330101ee349cf6ccaf1df6a9d247a21579c6",
       "status": "candidate_external",
       "log": "logs/pack-actor_m06.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m07",
@@ -301,7 +305,7 @@
       "sha256": "8b0c09ac74fcc480ba4b0b44556ab89a63f7267a526946ecfafd87615feb8bfe",
       "status": "candidate_external",
       "log": "logs/pack-actor_m07.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m08",
@@ -312,7 +316,7 @@
       "sha256": "b5e9e4427d814916e8e7827b9f661e998a96363f8275a75c4d984fb8fcf45211",
       "status": "candidate_external",
       "log": "logs/pack-actor_m08.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m09",
@@ -323,7 +327,7 @@
       "sha256": "6bbd5b64cdbe146785fe5a375752d567ce74819d33026df6ebd199df1cd5e05e",
       "status": "candidate_external",
       "log": "logs/pack-actor_m09.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m10",
@@ -334,7 +338,7 @@
       "sha256": "695a33495cf30c647fbf83669c75e201109f8b6adbf851e0600f5e3d871a22f5",
       "status": "candidate_external",
       "log": "logs/pack-actor_m10.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m11",
@@ -345,7 +349,7 @@
       "sha256": "6c8538f5d88702ffe98e93adf1b1aa15078c8ae6346e24dadbb8c4430a1b290d",
       "status": "candidate_external",
       "log": "logs/pack-actor_m11.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m12",
@@ -356,7 +360,7 @@
       "sha256": "bc079d4d5dfa919bfa1e72a70027549e13c103adecfbd0093f42c7e33910d6be",
       "status": "candidate_external",
       "log": "logs/pack-actor_m12.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m13",
@@ -367,7 +371,7 @@
       "sha256": "0918dbad6df6505ef33e3149fc34eb0c1e275da953481d09862222f39d52cafc",
       "status": "candidate_external",
       "log": "logs/pack-actor_m13.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m14",
@@ -378,7 +382,7 @@
       "sha256": "7878c867a447c47ab55930aa6f0b430364d52ecf9cb07e198898a0096d3a758f",
       "status": "candidate_external",
       "log": "logs/pack-actor_m14.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m15",
@@ -389,7 +393,7 @@
       "sha256": "13a6c71d52b2ad0c48839c7b18e248978b16266b9f1697aec1725c1aa0d2d357",
       "status": "candidate_external",
       "log": "logs/pack-actor_m15.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m16",
@@ -400,7 +404,7 @@
       "sha256": "298372186585db40bed4fb9c6de080063362261932a7425cbdbfb72ccc485bbc",
       "status": "candidate_external",
       "log": "logs/pack-actor_m16.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m17",
@@ -411,7 +415,7 @@
       "sha256": "370169b09fbd11422f9c102c11c3c6aec94c44026ab14d9dd87c0d71fea23b3a",
       "status": "candidate_external",
       "log": "logs/pack-actor_m17.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m18",
@@ -422,7 +426,7 @@
       "sha256": "cfd537b942e5829a87efa9bfe0dc52d35ce9a71ff2b9fea3608a61bca4fece02",
       "status": "candidate_external",
       "log": "logs/pack-actor_m18.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m19",
@@ -433,7 +437,7 @@
       "sha256": "9546650edb4f92a0bec70ab57e25dda83357ff852fe0b40368143155abc5a272",
       "status": "candidate_external",
       "log": "logs/pack-actor_m19.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_m20",
@@ -444,7 +448,7 @@
       "sha256": "0a414136d4704949c5d71208b725ff1ba9396d782a2c87adaea3f5f5e181f543",
       "status": "candidate_external",
       "log": "logs/pack-actor_m20.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_p01",
@@ -455,7 +459,7 @@
       "sha256": "07f318e6278dd5fd6dc556744be234791a0a40a9ad6a9b3b2edcd60b7e9f5794",
       "status": "candidate_external",
       "log": "logs/pack-actor_p01.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "actor_shared",
@@ -466,7 +470,7 @@
       "sha256": "db4286666153c2e6b2331b04ef681b2389f8b57028266799c426be8dd93509e7",
       "status": "candidate_external",
       "log": "logs/pack-actor_shared.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     },
     {
       "id": "leisure",
@@ -477,16 +481,16 @@
       "sha256": "91eae79db55f6909af1cf52ac4bc228936d616b6a3bc9877bf450e13cc447fe4",
       "status": "candidate_external",
       "log": "logs/pack-leisure.stdout.log",
-      "reused_from": "startup-verified-r2-20261106; unchanged asset inputs"
+      "reused_from": "startup-speed-20261107; unchanged native pack inputs"
     }
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "startup-speed-20261107",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\startup-speed-20261107\\export",
-    "generated_from_commit": "420593e80aa6737eb8c5db62543d1dc016cace24",
-    "artifacts_total_bytes": 205947075,
-    "root_pck_sha256": "98f5e4be64d1094cf3145270d122d6f8aaacb270a888079ab4e9ac61b7402355",
+    "build_id": "startup-half-r4-20261107",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\export",
+    "generated_from_commit": "3c05bdf1c8da7d16b394f98984b1d15a0deaf0cb",
+    "artifacts_total_bytes": 205953527,
+    "root_pck_sha256": "9e434a9550d880b138daf23591a23e8a6655f32910959a6454bfdaf70b5c35f0",
     "note": "Startup repair; unchanged asset packs retain their exact bytes. Native records describe decoded artifacts."
   }
 }

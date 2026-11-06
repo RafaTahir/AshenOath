@@ -15,6 +15,7 @@ function sourceBetween(start, end) {
 }
 const metadataSource = sourceBetween('      async function sha256Hex(payload)', '      function mountOpeningPackAfterReady()');
 const shutdownSource = sourceBetween('      function showStartupError(', '      window.__ashenOathBootstrapFailure');
+const startupSource = sourceBetween('      window.__ashenOathStart = async () => {', '    })();');
 const digest = bytes => createHash('sha256').update(new Uint8Array(bytes)).digest('hex');
 const digestBuffer = bytes => Uint8Array.from(createHash('sha256').update(new Uint8Array(bytes)).digest()).buffer;
 const encode = value => new TextEncoder().encode(JSON.stringify(value));
@@ -129,8 +130,61 @@ function harness(options = {}) {
     state: id => window.__ashenOathPreloadedPacks[id],
     setRoute: replacement => { route = replacement; },
     count: path => requests.filter(request => request.path === path).length,
+    startEngine: Engine => {
+      Object.assign(context, { Engine, GODOT_CONFIG: { executable: 'engine' }, started: false,
+        engineBooted: false, startupResourceError: '', performance: { now: () => clock.now, mark() {} },
+        captureEngineAudioContext: () => () => {}, updateLoading() {}, mountOpeningPackAfterReady() {} });
+      vm.runInContext(startupSource, context);
+      return window.__ashenOathStart();
+    },
   };
 }
+
+test('verified packs enter the initialized filesystem before project startup finishes', async () => {
+  const h = harness({ filesystemReady: false });
+  const initialized = deferred(), running = deferred();
+  let loads = 0;
+  class Engine {
+    static getMissingFeatures() { return []; }
+    init() { return initialized.promise; }
+    startGame() { loads += 1; return Promise.all([this.init(), running.promise]); }
+    copyToFS(path, bytes) { h.copied.push({ path, bytes }); }
+  }
+  h.request('campaign');
+  const started = observe(h.startEngine(Engine));
+  await flush();
+  assert.equal(h.state('campaign').state, 'verified');
+  assert.equal(h.copied.length, 0);
+  initialized.resolve();
+  await flush();
+  assert.equal(h.state('campaign').state, 'preloaded');
+  assert.equal(h.copied.length, 1);
+  assert.equal(started.state, 'pending');
+  running.resolve();
+  await flush();
+  assert.equal(started.state, 'fulfilled');
+  assert.equal(loads, 1);
+});
+
+test('failed engine initialization never copies verified packs into an unavailable filesystem', async () => {
+  const h = harness({ filesystemReady: false });
+  const initialized = deferred();
+  class Engine {
+    static getMissingFeatures() { return []; }
+    init() { return initialized.promise; }
+    startGame() { return this.init(); }
+    copyToFS() { assert.fail('copy after failed initialization'); }
+    requestQuit() {}
+  }
+  h.request('campaign');
+  const starting = h.startEngine(Engine);
+  await flush();
+  initialized.reject(new Error('Engine initialization failed'));
+  await starting;
+  await flush();
+  assert.equal(h.copied.length, 0);
+  assert.equal(h.request('campaign'), false);
+});
 
 test('the complete source shell scripts parse', () => {
   const scripts = [...shell.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)];

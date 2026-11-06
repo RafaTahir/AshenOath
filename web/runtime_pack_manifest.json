@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "program": "SOUL-REBUILD",
-  "release_id": "startup-speed-20261107",
+  "release_id": "startup-half-r4-20261107",
   "artifact_policy": "external_runtime_packs",
   "candidate_manifest": "res://runtime_pack_candidates.json",
   "pack_presets": {
@@ -52,7 +52,7 @@
   "max_deployment_bytes": 268435456,
   "packs": {
     "base": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "",
       "sha256": "",
       "bytes": 0,
@@ -76,7 +76,7 @@
       "embedded_source_kind": "standalone_pack_candidate"
     },
     "opening": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/opening.pck?sha256=80c1e03a6545cfaf0861b77af461be6639d0f17e157dd66532c83256270e291f",
       "sha256": "80c1e03a6545cfaf0861b77af461be6639d0f17e157dd66532c83256270e291f",
       "bytes": 73978140,
@@ -97,7 +97,7 @@
       "cache_key": "80c1e03a6545cfaf0861b77af461be6639d0f17e157dd66532c83256270e291f"
     },
     "campaign": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/campaign.pck?sha256=b327a871f34932ba4b74efbca4b5b450e0902aadae755dddaca33340d747f3b7",
       "sha256": "b327a871f34932ba4b74efbca4b5b450e0902aadae755dddaca33340d747f3b7",
       "bytes": 7599096,
@@ -120,7 +120,7 @@
       "cache_key": "b327a871f34932ba4b74efbca4b5b450e0902aadae755dddaca33340d747f3b7"
     },
     "characters": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/characters.pck?sha256=d04b1b6d9eee1d96acef25b330d98d9c6b572f7a0e6e9d5673ea3e73e3dbe340",
       "sha256": "d04b1b6d9eee1d96acef25b330d98d9c6b572f7a0e6e9d5673ea3e73e3dbe340",
       "bytes": 1747280,
@@ -141,7 +141,7 @@
       "cache_key": "d04b1b6d9eee1d96acef25b330d98d9c6b572f7a0e6e9d5673ea3e73e3dbe340"
     },
     "monsters": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/monsters.pck?sha256=11101b6e5f086db9350e15c94b28371f2b82b01d2f2acbc5e66138bfc508ba73",
       "sha256": "11101b6e5f086db9350e15c94b28371f2b82b01d2f2acbc5e66138bfc508ba73",
       "bytes": 15769868,
@@ -163,7 +163,7 @@
       "cache_key": "11101b6e5f086db9350e15c94b28371f2b82b01d2f2acbc5e66138bfc508ba73"
     },
     "audio": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/audio.pck?sha256=192bbd2ce578f40d56874dd1afe06ab40b0bfc1d27104b7795b2f3873d856a10",
       "sha256": "192bbd2ce578f40d56874dd1afe06ab40b0bfc1d27104b7795b2f3873d856a10",
       "bytes": 21351692,
@@ -184,7 +184,7 @@
       "cache_key": "192bbd2ce578f40d56874dd1afe06ab40b0bfc1d27104b7795b2f3873d856a10"
     },
     "quality_materials": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/quality_materials.pck?sha256=0568a1aa7ac5628bbc5abd77a9a38a335de9a48036706eb23ac9a402b0a7e8c9",
       "sha256": "0568a1aa7ac5628bbc5abd77a9a38a335de9a48036706eb23ac9a402b0a7e8c9",
       "bytes": 7377212,
@@ -205,7 +205,7 @@
       "cache_key": "0568a1aa7ac5628bbc5abd77a9a38a335de9a48036706eb23ac9a402b0a7e8c9"
     },
     "adjacent": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/adjacent.pck?sha256=2ad24d19fa685b4d25533c7078603ee3c1dcf84a22b3650e6d889338d43b66c4",
       "sha256": "2ad24d19fa685b4d25533c7078603ee3c1dcf84a22b3650e6d889338d43b66c4",
       "bytes": 3235760,
@@ -227,7 +227,7 @@
       "cache_key": "2ad24d19fa685b4d25533c7078603ee3c1dcf84a22b3650e6d889338d43b66c4"
     },
     "actor_c01": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c01.pck?sha256=0babda10bcec1515177a5e7fa4e47d063549ca1a35a9bc0e360c6c0ff8b0668b",
       "bytes": 4833348,
       "sha256": "0babda10bcec1515177a5e7fa4e47d063549ca1a35a9bc0e360c6c0ff8b0668b",
@@ -257,7 +257,7 @@
       "cache_key": "0babda10bcec1515177a5e7fa4e47d063549ca1a35a9bc0e360c6c0ff8b0668b"
     },
     "actor_c02": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c02.pck?sha256=66575189fc59322513ac82b814ad6e9dd8d5c9a2fe9de17d9c7ccbc8fac5af69",
       "bytes": 2048900,
       "sha256": "66575189fc59322513ac82b814ad6e9dd8d5c9a2fe9de17d9c7ccbc8fac5af69",
@@ -280,7 +280,7 @@
       "cache_key": "66575189fc59322513ac82b814ad6e9dd8d5c9a2fe9de17d9c7ccbc8fac5af69"
     },
     "actor_c03": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c03.pck?sha256=bc9411097cc4876225ba939fac34c6cac0e0fc353ccf6a41b889f35fc9d185d2",
       "bytes": 1948948,
       "sha256": "bc9411097cc4876225ba939fac34c6cac0e0fc353ccf6a41b889f35fc9d185d2",
@@ -303,7 +303,7 @@
       "cache_key": "bc9411097cc4876225ba939fac34c6cac0e0fc353ccf6a41b889f35fc9d185d2"
     },
     "actor_c04": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c04.pck?sha256=33ca573de967bfa0a59b964a882ce566975873e80983483d794d5ffb284dce76",
       "bytes": 1972948,
       "sha256": "33ca573de967bfa0a59b964a882ce566975873e80983483d794d5ffb284dce76",
@@ -326,7 +326,7 @@
       "cache_key": "33ca573de967bfa0a59b964a882ce566975873e80983483d794d5ffb284dce76"
     },
     "actor_c05": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c05.pck?sha256=d20b6dcaa60f7099785c5675f8e638366eac1871500200e4dff14a3439e13e70",
       "bytes": 3144388,
       "sha256": "d20b6dcaa60f7099785c5675f8e638366eac1871500200e4dff14a3439e13e70",
@@ -349,7 +349,7 @@
       "cache_key": "d20b6dcaa60f7099785c5675f8e638366eac1871500200e4dff14a3439e13e70"
     },
     "actor_c06": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c06.pck?sha256=a02e29ba7b7056e351f5b3028f80b261be5db1f9f602423f60e6e7a17405e94d",
       "bytes": 2091588,
       "sha256": "a02e29ba7b7056e351f5b3028f80b261be5db1f9f602423f60e6e7a17405e94d",
@@ -372,7 +372,7 @@
       "cache_key": "a02e29ba7b7056e351f5b3028f80b261be5db1f9f602423f60e6e7a17405e94d"
     },
     "actor_c07": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c07.pck?sha256=92ae96bc53617e2a1f0268138111b99814aa8640b44f575c1a6a2080727855cd",
       "bytes": 2423288,
       "sha256": "92ae96bc53617e2a1f0268138111b99814aa8640b44f575c1a6a2080727855cd",
@@ -396,7 +396,7 @@
       "cache_key": "92ae96bc53617e2a1f0268138111b99814aa8640b44f575c1a6a2080727855cd"
     },
     "actor_c08": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c08.pck?sha256=3ec37b39ccd07e7bc1cfe3c92a25a35abd96df23d96b1bf7132bf9983001d00b",
       "bytes": 2064568,
       "sha256": "3ec37b39ccd07e7bc1cfe3c92a25a35abd96df23d96b1bf7132bf9983001d00b",
@@ -419,7 +419,7 @@
       "cache_key": "3ec37b39ccd07e7bc1cfe3c92a25a35abd96df23d96b1bf7132bf9983001d00b"
     },
     "actor_c09": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c09.pck?sha256=388303da283be5fd3900be84e00a337f9284db2ec4df5cac5c19103b8c6b8bfe",
       "bytes": 1899128,
       "sha256": "388303da283be5fd3900be84e00a337f9284db2ec4df5cac5c19103b8c6b8bfe",
@@ -442,7 +442,7 @@
       "cache_key": "388303da283be5fd3900be84e00a337f9284db2ec4df5cac5c19103b8c6b8bfe"
     },
     "actor_c10": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c10.pck?sha256=a1ada7be842972e18a2bef86dab655d05e362fac5bf9b27a50c65fa9d5926d67",
       "bytes": 2086936,
       "sha256": "a1ada7be842972e18a2bef86dab655d05e362fac5bf9b27a50c65fa9d5926d67",
@@ -465,7 +465,7 @@
       "cache_key": "a1ada7be842972e18a2bef86dab655d05e362fac5bf9b27a50c65fa9d5926d67"
     },
     "actor_c11": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c11.pck?sha256=4c504a67957635f10f9edcd7e65bb6c351301029246b35a3fb879697b656a296",
       "bytes": 1886468,
       "sha256": "4c504a67957635f10f9edcd7e65bb6c351301029246b35a3fb879697b656a296",
@@ -488,7 +488,7 @@
       "cache_key": "4c504a67957635f10f9edcd7e65bb6c351301029246b35a3fb879697b656a296"
     },
     "actor_c12": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_c12.pck?sha256=9dcf045da6ee9541a22bbbc4cd430f53b1e85d8dcafa0d937af655fbe0ea26f7",
       "bytes": 1892468,
       "sha256": "9dcf045da6ee9541a22bbbc4cd430f53b1e85d8dcafa0d937af655fbe0ea26f7",
@@ -511,7 +511,7 @@
       "cache_key": "9dcf045da6ee9541a22bbbc4cd430f53b1e85d8dcafa0d937af655fbe0ea26f7"
     },
     "actor_m01": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m01.pck?sha256=b062800f63baa733da69b13c427015384177086f4f2ceb554994c0b60e09bab7",
       "bytes": 1167948,
       "sha256": "b062800f63baa733da69b13c427015384177086f4f2ceb554994c0b60e09bab7",
@@ -540,7 +540,7 @@
       "cache_key": "b062800f63baa733da69b13c427015384177086f4f2ceb554994c0b60e09bab7"
     },
     "actor_m02": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m02.pck?sha256=71848f5a6eab23808e6639745ddd299ed239d96a9ea7702afc4406ea3330dc72",
       "bytes": 4120780,
       "sha256": "71848f5a6eab23808e6639745ddd299ed239d96a9ea7702afc4406ea3330dc72",
@@ -562,7 +562,7 @@
       "cache_key": "71848f5a6eab23808e6639745ddd299ed239d96a9ea7702afc4406ea3330dc72"
     },
     "actor_m03": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m03.pck?sha256=830a56c97b14eed9bd04787875d39a9268b6c558229b1c99738ce73f9433791d",
       "bytes": 1299316,
       "sha256": "830a56c97b14eed9bd04787875d39a9268b6c558229b1c99738ce73f9433791d",
@@ -597,7 +597,7 @@
       "cache_key": "830a56c97b14eed9bd04787875d39a9268b6c558229b1c99738ce73f9433791d"
     },
     "actor_m04": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m04.pck?sha256=9af919a7422eee1b823f23b820492bccd8d3a6f7dd37273c3d3c6550fce0e3ec",
       "bytes": 1305632,
       "sha256": "9af919a7422eee1b823f23b820492bccd8d3a6f7dd37273c3d3c6550fce0e3ec",
@@ -622,7 +622,7 @@
       "cache_key": "9af919a7422eee1b823f23b820492bccd8d3a6f7dd37273c3d3c6550fce0e3ec"
     },
     "actor_m05": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m05.pck?sha256=142388b822a0ba29f1287397ce908a4a72b061b574e9f3632108d6e6afda67c2",
       "bytes": 1412216,
       "sha256": "142388b822a0ba29f1287397ce908a4a72b061b574e9f3632108d6e6afda67c2",
@@ -656,7 +656,7 @@
       "cache_key": "142388b822a0ba29f1287397ce908a4a72b061b574e9f3632108d6e6afda67c2"
     },
     "actor_m06": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m06.pck?sha256=49177d62fb1545bd2bef67b89be6330101ee349cf6ccaf1df6a9d247a21579c6",
       "bytes": 2326096,
       "sha256": "49177d62fb1545bd2bef67b89be6330101ee349cf6ccaf1df6a9d247a21579c6",
@@ -681,7 +681,7 @@
       "cache_key": "49177d62fb1545bd2bef67b89be6330101ee349cf6ccaf1df6a9d247a21579c6"
     },
     "actor_m07": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m07.pck?sha256=8b0c09ac74fcc480ba4b0b44556ab89a63f7267a526946ecfafd87615feb8bfe",
       "bytes": 1895020,
       "sha256": "8b0c09ac74fcc480ba4b0b44556ab89a63f7267a526946ecfafd87615feb8bfe",
@@ -701,7 +701,7 @@
       "cache_key": "8b0c09ac74fcc480ba4b0b44556ab89a63f7267a526946ecfafd87615feb8bfe"
     },
     "actor_m08": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m08.pck?sha256=b5e9e4427d814916e8e7827b9f661e998a96363f8275a75c4d984fb8fcf45211",
       "bytes": 1503596,
       "sha256": "b5e9e4427d814916e8e7827b9f661e998a96363f8275a75c4d984fb8fcf45211",
@@ -721,7 +721,7 @@
       "cache_key": "b5e9e4427d814916e8e7827b9f661e998a96363f8275a75c4d984fb8fcf45211"
     },
     "actor_m09": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m09.pck?sha256=6bbd5b64cdbe146785fe5a375752d567ce74819d33026df6ebd199df1cd5e05e",
       "bytes": 1253084,
       "sha256": "6bbd5b64cdbe146785fe5a375752d567ce74819d33026df6ebd199df1cd5e05e",
@@ -741,7 +741,7 @@
       "cache_key": "6bbd5b64cdbe146785fe5a375752d567ce74819d33026df6ebd199df1cd5e05e"
     },
     "actor_m10": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m10.pck?sha256=695a33495cf30c647fbf83669c75e201109f8b6adbf851e0600f5e3d871a22f5",
       "bytes": 1181100,
       "sha256": "695a33495cf30c647fbf83669c75e201109f8b6adbf851e0600f5e3d871a22f5",
@@ -761,7 +761,7 @@
       "cache_key": "695a33495cf30c647fbf83669c75e201109f8b6adbf851e0600f5e3d871a22f5"
     },
     "actor_m11": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m11.pck?sha256=6c8538f5d88702ffe98e93adf1b1aa15078c8ae6346e24dadbb8c4430a1b290d",
       "bytes": 1335884,
       "sha256": "6c8538f5d88702ffe98e93adf1b1aa15078c8ae6346e24dadbb8c4430a1b290d",
@@ -781,7 +781,7 @@
       "cache_key": "6c8538f5d88702ffe98e93adf1b1aa15078c8ae6346e24dadbb8c4430a1b290d"
     },
     "actor_m12": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m12.pck?sha256=bc079d4d5dfa919bfa1e72a70027549e13c103adecfbd0093f42c7e33910d6be",
       "bytes": 1190796,
       "sha256": "bc079d4d5dfa919bfa1e72a70027549e13c103adecfbd0093f42c7e33910d6be",
@@ -801,7 +801,7 @@
       "cache_key": "bc079d4d5dfa919bfa1e72a70027549e13c103adecfbd0093f42c7e33910d6be"
     },
     "actor_m13": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m13.pck?sha256=0918dbad6df6505ef33e3149fc34eb0c1e275da953481d09862222f39d52cafc",
       "bytes": 2299236,
       "sha256": "0918dbad6df6505ef33e3149fc34eb0c1e275da953481d09862222f39d52cafc",
@@ -822,7 +822,7 @@
       "cache_key": "0918dbad6df6505ef33e3149fc34eb0c1e275da953481d09862222f39d52cafc"
     },
     "actor_m14": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m14.pck?sha256=7878c867a447c47ab55930aa6f0b430364d52ecf9cb07e198898a0096d3a758f",
       "bytes": 1375036,
       "sha256": "7878c867a447c47ab55930aa6f0b430364d52ecf9cb07e198898a0096d3a758f",
@@ -842,7 +842,7 @@
       "cache_key": "7878c867a447c47ab55930aa6f0b430364d52ecf9cb07e198898a0096d3a758f"
     },
     "actor_m15": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m15.pck?sha256=13a6c71d52b2ad0c48839c7b18e248978b16266b9f1697aec1725c1aa0d2d357",
       "bytes": 4210904,
       "sha256": "13a6c71d52b2ad0c48839c7b18e248978b16266b9f1697aec1725c1aa0d2d357",
@@ -862,7 +862,7 @@
       "cache_key": "13a6c71d52b2ad0c48839c7b18e248978b16266b9f1697aec1725c1aa0d2d357"
     },
     "actor_m16": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m16.pck?sha256=298372186585db40bed4fb9c6de080063362261932a7425cbdbfb72ccc485bbc",
       "bytes": 1065948,
       "sha256": "298372186585db40bed4fb9c6de080063362261932a7425cbdbfb72ccc485bbc",
@@ -882,7 +882,7 @@
       "cache_key": "298372186585db40bed4fb9c6de080063362261932a7425cbdbfb72ccc485bbc"
     },
     "actor_m17": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m17.pck?sha256=370169b09fbd11422f9c102c11c3c6aec94c44026ab14d9dd87c0d71fea23b3a",
       "bytes": 1687004,
       "sha256": "370169b09fbd11422f9c102c11c3c6aec94c44026ab14d9dd87c0d71fea23b3a",
@@ -902,7 +902,7 @@
       "cache_key": "370169b09fbd11422f9c102c11c3c6aec94c44026ab14d9dd87c0d71fea23b3a"
     },
     "actor_m18": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m18.pck?sha256=cfd537b942e5829a87efa9bfe0dc52d35ce9a71ff2b9fea3608a61bca4fece02",
       "bytes": 1459676,
       "sha256": "cfd537b942e5829a87efa9bfe0dc52d35ce9a71ff2b9fea3608a61bca4fece02",
@@ -922,7 +922,7 @@
       "cache_key": "cfd537b942e5829a87efa9bfe0dc52d35ce9a71ff2b9fea3608a61bca4fece02"
     },
     "actor_m19": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m19.pck?sha256=9546650edb4f92a0bec70ab57e25dda83357ff852fe0b40368143155abc5a272",
       "bytes": 1184000,
       "sha256": "9546650edb4f92a0bec70ab57e25dda83357ff852fe0b40368143155abc5a272",
@@ -954,7 +954,7 @@
       "cache_key": "9546650edb4f92a0bec70ab57e25dda83357ff852fe0b40368143155abc5a272"
     },
     "actor_m20": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_m20.pck?sha256=0a414136d4704949c5d71208b725ff1ba9396d782a2c87adaea3f5f5e181f543",
       "bytes": 1215696,
       "sha256": "0a414136d4704949c5d71208b725ff1ba9396d782a2c87adaea3f5f5e181f543",
@@ -986,7 +986,7 @@
       "cache_key": "0a414136d4704949c5d71208b725ff1ba9396d782a2c87adaea3f5f5e181f543"
     },
     "actor_p01": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_p01.pck?sha256=07f318e6278dd5fd6dc556744be234791a0a40a9ad6a9b3b2edcd60b7e9f5794",
       "bytes": 2407156,
       "sha256": "07f318e6278dd5fd6dc556744be234791a0a40a9ad6a9b3b2edcd60b7e9f5794",
@@ -1010,7 +1010,7 @@
       "cache_key": "07f318e6278dd5fd6dc556744be234791a0a40a9ad6a9b3b2edcd60b7e9f5794"
     },
     "actor_shared": {
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "url": "packs/actor_shared.pck?sha256=db4286666153c2e6b2331b04ef681b2389f8b57028266799c426be8dd93509e7",
       "bytes": 6133704,
       "sha256": "db4286666153c2e6b2331b04ef681b2389f8b57028266799c426be8dd93509e7",
@@ -1048,7 +1048,7 @@
       "id": "leisure",
       "filename": "leisure.pck",
       "url": "packs/leisure.pck?sha256=91eae79db55f6909af1cf52ac4bc228936d616b6a3bc9877bf450e13cc447fe4",
-      "version": "startup-speed-20261107",
+      "version": "startup-half-r4-20261107",
       "sha256": "91eae79db55f6909af1cf52ac4bc228936d616b6a3bc9877bf450e13cc447fe4",
       "bytes": 415404,
       "entry_scene": "",
@@ -1067,9 +1067,9 @@
       "cache_key": "91eae79db55f6909af1cf52ac4bc228936d616b6a3bc9877bf450e13cc447fe4"
     }
   },
-  "build_id": "startup-speed-20261107",
-  "generated_from_commit": "420593e80aa6737eb8c5db62543d1dc016cace24",
-  "generated_at_utc": "2026-11-06T16:28:10.649495Z",
+  "build_id": "startup-half-r4-20261107",
+  "generated_from_commit": "3c05bdf1c8da7d16b394f98984b1d15a0deaf0cb",
+  "generated_at_utc": "2026-11-06T18:34:56.080807Z",
   "total_bytes": 202797256,
   "source_dirty": true,
   "deployment_policy_id": "vercel-git-256mib-v1",

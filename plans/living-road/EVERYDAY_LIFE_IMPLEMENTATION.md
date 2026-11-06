@@ -304,6 +304,120 @@ loading/FPS/memory targets and actual-phone/WebKit behavior remain unverified or
 unmet as described above. Publication is development/main Git push only; Vercel
 deploys automatically and is not awaited or represented as live-verified.
 
+## Startup Halving Follow-up, 2026-11-07
+
+Scope: continue the 113.9-second complaint toward approximately 57 seconds,
+without reducing content, materials, lighting, population or quality settings.
+Evidence directory: `D:/Temp/AshenOath/startup-half`. Implementation and focused
+verification are complete for the retained candidate; **the approximately
+57-second cold-load objective is NOT consistently met**. Do not mark it accepted.
+
+### Implementation
+
+- The existing Web shader adapter now exposes the same std140 light/shadow UBO
+  bytes through packed `uvec4` views. Block identities, sizes, strides, field
+  precision, integer bits and matrix columns are preserved. Accessors recover
+  float bits without changing light calculations. Only exact known schemas and
+  simple known reads are adapted; unknown fields/precision/accesses retain the
+  original block and all its reads. This avoids costly ANGLE compilation of
+  dynamically indexed mixed-field struct arrays; no engine binary is replaced.
+- Sole, empty definitions of a bounded list of unused generated stage flags are
+  removed. A referenced flag, value-bearing definition or unknown shader remains
+  intact. Captured sources had 149 distinct stages, 135 after unused instancing
+  removal, and 118 after the retained bounded stage-flag cleanup. That is source
+  deduplication evidence, not a prediction of seconds saved.
+- Verified opening/actor packs can enter the engine filesystem when its shared
+  `init()` promise completes, before `startGame()` finishes the root/project load.
+  The separately downloaded opening pack no longer occupies a second prefetch
+  queue slot. Two other consumers bound decoded buffers before initialization.
+  Request sharing, hash checks, cancellation, Retry and complete first-camera
+  readiness remain mandatory. Failed initialization cannot publish a pack.
+- No native/GDScript or asset inputs changed. All existing runtime packs retain
+  their bytes. The previous native shutdown implementation and its two passed
+  Quit checks remain valid at unchanged dependency scope; they were not rerun.
+
+### Checks and Attribution
+
+- Source-shell metadata/shader checks: **24 tests passed**, covering early
+  filesystem handoff, failed initialization, shared requests, metadata deadlines,
+  cancellation, late callbacks, Retry, identity/hash rejection, unchanged ordered
+  light evaluation and conservative shader fallbacks.
+- `stage-flags.json`: Intel HD 620 / ANGLE D3D11 GPU comparison passed all
+  **8,192 output words**, including five UBO families and all shadow-matrix
+  columns. Four captured actual program pairs compiled successfully. Component
+  compile times improved in this diagnostic, but these are not startup timings.
+- A `vec4` rather than `uvec4` storage experiment passed layout checks but did
+  not show a worthwhile compile advantage; it was reverted before packaging.
+  A subsequent whole-struct accessor experiment also passed data equality but
+  compiled slower in all four captured pairs (`struct-accessor.json`); it was
+  reverted to the exact tested r4 shell, without exporting it.
+- The browser startup harness now records visibility/focus and uses its existing
+  focus-emulation approach for desktop as well as touch. An intervening diagnostic
+  browser was actually hidden and suspended preparation. Its aborted 363.9-second
+  run remains recorded as HARNESS-invalid, not deleted or used as a benchmark.
+- Final comparisons use fresh isolated Chrome profiles, foreground emulation,
+  no loading screenshots/profiling and one graphical workload, with no build or
+  heavy repository operation during measurement. Menu and gameplay captures,
+  actual input, movement, durable Save/reload/Continue and unexpected-error checks
+  remain. These are local HTTP results, not throttled-internet or phone timings.
+
+Earlier candidates were not treated as the final answer: injected shadow views
+reached 47.6/45.6 seconds cold/reload, but actual r1 exports varied (115.1/79.9,
+then foreground 80.4/48.8). R2 foreground was 81.3/56.5; its controlled pair was
+**72.7/56.2 published baseline -> 61.9/56.1 r2**. R3's earlier filesystem handoff
+passed New Game/movement/durable Continue but measured **62.3/65.6** and did not
+establish the target. These results remain preserved; the best injected time is
+not substituted for exported evidence. The original 113.9-second report predates
+the foreground-harness correction, so that full difference cannot be attributed
+solely to source changes.
+
+### Final Exported Results
+
+All three runs used the same `startup-half-r4-20261107` bytes, without injection:
+
+| Report | Cold ready menu | Reload ready menu | Observed first control |
+|---|---:|---:|---:|
+| `browser-final-r4.json` | 73.4 s | 56.7 s | 94.6 s |
+| `browser-final-r4-repeat.json` | 59.9 s | 61.1 s | 80.0 s |
+| `browser-final-r4-confirm.json` | 68.6 s | 64.4 s | 99.4 s |
+
+Median cold/reload: **68.6/61.1 seconds**. Cold is about 40% below the earlier
+reported 113.9 seconds, but not a reliable halving, and the foreground harness
+change prevents attributing that entire difference to game code. Against the
+same-harness published baseline of 72.7 seconds, the final median is only about
+5.7% lower; this is not a statistical confidence claim. The remaining first-view
+wait was 33.0-35.6 seconds, while cold pack preparation varied 4.2-10.5 seconds.
+Host free physical memory was about 680 MiB during one run; that observation
+does not prove it is the sole cause. Further loading work remains necessary.
+
+Each run passed withheld loading actions, real mouse New Game, complete opening
+readiness, normal movement, durable Quick Save, reload and normal Continue of
+the exact earned journey/position. No unexpected runtime/resource errors were
+recorded. Inspected New Game capture shows Kael, village buildings, the bridge,
+river, vegetation and required nearby characters. This is not pixel-identical
+visual certification. First-control times above include menu screenshots,
+normal input, optional introduction Skip and driver waits, not just the handoff.
+Short post-movement samples remained about 14.9-15.0 FPS; neither sustained
+performance nor the retained FPS targets are passed.
+
+Compilation/export and exact package integrity passed. Complete deployment:
+**205,979,994 bytes (196.44 MiB)**, including the release manifest. All **46**
+pack/engine artifacts have identical sizes and hashes to the prior published
+package. Root transport SHA-256:
+`9e434a9550d880b138daf23591a23e8a6655f32910959a6454bfdaf70b5c35f0`.
+Release-manifest SHA-256:
+`c31563af2b597a4f188879c2a68cc21c3961116f499d0f6c33bf97fe1f7439a1`.
+Source records truthfully retain generating commit `3c05bdf` plus dirty source;
+the publication commit carries the shell changes and these exact artifacts.
+Publication uses development/main Git push only; Vercel is not manually deployed,
+awaited or claimed live-verified. No running test browser remains.
+
+Initial required asset bytes were not reduced. Balanced's previous 124,523,465
+compressed bytes imply approximately 49.8 seconds of transfer alone at 20 Mbps;
+small HTML/metadata changes do not materially change that floor. The retained
+15-second cold-control target is not passed by this repair. Actual-phone/WebKit,
+sustained FPS, owned-process memory and user visual acceptance remain separate.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

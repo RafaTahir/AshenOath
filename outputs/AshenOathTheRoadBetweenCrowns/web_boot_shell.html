@@ -60,7 +60,65 @@
   <script id="ashen-bounded-light-loops">
     (() => {
       if (!window.WebGL2RenderingContext || window.__ashenBoundedLightLoops) return;
-      const stats = window.__ashenBoundedLightLoops = { shaders: 0, loops: 0 };
+      const stats = window.__ashenBoundedLightLoops = { shaders: 0, loops: 0, packed_blocks: 0, unused_instancing: 0, unused_stage_flags: 0 };
+      const stageFlags = ['USE_INSTANCING', 'DISABLE_REFLECTION_PROBE', 'USE_RADIANCE_MAP',
+        'APPLY_TONEMAPPING', 'VERTEX_CODE_USED', 'FRAGMENT_CODE_USED', 'DIFFUSE_BURLEY',
+        'SPECULAR_SCHLICK_GGX', 'DISABLE_FOG', 'DO_SIDE_CHECK', 'USE_OPAQUE_PREPASS'];
+      // Preserve Godot's std140 bytes, but avoid ANGLE expanding dynamically
+      // indexed arrays of mixed-field structures into expensive HLSL code.
+      const lightFields = [
+        ['highp', 'vec3', 'position', 0, 'xyz'], ['highp', 'float', 'inv_radius', 0, 'w'],
+        ['mediump', 'vec3', 'direction', 1, 'xyz'], ['highp', 'float', 'size', 1, 'w'],
+        ['mediump', 'vec3', 'color', 2, 'xyz'], ['mediump', 'float', 'attenuation', 2, 'w'],
+        ['mediump', 'float', 'cone_attenuation', 3, 'x'], ['mediump', 'float', 'cone_angle', 3, 'y'],
+        ['mediump', 'float', 'specular_amount', 3, 'z'], ['mediump', 'float', 'shadow_opacity', 3, 'w'],
+        ['lowp', 'vec3', 'pad', 4, 'xyz'], ['lowp', 'uint', 'bake_mode', 4, 'w'],
+      ];
+      const directionalFields = [
+        ['mediump', 'vec3', 'direction', 0, 'xyz'], ['mediump', 'float', 'energy', 0, 'w'],
+        ['mediump', 'vec3', 'color', 1, 'xyz'], ['mediump', 'float', 'size', 1, 'w'],
+        ['lowp', 'uint', 'enabled_bake_mode', 2, 'x'], ['mediump', 'float', 'shadow_opacity', 2, 'y'],
+        ['mediump', 'float', 'specular', 2, 'z'], ['highp', 'uint', 'mask', 2, 'w'],
+      ];
+      const positionalShadowFields = [
+        ['highp', 'mat4', 'shadow_matrix', 0], ['highp', 'vec3', 'light_position', 4, 'xyz'],
+        ['highp', 'float', 'shadow_normal_bias', 4, 'w'], ['', 'vec3', 'pad', 5, 'xyz'],
+        ['highp', 'float', 'shadow_atlas_pixel_size', 5, 'w'],
+      ];
+      const directionalShadowFields = [
+        ['highp', 'vec3', 'direction', 0, 'xyz'], ['highp', 'float', 'shadow_atlas_pixel_size', 0, 'w'],
+        ['highp', 'vec4', 'shadow_normal_bias', 1, 'xyzw'], ['highp', 'vec4', 'shadow_split_offsets', 2, 'xyzw'],
+        ['highp', 'mat4', 'shadow_matrix1', 3], ['highp', 'mat4', 'shadow_matrix2', 7],
+        ['highp', 'mat4', 'shadow_matrix3', 11], ['highp', 'mat4', 'shadow_matrix4', 15],
+        ['mediump', 'float', 'fade_from', 19, 'x'], ['mediump', 'float', 'fade_to', 19, 'y'],
+        ['mediump', 'vec2', 'pad', 19, 'zw'],
+      ];
+      function packLightBlock(source, block, struct, array, capacity, stride, fields) {
+        const normalize = text => text.replace(/\/\/[^\n]*/g, '').replace(/\s+/g, ' ').trim();
+        const declaration = source.match(new RegExp('struct ' + struct + '\\s*\\{([^}]+)\\};'));
+        const expected = normalize(fields.map(([precision, type, name]) => `${precision} ${type} ${name};`).join(' '));
+        if (!declaration || normalize(declaration[1]) !== expected) return source;
+        const blockPattern = new RegExp('layout\\(std140\\) uniform ' + block + '\\s*\\{\\s*(?://[^\\n]*\\n\\s*)?' + struct + ' ' + array + '\\[' + capacity + '\\];\\s*\\};');
+        if (!blockPattern.test(source)) return source;
+        const prefix = 'ashen_' + array;
+        const readers = fields.map(([precision, type, name, slot, lanes]) => {
+          const raw = `${prefix}_words[int(i) * ${stride} + ${slot}].${lanes}`;
+          const value = type === 'mat4'
+            ? `mat4(${[0, 1, 2, 3].map(column => `uintBitsToFloat(${prefix}_words[int(i) * ${stride} + ${slot + column}])`).join(', ')})`
+            : type === 'uint' ? raw : `uintBitsToFloat(${raw})`;
+          return `${precision} ${type} ${prefix}_${name}(highp uint i) { return ${value}; }`;
+        }).join('\n');
+        let candidate = source.replace(blockPattern,
+          `layout(std140) uniform ${block} { highp uvec4 ${prefix}_words[${capacity} * ${stride}]; };\n${readers}`);
+        for (const [, , name] of fields) {
+          candidate = candidate.replace(new RegExp('\\b' + array + '\\[([a-zA-Z_][a-zA-Z_0-9]*|[0-9]+u?)\\]\\.' + name + '\\b', 'g'),
+            (_, index) => `${prefix}_${name}(uint(${index}))`);
+        }
+        // Unknown access syntax must keep the original block and all its reads.
+        if (new RegExp('\\b' + array + '\\b').test(candidate)) return source;
+        stats.packed_blocks++;
+        return candidate;
+      }
       const original = WebGL2RenderingContext.prototype.shaderSource;
       WebGL2RenderingContext.prototype.shaderSource = function (shader, source) {
         // Godot 4.6 Compatibility's fixed-bound loops make ANGLE unroll the
@@ -77,6 +135,22 @@
             });
           }
           if (changed) { stats.shaders++; stats.loops += changed; }
+          source = packLightBlock(source, 'OmniLightData', 'LightData', 'omni_lights', 'MAX_LIGHT_DATA_STRUCTS', 5, lightFields);
+          source = packLightBlock(source, 'SpotLightData', 'LightData', 'spot_lights', 'MAX_LIGHT_DATA_STRUCTS', 5, lightFields);
+          source = packLightBlock(source, 'DirectionalLights', 'DirectionalLightData', 'directional_lights', 'MAX_DIRECTIONAL_LIGHT_DATA_STRUCTS', 3, directionalFields);
+          source = packLightBlock(source, 'PositionalShadows', 'PositionalShadowData', 'positional_shadows', 'MAX_LIGHT_DATA_STRUCTS', 6, positionalShadowFields);
+          source = packLightBlock(source, 'DirectionalShadows', 'DirectionalShadowData', 'directional_shadows', 'MAX_DIRECTIONAL_LIGHT_DATA_STRUCTS', 20, directionalShadowFields);
+          // Godot repeats material flags in both stages, even where a stage
+          // never reads them. Remove only sole, empty definitions so equivalent
+          // stages share the driver cache; referenced features remain unchanged.
+          for (const flag of stageFlags) {
+            const declaration = new RegExp('^#define ' + flag + '[ \\t]*\\r?\\n', 'm');
+            if ((source.match(new RegExp('\\b' + flag + '\\b', 'g')) || []).length === 1 && declaration.test(source)) {
+              source = source.replace(declaration, '');
+              stats.unused_stage_flags++;
+              if (flag === 'USE_INSTANCING') stats.unused_instancing++;
+            }
+          }
         }
         return Reflect.apply(original, this, [shader, source]);
       };
@@ -512,7 +586,7 @@
             if (controller.signal.aborted) abortWait();
           });
           try {
-            await Promise.race([filesystemReady, aborted]);
+            if (!await Promise.race([filesystemReady, aborted])) return null;
           } finally {
             controller.signal.removeEventListener('abort', abortWait);
           }
@@ -593,9 +667,9 @@
           for (const dependency of manifest.packs?.[id]?.dependencies || []) visit(dependency);
         };
         for (const id of manifest.startup_dependencies || ['opening', 'opening_materials']) visit(id);
-        openingPrefetchQueue = [...required].filter(id => manifest.packs?.[id]?.url && (!foregroundPrefetchIds || foregroundPrefetchIds.has(id)));
-        // Two consumers share the engine handoff; do not retain an entire
-        // roster's decoded buffers while WebAssembly initializes.
+        openingPrefetchQueue = [...required].filter(id => id !== 'opening' && manifest.packs?.[id]?.url && (!foregroundPrefetchIds || foregroundPrefetchIds.has(id)));
+        // Opening already owns a download. Bound the remaining pre-init buffers
+        // to two consumers instead of retaining the entire decoded roster.
         const prefetch = async () => {
           while (openingPrefetchQueue.length && !failed) {
             const id = openingPrefetchQueue.shift();
@@ -623,7 +697,7 @@
           const restoreAudioConstructors = captureEngineAudioContext();
           // startGame downloads/initializes WASM and the root PCK together.
           try {
-            await engine.startGame({
+            const starting = engine.startGame({
               onProgress: (current, total) => {
                 bootMetrics.progress_samples += 1;
                 bootMetrics.downloaded_bytes = current;
@@ -639,11 +713,18 @@
                 console.error(...messages);
               },
             });
+            // startGame shares init's promise, but also waits for the root pack
+            // and project startup. Verified packs can enter the filesystem as
+            // soon as init completes, overlapping those remaining startup steps.
+            const initializing = engine.init(GODOT_CONFIG.executable).then(() => {
+              bootMetrics.filesystem_ready_ms = performance.now();
+              filesystemReadyResolve(true);
+            });
+            await Promise.all([starting, initializing]);
           } finally { restoreAudioConstructors(); }
           if (failed) return;
           engineBooted = true;
           updateAudioNotice();
-          filesystemReadyResolve(true);
           bootMetrics.engine_ready_ms = performance.now();
           performance.mark('ashen-oath-engine-ready');
           if (!bootMetrics.menu_ready_ms) setBootState('engine_ready');
