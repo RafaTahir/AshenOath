@@ -2,6 +2,7 @@ extends Node
 
 signal time_changed(world_time_minutes: float, phase: String, day_count: int)
 signal phase_changed(phase: String)
+signal weather_changed(weather: String)
 
 const FULL_DAY_MINUTES := 1440.0
 const CYCLE_SECONDS := 2160.0
@@ -12,6 +13,8 @@ var day_count := 0
 var time_locked := false
 var current_phase := "dusk"
 var _tick_accumulator := 0.0
+var active_play_seconds := 0.0
+var current_weather := "clear"
 const VISUAL_UPDATE_INTERVAL := 0.2
 
 func _ready() -> void:
@@ -44,12 +47,19 @@ func set_time_lock(locked: bool) -> void:
 	time_locked = locked
 
 func save_state() -> Dictionary:
-	return {"world_time_minutes": world_time_minutes, "day_count": day_count}
+	return {"world_time_minutes": world_time_minutes, "day_count": day_count, "active_play_seconds":active_play_seconds}
 
 func load_state(data: Dictionary) -> void:
+	active_play_seconds = maxf(0.0, float(data.get("active_play_seconds", 0.0)))
+	if not is_finite(active_play_seconds): active_play_seconds = 0.0
 	set_time(float(data.get("world_time_minutes", START_TIME_MINUTES)), int(data.get("day_count", 0)))
 
 func _emit_time(force_phase: bool = false) -> void:
+	var slot := posmod(day_count * 4 + int(world_time_minutes / 360.0), 9)
+	var weather := "rain" if slot in [4, 5] else ("clearing" if slot == 6 else "clear")
+	if weather != current_weather or force_phase:
+		current_weather = weather
+		weather_changed.emit(weather)
 	var next_phase := _phase_for_time(world_time_minutes)
 	if force_phase or next_phase != current_phase:
 		current_phase = next_phase

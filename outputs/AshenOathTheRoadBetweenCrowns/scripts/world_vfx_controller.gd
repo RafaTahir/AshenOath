@@ -10,6 +10,11 @@ var update_accumulator := 0.0
 var shared_mote_mesh: SphereMesh
 var shared_mote_material: StandardMaterial3D
 var shared_pulse_mesh: ArrayMesh
+var rainfall: MultiMeshInstance3D
+var weather := "clear"
+var weather_focus: WeakRef
+var rain_roof: Dictionary = {}
+var rain_cursor := 0
 const UPDATE_INTERVAL := 1.0 / 10.0
 
 func configure(active_zone: String, quality_preset: String) -> void:
@@ -24,6 +29,7 @@ func _physics_process(delta: float) -> void:
 	delta = update_accumulator
 	update_accumulator = 0.0
 	elapsed += delta
+	_tick_rain(delta)
 	if mote_batch == null or mote_batch.multimesh == null:
 		return
 	for index in range(mote_positions.size()):
@@ -67,6 +73,50 @@ func pulse_interaction(world_position: Vector3, color: Color = Color(0.72, 0.84,
 		active_pulses = maxi(0, active_pulses - 1)
 		pulse.queue_free()
 	)
+
+func set_weather(value: String, focus: Node3D) -> void:
+	weather = value if zone_id not in ["record_hall", "undercroft", "vargan_court"] else "clear"
+	weather_focus = weakref(focus)
+	if weather != "rain":
+		if is_instance_valid(rainfall): rainfall.visible = false
+		return
+	if rainfall == null:
+		rainfall = MultiMeshInstance3D.new()
+		rainfall.name = "NearbyRain"
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3(0.009, 0.18, 0.009)
+		var material := StandardMaterial3D.new()
+		material.albedo_color = Color(0.64,0.74,0.78,0.35)
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		mesh.material = material
+		rainfall.multimesh = MultiMesh.new()
+		rainfall.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		rainfall.multimesh.mesh = mesh
+		rainfall.multimesh.instance_count = 40
+		rainfall.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(rainfall)
+		rainfall.multimesh.custom_aabb = AABB(Vector3(-8,-1,-8), Vector3(16,8,16))
+	rainfall.visible = true
+
+func _tick_rain(_delta: float) -> void:
+	if weather != "rain" or not is_instance_valid(rainfall) or weather_focus == null: return
+	var focus := weather_focus.get_ref() as Node3D
+	if not is_instance_valid(focus): return
+	rainfall.global_position = focus.global_position
+	# Four roof probes per update; cache the rest instead of forty rays per frame.
+	for offset in 4:
+		var index := (rain_cursor+offset)%rainfall.multimesh.instance_count
+		var point := focus.global_position+Vector3(sin(float(index)*21.17)*7.0,0.0,cos(float(index)*17.63)*7.0)
+		var hit := get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(point+Vector3.UP*7.0,point+Vector3.UP*0.5,1))
+		rain_roof[index] = not hit.is_empty() and hit.position.y > focus.global_position.y+0.9
+	rain_cursor = (rain_cursor+4)%rainfall.multimesh.instance_count
+	for index in rainfall.multimesh.instance_count:
+		var x := sin(float(index)*21.17)*7.0
+		var z := cos(float(index)*17.63)*7.0
+		var y := 6.0-fposmod(elapsed*6.0+float(index)*0.73,6.0)
+		var hidden := bool(rain_roof.get(index,true))
+		rainfall.multimesh.set_instance_transform(index,Transform3D(Basis.IDENTITY.scaled(Vector3.ZERO if hidden else Vector3.ONE),Vector3(x,y,z)))
 
 func _make_pulse_ring(segments: int) -> ArrayMesh:
 	var vertices := PackedVector3Array()

@@ -352,7 +352,9 @@ func _on_enemy_died(enemy) -> void:
 			hud.show_status_cue("Senn's guard breaks", "victory")
 			_show_current_objective_guidance(5.5)
 		elif current_zone_id == "wychwood" and quests.is_active("side_black_dog") and not _has_living_enemy("bandit"):
-			story_state.set_flag("black_dog_bandits_defeated", true)
+			story_state.set_flag("black_dog_bandits_resolved", true)
+			if not bool(story_state.get_flag("black_dog_any_surrender",false)):
+				story_state.set_flag("black_dog_bandits_defeated", true)
 			_try_complete_black_dog_investigation()
 
 	elif current_zone_id == "old_mill" and bool(enemy.get_meta("ash_mill_enemy", false)):
@@ -391,7 +393,7 @@ func _try_complete_black_dog_investigation() -> void:
 		return
 	if not bool(story_state.get_flag("black_dog_bandit_camp_inspected", false)):
 		return
-	if not bool(story_state.get_flag("black_dog_bandits_defeated", false)):
+	if not bool(story_state.get_flag("black_dog_bandits_defeated", false)) and not bool(story_state.get_flag("black_dog_bandits_resolved",false)):
 		return
 	quests.complete_objective("side_black_dog", "find_dog")
 	hud.toast("The bandits held the ribbon. The black dog drove them from the children, not toward them.")
@@ -551,15 +553,30 @@ func _hitstop(seconds: float) -> void:
 
 func _has_living_enemy(enemy_id: String) -> bool:
 	for enemy in active_enemies:
-		if is_instance_valid(enemy) and not enemy.dead and enemy.enemy_id == enemy_id:
+		if is_instance_valid(enemy) and not enemy.dead and not bool(enemy.get("resolved_nonlethal")) and enemy.enemy_id == enemy_id:
 			return true
 	return false
+
+func accept_ordinary_surrender(enemy: Node) -> void:
+	if not is_instance_valid(enemy) or not zone_root.is_ancestor_of(enemy) or enemy.global_position.distance_to(player.global_position)>3.0:return
+	if not enemy.accept_ordinary_surrender():return
+	var reward_id:=str(enemy.get_meta("progression_reward_id",""))
+	story_state.set_flag("ordinary_surrender:"+current_zone_id+":"+reward_id,true)
+	if current_zone_id=="wychwood":story_state.set_flag("black_dog_any_surrender",true)
+	if reward_id!="":progression.award_encounter(reward_id,str(enemy.get_meta("progression_zone",current_zone_id)),"Encounter resolved without a death")
+	if current_zone_id=="wychwood" and not _has_living_enemy("bandit"):
+		story_state.set_flag("black_dog_bandits_resolved",true)
+		_try_complete_black_dog_investigation()
+	hud.hide_enemy()
+	hud.toast("Surrender accepted. The encounter is resolved; no death or Honor change is recorded.")
+	story_save_pending=true
+	_host.call_deferred("_persist_story_action")
 
 func _nearest_living_enemy(max_distance: float):
 	var best = null
 	var best_distance = max_distance
 	for enemy in active_enemies:
-		if enemy == null or enemy.dead:
+		if not is_instance_valid(enemy) or enemy.dead or not enemy.is_encounter_active():
 			continue
 		var dist = enemy.global_position.distance_to(player.global_position)
 		if dist < best_distance:

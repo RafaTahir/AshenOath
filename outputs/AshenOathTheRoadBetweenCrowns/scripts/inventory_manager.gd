@@ -37,7 +37,7 @@ const BASE_OIL_DURATION_SECONDS := 300.0
 var coin = STARTING_COIN
 const ITEM_TYPE_ORDER := ["ammo", "potion", "food", "bomb", "oil", "trap"]
 const DEFAULT_QUICK_SLOTS := {"use_potion": "redroot_potion", "throw_bomb": "ash_bomb"}
-const QUICK_SLOT_TYPES := {"use_potion": ["potion"], "throw_bomb": ["bomb", "trap"]}
+const QUICK_SLOT_TYPES := {"use_potion": ["potion"], "throw_bomb": ["bomb", "trap", "distraction"]}
 const KIT_CATEGORIES := ["equipment", "supplies", "ingredients"]
 var quick_slots: Dictionary = DEFAULT_QUICK_SLOTS.duplicate()
 var sort_mode := "type"
@@ -226,19 +226,33 @@ func set_kit_preference(key: String, value: String) -> bool:
 	changed.emit()
 	return true
 
-func recipe_status(id: String) -> Dictionary:
+func recipe_status(id: String, at_kitchen: bool = false) -> Dictionary:
 	var required: Dictionary = item_defs.get(id, {}).get("recipe", {})
+	var requested_items: Dictionary = item_defs.get(id, {}).get("recipe_items", {})
+	var required_items: Dictionary = {}
+	for item: String in requested_items:
+		var amount := int(requested_items[item])
+		if item == "fresh_fish":
+			var common := mini(owned_count("river_dace"), amount)
+			if common > 0: required_items["river_dace"] = common
+			if common < amount: required_items["copper_perch"] = amount - common
+		else: required_items[item] = amount
 	var missing: Dictionary = {}
+	for item: String in required_items:
+		if owned_count(item) < int(required_items[item]): missing[item] = int(required_items[item]) - owned_count(item)
 	for ingredient in required.keys():
 		var shortage := int(required[ingredient]) - int(ingredients.get(ingredient, 0))
 		if shortage > 0:
 			missing[ingredient] = shortage
-	var has_recipe: bool = item_defs.has(id) and not required.is_empty()
+	var has_recipe: bool = item_defs.has(id) and (not required.is_empty() or not requested_items.is_empty())
+	var needs_kitchen := get_item_type(id) == "meal" and not at_kitchen
 	var cap: int = get_ammo_cap(id) if get_item_type(id) == "ammo" else 0
 	var full: bool = cap > 0 and int(items.get(id, 0)) >= cap
 	var reason: String = ""
 	if not has_recipe:
 		reason = "There is no field recipe for this item."
+	elif needs_kitchen:
+		reason = "Prepare this meal at a safe kitchen."
 	elif full:
 		reason = "You cannot carry another %s." % get_item_name(id)
 	elif not missing.is_empty():
@@ -248,11 +262,12 @@ func recipe_status(id: String) -> Dictionary:
 		reason = "You still need %s." % ", ".join(names)
 	return {
 		"required": required.duplicate(true),
+		"required_items":required_items,
 		"missing": missing,
 		"has_recipe": has_recipe,
 		"capacity": cap,
 		"reason": reason,
-		"craftable": has_recipe and missing.is_empty() and not full
+		"craftable": has_recipe and missing.is_empty() and not full and not needs_kitchen
 	}
 
 func get_preparation_summary() -> Dictionary:
@@ -274,18 +289,20 @@ func craft(id: String) -> bool:
 	message.emit(str(result.get("message", "")))
 	return bool(result.get("ok", false))
 
-func craft_result(id: String, returns: Dictionary = {}) -> Dictionary:
-	var status: Dictionary = recipe_status(id)
+func craft_result(id: String, returns: Dictionary = {}, at_kitchen: bool = false) -> Dictionary:
+	var status: Dictionary = recipe_status(id, at_kitchen)
 	if not bool(status.get("craftable", false)):
 		var reason: String = str(status.get("reason", "This item cannot be crafted."))
 		return {"ok": false, "operation": "craft", "item_id": id, "quantity": 0, "spent": {}, "remaining": {}, "reason": reason, "message": reason}
 	var recipe: Dictionary = status.get("required", {})
 	var spent: Dictionary = {}
+	var spent_items: Dictionary = status.get("required_items", {})
+	for item: String in spent_items: items[item] = owned_count(item) - int(spent_items[item])
 	for ingredient in recipe.keys():
 		spent[ingredient] = int(recipe[ingredient]) - clampi(int(returns.get(ingredient, 0)), 0, int(recipe[ingredient]))
 		ingredients[ingredient] = int(ingredients.get(ingredient, 0)) - int(spent[ingredient])
 	add_item(id, 1)
-	return {"ok": true, "operation": "craft", "item_id": id, "quantity": 1, "spent": {"ingredients": spent}, "remaining": {"items": items.duplicate(true), "ingredients": ingredients.duplicate(true)}, "reason": "", "message": "Crafted %s. You now carry %d." % [get_item_name(id), int(items.get(id, 0))]}
+	return {"ok": true, "operation": "craft", "item_id": id, "quantity": 1, "spent": {"ingredients": spent, "items":spent_items}, "remaining": {"items": items.duplicate(true), "ingredients": ingredients.duplicate(true)}, "reason": "", "message": "Prepared %s. You now carry %d." % [get_item_name(id), int(items.get(id, 0))]}
 
 func consume(id: String) -> bool:
 	if not can_consume(id):

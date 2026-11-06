@@ -1118,6 +1118,8 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	if active_enemies.filter(func(actor): return is_instance_valid(actor) and not actor.dead).size() >= 5:
 		return null
 	pos = river_safe_position(pos,1.2)
+	var reward_key := "%s:%.2f:%.2f" % [id,pos.x,pos.z]
+	if bool(story_state.get_flag("ordinary_surrender:"+current_zone_id+":"+reward_key,false)):return null
 	# Enemy roots use the same floor-origin contract as the player. Only
 	# explicitly airborne roles retain an authored vertical spawn offset.
 	if not CharacterRoleSpec.is_airborne(id):
@@ -1125,6 +1127,9 @@ func _spawn_enemy(id: String, pos: Vector3, visual_role: String = "") -> Node:
 	var enemy = EnemyAI.new()
 	enemy.set_meta("progression_reward_id", "%s:%.2f:%.2f" % [id, pos.x, pos.z])
 	enemy.set_meta("progression_zone", current_zone_id)
+	# This optional rescue encounter permits a living resolution. Senn's guards,
+	# named actors and all kill-required encounters keep their own contracts.
+	enemy.set_meta("ordinary_surrender_eligible",id=="bandit" and current_zone_id=="wychwood")
 	enemy.visual_role_override = visual_role
 	# Keep the actor hidden while imported surfaces are normalized and receive
 	# their validated overrides. Grounding still needs an in-tree transform.

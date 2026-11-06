@@ -40,6 +40,36 @@ var approved_voice_revisions: Dictionary = {}
 var mix_levels: Dictionary = {"music": 0.8, "sfx": 1.0, "voice": 1.0}
 var ambient_player: AudioStreamPlayer
 var music_player: AudioStreamPlayer
+var nearby_performance: AudioStreamPlayer3D
+var nearby_performance_owner := 0
+var nearby_performance_left := 0.0
+
+func play_table_performance(owner_id:int,actor:Node3D) -> void:
+	stop_table_performance(nearby_performance_owner)
+	prewarm_music_state("greyfen_explore")
+	if not music.has("greyfen_explore") or not is_instance_valid(actor):return
+	nearby_performance=AudioStreamPlayer3D.new()
+	nearby_performance.stream=music.greyfen_explore
+	nearby_performance.bus=music_bus_name
+	nearby_performance.max_distance=15.0
+	nearby_performance.unit_size=4.0
+	nearby_performance.volume_db=-15.0
+	add_child(nearby_performance)
+	nearby_performance.global_position=actor.global_position+Vector3.UP
+	nearby_performance_owner=owner_id
+	nearby_performance_left=18.0
+	if is_instance_valid(music_player):music_player.stream_paused=true
+	nearby_performance.play()
+
+func stop_table_performance(owner_id:int) -> void:
+	if owner_id!=nearby_performance_owner:return
+	if is_instance_valid(nearby_performance):
+		nearby_performance.stop()
+		nearby_performance.queue_free()
+	nearby_performance=null
+	nearby_performance_owner=0
+	nearby_performance_left=0.0
+	if is_instance_valid(music_player):music_player.stream_paused=game_paused and not dialogue_active
 var voice_player: AudioStreamPlayer
 var idle_voice_players: Array[AudioStreamPlayer] = []
 var retiring_voice_players: Dictionary = {}
@@ -119,6 +149,11 @@ func _process(delta: float) -> void:
 			pending_dialogue_voice = ""
 			_play_voice_now(voice_id)
 	_update_nearby_voice()
+	if is_instance_valid(nearby_performance):
+		nearby_performance.stream_paused=game_paused
+		if not game_paused:
+			nearby_performance_left-=delta
+			if nearby_performance_left<=0.0:stop_table_performance(nearby_performance_owner)
 	var duck_target := 1.0 if dialogue_active or (voice_player != null and voice_player.playing) else (0.45 if ambient_conversation or is_instance_valid(nearby_voice_player) else 0.0)
 	var previous_duck := dialogue_duck
 	dialogue_duck = move_toward(dialogue_duck, duck_target, delta * (6.0 if duck_target > dialogue_duck else 1.8))
@@ -627,7 +662,7 @@ func set_game_paused(paused: bool) -> void:
 			player.stream_paused = paused and not dialogue_active
 	for player in get_tree().get_nodes_in_group(MUSIC_GROUP):
 		if is_instance_valid(player) and player.get_parent() == self:
-			player.stream_paused = paused and not dialogue_active
+			player.stream_paused = (paused and not dialogue_active) or (player==music_player and is_instance_valid(nearby_performance))
 	_publish_audio_status()
 
 func prewarm_opening_audio() -> void:
@@ -1045,6 +1080,7 @@ func stop_voice() -> void:
 			_retire_voice_player(retiring)
 
 func set_music_state(state_id: String) -> void:
+	if state_id.begins_with("boss_") or state_id=="ghoulkin_combat":stop_table_performance(nearby_performance_owner)
 	if state_id == "record_hall":
 		_prepare_event("record_page")
 	if story_music_override != "" and state_id in ["greyfen_explore", "shrine_anwen", "return_report", "castle_silence", "record_hall", "assembly", "hart_glade"]:

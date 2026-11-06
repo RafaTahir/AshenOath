@@ -12,9 +12,11 @@ func _use_inventory_item(item_id: String) -> Dictionary:
 	if player == null or not is_instance_valid(player) or inventory == null:
 		return _preparation_item_result(item_id, false, "Kael must be on the road to prepare this item.")
 	var item_name: String = inventory.get_item_name(item_id)
+	if inventory.get_item_type(item_id) == "meal":
+		return _preparation_item_result(item_id, false, "Eat this meal while seated at a safe resting place.")
 	if not inventory.can_consume(item_id):
 		return _preparation_item_result(item_id, false, "No %s left." % item_name)
-	if item_id in ["ash_bomb", "iron_trap"]:
+	if item_id in ["ash_bomb", "iron_trap", "loose_stone"]:
 		if _host.get_tree().paused or not input_router.is_gameplay_context():
 			var equipped: bool = inventory.set_quick_item("throw_bomb", item_id)
 			return _preparation_item_result(item_id, equipped, "%s selected. Use the field-tool control on the road." % item_name, "select")
@@ -67,7 +69,7 @@ func _update_preparation_context() -> void:
 		snapshot["objective"] = quest_presentation.get_objective_view_model()
 	var supply_sources: Dictionary = {}
 	if vendor_service != null and inventory != null:
-		for vendor_id: String in ["tor_forge", "mira_apothecary"]:
+		for vendor_id: String in ["tor_forge", "mira_apothecary", "nessa_kitchen"]:
 			for stock: Dictionary in vendor_service.list_stock(vendor_id, inventory, story_state, quests):
 				var item_id: String = str(stock.get("item_id", ""))
 				var quote: Dictionary = vendor_service.quote(vendor_id, item_id, 1, inventory, story_state, quests)

@@ -92,6 +92,16 @@ def compile_layout(defer_environment=False):
     config.read(path, encoding="utf-8-sig")
     sections = {json.loads(config[s]["name"]): s for s in config.sections()
                 if "name" in config[s]}
+    leisure = "Runtime Pack Leisure"
+    if leisure not in sections:
+        index = max(int(s.split(".")[1]) for s in config.sections() if "." in s) + 1
+        section = f"preset.{index}"
+        config[section] = dict(config[sections["Runtime Pack Campaign"]])
+        config[section]["name"] = json.dumps(leisure)
+        config[section]["export_files"] = "PackedStringArray()"
+        config[section]["include_filter"] = '"assets/everyday/*.glb"'
+        config[section + ".options"] = {"variant/extensions_support": "false"}
+        sections[leisure] = section
     adjacent = "Runtime Pack Adjacent"
     if adjacent not in sections:
         index = max(int(s.split(".")[1]) for s in config.sections() if "." in s) + 1
@@ -457,6 +467,28 @@ def compile_layout(defer_environment=False):
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
     manifest_path = PROJECT / "runtime_pack_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
+    manifest["packs"].setdefault("leisure", {
+        "id":"leisure", "filename":"leisure.pck", "url":"packs/leisure.pck",
+        "version":"pending-build", "sha256":"", "bytes":0, "entry_scene":"",
+        "preload_priority":30, "status":"awaiting_source_aligned_build",
+        "required_at_startup":False, "dependencies":["base"],
+        "contents":["optional_inspection_fishing_cooking"],
+    })
+    manifest.setdefault("pack_presets", {})["leisure"] = leisure
+    for name, section in sections.items():
+        excluded = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        included = set(json.loads(config[section].get("include_filter", '""')).split(",")) - {""}
+        if name == leisure:
+            included = set()
+            excluded.discard("assets/everyday/*")
+            resources = sorted("res://" + p.relative_to(PROJECT).as_posix()
+                               for p in (PROJECT / "assets/everyday").glob("*.glb"))
+            config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in resources) + ")"
+        else:
+            excluded.add("assets/everyday/*")
+            included.discard("assets/everyday/*.glb")
+        config[section]["include_filter"] = json.dumps(",".join(sorted(included)))
+        config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
     manifest["packs"].setdefault("adjacent", {
         "version": "pending-build", "url": "", "sha256": "", "bytes": 0,
         "entry_scene": "", "dependencies": ["base", "opening"],

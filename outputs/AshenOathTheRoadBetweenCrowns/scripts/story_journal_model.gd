@@ -346,12 +346,22 @@ static func _evidence_entries(campaign: Dictionary, quests, state, zone_id: Stri
 			})
 	if state != null:
 		for id: String in state.evidence:
-			if not id.begins_with("saga_") or not state.evidence[id] is Dictionary:
+			if not (id.begins_with("saga_") or id.begins_with("everyday_")) or not state.evidence[id] is Dictionary:
 				continue
 			var record: Dictionary = state.evidence[id]
 			var words := str(record.get("text", ""))
 			var place := Routes.zone_name(str(record.get("zone", "")))
+			if id.begins_with("everyday_rumour:"):
+				var data:Variant=JSON.parse_string(FileAccess.get_file_as_string("res://data/everyday_life.json"))
+				if data is Dictionary:
+					for rumour:Dictionary in data.get("rumours",[]):
+						if str(rumour.id)==id.trim_prefix("everyday_rumour:"):
+							words+="\n\n"+(str(rumour.finding) if quests.is_completed(str(rumour.quest)) else "Unconfirmed. This remains testimony, not a discovered fact.")
 			entries.append({"id":"evidence:" + id, "detail_id":"evidence:" + id, "title":str(record.get("title", id)), "body":words + "\n\nRecorded at: " + place, "kind":"observed", "kind_label":"Regional record", "source":"This journey's recorded regional work", "place":place, "place_label":"Recorded at", "zone":str(record.get("zone", "")), "recorded_text":words, "text_label":"Recorded account", "blocks":[], "known_relevance":[], "links":[]})
+			if id.begins_with("everyday_"):
+				entries.back().kind=str(record.get("kind","observed"))
+				entries.back().kind_label="Local account" if entries.back().kind=="testimony" else "Observed on the road"
+				entries.back().source=str(record.get("source","This journey"))
 	var creatures: Array[Dictionary] = creature_entries(campaign, quests, state)
 	var visible: Dictionary = {"evidence": {}, "people": {}, "preparation": {}, "creatures": {}}
 	for entry: Dictionary in entries:

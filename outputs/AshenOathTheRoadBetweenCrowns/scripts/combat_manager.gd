@@ -17,12 +17,15 @@ var _blade_hit_ids: Dictionary = {}
 var _device_host: WeakRef
 var _deployed_devices: Dictionary = {}
 var _device_serial := 0
+var _stone_ready_at := 0.0
 
 func save_devices() -> Dictionary:
-	return {"serial": _device_serial, "zones": _deployed_devices.duplicate(true)}
+	return {"serial": _device_serial, "zones": _deployed_devices.duplicate(true), "stone_ready_at":_stone_ready_at}
 
 func load_devices(value: Dictionary) -> void:
 	_device_serial = maxi(0, int(value.get("serial", 0)))
+	_stone_ready_at = maxf(0.0, float(value.get("stone_ready_at", 0.0)))
+	if not is_finite(_stone_ready_at): _stone_ready_at = 0.0
 	_deployed_devices.clear()
 	var zones: Variant = value.get("zones", {})
 	if not zones is Dictionary: return
@@ -83,9 +86,12 @@ func _device_game() -> Node:
 	return _device_host.get_ref() as Node if _device_host != null else null
 
 func deploy_tool(host: Node, item_id: String, damage: float = 45.0) -> Dictionary:
+	if item_id not in ["ash_bomb", "iron_trap", "loose_stone"]: return {"ok":false, "message":"That is not a field tool."}
 	if host.get_tree().paused or not host.player.can_control or host.zone_transition_pending or not host.input_router.is_gameplay_context():
 		return {"ok": false, "message": "Return to the road before using a field tool."}
 	var player: Node3D = host.player
+	if item_id == "loose_stone" and host.day_night.active_play_seconds < _stone_ready_at:
+		return {"ok":false, "message":"Let the last sound settle before throwing another stone."}
 	var aim: Dictionary = player.field_tool_aim()
 	if bool(aim.get("blocked", false)):
 		return {"ok": false, "message": "The tool needs clearance. Nothing was used."}
@@ -119,20 +125,21 @@ func deploy_tool(host: Node, item_id: String, damage: float = 45.0) -> Dictionar
 	var device := preload("res://scripts/field_device.gd").new()
 	device.manager = weakref(self)
 	device.zone = str(host.current_zone_id)
-	device.kind = "trap" if item_id == "iron_trap" else "bomb"
+	device.kind = "trap" if item_id == "iron_trap" else ("stone" if item_id == "loose_stone" else "bomb")
 	_device_serial += 1
 	device.device_id = str(_device_serial)
 	device.set_meta("damage", damage)
 	host.zone_root.get_node("FieldDevices").add_child(device)
 	device.global_position = position
 	device.rotation.y = player.rotation.y
-	if device.kind == "bomb":
+	if device.kind in ["bomb", "stone"]:
 		device.velocity = (aim.direction as Vector3) * 13.0 + Vector3.UP * 2.4
+		if device.kind == "stone": _stone_ready_at = host.day_night.active_play_seconds + 8.0
 	else:
 		var local: Vector3 = host.zone_root.to_local(position)
 		records.append({"id": device.device_id, "kind": "trap", "position": [local.x, local.y, local.z], "yaw": device.rotation.y})
 		_deployed_devices[str(host.current_zone_id)] = records
-	return {"ok": true, "message": "Iron Trap armed." if device.kind == "trap" else "Ash Bomb thrown."}
+	return {"ok": true, "message": "Iron Trap armed." if device.kind == "trap" else ("Stone thrown." if device.kind == "stone" else "Ash Bomb thrown.")}
 
 func try_trigger_trap(device: Node3D) -> void:
 	if not device_can_tick(device) or device.consumed: return
@@ -166,6 +173,12 @@ func explode_device(device: Node3D) -> void:
 	if not device_can_tick(device): device.queue_free(); return
 	var host := _device_game()
 	var center := device.global_position
+	if device.kind == "stone":
+		# Only the existing sound-perception path hears a harmless landing.
+		host.audio.play_spatial_event("stone_contact", center, host.player.global_position, 12.0, 0.0, 0.0)
+		host.audio.perception_cue.emit(center, 9.0, false)
+		device.queue_free()
+		return
 	var targets: Array = []
 	for enemy in host.active_enemies:
 		if not is_instance_valid(enemy) or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()): continue

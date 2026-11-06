@@ -6,6 +6,25 @@ Scope: finish and establish acceptance of the retained game, not replace it.
 
 ## Current Combined Candidate - 2026-11-06
 
+### Everyday Life, Lasting Consequences - compiled release candidate
+
+Approved 24 additions continue from `6d14b36` on `codex/art-recovery-anwen`.
+Order: immediate interaction; relationships; nature/time; combat/food/leisure.
+Build-only, no agent runtime tests. One combined publication after implementation
+and package integrity; push development/main without waiting for Vercel.
+Keep six worlds, 57 quests, current cast, earned saves and all ending access.
+Meals recover only at safe rests; fish sales are limited; surrender is optional.
+Implementation, compilation, publication and user acceptance remain separate.
+All 24 additions are implemented at source level; corrected compilation and
+package integrity passed. Build `everyday-life-20261106`: 205,967,595 complete
+Web bytes, below 256 MiB. Initial downloads increased 87,250 bytes; no loading
+or FPS improvement is claimed. Publication is the authorized combined Git push,
+not runtime acceptance. See the
+[implementation ledger and user checklist](../living-road/EVERYDAY_LIFE_IMPLEMENTATION.md).
+Mandatory user acceptance remains 0/16; historical failures remain recorded.
+
+### Previous Combined Candidate
+
 Current work: `codex/art-recovery-anwen`, D:/Projects/AshenOath, baseline `1b3e397`.
 The authorized A Coherent, Living Campaign implementation is recorded in
 [COHESIVE_GAME_IMPLEMENTATION](../living-road/COHESIVE_GAME_IMPLEMENTATION.md).

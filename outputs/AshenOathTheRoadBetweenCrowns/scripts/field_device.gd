@@ -15,13 +15,18 @@ func _ready() -> void:
 	metal.albedo_color = Color(0.19, 0.20, 0.18)
 	metal.metallic = 0.7
 	metal.roughness = 0.65
-	if kind == "bomb":
+	if kind in ["bomb", "stone"]:
 		var shell := SphereMesh.new()
 		shell.radius = 0.095
 		shell.height = 0.19
 		shell.radial_segments = 12
 		shell.rings = 6
 		_add_mesh(shell, metal, Vector3.ZERO)
+		if kind == "stone":
+			metal.metallic = 0.0
+			metal.albedo_color = Color(0.32, 0.34, 0.30)
+			scale = Vector3(0.8, 0.55, 0.65)
+			return
 		var band := TorusMesh.new()
 		band.inner_radius = 0.085
 		band.outer_radius = 0.105

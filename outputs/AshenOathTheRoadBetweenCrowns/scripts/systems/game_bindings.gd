@@ -991,6 +991,7 @@ func _purchase_from_vendor(vendor_id: String, item_id: String, quantity: int = 1
 func _sell_to_vendor(vendor_id: String, item_id: String, quantity: int) -> void: _systems["inventory"]._sell_to_vendor(vendor_id, item_id, quantity)
 func _on_enemy_died(enemy) -> void: _systems["combat"]._on_enemy_died(enemy)
 func _try_complete_black_dog_investigation() -> void: _systems["combat"]._try_complete_black_dog_investigation()
+func accept_ordinary_surrender(enemy: Node) -> void: _systems["combat"].accept_ordinary_surrender(enemy)
 func _try_complete_oren_thread_trace(publish_return := true) -> void: _systems["combat"]._try_complete_oren_thread_trace(publish_return)
 func _record_encounter_knowledge(enemy) -> void: _systems["combat"]._record_encounter_knowledge(enemy)
 func _on_enemy_damaged(enemy, current: float, maximum: float) -> void: _systems["combat"]._on_enemy_damaged(enemy, current, maximum)

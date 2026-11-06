@@ -741,6 +741,17 @@ func set_creature_presence(id: String, intent: String, amount: float) -> void:
 		life_modifier.creature_intent = intent
 		life_modifier.creature_amount = clampf(amount, 0.0, 1.0)
 
+func set_observation_clip(requested: String) -> bool:
+	if not is_valid() or dead or action_active or story_dialogue_active: return false
+	for clip: StringName in animation_player.get_animation_list():
+		if str(clip).get_file().to_lower() != requested.to_lower(): continue
+		presentation_state = "ecology"
+		current_state = "ecology"
+		target_playback_scale = 1.0
+		animation_graph.ambient_clip(str(clip))
+		return true
+	return false
+
 func _ensure_life_modifier() -> void:
 	if life_modifier == null and is_valid() and skeleton != null:
 		life_modifier = load("res://scripts/character_life_modifier.gd").new()

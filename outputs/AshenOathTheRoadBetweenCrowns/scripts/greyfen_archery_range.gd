@@ -25,6 +25,18 @@ var ring_target: AnimatableBody3D
 var shots_root: Node3D
 var overlay: CanvasLayer
 var readout: Label
+var region := "greyfen"
+var meet_id := ""
+var meet_round := 0
+
+static func install_regional(host) -> void:
+	if str(host.current_zone_id) not in ["wychwood","bandit_road"] or host.zone_root.get_node_or_null(RANGE_NAME)!=null:return
+	var range_node=load("res://scripts/greyfen_archery_range.gd").new()
+	range_node.name=RANGE_NAME
+	range_node.game=host
+	range_node.region=str(host.current_zone_id)
+	host.zone_root.add_child(range_node)
+	range_node._build()
 
 static func install(host) -> void:
 	if str(host.current_zone_id) != "greyfen" or host.zone_root.get_node_or_null(RANGE_NAME) != null:
@@ -52,6 +64,9 @@ static func choose(host, action: Dictionary) -> void:
 func _build() -> void:
 	var area = Interactable.new()
 	area.setup("lr_archery", "story_activity", "Greyfen archery range")
+	if region!="greyfen":
+		area.prompt="Regional archery meet"
+		area.set_meta("everyday_action","meet")
 	area.position = START
 	area.build_collision(1.0)
 	game.zone_root.add_child(area)
@@ -159,7 +174,20 @@ func open_menu() -> void:
 	game.hud.show_dialogue({"name":"Greyfen range", "pages":pages, "actions":actions})
 
 func _safe_to_start() -> bool:
-	return game != null and is_instance_valid(game.player) and get_parent() == game.zone_root and str(game.current_zone_id) == "greyfen" and not game._journey_load_pending() and not game.zone_transition_pending and not game.story_action_in_progress and str(game.pending_ending) == "" and not game._story_has_active_combat() and game.player.health_component.health > 0.0 and game.player.is_on_floor()
+	return game != null and is_instance_valid(game.player) and get_parent() == game.zone_root and str(game.current_zone_id) == region and not game._journey_load_pending() and not game.zone_transition_pending and not game.story_action_in_progress and str(game.pending_ending) == "" and not game._story_has_active_combat() and game.player.health_component.health > 0.0 and game.player.is_on_floor()
+
+func start_meet(id:String,round_index:int) -> void:
+	if id!=region or round_index<0 or round_index>2:return
+	start("practice")
+	if not running:return
+	meet_id=id
+	meet_round=round_index
+	var saved:Dictionary=game.story_state.get_flag("regional_range:"+id,{})
+	if int(saved.get("round",-1))==round_index:
+		score=clampi(int(saved.get("score",0)),0,40)
+		shots=clampi(int(saved.get("shots",0)),0,8)
+		finishing=shots>=8
+	_update_readout()
 
 func start(requested_mode: String) -> void:
 	if requested_mode == "decline":
@@ -197,6 +225,7 @@ func _shot_limit() -> int:
 	return int(CHALLENGES[mode].shots) if CHALLENGES.has(mode) else 8
 
 func _time_limit() -> float:
+	if meet_id!="":return 0.0
 	return float(CHALLENGES[mode].seconds) if CHALLENGES.has(mode) else 45.0 if mode == "timed" else 0.0
 
 func _update_target_motion() -> void:
@@ -210,6 +239,7 @@ func fire(request: Dictionary) -> void:
 	if not training_ready() or int(request.get("training_owner", 0)) != get_instance_id():
 		return
 	shots += 1
+	_store_meet()
 	pending_shots += 1
 	var projectile := TrainingArrow.new()
 	projectile.activity = self
@@ -237,6 +267,7 @@ func shot_finished(collider: Object, point: Vector3) -> void:
 		game.audio.play_event("light_hit", 0.02)
 		game.hud.toast("Ring hit: +%d" % points, 1.0)
 	_update_readout()
+	_store_meet()
 
 func _physics_process(delta: float) -> void:
 	if not running:
@@ -259,10 +290,18 @@ func _physics_process(delta: float) -> void:
 
 func _update_readout() -> void:
 	var goal := " / %d" % int(CHALLENGES[mode].goal) if CHALLENGES.has(mode) else ""
+	if meet_id!="":goal=" / %d"%[ [12,18,24][meet_round] ]
 	readout.text = "Range  %d%s points  |  %d / %d arrows%s" % [score, goal, shots, _shot_limit(), "  |  %ds" % maxi(0, ceili(_time_limit() - elapsed)) if _time_limit() > 0.0 else ""]
 
 func _finish() -> void:
 	var result := score
+	if meet_id!="":
+		var id:=meet_id
+		var round_index:=meet_round
+		cancel()
+		game.story_state.set_flag("regional_range:"+id,{})
+		preload("res://scripts/regional_meet.gd").record_result(game,id,round_index,"win" if result>=[12,18,24][round_index] else "loss")
+		return
 	var key := "lr_range_best_" + mode
 	game.story_state.begin_change()
 	if result > int(game.story_state.get_flag(key, 0)):
@@ -289,7 +328,9 @@ func _finish() -> void:
 func cancel() -> void:
 	if not running:
 		return
+	_store_meet()
 	running = false
+	meet_id=""
 	if is_instance_valid(game) and is_instance_valid(game.player):
 		game.player.training_range = null
 		game.player.load_equipment_state(equipment_before)
@@ -305,6 +346,12 @@ func cancel() -> void:
 		overlay.hide()
 	equipment_before.clear()
 	camera_before.clear()
+
+func _store_meet() -> void:
+	if meet_id=="" or not running:return
+	game.story_state.set_flag("regional_range:"+meet_id,{"round":meet_round,"score":score,"shots":shots})
+	game.story_save_pending=true
+	game.call_deferred("_persist_story_action")
 
 func _notification(what: int) -> void:
 	if what in [NOTIFICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_EXIT_TREE]:

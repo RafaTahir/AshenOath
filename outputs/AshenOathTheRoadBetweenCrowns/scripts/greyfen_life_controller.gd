@@ -1075,7 +1075,8 @@ func _sync_story_state(force: bool) -> void:
 	var state = host.get("story_state")
 	var report := str(state.get_flag("evidence_report", "")) if state != null and state.has_method("get_flag") else ""
 	var bell := bool(state.get_flag("cemetery_bell_rung", false)) if state != null and state.has_method("get_flag") else false
-	var signature := str([report, bell, ConsequenceRoutines.signature(state), routine_phase, cast_revision, floori(_routine_minutes())])
+	var weather := str(host.day_night.current_weather) if is_instance_valid(host.day_night) else "clear"
+	var signature := str([report, bell, ConsequenceRoutines.signature(state), routine_phase, weather, cast_revision, floori(_routine_minutes())])
 	if not force and signature == story_signature:
 		return
 	story_signature = signature
@@ -1089,6 +1090,7 @@ func _sync_story_state(force: bool) -> void:
 			var routine := CastProfile.routine(str(entry.id), str(entry.routine_zone), state, host.quests, routine_phase, _routine_minutes())
 			if routine.is_empty():
 				continue
+			routine = RoutineDirector.weather_routine(routine,entry,host,weather)
 			var previous: Dictionary = entry.pending_routine.get("profile", entry.profile)
 			if str(routine.revision) == str(previous.get("revision", "")):
 				continue
@@ -1112,6 +1114,7 @@ func _sync_story_state(force: bool) -> void:
 			if outcome.has(key): next_profile[key] = outcome[key]
 		next_profile["revision"] = str([reaction, cast_revision])
 		var schedule := RoutineDirector.for_existing_route(CastProfile.life_data(), str(entry.id), next_profile, outcome.get("path", entry.base_path), _routine_minutes())
+		schedule = RoutineDirector.weather_routine(schedule,entry,host,weather)
 		var previous: Dictionary = entry.pending_routine.get("profile", entry.profile)
 		if str(schedule.get("revision", "")) != str(previous.get("revision", "")):
 			entry.pending_routine = {"profile":schedule, "path":schedule.get("path", entry.base_path).duplicate(), "line":outcome.get("line", ""), "spatial_override":true}
@@ -1166,6 +1169,7 @@ func _update_reaction(entry: Dictionary, delta: float) -> void:
 			threat_actor = enemy
 			break
 	if threat != "":
+		if threat == "armed": entry.minor_friction_until = Time.get_ticks_msec() + 45000
 		var response := str(CastProfile.presence_profile(str(entry.id)).get("danger_response", "shelter"))
 		var accepted := _start_reaction(entry, ("anger" if response == "guard" else "fear") if threat == "danger" else "suspicion", threat_position, 2.5, threat_actor)
 		if accepted and float(entry.notice_cooldown) <= 0.0 and line_cooldown <= 0.0:
@@ -1174,6 +1178,8 @@ func _update_reaction(entry: Dictionary, delta: float) -> void:
 			var warning := "Give us room. People are still working here." if threat == "armed" else "Behind the wall. Leave the road clear!"
 			host.hud.toast("%s: %s" % [str(entry.profile.occupation).capitalize(), warning], 3.5)
 	elif float(entry.reaction_time) <= 0.0:
+		if entry.node.global_position.distance_squared_to(player.global_position) < 0.64:
+			entry.minor_friction_until = Time.get_ticks_msec() + 30000
 		if float(entry.get("social_time", 0.0)) > 0.0:
 			return
 		if is_instance_valid(face):
@@ -1349,6 +1355,7 @@ func _end_social_exchange() -> void:
 		host.hud.clear_ambient_subtitle(get_instance_id())
 	if is_instance_valid(host.audio):
 		host.audio.set_ambient_conversation(false)
+		host.audio.stop_table_performance(get_instance_id())
 	for record: Dictionary in social_scene.actors:
 		var entry: Dictionary = record.entry
 		if not is_instance_valid(entry.node):
@@ -1396,11 +1403,79 @@ func _world_actor(id: String) -> Dictionary:
 		return entry
 	return {}
 
+func has_minor_friction(actor: Node3D) -> bool:
+	for entry: Dictionary in actors:
+		if entry.node == actor:
+			return float(entry.get("minor_friction_until", 0.0)) > Time.get_ticks_msec()
+	return false
+
+func repair_minor_friction(actor: Node3D) -> bool:
+	if Presence.player_threat(player) != "" or actor.global_position.distance_to(player.global_position) < 1.1: return false
+	for entry: Dictionary in actors:
+		if entry.node != actor or not has_minor_friction(actor): continue
+		entry.minor_friction_until = 0
+		if str(entry.get("reaction", "")) == "suspicion": _finish_reaction(entry)
+		return true
+	return false
+
+func joinable_world_conversation(actor: Node3D) -> Dictionary:
+	if social_scene.is_empty() or not social_scene.has("world"): return {}
+	var scene: Dictionary = social_scene.world
+	if str(scene.get("kind", "")) != "exchange": return {}
+	for record: Dictionary in social_scene.actors:
+		if record.entry.node == actor:
+			var copy := scene.duplicate(true)
+			copy["join_from"] = int(social_scene.index)
+			return copy
+	return {}
+
+func join_world_conversation(actor: Node3D, scene: Dictionary) -> void:
+	if scene.is_empty() or not WorldScenes.eligible(scene, host): return
+	var selected: Array[Dictionary] = []
+	for id: String in scene.get("actors", []):
+		var entry := _world_actor(id)
+		if entry.is_empty() or not _social_actor_available(entry) or entry.node.global_position.distance_to(player.global_position) > 6.0: return
+		if not selected.any(func(other): return other.node == entry.node): selected.append(entry)
+	if selected.is_empty(): return
+	_end_social_exchange()
+	var joined := scene.duplicate(true)
+	joined.id = str(scene.id) + ":joined"
+	if bool(host.story_state.get_flag("world_scenes_heard", {}).get(str(joined.id), false)): return
+	joined["completes_scene"] = str(scene.id)
+	joined.turns = [["player", "Kael", "May I join you?"], [str(actor.get("interaction_id")), CastProfile.display_name(str(actor.get("interaction_id"))), "Of course. We were just talking about the work here."]] + WorldScenes.turns(scene, host).slice(int(scene.get("join_from",0)))
+	joined.erase("variants")
+	_start_world_scene(joined, selected)
+
+func play_optional_exchange(actor: Node3D, turns: Array, id: String) -> bool:
+	if host._story_has_active_combat() or host.zone_transition_pending or Presence.player_threat(player) != "": return false
+	var entry := _world_actor(str(actor.get("interaction_id")))
+	if entry.is_empty() or not _social_actor_available(entry): return false
+	_end_social_exchange()
+	# Repeated social intent is ephemeral, not a replayable quest or reward.
+	var scene := {"id":id + ":" + str(Time.get_ticks_msec()), "ephemeral":true, "zone":host.current_zone_id, "kind":"conversation", "actors":[str(entry.id)], "turns":turns, "action":"idle"}
+	_start_world_scene(scene, [entry])
+	return not social_scene.is_empty()
+
+func request_world_scene(id: String) -> bool:
+	if host._story_has_active_combat() or host.zone_transition_pending or Presence.player_threat(player) != "": return false
+	for scene: Dictionary in WorldScenes.data().get("scenes", []):
+		if str(scene.id) != id or not bool(scene.get("requested", false)) or not WorldScenes.eligible(scene, host): continue
+		var selected: Array[Dictionary] = []
+		for actor_id: String in scene.get("actors", []):
+			var entry := _world_actor(actor_id)
+			if entry.is_empty() or not _social_actor_available(entry) or entry.node.global_position.distance_to(player.global_position) > 12.0: return false
+			if not selected.any(func(other): return other.node == entry.node): selected.append(entry)
+		_end_social_exchange()
+		_start_world_scene(scene, selected)
+		return not social_scene.is_empty()
+	return false
+
 func _try_world_scene() -> void:
 	if not bool(player.can_control): return
 	if not social_scene.is_empty() or social_cooldown > 0.0 or not host.hud.ambient_subtitle_available(get_instance_id()) or host._story_has_active_combat() or host.zone_transition_pending or Presence.player_threat(player) != "": return
 	var heard: Dictionary = host.story_state.get_flag("world_scenes_heard", {})
 	for scene: Dictionary in WorldScenes.data().get("scenes", []):
+		if bool(scene.get("requested", false)): continue
 		if Time.get_ticks_msec() < int(world_retry_after.get(str(scene.id), 0)): continue
 		if bool(heard.get(str(scene.id), false)) or not WorldScenes.eligible(scene, host): continue
 		var selected: Array[Dictionary] = []
@@ -1490,6 +1565,7 @@ func _tick_world_scene(delta: float) -> void:
 		if not arrived: return
 		social_scene.staged = true
 		social_scene.waiting = 0.0
+		if scene.has("music") and not social_scene.actors.is_empty():host.audio.play_table_performance(get_instance_id(),social_scene.actors[0].entry.node)
 	# Walk only while the player is nearby. Finish each safe route before speaking.
 	if scene.has("walk") and int(social_scene.index) == 1 and not bool(social_scene.speaking):
 		var route: Array = scene.walk
@@ -1529,17 +1605,22 @@ func _tick_world_scene(delta: float) -> void:
 		_remember_world_scene_progress()
 		if scene.has("walk") and int(social_scene.index) == 1:
 			return
+	if scene.has("activity_point") and int(social_scene.index) == 2 and not bool(host.story_state.get_flag("everyday_work:" + str(scene.id), false)):
+		return
 	if int(social_scene.index) >= social_scene.turns.size():
-		var heard: Dictionary = host.story_state.get_flag("world_scenes_heard", {}).duplicate()
-		heard[str(scene.id)] = true
-		host.story_state.set_flag("world_scenes_heard", heard)
-		host.story_save_pending = true
-		host.call_deferred("_persist_story_action")
+		if not bool(scene.get("ephemeral", false)):
+			var heard: Dictionary = host.story_state.get_flag("world_scenes_heard", {}).duplicate()
+			heard[str(scene.id)] = true
+			if scene.has("completes_scene"): heard[str(scene.completes_scene)] = true
+			host.story_state.set_flag("world_scenes_heard", heard)
+			host.story_save_pending = true
+			host.call_deferred("_persist_story_action")
 		_end_social_exchange()
 		social_cooldown = 12.0
 		return
 	var turn: Array = social_scene.turns[int(social_scene.index)]
 	var duration := clampf(str(turn[2]).split(" ", false).size() * 0.32 + 1.5, 3.0, 11.0)
+	if scene.has("music") and int(social_scene.index)==1:duration=14.0
 	for record: Dictionary in social_scene.actors:
 		var entry: Dictionary = record.entry
 		_set_motion(entry, 0.0)
@@ -1565,6 +1646,7 @@ func _tick_world_scene(delta: float) -> void:
 	social_scene.speaking = true
 
 func _remember_world_scene_progress() -> void:
+	if bool(social_scene.world.get("ephemeral", false)): return
 	var progress: Dictionary = host.story_state.get_flag("world_scene_progress", {}).duplicate()
 	progress[str(social_scene.world.id)] = {"index":int(social_scene.index), "walk_index":int(social_scene.walk_index), "signature":str(social_scene.signature)}
 	host.story_state.set_flag("world_scene_progress", progress)

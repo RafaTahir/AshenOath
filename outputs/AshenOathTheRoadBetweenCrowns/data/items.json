@@ -1,4 +1,10 @@
 {
+  "river_dace": {"name":"River dace", "type":"food", "effect":{}, "description":"A fresh catch for a resting meal. Nessa buys a limited number. No XP or Honor is awarded for catching fish."},
+  "copper_perch": {"name":"Copper perch", "type":"food", "effect":{}, "description":"A firm freshwater fish. Either species can supply a fish recipe; carry at most six fish altogether."},
+  "grilled_fish": {"name":"Grilled fish", "type":"meal", "recipe_items":{"fresh_fish":1}, "effect":{"heal":15}, "description":"Cook at a safe kitchen. Eat while seated at an authored rest: restores up to 15 health, without a lasting buff."},
+  "fish_broth": {"name":"Fish and herb broth", "type":"meal", "recipe":{"bitterleaf":1}, "recipe_items":{"fresh_fish":1}, "effect":{"heal":10,"stamina":20}, "description":"A resting meal: restores up to 10 health and 20 stamina. Uses one fish and one bitterleaf; no combat buff."},
+  "bread_supper": {"name":"Bread and herb supper", "type":"meal", "recipe":{"bitterleaf":1}, "recipe_items":{"travel_bread":1}, "effect":{"stamina":20}, "description":"A resting meal: restores up to 20 stamina. Uses one travel bread and one bitterleaf. Ordinary bread keeps its existing uses."},
+  "loose_stone": {"name":"Loose stone", "type":"distraction", "effect":{}, "description":"A harmless field-tool throw. Unengaged listeners may investigate its landing; confirmed sight and boss encounters take precedence. One stone can be carried."},
   "travel_bread": {
     "name": "Travel Bread",
     "type": "food",

@@ -124,7 +124,7 @@ func _process_modification() -> void:
 	pose_weight = move_toward(pose_weight, 1.0 if requested else 0.0, delta * 4.5)
 	if pose_weight <= 0.001:
 		return
-	if effective == "sit":
+	if effective in ["sit", "seated_eat"]:
 		if pelvis >= 0:
 			var parent := skeleton.get_bone_parent(pelvis)
 			var frame := skeleton.global_basis * (skeleton.get_bone_global_pose(parent).basis if parent >= 0 else Basis.IDENTITY)
@@ -133,7 +133,7 @@ func _process_modification() -> void:
 		for leg: Dictionary in seated_legs:
 			skeleton.set_bone_pose_rotation(leg.thigh,skeleton.get_bone_pose_rotation(leg.thigh)*Quaternion(Vector3.RIGHT,-1.35*pose_weight))
 			skeleton.set_bone_pose_rotation(leg.calf,skeleton.get_bone_pose_rotation(leg.calf)*Quaternion(Vector3.RIGHT,1.35*pose_weight))
-		return
+		if effective == "sit": return
 	if spine >= 0:
 		var base := skeleton.get_bone_pose_rotation(spine)
 		var bend := 0.12 if effective == "scavenge" else 0.0
@@ -155,6 +155,10 @@ func _process_modification() -> void:
 		var depth := 0.36
 		var drop := 0.58
 		match effective:
+			"fishing":
+				across = -0.22 * float(arm.side)
+				depth = 0.44
+				drop = 0.38
 			"forge", "repair":
 				depth = 0.55
 				drop = 0.48 - (maxf(0.0, sin(elapsed * 3.1)) * 0.42 if float(arm.side) > 0 else 0.0)
@@ -180,7 +184,7 @@ func _process_modification() -> void:
 			"care":
 				depth = 0.42 if float(arm.side) > 0 else 0.15
 				drop = 0.42
-			"eat":
+			"eat", "seated_eat":
 				across = -0.10 * float(arm.side)
 				depth = 0.23
 				drop = 0.12 + (0.08 * sin(elapsed * 0.9) if float(arm.side) > 0 else 0.25)
@@ -250,6 +254,28 @@ func _creature_pose(skeleton: Skeleton3D) -> void:
 	var lean := 0.0
 	var tilt := 0.0
 	match creature_id:
+		"reed_choir":
+			lean = 0.0 if creature_intent == "attentive" else sin(elapsed*1.8)*0.045
+			tilt = sin(elapsed*0.38)*0.035
+		"glassmoth":
+			lean = -0.08 if creature_intent == "feeding" else 0.025
+			tilt = sin(elapsed*0.7)*0.09
+			for index in wings.size():
+				var bone := wings[index]
+				var fold := sin(elapsed*2.2)*0.08*(-1.0 if index==0 else 1.0)*creature_weight
+				skeleton.set_bone_pose_rotation(bone,skeleton.get_bone_pose_rotation(bone)*Quaternion(Vector3.FORWARD,fold))
+		"gallows_weaver":
+			lean = sin(elapsed*1.4)*0.035 if creature_intent == "feeding" else 0.025
+			tilt = sin(elapsed*0.4)*0.04
+		"shroud_swimmer":
+			lean = sin(elapsed*0.8)*0.04
+			tilt = sin(elapsed*0.55)*0.075
+		"inkblind":
+			lean = 0.08 if creature_intent == "feeding" else 0.02
+			tilt = sin(elapsed*1.7)*0.055
+		"cairn_mother":
+			lean = -0.015
+			tilt = sin(elapsed*0.25)*0.045
 		"bell_eater":
 			tilt = sin(elapsed*0.75)*0.09 if not recovery else 0.05
 			lean = 0.04 if recovery else 0.015

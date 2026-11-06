@@ -14,6 +14,9 @@ const WAYPOINTS := {
 const REST_PLACES := {
 	"greyfen": {"id": "shrine_prayer", "name": "The shrine bench", "position": Vector3(8, 0, -6.2)},
 	"wychwood": {"id": "rest_wychwood", "name": "The southern deadfall", "position": Vector3(-4.9, 0, 11)},
+	"old_mill": {"id":"rest_mill", "name":"The workers' dry bench", "position":Vector3(-5.6,0,11)},
+	"vargan_approach": {"id":"rest_castle", "name":"The waiting bench", "position":Vector3(-4.4,0,9.5)},
+	"ruins": {"id":"rest_ruins", "name":"The stoneworker's resting stone", "position":Vector3(-2.4,0,5.6)},
 	"bandit_road": {"id": "rest_long_road", "name": "The old supply cart", "position": Vector3(-8, 0, 5.6)}
 }
 const REST_SECONDS := 4.0
@@ -45,6 +48,7 @@ var rest_area: WeakRef
 var rest_elapsed := 0.0
 var rest_start := Vector3.ZERO
 var rest_started := false
+var rest_minutes := REST_MINUTES
 var friend_work := ""
 var friend_work_elapsed := 0.0
 var friend_work_start := Vector3.ZERO
@@ -185,6 +189,7 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		director._build(root)
 	director.refresh()
 	preload("res://scripts/saga_activities.gd").install(game, director, zone_id)
+	load("res://scripts/everyday_life.gd").install(game, director)
 	if zone_id == "greyfen":
 		preload("res://scripts/opening_care_scene.gd").install(game, root)
 		preload("res://scripts/greyfen_archery_range.gd").install(game)
@@ -193,14 +198,16 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		preload("res://scripts/greyfen_village_details.gd").install(game)
 
 static func handle(game, area) -> void:
+	if area.has_meta("everyday_action"):
+		var everyday: Node = game.zone_root.get_node_or_null("StoryActivities/EverydayLife")
+		if everyday != null: everyday.activate(area)
+		return
 	if area.has_meta("design_ecology"):
 		var sighting: Dictionary = area.get_meta("design_ecology")
-		game.story_state.record_evidence(str(area.interaction_id), {"zone":game.current_zone_id, "kind":"observed", "title":sighting.title, "text":sighting.observation})
-		game.story_save_pending = true
-		game.call_deferred("_persist_story_action")
+		var observed: bool = game.story_state.evidence.has(str(area.interaction_id))
 		game.audio.set_game_paused(true)
 		game.get_tree().paused = true
-		game.hud.show_dialogue({"name":sighting.title, "pages":[{"speaker":"Kael's field notes", "speaker_id":"narrator", "text":str(sighting.observation) + "\n\n" + str(sighting.connection)}], "actions":[{"type":"close", "label":"Leave it undisturbed"}]})
+		game.hud.show_dialogue({"name":sighting.title, "pages":[{"speaker":"Kael's field notes", "speaker_id":"narrator", "text":str(sighting.observation) + "\n\n" + str(sighting.connection) if observed else "Keep a little distance and watch it work. There is no account to write yet."}], "actions":[{"type":"close", "label":"Leave it undisturbed"}]})
 		return
 	if str(area.interaction_id).begins_with("greyfen_detail:"):
 		var details: Node = preload("res://scripts/greyfen_village_details.gd").current(game)
@@ -719,6 +726,10 @@ func _open_rest(id: String) -> void:
 	var actions: Array = []
 	for entry in [["rest", "Rest for half an hour"], ["prepare", "Lay out supplies"], ["leave", "Keep moving"]]:
 		actions.append({"type": "rest_place", "label": entry[1], "operation": entry[0], "rest_actor_instance": area.get_instance_id(), "rest_id": id})
+	for option in [["morning", "Wait until morning"], ["evening", "Wait until evening"]]:
+		actions.insert(actions.size() - 1, {"type":"rest_place", "label":option[1], "operation":option[0], "rest_actor_instance":area.get_instance_id(), "rest_id":id})
+	var everyday: Node = preload("res://scripts/everyday_life.gd").current(host)
+	if everyday != null: everyday.append_rest_actions(area, actions)
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
 	host.hud.show_dialogue({"name": str(place.name), "pages": [{"speaker": str(place.name), "speaker_id": "narrator", "text": words}], "actions": actions})
@@ -739,8 +750,13 @@ func _choose_rest(action: Dictionary) -> void:
 		host._update_preparation_context()
 		host.hud.show_inventory(host.inventory, host.quests, host.story_state, host.progression, "preparation")
 		return
-	if str(action.get("operation", "")) != "rest":
+	if str(action.get("operation", "")) not in ["rest", "morning", "evening"]:
 		return
+	rest_minutes = REST_MINUTES
+	if str(action.operation) in ["morning", "evening"]:
+		var target := 420.0 if str(action.operation) == "morning" else 1080.0
+		rest_minutes = fposmod(target - host.day_night.get_time(), 1440.0)
+		if rest_minutes < 1.0: rest_minutes = 1440.0
 	_cancel_friend_work()
 	rest_area = weakref(area)
 	rest_elapsed = 0.0
@@ -769,13 +785,12 @@ func _tick_rest(delta: float) -> void:
 		return
 	var id: String = str(REST_PLACES[zone].id)
 	_cancel_rest()
-	# Only a completed interval commits time/recovery. No supplies or story
+	# Only a completed interval commits time. No supplies or story
 	# objectives are granted; existing clock signals own schedule/sky changes.
 	var clock = host.day_night
-	var minutes: float = clock.get_time() + REST_MINUTES
+	var minutes: float = clock.get_time() + rest_minutes
 	var days: int = int(clock.day_count) + int(floor(minutes / 1440.0))
 	clock.set_time(minutes, days)
-	host.player.stamina_component.restore(host.player.stamina_component.max_stamina)
 	var event := "quiet"
 	if host.story_state.has_heard_testimony():
 		event = "after_testimony"
@@ -785,6 +800,7 @@ func _tick_rest(delta: float) -> void:
 	host.story_state.begin_change()
 	host.story_state.set_flag("last_rest", record)
 	var reaction := _rest_reaction(event)
+	if not is_equal_approx(rest_minutes,REST_MINUTES): reaction=reaction.replace("Half an hour passes.","Time passes.")
 	host.story_state.end_change()
 	host.hud.toast(reaction)
 	host.story_save_pending = true

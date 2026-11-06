@@ -1,4 +1,9 @@
 {
+  "nessa_kitchen": {
+    "name":"Nessa's Kitchen",
+    "subtitle":"Bread for the road; a limited daily need for fresh fish",
+    "stock":[{"item_id":"travel_bread","price":1,"cap":6}]
+  },
   "tor_forge": {
     "name": "Tor's Forge",
     "subtitle": "Iron, strings, and arrows that hold their line",

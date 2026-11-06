@@ -13,10 +13,18 @@ var emergency_healing_claimed := false
 var stock_beats: Dictionary = {}
 var stock_purchases: Dictionary = {}
 var _transaction_active := false
+var clock: Node
+var fish_allowance := {"remaining":3, "day":0, "played":0.0}
+
+func refresh_fish_allowance() -> void:
+	if not is_instance_valid(clock): return
+	if int(clock.day_count) > int(fish_allowance.day) and float(clock.active_play_seconds)-float(fish_allowance.played) >= 2160.0:
+		fish_allowance = {"remaining":3,"day":int(clock.day_count),"played":float(clock.active_play_seconds)}
 
 # Fixed buyback prices stay below the lowest permitted shop price. Keep a
 # practical reserve; evidence, ingredients, keepsakes and fittings are excluded.
 const BUYBACK := {
+	"nessa_kitchen": {"river_dace":[1,0], "copper_perch":[2,0]},
 	"tor_forge": {"bodkin_arrow": [1,3], "ashfire_arrow": [2,2], "iron_trap": [2,1], "moon_oil": [3,1]},
 	"mira_apothecary": {"redroot_potion": [1,2], "bitterleaf_tonic": [1,1], "ash_bomb": [2,1], "moon_oil": [3,1], "rot_oil": [3,1]}
 }
@@ -35,6 +43,12 @@ func sell_quote(vendor_id: String, item_id: String, quantity: int, inventory) ->
 	var owned: int = inventory.owned_count(item_id)
 	var reserve: int = int(offer[1])
 	var count := mini(mini(quantity, 99), maxi(owned-reserve, 0))
+	if vendor_id == "nessa_kitchen":
+		refresh_fish_allowance()
+		count = mini(count, int(fish_allowance.remaining))
+		if count <= 0:
+			result.message = "Nessa needs at most three fish per allowance. Another day and a full day's active travel must pass before she needs more."
+			return result
 	result.merge({"owned":owned,"reserve":reserve,"quantity":count,"unit_price":int(offer[0]),"total_price":count*int(offer[0])},true)
 	if count <= 0:
 		result.message = "Keep at least %d %s for the road." % [reserve,inventory.get_item_name(item_id)]; return result
@@ -49,6 +63,7 @@ func sell(vendor_id: String, item_id: String, quantity: int, inventory) -> Dicti
 	var offer := sell_quote(vendor_id,item_id,quantity,inventory)
 	if not bool(offer.ok): return _fail(str(offer.message),item_id,"sell")
 	_transaction_active = true
+	if vendor_id == "nessa_kitchen": fish_allowance.remaining = int(fish_allowance.remaining)-int(offer.quantity)
 	inventory.items[item_id] = int(inventory.items.get(item_id,0))-int(offer.quantity)
 	inventory.coin += int(offer.total_price)
 	inventory.changed.emit()
@@ -62,6 +77,7 @@ func load_vendors(path: String) -> void:
 	definitions = _read_json(path)
 
 func reset_state() -> void:
+	fish_allowance = {"remaining":3,"day":0,"played":0.0}
 	emergency_refill_claimed = false
 	emergency_healing_claimed = false
 	stock_beats.clear()
@@ -274,9 +290,16 @@ func claim_emergency_arrow_refill(vendor_id: String, inventory) -> Dictionary:
 	return buy(vendor_id, "__emergency_arrows__", 1, inventory)
 
 func save_state() -> Dictionary:
-	return {"emergency_refill_claimed": emergency_refill_claimed, "emergency_healing_claimed": emergency_healing_claimed, "stock_beats": stock_beats.duplicate(), "stock_purchases": stock_purchases.duplicate(true)}
+	return {"fish_allowance":fish_allowance.duplicate(), "emergency_refill_claimed": emergency_refill_claimed, "emergency_healing_claimed": emergency_healing_claimed, "stock_beats": stock_beats.duplicate(), "stock_purchases": stock_purchases.duplicate(true)}
 
 func load_state(state: Dictionary) -> void:
+	var fish: Variant = state.get("fish_allowance", {})
+	fish_allowance = {"remaining":3,"day":0,"played":0.0}
+	if fish is Dictionary:
+		fish_allowance.remaining = clampi(int(fish.get("remaining",3)),0,3)
+		fish_allowance.day = maxi(0,int(fish.get("day",0)))
+		var seconds := float(fish.get("played",0.0))
+		fish_allowance.played = maxf(0.0,seconds) if is_finite(seconds) else 0.0
 	var claimed: Variant = state.get("emergency_refill_claimed", false)
 	emergency_refill_claimed = typeof(claimed) == TYPE_BOOL and claimed
 	var healing: Variant = state.get("emergency_healing_claimed", false)

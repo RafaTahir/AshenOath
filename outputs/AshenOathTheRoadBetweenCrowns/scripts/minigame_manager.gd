@@ -9,13 +9,22 @@ const Square = preload("res://scripts/board_square.gd")
 const ChessRules = preload("res://scripts/third_party/chess/Chess.gd")
 const ChessOpponent = preload("res://scripts/third_party/chess/ChessEngine.gd")
 const OPPONENTS := {
+	"merrow":{"name":"Merrow","style":"methodical","depth":2,"mistake":0.15,"prize":0,"win":"I will have to reconsider that opening.","loss":"A patient answer is still an answer.","draw":"Shall we record an even result?"},
+	"mira":{"name":"Mira","style":"patient","depth":2,"mistake":0.15,"prize":0,"win":"You left room for the answer. Well played.","loss":"Look at the space behind the piece.","draw":"We can both leave the board content."},
+	"nera":{"name":"Nera","style":"deliberate","depth":2,"mistake":0.15,"prize":0,"win":"That route was open. I should have seen it.","loss":"Plan the return as well as the crossing.","draw":"Neither of us has to force it."},
+	"vale":{"name":"Vale","style":"precise","depth":3,"mistake":0.0,"prize":0,"win":"A sound conclusion.","loss":"The earlier move mattered more than the last.","draw":"An honest result."},
 	"saga_nessa": {"name":"Nessa", "style":"casual", "depth":0, "mistake":0.55, "prize":2, "win":"Well, that settles who cuts the next loaf. Not you, apparently.", "loss":"Another round? The bread can cool without our supervision.", "draw":"Fair shares. I approve of this board."},
 	"rook": {"name":"Rook", "style":"practised", "depth":2, "mistake":0.15, "prize":3, "win":"I was about to do that. Only, on my side of the board.", "loss":"Watch what I leave unguarded. Sometimes it is an invitation.", "draw":"Neither of us has earned the right to boast. Tragic."},
 	"blacksmith_tor": {"name":"Tor", "style":"skilled", "depth":3, "mistake":0.0, "prize":8, "win":"Sound work. You saw the joint I left weak.", "loss":"Don't hurry the answer. Look at what my last move opened.", "draw":"Nothing loose. Nothing broken. A good finish."},
 }
 
 func opponent_profile() -> Dictionary:
-	return OPPONENTS.get(opponent_id, OPPONENTS.rook)
+	var profile:Dictionary=OPPONENTS.get(opponent_id, OPPONENTS.rook).duplicate()
+	if competition_id!="":
+		profile.depth=[0,2,3][clampi(competition_round,0,2)]
+		profile.mistake=[0.5,0.15,0.0][clampi(competition_round,0,2)]
+		profile.style=["warm-up","practised","deciding round"][clampi(competition_round,0,2)]
+	return profile
 
 func _opponent_label() -> String:
 	var profile := opponent_profile()
@@ -35,6 +44,9 @@ var world_control_locked := false
 var input_source: Node
 var rng := RandomNumberGenerator.new()
 var opponent_id := "rook"
+var competition_id := ""
+var competition_round := 0
+var restart_button:Button
 var sessions: Dictionary = {}
 var chess
 var chess_moves: Array[String] = []
@@ -98,10 +110,14 @@ func setup(router: Node, preferences: Node = null) -> void:
 	input_source = router
 	_settings_source = preferences
 
-func open_game(game_id: String, person: String = "rook") -> void:
+func open_game(game_id: String, person: String = "rook", meet: String = "", round_index: int = 0) -> void:
 	if overlay == null:
 		_build_ui()
 	active_game = game_id
+	competition_id=meet
+	competition_round=clampi(round_index,0,2)
+	game_picker.disabled=meet!=""
+	restart_button.disabled=meet!=""
 	opponent_id = person if OPPONENTS.has(person) else "rook"
 	finished = false
 	draughts_selected = -1
@@ -123,6 +139,7 @@ func close_game() -> void:
 	generation += 1
 	thinking = false
 	active_game = ""
+	competition_id=""
 	overlay.visible = false
 	world_control_locked = false
 	get_tree().paused = _was_paused
@@ -219,10 +236,16 @@ func save_state() -> Dictionary:
 
 func load_state(data: Dictionary) -> void:
 	generation += 1
+	competition_id = ""
+	competition_round = 0
 	thinking = false
 	sessions.clear()
 	var raw: Variant = data.get("sessions", {})
 	if raw is Dictionary:
+		for region in ["greyfen","old_mill","vargan_approach","ruins"]:
+			for round_index in 3:
+				var meet_key: String="meet:"+region+":"+str(round_index)
+				if raw.get(meet_key) is Dictionary:sessions[meet_key]=raw[meet_key].duplicate(true)
 		for person in OPPONENTS:
 			for mode in ["tic_tac_toe", "draughts", "chess"]:
 				var key: String = str(person) + ":" + str(mode)
@@ -233,6 +256,7 @@ func load_state(data: Dictionary) -> void:
 	world_control_locked = false
 
 func _session_key() -> String:
+	if competition_id!="":return "meet:"+competition_id+":"+str(competition_round)
 	return opponent_id + ":" + active_game
 
 func _capture_session() -> void:
@@ -342,7 +366,7 @@ func _build_ui() -> void:
 	for kind in ["q", "r", "b", "n"]:
 		var choice := Button.new(); choice.text = {"q":"Queen", "r":"Rook", "b":"Bishop", "n":"Knight"}[kind]; _style_action_button(choice); choice.pressed.connect(_promote.bind(kind)); promotion_actions.add_child(choice)
 	var actions := HBoxContainer.new(); actions.alignment = BoxContainer.ALIGNMENT_CENTER; box.add_child(actions)
-	var restart := Button.new(); restart.text = "New board"; _style_action_button(restart); restart.pressed.connect(_restart); actions.add_child(restart)
+	restart_button = Button.new(); restart_button.text = "New board"; _style_action_button(restart_button); restart_button.pressed.connect(_restart); actions.add_child(restart_button)
 	resign_button = Button.new(); resign_button.text = "Resign"; _style_action_button(resign_button); resign_button.pressed.connect(_resign); actions.add_child(resign_button)
 	var exit := Button.new(); exit.text = "Return"; _style_action_button(exit); exit.pressed.connect(close_game); actions.add_child(exit)
 

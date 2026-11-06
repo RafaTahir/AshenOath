@@ -59,3 +59,10 @@ func craft_result(item_id: String) -> Dictionary:
 		quest_manager.complete_objective("main_teeth_in_rain", "craft_moon_oil")
 	crafted.emit(item_id)
 	return result
+
+func cook_result(item_id: String, station_available: Callable) -> Dictionary:
+	if inventory == null or inventory.get_item_type(item_id) != "meal" or not station_available.is_valid() or not bool(station_available.call()):
+		return {"ok":false, "message":"Use a safe kitchen within reach."}
+	var result: Dictionary = inventory.craft_result(item_id, {}, true)
+	if bool(result.get("ok", false)): crafted.emit(item_id)
+	return result

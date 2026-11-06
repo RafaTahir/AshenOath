@@ -49,3 +49,55 @@ static func for_existing_route(data: Dictionary, id: String, profile: Dictionary
 	var rest: Vector3 = route.front()
 	var definition := {"work":[work.x,work.y,work.z], "errand":[rest.x,rest.y,rest.z], "rest":[rest.x,rest.y,rest.z]}
 	return resolve(data, id, definition, profile, minutes)
+
+static func weather_routine(profile: Dictionary, entry: Dictionary, host, weather: String) -> Dictionary:
+	profile = shared_work_routine(profile, entry, host)
+	if weather != "rain" or bool(profile.get("sleeping",false)): return profile
+	var shelter: Variant = entry.get("rain_shelter")
+	if shelter == null:
+		entry["rain_shelter"] = false
+		var points: Array = profile.get("path",[]).duplicate()
+		points.append_array(entry.get("base_path",[]))
+		for raw in points:
+			var point: Vector3 = raw
+			var query := PhysicsRayQueryParameters3D.create(point+Vector3.UP*1.8,point+Vector3.UP*5.5,1)
+			var hit: Dictionary = host.zone_root.get_world_3d().direct_space_state.intersect_ray(query)
+			if not hit.is_empty():
+				entry.rain_shelter = point
+				break
+		shelter = entry.rain_shelter
+	if not shelter is Vector3: return profile
+	var result := profile.duplicate(true)
+	var activity := "read" if str(profile.get("activity","")) == "read" else "check_supplies"
+	result.merge({"path":[shelter],"activities":[activity],"activity":activity,"prop":WORK_PROPS.get(activity,""),"scheduled":true,"hold_activity":true,"revision":str(profile.get("revision",""))+":rain","line":"We'll keep the work dry until this passes."},true)
+	result.erase("workstation")
+	return result
+
+static func shared_work_routine(profile: Dictionary, entry: Dictionary, host) -> Dictionary:
+	if bool(profile.get("sleeping",false)): return profile
+	var minutes: float = host.day_night.get_time()
+	if minutes < 960.0 or minutes >= 1080.0: return profile
+	var scenes = preload("res://scripts/story_world_scenes.gd")
+	var cast = load("res://scripts/story_cast_profile.gd")
+	var heard: Dictionary = host.story_state.get_flag("world_scenes_heard",{})
+	for scene: Dictionary in scenes.data().get("scenes",[]):
+		if str(scene.id) not in ["everyday_gre_pair","everyday_wyc_pair","everyday_dep_pair","everyday_roa_pair","everyday_var_pair_after","everyday_har_pair"]: continue
+		if not bool(heard.get(str(scene.id),false)) or not scenes.eligible(scene,host): continue
+		var actor_id := ""
+		for id: String in scene.actors:
+			if cast.same_person(id,str(entry.id)): actor_id=id
+		if actor_id=="": continue
+		var complete := true
+		for id: String in scene.actors:
+			if not is_instance_valid(cast.registered_actor(host.zone_root,id)): complete=false
+		if not complete: continue
+		var result := profile.duplicate(true)
+		var path: Array = entry.get("base_path",profile.get("path",[]))
+		var raw: Array = scene.get("stage",{}).get(actor_id,[])
+		if not raw.is_empty(): path=[Vector3(raw[0],raw[1],raw[2])]
+		if path.is_empty(): return profile
+		var activity := str(scene.get("action","check_supplies"))
+		result.merge({"path":[path.back()],"activities":[activity],"activity":activity,"prop":WORK_PROPS.get(activity,""),"scheduled":true,"hold_activity":true,"revision":str(profile.get("revision",""))+":"+str(scene.id)},true)
+		result.erase("workstation")
+		return result
+	return profile

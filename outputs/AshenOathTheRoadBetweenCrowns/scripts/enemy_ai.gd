@@ -49,6 +49,9 @@ var hit_flash_time = 0.0
 var pending_attack_time = 0.0
 var attack_windup_total := 0.0
 var stagger_time = 0.0
+var surrender_offer := false
+var surrender_declined := false
+var resolved_nonlethal := false
 var home_position = Vector3.ZERO
 var leash_radius = 14.0
 var windup_marker: MeshInstance3D
@@ -117,7 +120,7 @@ func _on_world_sound(position: Vector3, radius: float, _danger: bool) -> void:
 			if str(owner_node.get_meta("zone_resource_owner")) != "active": return
 			break
 		owner_node = owner_node.get_parent()
-	if dead or is_boss or not encounter_active or can_see_player or Time.get_ticks_msec() < heard_cue_deadline:
+	if dead or is_boss or not encounter_active or can_see_player or perception_memory_time > 0.0 or pending_attack_time > 0.0 or Time.get_ticks_msec() < heard_cue_deadline:
 		return
 	if global_position.distance_squared_to(position) > radius*radius or position.distance_to(home_position) > leash_radius-1.0 or global_position.distance_squared_to(position) < 0.25:
 		return
@@ -216,6 +219,14 @@ func _physics_process(delta: float) -> void:
 	if encounter_spatial_index != null:
 		encounter_spatial_index.update(self)
 	if dead or player == null:
+		return
+	if surrender_offer or resolved_nonlethal:
+		_cancel_pending_strike()
+		_release_attack_token()
+		velocity=Vector3.ZERO
+		if animation_driver!=null:
+			animation_driver.set_external_tick(false)
+			animation_driver.set_life_activity("fear" if surrender_offer else "sit")
 		return
 	if bool(get_meta("story_surrender_protected", false)):
 		_cancel_pending_strike()
@@ -416,6 +427,10 @@ func _validated_step_direction(direction: Vector3, target: Vector3, step_distanc
 func apply_damage(amount: float, source_tag: String = "") -> void:
 	if dead or not encounter_active or bool(get_meta("story_surrender_protected", false)):
 		return
+	if surrender_offer:
+		surrender_offer=false
+		surrender_declined=true
+		if animation_driver!=null:animation_driver.clear_life_activity()
 	if bool(get_meta("dormant_arena", false)):
 		var controller: Node = get_node_or_null("BossEncounterController")
 		if controller != null and is_instance_valid(controller.host):
@@ -438,6 +453,10 @@ func apply_damage(amount: float, source_tag: String = "") -> void:
 			preload("res://scripts/saga_encounters.gd").senn_yields(controller.host, self)
 	hit_flash_time = 0.12
 	stagger_time = max(stagger_time, 0.16)
+	if bool(get_meta("ordinary_surrender_eligible",false)) and not surrender_declined and not dead and health_component.health>0.0 and health_component.health<=health_component.max_health*0.25:
+		surrender_offer=true
+		_cancel_pending_strike()
+		_release_attack_token()
 	if animation_driver != null:
 		native_attack_tail_active = false
 		animation_driver.trigger_action("hit")
@@ -485,7 +504,21 @@ func set_encounter_active(value: bool) -> void:
 			animation_driver.set_locomotion(0.0, Vector3.ZERO, true)
 
 func is_encounter_active() -> bool:
-	return encounter_active
+	return encounter_active and not resolved_nonlethal
+
+func accept_ordinary_surrender() -> bool:
+	if not surrender_offer or dead or is_boss or not bool(get_meta("ordinary_surrender_eligible",false)):return false
+	surrender_offer=false
+	resolved_nonlethal=true
+	encounter_active=false
+	_cancel_pending_strike()
+	_release_attack_token()
+	set_meta("story_surrender_protected",true)
+	if animation_driver!=null:
+		animation_driver.stop_action("idle",0.12)
+		animation_driver.set_external_tick(false)
+		animation_driver.set_life_activity("sit")
+	return true
 
 func stagger(seconds: float = 0.7) -> void:
 	native_attack_tail_active = false

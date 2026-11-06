@@ -8,11 +8,15 @@ static func data() -> Dictionary:
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/people_place_scenes.json"))
 		if parsed is Dictionary:
 			_data = parsed
+			var everyday: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/everyday_scenes.json"))
+			if everyday is Dictionary: _data.get_or_add("scenes", []).append_array(everyday.get("scenes", []))
 	return _data
 
 static func eligible(scene: Dictionary, host) -> bool:
 	if str(scene.zone) != str(host.current_zone_id):
 		return false
+	for id: String in scene.get("heard", []):
+		if not bool(host.story_state.get_flag("world_scenes_heard", {}).get(id, false)): return false
 	for key: String in scene.get("when", {}):
 		var wanted: Variant = scene.when[key]
 		var actual: Variant = host.story_state.get_flag(key, false if wanted is bool else null)
@@ -87,6 +91,8 @@ static func reflections(state) -> Array[Dictionary]:
 		if not bool(heard.get(str(reflection.scene), false)): continue
 		if reflection.has("flag") and not bool(state.get_flag(str(reflection.flag), false)): continue
 		var body := str(reflection.text)
+		var choice := str(state.get_flag("everyday_reflection:reflection:" + str(reflection.id), ""))
+		if choice != "" and choice != "Leave unwritten": body += "\n\nKael chose to write: " + choice
 		if str(reflection.id) == "hartlands":
 			body += " The recorded covenant is " + str(state.get_flag("final_covenant", "unresolved")) + ". That outcome stands; no unchosen feeling is recorded for Kael."
 		result.append({"id":"reflection:" + str(reflection.id), "title":str(reflection.title), "body":body})

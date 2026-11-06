@@ -78,6 +78,8 @@ func _handle_interaction(area) -> void:
 		if not report_chosen:
 			preload("res://scripts/story_activity_director.gd").add_friend_invitation(_host, area, dialogue_data)
 			preload("res://scripts/story_activity_director.gd").add_personal_invitation(_host, area, dialogue_data)
+			var everyday: Node = zone_root.get_node_or_null("StoryActivities/EverydayLife")
+			if everyday != null: everyday.append_topics(area, dialogue_data)
 			var regional: Node = zone_root.get_node_or_null("StoryActivities/SixWorldStories")
 			if regional != null:
 				regional.append_cast_topics(area, dialogue_data)
@@ -269,6 +271,9 @@ func _handle_village_place(id: String) -> void:
 		_: hud.toast("Greyfen has made use of everything it could keep.")
 
 func _on_minigame_result(game_id: String, outcome: String) -> void:
+	if str(minigames.competition_id)!="":
+		preload("res://scripts/regional_meet.gd").record_result(_host,str(minigames.competition_id),int(minigames.competition_round),outcome)
+		return
 	if game_id == "tic_tac_toe" and quests.is_active("saga_gre_q04") and str(story_state.get_flag("saga_gre_q04_outcome", "")) == "replayed":
 		story_state.set_flag("saga_gre_q04:round_played", true)
 	var played_id := "%s_played" % game_id

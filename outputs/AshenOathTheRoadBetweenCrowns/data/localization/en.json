@@ -8326,6 +8326,54 @@
       "speaker": "",
       "context": "items.bodkin_arrow"
     },
+    "items.bread_supper.description": {
+      "source": "A resting meal: restores up to 20 stamina. Uses one travel bread and one bitterleaf. Ordinary bread keeps its existing uses.",
+      "text": "A resting meal: restores up to 20 stamina. Uses one travel bread and one bitterleaf. Ordinary bread keeps its existing uses.",
+      "speaker": "",
+      "context": "items.bread_supper"
+    },
+    "items.bread_supper.name": {
+      "source": "Bread and herb supper",
+      "text": "Bread and herb supper",
+      "speaker": "",
+      "context": "items.bread_supper"
+    },
+    "items.copper_perch.description": {
+      "source": "A firm freshwater fish. Either species can supply a fish recipe; carry at most six fish altogether.",
+      "text": "A firm freshwater fish. Either species can supply a fish recipe; carry at most six fish altogether.",
+      "speaker": "",
+      "context": "items.copper_perch"
+    },
+    "items.copper_perch.name": {
+      "source": "Copper perch",
+      "text": "Copper perch",
+      "speaker": "",
+      "context": "items.copper_perch"
+    },
+    "items.fish_broth.description": {
+      "source": "A resting meal: restores up to 10 health and 20 stamina. Uses one fish and one bitterleaf; no combat buff.",
+      "text": "A resting meal: restores up to 10 health and 20 stamina. Uses one fish and one bitterleaf; no combat buff.",
+      "speaker": "",
+      "context": "items.fish_broth"
+    },
+    "items.fish_broth.name": {
+      "source": "Fish and herb broth",
+      "text": "Fish and herb broth",
+      "speaker": "",
+      "context": "items.fish_broth"
+    },
+    "items.grilled_fish.description": {
+      "source": "Cook at a safe kitchen. Eat while seated at an authored rest: restores up to 15 health, without a lasting buff.",
+      "text": "Cook at a safe kitchen. Eat while seated at an authored rest: restores up to 15 health, without a lasting buff.",
+      "speaker": "",
+      "context": "items.grilled_fish"
+    },
+    "items.grilled_fish.name": {
+      "source": "Grilled fish",
+      "text": "Grilled fish",
+      "speaker": "",
+      "context": "items.grilled_fish"
+    },
     "items.iron_trap.description": {
       "source": "A sprung jaw that slows beasts long enough to strike.",
       "text": "A sprung jaw that slows beasts long enough to strike.",
@@ -8337,6 +8385,18 @@
       "text": "Iron Trap",
       "speaker": "",
       "context": "items.iron_trap"
+    },
+    "items.loose_stone.description": {
+      "source": "A harmless field-tool throw. Unengaged listeners may investigate its landing; confirmed sight and boss encounters take precedence. One stone can be carried.",
+      "text": "A harmless field-tool throw. Unengaged listeners may investigate its landing; confirmed sight and boss encounters take precedence. One stone can be carried.",
+      "speaker": "",
+      "context": "items.loose_stone"
+    },
+    "items.loose_stone.name": {
+      "source": "Loose stone",
+      "text": "Loose stone",
+      "speaker": "",
+      "context": "items.loose_stone"
     },
     "items.moon_oil.description": {
       "source": "Silver-blue oil that bites deep into spirits. One bottle coats the blades for five minutes of active play; six with Ash-Tempered Blade Fitting.",
@@ -8373,6 +8433,18 @@
       "text": "Redroot Potion",
       "speaker": "",
       "context": "items.redroot_potion"
+    },
+    "items.river_dace.description": {
+      "source": "A fresh catch for a resting meal. Nessa buys a limited number. No XP or Honor is awarded for catching fish.",
+      "text": "A fresh catch for a resting meal. Nessa buys a limited number. No XP or Honor is awarded for catching fish.",
+      "speaker": "",
+      "context": "items.river_dace"
+    },
+    "items.river_dace.name": {
+      "source": "River dace",
+      "text": "River dace",
+      "speaker": "",
+      "context": "items.river_dace"
     },
     "items.rot_oil.description": {
       "source": "A rancid oil brewed for grave-things and restless dead. One bottle coats the blades for five minutes of active play; six with Ash-Tempered Blade Fitting.",
@@ -11859,6 +11931,18 @@
       "text": "Bitter medicine, clean bandages, and things that burn curses",
       "speaker": "",
       "context": "vendors.mira_apothecary"
+    },
+    "vendors.nessa_kitchen.name": {
+      "source": "Nessa's Kitchen",
+      "text": "Nessa's Kitchen",
+      "speaker": "",
+      "context": "vendors.nessa_kitchen"
+    },
+    "vendors.nessa_kitchen.subtitle": {
+      "source": "Bread for the road; a limited daily need for fresh fish",
+      "text": "Bread for the road; a limited daily need for fresh fish",
+      "speaker": "",
+      "context": "vendors.nessa_kitchen"
     },
     "vendors.tor_forge.name": {
       "source": "Tor's Forge",
