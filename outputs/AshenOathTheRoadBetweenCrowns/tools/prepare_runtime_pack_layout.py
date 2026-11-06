@@ -13,6 +13,7 @@ import re
 from pathlib import Path
 from runtime_pack_validation import require_valid_pack_graph
 from partition_actor_packs import partition_actor_packs
+from prepared_forest_tree_layout import load_prepared_forest_trees
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -86,7 +87,8 @@ def prepared_source_exclusions(catalog):
     return exclusions
 
 
-def compile_layout(defer_environment=False):
+def compile_layout(defer_environment=False, require_prepared_forest=False):
+    forest = load_prepared_forest_trees(PROJECT, required=not defer_environment or require_prepared_forest)
     presets_path = PROJECT / "export_presets.cfg"
     config = configparser.ConfigParser(interpolation=None, strict=True)
     config.read(presets_path, encoding="utf-8-sig")
@@ -129,6 +131,16 @@ def compile_layout(defer_environment=False):
                 for n, s in sections.items()}
     files = {n: set(selected_files(config[s].get("export_files", "PackedStringArray()")))
              for n, s in sections.items()}
+    # The compiler proves identical arrays, bounds and effective flat materials.
+    # Keep raw authoring files locally, but never load their obsolete imported
+    # materials through a later pack after their prepared replacement is owned.
+    for name in sections:
+        for source, record in forest.items():
+            files[name].discard(source)
+            includes[name].discard(source.removeprefix("res://"))
+            files[name].discard(record["path"])
+            includes[name].discard(record["path"].removeprefix("res://"))
+    files["Runtime Pack Opening"].update(record["path"] for record in forest.values())
     for name in ROOT_NAMES:
         includes[name].add("data/native_attack_profiles.json")
         includes[name].update({"scripts/systems/*.gd", "scripts/hud/*.gd", "scripts/systems/method_ownership.json"})
@@ -232,6 +244,7 @@ def compile_layout(defer_environment=False):
     for name in ROOT_NAMES:
         files[name].add("res://scripts/zone_construction_host.gd")
         includes[name].add("data/prepared_actors.json")
+        includes[name].add("data/prepared_forest_trees.json")
         includes[name].add("data/prepared_static_batches.res")
         includes[name].update({"data/prepared_audio.json", "assets/audio/prepared/menu/*.res"})
     includes["Runtime Pack Opening"].add("assets/audio/prepared/opening/*.res")
@@ -349,6 +362,14 @@ def compile_layout(defer_environment=False):
     # dependency expansion as well as from explicit selections.
     for name, section in sections.items():
         exclusions = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        exclusions.update(source.removeprefix("res://") for source in forest)
+        forest_pattern = "assets_external/environment/prepared/forest_tree_*.res"
+        if name == "Runtime Pack Opening":
+            exclusions.discard(forest_pattern)
+            for record in forest.values():
+                exclusions.discard(record["path"].removeprefix("res://"))
+        else:
+            exclusions.add(forest_pattern)
         # Art review derivatives are deliberately unapproved, high-density
         # inspection assets. They never belong to any production pack.
         exclusions.update({"art_review/*", "art_review/**/*"})
@@ -394,6 +415,7 @@ def compile_layout(defer_environment=False):
         if name not in ROOT_NAMES:
             exclusions.update({"scripts/systems/*", "scripts/hud/*"})
             exclusions.add("data/native_attack_profiles.json")
+            exclusions.add("data/prepared_forest_trees.json")
         else:
             exclusions.discard("data/native_attack_profiles.json")
         if name in {"Web Browser", "Web QA Browser"}:
@@ -542,6 +564,17 @@ def compile_layout(defer_environment=False):
     manifest["pack_presets"]["opening_materials"] = materials
     manifest["pack_presets"]["quality_materials"] = "Runtime Pack Quality Materials"
     partition_actor_packs(PROJECT, config, sections, manifest, prepared_catalog, standalone_sources)
+    # Actor partitioning can create presets and replace inherited exclusion
+    # sets. Reapply the forest ownership boundary to the final preset set too.
+    for name, section in sections.items():
+        excluded = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        excluded.update(source.removeprefix("res://") for source in forest)
+        forest_pattern = "assets_external/environment/prepared/forest_tree_*.res"
+        if name == "Runtime Pack Opening":
+            excluded.discard(forest_pattern)
+        else:
+            excluded.add(forest_pattern)
+        config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
     # Validate the complete generated graph before either tracked output changes.
     require_valid_pack_graph(manifest)
     with presets_path.open("w", encoding="utf-8", newline="\n") as output:
@@ -553,4 +586,6 @@ def compile_layout(defer_environment=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--defer-environment", action="store_true")
-    compile_layout(parser.parse_args().defer_environment)
+    parser.add_argument("--require-prepared-forest", action="store_true")
+    args = parser.parse_args()
+    compile_layout(args.defer_environment, args.require_prepared_forest)

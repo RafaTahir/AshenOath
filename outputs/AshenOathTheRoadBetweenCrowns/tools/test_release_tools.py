@@ -19,6 +19,7 @@ import verify_web_preset_parity as parity
 from deployment_policy import POLICY, size_summary
 from runtime_pack_artifacts import artifact_plan, copy_runtime_pack_artifacts, copy_shell_assets
 from runtime_pack_validation import validate_pack_graph
+from prepared_forest_tree_layout import SOURCES as FOREST_SOURCES
 from web_release_contract import effective_headers, hosting_errors, hud_identity_errors
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -164,11 +165,51 @@ class GraphValidation(Fixture):
         runtime["packs"]["base"]["dependencies"] = ["opening"]
         runtime_path.write_text(json.dumps(runtime), encoding="utf-8")
         before = [(path, path.read_bytes()) for path in [runtime_path, project / "export_presets.cfg"]]
-        with patch.object(layout, "PROJECT", project), patch.object(layout, "prepared_source_exclusions", return_value=set()):
+        with patch.object(layout, "PROJECT", project), patch.object(layout, "prepared_source_exclusions", return_value=set()), patch.object(layout, "load_prepared_forest_trees", return_value={}):
             with self.assertRaisesRegex(ValueError, "cyclic"):
                 layout.compile_layout()
         for path, content in before:
             self.assertEqual(content, path.read_bytes())
+
+
+class ForestLayout(Fixture):
+    def test_prepared_tree_owner_and_raw_exclusions_survive_full_layout_compilation(self):
+        project = self.preset_project()
+        actors_path = project / "data/prepared_actors.json"
+        actors = json.loads(actors_path.read_text(encoding="utf-8"))
+        for actor in actors.values():
+            actor.update(resource_dependencies=[], material_bindings=[], animation_resources=[])
+        actors_path.write_text(json.dumps(actors), encoding="utf-8")
+        (project / "data/environment_material_dependencies.json").write_text('{"textures":{}}', encoding="utf-8")
+        runtime_assets = json.loads((project / "runtime_asset_manifest.json").read_text(encoding="utf-8"))
+        for record in runtime_assets["roles"].values():
+            for resource in record.get("runtime_files", []):
+                if resource["path"].endswith((".png", ".jpg", ".jpeg", ".webp")):
+                    target = project / resource["path"].removeprefix("res://")
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.touch()
+        forest = {source: {"path": prepared} for source, prepared in FOREST_SOURCES.items()}
+        with patch.object(layout, "PROJECT", project), patch.object(layout, "prepared_source_exclusions", return_value=set()), patch.object(layout, "load_prepared_forest_trees", return_value=forest):
+            layout.compile_layout()
+        config = configparser.ConfigParser(interpolation=None)
+        config.read(project / "export_presets.cfg", encoding="utf-8")
+        for section in config.sections():
+            if "name" not in config[section]:
+                continue
+            name = json.loads(config[section]["name"])
+            selected = set(layout.selected_files(config[section]["export_files"]))
+            excluded = json.loads(config[section]["exclude_filter"]).split(",")
+            for source, prepared in FOREST_SOURCES.items():
+                self.assertNotIn(source, selected)
+                self.assertTrue(any(fnmatch.fnmatchcase(source.removeprefix("res://"), pattern) for pattern in excluded), (name, source))
+                if name == "Runtime Pack Opening":
+                    self.assertIn(prepared, selected)
+                    self.assertFalse(any(fnmatch.fnmatchcase(prepared.removeprefix("res://"), pattern) for pattern in excluded))
+                else:
+                    self.assertNotIn(prepared, selected)
+                    self.assertTrue(any(fnmatch.fnmatchcase(prepared.removeprefix("res://"), pattern) for pattern in excluded))
+            if name in layout.ROOT_NAMES:
+                self.assertIn("data/prepared_forest_trees.json", json.loads(config[section]["include_filter"]).split(","))
 
 
 class ArtifactCopy(Fixture):

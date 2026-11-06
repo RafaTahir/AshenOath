@@ -152,8 +152,17 @@ if (-not $DesignPackCast) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_bracken_asset.gd")) "bracken-asset"
 }
 }
+if ($CharacterAssetsOnly) {
+    # Tree delivery is now source-aligned too. The focused character build can
+    # prepare these three shared meshes without rebaking unrelated zone geometry.
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd"), "--", "--forest-trees-only") "prepared-forest-geometry"
+}
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
+# Apply the freshly verified tree derivatives before collecting environment
+# dependencies. Otherwise the previous raw OBJ selections resurrect their MTL
+# textures for another build, despite no runtime tree using those materials.
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py"), "--defer-environment", "--require-prepared-forest") "prepared-geometry-pack-layout"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_environment_dependencies.gd")) "environment-material-dependencies"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "prepared-actor-pack-layout"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "runtime_pack_validation.py"), (Join-Path $ProjectRoot "runtime_pack_manifest.json")) "runtime-pack-graph"

@@ -1,5 +1,38 @@
 extends RefCounted
 
+const PreparedForestTrees = preload("res://scripts/prepared_forest_trees.gd")
+
+static func forest_tree(source: ArrayMesh, source_path: String) -> ArrayMesh:
+	if not PreparedForestTrees.is_source(source_path) or source == null or source.get_surface_count() < 2:
+		push_error("Cannot prepare an unknown or invalid forest tree: " + source_path)
+		return null
+	var result := _copy_flat_forest_tree(source, {})
+	if result == null:
+		return null
+	var original_signature := PreparedForestTrees.geometry_signature(source)
+	if original_signature == "" or PreparedForestTrees.geometry_signature(result) != original_signature or PreparedForestTrees.material_error(result) != "":
+		push_error("Prepared forest tree changed geometry or effective materials: " + source_path)
+		return null
+	return result
+
+static func _copy_flat_forest_tree(source: ArrayMesh, visiting: Dictionary) -> ArrayMesh:
+	if visiting.has(source.get_instance_id()):
+		push_error("Cannot prepare a cyclic forest tree shadow mesh")
+		return null
+	visiting[source.get_instance_id()] = true
+	# A shallow resource duplicate retains the exact imported geometry buffers,
+	# LODs, surface names and bounds. Do not rebuild, weld or normalize vertices.
+	var result := source.duplicate(false) as ArrayMesh
+	for index in result.get_surface_count():
+		result.surface_set_material(index, PreparedForestTrees.material(result.surface_get_name(index)))
+	if source.shadow_mesh != null:
+		var shadow := _copy_flat_forest_tree(source.shadow_mesh, visiting)
+		if shadow == null:
+			return null
+		result.shadow_mesh = shadow
+	visiting.erase(source.get_instance_id())
+	return result
+
 static func wychwood_floor_edge(side: float, bank: int) -> ArrayMesh:
 	var start_z := -13.8 if bank == 0 else 3.4
 	var end_z := -3.4 if bank == 0 else 14.2
