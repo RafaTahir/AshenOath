@@ -2,6 +2,7 @@ extends RefCounted
 class_name WorldSectorManifest
 
 const PATH := "res://world_sector_manifest.json"
+const Revision = preload("res://scripts/campaign_revision.gd")
 static var _data: Dictionary = {}
 static var _load_error := ""
 static var _connection_cache: Dictionary = {}
@@ -21,7 +22,9 @@ const WALKABLE_LINKS := [
 	["greyfen","west",-10.0,"deep_wood","east",9.0],
 	["greyfen","east",0.0,"vargan_approach","west",0.0],
 	["greyfen","south",0.0,"hart_glade","north",-7.0],
-	["hart_glade","east",9.0,"ruins","west",5.0]
+	["hart_glade","east",9.0,"ruins","west",5.0],
+	["old_mill","west",9.0,"lantern_reach","east",10.0],
+	["undercroft","north",6.0,"hearthward","south",0.0]
 ]
 static var _aliases := {
 	"deep_woods": "deep_wood",
@@ -61,7 +64,7 @@ static func bounds(zone_id: String) -> Vector2:
 	var raw: Array = sector(zone_id).get("bounds", [20.0, 16.0])
 	return Vector2(float(raw[0]), float(raw[1])) if raw.size() >= 2 else Vector2(20.0, 16.0)
 
-static func neighbors(zone_id: String) -> Array[String]:
+static func neighbors(zone_id: String, story = null) -> Array[String]:
 	var result: Array[String] = []
 	var record := sector(zone_id)
 	for edge in (record.get("edges", {}) as Dictionary).values():
@@ -74,11 +77,13 @@ static func neighbors(zone_id: String) -> Array[String]:
 			result.append(target)
 	for link: Dictionary in connections(zone_id):
 		if str(link.target) not in result: result.append(str(link.target))
+	if story != null:
+		result = result.filter(func(id: String): return Revision.zone_available(id,story))
 	return result
 
 static func available_neighbors(zone_id: String, quests, story = null) -> Array[String]:
 	var result: Array[String] = []
-	for target: String in neighbors(zone_id):
+	for target: String in neighbors(zone_id,story):
 		var edge := connection_between(zone_id, target)
 		if edge.is_empty():
 			edge = edge_between(zone_id, target)
@@ -86,10 +91,10 @@ static func available_neighbors(zone_id: String, quests, story = null) -> Array[
 			result.append(target)
 	return result
 
-static func connections(zone_id: String) -> Array[Dictionary]:
+static func connections(zone_id: String, story = null) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var source := canonical(zone_id)
-	if _connection_cache.has(source): return _connection_cache[source]
+	if _connection_cache.has(source): return _visible_connections(_connection_cache[source],story)
 	for row: Array in WALKABLE_LINKS:
 		var offset := 0 if str(row[0]) == source else (3 if str(row[3]) == source else -1)
 		if offset < 0: continue
@@ -105,6 +110,13 @@ static func connections(zone_id: String) -> Array[Dictionary]:
 			edge["requires_unlocked_quest"] = "main_hart_remembers"
 		result.append(edge)
 	_connection_cache[source] = result
+	return _visible_connections(result,story)
+
+static func _visible_connections(edges: Array[Dictionary], story) -> Array[Dictionary]:
+	if story == null: return edges
+	var result: Array[Dictionary] = []
+	for edge: Dictionary in edges:
+		if Revision.zone_available(str(edge.source),story) and Revision.zone_available(str(edge.target),story): result.append(edge)
 	return result
 
 static func connection_between(source: String, target: String) -> Dictionary:
@@ -150,9 +162,9 @@ static func crossing_transform(edge: Dictionary) -> Transform3D:
 	var reverse := connection_between(str(edge.target),str(edge.source))
 	return crossing_frame(reverse)*Transform3D(Basis(Vector3.UP,PI),Vector3.ZERO)*crossing_frame(edge).affine_inverse()
 
-static func connector_contains(zone_id: String, position: Vector3, margin: float = 0.0) -> bool:
+static func connector_contains(zone_id: String, position: Vector3, margin: float = 0.0, story = null) -> bool:
 	var point := Vector2(position.x,position.z)
-	for edge: Dictionary in connections(zone_id):
+	for edge: Dictionary in connections(zone_id,story):
 		if Geometry2D.is_point_in_polygon(point, connector_polygon(edge, margin)): return true
 	return false
 
@@ -179,10 +191,10 @@ static func connector_polygon(edge: Dictionary, margin: float = 0.0) -> PackedVe
 	_corridor_cache[key] = left
 	return left
 
-static func clear_connector_position(zone_id: String, position: Vector3, clearance: float) -> Vector3:
+static func clear_connector_position(zone_id: String, position: Vector3, clearance: float, story = null) -> Vector3:
 	var point := Vector2(position.x,position.z)
 	for _pass in range(3):
-		for edge: Dictionary in connections(zone_id):
+		for edge: Dictionary in connections(zone_id,story):
 			var points := connector_points(edge)
 			for i in range(points.size()-1):
 				var a := Vector2(points[i].x,points[i].z)
@@ -195,15 +207,22 @@ static func clear_connector_position(zone_id: String, position: Vector3, clearan
 				point = closest+side*(radius+0.05)
 	return Vector3(point.x,position.y,point.y)
 
-static func open_edges(zone_id: String) -> Dictionary:
-	return (sector(zone_id).get("edges", {}) as Dictionary).duplicate(true)
+static func open_edges(zone_id: String, story = null) -> Dictionary:
+	var result := (sector(zone_id).get("edges", {}) as Dictionary).duplicate(true)
+	if story != null:
+		for id: String in result.keys():
+			if not Revision.zone_available(str(result[id].get("target","")),story): result.erase(id)
+	return result
 
-static func atlas() -> Dictionary:
+static func atlas(revision: int = Revision.LEGACY) -> Dictionary:
 	_ensure_loaded()
 	var view: Dictionary = _data.get("atlas", {}).duplicate(true)
+	if revision != Revision.EXPANDED:
+		for id in ["lantern_reach","hearthward"]: view.get("positions",{}).erase(id)
 	var links: Array[Dictionary] = []
 	var seen: Dictionary = {}
 	var add_link := func(source: String, target: String):
+		if not view.get("positions",{}).has(source) or not view.get("positions",{}).has(target): return
 		var pair: Array[String] = [source,target]; pair.sort()
 		var key := ":".join(pair)
 		if seen.has(key):
@@ -223,6 +242,7 @@ static func atlas() -> Dictionary:
 	return view
 
 static func edge_available(edge: Dictionary, quests, story = null) -> bool:
+	if not Revision.zone_available(str(edge.get("source","")),story) or not Revision.zone_available(str(edge.get("target","")),story): return false
 	if edge.has("requires_flag") and (story == null or not bool(story.get_flag(str(edge.requires_flag),false))): return false
 	if edge.has("requires_unlocked_quest"):
 		var id := str(edge.requires_unlocked_quest)

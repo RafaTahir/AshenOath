@@ -158,6 +158,18 @@ static func life_data() -> Dictionary:
 			_life_data = data
 	return _life_data
 
+static func load_region_life(zone: String, path: String) -> bool:
+	# Optional regions provide their routine records only after their own pack
+	# mounts. The opening catalog never asks for late campaign resources.
+	if zone not in ["lantern_reach","hearthward"] or path != "res://data/community_cast_life.json": return false
+	var catalog := life_data()
+	if catalog.get("zones",{}).has(zone): return true
+	if not FileAccess.file_exists(path): return false
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not parsed is Dictionary or not parsed.get("zones",{}).get(zone) is Dictionary: return false
+	catalog.get_or_add("zones",{})[zone] = parsed.zones[zone].duplicate(true)
+	return true
+
 static func routine(id: String, zone: String, state, quests, phase: String, minutes: float = -1.0) -> Dictionary:
 	var definition: Dictionary = life_data().get("zones", {}).get(zone, {}).get(id, {}).duplicate(true)
 	if id == "saga_maren":

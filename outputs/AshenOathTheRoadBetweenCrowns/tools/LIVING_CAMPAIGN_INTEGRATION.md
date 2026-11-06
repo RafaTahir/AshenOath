@@ -1,9 +1,111 @@
-# Living campaign core: Stage 4 integration contract
+# Living campaign: Stage 4 integration contract
 
-This is dormant core work on `codex/living-campaign-expansion`. It is not a
-complete playable release. `CampaignRevision.EXPANSION_ENABLED` remains `false`.
+This is isolated source work on `codex/living-campaign-expansion`. Runtime
+implementation is now present; this is not an accepted playable release.
+`CampaignRevision.EXPANSION_ENABLED` remains `false`.
 Enable it only after the complete four-chapter/two-region chain, both ending
 alternatives, pack closure and gameplay acceptance have passed together.
+
+## Current source checkpoint: playable runtime wiring (2026-11-07)
+
+Based on merge `0304f5c` (stable combined source `02d0341`, core `c0800b1`,
+authored checkpoint `e0c0c51`). Find the exact checkpoint with
+`git log -1 -- tools/LIVING_CAMPAIGN_INTEGRATION.md`. The historical sections
+below describe earlier gates; this section supersedes their implementation TODOs.
+No canonical checkout, export or deployment was changed by this worktree.
+
+Implemented source:
+
+- `community_section.gd` constructs Lantern Reach and Hearthward from retained
+  houses, trees, cart, crate, barrel, torch and reusable timber/linen/iron joinery.
+  There are fifteen physical work assemblies, two landing surveys, a usable
+  crossing or ferry, meal/refuge/record arrangements, a public board, shelter
+  waits, and two-way connection corridors. Roof collision is explicitly excluded
+  from walkable floor support.
+- `community_activity.gd` is a RefCounted adapter owned and ticked by the existing
+  StoryActivityDirector. Current source instance, menu generation, HUD generation,
+  zone owner, proximity, health, threat and eligibility are checked before writes.
+  Progress requires actual uninterrupted duration. Movement, weapon draw,
+  pause/focus loss, damage, travel and saving discard unfinished work. The ferry
+  returns the player to its safe bank before SaveManager captures a snapshot;
+  carried supplies persist but an unfinished passage does not. Crossing credit
+  requires the selected physical passage before far-bank delivery.
+- Participant answers use the actual canonical actor instance; a separate fresh
+  menu presents and records the authored answer. Caller-supplied identity/effects
+  cannot replace the owner's immutable action. Withdrawal remains available before
+  ending lock. Senn's fate, cooperative Edric, Nera's introduction and active
+  escort preserve existing availability. Public accounts never infer private
+  testimony, trust or consent.
+- Hearthward publishes at most eight NPCs per morning/evening shift, leaving room
+  for Kael and Bracken under ten visible skeletons. Both shifts together cover all
+  twelve eligible canonical actors. Hidden people are noninteractive with disabled
+  inherited processing; arrivals enroll in the existing RegionalLifeController.
+  The existing rest owner can wait until 07:00 or 18:00. All twelve actor pack
+  requirements remain necessary even though their visible presence is sequential.
+- `community_cast_life.json` supplies seventeen real workstation bindings plus
+  Senn's contact-free watch. WorkStand/Contact/Left/Right and GripLeft/Right markers
+  are on actual assemblies. Existing routine, motion and hand-contact owners
+  remain authoritative; native contact geometry still needs visual acceptance.
+- State-filtered topology, atlas, seamless preparation, arrival objectives,
+  safe spawns, actor requirements and per-objective navigation cover both regions.
+  Missing/explicit legacy markers cannot enter either new region. Existing regions
+  dynamically resolve their old builder; they do not preload the community module.
+- Main chapter title remains **A Road Kept Open**. The existing Nera sidequest
+  `side_escort_06` is now **The Relief Handover**, avoiding the title collision.
+
+Deferred pack contract (root release owner must integrate):
+
+| Resource owner | Exact resource paths / requirements |
+| --- | --- |
+| Community runtime | `scripts/community_campaign.gd`, `scripts/community_activity.gd`, `scripts/community_presentation.gd`, `scripts/zones/community_section.gd` |
+| Community data | `data/community_campaign.json`, `data/community_cast_life.json` |
+| Lantern Reach actors | Existing P01/M13 shared requirements; C02, C04, C05, C06, C11, C12 |
+| Hearthward actors | Existing P01/M13 shared requirements; C01 through C12 |
+| Retained scenery | Houses, trees, cart, barrel, crate, torch and their existing material closure |
+| New aftermath meshes | `assets_external/environment/forest/HartAftermath_concord_Authored.res`, `HartAftermath_open_road_Authored.res` (two surfaces and existing obstacle metadata contract) |
+
+The new destinations must request these dependencies before construction. Saved
+expanded Hart Glade outcomes also need the new aftermath resources. Base quest
+and revision helpers remain available to unlock destinations before downloading
+their content; new region/audio resources must stay outside opening preparation.
+
+Exact text / voice inventory:
+
+- `community_campaign.json`: `participant_lines.*.{lantern_reach,hearthward}` uses
+  the row's explicit `speaker_id`; `consent_offers.*.{yes,no,withdraw}` uses the
+  offer's explicit `speaker_id`; `.question` uses `question_speaker_id: player`.
+- `chapters.*.{summary,stakes}` and `public_accounts.*` are consumed directly as
+  separate exact `speaker_id: narrator` pages. They are caption-only. Live work,
+  shift and consent rosters are `speaker_id: system`, also caption-only.
+- `covenant_resolution.gd` JSON-shaped `STEPS.share[*][1]` and
+  `STEPS.depart[*][1]` are the six exact new narrator ritual pages (caption-only).
+  `STEPS.*[*][0]` is the runtime prompt; do not invent spoken performance for it.
+- `campaign_dialogue.json` White Hart's revision-2 variant and its two new ending
+  actions carry `source_tag: campaign_revision_2`. The six
+  `interaction_scenes.json` roots `aftermath_{names,work,road}_{concord,open_road}`
+  carry the same source tag. Use canonical actor + exact runtime text for audio.
+- Work results, survey/delivery guidance and public roster status are HUD captions,
+  not additional NPC speech. No duplicate list of drifting subtitle text exists.
+
+Verification recorded before the latest source refinements:
+
+- In-memory `verify_community_activity.gd`: **PASS 12**; pure graph/routes:
+  **PASS 75**; actual quest/rules/save value fixture: **PASS 214**;
+  objective ownership: **PASS 132**; campaign/replay revision fixture: **PASS 435**.
+- Each ran parser-first on pinned Godot 4.6.3, with APPDATA/LOCALAPPDATA redirected
+  before engine startup. `community_section.gd --check-only` also passed. Exact
+  logs are under worktree `.release-gate/community-runtime/tests/`.
+- **Rerun required for this checkpoint:** subsequent ferry-save, actual participant
+  answer/withdrawal, strict speaker, shift-budget and roof refinements extended
+  the fixtures after those runs. They are explicitly unverified at this checkpoint;
+  the shared host is reserved for combined-release browser acceptance. No new
+  engine was started during that quiet window.
+- No full world, native model/contact, real input, browser, Web export, physical
+  phone, performance or deployment acceptance is claimed. Required follow-up is
+  parser/pure tests, resource closure and old-save/replay matrix, then both route
+  branches and all six endings at desktop/touch viewports using isolated profiles.
+  Check shift changes, waiting, return travel, save during ferry, interruption,
+  actual held-work geometry and all declared availability cases in that session.
 
 ## Journey identity and graph
 
@@ -139,7 +241,7 @@ save/reload/replay, exact committed export identity and publication gates before
 turning on the expansion switch.
 
 
-## Source checkpoint after authored community data (2026-11-07)
+## Historical checkpoint after authored community data (2026-11-07)
 
 This checkpoint follows core commit `c0800b1dbf191512797b893bd75f7ee6332a1373`.
 Find its own exact commit with `git log -1 -- tools/LIVING_CAMPAIGN_INTEGRATION.md`;
@@ -211,10 +313,8 @@ Remaining implementation before a playable claim:
 6. Add objective route hints/journal work entries and test direct raw catalog
    consumers. `StoryJournal.active_chapter` already asks only projected active
    quests; public raw `campaign()` remains an authoring catalog, not a journey UI.
-7. Review the title collision: `main_road_kept_open` and existing `side_escort_06`
-   both currently display **A Road Kept Open**. Their work differs (public route
-   construction vs Nera's existing relief handover); give the new chapter a distinct
-   displayed title while retaining its ID, before voice/text collection.
+7. The title collision noted at that checkpoint is resolved above: the main title
+   remains **A Road Kept Open**; the older sidequest is **The Relief Handover**.
 8. Collect/render exact new spoken lines and ritual/aftermath lines; add both
    authored Hart memorial resources at the paths specified above. Run the new
    fixture, original core/ownership fixtures, parser/resource checks, complete

@@ -208,7 +208,15 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 func backup_path(path: String) -> String:
 	return path + ".bak"
 
+static func stop_transient_activity_for_save(game) -> void:
+	# An in-flight ferry is transient motion. Its existing activity owner returns
+	# the player to the safe bank before snapshotting; carried work stays durable.
+	var root = game.get("zone_root")
+	var activities = root.get_node_or_null("StoryActivities") if is_instance_valid(root) else null
+	if activities != null and activities.get("community") != null: activities.community.cancel()
+
 func _build_save_data(game, for_checkpoint: bool = false) -> Dictionary:
+	stop_transient_activity_for_save(game)
 	preload("res://scripts/bracken_field_trial.gd").stop_activity(game)
 	preload("res://scripts/greyfen_archery_range.gd").stop_activity(game)
 	preload("res://scripts/companion_controller.gd").capture(game)

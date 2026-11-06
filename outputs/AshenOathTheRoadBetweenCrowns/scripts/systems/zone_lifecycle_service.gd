@@ -219,10 +219,7 @@ func _recover_failed_pack_load(reason: String = "The destination could not load.
 	_finish_gameplay_handoff()
 
 func _zone_requires_campaign_pack(zone_id: String) -> bool:
-	return zone_id in [
-		"deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road",
-		"vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade",
-	]
+	return zone_id in preload("res://scripts/zone_composition_router.gd").CAMPAIGN_ZONES
 
 func _zone_requires_opening_pack(zone_id: String) -> bool:
 	return zone_id in ["greyfen", "wychwood", "cemetery", "ruins"]
@@ -964,7 +961,7 @@ func release_session() -> void:
 func _keep_player_in_world() -> void:
 	if player == null:
 		return
-	var in_passage := WorldSectorManifest.connector_contains(current_zone_id,player.global_position) or (seamless_world != null and seamless_world.contains_resident_passage(player.global_position))
+	var in_passage := WorldSectorManifest.connector_contains(current_zone_id,player.global_position,0.0,story_state) or (seamless_world != null and seamless_world.contains_resident_passage(player.global_position))
 	if in_passage and player.global_position.y > -2.0: return
 	if _is_river_recovery_position(current_zone_id, player.global_position):
 		_recover_from_river(player, _river_center(current_zone_id), 3.4)
@@ -996,7 +993,7 @@ func _keep_player_in_world() -> void:
 		hud.toast("Kael catches himself before the dark takes him.")
 
 func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
-	if WorldSectorManifest.connector_contains(zone,pos) and pos.y > -2.0 and pos.y < 4.0:
+	if WorldSectorManifest.connector_contains(zone,pos,0.0,story_state) and pos.y > -2.0 and pos.y < 4.0:
 		return Vector3(pos.x,maxf(0.95,pos.y),pos.z)
 	var river_z := _river_center(zone)
 	if spatial_service != null and spatial_service.zone_id == zone:

@@ -67,7 +67,7 @@ func present_page(entry: Dictionary) -> void:
 	page_speaker = speaker
 	delivery_active = false
 	var id := str(profile.get("id", ""))
-	speaking = speaker != "narrator" and (speaker == "player" if id == "kael" else (id != "" and speaker.contains(id)))
+	speaking = speaker_matches(id,speaker)
 	if not speaking and id != "kael" and actor.has_method("is_interaction_enabled"):
 		var actor_id := str(actor.get("interaction_id"))
 		var supporting_speakers: Dictionary = {
@@ -89,6 +89,12 @@ func present_page(entry: Dictionary) -> void:
 			face.set_expression(emotion)
 	pending_gesture = str(direction.get("gesture", "")) if speaking else str(direction.get("listener_gesture", "remember" if str(direction.get("emotion", "")) == "grieving" else ""))
 	next_beat = elapsed + float(direction.get("reaction_delay", 0.18))
+
+static func speaker_matches(identity: String, speaker_id: String) -> bool:
+	if speaker_id == "narrator" or identity == "": return false
+	var canonical := CastProfile.canonical_identity(identity)
+	if canonical != "": return CastProfile.canonical_identity(speaker_id) == canonical
+	return identity == speaker_id
 
 func start(target: Node3D, player: Node3D, state) -> void:
 	if active:

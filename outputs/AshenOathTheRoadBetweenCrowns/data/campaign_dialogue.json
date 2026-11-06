@@ -672,7 +672,8 @@
           "ending_available": "share"
         },
         "preview": "Care, logistics and the records each have a willing keeper. Each person confirms their own terms; Kael cannot pledge another person.",
-        "cost": "The work continues. Keepers may withdraw, leaving vacancies and real vulnerability."
+        "cost": "The work continues. Keepers may withdraw, leaving vacancies and real vulnerability.",
+        "source_tag": "campaign_revision_2"
       },
       {
         "label": "Open Road — relinquish the old shelter and lead the community to the refuge.",
@@ -682,7 +683,8 @@
           "ending_available": "depart"
         },
         "preview": "Use the prepared route and refuge. Carry the human evidence and supplies out before dismantling the boundary.",
-        "cost": "Lose the old supernatural shelter and access to the Hart's complete account. The new home still needs protection and work."
+        "cost": "Lose the old supernatural shelter and access to the Hart's complete account. The new home still needs protection and work.",
+        "source_tag": "campaign_revision_2"
       }
     ],
     "voice": [],
@@ -708,7 +710,8 @@
           "The White Hart: Carry the people and their human records through the prepared passage. Undo this boundary, and its shelter will not follow. Neither will the complete account I hold.",
           "Kael: A rota can fail. A refuge can fail. Neither makes the old choices disappear.",
           "The White Hart: Then choose whose work begins when mine ends."
-        ]
+        ],
+        "source_tag": "campaign_revision_2"
       }
     ]
   },

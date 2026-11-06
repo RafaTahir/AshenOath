@@ -1671,7 +1671,8 @@
       }
     ],
     "actions": [],
-    "campaign_revision": 2
+    "campaign_revision": 2,
+    "source_tag": "campaign_revision_2"
   },
   "aftermath_work_concord": {
     "name": "Tor and Rook",
@@ -1709,7 +1710,8 @@
       }
     ],
     "actions": [],
-    "campaign_revision": 2
+    "campaign_revision": 2,
+    "source_tag": "campaign_revision_2"
   },
   "aftermath_road_concord": {
     "name": "Nera",
@@ -1747,7 +1749,8 @@
       }
     ],
     "actions": [],
-    "campaign_revision": 2
+    "campaign_revision": 2,
+    "source_tag": "campaign_revision_2"
   },
   "aftermath_names_open_road": {
     "name": "The departing record",
@@ -1785,7 +1788,8 @@
       }
     ],
     "actions": [],
-    "campaign_revision": 2
+    "campaign_revision": 2,
+    "source_tag": "campaign_revision_2"
   },
   "aftermath_work_open_road": {
     "name": "The last load",
@@ -1823,7 +1827,8 @@
       }
     ],
     "actions": [],
-    "campaign_revision": 2
+    "campaign_revision": 2,
+    "source_tag": "campaign_revision_2"
   },
   "aftermath_road_open_road": {
     "name": "The open road",
@@ -1861,6 +1866,7 @@
       }
     ],
     "actions": [],
-    "campaign_revision": 2
+    "campaign_revision": 2,
+    "source_tag": "campaign_revision_2"
   }
 }

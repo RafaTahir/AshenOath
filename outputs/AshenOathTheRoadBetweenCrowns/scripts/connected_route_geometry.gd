@@ -57,7 +57,7 @@ static func install(context: ZoneBuildContext) -> void:
 	var timber := context.make_world_material("timber",Color(0.52,0.45,0.32))
 	var masonry := context.make_world_material("medieval_brick",Color(0.60,0.61,0.55)).duplicate() as BaseMaterial3D
 	masonry.cull_mode = BaseMaterial3D.CULL_DISABLED
-	for edge: Dictionary in Sectors.connections(context.zone_id):
+	for edge: Dictionary in Sectors.connections(context.zone_id,context.story_state):
 		var path := Node3D.new()
 		path.name = "RoadTo_"+str(edge.target)
 		path.set_meta("connected_target",str(edge.target))

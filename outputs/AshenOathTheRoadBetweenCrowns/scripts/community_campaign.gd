@@ -52,6 +52,15 @@ static func actor_available(id: String, state, quests) -> bool:
 		return _true(state,"escort_abandonment_acknowledged") and (quests == null or not quests.is_active("side_escort_04"))
 	return true
 
+static func presence_shift(minutes: float) -> String:
+	var time := fposmod(minutes,1440.0)
+	return "morning" if time >= 420.0 and time < 1080.0 else "evening"
+
+static func actor_present(id: String, zone: String, minutes: float, state, quests) -> bool:
+	if not actor_available(id,state,quests) or id not in REGIONAL_ACTORS.get(zone,[]): return false
+	var shifts: Dictionary = data().get("presence_shifts",{}).get(zone,{})
+	return shifts.is_empty() or id in shifts.get(presence_shift(minutes),[])
+
 static func work_ids(quest: String, state) -> Array:
 	var row := chapter(quest)
 	if row.has("work"): return row.work.duplicate()
@@ -148,11 +157,18 @@ static func finish_aftermath(quest: String, zone: String, state, quests, deliver
 		if not delivered:
 			if _true(state,"community_route_load_carried"): return false
 			state.set_flag("community_route_load_carried",true)
+			state.set_flag("community_route_load_crossed",false)
 			return true
 		if not _true(state,"community_route_load_carried"): return false
+		if not _true(state,"community_route_load_crossed"): return false
 		state.set_flag("community_route_load_carried",false)
 	state.set_flag("community_aftermath:"+quest,true)
 	_complete(quest,str((Revision.OBJECTIVES[quest] as Array).back()),quests)
+	return true
+
+static func record_route_crossing(route: String, state, quests) -> bool:
+	if not aftermath_available("main_road_kept_open","lantern_reach",state,quests) or not _true(state,"community_route_load_carried") or _true(state,"community_route_load_crossed") or route not in ["crossing","ferry"] or str(state.get_flag("community_route","")) != route: return false
+	state.set_flag("community_route_load_crossed",true)
 	return true
 
 static func consent_available(id: String, state, quests) -> bool:

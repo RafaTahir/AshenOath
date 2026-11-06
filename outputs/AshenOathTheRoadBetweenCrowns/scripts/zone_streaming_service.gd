@@ -41,7 +41,7 @@ func setup(owner: Node) -> void:
 		_load_topology()
 
 func neighbors(zone_id: String) -> Array[String]:
-	return WorldSectorManifest.neighbors(zone_id)
+	return WorldSectorManifest.neighbors(zone_id,owner_node.get("story_state") if is_instance_valid(owner_node) else null)
 
 func prewarm_neighbors(zone_id: String) -> void:
 	var packs = owner_node.get("runtime_packs") if is_instance_valid(owner_node) else null
@@ -63,6 +63,7 @@ func request_zone(zone_id: String, resource_path: String = "") -> void:
 	var id := zone_id.strip_edges().to_lower()
 	if id == "":
 		return
+	if is_instance_valid(owner_node) and not preload("res://scripts/campaign_revision.gd").zone_available(id,owner_node.get("story_state")): return
 	if requests.has(id) and str(requests[id].get("state", "")) in ["waiting_pack", "loading", "ready"]:
 		return
 	var canonical := "bandit_road" if id == "long_road" else id

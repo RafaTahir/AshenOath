@@ -3,6 +3,9 @@ extends "res://scripts/systems/game_bindings.gd"
 signal dialogue_action_completed(action: Dictionary)
 
 func _handle_dialogue_action(action: Dictionary) -> void:
+	if str(action.get("type", "")) == "community_action":
+		preload("res://scripts/story_activity_director.gd").choose_community(_host, action)
+		return
 	if str(action.get("type", "")) == "everyday_action":
 		var everyday: Node = zone_root.get_node_or_null("StoryActivities/EverydayLife") if is_instance_valid(zone_root) else null
 		if everyday != null: everyday.choose(action)

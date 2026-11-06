@@ -57,6 +57,8 @@ func _apply_campaign_arrival(zone_id: String) -> void:
 		if allow_recovery and not quests.is_active("main_blood_under_stone") and not quests.is_completed("main_blood_under_stone"):
 			quests.start_quest("main_blood_under_stone")
 	var arrivals := {
+		"lantern_reach":["main_empty_tables","reach_lantern_reach"],
+		"hearthward":["main_house_many_names","reach_hearthward"],
 		"old_mill":["main_ash_at_the_mill","reach_mill"],
 		"bandit_road":["main_soldier_without_banner","reach_bandit_road"],
 		"vargan_approach":["main_blood_under_stone","reach_castle"],
