@@ -99,13 +99,16 @@ function harness(options = {}) {
     __ashenOathPreloadedPacks: {}, setTimeout: clock.setTimeout, clearTimeout: clock.clearTimeout,
     dispatchEvent() {},
   };
+  if (options.cache) window.caches = options.cache;
   const context = vm.createContext({
     AbortController, URL, TextDecoder, Uint8Array, crypto, window, location: window.location,
+    caches: options.cache,
     SHELL_BUILD_ID: 'metadata-fixture', failed: false, bootMetrics: {}, startupDeadline: 0,
     document: { hidden: true, getElementById: () => ({}) }, errorPanel: {}, loading: {},
     updateAudioNotice() {}, setBootState() {}, reload: { focus() {} },
     CustomEvent: class { constructor(type, init) { this.type = type; this.detail = init.detail; } },
-    engine: { copyToFS: (path, bytes) => copied.push({ path, bytes: new Uint8Array(bytes) }), requestQuit() {} },
+    engine: { supportsOwnedPackBuffers: options.ownedBuffers === true,
+      copyToFS: (path, bytes, owned) => copied.push({ path, bytes: new Uint8Array(bytes), owned }), requestQuit() {} },
     console: { error: (...values) => errors.push(values) },
     fetch: (url, init) => {
       const request = { url: String(url), path: new URL(url, window.location.href).pathname, ...init };
@@ -139,6 +142,60 @@ function harness(options = {}) {
     },
   };
 }
+
+test('new packs use HTTP caching without a duplicate decoded Cache Storage write', async () => {
+  let writes = 0;
+  const h = harness({ cache: { open: async () => ({
+    match: async () => undefined, put: async () => { writes++; }, delete: async () => true,
+  }) } });
+  h.request('campaign');
+  await h.api.operation('campaign').promise;
+  assert.equal(h.state('campaign').state, 'preloaded');
+  assert.equal(h.requests.find(request => request.path === '/packs/campaign.pck').cache, 'force-cache');
+  assert.equal(writes, 0);
+});
+
+test('valid legacy decoded caches remain readable and hash verified', async () => {
+  const data = fixture();
+  const h = harness({ data, cache: { open: async () => ({
+    match: async () => ({ ok: true, arrayBuffer: async () => data.bodies.get('campaign').buffer }),
+    put: async () => { throw new Error('Legacy cache must be read-only'); },
+    delete: async () => true,
+  }) } });
+  h.request('campaign');
+  await h.api.operation('campaign').promise;
+  assert.equal(h.state('campaign').state, 'preloaded');
+  assert.equal(h.count('/packs/campaign.pck'), 0);
+  assert.deepEqual(h.copied[0].bytes, data.bodies.get('campaign'));
+});
+
+test('corrupt legacy cache is removed and Retry reloads verified network bytes', async () => {
+  const data = fixture();
+  let stale = true, deletions = 0;
+  const bad = new Uint8Array(data.bodies.get('campaign'));
+  bad[0] ^= 1;
+  const h = harness({ data, cache: { open: async () => ({
+    match: async () => stale ? { ok: true, arrayBuffer: async () => bad.buffer } : undefined,
+    delete: async () => { stale = false; deletions++; return true; },
+  }) } });
+  h.request('campaign');
+  await h.api.operation('campaign').promise;
+  assert.equal(h.state('campaign').state, 'failed');
+  assert.equal(h.copied.length, 0);
+  assert.equal(deletions, 1);
+  h.request('campaign');
+  await h.api.operation('campaign').promise;
+  assert.equal(h.state('campaign').state, 'preloaded');
+  assert.equal(h.requests.find(request => request.path === '/packs/campaign.pck').cache, 'reload');
+});
+
+test('unavailable legacy cache does not prevent HTTP-cached pack loading', async () => {
+  const h = harness({ cache: { open: async () => { throw new Error('Storage unavailable'); } } });
+  h.request('campaign');
+  await h.api.operation('campaign').promise;
+  assert.equal(h.state('campaign').state, 'preloaded');
+  assert.equal(h.count('/packs/campaign.pck'), 1);
+});
 
 test('verified packs enter the initialized filesystem before project startup finishes', async () => {
   const h = harness({ filesystemReady: false });
@@ -191,6 +248,17 @@ test('the complete source shell scripts parse', () => {
   assert.ok(scripts.length > 0);
   for (const [, source] of scripts) new vm.Script(source, { filename: 'web_boot_shell.html' });
 });
+
+for (const ownedBuffers of [false, true]) {
+  test(`verified pack ownership requires explicit engine capability: ${ownedBuffers}`, async () => {
+    const h = harness({ ownedBuffers });
+    h.request('campaign');
+    await flush();
+    assert.equal(h.state('campaign').state, 'preloaded');
+    assert.equal(h.copied[0].owned, ownedBuffers);
+    assert.equal(digest(h.copied[0].bytes), h.data.manifest.packs.campaign.sha256);
+  });
+}
 
 test('concurrent packs share one validated manifest and retain successful metadata', async () => {
   const h = harness();

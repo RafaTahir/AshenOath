@@ -568,7 +568,6 @@
               response = await packCache.match(packUrl);
             } catch (_) { packCache = null; }
           }
-          const fromCache = Boolean(response);
           if (!response) response = await fetch(packUrl, { cache: operation.reload ? 'reload' : 'force-cache', signal: controller.signal });
           if (!response.ok) throw new Error(`${id} pack HTTP ${response.status}`);
           const payload = await readPackBody(response, id, operation, pack.bytes);
@@ -591,25 +590,19 @@
             controller.signal.removeEventListener('abort', abortWait);
           }
           if (controller.signal.aborted || failed || packOperations.get(id) !== operation) return null;
-          engine.copyToFS(metadata.path, payload);
+          // Only verified, private pack buffers may transfer their ownership.
+          // Other engine callers retain copy semantics, including file imports.
+          engine.copyToFS(metadata.path, payload, engine.supportsOwnedPackBuffers === true);
           const detail = { ...metadata, state: 'preloaded', progress: 1 };
           window.__ashenOathPreloadedPacks[id] = detail;
           if (id === 'opening') {
             bootMetrics.opening_prefetch_state = 'preloaded';
             window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
           }
-          // Persist only verified bytes. Optional cache I/O is not a readiness gate.
-          if (packCache && !fromCache) {
-            void packCache.put(packUrl, new Response(payload)).then(async () => {
-              const live = new Set(Object.values(manifest.packs).filter(p => p.url).map(p => new URL(p.url, location.href).href));
-              const keys = await packCache.keys();
-              let surplus = keys.length - Math.max(16, live.size);
-              for (const key of keys) {
-                if (surplus <= 0) break;
-                if (!live.has(key.url)) { await packCache.delete(key); surplus -= 1; }
-              }
-            }).catch(() => {});
-          }
+          // Content-addressed pack URLs already use the browser's HTTP cache.
+          // Read legacy Cache Storage entries, but do not allocate and persist a
+          // second decoded copy while the engine is preparing the same resources.
+          // Hash validation above applies to both cache paths; Retry uses reload.
           return detail;
         } catch (error) {
           if (packCache && packUrl && !controller.signal.aborted && packOperations.get(id) === operation) await packCache.delete(packUrl).catch(() => {});

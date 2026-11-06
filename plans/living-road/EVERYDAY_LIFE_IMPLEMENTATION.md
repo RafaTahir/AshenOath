@@ -418,6 +418,80 @@ small HTML/metadata changes do not materially change that floor. The retained
 15-second cold-control target is not passed by this repair. Actual-phone/WebKit,
 sustained FPS, owned-process memory and user visual acceptance remain separate.
 
+## Isolated Loading Follow-up: Verified Pack Ownership (2026-11-07)
+
+Continuation is isolated at `D:/Temp/AshenOath/loading-resume-r4`, branch
+`codex/loading-overlap-r5`, based on published `6aa8fdf`. The active
+`D:/Projects/AshenOath` asset worktree has not been modified. Publication belongs
+to the coordinated asset/package/loading integration, not this isolated branch.
+
+### Retained Implementation
+
+- The existing pack fetch path already owns a private, hash-verified ArrayBuffer.
+  Stock Godot's exported JavaScript copied it again into MEMFS. The packaging
+  adapter adds explicit, opt-in `takeOwnership` to `copyToFS`; verified pack
+  callers use it only when the engine advertises the capability. Other callers
+  still copy. The WASM engine, PCK bytes, scenes, materials and quality are unchanged.
+- The adapter recognizes the actual exported glue boundaries, is idempotent,
+  and rejects unknown or partially patched glue rather than advertising an
+  ineffective capability. Existing engine content addressing gives the changed
+  JavaScript a new immutable URL on the combined build.
+- The opening pack is 73,978,140 decoded bytes. The actual-engine check proves
+  its MEMFS view shares that verified buffer instead of allocating another full
+  copy. This is an allocation result, not a measured reduction in peak process
+  memory or a claim that the complete loading target passes.
+- Candidate engine script transport is 78,425 bytes versus 78,364 previously
+  (+61 bytes); decoded SHA-256 is
+  `ec0a6458c912d4fc5f144b2d337b38e47161cf79a7bdd56cd9277837a7db4b94`.
+  No final combined package or replacement Web manifest is produced here.
+
+### Checks and Rejected Work
+
+- `node --test tools/test_web_metadata.mjs tools/test_web_light_loops.mjs`:
+  **26 passed**, including capability fallback, Retry, cancellation, metadata
+  identity, unchanged shader-adapter behavior and late-callback isolation.
+- `python -m unittest test_web_engine_owned_buffers -v`: **5 passed**. Actual
+  engine syntax, explicit versus default copy semantics, unknown/partial glue
+  rejection, lossless packaging and repeated-build identity are covered.
+- `tools/test_web_pack_buffers.mjs` initializes the actual exported engine in an
+  isolated headless Chrome profile with graphics disabled. It does not start the
+  game. Test-only filesystem readback is injected in memory, never into packaged
+  glue. It checks the complete opening pack, ordinary-copy isolation, owned-buffer
+  identity and real Cache Storage round trips. Reports remain under
+  `D:/Temp/AshenOath/loading-resume-evidence/`.
+- Final retained-path report `owned-pack-buffers-final.json`: **PASS**, Chrome
+  156.0.8078.80, no runtime/console errors. The complete 73,978,140-byte pack
+  retained decoded SHA-256
+  `80c1e03a6545cfaf0861b77af461be6639d0f17e157dd66532c83256270e291f`
+  through both MEMFS and Cache Storage. Isolated copy/ownership operations took
+  96.4/0.8 ms; the unchanged cache write took 7.39 seconds. These are component
+  checks on a busy shared machine, not startup or performance acceptance.
+- An initial browser check timed out (`owned-pack-buffers.json`); it is retained,
+  not called a pass. Phase-level recheck passed the full byte-integrity boundary.
+- A proposed bounded-stream cache write preserved bytes but was rejected:
+  `owned-pack-buffers-cache-comparison.json` measured the existing Response write
+  at 5.46 seconds versus 19.60 seconds for the stream on the same run. The original
+  `new Response(payload)` cache path is retained. No stream optimization ships.
+  The isolated filesystem operation in that run was 70.9 ms copying versus
+  0.3 ms owned; these are not navigation-to-menu/control measurements.
+
+### Integration and Remaining Requirement
+
+1. Reconcile this commit with Game Assets and Package it better. The expected
+   overlap is `tools/build_web_runtime_manifest.py`: retain both packaging work
+   and its call to `enable_owned_pack_buffers` before engine hashing/compression.
+2. Produce one source-aligned combined package through the existing build path.
+   No asset or WASM replacement is needed specifically for this JavaScript change.
+3. Verify cold/warm startup and normal New Game/Save/reload/Continue on those exact
+   integrated bytes, with no competing build or graphical workload. No user save
+   has been touched by this follow-up. Preserve the prior shutdown evidence at its
+   unchanged dependency scope.
+4. The last full-game median remains **68.6 seconds cold**, not the approximately
+   57-second goal. First-view preparation was still 33.0-35.6 seconds. This small
+   allocation repair does not resolve that renderer wait or establish the loading,
+   FPS or memory targets. Do not publish a claim that loading is finished from
+   the focused checks above. No independent push or deployment is performed.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

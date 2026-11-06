@@ -181,6 +181,15 @@ foreach ($pack in $packs) {
         log = "logs/pack-$($pack.id).stdout.log"
     }
 }
+$MetadataReceipt = Join-Path $OutputDirectory "pack-metadata-compaction.json"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "compact_runtime_packs.py"), "--root-pack", (Join-Path $PackRoot "base.pck"), "--pack-dir", $PackRoot, "--report", $MetadataReceipt) "pack-metadata-compaction"
+# Compaction preserves resource payloads but changes container identities.
+# Bind the exact final bytes before the manifest is embedded in the Web root.
+foreach ($record in $records) {
+    $target = Join-Path $PackRoot $record["artifact"]
+    $record["bytes"] = [int64](Get-Item -LiteralPath $target).Length
+    $record["sha256"] = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLowerInvariant()
+}
 $candidatePath = Join-Path $PackRoot "runtime_pack_candidates.json"
 $candidate = [ordered]@{
     schema_version = 2
@@ -205,6 +214,7 @@ $candidateJson = ($candidate | ConvertTo-Json -Depth 8) + [System.Environment]::
 $runtimeManifest = Join-Path $ProjectRoot "runtime_pack_manifest.json"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "sync_runtime_pack_manifest.py"), $runtimeManifest, $candidatePath, "--build-id", $BuildId, "--source-commit", $SourceCommit) "pack-manifest"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--export-release", "Web Browser", (Join-Path $ExportRoot "index.html")) "web-production"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "compact_runtime_packs.py"), "--root-pack", (Join-Path $ExportRoot "index.pck"), "--verify-authority", $MetadataReceipt) "pack-metadata-authority"
 $ResourceCheckRoot = Assert-Within (Join-Path $OutputDirectory "isolated-resource-check") $OutputDirectory
 New-Item -ItemType Directory -Force -Path $ResourceCheckRoot | Out-Null
 if (@(Get-ChildItem -LiteralPath $ResourceCheckRoot -Force).Count -gt 0) {
