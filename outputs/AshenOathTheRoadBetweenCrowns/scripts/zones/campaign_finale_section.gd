@@ -202,6 +202,8 @@ func _make_hart_aftermath(context: ZoneBuildContext, covenant: String) -> void:
 		"mercy": Color(0.44, 0.72, 0.86),
 		"duty": Color(0.58, 0.66, 0.48),
 		"ash": Color(0.42, 0.28, 0.24),
+		"concord": Color(0.60, 0.76, 0.56),
+		"open_road": Color(0.72, 0.65, 0.43),
 	}
 	var tone: Color = colors.get(covenant, Color(0.35, 0.42, 0.38))
 	var mesh := load("res://assets_external/environment/forest/HartAftermath_%s_Authored.res" % covenant) as ArrayMesh
@@ -222,7 +224,7 @@ func _make_hart_aftermath(context: ZoneBuildContext, covenant: String) -> void:
 		context.make_collision_box("HartMemorialStone_%d" % index, obstacles[index].centre, obstacles[index].size)
 	var inscription := Label3D.new()
 	inscription.name = "HartCovenantInscription"
-	inscription.text = {"witness": "THE NAMES ARE KEPT", "mercy": "THE OATH IS RELEASED", "duty": "THE OATH HOLDS", "ash": "NO OATH REMAINS"}.get(covenant, "")
+	inscription.text = {"witness": "THE NAMES ARE KEPT", "mercy": "THE OATH IS RELEASED", "duty": "THE OATH HOLDS", "ash": "NO OATH REMAINS", "concord":"THE KEEPING IS SHARED", "open_road":"THE ROAD REMAINS OPEN"}.get(covenant, "")
 	inscription.position = Vector3(0, 2.65, -12.8)
 	inscription.font_size = 32
 	inscription.pixel_size = 0.0034

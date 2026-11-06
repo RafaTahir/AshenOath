@@ -21,7 +21,7 @@ static func eligible(scene: Dictionary, host) -> bool:
 		var wanted: Variant = scene.when[key]
 		var actual: Variant = host.story_state.get_flag(key, false if wanted is bool else null)
 		if key == "final_covenant":
-			actual = {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(str(actual), actual)
+			actual = preload("res://scripts/ending_catalog.gd").covenant(str(actual))
 		if wanted is Array:
 			if actual not in wanted: return false
 		elif actual != wanted:

@@ -1,5 +1,7 @@
 extends Node
 
+const CampaignRevision = preload("res://scripts/campaign_revision.gd")
+
 signal changed
 signal message(text: String)
 signal quest_completed(id: String)
@@ -23,6 +25,8 @@ var completed_objectives: Dictionary:
 	set(value):
 		_completed_objectives = value
 var quest_defs = {}
+var source_quest_defs: Dictionary = {}
+var campaign_revision := CampaignRevision.LEGACY
 var world_reads = preload("res://scripts/world_read_scope.gd").new()
 var _active: Dictionary = {}
 var active: Dictionary:
@@ -81,8 +85,22 @@ const IMPLEMENTED_SIDE_QUESTS := {
 func load_quests(path: String) -> void:
 	var parsed = _read_json(path)
 	if typeof(parsed) == TYPE_DICTIONARY:
-		quest_defs = parsed
-		quest_defs.merge(preload("res://scripts/saga_catalog.gd").quest_definitions(), true)
+		source_quest_defs = parsed
+		source_quest_defs.merge(preload("res://scripts/saga_catalog.gd").quest_definitions(), true)
+		configure_campaign_revision(campaign_revision)
+
+func can_load_campaign_revision(revision: int) -> bool:
+	var source: Dictionary = source_quest_defs if not source_quest_defs.is_empty() else quest_defs
+	return revision == CampaignRevision.LEGACY or (revision == CampaignRevision.EXPANDED and CampaignRevision.has_complete_expansion(source))
+
+func configure_campaign_revision(revision: int) -> bool:
+	if not can_load_campaign_revision(revision):
+		return false
+	if source_quest_defs.is_empty():
+		source_quest_defs = quest_defs.duplicate(true)
+	campaign_revision = revision
+	quest_defs = CampaignRevision.project_quests(source_quest_defs, revision)
+	return true
 
 func start_quest(id: String) -> bool:
 	if not quest_defs.has(id):
@@ -383,6 +401,8 @@ func set_tracked_quest_for_zone(zone_id: String) -> void:
 		"wychwood":["main_road_of_crows","main_teeth_in_rain"],
 		"deep_wood":["main_teeth_in_rain","main_names_they_burned"],
 		"old_mill":["main_ash_at_the_mill"],
+		"lantern_reach":["main_empty_tables", "main_road_kept_open"],
+		"hearthward":["main_house_many_names", "main_what_we_promise"],
 		"burned_farmstead":["main_names_they_burned"],
 		"marsh_crossing":["main_names_they_burned"],
 		"bandit_road":["main_soldier_without_banner"],

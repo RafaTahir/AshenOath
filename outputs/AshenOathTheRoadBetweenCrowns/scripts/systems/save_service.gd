@@ -43,6 +43,9 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 		vendor_service.load_state(data.get("vendors", {}))
 	if minigames != null:
 		minigames.load_state(data.get("minigames", {}) if data.get("minigames", {}) is Dictionary else {})
+	# Select the journey's graph before sanitizing its active/completed IDs.
+	# The preparation owner already rejected a revision whose definitions are absent.
+	quests.configure_campaign_revision(preload("res://scripts/campaign_revision.gd").from_save(data))
 	quests.load_state(data.get("quests", {}))
 	if quest_presentation != null:
 		quest_presentation.load_state(data.get("quest_presentation", {}))

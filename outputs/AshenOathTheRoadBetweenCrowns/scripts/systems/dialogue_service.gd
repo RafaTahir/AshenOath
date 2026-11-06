@@ -238,7 +238,7 @@ func _apply_dialogue_action(action: Dictionary) -> bool:
 			story_state.set_flag("record_hall_unlocked", true)
 			_show_current_objective_guidance(5.0)
 	elif type == "ending":
-		return _complete_ending(action.get("ending", "expose"))
+		return _complete_ending(action.get("ending", ""))
 	else:
 		return false
 	if audio != null:

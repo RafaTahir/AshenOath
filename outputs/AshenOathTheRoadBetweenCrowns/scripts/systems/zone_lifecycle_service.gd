@@ -235,10 +235,16 @@ func _start_new_game_world() -> void:
 	var prepared_root := route_zone_cache.get("greyfen") as Node3D
 	if prepared_root == null or not bool(prepared_root.get_meta("opening_presentation_ready", false)):
 		return
+	var revision := preload("res://scripts/campaign_revision.gd").new_journey_revision()
+	if not quests.can_load_campaign_revision(revision):
+		hud.set_new_game_status("The campaign chapters could not be prepared. Please retry the download.")
+		return
 	new_game_start_pending = false
 	# Identity and reading history belong to the accepted world handoff, not a
 	# request that can remain queued while files or the first view are prepared.
 	save_manager.begin_new_journey()
+	quests.configure_campaign_revision(revision)
+	story_state.set_flag("campaign_revision", revision)
 	hud.load_text_history([])
 	if hud != null and hud.has_method("set_new_game_ready"):
 		hud.set_new_game_ready(true)

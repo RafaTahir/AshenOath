@@ -11,13 +11,15 @@ const MANUAL_SLOT_COUNT := 6
 const MAX_IMPORT_BYTES := 2097152
 const RESUME_PATH := "user://ashen_oath_resume.json"
 const JourneySummary = preload("res://scripts/saved_journey_model.gd")
-const CHAPTER_IDS := ["main_road_of_crows", "main_bell_beneath_greyfen", "main_teeth_in_rain", "main_names_they_burned", "main_ash_at_the_mill", "main_soldier_without_banner", "main_blood_under_stone", "main_last_witness", "main_crowns_without_mercy", "main_hart_remembers"]
+const CampaignRevision = preload("res://scripts/campaign_revision.gd")
+const EndingCatalog = preload("res://scripts/ending_catalog.gd")
+const CHAPTER_IDS := CampaignRevision.EXPANDED_CHAPTERS
 const CAMPAIGN_RESUME_SLOTS := ["quick", "auto", "checkpoint", "manual_1", "manual_2", "manual_3", "manual_4", "manual_5", "manual_6"]
 const REPLAY_RESUME_SLOTS := ["replay", "replay_checkpoint", "replay_quick", "manual_1", "manual_2", "manual_3", "manual_4", "manual_5", "manual_6"]
 const RELEASED_ZONES := [
 	"greyfen", "wychwood", "ruins", "cemetery", "deep_wood", "old_mill",
 	"burned_farmstead", "marsh_crossing", "bandit_road", "vargan_approach",
-	"vargan_court", "record_hall", "undercroft", "assembly", "hart_glade"
+	"vargan_court", "record_hall", "undercroft", "assembly", "hart_glade", "lantern_reach", "hearthward"
 ]
 
 signal message(text: String)
@@ -143,6 +145,10 @@ func migrate_save_data(raw_data: Dictionary) -> Dictionary:
 	data.vendors["emergency_healing_claimed"] = typeof(medicine) == TYPE_BOOL and medicine
 	_sanitize_dictionary_fields(data.quests, ["active", "completed", "unlocked", "world_flags", "evidence_history", "completed_objectives"])
 	_sanitize_dictionary_fields(data.story_state, ["flags", "values", "evidence"])
+	# A missing legacy marker stays missing so existing Continue payload tokens
+	# and exported journey bytes are not changed merely by this release.
+	if data.story_state.flags.has(CampaignRevision.FLAG):
+		data.story_state.flags[CampaignRevision.FLAG] = CampaignRevision.from_save(raw_data)
 	_sanitize_dictionary_fields(data.progression, ["unlocked", "rewarded_quests", "claimed_rewards", "visited_sectors"])
 	_sanitize_dictionary_fields(data.world_state, ["removed_interactions", "day_night"])
 	if not data.has("quest_presentation") or typeof(data.get("quest_presentation")) != TYPE_DICTIONARY:
@@ -416,6 +422,9 @@ func _timestamp_value(value: String) -> int:
 	return timestamp if Time.get_datetime_string_from_unix_time(timestamp) == normalized else -1
 
 func _version_error(data: Dictionary) -> String:
+	var campaign_error := CampaignRevision.save_revision_error(data)
+	if campaign_error != "":
+		return campaign_error
 	var version: Variant = data.get("version", 0)
 	if typeof(version) not in [TYPE_INT, TYPE_FLOAT]:
 		return "invalid_version"
@@ -554,9 +563,7 @@ func _sanitize_bool_map(value: Variant) -> Dictionary:
 	return result
 
 func _normalize_ending(value: String) -> String:
-	var aliases := {"witness": "expose", "mercy": "free", "duty": "bind", "ash": "kill"}
-	value = str(aliases.get(value, value))
-	return value if value in ["", "expose", "free", "bind", "kill"] else ""
+	return EndingCatalog.normalize(value)
 
 func _legacy_road_complete(quests: Dictionary) -> bool:
 	var completed = quests.get("completed", {})
@@ -856,6 +863,8 @@ func _read_selection(selection: Dictionary, require_token: bool = true) -> Dicti
 		var completed: Dictionary = _read_slot(COMPLETED_CAMPAIGN_PATH)
 		if not bool(completed.get("ok", false)):
 			return completed
+		if chapter_id not in CampaignRevision.chapter_ids(CampaignRevision.from_save(completed.data)):
+			return {"ok": false, "reason": "invalid_selection"}
 		path = _chapter_path(chapter_id, str(completed.data.get("journey_id", "")))
 	elif source in ["primary", "backup"]:
 		path = slot_path(slot_id)
@@ -1356,7 +1365,7 @@ func chapter_replays() -> Array[Dictionary]:
 	if not bool(completed.get("ok", false)):
 		return chapters
 	var source_journey := str(completed.data.get("journey_id", "legacy"))
-	for quest_id: String in CHAPTER_IDS:
+	for quest_id: String in CampaignRevision.chapter_ids(CampaignRevision.from_save(completed.data)):
 		var result := _read_slot(_chapter_path(quest_id, source_journey))
 		if bool(result.get("ok", false)):
 			var model: Dictionary = _card_for_result("chapter:" + quest_id, "chapter", result)

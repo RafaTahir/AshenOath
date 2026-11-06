@@ -8,7 +8,7 @@ const ZONE_NAMES := {
 	"bandit_road":"Bandit Road", "vargan_approach":"Castle Vargan Approach",
 	"vargan_court":"Castle Vargan Courtyard", "record_hall":"Vargan Record Hall",
 	"undercroft":"Vargan Undercroft", "assembly":"Greyfen Assembly", "hart_glade":"White Hart Glade",
-	"cemetery":"Greyfen Cemetery", "ruins":"Old Ruins"
+	"cemetery":"Greyfen Cemetery", "ruins":"Old Ruins", "lantern_reach":"Lantern Reach", "hearthward":"Hearthward"
 }
 
 # zone, public interaction IDs, local context, why the step matters. Empty IDs
@@ -200,12 +200,12 @@ static func ending_continuation(state, current_zone: String) -> Dictionary:
 	var completed: bool = bool(state.get_flag("final_choice_completed", false))
 	var covenant: String = str(state.get_flag("final_covenant", ""))
 	if not completed and covenant != "":
-		var ending: String = str({"witness":"expose", "mercy":"free", "duty":"bind", "ash":"kill"}.get(covenant, ""))
-		var steps: Dictionary = {
-			"expose":["Lay the command ledger", "Speak the recovered names", "Speak of the retreat"],
-			"free":["Return the family tokens", "Keep the public record", "Untie the witness"],
-			"bind":["Set down the old badge", "Name the limits of the promise", "Take the willing burden"]
-		}
+		var ending: String = preload("res://scripts/ending_catalog.gd").normalize(covenant)
+		var steps: Dictionary = {}
+		for id: String in preload("res://scripts/covenant_resolution.gd").STEPS:
+			steps[id] = []
+			for entry: Array in preload("res://scripts/covenant_resolution.gd").STEPS[id]:
+				steps[id].append(str(entry[0]))
 		if steps.has(ending) and bool(state.get_flag("covenant_ritual_started", false)):
 			var step: int = clampi(int(state.get_flag("covenant_ritual_step", 0)), 0, 3)
 			var ritual_result := _continuation("covenant_resolution", "THE CHOSEN PROMISE", "Let the covenant settle" if step >= 3 else str(steps[ending][step]), "hart_glade", "The marked places carry the promise in order.", "Carry out the intention you chose.")

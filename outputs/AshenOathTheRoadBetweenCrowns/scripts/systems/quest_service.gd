@@ -1,4 +1,6 @@
 extends "res://scripts/systems/game_bindings.gd"
+const CampaignRevision = preload("res://scripts/campaign_revision.gd")
+const EndingCatalog = preload("res://scripts/ending_catalog.gd")
 ## Owns quest operations; configure() injects dependencies.
 signal quest_completed(quest_id: String)
 
@@ -47,9 +49,12 @@ func _make_all_evidence_safe_edge() -> void:
 func _apply_campaign_arrival(zone_id: String) -> void:
 	if zone_id in ["vargan_approach", "vargan_court", "record_hall"]:
 		story_state.set_flag("castle_discovered", true)
-		if not quests.is_unlocked("main_blood_under_stone"):
+		# Legacy saves retain the original arrival recovery. Expanded journeys
+		# cannot bypass the community chapters by walking directly to Vargan.
+		var allow_recovery: bool = CampaignRevision.from_state(story_state) == CampaignRevision.LEGACY or quests.is_completed("main_soldier_without_banner")
+		if allow_recovery and not quests.is_unlocked("main_blood_under_stone"):
 			quests.unlocked["main_blood_under_stone"] = true
-		if not quests.is_active("main_blood_under_stone") and not quests.is_completed("main_blood_under_stone"):
+		if allow_recovery and not quests.is_active("main_blood_under_stone") and not quests.is_completed("main_blood_under_stone"):
 			quests.start_quest("main_blood_under_stone")
 	var arrivals := {
 		"old_mill":["main_ash_at_the_mill","reach_mill"],
@@ -159,9 +164,12 @@ func _story_choice_prerequisites_done(quest_id: String, choice_id: String) -> bo
 	return found_choice
 
 func _complete_ending(ending: String) -> bool:
-	var ending_id := str(ending)
-	if ending_id not in ["expose", "free", "bind", "kill"]:
+	var ending_id := EndingCatalog.normalize(ending)
+	if ending_id == "":
 		hud.toast("The covenant offers no such answer.")
+		return false
+	if not EndingCatalog.available(ending_id, story_state, quests):
+		hud.toast("That promise needs the completed community work and the people's current agreement.")
 		return false
 	if str(story_state.get_flag("final_covenant", "")) != "" or bool(story_state.get_flag("final_choice_completed", false)):
 		hud.toast("The covenant has already been chosen.")
@@ -176,7 +184,9 @@ func _complete_ending(ending: String) -> bool:
 		if str(story_state.get_flag("witness_consent_" + witness, "")) == "voluntary":
 			witnesses.append(witness)
 	story_state.set_flag("final_witnesses", witnesses)
-	story_state.set_flag("final_covenant", {"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}[ending_id])
+	story_state.set_flag("final_covenant", EndingCatalog.covenant(ending_id))
+	if ending_id == "share":
+		story_state.set_flag("final_keeper_consent", story_state.get_flag(EndingCatalog.CONSENT_FLAG, {}).duplicate(true))
 	quests.world_flags["ending"] = ending_id
 	quests.complete_objective("main_hart_remembers", "hear_testimony")
 	if ending_id != "kill":
@@ -204,6 +214,9 @@ func _complete_ending(ending: String) -> bool:
 	return true
 
 func _show_ending_consequence(ending: String) -> void:
+	ending = EndingCatalog.normalize(ending)
+	if ending == "":
+		return
 	if bool(story_state.get_flag("final_choice_completed", false)):
 		return
 	story_action_in_progress = true
@@ -231,7 +244,9 @@ func _show_ending_consequence(ending: String) -> void:
 func _show_completed_epilogue() -> void:
 	if not bool(story_state.get_flag("final_choice_completed", false)):
 		return
-	var ending := str(quests.world_flags.get("ending", "expose"))
+	var ending := EndingCatalog.normalize(str(quests.world_flags.get("ending", story_state.get_flag("final_covenant", ""))))
+	if ending == "":
+		return
 	var cards: Array[String] = EpilogueResolver.resolve(ending, story_state)
 	story_state.set_flag("epilogue_cards", cards)
 	story_state.set_flag("epilogue_presented", true)
@@ -243,6 +258,8 @@ func _show_completed_epilogue() -> void:
 	_host.call_deferred("_persist_story_action")
 
 func _on_quest_completed(id: String) -> void:
+	if CampaignRevision.COMPLETION_FLAGS.has(id):
+		story_state.set_flag(str(CampaignRevision.COMPLETION_FLAGS[id]), true)
 	if id == "main_bell_beneath_greyfen":
 		story_state.set_flag("teeth_in_rain_available", true)
 	if id == "main_teeth_in_rain":

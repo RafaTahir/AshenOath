@@ -10,6 +10,7 @@ const Routes = preload("res://scripts/story_route_catalog.gd")
 static func describe(data: Dictionary, recorded: Dictionary, quest_defs: Dictionary, item_defs: Dictionary) -> Dictionary:
 	var quests = QuestView.new()
 	quests.quest_defs = quest_defs.duplicate(true)
+	quests.configure_campaign_revision(preload("res://scripts/campaign_revision.gd").from_save(data))
 	quests.load_state(data.get("quests", {}))
 	var story = StoryView.new()
 	story.load_state(data.get("story_state", {}))

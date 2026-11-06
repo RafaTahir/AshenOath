@@ -312,7 +312,7 @@ static func _greyfen_daily_consequences(game, parent: Node3D) -> void:
 			_box(game, parent, "ReturnedHouseholdBowl", Vector3(x, 0.18, 3.5), Vector3(0.35, 0.12, 0.32), STONE)
 	if bool(_flag(game, "final_choice_completed", false)):
 		var covenant := str(_flag(game, "final_covenant"))
-		var headings := {"witness":"COPIES FOR EVERY HOUSEHOLD", "mercy":"NO HOUSEHOLD OWES A CHILD", "duty":"KAEL BEARS THE OATH", "ash":"THE BINDING IS ENDED"}
+		var headings := {"witness":"COPIES FOR EVERY HOUSEHOLD", "mercy":"NO HOUSEHOLD OWES A CHILD", "duty":"KAEL BEARS THE OATH", "ash":"THE BINDING IS ENDED", "concord":"THE WILLING KEEPERS SHARE THE WORK", "open_road":"A PLACE TO STAY, A WAY TO LEAVE"}
 		_notice(game, parent, Vector3(2.6, 0, -4.6), str(headings.get(covenant, "THE NAMES REMAIN")) + "\nTomorrow's work is ours")
 
 static func _mira(game, parent: Node3D) -> void:
@@ -498,7 +498,7 @@ static func _hart(game, parent: Node3D) -> void:
 	var resolved := bool(_flag(game, "final_choice_completed", false))
 	if not resolved: return
 	var covenant := str(_flag(game, "final_covenant"))
-	var headings := {"witness": "THE NAMES BELONG TO EVERYONE", "mercy": "NO HOUSEHOLD OWES A CHILD", "duty": "KAEL BEARS THE OATH", "ash": "THE COVENANT IS GONE"}
+	var headings := {"witness": "THE NAMES BELONG TO EVERYONE", "mercy": "NO HOUSEHOLD OWES A CHILD", "duty": "KAEL BEARS THE OATH", "ash": "THE COVENANT IS GONE", "concord":"THE KEEPING IS SHARED", "open_road":"THE ROAD REMAINS OPEN"}
 	_label(parent, "EndingReturnPromise", str(headings.get(covenant, "THE ROAD REMEMBERS")), Vector3(0, 2.4, 5.8), GREEN if covenant == "mercy" else PAPER)
 	for index in range(3):
 		var pos := Vector3(-4.0 + float(index) * 0.65, 0.02, 6.0)
