@@ -137,3 +137,87 @@ resource closure, per-file/total Web limits, desktop/touch real-input journeys,
 old saves at each insertion/finale, both complete alternatives, cancellation,
 save/reload/replay, exact committed export identity and publication gates before
 turning on the expansion switch.
+
+
+## Source checkpoint after authored community data (2026-11-07)
+
+This checkpoint follows core commit `c0800b1dbf191512797b893bd75f7ee6332a1373`.
+Find its own exact commit with `git log -1 -- tools/LIVING_CAMPAIGN_INTEGRATION.md`;
+no publication is authorized from this incomplete branch. The expansion switch
+remains **false**. No canonical checkout file, export, actor or Blender asset was
+changed by this isolated checkpoint.
+
+Included source work:
+
+- Four authored quest definitions and 14-chapter/six-ending catalog; revision-2
+  Hart dialogue with two eligible alternatives and six new aftermath scenes.
+- `data/community_campaign.json`: four chapter outlines, 15 physical work tasks,
+  concrete choice results and six participant offers/refusals/withdrawals.
+- QuestManager now treats `kind: activity` as explicit completion: stored evidence,
+  incidental observations and reload cannot perform physical work. Choice kinds
+  still require `complete_choice` rather than generic objective completion.
+- `community_campaign.gd` is a dormant pure rule helper, **not yet wired to any
+  runtime interaction**. It validates chapter/order/region/work selection,
+  distinct crossing/ferry tasks, both survey stations, preparation readiness,
+  choice then enacted aftermath, first-load carry/delivery, posted vacancies,
+  participant availability and explicit consent/withdrawal. The existing activity
+  director must supply physical elapsed time, proximity, interruption and source
+  participant validation before calling these methods. Calling this helper alone
+  does not prove gameplay occurred.
+- Missing/explicit revision-1 markers in either new region now reject as
+  `campaign_region_revision_mismatch`; region names never upgrade a journey.
+  Future revision diagnostics retain precedence. StoryJournal receives a projected
+  10/4 or 14/6 catalog without mutating the authored source.
+
+Validation status is intentionally separated:
+
+- Previously recorded core: **435 checks PASS**; root-authored physical objective
+  ownership fixture: **132 checks PASS** before this checkpoint's later edits.
+- New `verify_community_campaign.gd`: **NOT RUN**. It covers both route branches,
+  physical ordering, duplicate work, refusal/withdrawal, carried load save/reload,
+  aftermath, unavailable Senn outcomes, legacy new-region rejection and 10/4 vs
+  14/6 catalog projection. It uses real QuestManager/StoryState in memory only.
+- No Godot engine, model/world, Blender, Web export, gameplay or deployment run
+  was started for the new checkpoint; the shared host was reserved for the
+  orchestrator's published-baseline browser acceptance.
+
+Remaining implementation before a playable claim:
+
+1. Build `scripts/zones/community_section.gd` with two compact retained-kit regions.
+   Keep the entry/return corridors and 15 task positions reachable. Add the actual
+   meals, refuge, inspected landings, chosen route and enacted-aftermath visuals.
+2. Wire the pure helper through **StoryActivityDirector's existing tick/lifecycle**
+   and the current dialogue/quest owners. Do not add a second per-prop controller.
+   Bind source instance + current menu generation; revalidate participant, region,
+   quest order and distance at commit. Use existing work cancellation for movement,
+   combat, pause, death, focus loss, travel and restore. Preserve only completed
+   durable work; interrupted timers must not grant credit. The route load needs
+   a visible carried presentation and real movement to its far-landing delivery.
+3. Show all available canonical participants. Never spawn exiled/punished Senn;
+   cooperative Edric and Nera's existing personal-introduction/escort availability
+   remain gates. Missing participants leave written public accounts or vacancies,
+   never inferred testimony/consent. A refused shift must not block food/shelter or
+   the original endings. Consent requires the actual authored participant's answer;
+   keep withdrawal accessible until the final ending lock.
+4. Add gated two-way sector connections, arrival completion and safe spawns,
+   registration/preparation builders, state-aware legacy topology/atlas filtering,
+   regional routines and actor requirements. The premature new-zone registration
+   hooks were deliberately removed from this checkpoint: no missing builder is
+   currently registered. `zone_available` is ready for those entry guards.
+5. Dynamically load the community builder only after its dedicated pack is ready;
+   update authoritative pack selection/manifest sources, all old destinations that
+   need expansion-owned scenes (including saved expanded glade outcomes), and exact
+   resource closure. No full asset checkout exists here, so closure is deferred.
+6. Add objective route hints/journal work entries and test direct raw catalog
+   consumers. `StoryJournal.active_chapter` already asks only projected active
+   quests; public raw `campaign()` remains an authoring catalog, not a journey UI.
+7. Review the title collision: `main_road_kept_open` and existing `side_escort_06`
+   both currently display **A Road Kept Open**. Their work differs (public route
+   construction vs Nera's existing relief handover); give the new chapter a distinct
+   displayed title while retaining its ID, before voice/text collection.
+8. Collect/render exact new spoken lines and ritual/aftermath lines; add both
+   authored Hart memorial resources at the paths specified above. Run the new
+   fixture, original core/ownership fixtures, parser/resource checks, complete
+   save/import/replay/legacy matrix, six-ending runtime acceptance, pack/Web gates,
+   and desktop/touch real-input gameplay. Enable revision 2 only when the coherent
+   complete expansion passes together; never publish an incomplete required chain.

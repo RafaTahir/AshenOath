@@ -116,7 +116,7 @@ func start_quest(id: String) -> bool:
 	var objectives: Array = []
 	for objective in quest_defs[id].get("objectives", []):
 		var runtime_objective: Dictionary = objective.duplicate(true)
-		runtime_objective["done"] = not is_choice_objective(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false))
+		runtime_objective["done"] = not requires_explicit_completion(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false))
 		if runtime_objective.done and str(objective.get("completion_flag", "")) != "":
 			world_flags[str(objective.completion_flag)] = true
 		objectives.append(runtime_objective)
@@ -151,7 +151,7 @@ func complete_objective(quest_id: String, objective_id: String) -> bool:
 	return false
 
 func complete_evidence(quest_id: String, evidence_id: String) -> bool:
-	if _objective_definition(quest_id, evidence_id).is_empty() or is_choice_objective(quest_id, evidence_id):
+	if _objective_definition(quest_id, evidence_id).is_empty() or requires_explicit_completion(quest_id, evidence_id):
 		return false
 	var key := "%s:%s" % [quest_id, evidence_id]
 	var newly_observed := not _saved_true(evidence_history.get(key, false))
@@ -183,6 +183,11 @@ func complete_choice(quest_id: String, objective_id: String) -> bool:
 	var completed_now := complete_objective(quest_id, objective_id)
 	_choice_depth -= 1
 	return completed_now
+
+func requires_explicit_completion(quest_id: String, objective_id: String) -> bool:
+	# Physical work is credited by its activity owner. Finding an older clue
+	# or restoring evidence history cannot perform it on the player's behalf.
+	return is_choice_objective(quest_id, objective_id) or str(_objective_definition(quest_id, objective_id).get("kind", "")) == "activity"
 
 func is_choice_objective(quest_id: String, objective_id: String) -> bool:
 	if objective_id.ends_with("_choice") or objective_id in ["final_choice", "return_village"]:
@@ -247,7 +252,7 @@ func is_objective_done(quest_id: String, objective_id: String) -> bool:
 	var definition := _objective_definition(quest_id, objective_id)
 	if definition.is_empty():
 		return false
-	if not is_choice_objective(quest_id, objective_id) and _saved_true(_evidence_history.get("%s:%s" % [quest_id, objective_id], false)):
+	if not requires_explicit_completion(quest_id, objective_id) and _saved_true(_evidence_history.get("%s:%s" % [quest_id, objective_id], false)):
 		return true
 	if _completed.has(quest_id):
 		if _completed_objectives.has(quest_id):
@@ -536,7 +541,7 @@ func load_state(state: Dictionary) -> void:
 	_migrate_teeth_in_rain()
 	for id: String in active:
 		for objective: Dictionary in active[id].objectives:
-			if not is_choice_objective(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false)):
+			if not requires_explicit_completion(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false)):
 				objective.done = true
 		_update_evidence_groups(id)
 	_emit_changed()

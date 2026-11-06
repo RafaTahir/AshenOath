@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "campaign_revision": 2,
+  "chapters": {
+    "main_empty_tables": {
+      "title": "The Empty Tables",
+      "region": "lantern_reach",
+      "question": "Who can eat when the mill's promises no longer feed them?",
+      "summary": "At the old river landing, Nessa, Elna and Toma prepare a kitchen and dry sleeping places. The households disagree about where food should be held, but nobody must give testimony to receive it.",
+      "stakes": "A common kitchen saves fuel and concentrates work. Household distribution preserves independence but asks more of the carriers.",
+      "objectives": [
+        {"id":"reach_lantern_reach", "text":"Follow the mill's landing path to Lantern Reach."},
+        {"id":"hear_households", "text":"Hear the households' needs at the waiting table."},
+        {"id":"prepare_kitchen", "text":"Brace the cooking table, secure the windscreen and lay the first places."},
+        {"id":"settle_tables", "text":"Agree how the food is shared, then serve the first meal."}
+      ],
+      "work": ["kitchen_trestle", "kitchen_screen", "kitchen_places"],
+      "choice": "community_distribution",
+      "choices": {
+        "central": {"label":"Keep a common kitchen, with an open ration book.", "aftermath":"The hearth stays busy. The daily queue is shorter, but a few willing cooks carry most of the work. Meals remain available to households that disagree with the arrangement."},
+        "households": {"label":"Send household shares from the landing each morning.", "aftermath":"Carriers pack smaller parcels. Families prepare meals in their own shelters; the extra journeys consume time and make bad weather harder."}
+      },
+      "aftermath_task": "serve_first_meal",
+      "completed_flag":"campaign_empty_tables_completed"
+    },
+    "main_road_kept_open": {
+      "title":"A Road Kept Open",
+      "region":"lantern_reach",
+      "question":"What kind of passage can people keep working together?",
+      "summary":"Nera measures the crossing while Rook reads the current and Tor examines the old joints. A public bridge and an escorted ferry are both possible; neither maintains itself.",
+      "stakes":"A repaired crossing stays open between patrols but needs watch and repairs. A ferry needs less timber, but people must wait for its crew and weather.",
+      "objectives":[
+        {"id":"survey_crossing", "text":"Read the current and inspect both landings."},
+        {"id":"agree_route", "text":"Choose a public crossing or an escorted ferry."},
+        {"id":"secure_route", "text":"Work at the chosen route's joints, rail or hauling line."},
+        {"id":"open_route", "text":"Accompany the first load to the far landing."}
+      ],
+      "choice":"community_route",
+      "choices":{
+        "crossing":{"label":"Repair the public crossing and publish a repair rota.", "work":["crossing_beam","crossing_rail","crossing_load"], "aftermath":"People can cross without waiting for a crew. Tor's repair marks remain visible; the watch must check the joints after rain and keep the public approach clear."},
+        "ferry":{"label":"Rig a ferry and keep an escorted sailing rota.", "work":["ferry_landing","ferry_rope","ferry_load"], "aftermath":"The hauling line keeps the passage measured. Nera posts sailing times. The crew shares the watch, but queues and weather delays remain part of every journey."}
+      },
+      "aftermath_task":"first_route_load",
+      "completed_flag":"campaign_road_kept_open_completed"
+    },
+    "main_house_many_names":{
+      "title":"The House of Many Names",
+      "region":"hearthward",
+      "question":"Can a house keep an honest account without demanding its occupants' stories?",
+      "summary":"Anwen and Mira inspect an upland refuge while Vale separates the public account from private testimony. Beds, medicine and a dry shelf come before names in a book.",
+      "stakes":"Distributed public copies resist a single keeper's failure. Protected custody limits exposure but depends on fewer people. Shelter is unconditional in either arrangement.",
+      "objectives":[
+        {"id":"reach_hearthward", "text":"Take the upland path to Hearthward."},
+        {"id":"hear_households", "text":"Read the refuge's needs and hear the available keepers."},
+        {"id":"prepare_refuge", "text":"Raise the bunks, dry the record shelves and mark an open sleeping place."},
+        {"id":"settle_records", "text":"Separate the public account from protected testimony and welcome the first arrivals."}
+      ],
+      "work":["refuge_bunks","refuge_shelves","refuge_places"],
+      "choice":"community_records",
+      "choices":{
+        "distributed":{"label":"Distribute the public account; seal private testimony separately.", "aftermath":"Several open shelves hold the same account of the orders and their consequences. Sealed testimony stays with its owners or their chosen custodians. The copies require regular comparison."},
+        "protected":{"label":"Keep a public summary and entrust the full account to willing custodians.", "aftermath":"The public summary names the responsible institutions and acts. Protected copies remain available through their keepers; fewer hands reduce exposure but make absence and neglect more dangerous."}
+      },
+      "aftermath_task":"welcome_first_arrivals",
+      "completed_flag":"campaign_house_many_names_completed"
+    },
+    "main_what_we_promise":{
+      "title":"What We Promise",
+      "region":"hearthward",
+      "question":"Which responsibilities will people actually choose, and how can they leave them?",
+      "summary":"The community tests a meal round, a night alarm and a record handover. Merrow, Edric and any surviving, willing Senn answer for the powers they still hold. Kael can offer his own work, never somebody else's assent.",
+      "stakes":"A rota is useful only while its keepers can refuse, rest and withdraw. Missing volunteers leave work unfinished; they do not lose food or shelter.",
+      "objectives":[
+        {"id":"gather_cast", "text":"Open the public meeting; accept written answers from anyone absent."},
+        {"id":"test_arrangements", "text":"Practice the meal round, the alarm and a record handover."},
+        {"id":"choose_responsibilities", "text":"Ask the willing keepers what they will undertake. Record refusals as refusals."},
+        {"id":"carry_promise", "text":"Post the rota with a clear way to withdraw, then complete the first watch."}
+      ],
+      "work":["promise_meal","promise_alarm","promise_records"],
+      "aftermath_task":"first_watch",
+      "completed_flag":"campaign_what_we_promise_completed"
+    }
+  },
+  "work":{
+    "kitchen_trestle":{"region":"lantern_reach","position":[-5,0,2],"prompt":"Brace the trestle while its joint is seated","seconds":4,"kind":"brace","actor":"nessa","result":"The trestle takes the weight without rocking."},
+    "kitchen_screen":{"region":"lantern_reach","position":[-8,0,-1],"prompt":"Fasten the kitchen's windscreen","seconds":4,"kind":"repair","actor":"elna","result":"The canvas holds clear of the hearth."},
+    "kitchen_places":{"region":"lantern_reach","position":[-4,0,-3],"prompt":"Lay the first meal places","seconds":4,"kind":"sort","actor":"toma","result":"There is a place for every waiting household, including those who gave no name."},
+    "crossing_beam":{"region":"lantern_reach","position":[2,0,-4],"prompt":"Hold the crossbeam against its seat","seconds":5,"kind":"brace","actor":"tor","result":"The beam sits square in the retained stone abutment."},
+    "crossing_rail":{"region":"lantern_reach","position":[5,0,-4],"prompt":"Secure the public crossing's handrail","seconds":4,"kind":"repair","actor":"rook","result":"The rail carries a steady hand without shifting."},
+    "crossing_load":{"region":"lantern_reach","position":[8,0,-4],"prompt":"Check the loaded wheel over the repaired joint","seconds":5,"kind":"inspect","actor":"nera","result":"The wheel passes the joint. Nera marks it for inspection after rain."},
+    "ferry_landing":{"region":"lantern_reach","position":[2,0,4],"prompt":"Seat the ferry landing board","seconds":4,"kind":"brace","actor":"tor","result":"The landing board rests firmly above the waterline."},
+    "ferry_rope":{"region":"lantern_reach","position":[5,0,4],"prompt":"Tension the ferry's hauling line","seconds":5,"kind":"haul","actor":"rook","result":"The line carries the test load without dragging the landing."},
+    "ferry_load":{"region":"lantern_reach","position":[8,0,4],"prompt":"Balance the first load at the landing","seconds":4,"kind":"sort","actor":"nera","result":"The load is low and balanced. The crew can wait for a safe passage."},
+    "refuge_bunks":{"region":"hearthward","position":[-6,0,2],"prompt":"Raise and brace the sleeping platforms","seconds":5,"kind":"brace","actor":"anwen","result":"The sleeping places stand above the damp floor."},
+    "refuge_shelves":{"region":"hearthward","position":[5,0,-4],"prompt":"Dry and fit the record shelf lining","seconds":4,"kind":"repair","actor":"vale","result":"The dry lining separates the records from the outer wall."},
+    "refuge_places":{"region":"hearthward","position":[-5,0,-3],"prompt":"Prepare an unregistered sleeping place","seconds":4,"kind":"sort","actor":"mira","result":"The place is ready. Nobody has to trade a memory for it."},
+    "promise_meal":{"region":"hearthward","position":[-4,0,6],"prompt":"Practice the meal handover","seconds":4,"kind":"sort","actor":"merrow","result":"A portion passes to the next keeper without a signature or a pledge."},
+    "promise_alarm":{"region":"hearthward","position":[7,0,3],"prompt":"Test the shelter's warning bell","seconds":4,"kind":"inspect","actor":"senn","result":"The bell can be heard from the sleeping places. The watch records an answer, not a muster."},
+    "promise_records":{"region":"hearthward","position":[5,0,-2],"prompt":"Compare a copy and hand it to the next keeper","seconds":4,"kind":"inspect","actor":"vale","result":"The two public copies agree. The protected envelopes remain closed."}
+  },
+  "consent_offers":{
+    "anwen":{"role":"care","question":"Will you take a care shift, with the right to step away?","yes":"I can take the dawn round. If I cannot keep it, I will tell the next keeper. That is what I am offering.","no":"Not another promise today. The beds are still open; my answer need not close them.","withdraw":"I need to leave the dawn round. Put my place back on the board, without putting another name in it."},
+    "mira":{"role":"care","question":"Would you choose to share the care work?","yes":"I will take the evening round, and teach someone willing to cover it. No one learns by being volunteered.","no":"I can help with this room. I cannot promise a standing shift.","withdraw":"I cannot carry the evening round now. The medicines and instructions stay here."},
+    "nera":{"role":"logistics","question":"Will you keep a route shift under these terms?","yes":"One crossing round in the morning. Weather can stop it, and I can leave it. Write both beside my name.","no":"I can explain the route. I am not agreeing to keep it every day.","withdraw":"Take me off the crossing rota. Leave the route marks for whoever comes next."},
+    "nessa":{"role":"logistics","question":"Would you take a share of the food and delivery rota?","yes":"I will keep the kitchen's count for now. If I stop, the bowls do not stop with me.","no":"I have already promised today's meal. That is all I can give you now.","withdraw":"Someone else must keep the count after today. Nobody loses their share because I am tired."},
+    "vale":{"role":"records","question":"Will you keep a copy without claiming its people's choices?","yes":"I will check one public copy and protect what was entrusted to me. A record is evidence. It is never somebody's consent.","no":"I can finish these shelves. I cannot become their permanent keeper.","withdraw":"I am leaving this copy with the agreed custodian. The sealed accounts remain under their owners' terms."},
+    "merrow":{"role":"records","question":"Will you take a record shift with a public handover?","yes":"A weekly comparison and an open handover. If I withdraw, the book will show the vacancy. I will not fill it with an order.","no":"I owe you an account of what I administered. That debt is not a promise to take this office.","withdraw":"Mark my shift vacant. The records stay available, and the reasons for my old orders stay in them."}
+  }
+}

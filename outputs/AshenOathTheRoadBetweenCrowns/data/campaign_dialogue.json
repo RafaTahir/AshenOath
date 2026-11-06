@@ -663,11 +663,54 @@
         "ending": "kill",
         "preview": "Destroy the complete witness by combat; the copied human record survives.",
         "cost": "Irreplaceable memories are lost. Dispersal harms the land and future harvests."
+      },
+      {
+        "label": "Concord — share stewardship with the keepers who freely agreed.",
+        "type": "ending",
+        "ending": "share",
+        "conditions": {
+          "ending_available": "share"
+        },
+        "preview": "Care, logistics and the records each have a willing keeper. Each person confirms their own terms; Kael cannot pledge another person.",
+        "cost": "The work continues. Keepers may withdraw, leaving vacancies and real vulnerability."
+      },
+      {
+        "label": "Open Road — relinquish the old shelter and lead the community to the refuge.",
+        "type": "ending",
+        "ending": "depart",
+        "conditions": {
+          "ending_available": "depart"
+        },
+        "preview": "Use the prepared route and refuge. Carry the human evidence and supplies out before dismantling the boundary.",
+        "cost": "Lose the old supernatural shelter and access to the Hart's complete account. The new home still needs protection and work."
       }
     ],
     "voice": [],
     "content_version": 2,
-    "variants": []
+    "variants": [
+      {
+        "priority": 100,
+        "conditions": {
+          "campaign_revision": 2
+        },
+        "greeting": "You have kept the account where a living hand can reach it. That is something the old oath would not allow.",
+        "lines": [
+          "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
+          "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+          "Kael: The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
+          "The White Hart: Then begin with your own hands. Do not fill the empty places with another person's vow.",
+          "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
+          "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
+          "Kael: Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
+          "Kael: The kitchen is working. There is a route and a dry refuge. We have tried the shifts, not just written them down.",
+          "The White Hart: Then there are two more things you may attempt. Share stewardship only with the keepers who still freely offer it. An empty place remains empty until somebody chooses it.",
+          "Kael: And if we leave?",
+          "The White Hart: Carry the people and their human records through the prepared passage. Undo this boundary, and its shelter will not follow. Neither will the complete account I hold.",
+          "Kael: A rota can fail. A refuge can fail. Neither makes the old choices disappear.",
+          "The White Hart: Then choose whose work begins when mine ends."
+        ]
+      }
+    ]
   },
   "witness_7": {
     "name": "The Record",
@@ -1453,12 +1496,72 @@
     "greeting": "Tell me what you found. If some of it is still unknown, say so.",
     "lines": [
       "Kael: The pack is dead. Here is what I could establish on the road.",
-      {"text": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "bram"}]}},
-      {"text": "Kael: Red thread bound the black feathers.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "sella"}]}},
-      {"text": "Anwen: My knot. I tied that thread for Sella.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "sella"}]}},
-      {"text": "Kael: Oren's wooden crow had his name scraped away.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "oren"}]}},
-      {"text": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "vargan_wire"}]}},
-      {"text": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.", "conditions": {"objectives_done": [{"quest": "main_road_of_crows", "id": "drag_marks"}]}},
+      {
+        "text": "Kael: Bram was still gripping the cart brake. His ledger's debts were crossed out.",
+        "conditions": {
+          "objectives_done": [
+            {
+              "quest": "main_road_of_crows",
+              "id": "bram"
+            }
+          ]
+        }
+      },
+      {
+        "text": "Kael: Red thread bound the black feathers.",
+        "conditions": {
+          "objectives_done": [
+            {
+              "quest": "main_road_of_crows",
+              "id": "sella"
+            }
+          ]
+        }
+      },
+      {
+        "text": "Anwen: My knot. I tied that thread for Sella.",
+        "conditions": {
+          "objectives_done": [
+            {
+              "quest": "main_road_of_crows",
+              "id": "sella"
+            }
+          ]
+        }
+      },
+      {
+        "text": "Kael: Oren's wooden crow had his name scraped away.",
+        "conditions": {
+          "objectives_done": [
+            {
+              "quest": "main_road_of_crows",
+              "id": "oren"
+            }
+          ]
+        }
+      },
+      {
+        "text": "Kael: Vargan wire bound a name to the creatures. Someone tried to burn it off.",
+        "conditions": {
+          "objectives_done": [
+            {
+              "quest": "main_road_of_crows",
+              "id": "vargan_wire"
+            }
+          ]
+        }
+      },
+      {
+        "text": "Kael: The drag marks were deliberate. Boots followed the pack's tracks.",
+        "conditions": {
+          "objectives_done": [
+            {
+              "quest": "main_road_of_crows",
+              "id": "drag_marks"
+            }
+          ]
+        }
+      },
       "Anwen: Give me what you found, show the village, or keep it while we make copies. Do not fill the gaps for anyone.",
       "Anwen: A public account is not permission to speak for the people behind it.",
       "Kael: I will stay. The payment ends the hunt. It does not settle what I now know."

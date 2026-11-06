@@ -16,6 +16,10 @@ static func campaign() -> Dictionary:
 	_campaign_data = parsed if typeof(parsed) == TYPE_DICTIONARY else {}
 	return _campaign_data
 
+static func campaign_for(state) -> Dictionary:
+	var revision = preload("res://scripts/campaign_revision.gd")
+	return revision.project_catalog(campaign(),revision.from_state(state))
+
 static func build(game) -> String:
 	return build_from_state(game.quests, game.story_state)
 
@@ -24,19 +28,19 @@ static func recap(game) -> String:
 	return str(recap_model(game.quests, game.story_state, zone_id).get("body", ""))
 
 static func sections(quests, state, zone_id: String = "") -> Array[Dictionary]:
-	return Model.sections(campaign(), quests, state, zone_id)
+	return Model.sections(campaign_for(state), quests, state, zone_id)
 
 static func creature_entries(quests, state) -> Array[Dictionary]:
-	return Model.creature_entries(campaign(), quests, state)
+	return Model.creature_entries(campaign_for(state), quests, state)
 
 static func evidence_model(quests, state, zone_id: String = "") -> Dictionary:
-	return Model.evidence_model(campaign(), quests, state, zone_id)
+	return Model.evidence_model(campaign_for(state), quests, state, zone_id)
 
 static func evidence_detail(entry_id: String, quests, state, zone_id: String = "") -> Dictionary:
-	return Model.evidence_detail(campaign(), entry_id, quests, state, zone_id)
+	return Model.evidence_detail(campaign_for(state), entry_id, quests, state, zone_id)
 
 static func recap_model(quests, state, zone_id: String = "") -> Dictionary:
-	return Model.recap_model(campaign(), quests, state, zone_id)
+	return Model.recap_model(campaign_for(state), quests, state, zone_id)
 
 static func encounter_record(speaker_id: String, zone_id: String) -> Dictionary:
 	return Model.encounter_record(speaker_id, zone_id)

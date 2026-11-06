@@ -47,24 +47,36 @@ static func from_save(data: Dictionary) -> int:
 
 static func save_revision_error(data: Dictionary) -> String:
 	var story: Variant = data.get("story_state", {})
-	if not story is Dictionary or not story.get("flags", {}) is Dictionary:
-		return ""
-	var flags: Dictionary = story.get("flags", {})
-	if not flags.has(FLAG):
-		return ""
-	var value: Variant = flags[FLAG]
-	if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
-		return "invalid_campaign_revision"
-	if value > EXPANDED:
-		return "future_version"
-	# JSON parses numeric markers as floats; Array.has uses strict Variant types.
-	return "" if float(value) == float(LEGACY) or float(value) == float(EXPANDED) else "invalid_campaign_revision"
+	var flags: Dictionary = story.get("flags", {}) if story is Dictionary and story.get("flags", {}) is Dictionary else {}
+	if flags.has(FLAG):
+		var value: Variant = flags[FLAG]
+		if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
+			return "invalid_campaign_revision"
+		if value > EXPANDED:
+			return "future_version"
+		if float(value) != float(LEGACY) and float(value) != float(EXPANDED):
+			return "invalid_campaign_revision"
+	# A region identifier is never evidence that an old journey opted in.
+	if from_save(data) != EXPANDED and (str(data.get("zone", "")).strip_edges().to_lower() in NEW_ZONES or str(data.get("world_sector", "")).strip_edges().to_lower() in NEW_ZONES):
+		return "campaign_region_revision_mismatch"
+	return ""
 
 static func from_state(state) -> int:
 	return from_flags({FLAG:state.get_flag(FLAG, LEGACY)}) if state != null else LEGACY
 
 static func chapter_ids(revision: int) -> Array:
 	return EXPANDED_CHAPTERS.duplicate() if revision == EXPANDED else LEGACY_CHAPTERS.duplicate()
+
+static func zone_available(zone_id: String, state) -> bool:
+	return zone_id not in NEW_ZONES or from_state(state) == EXPANDED
+
+static func project_catalog(data: Dictionary, revision: int) -> Dictionary:
+	var result := data.duplicate(true)
+	var chapters := chapter_ids(revision)
+	result["chapters"] = (result.get("chapters", []) as Array).filter(func(row): return str(row.get("quest_id", "")) in chapters)
+	if revision != EXPANDED:
+		result["endings"] = (result.get("endings", []) as Array).filter(func(row): return str(row.get("id", "")) in ["expose","free","bind","kill"])
+	return result
 
 static func project_quests(definitions: Dictionary, revision: int) -> Dictionary:
 	var result := definitions.duplicate(true)
