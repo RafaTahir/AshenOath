@@ -6,6 +6,66 @@ closure; the authored destination declaration supplies potential actor presence.
 
 import fnmatch
 import json
+import re
+
+
+ACTOR_TEXTURE_DIRECTORIES = (
+    "assets_external/design_pack_v1/humans/textures/",
+    "assets_external/design_pack_v1/creatures/textures/",
+)
+ACTOR_IMAGE_DIRECTORIES = tuple(path.removesuffix("textures/") for path in ACTOR_TEXTURE_DIRECTORIES)
+TEXTURE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
+
+
+def retired_actor_textures(project, resources, selections):
+    """Retire stale selectors, preserving compiled, declared and direct users.
+
+    Actor atlases belong to the current dependency ledger. Earlier exports left
+    old exact selectors behind when an actor switched to a new atlas. Keep the
+    editable files, but stop exporting atlases with no remaining consumer.
+    """
+    def managed(path):
+        return path.removeprefix("res://").startswith(ACTOR_IMAGE_DIRECTORIES)
+
+    candidates = {path for path in selections if managed(path)
+                  and any(path.lower().endswith(suffix) for suffix in TEXTURE_SUFFIXES)
+                  and not any(c in path for c in "*?[")}
+    for directory in ACTOR_IMAGE_DIRECTORIES:
+        candidates.update("res://" + path.relative_to(project).as_posix()
+                          for path in (project / directory).rglob("*")
+                          if path.is_file() and path.suffix.lower() in TEXTURE_SUFFIXES)
+    protected = set(resources)
+    environment_path = project / "data/environment_material_dependencies.json"
+    if environment_path.is_file():
+        protected.update(json.loads(environment_path.read_text(encoding="utf-8-sig"))["textures"])
+    # Direct runtime loads are outside the compiled actor dependency graph.
+    # A directory literal with computed filenames makes the namespace ambiguous;
+    # conservatively keep that directory until its users have a resource ledger.
+    literal = re.compile(r'''["']([^"'\r\n]+)["']''')
+    values = set()
+    computed_prefixes = set()
+    for script in (project / "scripts").rglob("*.gd"):
+        text = script.read_text(encoding="utf-8-sig")
+        for match in literal.finditer(text):
+            value = match.group(1)
+            values.add(value)
+            relative = value.removeprefix("res://")
+            if not relative.startswith(ACTOR_IMAGE_DIRECTORIES):
+                continue
+            if not (relative.endswith("/") or "%" in relative or "{" in relative):
+                continue
+            # Family classification is not a computed filename. Other uses of
+            # a directory/template are conservatively treated as live loaders.
+            context = text[max(0, match.start() - 40):match.start()]
+            if re.search(r"\.(?:begins_with|ends_with|contains|trim_prefix|trim_suffix)\(\s*$", context):
+                continue
+            computed_prefixes.add(re.split(r"[%{]", relative, maxsplit=1)[0])
+    ambiguous = tuple(computed_prefixes)
+    for path in candidates:
+        relative = path.removeprefix("res://")
+        if path in values or relative.rsplit("/", 1)[-1] in values or (ambiguous and relative.startswith(ambiguous)):
+            protected.add(path)
+    return candidates - protected
 
 
 def partition_actor_packs(project, config, sections, manifest, catalog, standalone):
@@ -60,6 +120,13 @@ def partition_actor_packs(project, config, sections, manifest, catalog, standalo
 
     excluded_sources = {"res://" + path for path in standalone}
     actor_paths = set(resources) | excluded_sources
+    prior_selections = set()
+    for section in sections.values():
+        encoded = config[section].get("export_files", "PackedStringArray()")
+        prior_selections.update(json.loads("[" + encoded.removeprefix("PackedStringArray(").removesuffix(")") + "]"))
+        prior_selections.update("res://" + path.removeprefix("res://")
+                                for path in json.loads(config[section].get("include_filter", '""')).split(",") if path)
+    retired_textures = retired_actor_textures(project, resources, prior_selections)
     for name, section in sections.items():
         encoded = config[section].get("export_files", "PackedStringArray()")
         selected = set(json.loads("[" + encoded.removeprefix("PackedStringArray(").removesuffix(")") + "]"))
@@ -67,6 +134,11 @@ def partition_actor_packs(project, config, sections, manifest, catalog, standalo
         excluded = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
         pack_id = name.removeprefix("Runtime Pack ")
         selected.difference_update(actor_paths)
+        selected.difference_update(retired_textures)
+        for path in retired_textures:
+            relative = path.removeprefix("res://")
+            included.discard(relative)
+            excluded.add(relative)
         # Broad compiled-actor selectors would resurrect already partitioned
         # scenes; selecting each catalog path also omits stale compiler outputs.
         included = {p for p in included if not p.startswith("assets_external/characters_prepared/")}
@@ -74,6 +146,7 @@ def partition_actor_packs(project, config, sections, manifest, catalog, standalo
             selected = {p for p, owner in owners.items() if owner == pack_id}
             included.clear()
             excluded = {"art_review/*", "art_review/**/*", "scripts/*", "data/*"}
+            excluded.update(path.removeprefix("res://") for path in retired_textures)
         for path in actor_paths:
             relative = path.removeprefix("res://")
             included.discard(relative)

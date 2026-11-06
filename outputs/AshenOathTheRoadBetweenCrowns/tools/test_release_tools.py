@@ -1,5 +1,6 @@
 """Small release-tool fixtures; never export, run Godot, or contact a server."""
 import configparser
+import fnmatch
 import gzip
 import hashlib
 import json
@@ -67,8 +68,9 @@ class Fixture(unittest.TestCase):
         project = self.root / "project"
         (project / "data").mkdir(parents=True, exist_ok=True)
         for relative in ["export_presets.cfg", "runtime_pack_manifest.json", "runtime_asset_manifest.json",
-                         "curated_asset_manifest.json", "visual_upgrade_manifest.json", "data/prepared_actors.json",
-                         "data/design_pack_assets.json", "data/environment_material_dependencies.json"]:
+                         "curated_asset_manifest.json", "curated_runtime_assets.json", "visual_upgrade_manifest.json", "data/prepared_actors.json",
+                         "data/design_pack_assets.json", "data/environment_material_dependencies.json",
+                         "data/zone_actor_requirements.json", "data/design_pack_ecology.json"]:
             source = PROJECT / relative
             if source.is_file():
                 shutil.copyfile(source, project / relative)
@@ -282,6 +284,10 @@ class WebContracts(Fixture):
         self.assertIn("does not render", "; ".join(hud_identity_errors(project)))
 
     def test_current_catalog_preset_parity_passes(self):
+        runtime = json.loads((PROJECT / "runtime_pack_manifest.json").read_text(encoding="utf-8-sig"))
+        actors = json.loads((PROJECT / "data/prepared_actors.json").read_text(encoding="utf-8-sig"))
+        self.assertTrue(any(runtime["actor_resource_owners"][actor["path"]] != actor["owner"] for actor in actors.values()),
+                        "Fixture must exercise delivery ownership differing from compilation batches")
         parity.validate(PROJECT / "export_presets.cfg")
 
     def test_extra_qa_resource_missing_duplicate_actor_or_missing_quality_maps_fails(self):
@@ -292,18 +298,45 @@ class WebContracts(Fixture):
             config.read(project / "export_presets.cfg", encoding="utf-8-sig")
             presets = {section.get("name", "").strip('"'): section for section in config.values()}
             section = presets[name]
+            runtime = json.loads((project / "runtime_pack_manifest.json").read_text(encoding="utf-8"))
+            actor = next(iter(json.loads((project / "data/prepared_actors.json").read_text(encoding="utf-8")).values()))
+            resource = actor["path"]
             if kind == "qa":
                 patterns = json.loads(section["include_filter"]) + ",assets/qa_extra/*"
             elif kind == "duplicate":
-                patterns = json.loads(section["include_filter"]) + ",assets_external/characters_prepared/opening/*.scn"
+                selected = parity.selected_files(section) | {resource}
+                section["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(path) for path in sorted(selected)) + ")"
+                relative = resource.removeprefix("res://")
+                exclusions = [pattern for pattern in parity.filters(section, "exclude_filter")
+                              if not fnmatch.fnmatchcase(relative, pattern)]
+                section["exclude_filter"] = json.dumps(",".join(sorted(exclusions)))
+                patterns = json.loads(section["include_filter"])
             elif kind == "quality":
                 patterns = ",".join(pattern for pattern in json.loads(section["include_filter"]).split(",") if "*_normal.jpg" not in pattern)
             else:
-                patterns = ",".join(pattern for pattern in json.loads(section["include_filter"]).split(",") if "characters_prepared/opening" not in pattern)
+                owner = runtime["actor_resource_owners"][resource]
+                section = presets[runtime["pack_presets"][owner]]
+                selected = parity.selected_files(section) - {resource}
+                section["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(path) for path in sorted(selected)) + ")"
+                patterns = json.loads(section["include_filter"])
             section["include_filter"] = json.dumps(patterns)
             with (project / "export_presets.cfg").open("w", encoding="utf-8") as output:
                 config.write(output, space_around_delimiters=False)
             with self.subTest(kind=kind), self.assertRaisesRegex(ValueError, "QA includes extra|missing current prepared actor|duplicates|Quality pack lacks"):
+                parity.validate(project / "export_presets.cfg")
+
+    def test_explicit_actor_registry_cannot_omit_or_name_unknown_owner(self):
+        for owner in (None, "missing_actor_pack"):
+            project = self.preset_project()
+            path = project / "runtime_pack_manifest.json"
+            runtime = json.loads(path.read_text(encoding="utf-8"))
+            actor = next(iter(json.loads((project / "data/prepared_actors.json").read_text(encoding="utf-8")).values()))
+            if owner is None:
+                runtime["actor_resource_owners"].pop(actor["path"])
+            else:
+                runtime["actor_resource_owners"][actor["path"]] = owner
+            path.write_text(json.dumps(runtime), encoding="utf-8")
+            with self.subTest(owner=owner), self.assertRaisesRegex(ValueError, "prepared actor"):
                 parity.validate(project / "export_presets.cfg")
 
 
