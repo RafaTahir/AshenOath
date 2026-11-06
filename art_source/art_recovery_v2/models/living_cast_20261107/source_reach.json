@@ -1,0 +1,217 @@
+{
+  "status": "source_reach_pass",
+  "coordinate_order": [
+    "lateral",
+    "forward",
+    "height"
+  ],
+  "contacts": [
+    {
+      "asset": "C01",
+      "hand": "hand_l",
+      "goal_lateral_forward_height": [
+        -0.12,
+        0.38,
+        1.04
+      ],
+      "authored_shoulder": [
+        -0.12881794571876526,
+        0.029196061193943024,
+        1.257156491279602
+      ],
+      "authored_hand": [
+        -0.23242536187171936,
+        0.33914855122566223,
+        1.0384101867675781
+      ],
+      "authored_contact_probe": [
+        -0.23242536187171936,
+        0.33914855122566223,
+        1.0384101867675781
+      ],
+      "required_wrist_goal": [
+        -0.12,
+        0.38,
+        1.04
+      ],
+      "retained_arm_length": 0.45522415201555305,
+      "required_reach": 0.41267190521455505,
+      "reach_margin": 0.042552246800998006,
+      "native_palm_goal_residual": 0.11962788289133675,
+      "shoulder_forward_shift": 0.006107177585363388
+    },
+    {
+      "asset": "C04",
+      "hand": "hand_r",
+      "goal_lateral_forward_height": [
+        0.18,
+        0.35,
+        1.185
+      ],
+      "authored_shoulder": [
+        0.16973140835762024,
+        -0.023108238354325294,
+        1.3144062757492065
+      ],
+      "authored_hand": [
+        0.17999999225139618,
+        0.34999996423721313,
+        1.184999942779541
+      ],
+      "authored_contact_probe": [
+        0.17999999225139618,
+        0.34999996423721313,
+        1.184999942779541
+      ],
+      "required_wrist_goal": [
+        0.18,
+        0.35,
+        1.185
+      ],
+      "retained_arm_length": 0.47147190464837446,
+      "required_reach": 0.39504580203498635,
+      "reach_margin": 0.07642610261338811,
+      "native_palm_goal_residual": 6.792053236194243e-08,
+      "shoulder_forward_shift": 0.06188262812793255
+    },
+    {
+      "asset": "C03",
+      "hand": "hand_l",
+      "goal_lateral_forward_height": [
+        -0.12,
+        0.44,
+        0.9521172
+      ],
+      "authored_shoulder": [
+        -0.12914526462554932,
+        0.1791296750307083,
+        1.1728076934814453
+      ],
+      "authored_hand": [
+        -0.1400793045759201,
+        0.4034225046634674,
+        0.9622077345848083
+      ],
+      "authored_contact_probe": [
+        -0.11999999731779099,
+        0.44000011682510376,
+        0.9521172046661377
+      ],
+      "required_wrist_goal": [
+        -0.14007930725812912,
+        0.40342238783836365,
+        0.9622077299186707
+      ],
+      "retained_arm_length": 0.45638131265458104,
+      "required_reach": 0.3078621752660603,
+      "reach_margin": 0.14851913738852074,
+      "native_palm_goal_residual": 1.1694901433598251e-07,
+      "shoulder_forward_shift": 0.1417624056339264
+    },
+    {
+      "asset": "C03",
+      "hand": "hand_r",
+      "goal_lateral_forward_height": [
+        0.12,
+        0.44,
+        0.9521172
+      ],
+      "authored_shoulder": [
+        0.13642916083335876,
+        0.1107955351471901,
+        1.22575044631958
+      ],
+      "authored_hand": [
+        0.14065773785114288,
+        0.40599706768989563,
+        0.9682408571243286
+      ],
+      "authored_contact_probe": [
+        0.11999999731779099,
+        0.44000011682510376,
+        0.952117383480072
+      ],
+      "required_wrist_goal": [
+        0.1406577405333519,
+        0.4059969508647919,
+        0.9682406736442566
+      ],
+      "retained_arm_length": 0.45638131265496495,
+      "required_reach": 0.3917563525346492,
+      "reach_margin": 0.06462496012031577,
+      "native_palm_goal_residual": 2.1753214921775923e-07,
+      "shoulder_forward_shift": 0.1597672887146473
+    },
+    {
+      "asset": "C02",
+      "hand": "hand_l",
+      "goal_lateral_forward_height": [
+        -0.1,
+        0.48,
+        1.11
+      ],
+      "authored_shoulder": [
+        -0.17261070013046265,
+        0.1596338152885437,
+        1.230634331703186
+      ],
+      "authored_hand": [
+        -0.09633349627256393,
+        0.4419463276863098,
+        1.0919151306152344
+      ],
+      "authored_contact_probe": [
+        -0.10000018030405045,
+        0.4800001084804535,
+        1.1100001335144043
+      ],
+      "required_wrist_goal": [
+        -0.0963333159685135,
+        0.4419462192058563,
+        1.0919149971008302
+      ],
+      "retained_arm_length": 0.47198552242322295,
+      "required_reach": 0.32366894588866846,
+      "reach_margin": 0.1483165765345545,
+      "native_palm_goal_residual": 2.4920605034237353e-07,
+      "shoulder_forward_shift": 0.14051122404634953
+    },
+    {
+      "asset": "C02",
+      "hand": "hand_r",
+      "goal_lateral_forward_height": [
+        0.1,
+        0.48,
+        1.11
+      ],
+      "authored_shoulder": [
+        0.16991642117500305,
+        0.06447860598564148,
+        1.291365385055542
+      ],
+      "authored_hand": [
+        0.08974619209766388,
+        0.4403766691684723,
+        1.1206495761871338
+      ],
+      "authored_contact_probe": [
+        0.10000009834766388,
+        0.4799998700618744,
+        1.1100000143051147
+      ],
+      "required_wrist_goal": [
+        0.08974609375,
+        0.4403767991065979,
+        1.1206495618820191
+      ],
+      "retained_arm_length": 0.47198559396549405,
+      "required_reach": 0.42055989498862767,
+      "reach_margin": 0.051425698976866385,
+      "native_palm_goal_residual": 1.6358733379165196e-07,
+      "shoulder_forward_shift": 0.15815836191177368
+    }
+  ],
+  "runtime_verified": false,
+  "user_accepted": false,
+  "note": "Reachability is measured from source FK and retained bone lengths. Exact native runtime contact still requires the existing IK and in-game fixture."
+}

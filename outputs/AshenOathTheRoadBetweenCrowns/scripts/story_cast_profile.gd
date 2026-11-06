@@ -58,6 +58,16 @@ const PRESENCE_ALIASES := {"sister_anwen":"anwen", "sister_anwen_human":"anwen",
 static var _life_data: Dictionary = {}
 static var _design_cast: Dictionary = {}
 
+const LIFE_MOTION := {
+	"anwen":{"library":"res://assets_external/characters_prepared/animations/life_C01.res", "work":["care"], "contact":0.50},
+	"tor":{"library":"res://assets_external/characters_prepared/animations/life_C04.res", "work":["forge", "repair"], "contact":0.50},
+	"mira":{"library":"res://assets_external/characters_prepared/animations/life_C03.res", "work":["sort_herbs", "herb_stall", "sort_seeds"], "contact":0.50, "contact_probe":"palm"},
+	"rook":{"library":"res://assets_external/characters_prepared/animations/life_C02.res", "work":["check_supplies", "sort_supplies", "check_rope"], "contact":0.50, "contact_probe":"palm"},
+}
+
+static func life_motion_profile(actor_id: String) -> Dictionary:
+	return LIFE_MOTION.get(canonical_identity(actor_id), {}).duplicate(true)
+
 static func design_cast() -> Dictionary:
 	if _design_cast.is_empty():
 		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_cast.json"))
@@ -129,7 +139,10 @@ static func register_actor(zone_root: Node3D, actor: Node3D, actor_id: String) -
 
 # Contact points are local to retained work geometry, not actor shoulders.
 const WORKSTATIONS := {
-	"blacksmith_tor":{"node":"BlacksmithFittedWork", "point":Vector3(-1.18,0.92,-0.35), "stand":Vector3(-1.18,0,0.35), "left":Vector3(-1.30,1.01,-0.25), "right":Vector3(-1.06,1.01,-0.25), "activity":"forge", "sound":"forge_hammer", "period":2.0, "lift":0.36},
+	"sister_anwen":{"node":"LifeWork_anwen", "markers":true, "activity":"care", "period":4.0},
+	"mira":{"node":"LifeWork_mira", "markers":true, "activity":"sort_herbs", "period":4.0, "surface_prop":"MiraRaisedDryingRack"},
+	"rook":{"node":"LifeWork_rook", "markers":true, "activity":"check_supplies", "period":4.0, "surface_prop":"RookStationSatchel", "contact_event":"satchel_cinch"},
+	"blacksmith_tor":{"node":"BlacksmithFittedWork", "point":Vector3(-1.22,0.92,0.10), "stand":Vector3(-1.40,0,0.45), "look":Vector3(-1.40,1.10,-0.35), "left":Vector3(-1.52,1.01,0.10), "right":Vector3(-1.22,1.185,0.10), "activity":"forge", "sound":"forge_hammer", "period":4.0, "lift":0.36},
 	"saga_nessa":{"quest":"saga_gre_q01", "point":Vector3(0,0.48,0), "stand":Vector3(0,0,0.65), "left":Vector3(-0.12,0.54,0.10), "right":Vector3(0.12,0.54,0.10), "activity":"bake", "period":2.5},
 	"saga_jory":{"quest":"saga_gre_q02", "point":Vector3(0.30,1.05,0), "stand":Vector3(0.30,0,0.65), "left":Vector3(0.30,0.95,0), "right":Vector3(0.30,1.13,0), "activity":"check_rope", "period":2.4, "lift":0.08},
 	"saga_lysa":{"quest":"saga_var_q01", "point":Vector3(0,0.5,0), "stand":Vector3(0,0,0.65), "left":Vector3(-0.12,0.58,0.10), "right":Vector3(0.12,0.58,0.10), "activity":"read", "sound":"record_page", "period":6.0},

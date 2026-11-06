@@ -66,6 +66,8 @@ const LOCOMOTION_STATES := ["walk", "walk_back", "strafe", "strafe_left", "straf
 const REFERENCE_HEIGHT_M := 1.72
 const WALK_CYCLE_DISTANCE_M := 1.45
 const RUN_CYCLE_DISTANCE_M := 3.20
+const LIFE_IDLE_KINDS := ["idle", "rest", "watch", "lookout", "remember"]
+const LIFE_STORY_GESTURES := ["offer", "explain", "acknowledge", "disagree", "recall", "remember", "reassure", "guarded_listening"]
 
 var character_root: Node3D
 var animation_player: AnimationPlayer
@@ -108,6 +110,14 @@ var locomotion_step_index := 0
 var story_gesture_remaining := 0.0
 var story_dialogue_active := false
 var life_modifier
+var life_clip := StringName()
+var life_elapsed := 0.0
+var life_idle_variant := 0
+var life_library_path := ""
+var life_work_kinds: Array = []
+var life_contact_fraction := 0.50
+var life_contact_probes: Dictionary = {}
+var life_seated_base := false
 var animation_graph
 var action_duration := 0.0
 var configured := false
@@ -185,6 +195,9 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	# Resolve aliases once; AnimationPlayer now supplies libraries, never playback.
 	for state: String in STATE_ALIASES:
 		_clip_for(state)
+	_bind_life_library()
+	if not contract_errors.is_empty():
+		return _fail_contract("authored life library failed binding")
 	var directions := {}
 	for state: String in ["walk_back", "run_back"]:
 		directions[state] = _playback_direction_for_state(state) > 0.0
@@ -214,6 +227,12 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 
 func _clear_playback() -> void:
 	configured = false
+	life_clip = StringName()
+	life_elapsed = 0.0
+	life_library_path = ""
+	life_work_kinds.clear()
+	life_contact_probes.clear()
+	life_seated_base = false
 	set_process(false)
 	if is_instance_valid(manual_tick_timer):
 		manual_tick_timer.stop()
@@ -226,8 +245,15 @@ func _clear_playback() -> void:
 		if reference != null and reference.get_ref() == self:
 			skeleton.remove_meta("character_motion_owner")
 	if is_instance_valid(life_modifier):
+		life_modifier._release_tool()
 		life_modifier.free()
 	life_modifier = null
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		# Removal from the tree also serves zone caching; only final deletion
+		# disposes the sibling graph/modifier and their generated props.
+		_clear_playback()
 
 func _fail_contract(reason: String) -> bool:
 	_clear_playback()
@@ -360,6 +386,12 @@ func _advance_animation(delta: float) -> void:
 	else:
 		current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
 	animation_graph.set_action_rate(current_playback_scale)
+	if life_clip != StringName() and presentation_state.begins_with("life:") and not action_active:
+		life_elapsed += delta * current_playback_scale
+		var life_kind := presentation_state.trim_prefix("life:")
+		if life_kind in LIFE_IDLE_KINDS and life_elapsed >= animation_player.get_animation(life_clip).length:
+			life_idle_variant = 1 - life_idle_variant
+			_play_life_clip("Life_Idle_A" if life_idle_variant == 0 else "Life_Idle_B")
 	animation_graph.advance(delta)
 	if action_active:
 		action_elapsed += delta
@@ -409,6 +441,8 @@ func is_evaluation_scheduled() -> bool:
 	return is_processing() and not timer_running
 
 func set_distance_suspended(suspended: bool) -> void:
+	if suspended and is_instance_valid(life_modifier):
+		life_modifier.hide_activity_tool()
 	if distance_suspended == suspended:
 		_reconcile_clock()
 		return
@@ -466,6 +500,8 @@ func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground:
 		current_local_direction = Vector3(current_direction.dot(visible_right), 0.0, -current_direction.dot(visible_forward))
 	else:
 		current_local_direction = Vector3.ZERO
+	if presentation_state.begins_with("life:") and current_speed_mps > 0.08 and not action_active:
+		clear_life_activity()
 	if not is_valid() or dead or action_active or presentation_state != "":
 		return
 	var previously_moving: bool = locomotion_state in LOCOMOTION_STATES
@@ -584,12 +620,17 @@ func set_dialogue_pose(active: bool) -> void:
 			_play_state("idle", 0.12)
 
 func play_story_gesture(kind: String, pace: float = 0.9) -> void:
-	if not story_dialogue_active or dead or kind not in ["offer", "explain"]:
+	if not story_dialogue_active or dead or kind not in LIFE_STORY_GESTURES:
 		return
-	if trigger_action("story_" + kind, pace, 0.18):
+	var state := "story_" + kind
+	if _clip_for(state) == StringName():
+		# Older actors keep their existing body language; head gestures remain
+		# distinct without borrowing an unrelated combat or interaction clip.
+		return
+	if trigger_action(state, pace, 0.18):
 		# A shared Interact clip may be looping. A bounded gesture returns to
 		# attentive stillness rather than repeatedly handing over an empty object.
-		story_gesture_remaining = 1.8 / maxf(pace, 0.5)
+		story_gesture_remaining = minf(action_duration, 4.0 / maxf(pace, 0.5))
 
 func stop_story_gesture() -> void:
 	story_dialogue_active = false
@@ -693,22 +734,119 @@ func set_life_activity(kind: String) -> void:
 		skeleton.add_child(life_modifier)
 		life_modifier.configure(character_root, self)
 	life_modifier.activity = kind
+	if kind != "sleep":
+		life_modifier.rest_anchor = {}
+	life_modifier.last_contact_cycle = -1
+	life_modifier.last_contact_samples.clear()
 	presentation_state = "life:" + kind
 	current_state = ""
 	target_playback_scale = 1.0
-	_play_state("idle", 0.18)
+	current_playback_scale = 1.0
+	var requested := "Life_Idle_A" if life_idle_variant == 0 else "Life_Idle_B"
+	if kind not in LIFE_IDLE_KINDS:
+		requested = "Life_Work" if kind in life_work_kinds else ""
+	if requested == "" or not _play_life_clip(requested):
+		life_clip = StringName()
+		life_elapsed = 0.0
+		_play_state("idle", 0.18)
 
 func clear_life_activity() -> void:
+	life_clip = StringName()
+	life_elapsed = 0.0
 	if life_modifier != null:
+		life_modifier.hide_activity_tool()
 		life_modifier.activity = ""
 		life_modifier.station = {}
+		life_modifier.rest_anchor = {}
 		life_modifier.activity_prop = ""
 		life_modifier.carried_activity = ""
+		life_modifier.last_contact_cycle = -1
+		life_modifier.last_contact_samples.clear()
 	if presentation_state.begins_with("life:"):
 		presentation_state = ""
 		current_state = ""
 		if is_valid() and not dead:
 			_play_state("idle", 0.18)
+
+func _bind_life_library() -> void:
+	# Optional per-person authored performances live beside their actor pack.
+	# They never replace locomotion, combat, rest poses or source attack clips.
+	var profile = preload("res://scripts/story_cast_profile.gd")
+	var identity := profile.canonical_identity(str(character_root.get_meta("character_identity_profile", character_root.get_meta("character_visual_role", ""))))
+	var recipe: Dictionary = profile.life_motion_profile(identity)
+	life_work_kinds = recipe.get("work", []).duplicate()
+	life_library_path = str(recipe.get("library", ""))
+	if life_library_path == "":
+		return
+	if not ResourceLoader.exists(life_library_path):
+		contract_errors.append("required authored life library is missing: " + life_library_path)
+		return
+	var library := load(life_library_path) as AnimationLibrary
+	if library == null:
+		contract_errors.append("authored life resource is not an animation library: " + life_library_path)
+		return
+	life_contact_fraction = float(library.get_meta("contact_fraction", -1.0))
+	if str(recipe.get("contact_probe", "")) == "palm":
+		var probes: Variant = library.get_meta("contact_probes", {})
+		if not probes is Dictionary or str(library.get_meta("contact_probe_method", "")).is_empty():
+			contract_errors.append("authored palm probes lack calibration provenance: " + life_library_path)
+		else:
+			for side: String in ["left", "right"]:
+				var point: Variant = probes.get(side)
+				if not point is Vector3 or not point.is_finite() or point.length() < 0.005 or point.length() > 0.18:
+					contract_errors.append("authored palm probe is missing or invalid: " + identity + "/" + side)
+				else:
+					life_contact_probes[side] = point
+	if int(library.get_meta("schema_version", 0)) != 1 or str(library.get_meta("actor_identity", "")) != identity \
+			or not is_finite(life_contact_fraction) or not is_equal_approx(life_contact_fraction, float(recipe.get("contact", 0.50))):
+		contract_errors.append("authored life library identity/contact metadata is invalid: " + life_library_path)
+		return
+	if animation_player.has_animation_library("life"):
+		animation_player.remove_animation_library("life")
+	animation_player.add_animation_library("life", library)
+	for name: String in ["Life_Idle_A", "Life_Idle_B", "Life_Work", "Life_Listen", "Life_Speak"]:
+		var key := StringName("life/" + name)
+		if not animation_player.has_animation(key) or _bound_bone_tracks(key) == 0:
+			contract_errors.append("authored life clip is missing or unbound: " + str(key))
+			continue
+		var duration := animation_player.get_animation(key).length
+		if not is_finite(duration) or duration <= 0.0 or name == "Life_Work" and not is_equal_approx(duration, 4.0):
+			contract_errors.append("authored life clip duration is invalid: " + str(key))
+		bound_track_counts[str(key)] = _bound_bone_tracks(key)
+	if not contract_errors.is_empty():
+		return
+	# Board-game and injured seated variants share a person's identity, but
+	# must retain their seated library rather than stand for a conversation.
+	life_seated_base = str(resolved_clip_map.get("idle", "")).to_lower().contains("sitting")
+	if life_seated_base:
+		return
+	resolved_clip_map["dialogue"] = &"life/Life_Listen"
+	resolved_clip_map["story_listen"] = &"life/Life_Listen"
+	for gesture: String in LIFE_STORY_GESTURES:
+		resolved_clip_map["story_" + gesture] = &"life/Life_Listen" if gesture == "guarded_listening" else &"life/Life_Speak"
+	life_idle_variant = absi(identity.hash()) % 2
+
+func _play_life_clip(name: String) -> bool:
+	if life_seated_base:
+		return false
+	var key := StringName("life/" + name)
+	if not animation_player.has_animation(key) or not bound_track_counts.has(str(key)):
+		return false
+	life_clip = key
+	life_elapsed = 0.0
+	current_state = "life_clip:" + name
+	animation_graph.ambient_clip(str(key), true)
+	# Publish a queued same-node restart at time zero. Otherwise the next
+	# elapsed step can be consumed by the reset while contact time advances.
+	animation_graph.advance(0.0)
+	return true
+
+func life_motion_sample() -> Dictionary:
+	if life_clip == StringName() or not presentation_state.begins_with("life:"):
+		return {}
+	var duration := animation_player.get_animation(life_clip).length
+	return {"clip":str(life_clip), "elapsed":life_elapsed, "duration":duration,
+		"phase":fposmod(life_elapsed, duration) / duration, "cycle":floori(life_elapsed / duration), "contact_fraction":life_contact_fraction, "contact_probes":life_contact_probes}
 
 func get_skeleton() -> Skeleton3D:
 	return skeleton
@@ -719,6 +857,13 @@ func set_life_workstation(value: Dictionary) -> void:
 	_ensure_life_modifier()
 	if life_modifier != null:
 		life_modifier.station = value
+
+func set_life_rest_anchor(value: Dictionary) -> void:
+	if value.is_empty() and life_modifier == null:
+		return
+	_ensure_life_modifier()
+	if life_modifier != null:
+		life_modifier.rest_anchor = value
 
 func set_carried_activity(kind: String) -> void:
 	if kind == "" and life_modifier == null:

@@ -11,6 +11,8 @@ param(
     [switch]$Publish,
     [string]$PublishMessage = "",
     [string]$Ticket = "",
+    [ValidateSet('codex/masterpiece-rebuild', 'codex/art-recovery-anwen')]
+    [string]$DevelopmentBranch = 'codex/masterpiece-rebuild',
     [string[]]$PublishPaths = @()
 )
 
@@ -143,12 +145,14 @@ foreach ($script in @("greyfen_life_controller", "story_state", "hud")) {
 if (-not $CharacterAssetsOnly) {
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "split_prepared_audio.gd")) "prepared-audio-split"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_audio.gd"), "--", "--approved-arrangements") "approved-arrangements"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_station_props.gd")) "living-cast-station-props"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd")) "prepared-zone-geometry"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"
 if (-not $DesignPackCast) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_bracken_asset.gd")) "bracken-asset"
 }
 }
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_environment_dependencies.gd")) "environment-material-dependencies"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "prepared-actor-pack-layout"
@@ -282,7 +286,7 @@ if ($Publish) {
             "outputs/AshenOathTheRoadBetweenCrowns/docs/audio"
         )
     }
-    & (Join-Path $PSScriptRoot "publish_living_road.ps1") -Ticket $Ticket -Message $PublishMessage -CommitPaths (@($GeneratedPaths + $PublishPaths | Select-Object -Unique)) -PythonPath $PythonPath
+    & (Join-Path $PSScriptRoot "publish_living_road.ps1") -Ticket $Ticket -Message $PublishMessage -CommitPaths (@($GeneratedPaths + $PublishPaths | Select-Object -Unique)) -PythonPath $PythonPath -DevelopmentBranch $DevelopmentBranch
 } else {
     Write-Host "Packaging completed; publication was not requested."
 }

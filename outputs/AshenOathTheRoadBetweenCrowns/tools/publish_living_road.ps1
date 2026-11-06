@@ -3,6 +3,8 @@ param(
     [Parameter(Mandatory = $true)][string]$Message,
     [Parameter(Mandatory = $true)][string[]]$CommitPaths,
     [string]$RuntimeEvidence = "",
+    [ValidateSet('codex/masterpiece-rebuild', 'codex/art-recovery-anwen')]
+    [string]$DevelopmentBranch = 'codex/masterpiece-rebuild',
     [string]$PythonPath = "C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
 )
 
@@ -36,14 +38,14 @@ function Invoke-Git([string[]]$GitArgs) {
 }
 
 $branch = (& git -C $RepositoryRoot branch --show-current).Trim()
-if ($LASTEXITCODE -ne 0 -or $branch -ne 'codex/masterpiece-rebuild') { throw 'Expected codex/masterpiece-rebuild.' }
+if ($LASTEXITCODE -ne 0 -or $branch -ne $DevelopmentBranch) { throw "Expected $DevelopmentBranch." }
 foreach ($relative in $CommitPaths) {
     if ($relative -match '[*?]' -or $relative.StartsWith(':') -or [IO.Path]::IsPathRooted($relative)) { throw "Use explicit repository-relative paths: $relative" }
     $absolute = [IO.Path]::GetFullPath((Join-Path $RepositoryRoot $relative))
     if (-not $absolute.StartsWith($RepositoryRoot + '\', [StringComparison]::OrdinalIgnoreCase)) { throw "Path escapes repository: $relative" }
 }
 Invoke-Git @('fetch', 'origin')
-foreach ($remoteBranch in @('origin/main', 'origin/codex/masterpiece-rebuild')) {
+foreach ($remoteBranch in @('origin/main', ('origin/' + $DevelopmentBranch))) {
     & git -C $RepositoryRoot merge-base --is-ancestor $remoteBranch HEAD
     if ($LASTEXITCODE -ne 0) { throw "$remoteBranch contains changes that must be integrated before publication." }
 }
@@ -63,6 +65,7 @@ $receipt = [ordered]@{
     runtime_evidence = $RuntimeEvidence
     production_url = 'https://ashenoath.vercel.app'
     deployment_method = 'git_automatic_production'
+    development_branch = $DevelopmentBranch
 }
 function Save-Receipt {
     [IO.File]::WriteAllText((Join-Path $RunRoot 'publication.json'), (($receipt | ConvertTo-Json -Depth 8) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
@@ -87,7 +90,7 @@ Save-Receipt
 Invoke-Git (@('add', '--') + $CommitPaths)
 Invoke-Git (@('commit', '--only', '-m', $Message, '--') + $CommitPaths)
 Invoke-PublicationStep 'bind'
-Invoke-Git @('push', 'origin', 'HEAD:codex/masterpiece-rebuild')
+Invoke-Git @('push', 'origin', ('HEAD:' + $DevelopmentBranch))
 
 # Recheck main before the production push; never overwrite concurrent work.
 Invoke-Git @('fetch', 'origin', 'main')

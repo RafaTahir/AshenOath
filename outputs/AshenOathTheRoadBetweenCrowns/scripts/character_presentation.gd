@@ -50,11 +50,15 @@ static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
 	var skeleton := _find_skeleton(owner)
 	if skeleton == null:
 		return null
-	var bone := _find_bone_index(skeleton, ["hand_r", "RightHand", "Hand.R", "right_hand"])
+	var free_care_hand := style == "cloth" and uses_fitted_anwen_staff(skeleton, owner)
+	var hand_aliases: Array[String] = []
+	hand_aliases.assign(["hand_l", "LeftHand", "Hand.L", "left_hand"] if free_care_hand else ["hand_r", "RightHand", "Hand.R", "right_hand"])
+	var bone := _find_bone_index(skeleton, hand_aliases)
 	if bone < 0:
 		return null
 	var hand := BoneAttachment3D.new()
 	hand.name = "CastActivityTool"
+	hand.set_meta("life_generated_activity_tool", true)
 	hand.bone_name = skeleton.get_bone_name(bone)
 	hand.bone_idx = bone
 	skeleton.add_child(hand)
@@ -155,6 +159,8 @@ static func apply_npc(owner: Node3D, role_id: String, include_ground_shadow: boo
 		CharacterSilhouette.apply(visual_target, role_id.to_lower(), _variant_seed(owner, role_id))
 		if visual_target != owner:
 			_copy_identity_contract(owner, visual_target, role_id.to_lower())
+		if role_id.to_lower() in ["sister_anwen", "sister_anwen_human"]:
+			_add_anwen_staff(owner)
 		return
 	owner.set_meta("character_presentation_applied", true)
 	if include_ground_shadow:
@@ -358,15 +364,27 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	# mounted silhouette. The staff follows the imported hand bone through
 	# dialogue and locomotion, and its equipment parent is excluded from body
 	# bounds and character material validation.
-	if owner.find_child("AnwenStaffEquipment", true, false) != null:
-		return
 	var skeleton := _find_skeleton(owner)
 	if skeleton == null:
 		return
-	var hand_index := _find_bone_index(skeleton, ["LeftHand", "Hand.L", "hand_l", "left_hand"])
+	var fitted_staff := uses_fitted_anwen_staff(skeleton, owner)
+	var hand_aliases: Array[String] = []
+	hand_aliases.assign(["RightHand", "Hand.R", "hand_r", "right_hand"] if fitted_staff else ["LeftHand", "Hand.L", "hand_l", "left_hand"])
+	var hand_index := _find_bone_index(skeleton, hand_aliases)
 	if hand_index < 0:
 		hand_index = _find_bone_index(skeleton, ["RightHand", "Hand.R", "hand_r", "right_hand"])
 	if hand_index < 0:
+		return
+	if owner.find_child("AnwenStaffEquipment", true, false) != null:
+		var existing_socket := owner.find_child("AnwenStaffSocket", true, false) as BoneAttachment3D
+		if fitted_staff and existing_socket != null:
+			existing_socket.bone_idx = hand_index
+			existing_socket.bone_name = skeleton.get_bone_name(hand_index)
+			var existing_equipment := owner.find_child("AnwenStaffEquipment", true, false) as Node3D
+			existing_equipment.position = Vector3(0, 0.045, -0.012)
+			existing_equipment.rotation_degrees = Vector3(0, 0, 90)
+			var existing_model := existing_equipment.find_child("AnwenStaffModeled", true, false) as Node3D
+			if existing_model != null: existing_model.scale.y = 0.93 / 0.86
 		return
 	var attachment := BoneAttachment3D.new()
 	attachment.name = "AnwenStaffSocket"
@@ -377,7 +395,6 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	equipment.name = "AnwenStaffEquipment"
 	equipment.actor = owner
 	equipment.position = Vector3.ZERO
-	var fitted_staff := uses_fitted_anwen_staff(skeleton, owner)
 	# The authored staff origin is its grip; WorldOrientedEquipment keeps its
 	# upright shaft while the socket supplies the animated hand position.
 	equipment.rotation_degrees = Vector3.ZERO
@@ -401,17 +418,28 @@ static func _add_anwen_staff(owner: Node3D) -> void:
 	push_warning("Anwen staff source could not be loaded: %s" % CLERIC_STAFF_PATH)
 
 static func uses_fitted_anwen_staff(skeleton: Skeleton3D, owner: Node) -> bool:
-	var node: Node = skeleton.get_parent()
+	# GLTF armature extras can be attached to Skeleton3D itself. Prepared
+	# assemblies also retain their exact source/identity if extras were omitted.
+	var node: Node = skeleton
+	var retained_c01 := false
+	var anwen_identity := false
 	while node != null:
 		if node.has_meta("anwen_staff_pose"):
 			return bool(node.get_meta("anwen_staff_pose"))
 		var extras: Variant = node.get_meta("extras", {})
 		if extras is Dictionary and extras.has("anwen_staff_pose"):
 			return bool(extras.anwen_staff_pose)
+		retained_c01 = retained_c01 or str(node.get_meta("prepared_actor_source", "")).ends_with("/humans/C01_Anwen.glb")
+		var role := str(node.get_meta("character_identity_profile", node.get_meta("character_visual_role", "")))
+		anwen_identity = anwen_identity or preload("res://scripts/story_cast_profile.gd").canonical_identity(role) == "anwen"
 		if node == owner:
 			break
 		node = node.get_parent()
-	return false
+	if not retained_c01 or not anwen_identity or skeleton.get_bone_count() != 76:
+		return false
+	for bone: String in ["upperarm_l", "lowerarm_l", "hand_l", "upperarm_r", "lowerarm_r", "hand_r"]:
+		if skeleton.find_bone(bone) < 0: return false
+	return true
 
 static func _instantiate_prop(path: String) -> Node3D:
 	if path.is_empty() or not ResourceLoader.exists(path):

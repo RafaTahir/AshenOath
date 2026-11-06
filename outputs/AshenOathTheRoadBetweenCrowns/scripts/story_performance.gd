@@ -17,9 +17,7 @@ var pending_gesture := ""
 var audio_source: Node
 var delivery_active := false
 var page_speaker := ""
-var previous_face_focus: Node3D
-var previous_expression := "neutral"
-var previous_face_suspended := false
+var previous_attention: Dictionary = {}
 
 static func begin(target: Node3D, player: Node3D, _dialogue: Dictionary = {}, state = null) -> void:
 	if target == null or not is_instance_valid(target):
@@ -107,6 +105,9 @@ func start(target: Node3D, player: Node3D, state) -> void:
 		profile = CastProfile.get_profile("player")
 	driver = actor.find_child("CharacterAnimationDriver", true, false)
 	face = actor.find_child("CharacterFaceDriver", true, false)
+	if is_instance_valid(driver) and bool(driver.dead):
+		Presence.release(target, "dialogue", get_instance_id())
+		return
 	if driver == null and face == null:
 		Presence.release(target, "dialogue", get_instance_id())
 		return
@@ -121,6 +122,8 @@ func start(target: Node3D, player: Node3D, state) -> void:
 		if node is AnimationPlayer or node is Skeleton3D or node is SkeletonModifier3D or node == driver or node == face or node is Timer and node.get_parent() in [driver, face]:
 			saved_modes[node] = node.process_mode
 			node.process_mode = Node.PROCESS_MODE_ALWAYS
+	if face != null:
+		previous_attention = face.capture_attention()
 	if driver != null:
 		previous_clock = driver.capture_clock()
 		driver.set_external_tick(false)
@@ -128,9 +131,6 @@ func start(target: Node3D, player: Node3D, state) -> void:
 		driver.set_update_rate_hz(30.0)
 		driver.set_dialogue_pose(true)
 	if face != null:
-		previous_face_focus = face.focus_target
-		previous_expression = str(face.expression)
-		previous_face_suspended = bool(face.distance_suspended)
 		face.set_conversation_active(true)
 		face.set_distance_suspended(false)
 		face.set_focus_target(listener)
@@ -138,7 +138,7 @@ func start(target: Node3D, player: Node3D, state) -> void:
 	set_process(true)
 
 func _process(delta: float) -> void:
-	if not active or not is_instance_valid(actor):
+	if not active or not is_instance_valid(actor) or is_instance_valid(driver) and bool(driver.dead):
 		stop()
 		return
 	var delivery: Dictionary = audio_source.get_dialogue_delivery() if is_instance_valid(audio_source) else {}
@@ -155,7 +155,7 @@ func _process(delta: float) -> void:
 		pending_gesture = ""
 		if face != null:
 			face.play_story_gesture(gesture)
-		if driver != null and speaking and gesture in ["offer", "explain"]:
+		if driver != null and gesture in ["offer", "explain", "acknowledge", "disagree", "recall", "remember", "reassure", "guarded_listening"]:
 			driver.play_story_gesture(gesture, float(profile.get("pace", 0.9)))
 
 func stop() -> void:
@@ -172,10 +172,8 @@ func stop() -> void:
 	previous_clock.clear()
 	if is_instance_valid(face):
 		face.set_speech_amount(0.0)
-		face.set_conversation_active(false)
-		face.set_focus_target(previous_face_focus if is_instance_valid(previous_face_focus) else null)
-		face.set_expression(previous_expression)
-		face.set_distance_suspended(previous_face_suspended)
+		face.restore_attention(previous_attention)
+	previous_attention.clear()
 	audio_source = null
 	for node in saved_modes:
 		if is_instance_valid(node):

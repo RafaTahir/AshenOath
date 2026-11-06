@@ -18,10 +18,15 @@ var creature_intent := ""
 var creature_amount := 0.0
 var creature_weight := 0.0
 var tool: Node3D
+var owns_tool := false
 var tool_kind := ""
 var station: Dictionary = {}
+var rest_anchor: Dictionary = {}
 var last_contact_cycle := -1
 var tool_contact: Node3D
+var tool_contact_local := Vector3.ZERO
+var tool_contact_points := PackedVector3Array()
+var last_contact_samples: Dictionary = {}
 var seated_legs: Array[Dictionary] = []
 var pelvis := -1
 var ambient_weight := 0.0
@@ -60,7 +65,8 @@ func configure(body: Node3D, motion: Node) -> void:
 	for side: String in ["l", "r"]:
 		var thigh := skeleton.find_bone("thigh_" + side)
 		var calf := skeleton.find_bone("calf_" + side)
-		if thigh >= 0 and calf >= 0: seated_legs.append({"thigh":thigh,"calf":calf})
+		var foot := skeleton.find_bone("foot_" + side)
+		if thigh >= 0 and calf >= 0: seated_legs.append({"thigh":thigh,"calf":calf,"foot":foot,"side":-1.0 if side == "l" else 1.0})
 	for alias: String in ["Head", "head", "head_01", "DEF-head"]:
 		head = skeleton.find_bone(alias)
 		if head >= 0:
@@ -94,9 +100,13 @@ func _process_modification() -> void:
 	if bool(driver.dead) or bool(driver.distance_suspended) or driver.has_active_action():
 		pose_weight = 0.0
 		ambient_weight = 0.0
-		if is_instance_valid(tool):
-			tool.visible = false
-		if anwen_staff_pose and is_instance_valid(staff_equipment) and not bool(driver.distance_suspended):
+		hide_activity_tool()
+		if anwen_staff_pose and not bool(driver.dead) and not bool(driver.distance_suspended) \
+				and (bool(driver.story_dialogue_active) or str(driver.current_state) == "greet"):
+			# Keep the real support grip while the free arm and body deliver
+			# authored dialogue. Combat and terminal poses retain their priority.
+			_staff_pose(skeleton, minf(get_process_delta_time(), 0.05), "")
+		elif anwen_staff_pose and is_instance_valid(staff_equipment) and not bool(driver.distance_suspended):
 			staff_equipment.visible = false
 		return
 	var delta := minf(get_process_delta_time(), 0.05)
@@ -106,8 +116,9 @@ func _process_modification() -> void:
 	if is_instance_valid(viewer):
 		near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
 	var effective := activity if activity != "" else carried_activity
+	var native_motion: Dictionary = driver.life_motion_sample()
 	var requested := effective != "" and near and not bool(driver.story_dialogue_active)
-	_ambient_pose(skeleton, delta, near, effective)
+	_ambient_pose(skeleton, delta, near, effective, not native_motion.is_empty())
 	if humanoid and near and garment_arm_clearance > 0.0 and not bool(driver.story_dialogue_active) and float(driver.current_speed_mps) > 0.08 and effective in ["", "idle", "watch", "lookout", "walk", "travel"]:
 		var across := actor.global_basis.x.normalized()
 		var clearance := garment_arm_clearance * actor.global_basis.get_scale().y * clampf(float(driver.current_speed_mps) / 0.6, 0.0, 1.0)
@@ -124,6 +135,9 @@ func _process_modification() -> void:
 	pose_weight = move_toward(pose_weight, 1.0 if requested else 0.0, delta * 4.5)
 	if pose_weight <= 0.001:
 		return
+	if effective == "sleep":
+		_pose_supported_sleep(skeleton)
+		return
 	if effective in ["sit", "seated_eat"]:
 		if pelvis >= 0:
 			var parent := skeleton.get_bone_parent(pelvis)
@@ -134,7 +148,7 @@ func _process_modification() -> void:
 			skeleton.set_bone_pose_rotation(leg.thigh,skeleton.get_bone_pose_rotation(leg.thigh)*Quaternion(Vector3.RIGHT,-1.35*pose_weight))
 			skeleton.set_bone_pose_rotation(leg.calf,skeleton.get_bone_pose_rotation(leg.calf)*Quaternion(Vector3.RIGHT,1.35*pose_weight))
 		if effective == "sit": return
-	if spine >= 0:
+	if spine >= 0 and native_motion.is_empty():
 		var base := skeleton.get_bone_pose_rotation(spine)
 		var bend := 0.12 if effective == "scavenge" else 0.0
 		skeleton.set_bone_pose_rotation(spine, base * Quaternion(Vector3.RIGHT, (bend + sin(elapsed * 1.4) * 0.007) * pose_weight))
@@ -145,8 +159,27 @@ func _process_modification() -> void:
 	var period := float(station.get("period", 2.0))
 	var cycle := floori(elapsed / period)
 	var phase := fmod(elapsed, period) / period
+	var authored_work := str(native_motion.get("clip", "")) == "life/Life_Work"
+	var contact_fraction := 0.0
+	if authored_work:
+		cycle = int(native_motion.cycle)
+		phase = float(native_motion.phase)
+		contact_fraction = float(native_motion.contact_fraction)
 	var contact := not station.is_empty() and effective == str(station.get("activity", ""))
+	# Native work owns anticipation, inspection and recovery. IK only corrects
+	# final contact against the real station, never replaces the complete clip.
+	if authored_work and not contact:
+		return
+	var reached_contact := not authored_work
+	var contact_hands := 0
+	var reached_hands := 0
 	for arm: Dictionary in arms:
+		if authored_work and effective == "forge" and float(arm.side) < 0:
+			continue
+		# Anwen's fitted right-hand staff remains the sole owner of that arm
+		# while her free hand performs care at the table.
+		if anwen_staff_pose and effective == "care" and float(arm.side) > 0:
+			continue
 		var shoulder := _world(skeleton, int(arm.upper))
 		var elbow := _world(skeleton, int(arm.lower))
 		var hand := _world(skeleton, int(arm.hand))
@@ -198,23 +231,66 @@ func _process_modification() -> void:
 				drop = 0.57
 		var goal := shoulder + (forward * depth + right * across - Vector3.UP * drop) * reach
 		var wrist_target: Variant = null
+		var probe_local := Vector3.ZERO
+		var probe_kind := "wrist"
 		if contact:
-			goal = station.get("right" if float(arm.side) > 0 else "left", goal)
+			var working_right := float(arm.side) > 0
+			goal = station.get("right" if working_right else "left", goal)
 			var lift := float(station.get("lift", 0.0))
-			if float(arm.side) > 0:
+			if working_right:
 				if effective == "forge" and is_instance_valid(tool_contact):
-					var tip_offset := tool_contact.global_position - hand
+					# BoneAttachment globals may still contain the preceding frame.
+					# The authored socket offset composed with this sampled bone is
+					# stable at every animation/update rate.
+					var tip_offset := skeleton.global_basis * skeleton.get_bone_global_pose(int(arm.hand)).basis * tool_contact_local
 					if tip_offset.length_squared() > 0.0001:
 						var hand_basis := (skeleton.global_basis * skeleton.get_bone_global_pose(int(arm.hand)).basis).orthonormalized()
 						wrist_target = Basis(Quaternion(tip_offset.normalized(), Vector3.DOWN)) * hand_basis
 						goal = (station.point as Vector3) + Vector3.UP * (0.035 + tip_offset.length())
-				goal += Vector3.UP * lift * pow(sin(phase * PI), 2.0)
+				goal += Vector3.UP * lift * (pow(maxf(0.0, sin(phase * TAU)), 2.0) if authored_work else pow(sin(phase * PI), 2.0))
 			elif effective in ["bake", "sort_herbs", "sort_seeds", "tend"]:
 				goal += right * sin(phase * TAU) * 0.04
-		_solve_arm(skeleton, arm, hand.lerp(goal, pose_weight), wrist_target)
-	if contact and cycle != last_contact_cycle and phase < 0.15 and pose_weight > 0.95:
+		var contact_target := goal
+		if authored_work and contact:
+			var hand_frame := skeleton.global_basis * skeleton.get_bone_global_pose(int(arm.hand)).basis
+			var probes: Dictionary = native_motion.get("contact_probes", {})
+			var side := "left" if float(arm.side) < 0 else "right"
+			if probes.has(side):
+				probe_local = probes[side]
+				probe_kind = "palm"
+			elif effective == "care" and tool_kind == "cloth" and not tool_contact_points.is_empty():
+				var lowest := INF
+				for point: Vector3 in tool_contact_points:
+					var height := (hand_frame * point).y
+					if height < lowest:
+						lowest = height
+						probe_local = point
+				probe_kind = "cloth"
+				contact_target.y = (station.point as Vector3).y
+			elif effective == "forge" and is_instance_valid(tool_contact):
+				probe_kind = "hammer"
+				probe_local = tool_contact_local
+				contact_target = (station.point as Vector3) + Vector3.UP * 0.035
+			if probe_kind in ["palm", "cloth"]:
+				# Preserve the authored palm orientation while moving its actual
+				# grip/surface onto the target; wrist origins are not contacts.
+				wrist_target = hand_frame.orthonormalized()
+				goal = contact_target - hand_frame * probe_local
+		var contact_weight := smoothstep(0.22, contact_fraction, phase) * (1.0 - smoothstep(contact_fraction + 0.08, 0.80, phase)) if authored_work else 1.0
+		_solve_arm(skeleton, arm, hand.lerp(goal, pose_weight * contact_weight), wrist_target if contact_weight > 0.95 else null)
+		if authored_work and contact_weight > 0.95 and (effective != "forge" or float(arm.side) > 0):
+			contact_hands += 1
+			var actual: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(int(arm.hand)) * probe_local
+			var error := actual.distance_to(contact_target)
+			last_contact_samples["left" if float(arm.side) < 0 else "right"] = {"kind":probe_kind, "target":contact_target, "actual":actual, "error":error, "cycle":cycle}
+			if error <= 0.06:
+				reached_hands += 1
+	if authored_work:
+		reached_contact = contact_hands > 0 and reached_hands == contact_hands
+	var at_contact := phase >= contact_fraction if authored_work else phase < 0.15
+	if contact and cycle != last_contact_cycle and at_contact and pose_weight > 0.95 and reached_contact:
 		last_contact_cycle = cycle
-		var event := str(station.get("sound", ""))
+		var event := str(station.get("contact_event", station.get("sound", "")))
 		if event != "":
 			driver.activity_contact.emit(event, station.get("point", actor.global_position))
 
@@ -222,16 +298,93 @@ func _update_tool(kind: String, visible_now: bool) -> void:
 	var style := str({"repair":"hammer", "forge":"hammer", "read":"book", "notice_board":"book", "check_rope":"rope", "well":"rope", "bake":"bread", "kitchen":"bread", "care":"cloth", "carry":"supply", "check_supplies":"supply", "sort_supplies":"supply", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "herb_stall":"bowl"}.get(kind, ""))
 	if activity_prop != "":
 		style = activity_prop
-	if style != "" and style != tool_kind:
-		if is_instance_valid(tool):
-			tool.queue_free()
+	if station.get("activity", "") == kind and str(station.get("surface_prop", "")) != "":
+		style = ""
+	if style != "" and (style != tool_kind or not is_instance_valid(tool)):
+		_release_tool()
 		tool = preload("res://scripts/character_presentation.gd").attach_activity_tool(actor, style)
+		owns_tool = is_instance_valid(tool) and bool(tool.get_meta("life_generated_activity_tool", false))
 		tool_kind = style
 		tool_contact = tool.find_child("ForgedHead", true, false) as Node3D if is_instance_valid(tool) and style == "hammer" else null
+		tool_contact_local = _contact_socket_offset(tool_contact)
+		tool_contact_points.clear()
+		if style == "cloth" and is_instance_valid(tool):
+			var unique := {}
+			for mesh: MeshInstance3D in tool.find_children("*", "MeshInstance3D", true, false):
+				if mesh.mesh == null: continue
+				var frame := _contact_socket_frame(mesh)
+				for vertex: Vector3 in mesh.mesh.get_faces():
+					var point := frame * vertex
+					if not unique.has(point):
+						unique[point] = true
+						tool_contact_points.append(point)
 	if is_instance_valid(tool):
 		tool.visible = visible_now and style == tool_kind
 
-func _ambient_pose(skeleton: Skeleton3D, delta: float, near: bool, effective: String) -> void:
+func hide_activity_tool() -> void:
+	if is_instance_valid(tool):
+		tool.visible = false
+
+func _release_tool() -> void:
+	if is_instance_valid(tool):
+		tool.visible = false
+		# Authored occupation equipment belongs to the character. Only the
+		# generated sibling socket belongs to this short-lived modifier.
+		if owns_tool and not tool.is_queued_for_deletion():
+			tool.queue_free()
+	tool = null
+	tool_contact = null
+	tool_contact_local = Vector3.ZERO
+	tool_contact_points.clear()
+	tool_kind = ""
+	owns_tool = false
+
+func _exit_tree() -> void:
+	_release_tool()
+
+func _contact_socket_offset(contact: Node3D) -> Vector3:
+	return _contact_socket_frame(contact).origin
+
+func _contact_socket_frame(contact: Node3D) -> Transform3D:
+	var local := Transform3D.IDENTITY
+	var cursor := contact
+	while is_instance_valid(cursor) and not cursor is BoneAttachment3D:
+		local = cursor.transform * local
+		cursor = cursor.get_parent() as Node3D
+	return local if cursor is BoneAttachment3D else Transform3D.IDENTITY
+
+func _pose_supported_sleep(skeleton: Skeleton3D) -> void:
+	# The routine owner supplies a verified furniture anchor. Offset the pose
+	# onto its real seat while the movement root remains at its safe approach.
+	# Without that evidence this modifier never invents a seated pose.
+	if rest_anchor.is_empty() or pelvis < 0:
+		return
+	var seat: Vector3 = rest_anchor.get("seat", Vector3.INF)
+	var stand: Vector3 = rest_anchor.get("stand", Vector3.INF)
+	if not seat.is_finite() or not stand.is_finite() or actor.global_position.distance_squared_to(stand) > 0.16:
+		return
+	var forward: Vector3 = driver.get_visible_forward()
+	var right := forward.cross(Vector3.UP).normalized()
+	var parent := skeleton.get_bone_parent(pelvis)
+	var frame := skeleton.global_basis * (skeleton.get_bone_global_pose(parent).basis if parent >= 0 else Basis.IDENTITY)
+	var offset := seat + Vector3.UP * 0.12 - _world(skeleton, pelvis)
+	if offset.length() > 1.0:
+		return
+	skeleton.set_bone_pose_position(pelvis, skeleton.get_bone_pose_position(pelvis) + frame.inverse() * offset * pose_weight)
+	for leg: Dictionary in seated_legs:
+		if int(leg.foot) < 0: continue
+		var foot_goal := seat + forward * 0.42 + right * float(leg.side) * 0.12
+		foot_goal.y = stand.y + 0.095
+		var chain := {"upper":leg.thigh, "lower":leg.calf, "hand":leg.foot, "side":leg.side}
+		var sole_basis := (skeleton.global_basis * skeleton.get_bone_global_pose(int(leg.foot)).basis).orthonormalized()
+		_solve_arm(skeleton, chain, _world(skeleton, int(leg.foot)).lerp(foot_goal, pose_weight), sole_basis, forward)
+	if spine >= 0:
+		skeleton.set_bone_pose_rotation(spine, skeleton.get_bone_pose_rotation(spine) * Quaternion(Vector3.RIGHT, 0.08 * pose_weight))
+
+func _ambient_pose(skeleton: Skeleton3D, delta: float, near: bool, effective: String, native_pose: bool = false) -> void:
+	if native_pose:
+		ambient_weight = 0.0
+		return
 	var resting := humanoid and creature_id == "" and near and float(driver.current_speed_mps) < 0.08 and not bool(driver.story_dialogue_active)
 	# Workstation hands and feet retain their anchors; sway is idle-only. Bone
 	# modifiers compose over each graph pose, never accumulate on the last pose.
@@ -308,7 +461,7 @@ func _staff_pose(skeleton: Skeleton3D, delta: float, effective: String) -> void:
 		staff_equipment = actor.find_child("AnwenStaffEquipment", true, false) as Node3D
 	if not is_instance_valid(staff_equipment):
 		return
-	var holding := effective in ["", "idle", "watch", "lookout", "remember", "rest"]
+	var holding := effective in ["", "idle", "watch", "lookout", "remember", "rest", "care"]
 	staff_weight = move_toward(staff_weight, 1.0 if holding else 0.0, delta * 5.0)
 	staff_equipment.visible = holding
 	if not holding:
@@ -319,7 +472,7 @@ func _staff_pose(skeleton: Skeleton3D, delta: float, effective: String) -> void:
 	var scale := actor.global_basis.get_scale().y
 	var moving := float(driver.current_speed_mps) > 0.08
 	var phase := fposmod(float(driver.animation_graph.gait_phase), 1.0) if driver.animation_graph != null else 0.0
-	var desired_tip := actor.global_position - right * 0.36 * scale + forward * (0.16 if moving else 0.05) * scale
+	var desired_tip := actor.global_position + right * 0.36 * scale + forward * (0.16 if moving else 0.05) * scale
 	if not moving:
 		staff_tip = desired_tip
 		staff_planted = false
@@ -337,7 +490,7 @@ func _staff_pose(skeleton: Skeleton3D, delta: float, effective: String) -> void:
 	var grip := staff_tip + Vector3.UP * (0.93 * scale + lift)
 	var goal := grip - wrist * Vector3(0, 0.045, -0.012) * scale
 	for arm: Dictionary in arms:
-		if float(arm.side) < 0:
+		if float(arm.side) > 0:
 			_solve_arm(skeleton, arm, _world(skeleton, int(arm.hand)).lerp(goal, staff_weight), wrist, Vector3.ZERO, staff_weight)
 	if not bool(driver.story_dialogue_active):
 		for finger: String in ["index", "middle", "ring", "pinky"]:

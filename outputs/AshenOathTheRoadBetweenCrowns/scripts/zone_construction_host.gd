@@ -1043,6 +1043,7 @@ func _make_village_place(id: String, type: String, prompt: String, pos: Vector3,
 	if table != null:
 		table.mesh = mesh
 		area.add_child(table)
+	preload("res://scripts/living_cast_stations.gd").decorate_place(area, id)
 	if id == "village_well":
 		_apply_greyfen_well_visual(table, pos)
 	var label := Label3D.new()
@@ -1426,6 +1427,7 @@ func _make_shrine_scene(pos: Vector3) -> void:
 	_make_loose_role("barrel", pos + Vector3(1.2, 0, 1.40), Vector3.ONE * 0.42, 16.0)
 	_make_light("ShrineGlow", pos + Vector3(0, 1.7, -0.3), Color(0.56, 0.78, 0.62), 1.6)
 	_make_world_prop_anchor("shrine", "shrine", pos, "crow_shrine_state")
+	preload("res://scripts/living_cast_stations.gd").add_care_table(zone_root)
 
 
 func _make_blacksmith_scene(pos: Vector3) -> void:

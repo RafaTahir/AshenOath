@@ -87,6 +87,7 @@ var world_scene_clock := 0.0
 var gathering_staged := false
 var world_retry_after: Dictionary = {}
 var opening_scene: Dictionary = {}
+var work_contact_effects: Array[Dictionary] = []
 
 const CROWD_IDENTITIES := [
 	"generic_villager_01", "generic_villager_02", "farmer_toma", "widow_elna",
@@ -255,6 +256,7 @@ func _physics_process(delta: float) -> void:
 	if get_tree().paused:
 		_end_social_exchange()
 		return
+	_tick_work_contact_effects(delta)
 	if not opening_scene.is_empty():
 		_tick_opening_scene(delta)
 		return
@@ -488,6 +490,12 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		entry.motion_speed = 0.0
 		entry.travel_direction = Vector3.ZERO
 		return
+	if entry.driver.get("dead") == true:
+		_cancel_greeting(entry, false)
+		_release_activity(entry, false)
+		entry.motion_speed = 0.0
+		entry.travel_direction = Vector3.ZERO
+		return
 	if entry.has("table_restore"):
 		entry.table_seconds = float(entry.get("table_seconds",120.0)) - delta
 		if float(entry.table_seconds) <= 0.0 or player.global_position.distance_to(entry.get("table_point",node.global_position)) > 9.0:
@@ -523,6 +531,8 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 			_face(node, threat, delta)
 			if entry.driver != null:
 				entry.driver.set_life_activity("fear" if str(entry.get("reaction", "")) == "fear" else "watch")
+			if is_instance_valid(entry.get("face")):
+				entry.face.set_attention("point", null, threat + Vector3.UP * 1.4)
 		return
 	entry.social_time = maxf(float(entry.get("social_time", 0.0)) - delta, 0.0)
 	if float(entry.social_time) > 0.0:
@@ -797,7 +807,7 @@ func _tick_greeting(entry: Dictionary, delta: float) -> bool:
 		entry.greeted_on_approach = false
 	var remaining := float(entry.get("greeting_remaining", 0.0))
 	if remaining <= 0.0:
-		if distance > 4.0 or bool(entry.profile.get("sleeping", false)) or bool(entry.get("greeted_on_approach", false)) or float(entry.bark_cooldown) > 0.0 or not social_scene.is_empty():
+		if distance > 4.0 or bool(entry.profile.get("sleeping", false)) and _supported_rest(entry) or bool(entry.get("greeted_on_approach", false)) or float(entry.bark_cooldown) > 0.0 or not social_scene.is_empty():
 			return false
 		if not is_instance_valid(entry.driver) or entry.driver.has_active_action() or not Presence.can_see(node, player, 4.0, true):
 			return false
@@ -843,7 +853,7 @@ func _cancel_greeting(entry: Dictionary, release_pose: bool = true) -> void:
 	if is_instance_valid(entry.driver) and str(entry.driver.current_state) == "greet":
 		entry.driver.stop_action()
 	if is_instance_valid(entry.get("face")):
-		entry.face.set_focus_target(null)
+		_set_activity_attention(entry, bool(entry.get("activity_active", false)))
 
 func _begin_activity(entry: Dictionary) -> void:
 	var node: Node3D = entry.node
@@ -879,8 +889,10 @@ func _update_activity(entry: Dictionary, delta: float) -> void:
 	entry.activity_elapsed = float(entry.activity_elapsed) + delta
 	var anchor := _activity_anchor(entry)
 	var station: Dictionary = entry.profile.get("workstation", {})
+	if str(profile.get("activity", "")) == "sleep" and _supported_rest(entry):
+		anchor = entry.profile.rest_anchor.look
 	if str(profile.get("activity", "")) == str(station.get("activity", "")):
-		anchor = station.get("point", anchor)
+		anchor = station.get("look", station.get("point", anchor))
 	if anchor != Vector3.ZERO:
 		_face(node, anchor, delta)
 	_set_activity_pose(entry, true)
@@ -901,6 +913,7 @@ func _end_activity(entry: Dictionary) -> void:
 	_apply_pending_routine(entry)
 
 func _release_activity(entry: Dictionary, release_pose: bool = true) -> void:
+	_clear_work_contact_effects(entry.node)
 	var was_active := bool(entry.get("activity_active", false))
 	var station := str(entry.get("station", ""))
 	if station != "" and activity_reservations.get(station) == entry.node:
@@ -919,6 +932,7 @@ func _release_activity(entry: Dictionary, release_pose: bool = true) -> void:
 		entry.driver.set_life_workstation({})
 
 func _bind_workstation(profile: Dictionary, path: Array) -> void:
+	_bind_rest_anchor(profile, path)
 	profile["workstation"] = {}
 	var definition: Dictionary = profile.get("station", {})
 	if definition.is_empty():
@@ -933,7 +947,12 @@ func _bind_workstation(profile: Dictionary, path: Array) -> void:
 				break
 	if not is_instance_valid(station):
 		return
-	var standing: Vector3 = station.to_global(definition.stand)
+	var standing: Vector3 = station.to_global(definition.get("stand", Vector3.ZERO))
+	if bool(definition.get("markers", false)):
+		var stand_marker := station.get_node_or_null("WorkStand") as Marker3D
+		if stand_marker == null:
+			return
+		standing = stand_marker.global_position
 	var safe: Vector3 = host.validate_walkable_position(standing)
 	if safe.distance_squared_to(standing) > 0.04:
 		return
@@ -942,9 +961,65 @@ func _bind_workstation(profile: Dictionary, path: Array) -> void:
 			continue
 		var resolved := definition.duplicate()
 		for key: String in ["point", "left", "right"]:
-			resolved[key] = station.to_global(definition[key])
+			if bool(definition.get("markers", false)):
+				var marker := station.get_node_or_null({"point":"WorkContact", "left":"WorkLeft", "right":"WorkRight"}[key]) as Marker3D
+				if marker == null:
+					return
+				resolved[key] = marker.global_position
+			else:
+				resolved[key] = station.to_global(definition[key])
+		if definition.has("look"):
+			resolved["look"] = station.to_global(definition.look)
 		profile.workstation = resolved
 		path[index] = safe
+
+func _bind_rest_anchor(profile: Dictionary, path: Array) -> void:
+	profile["rest_anchor"] = {}
+	if not bool(profile.get("sleeping", false)) or path.is_empty():
+		return
+	# A scheduled coordinate is not evidence of a bed or seat. Only authored,
+	# physically supported markers may request the seated sleeping performance.
+	for anchor: Node in host.zone_root.find_children("LifeRest_*", "Marker3D", true, false):
+		if not bool(anchor.get_meta("rest_supported", false)) or str(anchor.get_meta("rest_kind", "")) != "seated":
+			continue
+		var stand: Vector3 = anchor.to_global(anchor.get_meta("stand_offset", Vector3.ZERO))
+		var seat: Vector3 = anchor.global_position
+		var seat_height := seat.y - stand.y
+		if seat_height < 0.35 or seat_height > 0.65 or stand.distance_squared_to(path[0]) > 1.0:
+			continue
+		if host.validate_walkable_position(stand).distance_squared_to(stand) > 0.04:
+			continue
+		profile.rest_anchor = {"node":weakref(anchor), "stand":stand, "seat":seat, "kind":"seated", "look":stand + anchor.global_basis.z}
+		path[0] = stand
+		return
+
+func _supported_rest(entry: Dictionary) -> bool:
+	var rest: Dictionary = entry.profile.get("rest_anchor", {})
+	var reference: WeakRef = rest.get("node")
+	# The player's approach takes precedence over a background occupant. This
+	# also releases the sleeping pose before the bench's interaction opens.
+	if is_instance_valid(player) and not rest.is_empty() and player.global_position.distance_squared_to(rest.get("seat", Vector3.INF)) < 1.96:
+		return false
+	return reference != null and is_instance_valid(reference.get_ref()) and str(rest.get("kind", "")) == "seated" \
+		and entry.node.global_position.distance_squared_to(rest.get("stand", Vector3.INF)) <= 0.16
+
+func _set_activity_attention(entry: Dictionary, active: bool) -> void:
+	var face = entry.get("face")
+	if not is_instance_valid(face):
+		return
+	var activity := str(entry.profile.get("activity", "idle"))
+	if not active:
+		face.set_attention("neutral")
+	elif activity == "sleep":
+		face.set_attention("sleep" if _supported_rest(entry) else "neutral")
+	elif activity in ["rest", "idle", "remember", "sit"]:
+		face.set_attention("neutral")
+	else:
+		var station: Dictionary = entry.profile.get("workstation", {})
+		var target: Vector3 = station.get("point", entry.node.global_position + entry.driver.get_visible_forward() * 0.5 + Vector3.UP * 1.0)
+		if is_instance_valid(entry.driver.life_modifier) and is_instance_valid(entry.driver.life_modifier.tool) and station.is_empty():
+			target = entry.driver.life_modifier.tool.global_position
+		face.set_attention("point", null, target)
 
 func _connect_activity_contact(entry: Dictionary) -> void:
 	if not is_instance_valid(entry.driver):
@@ -957,8 +1032,45 @@ func _on_activity_contact(event: String, point: Vector3, source: WeakRef) -> voi
 	var actor := source.get_ref() as Node3D
 	if not is_instance_valid(host) or not is_instance_valid(actor) or not bool(host.game_started) or get_tree().paused or Presence.protected(actor):
 		return
+	if event == "satchel_cinch":
+		if not _begin_satchel_cinch(actor):
+			return
+		event = "cloth_wind"
 	if is_instance_valid(host.audio) and is_instance_valid(player):
 		host.audio.play_spatial_event(event, point, player.global_position, 11.0, 0.25, 0.025)
+
+func _begin_satchel_cinch(actor: Node3D) -> bool:
+	var bag := host.zone_root.find_child("RookStationSatchel", true, false) as Node3D
+	var knot := bag.find_child("SatchelKnot", true, false) as Node3D if bag != null else null
+	if knot == null:
+		return false
+	_clear_work_contact_effects(actor)
+	work_contact_effects.append({"actor":weakref(actor), "node":weakref(knot), "scale":knot.scale, "remaining":0.35})
+	knot.scale *= Vector3(0.92, 1.0, 0.92)
+	return true
+
+func _tick_work_contact_effects(delta: float) -> void:
+	for index in range(work_contact_effects.size() - 1, -1, -1):
+		var effect: Dictionary = work_contact_effects[index]
+		var knot := effect.node.get_ref() as Node3D
+		if not is_instance_valid(knot):
+			work_contact_effects.remove_at(index)
+			continue
+		effect.remaining = maxf(0.0, float(effect.remaining) - delta)
+		var tension := float(effect.remaining) / 0.35
+		knot.scale = (effect.scale as Vector3) * Vector3(1.0 - tension * 0.08, 1.0, 1.0 - tension * 0.08)
+		if float(effect.remaining) <= 0.0:
+			work_contact_effects.remove_at(index)
+
+func _clear_work_contact_effects(actor: Node3D) -> void:
+	for index in range(work_contact_effects.size() - 1, -1, -1):
+		var effect: Dictionary = work_contact_effects[index]
+		if effect.actor.get_ref() != actor:
+			continue
+		var knot := effect.node.get_ref() as Node3D
+		if is_instance_valid(knot):
+			knot.scale = effect.scale
+		work_contact_effects.remove_at(index)
 
 func _apply_pending_routine(entry: Dictionary) -> void:
 	var pending: Dictionary = entry.get("pending_routine", {})
@@ -1010,11 +1122,16 @@ func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 	if driver == null:
 		return
 	var activity := str(entry.profile.get("activity", "idle"))
+	if activity == "sleep" and not _supported_rest(entry):
+		activity = "rest"
 	if driver.has_method("set_life_activity"):
 		driver.set_life_activity(activity if active else "")
+		if driver.has_method("set_life_rest_anchor"):
+			driver.set_life_rest_anchor(entry.profile.get("rest_anchor", {}) if active and activity == "sleep" else {})
 		driver.set_activity_prop(str(entry.profile.get("prop", "")) if active else "")
 		if active:
 			driver.set_life_workstation(entry.profile.get("workstation", {}))
+		_set_activity_attention(entry, active)
 		return
 	if active:
 		if activity == "notice_board" or activity == "lookout" or bool(entry.get("quiet_after_report", false)):
@@ -1287,12 +1404,14 @@ func _social_pair(first: Dictionary, second: Dictionary, turns: Array) -> void:
 	line_cooldown = 12.0
 	var saved: Array[Dictionary] = []
 	for entry: Dictionary in [first, second]:
+		var face: Node = entry.get("face")
+		# Releasing work changes its attention. Capture the previous owner's
+		# complete intent before that handoff, including neutral and sleep state.
+		saved.append({"entry":entry, "attention":face.capture_attention() if is_instance_valid(face) else {}})
 		entry.node.set_meta("cast_social_cancel", _end_social_exchange)
 		_release_activity(entry)
 		entry.social_time = 30.0
 		entry.motion_speed = 0.0
-		var face: Node = entry.get("face")
-		saved.append({"entry":entry, "focus":face.focus_target if is_instance_valid(face) else null, "expression":str(face.expression) if is_instance_valid(face) else "neutral"})
 		if is_instance_valid(entry.driver):
 			entry.driver.set_dialogue_pose(true)
 		if is_instance_valid(face):
@@ -1375,10 +1494,9 @@ func _end_social_exchange() -> void:
 			entry.driver.set_dialogue_pose(false)
 			entry.driver.clear_life_activity()
 		if is_instance_valid(entry.get("face")):
-			entry.face.set_conversation_active(false)
-			entry.face.set_speech_amount(0.0)
-			entry.face.set_focus_target(record.focus if is_instance_valid(record.focus) else null)
-			entry.face.set_expression(str(record.expression))
+			# A death/restore/rebind invalidates old snapshots; a newer protected
+			# owner was already excluded above. Never convert neutral into auto gaze.
+			entry.face.restore_attention(record.get("attention", {}))
 	social_scene = {}
 
 func _world_actor(id: String) -> Dictionary:
@@ -1511,7 +1629,11 @@ func _start_world_scene(scene: Dictionary, selected: Array[Dictionary]) -> void:
 			for claimed: Dictionary in saved: Presence.release(claimed.entry.node, "social", get_instance_id())
 			return
 		var face: Node = entry.get("face")
-		saved.append({"entry":entry, "focus":face.focus_target if is_instance_valid(face) else null, "expression":str(face.expression) if is_instance_valid(face) else "neutral"})
+		saved.append({"entry":entry, "attention":face.capture_attention() if is_instance_valid(face) else {}})
+	# Claim the whole cast before changing anyone's work or focus. A failed
+	# later claim must leave earlier participants in their original activity.
+	for record: Dictionary in saved:
+		var entry: Dictionary = record.entry
 		entry.node.set_meta("cast_social_cancel", _end_social_exchange)
 		_release_activity(entry)
 		entry.social_time = 2.0

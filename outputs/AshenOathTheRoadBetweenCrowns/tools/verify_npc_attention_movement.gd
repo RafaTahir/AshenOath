@@ -14,6 +14,7 @@ class ErrorLog extends Logger:
 			errors.append("%s:%d %s %s" % [file, line, code, rationale])
 
 class Driver extends Node:
+	func is_valid() -> bool: return true
 	var actor: Node3D
 	var activity := ""
 	var station: Dictionary = {}
@@ -61,7 +62,7 @@ class Spatial extends RefCounted:
 	var reconnect_checks := 0
 	var runtime_checks := 0
 	var route_builds := 0
-	func build_route(start: Vector3, destination: Vector3, _clearance: float) -> Array:
+	func build_route(start: Vector3, destination: Vector3, _clearance: float) -> Array[Vector3]:
 		route_builds += 1
 		return [start, destination]
 	func validate_runtime_segment(start: Vector3, destination: Vector3, _clearance: float) -> bool:
@@ -227,7 +228,7 @@ func _verify_greeting_radius_and_sleep() -> void:
 	var position: Vector3 = entry.node.position
 	_tick(f, 100)
 	_check(entry.driver.greeting_actions == 1 and not entry.greeted_on_approach and entry.greeting_remaining == 0.0, "sleeping worker ignores ordinary approach greetings")
-	_check(entry.activity_elapsed > elapsed + 4.9 and entry.activity_active and entry.driver.activity == "sleep" and entry.node.position == position, "sleep remains a held activity while the player's proximity is harmless")
+	_check(entry.activity_elapsed > elapsed + 4.9 and entry.activity_active and entry.driver.activity == "rest" and entry.node.position == position, "unsupported sleep remains a held standing rest while the player's proximity is harmless")
 	f.host.free()
 
 func _verify_nearby_walk() -> void:

@@ -1,0 +1,199 @@
+{
+	"libraries": [
+		{
+			"asset": "C01",
+			"bytes": 195202,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "C01_Anwen_Rig/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "C01_Anwen_Rig/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "C01_Anwen_Rig/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "C01_Anwen_Rig/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "C01_Anwen_Rig/Skeleton3D",
+					"tracks": 52
+				}
+			},
+			"contact_probe_method": "not_required",
+			"contact_probes": {
+
+			},
+			"maximum_rest_error": 0.00000339029907081567,
+			"model": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+			"model_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
+			"path": "res://assets_external/characters_prepared/animations/life_C01.res",
+			"runtime_reviewed": false,
+			"sha256": "d2318218eefbf952aefc732bd6dacca39bc9dcfcb3d8664c8ddf7399e6d356bd",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C01/C01_life_review.glb",
+			"source_sha256": "6048b7b8ceb634d2a05d921593476acca605ddc6eaaec653c4235c952a06d567",
+			"user_accepted": false
+		},
+		{
+			"asset": "C04",
+			"bytes": 199305,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				}
+			},
+			"contact_probe_method": "not_required",
+			"contact_probes": {
+
+			},
+			"maximum_rest_error": 0.00000380689857593097,
+			"model": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+			"model_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+			"path": "res://assets_external/characters_prepared/animations/life_C04.res",
+			"runtime_reviewed": false,
+			"sha256": "b4370949eb1ac97928389a4ff42f972dfac930dee2ce571e920aadea474f320f",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C04/C04_life_review.glb",
+			"source_sha256": "1b5132ffa7460a23b2d193e7b1162bcedb83e16f2d0304ddda23efcfbf9b849d",
+			"user_accepted": false
+		},
+		{
+			"asset": "C03",
+			"bytes": 202547,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				}
+			},
+			"contact_probe_method": "nearest retained palm-surface vertex to curled-palm reference in native Idle; hand weight>=.90; source FK preserves wrist orientation; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0112020969390869,
+					0.0423621535301209,
+					-0.0141905546188354
+				],
+				"right": [
+					-0.011201947927475,
+					0.0423625707626343,
+					-0.014190673828125
+				]
+			},
+			"maximum_rest_error": 0.00000339029907081567,
+			"model": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+			"model_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+			"path": "res://assets_external/characters_prepared/animations/life_C03.res",
+			"runtime_reviewed": false,
+			"sha256": "6fa8d3ada8c0e391b5fb2b5aa25b47e8ee09079ced797461b19834d9c0db996f",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C03/C03_life_review.glb",
+			"source_sha256": "652a6bba9772b7fe8477a7f2c0afad30d665c86bebe0facef053b2b074a7f1aa",
+			"user_accepted": false
+		},
+		{
+			"asset": "C02",
+			"bytes": 202486,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				}
+			},
+			"contact_probe_method": "nearest retained palm-surface vertex to curled-palm reference in native Idle; hand weight>=.90; source FK preserves wrist orientation; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					-0.0192787647247314,
+					0.039111852645874,
+					-0.0062028169631958
+				],
+				"right": [
+					0.0192777067422867,
+					0.0391110181808472,
+					-0.00620317459106445
+				]
+			},
+			"maximum_rest_error": 0.00000380689857593097,
+			"model": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+			"model_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
+			"path": "res://assets_external/characters_prepared/animations/life_C02.res",
+			"runtime_reviewed": false,
+			"sha256": "025cb01ec9eeb950aee7ac541fd841b1176eea2e0fe82f61d0a0789637d71af3",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C02/C02_life_review.glb",
+			"source_sha256": "a9ef10665a13385ec91c439c82e6eff5ba926961258d231978aaded44fcf96ae",
+			"user_accepted": false
+		}
+	],
+	"status": "compiled"
+}
