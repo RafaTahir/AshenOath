@@ -87,9 +87,9 @@ def prepared_source_exclusions(catalog):
 
 
 def compile_layout(defer_environment=False):
-    path = PROJECT / "export_presets.cfg"
+    presets_path = PROJECT / "export_presets.cfg"
     config = configparser.ConfigParser(interpolation=None, strict=True)
-    config.read(path, encoding="utf-8-sig")
+    config.read(presets_path, encoding="utf-8-sig")
     sections = {json.loads(config[s]["name"]): s for s in config.sections()
                 if "name" in config[s]}
     leisure = "Runtime Pack Leisure"
@@ -544,7 +544,7 @@ def compile_layout(defer_environment=False):
     partition_actor_packs(PROJECT, config, sections, manifest, prepared_catalog, standalone_sources)
     # Validate the complete generated graph before either tracked output changes.
     require_valid_pack_graph(manifest)
-    with path.open("w", encoding="utf-8", newline="\n") as output:
+    with presets_path.open("w", encoding="utf-8", newline="\n") as output:
         config.write(output, space_around_delimiters=False)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"Prepared {len(sections)} export presets with an adjacent-world pack")
