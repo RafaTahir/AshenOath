@@ -264,7 +264,7 @@ func _begin_work(area: Node3D, action: Dictionary) -> void:
 	work["source"] = weakref(area)
 	work_start = game.player.global_position
 	if str(action.operation)=="ferry":
-		ferry_safe = game.zone_root.to_global(Vector3(3,0.95,1.5))
+		ferry_safe = game.zone_root.to_global(Vector3(3,0.02,1.5))
 		ferry_control = game.player.can_control
 		game.player.can_control = false
 	game.player._request_equipment(game.player.weapon_mode,game.player.get_selected_blade_id(),false)
@@ -346,8 +346,10 @@ func _tick_crossing() -> void:
 		crossing_entered=false
 		return
 	var position: Vector3 = game.zone_root.to_local(game.player.global_position)
-	if absf(position.z)<=0.9 and position.x>=4.0 and position.x<=7.5 and position.y>=0.85: crossing_entered=true
-	if absf(position.z)>1.5 or position.y<0.85: crossing_entered=false
+	# PlayerController's root is at its feet, not the capsule centre. The deck
+	# top is 0.12 + 0.13/2 = 0.185 m; the unfinished channel bed is below zero.
+	if absf(position.z)<=0.9 and position.x>=4.0 and position.x<=7.5 and position.y>=0.10 and position.y<=0.65: crossing_entered=true
+	if absf(position.z)>1.5 or position.y<0.10: crossing_entered=false
 	if crossing_entered and position.x>=9.5 and absf(position.z)<=1.5 and Rules.record_route_crossing("crossing",game.story_state,game.quests):
 		_crossing_finished()
 
@@ -363,9 +365,10 @@ func _tick_ferry(delta: float) -> void:
 	elapsed += maxf(delta,0)
 	boat.position.x = lerpf(3.5,9.5,clampf(elapsed/float(work.seconds),0,1))
 	game.player.velocity=Vector3.ZERO
-	game.player.global_position=boat.to_global(Vector3(0,1.19,0))
+	# FerryDeck is centred at .15 with .18 height: feet rest just above .24.
+	game.player.global_position=boat.to_global(Vector3(0,0.25,0))
 	if elapsed<float(work.seconds): return
-	ferry_safe=game.zone_root.to_global(Vector3(10.5,0.95,1.5))
+	ferry_safe=game.zone_root.to_global(Vector3(10.5,0.02,1.5))
 	var applied := Rules.record_route_crossing("ferry",game.story_state,game.quests)
 	cancel()
 	if applied: _crossing_finished()
