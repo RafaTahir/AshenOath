@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "web-package-efficiency-20261107",
+  "status": "isolated_source_ready_for_integration_not_published",
+  "base_commit": "6aa8fdf2ac24f00cbd72c0178d6485d0a548a6db",
+  "branch": "codex/package-efficiency-20261107",
+  "isolated_checkout": "D:\\Temp\\AO_Package_20261107",
+  "baseline_build_id": "startup-half-r4-20261107",
+  "private_candidate_build_id": "package-efficiency-20261107-pinned",
+  "before_complete_web_bytes": 205979994,
+  "after_complete_web_bytes": 187927552,
+  "saved_bytes": 18052442,
+  "saved_percent": 8.76417250502493,
+  "changes": {
+    "unused_monster_atlases_retired": 24,
+    "editable_source_assets_deleted_or_changed": 0,
+    "dynamic_skin_textures_retained": 3,
+    "metadata_saved_transport_bytes": 2866165,
+    "wasm_saved_transport_bytes": 364075,
+    "project_binary_settings_retained_in_supplements": true,
+    "wasm_decoded_sha256": "26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6",
+    "all_other_retained_resource_paths_flags_payloads_digests_identical": true,
+    "intentional_root_resource_update": "runtime_pack_manifest.json: hashes, byte counts, version and build identities only"
+  },
+  "validation": {
+    "focused_unit_methods_passed": 48,
+    "unit_suites": {
+      "test_actor_texture_retirement": 8,
+      "test_engine_transport_cache": 8,
+      "test_compact_runtime_packs": 10,
+      "test_release_tools": 22
+    },
+    "package_integrity": "pass",
+    "web_export": "pass",
+    "native_pack_mounts": 43,
+    "native_resources_checked": 1563,
+    "native_dependencies_checked": 391,
+    "native_unresolved_dependencies": 0,
+    "uid_comparisons": 101609,
+    "root_game_nodes": 0,
+    "userdata_identity_isolated": true,
+    "gameplay_browser_visual_performance_acceptance": "not_run"
+  },
+  "evidence": {
+    "preservation-and-size.json": {
+      "path": "D:\\Temp\\AO_Package_20261107\\.release-gate\\package-candidate\\preservation-and-size.json",
+      "sha256": "b0631eea831cb259ecc5736df25f266e4fae63193114ffa44d3b9264a4eeb12f"
+    },
+    "metadata-authority.json": {
+      "path": "D:\\Temp\\AO_Package_20261107\\.release-gate\\package-candidate\\metadata-authority.json",
+      "sha256": "8d9522e55bb71e5b0fc3fc852e33e888d2146c34e60a1219f1290d8549906196"
+    },
+    "native-resource-proof.json": {
+      "path": "D:\\Temp\\AO_Package_20261107\\.release-gate\\package-candidate\\native-resource-proof.json",
+      "sha256": "56b9fb2bad986eee19e323499d4a5ca8a47cb3fdeeb2065382ed55b6a60ba23d"
+    },
+    "web-export-proof.json": {
+      "path": "D:\\Temp\\AO_Package_20261107\\.release-gate\\package-candidate\\web-export-proof.json",
+      "sha256": "24bc047eb26cc807e40560734fd734f9d434535812a4d8b4a4fe3ccd61f58458"
+    }
+  },
+  "orphan_proof": {
+    "path": "D:/Temp/AO_TransportAudit_20261107/orphan-monster-textures.json",
+    "packed_gdc_files_checked": 229,
+    "static_resource_consumers": 0,
+    "packed_code_filename_references": 0,
+    "source_catalog_filename_references": 0
+  },
+  "integration": {
+    "generated_web_changes_committed": false,
+    "active_checkout_modified": false,
+    "push_performed": false,
+    "deployment_performed": false,
+    "fresh_integrated_rebuild_required": true,
+    "builder_merge_note": "Apply metadata hook hunks after all pack exports and after Web root export; preserve concurrent DevelopmentBranch and living-cast-library changes.",
+    "optional_verified_wasm_cache_seed": {
+      "from": "D:\\Temp\\AO_Package_20261107\\.release-gate\\transport-cache\\26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6.wasm.gz",
+      "relative_destination": ".release-gate/transport-cache/26b61ce95247012ab3dca3ff51e96d1cdbff44ee91a8c20a83e150afca83f1b6.wasm.gz",
+      "bytes": 9018207,
+      "sha256": "a83457a66ac04fe369e0c14450fc91fe15aed469a7091f6b7864a6e5d0057a49"
+    },
+    "native_test_note": "The private verification starts a unique minimal project before mounting game packs. --script with the real game main pack can initialize autoloads; isolate userdata before running existing full native gates.",
+    "remaining_limits": [
+      "Measurements are pinned to base 6aa8fdf; Game Assets and Local AshenOath changes must be reconciled and freshly packaged.",
+      "No gameplay, browser, visual, or performance acceptance is claimed.",
+      "The WASM cache seed is ignored build data, not part of this source commit; copy it once for the measured extra 364075-byte saving."
+    ]
+  }
+}

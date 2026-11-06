@@ -8,10 +8,12 @@ import gzip
 import hashlib
 import io
 import json
+import os
 import re
 import subprocess
 import struct
 import sys
+import tempfile
 import zlib
 from datetime import datetime, timezone
 from pathlib import Path
@@ -26,23 +28,32 @@ RELEASE_MANIFEST = "release_manifest.json"
 MAX_TOTAL_BYTES = POLICY["max_deployment_bytes"]
 
 
+def engine_gzip_cache_path(decoded: bytes) -> Path:
+    """Retain expensive lossless encoding across clean export directories."""
+    root = Path(__file__).resolve().parents[3]
+    return root / ".release-gate" / "transport-cache" / (hashlib.sha256(decoded).hexdigest() + ".wasm.gz")
+
+
 def retained_gzip(decoded: bytes, relative: str) -> bytes | None:
     """Reuse proven transport only when its entire decoded content is unchanged."""
     published = Path(__file__).resolve().parents[3] / "web"
     if relative == "index.wasm":
         candidates = sorted(published.glob("engine/*/index.wasm"))
+        candidates.append(engine_gzip_cache_path(decoded))
     else:
         candidates = [published / relative]
+    best = None
     for candidate in candidates:
-        if not candidate.is_file():
-            continue
-        packed = candidate.read_bytes()
         try:
-            if packed.startswith(b"\x1f\x8b") and gzip.decompress(packed) == decoded:
-                return packed
+            if not candidate.is_file():
+                continue
+            packed = candidate.read_bytes()
+            if (packed.startswith(b"\x1f\x8b") and gzip.decompress(packed) == decoded
+                    and (best is None or len(packed) < len(best))):
+                best = packed
         except (OSError, EOFError, zlib.error):
             continue
-    return None
+    return best
 
 
 def lossless_gzip(payload: bytes, optimize_large: bool = False) -> bytes:
@@ -173,15 +184,53 @@ def sha256(path: Path) -> str:
 
 def compress_wasm(path: Path) -> None:
     payload = path.read_bytes()
+    encoded_input = payload if payload.startswith(b"\x1f\x8b") else None
     if payload.startswith(b"\x1f\x8b"):
         payload = gzip.decompress(payload)
     if not payload.startswith(b"\x00asm"):
         raise ValueError("Cannot package a non-WebAssembly engine")
     # Engine code benefits from the bounded encoder even above the small-pack
     # threshold. Its decoded bytes and the required gzip format stay identical.
-    packed = retained_gzip(payload, "index.wasm") or lossless_gzip(payload, optimize_large=True)
+    candidates = [item for item in (encoded_input, retained_gzip(payload, "index.wasm")) if item is not None]
+    packed = min(candidates, key=len) if candidates else lossless_gzip(payload, optimize_large=True)
     if gzip.decompress(packed) != payload:
         raise ValueError("WebAssembly lossless transport round trip failed")
+    # The cache is optional and never changes the engine's decoded identity.
+    # Lock only the optional cache write. A stale encoder must not overwrite a
+    # stronger stream saved by another isolated build after our first read.
+    cached = engine_gzip_cache_path(payload)
+    lock = cached.with_name(cached.name + ".lock")
+    lock_fd = None
+    temporary = None
+    try:
+        cached.parent.mkdir(parents=True, exist_ok=True)
+        lock_fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        existing = cached.read_bytes() if cached.is_file() else None
+        if existing is not None and len(existing) < len(packed):
+            try:
+                if gzip.decompress(existing) == payload:
+                    packed = existing
+            except (OSError, EOFError, zlib.error):
+                pass
+        if existing != packed:
+            with tempfile.NamedTemporaryFile(dir=cached.parent, delete=False, suffix=".tmp") as stream:
+                temporary = Path(stream.name)
+                stream.write(packed)
+            temporary.replace(cached)
+    except OSError:
+        pass  # A disposable cache must not make a valid export fail.
+    finally:
+        if temporary is not None:
+            try:
+                temporary.unlink(missing_ok=True)
+            except OSError:
+                pass
+        if lock_fd is not None:
+            os.close(lock_fd)
+            try:
+                lock.unlink(missing_ok=True)
+            except OSError:
+                pass
     path.write_bytes(packed)
 
 
