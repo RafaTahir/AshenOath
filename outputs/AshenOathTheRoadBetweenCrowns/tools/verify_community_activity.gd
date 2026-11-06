@@ -20,6 +20,9 @@ class FakeAnimation extends RefCounted:
 	func stop_action(id: String, _a) -> void: current_state=id
 class Health extends RefCounted:
 	var health := 100.0
+class Clock extends RefCounted:
+	var minutes := 600.0
+	func get_time() -> float: return minutes
 class Player extends Node3D:
 	var can_control := true
 	var transition_locked := false
@@ -61,6 +64,7 @@ class Game extends Node3D:
 	var hud := HUD.new()
 	var audio := Audio.new()
 	var save_manager := Saves.new()
+	var day_night := Clock.new()
 	var zone_transition_pending := false
 	var zone_load_request_pending := false
 	var pending_player_restore := {}
@@ -106,7 +110,7 @@ func _run() -> void:
 	game.quests.complete_objective("main_empty_tables","hear_households")
 	var director := Director.new(); director.host=game; director.name="StoryActivities"
 	game.zone_root.add_child(director)
-	var adapter := Adapter.new(); adapter.configure(director)
+	var adapter := Adapter.new(); adapter.configure(director,false)
 	director.community=adapter
 	var area: Node3D = adapter.stations["work:kitchen_trestle"].get_ref()
 	game.player.global_position=area.global_position+Vector3(0,0.9,0.7)
@@ -199,6 +203,24 @@ func _run() -> void:
 	game.hud.close_surface(); game._resume_game()
 	preload("res://scripts/story_performance.gd").finish(nessa)
 	adapter.cancel(); paused=false
+	game.current_zone_id="hearthward"; director.zone="hearthward"; adapter.zone="hearthward"
+	game.story_state.set_flag("senn_fate","testimony")
+	game.story_state.set_flag("edric_stance","cooperate")
+	game.story_state.set_flag("escort_abandonment_acknowledged",true)
+	for id: String in Rules.REGIONAL_ACTORS.hearthward:
+		if id=="nessa": continue
+		var person := Interactable.new(); person.setup(str(Rules.ACTORS[id]),"dialogue","Speak")
+		person.set_meta("community_actor_id",id); game.zone_root.add_child(person)
+	adapter.published_shift=""
+	for minute in [600.0,1080.0,420.0]:
+		game.day_night.minutes=minute
+		adapter.tick(.1)
+		var visible_count := 0
+		for person in game.zone_root.find_children("*","Area3D",true,false):
+			if not person.has_meta("community_actor_id"): continue
+			if person.visible: visible_count+=1
+			else: _check(person.process_mode==Node.PROCESS_MODE_DISABLED and not person.is_interaction_enabled(),"off-shift bodies cannot animate or interact")
+		_check(visible_count==8,"actual shift publication keeps eight NPCs through morning/evening handover")
 	for failure: String in failures: printerr("COMMUNITY ACTIVITY: "+failure)
 	print("COMMUNITY ACTIVITY: %s checks=%d (synthetic actor and UI; no models/input claim)" % ["PASS" if failures.is_empty() else "FAIL",checks])
 	game.free()

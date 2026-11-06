@@ -22,11 +22,12 @@ var ferry_control := true
 var ferry_safe := Vector3.ZERO
 var published_shift := ""
 
-func configure(owner: Node) -> void:
+func configure(owner: Node, build_stations: bool = true) -> void:
 	director = owner
 	game = owner.host
 	zone = owner.zone
 	preload("res://scripts/story_cast_profile.gd").load_region_life(zone,"res://data/community_cast_life.json")
+	if build_stations: load("res://scripts/community_presentation.gd").ensure_stations(game,zone)
 	var board: Dictionary = Rules.BOARDS[zone]
 	_station("board", str(board.title), _position(board.position), {"operation":"board"})
 	for id: String in Rules.data().get("work",{}):

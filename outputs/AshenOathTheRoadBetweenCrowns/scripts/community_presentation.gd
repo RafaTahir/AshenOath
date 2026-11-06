@@ -85,40 +85,64 @@ static func build(context: ZoneBuildContext) -> void:
 		if id not in ["refuge_bunks","refuge_places","ferry_landing"]:
 			ZoneBuildContext.add_collision_box(root,id+"Support",assembly.position+Vector3(0,0.5,-0.25),Vector3(1.4,1,0.45))
 	_choice_arrangements(host,root,context.zone_id)
-	_stations(host,root,context.zone_id)
 	refresh(context.zone_root,context.story_state)
 
-static func _stations(host, root: Node3D, zone: String) -> void:
+static func ensure_stations(game, zone: String) -> void:
+	# Called after publication, when the actual region floor and spatial owner
+	# exist. Reuse the measured native-work geometry; no duplicate generic table
+	# or guessed hand target is added over the player's construction assemblies.
+	var stations = load("res://scripts/living_cast_stations.gd")
+	var host = ZoneBuildContext.active_host(game)
 	for id: String in Rules.data().station_assignments.get(zone,{}):
 		var row: Dictionary = Rules.data().station_assignments[zone][id]
-		var station := root.get_node_or_null(str(row.node)) as Node3D
-		if bool(row.auxiliary):
-			station=Node3D.new()
-			station.name=str(row.node)
-			station.position=Vector3(row.position[0],row.position[1],row.position[2])
-			root.add_child(station)
-			_table(host,station)
-			match str(row.activity):
-				"fold_cloth", "care": _box(host,station,Vector3(0,0.86,-0.1),Vector3(0.9,0.04,0.45),LINEN)
-				"read", "review_dispatch", "administer":
-					for x in [-0.3,0.1]: _box(host,station,Vector3(x,0.85,-0.1),Vector3(0.32,0.025,0.4),LINEN)
-				"check_rope":
-					for index in range(3):
-						var coil := TorusMesh.new()
-						coil.inner_radius=0.12+index*0.025; coil.outer_radius=coil.inner_radius+0.02; coil.rings=16; coil.ring_segments=4
-						_mesh(host,station,coil,Vector3(0,0.86,-0.1),LINEN)
-				"repair": _box(host,station,Vector3(0,0.9,-0.1),Vector3(1.05,0.12,0.25),WOOD.lightened(0.1))
-				_: _bowl(host,station,Vector3(0,0.86,-0.1))
-			ZoneBuildContext.add_collision_box(station,"TableSupport",Vector3(0,0.4,0.1),Vector3(1.4,0.8,0.4))
-		if station==null: continue
+		if game.zone_root.find_child(str(row.node),true,false) != null: continue
+		var stand := Vector3(row.stand[0],row.stand[1],row.stand[2])
+		var station: Node3D
+		if id in ["nessa","elna","toma","nera","vale","merrow","edric"]:
+			var assembly: Node3D = stations._add_regional_work(game,id,row.stand,"_community")
+			if assembly != null: station=assembly.get_node_or_null(str(row.node))
+		elif id=="anwen":
+			var table: Node3D = stations.add_care_table(game.zone_root)
+			if table != null:
+				table.position=stand-Vector3(0,0,.78)
+				station=table.get_node_or_null("LifeWork_anwen")
+		elif id in ["mira","rook"]:
+			var assembly := Node3D.new()
+			assembly.name="CommunityMeasured_"+id
+			assembly.position=stand-(Vector3(-.35,0,-1.12) if id=="mira" else Vector3(-1.78,0,0))
+			game.zone_root.add_child(assembly)
+			if id=="mira":
+				load("res://scripts/greyfen_social_presentation.gd").apply(assembly,"mira_apothecary")
+				ZoneBuildContext.add_collision_box(assembly,"CounterSolid",Vector3(0,.38,0),Vector3(1.75,.76,1.25))
+			else:
+				var mesh: Mesh = stations._retained_timber_structure()
+				if mesh != null:
+					var table := MeshInstance3D.new()
+					table.mesh=mesh
+					table.scale=Vector3(2.8/2.2,1,1.8/1.5)
+					assembly.add_child(table)
+				ZoneBuildContext.add_collision_box(assembly,"TableSolid",Vector3(0,.465,0),Vector3(2.8,.93,1.8))
+			stations.decorate_place(assembly,"mira_apothecary" if id=="mira" else "common_table")
+			station=assembly.get_node_or_null("LifeWork_"+id)
+			var prop: Node3D = assembly.get_node_or_null("MiraDryingLeaves" if id=="mira" else "RookStationSatchel")
+			if station!=null and prop!=null: station.set_meta("task_prop",weakref(prop))
+		elif id=="tor":
+			var assembly := Node3D.new()
+			assembly.name="CommunityMeasured_tor"
+			assembly.position=stand-Vector3(-1.40,0,.45)
+			game.zone_root.add_child(assembly)
+			for x in [-1.60,-.84]: _box(host,assembly,Vector3(x,.46,.10),Vector3(.12,.92,.14),WOOD)
+			var beam := _box(host,assembly,Vector3(-1.22,.86,.10),Vector3(1.1,.12,.14),WOOD)
+			beam.name="SupportedRepairBeam"
+			ZoneBuildContext.add_collision_box(assembly,"BeamSolid",Vector3(-1.22,.46,.10),Vector3(1.1,.92,.14))
+			station=stations.add_work(assembly,"tor",Vector3(-1.22,.92,.10),Vector3(-1.40,0,.45),Vector3.ZERO,0.0)
+			station.get_node("WorkRight").position=Vector3(-1.22,1.185,.10)
+			station.set_meta("task_prop",weakref(beam))
+		if station==null:
+			push_error("Community station is missing verified geometry: "+zone+"/"+id)
+			continue
+		station.name=str(row.node)
 		station.set_meta("work_identity",id)
-		var part := station.get_node_or_null("WorkingPart") as Node3D
-		if part!=null: station.set_meta("task_prop",weakref(part))
-		for marker_name: String in ["WorkStand","WorkContact","WorkLeft","WorkRight","GripLeft","GripRight"]:
-			var marker := Marker3D.new()
-			marker.name=marker_name
-			marker.position=Vector3(0,0,-0.85) if marker_name=="WorkStand" else Vector3(-0.12 if marker_name in ["WorkLeft","GripLeft"] else (0.12 if marker_name in ["WorkRight","GripRight"] else 0.0),float(row.height),-0.3)
-			station.add_child(marker)
 
 static func _choice_arrangements(host, root: Node3D, zone: String) -> void:
 	var table := Node3D.new()

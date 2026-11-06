@@ -499,210 +499,176 @@
   "station_assignments": {
     "lantern_reach": {
       "nessa": {
-        "node": "kitchen_trestle",
-        "activity": "bake",
-        "height": 0.84,
         "actor": "nessa",
-        "position": [
-          -5,
+        "node": "LifeWork_nessa_community",
+        "stand": [
+          -7,
           0,
-          1.35
+          0.4
         ],
-        "auxiliary": false
+        "activity": "bake"
       },
       "elna": {
-        "node": "kitchen_screen",
-        "activity": "fold_cloth",
-        "height": 1.0,
         "actor": "elna",
-        "position": [
-          -8,
+        "node": "LifeWork_elna_community",
+        "stand": [
+          -9.5,
           0,
-          -1.65
+          -3.8
         ],
-        "auxiliary": false
+        "activity": "fold_cloth"
       },
       "toma": {
-        "node": "kitchen_places",
-        "activity": "sort_seeds",
-        "height": 0.84,
         "actor": "toma",
-        "position": [
-          -4,
+        "node": "LifeWork_toma_community",
+        "stand": [
+          -3,
           0,
-          -3.65
+          0.6
         ],
-        "auxiliary": false
+        "activity": "sort_seeds"
       },
       "tor": {
-        "node": "crossing_beam",
-        "activity": "repair",
-        "height": 0.85,
         "actor": "tor",
-        "position": [
-          2,
+        "node": "LifeWork_tor_community",
+        "stand": [
+          1,
           0,
-          -4.65
+          -2.2
         ],
-        "auxiliary": false
+        "activity": "repair"
       },
       "rook": {
-        "node": "ferry_rope",
-        "activity": "check_rope",
-        "height": 0.85,
         "actor": "rook",
-        "position": [
-          5,
+        "node": "LifeWork_rook_community",
+        "stand": [
+          -12.5,
           0,
-          3.35
+          3.5
         ],
-        "auxiliary": false
+        "activity": "check_rope"
       },
       "nera": {
-        "node": "crossing_load",
-        "activity": "check_supplies",
-        "height": 0.8,
         "actor": "nera",
-        "position": [
-          8,
+        "node": "LifeWork_nera_community",
+        "stand": [
+          11.5,
           0,
-          -4.65
+          -3.5
         ],
-        "auxiliary": false
+        "activity": "check_supplies"
       }
     },
     "hearthward": {
       "anwen": {
-        "node": "refuge_bunks",
-        "activity": "care",
-        "height": 0.64,
         "actor": "anwen",
-        "position": [
-          -6,
+        "node": "LifeWork_anwen_community",
+        "stand": [
+          -8,
           0,
-          1.35
+          2.28
         ],
-        "auxiliary": false
+        "activity": "care"
       },
       "mira": {
-        "node": "refuge_places",
-        "activity": "care",
-        "height": 0.64,
         "actor": "mira",
-        "position": [
-          -5,
+        "node": "LifeWork_mira_community",
+        "stand": [
+          -8.35,
           0,
-          -3.65
+          -3.32
         ],
-        "auxiliary": false
+        "activity": "sort_herbs"
       },
       "vale": {
-        "node": "refuge_shelves",
-        "activity": "read",
-        "height": 0.95,
         "actor": "vale",
-        "position": [
-          5,
+        "node": "LifeWork_vale_community",
+        "stand": [
+          7.5,
           0,
-          -4.65
+          -3.3
         ],
-        "auxiliary": false
+        "activity": "read"
       },
       "merrow": {
-        "node": "promise_meal",
-        "activity": "administer",
-        "height": 0.84,
         "actor": "merrow",
-        "position": [
-          -4,
+        "node": "LifeWork_merrow_community",
+        "stand": [
+          -2.5,
           0,
-          5.35
+          4
         ],
-        "auxiliary": false
+        "activity": "administer"
       },
       "nessa": {
-        "node": "CommunityNessaTable",
-        "activity": "bake",
-        "height": 0.84,
         "actor": "nessa",
-        "position": [
-          -5.5,
+        "node": "LifeWork_nessa_community",
+        "stand": [
+          -5.4,
           0,
-          6.85
+          4.2
         ],
-        "auxiliary": true
+        "activity": "bake"
       },
       "nera": {
-        "node": "CommunityNeraLine",
-        "activity": "check_rope",
-        "height": 0.84,
         "actor": "nera",
-        "position": [
-          9,
+        "node": "LifeWork_nera_community",
+        "stand": [
+          11,
           0,
-          6.35
+          5.5
         ],
-        "auxiliary": true
+        "activity": "check_rope"
       },
       "rook": {
-        "node": "CommunityRookSupplies",
-        "activity": "check_supplies",
-        "height": 0.84,
         "actor": "rook",
-        "position": [
-          4,
+        "node": "LifeWork_rook_community",
+        "stand": [
+          3.22,
           0,
-          9.35
+          8.5
         ],
-        "auxiliary": true
+        "activity": "check_supplies"
       },
       "tor": {
-        "node": "CommunityTorBench",
-        "activity": "repair",
-        "height": 0.84,
         "actor": "tor",
-        "position": [
-          -11,
+        "node": "LifeWork_tor_community",
+        "stand": [
+          -11.2,
           0,
-          -1.65
+          -0.5
         ],
-        "auxiliary": true
+        "activity": "repair"
       },
       "elna": {
-        "node": "CommunityElnaCloth",
-        "activity": "fold_cloth",
-        "height": 0.84,
         "actor": "elna",
-        "position": [
-          -10,
+        "node": "LifeWork_elna_community",
+        "stand": [
+          -9.8,
           0,
-          4.35
+          2.1
         ],
-        "auxiliary": true
+        "activity": "fold_cloth"
       },
       "toma": {
-        "node": "CommunityTomaSeeds",
-        "activity": "sort_seeds",
-        "height": 0.84,
         "actor": "toma",
-        "position": [
+        "node": "LifeWork_toma_community",
+        "stand": [
           -2,
           0,
-          -8.65
+          -3.4
         ],
-        "auxiliary": true
+        "activity": "sort_seeds"
       },
       "edric": {
-        "node": "CommunityEdricDispatch",
-        "activity": "review_dispatch",
-        "height": 0.84,
         "actor": "edric",
-        "position": [
+        "node": "LifeWork_edric_community",
+        "stand": [
           3,
           0,
-          -10.65
+          -3
         ],
-        "auxiliary": true
+        "activity": "review_dispatch"
       }
     }
   },
