@@ -1,7 +1,13 @@
 extends SceneTree
 
 const Factory = preload("res://tools/prepared_zone_geometry_factory.gd")
+const PreparedForestTrees = preload("res://scripts/prepared_forest_trees.gd")
 const ROOT := "res://assets_external/environment/prepared/"
+const FOREST_TREE_COMPILERS := [
+	"res://scripts/prepared_forest_trees.gd",
+	"res://tools/build_prepared_zone_geometry.gd",
+	"res://tools/prepared_zone_geometry_factory.gd",
+]
 var failed := false
 
 func _initialize() -> void:
@@ -9,9 +15,17 @@ func _initialize() -> void:
 
 func _compile() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(ROOT))
+	if "--forest-trees-only" in OS.get_cmdline_user_args():
+		_compile_forest_trees()
+		quit(1 if failed else 0)
+		return
 	if "--roads-only" in OS.get_cmdline_user_args():
 		_compile_roads(true)
 		quit(1 if failed else 0)
+		return
+	_compile_forest_trees()
+	if failed:
+		quit(1)
 		return
 	_compile_static_batches()
 	var packed := load("res://scenes/runtime/greyfen_gameplay_core.tscn") as PackedScene
@@ -151,3 +165,129 @@ func _compile_static_batches() -> void:
 	if error != OK:
 		failed = true
 		push_error("Static batch compilation failed: " + error_string(error))
+
+func _forest_tree_failure(message: String) -> void:
+	failed = true
+	push_error("Prepared forest tree compilation failed: " + message)
+
+func _forest_fingerprints(paths: Array) -> Dictionary:
+	var result: Dictionary = {}
+	for path: String in paths:
+		var file := FileAccess.open(path, FileAccess.READ)
+		if file == null:
+			_forest_tree_failure("required fingerprint input is missing: " + path)
+			return {}
+		var size := file.get_length()
+		file.close()
+		var digest := FileAccess.get_sha256(path)
+		if digest.length() != 64:
+			_forest_tree_failure("cannot fingerprint " + path)
+			return {}
+		result[path] = {"sha256": digest, "bytes": size}
+	return result
+
+func _forest_source_fingerprints(source: String) -> Dictionary:
+	if not FileAccess.file_exists(source) or not FileAccess.file_exists(source + ".import"):
+		_forest_tree_failure("source OBJ or its completed import is missing: " + source)
+		return {}
+	var paths: Array = [source, source + ".import"]
+	for line: String in FileAccess.get_file_as_string(source).split("\n"):
+		var clean := line.strip_edges()
+		if not clean.begins_with("mtllib "):
+			continue
+		var declaration := clean.trim_prefix("mtllib ").strip_edges()
+		var names: PackedStringArray = PackedStringArray([declaration.trim_prefix('"').trim_suffix('"')]) if declaration.begins_with('"') else declaration.split(" ", false)
+		for name: String in names:
+			var path := source.get_base_dir().path_join(name).simplify_path()
+			if not path.begins_with(source.get_base_dir() + "/"):
+				_forest_tree_failure("material library escapes the tree source directory: " + path)
+				return {}
+			if path not in paths:
+				paths.append(path)
+	if paths.size() < 3:
+		_forest_tree_failure("tree OBJ has no retained material library: " + source)
+		return {}
+	paths.sort()
+	return _forest_fingerprints(paths)
+
+func _compile_forest_trees() -> void:
+	var compiler_fingerprints := _forest_fingerprints(FOREST_TREE_COMPILERS)
+	if compiler_fingerprints.is_empty():
+		return
+	var catalog: Dictionary = {}
+	for source_path: String in PreparedForestTrees.source_paths():
+		var source_fingerprints := _forest_source_fingerprints(source_path)
+		if source_fingerprints.is_empty():
+			return
+		# Deliberately load the original only inside this compiler. Runtime paths
+		# resolve directly to the certified derivative and never need its textures.
+		var source := ResourceLoader.load(source_path, "ArrayMesh", ResourceLoader.CACHE_MODE_IGNORE) as ArrayMesh
+		if source == null:
+			_forest_tree_failure("cannot load the completed tree import: " + source_path)
+			return
+		var original_geometry := PreparedForestTrees.geometry_signature(source)
+		var mesh := Factory.forest_tree(source, source_path)
+		if mesh == null or original_geometry == "":
+			_forest_tree_failure("geometry or effective material contract rejected " + source_path)
+			return
+		var material_signature := PreparedForestTrees.material_signature(mesh)
+		mesh.set_meta("forest_tree_contract_version", PreparedForestTrees.CONTRACT_VERSION)
+		mesh.set_meta("forest_tree_source", source_path)
+		mesh.set_meta("forest_tree_geometry_sha256", original_geometry)
+		mesh.set_meta("forest_tree_material_sha256", material_signature)
+		var output_path := PreparedForestTrees.resource_path(source_path)
+		var error := ResourceSaver.save(mesh, output_path, ResourceSaver.FLAG_COMPRESS)
+		if error != OK:
+			_forest_tree_failure("cannot save %s: %s" % [output_path, error_string(error)])
+			return
+		var dependencies := ResourceLoader.get_dependencies(output_path)
+		if not dependencies.is_empty():
+			_forest_tree_failure("prepared tree retains external resources: %s %s" % [output_path, str(dependencies)])
+			return
+		var reloaded := ResourceLoader.load(output_path, "ArrayMesh", ResourceLoader.CACHE_MODE_IGNORE) as ArrayMesh
+		if reloaded == null or PreparedForestTrees.geometry_signature(reloaded) != original_geometry:
+			_forest_tree_failure("saved tree changed surface arrays, names, LODs or bounds: " + source_path)
+			return
+		var names: Array = []
+		for index in source.get_surface_count():
+			names.append(source.surface_get_name(index))
+		var bounds := source.get_aabb()
+		var compiled := _forest_fingerprints([output_path])
+		if compiled.is_empty():
+			return
+		var record := {
+			"contract_version": PreparedForestTrees.CONTRACT_VERSION,
+			"source_path": source_path,
+			"path": output_path,
+			"compiled_sha256": compiled[output_path].sha256,
+			"compiled_bytes": compiled[output_path].bytes,
+			"source_fingerprints": source_fingerprints,
+			"compiler_fingerprints": compiler_fingerprints,
+			"source_geometry_sha256": original_geometry,
+			"geometry_sha256": PreparedForestTrees.geometry_signature(reloaded),
+			"material_sha256": material_signature,
+			"surface_names": names,
+			"aabb": [bounds.position.x, bounds.position.y, bounds.position.z, bounds.size.x, bounds.size.y, bounds.size.z],
+			"source_scene_dependencies": [],
+			"resource_dependencies": [],
+		}
+		if not PreparedForestTrees.validate(reloaded, source_path, record):
+			_forest_tree_failure("saved tree failed its exact effective material check: " + source_path)
+			return
+		if _forest_source_fingerprints(source_path) != source_fingerprints:
+			_forest_tree_failure("tree inputs changed during compilation: " + source_path)
+			return
+		catalog[source_path] = record
+		print("PREPARED FOREST TREE: PASS source=%s surfaces=%d exact_geometry=true exact_flat_materials=true dependencies=0" % [source_path, names.size()])
+	if _forest_fingerprints(FOREST_TREE_COMPILERS) != compiler_fingerprints or catalog.size() != PreparedForestTrees.SOURCES.size():
+		_forest_tree_failure("compiler inputs changed or the catalog is incomplete")
+		return
+	var file := FileAccess.open(PreparedForestTrees.CATALOG_PATH, FileAccess.WRITE)
+	if file == null:
+		_forest_tree_failure("cannot write " + PreparedForestTrees.CATALOG_PATH)
+		return
+	file.store_string(JSON.stringify(catalog, "  ", true, true) + "\n")
+	file.close()
+	# Autoloads may have inspected an earlier receipt in this same compiler
+	# process. The following zone preparation must see the newly written proof.
+	PreparedForestTrees.clear_cached_catalog()

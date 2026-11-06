@@ -7,6 +7,7 @@ const CharacterRoleContract = preload("res://scripts/character_role_contract.gd"
 const CharacterAnimationFusion = preload("res://scripts/character_animation_fusion.gd")
 const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
 const PreparedActorCatalog = preload("res://scripts/prepared_actor_catalog.gd")
+const PreparedForestTrees = preload("res://scripts/prepared_forest_trees.gd")
 const CharacterNodeManifest = preload("res://scripts/character_node_manifest.gd")
 const CharacterMaterialBindings = preload("res://scripts/character_material_bindings.gd")
 const ENVIRONMENT_RESOURCE_CATALOG := "res://data/environment_material_dependencies.json"
@@ -80,12 +81,12 @@ func begin_resource_attempt() -> void:
 		var status: int = resource_requests.status(path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var resource: Resource = resource_requests.take(path, self)
-			if resource != null and (not _required_environment_textures.has(path) or _valid_environment_texture(resource)):
+			if resource != null and (not _required_environment_textures.has(path) or _valid_environment_texture(resource)) and _valid_forest_resource(path, resource):
 				resource_cache[path] = resource
 		resource_requests.release(path, self)
 	pending_role_resources.clear()
 	for path in resource_cache.keys():
-		if resource_cache[path] == null or (_required_environment_textures.has(path) and not _valid_environment_texture(resource_cache[path])):
+		if resource_cache[path] == null or (_required_environment_textures.has(path) and not _valid_environment_texture(resource_cache[path])) or not _valid_forest_resource(path, resource_cache[path]):
 			resource_cache.erase(path)
 	_required_environment_textures.clear()
 	_resource_prewarm_status = OK
@@ -120,6 +121,18 @@ func _valid_environment_texture(resource: Resource) -> bool:
 	var texture := resource as Texture2D
 	return texture != null and texture.get_width() > 0 and texture.get_height() > 0
 
+func _runtime_resource_path(path: String) -> String:
+	# Logical OBJ identity stays in roles/diagnostics. Runtime requests must never
+	# load the old imported tree material graph before replacing its materials.
+	return PreparedForestTrees.resource_path(path) if PreparedForestTrees.is_source(path) else path
+
+func _valid_forest_resource(path: String, resource: Resource) -> bool:
+	var source := PreparedForestTrees.source_path(path)
+	if source.is_empty():
+		return true
+	var mesh := resource as ArrayMesh
+	return mesh != null and PreparedForestTrees.validate(mesh, source)
+
 func _fail_resource_prewarm(error: Error, detail: String) -> Error:
 	if _resource_prewarm_status == OK:
 		_resource_prewarm_status = error
@@ -137,7 +150,7 @@ func request_role_resources(role_names: Array, visual_roles: bool = false, varia
 		if path.is_empty():
 			return _fail_resource_prewarm(ERR_FILE_NOT_FOUND, "Required actor role has no resource: %s" % role)
 		var prepared := PreparedActorCatalog.entry(str(role), path, variant_seed) if not building_prepared_assets else {}
-		path = str(prepared.get("path", path))
+		path = _runtime_resource_path(str(prepared.get("path", path)))
 		paths.append(path)
 	return request_resource_paths(paths)
 
@@ -145,7 +158,8 @@ func request_resource_paths(paths: Array) -> Error:
 	if _resource_prewarm_status != OK:
 		return _resource_prewarm_status
 	for raw_path in paths:
-		var path := str(raw_path)
+		var path := _runtime_resource_path(str(raw_path))
+		_record_asset_use(str(raw_path))
 		_record_asset_use(path)
 		if path.is_empty() or not ResourceLoader.exists(path):
 			return _fail_resource_prewarm(ERR_FILE_NOT_FOUND, path + ": resource not found")
@@ -153,6 +167,9 @@ func request_resource_paths(paths: Array) -> Error:
 			if _required_environment_textures.has(path) and not _valid_environment_texture(resource_cache[path]):
 				resource_cache.erase(path)
 				return _fail_resource_prewarm(ERR_CANT_OPEN, path + ": required environment texture is not a non-empty Texture2D")
+			if not _valid_forest_resource(path, resource_cache[path]):
+				resource_cache.erase(path)
+				return _fail_resource_prewarm(ERR_INVALID_DATA, path + ": required prepared forest tree is invalid")
 			if resource_cache[path] != null:
 				continue
 			resource_cache.erase(path)
@@ -165,7 +182,8 @@ func request_resource_paths(paths: Array) -> Error:
 	return OK
 
 func is_resource_cached(path: String) -> bool:
-	return resource_cache.has(path)
+	path = _runtime_resource_path(path)
+	return resource_cache.has(path) and _valid_forest_resource(path, resource_cache[path])
 
 func poll_role_resources(timeout_msec: int = 20000) -> Error:
 	if _resource_prewarm_status != OK:
@@ -180,6 +198,9 @@ func poll_role_resources(timeout_msec: int = 20000) -> Error:
 				return _fail_resource_prewarm(ERR_CANT_OPEN, path + ": required environment texture is not a non-empty Texture2D")
 			if resource == null:
 				return _fail_resource_prewarm(ERR_CANT_OPEN, path + ": decoded resource is null")
+			if not _valid_forest_resource(path, resource):
+				resource_cache.erase(path)
+				return _fail_resource_prewarm(ERR_INVALID_DATA, path + ": required prepared forest tree is invalid")
 			resource_cache[path] = resource
 		elif status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			resource_requests.release(path, self)
@@ -252,10 +273,17 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 	if diagnostic_fallback:
 		_record_runtime_role_use(role_name, fallback_category, path, runtime_policy)
 	var prepared := PreparedActorCatalog.entry(role_name, path, variant_seed) if not building_prepared_assets else {}
-	var selected_path := str(prepared.get("path", path))
+	var forest_tree := _is_forest_tree(path)
+	var selected_path := _runtime_resource_path(str(prepared.get("path", path)))
+	if forest_tree and (PreparedForestTrees.entry(path).is_empty() or selected_path.is_empty() or not ResourceLoader.exists(selected_path)):
+		push_error("Required prepared forest tree is missing: %s (%s)" % [path, selected_path])
+		return null
 	if selected_path != "" and (ResourceLoader.exists(selected_path) or FileAccess.file_exists(selected_path)):
 		var profile_started := Time.get_ticks_usec()
 		var resource = _load_cached_resource(selected_path)
+		if forest_tree and resource == null:
+			push_error("Required prepared forest tree failed to load: %s (%s)" % [path, selected_path])
+			return null
 		if not prepared.is_empty() and resource == null:
 			push_error("Required prepared actor is missing: %s (%s)" % [role_name, selected_path])
 			return null
@@ -304,6 +332,9 @@ func _spawn_from_entry(entry: Dictionary, role_name: String, fallback_category: 
 					float(Time.get_ticks_usec() - composed_usec) / 1000.0,
 				])
 			return spawned
+		if forest_tree:
+			push_error("Required prepared forest tree failed to instantiate: %s" % path)
+			return null
 		var fallback: Node3D = _instantiate_source_file(path)
 		if fallback != null:
 			fallback = _compose_player_body(fallback, path, role_name, variant_seed)
@@ -645,7 +676,13 @@ func _instantiate_source_file(path: String) -> Node3D:
 
 func _load_cached_resource(path: String):
 	_record_asset_use(path)
+	path = _runtime_resource_path(path)
+	_record_asset_use(path)
 	if resource_cache.has(path):
+		if not _valid_forest_resource(path, resource_cache[path]):
+			resource_cache.erase(path)
+			push_error("Required prepared forest tree failed validation: " + path)
+			return null
 		return resource_cache[path]
 	if not ResourceLoader.exists(path):
 		return null
@@ -655,6 +692,9 @@ func _load_cached_resource(path: String):
 		pending_role_resources.erase(path)
 	else:
 		resource = resource_requests.load_now(path, self)
+	if not _valid_forest_resource(path, resource):
+		push_error("Required prepared forest tree failed validation: " + path)
+		return null
 	if resource != null:
 		resource_cache[path] = resource
 	return resource
@@ -671,7 +711,7 @@ func prewarm_roles(role_names: Array) -> Dictionary:
 		var entry: Dictionary = database.get_asset_for_role(role)
 		var path := str(entry.get("path", ""))
 		var prepared := PreparedActorCatalog.entry(role, path) if not building_prepared_assets else {}
-		path = str(prepared.get("path", path))
+		path = _runtime_resource_path(str(prepared.get("path", path)))
 		if path == "" or not (ResourceLoader.exists(path) or FileAccess.file_exists(path)):
 			missing.append(role)
 			continue
@@ -738,11 +778,19 @@ func forest_tree_source(role: String) -> Dictionary:
 
 func _load_forest_tree_mesh(path: String) -> ArrayMesh:
 	_record_asset_use(path)
+	if PreparedForestTrees.entry(path).is_empty():
+		push_error("Required prepared forest tree contract is missing: " + path)
+		return null
 	var key := path + ":runtime_tree"
 	if mesh_cache.has(key):
 		return mesh_cache[key]
-	var imported := _load_cached_resource(path) as ArrayMesh
+	var prepared_path := PreparedForestTrees.resource_path(path)
+	if prepared_path.is_empty():
+		push_error("Unapproved prepared forest tree source: " + path)
+		return null
+	var imported := _load_cached_resource(prepared_path) as ArrayMesh
 	if imported == null or imported.get_surface_count() < 2:
+		push_error("Required prepared forest tree mesh is missing or invalid: " + prepared_path)
 		return null
 	var mesh := imported.duplicate(false) as ArrayMesh
 	for index in mesh.get_surface_count():
@@ -751,6 +799,8 @@ func _load_forest_tree_mesh(path: String) -> ArrayMesh:
 	return mesh
 
 func _load_obj_mesh(path: String) -> ArrayMesh:
+	if _is_forest_tree(path):
+		return _load_forest_tree_mesh(path)
 	_record_asset_use(path)
 	if mesh_cache.has(path):
 		return mesh_cache[path]
@@ -770,20 +820,20 @@ func _load_obj_mesh(path: String) -> ArrayMesh:
 	return _load_obj_mesh_text(path)
 
 func _is_forest_tree(path: String) -> bool:
-	return path.ends_with("/TwistedTree_2.obj") or path.ends_with("/TwistedTree_4.obj") or path.ends_with("/CommonTree_5.obj")
+	return PreparedForestTrees.is_source(path)
 
 func _forest_tree_material(surface_name: String) -> StandardMaterial3D:
 	var bark := surface_name.begins_with("Bark_")
 	var key := "forest_tree_bark" if bark else "forest_tree_leaves"
 	if material_cache.has(key):
 		return material_cache[key]
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.27, 0.20, 0.15) if bark else Color(0.12, 0.24, 0.13)
-	material.roughness = 0.88
+	var material := PreparedForestTrees.material(surface_name)
 	material_cache[key] = material
 	return material
 
 func _load_obj_mesh_text(path: String) -> ArrayMesh:
+	if _is_forest_tree(path):
+		return _load_forest_tree_mesh(path)
 	var file = FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return null

@@ -4,6 +4,7 @@ const CURATED_RUNTIME_PATH = "res://curated_runtime_assets.json"
 const VISUAL_UPGRADE_PATH = "res://visual_upgrade_manifest.json"
 const RUNTIME_ACCEPTANCE_PATH = "res://runtime_asset_manifest.json"
 const PreparedActorCatalog = preload("res://scripts/prepared_actor_catalog.gd")
+const PreparedForestTrees = preload("res://scripts/prepared_forest_trees.gd")
 
 var manifest = {}
 var role_mapping = {}
@@ -90,6 +91,11 @@ func has_visual_asset_for_role(role_name: String) -> bool:
 func _role_resource_exists(role_name: String, source: String) -> bool:
 	if source.is_empty():
 		return false
+	if PreparedForestTrees.is_source(source):
+		# A present authoring OBJ is not a substitute for required compiled runtime
+		# geometry. Keep the source path in the returned role metadata.
+		var forest_path := PreparedForestTrees.resource_path(source)
+		return not PreparedForestTrees.entry(source).is_empty() and not forest_path.is_empty() and ResourceLoader.exists(forest_path)
 	if ResourceLoader.exists(source) or FileAccess.file_exists(source):
 		return true
 	# Compiled actors retain their authored source identity in the manifests,
