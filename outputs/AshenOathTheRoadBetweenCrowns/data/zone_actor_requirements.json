@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "policy": "All possible actors for the destination, including conditional returns. Ecology sightings are added from design_pack_ecology; aliases retain their prepared source identity.",
+  "shared": ["P01", "M13"],
+  "zones": {
+    "greyfen": ["C01", "C02", "C03", "C04", "C05", "C06", "C11", "C12", "M01", "M04", "M05"],
+    "wychwood": ["C03", "C05", "C06", "C12", "M01", "M02", "M03", "M04", "M19", "M20"],
+    "cemetery": ["C01", "C02", "C03", "M01", "M04", "M05"],
+    "deep_wood": ["C03", "C04", "C05", "C06", "C12", "M01", "M02", "M03", "M06", "M19", "M20"],
+    "old_mill": ["C04", "C05", "C11", "C12", "M01", "M07"],
+    "burned_farmstead": ["C04", "C05", "C06", "C12", "M01", "M02", "M06"],
+    "marsh_crossing": ["C02", "C06", "C12", "M01", "M02", "M03", "M04"],
+    "bandit_road": ["C02", "C06", "C07", "C12", "M04"],
+    "vargan_approach": ["C01", "C02", "C03", "C06", "C07", "C08", "C10", "C11", "C12", "M04"],
+    "vargan_court": ["C02", "C06", "C08", "C09", "C10", "C11", "C12", "M01", "M02", "M04"],
+    "record_hall": ["C06", "C08", "C09", "C10", "C11", "C12", "M01", "M04"],
+    "undercroft": ["C09", "C10", "C12", "M04"],
+    "assembly": ["C01", "C02", "C03", "C04", "C05", "C06", "C08", "C09", "C10", "C11", "C12"],
+    "hart_glade": ["C01", "C02", "C03", "C04", "C05", "C08", "C12", "M08"],
+    "ruins": ["C03", "C04", "C05", "C08", "C12", "M04", "M08"]
+  }
+}

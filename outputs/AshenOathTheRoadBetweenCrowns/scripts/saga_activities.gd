@@ -897,12 +897,15 @@ func _begin_work(id: String, step: Array, area: Node3D) -> void:
 		return
 	_cancel_work()
 	_work = {"id":id, "step":step, "area":weakref(area), "start":host.player.global_position, "part":_part(id, str(step[0]))}
+	_work.performance = Catalog.work_performance(id, step, int(_work.part))
 	_elapsed = 0.0
 	host.player.face_target(area.global_position)
 	host.player._request_equipment(host.player.weapon_mode, host.player.get_selected_blade_id(), false)
 	host.hud.toast(str(area.prompt))
 
 func _cancel_work() -> void:
+	if not _work.is_empty() and not bool(_work.get("escort", false)):
+		WorkPresentation.sync_progress(_assemblies.get(str(_work.id)), host, str(_work.id))
 	if not _work.is_empty() and not bool(_work.get("escort", false)) and host != null and is_instance_valid(host.player):
 		Presence.release(host.player, "work", get_instance_id())
 		if host.player.animation_driver != null:
@@ -1123,10 +1126,11 @@ func _physics_process(delta: float) -> void:
 		return
 	host.player.set_meta("cast_work_cancel", _cancel_work)
 	if host.player.animation_driver != null:
-		host.player.animation_driver.set_life_activity(str(Catalog.performance(str(_work.id)).get("activity", Catalog.QUESTS[str(_work.id)].get("activity", "repair"))))
+		host.player.animation_driver.set_life_activity(str(_work.performance.activity))
 	_elapsed += delta
-	WorkPresentation.animate_work(_assemblies.get(str(_work.id)), str(_work.step[3]), int(_work.part), minf(_elapsed / 1.25, 1.0))
-	if _elapsed >= 1.25:
+	var duration := float(_work.performance.duration)
+	WorkPresentation.animate_work(_assemblies.get(str(_work.id)), str(_work.step[3]), int(_work.part), minf(_elapsed / duration, 1.0), str(_work.step[0]))
+	if _elapsed >= duration:
 		var id := str(_work.id)
 		var step: Array = _work.step
 		var part := int(_work.part)

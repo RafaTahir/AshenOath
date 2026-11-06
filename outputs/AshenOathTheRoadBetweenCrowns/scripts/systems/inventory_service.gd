@@ -14,6 +14,13 @@ func _use_inventory_item(item_id: String) -> Dictionary:
 	var item_name: String = inventory.get_item_name(item_id)
 	if not inventory.can_consume(item_id):
 		return _preparation_item_result(item_id, false, "No %s left." % item_name)
+	if item_id in ["ash_bomb", "iron_trap"]:
+		if _host.get_tree().paused or not input_router.is_gameplay_context():
+			var equipped: bool = inventory.set_quick_item("throw_bomb", item_id)
+			return _preparation_item_result(item_id, equipped, "%s selected. Use the field-tool control on the road." % item_name, "select")
+		var tool_effect: Dictionary = preload("res://scripts/preparation_view_model.gd").resolved_effect(item_id, inventory, progression)
+		var deployed: Dictionary = combat.deploy_tool(_host, item_id, float(tool_effect.get("damage", 45.0)))
+		return _preparation_item_result(item_id, bool(deployed.ok), str(deployed.message), "use", 1 if deployed.ok else 0)
 	if inventory.get_item_type(item_id) == "ammo":
 		if player.get_selected_arrow_id() == item_id:
 			return _preparation_item_result(item_id, false, "%s is already selected." % item_name, "select")
@@ -43,22 +50,6 @@ func _use_inventory_item(item_id: String) -> Dictionary:
 		player.stamina_component.restore(restored)
 		audio.play_event("potion")
 		return _preparation_item_result(item_id, true, "Bitterleaf restored %s stamina." % str(snappedf(restored, 0.1)), "use", 1)
-	if item_id == "ash_bomb":
-		if not inventory.consume(item_id):
-			return _preparation_item_result(item_id, false, "No Ash Bomb remains.")
-		audio.play_event("bomb")
-		if camera_rig != null:
-			camera_rig.shake(0.12)
-		combat.throw_bomb(player, active_enemies, float(effect.get("damage", 45.0)))
-		for enemy in active_enemies:
-			if is_instance_valid(enemy) and not enemy.dead and enemy.enemy_id == "bog_wretch" and enemy.global_position.distance_to(player.global_position) <= 6.5:
-				_expose_bog_core(enemy, "Ash Bomb")
-		return _preparation_item_result(item_id, true, "Ash Bomb thrown.", "use", 1)
-	if item_id == "iron_trap":
-		if not inventory.consume(item_id):
-			return _preparation_item_result(item_id, false, "No Iron Trap remains.")
-		combat.place_trap(player, active_enemies)
-		return _preparation_item_result(item_id, true, "Iron Trap set at your feet.", "use", 1)
 	return _preparation_item_result(item_id, false, "This item has no preparation action.")
 
 func _preparation_item_result(item_id: String, ok: bool, message: String, operation: String = "use", consumed: int = 0) -> Dictionary:

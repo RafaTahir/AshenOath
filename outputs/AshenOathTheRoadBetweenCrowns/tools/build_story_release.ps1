@@ -157,17 +157,8 @@ Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "runtime_pack_validat
 # They must never be reused from an earlier release: load_resource_pack can
 # otherwise override freshly exported core code. This build intentionally
 # exports all asset packs too, avoiding unproven cross-build cache assumptions.
-$packs = @(
-    @{ id = "base"; preset = "Runtime Pack Base" },
-    @{ id = "opening"; preset = "Runtime Pack Opening" },
-    @{ id = "opening_materials"; preset = "Runtime Pack Opening Materials" },
-    @{ id = "adjacent"; preset = "Runtime Pack Adjacent" },
-    @{ id = "campaign"; preset = "Runtime Pack Campaign" },
-    @{ id = "characters"; preset = "Runtime Pack Characters" },
-    @{ id = "monsters"; preset = "Runtime Pack Monsters" },
-    @{ id = "audio"; preset = "Runtime Pack Audio" },
-    @{ id = "quality_materials"; preset = "Runtime Pack Quality Materials" }
-)
+$PackLayout = Get-Content -LiteralPath (Join-Path $ProjectRoot 'runtime_pack_manifest.json') -Raw | ConvertFrom-Json
+$packs = @($PackLayout.pack_presets.psobject.Properties | ForEach-Object { @{ id = $_.Name; preset = [string]$_.Value } })
 $records = @()
 foreach ($pack in $packs) {
     $artifactName = $pack.id + ".pck"

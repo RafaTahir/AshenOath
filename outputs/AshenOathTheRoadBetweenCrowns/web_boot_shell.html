@@ -550,8 +550,36 @@
         return packOperations.get('opening')?.promise || null;
       }
       window.__ashenOathRequestPack('opening');
+      let openingPrefetchQueue = [];
+      let foregroundPrefetchIds = null;
+      window.__ashenOathPrioritizePacks = ids => {
+        const required = new Set(ids);
+        foregroundPrefetchIds = required;
+        openingPrefetchQueue = openingPrefetchQueue.filter(id => required.has(id));
+        for (const id of packOperations.keys()) {
+          if (!required.has(id)) window.__ashenOathCancelPack(id);
+        }
+      };
       void getPackManifest().then(manifest => {
-        if (manifest.packs?.opening_materials) window.__ashenOathRequestPack('opening_materials');
+        const required = new Set();
+        const visit = id => {
+          if (required.has(id)) return;
+          required.add(id);
+          for (const dependency of manifest.packs?.[id]?.dependencies || []) visit(dependency);
+        };
+        for (const id of manifest.startup_dependencies || ['opening', 'opening_materials']) visit(id);
+        openingPrefetchQueue = [...required].filter(id => manifest.packs?.[id]?.url && (!foregroundPrefetchIds || foregroundPrefetchIds.has(id)));
+        // Two consumers share the engine handoff; do not retain an entire
+        // roster's decoded buffers while WebAssembly initializes.
+        const prefetch = async () => {
+          while (openingPrefetchQueue.length && !failed) {
+            const id = openingPrefetchQueue.shift();
+            window.__ashenOathRequestPack(id);
+            await packOperations.get(id)?.promise;
+          }
+        };
+        void prefetch();
+        void prefetch();
       }).catch(() => {});
       window.__ashenOathBeginOpeningPackMount = mountOpeningPackAfterReady;
       window.__ashenOathStart = async () => {

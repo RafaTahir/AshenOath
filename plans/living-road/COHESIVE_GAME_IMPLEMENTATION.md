@@ -1,6 +1,113 @@
 # A Cohesive Ashen Oath
 
-## Current Director Repair - 2026-10-28
+## Current Combined Implementation - 2026-11-06
+
+Authorized scope: A Coherent, Living Campaign. Continue the retained game from
+`1b3e397` on `codex/art-recovery-anwen`, physically in D:/Projects/AshenOath.
+The older per-ticket stops below are historical. Current delivery is one combined
+candidate, development/main Git pushes, no manual deployment or Vercel waiting.
+This execution is build-only: no gameplay, browser, tests, screenshots or benchmark.
+Compilation and package-integrity checks are permitted; runtime acceptance belongs
+to Rafa. Historical failures and 0/16 FINISH user acceptance are unchanged.
+
+### Implementation ledger
+
+| Layer / existing owners | Changes in this candidate | Retained implementation, not a new completion claim |
+| --- | --- | --- |
+| Travel and resources / OPT, FINISH-001/014/016 | Compile prepared-actor dependency ownership into per-design packs plus one shared owner; authored potential-presence lists cover each destination and ecology. Startup and selected Continue expand dependency closure; only the selected neighbor gets speculative world preparation. Early browser downloads reuse existing verified promises and respond to destination priority. | Explicit zone contexts, bounded 1.5 ms main-thread publication, generation/dependency guards, source-side support, renderer-safe retirement, cached returns, 14 connector pairs and existing regional profiles. No active pack unmounting, content deletion or quality reduction. |
+| Combat / PLAYFIX, FINISH-004/006 | One straight-arrow speed contract for real and training shots: ammo-authored 28/30/26 m/s at full draw, scaled 65-100%; retained damage. Real swept thrown bombs with gravity, impact/fuse, 45 damage, six-metre unobstructed blast; persistent supported traps, maximum three per region, first eligible hostile slowed four seconds. Equip from paused inventory; deployment uses normal input and consumes only a valid placement/release. | Existing bow alignment, muzzle obstruction, aim assist, action ownership, civilian protections, enemy balance and contact effects. No invented bodkin piercing or burning-arrow effect. |
+| Living cast / CAST | Far but visible actors retain a coarse animation schedule instead of freezing. Scene dressing tracks the actual flags read by its current projection, avoiding unrelated rebuilding. | Current 33 asset candidates, merged canonical cast/aliases, absence handling, nearby perception, species habits, interruption priorities and approved music ownership. Candidate art is not user-accepted art. |
+| Story / WORLD-SAGA, Living Road | Shorter optional opening with care, a practical repair and one personal road concern. Different work timing/acting for bell repair, snares, doors, lift, signals, forms and seeds; physical loop/post/brake movement follows work and resets to saved progress on interruption. Castle's correction repository uses records and shelving, distinct from the Hartlands' stone memorial. Correct the merged Nera crossing introduction. | All 21 base quests, 30 regional quests and six escort chapters retain IDs, rewards and branches. Existing regional performances, distinct main-quest structures, early clues, one-time rewards, private knowledge, four endings and homecoming stay authoritative. Strong existing dialogue is retained; this is not a wholesale prose replacement. |
+| Usability and leisure / FINISH-005/006/013 | Six settings groups with toggles, selectors and sliders; retained remapping and touch sizes. Nessa/Rook/Tor provide casual/practised/skilled board opponents with bounded chess search, distinct responses, invitations through walking routines and one-time prizes. Correct side-to-move draughts termination and Three Marks concession rendering. Tool descriptions match actual behavior. Footstep material comes from supporting geometry, with regional fallback. | Three Marks, draughts, chess, archery, scrollable touch-sized boards, resumable sessions, existing economy/oils/fittings, camera settings, browser audio routing, subtitle fallback and text-matched recorded voices. No essential-evidence or relationship victory gate. |
+| Delivery / FINISH-016 | Combined source-aligned export, resource/hash ownership and size accounting; intended paths only in Git. | Below 256 MiB total, warning at 200 MiB, individual tracked files below 100 MiB. Build bytes are not runtime memory. |
+
+### Compatibility and review notes
+
+- Traps add `world.field_devices`; absent legacy data starts empty. Saved records
+  retain zone, ID, local position and yaw; unsupported restored devices stay dormant,
+  not teleported or refunded. No offline simulation or free supplies.
+- Existing campaign objective and partial-work IDs are unchanged. Work presentation
+  reads progress; it does not award XP. Optional omissions remain unknown.
+- Per-zone actor requirements include possible returns/aftermath, not just first
+  arrival. Ecology augments the declared list at packaging. Required resources must
+  mount before actor construction; the catalog and recovery resources are preserved.
+- Settings write existing preference keys. No preset, save, quality, protagonist or
+  equipment migration is introduced. Slow gameplay frames are no longer dropped by
+  the optional monitor's former 250 ms filter; no new measurements were made.
+- Historical connector geometry repairs remain intact, including the shared arch;
+  this release does not claim a new visual pass on every connector.
+- Existing regional stories already contain investigation, repair, bounded escort,
+  social play, rescue, choice, handover and return. Retaining them avoids replacing
+  strong authored scenes simply to inflate the change count. Distinct work timing
+  and animation are implementation, not evidence that chores now feel enjoyable.
+- Existing 33 character candidates and original sources remain untouched. No broader
+  art-quality acceptance or realistic-character claim is made.
+
+### Build and publication
+
+Candidate: `coherent-campaign-20261106-r3`. The first export stopped because actor
+partitioning correctly moved its textures but left the old Opening Materials
+preset empty. The corrected compiler retires that empty preset/dependency only;
+all its textures retain their declared actor owner. No dummy resource or quality
+reduction is used. Static review also added Bell-Eater and its summons to Greyfen's
+potential cast because their encounter can begin without a zone reload.
+The second export exposed a preset-index gap after retiring that pack. Godot stops
+reading at a missing numeric index; the compiler now renumbers all presets together
+with their options. Both unsuccessful exports are retained under `.release-gate`.
+The retry retains the already compiled audio/geometry; no gameplay was launched.
+Compilation/export completed. The isolated exported-resource check passed for all
+33 compiled actors and 32 safely omitted duplicate source scenes, with no gameplay.
+The copied `web/` package passed the existing read-only hash/size/graph check:
+
+| Package fact | Result |
+| --- | --- |
+| Complete directory, including manifests | 205,604,120 bytes / 196.08 MiB |
+| Transport artifact inventory | 205,578,148 bytes, 50 artifacts |
+| Decoded artifact inventory | 253,470,635 bytes; not runtime memory |
+| Largest tracked Web file | opening.pck: 69,633,599 bytes |
+| Balanced/Potato opening dependency inventory | 122,026,924 bytes |
+| Quality opening dependency inventory | 129,251,193 bytes |
+| Additional Wychwood dependencies after Greyfen | 11,339,916 bytes, previously 50,789,794 |
+| Root PCK transport SHA-256 | 92a76263b89f97440a12d81d602bfab0b8090324bc05ad70b3e66583117166c0 |
+| Root PCK decoded SHA-256 | 71b914b1a951c085430bd82111be891ad825c807c79ff6c0c05b0a4040473810 |
+
+The destination split reduces Wychwood's additional download inventory by about
+77.7%, not a measured transition time. Opening inventory increases 4,317,040 bytes
+over 117,709,884 because it now explicitly covers potential Greyfen encounter and
+ecology resources as well as partition overhead. Its ideal transfer floor at
+20 Mbps is 48.81 seconds before preparation, versus 47.08 previously. This does
+not meet the retained 15-second cold-control target and is not claimed as a startup
+speed improvement. No bytes, population or quality were removed to conceal that
+limitation. Future startup work must address the large scenery/resource inventory.
+
+No automated behavioral test, browser, gameplay, screenshot, benchmark or profiling
+run was performed. Static diff review passed. User acceptance remains pending.
+The manifest honestly records the baseline commit with `source_dirty: true`; the
+combined Git commit contains the changed source and these exact generated bytes.
+Git delivery does not confirm Vercel success; hosting is intentionally not polled.
+
+### Consolidated user acceptance
+
+1. Cold/warm launch, immediate menu controls, destination-first Continue, Retry,
+   persisted Quality and complete scenery/actors at first control.
+2. Greyfen-Wychwood and regional crossings in both directions; cancellation,
+   immediate reversal, cached returns, late-story cast and unchanged gates.
+3. Bow in both cameras, partial/full draw, aim assist, wall clearance and practice
+   ammunition; bomb tap/hold/cancel/cover; invalid trap placement and three-trap cap.
+4. Save/reload and browser restart with exact journey, preferences, partial regional
+   work, deployed traps, inventory, rewards, decisions and all four endings/homecoming.
+5. Clear and obstructed Use, sword/casting ownership, actor work/interruption/return,
+   Nera's single local identity, and people reacting without new civilian death rules.
+6. Each game's three opponents, concession, interrupted board restoration, forced
+   draughts captures, prize nonduplication, scrollable boards and actual-phone touch.
+7. Optional introduction/skip, private/public accounts, alternate clue order, repaired
+   mechanisms, six regional returns and Castle-versus-Hartlands memorial purposes.
+8. Grouped settings/remapping, short screens, daylight/night materials, footsteps,
+   music, dialogue ducking, focus/pause recovery and audible volume persistence.
+9. Reference-PC startup, sustained play, slow frames, transitions and owned-process
+   memory against the retained strict targets; phone performance reported separately.
+
+## Historical Director Repair - 2026-10-28
 
 The approved ten-child roadmap in [FINISH-000](../finish-line/FINISH-000.md) is
 current. One child is implemented, verified and delivered at a time, then waits

@@ -178,7 +178,15 @@ static func build(game, parent: Node3D, id: String, completed: bool, outcome: St
 				coil.rings = 12
 				coil.ring_segments = 4
 				_mesh(game,assembly,coil,Vector3(0.25,0.04,0.13),LINEN)
-		"saga_har_q01", "saga_var_q05":
+		"saga_var_q05":
+			# Castle keeps a challengeable record; the Hartlands own the stone memorial.
+			for x in [-0.48, 0.48]:
+				_plank(game, assembly, Vector3(x,0.4,0), Vector3(0.065,0.8,0.4))
+			_plank(game, assembly, Vector3(0,0.82,0), Vector3(1.1,0.06,0.46))
+			for x in [-0.32, 0.0, 0.32]:
+				_record(assembly, Vector3(x,0.87,0))
+			_plank(game, assembly, Vector3(0,0.35,0.05), Vector3(0.8,0.045,0.35))
+		"saga_har_q01":
 			for index in range(3):
 				var stone := game._make_role_visual("forest_rock", "environment", Vector3(0.14,0.22,0.10)) as Node3D
 				if stone != null:
@@ -364,12 +372,21 @@ static func sync_progress(assembly: Node3D, game, id: String) -> void:
 	if cover != null and id == "saga_dep_q05":
 		cover.scale.x = maxf(0.15, _progress(game,id,"fit_cover"))
 
-static func animate_work(assembly: Node3D, mode: String, part: int, amount: float) -> void:
+static func animate_work(assembly: Node3D, mode: String, part: int, amount: float, step_id: String = "") -> void:
 	if not is_instance_valid(assembly):
 		return
+	var quest := str(assembly.get_meta("quest", ""))
+	if quest == "saga_wyc_q02" and step_id == "release_line":
+		var snare := assembly.get_node_or_null("SnareLoop" + str(part)) as Node3D
+		if snare != null: snare.rotation.z = lerpf(PI * 0.35, 0.0, smoothstep(0.0, 1.0, amount))
+	elif quest == "saga_roa_q04" and step_id == "set_markers":
+		var post := assembly.get_node_or_null("SignalPost" + str(part)) as Node3D
+		if post != null: post.rotation.z = lerpf(0.28, 0.0, smoothstep(0.0, 1.0, amount))
+	elif quest == "saga_gre_q02" and step_id == "seat_counterweight":
+		var brake := assembly.get_node_or_null("BellBrake") as Node3D
+		if brake != null: brake.rotation.z = lerpf(0.0, -0.35, amount) if part == 0 else lerpf(-0.35, 0.0, amount) if part == 2 else -0.35
 	var load := assembly.get_node_or_null("ReliefLoad") as Node3D
 	if load != null and mode == "work":
-		var quest := str(assembly.get_meta("quest", ""))
 		if quest == "side_escort_03" and bool(assembly.get_meta("lowering", false)):
 			load.position.y = lerpf(0.85, 0.23, (float(part) + amount) / 3.0)
 	if mode == "door" and part < 2:

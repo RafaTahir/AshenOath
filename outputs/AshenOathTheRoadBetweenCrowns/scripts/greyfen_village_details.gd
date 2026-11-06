@@ -29,6 +29,7 @@ var _observed_drawn := false
 var _static: Dictionary = {}
 var _work: Dictionary = {}
 var _lamps: Dictionary = {}
+var _table_invites: Dictionary = {}
 
 static func install(host) -> void:
 	if str(host.current_zone_id) != "greyfen" or host.zone_root.get_node_or_null(OWNER) != null: return
@@ -46,6 +47,15 @@ static func choose(host, action: Dictionary) -> void:
 		Guidance.set_mode(host, str(action.get("mode", "paused")))
 		return
 	var details := current(host)
+	if details != null and str(action.get("operation", "")) == "table_invite":
+		var table_id := str(action.get("table", ""))
+		var person := str(action.get("person", ""))
+		if table_id not in ["common_table", "barrel_board"] or not host.minigames.OPPONENTS.has(person): return
+		details._table_invites[table_id] = person
+		host._resume_game()
+		var table := host.zone_root.find_child(table_id, true, false) as Node3D
+		if table != null: details.open_table(table)
+		return
 	if details != null and str(action.get("operation", "")) == "preparation":
 		Guidance.learn(host, "prepare")
 		host._resume_game()
@@ -143,16 +153,29 @@ func open_table(area: Node3D) -> bool:
 	if life == null:
 		game.hud.toast("The table is here; its opponent is not available yet.")
 		return true
-	var person := "rook" if str(area.interaction_id) == "common_table" else "blacksmith_tor"
+	var table_id := str(area.interaction_id)
+	if not _table_invites.has(table_id):
+		var actions: Array = []
+		for person_id: String in game.minigames.OPPONENTS:
+			var profile: Dictionary = game.minigames.OPPONENTS[person_id]
+			actions.append({"type":"greyfen_detail_action", "operation":"table_invite", "table":table_id, "person":person_id, "label":"Invite %s - %s" % [profile.name, profile.style]})
+		actions.append({"type":"close", "label":"Leave the board for now"})
+		_read("A place at the table", "The pieces are laid out. Nessa plays for company, Rook watches for an opening, and Tor takes his time. Nobody needs to wager to sit down.", actions)
+		return true
+	var person := str(_table_invites[table_id])
 	var arrival := area.get_node_or_null("BoardGameOpponentApproach") as Node3D
 	var corner := area.get_node_or_null("BoardGameOpponentCorner") as Node3D
 	if arrival == null:
 		game.hud.toast("The table's clear approach is not ready yet.")
 		return true
 	if not life.request_table_visit(person,arrival.global_position,corner.global_position if corner != null else Vector3.INF):
-		game.hud.toast(("Rook" if person == "rook" else "Tor") + " is coming over when the work allows. The shop stays open; use the board again when your opponent arrives.",5.0)
+		# An unavailable actor must not leave this table locked to one invitation.
+		_table_invites.erase(table_id)
+		game.hud.toast(str(game.minigames.OPPONENTS[person].name) + " has been invited. Use the board to invite them again when they arrive, or choose another opponent.",5.0)
 		return true
-	return false
+	_table_invites.erase(table_id)
+	game.minigames.open_game("tic_tac_toe" if table_id == "common_table" else "draughts", person)
+	return true
 
 func _model(parent: Node3D, file: String, height: float, point: Vector3) -> Node3D:
 	# Instantiate the imported resource, preserving its authored material slots;

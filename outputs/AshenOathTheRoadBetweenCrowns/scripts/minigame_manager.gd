@@ -8,6 +8,18 @@ signal state_changed
 const Square = preload("res://scripts/board_square.gd")
 const ChessRules = preload("res://scripts/third_party/chess/Chess.gd")
 const ChessOpponent = preload("res://scripts/third_party/chess/ChessEngine.gd")
+const OPPONENTS := {
+	"saga_nessa": {"name":"Nessa", "style":"casual", "depth":0, "mistake":0.55, "prize":2, "win":"Well, that settles who cuts the next loaf. Not you, apparently.", "loss":"Another round? The bread can cool without our supervision.", "draw":"Fair shares. I approve of this board."},
+	"rook": {"name":"Rook", "style":"practised", "depth":2, "mistake":0.15, "prize":3, "win":"I was about to do that. Only, on my side of the board.", "loss":"Watch what I leave unguarded. Sometimes it is an invitation.", "draw":"Neither of us has earned the right to boast. Tragic."},
+	"blacksmith_tor": {"name":"Tor", "style":"skilled", "depth":3, "mistake":0.0, "prize":8, "win":"Sound work. You saw the joint I left weak.", "loss":"Don't hurry the answer. Look at what my last move opened.", "draw":"Nothing loose. Nothing broken. A good finish."},
+}
+
+func opponent_profile() -> Dictionary:
+	return OPPONENTS.get(opponent_id, OPPONENTS.rook)
+
+func _opponent_label() -> String:
+	var profile := opponent_profile()
+	return "%s, %s" % [profile.name, profile.style]
 
 var overlay: PanelContainer
 var title_label: Label
@@ -90,7 +102,7 @@ func open_game(game_id: String, person: String = "rook") -> void:
 	if overlay == null:
 		_build_ui()
 	active_game = game_id
-	opponent_id = person if person in ["rook", "blacksmith_tor"] else "rook"
+	opponent_id = person if OPPONENTS.has(person) else "rook"
 	finished = false
 	draughts_selected = -1
 	draughts_legal_targets.clear()
@@ -164,7 +176,7 @@ func play_draughts(from_index: int, to_index: int) -> bool:
 			status_label.text = "Continue the capture."
 			_render_draughts(); _store_session(); return true
 	draughts_chain = -1
-	if _finish_draughts_if_needed(): return true
+	if _finish_draughts_if_needed(-1): return true
 	var npc_moves := get_draughts_moves(-1)
 	while not npc_moves.is_empty():
 		var move: Dictionary = _choose_draughts_move(npc_moves)
@@ -211,7 +223,7 @@ func load_state(data: Dictionary) -> void:
 	sessions.clear()
 	var raw: Variant = data.get("sessions", {})
 	if raw is Dictionary:
-		for person in ["rook", "blacksmith_tor"]:
+		for person in OPPONENTS:
 			for mode in ["tic_tac_toe", "draughts", "chess"]:
 				var key: String = str(person) + ":" + str(mode)
 				if raw.get(key) is Dictionary:
@@ -237,7 +249,7 @@ func _open_session() -> void:
 	chess_selected = -1; chess_targets.clear(); promotion_from = -1
 	promotion_actions.hide()
 	game_picker.select(["tic_tac_toe", "draughts", "chess"].find(active_game))
-	title_label.text = ("Three Marks" if active_game == "tic_tac_toe" else "Greyfen Draughts - 6 x 6") + " - " + ("Rook" if opponent_id == "rook" else "Tor")
+	title_label.text = ("Three Marks" if active_game == "tic_tac_toe" else "Greyfen Draughts - 6 x 6") + " - " + _opponent_label()
 	resign_button.visible = active_game != "tic_tac_toe"
 	var saved: Dictionary = sessions.get(_session_key(), {})
 	if saved.is_empty():
@@ -288,10 +300,11 @@ func _resign() -> void:
 	generation += 1; thinking = false
 	_finish("loss", "You concede this board. No wager or relationship is lost.")
 	if active_game == "chess": _render_chess()
+	elif active_game == "tic_tac_toe": _render_ttt()
 	else: _render_draughts()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not is_open() or not event.pressed: return
+	if not is_open() or not event.is_pressed(): return
 	if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		close_game()
@@ -339,12 +352,12 @@ func _restart() -> void:
 	promotion_actions.hide()
 	finished = false
 	if active_game == "tic_tac_toe":
-		title_label.text = "Three Marks - " + ("Rook, casual" if opponent_id == "rook" else "Tor, considered")
+		title_label.text = "Three Marks - " + _opponent_label()
 		status_label.text = "Three in a row. No wager is required."
 		ttt_board = [0,0,0,0,0,0,0,0,0]
 		_render_ttt()
 	elif active_game == "draughts":
-		title_label.text = "Greyfen Draughts - 6 x 6 - " + ("Rook, casual" if opponent_id == "rook" else "Tor, considered")
+		title_label.text = "Greyfen Draughts - 6 x 6 - " + _opponent_label()
 		status_label.text = "Captures are compulsory; continue a jumping piece. Crowning ends that turn."
 		_setup_draughts()
 		_render_draughts()
@@ -367,7 +380,7 @@ func _render_ttt() -> void:
 	if not _layout.is_empty(): _apply_controls(board_grid)
 
 func _choose_ttt_move() -> int:
-	if opponent_id == "rook" and rng.randf() < 0.4:
+	if rng.randf() < float(opponent_profile().mistake):
 		var empty: Array = range(9).filter(func(index): return ttt_board[index] == 0)
 		return -1 if empty.is_empty() else int(empty.pick_random())
 	for side in [2,1]:
@@ -495,13 +508,14 @@ func _apply_draughts_move(move: Dictionary) -> void:
 	elif piece == -1 and row == 0: draughts_board[int(move.to)] = -2
 	move["crowned"] = absi(draughts_board[int(move.to)]) != absi(piece)
 
-func _finish_draughts_if_needed() -> bool:
+func _finish_draughts_if_needed(side_to_move: int = 1) -> bool:
 	if draughts_quiet >= 80:
 		_finish("draw", "Draw by forty quiet moves each."); _render_draughts(); return true
-	var player_moves := get_draughts_moves(1); var npc_moves := get_draughts_moves(-1)
-	if not player_moves.is_empty() and not npc_moves.is_empty(): return false
+	# Only the side whose turn has begun can lose through immobilization. Its
+	# reply may reopen a square for the other side, so do not adjudicate both.
+	if not get_draughts_moves(side_to_move).is_empty(): return false
 	finished = true
-	var player_won := npc_moves.is_empty() and not player_moves.is_empty()
+	var player_won := side_to_move == -1
 	status_label.text = "You win. You saw the trap before it closed." if player_won else "Your opponent wins. Forward is not always out."
 	_finish("win" if player_won else "loss", status_label.text); _render_draughts(); return true
 
@@ -516,7 +530,7 @@ func _piece_captures(index: int, side: int) -> Array:
 	return get_draughts_moves(side).filter(func(move): return int(move.from) == index and int(move.capture) >= 0)
 
 func _choose_draughts_move(moves: Array) -> Dictionary:
-	if opponent_id == "rook": return moves[rng.randi_range(0, moves.size()-1)]
+	if int(opponent_profile().depth) == 0 or rng.randf() < float(opponent_profile().mistake): return moves[rng.randi_range(0, moves.size()-1)]
 	var best: Dictionary = moves[0]
 	var score := -10000
 	for move: Dictionary in moves:
@@ -532,7 +546,7 @@ func _choose_draughts_move(moves: Array) -> Dictionary:
 
 func _finish(outcome: String, text: String) -> void:
 	finished = true
-	status_label.text = text
+	status_label.text = text + "\n" + str(opponent_profile().name) + ": " + str(opponent_profile().get(outcome, "Another board is here whenever you like."))
 	_store_session()
 	result.emit(active_game, outcome)
 
@@ -541,9 +555,9 @@ func _move_key(move) -> String:
 
 func _render_chess() -> void:
 	_clear_board(); board_grid.columns = 8
-	title_label.text = "Chess - " + ("Rook, casual" if opponent_id == "rook" else "Tor, considered")
+	title_label.text = "Chess - " + _opponent_label()
 	if not finished:
-		status_label.text = "Choose a promotion." if promotion_from >= 0 else ("%s is considering the board." % ("Rook" if opponent_id == "rook" else "Tor") if thinking or chess.turn else ("Your king is in check." if chess.in_check() else "Your move. You hold the brass pieces."))
+		status_label.text = "Choose a promotion." if promotion_from >= 0 else ("%s is considering the board." % str(opponent_profile().name) if thinking or chess.turn else ("Your king is in check." if chess.in_check() else "Your move. You hold the brass pieces."))
 	for index in range(64):
 		var square := Square.new(); square.custom_minimum_size = Vector2(48,48)
 		var piece: Variant = chess.pieces[index]
@@ -596,11 +610,11 @@ func _chess_reply() -> void:
 	var position = chess.duplicate()
 	var legal: Array = position.generate_legal_moves()
 	var chosen = null
-	if opponent_id == "rook":
+	if int(opponent_profile().depth) == 0:
 		await get_tree().create_timer(0.3,true).timeout
 		if not legal.is_empty(): chosen = legal[rng.randi_range(0,legal.size()-1)]
 	else:
-		var engine = ChessOpponent.new(); engine.search_depth = 3; engine.quiescence_depth = 3
+		var engine = ChessOpponent.new(); engine.search_depth = int(opponent_profile().depth); engine.quiescence_depth = 3
 		engine.cancelled = func(): return generation != token or not is_open()
 		var answer: Array = await engine.get_move(position)
 		chosen = answer[1]

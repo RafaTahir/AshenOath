@@ -100,19 +100,18 @@ func _run_deferred_visual_roles(root: Node3D) -> void:
 			root.set_meta("deferred_visual_roles_pending", false)
 		return
 	var markers := _deferred_visual_markers(root)
-	var needs_character_pack := false
+	var waiting_for_actor := false
 	for marker in markers:
 		if str(marker.get_meta("deferred_visual_category", "")) == "characters":
-			needs_character_pack = true
-			break
-	if needs_character_pack and OS.has_feature("web") and runtime_packs != null and runtime_packs.has_method("is_ready") \
-		and not bool(runtime_packs.is_ready("characters")):
-		if runtime_packs.has_method("get_state") and str(runtime_packs.get_state("characters")) == "failed":
-			root.set_meta("deferred_visual_roles_pending", false)
-			push_error("Deferred character pack failed: %s" % runtime_packs.get_last_error("characters"))
-			return
-		if runtime_packs.has_method("request_pack"):
-			runtime_packs.request_pack("characters")
+			var pack: String = runtime_packs.actor_pack(str(marker.get_meta("deferred_visual_role", ""))) if runtime_packs != null else "characters"
+			if OS.has_feature("web") and runtime_packs != null and not runtime_packs.is_ready(pack):
+				if str(runtime_packs.get_state(pack)) == "failed":
+					root.set_meta("deferred_visual_roles_pending", false)
+					push_error("Deferred actor pack %s failed: %s" % [pack, runtime_packs.get_last_error(pack)])
+					return
+				runtime_packs.request_pack(pack)
+				waiting_for_actor = true
+	if waiting_for_actor:
 		var pack_retry := _create_owned_timer(0.5, true)
 		await pack_retry.timeout
 		if is_instance_valid(root) and root == zone_root and game_started:

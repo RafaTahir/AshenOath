@@ -24,6 +24,7 @@
       }
     },
     "side_escort_03": {
+      "work": {"brace_lift": {"activity": "repair", "seconds": [1.4, 2.0, 0.8]}, "lower_load": {"activity": "check_rope", "seconds": [2.0, 1.5, 0.7]}},
       "activity": "repair",
       "dialogue": {
         "hear_lift_plan": [
@@ -108,6 +109,7 @@
       }
     },
     "saga_gre_q02": {
+      "work": {"recover_pin": {"activity": "check_supplies", "seconds": [0.6]}, "seat_counterweight": {"activity": "check_rope", "seconds": [1.4, 0.8, 1.0]}, "sound_trial": {"activity": "check_rope", "seconds": [2.0, 0.6]}},
       "opening": "Tor is pulling a rope that answers late. Find the worn part, seat the counterweight and try the village warning with the watch. This is an ordinary warning bell, not the cemetery's binding.",
       "activity": "check_rope",
       "clues": {
@@ -127,6 +129,7 @@
       }
     },
     "saga_gre_q03": {
+      "work": {"check_clearance": {"activity": "repair", "seconds": [1.1, 1.1, 0.8]}},
       "opening": "Elna lifts her door by the handle to shut it. Repair the wet frame without losing its carved strip, then operate the latch rather than merely calling the job finished.",
       "activity": "repair",
       "beats": {
@@ -187,6 +190,7 @@
       }
     },
     "saga_wyc_q02": {
+      "work": {"release_line": {"activity": "check_rope", "seconds": [0.8, 2.2, 0.8]}, "clear_remaining": {"activity": "tend", "seconds": [0.7, 0.9, 0.5]}},
       "opening": "A loose anchor moves beside an abandoned snare. Release the tension before following its owner's cord back to the shelter. The forest is dangerous enough without forgotten human work.",
       "activity": "tend",
       "clues": {
@@ -296,6 +300,7 @@
       }
     },
     "saga_dep_q03": {
+      "work": {"clear_entry": {"activity": "repair", "seconds": [1.4, 1.1]}, "secure_air": {"activity": "repair", "seconds": [0.8, 1.3]}},
       "opening": "Warm air still moves under the burned house. Follow it from the flue to the cellar, lift the loose boards and find out what survived before assuming another haunting.",
       "activity": "repair",
       "clues": {
@@ -389,6 +394,7 @@
       }
     },
     "saga_roa_q04": {
+      "work": {"set_markers": {"activity": "check_rope", "seconds": [1.3, 1.3, 1.3]}},
       "opening": "Three signal posts have lost their line. Read the notch code, repair the markers and walk to the far end and back. The route must make sense in sunlight as well as by lamplight.",
       "activity": "check_rope",
       "beats": {
@@ -463,6 +469,7 @@
       }
     },
     "saga_var_q04": {
+      "work": {"prepare_clean_forms": {"activity": "read", "seconds": [0.7, 1.2]}, "issue_trial": {"activity": "sort_supplies", "seconds": [1.0, 0.6]}},
       "opening": "The supply office has parcels ready and a form that demands assent. Compare its authority, remove that condition and issue one actual delivery with a matching receipt.",
       "activity": "check_supplies",
       "beats": {
@@ -534,6 +541,7 @@
       }
     },
     "saga_har_q04": {
+      "work": {"store_reserve": {"activity": "sort_seeds", "seconds": [1.4, 0.7]}},
       "opening": "Mira has a limited seed reserve and two possible growing places. Compare the sites, carry the supplied trial cups and keep the untouched reserve dry.",
       "activity": "sort_seeds",
       "beats": {

@@ -153,6 +153,8 @@ var weapon_mode: String:
 	set(value):
 		equipment_loadout.set_active_weapon(value)
 var bow_aiming := false
+var field_tool_aiming := false
+var _field_tool_pressed := false
 var bow_draw_time := 0.0
 var bow_recovery := 0.0
 var bow_drawing := false
@@ -271,6 +273,8 @@ func _physics_process(delta: float) -> void:
 
 func set_transition_locked(locked: bool) -> void:
 	if locked:
+		_field_tool_pressed = false
+		field_tool_aiming = false
 		_cancel_equipment_action()
 		_cancel_bow()
 	if locked and beam_cast_state != BEAM_STATE_IDLE:
@@ -284,6 +288,8 @@ func set_transition_locked(locked: bool) -> void:
 		can_control = true
 
 func cancel_buffered_input(reason: String = "context") -> void:
+	_field_tool_pressed = false
+	field_tool_aiming = false
 	_movement_frame_active = false
 	end_companion_gesture(true)
 	_cancel_equipment_action()
@@ -774,8 +780,7 @@ func _handle_combat_input() -> void:
 	if beam_cast_state == BEAM_STATE_IDLE:
 		if _action_just_pressed("use_potion"):
 			potion_requested.emit()
-		if _action_just_pressed("throw_bomb"):
-			bomb_requested.emit()
+		if _handle_field_tool(): return
 	if weapon_mode == "bow":
 		# LT is bow aim in this weapon context, not an Oathfire cast. A separately
 		# bound Oathfire press stows the bow until the cast restores its prior intent.
@@ -870,6 +875,35 @@ func _handle_bow_input() -> void:
 	elif not _action_pressed("fire_bow"):
 		bow_drawing = false
 		bow_draw_time = 0.0
+
+func _handle_field_tool() -> bool:
+	if attack_anim_time > 0.0 or dodge_time > 0.0 or hurt_react_time > 0.0 or equipment_loadout.is_transitioning():
+		_field_tool_pressed = false
+		field_tool_aiming = false
+		return false
+	if _action_just_pressed("throw_bomb"):
+		_cancel_bow()
+		_field_tool_pressed = true
+		field_tool_aiming = true
+	if not _field_tool_pressed: return false
+	if _action_just_pressed("dodge") or _action_just_pressed("aim_bow"):
+		_field_tool_pressed = false
+		field_tool_aiming = false
+		return false
+	if not _action_pressed("throw_bomb"):
+		_field_tool_pressed = false
+		bomb_requested.emit()
+		field_tool_aiming = false
+	return true
+
+func field_tool_aim() -> Dictionary:
+	var origin := global_position + Vector3.UP * 1.15
+	var direction := -global_basis.z
+	var solution: Dictionary = {"direction": direction, "point": origin + direction * 18.0}
+	if camera_controller != null:
+		solution = camera_controller.bow_aim_solution(origin, 18.0, false)
+	solution["origin"] = origin
+	return solution
 
 func _cancel_bow() -> void:
 	bow_aiming = false
@@ -1289,7 +1323,7 @@ func _set_sword_sheathed(sheathed: bool) -> void:
 		slash_arc_root.visible = false
 
 func is_blocking() -> bool:
-	return weapon_mode == "sword" and not sword_sheathed and not equipment_loadout.is_transitioning() and _action_pressed("block") and stamina_component.stamina > 8.0
+	return not field_tool_aiming and weapon_mode == "sword" and not sword_sheathed and not equipment_loadout.is_transitioning() and _action_pressed("block") and stamina_component.stamina > 8.0
 
 func take_damage(amount: float) -> bool:
 	amount *= float(difficulty_profile.get("incoming_damage_multiplier", 1.0))

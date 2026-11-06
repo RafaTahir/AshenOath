@@ -11,9 +11,12 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	var owner: Node = hud._game_owner if is_instance_valid(hud) else null
 	var player: Node3D = owner.get("player") if is_instance_valid(owner) else null
-	visible = is_instance_valid(player) and not get_tree().paused and not hud._gameplay_surface_blocked() and player.is_bow_pose_active() and player.bow_aiming
+	visible = is_instance_valid(player) and not get_tree().paused and not hud._gameplay_surface_blocked() and ((player.is_bow_pose_active() and player.bow_aiming) or player.field_tool_aiming)
 	if not visible: return
-	state = player.bow_aim_solution
+	state = player.field_tool_aim() if player.field_tool_aiming else player.bow_aim_solution
+	if player.field_tool_aiming:
+		state["ammo"] = owner.inventory.can_consume(owner.inventory.quick_item("throw_bomb"))
+		state["draw"] = 0.0
 	var camera := get_viewport().get_camera_3d()
 	if camera == null: return
 	var target: Vector3 = state.get("point", camera.global_position - camera.global_basis.z * 10.0)

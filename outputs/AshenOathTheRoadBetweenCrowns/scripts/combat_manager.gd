@@ -14,6 +14,184 @@ signal contact_missed(result: Dictionary)
 var _blade_owner_id := 0
 var _blade_attack_id := -1
 var _blade_hit_ids: Dictionary = {}
+var _device_host: WeakRef
+var _deployed_devices: Dictionary = {}
+var _device_serial := 0
+
+func save_devices() -> Dictionary:
+	return {"serial": _device_serial, "zones": _deployed_devices.duplicate(true)}
+
+func load_devices(value: Dictionary) -> void:
+	_device_serial = maxi(0, int(value.get("serial", 0)))
+	_deployed_devices.clear()
+	var zones: Variant = value.get("zones", {})
+	if not zones is Dictionary: return
+	var seen: Dictionary = {}
+	for zone: String in zones:
+		if not zones[zone] is Array: continue
+		var retained: Array = []
+		for record: Variant in zones[zone]:
+			if not record is Dictionary or str(record.get("kind", "")) != "trap": continue
+			var position: Variant = record.get("position")
+			if not position is Array or position.size() != 3: continue
+			var valid := true
+			for component in position:
+				if not (component is float or component is int) or not is_finite(float(component)): valid = false
+			var id := str(record.get("id", ""))
+			var saved_yaw: Variant = record.get("yaw", 0.0)
+			if not (saved_yaw is float or saved_yaw is int): continue
+			var yaw := float(saved_yaw)
+			if valid and is_finite(yaw) and id.is_valid_int() and int(id) > 0 and not seen.has(id) and retained.size() < 3:
+				retained.append({"id": id, "kind": "trap", "position": position.duplicate(), "yaw": yaw})
+				seen[id] = true
+				_device_serial = maxi(_device_serial, int(id))
+		_deployed_devices[zone] = retained
+
+func activate_devices(host: Node) -> void:
+	_device_host = weakref(host)
+	var previous := host.zone_root.get_node_or_null("FieldDevices")
+	if previous != null:
+		host.zone_root.remove_child(previous)
+		previous.queue_free()
+	var root := Node3D.new()
+	root.name = "FieldDevices"
+	host.zone_root.add_child(root)
+	for record: Dictionary in _deployed_devices.get(str(host.current_zone_id), []):
+		var device := preload("res://scripts/field_device.gd").new()
+		device.manager = weakref(self)
+		device.zone = str(host.current_zone_id)
+		device.device_id = str(record.id)
+		root.add_child(device)
+		device.position = Vector3(record.position[0], record.position[1], record.position[2])
+		device.rotation.y = float(record.get("yaw", 0.0))
+		# Keep unsupported legacy placements dormant; never move or refund them.
+		device.set_meta("support_pending", true)
+
+func device_can_tick(device: Node3D) -> bool:
+	var host := _device_game()
+	return host != null and str(device.zone) == str(host.current_zone_id) and device.get_parent().get_parent() == host.zone_root \
+		and host.game_started and not host.zone_transition_pending and not host.get_tree().paused \
+		and is_instance_valid(host.player) and host.player.can_control
+
+func device_exclusions() -> Array[RID]:
+	var host := _device_game()
+	var excluded: Array[RID] = []
+	if host != null and is_instance_valid(host.player): excluded.append(host.player.get_rid())
+	return excluded
+
+func _device_game() -> Node:
+	return _device_host.get_ref() as Node if _device_host != null else null
+
+func deploy_tool(host: Node, item_id: String, damage: float = 45.0) -> Dictionary:
+	if host.get_tree().paused or not host.player.can_control or host.zone_transition_pending or not host.input_router.is_gameplay_context():
+		return {"ok": false, "message": "Return to the road before using a field tool."}
+	var player: Node3D = host.player
+	var aim: Dictionary = player.field_tool_aim()
+	if bool(aim.get("blocked", false)):
+		return {"ok": false, "message": "The tool needs clearance. Nothing was used."}
+	var position: Vector3 = aim.origin
+	var records: Array = _deployed_devices.get(str(host.current_zone_id), [])
+	if item_id == "iron_trap":
+		if records.size() >= 3:
+			return {"ok": false, "message": "Three traps are already armed here. Nothing was used."}
+		var ahead: Vector3 = player.global_position - player.global_basis.z * 1.25
+		var query := PhysicsRayQueryParameters3D.create(ahead + Vector3.UP * 0.7, ahead - Vector3.UP * 0.8, 1)
+		query.exclude = [player.get_rid()]
+		query.collide_with_areas = false
+		var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
+		if hit.is_empty() or hit.normal.dot(Vector3.UP) < 0.85 or hit.collider is CharacterBody3D:
+			return {"ok": false, "message": "Find clear, level ground for the trap. Nothing was used."}
+		position = hit.position + Vector3.UP * 0.015
+		var space := PhysicsShapeQueryParameters3D.new()
+		var clearance := BoxShape3D.new()
+		clearance.size = Vector3(0.55, 0.22, 0.55)
+		space.shape = clearance
+		space.transform.origin = position + Vector3.UP * 0.16
+		space.collision_mask = 1
+		space.exclude = [player.get_rid()]
+		if not player.get_world_3d().direct_space_state.intersect_shape(space, 1).is_empty():
+			return {"ok": false, "message": "The trap would overlap an obstacle. Nothing was used."}
+		for record: Dictionary in records:
+			if position.distance_to(host.zone_root.to_global(Vector3(record.position[0], record.position[1], record.position[2]))) < 0.8:
+				return {"ok": false, "message": "Leave space between traps. Nothing was used."}
+	if not host.inventory.consume(item_id): return {"ok": false, "message": "No field tool remains."}
+	if _device_game() != host or host.zone_root.get_node_or_null("FieldDevices") == null: activate_devices(host)
+	var device := preload("res://scripts/field_device.gd").new()
+	device.manager = weakref(self)
+	device.zone = str(host.current_zone_id)
+	device.kind = "trap" if item_id == "iron_trap" else "bomb"
+	_device_serial += 1
+	device.device_id = str(_device_serial)
+	device.set_meta("damage", damage)
+	host.zone_root.get_node("FieldDevices").add_child(device)
+	device.global_position = position
+	device.rotation.y = player.rotation.y
+	if device.kind == "bomb":
+		device.velocity = (aim.direction as Vector3) * 13.0 + Vector3.UP * 2.4
+	else:
+		var local: Vector3 = host.zone_root.to_local(position)
+		records.append({"id": device.device_id, "kind": "trap", "position": [local.x, local.y, local.z], "yaw": device.rotation.y})
+		_deployed_devices[str(host.current_zone_id)] = records
+	return {"ok": true, "message": "Iron Trap armed." if device.kind == "trap" else "Ash Bomb thrown."}
+
+func try_trigger_trap(device: Node3D) -> void:
+	if not device_can_tick(device) or device.consumed: return
+	var host := _device_game()
+	if bool(device.get_meta("support_pending", false)):
+		var support_query := PhysicsRayQueryParameters3D.create(device.global_position + Vector3.UP * 0.15, device.global_position - Vector3.UP * 0.2, 1)
+		support_query.exclude = device_exclusions()
+		var support := device.get_world_3d().direct_space_state.intersect_ray(support_query)
+		if support.is_empty() or support.normal.dot(Vector3.UP) < 0.85 or support.collider is CharacterBody3D: return
+		device.set_meta("support_pending", false)
+	for enemy in host.active_enemies:
+		if not is_instance_valid(enemy) or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()): continue
+		if enemy.global_position.distance_to(device.global_position) > 0.8: continue
+		var query := PhysicsRayQueryParameters3D.create(device.global_position + Vector3.UP * 0.15, enemy.global_position + Vector3.UP * 0.25, 1)
+		query.exclude = device_exclusions()
+		var obstruction := device.get_world_3d().direct_space_state.intersect_ray(query)
+		if not obstruction.is_empty() and obstruction.collider != enemy and not enemy.is_ancestor_of(obstruction.collider): continue
+		device.consumed = true
+		var records: Array = _deployed_devices.get(device.zone, [])
+		for index in range(records.size() - 1, -1, -1):
+			if str(records[index].id) == device.device_id: records.remove_at(index)
+		enemy.slow(4.0)
+		host.audio.play_spatial_event("block", device.global_position, host.player.global_position, 14.0, 0.0, 0.0)
+		message.emit("%s is caught in the iron trap." % enemy.display_name)
+		host.story_save_pending = true
+		host.call_deferred("_persist_story_action")
+		device.queue_free()
+		return
+
+func explode_device(device: Node3D) -> void:
+	if not device_can_tick(device): device.queue_free(); return
+	var host := _device_game()
+	var center := device.global_position
+	var targets: Array = []
+	for enemy in host.active_enemies:
+		if not is_instance_valid(enemy) or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()): continue
+		if enemy.global_position.distance_to(center) > 6.0: continue
+		var query := PhysicsRayQueryParameters3D.create(center, BodyQuery.aim_point_for(enemy), 1)
+		query.exclude = device_exclusions()
+		query.collide_with_areas = false
+		var wall := device.get_world_3d().direct_space_state.intersect_ray(query)
+		if not wall.is_empty() and wall.collider != enemy and not enemy.is_ancestor_of(wall.collider): continue
+		targets.append(enemy)
+	for enemy in targets:
+		enemy.apply_damage(float(device.get_meta("damage", 45.0)), "ash_bomb")
+		impact.emit(enemy.global_position + Vector3.UP, true)
+		if is_instance_valid(enemy) and not enemy.dead and str(enemy.enemy_id) == "bog_wretch": host._expose_bog_core(enemy, "Ash Bomb")
+	for person: Node3D in host._civilian_contact_candidates(center, 6.0):
+		var sight := PhysicsRayQueryParameters3D.create(center, BodyQuery.aim_point_for(person), 1)
+		sight.exclude = device_exclusions()
+		sight.collide_with_areas = false
+		var wall := device.get_world_3d().direct_space_state.intersect_ray(sight)
+		if not wall.is_empty() and wall.collider != person and not person.is_ancestor_of(wall.collider): continue
+		var response: Callable = person.get_meta("civilian_contact", Callable())
+		if response.is_valid(): response.call({"source_tag": "ash_bomb", "point": center, "damage": 0.0})
+	host.audio.play_spatial_event("bomb", center, host.player.global_position, 24.0, 0.0, 0.0)
+	preload("res://scripts/combat_feedback.gd").impact_burst(host.zone_root, center, true, Color(0.68, 0.48, 0.25))
+	if center.distance_to(host.player.global_position) < 10.0 and host.camera_rig != null: host.camera_rig.shake(0.12)
+	device.queue_free()
 
 func resolve_player_blade_contact(player: Node3D, enemies: Array, contact: Dictionary, active_oil: String, civilians: Array = []) -> Dictionary:
 	if not is_instance_valid(player) or not player.has_method("is_blade_ready") or not player.is_blade_ready():
@@ -169,32 +347,6 @@ func _has_contact_line(player: Node3D, enemy: Node3D, contact_point: Vector3) ->
 	var hit: Dictionary = player.get_world_3d().direct_space_state.intersect_ray(query)
 	return hit.is_empty() or hit.get("collider") == enemy or enemy.is_ancestor_of(hit.get("collider"))
 
-func throw_bomb(player: Node3D, enemies: Array, damage: float) -> bool:
-	var hit = false
-	for enemy in enemies:
-		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
-			continue
-		if enemy.global_position.distance_to(player.global_position) <= 6.0:
-			enemy.apply_damage(damage, "ash_bomb")
-			impact.emit(enemy.global_position + Vector3(0, 1.0, 0), true)
-			hit = true
-	if hit:
-		message.emit("Ash Bomb bursts hot and white.")
-	else:
-		message.emit("The bomb scatters ash across empty ground.")
-	return hit
-
-func place_trap(player: Node3D, enemies: Array) -> bool:
-	for enemy in enemies:
-		if enemy == null or enemy.dead or (enemy.has_method("is_encounter_active") and not enemy.is_encounter_active()):
-			continue
-		if enemy.global_position.distance_to(player.global_position) <= 4.0:
-			enemy.slow(4.0)
-			message.emit("%s is caught in the iron trap." % enemy.display_name)
-			return true
-	message.emit("Trap set, but nothing steps into it.")
-	return false
-
 func resolve_energy_beam(player: Node3D, enemies: Array, direction: Vector3, endpoint: Vector3, width: float, damage: float) -> Array:
 	var origin: Vector3 = player.global_position + Vector3(0, 1.05, 0)
 	return resolve_oathfire_cast(enemies, {
@@ -322,6 +474,21 @@ func environment_contact(hit: Dictionary) -> Dictionary:
 			surface = "foliage"
 		cursor = cursor.get_parent()
 	return {"hit":true,"kind":"scenery","enemy":null,"surface":surface,"point":hit.get("position",Vector3.ZERO),"contact_point":hit.get("position",Vector3.ZERO),"normal":hit.get("normal",Vector3.UP)}
+
+func foot_surface(player: Node3D, fallback: String) -> String:
+	var query := PhysicsRayQueryParameters3D.create(player.global_position + Vector3.UP * 0.18, player.global_position - Vector3.UP * 0.45, 1)
+	query.exclude = [player.get_rid()]
+	query.collide_with_areas = false
+	var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
+	var node: Node = hit.get("collider")
+	while is_instance_valid(node):
+		var authored := str(node.get_meta("footstep_surface", node.get_meta("impact_surface", "")))
+		if authored in ["wood", "stone", "forest", "mud", "road"]: return authored
+		var label := str(node.name).to_lower()
+		if ["bridge", "plank", "board", "timber"].any(func(word): return label.contains(word)): return "wood"
+		if ["cobble", "masonry", "stonefloor", "stairs"].any(func(word): return label.contains(word)): return "stone"
+		node = node.get_parent()
+	return fallback
 
 func _resolve_environment_contact(player: Node3D, contact: Dictionary, actors: Array) -> Dictionary:
 	var base: Vector3 = contact.get("base", player.global_position)

@@ -4,7 +4,29 @@ Date: 2026-10-19. Workspace: D:/Projects/AshenOath.
 Branch: codex/masterpiece-rebuild.
 Scope: finish and establish acceptance of the retained game, not replace it.
 
-## Current Director Repair Roadmap - 2026-10-28
+## Current Combined Candidate - 2026-11-06
+
+Current work: `codex/art-recovery-anwen`, D:/Projects/AshenOath, baseline `1b3e397`.
+The authorized A Coherent, Living Campaign implementation is recorded in
+[COHESIVE_GAME_IMPLEMENTATION](../living-road/COHESIVE_GAME_IMPLEMENTATION.md).
+One combined source-aligned release is authorized before Rafa's runtime testing.
+Push development/main; do not wait for Vercel or run a separate CLI deployment.
+No agent gameplay, automated tests, browser QA, screenshots or performance run.
+Necessary compilation and package-integrity checks are not runtime acceptance.
+
+Current source changes cover destination actor ownership/download priority,
+physical bombs and durable traps, shared arrow speed, living-actor presentation,
+regional work feedback, optional opening, grouped settings, board opponents and
+adjudication, honest item descriptions and supporting-surface footsteps.
+Existing six worlds, 57 quests, 33 art candidates, saves, four endings, homecoming,
+controls and visual presets are preserved. No new quest/reward authority.
+
+Implementation, compilation, publication and user acceptance remain separate.
+Mandatory user acceptance remains **0/16**; no plan approval changes this count.
+Strict performance failures and historical art limitations remain recorded.
+The combined record owns current build/size/push details and the user checklist.
+
+## Historical Director Repair Roadmap - 2026-10-28
 
 The approved ten-child roadmap supersedes the execution restrictions and
 source-complete assumptions in the dated delivery record below. Mandatory user

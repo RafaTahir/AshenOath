@@ -174,7 +174,7 @@ func _apply_responsive_typography(node: Node, fonts: Dictionary, button_height: 
 		if node is Slider:
 			control.custom_minimum_size.x = 0.0
 			control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			control.custom_minimum_size.y = maxf(32.0 * unit, button_height * 0.75)
+			control.custom_minimum_size.y = button_height
 		if node is Button and bool(node.get_meta("wrapped_label", false)):
 			_hide_native_button_text(node as Button)
 	for child: Node in node.get_children():

@@ -215,7 +215,8 @@ func fire(request: Dictionary) -> void:
 	projectile.activity = self
 	projectile.position = request.origin
 	projectile.direction = request.direction
-	projectile.speed = lerpf(20.0, 34.0, float(request.get("draw_ratio", 0.0)))
+	var arrow: Dictionary = game.inventory.item_defs.get(str(request.get("arrow_id", "standard_arrow")), {})
+	projectile.speed = preload("res://scripts/arrow_flight.gd").speed(arrow.get("effect", {}), float(request.get("draw_ratio", 0.0)))
 	shots_root.add_child(projectile)
 	projectile.top_level = true
 	projectile.global_position = request.origin
@@ -309,21 +310,17 @@ func _notification(what: int) -> void:
 	if what in [NOTIFICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_EXIT_TREE]:
 		cancel()
 
-class TrainingArrow extends MeshInstance3D:
+class TrainingArrow extends Node3D:
 	var activity
 	var direction := Vector3.RIGHT
 	var speed := 30.0
 	var age := 0.0
 
 	func _ready() -> void:
-		var shaft := CylinderMesh.new()
-		shaft.top_radius = 0.009
-		shaft.bottom_radius = 0.009
-		shaft.height = 0.55
-		shaft.radial_segments = 6
-		mesh = shaft
-		material_override = activity._material(Color(0.63, 0.49, 0.31))
-		quaternion = Quaternion(Vector3.UP, direction.normalized())
+		var packed := load("res://assets/characters/kael_arrow.glb") as PackedScene
+		if packed != null:
+			preload("res://scripts/arrow_visual.gd").attach(self, packed.instantiate() as Node3D, true)
+		look_at(global_position + direction, Vector3.RIGHT if absf(direction.dot(Vector3.UP)) > 0.99 else Vector3.UP)
 
 	func _physics_process(delta: float) -> void:
 		if not is_instance_valid(activity) or not activity.running:

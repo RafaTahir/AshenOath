@@ -27,6 +27,8 @@ const WATCHED_FLAGS := [
 
 static var _unit_box: BoxMesh
 static var _unit_sack: CylinderMesh
+static var _presentation_reads: Dictionary = {}
+static var _recording_presentation := false
 
 static func decorate(game, root: Node3D, zone_id: String) -> void:
 	if root == null or not is_instance_valid(root) or game.story_state == null:
@@ -53,8 +55,9 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 		interactions.name = "Interactions"
 		layer.add_child(interactions)
 		_install_interactions(game, interactions, zone_id)
-	var signature := _signature(game, zone_id)
-	if str(layer.get_meta("state_signature", "")) == signature:
+	var keys: Array = layer.get_meta("presentation_dependencies", [])
+	var signature := _signature(game, zone_id, keys)
+	if layer.has_meta("state_signature") and str(layer.get_meta("state_signature")) == signature:
 		return
 	var old := layer.get_node_or_null("Presentation")
 	if old != null:
@@ -64,6 +67,8 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 	presentation.name = "Presentation"
 	presentation.set_meta("village_plaques", zone_id == "greyfen")
 	layer.add_child(presentation)
+	_presentation_reads.clear()
+	_recording_presentation = true
 	match zone_id:
 		"greyfen": _greyfen(game, presentation)
 		"wychwood": _wychwood(game, presentation)
@@ -76,7 +81,10 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 		"undercroft": _undercroft(game, presentation)
 		"assembly": _assembly(game, presentation)
 		"hart_glade": _hart(game, presentation)
-	layer.set_meta("state_signature", signature)
+	_recording_presentation = false
+	keys = _presentation_reads.keys()
+	layer.set_meta("presentation_dependencies", keys)
+	layer.set_meta("state_signature", _signature(game, zone_id, keys))
 	layer.set_meta("story_world_zone", zone_id)
 	_update_prompts(game, layer)
 
@@ -85,13 +93,14 @@ static func refresh(game) -> void:
 		return
 	decorate(game, game.zone_root, str(game.current_zone_id))
 
-static func _signature(game, zone_id: String) -> String:
+static func _signature(game, zone_id: String, keys: Array) -> String:
 	var values: Array = [zone_id]
-	for flag in WATCHED_FLAGS:
+	for flag in keys:
 		values.append(game.story_state.get_flag(flag, null))
 	return str(hash(values))
 
 static func _flag(game, id: String, fallback: Variant = "") -> Variant:
+	if _recording_presentation: _presentation_reads[id] = true
 	return game.story_state.get_flag(id, fallback)
 
 static func _install_interactions(game, parent: Node3D, zone: String) -> void:

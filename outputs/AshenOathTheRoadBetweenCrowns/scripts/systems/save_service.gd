@@ -166,10 +166,13 @@ func save_world_state() -> Dictionary:
 		"ghoulkin_kills": wychwood_pack_kills,
 		"wychwood_encounter": {"started": wychwood_encounter_started, "wave": wychwood_pack_kills},
 		"boss_states": boss_states,
+		"field_devices": combat.save_devices() if combat != null else {},
 		"day_night": day_night.save_state() if day_night != null else {}
 	}
 
 func load_world_state(state: Dictionary) -> void:
+	if combat != null:
+		combat.load_devices(state.get("field_devices", {}) if state.get("field_devices", {}) is Dictionary else {})
 	removed_interactions = state.get("removed_interactions", {}).duplicate(true) if typeof(state.get("removed_interactions", {})) == TYPE_DICTIONARY else {}
 	pending_ending = str(state.get("pending_ending", ""))
 	wychwood_pack_kills = int(state.get("wychwood_pack_kills", state.get("ghoulkin_kills", wychwood_pack_kills)))

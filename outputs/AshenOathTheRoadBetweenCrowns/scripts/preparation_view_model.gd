@@ -186,10 +186,10 @@ static func _item_action(item_id: String, kind: String, owned: int, selected: bo
 		verb = "Use remedy"
 	elif kind == "bomb":
 		id = "throw"
-		verb = "Throw bomb"
+		verb = "Equip bomb"
 	elif kind == "trap":
 		id = "set"
-		verb = "Set trap"
+		verb = "Equip trap"
 	if id == "":
 		return {}
 	var reason: String = ""
@@ -217,6 +217,7 @@ static func _arrow_comparison(item_id: String, selected_id: String, inventory) -
 		{"id": "damage", "label": "Base impact damage", "current": str(current_damage), "candidate": str(candidate_damage), "delta": _difference(candidate_damage - current_damage)},
 		{"id": "capacity", "label": "Bundle capacity", "current": str(current_cap), "candidate": str(candidate_cap), "delta": _difference(candidate_cap - current_cap)}
 	]
+	rows.append({"id": "flight", "label": "Full-draw speed", "current": "%.0f m/s" % float(current_effect.get("velocity", 28.0)), "candidate": "%.0f m/s" % float(candidate_effect.get("velocity", 28.0)), "delta": "Straight flight; partial draw starts at 65% speed. No additional armour-piercing or burning effect."})
 	return rows
 
 static func _difference(value: int) -> String:

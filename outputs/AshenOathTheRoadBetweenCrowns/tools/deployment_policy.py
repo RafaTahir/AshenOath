@@ -40,7 +40,10 @@ def size_summary(records: list[dict], runtime: dict) -> dict:
             if pack.get("url"):
                 paths.add(urlsplit(pack["url"]).path)
 
-        for pack_id in (["base", "opening", "quality_materials"] if quality else ["base", "opening"]):
+        required = list(runtime.get("startup_dependencies", ["base", "opening"]))
+        if quality:
+            required.append("quality_materials")
+        for pack_id in required:
             include(pack_id)
         return {"paths": sorted(paths), "transport_bytes": sum(by_path[path]["bytes"] for path in paths)}
 

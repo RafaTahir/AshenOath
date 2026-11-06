@@ -3,9 +3,9 @@ extends RefCounted
 ## Performance direction only: no changes to dialogue meaning or decisions.
 static func opening_arrival() -> Array[Dictionary]:
 	return [
-		{"actor":"sister_anwen", "speaker":"Anwen", "seconds":15.0, "activity":"care", "text":"Easy. You are across the bridge now. Nessa has the kitchen open; Tor will see to the cart. Kael, stay a moment. People are coming down that road with less than they left with."},
-		{"actor":"blacksmith_tor", "speaker":"Tor", "seconds":14.0, "activity":"forge", "text":"The axle can be braced. Not pretty, but it will bring the load home. Whatever is keeping the northern carts out there, we cannot mend it here at the forge."},
-		{"actor":"saga_maren", "speaker":"Nera", "seconds":16.0, "activity":"check_rope", "text":"Keep the heavy sacks over the sound wheel. No one walks the last stretch alone. ... Kael? I remember you. We can speak when this load is safe. These people need a road they can trust first."},
+		{"actor":"sister_anwen", "speaker":"Anwen", "seconds":14.0, "activity":"care", "text":"Easy. You're over the bridge. Nessa has soup on. Kael, when you've caught your breath, come here. Bram's cart never came back from the north road. Sella and her boy were with him."},
+		{"actor":"blacksmith_tor", "speaker":"Tor", "seconds":11.0, "activity":"forge", "text":"Hold that axle. There. Ugly repair, sound wheel. Don't tell Nessa I said ugly; she'll give it a name and start feeding it."},
+		{"actor":"saga_maren", "speaker":"Nera", "seconds":12.0, "activity":"check_rope", "text":"Heavy sacks over this wheel. One at a time. ... Kael? I remember you. Not now. Help Anwen find her missing people. This load is my business."},
 	]
 
 const SCENES := {

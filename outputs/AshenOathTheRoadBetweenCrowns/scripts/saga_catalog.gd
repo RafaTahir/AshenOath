@@ -16,6 +16,13 @@ static func opening(id: String) -> String:
 static func account(id: String, step: Array) -> String:
 	return str(performance(id).get("beats", {}).get(str(step[0]), step[5]))
 
+static func work_performance(id: String, step: Array, part: int) -> Dictionary:
+	var authored: Dictionary = performance(id).get("work", {}).get(str(step[0]), {})
+	var activity := str(authored.get("activity", performance(id).get("activity", QUESTS[id].get("activity", "repair"))))
+	var durations: Array = authored.get("seconds", [])
+	var duration := float(durations[part]) if part >= 0 and part < durations.size() else 1.25
+	return {"activity": activity, "duration": clampf(duration, 0.45, 3.0)}
+
 static func observation(id: String, step: Array, index: int) -> String:
 	var clues: Array = performance(id).get("clues", QUESTS.get(id, {}).get("observations", {})).get(str(step[0]), [])
 	if index >= 0 and index < clues.size():
@@ -155,7 +162,7 @@ const QUESTS := {
 		["brace_lift","Brace and test the relief lifting frame","shelter","work",["Seat the foot brace","Take the slack out of the lift rope","Test the supported crossbeam"],"The frame takes the strain. Nobody enters the old mill or changes the recorded workers' escape."],
 		["choose_load","Agree which supported load to recover now","shelter","choice",{"medicine":"Recover the light sealed medicine load","tools":"Recover the usable repair tools"},"The crew isolates the unsafe stock. A practical limit is not a claim that every loss can be undone."],
 		["lower_load","Lower the chosen load onto the supported tray","shelter","work",["Hold the brake while Nera guides the load","Lower the cradle onto its supports","Release the slack rope"],"Nera checks the load herself. 'That much we can use. Leave the rest marked. We are not putting a person under it.'"]]},
-	"side_escort_04":{"title":"Hold the Rear", "zone":"marsh_crossing", "region":"long_road", "actor":"saga_maren", "site":"keeper", "previous":"side_escort_03", "hook":"Nera and the relief travelers are ready for Nera's crossing. She will lead the group. Kael can clear the approach or protect the rear, and stay until the last traveler reaches firm ground.", "outcomes":{"approach":"Kael checked the approach while Nera led the travelers through Nera's existing safe route. The group waited at safe anchors when separated or threatened.", "rear":"Kael stayed behind the last traveler while Nera led the crossing. It was present work, not a replacement version of his retreat."}, "steps":[
+	"side_escort_04":{"title":"Hold the Rear", "zone":"marsh_crossing", "region":"long_road", "actor":"saga_maren", "site":"keeper", "previous":"side_escort_03", "hook":"Nera knows this crossing as its keeper. Today she must lead her own relief travelers across it. Kael can clear the approach or protect the rear, and stay until the last traveler reaches firm ground.", "outcomes":{"approach":"Kael checked the approach while Nera led the travelers through the existing safe route. The group waited at safe anchors when separated or threatened.", "rear":"Kael stayed behind the last traveler while Nera led the crossing. It was present work, not a replacement version of his retreat."}, "steps":[
 		["choose_position","Agree your place in the crossing","keeper","choice",{"approach":"Clear the approach; let Nera lead the travelers","rear":"Protect the rear; stay behind the last traveler"},"Nera: 'I give the travelers their pace. If you need us to stop, we stop. No one gets dragged along to finish your promise.'"],
 		["cross_with_crew","Accompany every traveler to the far safe shoulder","keeper","escort",["keeper","line","causeway"],"The last traveler reaches firm ground. The group kept its own pace; no unseen casualty clock decided the crossing."],
 		["check_last_load","Check the last load with Nera","causeway","talk",[],"Nera counts the people before the crates. 'All here. That is what I asked. It does not change the other road.' Kael: 'No.' Nera: 'Good. Help me get the rope dry.'"],

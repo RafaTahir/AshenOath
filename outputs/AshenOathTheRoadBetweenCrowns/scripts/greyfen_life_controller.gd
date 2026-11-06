@@ -233,6 +233,7 @@ func _receive_contact(contact: Dictionary, entry: Dictionary) -> void:
 	if owns_motion and is_instance_valid(entry.get("face")): entry.face.set_expression(str(entry.reaction))
 	var key := preload("res://scripts/story_honor.gd").actor_key(str(entry.id))
 	var words := "Keep that blade away from me!" if not str(contact.get("source_tag", "")).begins_with("arrow") else "You shot me! Put that bow down!"
+	if str(contact.get("source_tag", "")) == "ash_bomb": words = "Keep your explosives away from people!"
 	host.hud.toast("%s: %s" % [str(entry.profile.get("occupation", "Villager")).capitalize(), words], 4.0)
 	host.story_state.record_relationship_event({"id":"lr." + key + ".weapon_contact","actor":key,"kind":"boundary","text":"Kael struck this person with a weapon.","acknowledgement":"You struck me. Keep your weapon lowered while we speak. I have not forgotten it."})
 	host.story_save_pending = true
@@ -298,11 +299,13 @@ func _physics_process(delta: float) -> void:
 			var distance_to_player: float = actor_node.global_position.distance_to(player.global_position)
 			# A requested table visit must finish crossing the village even when
 			# its route briefly leaves the ambient simulation radius.
-			var distant: bool = distance_to_player > distance_limit and not entry.has("table_restore")
+			var camera := get_viewport().get_camera_3d()
+			var in_view := actor_node.is_visible_in_tree() and camera != null and camera.is_position_in_frustum(actor_node.global_position + Vector3.UP)
+			var distant: bool = distance_to_player > distance_limit and not in_view and not entry.has("table_restore")
 			if not entry.has("face") or not is_instance_valid(entry.face):
 				entry.face = actor_node.find_child("CharacterFaceDriver", true, false)
 			if is_instance_valid(entry.face):
-				entry.face.set_distance_suspended(distant)
+				entry.face.set_distance_suspended(distant or distance_to_player > 9.0)
 			if is_instance_valid(entry.driver) and entry.driver.is_valid():
 				entry.driver.character_root.set_meta("cast_viewer", player)
 			_update_reaction(entry, float(decision_period) / 1000.0)
@@ -315,7 +318,7 @@ func _physics_process(delta: float) -> void:
 				entry.distance_suspended = distant
 				entry.motion_speed = 0.0
 			if not distant and driver != null and driver.has_method("set_update_rate_hz"):
-				var animation_hz: float = 30.0 if distance_to_player < 7.0 else (20.0 if quality == "quality" else 15.0)
+				var animation_hz: float = 30.0 if distance_to_player < 7.0 else (10.0 if distance_to_player > render_distance else (20.0 if quality == "quality" else 15.0))
 				if not is_equal_approx(float(entry.get("animation_hz", 0.0)), animation_hz):
 					driver.set_update_rate_hz(animation_hz)
 					entry.animation_hz = animation_hz

@@ -52,6 +52,56 @@ const DEFAULT_SETTINGS := {
 
 var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
 
+const OPTION_GROUPS := {
+	"Play": ["difficulty", "targeting_assist", "block_mode", "sprint_mode"],
+	"Controls": ["control_preset", "touch_controls", "touch_aim_mode", "gamepad_vibration", "pause_on_focus_loss"],
+	"Camera": ["mouse_sensitivity", "gamepad_look_sensitivity", "touch_look_sensitivity", "invert_y", "camera_shake"],
+	"Accessibility": ["subtitle_scale", "subtitle_background_opacity", "subtitle_speaker_names", "high_contrast", "reduced_motion", "flash_reduction", "blood_effects"],
+	"Audio": ["master_volume", "music_volume", "sfx_volume", "voice_volume"],
+	"Display": ["quality_preset", "shadow_quality", "vsync", "fullscreen"],
+}
+const OPTION_CHOICES := {
+	"difficulty": ["story", "standard", "veteran"], "quality_preset": ["potato", "balanced", "quality"],
+	"shadow_quality": [0, 1, 2], "control_preset": ["standard", "left_handed"],
+	"touch_controls": ["auto", "on", "off"], "touch_aim_mode": ["hold", "toggle"],
+	"block_mode": ["hold", "toggle"], "sprint_mode": ["hold", "toggle"],
+}
+const OPTION_RANGES := {
+	"mouse_sensitivity": [0.0018, 0.0048, 0.0001], "gamepad_look_sensitivity": [0.55, 1.55, 0.05],
+	"touch_look_sensitivity": [0.55, 1.55, 0.05], "camera_shake": [0.0, 1.0, 0.05],
+	"subtitle_scale": [0.9, 1.5, 0.05], "subtitle_background_opacity": [0.0, 1.0, 0.05],
+	"master_volume": [0.0, 1.0, 0.05], "music_volume": [0.0, 1.0, 0.05],
+	"sfx_volume": [0.0, 1.0, 0.05], "voice_volume": [0.0, 1.0, 0.05],
+}
+
+func option_groups() -> Dictionary:
+	return OPTION_GROUPS.duplicate(true)
+
+func option_choices(key: String) -> Array:
+	return OPTION_CHOICES.get(key, []).duplicate()
+
+func option_range(key: String) -> Array:
+	return OPTION_RANGES.get(key, []).duplicate()
+
+func set_user_option(key: String, value: Variant) -> void:
+	var exposed := false
+	for keys: Array in OPTION_GROUPS.values():
+		if key in keys: exposed = true; break
+	if not exposed: return
+	if OPTION_CHOICES.has(key):
+		if not value in OPTION_CHOICES[key]: return
+	elif OPTION_RANGES.has(key):
+		if not (value is float or value is int) or not is_finite(float(value)): return
+		value = clampf(float(value), OPTION_RANGES[key][0], OPTION_RANGES[key][1])
+	elif not value is bool:
+		return
+	if settings.get(key) == value: return
+	if key == "quality_preset":
+		set_quality_preset(str(value))
+		return
+	settings[key] = value
+	apply()
+
 var _fps_sample_time := 0.0
 var _fps_report_time := 0.0
 var _fps_samples: Array[float] = []
@@ -70,7 +120,7 @@ func _ready() -> void:
 	apply()
 
 func _process(delta: float) -> void:
-	if delta > 0.0 and delta < 0.25:
+	if delta > 0.0:
 		var frame_ms := delta * 1000.0
 		if _frame_time_count < FRAME_TIME_CAPACITY:
 			_frame_times_ms.append(frame_ms)

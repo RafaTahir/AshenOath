@@ -9575,20 +9575,20 @@
       "context": "journal_work.work.root_record"
     },
     "preparation_notes.items.ash_bomb.body": {
-      "source": "Throw a burst of hot ash at enemies close to Kael. Throwing uses one bomb immediately, including when no enemy is within reach.",
-      "text": "Throw a burst of hot ash at enemies close to Kael. Throwing uses one bomb immediately, including when no enemy is within reach.",
+      "source": "Equip a field tool from your pack. On the road, tap and release Tool to throw; hold it to aim first. A bomb follows an arc and bursts on contact or after three seconds of active flight. Cancel with Dodge or Aim before release without spending it.",
+      "text": "Equip a field tool from your pack. On the road, tap and release Tool to throw; hold it to aim first. A bomb follows an arc and bursts on contact or after three seconds of active flight. Cancel with Dodge or Aim before release without spending it.",
       "speaker": "",
       "context": "preparation_notes.items.ash_bomb"
     },
     "preparation_notes.items.ash_bomb.effects.reach.text": {
-      "source": "Affects nearby enemies within 6 metres.",
-      "text": "Affects nearby enemies within 6 metres.",
+      "source": "45 base damage within 6 metres of the burst, blocked by solid scenery. One bomb is spent on a valid release, even if it hits nobody.",
+      "text": "45 base damage within 6 metres of the burst, blocked by solid scenery. One bomb is spent on a valid release, even if it hits nobody.",
       "speaker": "",
       "context": "preparation_notes.items.ash_bomb.effects.reach"
     },
     "preparation_notes.items.ash_bomb.effects.reach.title": {
-      "source": "Reach",
-      "text": "Reach",
+      "source": "Blast",
+      "text": "Blast",
       "speaker": "",
       "context": "preparation_notes.items.ash_bomb.effects.reach"
     },
@@ -9611,20 +9611,20 @@
       "context": "preparation_notes.items.bodkin_arrow"
     },
     "preparation_notes.items.iron_trap.body": {
-      "source": "Use a sprung iron jaw to interrupt a nearby enemy's approach. Setting a trap spends one immediately, including when no enemy is close enough to catch.",
-      "text": "Use a sprung iron jaw to interrupt a nearby enemy's approach. Setting a trap spends one immediately, including when no enemy is close enough to catch.",
+      "source": "Equip the trap, then release Tool on clear, level ground in front of Kael. An armed jaw waits for the first hostile to step into it and slows that target for four seconds. Civilians do not trigger it.",
+      "text": "Equip the trap, then release Tool on clear, level ground in front of Kael. An armed jaw waits for the first hostile to step into it and slows that target for four seconds. Civilians do not trigger it.",
       "speaker": "",
       "context": "preparation_notes.items.iron_trap"
     },
     "preparation_notes.items.iron_trap.effects.reach.text": {
-      "source": "Best used with an enemy close to Kael; it does not place a permanent trap on the road.",
-      "text": "Best used with an enemy close to Kael; it does not place a permanent trap on the road.",
+      "source": "Up to three armed traps per region. Placements survive Save/Continue and regional returns; they do not catch anything while you are away. Invalid placement spends nothing. Traps do not block walking.",
+      "text": "Up to three armed traps per region. Placements survive Save/Continue and regional returns; they do not catch anything while you are away. Invalid placement spends nothing. Traps do not block walking.",
       "speaker": "",
       "context": "preparation_notes.items.iron_trap.effects.reach"
     },
     "preparation_notes.items.iron_trap.effects.reach.title": {
-      "source": "Use",
-      "text": "Use",
+      "source": "Placement",
+      "text": "Placement",
       "speaker": "",
       "context": "preparation_notes.items.iron_trap.effects.reach"
     },

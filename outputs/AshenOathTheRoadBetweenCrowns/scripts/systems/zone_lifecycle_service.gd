@@ -74,7 +74,7 @@ func _zone_encounter_packs(zone_id: String, recorded_journey: Dictionary = {}) -
 			and not bool(flags.get("bell_eater_defeated", false)) and not bool(flags.get("bell_eater_legacy_retired", false)) \
 			and not (boss is Dictionary and str(boss.get("outcome", "")) == "defeated")
 	if bell_pending:
-		encounter_packs.append("monsters")
+		encounter_packs.append(runtime_packs.actor_pack("bell_eater") if runtime_packs != null else "monsters")
 	return encounter_packs
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
@@ -274,6 +274,7 @@ func _start_new_game_world() -> void:
 	pending_anwen_relocation = false
 	tutorial_flags.clear()
 	inventory.reset_starting_loadout()
+	if combat != null: combat.load_devices({})
 	if vendor_service != null:
 		vendor_service.reset_state()
 	if minigames != null:

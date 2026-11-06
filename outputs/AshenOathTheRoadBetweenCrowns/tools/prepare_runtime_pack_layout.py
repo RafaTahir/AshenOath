@@ -12,6 +12,7 @@ import json
 import re
 from pathlib import Path
 from runtime_pack_validation import require_valid_pack_graph
+from partition_actor_packs import partition_actor_packs
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -490,6 +491,8 @@ def compile_layout(defer_environment=False):
                     dependencies.append(owner)
     manifest.setdefault("pack_presets", {})["adjacent"] = adjacent
     manifest["pack_presets"]["opening_materials"] = materials
+    manifest["pack_presets"]["quality_materials"] = "Runtime Pack Quality Materials"
+    partition_actor_packs(PROJECT, config, sections, manifest, prepared_catalog, standalone_sources)
     # Validate the complete generated graph before either tracked output changes.
     require_valid_pack_graph(manifest)
     with path.open("w", encoding="utf-8", newline="\n") as output:

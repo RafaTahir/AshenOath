@@ -38,8 +38,8 @@
       "effects": []
     },
     "ash_bomb": {
-      "body": "Throw a burst of hot ash at enemies close to Kael. Throwing uses one bomb immediately, including when no enemy is within reach.",
-      "effects": [{"id": "reach", "title": "Reach", "text": "Affects nearby enemies within 6 metres."}]
+      "body": "Equip a field tool from your pack. On the road, tap and release Tool to throw; hold it to aim first. A bomb follows an arc and bursts on contact or after three seconds of active flight. Cancel with Dodge or Aim before release without spending it.",
+      "effects": [{"id": "reach", "title": "Blast", "text": "45 base damage within 6 metres of the burst, blocked by solid scenery. One bomb is spent on a valid release, even if it hits nobody."}]
     },
     "moon_oil": {
       "body": "Apply one bottle to coat your blades against spirit weaknesses for five minutes of active play, or six with Ash-Tempered Blade Fitting. Menus, dialogue, loading and time outside the game do not spend the coating. Reapplying refreshes the duration; another oil replaces it.",
@@ -50,8 +50,8 @@
       "effects": [{"id": "coating", "title": "Blade coating", "text": "Gives blade contacts the undead tag. Its effect depends on the target's weakness."}]
     },
     "iron_trap": {
-      "body": "Use a sprung iron jaw to interrupt a nearby enemy's approach. Setting a trap spends one immediately, including when no enemy is close enough to catch.",
-      "effects": [{"id": "reach", "title": "Use", "text": "Best used with an enemy close to Kael; it does not place a permanent trap on the road."}]
+      "body": "Equip the trap, then release Tool on clear, level ground in front of Kael. An armed jaw waits for the first hostile to step into it and slows that target for four seconds. Civilians do not trigger it.",
+      "effects": [{"id": "reach", "title": "Placement", "text": "Up to three armed traps per region. Placements survive Save/Continue and regional returns; they do not catch anything while you are away. Invalid placement spends nothing. Traps do not block walking."}]
     },
     "standard_arrow": {
       "body": "An ordinary hunting arrow. Selecting a bundle does not spend an arrow; releasing a bow shot spends one. Arrows are replenished through supplies and shops, not field crafting.",

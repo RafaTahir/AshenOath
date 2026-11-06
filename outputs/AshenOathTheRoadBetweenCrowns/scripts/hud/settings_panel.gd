@@ -12,51 +12,70 @@ func show_settings_menu(back_target: String = "pause", requested_page: int = -1)
 	_set_ui_pointer("settings")
 	_clear_menu()
 	menu_layer.visible = true
-	var box = _menu_box("Settings", "Play, Sound & Controls", "tune the lantern")
+	var box = _menu_box("Settings", "", "")
 	box.set_meta("compact_buttons", true)
 	var s = _current_settings()
-	var entries := _settings_entries(s)
-	var page_count := maxi(1, ceili(float(entries.size()) / 6.0))
-	settings_page = clampi(settings_page, 0, page_count - 1)
-	_add_menu_text(box, "Page %d of %d  |  Select an option to cycle it" % [settings_page + 1, page_count])
-	var first_entry := settings_page * 6
-	var last_entry := mini(first_entry + 6, entries.size())
-	for index in range(first_entry, last_entry):
-		var entry: Dictionary = entries[index]
-		var action := str(entry.get("action", ""))
-		if entry.has("mix_channel"):
-			var volume_label := Label.new()
-			volume_label.text = str(entry.label)
-			volume_label.add_theme_font_size_override("font_size", 18)
-			box.add_child(volume_label)
-			var slider := HSlider.new()
-			slider.set_meta("navigation_key", "mix:" + str(entry.mix_channel))
-			slider.min_value = 0.0
-			slider.max_value = 1.0
-			slider.step = 0.05
-			slider.value = float(entry.get("value", 1.0))
-			slider.custom_minimum_size = Vector2(320, 28)
-			slider.focus_mode = Control.FOCUS_ALL
-			slider.tooltip_text = "Use Left and Right to adjust; zero mutes this channel."
-			slider.value_changed.connect(func(value: float, channel = str(entry.mix_channel), heading = volume_label):
-				heading.text = "%s Volume  %d%%" % [channel.capitalize(), int(round(value * 100.0))]
-				audio_mix_requested.emit(channel, value)
-			)
-			box.add_child(slider)
-		elif action == "":
-			_add_menu_text(box, str(entry.get("label", "")))
-		else:
-			_add_menu_button(box, str(entry.get("label", "")), func(setting_action = action):
-				var manager = _settings_source
-				if manager != null and manager.has_method("cycle_accessibility") and manager.cycle_accessibility(setting_action):
-					show_settings_menu(controls_back_target, settings_page)
-				else:
-					settings_requested.emit(setting_action)
-			, false, "setting:" + action)
-	if page_count > 1:
-		_add_menu_button(box, "Previous Page", func(): show_settings_menu(controls_back_target, settings_page - 1), settings_page <= 0)
-		_add_menu_button(box, "Next Page", func(): show_settings_menu(controls_back_target, settings_page + 1), settings_page >= page_count - 1)
+	var groups: Dictionary = _settings_source.option_groups()
+	var names: Array = groups.keys()
+	settings_page = clampi(settings_page, 0, names.size() - 1)
+	var selector := OptionButton.new()
+	selector.set_meta("navigation_key", "settings:category")
+	for category in names: selector.add_item(category)
+	selector.select(settings_page)
+	selector.item_selected.connect(func(index: int): show_settings_menu(controls_back_target, index))
+	box.add_child(selector)
+	for key: String in groups[names[settings_page]]:
+		_add_setting_control(box, key, s[key])
+	if names[settings_page] == "Controls":
+		_add_menu_button(box, "Customize Bindings", func(): show_remap_menu(controls_back_target))
 	_add_menu_button(box, "Back", _return_from_controls)
+	view.call_deferred("_apply_hud_layout")
+
+func _setting_name(key: String) -> String:
+	return str({"sfx_volume": "Effects volume", "pause_on_focus_loss": "Pause when focus is lost", "shadow_quality": "Shadows", "quality_preset": "Visual preset", "invert_y": "Invert camera Y"}.get(key, key.replace("_", " ").capitalize()))
+
+func _setting_value(key: String, value: float) -> String:
+	if key == "mouse_sensitivity": return "%.4f" % value
+	return "%d%%" % roundi(value * 100.0)
+
+func _add_setting_control(box: Control, key: String, value: Variant) -> void:
+	var choices: Array = _settings_source.option_choices(key)
+	var bounds: Array = _settings_source.option_range(key)
+	var control: Control
+	if value is bool:
+		var toggle := CheckButton.new()
+		toggle.text = _setting_name(key)
+		toggle.button_pressed = value
+		toggle.toggled.connect(func(enabled: bool): _settings_source.set_user_option(key, enabled))
+		control = toggle
+	else:
+		var label := Label.new()
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.text = _setting_name(key)
+		box.add_child(label)
+		if not choices.is_empty():
+			var select := OptionButton.new()
+			for choice in choices:
+				select.add_item(_shadow_label(int(choice)) if key == "shadow_quality" else str(choice).replace("_", " ").capitalize())
+			select.select(maxi(0, choices.find(value)))
+			select.item_selected.connect(func(index: int): _settings_source.set_user_option(key, choices[index]))
+			control = select
+		else:
+			var slider := HSlider.new()
+			slider.min_value = bounds[0]
+			slider.max_value = bounds[1]
+			slider.step = bounds[2]
+			slider.value = float(value)
+			label.text += "  " + _setting_value(key, value)
+			slider.value_changed.connect(func(number: float):
+				label.text = _setting_name(key) + "  " + _setting_value(key, number)
+				_settings_source.set_user_option(key, number))
+			control = slider
+	control.set_meta("navigation_key", "setting:" + key)
+	control.custom_minimum_size.y = 48.0
+	control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	control.focus_mode = Control.FOCUS_ALL
+	box.add_child(control)
 
 func _settings_entries(s: Dictionary) -> Array:
 	return [

@@ -22,7 +22,7 @@ const PREPARATION_TIMEOUT_MSEC := 120000
 # Greyfen's geometry and materials must mount before its covered preparation.
 # Campaign content remains independent of the first playable settlement.
 const STARTUP_PACK_IDS: Array[String] = ["base", "opening"]
-const BACKGROUND_PACK_IDS: Array[String] = ["adjacent", "quality_materials", "characters", "monsters", "audio", "campaign"]
+const BACKGROUND_PACK_IDS: Array[String] = ["audio"]
 
 var manifest: Dictionary = {}
 var requests: Dictionary = {}
@@ -46,11 +46,20 @@ var _background_mount_frame := -1
 
 func required_startup_packs() -> Array[String]:
 	var ids: Array[String] = STARTUP_PACK_IDS.duplicate()
+	if manifest.get("startup_dependencies") is Array:
+		ids.assign(manifest.startup_dependencies)
 	if manifest.get("packs", {}).has("opening_materials"):
 		ids.insert(1, "opening_materials")
 	if quality_preset == "quality":
 		ids.append("quality_materials")
-	return ids
+	var ordered: Array[String] = []
+	var marks: Dictionary = {}
+	for id in ids:
+		var failure := _dependency_order(id, marks, ordered)
+		if not failure.is_empty():
+			push_error(failure)
+			return ids
+	return ordered
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -185,17 +194,35 @@ func request_background_packs() -> bool:
 	return accepted
 
 func required_zone_packs(zone_id: String, encounter_packs: Array[String] = []) -> Array[String]:
-	var result: Array[String] = required_startup_packs()
-	if zone_id in ["wychwood", "cemetery", "ruins"]:
-		result.append("adjacent")
-	if zone_id != "greyfen":
-		result.append("monsters")
-	if zone_id not in ["greyfen", "wychwood", "cemetery", "ruins"]:
-		result.append_array(["characters", "campaign"])
+	var result: Array[String] = []
+	var declared: Variant = manifest.get("zone_dependencies", {}).get(zone_id)
+	if declared is Array:
+		result.assign(declared)
+	else:
+		# Compatibility for older embedded manifests; new exports declare every
+		# destination explicitly and are rejected if a destination is missing.
+		result = required_startup_packs()
+		if zone_id in ["wychwood", "cemetery", "ruins"]:
+			result.append("adjacent")
+		if zone_id != "greyfen":
+			result.append("monsters")
+		if zone_id not in ["greyfen", "wychwood", "cemetery", "ruins"]:
+			result.append_array(["characters", "campaign"])
+	if quality_preset == "quality" and "quality_materials" not in result:
+		result.append("quality_materials")
 	for id: String in encounter_packs:
 		if id not in result:
 			result.append(id)
-	return result
+	var ordered: Array[String] = []
+	var marks: Dictionary = {}
+	for id in result:
+		var error := _dependency_order(id, marks, ordered)
+		if not error.is_empty() and id not in ordered:
+			ordered.append(id)
+	return ordered
+
+func actor_pack(role: String) -> String:
+	return str(manifest.get("actor_packs", {}).get(role, "monsters"))
 
 func request_zone_packs(zone_id: String, encounter_packs: Array[String] = [], retry_failed: bool = false) -> bool:
 	var accepted := true
@@ -230,6 +257,8 @@ func prioritize_zone(zone_id: String, encounter_packs: Array[String] = []) -> vo
 	var marks: Dictionary = {}
 	for id in required_zone_packs(zone_id, encounter_packs):
 		_dependency_order(id, marks, foreground_pack_ids)
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.__ashenOathPrioritizePacks && window.__ashenOathPrioritizePacks(%s)" % JSON.stringify(foreground_pack_ids), true)
 	var was_scheduling := scheduling_downloads
 	scheduling_downloads = true
 	for id in requests:

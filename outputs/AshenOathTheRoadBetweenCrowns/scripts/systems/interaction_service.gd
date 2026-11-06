@@ -292,8 +292,8 @@ func _on_minigame_result(game_id: String, outcome: String) -> void:
 			var claim := "chess_prize:" + person
 			if not bool(story_state.get_flag(claim, false)):
 				story_state.set_flag(claim, true)
-				inventory.add_reward({"coin": 3 if person == "rook" else 8})
-				hud.toast("%s pays the table's one-time prize." % ("Rook" if person == "rook" else "Tor"))
+				inventory.add_reward({"coin": int(minigames.opponent_profile().prize)})
+				hud.toast("%s pays the table's one-time prize." % str(minigames.opponent_profile().name))
 	save_manager.autosave(_host)
 
 func _on_minigame_state_changed() -> void:

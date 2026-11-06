@@ -14,6 +14,16 @@ def validate_pack_graph(manifest: object) -> list[str]:
         return ["runtime manifest must contain a non-empty packs object"]
     errors = []
     edges = {}
+    for zone, dependencies in manifest.get("zone_dependencies", {}).items():
+        if not isinstance(dependencies, list) or not dependencies:
+            errors.append(f"{zone}: destination dependencies must be non-empty")
+            continue
+        for dependency in dependencies:
+            if dependency not in packs:
+                errors.append(f"{zone}: unknown destination pack {dependency}")
+    for role, owner in manifest.get("actor_packs", {}).items():
+        if owner not in packs:
+            errors.append(f"{role}: unknown actor pack {owner}")
     for pack_id, pack in packs.items():
         if not isinstance(pack_id, str) or not re.fullmatch(r"[a-z0-9_]+", pack_id):
             errors.append(f"invalid pack ID: {pack_id!r}")

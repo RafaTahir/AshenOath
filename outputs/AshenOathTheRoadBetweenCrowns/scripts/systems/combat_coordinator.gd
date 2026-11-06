@@ -76,6 +76,7 @@ func _on_player_arrow(request: Dictionary) -> void:
 	combat_vfx_coordinator.launch_arrow(zone_root, origin, direction, float(request.get("range", 24.0)), arrow_targets, combat, arrow_exclusions, {
 		"width": float(request.get("width", 0.34)),
 		"damage": damage,
+		"velocity": preload("res://scripts/arrow_flight.gd").speed(effect, float(request.get("draw_ratio", 0.0))),
 		"source_tag": "arrow_%s" % arrow_id,
 	}, Callable(_host, "_on_arrow_impact").bind(arrow_id, damage, zone_root.get_instance_id()))
 
@@ -206,6 +207,7 @@ func _on_player_footstep() -> void:
 		surface = "forest"
 	elif spatial_service != null and spatial_service.is_on_bridge(player.global_position):
 		surface = "wood"
+	surface = combat.foot_surface(player, surface)
 	audio.play_footstep(current_zone_id, on_road, surface)
 
 func _on_player_parried() -> void:

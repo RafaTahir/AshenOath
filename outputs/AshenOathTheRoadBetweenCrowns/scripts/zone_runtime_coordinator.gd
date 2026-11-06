@@ -553,6 +553,8 @@ func advance_transition() -> void:
 
 func _complete_supported_arrival(grounded: Vector3) -> void:
 	var zone_id: String = host.current_zone_id
+	if host.combat != null:
+		host.combat.activate_devices(host)
 	if _prewarmed_runtime_pending:
 		host._activate_prewarmed_player_runtime()
 		_prewarmed_runtime_pending = false

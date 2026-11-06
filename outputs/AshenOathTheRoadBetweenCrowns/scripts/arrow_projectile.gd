@@ -1,6 +1,6 @@
 extends Node3D
 
-const SPEED := 48.0
+const Flight := preload("res://scripts/arrow_flight.gd")
 var direction := Vector3.FORWARD
 var remaining := 0.0
 var shot: Dictionary = {}
@@ -13,7 +13,7 @@ var finished := false
 func _physics_process(delta: float) -> void:
 	if finished: return
 	var origin := global_position
-	var endpoint := origin + direction * minf(SPEED * delta, remaining)
+	var endpoint := origin + direction * Flight.distance_step(float(shot.get("velocity", Flight.DEFAULT_VELOCITY)), delta, remaining)
 	var query := PhysicsRayQueryParameters3D.create(origin, endpoint, 1)
 	query.exclude = excluded
 	query.collide_with_areas = false
