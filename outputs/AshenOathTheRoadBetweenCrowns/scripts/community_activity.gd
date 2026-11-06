@@ -1,0 +1,379 @@
+extends RefCounted
+
+## An activity adapter, not another scene/process owner. StoryActivityDirector
+## calls tick/cancel and owns its lifetime with the published sector.
+const Rules = preload("res://scripts/community_campaign.gd")
+const Decisions = preload("res://scripts/story_decision_coordinator.gd")
+const StoryPerformance = preload("res://scripts/story_performance.gd")
+var director: Node
+var game
+var zone := ""
+var stations: Dictionary = {}
+var menu_generation := 0
+var menu_source: WeakRef
+var menu_actions: Array[Dictionary] = []
+var work: Dictionary = {}
+var elapsed := 0.0
+var work_start := Vector3.ZERO
+var gesture := ""
+var menu_view_generation := -1
+var crossing_entered := false
+var ferry_control := true
+var ferry_safe := Vector3.ZERO
+var published_shift := ""
+
+func configure(owner: Node) -> void:
+	director = owner
+	game = owner.host
+	zone = owner.zone
+	preload("res://scripts/story_cast_profile.gd").load_region_life(zone,"res://data/community_cast_life.json")
+	var board: Dictionary = Rules.BOARDS[zone]
+	_station("board", str(board.title), _position(board.position), {"operation":"board"})
+	for id: String in Rules.data().get("work",{}):
+		var task: Dictionary = Rules.data().work[id]
+		if str(task.region) == zone:
+			_station("work:"+id,str(task.prompt),_position(task.position),{"operation":"work","id":id,"seconds":float(task.seconds),"kind":str(task.kind)})
+	for quest: String in Rules.AFTERMATH:
+		if str(Rules.chapter(quest).region) != zone: continue
+		var task: Dictionary = Rules.AFTERMATH[quest]
+		_station("aftermath:"+quest,str(task.prompt),_position(task.position),{"operation":"aftermath","quest":quest,"seconds":float(task.seconds),"kind":str(task.kind)})
+	if zone == "lantern_reach":
+		_station("survey:near","Inspect the near landing and read the current",Vector3(1,0,-1),{"operation":"survey","id":"near","seconds":3.0,"kind":"inspect"})
+		_station("survey:far","Inspect the far landing and its approach",Vector3(11,0,-1),{"operation":"survey","id":"far","seconds":3.0,"kind":"inspect"})
+		_station("delivery","Set down the first load at the far landing",Vector3(11,0,1.5),{"operation":"delivery","quest":"main_road_kept_open","seconds":3.0,"kind":"haul"})
+		_station("ferry","Board the ferry with the first load",Vector3(3.0,0,0.8),{"operation":"ferry","seconds":7.5,"kind":"haul"})
+	refresh()
+
+func _station(id: String, prompt: String, position: Vector3, action: Dictionary) -> void:
+	var node_id := "community_"+id.replace(":","_")
+	director._point(game.zone_root,node_id,prompt,position,"",Color(0.62,0.57,0.42))
+	var area := game.zone_root.find_child(node_id,true,false) as Node3D
+	area.set("interaction_id","community:"+id)
+	area.set_meta("community_action",action.duplicate(true))
+	stations[id] = weakref(area)
+
+func refresh() -> void:
+	published_shift = Rules.presence_shift(_minutes())
+	for id: String in stations:
+		var area: Node3D = stations[id].get_ref()
+		if not is_instance_valid(area): continue
+		var enabled := _available(area.get_meta("community_action"))
+		area.visible = enabled
+		area.set_interaction_enabled(enabled)
+		if not enabled: game._remove_interaction_candidate(area)
+	# Regional actors retain the normal native routine owner. Availability is
+	# rechecked when a menu commits, not only when this sector was constructed.
+	var actors: Array = game.zone_root.find_children("*","Area3D",true,false)
+	# Retire the outgoing shift before showing arrivals, keeping eight canonical
+	# NPCs at most (plus Kael and Bracken) even on the handover frame.
+	for actor in actors:
+		if not actor.has_meta("community_actor_id"): continue
+		if not _actor_present(actor): _set_present(actor,false)
+	for actor in actors:
+		if actor.has_meta("community_actor_id") and _actor_present(actor): _set_present(actor,true)
+	var life: Node = game.zone_root.get_node_or_null("RegionalLifeController")
+	if life != null: life.enroll_region()
+	load("res://scripts/community_presentation.gd").refresh(game.zone_root,game.story_state)
+
+func _minutes() -> float:
+	var clock = game.get("day_night")
+	return float(clock.get_time()) if clock != null else 600.0
+
+func _actor_present(actor: Node3D) -> bool:
+	return _actor_alive(actor) and Rules.actor_present(str(actor.get_meta("community_actor_id","")),zone,_minutes(),game.story_state,game.quests)
+
+func _set_present(actor: Node3D, present: bool) -> void:
+	if not present and not actor.has_meta("community_process_mode"):
+		actor.set_meta("community_process_mode",actor.process_mode)
+	if present and actor.has_meta("community_process_mode"):
+		actor.process_mode = int(actor.get_meta("community_process_mode"))
+		actor.remove_meta("community_process_mode")
+	elif not present:
+		actor.process_mode = Node.PROCESS_MODE_DISABLED
+	actor.visible = present
+	actor.set_interaction_enabled(present)
+	if not present: game._remove_interaction_candidate(actor)
+
+func activate(area: Node3D) -> void:
+	if not _source_valid(area): return
+	if area.has_meta("community_actor_id"):
+		_open_actor(area)
+		return
+	var action: Dictionary = area.get_meta("community_action",{})
+	if not _available(action): return
+	if str(action.operation) == "board":
+		_open_board(area)
+	else:
+		_begin_work(area,action)
+
+func _source_valid(area: Node3D) -> bool:
+	if is_instance_valid(area) and area.has_method("is_interaction_enabled") and not area.is_interaction_enabled(): return false
+	if is_instance_valid(area) and area.has_meta("community_actor_id") and not _actor_present(area): return false
+	return Rules.enabled(game.story_state) and is_instance_valid(area) and _actor_alive(area) and is_instance_valid(game.zone_root) and director.get_parent() == game.zone_root and str(game.current_zone_id) == zone and game.zone_root.is_ancestor_of(area) and area.is_visible_in_tree() and is_instance_valid(game.player) and area.global_position.distance_to(game.player.global_position) <= 2.8 and not game._journey_load_pending() and not game.zone_transition_pending and not game.zone_load_request_pending and game.pending_player_restore.is_empty() and str(game.pending_ending) == "" and float(game.player.health_component.health) > 0.0 and not director._danger_near(game)
+
+func _actor_alive(area: Node3D) -> bool:
+	if not area.has_meta("community_actor_id"): return true
+	var driver := area.find_child("CharacterAnimationDriver",true,false)
+	return driver == null or driver.get("dead") != true
+
+func _available(action: Dictionary) -> bool:
+	match str(action.get("operation","")):
+		"board": return Rules.enabled(game.story_state)
+		"work": return Rules.work_available(str(action.get("id","")),zone,game.story_state,game.quests)
+		"survey": return zone == "lantern_reach" and Rules.current_objective("main_road_kept_open",game.quests) == "survey_crossing" and not Rules._true(game.story_state,"community_survey:"+str(action.id))
+		"aftermath":
+			return Rules.aftermath_available(str(action.get("quest","")),zone,game.story_state,game.quests) and (str(action.quest) != "main_road_kept_open" or not Rules._true(game.story_state,"community_route_load_carried"))
+		"delivery": return Rules.aftermath_available("main_road_kept_open",zone,game.story_state,game.quests) and Rules._true(game.story_state,"community_route_load_carried") and Rules._true(game.story_state,"community_route_load_crossed")
+		"ferry": return zone=="lantern_reach" and str(game.story_state.get_flag("community_route",""))=="ferry" and Rules.aftermath_available("main_road_kept_open",zone,game.story_state,game.quests) and Rules._true(game.story_state,"community_route_load_carried") and not Rules._true(game.story_state,"community_route_load_crossed")
+	return false
+
+func _open_board(area: Node3D) -> void:
+	var quest := Rules.active_chapter(zone,game.quests,game.story_state)
+	var row := Rules.chapter(quest)
+	var pages: Array = []
+	for key: String in ["summary","stakes"]:
+		if row.has(key): pages.append({"speaker":"Public account","speaker_id":"narrator","text":str(row[key]),"read_only":true})
+	var status := ""
+	var objective := Rules.current_objective(quest,game.quests)
+	if objective in ["hear_households","gather_cast"]:
+		pages.append({"speaker":"Public account","speaker_id":"narrator","text":_public_account(quest),"read_only":true})
+	if objective in ["choose_responsibilities","carry_promise"] or game.quests.is_completed("main_what_we_promise"):
+		status = _rota_text()
+	if objective in ["prepare_kitchen","secure_route","prepare_refuge","test_arrangements"]:
+		status = "Work still needed:"
+		for id: String in Rules.work_ids(quest,game.story_state):
+			if not Rules._true(game.story_state,"community_work:"+id): status += "\n• "+str(Rules.data().work[id].prompt)
+	if pages.is_empty() and status=="": status="The completed work remains open to anyone who needs it."
+	# Live checklists are a reading surface. Authored narration stays in separate
+	# exact-text pages so the voice collector never needs combinatorial variants.
+	if status!="": pages.append({"speaker":"Public work record","speaker_id":"system","text":status,"read_only":true})
+	if zone == "hearthward":
+		pages.append({"speaker":"Visits and shifts","speaker_id":"system","text":_shift_text(),"read_only":true})
+	_show(area,str(Rules.BOARDS[zone].title),pages,Rules.board_actions(zone,game.story_state,game.quests))
+
+func _shift_text() -> String:
+	var lines: Array[String] = ["People use the public rooms in two shifts. The shelter bench lets you wait until morning or evening."]
+	for shift: String in ["morning","evening"]:
+		var names: Array[String] = []
+		for id: String in Rules.data().get("presence_shifts",{}).get(zone,{}).get(shift,[]):
+			if Rules.actor_available(id,game.story_state,game.quests): names.append(str(Rules.data().participant_lines[id].name))
+		lines.append(shift.capitalize()+": "+", ".join(names)+".")
+	return "\n".join(lines)
+
+func _public_account(quest: String) -> String:
+	# These are practical requests authored for public circulation, never private
+	# testimony attributed to an unavailable participant.
+	return str(Rules.data().get("public_accounts",{}).get(quest,""))
+
+func _rota_text() -> String:
+	var answers: Dictionary = game.story_state.get_flag("community_keeper_consent",{})
+	var lines: Array[String] = ["Recorded shifts — food and shelter do not depend on joining:"]
+	for id: String in Rules.data().consent_offers:
+		var value: Variant = answers.get(id)
+		lines.append(id.capitalize()+": "+("offered; may withdraw" if typeof(value)==TYPE_BOOL and value else "vacant — no current agreement"))
+	return "\n".join(lines)
+
+func _open_actor(actor: Node3D, reply: String = "") -> void:
+	var id := str(actor.get_meta("community_actor_id",""))
+	if id not in Rules.REGIONAL_ACTORS.get(zone,[]) or not Rules.actor_available(id,game.story_state,game.quests): return
+	var row: Dictionary = Rules.data().get("participant_lines",{}).get(id,{})
+	var words := reply if reply != "" else str(row.get(zone,""))
+	var pages: Array = [{"speaker":str(row.get("name",id.capitalize())),"speaker_id":str(Rules.ACTORS[id]),"text":words,"performance":{"emotion":"warmth","gesture":"reassure"}}]
+	var actions: Array[Dictionary] = []
+	if Rules.consent_available(id,game.story_state,game.quests):
+		var offer: Dictionary = Rules.data().consent_offers[id]
+		pages.append({"speaker":"Kael","speaker_id":"player","text":str(offer.question),"performance":{"gesture":"guarded_listening"}})
+		# Ask each person for an answer. A separately presented answer is then
+		# recorded, so a menu cannot substitute Kael's choice for their speech.
+		actions.append({"operation":"ask_consent","id":id,"label":"Hear the shift they are offering."})
+		actions.append({"operation":"ask_refusal","id":id,"label":"Leave this responsibility open."})
+		var consent: Dictionary = game.story_state.get_flag("community_keeper_consent",{})
+		if consent.get(id) == true: actions.append({"operation":"withdraw","id":id,"label":"Release the recorded shift."})
+	_show(actor,str(row.get("name",id.capitalize())),pages,actions)
+
+func _show(source: Node3D, title: String, pages: Array, actions: Array[Dictionary]) -> void:
+	cancel(false)
+	menu_generation += 1
+	menu_source = weakref(source)
+	menu_actions = actions.duplicate(true)
+	var published: Array[Dictionary] = []
+	for index in range(menu_actions.size()):
+		var option := menu_actions[index].duplicate(true)
+		option.merge({"type":"community_action","generation":menu_generation,"index":index,"source":source.get_instance_id()})
+		published.append(option)
+	published.append({"type":"close","label":"Leave the conversation"})
+	var content := {"name":title,"pages":pages,"actions":published}
+	if source.has_meta("community_actor_id"):
+		game._stage_dialogue_moment(source)
+		StoryPerformance.begin(source,game.player,content,game.story_state)
+	game.audio.set_dialogue_active(true)
+	game.audio.set_game_paused(true)
+	game.get_tree().paused = true
+	game.hud.show_dialogue(game._prepare_dialogue_presence(content))
+	menu_view_generation = int(game.hud._dialogue_view_generation)
+
+func choose(action: Dictionary) -> void:
+	var source: Node3D = menu_source.get_ref() if menu_source != null else null
+	var index := int(action.get("index",-1))
+	# HUD closes the source surface (advancing its generation once) immediately
+	# before emitting this action. Its old button cannot close a later surface.
+	if not _source_valid(source) or game.hud.dialogue_layer.visible or int(game.hud._dialogue_view_generation) != menu_view_generation+1 or int(action.get("generation",-1)) != menu_generation or int(action.get("source",0)) != source.get_instance_id() or index < 0 or index >= menu_actions.size():
+		game._resume_game()
+		return
+	# Trust the owner's immutable menu entry, never the caller's effects/ID.
+	var chosen := menu_actions[index].duplicate(true)
+	menu_generation += 1
+	menu_actions.clear()
+	game._resume_game()
+	var operation := str(chosen.operation)
+	if operation in ["ask_consent","ask_refusal"]:
+		var id := str(chosen.id)
+		if not _participant_source(source,id): return
+		var accepted := operation == "ask_consent"
+		var text := str(Rules.data().consent_offers[id]["yes" if accepted else "no"])
+		_show(source,id.capitalize(),[{"speaker":id.capitalize(),"speaker_id":Rules.ACTORS[id],"text":text,"performance":{"gesture":"acknowledge" if accepted else "disagree"}}],[{"operation":"record_consent","id":id,"accepted":accepted,"label":"Record that answer, with the right to withdraw."}])
+		return
+	var transaction := Decisions.new()
+	var receipt := {"type":"story_choice","quest":str(chosen.get("quest","")),"choice_id":"community:"+operation+":"+str(chosen.get("quest",chosen.get("id",""))),"label":str(chosen.get("label",""))}
+	if operation == "choice":
+		receipt["sets_flags"] = {str(Rules.chapter(str(chosen.quest)).choice):str(chosen.value)}
+	game.save_manager.predecision(game,str(receipt.choice_id))
+	transaction.begin(game)
+	var applied := false
+	if operation in ["record_consent","withdraw"]:
+		var id := str(chosen.id)
+		if _participant_source(source,id): applied = Rules.record_consent(id,bool(chosen.get("accepted",false)) if operation == "record_consent" else false,game.story_state,game.quests)
+	else:
+		if source.get_meta("community_action",{}).get("operation","") == "board": applied = Rules.apply_board_action(chosen,zone,game.story_state,game.quests)
+	transaction.finish(game,receipt,applied)
+	if applied:
+		refresh()
+		if operation == "withdraw": _open_actor(source,str(Rules.data().consent_offers[str(chosen.id)].withdraw))
+		else: game.hud.toast("The public account now records that answer.")
+
+func _participant_source(source: Node3D, id: String) -> bool:
+	return _source_valid(source) and id in Rules.REGIONAL_ACTORS.get(zone,[]) and str(source.get_meta("community_actor_id","")) == id and str(source.get("interaction_id")) == str(Rules.ACTORS.get(id,"!")) and Rules.consent_available(id,game.story_state,game.quests)
+
+func _begin_work(area: Node3D, action: Dictionary) -> void:
+	if director._rest_unavailable(area) != "" or not _available(action): return
+	director._cancel_rest()
+	director._cancel_friend_work()
+	cancel()
+	work = action.duplicate(true)
+	work["source"] = weakref(area)
+	work_start = game.player.global_position
+	if str(action.operation)=="ferry":
+		ferry_safe = game.zone_root.to_global(Vector3(3,0.95,1.5))
+		ferry_control = game.player.can_control
+		game.player.can_control = false
+	game.player._request_equipment(game.player.weapon_mode,game.player.get_selected_blade_id(),false)
+	game.hud.set_guidance_hint(str(area.get("prompt"))+". Stay beside the work; move to stop.",float(action.seconds)+3.0)
+
+func tick(delta: float) -> void:
+	if director.get_parent()!=game.zone_root or str(game.current_zone_id)!=zone:
+		cancel()
+		return
+	if published_shift != Rules.presence_shift(_minutes()): refresh()
+	_tick_crossing()
+	if work.is_empty(): return
+	if str(work.operation)=="ferry":
+		_tick_ferry(delta)
+		return
+	var area: Node3D = work.source.get_ref()
+	if not _source_valid(area) or not _available(work) or director._rest_unavailable(area) != "" or not game.player.can_control or game.player.transition_locked or game.player.global_position.distance_to(work_start) > 0.3:
+		cancel()
+		return
+	if game.player.equipment_loadout.is_transitioning():
+		if gesture != "": cancel()
+		return
+	if game.player.equipment_loadout.is_drawn():
+		cancel()
+		return
+	if gesture == "":
+		gesture = "story_explain" if str(work.kind) == "inspect" else "story_offer"
+		var offset: Vector3 = area.global_position-game.player.global_position
+		if Vector2(offset.x,offset.z).length_squared() > 0.01: game.player.rotation.y = atan2(-offset.x,-offset.z)
+		if game.player.animation_driver != null: game.player.animation_driver.trigger_action(gesture,1.0,0.15,false,float(work.seconds))
+	elapsed += maxf(0.0,delta)
+	if str(work.operation)=="work": load("res://scripts/community_presentation.gd").animate_work(game.zone_root,str(work.id),elapsed/float(work.seconds))
+	if elapsed < float(work.seconds): return
+	var completed := work.duplicate()
+	cancel()
+	var transaction := Decisions.new()
+	transaction.begin(game)
+	var applied := false
+	var result := ""
+	match str(completed.operation):
+		"work":
+			applied = Rules.complete_work(str(completed.id),zone,game.story_state,game.quests)
+			result = str(Rules.data().work[str(completed.id)].result)
+		"survey":
+			applied = Rules.inspect_landing(str(completed.id),zone,game.story_state,game.quests)
+			result = "The landing's footing and the current are marked for the public route decision."
+		"aftermath","delivery":
+			applied = Rules.finish_aftermath(str(completed.quest),zone,game.story_state,game.quests,str(completed.operation)=="delivery")
+			result = Rules.aftermath_text(str(completed.quest),game.story_state)
+			if str(completed.quest)=="main_road_kept_open" and str(completed.operation)=="aftermath": result = "The load is secure. Carry it to the far landing and set it down there."
+	transaction.finish(game,{"type":"community_work","label":result},applied)
+	if applied:
+		game.audio.play_event("cloth_wind",0.015)
+		game.hud.toast(result)
+		game.hud.set_guidance_hint(result,8.0)
+		refresh()
+
+func cancel(invalidate_menu: bool = true) -> void:
+	if not work.is_empty() and str(work.operation)=="ferry" and game != null and is_instance_valid(game.player):
+		if director.get_parent()==game.zone_root and str(game.current_zone_id)==zone:
+			if not game.player.transition_locked and float(game.player.health_component.health)>0: game.player.can_control = ferry_control
+			game.player.velocity = Vector3.ZERO
+			game.player.global_position = ferry_safe
+		var boat := game.zone_root.get_node_or_null("CommunityWork/PublicRoute_ferry/Ferry") as Node3D if is_instance_valid(game.zone_root) else null
+		if boat != null: boat.position.x = 3.5
+	if gesture != "" and game != null and is_instance_valid(game.player) and game.player.animation_driver != null and game.player.animation_driver.current_state == gesture:
+		game.player.animation_driver.stop_action("idle",0.12)
+	work.clear()
+	elapsed = 0.0
+	gesture = ""
+	if game != null and is_instance_valid(game.zone_root): load("res://scripts/community_presentation.gd").refresh(game.zone_root,game.story_state)
+	if invalidate_menu:
+		menu_generation += 1
+		menu_actions.clear()
+		menu_source = null
+
+func _tick_crossing() -> void:
+	if zone!="lantern_reach" or str(game.story_state.get_flag("community_route",""))!="crossing" or not Rules._true(game.story_state,"community_route_load_carried") or Rules._true(game.story_state,"community_route_load_crossed"):
+		crossing_entered=false
+		return
+	var position: Vector3 = game.zone_root.to_local(game.player.global_position)
+	if absf(position.z)<=0.9 and position.x>=4.0 and position.x<=7.5 and position.y>=0.85: crossing_entered=true
+	if absf(position.z)>1.5 or position.y<0.85: crossing_entered=false
+	if crossing_entered and position.x>=9.5 and absf(position.z)<=1.5 and Rules.record_route_crossing("crossing",game.story_state,game.quests):
+		_crossing_finished()
+
+func _tick_ferry(delta: float) -> void:
+	var boat := game.zone_root.get_node_or_null("CommunityWork/PublicRoute_ferry/Ferry") as Node3D
+	if boat==null or director.get_parent()!=game.zone_root or str(game.current_zone_id)!=zone or not _available(work) or game._journey_load_pending() or game.zone_transition_pending or game.zone_load_request_pending or not game.pending_player_restore.is_empty() or director._danger_near(game) or float(game.player.health_component.health)<=0 or float(game.player.hurt_react_time)>0:
+		cancel()
+		return
+	if game.player.equipment_loadout.is_transitioning(): return
+	if game.player.equipment_loadout.is_drawn():
+		cancel()
+		return
+	elapsed += maxf(delta,0)
+	boat.position.x = lerpf(3.5,9.5,clampf(elapsed/float(work.seconds),0,1))
+	game.player.velocity=Vector3.ZERO
+	game.player.global_position=boat.to_global(Vector3(0,1.19,0))
+	if elapsed<float(work.seconds): return
+	ferry_safe=game.zone_root.to_global(Vector3(10.5,0.95,1.5))
+	var applied := Rules.record_route_crossing("ferry",game.story_state,game.quests)
+	cancel()
+	if applied: _crossing_finished()
+
+func _crossing_finished() -> void:
+	game.story_save_pending=true
+	game.call_deferred("_persist_story_action")
+	game.hud.set_guidance_hint("The first load has crossed. Set it down at the far landing.",6.0)
+	refresh()
+
+static func _position(value: Array) -> Vector3:
+	return Vector3(float(value[0]),float(value[1]),float(value[2]))

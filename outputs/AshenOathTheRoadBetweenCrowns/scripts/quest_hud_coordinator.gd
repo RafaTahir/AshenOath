@@ -84,7 +84,7 @@ func _navigation_dial_geometry(zone_id: String, spatial_source: Node, zone_root:
 		var center: Vector3 = raw_exclusion.get("center", Vector3.ZERO)
 		var half_size: Vector2 = raw_exclusion.get("half_size", Vector2.ZERO)
 		terrain.append({"kind": "obstacle", "points": _dial_rect_points(Rect2(Vector2(center.x, center.z) - half_size, half_size * 2.0))})
-	for edge: Dictionary in SectorManifest.connections(zone_id):
+	for edge: Dictionary in SectorManifest.connections(zone_id,story_state):
 		terrain.append({"kind": "road", "points": SectorManifest.connector_polygon(edge)})
 	_dial_geometry_key = key
 	_dial_geometry = {"bounds": bounds, "terrain": terrain, "spatial_revision": key}
@@ -157,7 +157,7 @@ func _physical_connection(zone_id: String, destination: String, position: Vector
 	var best: Dictionary = {}
 	var best_steps := 999
 	var nearest := INF
-	for edge: Dictionary in SectorManifest.connections(zone_id):
+	for edge: Dictionary in SectorManifest.connections(zone_id,story_state):
 		if not SectorManifest.edge_available(edge, quests, story_state):
 			continue
 		var steps := _steps_to(str(edge.target), destination, zone_id)

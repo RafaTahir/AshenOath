@@ -140,7 +140,7 @@ var generated_current_recordings_allowed := false
 var revised_voice_cache_order: Array[String] = []
 var story_music_override := ""
 const STORY_SCORE_PATH := "res://assets_external/audio/story_score/"
-const STORY_SCORE_STATES := ["story_road", "story_names", "story_renewal", "ending_witness", "ending_mercy", "ending_duty", "ending_ash"]
+const STORY_SCORE_STATES := ["story_road", "story_names", "story_renewal", "ending_witness", "ending_mercy", "ending_duty", "ending_ash", "ending_concord", "ending_open_road"]
 
 func _process(delta: float) -> void:
 	if pending_dialogue_voice != "" and dialogue_active and not dialogue_review_paused:
@@ -598,8 +598,8 @@ func _story_music_state(state: Node, zone_id: String) -> String:
 	if state == null:
 		return ""
 	var ending := str(state.get_flag("final_covenant", ""))
-	ending = str({"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending, ending))
-	if zone_id in ["greyfen", "assembly", "hart_glade"] and bool(state.get_flag("final_choice_completed", false)) and ending in ["witness", "mercy", "duty", "ash"]:
+	ending = preload("res://scripts/ending_catalog.gd").covenant(ending)
+	if zone_id in ["greyfen", "assembly", "hart_glade"] and bool(state.get_flag("final_choice_completed", false)) and ending != "":
 		return "ending_" + ending
 	elif zone_id == "greyfen" and bool(state.get_flag("renewal_announced", false)):
 		return "story_road" if bool(state.get_flag("renewal_stopped", false)) else "story_renewal"
@@ -1535,7 +1535,7 @@ func _build_music_state(state_id: String) -> void:
 		if stream != null:
 			music[state_id] = stream
 		else:
-			var fallback := str({"story_road":"greyfen_explore", "story_names":"record_hall", "story_renewal":"undercroft", "ending_witness":"assembly", "ending_mercy":"hart_glade", "ending_duty":"shrine_anwen", "ending_ash":"castle_silence"}.get(state_id, "greyfen_explore"))
+			var fallback := str({"story_road":"greyfen_explore", "story_names":"record_hall", "story_renewal":"undercroft", "ending_witness":"assembly", "ending_mercy":"hart_glade", "ending_duty":"shrine_anwen", "ending_ash":"castle_silence", "ending_concord":"assembly", "ending_open_road":"hart_glade"}.get(state_id, "greyfen_explore"))
 			var fallback_stream: AudioStream = prepared_audio.stream("music", fallback)
 			if fallback_stream != null:
 				music[state_id] = fallback_stream

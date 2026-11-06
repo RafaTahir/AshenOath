@@ -110,7 +110,7 @@ func route_for_id(game: Node, target_id: String) -> Dictionary:
 			var normal := SectorManifest.direction(str(connection.id))
 			var raw_route: Array[Vector3] = []
 			var next_segment := 0
-			if SectorManifest.connector_contains(str(game.current_zone_id), player.global_position):
+			if SectorManifest.connector_contains(str(game.current_zone_id), player.global_position,0.0,game.story_state):
 				raw_route.append(player.global_position)
 				var nearest := INF
 				for index in range(corridor.size() - 1):
@@ -175,7 +175,7 @@ func _route_from_player(game: Node, player: CharacterBody3D, spatial: Node, dest
 		var nearest := INF
 		var inbound := PackedVector3Array()
 		var segment := -1
-		for connection: Dictionary in SectorManifest.connections(str(game.current_zone_id)):
+		for connection: Dictionary in SectorManifest.connections(str(game.current_zone_id),game.story_state):
 			var corridor := SectorManifest.connector_points(connection)
 			for index in range(corridor.size() - 1):
 				var closest := Geometry3D.get_closest_point_to_segment(source, corridor[index], corridor[index + 1])
@@ -239,7 +239,7 @@ func _physical_point_clear(context: Dictionary, point: Vector3, padded: bool = f
 	var bounds: Vector2 = context.spatial.half_extents
 	var inside := absf(point.x) <= bounds.x - 0.55 and absf(point.z) <= bounds.y - 0.55
 	var resident: bool = is_instance_valid(context.seamless) and context.seamless.contains_resident_passage(point)
-	if (not inside and not resident and not SectorManifest.connector_contains(str(context.spatial.zone_id), point, -0.55)) \
+	if (not inside and not resident and not SectorManifest.connector_contains(str(context.spatial.zone_id), point, -0.55,_host.get("story_state"))) \
 		or not context.spatial.validate_segment(point, point, 0.55):
 		return false
 	var query: PhysicsShapeQueryParameters3D = context.query

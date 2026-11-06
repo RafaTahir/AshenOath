@@ -9,8 +9,15 @@ const CORE_BUILDER_PATHS := {
 const CAMPAIGN_ZONES: Array[String] = [
 	"deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road",
 	"vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade",
+	"lantern_reach", "hearthward",
 ]
 const CAMPAIGN_BUILDER_PATH := "res://scripts/zones/campaign_section.gd"
+const COMMUNITY_BUILDER_PATH := "res://scripts/zones/community_section.gd"
+
+static func builder_path(zone_id: String) -> String:
+	var id := _canonical(zone_id)
+	if id in ["lantern_reach","hearthward"]: return COMMUNITY_BUILDER_PATH
+	return str(CORE_BUILDER_PATHS.get(id,CAMPAIGN_BUILDER_PATH))
 
 static func supports(zone_id: String) -> bool:
 	var canonical_id := _canonical(zone_id)
@@ -28,7 +35,7 @@ static func resource_paths(zone_id: String) -> Array[String]:
 	if CORE_BUILDER_PATHS.has(id):
 		return [str(CORE_BUILDER_PATHS[id])]
 	if id in CAMPAIGN_ZONES:
-		return [CAMPAIGN_BUILDER_PATH]
+		return [builder_path(id)]
 	return []
 
 static func build_core(host: Node, zone_id: String, build_profile: String = "full") -> Dictionary:
@@ -62,7 +69,7 @@ static func build_campaign(host: Node, zone_id: String, build_profile: String = 
 	context.record_operation("begin:%s" % canonical_id)
 	# Campaign builders are resolved only when a player reaches the campaign.
 	# This keeps later-zone scripts and optional assets out of the startup graph.
-	var builder_script: Script = load(CAMPAIGN_BUILDER_PATH) as Script
+	var builder_script: Script = load(builder_path(canonical_id)) as Script
 	if builder_script == null:
 		return _failure(canonical_id, "campaign builder pack is not mounted")
 	var builder = builder_script.new()

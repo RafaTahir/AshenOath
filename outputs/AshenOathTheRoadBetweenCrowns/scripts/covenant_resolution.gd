@@ -17,11 +17,24 @@ const STEPS := {
 		["Set down the old badge", "Kael puts down the badge that once made leaving feel lawful. This oath will have no command behind it."],
 		["Name the limits of the promise", "Kael: I will keep the road and the record. No child's name. No hidden levy. Nobody carries this because I told them to."],
 		["Take the willing burden", "The heat enters Kael's hands. He does not kneel until the Hart waits for his answer. Kael: Mine, then. And only while I keep choosing it."]
+	],
+	"share": [
+		["Read the willing keepers' terms", "The names entered here belong only to people who agreed. Each keeper may leave the work; the promise gives nobody the right to appoint a replacement in their silence."],
+		["Divide the keeping", "Kael sets the record beside separate keys. Care, the road and the copies have different keepers. None can close the whole account, and none inherits another person's burden."],
+		["Take the first shared watch", "The Hart rests while the first willing watch begins. Kael takes his turn among the others. This arrangement will need meetings, spare hands and difficult answers long after tonight."]
+	],
+	"depart": [
+		["Place the open-road provisions", "The prepared crossing and refuge stand ready for people who choose to travel. A place to stay remains available without an oath to stay there."],
+		["Release the road's claim", "Kael removes the binding's claim on households and travelers. The recovered records remain in human custody. The Hart may leave; no road is owed a captive witness."],
+		["Mark a way onward", "Kael turns the last marker toward the open road. People may remain, return or set out. Keeping those choices possible will demand work without the certainty of a single keeper."]
 	]
 }
 const POSITIONS := [Vector3(-4.5, 0.0, -2.5), Vector3(0.0, 0.0, -5.0), Vector3(4.5, 0.0, -2.5)]
 
 static func begin(game, ending: String) -> void:
+	ending = preload("res://scripts/ending_catalog.gd").normalize(ending)
+	if not STEPS.has(ending):
+		return
 	game.pending_ending = ending
 	game.story_state.set_flag("covenant_ritual_started", true)
 	game.story_state.set_flag("covenant_ritual_step", 0)

@@ -87,7 +87,7 @@ static func sections(campaign: Dictionary, quests, state, zone_id: String) -> Ar
 
 static func _covenant_entry(campaign: Dictionary, state) -> Dictionary:
 	var value: String = _flag_text(state, "final_covenant")
-	var ending_id: String = str({"witness": "expose", "mercy": "free", "duty": "bind", "ash": "kill"}.get(value, value))
+	var ending_id: String = preload("res://scripts/ending_catalog.gd").normalize(value)
 	if ending_id == "":
 		return {}
 	for ending in campaign.get("endings", []):

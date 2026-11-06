@@ -39,6 +39,22 @@
       "stakes": "Choose closure, supervised supply, or clean repair and restitution."
     },
     {
+      "quest_id": "main_empty_tables",
+      "title": "The Empty Tables",
+      "question": "Who can eat when the mill's promises no longer feed them?",
+      "summary": "At the old river landing, Nessa, Elna and Toma prepare a kitchen and dry sleeping places. The households disagree about where food should be held, but nobody must give testimony to receive it.",
+      "stakes": "A common kitchen saves fuel and concentrates work. Household distribution preserves independence but asks more of the carriers.",
+      "campaign_revision": 2
+    },
+    {
+      "quest_id": "main_road_kept_open",
+      "title": "A Road Kept Open",
+      "question": "What kind of passage can people keep working together?",
+      "summary": "Nera measures the crossing while Rook reads the current and Tor examines the old joints. A public bridge and an escorted ferry are both possible; neither maintains itself.",
+      "stakes": "A repaired crossing stays open between patrols but needs watch and repairs. A ferry needs less timber, but people must wait for its crew and weather.",
+      "campaign_revision": 2
+    },
+    {
       "quest_id": "main_soldier_without_banner",
       "title": "A Soldier Without a Banner",
       "question": "Can testimony establish responsibility without purchasing absolution?",
@@ -58,6 +74,22 @@
       "question": "What could obedience have refused?",
       "summary": "Halvern holds a bounded memory of the sanctuary order, refusal, and execution. Kael admits that he abandoned a different escort and never went back.",
       "stakes": "Keep guaranteed command proof and accept responsibility for the people still on the road."
+    },
+    {
+      "quest_id": "main_house_many_names",
+      "title": "The House of Many Names",
+      "question": "Can a house keep an honest account without demanding its occupants' stories?",
+      "summary": "Anwen and Mira inspect an upland refuge while Vale separates the public account from private testimony. Beds, medicine and a dry shelf come before names in a book.",
+      "stakes": "Distributed public copies resist a single keeper's failure. Protected custody limits exposure but depends on fewer people. Shelter is unconditional in either arrangement.",
+      "campaign_revision": 2
+    },
+    {
+      "quest_id": "main_what_we_promise",
+      "title": "What We Promise",
+      "question": "Which responsibilities will people actually choose, and how can they leave them?",
+      "summary": "The community tests a meal round, a night alarm and a record handover. Merrow, Edric and any surviving, willing Senn answer for the powers they still hold. Kael can offer his own work, never somebody else's assent.",
+      "stakes": "A rota is useful only while its keepers can refuse, rest and withdraw. Missing volunteers leave work unfinished; they do not lose food or shelter.",
+      "campaign_revision": 2
     },
     {
       "quest_id": "main_crowns_without_mercy",
@@ -588,6 +620,26 @@
       "cost": "The complete account is lost forever. Dispersed memory harms land and future harvests; copies cannot recover every missing name.",
       "minimum": "Kael plus guaranteed main-path proof.",
       "procedure": "Fight the Hart Avatar. Destruction is force, not a consensual replacement oath; human accountability may continue."
+    },
+    {
+      "id": "share",
+      "title": "Concord",
+      "campaign_revision": 2,
+      "intention": "Distribute stewardship among the keepers who have each explicitly agreed.",
+      "benefit": "Care, passage and the records have several willing owners instead of one indispensable bearer.",
+      "cost": "The shifts continue. Keepers can withdraw; an empty shift leaves the community vulnerable until another person freely accepts it.",
+      "minimum": "All four community chapters and currently consenting keepers for care, logistics and record-keeping.",
+      "procedure": "Each keeper confirms their own terms. Kael accepts his own work and cannot fill a vacancy with somebody else's name."
+    },
+    {
+      "id": "depart",
+      "title": "Open Road",
+      "campaign_revision": 2,
+      "intention": "Dismantle the territorial protection and lead the dependent community to the prepared refuge.",
+      "benefit": "The community can leave with its human evidence, supplies and a working route.",
+      "cost": "The old supernatural shelter is lost, and the Hart's complete account becomes inaccessible. The new refuge still needs labor and protection.",
+      "minimum": "All four community chapters, a working evacuation route and a prepared refuge.",
+      "procedure": "Secure the copied human records, open the prepared departure, and dismantle the boundary only after the dependent households can leave."
     }
   ],
   "consent_rules": [

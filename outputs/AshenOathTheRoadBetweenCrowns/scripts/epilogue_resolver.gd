@@ -1,6 +1,9 @@
 extends RefCounted
 
 static func resolve(ending: String, state) -> Array[String]:
+	ending = preload("res://scripts/ending_catalog.gd").normalize(ending)
+	if ending == "":
+		return []
 	var cards: Array[String] = [_covenant_card(ending), _greyfen_card(state), _anwen_card(state), _vargan_card(state)]
 	for actor in ["elna", "tor", "mira", "rook", "toma", "senn", "memorials", "mill"]:
 		var card := _person_card(actor, state)
@@ -93,6 +96,7 @@ static func _flag(state, key: String, fallback: String = "") -> String:
 	return str(state.get_flag(key, fallback))
 
 static func _covenant_card(ending: String) -> String:
+	ending = preload("res://scripts/ending_catalog.gd").normalize(ending)
 	match ending:
 		"kill":
 			return "ASH\nThe Hart dies. The pressure beneath the road ends, and Greyfen sleeps without waiting for another summons. The complete memory dies with its witness; the human records Kael recovered remain. In the wood, pale shoots fail to return. The living must decide what repair means without the dead to answer them."
@@ -100,8 +104,13 @@ static func _covenant_card(ending: String) -> String:
 			return "MERCY\nKael dismantles the binding and releases the Hart. The recovered record survives, but intimate memories and vulnerable families are not offered for public display. Proven wrongdoing stays on the record. Keeping it safe becomes human work: visits, copies, and a promise to ask before speaking for another person."
 		"bind":
 			return "DUTY\nKael takes stewardship of the binding upon himself. Greyfen has time to mend its roofs and feed its children. The obligation follows him beyond the glade; no villager inherits it merely by living there. He has contained the danger, not settled the debt. Each season brings another reason to return."
-		_:
+		"expose":
 			return "WITNESS\nThe public record can no longer be buried. Names replace the village's comfortable account of its founding. Restitution costs iron, food, labor, and the authority of people who once decided what could be known. Kael keeps the account alive; willing witnesses may share that work, but no refusal is turned into agreement."
+		"share":
+			return "CONCORD\nThe willing keepers divide the work of care, passage and memory. Kael holds one turn in a revocable arrangement, not a claim over the other hands. No single keeper can bury every copy or pledge another household. Meetings take time; a withdrawal leaves real work to redistribute. The community has gained a way to answer together, not a guarantee that it always will."
+		"depart":
+			return "OPEN ROAD\nThe binding no longer claims the people who live beside it. The prepared route and refuge make departure possible without making it compulsory. The Hart may go, and the human records remain. Some neighbors stay; others carry their lives onward. There is no single keeper to settle every dispute, and maintaining a safe way back will remain the work of those who freely take it up."
+	return ""
 
 static func _greyfen_card(state) -> String:
 	var public_names := _flag(state, "names_policy") == "published"

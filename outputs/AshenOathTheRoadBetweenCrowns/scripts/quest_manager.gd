@@ -1,5 +1,7 @@
 extends Node
 
+const CampaignRevision = preload("res://scripts/campaign_revision.gd")
+
 signal changed
 signal message(text: String)
 signal quest_completed(id: String)
@@ -23,6 +25,8 @@ var completed_objectives: Dictionary:
 	set(value):
 		_completed_objectives = value
 var quest_defs = {}
+var source_quest_defs: Dictionary = {}
+var campaign_revision := CampaignRevision.LEGACY
 var world_reads = preload("res://scripts/world_read_scope.gd").new()
 var _active: Dictionary = {}
 var active: Dictionary:
@@ -81,8 +85,22 @@ const IMPLEMENTED_SIDE_QUESTS := {
 func load_quests(path: String) -> void:
 	var parsed = _read_json(path)
 	if typeof(parsed) == TYPE_DICTIONARY:
-		quest_defs = parsed
-		quest_defs.merge(preload("res://scripts/saga_catalog.gd").quest_definitions(), true)
+		source_quest_defs = parsed
+		source_quest_defs.merge(preload("res://scripts/saga_catalog.gd").quest_definitions(), true)
+		configure_campaign_revision(campaign_revision)
+
+func can_load_campaign_revision(revision: int) -> bool:
+	var source: Dictionary = source_quest_defs if not source_quest_defs.is_empty() else quest_defs
+	return revision == CampaignRevision.LEGACY or (revision == CampaignRevision.EXPANDED and CampaignRevision.has_complete_expansion(source))
+
+func configure_campaign_revision(revision: int) -> bool:
+	if not can_load_campaign_revision(revision):
+		return false
+	if source_quest_defs.is_empty():
+		source_quest_defs = quest_defs.duplicate(true)
+	campaign_revision = revision
+	quest_defs = CampaignRevision.project_quests(source_quest_defs, revision)
+	return true
 
 func start_quest(id: String) -> bool:
 	if not quest_defs.has(id):
@@ -98,7 +116,7 @@ func start_quest(id: String) -> bool:
 	var objectives: Array = []
 	for objective in quest_defs[id].get("objectives", []):
 		var runtime_objective: Dictionary = objective.duplicate(true)
-		runtime_objective["done"] = not is_choice_objective(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false))
+		runtime_objective["done"] = not requires_explicit_completion(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false))
 		if runtime_objective.done and str(objective.get("completion_flag", "")) != "":
 			world_flags[str(objective.completion_flag)] = true
 		objectives.append(runtime_objective)
@@ -133,7 +151,7 @@ func complete_objective(quest_id: String, objective_id: String) -> bool:
 	return false
 
 func complete_evidence(quest_id: String, evidence_id: String) -> bool:
-	if _objective_definition(quest_id, evidence_id).is_empty() or is_choice_objective(quest_id, evidence_id):
+	if _objective_definition(quest_id, evidence_id).is_empty() or requires_explicit_completion(quest_id, evidence_id):
 		return false
 	var key := "%s:%s" % [quest_id, evidence_id]
 	var newly_observed := not _saved_true(evidence_history.get(key, false))
@@ -165,6 +183,11 @@ func complete_choice(quest_id: String, objective_id: String) -> bool:
 	var completed_now := complete_objective(quest_id, objective_id)
 	_choice_depth -= 1
 	return completed_now
+
+func requires_explicit_completion(quest_id: String, objective_id: String) -> bool:
+	# Physical work is credited by its activity owner. Finding an older clue
+	# or restoring evidence history cannot perform it on the player's behalf.
+	return is_choice_objective(quest_id, objective_id) or str(_objective_definition(quest_id, objective_id).get("kind", "")) == "activity"
 
 func is_choice_objective(quest_id: String, objective_id: String) -> bool:
 	if objective_id.ends_with("_choice") or objective_id in ["final_choice", "return_village"]:
@@ -229,7 +252,7 @@ func is_objective_done(quest_id: String, objective_id: String) -> bool:
 	var definition := _objective_definition(quest_id, objective_id)
 	if definition.is_empty():
 		return false
-	if not is_choice_objective(quest_id, objective_id) and _saved_true(_evidence_history.get("%s:%s" % [quest_id, objective_id], false)):
+	if not requires_explicit_completion(quest_id, objective_id) and _saved_true(_evidence_history.get("%s:%s" % [quest_id, objective_id], false)):
 		return true
 	if _completed.has(quest_id):
 		if _completed_objectives.has(quest_id):
@@ -383,6 +406,8 @@ func set_tracked_quest_for_zone(zone_id: String) -> void:
 		"wychwood":["main_road_of_crows","main_teeth_in_rain"],
 		"deep_wood":["main_teeth_in_rain","main_names_they_burned"],
 		"old_mill":["main_ash_at_the_mill"],
+		"lantern_reach":["main_empty_tables", "main_road_kept_open"],
+		"hearthward":["main_house_many_names", "main_what_we_promise"],
 		"burned_farmstead":["main_names_they_burned"],
 		"marsh_crossing":["main_names_they_burned"],
 		"bandit_road":["main_soldier_without_banner"],
@@ -516,7 +541,7 @@ func load_state(state: Dictionary) -> void:
 	_migrate_teeth_in_rain()
 	for id: String in active:
 		for objective: Dictionary in active[id].objectives:
-			if not is_choice_objective(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false)):
+			if not requires_explicit_completion(id, str(objective.id)) and _saved_true(evidence_history.get("%s:%s" % [id, objective.id], false)):
 				objective.done = true
 		_update_evidence_groups(id)
 	_emit_changed()

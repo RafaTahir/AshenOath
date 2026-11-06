@@ -17,7 +17,9 @@ const REST_PLACES := {
 	"old_mill": {"id":"rest_mill", "name":"The workers' dry bench", "position":Vector3(-5.6,0,11)},
 	"vargan_approach": {"id":"rest_castle", "name":"The waiting bench", "position":Vector3(-4.4,0,9.5)},
 	"ruins": {"id":"rest_ruins", "name":"The stoneworker's resting stone", "position":Vector3(-2.4,0,5.6)},
-	"bandit_road": {"id": "rest_long_road", "name": "The old supply cart", "position": Vector3(-8, 0, 5.6)}
+	"bandit_road": {"id": "rest_long_road", "name": "The old supply cart", "position": Vector3(-8, 0, 5.6)},
+	"lantern_reach": {"id":"rest_lantern", "name":"The landing shelter bench", "position":Vector3(-9,0,4)},
+	"hearthward": {"id":"rest_hearthward", "name":"The refuge shelter bench", "position":Vector3(-9,0,4)}
 }
 const REST_SECONDS := 4.0
 const REST_MINUTES := 30.0
@@ -53,6 +55,7 @@ var friend_work := ""
 var friend_work_elapsed := 0.0
 var friend_work_start := Vector3.ZERO
 var friend_gesture_started := false
+var community: RefCounted
 
 static func personal_scenes(game, actor_id: String) -> Array[Dictionary]:
 	var scenes: Array[Dictionary] = []
@@ -187,6 +190,10 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		director.zone = zone_id
 		root.add_child(director)
 		director._build(root)
+	if community_zone(zone_id) and director.community == null and preload("res://scripts/campaign_revision.gd").from_state(game.story_state) == 2:
+		# The destination pack has mounted before its published activity owner.
+		director.community = load("res://scripts/community_activity.gd").new()
+		director.community.configure(director)
 	director.refresh()
 	preload("res://scripts/saga_activities.gd").install(game, director, zone_id)
 	load("res://scripts/everyday_life.gd").install(game, director)
@@ -197,7 +204,22 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		preload("res://scripts/greyfen_gathering.gd").install(game)
 		preload("res://scripts/greyfen_village_details.gd").install(game)
 
+static func community_zone(zone_id: String) -> bool:
+	return zone_id in ["lantern_reach", "hearthward"]
+
+static func handle_community(game, area) -> bool:
+	if area == null or not (area.has_meta("community_action") or area.has_meta("community_actor_id")): return false
+	var owner: Node = game.zone_root.get_node_or_null(LAYER) if is_instance_valid(game.zone_root) else null
+	if owner != null and owner.community != null: owner.community.activate(area)
+	return true
+
+static func choose_community(game, action: Dictionary) -> void:
+	var owner: Node = game.zone_root.get_node_or_null(LAYER) if is_instance_valid(game.zone_root) else null
+	if owner != null and owner.community != null: owner.community.choose(action)
+	else: game._resume_game()
+
 static func handle(game, area) -> void:
+	if handle_community(game, area): return
 	if area.has_meta("everyday_action"):
 		var everyday: Node = game.zone_root.get_node_or_null("StoryActivities/EverydayLife")
 		if everyday != null: everyday.activate(area)
@@ -383,6 +405,7 @@ func refresh() -> void:
 	for area in get_tree().get_nodes_in_group("story_activity"):
 		if not host.zone_root.is_ancestor_of(area):
 			continue
+		if area.has_meta("community_action"): continue
 		var id := str(area.interaction_id)
 		var enabled := true
 		if id.begins_with("lr_work_"):
@@ -420,6 +443,7 @@ func refresh() -> void:
 	var saga := get_node_or_null("SixWorldStories")
 	if saga != null:
 		saga.refresh()
+	if community != null: community.refresh()
 
 func activate(id: String) -> void:
 	if id.begins_with("approach_"):
@@ -843,15 +867,18 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_PAUSED or what == NOTIFICATION_EXIT_TREE or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		_cancel_rest()
 		_cancel_friend_work()
+		if community != null: community.cancel(what != NOTIFICATION_PAUSED)
 
 func _physics_process(delta: float) -> void:
 	delta = preload("res://scripts/systems/character_motion_step.gd").simulation_delta(delta)
 	if host == null or host.current_zone_id != zone or host.player == null:
 		_cancel_rest()
 		_cancel_friend_work()
+		if community != null: community.cancel()
 		return
 	_tick_rest(delta)
 	_tick_friend_work(delta)
+	if community != null: community.tick(delta)
 	escort_tick += delta
 	if escort_tick >= 0.1:
 		escort_tick = 0.0
@@ -928,7 +955,7 @@ func _worker_motion(world_velocity: Vector3, delta: float = 0.016667) -> void:
 			driver.set_locomotion_motion(world_velocity, true)
 
 func _refresh_carried_bundle() -> void:
-	var carried := _flag("cart_sack_carried") or _flag("relief_shares_carried")
+	var carried := _flag("cart_sack_carried") or _flag("relief_shares_carried") or _flag("community_route_load_carried")
 	var bundle = host.player.get_node_or_null("StoryWorkBundle")
 	if not carried:
 		if bundle != null:

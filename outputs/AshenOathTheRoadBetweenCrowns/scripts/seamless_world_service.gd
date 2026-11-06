@@ -100,7 +100,7 @@ func _process(delta: float) -> void:
 	if _neighbor_scope != null and _neighbor_scope.zone_id != target: cancel_preparation()
 	# Cold activation starts just before the common plane. Retain the source
 	# half while it still supports Kael, even if a state change invalidated it.
-	if contains_resident_passage(host.player.global_position) and not WorldSectorManifest.connector_contains(str(host.current_zone_id),host.player.global_position): return
+	if contains_resident_passage(host.player.global_position) and not WorldSectorManifest.connector_contains(str(host.current_zone_id),host.player.global_position,0.0,host.story_state): return
 	if _valid_cached_destination(target):
 		if _connection_distance(_selected_connection) < APPROACH_RADIUS: _show_neighbor(_selected_connection)
 		return
@@ -142,7 +142,7 @@ func _nearest_connection() -> Dictionary:
 	if not is_instance_valid(host.player): return {}
 	var best: Dictionary = {}
 	var distance := APPROACH_RADIUS
-	for edge: Dictionary in WorldSectorManifest.connections(str(host.current_zone_id)):
+	for edge: Dictionary in WorldSectorManifest.connections(str(host.current_zone_id),host.story_state):
 		if not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): continue
 		var proximity := _connection_distance(edge)
 		if proximity < distance:
@@ -194,7 +194,7 @@ func _preparation_connection() -> Dictionary:
 		return near
 	var best: Dictionary = {}
 	var distance := INF
-	for edge: Dictionary in WorldSectorManifest.connections(source):
+	for edge: Dictionary in WorldSectorManifest.connections(source,host.story_state):
 		if str(edge.target) == previous_sector or not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): continue
 		var proximity := _connection_distance(edge)
 		if proximity < distance:
@@ -230,7 +230,7 @@ func crossing_for(zone_id: String) -> Dictionary:
 
 func contains_resident_passage(position: Vector3) -> bool:
 	if not is_instance_valid(_preview_root) or _preview_root.is_queued_for_deletion() or not _preview_root.visible: return false
-	return WorldSectorManifest.connector_contains(str(_preview_root.get_meta("zone_resource_id","")),_preview_root.to_local(position))
+	return WorldSectorManifest.connector_contains(str(_preview_root.get_meta("zone_resource_id","")),_preview_root.to_local(position),0.0,host.story_state)
 
 func complete_crossing(previous_root: Node3D) -> void:
 	_preview_root = null
@@ -317,8 +317,7 @@ func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 	return false
 
 func _begin_neighbor(target: String) -> void:
-	var paths: Dictionary = preload("res://scripts/zone_composition_router.gd").CORE_BUILDER_PATHS
-	var builder_path := str(paths.get(target,preload("res://scripts/zone_composition_router.gd").CAMPAIGN_BUILDER_PATH))
+	var builder_path := preload("res://scripts/zone_composition_router.gd").builder_path(target)
 	var builder_script := load(builder_path) as Script
 	if builder_script == null or not builder_script.can_instantiate():
 		_neighbor_failure = "The destination builder could not be loaded: " + target
@@ -463,8 +462,8 @@ func _exit_tree() -> void:
 	if get_tree().node_added.is_connected(_construction_node_added): get_tree().node_added.disconnect(_construction_node_added)
 
 func open_edges_for(zone_id: String) -> Dictionary:
-	var edges := WorldSectorManifest.open_edges(zone_id)
-	for edge: Dictionary in WorldSectorManifest.connections(zone_id): edges[str(edge.id)] = edge
+	var edges := WorldSectorManifest.open_edges(zone_id,host.story_state)
+	for edge: Dictionary in WorldSectorManifest.connections(zone_id,host.story_state): edges[str(edge.id)] = edge
 	return edges
 
 func is_exterior_route(source_zone: String, target_zone: String) -> bool:
@@ -476,7 +475,7 @@ func is_interior_route(source_zone: String, target_zone: String) -> bool:
 	var source := WorldSectorManifest.canonical(source_zone)
 	var target := WorldSectorManifest.canonical(target_zone)
 	return not is_exterior_route(source, target) \
-		and target in WorldSectorManifest.neighbors(source) \
+		and target in WorldSectorManifest.neighbors(source,host.story_state) \
 		and (not WorldSectorManifest.is_exterior(source) or not WorldSectorManifest.is_exterior(target))
 
 func should_suppress_exterior_gate(source_zone: String, target_zone: String) -> bool:
@@ -495,7 +494,7 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 	if current_sector != source:
 		on_zone_activated(source, actor.global_position)
 	if cooldown <= 0.0:
-		for connection: Dictionary in WorldSectorManifest.connections(source):
+		for connection: Dictionary in WorldSectorManifest.connections(source,host.story_state):
 			if not WorldSectorManifest.edge_available(connection,host.quests,host.story_state): continue
 			var frame := WorldSectorManifest.crossing_frame(connection)
 			var point := frame.affine_inverse()*actor.global_position
@@ -635,7 +634,7 @@ func _zone_bounds(zone_id: String) -> Vector2:
 
 func _kept_sector_ids(zone_id: String) -> Array[String]:
 	var kept: Array[String] = [zone_id]
-	for neighbor in WorldSectorManifest.neighbors(zone_id):
+	for neighbor in WorldSectorManifest.neighbors(zone_id,host.story_state):
 		if neighbor not in kept:
 			kept.append(neighbor)
 	return kept

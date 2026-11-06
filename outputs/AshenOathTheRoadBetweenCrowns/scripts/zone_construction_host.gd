@@ -491,7 +491,7 @@ func _make_tree(pos: Vector3) -> void:
 			if Vector2(pos.x, pos.z).distance_to(Vector2(house_position.x, house_position.z)) < 5.5:
 				return
 	var radius := _scene_randf_range(1.0, 1.35)
-	pos = WorldSectorManifest.clear_connector_position(current_zone_id,pos,1.35)
+	pos = WorldSectorManifest.clear_connector_position(current_zone_id,pos,1.35,story_state)
 	if spatial_service != null:
 		spatial_service.add_presence_landmark("shelter", pos, 0.7)
 	var height := _scene_randf_range(2.0, 2.7)
@@ -596,7 +596,7 @@ func _make_prop_box(name: String, pos: Vector3, size: Vector3, color: Color, ren
 		body.add_child(shape)
 	if not render_geometry:
 		return
-	if current_zone_id in ["greyfen", "wychwood", "deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road", "assembly", "hart_glade"] and separate_body and body != null:
+	if current_zone_id in ["greyfen", "wychwood", "deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road", "assembly", "hart_glade", "lantern_reach", "hearthward"] and separate_body and body != null:
 		var bank := MeshInstance3D.new()
 		bank.name = "WeatheredLandscapeBoundary"
 		bank.mesh = world_materials.make_forest_berm(size, pos)
@@ -2052,7 +2052,7 @@ func _make_boundary_edge(edge_id: String, width: float, depth: float, color: Col
 	var opening_half := float(open_edge.get("half_width", 0.0))
 	var lane := float(open_edge.get("lane", 0.0))
 	var openings: Array[Vector2] = []
-	for edge: Dictionary in WorldSectorManifest.connections(current_zone_id):
+	for edge: Dictionary in WorldSectorManifest.connections(current_zone_id,story_state):
 		if str(edge.id) == edge_id: openings.append(Vector2(float(edge.lane)-float(edge.half_width),float(edge.lane)+float(edge.half_width)))
 	if openings.is_empty() and not open_edge.is_empty() and opening_half > 0.0 and WorldSectorManifest.connection_between(current_zone_id,str(open_edge.get("target",""))).is_empty():
 		openings.append(Vector2(lane-opening_half,lane+opening_half))
@@ -2655,7 +2655,7 @@ func _boss_is_resolved(id: String) -> bool:
 	var saved: Variant = boss_saved_states.get(id, {})
 	if typeof(saved) == TYPE_DICTIONARY:
 		var saved_outcome := str(saved.get("outcome", ""))
-		return saved_outcome in ["defeated", "release", "testimony", "witness", "mercy", "duty", "ash"]
+		return saved_outcome in ["defeated", "release", "testimony", "witness", "mercy", "duty", "ash", "concord", "open_road"]
 	return false
 
 
