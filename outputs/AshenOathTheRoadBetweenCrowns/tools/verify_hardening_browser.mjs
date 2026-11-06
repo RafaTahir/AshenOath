@@ -5,6 +5,7 @@
 // combat requires --combat-phase light|heavy|bow; run each phase/viewport in a fresh invocation.
 // --fault metadata_headers_stall|metadata_body_stall|opening_unavailable selects one Retry case.
 // --inspect validates inputs and candidate transport without launching Chromium.
+// --no-precontrol-captures excludes screenshot work before the measured first control.
 import puppeteer from 'puppeteer-core';
 import { createServer } from 'node:http';
 import { createReadStream, existsSync, mkdirSync, openSync, closeSync, readSync,
@@ -32,6 +33,7 @@ if (scenario === 'combat') assert(['light', 'heavy', 'bow'].includes(combatPhase
   'Combat requires --combat-phase light|heavy|bow. Run each phase/viewport in a fresh process/profile; combined combat reloads are not supported.');
 assert(metadataFaults.every(kind => ['metadata_headers_stall', 'metadata_body_stall', 'opening_unavailable'].includes(kind)), 'Invalid --fault');
 const timeoutMs = Number(options.timeout || 180000);
+if (options['no-precontrol-captures']) options['no-loading-captures'] = true;
 assert(Number.isFinite(timeoutMs) && timeoutMs >= 30000, '--timeout must be at least 30000 ms');
 const temporaryRoot = resolve('D:/Temp/AshenOath/hardening-browser');
 const runRoot = join(temporaryRoot, `run-${Date.now()}-${process.pid}`);
@@ -234,8 +236,10 @@ async function clickButton(page, label, viewport, touch = false, prefix = false)
     if (previous !== geometry) { previous = geometry; previousTimestamp = state.timestamp; return null; }
     return state.timestamp > previousTimestamp ? { p, text: button.text, state } : null;
   }, `visible enabled ${label}`);
+  const requestMs = scenario === 'startup' ? await page.evaluate(() => performance.now()) : null;
   await tap(page, found.p, touch);
-  event({ event: 'ui_click', text: found.text, at: Date.now(), point: found.p });
+  if (scenario === 'startup' && label === 'New Game') currentCase.new_game_driver_request_ms = requestMs;
+  event({ event: 'ui_click', text: found.text, at: Date.now(), point: found.p, navigation_request_ms: requestMs });
   return found.state;
 }
 async function screenshot(page, name) {
@@ -328,7 +332,7 @@ async function enterMenu(page, touch) {
       writeFileSync(path, JSON.stringify(profile, null, 2));
       (currentCase.webgl_profiles ||= []).push(path);
     }
-    await screenshot(page, 'ready-menu');
+    if (!options['no-precontrol-captures']) await screenshot(page, 'ready-menu');
   }
 }
 async function startGame(page, viewport, touch) {
@@ -359,9 +363,20 @@ async function startGame(page, viewport, touch) {
     }
     return playable(s) && s.zone === 'greyfen' ? s : null;
   }, 'New Game grants ordinary Greyfen control');
-  if (scenario === 'startup') event({ event: 'first_control',
-    navigation_ms: await page.evaluate(() => performance.now()),
-    performance: (await observe(page))?.performance || null });
+  if (scenario === 'startup') {
+    const firstControl = await waitFor(async () => page.evaluate(() =>
+      window.__ashenOathBoot?.first_control_ms > 0 ? {
+        first_control_ms: window.__ashenOathBoot.first_control_ms,
+        observed_ms: performance.now(), menu_ready_ms: window.__ashenOathBoot.menu_ready_ms,
+      } : null), 'authoritative first-control timestamp');
+    event({ event: 'first_control', navigation_ms: firstControl.first_control_ms,
+      observed_navigation_ms: firstControl.observed_ms,
+      new_game_driver_request_ms: currentCase.new_game_driver_request_ms,
+      menu_to_driver_request_ms: currentCase.new_game_driver_request_ms - firstControl.menu_ready_ms,
+      request_to_control_ms: firstControl.first_control_ms - currentCase.new_game_driver_request_ms,
+      includes_optional_intro: openingSkipAttempted,
+      performance: (await observe(page))?.performance || null });
+  }
   await screenshot(page, 'new-game');
 }
 async function pause(page, viewport, touch) {
@@ -655,6 +670,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
     await focus.send('Emulation.setFocusEmulationEnabled', { enabled: true });
     currentCase.focus_mode = 'foreground_emulated';
     currentCase.loading_captures = !options['no-loading-captures'];
+    currentCase.precontrol_captures = !options['no-precontrol-captures'];
     await page.evaluateOnNewDocument(() => {
       const record = () => window.__ashenTestVisibility.push({ ms: performance.now(), hidden: document.hidden, focused: document.hasFocus() });
       window.__ashenTestVisibility = [];
