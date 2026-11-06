@@ -145,12 +145,13 @@ def compile_layout(defer_environment=False):
     spectral_profiles = PROJECT / "data/spectral_monster_profiles.json"
     if spectral_profiles.exists():
         files["Runtime Pack Monsters"].update(json.loads(spectral_profiles.read_text())["assets"])
-    # Optional chapter illustrations never gate the usable menu or first control.
-    # Keep one owner; the unchanged Greyfen menu artwork is still root-resident.
+    # Loading artwork belongs to the boot PCK, not a later campaign download.
+    # Select the imported texture explicitly; keep just one mounted owner.
     for name in sections:
         includes[name].discard(CHAPTER_ART)
         files[name].discard("res://" + CHAPTER_ART)
-    includes["Runtime Pack Campaign"].add(CHAPTER_ART)
+        if name in {"Web Browser", "Web QA Browser"}:
+            files[name].add("res://" + CHAPTER_ART)
     includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
     # Touchable village details share retained source meshes, owned by opening.
     for prop in ("Dummy.obj", "Pot_1.obj", "Pot_1_Lid.obj"):
@@ -383,7 +384,7 @@ def compile_layout(defer_environment=False):
             exclusions.add("data/native_attack_profiles.json")
         else:
             exclusions.discard("data/native_attack_profiles.json")
-        if name == "Runtime Pack Campaign":
+        if name in {"Web Browser", "Web QA Browser"}:
             exclusions.discard(CHAPTER_ART)
         else:
             exclusions.add(CHAPTER_ART)

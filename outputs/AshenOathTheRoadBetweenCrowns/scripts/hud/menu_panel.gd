@@ -196,6 +196,9 @@ func clear_journey_transients(new_timeline: bool) -> void:
 	_update_process_policy()
 
 func show_main_menu() -> void:
+	if not new_game_ready and (not is_instance_valid(_game_owner) or not bool(_game_owner.get("game_started"))):
+		show_startup_loading(str(_opening_preparation.get("message", "Loading Greyfen...")), float(_opening_preparation.get("progress", -1.0)), str(_opening_preparation.get("state", "")) == "failed")
+		return
 	active_menu = "main"
 	_set_internal_canvas(Vector2i(MENU_SIZE))
 	_set_ui_pointer("menu")
@@ -222,6 +225,7 @@ func show_main_menu() -> void:
 func show_startup_loading(message: String = "Preparing the road...", fraction: float = -1.0, failed: bool = false) -> void:
 	if active_menu != "startup" or not is_instance_valid(_startup_view):
 		active_menu = "startup"
+		_set_internal_canvas(Vector2i(MENU_SIZE))
 		_set_ui_pointer("menu")
 		_clear_menu()
 		_screen_generation += 1
@@ -246,6 +250,17 @@ func set_new_game_status(text: String) -> void:
 
 func set_opening_preparation(state: String, message: String, progress: float = -1.0, requested: bool = false) -> void:
 	_opening_preparation = {"state": state, "message": message, "progress": progress, "requested": requested}
+	if state != "ready":
+		var phases := {"preparing":"Loading Greyfen...", "downloading":"Downloading opening content", "services":"Preparing the journey...", "resources":"Preparing characters and materials...", "building":"Building Greyfen", "finalizing":"Finishing the village...", "first_view":"Preparing the first view..."}
+		var phase: String = message if state == "failed" else str(phases.get(state, "Preparing the road..."))
+		if progress >= 0.0 and state != "failed":
+			phase += "  %d%%" % clampi(int(progress * 100.0), 0, 99)
+		show_startup_loading(phase, progress, state == "failed")
+		return
+	if active_menu == "startup" and new_game_ready:
+		if input_source != null:
+			input_source.reset_transient_input("opening_menu_ready")
+		show_main_menu()
 	# Internal construction prose remains in diagnostics, not the loading UI.
 	var label := message if state == "failed" else ("100%" if state == "ready" else ("%d%%" % clampi(int(progress * 100.0), 0, 99) if progress >= 0.0 else ""))
 	set_new_game_status(label)

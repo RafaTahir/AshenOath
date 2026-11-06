@@ -133,6 +133,7 @@ if ($BuildVoices) {
 }
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--editor", "--import", "--quit") "import"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "compile_runtime_services.gd")) "runtime-services-compile"
 # EnemyAI is demand-loaded after the menu, so editor import alone can miss a
 # parser failure that disables every encounter. Compile it without running it.
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--check-only", "--script", "res://scripts/enemy_ai.gd") "enemy-runtime-compile"

@@ -314,11 +314,11 @@ func _prepare_opening_services(generation: int) -> void:
 	if not _opening_attempt_current(generation):
 		return
 	if not services_ready:
-		_opening_prepare_failed("Journey services could not be prepared. Select Retry to try again.")
+		_opening_prepare_failed("%s Select Retry to try again." % runtime_services.preparation_error if runtime_services.preparation_error != "" else "Journey services could not be prepared. Select Retry to try again.")
 		return
 	_ensure_gameplay_runtime()
 	if not gameplay_runtime_ready:
-		_opening_prepare_failed("Journey services could not be prepared. Select Retry to try again.")
+		_opening_prepare_failed("%s Select Retry to try again." % runtime_services.preparation_error if runtime_services.preparation_error != "" else "Journey services could not be prepared. Select Retry to try again.")
 		return
 	_publish_web_opening_state("resources", "Preparing characters and materials...")
 	world_materials.begin_prewarm_attempt()
@@ -367,7 +367,7 @@ func _prepare_opening_services(generation: int) -> void:
 
 func _wait_for_opening_build_slot(generation: int) -> void:
 	# Settings/save browsing retains priority even after a queued New Game.
-	while _opening_attempt_current(generation) and hud.active_menu != "main":
+	while _opening_attempt_current(generation) and hud.active_menu not in ["main", "startup"]:
 		await _host.get_tree().process_frame
 
 func _opening_attempt_current(generation: int) -> bool:
@@ -702,10 +702,14 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 		hud.set_new_game_status("Greyfen is ready.")
 	# The actual gameplay-camera frame above is the render readiness boundary.
 	greyfen_prewarm_started = false
-	_publish_web_opening_state("ready", "Greyfen is ready.")
 	_refresh_journey_models()
 	if hud != null:
 		hud.set_new_game_ready(true)
+	_publish_web_opening_state("ready", "Greyfen is ready.", 1.0)
+	opening_startup_metrics["menu_ready_ms"] = Time.get_ticks_msec()
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
+	print("LOADING: usable_menu_ready ms=%d" % Time.get_ticks_msec())
 	print("LOADING: opening_world_render_ready")
 	print("LOADING: Greyfen prewarmed total=%dms build=%dms world=%dms player=%dms" % [
 		Time.get_ticks_msec() - prewarm_started, build_ms, world_finalize_ms, player_ms,

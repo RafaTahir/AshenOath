@@ -25,6 +25,8 @@ var configured := false
 var menu_configured := false
 var campaign_configured := false
 var prepared_service_modes: Dictionary = {}
+var preparation_error := ""
+var _failed_scripts: Dictionary = {}
 const MENU_SERVICES := ["save_manager", "settings", "audio", "hud", "input_router", "mobile_touch", "runtime_packs", "display_metrics"]
 
 func create_services(menu_only := false) -> Dictionary:
@@ -35,6 +37,7 @@ func create_gameplay_services() -> Dictionary:
 	return _create_missing_services(REQUIRED_SERVICES)
 
 func prepare_gameplay_services(keep_preparing: Callable) -> bool:
+	preparation_error = ""
 	var slice_started := Time.get_ticks_usec()
 	for id in REQUIRED_SERVICES:
 		if not keep_preparing.call():
@@ -47,19 +50,37 @@ func prepare_gameplay_services(keep_preparing: Callable) -> bool:
 			slice_started = Time.get_ticks_usec()
 	if not await services["hud"].prepare_gameplay_ui_async(keep_preparing):
 		return false
-	return bool(keep_preparing.call()) and is_complete()
+	if not keep_preparing.call():
+		return false
+	if not is_complete():
+		preparation_error = "A required journey service lost its owner during preparation."
+		return false
+	return true
 
 func _create_missing_services(ids: Array) -> Dictionary:
 	for id in ids:
 		if services.has(id):
-			continue
+			if is_instance_valid(services[id]) and services[id].get_parent() == self:
+				continue
+			preparation_error = "Journey service %s lost its owner. Reload to recover." % id
+			push_error(preparation_error)
+			return services
 		var path := "res://scripts/%s.gd" % SERVICE_PATHS[id]
-		var script := load(path) as Script
-		assert(script != null and script.can_instantiate(), "Required service unavailable: %s (%s)" % [id, path])
+		# Retry only the failed script; preserve already-created services and saves.
+		var cache_mode := ResourceLoader.CACHE_MODE_REPLACE if _failed_scripts.has(id) else ResourceLoader.CACHE_MODE_REUSE
+		var script := ResourceLoader.load(path, "Script", cache_mode) as Script
 		if script == null or not script.can_instantiate():
-			push_error("Required service unavailable: %s (%s)" % [id, path])
+			_failed_scripts[id] = true
+			preparation_error = "Journey service %s (%s.gd) could not be loaded." % [id, SERVICE_PATHS[id]]
+			push_error(preparation_error + " Resource: " + path)
 			return services
 		var service: Node = script.new()
+		if service == null:
+			_failed_scripts[id] = true
+			preparation_error = "Journey service %s could not be created." % id
+			push_error(preparation_error)
+			return services
+		_failed_scripts.erase(id)
 		services[id] = service
 		service.name = _service_node_name(id)
 		if id == "hud":

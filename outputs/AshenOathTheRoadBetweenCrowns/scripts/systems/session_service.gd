@@ -39,7 +39,7 @@ func start_session() -> void:
 	production_observation_bridge.setup(_host)
 	var services_ms := Time.get_ticks_msec() - phase_started
 	_refresh_journey_models()
-	hud.show_main_menu()
+	hud.show_startup_loading("Loading Greyfen...")
 	audio.set_music_state("main_menu")
 	_host.get_tree().paused = true
 	_host.call_deferred("_prepare_opening_after_menu_render")
@@ -55,10 +55,7 @@ func _prepare_opening_after_menu_render() -> void:
 		return
 	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-ui-ready'));", false)
-	opening_startup_metrics["menu_ready_ms"] = Time.get_ticks_msec()
-	if OS.has_feature("web"):
-		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-menu-ready'));", false)
-	print("LOADING: usable_menu_ready ms=%d" % Time.get_ticks_msec())
+	opening_startup_metrics["loading_view_ready_ms"] = Time.get_ticks_msec()
 	await _host.get_tree().process_frame
 	if not game_started and not _journey_load_pending():
 		_on_launch_accepted()

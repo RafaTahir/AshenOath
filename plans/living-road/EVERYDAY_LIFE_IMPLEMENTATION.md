@@ -95,6 +95,52 @@ The entries below describe source implementation, not observed gameplay.
 - User observations: none for this candidate. No FINISH acceptance increment.
 - Historical runtime failures and strict reference-PC targets remain unchanged.
 
+## Startup Repair After Publication
+
+The user reported repeated "Journey services could not be prepared" failures
+after `cbef4e6` was pushed to development and main. A compiler-only invocation
+reproduced a parse error in `combat_manager.gd`: the type of `previous`, obtained
+through the dynamic zone-root property, could not be inferred. That prevented
+the required combat service from loading. Retry alone could not repair code.
+The earlier packaging pass did not explicitly compile every demand-loaded
+service; its successful export was not proof that those services could load.
+
+- Explicitly type the affected node. The compiler now accepts all 24 required
+  registry services, without instantiating them or starting a journey.
+- The existing release builder now runs registry-driven service compilation
+  before exporting. This is a compiler gate, not a new gameplay test framework.
+- Preserve valid services on Retry; replace only a failed script-cache entry.
+  Report the affected service/resource in diagnostics and the loading error.
+- Show the existing full-screen artwork/progress view during startup and quality
+  re-preparation. Main-menu controls are not created until Greyfen, its gameplay
+  camera render and the current save summaries are ready. Only explicit New Game
+  or Continue starts play; readiness itself never starts a journey.
+- Permit opening construction while this loading view owns the UI. Move the
+  usable-menu timing event to actual readiness, retaining a separate loading-view
+  timestamp. Percentages are phase-specific; unknown work is indeterminate.
+- Reuse the Greyfen image and four chapter illustrations, changing roughly every
+  eight seconds during resource/world preparation. Reduced motion removes fades.
+  Move the existing atlas from campaign to the root pack, with no duplicate pack
+  owner. Engine download still begins with the immediate Greyfen artwork.
+- Retry remains the only loading-failure action. Long errors scroll independently
+  so the Retry control stays reachable; repeated activation is guarded.
+
+Candidate identity: `startup-loading-repair-20261106`. Export and package integrity
+completed: **203,567,658 bytes total (194.14 MiB)**, no budget warnings. Root
+transport SHA-256: `c8cf2d06e39ac109ebdf240ec163666b67559608be235cbb34250d1caac0c7d4`.
+The Balanced initial dependency set is 122,117,577 bytes, +3,403 bytes versus the
+preceding candidate. Exact identities belong to `web/release_manifest.json`.
+Artwork is now explicitly available at boot; this repair makes no loading-speed
+or performance-improvement claim. Character,
+audio, material and leisure assets are unchanged. Saves and preferences are not
+reset or migrated. No game/browser execution, screenshots or benchmarks were run.
+
+User checks after Vercel receives the new push: reload; confirm artwork/progress
+without menu buttons; wait for the menu; start New Game and selected Continue;
+check quality re-preparation, short-screen Retry and reduced-motion behavior.
+Runtime acceptance remains pending. A successful Git push is not a live browser
+verification, and Vercel is not manually deployed or awaited.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

@@ -88,11 +88,13 @@ func request(game, prepared: Dictionary) -> void:
 	if not _is_current(game, generation):
 		return
 	if not services_ready:
-		cancel(game, "Journey services could not be prepared. Select the saved journey to retry.")
+		var detail: String = game.runtime_services.preparation_error
+		cancel(game, (detail if detail != "" else "Journey services could not be prepared.") + " Select the saved journey to retry.")
 		return
 	game._ensure_gameplay_runtime()
 	if not game.gameplay_runtime_ready:
-		cancel(game, "Journey services could not be prepared. Select the saved journey to retry.")
+		var detail: String = game.runtime_services.preparation_error
+		cancel(game, (detail if detail != "" else "Journey services could not be prepared.") + " Select the saved journey to retry.")
 		return
 	if game.runtime_packs == null:
 		cancel(game, "The destination's content is unavailable. Select the saved journey to retry.")

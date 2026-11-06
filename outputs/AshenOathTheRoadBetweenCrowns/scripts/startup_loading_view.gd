@@ -14,6 +14,7 @@ var _next_art: TextureRect
 var _content: VBoxContainer
 var _title: Label
 var _phase: Label
+var _phase_scroll: ScrollContainer
 var _bar: ProgressBar
 var _retry: Button
 var _atlas: Texture2D
@@ -21,6 +22,7 @@ var _atlas_requested := false
 var _slide := 0
 var _slide_elapsed := 0.0
 var _crossfade: Tween
+var _failed := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -48,8 +50,13 @@ func _ready() -> void:
 	_phase = Label.new()
 	_phase.text = "Preparing the road..."
 	_phase.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_phase.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_phase.add_theme_color_override("font_color", IVORY)
-	_content.add_child(_phase)
+	_phase_scroll = ScrollContainer.new()
+	_phase_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_phase_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_phase_scroll.add_child(_phase)
+	_content.add_child(_phase_scroll)
 	_bar = ProgressBar.new()
 	_bar.custom_minimum_size.y = 4.0
 	_bar.show_percentage = false
@@ -78,6 +85,9 @@ func _ready() -> void:
 	_retry.add_theme_color_override("font_focus_color", GOLD)
 	_retry.action_mode = BaseButton.ACTION_MODE_BUTTON_RELEASE
 	_retry.pressed.connect(func():
+		if _retry.disabled:
+			return
+		_retry.disabled = true
 		_retry.hide()
 		retry_requested.emit()
 	)
@@ -98,15 +108,17 @@ func _make_art() -> TextureRect:
 	return art
 
 func update_progress(message: String, fraction: float = -1.0, failed: bool = false) -> void:
+	_failed = failed
 	_phase.text = message
 	_bar.indeterminate = fraction < 0.0 and not failed and not reduced_motion
 	_bar.value = clampf(fraction * 100.0, 0.0, 99.0)
 	_bar.visible = not failed
 	var was_failed := _retry.visible
 	_retry.visible = failed
+	_retry.disabled = not failed
 	if failed and not was_failed:
 		_retry.grab_focus()
-	call_deferred("_place_content")
+	call_deferred("_layout")
 
 func apply_accessibility(motion: bool, contrast: bool) -> void:
 	reduced_motion = motion
@@ -141,6 +153,10 @@ func _layout() -> void:
 	_retry.add_theme_font_size_override("font_size", int(fonts.get("button", 22)))
 	_retry.custom_minimum_size.y = maxf(48.0 * unit, float(policy.get("button_min_height", 48.0)))
 	_bar.custom_minimum_size.y = 4.0 * unit
+	# Long resource errors scroll independently so Retry stays reachable.
+	var available := maxf(32.0 * unit, safe.size.y - padding * 2.0 - _title.get_minimum_size().y - _retry.custom_minimum_size.y - 60.0 * unit)
+	var text_height := float(maxi(1, _phase.get_line_count()) * _phase.get_line_height())
+	_phase_scroll.custom_minimum_size.y = minf(available, clampf(text_height, 32.0 * unit, 120.0 * unit))
 	call_deferred("_place_content")
 
 func _place_content() -> void:
@@ -158,15 +174,20 @@ func _process(delta: float) -> void:
 			_atlas = ResourceLoader.load_threaded_get(ATLAS_PATH) as Texture2D
 		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 			_atlas_requested = false
+	if _failed:
+		return
 	_slide_elapsed += delta
 	if _slide_elapsed < 8.0 or _atlas == null:
 		return
 	_slide_elapsed = 0.0
-	var image := AtlasTexture.new()
-	image.atlas = _atlas
-	var tile := _atlas.get_size() / 2.0
-	image.region = Rect2(Vector2(_slide % 2, _slide >> 1) * tile, tile)
-	_slide = (_slide + 1) % 4
+	var image: Texture2D = BACKDROP
+	if _slide < 4:
+		var chapter := AtlasTexture.new()
+		chapter.atlas = _atlas
+		var tile := _atlas.get_size() / 2.0
+		chapter.region = Rect2(Vector2(_slide % 2, _slide >> 1) * tile, tile)
+		image = chapter
+	_slide = (_slide + 1) % 5
 	if reduced_motion:
 		_art.texture = image
 		return

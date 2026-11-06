@@ -52,7 +52,7 @@ func load_devices(value: Dictionary) -> void:
 
 func activate_devices(host: Node) -> void:
 	_device_host = weakref(host)
-	var previous := host.zone_root.get_node_or_null("FieldDevices")
+	var previous: Node = host.zone_root.get_node_or_null("FieldDevices")
 	if previous != null:
 		host.zone_root.remove_child(previous)
 		previous.queue_free()
