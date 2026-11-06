@@ -5,9 +5,9 @@
       "saga_nessa": {
         "profile": "nessa",
         "work": [
-          -5,
+          -7,
           0,
-          0.5
+          0.4
         ],
         "errand": [
           -9.0,
@@ -27,23 +27,23 @@
         "activity": "bake",
         "line": "Count the portions, not the mouths into debts. A person can eat here and still disagree with us afterward.",
         "station": {
-          "node": "kitchen_trestle",
+          "node": "LifeWork_nessa_community",
           "markers": true,
           "activity": "bake",
           "activities": [
             "bake"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "nessa_work"
         }
       },
       "widow_elna": {
         "profile": "elna",
         "work": [
-          -8,
+          -9.5,
           0,
-          -2.5
+          -3.8
         ],
         "errand": [
           -6.6,
@@ -63,23 +63,23 @@
         "activity": "fold_cloth",
         "line": "People keep bringing me empty bowls as if I can fill them with a speech. Give me a table that stays upright. I can begin there.",
         "station": {
-          "node": "kitchen_screen",
+          "node": "LifeWork_elna_community",
           "markers": true,
           "activity": "fold_cloth",
           "activities": [
             "fold_cloth"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "elna_work"
         }
       },
       "farmer_toma": {
         "profile": "toma",
         "work": [
-          -4,
+          -3,
           0,
-          -4.5
+          0.6
         ],
         "errand": [
           -4.2,
@@ -99,23 +99,23 @@
         "activity": "sort_seeds",
         "line": "A common fire saves wood. Carrying shares home saves arguments. I can tell you what either costs; I cannot tell every household which cost to bear.",
         "station": {
-          "node": "kitchen_places",
+          "node": "LifeWork_toma_community",
           "markers": true,
           "activity": "sort_seeds",
           "activities": [
             "sort_seeds"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "toma_work"
         }
       },
       "blacksmith_tor": {
         "profile": "tor",
         "work": [
-          2,
+          1,
           0,
-          -5.5
+          -2.2
         ],
         "errand": [
           -1.8,
@@ -135,23 +135,26 @@
         "activity": "repair",
         "line": "A beam can look straight and still have a rotten seat. Hold it while I check the bearing. We are building for the cart after ours, too.",
         "station": {
-          "node": "crossing_beam",
+          "node": "LifeWork_tor_community",
           "markers": true,
           "activity": "repair",
           "activities": [
+            "forge",
             "repair"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "tor_work",
+          "held_tool": true,
+          "lift": 0.36
         }
       },
       "rook": {
         "profile": "rook",
         "work": [
-          5,
+          -12.5,
           0,
-          2.5
+          3.5
         ],
         "errand": [
           -9.0,
@@ -171,23 +174,23 @@
         "activity": "check_rope",
         "line": "The water is slow here until the mill lets a pulse through. Read the wet marks on both banks before you promise anyone a quick crossing.",
         "station": {
-          "node": "ferry_rope",
+          "node": "LifeWork_rook_community",
           "markers": true,
           "activity": "check_rope",
           "activities": [
             "check_rope"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "bag"
         }
       },
       "saga_nera": {
         "profile": "nera",
         "work": [
-          8,
+          11.5,
           0,
-          -5.5
+          -3.5
         ],
         "errand": [
           -6.6,
@@ -207,15 +210,15 @@
         "activity": "check_supplies",
         "line": "Mark where a load can wait safely. A route is not open just because someone brave enough can get through it.",
         "station": {
-          "node": "crossing_load",
+          "node": "LifeWork_nera_community",
           "markers": true,
           "activity": "check_supplies",
           "activities": [
             "check_supplies"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "nera_work"
         }
       }
     },
@@ -223,9 +226,9 @@
       "sister_anwen": {
         "profile": "anwen",
         "work": [
-          -6,
+          -8,
           0,
-          0.5
+          2.28
         ],
         "errand": [
           -9.0,
@@ -245,23 +248,22 @@
         "activity": "care",
         "line": "A bed should not become another confessional. Let the person sleep first. If they want to tell us anything tomorrow, tomorrow has room for it.",
         "station": {
-          "node": "refuge_bunks",
+          "node": "LifeWork_anwen_community",
           "markers": true,
           "activity": "care",
           "activities": [
             "care"
           ],
           "period": 4.0,
-          "surface_prop": true,
           "require_station": true
         }
       },
       "mira": {
         "profile": "mira",
         "work": [
-          -5,
+          -8.35,
           0,
-          -4.5
+          -3.32
         ],
         "errand": [
           -6.6,
@@ -278,26 +280,26 @@
           0,
           -3.0
         ],
-        "activity": "care",
+        "activity": "sort_herbs",
         "line": "Keep the dressings where a stranger can find them. If only I know where they are, we have built a room that stops working whenever I am tired.",
         "station": {
-          "node": "refuge_places",
+          "node": "LifeWork_mira_community",
           "markers": true,
-          "activity": "care",
+          "activity": "sort_herbs",
           "activities": [
-            "care"
+            "sort_herbs"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "herbs"
         }
       },
       "vargan_record_keeper": {
         "profile": "vale",
         "work": [
-          5,
+          7.5,
           0,
-          -5.5
+          -3.3
         ],
         "errand": [
           -4.2,
@@ -317,23 +319,23 @@
         "activity": "read",
         "line": "These are two different shelves. The public account belongs where anyone can compare it. A private statement stays sealed under its owner's terms. Do not let the shelves teach us to forget the difference.",
         "station": {
-          "node": "refuge_shelves",
+          "node": "LifeWork_vale_community",
           "markers": true,
           "activity": "read",
           "activities": [
             "read"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "vale_work"
         }
       },
       "vargan_steward": {
         "profile": "merrow",
         "work": [
-          -4,
+          -2.5,
           0,
-          4.5
+          4
         ],
         "errand": [
           -1.8,
@@ -353,23 +355,23 @@
         "activity": "administer",
         "line": "I used to call an empty column an administrative problem. Sometimes it means no one agreed to do the work. That is a fact the book must preserve.",
         "station": {
-          "node": "promise_meal",
+          "node": "LifeWork_merrow_community",
           "markers": true,
           "activity": "administer",
           "activities": [
             "administer"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "merrow_work"
         }
       },
       "saga_nessa": {
         "profile": "nessa",
         "work": [
-          -5.5,
+          -5.4,
           0,
-          6.0
+          4.2
         ],
         "errand": [
           -9.0,
@@ -389,21 +391,21 @@
         "activity": "bake",
         "line": "If the rota has a gap, put the gap on the board. Hiding it only means the same tired person fills it again.",
         "station": {
-          "node": "CommunityNessaTable",
+          "node": "LifeWork_nessa_community",
           "markers": true,
           "activity": "bake",
           "activities": [
             "bake"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "nessa_work"
         }
       },
       "saga_nera": {
         "profile": "nera",
         "work": [
-          9,
+          11,
           0,
           5.5
         ],
@@ -425,21 +427,21 @@
         "activity": "check_rope",
         "line": "A handover needs an answer from the next pair of hands. Leaving a bundle beside someone is not the same thing.",
         "station": {
-          "node": "CommunityNeraLine",
+          "node": "LifeWork_nera_community",
           "markers": true,
           "activity": "check_rope",
           "activities": [
             "check_rope"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "nera_work"
         }
       },
       "rook": {
         "profile": "rook",
         "work": [
-          4,
+          3.22,
           0,
           8.5
         ],
@@ -461,23 +463,23 @@
         "activity": "check_supplies",
         "line": "I have spent half my life learning which doors want payment before they open. Leave this one easy to find from the road.",
         "station": {
-          "node": "CommunityRookSupplies",
+          "node": "LifeWork_rook_community",
           "markers": true,
           "activity": "check_supplies",
           "activities": [
             "check_supplies"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "bag"
         }
       },
       "blacksmith_tor": {
         "profile": "tor",
         "work": [
-          -11,
+          -11.2,
           0,
-          -2.5
+          -0.5
         ],
         "errand": [
           -1.8,
@@ -497,23 +499,26 @@
         "activity": "repair",
         "line": "These bunks come apart with common pegs. A room that cannot be repaired by the people using it is only waiting to close.",
         "station": {
-          "node": "CommunityTorBench",
+          "node": "LifeWork_tor_community",
           "markers": true,
           "activity": "repair",
           "activities": [
+            "forge",
             "repair"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "tor_work",
+          "held_tool": true,
+          "lift": 0.36
         }
       },
       "widow_elna": {
         "profile": "elna",
         "work": [
-          -10,
+          -9.8,
           0,
-          3.5
+          2.1
         ],
         "errand": [
           -9.0,
@@ -533,15 +538,15 @@
         "activity": "fold_cloth",
         "line": "Leave a place by the door for anyone who cannot sleep among strangers yet. They are still staying with us.",
         "station": {
-          "node": "CommunityElnaCloth",
+          "node": "LifeWork_elna_community",
           "markers": true,
           "activity": "fold_cloth",
           "activities": [
             "fold_cloth"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "elna_work"
         }
       },
       "farmer_toma": {
@@ -549,7 +554,7 @@
         "work": [
           -2,
           0,
-          -9.5
+          -3.4
         ],
         "errand": [
           -6.6,
@@ -569,15 +574,15 @@
         "activity": "sort_seeds",
         "line": "The next meal will use what we kept dry today. That is a small promise, but it is one I can check with my own hands.",
         "station": {
-          "node": "CommunityTomaSeeds",
+          "node": "LifeWork_toma_community",
           "markers": true,
           "activity": "sort_seeds",
           "activities": [
             "sort_seeds"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "toma_work"
         }
       },
       "edric_campaign": {
@@ -585,7 +590,7 @@
         "work": [
           3,
           0,
-          -11.5
+          -3
         ],
         "errand": [
           -4.2,
@@ -605,15 +610,15 @@
         "activity": "review_dispatch",
         "line": "I can account for the authority I used. I cannot lend you the consent of anyone who once answered to it. Put my answer beside the others, not above them.",
         "station": {
-          "node": "CommunityEdricDispatch",
+          "node": "LifeWork_edric_community",
           "markers": true,
           "activity": "review_dispatch",
           "activities": [
             "review_dispatch"
           ],
           "period": 4.0,
-          "surface_prop": true,
-          "require_station": true
+          "require_station": true,
+          "surface_prop": "edric_work"
         }
       },
       "captain_senn": {

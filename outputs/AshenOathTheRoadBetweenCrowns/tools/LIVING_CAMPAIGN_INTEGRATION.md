@@ -126,6 +126,27 @@ Verification recorded before the latest source refinements:
 - `verify_community_aftermath.gd` covers full/partial/absent cast projection and
   immutable source data. It is explicitly unrun during the shared quiet window.
 
+### Measured regional work geometry (following `e7388e2`)
+
+The original guessed community palm targets are superseded. Regional native work
+now reuses `living_cast_stations.gd`'s measured props and furniture after region
+publication, before enrollment: seven `station_<identity>.scn` props with geometry
+GripLeft/Right markers, Anwen's care table/cloth/staff, Mira's actual retained
+apothecary/rack/leaves, Rook's supported .93 m table/satchel and Tor's supported
+.92 m repair beam plus held hammer. Native stand directions and relative contact
+distances are retained. The actual construction tasks remain separate player work
+assemblies; their generic unfinished parts no longer masquerade as native palm
+contacts. Data names the real `LifeWork_<identity>_community` nodes and actor feet.
+
+This requires the Stage2 shared helper's explicit-station duplicate guard,
+WorkStand-to-WorkContact facing, and `held_tool`/repair hammer-head support. The
+seven task prop scenes, `GreyfenSocial_mira_apothecary.res`,
+`GreyfenSocial_barrel_board.res`, `rook_station_satchel.scn`, and `Fern_1.obj` must
+be in the destination closure. Anwen keeps its cloth; surface-prop workers suppress
+duplicate held props; Tor explicitly retains his hammer. The synthetic activity
+fixture passes `build_stations=false` so pure tests never instantiate model assets.
+No native contact, floor-clearance or camera acceptance has run for this geometry.
+
 ## Journey identity and graph
 
 `story_state.flags.campaign_revision` is numeric `1` (original) or `2` (expanded).
