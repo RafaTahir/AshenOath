@@ -1,0 +1,42 @@
+{
+  "source": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Bag.obj",
+  "source_sha256": "6aa7124265768200c3b59742a8b866fdc0fcbab002cac712e5e4f241b4b4b375",
+  "blend": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\living_cast_20261107\\props\\rook_station_satchel.blend",
+  "blend_sha256": "e4d8f4c1549aab89a5b2f2d9a2db97e91ca5e63ff71733ab675532cbf3bc9273",
+  "carrier": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\living_cast_20261107\\props\\rook_station_satchel.glb",
+  "carrier_sha256": "eaa6b63303f2b60fa8f49b6d907f91f0dd9eddf7f1c9026e30ed2f9b82947913",
+  "blender_version": "5.2.3 LTS",
+  "triangles": 962,
+  "body_bounds_godot": {
+    "minimum": [
+      -0.09,
+      0,
+      -0.16
+    ],
+    "size": [
+      0.18,
+      0.16,
+      0.32
+    ]
+  },
+  "grips_godot": {
+    "GripLeft": [
+      -0.08,
+      0.18,
+      -0.1
+    ],
+    "GripRight": [
+      -0.08,
+      0.18,
+      0.1
+    ]
+  },
+  "knot_node": "SatchelKnot",
+  "authored": true,
+  "runtime_verified": false,
+  "user_accepted": false,
+  "notes": [
+    "Retained Bag.obj body silhouette normalized to the supported workstation footprint.",
+    "Attached leather strap and separate rigid knot are authored additions; no pickup or carried behavior is claimed."
+  ]
+}

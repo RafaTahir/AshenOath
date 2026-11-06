@@ -18,10 +18,35 @@ var emotion := "neutral"
 var enabled := true
 var blink_closure := 0.0
 var look_pitch := 0.0
+var attention_pitch := 0.0
 var facial_bones: Dictionary = {}
 var facial_rest: Dictionary = {}
 var expression_weights := Vector4.ZERO
 var wanted_expression := Vector4.ZERO
+
+const EXPRESSIONS := ["neutral", "warmth", "wry", "concerned", "suspicion", "guarded", "fear", "anger", "stern", "grieving", "relieved", "resolute"]
+const EXPRESSION_ALIASES := {"warm":"warmth", "concern":"concerned", "grief":"grieving", "relief":"relieved"}
+const GESTURE_SECONDS := {"acknowledge":0.70, "nod":0.70, "disagree":1.05, "remember":1.20, "recall":1.20, "reassure":1.10, "guarded_listening":0.95, "offer":0.90, "explain":1.05}
+
+static func normalize_expression(value: String) -> String:
+	var key := value.strip_edges().to_lower()
+	return str(EXPRESSION_ALIASES.get(key, key))
+
+static func supports_expression(value: String) -> bool:
+	return normalize_expression(value) in EXPRESSIONS
+
+static func gesture_offset(kind: String, progress: float) -> Vector3:
+	var t := clampf(progress, 0.0, 1.0)
+	var envelope := pow(sin(t * PI), 2.0)
+	match kind:
+		"acknowledge", "nod": return Vector3(0.07 * envelope, 0, 0)
+		"disagree": return Vector3(0, sin(t * TAU * 1.5) * 0.085 * envelope, 0)
+		"remember", "recall": return Vector3(0.09 * envelope, -0.035 * envelope, -0.025 * envelope)
+		"reassure": return Vector3(0.035 * envelope, 0, 0.04 * envelope)
+		"guarded_listening": return Vector3(-0.025 * envelope, 0.035 * envelope, -0.018 * envelope)
+		"offer": return Vector3(0.045 * envelope, 0, -0.018 * envelope)
+		"explain": return Vector3(sin(t * TAU) * 0.035 * envelope, 0.045 * envelope, 0.015 * envelope)
+	return Vector3.ZERO
 
 const FACE_CONTROLS := ["Eye_L", "Eye_R", "LidUpper_L", "LidUpper_R", "LidLower_L", "LidLower_R", "Brow_L", "Brow_R", "Mouth_L", "Mouth_R", "Jaw"]
 
@@ -41,7 +66,10 @@ func configure(skeleton: Skeleton3D) -> void:
 		if head_index >= 0:
 			break
 
-func set_expression(value: String) -> void:
+func set_expression(value: String) -> bool:
+	if not supports_expression(value):
+		return false
+	value = normalize_expression(value)
 	emotion = value
 	var angles: Vector2 = {
 		"neutral":Vector2.ZERO, "guarded":Vector2(-0.025, 0.01),
@@ -64,32 +92,36 @@ func set_expression(value: String) -> void:
 		"relief": Vector4(0.20, 0, 0.35, 0), "relieved": Vector4(0.20, 0, 0.35, 0),
 		"resolute": Vector4(0, 0.20, 0.10, 0.15),
 	}.get(value, Vector4.ZERO)
+	return true
 
 func has_living_face() -> bool:
 	return facial_bones.size() == FACE_CONTROLS.size()
 
-func gesture(kind: String) -> void:
+func gesture(kind: String) -> bool:
+	if not GESTURE_SECONDS.has(kind):
+		return false
 	gesture_kind = kind
 	gesture_time = 0.001
+	return true
 
 func _process_modification() -> void:
 	var skeleton := get_skeleton()
 	if not enabled or skeleton == null or head_index < 0:
 		return
 	var delta := minf(get_process_delta_time(), 0.10)
-	var nod := 0.0
+	var delivery := Vector3.ZERO
 	if gesture_time > 0.0:
 		gesture_time += delta
-		var length := 1.2 if gesture_kind == "remember" else 0.75
+		var length := float(GESTURE_SECONDS.get(gesture_kind, 0.75))
 		if gesture_time >= length:
 			gesture_time = 0.0
 		else:
-			nod = sin(gesture_time / length * PI) * (0.10 if gesture_kind == "remember" else 0.065)
+			delivery = gesture_offset(gesture_kind, gesture_time / length)
 	var weight := 1.0 - exp(-5.0 * delta)
-	current_yaw = lerpf(current_yaw, clampf(look_yaw, -0.30, 0.30), weight)
+	current_yaw = lerpf(current_yaw, clampf(look_yaw + delivery.y, -0.30, 0.30), weight)
 	current_speech = lerpf(current_speech, speech_amount, 1.0 - exp(-18.0 * delta))
-	current_pitch = lerpf(current_pitch, emotion_pitch + nod + current_speech * 0.012, weight)
-	current_roll = lerpf(current_roll, emotion_roll, weight)
+	current_pitch = lerpf(current_pitch, clampf(emotion_pitch + attention_pitch + delivery.x + current_speech * 0.012, -0.38, 0.38), weight)
+	current_roll = lerpf(current_roll, emotion_roll + delivery.z, weight)
 	var base := skeleton.get_bone_pose_rotation(head_index)
 	var target_rotation := base * Quaternion.from_euler(Vector3(current_pitch, current_yaw, current_roll))
 	if base != target_rotation:

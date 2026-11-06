@@ -30,6 +30,8 @@ var reaction_refresh := 0.0
 var reaction_until := 0.0
 var reaction := ""
 var reaction_cooldown := 0.0
+var acknowledgement_remaining := 0.0
+var acknowledged_approach := false
 
 const ATTENTION_ARC := 48.0
 const ATTENTION_TURN_RATE := 1.1
@@ -82,6 +84,8 @@ func _physics_process(delta: float) -> void:
 	delta = preload("res://scripts/systems/character_motion_step.gd").simulation_delta(delta)
 	var parent_3d: Node3D = get_parent() as Node3D
 	if parent_3d == null:
+		return
+	if is_instance_valid(animation_driver) and animation_driver.get("dead") == true:
 		return
 	var displacement: Vector3 = parent_3d.global_position - previous_position
 	previous_position = parent_3d.global_position
@@ -167,6 +171,9 @@ func _update_attention(parent_3d: Node3D, delta: float) -> void:
 
 func _update_presence(actor: Node3D, delta: float, distance: float) -> void:
 	reaction_until = maxf(reaction_until - delta, 0.0)
+	acknowledgement_remaining = maxf(acknowledgement_remaining - delta, 0.0)
+	if distance > focus_radius + 0.5:
+		acknowledged_approach = false
 	reaction_cooldown = maxf(reaction_cooldown - delta, 0.0)
 	reaction_refresh -= delta
 	if reaction_refresh <= 0.0:
@@ -179,13 +186,30 @@ func _update_presence(actor: Node3D, delta: float, distance: float) -> void:
 			reaction_cooldown = 8.0
 		elif seen and distance < 2.5 and reaction_until <= 0.0:
 			reaction = CastProfile.expression_for(cast_profile, context.get("story_state"))
+			if not acknowledged_approach:
+				acknowledged_approach = true
+				acknowledgement_remaining = 1.2
+	var activity := str(cast_profile.get("activity", "idle"))
+	if is_instance_valid(animation_driver) and animation_driver.character_root != null and animation_driver.character_root.has_meta("cast_activity_override"):
+		activity = str(animation_driver.character_root.get_meta("cast_activity_override"))
+	# An unowned stationary actor has no verified seat/bed. A sleep schedule
+	# must be resolved by the routine owner before requesting a sleeping pose.
+	if activity == "sleep":
+		activity = "rest"
 	if is_instance_valid(face_driver):
 		face_driver.set_expression(reaction if reaction_until > 0.0 else CastProfile.expression_for(cast_profile, context.get("story_state")))
-		face_driver.set_focus_target(focus_target if distance < focus_radius else null)
+		if (reaction_until > 0.0 or acknowledgement_remaining > 0.0) and is_instance_valid(focus_target):
+			face_driver.set_attention("actor", focus_target)
+		elif activity not in ["idle", "rest", "remember", "watch", "lookout"]:
+			var point := actor.global_position + Vector3.UP * 1.0
+			if is_instance_valid(animation_driver):
+				point += animation_driver.get_visible_forward() * 0.5
+				if is_instance_valid(animation_driver.life_modifier):
+					point = animation_driver.life_modifier.station.get("point", point)
+			face_driver.set_attention("point", null, point)
+		else:
+			face_driver.set_attention("neutral")
 	if is_instance_valid(animation_driver) and animation_driver.has_method("set_life_activity"):
-		var activity := str(cast_profile.get("activity", "idle"))
-		if animation_driver.character_root != null and animation_driver.character_root.has_meta("cast_activity_override"):
-			activity = str(animation_driver.character_root.get_meta("cast_activity_override"))
 		if reaction_until > 0.0:
 			activity = "fear" if reaction == "fear" else "watch"
 		animation_driver.set_life_activity(activity if distance <= 7.0 else "")

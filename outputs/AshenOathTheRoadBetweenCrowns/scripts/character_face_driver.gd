@@ -16,6 +16,9 @@ var update_accumulator := 0.0
 var blink_remaining := 0.0
 var next_blink := 2.4
 var focus_target: Node3D
+var attention_mode := "auto"
+var focus_point := Vector3.ZERO
+var attention_generation := 0
 var look_offset := 0.0
 var valid := false
 var update_timer: Timer
@@ -61,6 +64,7 @@ func _bind_skeleton_motion() -> void:
 		bind_motion(reference.get_ref())
 
 func _on_terminal_state_changed(dead: bool) -> void:
+	attention_generation += 1
 	terminal_dead = dead
 	if dead and is_instance_valid(head_modifier):
 		# Disable additive ownership without touching the sampled death pose.
@@ -77,6 +81,8 @@ func _reset_transient_face_state() -> void:
 	# session without writing bones or replacing the authored expression recipe.
 	conversation_active = false
 	focus_target = null
+	attention_mode = "auto"
+	focus_point = Vector3.ZERO
 	focus_refresh_remaining = 0.0
 	screen_refresh_remaining = 0.0
 	update_accumulator = 0.0
@@ -88,6 +94,7 @@ func _reset_transient_face_state() -> void:
 		head_modifier.set_expression(expression)
 		head_modifier.look_yaw = 0.0
 		head_modifier.look_pitch = 0.0
+		head_modifier.attention_pitch = 0.0
 		head_modifier.current_yaw = 0.0
 		head_modifier.current_pitch = head_modifier.emotion_pitch
 		head_modifier.current_roll = head_modifier.emotion_roll
@@ -100,7 +107,7 @@ func _reset_transient_face_state() -> void:
 func _reconcile_face_eligibility() -> void:
 	face_tick_eligible = valid and is_inside_tree() and is_instance_valid(character_root) and character_root.is_visible_in_tree() \
 		and not terminal_dead and not distance_suspended
-	face_pose_eligible = face_tick_eligible and (face_on_screen or conversation_active)
+	face_pose_eligible = face_tick_eligible and (face_on_screen or conversation_active) and not _combat_owns_pose()
 	if is_instance_valid(head_modifier):
 		head_modifier.active = face_pose_eligible
 		if face_pose_eligible and expression_dirty:
@@ -146,7 +153,10 @@ func _refresh_screen_budget(step: float) -> void:
 func set_speech_amount(value: float) -> void:
 	_reconcile_face_eligibility()
 	if head_modifier != null:
-		head_modifier.speech_amount = clampf(value, 0.0, 1.0) if face_pose_eligible else 0.0
+		head_modifier.speech_amount = clampf(value, 0.0, 1.0) if face_pose_eligible and attention_mode != "sleep" and is_finite(value) else 0.0
+
+func _combat_owns_pose() -> bool:
+	return is_instance_valid(motion_driver) and motion_driver.has_active_action() and not bool(motion_driver.story_dialogue_active)
 
 const NATIVE_MONSTER_ROLES := [
 	"ghoulkin",
@@ -181,6 +191,8 @@ func configure(root: Node3D, role: String) -> bool:
 	if is_instance_valid(character_root) and character_root.visibility_changed.is_connected(_on_root_visibility_changed):
 		character_root.visibility_changed.disconnect(_on_root_visibility_changed)
 	terminal_dead = false
+	attention_generation += 1
+	_reset_transient_face_state()
 	head_modifier = null
 	character_root = root
 	if not root.visibility_changed.is_connected(_on_root_visibility_changed):
@@ -271,7 +283,18 @@ func _on_update_timer_timeout() -> void:
 	attention_elapsed += step
 	if not face_pose_eligible:
 		return
-	if (focus_target == null or not is_instance_valid(focus_target)) and role_id not in NATIVE_MONSTER_ROLES:
+	if attention_mode == "sleep":
+		look_offset = lerpf(look_offset, 0.0, 1.0 - exp(-5.0 * step))
+		_apply_eye_look()
+		if head_modifier != null:
+			head_modifier.look_pitch = 0.0
+			head_modifier.attention_pitch = 0.0
+			head_modifier.speech_amount = 0.0
+			head_modifier.current_speech = 0.0
+			head_modifier.gesture_time = 0.0
+			_apply_blink(move_toward(head_modifier.blink_closure, 1.0, step * 5.0))
+		return
+	if attention_mode == "auto" and not is_instance_valid(focus_target) and role_id not in NATIVE_MONSTER_ROLES:
 		focus_refresh_remaining -= step
 		if focus_refresh_remaining <= 0.0:
 			focus_refresh_remaining = 0.75
@@ -280,24 +303,32 @@ func _on_update_timer_timeout() -> void:
 	var wanted_look := 0.0
 	if head_modifier != null:
 		head_modifier.look_pitch = 0.0
-	if is_instance_valid(focus_target):
-		var target_height := float(focus_target.get_meta("cast_eye_height", 1.55))
+		head_modifier.attention_pitch = 0.0
+	if attention_mode == "point" or attention_mode in ["auto", "actor"] and is_instance_valid(focus_target):
+		var target_point := focus_point
+		if attention_mode != "point":
+			target_point = focus_target.global_position + Vector3.UP * float(focus_target.get_meta("cast_eye_height", 1.55))
 		var own_height := float(character_root.get_meta("cast_eye_height", 1.55))
-		var to_target := focus_target.global_position + Vector3.UP * target_height - character_root.global_position - Vector3.UP * own_height
+		var to_target := target_point - character_root.global_position - Vector3.UP * own_height
 		if to_target.length_squared() > 0.04 and to_target.length() < 10.0:
 			var local_target := character_root.global_transform.basis.inverse() * to_target.normalized()
 			var front := local_target.z if bool(character_root.get_meta("source_forward_positive_z", false)) else -local_target.z
 			if front > -0.15:
 				wanted_look = clampf(local_target.x, -0.85, 0.85)
 				if head_modifier != null:
-					head_modifier.look_pitch = -clampf(atan2(to_target.y, maxf(Vector2(to_target.x, to_target.z).length(), 0.1)), -0.15, 0.15)
+					var pitch := -atan2(to_target.y, maxf(Vector2(to_target.x, to_target.z).length(), 0.1))
+					# Explicit work/listener focus shares the angle between neck and
+					# eyes. Auto attention preserves its existing eye-only pitch.
+					var head_pitch := clampf(pitch * 0.65, -0.20, 0.28) if attention_mode in ["point", "actor"] else 0.0
+					head_modifier.attention_pitch = head_pitch
+					head_modifier.look_pitch = clampf(pitch - head_pitch, -0.15, 0.15)
 	# Brief, staggered breaks in eye contact rather than a permanent player stare.
 	var attention_phase := fmod(attention_elapsed + float(absi(role_id.hash()) % 37) * 0.1, 6.8)
-	if not conversation_active and role_id not in NATIVE_MONSTER_ROLES and attention_phase > 5.6:
+	if attention_mode == "auto" and not conversation_active and role_id not in NATIVE_MONSTER_ROLES and attention_phase > 5.6:
 		wanted_look = 0.16 * sin((attention_phase - 5.6) / 1.2 * PI)
 	# One head owner supplies gentle idle scanning as well as directed gaze.
 	# Conversation, greeting nods and explicit focus retain their authored view.
-	if not conversation_active and role_id not in NATIVE_MONSTER_ROLES and (head_modifier == null or head_modifier.gesture_time <= 0.0):
+	if attention_mode == "auto" and not conversation_active and role_id not in NATIVE_MONSTER_ROLES and (head_modifier == null or head_modifier.gesture_time <= 0.0):
 		var motion_ref: WeakRef = head_modifier.get_parent().get_meta("character_motion_owner") if head_modifier != null and head_modifier.get_parent().has_meta("character_motion_owner") else null
 		var motion: Node = motion_ref.get_ref() if motion_ref != null else null
 		if is_instance_valid(motion) and not motion.has_active_action() and not motion.story_dialogue_active and motion.presentation_state in ["", "life:idle", "life:rest", "life:watch", "life:lookout"] and float(motion.current_speed_mps) < 0.08:
@@ -342,17 +373,93 @@ func get_contract_report() -> Dictionary:
 		"blink_enabled": head_modifier != null and head_modifier.has_living_face(),
 		"eye_focus_enabled": head_modifier != null and head_modifier.has_living_face(),
 		"expression_controls": head_modifier.facial_bones.keys() if head_modifier != null else [],
+		"attention_mode": attention_mode,
 	}
 
 func set_focus_target(target: Node3D) -> void:
-	focus_target = target
-	focus_refresh_remaining = 0.75
+	set_attention("actor" if is_instance_valid(target) else "auto", target)
 
-func set_expression(value: String) -> void:
+func set_focus_point(point: Vector3) -> bool:
+	return set_attention("point", null, point)
+
+func set_sleeping(value: bool) -> void:
+	set_attention("sleep" if value else "auto")
+
+func set_attention(mode: String, target: Node3D = null, point: Vector3 = Vector3.ZERO) -> bool:
+	if mode not in ["auto", "actor", "point", "neutral", "sleep"] or not point.is_finite():
+		return false
+	if mode == "actor" and not is_instance_valid(target):
+		return false
+	if attention_mode == mode and (mode != "actor" or focus_target == target) and (mode != "point" or focus_point == point):
+		return true
+	var waking := attention_mode == "sleep" and mode != "sleep"
+	attention_mode = mode
+	focus_target = target if mode == "actor" else null
+	focus_point = point if mode == "point" else Vector3.ZERO
+	focus_refresh_remaining = 0.0 if mode == "auto" else 0.75
+	if mode == "sleep" or waking:
+		blink_remaining = 0.0
+		next_blink = 1.8 + float(absi(role_id.hash()) % 180) / 100.0
+		if is_instance_valid(head_modifier) and not terminal_dead:
+			head_modifier.speech_amount = 0.0
+			head_modifier.current_speech = 0.0
+			head_modifier.gesture_time = 0.0
+			head_modifier.gesture_kind = ""
+			if waking:
+				head_modifier.blink_closure = 0.0
+	return true
+
+func capture_attention() -> Dictionary:
+	var state := {"generation":attention_generation, "mode":attention_mode,
+		"target":weakref(focus_target) if is_instance_valid(focus_target) else null, "point":focus_point,
+		"expression":expression, "distance_suspended":distance_suspended, "conversation_active":conversation_active,
+		"focus_refresh_remaining":focus_refresh_remaining, "attention_elapsed":attention_elapsed,
+		"look_offset":look_offset, "update_accumulator":update_accumulator,
+		"blink_remaining":blink_remaining, "next_blink":next_blink, "head":{}}
+	if is_instance_valid(head_modifier):
+		for key: String in ["look_yaw", "look_pitch", "attention_pitch", "current_yaw", "current_pitch", "current_roll", "blink_closure", "speech_amount", "current_speech", "gesture_time", "gesture_kind", "expression_weights"]:
+			state.head[key] = head_modifier.get(key)
+	return state
+
+func restore_attention(state: Dictionary) -> bool:
+	# A dialogue begun before death or journey restoration cannot revive its
+	# old facial delivery. Snapshots are local presentation, never save data.
+	if terminal_dead or int(state.get("generation", -1)) != attention_generation:
+		return false
+	var reference: Variant = state.get("target")
+	var target := reference.get_ref() as Node3D if reference is WeakRef else null
+	var mode := str(state.get("mode", "neutral"))
+	if mode == "actor" and not is_instance_valid(target):
+		mode = "neutral"
+	if not set_attention(mode, target, state.get("point", Vector3.ZERO)):
+		return false
+	if mode == "auto":
+		focus_target = target
+	set_expression(str(state.get("expression", "neutral")))
+	conversation_active = bool(state.get("conversation_active", false))
+	distance_suspended = bool(state.get("distance_suspended", false))
+	focus_refresh_remaining = float(state.get("focus_refresh_remaining", 0.0))
+	attention_elapsed = float(state.get("attention_elapsed", 0.0))
+	look_offset = float(state.get("look_offset", 0.0))
+	update_accumulator = float(state.get("update_accumulator", 0.0))
+	blink_remaining = float(state.get("blink_remaining", 0.0))
+	next_blink = float(state.get("next_blink", 2.4))
+	if is_instance_valid(head_modifier):
+		for key: String in state.get("head", {}):
+			head_modifier.set(key, state.head[key])
+	screen_refresh_remaining = 0.0
+	_refresh_screen_budget(0.0)
+	return true
+
+func set_expression(value: String) -> bool:
+	if not StoryHeadModifier.supports_expression(value):
+		return false
+	value = StoryHeadModifier.normalize_expression(value)
 	if expression != value or (head_modifier != null and head_modifier.emotion != value):
 		expression_dirty = true
 	expression = value
 	_reconcile_face_eligibility()
+	return true
 
 func _apply_expression() -> void:
 	expression_dirty = false
@@ -371,5 +478,5 @@ func _apply_expression() -> void:
 
 func play_story_gesture(kind: String) -> void:
 	_reconcile_face_eligibility()
-	if head_modifier != null and face_pose_eligible:
+	if head_modifier != null and face_pose_eligible and attention_mode != "sleep":
 		head_modifier.gesture(kind)

@@ -154,6 +154,17 @@ def compile_layout(defer_environment=False):
         if name in {"Web Browser", "Web QA Browser"}:
             files[name].add("res://" + CHAPTER_ART)
     includes["Runtime Pack Opening"].add("assets_external/environment/prepared/greyfen_*.res")
+    living_station_directory = "assets_external/environment_prepared/living_cast/"
+    drying_leaves = "assets_external/environment/forest/Fern_1.obj"
+    # Greyfen owns the authored work props and their retained leaf detail.
+    # Select the scene so Godot includes its three mesh dependencies as well.
+    includes["Runtime Pack Opening"].update({living_station_directory + "*.res", living_station_directory + "*.scn", drying_leaves})
+    files["Runtime Pack Opening"].add("res://" + living_station_directory + "rook_station_satchel.scn")
+    for name in sections:
+        if name != "Runtime Pack Opening":
+            includes[name].discard(drying_leaves)
+            files[name].discard("res://" + drying_leaves)
+            files[name] = {path for path in files[name] if not path.startswith("res://" + living_station_directory)}
     # Touchable village details share retained source meshes, owned by opening.
     for prop in ("Dummy.obj", "Pot_1.obj", "Pot_1_Lid.obj"):
         relative = "assets_external/environment/props/" + prop
@@ -393,10 +404,14 @@ def compile_layout(defer_environment=False):
             exclusions.discard(SAGA_OPENING_RECORD)
             exclusions.discard(FORGE_HAMMER)
             exclusions.discard(HUNTING_ARROW)
+            exclusions.discard(living_station_directory + "*")
+            exclusions.discard(drying_leaves)
         else:
             exclusions.add(SAGA_OPENING_RECORD)
             exclusions.add(FORGE_HAMMER)
             exclusions.add(HUNTING_ARROW)
+            exclusions.add(living_station_directory + "*")
+            exclusions.add(drying_leaves)
         # Imported GLTF scenes already contain these vertex/skin buffers. Godot
         # loads the imported scene at runtime, never the source GLTF .bin files.
         # Keep originals in the repository, not duplicated in delivery packs.

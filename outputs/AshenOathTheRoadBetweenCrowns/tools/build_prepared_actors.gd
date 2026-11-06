@@ -28,6 +28,17 @@ func _refresh_library_ownership() -> void:
 		for binding: Dictionary in entry.get("material_bindings", []):
 			binding.surface = int(binding.surface)
 		var pending: Array[String] = [str(entry.path)]
+		# Living-cast libraries are selected by identity at runtime, so scene
+		# dependency walking alone cannot discover them. Keep each beside its
+		# owning actor instead of pulling every performance into the base pack.
+		var life_profile: Dictionary = preload("res://scripts/story_cast_profile.gd").life_motion_profile(str(entry.get("role", "")))
+		var life_library := str(life_profile.get("library", ""))
+		if life_library != "":
+			if not ResourceLoader.exists(life_library):
+				push_error("Missing authored life library for %s: %s" % [entry.get("role", ""), life_library])
+				quit(1)
+				return
+			pending.append(life_library)
 		var visited: Dictionary = {}
 		var libraries: Array[String] = []
 		var source_scenes: Array[String] = []

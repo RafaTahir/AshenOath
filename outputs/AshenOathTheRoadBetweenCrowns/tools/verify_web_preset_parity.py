@@ -47,9 +47,17 @@ def validate(path):
               for pack_id in runtime["packs"]}
     actors = json.loads((project / "data/prepared_actors.json").read_text(encoding="utf-8-sig"))
     check(bool(actors), "Current prepared actor catalog is empty")
+    declared_owners = runtime.get("actor_resource_owners")
+    check(declared_owners is None or isinstance(declared_owners, dict), "Prepared actor ownership registry must be an object")
     for actor in actors.values():
-        owner, resource = actor["owner"], actor["path"]
-        check(owner in owners and selected(owners[owner], resource), f"{owner}: missing current prepared actor {resource}")
+        resource = actor["path"]
+        # The catalog retains its compilation batch; partitioning declares the
+        # current delivery owner. An explicit registry must cover every scene.
+        owner = (declared_owners.get(resource) if isinstance(declared_owners, dict)
+                 else actor["owner"] if declared_owners is None else None)
+        if declared_owners is not None:
+            check(owner is not None, f"Missing explicit prepared actor ownership: {resource}")
+        check(isinstance(owner, str) and owner in owners and selected(owners[owner], resource), f"{owner}: missing current prepared actor {resource}")
         check(not selected(production, resource) and not selected(qa, resource), f"Root PCK duplicates deferred prepared actor {resource}")
         for other, section in owners.items():
             if other != owner and other != "base":

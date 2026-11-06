@@ -1,0 +1,101 @@
+{
+  "asset": "C03",
+  "phase": 0.5,
+  "method": "nearest evaluated retained palm surface vertex to curled-palm reference, hand weight>=.90 in distal palm region",
+  "measurements": {
+    "l": {
+      "local_grip_anchor": [
+        0.0,
+        0.04500000178813934,
+        -0.012000000104308128
+      ],
+      "world_grip_anchor": [
+        -0.12755578756332397,
+        0.44480711221694946,
+        0.9583655595779419
+      ],
+      "world_wrist": [
+        -0.14007937908172607,
+        0.40342238545417786,
+        0.9622084498405457
+      ],
+      "nearest_retained_hand_surface_local": [
+        0.011202037334442139,
+        0.0423615463078022,
+        -0.01419040560722351
+      ],
+      "world_surface_probe": [
+        -0.1200001910328865,
+        0.43999993801116943,
+        0.9521178007125854
+      ],
+      "source_mesh": "C03_MotionFittedAssembly",
+      "source_vertex_index": 9076,
+      "hand_bone_weight": 0.9047517776489258,
+      "nearest_surface_distance": 0.011715159861226902,
+      "sampled_hand_vertices": 11,
+      "palm_region_bounds": {
+        "min": [
+          -0.022285640239715576,
+          0.032727863639593124,
+          -0.01419040560722351
+        ],
+        "max": [
+          0.016152575612068176,
+          0.05127152428030968,
+          0.007497265934944153
+        ]
+      },
+      "actual_surface_to_recorded_probe_distance": 1.838648718484203e-07,
+      "actual_surface_to_authored_contact_distance": 6.51744834441812e-07
+    },
+    "r": {
+      "local_grip_anchor": [
+        0.0,
+        0.04500000178813934,
+        -0.012000000104308128
+      ],
+      "world_grip_anchor": [
+        0.12940531969070435,
+        0.445317804813385,
+        0.9536968469619751
+      ],
+      "world_wrist": [
+        0.14065790176391602,
+        0.4059968590736389,
+        0.9682415127754211
+      ],
+      "nearest_retained_hand_surface_local": [
+        -0.011202039197087288,
+        0.04236140102148056,
+        -0.014190617948770523
+      ],
+      "world_surface_probe": [
+        0.12000017613172531,
+        0.43999969959259033,
+        0.9521178603172302
+      ],
+      "source_mesh": "C03_MotionFittedAssembly",
+      "source_vertex_index": 5181,
+      "hand_bone_weight": 0.9047517776489258,
+      "nearest_surface_distance": 0.011715233535659708,
+      "sampled_hand_vertices": 11,
+      "palm_region_bounds": {
+        "min": [
+          -0.016152650117874146,
+          0.03272772952914238,
+          -0.014190617948770523
+        ],
+        "max": [
+          0.022379251196980476,
+          0.0512712337076664,
+          0.007497092708945274
+        ]
+      },
+      "actual_surface_to_recorded_probe_distance": 3.171532847552413e-07,
+      "actual_surface_to_authored_contact_distance": 6.58354819845394e-07
+    }
+  },
+  "runtime_verified": false,
+  "user_accepted": false
+}

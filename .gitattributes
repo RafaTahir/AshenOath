@@ -5,3 +5,11 @@ outputs/AshenOathTheRoadBetweenCrowns/release_reports/hardening_stage2_20261101/
 outputs/AshenOathTheRoadBetweenCrowns/release_reports/hardening_stage3_20261101/** -text whitespace=cr-at-eol
 # Engine log evidence retains its original bytes, including diagnostic spaces.
 outputs/AshenOathTheRoadBetweenCrowns/release_reports/**/*.txt -text whitespace=cr-at-eol,-blank-at-eol
+# Living-cast source manifests certify exact authoring and compiler bytes.
+art_source/art_recovery_v2/models/living_cast_20261107/** -text whitespace=cr-at-eol
+art_source/art_recovery_v2/evidence/living_cast_20261107/** -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/*living_cast* -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/author_rook_station_satchel.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_libraries.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_station_props.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/release_reports/living_cast_20261107/** -text whitespace=cr-at-eol

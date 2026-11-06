@@ -1,0 +1,369 @@
+{
+  "scope": "asset-authoring agent Stage1 owned files only",
+  "files": [
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_20261107/C01_baseline.glb",
+      "bytes": 7757824,
+      "sha256": "b908b23645a8136b853a118345fa7e32e8ad166c558f6175fb84ba9b87b344b9"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_20261107/C02_baseline.glb",
+      "bytes": 6785016,
+      "sha256": "775dbd8c051ce466e81d8b0d8222b0df55dd2711eb37f352fa276cb7d26105d5"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_20261107/C03_baseline.glb",
+      "bytes": 5799176,
+      "sha256": "99e2246cc7a8e19c42707488f07493ff0d2d1cf4e6be0acc0ccd24775efab915"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_20261107/C04_baseline.glb",
+      "bytes": 6659944,
+      "sha256": "adbe4a44b95222c4f886159d6336b29eb8b7da1508baddfb14d8babd923daea6"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_20261107/rig_inspection.json",
+      "bytes": 73332,
+      "sha256": "3be262303624028be7690a6cf32f08e50ef524f210b74dd57685d5f612eec91d"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/authoring.json",
+      "bytes": 46509,
+      "sha256": "6751bf6b7e460fdd987e96516af4981b01dd649f12f126f05009c7a3b5d3fc67"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/C01_life_review.glb",
+      "bytes": 7089884,
+      "sha256": "6048b7b8ceb634d2a05d921593476acca605ddc6eaaec653c4235c952a06d567"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/C01_living_cast_v001.blend",
+      "bytes": 8261885,
+      "sha256": "ce9bc5219d803054d2e25005142ff78dfdd5202c3f2e7d7062084838a019fed6"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/Life_Idle_A_25.png",
+      "bytes": 336763,
+      "sha256": "6424ec6965ebcf83b64d681b79d171a29067d87e26f435712820bb4c87e9005e"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/Life_Idle_B_50.png",
+      "bytes": 337347,
+      "sha256": "3ca208b57fdcd2ce4a084710216752e95ea830d71baed98a4729d479fc17901f"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/Life_Speak_44.png",
+      "bytes": 336202,
+      "sha256": "e75f7b1e15bc15babddcb1889e08ae9e3ebacdbb8e467b57138a8da73e5094cf"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/Life_Work_25.png",
+      "bytes": 337714,
+      "sha256": "e01bfd9653821087a271a0ee969ef254fb4b1e115ccdeeca2ef7f2ebf2277b35"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/Life_Work_50.png",
+      "bytes": 339025,
+      "sha256": "e577cb7f29f0cba78d9e5c318cfbd8419015127c5dba69feda09e5d11e996845"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C01/source_verification.json",
+      "bytes": 1147,
+      "sha256": "8e9f2a064a53b983402ca70a73635216f2539091f11b3a1c3c04b16bc5401628"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/authoring.json",
+      "bytes": 49680,
+      "sha256": "b01a8c3198d30e6d332d30f4cd9e9b737302d9984c6f343ac35aa67f01037c50"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/C02_life_review.glb",
+      "bytes": 6472056,
+      "sha256": "a9ef10665a13385ec91c439c82e6eff5ba926961258d231978aaded44fcf96ae"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/C02_living_cast_v001.blend",
+      "bytes": 6508089,
+      "sha256": "18f897a7b3dd5ae25c7215e1e60420345a76bcae48b5c2d1eb1c0fd72f95a3e6"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/Life_Idle_A_25.png",
+      "bytes": 340273,
+      "sha256": "8641c2b609f843b2a75510c8566d04fbdebf3e41d0e86ea611db76102e0a8207"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/Life_Idle_B_50.png",
+      "bytes": 339002,
+      "sha256": "141e2aeb03e292924324abfc1ec93538f8e8e2329800313bc83ccc6c3c21ddcf"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/Life_Speak_44.png",
+      "bytes": 338667,
+      "sha256": "3edd3c7de1a799e0e983da253e09517b4c328e283c6997610828e4aac7db0041"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/Life_Work_25.png",
+      "bytes": 345065,
+      "sha256": "0ef156bb66474d87807fa05815ad4bd0114f0d008692b70167bad65483d0a24a"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/Life_Work_50.png",
+      "bytes": 337319,
+      "sha256": "b799bb194fecd55b0d7edaea0092bbfcb55f98e1a9c9903b24dbf6a8b64e0118"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/palm_surface_inspection.json",
+      "bytes": 2894,
+      "sha256": "a9f6c3941034850bf66e0335a32359afbd32eaea434ddab9f4f0b37055150690"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/source_verification.json",
+      "bytes": 1145,
+      "sha256": "a6a15ce2241547df286600531fb07f209bc4bff765a52a5b74048bd082de3c52"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/authoring.json",
+      "bytes": 49648,
+      "sha256": "3e6ac0a8fec15ab0e4e57568ad9f72f8ab881f268d7cb022c373361b7f66c993"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/C03_life_review.glb",
+      "bytes": 5493740,
+      "sha256": "652a6bba9772b7fe8477a7f2c0afad30d665c86bebe0facef053b2b074a7f1aa"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/C03_living_cast_v001.blend",
+      "bytes": 5167114,
+      "sha256": "2d024aca1ca07637a2f8aba9529d8f254f9954ce3e5343b2059c597e4e380b3a"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/Life_Idle_A_25.png",
+      "bytes": 341537,
+      "sha256": "bc3cdcd3247bd3629d138f701f64a2a166baed6cadda1fee475e094989af762f"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/Life_Idle_B_50.png",
+      "bytes": 342889,
+      "sha256": "1e02be061cb3d95386d882280d522ae4373c463a62e5adabdb406209d43eb018"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/Life_Speak_44.png",
+      "bytes": 340498,
+      "sha256": "5c8dce31500f6a539821677ad607ab44860f40c351eec2358746ba79d8fd09b1"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/Life_Work_25.png",
+      "bytes": 339658,
+      "sha256": "f6965980513fa763c81d05fd971d699d205692d92774328b7044cc06cd683fa2"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/Life_Work_50.png",
+      "bytes": 336204,
+      "sha256": "31138192746880d68b21e48e4d8fb3c1ccae5aa0f86d5c5860afa3ce2b042300"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/palm_surface_inspection.json",
+      "bytes": 2923,
+      "sha256": "3a185686049404bd2ad294454248c854f7131cc7703c95a9095c8501934d0809"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C03/source_verification.json",
+      "bytes": 1147,
+      "sha256": "4f3896380ed0e993792d42abec3e76f5fee597210cd12a0f134d25d66903f185"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/authoring.json",
+      "bytes": 47537,
+      "sha256": "29643e7b545ac29c39bcbb2ef2946dd160c3db78ec13fb4d719cb0e3c0abb030"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/C04_life_review.glb",
+      "bytes": 6370408,
+      "sha256": "1b5132ffa7460a23b2d193e7b1162bcedb83e16f2d0304ddda23efcfbf9b849d"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/C04_living_cast_v001.blend",
+      "bytes": 6386040,
+      "sha256": "2356dc29305b164d86a51276f84daa21e386a33a27ddd834333102b82d12f465"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/Life_Idle_A_25.png",
+      "bytes": 343590,
+      "sha256": "db06b485589d3b9a0b7eb676b03e1bbbda0284d01132db797a3e419347f5e855"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/Life_Idle_B_50.png",
+      "bytes": 341793,
+      "sha256": "b0e4e71d7180a48a6d1ce8edb8d6001eb0d28465864ed7a8da9246069f595a79"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/Life_Speak_44.png",
+      "bytes": 342766,
+      "sha256": "4e1f31c3839c43668a1e0e69efc92281b2330ca81152342ed98d97f3fab3c161"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/Life_Work_25.png",
+      "bytes": 345568,
+      "sha256": "8ba71f34b5d3242eb24476a85a6c4eea8eed22fee1c4e737630c5f5cda8cc08c"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/Life_Work_50.png",
+      "bytes": 346013,
+      "sha256": "d1c9c47dc54f15bc519ff0e62e9dd8a8a5d00574edec1224a0f71d97727d77fd"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/C04/source_verification.json",
+      "bytes": 1147,
+      "sha256": "93da87a36dc17f63584501a9af67f6a5f1b60230ed60292f8c5191d3550c79cf"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/library_compile_C01_C04_C03_C02.json",
+      "bytes": 6127,
+      "sha256": "97247ce1fb9451489fe19e78f171ebbc9b930da67129f45713c5fadb0b9a53a9"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/props/rook_station_satchel.blend",
+      "bytes": 11690457,
+      "sha256": "e4d8f4c1549aab89a5b2f2d9a2db97e91ca5e63ff71733ab675532cbf3bc9273"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/props/rook_station_satchel.glb",
+      "bytes": 31328,
+      "sha256": "eaa6b63303f2b60fa8f49b6d907f91f0dd9eddf7f1c9026e30ed2f9b82947913"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/props/rook_station_satchel_review.png",
+      "bytes": 318043,
+      "sha256": "2620de40d0c4b35d77a2755bf9dd4db24dc1cd026a97b2cf6edf85ca37936732"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/props/satchel_authoring.json",
+      "bytes": 1370,
+      "sha256": "299a117da24a85899c9892e5b9ddb5373d8f9d9c7bcc4ff63df0ac24dd8c0c81"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/props/satchel_compile.json",
+      "bytes": 985,
+      "sha256": "30b6858e6df4d47081294c797c5d8ce78fddf95a80280e4bcb0691261f92ce21"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/README.md",
+      "bytes": 3311,
+      "sha256": "45721651d882bf731c14107fa842d2f93a092a0a19b9f04deb2fb921833b010a"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_20261107/source_reach.json",
+      "bytes": 5819,
+      "sha256": "00d86710cedf4fe3c57903e0821d04adf4dbb12d58cb2a7d3c6946b62e612658"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/author_living_cast_20261107.py",
+      "bytes": 22742,
+      "sha256": "9e431fa6f2629933a95a1e7a1955149c616cc4fb17c6f492dfb4388a7c99971c"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/author_rook_station_satchel.py",
+      "bytes": 6690,
+      "sha256": "9442bb0fa96de3de421b2adef6d3d1e3fe4d66372c1db971003aa608c3af18fe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/build_living_cast_coverage.py",
+      "bytes": 6221,
+      "sha256": "1203eaadec60c514c5fba3503ad294c12dcbd085be4ab788be92cb4b542c1cff"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/export_living_cast_baseline.gd",
+      "bytes": 1663,
+      "sha256": "dcd158b6c528617a205353e9bd1e5268c32522273ce9d5ce638d1ffb6fbcfabe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_cast_grips.py",
+      "bytes": 3956,
+      "sha256": "f55215facf24cc978910c2803e40e29ebecff44e4ec42c4b5e5c77638fe55b50"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_cast_rigs.py",
+      "bytes": 1441,
+      "sha256": "fce3b9121eb8d9887f1a225ebb5e457448817ee3d38d7cab6b3e743b67706a49"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/update_living_cast_stage1_evidence.py",
+      "bytes": 5866,
+      "sha256": "fa2c8f0a4f4ca4d7e8024f86d7e711d93f3799da57fec8d41f02d151f1518c5b"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/verify_living_cast_reach.py",
+      "bytes": 3291,
+      "sha256": "cb20e3a7da9b983a5b7313bef53b5b34219a5aedd5f5a5a6e1dc0bd97f000e25"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/verify_living_cast_sources.py",
+      "bytes": 4977,
+      "sha256": "f35fdaee6a40d729e0c9e1f29285b868074f37670e989f1fdea9973142c24253"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C01.res",
+      "bytes": 195202,
+      "sha256": "d2318218eefbf952aefc732bd6dacca39bc9dcfcb3d8664c8ddf7399e6d356bd"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C02.res",
+      "bytes": 202486,
+      "sha256": "025cb01ec9eeb950aee7ac541fd841b1176eea2e0fe82f61d0a0789637d71af3"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C03.res",
+      "bytes": 202547,
+      "sha256": "6fa8d3ada8c0e391b5fb2b5aa25b47e8ee09079ced797461b19834d9c0db996f"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C04.res",
+      "bytes": 199305,
+      "sha256": "b4370949eb1ac97928389a4ff42f972dfac930dee2ce571e920aadea474f320f"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/rook_station_satchel.scn",
+      "bytes": 781,
+      "sha256": "40b79fab8bea33afb8e848ae9ab3c56bb6b8995fb2d051c25365997f987632a9"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/rook_station_satchel_body.res",
+      "bytes": 12968,
+      "sha256": "c36bcb1cccb05a08b40d478e3ee7f682ee32ff9ec9fa62e7c9c35b55df58a882"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/rook_station_satchel_knot.res",
+      "bytes": 2071,
+      "sha256": "1297e5a88117b0944fb0b089a14b88678e976a43f3e267ec603edabad7ebffbf"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/rook_station_satchel_strap.res",
+      "bytes": 2411,
+      "sha256": "ce249302e8a7e7b6f1db3ddf056085cc310ab6ad90d59bb08b536bb324eb5322"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/release_reports/living_cast_20261107/asset_coverage.json",
+      "bytes": 266746,
+      "sha256": "4fd35795580683b319b78cacb092cddb361cd154957d2dd3fbbcc6a11a2edb1b"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_libraries.gd",
+      "bytes": 11003,
+      "sha256": "54dd24c1f47376598788eea319a045955b6d4748fa0ad1279a2b5ec579523ff4"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_station_props.gd",
+      "bytes": 4357,
+      "sha256": "0a22ec95ee7d65e5f9521fbdb6e3ed886b0fc4cae5dbefc877d6b21f579110e4"
+    }
+  ],
+  "manifest_path": "outputs/AshenOathTheRoadBetweenCrowns/release_reports/living_cast_20261107/stage1_asset_files.json",
+  "runtime_candidate_bytes": 817771,
+  "source_art_in_web": false,
+  "runtime_reviewed": false,
+  "user_accepted": false,
+  "notes": [
+    "Stage the listed files plus this manifest; exclude unrelated untracked art and .blend1 iteration backups.",
+    "Refresh after any final builder invocation that regenerates compiled resource bytes."
+  ]
+}

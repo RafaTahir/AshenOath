@@ -19,15 +19,18 @@ class ErrorLog extends Logger:
 class Clock extends Node:
 	signal phase_changed(phase: String)
 	var current_phase := "day"
+	var current_weather := "clear"
 	var day_count := 0
 	var minutes := 720.0
 	func get_time() -> float: return minutes
 
 class Driver extends Node:
+	func is_valid() -> bool: return true
 	signal activity_contact(event: String, point: Vector3)
 	var activity := ""
 	var prop := ""
 	var station: Dictionary = {}
+	var rest_anchor: Dictionary = {}
 	var current_state := "idle"
 	var stopped_actions := 0
 	func get_visible_forward() -> Vector3: return -(get_parent() as Node3D).global_basis.z
@@ -36,6 +39,7 @@ class Driver extends Node:
 	func set_life_activity(value: String) -> void: activity = value
 	func clear_life_activity() -> void: activity = ""
 	func set_life_workstation(value: Dictionary) -> void: station = value.duplicate()
+	func set_life_rest_anchor(value: Dictionary) -> void: rest_anchor = value.duplicate()
 	func set_carried_activity(_value: String) -> void: pass
 	func set_activity_prop(value: String) -> void: prop = value
 	func has_active_action() -> bool: return current_state == "greet"
@@ -85,6 +89,7 @@ func _run() -> void:
 	_verify_temporary_restore(true)
 	_verify_regional_only()
 	_verify_timed_handoff()
+	_verify_work_contact_lifecycle()
 	OS.remove_logger(error_log)
 	_check(error_log.errors.is_empty(), "no engine or script errors during routine verification")
 	for error: String in error_log.errors:
@@ -253,8 +258,60 @@ func _verify_timed_handoff() -> void:
 	life._begin_activity(entry)
 	entry.activity_elapsed = 30.0
 	life._update_activity(entry, 1.0)
-	_check(entry.activity_active and entry.driver.activity == "sleep" and entry.driver.prop == "" and not life._social_actor_available(entry), "sleep holds the authored rest station and refuses ambient social recruitment")
+	_check(entry.activity_active and entry.driver.activity == "rest" and entry.driver.prop == "" and not life._social_actor_available(entry), "unsupported sleep intent holds its rest station with a standing rest performance")
+	var seat := Marker3D.new()
+	seat.name = "LifeRest_fixture"
+	host.zone_root.add_child(seat)
+	seat.position = entry.node.position + Vector3.UP * 0.54
+	seat.set_meta("rest_supported", true)
+	seat.set_meta("rest_kind", "seated")
+	seat.set_meta("stand_offset", Vector3.DOWN * 0.54)
+	life._bind_rest_anchor(entry.profile, entry.path)
+	life._set_activity_pose(entry, true)
+	_check(entry.driver.activity == "sleep", "verified seat enables a seated sleep performance without moving the actor root")
+	_check(entry.driver.rest_anchor.get("seat", Vector3.ZERO) == seat.global_position, "verified rest forwards the physical seat to the retained body owner")
+	_check(entry.profile.rest_anchor.look.z > entry.profile.rest_anchor.stand.z, "supported seat faces outward toward the safe approach")
+	host.player.position = seat.position
+	life._set_activity_pose(entry, true)
+	_check(entry.driver.activity == "rest", "player bench approach wakes the NPC and releases the seated sleeping pose")
+	_check(entry.driver.rest_anchor.is_empty(), "waking releases the seated anchor before standing rest")
+	host.player.position = Vector3(100, 0, 100)
+	seat.free()
+	life._set_activity_pose(entry, true)
+	_check(entry.driver.activity == "rest", "discarded support cannot keep a cached actor sleeping on an absent seat")
 	_check(host.story_state.save_state() == before, "clock-driven routine and ownership transitions do not commit story choices or save fields")
+	_dispose(fixture)
+
+func _verify_work_contact_lifecycle() -> void:
+	var fixture := _fixture()
+	var life: Node = fixture.life
+	var entry: Dictionary = life._world_actor("rook")
+	_check(not life._begin_satchel_cinch(entry.node), "absent satchel never fabricates a knot contact")
+	var bag := Node3D.new()
+	bag.name = "RookStationSatchel"
+	fixture.host.zone_root.add_child(bag)
+	var knot := Node3D.new()
+	knot.name = "SatchelKnot"
+	knot.scale = Vector3(0.8, 1.1, 0.9)
+	bag.add_child(knot)
+	var base := knot.scale
+	var planted := bag.transform
+	_check(life._begin_satchel_cinch(entry.node), "real attached knot accepts the bounded work contact")
+	_check(knot.scale.x < base.x and knot.scale.y == base.y, "satchel contact visibly tightens its attached knot")
+	life._tick_work_contact_effects(0.175)
+	_check(knot.scale.x > base.x * 0.92 and knot.scale.x < base.x, "central routine tick recovers knot tension")
+	life._begin_satchel_cinch(entry.node)
+	_check(knot.scale.is_equal_approx(base * Vector3(0.92,1,0.92)) and life.work_contact_effects.size() == 1, "repeat contact never accumulates scale or creates a second owner")
+	life._release_activity(entry, false)
+	_check(knot.scale.is_equal_approx(base) and life.work_contact_effects.is_empty(), "protected-owner interruption clears transient knot tension")
+	_check(bag.visible and bag.transform.is_equal_approx(planted), "interruption leaves the real satchel on its supported table")
+	life._begin_satchel_cinch(entry.node)
+	life._tick_work_contact_effects(0.5)
+	_check(knot.scale.is_equal_approx(base) and life.work_contact_effects.is_empty(), "completed contact recovery releases the knot owner")
+	life._begin_satchel_cinch(entry.node)
+	knot.free()
+	life._tick_work_contact_effects(0.1)
+	_check(life.work_contact_effects.is_empty(), "removed knot cannot leave a stale contact owner")
 	_dispose(fixture)
 
 func _dispose(fixture: Dictionary) -> void:

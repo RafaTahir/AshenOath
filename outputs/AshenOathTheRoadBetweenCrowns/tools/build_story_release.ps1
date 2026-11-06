@@ -11,6 +11,8 @@ param(
     [switch]$Publish,
     [string]$PublishMessage = "",
     [string]$Ticket = "",
+    [ValidateSet('codex/masterpiece-rebuild', 'codex/art-recovery-anwen')]
+    [string]$DevelopmentBranch = 'codex/masterpiece-rebuild',
     [string[]]$PublishPaths = @()
 )
 
@@ -143,12 +145,14 @@ foreach ($script in @("greyfen_life_controller", "story_state", "hud")) {
 if (-not $CharacterAssetsOnly) {
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "split_prepared_audio.gd")) "prepared-audio-split"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_audio.gd"), "--", "--approved-arrangements") "approved-arrangements"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_station_props.gd")) "living-cast-station-props"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd")) "prepared-zone-geometry"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_directional_gaits.gd")) "directional-gaits"
 if (-not $DesignPackCast) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_bracken_asset.gd")) "bracken-asset"
 }
 }
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_environment_dependencies.gd")) "environment-material-dependencies"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "prepared-actor-pack-layout"
@@ -177,6 +181,15 @@ foreach ($pack in $packs) {
         log = "logs/pack-$($pack.id).stdout.log"
     }
 }
+$MetadataReceipt = Join-Path $OutputDirectory "pack-metadata-compaction.json"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "compact_runtime_packs.py"), "--root-pack", (Join-Path $PackRoot "base.pck"), "--pack-dir", $PackRoot, "--report", $MetadataReceipt) "pack-metadata-compaction"
+# Compaction preserves resource payloads but changes container identities.
+# Bind the exact final bytes before the manifest is embedded in the Web root.
+foreach ($record in $records) {
+    $target = Join-Path $PackRoot $record["artifact"]
+    $record["bytes"] = [int64](Get-Item -LiteralPath $target).Length
+    $record["sha256"] = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLowerInvariant()
+}
 $candidatePath = Join-Path $PackRoot "runtime_pack_candidates.json"
 $candidate = [ordered]@{
     schema_version = 2
@@ -201,6 +214,7 @@ $candidateJson = ($candidate | ConvertTo-Json -Depth 8) + [System.Environment]::
 $runtimeManifest = Join-Path $ProjectRoot "runtime_pack_manifest.json"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "sync_runtime_pack_manifest.py"), $runtimeManifest, $candidatePath, "--build-id", $BuildId, "--source-commit", $SourceCommit) "pack-manifest"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--export-release", "Web Browser", (Join-Path $ExportRoot "index.html")) "web-production"
+Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "compact_runtime_packs.py"), "--root-pack", (Join-Path $ExportRoot "index.pck"), "--verify-authority", $MetadataReceipt) "pack-metadata-authority"
 $ResourceCheckRoot = Assert-Within (Join-Path $OutputDirectory "isolated-resource-check") $OutputDirectory
 New-Item -ItemType Directory -Force -Path $ResourceCheckRoot | Out-Null
 if (@(Get-ChildItem -LiteralPath $ResourceCheckRoot -Force).Count -gt 0) {
@@ -282,7 +296,7 @@ if ($Publish) {
             "outputs/AshenOathTheRoadBetweenCrowns/docs/audio"
         )
     }
-    & (Join-Path $PSScriptRoot "publish_living_road.ps1") -Ticket $Ticket -Message $PublishMessage -CommitPaths (@($GeneratedPaths + $PublishPaths | Select-Object -Unique)) -PythonPath $PythonPath
+    & (Join-Path $PSScriptRoot "publish_living_road.ps1") -Ticket $Ticket -Message $PublishMessage -CommitPaths (@($GeneratedPaths + $PublishPaths | Select-Object -Unique)) -PythonPath $PythonPath -DevelopmentBranch $DevelopmentBranch
 } else {
     Write-Host "Packaging completed; publication was not requested."
 }

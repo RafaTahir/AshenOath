@@ -67,7 +67,7 @@ func _process_modification() -> void:
 	var can_plant: bool = supported and nearby and actor.is_visible_in_tree() and not seated_idle
 	if is_instance_valid(motion_driver):
 		can_plant = can_plant and bool(motion_driver.get("grounded")) and not bool(motion_driver.get("distance_suspended")) and not bool(motion_driver.get("dead")) and not motion_driver.has_active_action()
-		can_plant = can_plant and str(motion_driver.presentation_state) != "life:sit"
+		can_plant = can_plant and str(motion_driver.presentation_state) not in ["life:sit", "life:seated_eat", "life:sleep"]
 	sample_clock -= delta
 	var sample := sample_clock <= 0.0
 	if sample: sample_clock = 1.0 / (30.0 if physical_actor != null else 20.0)

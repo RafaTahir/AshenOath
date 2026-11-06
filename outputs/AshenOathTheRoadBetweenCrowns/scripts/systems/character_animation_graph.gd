@@ -115,11 +115,11 @@ func activate(suspended: bool = false) -> void:
 		set_gait(speed)
 		tree.advance(0.0)
 
-func ambient_clip(clip: String) -> void:
+func ambient_clip(clip: String, restart: bool = false) -> void:
 	if source == null or not source.has_animation(clip): return
 	var key := "ecology_" + str(abs(clip.hash()))
 	if not nodes.has(key): _add(key, _clip(clip, true))
-	transition(key, 0.14)
+	transition(key, 0.14, restart)
 
 func transition(logical: String, blend: float, restart: bool = false) -> void:
 	var next := state_for(logical)
