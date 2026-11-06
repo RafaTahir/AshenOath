@@ -101,7 +101,7 @@ function harness(options = {}) {
   };
   if (options.cache) window.caches = options.cache;
   const context = vm.createContext({
-    AbortController, URL, TextDecoder, Uint8Array, crypto, window, location: window.location,
+    AbortController, Response, URL, TextDecoder, Uint8Array, crypto, window, location: window.location,
     caches: options.cache,
     SHELL_BUILD_ID: 'metadata-fixture', failed: false, bootMetrics: {}, startupDeadline: 0,
     document: { hidden: true, getElementById: () => ({}) }, errorPanel: {}, loading: {},
@@ -143,23 +143,30 @@ function harness(options = {}) {
   };
 }
 
-test('new packs use HTTP caching without a duplicate decoded Cache Storage write', async () => {
+test('new packs persist verified bytes without waiting for optional cache I/O', async () => {
   let writes = 0;
+  const pending = deferred();
+  let cachedResponse;
   const h = harness({ cache: { open: async () => ({
-    match: async () => undefined, put: async () => { writes++; }, delete: async () => true,
+    match: async () => undefined,
+    put: (_url, response) => { writes++; cachedResponse = response; return pending.promise; },
+    keys: async () => [], delete: async () => true,
   }) } });
   h.request('campaign');
   await h.api.operation('campaign').promise;
   assert.equal(h.state('campaign').state, 'preloaded');
   assert.equal(h.requests.find(request => request.path === '/packs/campaign.pck').cache, 'force-cache');
-  assert.equal(writes, 0);
+  assert.equal(writes, 1);
+  assert.equal(digest(await cachedResponse.arrayBuffer()), h.data.manifest.packs.campaign.sha256);
+  pending.resolve();
+  await flush();
 });
 
-test('valid legacy decoded caches remain readable and hash verified', async () => {
+test('valid decoded caches remain readable and hash verified without another write', async () => {
   const data = fixture();
   const h = harness({ data, cache: { open: async () => ({
     match: async () => ({ ok: true, arrayBuffer: async () => data.bodies.get('campaign').buffer }),
-    put: async () => { throw new Error('Legacy cache must be read-only'); },
+    put: async () => { assert.fail('A cache hit must not be rewritten'); },
     delete: async () => true,
   }) } });
   h.request('campaign');
@@ -169,32 +176,48 @@ test('valid legacy decoded caches remain readable and hash verified', async () =
   assert.deepEqual(h.copied[0].bytes, data.bodies.get('campaign'));
 });
 
-test('corrupt legacy cache is removed and Retry reloads verified network bytes', async () => {
+test('corrupt cache is removed and Retry persists only verified network bytes', async () => {
   const data = fixture();
-  let stale = true, deletions = 0;
+  let stale = true, deletions = 0, writes = 0;
   const bad = new Uint8Array(data.bodies.get('campaign'));
   bad[0] ^= 1;
   const h = harness({ data, cache: { open: async () => ({
     match: async () => stale ? { ok: true, arrayBuffer: async () => bad.buffer } : undefined,
     delete: async () => { stale = false; deletions++; return true; },
+    put: async () => { writes++; }, keys: async () => [],
   }) } });
   h.request('campaign');
   await h.api.operation('campaign').promise;
   assert.equal(h.state('campaign').state, 'failed');
   assert.equal(h.copied.length, 0);
   assert.equal(deletions, 1);
+  assert.equal(writes, 0);
   h.request('campaign');
   await h.api.operation('campaign').promise;
   assert.equal(h.state('campaign').state, 'preloaded');
+  assert.equal(writes, 1);
   assert.equal(h.requests.find(request => request.path === '/packs/campaign.pck').cache, 'reload');
 });
 
-test('unavailable legacy cache does not prevent HTTP-cached pack loading', async () => {
+test('unavailable persistent cache does not prevent HTTP-cached pack loading', async () => {
   const h = harness({ cache: { open: async () => { throw new Error('Storage unavailable'); } } });
   h.request('campaign');
   await h.api.operation('campaign').promise;
   assert.equal(h.state('campaign').state, 'preloaded');
   assert.equal(h.count('/packs/campaign.pck'), 1);
+});
+
+test('cache quota failures do not invalidate a verified mounted pack', async () => {
+  const h = harness({ cache: { open: async () => ({
+    match: async () => undefined, put: async () => { throw new Error('Quota exceeded'); },
+    delete: async () => true,
+  }) } });
+  h.request('campaign');
+  await h.api.operation('campaign').promise;
+  await flush();
+  assert.equal(h.state('campaign').state, 'preloaded');
+  assert.equal(h.copied.length, 1);
+  assert.equal(h.errors.length, 0);
 });
 
 test('verified packs enter the initialized filesystem before project startup finishes', async () => {

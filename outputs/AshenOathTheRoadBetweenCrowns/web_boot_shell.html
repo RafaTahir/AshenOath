@@ -568,6 +568,7 @@
               response = await packCache.match(packUrl);
             } catch (_) { packCache = null; }
           }
+          const fromCache = Boolean(response);
           if (!response) response = await fetch(packUrl, { cache: operation.reload ? 'reload' : 'force-cache', signal: controller.signal });
           if (!response.ok) throw new Error(`${id} pack HTTP ${response.status}`);
           const payload = await readPackBody(response, id, operation, pack.bytes);
@@ -599,10 +600,20 @@
             bootMetrics.opening_prefetch_state = 'preloaded';
             window.dispatchEvent(new CustomEvent('ashenoath-opening-pack', { detail }));
           }
-          // Content-addressed pack URLs already use the browser's HTTP cache.
-          // Read legacy Cache Storage entries, but do not allocate and persist a
-          // second decoded copy while the engine is preparing the same resources.
-          // Hash validation above applies to both cache paths; Retry uses reload.
+          // HTTP caches may evict large packs even with immutable URLs. Persist
+          // only verified bytes; optional cache I/O must not gate readiness.
+          if (packCache && !fromCache) {
+            void packCache.put(packUrl, new Response(payload)).then(async () => {
+              const live = new Set(Object.values(manifest.packs).filter(pack => pack.url)
+                .map(pack => new URL(pack.url, location.href).href));
+              const keys = await packCache.keys();
+              let surplus = keys.length - Math.max(16, live.size);
+              for (const key of keys) {
+                if (surplus <= 0) break;
+                if (!live.has(key.url)) { await packCache.delete(key); surplus -= 1; }
+              }
+            }).catch(() => {});
+          }
           return detail;
         } catch (error) {
           if (packCache && packUrl && !controller.signal.aborted && packOperations.get(id) === operation) await packCache.delete(packUrl).catch(() => {});

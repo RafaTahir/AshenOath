@@ -492,6 +492,81 @@ to the coordinated asset/package/loading integration, not this isolated branch.
    FPS or memory targets. Do not publish a claim that loading is finished from
    the focused checks above. No independent push or deployment is performed.
 
+## Combined Assets, Packaging and Loading, 2026-11-07 (In Progress)
+
+The user now requests loading as close as practicable to 32 seconds, preserving
+content and quality, combined testing, and one Git push for automatic Vercel
+publication. This does not establish a new performance pass. The subsequent
+Game Assets instruction also authorizes its remaining stages 2-4; those remain
+isolated until complete and will be coordinated before final publication.
+
+- Canonical D: integration `02d0341` includes opening-cast handoff `a17a484`,
+  packaging `2d92060`, verified pack-buffer ownership `b898745`, and the harness
+  timestamp correction `e11c776`. The four-person handoff is not the completed
+  roster/campaign expansion; see its committed `STAGE1_HANDOFF.md`.
+- `a185332` attempted to remove decoded Cache Storage writes. Immutable,
+  content-addressed packs are eligible for browser HTTP caching. Existing
+  Cache Storage entries remain readable and hash-validated; corrupt entries
+  are removed and Retry uses HTTP `reload`. No saves/preferences are changed,
+  and the 90-second pack watchdog is unchanged. All 29 shell metadata/cache
+  cases pass, including legacy cache, failed storage, corrupt data and Retry.
+  Browser cache behavior follows the documented Fetch cache modes:
+  https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
+- The combined check below rejects this HTTP-only change: warm retention regressed.
+  Verified persistent Cache Storage writes are restored without awaiting optional
+  I/O; owned MEMFS buffer transfer remains. All 30 shell metadata/cache tests pass,
+  including quota failure and verification-before-write. Chromium's
+  Simple cache limits one ordinary entry to one eighth of its configured cache
+  (minimum limit 5 MiB), so HTTP freshness headers alone do not guarantee that
+  the roughly 70 MiB opening pack is retained. Source-only follow-up is tracing
+  prepared tree dependencies and lossless smaller environment-pack ownership;
+  no resource may be omitted while a mounted import still references it.
+  https://raw.githubusercontent.com/chromium/chromium/main/net/disk_cache/simple/simple_backend_impl.cc
+- The new unmodified published-baseline run failed its opening-pack deadline
+  before preparation/control. Its recorded state is `opening_failed`, not a
+  90.8-second menu pass. The driver then waited for New Game readiness and
+  timed out. Preserve `D:/Temp/AshenOath/combined-release-20261107/baseline.json`;
+  it cannot establish a startup gain or an asset failure. No user save was used.
+- The first combined build compiled services and generated audio, geometry,
+  work props, native life clips and prepared actors, then exposed an existing
+  animation-loop variable overwriting the export preset path. Fix `dfb1975`
+  names the destination `presets_path`. Failure logs remain under
+  `.release-gate/combined-loading-cast-20261107`. The retry uses the existing
+  `CharacterAssetsOnly` route to reuse successful audio/world generation.
+- Combined build `.release-gate/combined-loading-cast-r2-20261107`, source
+  `dfb1975`, compiled/exported successfully; prepared-actor package check passed
+  (33 compiled scenes, 32 omitted source scenes). Generated source changes remain
+  recorded, not falsely attributed solely to the clean commit.
+- The combined desktop browser run passed withheld loading actions, real-mouse
+  New Game, ordinary movement, Save, reload and selected Continue. It did NOT pass
+  the loading goal: cold menu/control 121.982/132.667 seconds, warm menu 100.270
+  seconds. First-view preparation alone was 60.538/57.340 seconds, with 169 shaders.
+  Report: `D:/Temp/AshenOath/combined-release-20261107/candidate-r2.json`.
+- A quiet matched check of the unchanged published build passed the same flow:
+  cold menu/control 101.257/114.996 seconds, warm menu 104.055 seconds; first-view
+  57.813/57.613 seconds and the same 169 shaders. This does not establish a Stage 1
+  shader regression or an overall improvement. Report: `baseline-quiet-r2.json`
+  in the same evidence directory. Previous faster measurements remain historical.
+- The HTTP-only candidate transferred 114,835,210 bytes on warm navigation versus
+  the published baseline's 16,970,942 bytes. The opening pack and most actor packs
+  were redownloaded. This is the measured reason for restoring persistent caching;
+  headers and component-copy timing alone were insufficient evidence.
+- The combined native Quit check FAILED despite its functional smoke PASS: 14
+  plain RefCounted instances remained at shutdown. No GDScriptFunctionState leak
+  was reported. Evidence: `quit-playable-r2/headless/verify_runtime_smoke.*.log` in
+  the same evidence directory. Game Assets owns focused teardown attribution;
+  isolated 14-driver checks have not reproduced the full-game leak. Do not claim
+  the old shutdown pass covers the changed actor lifecycle.
+- Final stages 2-4, first-view loading reduction, final combined inspection and
+  publication remain in progress. No push has occurred here.
+
+The corrected startup driver omits pre-control screenshots when requested and
+records the authoritative first-control timestamp separately from observer lag,
+driver click delay and the optional introduction. This changes measurement, not
+the game. Package savings and theoretical transfer floors must be reported
+separately from actual loading. Do not silently relabel prior 68.6-second evidence
+as satisfying the current 32-second aim.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

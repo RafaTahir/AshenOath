@@ -108,7 +108,13 @@ const server = createServer((request, response) => {
     if (info.gzip) headers['Content-Encoding'] = 'gzip';
     response.writeHead(200, headers);
     const stream = createReadStream(info.path);
-    response.once('close', () => stream.destroy());
+    record.transport_bytes = info.bytes;
+    response.once('finish', () => { record.finished_at = Date.now(); record.source_bytes_read = stream.bytesRead; });
+    response.once('close', () => {
+      record.closed_at = Date.now();
+      record.source_bytes_read = stream.bytesRead;
+      stream.destroy();
+    });
     stream.on('error', () => response.destroy());
     stream.pipe(response);
   };
@@ -301,7 +307,7 @@ async function enterMenu(page, touch) {
   }
   let nextLoadingCapture = Date.now() + 12000;
   let loadingCapture = 0;
-  await waitFor(async () => {
+  const menuState = await waitFor(async () => {
     const s = await observe(page);
     const retry = s?.ui?.buttons?.some(b => b.enabled && /Retry/i.test(b.text));
     if (scenario === 'startup' && !options['no-loading-captures'] && s?.ui?.active_menu === 'startup' && Date.now() >= nextLoadingCapture) {
@@ -311,9 +317,15 @@ async function enterMenu(page, touch) {
     return s?.ui?.active_menu === 'main' || retry ? s : null;
   }, 'production main menu or recoverable preparation failure');
   if (scenario === 'startup') {
-    event({ event: 'menu_reached', startup: await page.evaluate(() => ({
+    const preparationFailed = menuState.ui.buttons?.some(button => button.enabled && /Retry/i.test(button.text));
+    event({ event: preparationFailed ? 'preparation_failed' : 'menu_reached', startup: await page.evaluate(() => ({
       navigation_ms: performance.now(), boot: window.__ashenOathBoot, opening: window.__ashenOathOpeningState,
       light_loops: window.__ashenBoundedLightLoops || null,
+      resources: performance.getEntriesByType('resource').map(entry => ({
+        name: new URL(entry.name).pathname, start_ms: entry.startTime, response_end_ms: entry.responseEnd,
+        duration_ms: entry.duration, transfer_bytes: entry.transferSize,
+        encoded_bytes: entry.encodedBodySize, decoded_bytes: entry.decodedBodySize,
+      })),
       visibility: { hidden: document.hidden, focused: document.hasFocus(), history: window.__ashenTestVisibility || [] },
     })) });
     if (!currentCase.graphics) {
@@ -336,7 +348,13 @@ async function enterMenu(page, touch) {
   }
 }
 async function startGame(page, viewport, touch) {
-  await waitFor(async () => (await observe(page))?.new_game_ready, 'New Game ready');
+  await waitFor(async () => {
+    const state = await observe(page);
+    if (state?.ui?.buttons?.some(button => button.enabled && /Retry preparation/i.test(button.text))) {
+      throw new Error('Production preparation failed before New Game; see startup state and last observation');
+    }
+    return state?.new_game_ready;
+  }, 'New Game ready');
   await clickButton(page, 'New Game', viewport, touch);
   let openingSkipAttempted = false;
   // Close no story choices automatically: only a labelled Skip/Continue for an
