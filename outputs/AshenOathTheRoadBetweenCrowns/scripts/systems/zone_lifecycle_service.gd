@@ -785,10 +785,10 @@ func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
 		_release_route_spatial_service(str(raw_id))
 
 func prepare_resource_shutdown() -> void:
-	journey_loading.cancel(_host, "", false, true)
 	if resource_shutdown_prepared:
 		return
 	resource_shutdown_prepared = true
+	journey_loading.cancel(_host, "", false, true)
 	neighbor_crossing_pending = false
 	if seamless_world != null: seamless_world.cancel_preparation()
 	if is_instance_valid(runtime_services):

@@ -2,6 +2,8 @@ extends "res://scripts/systems/game_bindings.gd"
 ## Owns session operations; configure() injects dependencies.
 signal session_started()
 
+var _quit_pending := false
+
 func _gameplay_script(id: String) -> Script:
 	if not gameplay_scripts.has(id):
 		var script := load("res://scripts/%s.gd" % id) as Script
@@ -13,6 +15,8 @@ func _gameplay_script(id: String) -> Script:
 
 func start_session() -> void:
 	var ready_started := Time.get_ticks_msec()
+	if not OS.has_feature("web"):
+		_host.get_tree().auto_accept_quit = false
 	_host.process_mode = Node.PROCESS_MODE_ALWAYS
 	zone_residency.name = "ZoneResidencyService"
 	_host.add_child(zone_residency)
@@ -51,13 +55,13 @@ func start_session() -> void:
 func _prepare_opening_after_menu_render() -> void:
 	if DisplayServer.get_name().to_lower() != "headless":
 		await RenderingServer.frame_post_draw
-	if not _host.is_inside_tree():
+	if not _host.is_inside_tree() or resource_shutdown_prepared:
 		return
 	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.dispatchEvent(new CustomEvent('ashen-oath-ui-ready'));", false)
 	opening_startup_metrics["loading_view_ready_ms"] = Time.get_ticks_msec()
 	await _host.get_tree().process_frame
-	if not game_started and not _journey_load_pending():
+	if not resource_shutdown_prepared and not game_started and not _journey_load_pending():
 		_on_launch_accepted()
 
 func _restore_browser_session(delta: float) -> void:
@@ -230,6 +234,8 @@ func _restore_active_world_view() -> void:
 	camera_rig.restore_gameplay_view()
 
 func tick_session(delta: float) -> void:
+	if resource_shutdown_prepared:
+		return
 	_restore_browser_session(delta)
 	if game_started and _host.get_viewport().disable_3d:
 		_restore_active_world_view()
@@ -426,7 +432,27 @@ func _handle_quit_request() -> void:
 	if OS.has_feature("web"):
 		hud.show_exit_notice()
 		return
-	_host.get_tree().quit()
+	if _quit_pending:
+		return
+	_quit_pending = true
+	var tree := _host.get_tree()
+	tree.paused = true
+	_host.prepare_resource_shutdown()
+	# Cancellation must resume loading coroutines before their services die.
+	# Retired render hierarchies keep their existing frame-grace ownership.
+	for frame in range(ZoneResidencyService.ZONE_RETIRE_FRAMES + 2):
+		await tree.process_frame
+	var deadline := Time.get_ticks_msec() + 5000
+	while pending_zone_retirements > 0 and Time.get_ticks_msec() < deadline:
+		await tree.process_frame
+	var retirement_failed := pending_zone_retirements > 0
+	if retirement_failed:
+		push_error("Native shutdown: zone retirement did not finish")
+	_host.finalize_resource_shutdown()
+	for frame in range(3):
+		await tree.process_frame
+	RenderingServer.force_sync()
+	tree.quit(1 if retirement_failed else 0)
 
 func _read_json(path: String):
 	if not FileAccess.file_exists(path):

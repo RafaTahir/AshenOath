@@ -82,8 +82,12 @@ func _exit_tree() -> void:
 		_systems["zone_lifecycle"].release_session()
 
 func _notification(what: int) -> void:
-	# Only the focus notification was handled before extraction. Destruction
-	# notifications can arrive after child services have already been freed.
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		var session = _systems.get("session")
+		if is_instance_valid(session):
+			session._handle_quit_request()
+		return
+	# Destruction notifications can arrive after child services are freed.
 	if what != NOTIFICATION_APPLICATION_FOCUS_OUT:
 		return
 	var coordinator = _systems.get("hud")

@@ -1,4 +1,4 @@
-param([string[]]$Only = @(), [string]$Run = "", [string]$Godot = $env:GODOT_BIN)
+param([string[]]$Only = @(), [string]$Run = "", [string]$Godot = $env:GODOT_BIN, [switch]$VerboseEngine, [string[]]$FixtureArguments = @())
 # Uses the canonical verifier inventory and owned-process implementation.
 # This is headless source evidence, not browser or performance certification.
 $Suffix = ""
@@ -63,6 +63,7 @@ function Run-Check([string]$Name,[string]$Executable,[string[]]$Arguments,[bool]
     $script:GateFatalOutput = $false
     $script:CurrentEngineLog = if ($GodotCheck) { "$Run\headless\$Name$Suffix.engine.log" } else { '' }
     if ($GodotCheck) { $Arguments = @('--log-file',$script:CurrentEngineLog) + $Arguments }
+    if ($GodotCheck -and $VerboseEngine) { $Arguments = @('--verbose') + $Arguments }
 	$ownedTimeout = if ($Name -eq 'verify_gate_transitions') { 900 } else { 240 }
     $process = Invoke-ManagedProcess $Executable $Arguments $output $errorOutput $ownedTimeout
     $watch.Stop()
@@ -84,7 +85,7 @@ function Run-Check([string]$Name,[string]$Executable,[string[]]$Arguments,[bool]
 if (-not $Only.Count -or 'content-integrity' -in $Only) { Run-Check 'content-integrity' $Python @("$Project/tools/verify_content_integrity.py",$Project,'--json-report',"$Run\content-integrity$Suffix.json") $false }
 if (-not $Only.Count -or 'python-unit-suite' -in $Only) { Run-Check 'python-unit-suite' $Python @('-m','unittest','discover','-s',"$Project/tools",'-p','test_*.py') $false }
 foreach ($verifier in $verifiers) {
-    Run-Check ([IO.Path]::GetFileNameWithoutExtension($verifier)) $Godot @('--headless','--path',$Project,'--script',"tools/$verifier",'--','--acceptance-profile=headless_release_with_disclosures') $true
+    Run-Check ([IO.Path]::GetFileNameWithoutExtension($verifier)) $Godot (@('--headless','--path',$Project,'--script',"tools/$verifier",'--','--acceptance-profile=headless_release_with_disclosures') + $FixtureArguments) $true
 }
 $failed = @($results | Where-Object { $_.status -eq 'fail' })
 Write-Output "Evidence directory: $Run"

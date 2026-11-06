@@ -205,6 +205,105 @@ memory targets, actual iPhone/WebKit behavior and user acceptance are not passed
 by these checks. No content/quality was removed. Publication is a Git push for
 automatic Vercel deployment; no CLI deployment or live-verification claim.
 
+## Startup Cost and Native Shutdown Repair, 2026-11-07
+
+Scope: the user's authorized loading-time/shutdown repair, preserving all content,
+materials, lights, presets, saves and complete-world readiness. This is not a new
+campaign acceptance or a passing startup/performance certification.
+
+### Retained Changes
+
+- The Web shell narrowly rewrites Godot 4.6's generated fixed-capacity omni/spot
+  light loops to `i < min(MAX_FORWARD_LIGHTS, light_count)`. The same lights are
+  evaluated in the same order; no lighting feature, capacity, precision, material,
+  texture, geometry or actor is removed. Unknown shader patterns stay untouched.
+  This reduces observed ANGLE/D3D11 shader-program compilation/query time on the
+  Intel HD 620. It is not a claim that all driver internals were inspected.
+- Native Quit and the window-close handler now cancel preparation, allow its
+  awaiting functions to resume, drain the existing renderer-safe zone retirement,
+  finalize owned services/resources, then quit. A five-second retirement watchdog
+  reports failure instead of silently declaring a clean shutdown. Shutdown is
+  idempotent and cannot start another opening preparation.
+- Existing browser/headless tools record the actual graphics device, optional
+  startup WebGL timings, injected-versus-exported shader changes, first-control
+  observations and production Quit behavior. No parallel gameplay framework.
+
+### Checks and Their Limits
+
+Evidence: `D:/Temp/AshenOath/startup-speed-20261106`.
+
+| Local Chrome run, Intel HD 620 / ANGLE D3D11 | Cold menu | Reload menu | Cold first-view wait |
+|---|---:|---:|---:|
+| Published r2 baseline, profiled | 141.1 s | 115.5 s | 82.7 s |
+| Same r2 bytes with candidate shader adapter injected | 58.7 s | 60.1 s | 33.2 s |
+| Final exported candidate, profiled | 161.2 s | 71.0 s | 64.6 s |
+| Final exported candidate, unprofiled | 145.3 s | 94.3 s | 61.2 s |
+| Back-to-back unprofiled baseline | 131.3 s | 112.0 s | 87.7 s |
+| Back-to-back unprofiled final candidate | 113.9 s | 108.3 s | 63.0 s |
+
+All six runs passed New Game, normal movement, durable Quick Save, browser
+reload and Continue with the exact earned journey/position. Final exported runs
+used the packaged adapter, not injection; both reported 169 adapted shaders /
+338 equivalent loops and zero unexpected runtime/resource errors. Loading kept
+unready menu actions unavailable. Actual gameplay captures retain Greyfen's
+houses, bridge, river, vegetation and characters. These are not pixel-identical
+captures or actual-phone coverage.
+
+The baseline spent 78.9 s in program-status queries; the injected candidate spent
+31.1 s, and the final cold profiled run spent 59.6 s. The mechanism improves that
+component, but overall cold-start improvement was not consistent across runs. Final cold
+pack preparation took 54.1-67.9 s versus 13.6 s in the baseline. Host memory
+pressure was observed, but it was not isolated as the sole cause. No builds or
+other agent graphical workloads overlapped these browser comparisons. The final
+unprofiled run reached observed first control at 195.1 s, including screenshots,
+UI-driver waits and optional introduction Skip; this is not a handoff benchmark.
+Its first 55 gameplay samples reported 14.92 average FPS / 10.70 FPS 1% low:
+neither sustained-play evidence nor compliance with the retained performance gates.
+
+To avoid relying on the best diagnostic result, the final old/new pair ran
+sequentially without profiling, builds or other agent work. Cold menu improved
+131.3 -> 113.9 s (13.3%); reload improved 112.0 -> 108.3 s (3.3%). Observed first
+control improved 165.5 -> 125.3 s, including the same screenshot/input/Skip flow.
+The short post-movement samples were 14.95/10.24 FPS average/1% low before and
+15.01/11.06 after, with only 33/18 samples respectively; no sustained FPS claim.
+This is a measured incremental improvement, **not a satisfactory loading-time
+resolution**. Keep the original complaint open rather than claim 67-98 s is fixed.
+
+- `quit-before.log` reproduced two leaked `GDScriptFunctionState` instances from
+  `prepare_gameplay_services` / `_prepare_opening_services` when native Quit ran
+  during preparation. Historical failure is retained.
+- `quit-preparation/headless-results.json`: PASS, 7.2 s; actual cancellation/Quit
+  path, verbose engine output, no ObjectDB leak warnings.
+- `quit-playable-r2/headless-results.json`: PASS, 13.7 s; Quit after New Game,
+  services released and retirement drained, no leak warnings. The preceding
+  `quit-playable` run failed because the fixture awaited a non-awaiting forwarding
+  wrapper; that HARNESS failure remains recorded. The corrected fixture awaits
+  the actual session handler. OS window-close routes there but was not separately
+  exercised by a graphical close gesture; browser unload is a different lifecycle.
+- `tools/test_web_light_loops.mjs`: PASS for equivalent ordered light indices,
+  unknown-shader preservation, receiver forwarding and idempotent installation.
+- Required service/script compilation, Web export and exact package integrity:
+  PASS. Asset packs without changed inputs retain their exact bytes. Examination
+  of material and pack-buffer ownership did not justify unrelated asset changes.
+
+### Delivery and Remaining Loading Work
+
+Candidate: `startup-speed-20261107`. Complete deployment: **205,973,540 bytes
+(196.43 MiB)**, below 256 MiB and its 200 MiB warning. Root transport SHA-256:
+`98f5e4be64d1094cf3145270d122d6f8aaacb270a888079ab4e9ac61b7402355`.
+Balanced opening dependencies: 124,523,465 compressed bytes; Quality: 131,748,020.
+At 20 Mbps, Balanced transfer alone has an approximately 49.8-second theoretical
+floor, before processing. This change does not reduce that download requirement.
+
+Native shutdown repair is verified in the two stated cases. Loading is improved
+at the shader-compilation component, **not fully resolved**: large opening
+dependencies and remaining first-view compilation need further source-backed
+work. No content deletion, covert quality reduction, longer timeout or premature
+control was used to turn those requirements green. User acceptance, strict
+loading/FPS/memory targets and actual-phone/WebKit behavior remain unverified or
+unmet as described above. Publication is development/main Git push only; Vercel
+deploys automatically and is not awaited or represented as live-verified.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

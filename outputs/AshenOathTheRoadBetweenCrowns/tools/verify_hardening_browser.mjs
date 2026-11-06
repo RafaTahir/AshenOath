@@ -52,6 +52,7 @@ const report = {
   release_manifest_sha256: createHash('sha256').update(releaseBytes).digest('hex'),
   harness_sha256: createHash('sha256').update(readFileSync(new URL(import.meta.url))).digest('hex'),
   observation_mode: 'production_read_only', gameplay_input: 'Chromium mouse/keyboard/touch and file picker',
+  light_loop_candidate_injected: Boolean(options['light-loop-candidate']),
   limits: ['No gameplay mutation API', 'No performance thresholds or hardware/mobile-device certification',
     'Imported fixtures are test journeys, not earned campaign progression'],
   cases: [], requests: [], status: 'running',
@@ -306,7 +307,24 @@ async function enterMenu(page, touch) {
   if (scenario === 'startup') {
     event({ event: 'menu_reached', startup: await page.evaluate(() => ({
       navigation_ms: performance.now(), boot: window.__ashenOathBoot, opening: window.__ashenOathOpeningState,
+      light_loops: window.__ashenBoundedLightLoops || null,
     })) });
+    if (!currentCase.graphics) {
+      currentCase.graphics = await page.evaluate(() => {
+        const gl = document.querySelector('#canvas')?.getContext('webgl2');
+        if (!gl) return { context: 'unavailable' };
+        const info = gl.getExtension('WEBGL_debug_renderer_info');
+        return { context: 'webgl2', renderer: info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+          vendor: info ? gl.getParameter(info.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR), version: gl.getParameter(gl.VERSION) };
+      });
+      event({ event: 'graphics_device', ...currentCase.graphics });
+    }
+    if (options['webgl-profile']) {
+      const profile = await page.evaluate(() => window.__ASHEN_WEBGL_PROFILE__ || null);
+      const path = join(evidenceRoot, `${currentCase.name}-webgl-${currentCase.webgl_profiles?.length || 0}.json`);
+      writeFileSync(path, JSON.stringify(profile, null, 2));
+      (currentCase.webgl_profiles ||= []).push(path);
+    }
     await screenshot(page, 'ready-menu');
   }
 }
@@ -338,6 +356,9 @@ async function startGame(page, viewport, touch) {
     }
     return playable(s) && s.zone === 'greyfen' ? s : null;
   }, 'New Game grants ordinary Greyfen control');
+  if (scenario === 'startup') event({ event: 'first_control',
+    navigation_ms: await page.evaluate(() => performance.now()),
+    performance: (await observe(page))?.performance || null });
   await screenshot(page, 'new-game');
 }
 async function pause(page, viewport, touch) {
@@ -429,6 +450,8 @@ function replaySeed(source, suffix, destination = 'greyfen') {
 async function smoke(page, viewport, touch) {
   await startGame(page, viewport, touch);
   await movement(page, viewport, touch);
+  if (scenario === 'startup') event({ event: 'post_movement_performance',
+    performance: (await observe(page))?.performance || null });
   await pause(page, viewport, touch);
   await clickButton(page, 'Quick Save', viewport, touch);
   // Filename includes .json; keep the real durable value, never synthesize it.
@@ -622,6 +645,11 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
   const result = currentCase;
   const context = await browser.createBrowserContext();
   const page = await context.newPage();
+  if (options['light-loop-candidate']) {
+    const source = readFileSync(resolve('web_boot_shell.html'), 'utf8').match(/<script id="ashen-bounded-light-loops">([\s\S]*?)<\/script>/)?.[1];
+    assert(source, 'Bounded light loop source is missing');
+    await page.evaluateOnNewDocument(source);
+  }
   const cache = { latest: null, route: null, routeSerial: 0, phase: '' };
   observations.set(page, cache);
   await page.exposeFunction('__ASHEN_OATH_READ_ONLY_OBSERVATION__', payload => {
@@ -632,7 +660,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
         zone_load_request_pending: s.zone_load_request_pending, player: s.player, camera: s.camera,
         ui: s.ui, dialogue: s.dialogue, input: s.input, runtime_packs: s.runtime_packs,
         gates: s.gates, interactions: s.interactions, focus: s.focus,
-        enemies: s.enemies, inventory: s.inventory, settings: s.settings };
+        enemies: s.enemies, inventory: s.inventory, settings: s.settings, performance: s.performance };
       const phase = JSON.stringify([s.zone, s.ready, s.paused, s.ui?.active_menu, s.ui?.loading_visible, s.new_game_ready]);
       if (phase !== cache.phase) { cache.phase = phase; console.log(`HARDENING STATE: ${result.name} ${phase}`); }
     } catch { /* Ignore non-observation payloads. */ }
@@ -676,6 +704,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
     await cache.input.send('Emulation.setFocusEmulationEnabled', { enabled: true });
   }
   await page.bringToFront();
+  if (options['webgl-profile']) await page.evaluateOnNewDocument(readFileSync(new URL('./webgl_startup_probe.js', import.meta.url), 'utf8'));
   page.setDefaultTimeout(15000);
   page.on('console', message => {
     result.console.push({ type: message.type(), text: message.text(), at: Date.now() });

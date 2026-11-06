@@ -15,6 +15,15 @@ func _initialize() -> void:
 	_check(game.get("runtime_services") != null, "Runtime services were not initialized")
 	_check(not bool(game.get("resource_shutdown_prepared")), "Runtime entered shutdown during smoke test")
 	_check(not bool(game.get("game_started")), "Boot started a journey without explicit New Game")
+	if "--quit-during-preparation" in OS.get_cmdline_user_args():
+		var quit_deadline := Time.get_ticks_msec() + 120000
+		while not game.greyfen_prewarm_started and Time.get_ticks_msec() < quit_deadline:
+			await process_frame
+		_check(game.greyfen_prewarm_started, "Preparation never started before shutdown check")
+		await game.get_system("session")._handle_quit_request()
+		_check(game.runtime_services == null and game.resource_shutdown_prepared, "Quit bypassed resource cleanup")
+		print("RUNTIME SMOKE: " + ("PASS" if failures.is_empty() else "FAIL") + " (quit during preparation)")
+		return
 	var deadline := Time.get_ticks_msec() + 120000
 	while not game.opening_startup_metrics.has("menu_ready_ms") and Time.get_ticks_msec() < deadline:
 		await process_frame
@@ -24,6 +33,11 @@ func _initialize() -> void:
 	_check(game.get("world_materials") != null, "World material service was not initialized before control")
 	_check(bool(game.get("game_started")) and game.current_zone_id == "greyfen", "Explicit New Game did not enter Greyfen")
 	_check(game.zone_root != null and game.player != null and bool(game.player.can_control), "Greyfen never reached playable readiness")
+	if "--quit-through-menu" in OS.get_cmdline_user_args():
+		await game.get_system("session")._handle_quit_request()
+		_check(game.runtime_services == null and game.pending_zone_retirements == 0, "Quit retained services/zones")
+		print("RUNTIME SMOKE: " + ("PASS" if failures.is_empty() else "FAIL") + " (quit after New Game)")
+		return
 
 	# Runtime smoke owns teardown explicitly. This keeps normal shutdown errors
 	# attributable to the game lifecycle instead of an unconditional quit timer.

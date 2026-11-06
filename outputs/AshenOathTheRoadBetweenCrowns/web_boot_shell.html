@@ -57,6 +57,31 @@
     <p id="audio-message" role="status"></p>
     <button id="audio-retry" type="button">Enable sound</button>
   </section>
+  <script id="ashen-bounded-light-loops">
+    (() => {
+      if (!window.WebGL2RenderingContext || window.__ashenBoundedLightLoops) return;
+      const stats = window.__ashenBoundedLightLoops = { shaders: 0, loops: 0 };
+      const original = WebGL2RenderingContext.prototype.shaderSource;
+      WebGL2RenderingContext.prototype.shaderSource = function (shader, source) {
+        // Godot 4.6 Compatibility's fixed-bound loops make ANGLE unroll the
+        // entire PBR light body eight times, even for a single local light.
+        // min(count, capacity) visits exactly the same indices, in the same
+        // order, without expanding the compiler's work. Unknown code is intact.
+        if (source.startsWith('#version 300 es') && source.includes('#define MAX_FORWARD_LIGHTS 8u')) {
+          let changed = 0;
+          for (const kind of ['omni', 'spot']) {
+            const pattern = new RegExp('for \\(uint i = 0u; i < MAX_FORWARD_LIGHTS; i\\+\\+\\) \\{\\s*if \\(i >= ' + kind + '_light_count\\) \\{\\s*break;\\s*\\}');
+            source = source.replace(pattern, () => {
+              changed++;
+              return 'for (uint i = 0u; i < min(MAX_FORWARD_LIGHTS, ' + kind + '_light_count); i++) {';
+            });
+          }
+          if (changed) { stats.shaders++; stats.loops += changed; }
+        }
+        return Reflect.apply(original, this, [shader, source]);
+      };
+    })();
+  </script>
   <script>
     (() => {
       const canvas = document.getElementById('canvas');
