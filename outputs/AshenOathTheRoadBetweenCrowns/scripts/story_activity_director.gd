@@ -603,6 +603,20 @@ func _open_waypost() -> void:
 
 func _scene(id: String) -> void:
 	var content: Dictionary = host.dialogue.get_dialogue(id)
+	var community_scene := str(content.get("source_tag","")) == "campaign_revision_2"
+	var present: Dictionary = {}
+	if community_scene:
+		for actor_id: String in content.get("required_actors",[]):
+			var actor := preload("res://scripts/story_cast_profile.gd").registered_actor(host.zone_root,actor_id)
+			if not is_instance_valid(actor) or not actor.is_visible_in_tree() or actor.global_position.distance_to(host.player.global_position)>12.0: continue
+			if actor.has_method("is_interaction_enabled") and not actor.is_interaction_enabled(): continue
+			var driver := actor.find_child("CharacterAnimationDriver",true,false)
+			if driver != null and driver.get("dead") == true: continue
+			present[actor_id]=actor
+		content = community_aftermath_projection(content,present.keys())
+		for page: Dictionary in content.get("pages",[]):
+			var identity := preload("res://scripts/story_cast_profile.gd").canonical_identity(str(page.get("speaker_id","")))
+			if present.has(identity): page["speaker_actor_id"] = present[identity].get_instance_id()
 	if id.begins_with("aftermath_") and _flag("final_choice_completed"):
 		content = content.duplicate(true)
 		var pages: Array = content.get("pages", [])
@@ -618,11 +632,28 @@ func _scene(id: String) -> void:
 		content["pages"] = pages
 	var actor_id := "sister_anwen" if id.begins_with("aftermath_names_") else "blacksmith_tor" if id.begins_with("aftermath_work_") or id.begins_with("work_road_") else "mira" if id.begins_with("work_relief_") else "captain_senn" if id == "soldiers_stand_down" else "rook"
 	var scene_actor = host.zone_root.find_child(actor_id, true, false)
+	if community_scene: scene_actor = present.get(str(content.get("primary_actor","")))
 	if scene_actor != null:
 		host._stage_dialogue_moment(scene_actor)
+		if community_scene: preload("res://scripts/story_performance.gd").begin(scene_actor,host.player,content,host.story_state)
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
 	host.hud.show_dialogue(host._prepare_dialogue_presence(content))
+
+static func community_aftermath_projection(content: Dictionary, present: Array) -> Dictionary:
+	if str(content.get("source_tag","")) != "campaign_revision_2": return content
+	for actor_id: String in content.get("required_actors",[]):
+		if actor_id in present: continue
+		# A missing person did not make a recording or give testimony. Present the
+		# authored public work itself, without borrowing the absent person's words.
+		var projected := content.duplicate(true)
+		projected["pages"] = content.get("unattended_pages",[]).duplicate(true)
+		projected["greeting"] = ""
+		projected["lines"] = []
+		projected["primary_actor"] = ""
+		projected["fallback_text"] = str(projected.pages[0].get("text","")) if not projected.pages.is_empty() else ""
+		return projected
+	return content
 
 func _commit(flags: Dictionary, cue: String) -> void:
 	host.story_state.begin_change()

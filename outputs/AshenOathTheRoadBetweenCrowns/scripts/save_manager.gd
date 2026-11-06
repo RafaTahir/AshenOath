@@ -213,7 +213,9 @@ static func stop_transient_activity_for_save(game) -> void:
 	# the player to the safe bank before snapshotting; carried work stays durable.
 	var root = game.get("zone_root")
 	var activities = root.get_node_or_null("StoryActivities") if is_instance_valid(root) else null
-	if activities != null and activities.get("community") != null: activities.community.cancel()
+	# Closing one reading page can queue an autosave while its answer page is
+	# already open. Snapshotting stops physical work, not that new menu's owner.
+	if activities != null and activities.get("community") != null: activities.community.cancel(false)
 
 func _build_save_data(game, for_checkpoint: bool = false) -> Dictionary:
 	stop_transient_activity_for_save(game)

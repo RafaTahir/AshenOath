@@ -107,6 +107,25 @@ Verification recorded before the latest source refinements:
   Check shift changes, waiting, return travel, save during ferry, interruption,
   actual held-work geometry and all declared availability cases in that session.
 
+### Review corrections after `ad782d0` (source only; tests pending)
+
+- A deferred reading-history save can occur after the next consent answer page
+  opens. Save cleanup now cancels physical activity with `cancel(false)`, preserving
+  the current owned menu generation. The synthetic activity fixture covers a save
+  between hearing the willing answer and recording it.
+- The six expanded aftermath scenes declare `required_actors` and `primary_actor`.
+  Actual visible, nearby, living registered actors are required for spoken scenes.
+  When somebody is absent, `unattended_pages` supplies two authored narrator-only
+  public-work captions. These pages are consumed directly by runtime and tagged
+  `campaign_revision_2`; include all twelve in the caption inventory. An absent
+  person's words are never relabelled as a purported recording. Canonical source
+  instance IDs bind present speakers; the correct primary actor owns the scene.
+- Concord's work scene no longer attributes the weather allowance to Nera when
+  she may never have joined this journey. Its Rook line now begins "The rota
+  leaves a gap for weather." Regenerate that exact spoken line during integration.
+- `verify_community_aftermath.gd` covers full/partial/absent cast projection and
+  immutable source data. It is explicitly unrun during the shared quiet window.
+
 ## Journey identity and graph
 
 `story_state.flags.campaign_revision` is numeric `1` (original) or `2` (expanded).
