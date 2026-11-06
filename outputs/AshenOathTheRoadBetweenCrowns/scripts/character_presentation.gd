@@ -482,10 +482,13 @@ static func _add_castle_role_equipment(owner: Node3D, role: String) -> void:
 	equipment.scale = _inverse_attachment_scale(attachment)
 	attachment.add_child(equipment)
 	if castle_role.contains("patrol") or castle_role.contains("ranger"):
+		equipment.set_meta("equipment_kind", "spear")
 		_add_spear(equipment)
 	elif castle_role.contains("guard"):
+		equipment.set_meta("equipment_kind", "shield")
 		_add_shield(equipment)
 	else:
+		equipment.set_meta("equipment_kind", "book")
 		_add_record_book(equipment, castle_role.contains("steward"))
 
 static func _inverse_attachment_scale(attachment: BoneAttachment3D) -> Vector3:

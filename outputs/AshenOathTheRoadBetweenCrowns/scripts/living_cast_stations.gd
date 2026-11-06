@@ -1,5 +1,130 @@
 extends RefCounted
 
+const CastProfile = preload("res://scripts/story_cast_profile.gd")
+const STAGE_TWO := {
+	"nessa":{"source":"res://assets_external/environment_prepared/living_cast/station_nessa.scn", "contact_height":1.02},
+	"elna":{"source":"res://assets_external/environment_prepared/living_cast/station_elna.scn", "contact_height":1.02},
+	"toma":{"source":"res://assets_external/environment_prepared/living_cast/station_toma.scn", "contact_height":1.02},
+	"nera":{"source":"res://assets_external/environment_prepared/living_cast/station_nera.scn", "contact_height":1.10},
+	"vale":{"source":"res://assets_external/environment_prepared/living_cast/station_vale.scn", "contact_height":1.02},
+	"merrow":{"source":"res://assets_external/environment_prepared/living_cast/station_merrow.scn", "contact_height":1.02},
+	"edric":{"source":"res://assets_external/environment_prepared/living_cast/station_edric.scn", "contact_height":1.02},
+}
+
+## Called after region construction and before routine enrollment. Furniture is
+## static; the existing controller owns reservations, movement and all effects.
+static func ensure_region(host) -> void:
+	var definitions: Dictionary = CastProfile.life_data().get("zones", {}).get(str(host.current_zone_id), {}).duplicate(true)
+	if not definitions.has("saga_nera") and CastProfile.registered_actor(host.zone_root,"saga_maren") != null:
+		var routine := CastProfile.routine("saga_maren", str(host.current_zone_id), host.story_state, host.quests, "day")
+		if not routine.is_empty() and not routine.path.is_empty():
+			var point: Vector3 = routine.path[0]
+			definitions["saga_maren"] = {"work":[point.x,point.y,point.z]}
+	var created: Dictionary = {}
+	for id: String in definitions:
+		var identity := CastProfile.canonical_identity(id)
+		if identity not in STAGE_TWO and identity != "senn": continue
+		if created.has(identity): continue
+		var actor := CastProfile.registered_actor(host.zone_root, id)
+		if actor == null or not actor.visible: continue
+		created[identity] = true
+		var definition: Dictionary = definitions[id]
+		if identity in STAGE_TWO:
+			_add_regional_work(host, identity, definition.work, "")
+			if definition.has("after_work"):
+				_add_regional_work(host, identity, definition.after_work, "_after")
+		if definition.has("rest"):
+			_add_rest_stool(host, identity, definition.rest)
+
+static func _add_regional_work(host, identity: String, raw: Array, suffix: String) -> Node3D:
+	var name := "LivingWork_" + identity + suffix
+	var existing := host.zone_root.get_node_or_null(name) as Node3D
+	if existing != null: return existing
+	var stand := Vector3(float(raw[0]),float(raw[1]),float(raw[2]))
+	var safe: Vector3 = host.validate_walkable_position(stand)
+	if safe.distance_squared_to(stand) > 0.04: return null
+	var recipe: Dictionary = STAGE_TWO[identity]
+	var source := load(str(recipe.source)) as PackedScene
+	var mesh := _retained_timber_structure()
+	if source == null or mesh == null:
+		push_error("Living cast station is missing its authored task prop: " + identity)
+		return null
+	var root := Node3D.new()
+	root.name = name
+	root.position = safe
+	host.zone_root.add_child(root)
+	var table := MeshInstance3D.new()
+	table.name = "SupportedWorkTable"
+	table.mesh = mesh
+	table.scale = Vector3(1.10/2.2,1.0/0.93,0.80/1.5)
+	table.position.z = -0.76
+	root.add_child(table)
+	preload("res://scripts/camera_controller.gd").install_visual_clearance(table)
+	_add_box_solid(root, "TableSolid", Vector3(1.10,1.0,0.80), Vector3(0,0.5,-0.76))
+	var prop := source.instantiate() as Node3D
+	if prop == null or str(prop.get_meta("actor_identity", "")) != identity \
+			or not bool(prop.get_meta("stationary_supported_prop", false)) or not bool(prop.get_meta("grip_geometry_verified", false)):
+		push_error("Living cast station prop has invalid contact provenance: " + identity)
+		if prop != null: prop.free()
+		root.queue_free()
+		return null
+	prop.name = "StationWork_" + identity
+	prop.position = Vector3(0,1.0,-0.40)
+	root.add_child(prop)
+	var contact := Vector3(0,float(recipe.contact_height),-0.40)
+	var station := add_work(root, identity + suffix, contact, Vector3.ZERO, Vector3(0.12,0,0), 0.0)
+	for side: String in ["Left", "Right"]:
+		var grip := prop.find_child("Grip" + side, true, false) as Marker3D
+		if grip == null:
+			push_error("Living cast task prop lacks a calibrated grip: " + identity + "/" + side)
+			root.queue_free()
+			return null
+		_marker(station, "Work" + side, station.to_local(grip.global_position))
+	station.set_meta("task_prop", weakref(prop))
+	station.set_meta("work_identity", identity)
+	# Distinct seats around the actual table let shared meals reserve a place
+	# without taking another worker's hands or the player's interaction spot.
+	for side in [-1, 1]:
+		var place := _marker(root, "LifeMeal_%s_%s" % [identity, "left" if side < 0 else "right"], Vector3(float(side)*1.0,0,-0.76))
+		place.set_meta("meal_supported", true)
+		place.set_meta("table_point", Vector3(0,1.0,-0.76))
+	return root
+
+static func _add_rest_stool(host, identity: String, raw: Array) -> void:
+	var name := "LivingRest_" + identity
+	if host.zone_root.get_node_or_null(name) != null: return
+	var stand := Vector3(float(raw[0]),float(raw[1]),float(raw[2]))
+	if host.validate_walkable_position(stand).distance_squared_to(stand) > 0.04: return
+	var mesh := _retained_timber_structure()
+	if mesh == null: return
+	var root := Node3D.new()
+	root.name = name
+	root.position = stand
+	host.zone_root.add_child(root)
+	var seat := MeshInstance3D.new()
+	seat.name = "SupportedTimberSeat"
+	seat.mesh = mesh
+	seat.scale = Vector3(0.66/2.2,0.50/0.93,0.42/1.5)
+	seat.position.z = -0.56
+	root.add_child(seat)
+	_add_box_solid(root, "SeatSolid", Vector3(0.66,0.50,0.42), Vector3(0,0.25,-0.56))
+	var anchor := _marker(root, "LifeRest_" + identity, Vector3(0,0.50,-0.56))
+	anchor.set_meta("rest_supported", true)
+	anchor.set_meta("rest_kind", "seated")
+	anchor.set_meta("rest_identity", identity)
+	anchor.set_meta("stand_offset", Vector3(0,-0.50,0.56))
+
+static func _add_box_solid(parent: Node3D, name: String, size: Vector3, point: Vector3) -> void:
+	var body := StaticBody3D.new()
+	body.name = name
+	body.collision_layer = 1
+	body.collision_mask = 0
+	var shape := CollisionShape3D.new()
+	shape.shape = preload("res://scripts/immutable_collision_shapes.gd").box(size)
+	shape.position = point
+	body.add_child(shape)
+	parent.add_child(body)
+
 ## Contacts belong to visible retained furniture. These markers describe
 ## geometry; the existing routine owner still owns occupancy and movement.
 static func add_work(parent: Node3D, actor: String, contact: Vector3, stand: Vector3, hands: Vector3, hand_clearance: float = 0.025) -> Node3D:

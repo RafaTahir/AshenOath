@@ -40,13 +40,13 @@ func _add_mesh(node: GeometryInstance3D, mesh: Mesh, instance: int) -> void:
 		entries.append({"node":weakref(node), "mesh":id, "instance":instance, "bounds":mesh.get_aabb()})
 
 func obstruction(start: Vector3, finish: Vector3, actor: Node3D, cull_mask: int) -> Dictionary:
-	var direction := finish - start
-	if direction.length_squared() <= 0.0001:
-		return {}
-	# Stop just outside the target surface; actor meshes are excluded separately.
-	var end := finish - direction.normalized() * 0.035
-	var nearest: Dictionary = {}
-	var nearest_distance := start.distance_squared_to(end)
+	return _query_obstruction(start, finish, _query_entries(actor, cull_mask))
+
+func _query_entries(actor: Node3D, cull_mask: int) -> Array[Dictionary]:
+	# One fresh snapshot per validation, shared by its five rays. Transform and
+	# visibility work used to run five times per sample (and twice per image).
+	# Rebuild on every call so same-frame movement/hiding still invalidates hits.
+	var result: Array[Dictionary] = []
 	for entry: Dictionary in entries:
 		var node: GeometryInstance3D = entry.node.get_ref()
 		if not is_instance_valid(node) or not node.is_visible_in_tree() or (node.layers & cull_mask) == 0:
@@ -61,20 +61,30 @@ func obstruction(start: Vector3, finish: Vector3, actor: Node3D, cull_mask: int)
 			transform = transform * multi.get_instance_transform(int(entry.instance))
 		if absf(transform.basis.determinant()) < 0.000001:
 			continue
-		var inverse := transform.affine_inverse()
+		result.append({"node":node, "mesh":entry.mesh, "instance":entry.instance,
+			"transform":transform, "inverse":transform.affine_inverse(), "bounds":transform * (entry.bounds as AABB)})
+	return result
+
+func _query_obstruction(start: Vector3, finish: Vector3, candidates: Array[Dictionary]) -> Dictionary:
+	var direction := finish - start
+	if direction.length_squared() <= 0.0001: return {}
+	var end := finish - direction.normalized() * 0.035
+	var nearest: Dictionary = {}
+	var nearest_distance := start.distance_squared_to(end)
+	for entry: Dictionary in candidates:
+		var bounds: AABB = entry.bounds
+		if not bounds.has_point(start) and bounds.intersects_segment(start, end) == null: continue
+		var inverse: Transform3D = entry.inverse
 		var local_start := inverse * start
 		var local_end := inverse * end
-		var bounds: AABB = entry.bounds
-		if not bounds.has_point(local_start) and bounds.intersects_segment(local_start, local_end) == null:
-			continue
 		var hit: Dictionary = meshes[entry.mesh].intersect_segment(local_start, local_end)
 		if hit.is_empty():
 			continue
-		var position: Vector3 = transform * hit.position
+		var position: Vector3 = (entry.transform as Transform3D) * hit.position
 		var distance := start.distance_squared_to(position)
 		if distance < nearest_distance:
 			nearest_distance = distance
-			nearest = {"node":str(node.get_path()), "position":[position.x,position.y,position.z], "distance":sqrt(distance), "instance":entry.instance}
+			nearest = {"node":str(entry.node.get_path()), "position":[position.x,position.y,position.z], "distance":sqrt(distance), "instance":entry.instance}
 	return nearest
 
 func validate_actor(camera: Camera3D, actor: Node3D, viewport: Vector2i, forward: Vector3) -> Dictionary:
@@ -85,11 +95,12 @@ func validate_actor(camera: Camera3D, actor: Node3D, viewport: Vector2i, forward
 	var targets := [actor.global_position+Vector3.UP*height,actor.global_position+Vector3.UP*1.1,
 		actor.global_position+Vector3.UP*0.7,actor.global_position+Vector3.UP*1.05+right*0.23,
 		actor.global_position+Vector3.UP*1.05-right*0.23]
+	var candidates := _query_entries(actor, camera.cull_mask)
 	for target: Vector3 in targets:
 		if camera.is_position_behind(target): return {"reason":"actor behind camera"}
 		var pixel := camera.unproject_position(target)
 		if pixel.x < viewport.x*0.07 or pixel.x > viewport.x*0.93 or pixel.y < viewport.y*0.07 or pixel.y > viewport.y*0.93:
 			return {"reason":"actor projection outside safe frame","pixel":[pixel.x,pixel.y]}
-		var hit := obstruction(camera.global_position,target,actor,camera.cull_mask)
+		var hit := _query_obstruction(camera.global_position,target,candidates)
 		if not hit.is_empty(): return {"reason":"rendered mesh obstruction","hit":hit}
 	return {}

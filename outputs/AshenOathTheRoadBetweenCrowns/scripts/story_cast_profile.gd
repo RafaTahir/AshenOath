@@ -7,7 +7,7 @@ const RoutineDirector = preload("res://scripts/systems/npc_routine_director.gd")
 ## Heights and authored faces remain owned by the existing imported rigs.
 const CAST := {
 	"nera": {"expression":"guarded", "gesture":"explain", "pace":0.88, "token":"road_knot", "motif":"road"},
-	"nessa": {"expression":"warm", "gesture":"offer", "pace":0.92, "token":"grain", "motif":"home"},
+	"nessa": {"expression":"warmth", "gesture":"offer", "pace":0.92, "token":"grain", "motif":"home"},
 	"vale": {"expression":"guarded", "gesture":"explain", "pace":0.78, "token":"name", "motif":"names"},
 	"merrow": {"expression":"concerned", "gesture":"acknowledge", "pace":0.84, "token":"seal", "motif":"duty"},
 	"maren": {"expression":"guarded", "gesture":"explain", "pace":0.88, "token":"road_knot", "motif":"road"},
@@ -32,7 +32,7 @@ const PRESENCE := {
 	"tor": ["smith and mechanism keeper", "direct, dependable", "repairs arriving too late", ["rook", "anwen"], "forge", "warn"],
 	"mira": ["herbalist", "warm, practical", "help becoming another obligation", ["anwen", "iven"], "sort_herbs", "shelter"],
 	"rook": ["trader", "wry, watchful", "his family being followed", ["toma", "tor"], "check_supplies", "shelter"],
-	"elna": ["villager", "quiet, attentive", "private grief made spectacle", ["anwen", "nessa"], "remember", "shelter"],
+	"elna": ["villager", "quiet, attentive", "private grief made spectacle", ["anwen", "nessa"], "fold_cloth", "shelter"],
 	"toma": ["farmer and working-trail keeper", "earnest, observant", "another family missing supper", ["rook", "nessa", "mira"], "check_supplies", "warn"],
 	"senn": ["road captain", "controlled, weary", "order repeating a wrong", ["tavin", "nera"], "watch", "guard"],
 	"edric": ["lord", "polished, defensive", "accountability undoing his authority", ["merrow", "halvern"], "read", "guard"],
@@ -59,10 +59,19 @@ static var _life_data: Dictionary = {}
 static var _design_cast: Dictionary = {}
 
 const LIFE_MOTION := {
+	"kael":{"library":"res://assets_external/characters_prepared/animations/life_P01.res", "work":[], "contact":0.50, "idle_only":true, "clips":["Life_Idle_A", "Life_Idle_B"]},
 	"anwen":{"library":"res://assets_external/characters_prepared/animations/life_C01.res", "work":["care"], "contact":0.50},
 	"tor":{"library":"res://assets_external/characters_prepared/animations/life_C04.res", "work":["forge", "repair"], "contact":0.50},
 	"mira":{"library":"res://assets_external/characters_prepared/animations/life_C03.res", "work":["sort_herbs", "herb_stall", "sort_seeds"], "contact":0.50, "contact_probe":"palm"},
 	"rook":{"library":"res://assets_external/characters_prepared/animations/life_C02.res", "work":["check_supplies", "sort_supplies", "check_rope"], "contact":0.50, "contact_probe":"palm"},
+	"nessa":{"library":"res://assets_external/characters_prepared/animations/life_C11.res", "work":["bake", "care"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
+	"elna":{"library":"res://assets_external/characters_prepared/animations/life_C05.res", "work":["fold_cloth"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
+	"toma":{"library":"res://assets_external/characters_prepared/animations/life_C06.res", "work":["tend", "sort_seeds", "check_supplies"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
+	"nera":{"library":"res://assets_external/characters_prepared/animations/life_C12.res", "work":["check_rope", "check_supplies"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
+	"senn":{"library":"res://assets_external/characters_prepared/animations/life_C07.res", "work":["watch", "lookout"], "contact":0.50},
+	"vale":{"library":"res://assets_external/characters_prepared/animations/life_C09.res", "work":["read", "write"], "contact":0.50, "contact_probe":"palm", "requires_station":true, "extra_clips":{"lower_book":"Life_Lower_Book"}},
+	"merrow":{"library":"res://assets_external/characters_prepared/animations/life_C10.res", "work":["check_supplies", "read", "administer"], "contact":0.50, "contact_probe":"palm", "requires_station":true, "extra_clips":{"drink":"Life_Drink", "cup_hold":"Life_Cup_Hold"}},
+	"edric":{"library":"res://assets_external/characters_prepared/animations/life_C08.res", "work":["read", "review_dispatch"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
 }
 
 static func life_motion_profile(actor_id: String) -> Dictionary:
@@ -143,7 +152,13 @@ const WORKSTATIONS := {
 	"mira":{"node":"LifeWork_mira", "markers":true, "activity":"sort_herbs", "period":4.0, "surface_prop":"MiraRaisedDryingRack"},
 	"rook":{"node":"LifeWork_rook", "markers":true, "activity":"check_supplies", "period":4.0, "surface_prop":"RookStationSatchel", "contact_event":"satchel_cinch"},
 	"blacksmith_tor":{"node":"BlacksmithFittedWork", "point":Vector3(-1.22,0.92,0.10), "stand":Vector3(-1.40,0,0.45), "look":Vector3(-1.40,1.10,-0.35), "left":Vector3(-1.52,1.01,0.10), "right":Vector3(-1.22,1.185,0.10), "activity":"forge", "sound":"forge_hammer", "period":4.0, "lift":0.36},
-	"saga_nessa":{"quest":"saga_gre_q01", "point":Vector3(0,0.48,0), "stand":Vector3(0,0,0.65), "left":Vector3(-0.12,0.54,0.10), "right":Vector3(0.12,0.54,0.10), "activity":"bake", "period":2.5},
+	"saga_nessa":{"node":"LifeWork_nessa", "alternates":["LifeWork_nessa_after"], "markers":true, "activity":"bake", "activities":["bake", "care"], "surface_prop":"StationWork_nessa", "contact_event":"life_work:nessa", "period":4.0},
+	"widow_elna":{"node":"LifeWork_elna", "markers":true, "activity":"fold_cloth", "surface_prop":"StationWork_elna", "contact_event":"life_work:elna", "period":4.0},
+	"farmer_toma":{"node":"LifeWork_toma", "markers":true, "activity":"tend", "activities":["tend", "sort_seeds", "check_supplies"], "surface_prop":"StationWork_toma", "contact_event":"life_work:toma", "period":4.0},
+	"saga_nera":{"node":"LifeWork_nera", "alternates":["LifeWork_nera_after"], "markers":true, "activity":"check_rope", "activities":["check_rope", "check_supplies"], "surface_prop":"StationWork_nera", "contact_event":"life_work:nera", "period":4.0},
+	"vargan_record_keeper":{"node":"LifeWork_vale", "markers":true, "activity":"read", "activities":["read", "write"], "surface_prop":"StationWork_vale", "contact_event":"life_work:vale", "sound":"record_page", "period":4.0},
+	"vargan_steward":{"node":"LifeWork_merrow", "markers":true, "activity":"check_supplies", "activities":["check_supplies", "read", "administer"], "surface_prop":"StationWork_merrow", "contact_event":"life_work:merrow", "sound":"record_page", "period":4.0},
+	"edric":{"node":"LifeWork_edric", "markers":true, "activity":"review_dispatch", "activities":["review_dispatch", "read"], "surface_prop":"StationWork_edric", "contact_event":"life_work:edric", "sound":"record_page", "period":4.0},
 	"saga_jory":{"quest":"saga_gre_q02", "point":Vector3(0.30,1.05,0), "stand":Vector3(0.30,0,0.65), "left":Vector3(0.30,0.95,0), "right":Vector3(0.30,1.13,0), "activity":"check_rope", "period":2.4, "lift":0.08},
 	"saga_lysa":{"quest":"saga_var_q01", "point":Vector3(0,0.5,0), "stand":Vector3(0,0,0.65), "left":Vector3(-0.12,0.58,0.10), "right":Vector3(0.12,0.58,0.10), "activity":"read", "sound":"record_page", "period":6.0},
 	"saga_ressa":{"quest":"saga_dep_q02", "point":Vector3(0,0.15,0), "stand":Vector3(0,0,0.70), "left":Vector3(-0.12,0.24,0.15), "right":Vector3(0.12,0.24,0.15), "activity":"tend", "period":3.0},
@@ -199,7 +214,9 @@ static func routine(id: String, zone: String, state, quests, phase: String, minu
 		var social: Array = definition.social
 		path = [Vector3(social[0],social[1],social[2]), Vector3(work[0],work[1],work[2])]
 		activities = ["rest", activity]
-	var result := {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "station":definition.get("station", WORKSTATIONS.get(id, {})), "revision":str([phase,resolved,consequences,state.get_flag("final_covenant", "") if state != null else ""])}
+	var station_id := str({"nera":"saga_nera", "nessa":"saga_nessa", "vale":"vargan_record_keeper", "merrow":"vargan_steward", "elna":"widow_elna", "toma":"farmer_toma"}.get(str(profile.id), id))
+	var result := {"occupation":profile.occupation, "activity":activities[0], "activity_seconds":12.0 if phase == "night" else 8.0, "path":path, "activities":activities, "line":line, "identity":profile.id, "station":definition.get("station", WORKSTATIONS.get(station_id, WORKSTATIONS.get(id, {}))), "revision":str([phase,resolved,consequences,state.get_flag("final_covenant", "") if state != null else ""])}
+	result["meal_group"] = str(definition.get("meal_group", ""))
 	if minutes >= 0.0:
 		var locations := definition.duplicate(true)
 		locations.work = work

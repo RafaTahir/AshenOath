@@ -40,6 +40,17 @@ static func has_zone(zone: String) -> bool:
 		if str(scene.zone) == zone: return true
 	return false
 
+static func requestable_for(scene: Dictionary, host, actor: Node3D) -> bool:
+	if not is_instance_valid(actor) or not bool(scene.get("requested", false)) or not eligible(scene, host): return false
+	var actors: Array = scene.get("actors", [])
+	if actors.is_empty() or not preload("res://scripts/story_cast_profile.gd").same_person(str(actors[0]), str(actor.get("interaction_id"))): return false
+	if bool(host.story_state.get_flag("world_scenes_heard", {}).get(str(scene.get("id", "")), false)): return false
+	var required := str(scene.get("requires_bound_prop", ""))
+	if not required.is_empty():
+		var driver := actor.find_child("CharacterAnimationDriver", true, false)
+		if not is_instance_valid(driver) or not driver.has_method("supports_story_prop") or not driver.supports_story_prop(required): return false
+	return true
+
 static func turns(scene: Dictionary, host) -> Array:
 	for variant: Dictionary in scene.get("variants", []):
 		if eligible(variant.merged({"zone":scene.zone}), host):

@@ -1,0 +1,702 @@
+{
+  "schema_version": 1,
+  "source_read_only": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+  "isolated_game": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+  "copied": true,
+  "prepared_actor_inputs": {
+    "C11": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
+    "C05": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+    "C06": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+    "C12": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+    "C07": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
+    "C09": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+    "C10": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+    "C08": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn"
+  },
+  "files": [
+    {
+      "resource": "res://assets_external/animations/AnimationLibrary_Godot_Opening.tres",
+      "bytes": 1424583,
+      "sha256": "3f311fbe40f8bd928514f57bb7055e05402bc8061c1064877c3c35b487e53133"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "bytes": 3794792,
+      "sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "bytes": 1774668,
+      "sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+      "bytes": 1351564,
+      "sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "bytes": 1828876,
+      "sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+      "bytes": 1384804,
+      "sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "bytes": 1885436,
+      "sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+      "bytes": 1502736,
+      "sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "bytes": 1443260,
+      "sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9.png",
+      "bytes": 541148,
+      "sha256": "09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_0c038645fb8ee205e5ce61d8942d228143c4e13ed9a53052a658b2e50230b064.png",
+      "bytes": 56647,
+      "sha256": "0c038645fb8ee205e5ce61d8942d228143c4e13ed9a53052a658b2e50230b064"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png",
+      "bytes": 841125,
+      "sha256": "10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d.png",
+      "bytes": 834952,
+      "sha256": "2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png",
+      "bytes": 54690,
+      "sha256": "2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_35456ab8e4b0f0bff043394494928d05a18afbf34b8d84e09161f65ae33aac98.png",
+      "bytes": 475836,
+      "sha256": "35456ab8e4b0f0bff043394494928d05a18afbf34b8d84e09161f65ae33aac98"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4.png",
+      "bytes": 53536,
+      "sha256": "42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_430872605f1c3dd30718531fcca9c6f55ff91966c52b576076f988ac9cbefba6.png",
+      "bytes": 849303,
+      "sha256": "430872605f1c3dd30718531fcca9c6f55ff91966c52b576076f988ac9cbefba6"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png",
+      "bytes": 549889,
+      "sha256": "44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_4e333c769a5ccfb598fe146d01cc9b1fd9102fc0c5873e621c023699cfc67b5c.png",
+      "bytes": 922582,
+      "sha256": "4e333c769a5ccfb598fe146d01cc9b1fd9102fc0c5873e621c023699cfc67b5c"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_5616406d5216c22fb8ace1331600fcb09a1fbcb0042fd0c7a49f0a612f0904d3.png",
+      "bytes": 841696,
+      "sha256": "5616406d5216c22fb8ace1331600fcb09a1fbcb0042fd0c7a49f0a612f0904d3"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_5a8972406ebfb044eae14fd6281e63a5f4baf7984cf116367f3c895345f15c20.png",
+      "bytes": 53746,
+      "sha256": "5a8972406ebfb044eae14fd6281e63a5f4baf7984cf116367f3c895345f15c20"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_79538f82019fcf2377ff900ba856822f4c67fce9760d470f3a5d64a4ec8e7c4e.png",
+      "bytes": 565235,
+      "sha256": "79538f82019fcf2377ff900ba856822f4c67fce9760d470f3a5d64a4ec8e7c4e"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1.png",
+      "bytes": 56315,
+      "sha256": "7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d.png",
+      "bytes": 475471,
+      "sha256": "b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_b6637a3a91a0977d8ba1dcdb2408bac25529858b6aaad1bb493bdcc48ee79463.png",
+      "bytes": 54402,
+      "sha256": "b6637a3a91a0977d8ba1dcdb2408bac25529858b6aaad1bb493bdcc48ee79463"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
+      "bytes": 398,
+      "sha256": "bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_be8c0c35601285afab8473707370559b32eceaf8019fdb191fec6ed16774ad5f.png",
+      "bytes": 842787,
+      "sha256": "be8c0c35601285afab8473707370559b32eceaf8019fdb191fec6ed16774ad5f"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_beabbca278430acdec492e5a49954c055eddd5706941551a4afc3515ca0d8c37.png",
+      "bytes": 842319,
+      "sha256": "beabbca278430acdec492e5a49954c055eddd5706941551a4afc3515ca0d8c37"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png",
+      "bytes": 855265,
+      "sha256": "bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_c89792226e119dc6cc3bc51cf8321dec5f668be7642fd840915e0301f338ea79.png",
+      "bytes": 514147,
+      "sha256": "c89792226e119dc6cc3bc51cf8321dec5f668be7642fd840915e0301f338ea79"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_ccf31ac294eb1dd1d34c67db3f23656ab231a11c1e8683216f7c61cc6b706c91.png",
+      "bytes": 56582,
+      "sha256": "ccf31ac294eb1dd1d34c67db3f23656ab231a11c1e8683216f7c61cc6b706c91"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_d6cd7ab3f11b954fb2730afff7b52423646c842db4871ebfb428557ef989080f.png",
+      "bytes": 617306,
+      "sha256": "d6cd7ab3f11b954fb2730afff7b52423646c842db4871ebfb428557ef989080f"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_dea818dd1d8e19c616c16b937e24f86cf159c72025c50a7901f9c8a3760673c9.png",
+      "bytes": 839540,
+      "sha256": "dea818dd1d8e19c616c16b937e24f86cf159c72025c50a7901f9c8a3760673c9"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png",
+      "bytes": 56357,
+      "sha256": "ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_efb12074ef2149a2f554ddb649fa66acb6e471d36995adc6ed9e765a8944e8fa.png",
+      "bytes": 652359,
+      "sha256": "efb12074ef2149a2f554ddb649fa66acb6e471d36995adc6ed9e765a8944e8fa"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_fa383e674281f6863393bb380214dfa3edc485a5048a5f26c92a9ec37f609e5a.png",
+      "bytes": 543015,
+      "sha256": "fa383e674281f6863393bb380214dfa3edc485a5048a5f26c92a9ec37f609e5a"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_fd3776fce64b8f0e6190bcced5ef3da423405fc9878894b8e6840f940eeacffa.png",
+      "bytes": 499861,
+      "sha256": "fd3776fce64b8f0e6190bcced5ef3da423405fc9878894b8e6840f940eeacffa"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_31d38d4737a0c2fa33b72ce631fbf8b222ccaafe1bb6d9b6ada0c52ac6611a72.png",
+      "bytes": 996147,
+      "sha256": "31d38d4737a0c2fa33b72ce631fbf8b222ccaafe1bb6d9b6ada0c52ac6611a72"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_3afe5916e4b4dbfed778b6705eec943314d3641f8d0444fc8566c0cd6a517656.png",
+      "bytes": 865721,
+      "sha256": "3afe5916e4b4dbfed778b6705eec943314d3641f8d0444fc8566c0cd6a517656"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_3b74a949aa57ea4e6e20d8cc0d74e627a74d4bf32d6d9f6597baa7bb5e0e4fba.png",
+      "bytes": 847246,
+      "sha256": "3b74a949aa57ea4e6e20d8cc0d74e627a74d4bf32d6d9f6597baa7bb5e0e4fba"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_7016b92782ff53064d099da18fdc400517031fc9896f47f2eef023992ef53946.png",
+      "bytes": 21095,
+      "sha256": "7016b92782ff53064d099da18fdc400517031fc9896f47f2eef023992ef53946"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_9d176e04ded396a2207bc25540b1cb05747a66ca916e3c73a1ea49ff47f9a5e6.png",
+      "bytes": 369,
+      "sha256": "9d176e04ded396a2207bc25540b1cb05747a66ca916e3c73a1ea49ff47f9a5e6"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_eb9e24c96bb069ee5f7ca74446893bc79d1d09cf302a34bd9cd05d795ef7b099.png",
+      "bytes": 899737,
+      "sha256": "eb9e24c96bb069ee5f7ca74446893bc79d1d09cf302a34bd9cd05d795ef7b099"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_14f2d17ac26650851f41f806b939e88e3e577d3505f3f75a50376970b64d0e13.png",
+      "bytes": 1170663,
+      "sha256": "14f2d17ac26650851f41f806b939e88e3e577d3505f3f75a50376970b64d0e13"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_3688a3cb71e8cffa9b294cb4d7f3b5066ea0994c873d105963483e2b0c07b450.png",
+      "bytes": 1311663,
+      "sha256": "3688a3cb71e8cffa9b294cb4d7f3b5066ea0994c873d105963483e2b0c07b450"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_394942d23320612a0c93cc9adfa7046029077ec6a3f4d3d6c0cfed98e2ad2f31.png",
+      "bytes": 1317276,
+      "sha256": "394942d23320612a0c93cc9adfa7046029077ec6a3f4d3d6c0cfed98e2ad2f31"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_ca131b5511dbe968269047aa791f7f16a4a31b2a2bd9fd7681da75840ba1fe24.png",
+      "bytes": 1124880,
+      "sha256": "ca131b5511dbe968269047aa791f7f16a4a31b2a2bd9fd7681da75840ba1fe24"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_cd3bfe7be4979046113717192e9ef43748b3d369011b4b08eae671e1db2602a6.png",
+      "bytes": 22227,
+      "sha256": "cd3bfe7be4979046113717192e9ef43748b3d369011b4b08eae671e1db2602a6"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Banner_1_Cloth.obj",
+      "bytes": 8702,
+      "sha256": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Book_7.obj",
+      "bytes": 48541,
+      "sha256": "f65e5f4f68c92b634f7610e25f7a42572618cb80b85579fb436292dcd961ae4c"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Crate_Wooden.obj",
+      "bytes": 111592,
+      "sha256": "5452e2aa770f6bff09db597dcaabe8d9fd221fabb72d970b0a93e34b2544426f"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Mug.bin",
+      "bytes": 12488,
+      "sha256": "bbf61011611387a248b9107b13f40a9cddb31e605f677b2102b236147bf31691"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Mug.gltf",
+      "bytes": 3881,
+      "sha256": "73c4cb7e575685d0220a5d1dd40f1a68de9e64bfd34a54bcba6085b62a119a9d"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Scroll_1.obj",
+      "bytes": 34471,
+      "sha256": "c8165a9f6ae3763d3b444d84b57d75eb5ca49e6d6fdea4c286fe1239d956715b"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9.png.import",
+      "bytes": 1161,
+      "sha256": "7c21df72479102c72f0d674f3e4ef0553d3837524d9cf1ff11684a22f2b251ff"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_0c038645fb8ee205e5ce61d8942d228143c4e13ed9a53052a658b2e50230b064.png.import",
+      "bytes": 1161,
+      "sha256": "cab0b1a4d40eb1ee3dafd06dbefdfc5a040645566dd60b7a7a10cc7a6e0b4ee2"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png.import",
+      "bytes": 1161,
+      "sha256": "177651077b0512edb5e8dde285f0d69589e75fc8aebf4d97c79a8de74c97b2b4"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d.png.import",
+      "bytes": 1161,
+      "sha256": "eaed153b3b177447bfad0b0a8d3f0633d100f6e763bd63f0e744faea51ff6f35"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png.import",
+      "bytes": 1161,
+      "sha256": "43b345ec0eb4670e33d681beb34c445eecc96fee579cbf6275a40f63efc1c0a6"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_35456ab8e4b0f0bff043394494928d05a18afbf34b8d84e09161f65ae33aac98.png.import",
+      "bytes": 1161,
+      "sha256": "b60584e64d33003ae06edf55a9270a5ac66b242a2a143a629b207483c3b90eb8"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4.png.import",
+      "bytes": 1161,
+      "sha256": "82fb25c0c9917bbb91b17d26530c05bfe12cb057c6d69e5e4b0a692eba5db887"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_430872605f1c3dd30718531fcca9c6f55ff91966c52b576076f988ac9cbefba6.png.import",
+      "bytes": 1161,
+      "sha256": "32b01869d0ec2345f405577c9559996bc0a9fe2ac75a6d13ecafdc5a77d35be0"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png.import",
+      "bytes": 1161,
+      "sha256": "0c562a6532b58150e5fbe7fdc0f94940aef09a12bbc1a48f782cef309e64c59d"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_4e333c769a5ccfb598fe146d01cc9b1fd9102fc0c5873e621c023699cfc67b5c.png.import",
+      "bytes": 1161,
+      "sha256": "8ed57597f9f926f4f6e002c46240858b979b3e4845e32b2c72b68120bd04bb05"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_5616406d5216c22fb8ace1331600fcb09a1fbcb0042fd0c7a49f0a612f0904d3.png.import",
+      "bytes": 1161,
+      "sha256": "c15c9edfd5d7f55c05383f32ec34312a2fe87619d47b58cf2d24410d1b48bbc0"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_5a8972406ebfb044eae14fd6281e63a5f4baf7984cf116367f3c895345f15c20.png.import",
+      "bytes": 1161,
+      "sha256": "ef2bbbbffbc3377691d7941eb41594ec8217201826e22c98bcb4ce34e5575d4c"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_79538f82019fcf2377ff900ba856822f4c67fce9760d470f3a5d64a4ec8e7c4e.png.import",
+      "bytes": 1160,
+      "sha256": "880a2a6264121d7139dddc0eb409cc999891981baf65928ec475eec108c1eb08"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1.png.import",
+      "bytes": 1161,
+      "sha256": "9c91beb238e98efd8d70aa828ac4fdb1b984514bea0b9b3a76b5c70d82e918b2"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d.png.import",
+      "bytes": 1160,
+      "sha256": "c4aef078f7454eca890e337b3254a7566c880b7758fd5b3715399e3f9b4ba89a"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_b6637a3a91a0977d8ba1dcdb2408bac25529858b6aaad1bb493bdcc48ee79463.png.import",
+      "bytes": 1160,
+      "sha256": "f090d5a2006013c56ba9daf81f61cc2c4a5263be743501d474ca7aca819376d5"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png.import",
+      "bytes": 1161,
+      "sha256": "2a3ae501b89817fa635323b075e3775b1035542d4eabd2605f38b82e0da91d42"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_be8c0c35601285afab8473707370559b32eceaf8019fdb191fec6ed16774ad5f.png.import",
+      "bytes": 1159,
+      "sha256": "64f0939fcb2021d93dd91052b00d4c608fcde1a9b320690599e0f6c8e2c8e824"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_beabbca278430acdec492e5a49954c055eddd5706941551a4afc3515ca0d8c37.png.import",
+      "bytes": 1161,
+      "sha256": "23d4ca5a8d96f2472d8c627bd876d5454039cc9cf90bd973c40c963b06523e1c"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png.import",
+      "bytes": 1161,
+      "sha256": "b8d45bef35c1f303b389e17793bb379e539f77040b4d21de6f50810f600a9447"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_c89792226e119dc6cc3bc51cf8321dec5f668be7642fd840915e0301f338ea79.png.import",
+      "bytes": 1161,
+      "sha256": "b4261e940247c7d6b706272ded95365cf2410fa10956c2c2406f32e2a288d1bc"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_ccf31ac294eb1dd1d34c67db3f23656ab231a11c1e8683216f7c61cc6b706c91.png.import",
+      "bytes": 1161,
+      "sha256": "5ddda805ebed89b94fff8153a5aaa17c6f52f97aecb8ad51a22432680378625e"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_d6cd7ab3f11b954fb2730afff7b52423646c842db4871ebfb428557ef989080f.png.import",
+      "bytes": 1161,
+      "sha256": "a729a89f04b7d3ebdf7a27d0e62cce4c1206bb62d400e5b4be61e83c4fe1972b"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_dea818dd1d8e19c616c16b937e24f86cf159c72025c50a7901f9c8a3760673c9.png.import",
+      "bytes": 1161,
+      "sha256": "117c962aa7375ce5fc8b7d6e80b16d08d8d29af83903bddecf6763e47ef7dd12"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png.import",
+      "bytes": 1161,
+      "sha256": "3dbd95c6f79a6dd2da7d1fd23269b7916ac1d6716d9d3c6e26aed46515f27cc2"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_efb12074ef2149a2f554ddb649fa66acb6e471d36995adc6ed9e765a8944e8fa.png.import",
+      "bytes": 1160,
+      "sha256": "d8a11b36386d148e080266c3dbce8e4c7d87379c7ec5de4c07f52bd2c270ae47"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_fa383e674281f6863393bb380214dfa3edc485a5048a5f26c92a9ec37f609e5a.png.import",
+      "bytes": 1160,
+      "sha256": "65747d1c3fd00f418395f70214fcc3ff89e46d7e5ce6490ae9634b8bbf7f0c5d"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/color_fd3776fce64b8f0e6190bcced5ef3da423405fc9878894b8e6840f940eeacffa.png.import",
+      "bytes": 1160,
+      "sha256": "474003d8d0972f4127a88348096009cf117419903112f76d6e485cbf09072b59"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_31d38d4737a0c2fa33b72ce631fbf8b222ccaafe1bb6d9b6ada0c52ac6611a72.png.import",
+      "bytes": 1164,
+      "sha256": "31dec93b871890177d6522da697c309d99233fd30f554a66b33f36ef90285c3c"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_3afe5916e4b4dbfed778b6705eec943314d3641f8d0444fc8566c0cd6a517656.png.import",
+      "bytes": 1164,
+      "sha256": "dc260d0d3a2766a427aa5b3edb76c844b6ecde4e578e65aad4a2e7617f6c1d36"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_3b74a949aa57ea4e6e20d8cc0d74e627a74d4bf32d6d9f6597baa7bb5e0e4fba.png.import",
+      "bytes": 1164,
+      "sha256": "0b40b49dee66c4d710a20cc5203c56266cd56f49fd447f19c056839d21559753"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_7016b92782ff53064d099da18fdc400517031fc9896f47f2eef023992ef53946.png.import",
+      "bytes": 1163,
+      "sha256": "4085bd874e5c808777a3649ab1174f08e2418fcc7ed8e39dff3234c19266c4b4"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_9d176e04ded396a2207bc25540b1cb05747a66ca916e3c73a1ea49ff47f9a5e6.png.import",
+      "bytes": 1163,
+      "sha256": "8e6484f8c32d03a83f61f8493b8c800bbd7b6f59ff86ab6f7975a8a91f49dc58"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/linear_eb9e24c96bb069ee5f7ca74446893bc79d1d09cf302a34bd9cd05d795ef7b099.png.import",
+      "bytes": 1164,
+      "sha256": "8b08267f9ef5e3f950492b66dd18c059ab8fd5f09e0a40280d45dad2c841cf32"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_14f2d17ac26650851f41f806b939e88e3e577d3505f3f75a50376970b64d0e13.png.import",
+      "bytes": 1164,
+      "sha256": "e21321374a678c8deb8465106c6eb6102183e0482285220d0873d1abc031327b"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_3688a3cb71e8cffa9b294cb4d7f3b5066ea0994c873d105963483e2b0c07b450.png.import",
+      "bytes": 1164,
+      "sha256": "7ab1f8ee448d197a21cf0cb36a34f9cae1ca45ce802556aea7431f538460af12"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_394942d23320612a0c93cc9adfa7046029077ec6a3f4d3d6c0cfed98e2ad2f31.png.import",
+      "bytes": 1162,
+      "sha256": "9e8883cbd119c6e935b20785ba1614d7f129371ac4ad3e467c4ba8d57d4849de"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_ca131b5511dbe968269047aa791f7f16a4a31b2a2bd9fd7681da75840ba1fe24.png.import",
+      "bytes": 1164,
+      "sha256": "5c2e38af8da502ca776de18f7239ede5dc7120be256fa8567dfced67536ff378"
+    },
+    {
+      "resource": "res://assets_external/design_pack_v1/humans/textures/normal_cd3bfe7be4979046113717192e9ef43748b3d369011b4b08eae671e1db2602a6.png.import",
+      "bytes": 1164,
+      "sha256": "1ae09de4864e006b62f67635a93c06549e2fe322dacdb6cc0189f479428de4ae"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Banner_1_Cloth.mtl",
+      "bytes": 589,
+      "sha256": "fab7e1bc3db526d96baf8b4cec1c2dd9f6a577d800e91d841e3504ae671395c4"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Book_7.mtl",
+      "bytes": 599,
+      "sha256": "faadfbc91d6fe41bc760c5c71afc935be4567b7288cba61d35f783b433d7826a"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Crate_Wooden.mtl",
+      "bytes": 604,
+      "sha256": "cdbe3dc8ab8fd68341b213654d1a021330e0e70cae31101748f8f261d21e0c9a"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Scroll_1.mtl",
+      "bytes": 531,
+      "sha256": "256a3e17704d7656e76cbd4e3011b33b8363863fef09aa98812603b8d3f960ed"
+    },
+    {
+      "resource": "res://.godot/imported/color_09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9.png-468db75ce36939100136d404d1c4789b.ctex",
+      "bytes": 201488,
+      "sha256": "f18d043cb5dd5461f923bec77df3fdde7df1d2fdd03a89f4e70851fcccf014c8"
+    },
+    {
+      "resource": "res://.godot/imported/color_0c038645fb8ee205e5ce61d8942d228143c4e13ed9a53052a658b2e50230b064.png-eb8ce804735175f93bbd241ead143b35.ctex",
+      "bytes": 26126,
+      "sha256": "9c6b856615e33a22b1794a56d78ab054f98f6163a9caed394fdf0933eca7ad06"
+    },
+    {
+      "resource": "res://.godot/imported/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png-3af038e9f47a9959f8f8f1f318e0cc53.ctex",
+      "bytes": 522160,
+      "sha256": "a8e312507b0cbeefe84ae9233be53f8afcb01bca8278fa026126d5af5ca7dabd"
+    },
+    {
+      "resource": "res://.godot/imported/color_2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d.png-943205fd67a26ed9ad11535a9301201a.ctex",
+      "bytes": 519802,
+      "sha256": "a926c4a7b666f4c026b5d2d006a3e10677082b9cc3dd9920154fe312576dbe07"
+    },
+    {
+      "resource": "res://.godot/imported/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png-f1ba749e869da4ba4f82e1c93efe4885.ctex",
+      "bytes": 25440,
+      "sha256": "ae8237733ef203798a441602b59ad8e916289327680a1ff954486757f552a15d"
+    },
+    {
+      "resource": "res://.godot/imported/color_35456ab8e4b0f0bff043394494928d05a18afbf34b8d84e09161f65ae33aac98.png-3f393c0c87b937c6061180dbdbc4dd6f.ctex",
+      "bytes": 178160,
+      "sha256": "040a3c10bbac8e83850a1b1eb0bc41b214b2a05c5b297fd3c7197b871725e7ba"
+    },
+    {
+      "resource": "res://.godot/imported/color_42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4.png-5fe0d0b997a62dd6c7ea03fca03a404a.ctex",
+      "bytes": 23808,
+      "sha256": "203f35bd17acc8f42a03f6749792606363167f2f3751c2597502bdfd5b53e042"
+    },
+    {
+      "resource": "res://.godot/imported/color_430872605f1c3dd30718531fcca9c6f55ff91966c52b576076f988ac9cbefba6.png-bc918dfbc98a7538cb938a92f322f5a1.ctex",
+      "bytes": 529790,
+      "sha256": "4a7ed8bebaa06bbee720f868fcbd56e76b5d3f4334a2dfa9944190a8bc0e5c85"
+    },
+    {
+      "resource": "res://.godot/imported/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png-e3d4d03a36192bb05e0cb000468612a0.ctex",
+      "bytes": 246380,
+      "sha256": "7bed31d4bda14a5b5470244cc52d55591f1f7942f927ab27af8731ebf5310452"
+    },
+    {
+      "resource": "res://.godot/imported/color_4e333c769a5ccfb598fe146d01cc9b1fd9102fc0c5873e621c023699cfc67b5c.png-3e88f5b0147df437909ea00b4b8f2c98.ctex",
+      "bytes": 591580,
+      "sha256": "adc1008140aa5abf9e4c50d45e07edcfa4855ad29199e8eee24962e3a6960430"
+    },
+    {
+      "resource": "res://.godot/imported/color_5616406d5216c22fb8ace1331600fcb09a1fbcb0042fd0c7a49f0a612f0904d3.png-b2746501b48fb9b8846d625f717de937.ctex",
+      "bytes": 522034,
+      "sha256": "cd23dc2c97e2b4747fc77dd1e4070c349f16cc54f1fdcd2fcc66a298f9aa6776"
+    },
+    {
+      "resource": "res://.godot/imported/color_5a8972406ebfb044eae14fd6281e63a5f4baf7984cf116367f3c895345f15c20.png-224ad00d45493c6cf7044b484b0ec763.ctex",
+      "bytes": 24194,
+      "sha256": "8ac89974a3af3b2615426bfd521c47bd76f460a1f16bbd3a3f17890ebe4ade2e"
+    },
+    {
+      "resource": "res://.godot/imported/color_79538f82019fcf2377ff900ba856822f4c67fce9760d470f3a5d64a4ec8e7c4e.png-c0be1667e6ff5cc252da8e241fdae570.ctex",
+      "bytes": 134590,
+      "sha256": "46a590c0138b4d20e12e53e09b0dd6f8e3c8e71cfc4e9a5205797859bde98265"
+    },
+    {
+      "resource": "res://.godot/imported/color_7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1.png-291acc0c07a73ae732eb15eb0fecdf95.ctex",
+      "bytes": 25936,
+      "sha256": "e39d0c86a235326f0cb25086b0e94117f9df8c2ce75a78e3989308372e897e4e"
+    },
+    {
+      "resource": "res://.godot/imported/color_b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d.png-0d13cdf26508b15a9610d5a6252e6b99.ctex",
+      "bytes": 175446,
+      "sha256": "68b91938009b70b97e22f5fbba9801a13a41de7bda88c1661a4700a467696249"
+    },
+    {
+      "resource": "res://.godot/imported/color_b6637a3a91a0977d8ba1dcdb2408bac25529858b6aaad1bb493bdcc48ee79463.png-51eca98d81cb24319110f08fa1ec8200.ctex",
+      "bytes": 25030,
+      "sha256": "ed1fbc4a79da04b1785405d5b9ac47d4ae63d75aa58382c7bacf4d3e5667f7a1"
+    },
+    {
+      "resource": "res://.godot/imported/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png-7e030e0d45f37dc68550a072a30d832a.ctex",
+      "bytes": 158,
+      "sha256": "d8358a081427c59be488778a15a588680a1d4f2c9e3cdedcf524a0a81a7c062e"
+    },
+    {
+      "resource": "res://.godot/imported/color_be8c0c35601285afab8473707370559b32eceaf8019fdb191fec6ed16774ad5f.png-ab97ab35eda278c9186cdbb2bf6d1681.ctex",
+      "bytes": 523904,
+      "sha256": "c38b3786049a31a5d5426a4fe6083a4fe3952ca1a905ff8585962d1750d83b50"
+    },
+    {
+      "resource": "res://.godot/imported/color_beabbca278430acdec492e5a49954c055eddd5706941551a4afc3515ca0d8c37.png-4c0b3ec8539ed3e9dc7b6ee0a31b43a7.ctex",
+      "bytes": 526846,
+      "sha256": "b088f8067b600bba52ed2951b4613f7e34df3a52aab31f341bb74c14e179788d"
+    },
+    {
+      "resource": "res://.godot/imported/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png-cbf92b7ce4ffb6b9bb0feac7747b00ca.ctex",
+      "bytes": 535084,
+      "sha256": "da2e01fa4af466c22fef3f817866e900531998f932ebdf612746644281d0a4e1"
+    },
+    {
+      "resource": "res://.godot/imported/color_c89792226e119dc6cc3bc51cf8321dec5f668be7642fd840915e0301f338ea79.png-a57c0a03e55b2ef7f89cc2d5b97287b0.ctex",
+      "bytes": 184952,
+      "sha256": "325f5878d75663b2500510be58cefc70995499ef20c9d16e2b8d803819da1a67"
+    },
+    {
+      "resource": "res://.godot/imported/color_ccf31ac294eb1dd1d34c67db3f23656ab231a11c1e8683216f7c61cc6b706c91.png-5e8ebdc01358bb267b7055bc8408acb1.ctex",
+      "bytes": 26510,
+      "sha256": "08aa73828e7da08f67d732c930e067608ba096abb9d98fd235b8780032ec8835"
+    },
+    {
+      "resource": "res://.godot/imported/color_d6cd7ab3f11b954fb2730afff7b52423646c842db4871ebfb428557ef989080f.png-0844d80a9f98b360ff0daaf1cfbbb2e2.ctex",
+      "bytes": 365806,
+      "sha256": "1ad2a000e2323de2803f6f213a934a6ac3f853df1fa2cc2489105bfe33c410e4"
+    },
+    {
+      "resource": "res://.godot/imported/color_dea818dd1d8e19c616c16b937e24f86cf159c72025c50a7901f9c8a3760673c9.png-44def3e47026b40e25b4a672cf1f34e8.ctex",
+      "bytes": 524066,
+      "sha256": "0d221bd6e7549a6b22a3977098e57385a75e774d0531168b2a5ae2f58c25dd4f"
+    },
+    {
+      "resource": "res://.godot/imported/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png-80321214eb1d67a881e2a313845b9304.ctex",
+      "bytes": 26014,
+      "sha256": "5707532ff16b70af34059c116ba6d8dfbdbe939c6f20df38d35f83506c5ecdb6"
+    },
+    {
+      "resource": "res://.godot/imported/color_efb12074ef2149a2f554ddb649fa66acb6e471d36995adc6ed9e765a8944e8fa.png-8a0bc8e59d429b299d7e1540e1da6eab.ctex",
+      "bytes": 385436,
+      "sha256": "ac2b1ef7d72925db11d8245a47ab45310baabe103caedd5171f5707951a5a26a"
+    },
+    {
+      "resource": "res://.godot/imported/color_fa383e674281f6863393bb380214dfa3edc485a5048a5f26c92a9ec37f609e5a.png-205b4a761554266ba7f68aa13631363d.ctex",
+      "bytes": 200904,
+      "sha256": "8776dfcc8448b24a9941d6c6847c7338a4092ac3652547640a8074877e9ca9b9"
+    },
+    {
+      "resource": "res://.godot/imported/color_fd3776fce64b8f0e6190bcced5ef3da423405fc9878894b8e6840f940eeacffa.png-80685f5a9c3f2107535b1e0f5a081a07.ctex",
+      "bytes": 181686,
+      "sha256": "fb6743f7c056c29972331f07125c520015ce0916a3172039a9d4400d9014cb4a"
+    },
+    {
+      "resource": "res://.godot/imported/linear_31d38d4737a0c2fa33b72ce631fbf8b222ccaafe1bb6d9b6ada0c52ac6611a72.png-d02e63f367cf317146c9b1b8628653ce.ctex",
+      "bytes": 648174,
+      "sha256": "c3f588b1999436ad22443dcc943dafb628f842b3ce8487b644abb973456a5b62"
+    },
+    {
+      "resource": "res://.godot/imported/linear_3afe5916e4b4dbfed778b6705eec943314d3641f8d0444fc8566c0cd6a517656.png-05b9e86f897162aeb4cc1e9e8cbd04ea.ctex",
+      "bytes": 497444,
+      "sha256": "e9f3f916921683c6396c4378cb4cf5171c3b093e0378b9b1c17b34a8ef33dd9a"
+    },
+    {
+      "resource": "res://.godot/imported/linear_3b74a949aa57ea4e6e20d8cc0d74e627a74d4bf32d6d9f6597baa7bb5e0e4fba.png-760b3914c96747d2e3a4fe07cc6252c8.ctex",
+      "bytes": 484876,
+      "sha256": "608510684a6d2276cb7ed493e605e8c6f25f6f222a8b59d81ce16532bfaf3300"
+    },
+    {
+      "resource": "res://.godot/imported/linear_7016b92782ff53064d099da18fdc400517031fc9896f47f2eef023992ef53946.png-d24a2898f22dc455ce52fc25bdcd06cd.ctex",
+      "bytes": 322,
+      "sha256": "0f9c3fc03b4e735315e87feb922d0e92dabeca3e4bcb7696798fa0d70199f649"
+    },
+    {
+      "resource": "res://.godot/imported/linear_9d176e04ded396a2207bc25540b1cb05747a66ca916e3c73a1ea49ff47f9a5e6.png-bf02933b389aee1fac034eb41008b3b9.ctex",
+      "bytes": 136,
+      "sha256": "7364c1a6629d1c0490692d2e1944a4b854e18aefcc5feae495b4490102b45ebb"
+    },
+    {
+      "resource": "res://.godot/imported/linear_eb9e24c96bb069ee5f7ca74446893bc79d1d09cf302a34bd9cd05d795ef7b099.png-85738752d962b483813a9c8756259644.ctex",
+      "bytes": 503900,
+      "sha256": "f7a407e61905b19f8db8d003fb5336dc1401d1250e3e25b59aba85b2c792aa62"
+    },
+    {
+      "resource": "res://.godot/imported/normal_14f2d17ac26650851f41f806b939e88e3e577d3505f3f75a50376970b64d0e13.png-a1d6a8a583fcc629d33aa468bceab9dc.ctex",
+      "bytes": 795418,
+      "sha256": "482df247061d6c6b38601b42d467ecfbdef819be86229dfabefc63d03e160632"
+    },
+    {
+      "resource": "res://.godot/imported/normal_3688a3cb71e8cffa9b294cb4d7f3b5066ea0994c873d105963483e2b0c07b450.png-de08f1d30946e020fba0abda98bcbaff.ctex",
+      "bytes": 701702,
+      "sha256": "3bd6841d400271c3d667509f0a64e1e77b73d3dfd29f7b1da40de9c3536dcebe"
+    },
+    {
+      "resource": "res://.godot/imported/normal_394942d23320612a0c93cc9adfa7046029077ec6a3f4d3d6c0cfed98e2ad2f31.png-2c62815d56e19e26d043a4a28de9f046.ctex",
+      "bytes": 708402,
+      "sha256": "8b9228a272ae5bfe58fe2947291930b8105c56187ba1dcfbf22171fdfdaf59bb"
+    },
+    {
+      "resource": "res://.godot/imported/normal_ca131b5511dbe968269047aa791f7f16a4a31b2a2bd9fd7681da75840ba1fe24.png-51bcfb3cfbc84eb8afc035206f70ec16.ctex",
+      "bytes": 778526,
+      "sha256": "bec188e484ed5fe5873387fef53da51a1f430df2ea32aab04d75f17f0f8a8ce2"
+    },
+    {
+      "resource": "res://.godot/imported/normal_cd3bfe7be4979046113717192e9ef43748b3d369011b4b08eae671e1db2602a6.png-2adfaf58cacd2dd8e53ed83d7c280613.ctex",
+      "bytes": 378,
+      "sha256": "328c09bdad9b1063f185e59b45af4c0a875f310ee36d157f7e10dc64b4bfc2ab"
+    }
+  ],
+  "total_bytes": 51154158,
+  "full_cache_copied": false,
+  "prepared_actors_deferred": true,
+  "unused_material_textures_omitted": "Mug and OBJ source trim materials are replaced by the authored palette; exact geometry buffers/MTL provenance are retained."
+}

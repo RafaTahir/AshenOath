@@ -323,6 +323,8 @@ func _build_pages(data: Dictionary) -> Array:
 			page["direction"] = direction
 		if pause_after > 0.0:
 			page["pause_after"] = pause_after
+		if raw_line is Dictionary and raw_line.has("performance"):
+			page["performance"] = preload("res://scripts/story_scene_direction.gd").checked_performance(raw_line.performance)
 		pages.append(page)
 	return pages
 

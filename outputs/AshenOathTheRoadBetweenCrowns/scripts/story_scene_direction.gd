@@ -1,5 +1,56 @@
 extends RefCounted
 
+const HeadControls = preload("res://scripts/story_head_modifier.gd")
+static var _personal: Dictionary = {}
+static var _personal_loaded := false
+
+## Bind authored performance to the exact runtime speaker and subtitle. A text
+## edit must never reuse another line's gesture or emotional direction.
+static func authored(source_id: String, speaker: String, text: String) -> Dictionary:
+	if not _personal_loaded:
+		_personal_loaded = true
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/cast_personal_performances.json"))
+		if parsed is Dictionary: _personal = parsed.get("sources", {})
+	var entry: Dictionary = _personal.get(source_id, {})
+	if str(entry.get("speaker_id", "")) != speaker or str(entry.get("text_sha256", "")) != text.sha256_text():
+		return {}
+	return checked_performance(entry.get("performance", {}))
+
+static func checked_performance(raw: Variant) -> Dictionary:
+	if not raw is Dictionary: return {}
+	var result: Dictionary = raw.duplicate(true)
+	for key: String in ["emotion", "listener_emotion"]:
+		if result.has(key):
+			var expression := HeadControls.normalize_expression(str(result[key]))
+			if expression not in HeadControls.EXPRESSIONS: return {}
+			result[key] = expression
+	for key: String in ["gesture", "listener_gesture"]:
+		if str(result.get(key, "")) != "" and not HeadControls.GESTURE_SECONDS.has(str(result[key])): return {}
+	for key: String in ["body_gesture", "body_listener_gesture"]:
+		if result.has(key) and str(result[key]) not in ["drink", "lower_book"]: return {}
+	if result.has("attention"):
+		var attention: Variant = result.attention
+		if not attention is Dictionary or str(attention.get("mode", "")) not in ["actor", "neutral", "point"]: return {}
+		var seconds := float(attention.get("seconds", 1.0))
+		if not is_finite(seconds) or seconds <= 0.0 or seconds > 2.0: return {}
+		if str(attention.mode) == "point":
+			if attention.has("offset"):
+				var offset: Variant = attention.offset
+				if not offset is Array or offset.size() != 3: return {}
+				for value: Variant in offset:
+					if not (value is float or value is int) or not is_finite(float(value)) or absf(float(value)) > 20.0: return {}
+			elif str(attention.get("anchor", "")) != "doorway": return {}
+	if result.has("reaction_delay"):
+		var delay := float(result.reaction_delay)
+		if not is_finite(delay) or delay < 0.0 or delay > 1.0: return {}
+	return result
+
+static func for_world(scene_id: String, index: int, turn: Array) -> Dictionary:
+	if turn.size() < 3: return {}
+	var specific := authored("world_scene:%s:turn:%d" % [scene_id, index], str(turn[0]), str(turn[2]))
+	if not specific.is_empty(): return specific
+	return {"gesture":"explain", "listener_gesture":"acknowledge"}
+
 ## Performance direction only: no changes to dialogue meaning or decisions.
 static func opening_arrival() -> Array[Dictionary]:
 	return [
@@ -46,6 +97,8 @@ static func for_regional(speaker_id: String) -> Dictionary:
 	return {"emotion":emotion, "listener_emotion":"neutral", "gesture":"explain" if activity in ["repair", "check_rope", "read"] else "offer", "listener_gesture":"acknowledge", "framing":"two_shot", "reaction_delay":0.32}
 
 static func for_topic(topic_id: String, variant: String, page: Dictionary, index: int, count: int) -> Dictionary:
+	var specific := authored("conversation_topic:%s:line:%d" % [topic_id, index], str(page.get("speaker_id", "")), str(page.get("text", "")))
+	if not specific.is_empty(): return specific
 	var profile: Dictionary = TOPICS.get(topic_id, {"emotion":"neutral", "gesture":"acknowledge"})
 	var emotion := str(profile.emotion)
 	if topic_id == "edric_seal_in_hand" and variant in ["exposed", "compelled"]:
@@ -69,6 +122,8 @@ static func for_topic(topic_id: String, variant: String, page: Dictionary, index
 	}
 
 static func for_page(scene_id: String, page: Dictionary, index: int) -> Dictionary:
+	var explicit := checked_performance(page.get("performance", {}))
+	if not explicit.is_empty(): return explicit
 	var profile: Dictionary = SCENES.get(scene_id, {"emotion":"neutral", "listener":"concerned", "gesture":"acknowledge"})
 	if scene_id.begins_with("aftermath_"):
 		profile = {"emotion":"resolute", "listener":"relieved", "gesture":"acknowledge"}

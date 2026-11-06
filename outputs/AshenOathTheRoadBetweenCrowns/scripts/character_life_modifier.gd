@@ -17,8 +17,10 @@ var creature_id := ""
 var creature_intent := ""
 var creature_amount := 0.0
 var creature_weight := 0.0
+var authored_creature_ambient := false
 var tool: Node3D
 var owns_tool := false
+var stowed_role_equipment: Dictionary = {}
 var tool_kind := ""
 var station: Dictionary = {}
 var rest_anchor: Dictionary = {}
@@ -49,6 +51,15 @@ func configure(body: Node3D, motion: Node) -> void:
 	var skeleton := get_parent() as Skeleton3D
 	if skeleton == null:
 		return
+	# Only the prepared-source verifier marks these native clips as authored.
+	# Leave their fin, sac and antenna poses under the animation graph owner.
+	var creature_source: Node = skeleton
+	while creature_source != null:
+		if bool(creature_source.get_meta("authored_creature_ambient", false)):
+			authored_creature_ambient = true
+			break
+		if creature_source == actor: break
+		creature_source = creature_source.get_parent()
 	var source: Node = skeleton
 	while source != null:
 		if source.has_meta("garment_arm_clearance_m"):
@@ -116,6 +127,11 @@ func _process_modification() -> void:
 	if is_instance_valid(viewer):
 		near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
 	var effective := activity if activity != "" else carried_activity
+	if bool(driver.get("life_requires_station")) and effective in driver.life_work_kinds \
+			and (station.is_empty() or str(station.get("activity", "")) != effective):
+		# A missing/busy task surface is quiet waiting, never a convincing
+		# work clip performed against empty space or a substitute held vessel.
+		effective = "idle"
 	var native_motion: Dictionary = driver.life_motion_sample()
 	var requested := effective != "" and near and not bool(driver.story_dialogue_active)
 	_ambient_pose(skeleton, delta, near, effective, not native_motion.is_empty())
@@ -298,7 +314,9 @@ func _update_tool(kind: String, visible_now: bool) -> void:
 	var style := str({"repair":"hammer", "forge":"hammer", "read":"book", "notice_board":"book", "check_rope":"rope", "well":"rope", "bake":"bread", "kitchen":"bread", "care":"cloth", "carry":"supply", "check_supplies":"supply", "sort_supplies":"supply", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "herb_stall":"bowl"}.get(kind, ""))
 	if activity_prop != "":
 		style = activity_prop
-	if station.get("activity", "") == kind and str(station.get("surface_prop", "")) != "":
+	var supported_task: bool = station.get("activity", "") == kind and str(station.get("surface_prop", "")) != ""
+	_set_role_book_stowed(visible_now and supported_task)
+	if supported_task:
 		style = ""
 	if style != "" and (style != tool_kind or not is_instance_valid(tool)):
 		_release_tool()
@@ -324,8 +342,30 @@ func _update_tool(kind: String, visible_now: bool) -> void:
 func hide_activity_tool() -> void:
 	if is_instance_valid(tool):
 		tool.visible = false
+	_set_role_book_stowed(false)
+
+func _set_role_book_stowed(stowed: bool) -> void:
+	if not stowed:
+		var reference: WeakRef = stowed_role_equipment.get("node")
+		var borrowed := reference.get_ref() as Node3D if reference != null else null
+		if borrowed != null:
+			var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner", null)
+			if owner_ref != null and owner_ref.get_ref() == self:
+				borrowed.visible = bool(stowed_role_equipment.visible)
+				borrowed.remove_meta("book_visibility_owner")
+		stowed_role_equipment.clear()
+		return
+	if not stowed_role_equipment.is_empty() or not is_instance_valid(actor): return
+	var borrowed := actor.find_child("CastleRoleEquipment", true, false) as Node3D
+	if borrowed == null or borrowed.find_child("VarganRecordBook", true, false) == null: return
+	var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner", null)
+	if owner_ref != null and is_instance_valid(owner_ref.get_ref()): return
+	stowed_role_equipment = {"node":weakref(borrowed),"visible":borrowed.visible}
+	borrowed.set_meta("book_visibility_owner",weakref(self))
+	borrowed.visible = false
 
 func _release_tool() -> void:
+	_set_role_book_stowed(false)
 	if is_instance_valid(tool):
 		tool.visible = false
 		# Authored occupation equipment belongs to the character. Only the
@@ -404,6 +444,8 @@ func _ambient_pose(skeleton: Skeleton3D, delta: float, near: bool, effective: St
 
 func _creature_pose(skeleton: Skeleton3D) -> void:
 	var recovery := creature_intent == "recovery"
+	if authored_creature_ambient and not recovery and (str(driver.presentation_state) == "ecology" or (str(driver.presentation_state).is_empty() and float(driver.current_speed_mps) <= 0.08)):
+		return
 	var lean := 0.0
 	var tilt := 0.0
 	match creature_id:

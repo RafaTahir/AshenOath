@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import sys
 import urllib.request
+from story_voice_catalog import extra_utterances, role_for, canonical_speaker, source_identity, voice_directory, expansion_captions
 
 GAME = Path(__file__).resolve().parents[1]
 REPO = GAME.parents[1]
@@ -96,20 +97,21 @@ def utterances(cast):
         for scene_id, base in entries.items():
             for entry in [base, *[{**base, **variant} for variant in base.get("variants", [])]]:
                 for who, text, direction in pages(entry):
-                    role = ALIASES.get(who, who)
+                    role = role_for(GAME, who, ALIASES)
                     if role in cast:
                         if who == "guard" and scene_id == "vargan_patrol": role = "patrol_guard"
-                        yield scene_id, who, text, role, direction or str(entry.get("voice_direction", ""))
+                        yield source_identity(scene_id, entry), who, text, role, direction or str(entry.get("voice_direction", ""))
     topics = json.loads((GAME / "data/conversation_topics.json").read_text(encoding="utf-8-sig"))
     for topic in topics.get("topics", []):
         for entry in [topic, *[{**topic, **variant} for variant in topic.get("variants", [])]]:
             for who, text, direction in pages(entry):
-                role = ALIASES.get(who, who)
+                role = role_for(GAME, who, ALIASES)
                 if role not in cast:
                     raise RuntimeError(f"Uncast conversation speaker: {who}")
                 yield "conversation_topic:" + topic["id"], who, text, role, direction
     for scene, who, text, direction in ambient_pages():
-        yield scene, who, text, who, direction
+        yield scene, who, text, role_for(GAME, who, ALIASES), direction
+    yield from extra_utterances(GAME, cast, ALIASES, pages)
 
 def delivery_speed(profile, text, scene, direction):
     # Kokoro supports cadence, not free-form acting instructions. Never speak
@@ -152,15 +154,36 @@ def main():
     parser.add_argument("--all-scenes", action="store_true", help="Compatibility flag; full cast is always produced")
     parser.add_argument("--dialogue-only", action="store_true", help="Finish dialogue while leaving village remarks pending")
     parser.add_argument("--finalize-existing", action="store_true", help="Publish completed upgrades and retain earlier recordings without further synthesis")
+    parser.add_argument("--collect-only", type=Path, help="Write exact runtime tuples without importing inference or producing audio")
+    parser.add_argument("--incremental", action="store_true", help="Keep existing exact canonical-speaker performances and produce only missing lines")
+    parser.add_argument("--retained-assets-from", type=Path, help="Read retained audio from a verified source checkout; never write into it")
+    parser.add_argument("--new-directory", choices=["story", "living_cast", "community"], default="story")
+    parser.add_argument("--recipes", type=Path, help="Separate writable recipe cache when model files are shared read-only")
+    parser.add_argument("--max-new-bytes", type=int, default=16 * 1024 * 1024, help="Combined living_cast/community voice budget")
+    parser.add_argument("--threads", type=int, default=1, help="Bound inference concurrency on the shared workstation")
     args = parser.parse_args()
+    cast_data = json.loads((GAME / "data/voice_cast.json").read_text(encoding="utf-8-sig"))
+    cast = cast_data["roles"]
+    scheduled = list(utterances(cast))
+    if args.collect_only:
+        rows = [{"source_id":scene, "speaker_id":who, "canonical_speaker":canonical_speaker(GAME, who), "text":text,
+                 "text_sha256":hashlib.sha256(text.encode("utf-8")).hexdigest(), "cast_role":role, "direction":direction,
+                 "directory":voice_directory(scene, args.new_directory)}
+                for scene, who, text, role, direction in scheduled]
+        captions = list(expansion_captions(GAME))
+        for caption in captions:
+            caption["canonical_speaker"] = caption["speaker_id"]
+            caption["text_sha256"] = hashlib.sha256(caption["text"].encode("utf-8")).hexdigest()
+        args.collect_only.parent.mkdir(parents=True, exist_ok=True)
+        args.collect_only.write_text(json.dumps({"lines":rows, "captions":captions, "synthesis_performed":False}, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
+        print(f"Collected {len(rows)} runtime tuples; no audio generated.")
+        return
     sys.path.insert(0, str(args.runtime))
     import numpy as np
     import onnxruntime as ort
     import soundfile as sf
     from kokoro_onnx import Kokoro
 
-    cast_data = json.loads((GAME / "data/voice_cast.json").read_text(encoding="utf-8-sig"))
-    cast = cast_data["roles"]
     for asset in [MODEL, VOICES]:
         download(MODEL_BASE + asset, args.models / asset)
     credits = GAME / "docs/audio"
@@ -169,7 +192,7 @@ def main():
         download("https://huggingface.co/hexgrad/Kokoro-82M/resolve/main/" + remote, credits / local)
     download("https://www.apache.org/licenses/LICENSE-2.0.txt", credits / "KOKORO_LICENSE.txt")
     options = ort.SessionOptions()
-    options.intra_op_num_threads = min(6, max(1, (os.cpu_count() or 4) // 2))
+    options.intra_op_num_threads = max(1, min(args.threads, os.cpu_count() or 1))
     options.inter_op_num_threads = 1
     engine = None
     styles = {}
@@ -177,21 +200,42 @@ def main():
         session = ort.InferenceSession(str(args.models / MODEL), sess_options=options, providers=["CPUExecutionProvider"])
         engine = Kokoro.from_session(session, str(args.models / VOICES))
         styles = {role: sum(engine.get_voice_style(name) * weight for name, weight in profile["voices"].items()) / sum(profile["voices"].values()) for role, profile in cast.items()}
-    output = GAME / "assets_external/audio/voices/story"
-    output.mkdir(parents=True, exist_ok=True)
-    recipe_cache = args.models / "render-recipes"
+    recipe_cache = args.recipes or args.models / "render-recipes"
     recipe_cache.mkdir(parents=True, exist_ok=True)
     lines, seen = [], set()
     prior_path = GAME / "voice_production_manifest.json"
     prior = json.loads(prior_path.read_text(encoding="utf-8-sig")) if prior_path.exists() else {}
     previous_lines = {line["page_key"]:line for line in prior.get("lines", [])}
+    canonical_previous = {}
+    for line in prior.get("lines", []):
+        identity = canonical_speaker(GAME, str(line.get("speaker_id", "")))
+        canonical_previous.setdefault((identity, str(line.get("text", ""))), []).append(line)
+    if args.incremental:
+        lines = list(prior.get("lines", []))
     retained, pending = 0, []
-    scheduled = list(utterances(cast))
+    synthesized = 0
     print(f"Producing full cast: {len({(who, text) for _, who, text, _, _ in scheduled})} exact-text recordings", flush=True)
     for scene, who, text, role, direction in scheduled:
-        key = hashlib.sha256((who + "|" + text).encode("utf-8")).hexdigest()
+        identity = canonical_speaker(GAME, who)
+        key = hashlib.sha256(((identity if args.incremental else who) + "|" + text).encode("utf-8")).hexdigest()
         if key in seen: continue
         seen.add(key)
+        if args.incremental:
+            reusable = False
+            for existing in canonical_previous.get((identity, text), []):
+                if existing.get("cast_role") != role or existing.get("text_sha256") != hashlib.sha256(text.encode("utf-8")).hexdigest(): continue
+                path = str(existing.get("path", ""))
+                if not path.startswith("res://assets_external/audio/voices/"): continue
+                relative = Path(path[6:])
+                if ".." in relative.parts: raise ValueError("Retained voice path escapes asset root")
+                candidates = [GAME / relative]
+                if args.retained_assets_from: candidates.append(args.retained_assets_from.resolve() / relative)
+                if any(candidate.is_file() for candidate in candidates):
+                    reusable = True
+                    break
+            if reusable:
+                retained += 1
+                continue
         if args.dialogue_only and scene.startswith("ambient:"):
             pending.append({"scene":scene, "speaker_id":who, "page_key":key})
             continue
@@ -203,6 +247,8 @@ def main():
         recipe = {"version":RECIPE_VERSION, "cast_revision":cast_data["revision"], "model":cast_data["model"], "role":role, "profile":profile, "speed":speed, "spoken":spoken}
         recipe_hash = hashlib.sha256(json.dumps(recipe, sort_keys=True).encode("utf-8")).hexdigest()
         stamp = recipe_cache / (key + ".txt")
+        output = GAME / "assets_external/audio/voices" / voice_directory(scene, args.new_directory)
+        output.mkdir(parents=True, exist_ok=True)
         clip = output / (key + ".ogg")
         if clip.exists() and stamp.exists() and stamp.read_text(encoding="utf-8") == recipe_hash and previous_lines.get(key, {}).get("render_recipe_sha256") == recipe_hash:
             lines.append(previous_lines[key])
@@ -223,6 +269,7 @@ def main():
             partial = clip.with_suffix(".ogg.partial")
             sf.write(partial, samples, rate, format="OGG", subtype="VORBIS")
             partial.replace(clip)
+            synthesized += 1
             stamp.write_text(recipe_hash, encoding="utf-8")
             print(f"Produced {len(lines) + 1}: {scene} / {role}", flush=True)
         # Decode the delivered codec to bake the same timing that players hear.
@@ -231,23 +278,33 @@ def main():
         hop = max(1, int(rate / 30))
         rms = np.array([float(np.sqrt(np.mean(mono[i:i + hop] ** 2))) for i in range(0, len(mono), hop)])
         reference = max(float(np.percentile(rms, 95)), 0.01) if len(rms) else 0.01
-        lines.append({"id":"story_" + key[:20], "speaker_id":who, "cast_role":role, "text":text,
+        if args.incremental:
+            # Canonical aliases share the new performance; do not leave an old
+            # cast recipe competing for the same character and exact text.
+            lines = [line for line in lines if (canonical_speaker(GAME, str(line.get("speaker_id", ""))), str(line.get("text", ""))) != (identity, text)]
+        lines.append({"id":"story_" + key[:20], "speaker_id":identity if args.incremental else who, "cast_role":role, "text":text,
             "text_sha256":hashlib.sha256(text.encode("utf-8")).hexdigest(), "page_key":key,
             "narrative_revision":REVISION, "path":"res://" + clip.relative_to(GAME).as_posix(), "scene":scene,
-            "production_mode":"generated", "human_reviewed":False, "review_status":"not_performed_user_requested",
+            "production_mode":"generated", "human_reviewed":False, "review_status":"pending_listening_review",
             "status":"generated_current", "voice_model":cast_data["model"], "render_recipe_sha256":recipe_hash,
+            "audio_sha256":hashlib.sha256(clip.read_bytes()).hexdigest(), "audio_bytes":clip.stat().st_size,
             "speech_envelope_hz":rate / hop, "speech_envelope":np.round(np.clip((rms - 0.008) / reference, 0, 1), 3).tolist(),
             "duration_seconds":len(mono) / rate, "delivery_speed":speed})
+    new_bytes = sum(path.stat().st_size for folder in ["living_cast", "community"] for path in (GAME / "assets_external/audio/voices" / folder).glob("*.ogg"))
+    if new_bytes > args.max_new_bytes:
+        raise RuntimeError(f"New dialogue audio exceeds its budget: {new_bytes} > {args.max_new_bytes}; candidate remains local")
     manifest = {"ticket":"VOICE-CAST-003", "status":"generated_current_unreviewed", "narrative_revision":REVISION,
         "cast_revision":cast_data["revision"], "authoritative_delivery":"subtitles", "allow_generated_current_recordings":True,
-        "human_reviewed":False, "review_status":"not_performed_user_requested", "production_mode":"generated",
+        "human_reviewed":False, "review_status":"pending_listening_review", "production_mode":"generated",
         "source":"Kokoro-82M v1.0 full precision; kokoro-onnx 0.6.1", "source_url":"https://huggingface.co/hexgrad/Kokoro-82M",
         "attribution":"Kokoro by hexgrad, Apache-2.0 model weights. kokoro-onnx by thewh1teagle, MIT build-time runtime.",
         "pronunciation":PRONUNCIATION, "roles":cast, "lines":lines}
     manifest["retained_previous_recordings"] = retained
+    manifest["synthesized_this_run"] = synthesized
+    manifest["new_dialogue_bytes"] = new_bytes
     manifest["pending_recordings"] = pending
-    manifest["publication_mode"] = "completed_upgrades_with_existing_fallbacks" if args.finalize_existing else ("dialogue_complete" if args.dialogue_only else "full_cast")
-    if retained:
+    manifest["publication_mode"] = "incremental_living_cast" if args.incremental else ("completed_upgrades_with_existing_fallbacks" if args.finalize_existing else ("dialogue_complete" if args.dialogue_only else "full_cast"))
+    if retained and not args.incremental:
         manifest["source"] += "; retained Piper VCTK recordings for unfinished replacements"
         manifest["attribution"] += " Retained Piper/VCTK performances retain their original provenance and VCTK attribution."
     manifest_path = GAME / "voice_production_manifest.json"
@@ -258,7 +315,7 @@ def main():
     summary = "\n".join(f"| {role} | {count} |" for role, count in counts.items())
     (credits / "VOICE_PRODUCTION.md").write_text(
         "# Natural cast production\n\nKokoro-82M v1.0 full-precision synthesis replaces the previous Piper performances. "
-        "These are generated voices, not a human cast or cloned actor performances. No listening review, gameplay test, or verification was run, as requested. "
+        "These are generated voices, not a human cast or cloned actor performances. This compiler does not perform listening or gameplay acceptance. "
         "Written notices and narration stay text-led. Dialogue, optional conversation topics and supporting characters are included; pending village remarks remain caption-led.\n\n"
         "Cast recipes in `data/voice_cast.json` preserve identity using fixed model voice blends. Cadence is adjusted conservatively for intimate scenes. "
         "Character direction notes guide casting and cadence; Kokoro does not interpret free-form emotional acting prompts. "
@@ -266,10 +323,10 @@ def main():
         "No pitch-shifting or artificial ghost effects are used. The speech envelopes are baked from each final Ogg file.\n\n"
         "The model and inference dependencies stay under ignored work directories. Only compressed audio, recipes and provenance ship. "
         "Kokoro's Apache-2.0 model card, license and voice table are retained here. The old VCTK attribution remains for historical provenance.\n\n"
-        f"Published {len(lines)} exact-text performances: {len(lines) - retained} Kokoro upgrades and {retained} retained earlier recordings. "
-        f"{len(pending)} additional recordings remain unproduced and are outside this publication's scope.\n\n"
+        f"Manifest contains {len(lines)} exact-text performances. This run synthesized {synthesized} files and reused {retained} scheduled performances. "
+        f"{len(pending)} collected recordings remain unproduced and use subtitles until completed.\n\n"
         f"| Cast role | Clips |\n|---|---:|\n{summary}\n", encoding="utf-8")
-    print(f"Voice publication: {len(lines) - retained} Kokoro upgrades, {retained} retained recordings, {len(pending)} pending; {sum(count > 0 for count in counts.values())} voiced cast roles", flush=True)
+    print(f"Voice candidate: {synthesized} synthesized files, {retained} reused performances, {len(pending)} pending; {new_bytes} new-dialogue bytes. Publication and listening acceptance are separate.", flush=True)
 
 if __name__ == "__main__":
     main()

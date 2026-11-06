@@ -368,6 +368,8 @@ func _make_world_wheel(id: String, pos: Vector3, radius: float, depth: float, co
 	wheel.rotation_degrees = rotation_degrees
 	wheel.material_override = world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), color, 0.0, true)
 	wheel.set_meta("world_prop_kind", "mill_wheel")
+	wheel.set_meta("world_prop_spin_axis", Vector3.UP)
+	wheel.set_meta("world_prop_spin_speed", 0.45)
 	zone_root.add_child(wheel)
 	var hub := MeshInstance3D.new()
 	hub.name = "%sHub" % id
@@ -1493,7 +1495,7 @@ func _make_cart(pos: Vector3, include_visual: bool = true) -> void:
 			wheel.position = pos + Vector3(x, 0.35, -0.62)
 			wheel.rotation_degrees.z = 90
 			wheel.material_override = _mat(Color(0.07, 0.05, 0.035))
-			wheel.set_meta("world_prop_kind", "wheel")
+			wheel.set_meta("world_prop_kind", "cart_wheel")
 			wheel.set_meta("world_prop_id", "greyfen_cart_wheel")
 			zone_root.add_child(wheel)
 	_make_world_prop_anchor("cart", "cart", pos)
@@ -2829,6 +2831,7 @@ func _make_lantern_post(pos: Vector3, shrine_style: bool, casts_light: bool) -> 
 	glow.position = pos + Vector3(0.56, 1.17, 0)
 	glow.material_override = _emissive_mat(glow_color, 1.25)
 	glow.set_meta("world_prop_kind", "lantern")
+	glow.set_meta("world_prop_moving_part", true)
 	glow.set_meta("world_prop_id", "lantern_glow")
 	zone_root.add_child(glow)
 	if casts_light:

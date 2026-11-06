@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "asset": "C05",
+  "identity": "elna",
+  "sources": [
+    {
+      "resource": "res://assets_external/environment/props/Banner_1_Cloth.obj",
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Banner_1_Cloth.obj",
+      "sha256": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+      "retained_vertices": 92,
+      "change": "Retained silhouette normalized to supported workstation dimensions; authored palette."
+    }
+  ],
+  "authoring_tool_sha256": "3665cb014ec8acf8a6559cd9a3069967f1f439d20f220c49e23ce0e7ef9ae2e4",
+  "blend_sha256": "13feb452e3d330989d773149bed5af89ece042951d28f146daea93cbee72f349",
+  "carrier_sha256": "be898ce80d84ab9c75296aa1f992e2469653d2395f1731d457c0050f23c1a53f",
+  "recipe_snapshot": {
+    "sha256": "f4f319838209f398ae2911ec8bea4b080298333d31abbef44b5c26db1385699d",
+    "files": [
+      {
+        "name": "author_living_cast_stage2_props.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f4f319838209f398\\author_living_cast_stage2_props.py",
+        "sha256": "3665cb014ec8acf8a6559cd9a3069967f1f439d20f220c49e23ce0e7ef9ae2e4"
+      },
+      {
+        "name": "living_cast_stage2_profiles.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f4f319838209f398\\living_cast_stage2_profiles.py",
+        "sha256": "e6d9d479a6e34da106ffd0e70b1af87a4b9c8322ca95253ca046e9426e3d6ba3"
+      }
+    ]
+  },
+  "blender_version": "5.2.3 LTS",
+  "triangles": 1154,
+  "grips_godot": {
+    "GripLeft": [
+      -0.12,
+      0.02,
+      0
+    ],
+    "GripRight": [
+      0.12,
+      0.02,
+      0
+    ]
+  },
+  "surface_height": 0.02,
+  "prop_root_actor_relative_godot": [
+    0,
+    1,
+    -0.4
+  ],
+  "support_near_limit_godot_z": 0.04,
+  "contact_part": "WorkContactPart",
+  "contact_response": "compress",
+  "contact_amount": 0.035,
+  "runtime_resource": "res://assets_external/environment_prepared/living_cast/station_elna.scn",
+  "source_geometry_authored": true,
+  "geometry_contact_verified": false,
+  "native_grips_verified": false,
+  "user_accepted": false,
+  "notes": [
+    "Actual supported contact geometry; no pickup or carried transition is claimed.",
+    "New work surfaces/details supplement the retained source shapes where listed."
+  ]
+}

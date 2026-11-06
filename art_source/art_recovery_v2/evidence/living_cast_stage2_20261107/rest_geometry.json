@@ -1,0 +1,968 @@
+{
+  "schema_version": 1,
+  "status": "rest_measurements_only",
+  "source_game": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns",
+  "runtime_verified": false,
+  "visual_accepted": false,
+  "actors": [
+    {
+      "asset": "C11",
+      "identity": "nessa",
+      "production_resource": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+      "source_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+      "source_bytes": 1502736,
+      "target_height_m": 1.66,
+      "normalization_scale": 0.9320636056453584,
+      "bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.18159480405117198
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7809943333755858,
+          0.46849976816439964
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+        "garment_arm_clearance_m": 0.1
+      },
+      "bone_count": 76,
+      "source_animation_count": 0,
+      "rest_points_lateral_forward_height": {
+        "spine_01": [
+          2.2255845820728796e-07,
+          -0.0631519935626086,
+          0.9892399289127798
+        ],
+        "spine_02": [
+          2.2255786954341873e-07,
+          -0.05122155872661816,
+          1.0913938379749888
+        ],
+        "spine_03": [
+          2.2255832542557218e-07,
+          -0.05066230311014944,
+          1.2092068057802763
+        ],
+        "Head": [
+          2.225589022380903e-07,
+          -0.05923731642358236,
+          1.450611133798007
+        ],
+        "upperarm_l": [
+          -0.14130061678292785,
+          -0.09968886921126147,
+          1.3280446759750655
+        ],
+        "upperarm_r": [
+          0.1413010341429716,
+          -0.09968886317069885,
+          1.3280444149948696
+        ],
+        "lowerarm_l": [
+          -0.36527548362898904,
+          -0.10388317372069901,
+          1.3280447524477088
+        ],
+        "lowerarm_r": [
+          0.3652758775978948,
+          -0.10388317439667535,
+          1.328044652141927
+        ],
+        "hand_l": [
+          -0.5975457410249052,
+          -0.09717231544917745,
+          1.3280448975419181
+        ],
+        "hand_r": [
+          0.597546168210701,
+          -0.09717234039574699,
+          1.3280449527139646
+        ],
+        "foot_l": [
+          -0.10383161176552973,
+          -0.1203810664554099,
+          0.07218248067065543
+        ],
+        "foot_r": [
+          0.10383207783166973,
+          -0.12038102499124911,
+          0.07218256272615071
+        ]
+      },
+      "arms": {
+        "l": {
+          "upper_length_m": 0.22401413609197654,
+          "lower_length_m": 0.23236718376209375,
+          "total_length_m": 0.45638131985407027,
+          "proposed_surface_lateral_forward_height": [
+            -0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5873961224638323,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        },
+        "r": {
+          "upper_length_m": 0.22401411283080797,
+          "lower_length_m": 0.23236721626433401,
+          "total_length_m": 0.45638132909514195,
+          "proposed_surface_lateral_forward_height": [
+            0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5873959955957454,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        }
+      },
+      "aliases": [
+        "saga_nessa",
+        "vargan_servant",
+        "mill_second_worker"
+      ],
+      "garment_clearance_preexisting_m": 0.1
+    },
+    {
+      "asset": "C05",
+      "identity": "elna",
+      "production_resource": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "source_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+      "source_bytes": 3794792,
+      "target_height_m": 1.66,
+      "normalization_scale": 0.9320636056451866,
+      "bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.1672547985611091
+        ],
+        "size": [
+          1.6638829918113327,
+          1.780994333375914,
+          0.3513447462841781
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae"
+      },
+      "bone_count": 76,
+      "source_animation_count": 0,
+      "rest_points_lateral_forward_height": {
+        "spine_01": [
+          2.2255845820724696e-07,
+          -0.021919824728076725,
+          0.9892399289125975
+        ],
+        "spine_02": [
+          2.225578695433777e-07,
+          -0.009989389892088479,
+          1.0913938379747876
+        ],
+        "spine_03": [
+          2.2255832542553116e-07,
+          -0.009430134275619865,
+          1.2092068057800536
+        ],
+        "Head": [
+          2.225589022380493e-07,
+          -0.0180051475890512,
+          1.4506111337977396
+        ],
+        "upperarm_l": [
+          -0.14130061678290182,
+          -0.058456700376722855,
+          1.3280446759748208
+        ],
+        "upperarm_r": [
+          0.14130103414294556,
+          -0.058456694336160235,
+          1.3280444149946249
+        ],
+        "lowerarm_l": [
+          -0.3652754836289217,
+          -0.06265100488615963,
+          1.3280447524474641
+        ],
+        "lowerarm_r": [
+          0.3652758775978275,
+          -0.06265100556213597,
+          1.3280446521416822
+        ],
+        "hand_l": [
+          -0.5975457410247951,
+          -0.0559401466146393,
+          1.3280448975416734
+        ],
+        "hand_r": [
+          0.5975461682105908,
+          -0.05594017156120884,
+          1.32804495271372
+        ],
+        "foot_l": [
+          -0.1038316117655106,
+          -0.07914889762086748,
+          0.07218248067064213
+        ],
+        "foot_r": [
+          0.1038320778316506,
+          -0.07914885615670669,
+          0.0721825627261374
+        ]
+      },
+      "arms": {
+        "l": {
+          "upper_length_m": 0.2240141360919352,
+          "lower_length_m": 0.23236718376205096,
+          "total_length_m": 0.45638131985398617,
+          "proposed_surface_lateral_forward_height": [
+            -0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5527456782210753,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        },
+        "r": {
+          "upper_length_m": 0.22401411283076664,
+          "lower_length_m": 0.23236721626429122,
+          "total_length_m": 0.45638132909505785,
+          "proposed_surface_lateral_forward_height": [
+            0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5527455438504947,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        }
+      },
+      "aliases": [
+        "widow_elna",
+        "walker_well",
+        "ressa",
+        "saga_ressa",
+        "injured_traveler"
+      ],
+      "garment_clearance_preexisting_m": 0
+    },
+    {
+      "asset": "C06",
+      "identity": "toma",
+      "production_resource": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "source_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+      "source_bytes": 1774668,
+      "target_height_m": 1.72,
+      "normalization_scale": 0.943472810104059,
+      "bind_bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.19584862122243543
+        ],
+        "size": [
+          1.798829769336356,
+          1.823052006989258,
+          0.363389182569835
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93"
+      },
+      "bone_count": 76,
+      "source_animation_count": 0,
+      "rest_points_lateral_forward_height": {
+        "spine_01": [
+          1.1602652369060067e-07,
+          0.006843970953357875,
+          1.0151466897775352
+        ],
+        "spine_02": [
+          1.1602652453777524e-07,
+          0.017033496227358703,
+          1.1149661707951595
+        ],
+        "spine_03": [
+          1.1602652584778438e-07,
+          0.019863868923973,
+          1.2405425246430055
+        ],
+        "Head": [
+          1.1602652634906993e-07,
+          -0.003062427630572971,
+          1.5131116679063463
+        ],
+        "upperarm_l": [
+          -0.1810522509259009,
+          -0.048349199124570884,
+          1.376968967937283
+        ],
+        "upperarm_r": [
+          0.18105249733182516,
+          -0.04834920151230767,
+          1.3769682654433464
+        ],
+        "lowerarm_l": [
+          -0.4178638610305236,
+          -0.0555196709571543,
+          1.3769693636980345
+        ],
+        "lowerarm_r": [
+          0.4178640741522575,
+          -0.05551960346472227,
+          1.3769684145443584
+        ],
+        "hand_l": [
+          -0.6445804179802468,
+          -0.04834936976746851,
+          1.3769693065654527
+        ],
+        "hand_r": [
+          0.6445806119477635,
+          -0.04834924281434165,
+          1.3769684462006007
+        ],
+        "foot_l": [
+          -0.08547851585450904,
+          -0.06920047069340107,
+          0.08535360615700234
+        ],
+        "foot_r": [
+          0.08547874107308348,
+          -0.06920047155491112,
+          0.08535369056783307
+        ]
+      },
+      "arms": {
+        "l": {
+          "upper_length_m": 0.23692014339604459,
+          "lower_length_m": 0.2268299151661684,
+          "total_length_m": 0.46375005856221296,
+          "proposed_surface_lateral_forward_height": [
+            -0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5763429758129895,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        },
+        "r": {
+          "upper_length_m": 0.23692010801188015,
+          "lower_length_m": 0.22682989790113345,
+          "total_length_m": 0.46375000591301363,
+          "proposed_surface_lateral_forward_height": [
+            0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5763425686697173,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        }
+      },
+      "aliases": [
+        "farmer_toma",
+        "iven",
+        "saga_iven",
+        "odran",
+        "saga_odran"
+      ],
+      "garment_clearance_preexisting_m": 0
+    },
+    {
+      "asset": "C12",
+      "identity": "nera",
+      "production_resource": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "source_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+      "source_bytes": 1443260,
+      "target_height_m": 1.69,
+      "normalization_scale": 0.9517620642894633,
+      "bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.16725481346227097
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7756538775914201,
+          0.33479480286152813
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632"
+      },
+      "bone_count": 76,
+      "source_animation_count": 0,
+      "rest_points_lateral_forward_height": {
+        "spine_01": [
+          2.272620627234803e-07,
+          -0.014507265288038798,
+          1.0101467658612016
+        ],
+        "spine_02": [
+          2.2726146161864586e-07,
+          -0.002324689744268839,
+          1.1144596204511703
+        ],
+        "spine_03": [
+          2.2726192713552346e-07,
+          -0.0017536146837559936,
+          1.2347624761353486
+        ],
+        "Head": [
+          2.2726251613853746e-07,
+          -0.01050985441146388,
+          1.4812687018595911
+        ],
+        "upperarm_l": [
+          -0.1442868983405666,
+          -0.05181632014161991,
+          1.3561118947450819
+        ],
+        "upperarm_r": [
+          0.14428732452119888,
+          -0.051816313973394576,
+          1.3561116282492671
+        ],
+        "lowerarm_l": [
+          -0.3729953044270439,
+          -0.056099268101375124,
+          1.3561119728339166
+        ],
+        "lowerarm_r": [
+          0.37299570672218424,
+          -0.05609926879163772,
+          1.356111870408248
+        ],
+        "hand_l": [
+          -0.6101744178622441,
+          -0.049246580921045904,
+          1.3561121209945821
+        ],
+        "hand_r": [
+          0.6101748540762882,
+          -0.04924660639484231,
+          1.356112177332648
+        ],
+        "foot_l": [
+          -0.10602601426974281,
+          -0.07294583130855294,
+          0.0737080027505947
+        ],
+        "foot_r": [
+          0.10602649018583782,
+          -0.0729457889680785,
+          0.07370808654027076
+        ]
+      },
+      "arms": {
+        "l": {
+          "upper_length_m": 0.2287485052581745,
+          "lower_length_m": 0.23727808826674446,
+          "total_length_m": 0.46602659352491893,
+          "proposed_surface_lateral_forward_height": [
+            -0.12,
+            0.4,
+            1.1
+          ],
+          "rest_origin_reach_m": 0.5199241706318679,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        },
+        "r": {
+          "upper_length_m": 0.22874848150539875,
+          "lower_length_m": 0.23727812145589494,
+          "total_length_m": 0.4660266029612937,
+          "proposed_surface_lateral_forward_height": [
+            0.12,
+            0.4,
+            1.1
+          ],
+          "rest_origin_reach_m": 0.5199240539053698,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        }
+      },
+      "aliases": [
+        "saga_nera",
+        "maren",
+        "saga_maren"
+      ],
+      "garment_clearance_preexisting_m": 0
+    },
+    {
+      "asset": "C07",
+      "identity": "senn",
+      "production_resource": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+      "source_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+      "source_bytes": 1351564,
+      "target_height_m": 1.75,
+      "normalization_scale": 0.9632574244264626,
+      "bind_bounds": {
+        "position": [
+          -0.8994148808993716,
+          -0.003968038182141457,
+          -0.21921957768625347
+        ],
+        "size": [
+          1.7988298885456786,
+          1.8167521532906692,
+          0.386760139033653
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281"
+      },
+      "bone_count": 76,
+      "source_animation_count": 0,
+      "rest_points_lateral_forward_height": {
+        "spine_01": [
+          6.104496605573592e-08,
+          0.01824361261290301,
+          1.03643430455861
+        ],
+        "spine_02": [
+          6.104496692067576e-08,
+          0.02864681211844026,
+          1.1383469989816934
+        ],
+        "spine_03": [
+          6.104496825815578e-08,
+          0.03153653769898663,
+          1.2665566875714482
+        ],
+        "Head": [
+          6.104496876995326e-08,
+          0.008129476960973925,
+          1.5448416027339902
+        ],
+        "upperarm_l": [
+          -0.1848489720264503,
+          -0.0381069576269893,
+          1.4058439918625112
+        ],
+        "upperarm_r": [
+          0.1848491087702389,
+          -0.0381069600647969,
+          1.4058432746372846
+        ],
+        "lowerarm_l": [
+          -0.42662651895809245,
+          -0.045427794174059476,
+          1.4058443959223614
+        ],
+        "lowerarm_r": [
+          0.4266266217197217,
+          -0.0454277252663119,
+          1.4058434268649431
+        ],
+        "hand_l": [
+          -0.6580973195825844,
+          -0.038107131848266584,
+          1.40584433759171
+        ],
+        "hand_r": [
+          0.6580974027883327,
+          -0.03810700223293407,
+          1.4058434591850166
+        ],
+        "foot_l": [
+          -0.08727105679481563,
+          -0.05939548012844097,
+          0.08714347032771051
+        ],
+        "foot_r": [
+          0.08727117190695596,
+          -0.059395481008016865,
+          0.08714355650863544
+        ]
+      },
+      "arms": {
+        "l": {
+          "upper_length_m": 0.2418883561649767,
+          "lower_length_m": 0.2315865359614738,
+          "total_length_m": 0.4734748921264505,
+          "proposed_surface_lateral_forward_height": [
+            -0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5873829088000957,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        },
+        "r": {
+          "upper_length_m": 0.24188832003880678,
+          "lower_length_m": 0.23158651833439123,
+          "total_length_m": 0.47347483837319804,
+          "proposed_surface_lateral_forward_height": [
+            0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5873824545799227,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        }
+      },
+      "aliases": [
+        "captain_senn",
+        "road_ranger_human"
+      ],
+      "garment_clearance_preexisting_m": 0
+    },
+    {
+      "asset": "C09",
+      "identity": "vale",
+      "production_resource": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+      "source_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+      "source_bytes": 1384804,
+      "target_height_m": 1.66,
+      "normalization_scale": 0.9322084900568323,
+      "bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.1672547985611091
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7807175301512195,
+          0.3561134731328286
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+        "garment_arm_clearance_m": 0.1
+      },
+      "bone_count": 76,
+      "source_animation_count": 0,
+      "rest_points_lateral_forward_height": {
+        "spine_01": [
+          2.2259305375531772e-07,
+          -0.02414595587769973,
+          0.9893937010845917
+        ],
+        "spine_02": [
+          2.2259246499994376e-07,
+          -0.012213666518027242,
+          1.0915634894375537
+        ],
+        "spine_03": [
+          2.225929209529617e-07,
+          -0.011654323968198651,
+          1.2093947706523565
+        ],
+        "Head": [
+          2.2259349785514232e-07,
+          -0.020230670222591576,
+          1.4508366237099881
+        ],
+        "upperarm_l": [
+          -0.14132258122460276,
+          -0.06068851099253214,
+          1.3282511135723756
+        ],
+        "upperarm_r": [
+          0.1413229986495229,
+          -0.06068850495103055,
+          1.3282508525516117
+        ],
+        "lowerarm_l": [
+          -0.36533226379200673,
+          -0.06488346748466346,
+          1.3282511900569063
+        ],
+        "lowerarm_r": [
+          0.3653326578221529,
+          -0.06488346816074489,
+          1.3282510897355322
+        ],
+        "hand_l": [
+          -0.59763862638433,
+          -0.058171566045330976,
+          1.3282513351736698
+        ],
+        "hand_r": [
+          0.5976390536365295,
+          -0.05817159099577833,
+          1.3282513903542923
+        ],
+        "foot_l": [
+          -0.10384775184639108,
+          -0.08138392473049244,
+          0.07219370105965822
+        ],
+        "foot_r": [
+          0.10384821798497862,
+          -0.08138388325988627,
+          0.07219378312790861
+        ]
+      },
+      "arms": {
+        "l": {
+          "upper_length_m": 0.22404895791751817,
+          "lower_length_m": 0.23240330402519738,
+          "total_length_m": 0.45645226194271554,
+          "proposed_surface_lateral_forward_height": [
+            -0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5547137150361489,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        },
+        "r": {
+          "upper_length_m": 0.22404893465273376,
+          "lower_length_m": 0.23240333653248993,
+          "total_length_m": 0.4564522711852237,
+          "proposed_surface_lateral_forward_height": [
+            0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.5547135810165628,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        }
+      },
+      "aliases": [
+        "vargan_record_keeper",
+        "record_keeper_vale",
+        "lysa",
+        "saga_lysa"
+      ],
+      "garment_clearance_preexisting_m": 0.1
+    },
+    {
+      "asset": "C10",
+      "identity": "merrow",
+      "production_resource": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "source_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+      "source_bytes": 1885436,
+      "target_height_m": 1.82,
+      "normalization_scale": 0.9995281620787908,
+      "bind_bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.25824235328796763
+        ],
+        "size": [
+          1.798829769336356,
+          1.8208591503963378,
+          0.5036183976432693
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7"
+      },
+      "bone_count": 76,
+      "source_animation_count": 0,
+      "rest_points_lateral_forward_height": {
+        "spine_01": [
+          1.229201061597805e-07,
+          -0.0004666348526859214,
+          1.0754604628847724
+        ],
+        "spine_02": [
+          1.2292010705728898e-07,
+          0.010328289347041816,
+          1.181210603570014
+        ],
+        "spine_03": [
+          1.2292010844513078e-07,
+          0.01332682538236524,
+          1.314247932063084
+        ],
+        "Head": [
+          1.2292010897619963e-07,
+          -0.010961610715662023,
+          1.6030114575062278
+        ],
+        "upperarm_l": [
+          -0.19180926219615627,
+          -0.05893904365608288,
+          1.4587799955889376
+        ],
+        "upperarm_r": [
+          0.1918095232420051,
+          -0.058939046185684296,
+          1.4587792513571316
+        ],
+        "lowerarm_l": [
+          -0.44269076177078226,
+          -0.06653554082622322,
+          1.458780414863359
+        ],
+        "lowerarm_r": [
+          0.44269098755489894,
+          -0.06653546932380595,
+          1.4587794093168087
+        ],
+        "hand_l": [
+          -0.682877422217091,
+          -0.058939224437532016,
+          1.4587803543363107
+        ],
+        "hand_r": [
+          0.6828776277089647,
+          -0.05893908994163112,
+          1.4587794428538703
+        ],
+        "foot_l": [
+          -0.09055712356973691,
+          -0.08102916954524327,
+          0.0904247925062048
+        ],
+        "foot_r": [
+          0.09055736216941394,
+          -0.08102917045793895,
+          0.09042488193220798
+        ]
+      },
+      "arms": {
+        "l": {
+          "upper_length_m": 0.2509964812467394,
+          "lower_length_m": 0.24030675371081686,
+          "total_length_m": 0.49130323495755623,
+          "proposed_surface_lateral_forward_height": [
+            -0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.6389910018600765,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        },
+        "r": {
+          "upper_length_m": 0.2509964437602656,
+          "lower_length_m": 0.24030673541999964,
+          "total_length_m": 0.4913031791802652,
+          "proposed_surface_lateral_forward_height": [
+            0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.6389905219669495,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        }
+      },
+      "aliases": [
+        "vargan_steward",
+        "steward_merrow",
+        "vargan_gate_guard"
+      ],
+      "garment_clearance_preexisting_m": 0
+    },
+    {
+      "asset": "C08",
+      "identity": "edric",
+      "production_resource": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "source_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+      "source_bytes": 1828876,
+      "target_height_m": 1.82,
+      "normalization_scale": 0.999528162078788,
+      "bind_bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.20292944517778014
+        ],
+        "size": [
+          1.798829769336356,
+          1.820859150396343,
+          0.3704700065251797
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06"
+      },
+      "bone_count": 76,
+      "source_animation_count": 0,
+      "rest_points_lateral_forward_height": {
+        "spine_01": [
+          1.2292010615978014e-07,
+          0.010789339093711362,
+          1.0754604628847695
+        ],
+        "spine_02": [
+          1.2292010705728863e-07,
+          0.021584263293439068,
+          1.181210603570011
+        ],
+        "spine_03": [
+          1.2292010844513046e-07,
+          0.024582799328762485,
+          1.3142479320630804
+        ],
+        "Head": [
+          1.2292010897619932e-07,
+          0.00029436323073529,
+          1.6030114575062233
+        ],
+        "upperarm_l": [
+          -0.1918092621961557,
+          -0.04768306970968543,
+          1.4587799955889336
+        ],
+        "upperarm_r": [
+          0.19180952324200456,
+          -0.047683072239286854,
+          1.4587792513571276
+        ],
+        "lowerarm_l": [
+          -0.44269076177078104,
+          -0.05527956687982575,
+          1.458780414863355
+        ],
+        "lowerarm_r": [
+          0.4426909875548977,
+          -0.05527949537740849,
+          1.4587794093168047
+        ],
+        "hand_l": [
+          -0.6828774222170891,
+          -0.04768325049113457,
+          1.4587803543363067
+        ],
+        "hand_r": [
+          0.6828776277089628,
+          -0.04768311599523368,
+          1.4587794428538663
+        ],
+        "foot_l": [
+          -0.09055712356973666,
+          -0.06977319559884576,
+          0.09042479250620455
+        ],
+        "foot_r": [
+          0.09055736216941368,
+          -0.06977319651154143,
+          0.09042488193220773
+        ]
+      },
+      "arms": {
+        "l": {
+          "upper_length_m": 0.2509964812467388,
+          "lower_length_m": 0.24030675371081617,
+          "total_length_m": 0.49130323495755496,
+          "proposed_surface_lateral_forward_height": [
+            -0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.630955296016182,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        },
+        "r": {
+          "upper_length_m": 0.2509964437602649,
+          "lower_length_m": 0.24030673541999897,
+          "total_length_m": 0.4913031791802639,
+          "proposed_surface_lateral_forward_height": [
+            0.12,
+            0.4,
+            1.02
+          ],
+          "rest_origin_reach_m": 0.6309548099661115,
+          "note": "Rest-origin estimate only; a measured palm offset and authored native shoulder pose decide acceptance."
+        }
+      },
+      "aliases": [
+        "lord_edric",
+        "edric_vargan",
+        "edric_castle",
+        "edric_campaign"
+      ],
+      "garment_clearance_preexisting_m": 0
+    }
+  ]
+}

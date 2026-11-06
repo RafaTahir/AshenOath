@@ -2,7 +2,7 @@ extends RefCounted
 
 ## Resolves intent only. GreyfenLifeController retains travel, reservations and
 ## interruptions; the existing saved day/night clock remains the sole clock.
-const WORK_PROPS := {"forge":"hammer", "repair":"hammer", "read":"book", "check_rope":"rope", "bake":"bread", "care":"cloth", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "check_supplies":"supply", "sort_supplies":"supply"}
+const WORK_PROPS := {"forge":"hammer", "repair":"hammer", "read":"book", "write":"book", "review_dispatch":"book", "fold_cloth":"cloth", "check_rope":"rope", "bake":"bread", "care":"cloth", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "check_supplies":"supply", "sort_supplies":"supply"}
 
 static func resolve(data: Dictionary, id: String, definition: Dictionary, profile: Dictionary, minutes: float) -> Dictionary:
 	var schedule := str(definition.get("schedule", data.get("schedules_by_actor", {}).get(id, "villager_day")))
@@ -52,6 +52,7 @@ static func for_existing_route(data: Dictionary, id: String, profile: Dictionary
 
 static func weather_routine(profile: Dictionary, entry: Dictionary, host, weather: String) -> Dictionary:
 	profile = shared_work_routine(profile, entry, host)
+	profile = shared_meal_routine(profile, entry, host)
 	if weather != "rain" or bool(profile.get("sleeping",false)): return profile
 	var shelter: Variant = entry.get("rain_shelter")
 	if shelter == null:
@@ -71,6 +72,26 @@ static func weather_routine(profile: Dictionary, entry: Dictionary, host, weathe
 	var activity := "read" if str(profile.get("activity","")) == "read" else "check_supplies"
 	result.merge({"path":[shelter],"activities":[activity],"activity":activity,"prop":WORK_PROPS.get(activity,""),"scheduled":true,"hold_activity":true,"revision":str(profile.get("revision",""))+":rain","line":"We'll keep the work dry until this passes."},true)
 	result.erase("workstation")
+	result["station"] = {}
+	return result
+
+static func shared_meal_routine(profile: Dictionary, entry: Dictionary, host) -> Dictionary:
+	var group := str(profile.get("meal_group", ""))
+	if group == "" or str(profile.get("activity", "")) != "eat": return profile
+	var places: Array[Node] = host.zone_root.find_children("LifeMeal_" + group + "_*", "Marker3D", true, false)
+	var supported: Array[Node3D] = []
+	for place: Node3D in places:
+		if not bool(place.get_meta("meal_supported", false)): continue
+		if host.validate_walkable_position(place.global_position).distance_squared_to(place.global_position) > 0.04: continue
+		supported.append(place)
+	if supported.is_empty(): return profile
+	# Each participant keeps a stable place; the controller's normal station
+	# reservation handles a full table and releases it between short meals.
+	var index := posmod(absi(str(entry.id).hash()), supported.size())
+	var place := supported[index]
+	var result := profile.duplicate(true)
+	result.merge({"path":[place.global_position],"activities":["eat"],"hold_activity":false,"activity_seconds":18.0,"station":{},"meal_node":weakref(place),"revision":str(profile.get("revision", ""))+":meal:"+str(place.name)},true)
+	result.erase("workstation")
 	return result
 
 static func shared_work_routine(profile: Dictionary, entry: Dictionary, host) -> Dictionary:
@@ -89,7 +110,8 @@ static func shared_work_routine(profile: Dictionary, entry: Dictionary, host) ->
 		if actor_id=="": continue
 		var complete := true
 		for id: String in scene.actors:
-			if not is_instance_valid(cast.registered_actor(host.zone_root,id)): complete=false
+			var partner: Node3D = cast.registered_actor(host.zone_root,id)
+			if not is_instance_valid(partner) or not partner.is_visible_in_tree() or preload("res://scripts/character_presence.gd").protected(partner): complete=false
 		if not complete: continue
 		var result := profile.duplicate(true)
 		var path: Array = entry.get("base_path",profile.get("path",[]))
@@ -99,5 +121,6 @@ static func shared_work_routine(profile: Dictionary, entry: Dictionary, host) ->
 		var activity := str(scene.get("action","check_supplies"))
 		result.merge({"path":[path.back()],"activities":[activity],"activity":activity,"prop":WORK_PROPS.get(activity,""),"scheduled":true,"hold_activity":true,"revision":str(profile.get("revision",""))+":"+str(scene.id)},true)
 		result.erase("workstation")
+		result["station"] = {}
 		return result
 	return profile

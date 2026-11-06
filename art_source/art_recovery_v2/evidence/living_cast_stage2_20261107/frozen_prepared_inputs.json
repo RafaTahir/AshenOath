@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "old_code_mounted": false,
+  "files": [
+    {
+      "asset": "C11",
+      "resource": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
+      "sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+      "bytes": 982112,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_c11.pck",
+      "frozen_pack_sha256": "4c504a67957635f10f9edcd7e65bb6c351301029246b35a3fb879697b656a296",
+      "catalog_match": true
+    },
+    {
+      "asset": "C05",
+      "resource": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+      "sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
+      "bytes": 2135471,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_c05.pck",
+      "frozen_pack_sha256": "d20b6dcaa60f7099785c5675f8e638366eac1871500200e4dff14a3439e13e70",
+      "catalog_match": true
+    },
+    {
+      "asset": "C06",
+      "resource": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+      "sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+      "bytes": 1114633,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_c06.pck",
+      "frozen_pack_sha256": "a02e29ba7b7056e351f5b3028f80b261be5db1f9f602423f60e6e7a17405e94d",
+      "catalog_match": true
+    },
+    {
+      "asset": "C12",
+      "resource": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+      "sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
+      "bytes": 944784,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_c12.pck",
+      "frozen_pack_sha256": "9dcf045da6ee9541a22bbbc4cd430f53b1e85d8dcafa0d937af655fbe0ea26f7",
+      "catalog_match": true
+    },
+    {
+      "asset": "C07",
+      "resource": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
+      "sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
+      "bytes": 887583,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_c07.pck",
+      "frozen_pack_sha256": "92ae96bc53617e2a1f0268138111b99814aa8640b44f575c1a6a2080727855cd",
+      "catalog_match": true
+    },
+    {
+      "asset": "C09",
+      "resource": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+      "sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
+      "bytes": 934812,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_c09.pck",
+      "frozen_pack_sha256": "388303da283be5fd3900be84e00a337f9284db2ec4df5cac5c19103b8c6b8bfe",
+      "catalog_match": true
+    },
+    {
+      "asset": "C10",
+      "resource": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+      "sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+      "bytes": 1138852,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_c10.pck",
+      "frozen_pack_sha256": "a1ada7be842972e18a2bef86dab655d05e362fac5bf9b27a50c65fa9d5926d67",
+      "catalog_match": true
+    },
+    {
+      "asset": "C08",
+      "resource": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
+      "sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
+      "bytes": 1128431,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_c08.pck",
+      "frozen_pack_sha256": "3ec37b39ccd07e7bc1cfe3c92a25a35abd96df23d96b1bf7132bf9983001d00b",
+      "catalog_match": true
+    }
+  ],
+  "total_bytes": 9266678
+}

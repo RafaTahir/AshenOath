@@ -23,6 +23,7 @@
     "saga_lysa": "scribe_day",
     "vargan_record_keeper": "scribe_day",
     "vargan_steward": "scribe_day",
+    "edric": "scribe_day",
     "vargan_servant": "worker_day",
     "saga_odran": "worker_day",
     "saga_maelin": "worker_day",
@@ -682,6 +683,7 @@
         "after_line": "Nessa has her kettle. My reputation may take a little longer."
       },
       "saga_nessa": {
+        "meal_group": "nessa",
         "work": [
           -3.7,
           0,
@@ -762,6 +764,8 @@
         "after_line": "They have somewhere dry to rest. I can leave the blankets alone for a little while."
       },
       "widow_elna": {
+        "activity": "fold_cloth",
+        "meal_group": "nessa",
         "work": [
           9,
           0,
@@ -782,6 +786,8 @@
         "after_line": "I shut it with one hand this morning. Stood there and did it twice."
       },
       "farmer_toma": {
+        "activity": "tend",
+        "meal_group": "nessa",
         "work": [
           -10,
           0,
@@ -1151,6 +1157,7 @@
         ]
       },
       "vargan_record_keeper": {
+        "meal_group": "vale",
         "profile": "vale",
         "work": [
           -2.3,
@@ -1173,6 +1180,32 @@
           7.8
         ],
         "line": "An alteration is not the same as an approval. Keep both dates."
+      },
+      "edric": {
+        "profile": "edric",
+        "work": [
+          0,
+          0,
+          -11
+        ],
+        "errand": [
+          0.8,
+          0,
+          -10.5
+        ],
+        "rest": [
+          1.2,
+          0,
+          -10
+        ],
+        "social": [
+          0.8,
+          0,
+          -10.5
+        ],
+        "activity": "review_dispatch",
+        "stationary": true,
+        "line": "Read the answer before you bring me another seal."
       }
     },
     "vargan_court": {
@@ -1216,6 +1249,7 @@
         "line": "Leave room for the tray. People still have to eat while the great hall talks."
       },
       "vargan_steward": {
+        "meal_group": "merrow",
         "profile": "merrow",
         "work": [
           3.5,

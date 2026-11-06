@@ -8,6 +8,8 @@ var host
 var content: Dictionary = {}
 var social_cooldowns: Dictionary = {}
 var joinable: Dictionary = {}
+var personal_offer_generation := 0
+var personal_offers: Dictionary = {}
 var ecology: Array[Dictionary] = []
 var decision_elapsed := 0.0
 var pending_assets: Dictionary = {}
@@ -76,7 +78,7 @@ func configure() -> void:
 		surrender_targets.append({"enemy":weakref(enemy),"area":weakref(area)})
 	for area in host.interaction_focus.registered_nearby(host.player.global_position, host.zone_root, 500.0):
 		if area.has_meta("design_ecology"):
-			ecology.append({"actor":weakref(area), "elapsed":0.0, "phase":0, "visible_time":0.0})
+			ecology.append({"actor":weakref(area), "elapsed":0.0, "phase":-1, "visible_time":0.0, "event_clip":"", "event_phase":-1.0})
 			var ambient: Node = area.find_child("NpcAmbient", true, false)
 			if ambient != null: ambient.process_mode = Node.PROCESS_MODE_DISABLED
 
@@ -152,8 +154,20 @@ func choose(action: Dictionary) -> void:
 			persist()
 		return
 	if operation == "request_scene":
+		var scene_id := str(action.get("scene", ""))
+		if int(action.get("scene_generation", -1)) != personal_offer_generation or int(personal_offers.get(scene_id, 0)) != actor.get_instance_id(): return
+		# Recheck the current actor, conditions and bound props after menu closure.
+		# A stale menu cannot claim another actor or a now-unavailable scene.
+		var offered: Dictionary = {}
+		for scene: Dictionary in Scenes.data().get("scenes", []):
+			if str(scene.id) == scene_id and Scenes.requestable_for(scene, host, actor):
+				offered = scene
+				break
+		personal_offers.clear()
+		personal_offer_generation += 1
+		if offered.is_empty(): return
 		var controller := life()
-		if controller != null and not controller.request_world_scene(str(action.get("scene", ""))):
+		if controller != null and not controller.request_world_scene(scene_id):
 			host.hud.toast("Their work or the road needs attention first. Ask again when they are free.")
 		return
 	if operation == "social_menu":
@@ -198,6 +212,9 @@ func valid_actor(actor: Node3D) -> bool:
 	return is_instance_valid(actor) and host.zone_root.is_ancestor_of(actor) and actor.is_visible_in_tree() and actor.global_position.distance_to(host.player.global_position) <= 4.0 and Presence.can_see(host.player, actor, 4.0) and not host._story_has_active_combat() and not host.zone_transition_pending
 
 func open_social(actor: Node3D, identity: String) -> void:
+	if not valid_actor(actor): return
+	personal_offer_generation += 1
+	personal_offers.clear()
 	var actions: Array = []
 	var labels := {"greet":"Greet", "reassure":"Offer company", "joke":"Share a lighter moment", "work":"Ask about work", "apology":"Apologize for crowding them"}
 	var controller := life()
@@ -218,10 +235,10 @@ func open_social(actor: Node3D, identity: String) -> void:
 		if str(object.zone) == str(host.current_zone_id) and str(object.actor) == identity:
 			actions.append({"type":"everyday_action", "operation":"inspect", "actor":actor.get_instance_id(), "object":object.id, "label":"May I look at " + str(object.title) + "?"})
 	for scene: Dictionary in Scenes.data().get("scenes", []):
-		if not bool(scene.get("requested", false)) or not Scenes.eligible(scene, host) or scene.actors.is_empty() or not Cast.same_person(str(scene.actors[0]), identity): continue
-		if bool(host.story_state.get_flag("world_scenes_heard", {}).get(str(scene.id), false)): continue
+		if not Scenes.requestable_for(scene, host, actor): continue
 		var scene_labels := {"everyday_mira_outing":"Walk the gathering bank together", "everyday_rook_outing":"Inspect the supplies together", "everyday_nera_outing":"Check the crossing together", "everyday_performance_rook":"Hear a short story", "everyday_performance_tor":"Watch the pin demonstration", "everyday_performance_table":"Share the table's tune"}
-		actions.append({"type":"everyday_action", "operation":"request_scene", "scene":scene.id, "actor":actor.get_instance_id(), "label":scene_labels.get(str(scene.id), "Spend a moment together")})
+		personal_offers[str(scene.id)] = actor.get_instance_id()
+		actions.append({"type":"everyday_action", "operation":"request_scene", "scene":scene.id, "scene_generation":personal_offer_generation, "actor":actor.get_instance_id(), "label":str(scene.get("offer_label", scene_labels.get(str(scene.id), "Spend a moment together")))})
 	actions.append({"type":"close", "label":"Leave them to their work"})
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
@@ -509,6 +526,21 @@ func _physics_process(delta: float) -> void:
 	if host.day_night != null: host.day_night.active_play_seconds += delta
 	tick_work(delta)
 	tick_meal(delta)
+	# The existing activity owner cancels wildlife presentation on the first
+	# combat frame, without waiting for the low-frequency ambient decision.
+	var combat: bool = host._story_has_active_combat()
+	if combat:
+		for entry: Dictionary in ecology:
+			if int(entry.phase) == -2: continue
+			var actor := entry.actor.get_ref() as Node3D
+			if not is_instance_valid(actor): continue
+			var driver := actor.find_child("CharacterAnimationDriver", true, false)
+			if driver != null:
+				driver.clear_observation_clip()
+				driver.set_creature_presence("", "", 0.0)
+			entry.phase = -2
+			entry.event_phase = -1.0
+			entry.visible_time = 0.0
 	decision_elapsed += delta
 	if decision_elapsed < 0.25: return
 	var step := decision_elapsed
@@ -519,25 +551,60 @@ func _physics_process(delta: float) -> void:
 		if is_instance_valid(enemy) and is_instance_valid(area):area.set_interaction_enabled(bool(enemy.surrender_offer) and not enemy.dead)
 	for entry: Dictionary in ecology:
 		var actor := entry.actor.get_ref() as Node3D
-		if not is_instance_valid(actor) or actor.global_position.distance_squared_to(host.player.global_position) > 225.0: continue
+		if not is_instance_valid(actor): continue
 		var sighting: Dictionary = actor.get_meta("design_ecology", {})
 		var driver := actor.find_child("CharacterAnimationDriver", true, false)
 		if driver == null: continue
-		driver.set_distance_suspended(false)
+		var distant: bool = actor.global_position.distance_squared_to(host.player.global_position) > 225.0 or not actor.is_visible_in_tree()
+		driver.set_distance_suspended(distant)
+		if distant or combat:
+			entry.event_phase = -1.0
+			entry.visible_time = 0.0
+			continue
 		entry.elapsed = float(entry.elapsed) + step
 		var near := actor.global_position.distance_to(host.player.global_position) < 3.0
 		var phase := 0 if near else (1 if fmod(float(entry.elapsed), 14.0) < 7.0 else 2)
 		if int(entry.phase) != phase:
 			entry.phase = phase
-			driver.set_observation_clip("Idle" if phase == 0 else str(sighting.get("clip", "Idle")))
+			var clips: Array = sighting.get("ambient_clips", [str(sighting.get("clip", "Idle")), "Idle"])
+			var selected := "Investigate" if near else str(clips[(phase - 1) % clips.size()])
+			if not driver.set_observation_clip(selected): driver.set_observation_clip("Idle")
 			driver.set_creature_presence(str(sighting.role), "attentive" if phase == 0 else ("feeding" if phase == 1 else "watching"), 0.65)
 		var camera: Camera3D = host.get_viewport().get_camera_3d()
 		var visible: bool = camera != null and actor.is_visible_in_tree() and not camera.is_position_behind(actor.global_position) and host.get_viewport().get_visible_rect().has_point(camera.unproject_position(actor.global_position)) and Presence.can_see(host.player, actor, 12.0)
+		_tick_ecology_contact(entry, sighting, actor, driver, visible and not near)
 		entry.visible_time = float(entry.visible_time) + step if visible and phase != 0 else 0.0
 		if float(entry.visible_time) >= 4.0 and not host.story_state.evidence.has(str(actor.interaction_id)):
 			host.story_state.record_evidence(str(actor.interaction_id), {"zone":host.current_zone_id, "kind":"observed", "title":sighting.title, "text":sighting.observation})
 			host.hud.toast("Observed: " + str(sighting.name))
 			persist()
+
+func _tick_ecology_contact(entry: Dictionary, sighting: Dictionary, actor: Node3D, driver: Node, visible: bool) -> void:
+	var sample: Dictionary = driver.observation_motion_sample()
+	if not visible or sample.is_empty():
+		entry.event_phase = -1.0
+		return
+	var clip := str(sample.clip).get_file().to_lower()
+	var phase := float(sample.phase)
+	var previous := float(entry.event_phase)
+	if str(entry.event_clip) != clip: previous = -1.0
+	entry.event_clip = clip
+	entry.event_phase = phase
+	if previous < 0.0: return
+	for event: Dictionary in sighting.get("contact_events", []):
+		if clip != str(event.clip).to_lower(): continue
+		if phase_crossed(previous, phase, float(event.fraction)):
+			host.audio.play_spatial_event(str(event.cue), actor.global_position, host.player.global_position, 12.0, float(event.get("cooldown", 6.0)), 0.015)
+
+static func phase_crossed(previous: float, current: float, contact: float) -> bool:
+	if not is_finite(previous) or not is_finite(current) or not is_finite(contact): return false
+	if previous < 0.0 or previous >= 1.0 or current < 0.0 or current >= 1.0 or contact <= 0.0 or contact >= 1.0: return false
+	# No catch-up events after a hitch, suspension or seek. A normal wrap is
+	# supported and the same sampled phase can never emit twice.
+	var advanced := fposmod(current - previous, 1.0)
+	if advanced <= 0.0 or advanced > 0.45: return false
+	var to_contact := fposmod(contact - previous, 1.0)
+	return to_contact > 0.0 and to_contact <= advanced
 
 func _notification(what:int) -> void:
 	if what in [NOTIFICATION_PAUSED,NOTIFICATION_APPLICATION_FOCUS_OUT,NOTIFICATION_EXIT_TREE]:

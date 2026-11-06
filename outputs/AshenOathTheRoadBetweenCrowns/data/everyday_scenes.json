@@ -1,26 +1,1363 @@
 {
   "scenes": [
-    {"id":"everyday_gre_pair","zone":"greyfen","kind":"exchange","actors":["saga_nessa","rook"],"heard":["gre_exchange_before","gre_exchange_after"],"quests":["saga_gre_q04"],"action":"sort_supplies","stage":{"saga_nessa":[-4.8,0,10.6],"rook":[-6.0,0,10.6]},"turns":[["saga_nessa","Nessa","You can count the shares. I'll cut them."],["rook","Rook","A division of labor designed to protect you from my arithmetic?"],["saga_nessa","Nessa","From your thumb on the scale. Sit down, Rook. There is a share for you too."]]},
-    {"id":"everyday_wyc_pair","zone":"wychwood","kind":"exchange","actors":["saga_iven","saga_edda"],"heard":["wyc_exchange_before","wyc_exchange_after"],"quests":["saga_wyc_q05"],"action":"tend","stage":{"saga_iven":[7.7,0,-5.8],"saga_edda":[6.6,0,-5.0]},"turns":[["saga_iven","Toma","I still need water for the working beds."],["saga_edda","Mira","And I still need you to leave the bank rooted. We haven't stopped disagreeing."],["saga_iven","Toma","No. But now we can check the run together instead of guessing from opposite ends."]]},
-    {"id":"everyday_dep_pair","zone":"old_mill","kind":"exchange","actors":["saga_dain","mill_second_worker"],"heard":["dep_exchange_before","dep_exchange_after"],"quests":["saga_dep_q05"],"action":"repair","stage":{"saga_dain":[-4.5,0,11],"mill_second_worker":[-5.6,0,11]},"turns":[["saga_dain","Tor","This rack takes the load without leaning on the old wall."],["mill_second_worker","Nessa","Then I can count what stays dry, not what the rain leaves me."],["saga_dain","Tor","Hold the brace. I want your eyes on it before I call it finished."]]},
-    {"id":"everyday_roa_pair","zone":"bandit_road","kind":"exchange","actors":["saga_tavin","captain_senn"],"heard":["roa_exchange_before","roa_exchange_after"],"quests":["saga_roa_q05"],"when":{"senn_fate":"testimony"},"action":"check_supplies","stage":{"saga_tavin":[5.5,0,3.4],"captain_senn":[6.7,0,2.8]},"turns":[["saga_tavin","Rook","Two loads, three people. I wrote both down."],["captain_senn","Senn","You needn't ask my leave to cross."],["saga_tavin","Rook","I know. I thought you might like to practice hearing that."]]},
-    {"id":"everyday_var_pair_before","zone":"vargan_approach","kind":"exchange","actors":["vargan_steward","vargan_servant"],"action":"read","turns":[["vargan_servant","Nessa","The kitchen needs the answer before tomorrow, not a number to wait behind."],["vargan_steward","Merrow","A number keeps one request from eating all the others."],["vargan_servant","Nessa","Then put the hungry people on the page too."]]},
-    {"id":"everyday_var_pair_after","zone":"vargan_approach","kind":"exchange","actors":["vargan_steward","vargan_servant"],"heard":["everyday_var_pair_before"],"quests":["saga_var_q04"],"action":"check_supplies","turns":[["vargan_steward","Merrow","The supply answer names who receives it. You can check my count."],["vargan_servant","Nessa","I intend to. And I'll bring the empty bowls back before you close the book."],["vargan_steward","Merrow","Put them here. Beside the book."]]},
-    {"id":"everyday_har_pair","zone":"ruins","kind":"exchange","actors":["saga_maelin","saga_oris"],"heard":["har_exchange_before","har_exchange_after"],"quests":["saga_har_q02"],"action":"tend","stage":{"saga_maelin":[-1.2,0,4.8],"saga_oris":[-2.4,0,4.8]},"turns":[["saga_oris","Tor","I left the gap you asked for."],["saga_maelin","Mira","Roots need room. So do people leaving a promise."],["saga_oris","Tor","Then I won't put another stone there to make the work look finished."]]},
-    {"id":"everyday_rook_traveler_1","zone":"greyfen","kind":"conversation","actors":["rook"],"action":"check_supplies","turns":[["rook","Rook","That strap is getting thin. I keep saying one more journey."],["player","Kael","You could replace it before it decides for you."],["rook","Rook","A sensible opinion. Terrible for conversation."]]},
-    {"id":"everyday_rook_traveler_2","zone":"bandit_road","kind":"conversation","actors":["saga_tavin"],"heard":["everyday_rook_traveler_1"],"action":"check_supplies","turns":[["saga_tavin","Rook","New strap. Before you say it."],["player","Kael","I hadn't said anything."],["saga_tavin","Rook","You were being sensible very loudly."]]},
-    {"id":"everyday_rook_traveler_3","zone":"greyfen","kind":"conversation","actors":["rook"],"heard":["everyday_rook_traveler_2"],"action":"sort_supplies","turns":[["rook","Rook","All the jars came home whole. The strap earned its keep."],["player","Kael","Will you listen next time?"],["rook","Rook","Let's not turn one success into a habit of obedience."]]},
-    {"id":"everyday_nessa_traveler_1","zone":"greyfen","kind":"conversation","actors":["saga_nessa"],"action":"bake","turns":[["saga_nessa","Nessa","I need a rack that doesn't leave the bottom sack in the wet."],["player","Kael","Tor could see to the feet."],["saga_nessa","Nessa","I have asked. He says the ground needs an opinion too."]]},
-    {"id":"everyday_nessa_traveler_2","zone":"old_mill","kind":"conversation","actors":["mill_second_worker"],"heard":["everyday_nessa_traveler_1"],"action":"sort_supplies","turns":[["mill_second_worker","Nessa","We moved the sound boards off the damp. That much we can do today."],["player","Kael","And the rack?"],["mill_second_worker","Nessa","Still work, not a promise you have to make for us."]]},
-    {"id":"everyday_nessa_traveler_3","zone":"greyfen","kind":"conversation","actors":["saga_nessa"],"heard":["everyday_nessa_traveler_2"],"quests":["saga_dep_q05"],"action":"bake","turns":[["saga_nessa","Nessa","The rebuilding account reached us. I can plan the next load around what is actually there."],["player","Kael","Not the old arrangement."],["saga_nessa","Nessa","No. Something useful, with its costs written down."]]},
-    {"id":"everyday_tor_traveler_1","zone":"greyfen","kind":"conversation","actors":["blacksmith_tor"],"action":"forge","turns":[["blacksmith_tor","Tor","This pin's worn oval. Its owner calls that character."],["player","Kael","What do you call it?"],["blacksmith_tor","Tor","About to break."]]},
-    {"id":"everyday_tor_traveler_2","zone":"old_mill","kind":"conversation","actors":["saga_dain"],"heard":["everyday_tor_traveler_1"],"action":"repair","turns":[["saga_dain","Tor","Kept the old pin to show the crew where the wear begins."],["player","Kael","A broken thing doing useful work."],["saga_dain","Tor","Once it stops pretending to be a sound one."]]},
-    {"id":"everyday_tor_traveler_3","zone":"ruins","kind":"conversation","actors":["saga_oris"],"heard":["everyday_tor_traveler_2"],"action":"repair","turns":[["saga_oris","Tor","New hinge on the tool case. Old pin inside, wrapped in cloth."],["player","Kael","Still teaching?"],["saga_oris","Tor","Still remembering what to look for."]]},
-    {"id":"everyday_mira_outing","zone":"wychwood","kind":"conversation","actors":["saga_edda"],"requested":true,"action":"tend","walk":[[-3.4,0,10.5],[-5.2,0,9.0]],"activity_point":[-5.2,0,9.0],"activity_prompt":"Separate fallen dry stems from damp ones","activity_seconds":3,"turns":[["saga_edda","Mira","Come as far as the dry bank. We can sort what has already fallen."],["saga_edda","Mira","Leave the roots. We want next season as well as this handful."],["player","Kael","The sound stems are apart. Nothing pulled from the living bank."],["saga_edda","Mira","Good. Let's leave it looking like a place something can still grow."]]},
-    {"id":"everyday_rook_outing","zone":"greyfen","kind":"conversation","actors":["rook"],"requested":true,"action":"check_supplies","walk":[[-6.8,0,11.5],[-5.4,0,10.5]],"activity_point":[-5.4,0,10.5],"activity_prompt":"Check the crate's lower fastening","activity_seconds":3,"turns":[["rook","Rook","Come look at the tie underneath. I would like a second opinion that isn't a pothole."],["rook","Rook","Lift the loose end, not the crate."],["player","Kael","It catches before the strap takes the weight."],["rook","Rook","Then we retie it. A wonderfully uneventful adventure."]]},
-    {"id":"everyday_nera_outing","zone":"marsh_crossing","kind":"conversation","actors":["saga_nera"],"requested":true,"action":"check_rope","walk":[[-8,0,5.6],[-7,0,7.3]],"activity_point":[-7,0,7.3],"activity_prompt":"Check the unloaded crossing rope","activity_seconds":3,"turns":[["saga_nera","Nera","Walk the dry approach with me. We check before anyone steps onto the crossing."],["saga_nera","Nera","Feel for the loose turn. No load on it yet."],["player","Kael","This end holds without tightening the loose loop around it."],["saga_nera","Nera","Good. Now it is a checked rope, not a brave prediction."]]},
-    {"id":"everyday_performance_rook","zone":"greyfen","kind":"conversation","actors":["rook"],"requested":true,"action":"idle","turns":[["rook","Rook","A merchant once sold a man a shortcut. The man returned two days later and asked for his money back."],["rook","Rook","The merchant said: did it shorten your journey? It did, said the man. I never got there."],["rook","Rook","A cautionary tale about buying directions from somebody sitting comfortably."]]},
-    {"id":"everyday_performance_tor","zone":"greyfen","kind":"conversation","actors":["blacksmith_tor"],"requested":true,"action":"forge","turns":[["blacksmith_tor","Tor","Watch the pin. I touch it before I hit it. That's the measuring part."],["blacksmith_tor","Tor","Two small strikes. One large strike is faster, if you don't count making another pin."],["blacksmith_tor","Tor","There. No miracle. You're welcome to tell people it was, but I'll deny it."]]},
-    {"id":"everyday_performance_table","zone":"greyfen","kind":"conversation","actors":["saga_nessa","rook"],"requested":true,"action":"idle","music":"greyfen_belonging","turns":[["saga_nessa","Nessa","The tune can finish before the washing starts."],["rook","Rook","You drive a hard bargain."],["saga_nessa","Nessa","I haven't mentioned the second bucket."]]}
+    {
+      "id": "everyday_gre_pair",
+      "zone": "greyfen",
+      "kind": "exchange",
+      "actors": [
+        "saga_nessa",
+        "rook"
+      ],
+      "heard": [
+        "gre_exchange_before",
+        "gre_exchange_after"
+      ],
+      "quests": [
+        "saga_gre_q04"
+      ],
+      "action": "sort_supplies",
+      "stage": {
+        "saga_nessa": [
+          -4.8,
+          0,
+          10.6
+        ],
+        "rook": [
+          -6.0,
+          0,
+          10.6
+        ]
+      },
+      "turns": [
+        [
+          "saga_nessa",
+          "Nessa",
+          "You can count the shares. I'll cut them."
+        ],
+        [
+          "rook",
+          "Rook",
+          "A division of labor designed to protect you from my arithmetic?"
+        ],
+        [
+          "saga_nessa",
+          "Nessa",
+          "From your thumb on the scale. Sit down, Rook. There is a share for you too."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_wyc_pair",
+      "zone": "wychwood",
+      "kind": "exchange",
+      "actors": [
+        "saga_iven",
+        "saga_edda"
+      ],
+      "heard": [
+        "wyc_exchange_before",
+        "wyc_exchange_after"
+      ],
+      "quests": [
+        "saga_wyc_q05"
+      ],
+      "action": "tend",
+      "stage": {
+        "saga_iven": [
+          7.7,
+          0,
+          -5.8
+        ],
+        "saga_edda": [
+          6.6,
+          0,
+          -5.0
+        ]
+      },
+      "turns": [
+        [
+          "saga_iven",
+          "Toma",
+          "I still need water for the working beds."
+        ],
+        [
+          "saga_edda",
+          "Mira",
+          "And I still need you to leave the bank rooted. We haven't stopped disagreeing."
+        ],
+        [
+          "saga_iven",
+          "Toma",
+          "No. But now we can check the run together instead of guessing from opposite ends."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_dep_pair",
+      "zone": "old_mill",
+      "kind": "exchange",
+      "actors": [
+        "saga_dain",
+        "mill_second_worker"
+      ],
+      "heard": [
+        "dep_exchange_before",
+        "dep_exchange_after"
+      ],
+      "quests": [
+        "saga_dep_q05"
+      ],
+      "action": "repair",
+      "stage": {
+        "saga_dain": [
+          -4.5,
+          0,
+          11
+        ],
+        "mill_second_worker": [
+          -5.6,
+          0,
+          11
+        ]
+      },
+      "turns": [
+        [
+          "saga_dain",
+          "Tor",
+          "This rack takes the load without leaning on the old wall."
+        ],
+        [
+          "mill_second_worker",
+          "Nessa",
+          "Then I can count what stays dry, not what the rain leaves me."
+        ],
+        [
+          "saga_dain",
+          "Tor",
+          "Hold the brace. I want your eyes on it before I call it finished."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_roa_pair",
+      "zone": "bandit_road",
+      "kind": "exchange",
+      "actors": [
+        "saga_tavin",
+        "captain_senn"
+      ],
+      "heard": [
+        "roa_exchange_before",
+        "roa_exchange_after"
+      ],
+      "quests": [
+        "saga_roa_q05"
+      ],
+      "when": {
+        "senn_fate": "testimony"
+      },
+      "action": "check_supplies",
+      "stage": {
+        "saga_tavin": [
+          5.5,
+          0,
+          3.4
+        ],
+        "captain_senn": [
+          6.7,
+          0,
+          2.8
+        ]
+      },
+      "turns": [
+        [
+          "saga_tavin",
+          "Rook",
+          "Two loads, three people. I wrote both down."
+        ],
+        [
+          "captain_senn",
+          "Senn",
+          "You needn't ask my leave to cross."
+        ],
+        [
+          "saga_tavin",
+          "Rook",
+          "I know. I thought you might like to practice hearing that."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_var_pair_before",
+      "zone": "vargan_approach",
+      "kind": "exchange",
+      "actors": [
+        "vargan_steward",
+        "vargan_servant"
+      ],
+      "action": "read",
+      "turns": [
+        [
+          "vargan_servant",
+          "Nessa",
+          "The kitchen needs the answer before tomorrow, not a number to wait behind."
+        ],
+        [
+          "vargan_steward",
+          "Merrow",
+          "A number keeps one request from eating all the others."
+        ],
+        [
+          "vargan_servant",
+          "Nessa",
+          "Then put the hungry people on the page too."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_var_pair_after",
+      "zone": "vargan_approach",
+      "kind": "exchange",
+      "actors": [
+        "vargan_steward",
+        "vargan_servant"
+      ],
+      "heard": [
+        "everyday_var_pair_before"
+      ],
+      "quests": [
+        "saga_var_q04"
+      ],
+      "action": "check_supplies",
+      "turns": [
+        [
+          "vargan_steward",
+          "Merrow",
+          "The supply answer names who receives it. You can check my count."
+        ],
+        [
+          "vargan_servant",
+          "Nessa",
+          "I intend to. And I'll bring the empty bowls back before you close the book."
+        ],
+        [
+          "vargan_steward",
+          "Merrow",
+          "Put them here. Beside the book."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_har_pair",
+      "zone": "ruins",
+      "kind": "exchange",
+      "actors": [
+        "saga_maelin",
+        "saga_oris"
+      ],
+      "heard": [
+        "har_exchange_before",
+        "har_exchange_after"
+      ],
+      "quests": [
+        "saga_har_q02"
+      ],
+      "action": "tend",
+      "stage": {
+        "saga_maelin": [
+          -1.2,
+          0,
+          4.8
+        ],
+        "saga_oris": [
+          -2.4,
+          0,
+          4.8
+        ]
+      },
+      "turns": [
+        [
+          "saga_oris",
+          "Tor",
+          "I left the gap you asked for."
+        ],
+        [
+          "saga_maelin",
+          "Mira",
+          "Roots need room. So do people leaving a promise."
+        ],
+        [
+          "saga_oris",
+          "Tor",
+          "Then I won't put another stone there to make the work look finished."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_rook_traveler_1",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "rook"
+      ],
+      "action": "check_supplies",
+      "turns": [
+        [
+          "rook",
+          "Rook",
+          "That strap is getting thin. I keep saying one more journey."
+        ],
+        [
+          "player",
+          "Kael",
+          "You could replace it before it decides for you."
+        ],
+        [
+          "rook",
+          "Rook",
+          "A sensible opinion. Terrible for conversation."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_rook_traveler_2",
+      "zone": "bandit_road",
+      "kind": "conversation",
+      "actors": [
+        "saga_tavin"
+      ],
+      "heard": [
+        "everyday_rook_traveler_1"
+      ],
+      "action": "check_supplies",
+      "turns": [
+        [
+          "saga_tavin",
+          "Rook",
+          "New strap. Before you say it."
+        ],
+        [
+          "player",
+          "Kael",
+          "I hadn't said anything."
+        ],
+        [
+          "saga_tavin",
+          "Rook",
+          "You were being sensible very loudly."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_rook_traveler_3",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "rook"
+      ],
+      "heard": [
+        "everyday_rook_traveler_2"
+      ],
+      "action": "sort_supplies",
+      "turns": [
+        [
+          "rook",
+          "Rook",
+          "All the jars came home whole. The strap earned its keep."
+        ],
+        [
+          "player",
+          "Kael",
+          "Will you listen next time?"
+        ],
+        [
+          "rook",
+          "Rook",
+          "Let's not turn one success into a habit of obedience."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_nessa_traveler_1",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "saga_nessa"
+      ],
+      "action": "bake",
+      "turns": [
+        [
+          "saga_nessa",
+          "Nessa",
+          "I need a rack that doesn't leave the bottom sack in the wet."
+        ],
+        [
+          "player",
+          "Kael",
+          "Tor could see to the feet."
+        ],
+        [
+          "saga_nessa",
+          "Nessa",
+          "I have asked. He says the ground needs an opinion too."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_nessa_traveler_2",
+      "zone": "old_mill",
+      "kind": "conversation",
+      "actors": [
+        "mill_second_worker"
+      ],
+      "heard": [
+        "everyday_nessa_traveler_1"
+      ],
+      "action": "sort_supplies",
+      "turns": [
+        [
+          "mill_second_worker",
+          "Nessa",
+          "We moved the sound boards off the damp. That much we can do today."
+        ],
+        [
+          "player",
+          "Kael",
+          "And the rack?"
+        ],
+        [
+          "mill_second_worker",
+          "Nessa",
+          "Still work, not a promise you have to make for us."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_nessa_traveler_3",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "saga_nessa"
+      ],
+      "heard": [
+        "everyday_nessa_traveler_2"
+      ],
+      "quests": [
+        "saga_dep_q05"
+      ],
+      "action": "bake",
+      "turns": [
+        [
+          "saga_nessa",
+          "Nessa",
+          "The rebuilding account reached us. I can plan the next load around what is actually there."
+        ],
+        [
+          "player",
+          "Kael",
+          "Not the old arrangement."
+        ],
+        [
+          "saga_nessa",
+          "Nessa",
+          "No. Something useful, with its costs written down."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_tor_traveler_1",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "blacksmith_tor"
+      ],
+      "action": "forge",
+      "turns": [
+        [
+          "blacksmith_tor",
+          "Tor",
+          "This pin's worn oval. Its owner calls that character."
+        ],
+        [
+          "player",
+          "Kael",
+          "What do you call it?"
+        ],
+        [
+          "blacksmith_tor",
+          "Tor",
+          "About to break."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_tor_traveler_2",
+      "zone": "old_mill",
+      "kind": "conversation",
+      "actors": [
+        "saga_dain"
+      ],
+      "heard": [
+        "everyday_tor_traveler_1"
+      ],
+      "action": "repair",
+      "turns": [
+        [
+          "saga_dain",
+          "Tor",
+          "Kept the old pin to show the crew where the wear begins."
+        ],
+        [
+          "player",
+          "Kael",
+          "A broken thing doing useful work."
+        ],
+        [
+          "saga_dain",
+          "Tor",
+          "Once it stops pretending to be a sound one."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_tor_traveler_3",
+      "zone": "ruins",
+      "kind": "conversation",
+      "actors": [
+        "saga_oris"
+      ],
+      "heard": [
+        "everyday_tor_traveler_2"
+      ],
+      "action": "repair",
+      "turns": [
+        [
+          "saga_oris",
+          "Tor",
+          "New hinge on the tool case. Old pin inside, wrapped in cloth."
+        ],
+        [
+          "player",
+          "Kael",
+          "Still teaching?"
+        ],
+        [
+          "saga_oris",
+          "Tor",
+          "Still remembering what to look for."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_mira_outing",
+      "zone": "wychwood",
+      "kind": "conversation",
+      "actors": [
+        "saga_edda"
+      ],
+      "requested": true,
+      "action": "tend",
+      "walk": [
+        [
+          -3.4,
+          0,
+          10.5
+        ],
+        [
+          -5.2,
+          0,
+          9.0
+        ]
+      ],
+      "activity_point": [
+        -5.2,
+        0,
+        9.0
+      ],
+      "activity_prompt": "Separate fallen dry stems from damp ones",
+      "activity_seconds": 3,
+      "turns": [
+        [
+          "saga_edda",
+          "Mira",
+          "Come as far as the dry bank. We can sort what has already fallen."
+        ],
+        [
+          "saga_edda",
+          "Mira",
+          "Leave the roots. We want next season as well as this handful."
+        ],
+        [
+          "player",
+          "Kael",
+          "The sound stems are apart. Nothing pulled from the living bank."
+        ],
+        [
+          "saga_edda",
+          "Mira",
+          "Good. Let's leave it looking like a place something can still grow."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_rook_outing",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "rook"
+      ],
+      "requested": true,
+      "action": "check_supplies",
+      "walk": [
+        [
+          -6.8,
+          0,
+          11.5
+        ],
+        [
+          -5.4,
+          0,
+          10.5
+        ]
+      ],
+      "activity_point": [
+        -5.4,
+        0,
+        10.5
+      ],
+      "activity_prompt": "Check the crate's lower fastening",
+      "activity_seconds": 3,
+      "turns": [
+        [
+          "rook",
+          "Rook",
+          "Come look at the tie underneath. I would like a second opinion that isn't a pothole."
+        ],
+        [
+          "rook",
+          "Rook",
+          "Lift the loose end, not the crate."
+        ],
+        [
+          "player",
+          "Kael",
+          "It catches before the strap takes the weight."
+        ],
+        [
+          "rook",
+          "Rook",
+          "Then we retie it. A wonderfully uneventful adventure."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_nera_outing",
+      "zone": "marsh_crossing",
+      "kind": "conversation",
+      "actors": [
+        "saga_nera"
+      ],
+      "requested": true,
+      "action": "check_rope",
+      "walk": [
+        [
+          -8,
+          0,
+          5.6
+        ],
+        [
+          -7,
+          0,
+          7.3
+        ]
+      ],
+      "activity_point": [
+        -7,
+        0,
+        7.3
+      ],
+      "activity_prompt": "Check the unloaded crossing rope",
+      "activity_seconds": 3,
+      "turns": [
+        [
+          "saga_nera",
+          "Nera",
+          "Walk the dry approach with me. We check before anyone steps onto the crossing."
+        ],
+        [
+          "saga_nera",
+          "Nera",
+          "Feel for the loose turn. No load on it yet."
+        ],
+        [
+          "player",
+          "Kael",
+          "This end holds without tightening the loose loop around it."
+        ],
+        [
+          "saga_nera",
+          "Nera",
+          "Good. Now it is a checked rope, not a brave prediction."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_performance_rook",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "rook"
+      ],
+      "requested": true,
+      "action": "idle",
+      "turns": [
+        [
+          "rook",
+          "Rook",
+          "A merchant once sold a man a shortcut. The man returned two days later and asked for his money back."
+        ],
+        [
+          "rook",
+          "Rook",
+          "The merchant said: did it shorten your journey? It did, said the man. I never got there."
+        ],
+        [
+          "rook",
+          "Rook",
+          "A cautionary tale about buying directions from somebody sitting comfortably."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_performance_tor",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "blacksmith_tor"
+      ],
+      "requested": true,
+      "action": "forge",
+      "turns": [
+        [
+          "blacksmith_tor",
+          "Tor",
+          "Watch the pin. I touch it before I hit it. That's the measuring part."
+        ],
+        [
+          "blacksmith_tor",
+          "Tor",
+          "Two small strikes. One large strike is faster, if you don't count making another pin."
+        ],
+        [
+          "blacksmith_tor",
+          "Tor",
+          "There. No miracle. You're welcome to tell people it was, but I'll deny it."
+        ]
+      ]
+    },
+    {
+      "id": "everyday_performance_table",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "saga_nessa",
+        "rook"
+      ],
+      "requested": true,
+      "action": "idle",
+      "music": "greyfen_belonging",
+      "turns": [
+        [
+          "saga_nessa",
+          "Nessa",
+          "The tune can finish before the washing starts."
+        ],
+        [
+          "rook",
+          "Rook",
+          "You drive a hard bargain."
+        ],
+        [
+          "saga_nessa",
+          "Nessa",
+          "I haven't mentioned the second bucket."
+        ]
+      ]
+    },
+    {
+      "id": "life2_anwen_take_a_breath",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "sister_anwen"
+      ],
+      "requested": true,
+      "action": "rest",
+      "when": {},
+      "turns": [
+        [
+          "sister_anwen",
+          "Anwen",
+          "I was about to find another job. You caught me."
+        ],
+        [
+          "player",
+          "Kael",
+          "I can leave if you want the quiet."
+        ],
+        [
+          "sister_anwen",
+          "Anwen",
+          "Stay. Tell me the least important thing you saw on the road."
+        ],
+        [
+          "player",
+          "Kael",
+          "A crow trying to carry a twig through a gap too narrow for it."
+        ],
+        [
+          "sister_anwen",
+          "Anwen",
+          "Did it turn the twig?"
+        ],
+        [
+          "player",
+          "Kael",
+          "Eventually. It seemed annoyed that this worked."
+        ]
+      ],
+      "purpose": "Stay for a quiet minute",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Stay for a quiet minute",
+      "personal_staging": "Anwen lowers her working hands; gaze briefly follows nearby ambient scenery, then returns to Kael. No patient or absent witness is staged."
+    },
+    {
+      "id": "life2_rook_lost_word",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "rook"
+      ],
+      "requested": true,
+      "action": "idle",
+      "when": {},
+      "turns": [
+        [
+          "rook",
+          "Rook",
+          "There was a splendid ending to this story. I put it somewhere between the second inn and the third."
+        ],
+        [
+          "player",
+          "Kael",
+          "Start with the ending you have."
+        ],
+        [
+          "rook",
+          "Rook",
+          "A man bought a hat. No, the hat was important earlier."
+        ],
+        [
+          "player",
+          "Kael",
+          "Perhaps he was pleased with it."
+        ],
+        [
+          "rook",
+          "Rook",
+          "You have reduced a triumph of storytelling to a satisfactory purchase."
+        ],
+        [
+          "player",
+          "Kael",
+          "I am pleased for him."
+        ]
+      ],
+      "purpose": "Hear Rook lose his place",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Hear Rook lose his place",
+      "personal_staging": "Rook starts an explain gesture, pauses to recall, then accepts the joke with a wry expression. Do not invoke the board-game outcome/reward owner."
+    },
+    {
+      "id": "life2_mira_good_color",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "mira"
+      ],
+      "requested": true,
+      "action": "idle",
+      "when": {},
+      "turns": [
+        [
+          "mira",
+          "Mira",
+          "Yellow, I think. I am allowed to change my mind before you answer."
+        ],
+        [
+          "player",
+          "Kael",
+          "What are we choosing?"
+        ],
+        [
+          "mira",
+          "Mira",
+          "The color I would paint a door if I had a free afternoon."
+        ],
+        [
+          "player",
+          "Kael",
+          "Yellow would be easy to find in the rain."
+        ],
+        [
+          "mira",
+          "Mira",
+          "That is useful, but I was enjoying how cheerful it would look."
+        ],
+        [
+          "player",
+          "Kael",
+          "Then yellow. Cheerful first."
+        ]
+      ],
+      "purpose": "Let Mira choose a color",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Let Mira choose a color",
+      "personal_staging": "Mira considers the existing doorway with explicit point gaze; do not recolor geometry or assert a completed painting task."
+    },
+    {
+      "id": "life2_tor_hands_behind_back",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "blacksmith_tor"
+      ],
+      "requested": true,
+      "action": "listen",
+      "when": {},
+      "turns": [
+        [
+          "blacksmith_tor",
+          "Tor",
+          "Tell me where you would put your thumb. I'll keep my hands here."
+        ],
+        [
+          "player",
+          "Kael",
+          "Away from the head of the tool."
+        ],
+        [
+          "blacksmith_tor",
+          "Tor",
+          "Good. And your other hand?"
+        ],
+        [
+          "player",
+          "Kael",
+          "Clear of where it comes down."
+        ],
+        [
+          "blacksmith_tor",
+          "Tor",
+          "There. I managed an entire lesson without grabbing anything."
+        ],
+        [
+          "player",
+          "Kael",
+          "You moved your elbow twice."
+        ]
+      ],
+      "purpose": "Let Tor explain without taking over",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Let Tor explain without taking over",
+      "personal_staging": "Tor keeps hands behind his back using the authored listening pose, then gives one acknowledgement. No actual hammer swing near Kael; no hidden skill award."
+    },
+    {
+      "id": "life2_elna_ordinary_question",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "widow_elna"
+      ],
+      "requested": true,
+      "action": "rest",
+      "when": {},
+      "turns": [
+        [
+          "widow_elna",
+          "Elna",
+          "Go on. You have the expression you get before a careful question."
+        ],
+        [
+          "player",
+          "Kael",
+          "Would you rather have a sunny room or a cool one?"
+        ],
+        [
+          "widow_elna",
+          "Elna",
+          "Sunny. I can always open a window. That was a good question."
+        ],
+        [
+          "player",
+          "Kael",
+          "I had two more prepared."
+        ],
+        [
+          "widow_elna",
+          "Elna",
+          "Save them. We can manage a conversation without provisions for the whole week."
+        ],
+        [
+          "player",
+          "Kael",
+          "Sunny, then."
+        ]
+      ],
+      "purpose": "Ask Elna an ordinary question",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Ask Elna an ordinary question",
+      "personal_staging": "Elna begins guarded, relaxes into a small reassurance gesture and comfortable silence. Use a verified seat only; otherwise keep her standing rest pose."
+    },
+    {
+      "id": "life2_toma_unanswered_weather",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "farmer_toma"
+      ],
+      "requested": true,
+      "action": "idle",
+      "when": {},
+      "turns": [
+        [
+          "farmer_toma",
+          "Toma",
+          "Do you think it will rain before morning?"
+        ],
+        [
+          "player",
+          "Kael",
+          "I was going to ask you."
+        ],
+        [
+          "farmer_toma",
+          "Toma",
+          "That is inconvenient. I had hoped to borrow your certainty."
+        ],
+        [
+          "player",
+          "Kael",
+          "We could look again before we leave."
+        ],
+        [
+          "farmer_toma",
+          "Toma",
+          "Or admit we don't know and get indoors while it is dry."
+        ],
+        [
+          "player",
+          "Kael",
+          "I prefer that answer."
+        ]
+      ],
+      "purpose": "Leave one question unanswered",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Leave one question unanswered",
+      "personal_staging": "Both look briefly toward an outdoor sky point then return attention. Do not claim a weather forecast or alter the day/night clock."
+    },
+    {
+      "id": "life2_senn_ask_again",
+      "zone": "bandit_road",
+      "kind": "conversation",
+      "actors": [
+        "captain_senn"
+      ],
+      "requested": true,
+      "action": "watch",
+      "when": {
+        "senn_fate": "testimony"
+      },
+      "turns": [
+        [
+          "captain_senn",
+          "Senn",
+          "Move over. I mean—would you mind moving over?"
+        ],
+        [
+          "player",
+          "Kael",
+          "There is room here."
+        ],
+        [
+          "captain_senn",
+          "Senn",
+          "I heard myself. You needn't pretend the first part was courteous."
+        ],
+        [
+          "player",
+          "Kael",
+          "You asked again."
+        ],
+        [
+          "captain_senn",
+          "Senn",
+          "It takes longer than I expected."
+        ],
+        [
+          "player",
+          "Kael",
+          "We have time for a question."
+        ]
+      ],
+      "purpose": "Give Senn time to ask again",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Give Senn time to ask again",
+      "personal_staging": "Only testimony Senn: guarded listening, small correction gesture, then acknowledgement. Keep custody/fate and combat state untouched; no absolution flag."
+    },
+    {
+      "id": "life2_edric_poor_audience",
+      "zone": "record_hall",
+      "kind": "conversation",
+      "actors": [
+        "edric"
+      ],
+      "requested": true,
+      "action": "idle",
+      "when": {
+        "edric_stance": "cooperate"
+      },
+      "turns": [
+        [
+          "edric",
+          "Edric",
+          "I tried practicing with the door open once. Nobody came nearer."
+        ],
+        [
+          "player",
+          "Kael",
+          "That is a review of sorts."
+        ],
+        [
+          "edric",
+          "Edric",
+          "An unusually unanimous one. I had to laugh before I could close the door."
+        ],
+        [
+          "player",
+          "Kael",
+          "Did it help the playing?"
+        ],
+        [
+          "edric",
+          "Edric",
+          "Not at all. It helped the practice."
+        ],
+        [
+          "player",
+          "Kael",
+          "Then you had an audience after all."
+        ]
+      ],
+      "purpose": "Hear Edric admit a small failure",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Hear Edric admit a small failure",
+      "personal_staging": "Cooperative Edric only; restrained wry expression and a brief self-conscious glance. No musical instrument or unheard tune is fabricated."
+    },
+    {
+      "id": "life2_vale_keep_the_margin",
+      "zone": "record_hall",
+      "kind": "conversation",
+      "actors": [
+        "vargan_record_keeper"
+      ],
+      "requested": true,
+      "action": "read",
+      "when": {
+        "castle_discovered": true
+      },
+      "turns": [
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "I wrote three lines this morning and crossed out two."
+        ],
+        [
+          "player",
+          "Kael",
+          "Are you keeping the third?"
+        ],
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "For now. It sounds rather pleased with itself."
+        ],
+        [
+          "player",
+          "Kael",
+          "Must you correct that too?"
+        ],
+        [
+          "vargan_record_keeper",
+          "Vale",
+          "Perhaps tomorrow. I wanted to tell somebody I had written it."
+        ],
+        [
+          "player",
+          "Kael",
+          "I am glad you told me."
+        ]
+      ],
+      "purpose": "Let Vale keep her unfinished thought",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Let Vale keep her unfinished thought",
+      "personal_staging": "Vale closes or lowers her existing book before looking at Kael. No private writing text is exposed or added to evidence; use read-to-listen transition."
+    },
+    {
+      "id": "life2_merrow_no_form",
+      "zone": "vargan_approach",
+      "kind": "conversation",
+      "actors": [
+        "vargan_steward"
+      ],
+      "requested": true,
+      "action": "rest",
+      "when": {
+        "castle_discovered": true
+      },
+      "turns": [
+        [
+          "vargan_steward",
+          "Merrow",
+          "I have nearly said 'while you wait' three times. You aren't waiting for anything, are you?"
+        ],
+        [
+          "player",
+          "Kael",
+          "No."
+        ],
+        [
+          "vargan_steward",
+          "Merrow",
+          "Then I can finish this without finding a form for you."
+        ],
+        [
+          "player",
+          "Kael",
+          "You can."
+        ],
+        [
+          "vargan_steward",
+          "Merrow",
+          "That was still warm. I had forgotten it could be."
+        ],
+        [
+          "player",
+          "Kael",
+          "You might try again tomorrow."
+        ]
+      ],
+      "purpose": "Wait while Merrow drinks",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Wait while Merrow drinks",
+      "personal_staging": "Use an existing cup only if one is actually bound; otherwise change the staged gesture to a quiet pause and do not mime a nonexistent cup. Cup binding is an acceptance prerequisite for these exact lines.",
+      "requires_bound_prop": "cup"
+    },
+    {
+      "id": "life2_nessa_guest_for_once",
+      "zone": "greyfen",
+      "kind": "conversation",
+      "actors": [
+        "saga_nessa"
+      ],
+      "requested": true,
+      "action": "rest",
+      "when": {},
+      "turns": [
+        [
+          "saga_nessa",
+          "Nessa",
+          "I am trying very hard not to ask whether you've eaten."
+        ],
+        [
+          "player",
+          "Kael",
+          "I have. You may sit without feeding me."
+        ],
+        [
+          "saga_nessa",
+          "Nessa",
+          "Good. Now I need something else to say."
+        ],
+        [
+          "player",
+          "Kael",
+          "Tell me about the badger."
+        ],
+        [
+          "saga_nessa",
+          "Nessa",
+          "An excellent piece of carving. Slightly round. Fierce in the right light."
+        ],
+        [
+          "player",
+          "Kael",
+          "I look forward to meeting it."
+        ]
+      ],
+      "purpose": "Let Nessa be a guest for a moment",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Let Nessa be a guest for a moment",
+      "personal_staging": "Nessa uses a verified seat if available, otherwise relaxed standing. The carving is discussed, not conjured or awarded; do not imply the player has seen it."
+    },
+    {
+      "id": "life2_nera_off_duty",
+      "zone": "marsh_crossing",
+      "kind": "conversation",
+      "actors": [
+        "saga_nera"
+      ],
+      "requested": true,
+      "action": "rest",
+      "when": {
+        "escort_abandonment_acknowledged": true
+      },
+      "turns": [
+        [
+          "saga_nera",
+          "Nera",
+          "Nothing needs checking for a moment. I have checked that quite thoroughly."
+        ],
+        [
+          "player",
+          "Kael",
+          "What happens now?"
+        ],
+        [
+          "saga_nera",
+          "Nera",
+          "We stand here without discussing the crossing."
+        ],
+        [
+          "player",
+          "Kael",
+          "The wind has changed."
+        ],
+        [
+          "saga_nera",
+          "Nera",
+          "So it has. That can be the whole conversation if we like."
+        ],
+        [
+          "player",
+          "Kael",
+          "I would like that."
+        ]
+      ],
+      "purpose": "Share a minute outside the work",
+      "knowledge": "Only the present speaker's personal preferences and the current exchange; no new historical proof, inferred forgiveness or offscreen witness.",
+      "offer_label": "Share a minute outside the work",
+      "personal_staging": "Nera leaves work focus for a bounded environmental glance, then neutral shared rest. Use actual ambient wind only; no promise, forgiveness or travel commitment is recorded."
+    }
   ]
 }

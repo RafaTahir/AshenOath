@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "asset": "C11",
+  "identity": "nessa",
+  "sources": [],
+  "authoring_tool_sha256": "97f35212ec2786e4fe491f45bdc49592272806239cb0a42a6b0bb519dcb1eed4",
+  "blend_sha256": "7b1872441aa31582f8613c3f57ad2c6658d55191ba878a028e9e8c06ff7e9683",
+  "carrier_sha256": "3150e4073c71912f52243b64c0425b8f3dce56b4e421ba364a932937f2374280",
+  "blender_version": "5.2.3 LTS",
+  "triangles": 128,
+  "grips_godot": {
+    "GripLeft": [
+      -0.12,
+      0.02,
+      0
+    ],
+    "GripRight": [
+      0.12,
+      0.02,
+      0
+    ]
+  },
+  "surface_height": 0.02,
+  "prop_root_actor_relative_godot": [
+    0,
+    1,
+    -0.4
+  ],
+  "support_near_limit_godot_z": 0.04,
+  "contact_part": "WorkContactPart",
+  "contact_response": "compress",
+  "contact_amount": 0.055,
+  "runtime_resource": "res://assets_external/environment_prepared/living_cast/station_nessa.scn",
+  "source_geometry_authored": true,
+  "geometry_contact_verified": false,
+  "native_grips_verified": false,
+  "user_accepted": false,
+  "notes": [
+    "Actual supported contact geometry; no pickup or carried transition is claimed.",
+    "New work surfaces/details supplement the retained source shapes where listed."
+  ],
+  "recipe_snapshot": {
+    "sha256": "a403ea2a7895ec97298d6cd6c119913076174dbca954ab1bd80097b1f99017ad",
+    "files": [
+      {
+        "name": "author_living_cast_stage2_props.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\a403ea2a7895ec97\\author_living_cast_stage2_props.py",
+        "sha256": "97f35212ec2786e4fe491f45bdc49592272806239cb0a42a6b0bb519dcb1eed4"
+      },
+      {
+        "name": "living_cast_stage2_profiles.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\a403ea2a7895ec97\\living_cast_stage2_profiles.py",
+        "sha256": "e6d9d479a6e34da106ffd0e70b1af87a4b9c8322ca95253ca046e9426e3d6ba3"
+      }
+    ]
+  }
+}

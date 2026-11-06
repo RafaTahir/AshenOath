@@ -8,8 +8,11 @@ const Driver = preload("res://scripts/character_animation_driver.gd")
 const Profile = preload("res://scripts/story_cast_profile.gd")
 const Stations = preload("res://scripts/living_cast_stations.gd")
 const Routine = preload("res://scripts/greyfen_life_controller.gd")
+const Player = preload("res://scripts/player_controller.gd")
 const CASES := {
-	"sister_anwen_human":"care", "blacksmith_tor":"forge", "mira_human":"sort_herbs", "rook_human":"check_supplies"
+	"sister_anwen_human":"care", "blacksmith_tor":"forge", "mira_human":"sort_herbs", "rook_human":"check_supplies",
+	"nessa":"bake", "widow_elna":"fold_cloth", "farmer_toma":"tend", "saga_nera":"check_rope",
+	"captain_senn":"watch", "vargan_record_keeper":"read", "vargan_steward":"check_supplies", "edric":"review_dispatch"
 }
 var failures: Array[String] = []
 var checks := 0
@@ -19,6 +22,10 @@ var station_host: StationHost
 class StationHost extends Node3D:
 	var zone_root := Node3D.new()
 	func validate_walkable_position(point: Vector3) -> Vector3: return point
+
+class IsolatedPlayer extends Player:
+	func _ready() -> void:
+		set_physics_process(false)
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -32,12 +39,87 @@ func _run() -> void:
 	_build_stations()
 	for role: String in CASES:
 		await _actor(role, CASES[role])
+	await _player_idle()
 	helper.free()
 	station_host.free()
 	for failure in failures:
 		printerr("LIVING CAST MOTION: " + failure)
 	print("LIVING CAST MOTION: %s checks=%d actors=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, CASES.size()])
 	quit(0 if failures.is_empty() else 1)
+
+func _player_idle() -> void:
+	var visual: Node3D = helper.spawn_visual_role("player_human","characters")
+	_check(visual != null,"P01 actual retained player loads")
+	if visual == null: return
+	var controller := IsolatedPlayer.new()
+	root.add_child(controller)
+	controller.visual_root=Node3D.new()
+	controller.add_child(controller.visual_root)
+	controller.visual_root.add_child(visual)
+	controller._mapped_body=visual
+	controller.asset_helper=helper
+	var driver := Driver.new()
+	visual.add_child(driver)
+	controller.animation_driver=driver
+	var configured := driver.configure(visual,controller._animation_map_for_visual(visual))
+	_check(configured and driver.life_idle_only,"P01 binds only the two authored relaxation clips")
+	if not configured:
+		controller.free()
+		return
+	driver.set_external_tick(true)
+	var before := visual.transform
+	var attacks: Dictionary = {}
+	for state: String in ["attack_light","attack_heavy","draw","sheath","hit","death"]:
+		attacks[state]=driver.get_clip_for_state(state)
+	driver.set_relaxed_idle(true)
+	var first := driver.life_clip
+	for tick in 180: driver.advance_external(0.05)
+	_check(first != driver.life_clip and str(driver.life_clip).begins_with("life/Life_Idle_"),"P01 alternates complete idle performances only at a loop boundary")
+	_check(visual.transform.is_equal_approx(before),"P01 relaxation retains the actual locomotion root")
+	driver.set_relaxed_idle(false)
+	_check(driver.life_clip == StringName(),"drawing equipment restores retained player animation ownership")
+	for state: String in attacks:
+		_check(driver.get_clip_for_state(state)==attacks[state],"P01 relaxation never remaps "+state)
+	_check(driver.trigger_action("attack_light",1.0,0.10,true,0.34),"P01 retains its actual light attack")
+	driver.set_relaxed_idle(true)
+	_check(driver.action_active and driver.life_clip==StringName() and is_equal_approx(driver.action_duration,0.34),"relaxation cannot replace or retime an attack")
+	driver.set_dead()
+	driver.set_relaxed_idle(true)
+	_check(driver.dead and driver.life_clip==StringName(),"terminal P01 cannot restart relaxation")
+	driver.reset_for_journey_restore()
+	_check(not driver.dead and driver.life_clip==StringName(),"player restoration clears relaxed presentation")
+	controller._build_bow_visual()
+	_verify_bow_size(controller)
+	controller.free()
+	await process_frame
+
+func _verify_bow_size(player: Node3D) -> void:
+	var hand_model := player.bow_visual.get_node_or_null("KaelBowModeled") as Node3D if player.bow_visual != null else null
+	var back_model := player.bow_back_visual.get_child(0) as Node3D if player.bow_back_visual != null and player.bow_back_visual.get_child_count()>0 else null
+	_check(hand_model != null and back_model != null,"actual retained bow exists in both hand and back owners")
+	if hand_model == null or back_model == null: return
+	var back_span := _projected_extent(back_model,player.bow_back_visual.global_basis.y.normalized())
+	player.equipment_loadout.set_active_weapon("bow")
+	for weight: float in [0.0,0.5,1.0]:
+		var frame: Transform3D = player._equipment_anchor_world(player.bow_back_visual)
+		player._update_bow_equipment_reach({"position":frame.origin,"basis":frame.basis.orthonormalized(),"weight":weight})
+		var span := _projected_extent(hand_model,player.bow_visual.global_basis.y.normalized())
+		_check(absf(span-back_span)<0.001,"retained bow keeps physical size through transfer weight "+str(weight))
+	player.equipment_left_arm_ik.stop()
+	player.bow_presentation._process_modification()
+	var active_span := _projected_extent(hand_model,player.bow_visual.global_basis.y.normalized())
+	_check(absf(active_span-back_span)<0.001,"active archery cannot resize the bow after the draw handoff")
+	_check(not player.equipment_loadout.is_transitioning(),"visual size correction does not start an equipment transaction")
+
+func _projected_extent(node: Node3D, axis: Vector3) -> float:
+	var low := INF
+	var high := -INF
+	for mesh: MeshInstance3D in node.find_children("*","MeshInstance3D",true,false):
+		if mesh.mesh==null or str(mesh.name).to_lower().contains("arrow"): continue
+		for point: Vector3 in mesh.mesh.get_faces():
+			var projected := (mesh.global_transform*point).dot(axis)
+			low=minf(low,projected); high=maxf(high,projected)
+	return high-low if is_finite(low) and is_finite(high) else 0.0
 
 func _actor(role: String, occupation: String) -> void:
 	var visual: Node3D = helper.spawn_visual_role(role, "characters")
@@ -98,6 +180,7 @@ func _actor(role: String, occupation: String) -> void:
 		return
 	for hz: float in [20.0, 30.0, 60.0, 144.0]:
 		driver.clear_life_activity()
+		driver.set_life_workstation(workstation)
 		driver.set_life_activity(occupation)
 		var poses: Array = []
 		for sample in range(int(hz * 4.0)):
@@ -111,6 +194,7 @@ func _actor(role: String, occupation: String) -> void:
 	var first_idle := driver.life_clip
 	for tick in 200: driver.advance_external(0.05)
 	_check(driver.life_clip != first_idle, role + " alternates two authored idles at cycle boundaries")
+	driver.set_life_workstation(workstation)
 	driver.set_life_activity(occupation)
 	driver.advance_external(0.25)
 	var before_suspend := driver.life_elapsed
@@ -120,7 +204,7 @@ func _actor(role: String, occupation: String) -> void:
 	driver.set_distance_suspended(false)
 	driver.advance_external(0.25)
 	_check(is_equal_approx(driver.life_elapsed, before_suspend + 0.25), role + " native work resumes without catch-up contacts")
-	if role == "sister_anwen_human":
+	if role == "sister_anwen_human" or Profile.canonical_identity(role) in Stations.STAGE_TWO or role == "captain_senn":
 		driver.clear_life_activity()
 		driver.set_life_activity("sleep")
 		driver.advance_external(0.25)
@@ -147,7 +231,29 @@ func _actor(role: String, occupation: String) -> void:
 		if role == "sister_anwen_human":
 			driver.life_modifier._process_modification()
 			_verify_staff(visual, driver)
+	if role == "vargan_steward":
+		_check(driver.supports_story_prop("cup"), "Merrow cup requires actual measured grip and native drink clip")
+		_check(driver.set_story_prop("cup"), "Merrow binds actual cup to a valid hand socket")
+		driver.stop_action()
+		driver.set_dialogue_pose(true)
+		driver.play_story_gesture("drink")
+		_check(driver.action_active and driver.active_action_clip == &"life/Life_Drink", "Merrow uses authored sip, never a generic gesture")
+		var cup: Node3D = driver.story_prop
+		driver.set_distance_suspended(true)
+		_check(not is_instance_valid(driver.story_prop) and not cup.visible, "distance interruption removes the action-owned cup immediately")
+		driver.set_distance_suspended(false)
+	if role == "vargan_record_keeper":
+		driver.stop_action()
+		driver.set_dialogue_pose(true)
+		driver.play_story_gesture("lower_book")
+		_check(driver.action_active and driver.active_action_clip == &"life/Life_Lower_Book", "Vale owns the authored desk-ledger transition")
 	driver.stop_story_gesture()
+	if driver.life_requires_station:
+		driver.set_life_workstation({})
+		driver.set_life_activity(occupation)
+		_check(driver.life_clip != &"life/Life_Work", role + " waits without miming work when its station is unavailable")
+		driver.set_life_workstation(workstation)
+		_check(driver.life_clip == &"life/Life_Work", role + " acquiring its real station starts the native sequence")
 	driver.set_life_activity(occupation)
 	driver.set_locomotion_motion(Vector3(1, 0, 0), true)
 	_check(driver.life_clip == StringName() and driver.presentation_state == "", role + " actual locomotion interrupts planted work")
@@ -185,6 +291,11 @@ func _build_stations() -> void:
 	forge.mesh = load("res://assets_external/environment/props/GreyfenForgeWork_Authored.res") as ArrayMesh
 	station_host.zone_root.add_child(forge)
 	_check(forge.mesh != null, "real authored anvil loads")
+	var index := 0
+	for identity: String in Stations.STAGE_TWO:
+		var work := Stations._add_regional_work(station_host, identity, [30.0+float(index)*3.0,0,0], "")
+		_check(work != null, identity + " retained table and authored task prop load")
+		index += 1
 
 func _verify_staff(actor: Node3D, driver: Node) -> void:
 	var modeled := actor.find_child("AnwenStaffModeled", true, false) as Node3D
@@ -214,7 +325,8 @@ func _verify_staff(actor: Node3D, driver: Node) -> void:
 	_check(tip.distance_to(driver.life_modifier.staff_tip) < 0.04, "actual modeled staff tip agrees with the planted support target")
 
 func _workstation(role: String, occupation: String) -> Dictionary:
-	var id: String = {"sister_anwen_human":"sister_anwen", "blacksmith_tor":"blacksmith_tor", "mira_human":"mira", "rook_human":"rook"}[role]
+	if role == "captain_senn": return {}
+	var id: String = {"sister_anwen_human":"sister_anwen", "blacksmith_tor":"blacksmith_tor", "mira_human":"mira", "rook_human":"rook", "nessa":"saga_nessa"}.get(role, role)
 	var definition: Dictionary = Profile.WORKSTATIONS[id]
 	var node := station_host.zone_root.find_child(str(definition.node), true, false) as Node3D
 	_check(node != null, role + " real workstation exists")
