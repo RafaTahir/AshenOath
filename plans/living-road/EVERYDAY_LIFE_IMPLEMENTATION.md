@@ -141,6 +141,70 @@ check quality re-preparation, short-screen Retry and reduced-motion behavior.
 Runtime acceptance remains pending. A successful Git push is not a live browser
 verification, and Vercel is not manually deployed or awaited.
 
+## Authorized Startup Verification, 2026-11-06
+
+The user authorized runtime testing after the loading report. Isolated profiles
+and local HTTP origins preserve the user's production saves. This is a startup
+repair, not acceptance of the entire Everyday Life backlog or performance gates.
+
+- Published `9733c4c` was observed through the artwork screen. Browser control
+  timed out while Greyfen was preparing; that observation alone did not prove a
+  permanent hang. The tab was closed without starting or overwriting a journey.
+- Existing native `verify_runtime_smoke` reached the menu and Greyfen, but the
+  wrapper FAILED on an ObjectDB shutdown leak. Do not relabel that run a pass.
+- The exact published package then completed Chrome New Game, ordinary movement,
+  durable Quick Save, reload/Continue and replay-isolation checks. Its old harness
+  reported PASS despite repeated missing `everyday_wear.gdshader` errors. That
+  shader omission is a real packaging defect; the old aggregate pass is not a
+  clean resource/runtime result.
+- Explicitly export the shader and preload its shared binding. Strengthen the
+  existing browser checker to reject engine `ERROR:` output. The corrected
+  `startup-verified-20261106` package passed desktop and 960x540 touch-emulated
+  loading/menu/New Game/movement/Save/reload/Continue with zero such errors.
+  The observed menu times were about 67/72 seconds (desktop cold/reload) and
+  76/72 seconds (touch cold/reload). These are functional-run observations, not
+  controlled benchmarks; building overlapped part of this diagnostic session.
+- The first graphics render accounts for much of the wait. Keep the complete
+  world and final camera gate; do not claim the startup targets were met.
+- The loading slideshow used accumulated frame delta, which loses elapsed time
+  during long construction/render frames. Use monotonic elapsed time instead.
+  This does not make a synchronous graphics stall disappear.
+
+Evidence directory: `D:/Temp/AshenOath/startup-live-repair-20261106`.
+`browser-baseline.json` retains the old errors; `browser-candidate.json` records
+the clean desktop/touch checks. Final candidate: `startup-verified-r2-20261106`.
+
+- `browser-final.json`: PASS, zero unexpected engine/browser errors. Real mouse
+  New Game, optional introduction Skip, ordinary movement, durable Quick Save,
+  page reload and normal Continue restored the earned journey/position. Loading
+  actions stayed withheld; captured artwork changed from Greyfen to the village
+  illustration and mill illustration while real download progress advanced.
+  The first navigation deliberately delayed the opening response by 30 seconds
+  to inspect the loading screen; its 132-second menu time is not an ordinary
+  cold-load measurement. The subsequent reload took approximately 98 seconds,
+  including 64 seconds in first-view preparation. No startup-performance pass.
+- `browser-retry.json`: the touch-sized outage/recovery CASE passed. Two opening
+  HTTP requests deliberately returned 503; Retry fetched again after restoration
+  and real touch New Game reached playable Greyfen. The old aggregate filter
+  incorrectly classified those exact injected errors as unexpected and returned
+  FAIL. Preserve that report. Static review of its captured request/error/event
+  records found exactly those two injected messages and no unexpected errors.
+  The checker now exempts only that exact 503 message while that controlled fault
+  is active, preserving rejection of all other runtime/resource errors. No game
+  mutation, reload or fabricated save was used to rescue Retry.
+- Compilation/export and exact package-integrity checks passed. Complete Web
+  directory: **205,971,899 bytes (196.43 MiB)**, below 256 MiB and its 200 MiB
+  warning. Largest file: opening pack, 69,633,850 bytes, below Git's 100 MiB cap.
+  Root transport SHA-256:
+  `7bd204d9db73ed5e52b9c7f1f4d394297678b84cad8910d65cfef7333183ed9d`.
+- Static diff review passed with CR-at-EOL recognized; byte-preserved Web files
+  intentionally retain their generated CRLF, not whitespace-normalized artifacts.
+
+Scope limitations: native shutdown leak remains recorded; strict loading/FPS/
+memory targets, actual iPhone/WebKit behavior and user acceptance are not passed
+by these checks. No content/quality was removed. Publication is a Git push for
+automatic Vercel deployment; no CLI deployment or live-verification claim.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

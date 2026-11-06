@@ -3,6 +3,7 @@ extends Node
 const Cast = preload("res://scripts/story_cast_profile.gd")
 const Held = preload("res://scripts/held_prop_geometry.gd")
 const Surface = preload("res://scripts/spatial_surface_contract.gd")
+const WEAR_SHADER = preload("res://shaders/everyday_wear.gdshader")
 const TRAILS := {
 	"greyfen":{"name":"A loaded cart's passage","points":[Vector3(-4,0,12),Vector3(-4,0,10),Vector3(-3,0,8)],"text":"The parallel compressed marks lead to the kitchen's unloading place. They establish a load's approach, not who owned it."},
 	"wychwood":{"name":"Water-edge prints","points":[Vector3(9,0,-6),Vector3(8.5,0,-5),Vector3(7.7,0,-3.6)],"text":"Broad prints turn along the bank, not into the working beds. The watercourse signs can be inspected independently."},
@@ -100,7 +101,7 @@ func weather_changed(weather:String) -> void:
 func _collect_wear(actor:Node3D,id:String) -> void:
 	if not is_instance_valid(actor) or id=="":return
 	var material:=ShaderMaterial.new()
-	material.shader=load("res://shaders/everyday_wear.gdshader")
+	material.shader=WEAR_SHADER
 	var saved:Dictionary=host.story_state.get_flag("everyday_wear",{}).get(id,{})
 	var entry:Dictionary={"actor":weakref(actor),"id":id,"material":material,"meshes":[],"wet":clampf(float(saved.get("wet",0)),0,1),"soil":clampf(float(saved.get("soil",0)),0,1),"last":actor.global_position,"time":active_seconds}
 	for mesh in actor.find_children("*","MeshInstance3D",true,false):

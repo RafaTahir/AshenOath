@@ -138,6 +138,7 @@ def compile_layout(defer_environment=False):
             "res://shaders/character_region_palette.gdshader",
             "res://scripts/spectral_monster_presentation.gd",
             "res://shaders/spectral_veil.gdshader",
+            "res://shaders/everyday_wear.gdshader",
             "res://data/spectral_monster_profiles.json",
         })
         includes[name].update({"data/runtime_dialogue_index.json", "data/runtime_dialogue/*.json"})

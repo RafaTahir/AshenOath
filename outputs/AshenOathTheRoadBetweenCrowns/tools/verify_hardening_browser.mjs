@@ -1,9 +1,9 @@
 // Focused production-UI functional checks; no FPS, memory or hardware certification.
 // node tools/verify_hardening_browser.mjs --export ../../web --report D:/Temp/AshenOath/hardening/report.json
-// --scenario smoke|metadata|cold|all|combat --mode desktop|touch|both --label candidate|baseline
+// --scenario startup|smoke|metadata|cold|all|combat --mode desktop|touch|both --label candidate|baseline
 // combat is opt-in; all retains the save/loading suite.
 // combat requires --combat-phase light|heavy|bow; run each phase/viewport in a fresh invocation.
-// --fault metadata_headers_stall|metadata_body_stall selects one metadata case.
+// --fault metadata_headers_stall|metadata_body_stall|opening_unavailable selects one Retry case.
 // --inspect validates inputs and candidate transport without launching Chromium.
 import puppeteer from 'puppeteer-core';
 import { createServer } from 'node:http';
@@ -26,11 +26,11 @@ const scenario = String(options.scenario || 'all');
 const mode = String(options.mode || 'both');
 const combatPhase = String(options['combat-phase'] || '');
 const metadataFaults = options.fault ? [String(options.fault)] : ['metadata_headers_stall', 'metadata_body_stall'];
-assert(['all', 'smoke', 'metadata', 'cold', 'combat'].includes(scenario), 'Invalid --scenario');
+assert(['all', 'startup', 'smoke', 'metadata', 'cold', 'combat'].includes(scenario), 'Invalid --scenario');
 assert(['both', 'desktop', 'touch'].includes(mode), 'Invalid --mode');
 if (scenario === 'combat') assert(['light', 'heavy', 'bow'].includes(combatPhase),
   'Combat requires --combat-phase light|heavy|bow. Run each phase/viewport in a fresh process/profile; combined combat reloads are not supported.');
-assert(metadataFaults.every(kind => ['metadata_headers_stall', 'metadata_body_stall'].includes(kind)), 'Invalid --fault');
+assert(metadataFaults.every(kind => ['metadata_headers_stall', 'metadata_body_stall', 'opening_unavailable'].includes(kind)), 'Invalid --fault');
 const timeoutMs = Number(options.timeout || 180000);
 assert(Number.isFinite(timeoutMs) && timeoutMs >= 30000, '--timeout must be at least 30000 ms');
 const temporaryRoot = resolve('D:/Temp/AshenOath/hardening-browser');
@@ -112,6 +112,10 @@ const server = createServer((request, response) => {
   if (fault.kind && relative === fault.path) {
     fault.hits++;
     record.fault = fault.kind;
+    if (fault.kind === 'opening_unavailable') {
+      response.writeHead(503, { 'Cache-Control': 'no-store' }).end('Controlled opening-pack outage');
+      return;
+    }
     if (fault.kind === 'metadata_headers_stall' || fault.kind === 'metadata_body_stall') {
       // Hold headers/body until the production deadline aborts the real request.
       if (fault.kind === 'metadata_body_stall') {
@@ -273,11 +277,38 @@ async function enterMenu(page, touch) {
     await page.evaluate(target => { setTimeout(() => { location.href = target; }, 0); }, url);
     await waitFor(async () => !(await observe(page))?.ready, 'fresh page navigation');
   } else await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  if (scenario === 'startup' && !currentCase.loading_captured) {
+    const first = await waitFor(async () => {
+      const s = await observe(page);
+      return ['startup', 'main'].includes(s?.ui?.active_menu) ? s : null;
+    }, 'loading presentation appears');
+    currentCase.loading_captured = true;
+    if (first.ui.active_menu === 'startup') {
+      assert(!first.ui.buttons?.some(b => b.enabled && /^(New Game|Continue|Settings)$/.test(b.text)),
+        'Unready menu actions exposed during loading');
+      await screenshot(page, 'loading-first');
+      await sleep(9000);
+      if ((await observe(page))?.ui?.active_menu === 'startup') await screenshot(page, 'loading-artwork-next');
+      event({ event: 'loading_menu_actions_withheld' });
+    }
+  }
+  let nextLoadingCapture = Date.now() + 12000;
+  let loadingCapture = 0;
   await waitFor(async () => {
     const s = await observe(page);
     const retry = s?.ui?.buttons?.some(b => b.enabled && /Retry/i.test(b.text));
+    if (scenario === 'startup' && s?.ui?.active_menu === 'startup' && Date.now() >= nextLoadingCapture) {
+      await screenshot(page, `loading-stage-${++loadingCapture}`);
+      nextLoadingCapture = Date.now() + 12000;
+    }
     return s?.ui?.active_menu === 'main' || retry ? s : null;
   }, 'production main menu or recoverable preparation failure');
+  if (scenario === 'startup') {
+    event({ event: 'menu_reached', startup: await page.evaluate(() => ({
+      navigation_ms: performance.now(), boot: window.__ashenOathBoot, opening: window.__ashenOathOpeningState,
+    })) });
+    await screenshot(page, 'ready-menu');
+  }
 }
 async function startGame(page, viewport, touch) {
   await waitFor(async () => (await observe(page))?.new_game_ready, 'New Game ready');
@@ -412,6 +443,9 @@ async function smoke(page, viewport, touch) {
   assert.equal(resumed.zone, source.zone);
   assert(Math.hypot(resumed.player.position.x - expectedPosition[0], resumed.player.position.z - expectedPosition[2]) < 1.5, 'Continue restored another position');
   await screenshot(page, 'continued');
+  event({ event: 'durable_continue_restored', journey_id: source.journey_id, position: resumed.player.position,
+    saved_position: expectedPosition, zone: resumed.zone });
+  if (scenario === 'startup') return source;
   await pause(page, viewport, touch);
   // Continue legitimately schedules campaign autosaves. Force a subsequent UI
   // Quick Save and await its committed IDB generation before taking the byte
@@ -645,7 +679,12 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
   page.setDefaultTimeout(15000);
   page.on('console', message => {
     result.console.push({ type: message.type(), text: message.text(), at: Date.now() });
-    if (/SCRIPT ERROR|Parse Error|memory access out of bounds|RuntimeError:|Aborted\(/i.test(message.text())) runtimeErrors.push(message.text());
+    if (fault.kind === 'opening_unavailable'
+        && /^Runtime pack opening failed: Error: opening pack HTTP 503$/.test(message.text())) {
+      (result.expected_fault_errors ||= []).push(message.text());
+      return;
+    }
+    if (/SCRIPT ERROR|Parse Error|\bERROR:|memory access out of bounds|RuntimeError:|Aborted\(/i.test(message.text())) runtimeErrors.push(message.text());
   });
   page.on('pageerror', error => { runtimeErrors.push(String(error)); result.console.push({ type: 'pageerror', text: String(error) }); });
   try {
@@ -681,15 +720,24 @@ try {
         '--disable-component-update', '--force-device-scale-factor=1'] });
     report.browser = { executable, version: await browser.version(), headless: !options.headful };
     let source;
-    if (['all', 'smoke'].includes(scenario)) {
-      if (mode !== 'touch') source = await runCase('desktop-smoke', false, smoke);
-      if (mode !== 'desktop') await runCase('touch-smoke', true, smoke);
+    if (['all', 'startup', 'smoke'].includes(scenario)) {
+      const startupDelay = () => {
+        if (scenario === 'startup' && options['delay-opening']) {
+          const delay = Number(options['delay-opening']);
+          assert(Number.isFinite(delay) && delay > 0 && delay <= 60000, 'Invalid --delay-opening');
+          armFault('cold_delay', new URL(packs.packs.opening.url, origin).pathname.replace(/^\//, ''), delay);
+          currentCase.controlled_download_delay_ms = delay;
+        }
+      };
+      if (mode !== 'touch') source = await runCase('desktop-smoke', false, smoke, startupDelay);
+      if (mode !== 'desktop') await runCase('touch-smoke', true, smoke, startupDelay);
     }
     if (['all', 'metadata'].includes(scenario)) {
       for (const touch of mode === 'both' ? [false, true] : [mode === 'touch']) {
         for (const kind of metadataFaults) {
           await runCase(`${touch ? 'touch' : 'desktop'}-${kind}`, touch, metadata,
-            () => armFault(kind, 'runtime_pack_manifest.json'));
+            () => armFault(kind, kind === 'opening_unavailable'
+              ? new URL(packs.packs.opening.url, origin).pathname.replace(/^\//, '') : 'runtime_pack_manifest.json'));
         }
       }
     }

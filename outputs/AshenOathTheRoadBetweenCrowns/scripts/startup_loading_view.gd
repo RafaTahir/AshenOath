@@ -20,7 +20,7 @@ var _retry: Button
 var _atlas: Texture2D
 var _atlas_requested := false
 var _slide := 0
-var _slide_elapsed := 0.0
+var _next_slide_msec := 0
 var _crossfade: Tween
 var _failed := false
 
@@ -95,6 +95,7 @@ func _ready() -> void:
 	_content.add_child(_retry)
 	# The already-exported journal atlas is optional decoration, never a gate.
 	_atlas_requested = ResourceLoader.exists(ATLAS_PATH) and ResourceLoader.load_threaded_request(ATLAS_PATH, "Texture2D") == OK
+	_next_slide_msec = Time.get_ticks_msec() + 8000
 	resized.connect(_layout)
 	_layout()
 
@@ -167,7 +168,7 @@ func _place_content() -> void:
 	var padding := minf(40.0 * unit, maxf(16.0 * unit, safe.size.x * 0.04))
 	_content.position.y = maxf(safe.position.y + padding, safe.end.y - padding - _content.size.y)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if _atlas_requested and _atlas == null:
 		var status := ResourceLoader.load_threaded_get_status(ATLAS_PATH)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
@@ -176,10 +177,11 @@ func _process(delta: float) -> void:
 			_atlas_requested = false
 	if _failed:
 		return
-	_slide_elapsed += delta
-	if _slide_elapsed < 8.0 or _atlas == null:
+	# Construction/render stalls clamp frame delta; artwork uses elapsed time.
+	var now := Time.get_ticks_msec()
+	if now < _next_slide_msec or _atlas == null:
 		return
-	_slide_elapsed = 0.0
+	_next_slide_msec = now + 8000
 	var image: Texture2D = BACKDROP
 	if _slide < 4:
 		var chapter := AtlasTexture.new()
