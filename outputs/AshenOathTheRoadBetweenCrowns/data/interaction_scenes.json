@@ -1672,7 +1672,27 @@
     ],
     "actions": [],
     "campaign_revision": 2,
-    "source_tag": "campaign_revision_2"
+    "source_tag": "campaign_revision_2",
+    "required_actors": [
+      "anwen"
+    ],
+    "primary_actor": "anwen",
+    "unattended_pages": [
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "The public rota leaves uncovered shifts visible. Food and shelter remain available to households whether or not a name appears beside a responsibility.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      },
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "The copied orders stay open to scrutiny. Private statements stay under their owners' terms; the new arrangement does not release them into public custody.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      }
+    ]
   },
   "aftermath_work_concord": {
     "name": "Tor and Rook",
@@ -1686,7 +1706,7 @@
       {
         "speaker": "Rook",
         "speaker_id": "rook",
-        "text": "Nera left a gap for weather. Sensible. Weather has never signed anything I gave it."
+        "text": "The rota leaves a gap for weather. Sensible. Weather has never signed anything I gave it."
       },
       {
         "speaker": "Kael",
@@ -1711,7 +1731,28 @@
     ],
     "actions": [],
     "campaign_revision": 2,
-    "source_tag": "campaign_revision_2"
+    "source_tag": "campaign_revision_2",
+    "required_actors": [
+      "tor",
+      "rook"
+    ],
+    "primary_actor": "tor",
+    "unattended_pages": [
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "Repair tools wait beside a marked strap and a list of worn joints. The next willing worker can see both the task and the space left for weather.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      },
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "An uncovered shift is still written as uncovered. An unsafe part of the route can close until someone freely takes the work; a promise cannot brace a rail.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      }
+    ]
   },
   "aftermath_road_concord": {
     "name": "Nera",
@@ -1750,7 +1791,27 @@
     ],
     "actions": [],
     "campaign_revision": 2,
-    "source_tag": "campaign_revision_2"
+    "source_tag": "campaign_revision_2",
+    "required_actors": [
+      "nera"
+    ],
+    "primary_actor": "nera",
+    "unattended_pages": [
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "The public route marks name the next handover. Household shares are packed for people staying and people going on; neither choice appoints a keeper.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      },
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "Uncovered shifts remain visible beside the agreed ones. The community has a way to ask for help, not a right to fill the spaces with other people's names.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      }
+    ]
   },
   "aftermath_names_open_road": {
     "name": "The departing record",
@@ -1789,7 +1850,27 @@
     ],
     "actions": [],
     "campaign_revision": 2,
-    "source_tag": "campaign_revision_2"
+    "source_tag": "campaign_revision_2",
+    "required_actors": [
+      "vale"
+    ],
+    "primary_actor": "vale",
+    "unattended_pages": [
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "A public notice points toward the copied orders at Hearthward. Human records survive the departure. Nothing on the notice claims to contain the Hart's complete account.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      },
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "Sealed statements remain subject to their owners' terms. The departure list records the places needed without demanding testimony from the people using them.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      }
+    ]
   },
   "aftermath_work_open_road": {
     "name": "The last load",
@@ -1828,7 +1909,28 @@
     ],
     "actions": [],
     "campaign_revision": 2,
-    "source_tag": "campaign_revision_2"
+    "source_tag": "campaign_revision_2",
+    "required_actors": [
+      "tor",
+      "rook"
+    ],
+    "primary_actor": "tor",
+    "unattended_pages": [
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "Tools are packed below the sleeping cloths. Cooking pots are secured beside them, ready for the route the community has already tested.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      },
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "The walls remain. A notice gives the refuge's location for anyone returning. The people who stay behind have not been entered into a promise to follow.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      }
+    ]
   },
   "aftermath_road_open_road": {
     "name": "The open road",
@@ -1867,6 +1969,26 @@
     ],
     "actions": [],
     "campaign_revision": 2,
-    "source_tag": "campaign_revision_2"
+    "source_tag": "campaign_revision_2",
+    "required_actors": [
+      "nera"
+    ],
+    "primary_actor": "nera",
+    "unattended_pages": [
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "The route marks continue toward the prepared refuge. An ordinary lantern identifies the next turn; no new oath binds the people travelling beneath it.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      },
+      {
+        "speaker": "The public work",
+        "speaker_id": "narrator",
+        "text": "The copied human record can be carried and checked. The Hart's complete account was not copied, and the open road makes no claim to restore what was lost.",
+        "read_only": true,
+        "source_tag": "campaign_revision_2"
+      }
+    ]
   }
 }

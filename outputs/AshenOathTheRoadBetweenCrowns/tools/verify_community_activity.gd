@@ -187,6 +187,8 @@ func _run() -> void:
 	_check(not game.story_state.get_flag("community_keeper_consent",{}).has("nessa"),"hearing a willing answer does not silently record it")
 	_check(str(game.hud.content.pages[0].text)==str(Rules.data().consent_offers.nessa.yes),"actual authored participant answer is presented")
 	var record: Dictionary=game.hud.content.actions[0].duplicate(true)
+	SavesOwner.stop_transient_activity_for_save(game)
+	_check(adapter.menu_generation==int(record.generation) and not adapter.menu_actions.is_empty(),"deferred autosave preserves the newly opened participant answer")
 	record["id"]="anwen"; record["accepted"]=false
 	game.hud.close_surface(); adapter.choose(record)
 	_check(game.story_state.get_flag("community_keeper_consent",{}).get("nessa")==true and not game.story_state.get_flag("community_keeper_consent",{}).has("anwen"),"caller cannot replace participant identity or authored answer")
