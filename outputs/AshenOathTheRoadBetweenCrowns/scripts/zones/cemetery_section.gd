@@ -145,6 +145,13 @@ func _create_authored_presentation_layer(context: ZoneBuildContext, origin: Vect
 	return layer
 
 func _make_bell_house(parent: Node3D, context: ZoneBuildContext) -> void:
+	var suspension := Node3D.new()
+	suspension.name = "CemeteryBellClapperPivot"
+	suspension.position = Vector3(1.75, 1.70, 1.08)
+	suspension.set_meta("world_prop_kind", "clapper")
+	suspension.set_meta("world_prop_id", "cemetery_bell")
+	suspension.set_meta("world_prop_state_key", "cemetery_bell_rung")
+	parent.add_child(suspension)
 	var clapper := MeshInstance3D.new()
 	clapper.name = "CemeteryBellClapper"
 	var clapper_mesh := CylinderMesh.new()
@@ -153,9 +160,9 @@ func _make_bell_house(parent: Node3D, context: ZoneBuildContext) -> void:
 	clapper_mesh.height = 0.52
 	clapper_mesh.radial_segments = 6
 	clapper.mesh = clapper_mesh
-	clapper.position = Vector3(1.75, 1.44, 1.08)
+	clapper.position = Vector3(0, -0.26, 0)
 	clapper.material_override = context.make_material(Color(0.12, 0.10, 0.075))
-	parent.add_child(clapper)
+	suspension.add_child(clapper)
 	var rope := MeshInstance3D.new()
 	rope.name = "CemeteryBellRope"
 	var rope_mesh := CylinderMesh.new()

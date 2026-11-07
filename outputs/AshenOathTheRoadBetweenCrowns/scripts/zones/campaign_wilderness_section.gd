@@ -231,7 +231,7 @@ func _build_marsh(context: ZoneBuildContext) -> bool:
 	marker.name = "AuthoredMarshCrossing"
 	marker.set_meta("boardwalk_width", 3.2)
 	context.add_node(marker)
-	# Organic pools, slender reeds and flush timber boards are baked together.
+	# Reeds use rooted moving parts beside the retained pools and flush boards.
 	# The floor, safe route and non-walkable visual-water policy are unchanged.
 	for pos in [Vector3(-7.2,0.05,-5.5), Vector3(7.2,0.05,1.0), Vector3(-8.0,0.05,8.4)]:
 		context.make_visual_box("MarshWaterStreak", pos, Vector3(2.2, 0.012, 0.10), Color(0.12, 0.34, 0.31))
@@ -274,6 +274,14 @@ func _make_authored_mill_dressing(context: ZoneBuildContext) -> void:
 	mill.set_surface_override_material(0, stone)
 	mill.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	context.add_node(mill)
+	var wheel_source := load("res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn") as PackedScene
+	if wheel_source == null:
+		push_error("Required supported Ash Mill wheel is unavailable")
+	else:
+		var wheel := wheel_source.instantiate() as Node3D
+		wheel.name = "AshMillSupportedWheel"
+		wheel.position = mill.position
+		context.add_node(wheel)
 	for pos in [Vector3(-8.65, 0.0, -3.35), Vector3(-1.65, 0.0, -3.55)]:
 		context.make_loose_role("barrel", pos, Vector3.ONE * 0.62, 0.0)
 	context.make_loose_role("crate", Vector3(-7.75, 0.0, -3.35), Vector3.ONE * 0.48, 8.0)

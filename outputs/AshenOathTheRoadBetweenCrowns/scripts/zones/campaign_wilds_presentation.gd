@@ -15,6 +15,8 @@ const CHECKPOINT := preload("res://assets_external/environment/village/RoadCheck
 
 static func landscape(context: ZoneBuildContext) -> void:
 	_publish(context, LANDSCAPES[context.zone_id], "CampaignAuthoredLandscape")
+	if context.zone_id == "marsh_crossing":
+		_living_parts(context, "res://assets_external/environment_prepared/living_world/marsh_reeds.scn", "MarshLivingReeds")
 
 static func adjoining_frontier(context: ZoneBuildContext) -> void:
 	Frontier.build(context)
@@ -26,6 +28,18 @@ static func adjoining_frontier(context: ZoneBuildContext) -> void:
 
 static func checkpoint(context: ZoneBuildContext) -> void:
 	_publish(context, CHECKPOINT, "BanditAuthoredCheckpoint")
+	_living_parts(context, "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn", "CheckpointAttachedCloth")
+
+static func _living_parts(context: ZoneBuildContext, path: String, id: String) -> void:
+	if context.zone_root.has_node(NodePath(id)): return
+	var packed := load(path) as PackedScene
+	if packed == null:
+		push_error("Required authored scenery parts unavailable: " + path)
+		return
+	var parts := packed.instantiate() as Node3D
+	parts.name = id
+	# The bake retains world-space placements under each supported pivot.
+	context.add_node(parts)
 
 static func _publish(context: ZoneBuildContext, mesh: ArrayMesh, id: String) -> void:
 	var node := MeshInstance3D.new()

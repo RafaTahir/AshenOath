@@ -591,6 +591,9 @@ func _tick_ecology_contact(entry: Dictionary, sighting: Dictionary, actor: Node3
 	entry.event_clip = clip
 	entry.event_phase = phase
 	if previous < 0.0: return
+	if str(sighting.role) == "shroud_swimmer" and clip in ["idle", "feed"] \
+			and (phase_crossed(previous, phase, 0.25) or phase_crossed(previous, phase, 0.75)):
+		_ecology_water_contact(entry, driver)
 	for event: Dictionary in sighting.get("contact_events", []):
 		if clip != str(event.clip).to_lower(): continue
 		if phase_crossed(previous, phase, float(event.fraction)):
@@ -605,6 +608,59 @@ static func phase_crossed(previous: float, current: float, contact: float) -> bo
 	if advanced <= 0.0 or advanced > 0.45: return false
 	var to_contact := fposmod(contact - previous, 1.0)
 	return to_contact > 0.0 and to_contact <= advanced
+
+func _ecology_water_contact(entry: Dictionary, driver: Node) -> void:
+	if not is_instance_valid(host.world_vfx): return
+	var skeleton: Skeleton3D = driver.get_skeleton()
+	if skeleton == null: return
+	if not entry.has("water_probes"):
+		entry.water_probes = []
+		var source: Node = skeleton
+		while source != null:
+			if source.has_meta("authored_creature_water_probes"):
+				for raw: Dictionary in source.get_meta("authored_creature_water_probes", []):
+					var offset: Array = raw.get("offset", [])
+					var bone := skeleton.find_bone(str(raw.get("bone_name", "")))
+					if bone < 0 or offset.size() != 3: continue
+					var local := Vector3(float(offset[0]), float(offset[1]), float(offset[2]))
+					if local.is_finite(): entry.water_probes.append({"bone":bone, "offset":local})
+				break
+			if source == driver.character_root: break
+			source = source.get_parent()
+	if entry.water_probes.is_empty(): return
+	var water := host.zone_root.get_node_or_null("CampaignAuthoredLandscape") as MeshInstance3D
+	if water == null or water.mesh == null: return
+	if not entry.has("water_transform") or entry.water_transform != water.global_transform:
+		entry.water_transform = water.global_transform
+		entry.water_triangles = PackedVector3Array()
+		for surface in water.mesh.get_surface_count():
+			if water.mesh.surface_get_name(surface) != "water": continue
+			var arrays := water.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX] if arrays[Mesh.ARRAY_INDEX] != null else PackedInt32Array()
+			if indices.is_empty():
+				for vertex: Vector3 in vertices: entry.water_triangles.append(water.global_transform * vertex)
+			else:
+				for index: int in indices: entry.water_triangles.append(water.global_transform * vertices[index])
+	for probe: Dictionary in entry.water_probes:
+		var point: Vector3 = skeleton.global_transform * (skeleton.get_bone_global_pose(int(probe.bone)) * probe.offset)
+		var triangles: PackedVector3Array = entry.water_triangles
+		for index in range(0, triangles.size() - 2, 3):
+			var contact := water_contact_on_triangle(point, triangles[index], triangles[index+1], triangles[index+2])
+			if contact.is_finite():
+				host.world_vfx.pulse_water_contact(contact, host.player.global_position)
+				return
+
+static func water_contact_on_triangle(point: Vector3, a: Vector3, b: Vector3, c: Vector3) -> Vector3:
+	if not point.is_finite() or not a.is_finite() or not b.is_finite() or not c.is_finite(): return Vector3.INF
+	var denominator := (b.z - c.z) * (a.x - c.x) + (c.x - b.x) * (a.z - c.z)
+	if absf(denominator) < 0.000001: return Vector3.INF
+	var u := ((b.z - c.z) * (point.x - c.x) + (c.x - b.x) * (point.z - c.z)) / denominator
+	var v := ((c.z - a.z) * (point.x - c.x) + (a.x - c.x) * (point.z - c.z)) / denominator
+	var w := 1.0 - u - v
+	if minf(u, minf(v, w)) < -0.0001: return Vector3.INF
+	var level := u * a.y + v * b.y + w * c.y
+	return Vector3(point.x, level, point.z) if absf(point.y - level) <= 0.065 else Vector3.INF
 
 func _notification(what:int) -> void:
 	if what in [NOTIFICATION_PAUSED,NOTIFICATION_APPLICATION_FOCUS_OUT,NOTIFICATION_EXIT_TREE]:

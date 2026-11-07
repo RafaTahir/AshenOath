@@ -15,6 +15,8 @@ var weather := "clear"
 var weather_focus: WeakRef
 var rain_roof: Dictionary = {}
 var rain_cursor := 0
+var work_sparks: MultiMeshInstance3D
+var work_contacts: Array[Dictionary] = []
 const UPDATE_INTERVAL := 1.0 / 10.0
 
 func configure(active_zone: String, quality_preset: String) -> void:
@@ -30,6 +32,7 @@ func _physics_process(delta: float) -> void:
 	update_accumulator = 0.0
 	elapsed += delta
 	_tick_rain(delta)
+	_tick_work_contacts(delta)
 	if mote_batch == null or mote_batch.multimesh == null:
 		return
 	for index in range(mote_positions.size()):
@@ -42,6 +45,14 @@ func _physics_process(delta: float) -> void:
 		mote_batch.multimesh.set_instance_transform(index, Transform3D(Basis.IDENTITY, mote_position))
 
 func pulse_interaction(world_position: Vector3, color: Color = Color(0.72, 0.84, 0.66)) -> void:
+	_surface_pulse(world_position, color, false)
+
+func pulse_water_contact(point: Vector3, listener: Vector3) -> void:
+	if not point.is_finite() or not listener.is_finite() or point.distance_squared_to(listener) > 144.0: return
+	if is_inside_tree() and get_tree().paused: return
+	_surface_pulse(point, Color(0.34, 0.54, 0.49), true)
+
+func _surface_pulse(world_position: Vector3, color: Color, water: bool) -> void:
 	if active_pulses >= (1 if quality == "potato" else 3):
 		return
 	var pulse := MeshInstance3D.new()
@@ -56,23 +67,73 @@ func pulse_interaction(world_position: Vector3, color: Color = Color(0.72, 0.84,
 	var material := StandardMaterial3D.new()
 	material.albedo_color = Color(color.r, color.g, color.b, 0.42)
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.emission_enabled = quality != "potato"
+	material.emission_enabled = not water and quality != "potato"
 	material.emission = color
 	material.emission_energy_multiplier = 0.34
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	pulse.material_override = material
 	add_child(pulse)
-	var elevated := Vector3(world_position.x, world_position.y + 0.06, world_position.z)
+	var elevated := Vector3(world_position.x, world_position.y + (0.004 if water else 0.06), world_position.z)
 	pulse.position = to_local(elevated) if is_inside_tree() else elevated
 	active_pulses += 1
 	var tween := pulse.create_tween()
-	tween.tween_property(pulse, "scale", Vector3(1.15, 0.01, 1.15), 0.28)
-	tween.parallel().tween_property(material, "albedo_color:a", 0.0, 0.28)
+	var radius := 0.48 if water else 1.15
+	var seconds := 0.65 if water else 0.28
+	tween.tween_property(pulse, "scale", Vector3(radius, 0.01, radius), seconds)
+	tween.parallel().tween_property(material, "albedo_color:a", 0.0, seconds)
 	tween.tween_callback(func():
 		active_pulses = maxi(0, active_pulses - 1)
 		pulse.queue_free()
 	)
+
+func emit_work_contact(point: Vector3, listener: Vector3, kind: String) -> void:
+	if kind != "forge" or not point.is_finite() or not listener.is_finite() or point.distance_squared_to(listener) > 121.0: return
+	if is_inside_tree() and get_tree().paused: return
+	# Share the existing completion-effect cap; contact never allocates a light
+	# or an independent particle ticker for a worker or workstation.
+	if active_pulses >= (1 if quality == "potato" else 3): return
+	if work_sparks == null:
+		work_sparks = MultiMeshInstance3D.new()
+		work_sparks.name = "VerifiedForgeContacts"
+		work_sparks.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var mesh := SphereMesh.new()
+		mesh.radius = 0.012
+		mesh.height = 0.024
+		mesh.radial_segments = 5
+		mesh.rings = 2
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.albedo_color = Color(1.0, 0.55, 0.13)
+		mesh.material = material
+		var batch := MultiMesh.new()
+		batch.transform_format = MultiMesh.TRANSFORM_3D
+		batch.mesh = mesh
+		batch.instance_count = 12
+		batch.visible_instance_count = 0
+		work_sparks.multimesh = batch
+		add_child(work_sparks)
+	work_contacts.append({"point":to_local(point) if is_inside_tree() else point, "age":0.0})
+	active_pulses += 1
+	_tick_work_contacts(0.0)
+
+func _tick_work_contacts(delta: float) -> void:
+	if work_sparks == null: return
+	for index in range(work_contacts.size() - 1, -1, -1):
+		work_contacts[index].age = float(work_contacts[index].age) + delta
+		if float(work_contacts[index].age) >= 0.36:
+			work_contacts.remove_at(index)
+			active_pulses = maxi(0, active_pulses - 1)
+	var cursor := 0
+	for contact: Dictionary in work_contacts:
+		var time := float(contact.age)
+		for index in (2 if quality == "potato" else 4):
+			var direction := Vector3(cos(index * 2.4 + 0.3), 0.85 + index * 0.04, sin(index * 2.4 + 0.3))
+			var position: Vector3 = contact.point + direction * time * 0.85 + Vector3.DOWN * 2.4 * time * time
+			var size := maxf(0.05, 1.0 - time / 0.36)
+			work_sparks.multimesh.set_instance_transform(cursor, Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * size), position))
+			cursor += 1
+	work_sparks.multimesh.visible_instance_count = cursor
 
 func set_weather(value: String, focus: Node3D) -> void:
 	weather = value if zone_id not in ["record_hall", "undercroft", "vargan_court"] else "clear"

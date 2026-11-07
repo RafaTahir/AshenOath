@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from functools import lru_cache
 from pathlib import Path
 import re
 
@@ -20,6 +21,7 @@ def read(game: Path, relative: str):
     return json.loads((game / relative).read_text(encoding="utf-8-sig"))
 
 
+@lru_cache(maxsize=512)
 def canonical_speaker(game: Path, speaker: str) -> str:
     cast = read(game, "data/design_pack_cast.json")
     key = speaker.strip().lower()
@@ -81,6 +83,37 @@ def extra_utterances(game: Path, cast: dict, aliases: dict, pages):
         yield from emit("everyday:favour:" + favour["id"], favour["actor"], favour["reply"], "everyday")
     for rumour in everyday.get("rumours", []):
         yield from emit("everyday:rumour:" + rumour["id"], rumour["actor"], rumour["claim"], "everyday")
+
+    everyday_source = (game / "scripts/everyday_life.gd").read_text(encoding="utf-8-sig")
+    openings = gd_literal(everyday_source, "var openings :=")
+    for kind, text in openings.items():
+        yield from emit("everyday:player:" + kind, "player", text, "everyday")
+    for index, literal in enumerate(re.findall(r'\bspeak\(actor,\s*("(?:[^"\\]|\\.)*")', everyday_source)):
+        yield from emit(f"everyday:player:direct:{index}", "player", json.loads(literal), "everyday")
+
+    # Regional routines use exact authored lines from these catalogs. Keep new
+    # community barks deferred even when the same speaker lives in older zones.
+    for filename, prefix in (("cast_life.json", "routine"), ("community_cast_life.json", "community:routine")):
+        if not (game / "data" / filename).exists(): continue
+        for zone, actors in read(game, "data/" + filename).get("zones", {}).items():
+            for actor, definition in actors.items():
+                def routine_lines(value, source):
+                    if isinstance(value, dict):
+                        for key, child in value.items():
+                            if (key == "line" or key.endswith("_line")) and isinstance(child, str):
+                                yield from emit(source + ":" + key, actor, child, "everyday")
+                            elif isinstance(child, (dict, list)):
+                                yield from routine_lines(child, source + ":" + key)
+                    elif isinstance(value, list):
+                        for index, child in enumerate(value):
+                            yield from routine_lines(child, source + ":" + str(index))
+                yield from routine_lines(definition, f"{prefix}:{zone}:{actor}")
+    consequences = (game / "scripts/village_consequence_routines.gd").read_text(encoding="utf-8-sig")
+    ending_lines = gd_literal(consequences, "var lines :=")
+    for ending in ("concord", "open_road"):
+        if ending not in ending_lines: continue
+        for actor in ("shrine_pilgrim", "quality_mourner"):
+            yield from emit(f"community:aftermath:{ending}:{actor}", actor, ending_lines[ending], "everyday")
 
     saga_source = (game / "scripts/saga_catalog.gd").read_text(encoding="utf-8-sig")
     people = gd_literal(saga_source, "const PEOPLE :=")
@@ -152,7 +185,7 @@ def extra_utterances(game: Path, cast: dict, aliases: dict, pages):
         yield from spoken_rows(community, "community")
 
 
-def expansion_captions(game: Path):
+def expansion_captions(game: Path, pages=None):
     """Inventory exact authored caption pages without assigning a cast voice."""
     path = game / "data/community_campaign.json"
     if not path.exists(): return
@@ -169,3 +202,14 @@ def expansion_captions(game: Path):
     for action in ("share", "depart"):
         for index, step in enumerate(steps[action]):
             yield {"source_id":f"community:ending:{action}:{index}", "speaker_id":"narrator", "text":step[1], "caption_only":True}
+    if pages is not None:
+        for source_file in ("dialogue.json", "campaign_dialogue.json", "interaction_scenes.json"):
+            for scene_id, base in read(game, "data/"+source_file).items():
+                for index, entry in enumerate([base, *[{**base, **variant} for variant in base.get("variants", [])]]):
+                    if entry.get("source_tag") != "campaign_revision_2": continue
+                    for who, text, _ in pages(entry):
+                        if who in {"narrator", "system"}:
+                            yield {"source_id":f"campaign_revision_2:{source_file}:{scene_id}:{index}", "speaker_id":who, "text":text, "caption_only":True}
+                    for page_index, page in enumerate(entry.get("unattended_pages", [])):
+                        if page.get("speaker_id") != "narrator": raise ValueError("Unavailable cast fallback must be an authored narrator caption")
+                        yield {"source_id":f"campaign_revision_2:{scene_id}:unattended:{page_index}", "speaker_id":"narrator", "text":page["text"], "caption_only":True}

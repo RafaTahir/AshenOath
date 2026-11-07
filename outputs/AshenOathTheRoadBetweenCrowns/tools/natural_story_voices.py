@@ -7,7 +7,9 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
+import tempfile
 import urllib.request
 from story_voice_catalog import extra_utterances, role_for, canonical_speaker, source_identity, voice_directory, expansion_captions
 
@@ -113,6 +115,40 @@ def utterances(cast):
         yield scene, who, text, role_for(GAME, who, ALIASES), direction
     yield from extra_utterances(GAME, cast, ALIASES, pages)
 
+
+def baseline_inventory(reference, current_cast):
+    """Collect the retained release's text without checking it out or loading models."""
+    global GAME
+    commit = subprocess.check_output(["git", "-C", str(REPO), "rev-parse", "--verify", reference + "^{commit}"], text=True).strip()
+    files = ["data/" + name + ".json" for name in ("dialogue", "campaign_dialogue", "interaction_scenes", "conversation_topics", "design_pack_cast", "people_place_scenes", "everyday_scenes", "everyday_life", "regional_performances", "cast_life", "voice_cast")]
+    files += ["scripts/" + name + ".gd" for name in ("greyfen_life_controller", "village_consequence_routines", "saga_catalog", "saga_activities", "story_scene_direction", "everyday_life")]
+    prefix = GAME.relative_to(REPO).as_posix()
+    current_game = GAME
+    with tempfile.TemporaryDirectory(prefix="ashen-voice-baseline-") as folder:
+        baseline = Path(folder)
+        for relative in files:
+            content = subprocess.check_output(["git", "-C", str(REPO), "show", commit + ":" + prefix + "/" + relative])
+            target = baseline / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(content)
+        old_cast = json.loads((baseline / "data/voice_cast.json").read_text(encoding="utf-8-sig"))["roles"]
+        try:
+            GAME = baseline
+            keys = {(scene, canonical_speaker(baseline, who), text) for scene, who, text, _, _ in utterances(current_cast)}
+        finally:
+            GAME = current_game
+    return commit, keys, old_cast
+
+
+def prioritize_required(scheduled, baseline_keys, baseline_cast, current_cast):
+    # A new scene may reuse a short reply whose older scene was subtitle-only.
+    # Process the required source first, before canonical-text deduplication.
+    def priority(row):
+        scene, who, text, role, _ = row
+        required = (scene, canonical_speaker(GAME, who), text) not in baseline_keys or baseline_cast.get(role) != current_cast[role]
+        return (not required, voice_directory(scene) != "community")
+    return sorted(scheduled, key=priority)
+
 def delivery_speed(profile, text, scene, direction):
     # Kokoro supports cadence, not free-form acting instructions. Never speak
     # stage directions or pretend that speed changes are emotion conditioning.
@@ -161,21 +197,28 @@ def main():
     parser.add_argument("--recipes", type=Path, help="Separate writable recipe cache when model files are shared read-only")
     parser.add_argument("--max-new-bytes", type=int, default=16 * 1024 * 1024, help="Combined living_cast/community voice budget")
     parser.add_argument("--threads", type=int, default=1, help="Bound inference concurrency on the shared workstation")
+    parser.add_argument("--baseline-ref", help="With --incremental, synthesize new runtime text and changed cast recipes; retain pre-existing subtitle-only lines")
     args = parser.parse_args()
     cast_data = json.loads((GAME / "data/voice_cast.json").read_text(encoding="utf-8-sig"))
     cast = cast_data["roles"]
     scheduled = list(utterances(cast))
+    baseline_commit, baseline_keys, baseline_cast = "", set(), {}
+    if args.baseline_ref:
+        if not args.incremental: parser.error("--baseline-ref requires --incremental")
+        baseline_commit, baseline_keys, baseline_cast = baseline_inventory(args.baseline_ref, cast)
+        scheduled = prioritize_required(scheduled, baseline_keys, baseline_cast, cast)
     if args.collect_only:
         rows = [{"source_id":scene, "speaker_id":who, "canonical_speaker":canonical_speaker(GAME, who), "text":text,
                  "text_sha256":hashlib.sha256(text.encode("utf-8")).hexdigest(), "cast_role":role, "direction":direction,
+                 "required_new_or_recipe_changed":not baseline_commit or (scene, canonical_speaker(GAME, who), text) not in baseline_keys or baseline_cast.get(role) != cast[role],
                  "directory":voice_directory(scene, args.new_directory)}
                 for scene, who, text, role, direction in scheduled]
-        captions = list(expansion_captions(GAME))
+        captions = list(expansion_captions(GAME, pages))
         for caption in captions:
             caption["canonical_speaker"] = caption["speaker_id"]
             caption["text_sha256"] = hashlib.sha256(caption["text"].encode("utf-8")).hexdigest()
         args.collect_only.parent.mkdir(parents=True, exist_ok=True)
-        args.collect_only.write_text(json.dumps({"lines":rows, "captions":captions, "synthesis_performed":False}, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
+        args.collect_only.write_text(json.dumps({"lines":rows, "captions":captions, "baseline_commit":baseline_commit, "synthesis_performed":False}, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
         print(f"Collected {len(rows)} runtime tuples; no audio generated.")
         return
     sys.path.insert(0, str(args.runtime))
@@ -212,7 +255,7 @@ def main():
         canonical_previous.setdefault((identity, str(line.get("text", ""))), []).append(line)
     if args.incremental:
         lines = list(prior.get("lines", []))
-    retained, pending = 0, []
+    retained, pending, legacy_subtitle_only = 0, [], []
     synthesized = 0
     print(f"Producing full cast: {len({(who, text) for _, who, text, _, _ in scheduled})} exact-text recordings", flush=True)
     for scene, who, text, role, direction in scheduled:
@@ -224,18 +267,35 @@ def main():
             reusable = False
             for existing in canonical_previous.get((identity, text), []):
                 if existing.get("cast_role") != role or existing.get("text_sha256") != hashlib.sha256(text.encode("utf-8")).hexdigest(): continue
+                if prior.get("roles", {}).get(role) != cast[role]: continue
                 path = str(existing.get("path", ""))
                 if not path.startswith("res://assets_external/audio/voices/"): continue
                 relative = Path(path[6:])
                 if ".." in relative.parts: raise ValueError("Retained voice path escapes asset root")
                 candidates = [GAME / relative]
                 if args.retained_assets_from: candidates.append(args.retained_assets_from.resolve() / relative)
-                if any(candidate.is_file() for candidate in candidates):
+                for candidate in candidates:
+                    if not candidate.is_file(): continue
+                    actual_hash = hashlib.sha256(candidate.read_bytes()).hexdigest()
+                    if existing.get("audio_sha256") and existing["audio_sha256"] != actual_hash:
+                        raise ValueError("Retained voice bytes changed: " + str(candidate))
+                    existing["audio_sha256"] = actual_hash
+                    existing["audio_bytes"] = candidate.stat().st_size
                     reusable = True
                     break
+                if reusable: break
             if reusable:
+                lines = [line for line in lines if (canonical_speaker(GAME, str(line.get("speaker_id", ""))), str(line.get("text", ""))) != (identity, text)]
+                selected = dict(existing)
+                selected.update(speaker_id=identity, page_key=key, retained_previous_performance=True)
+                lines.append(selected)
                 retained += 1
                 continue
+        if baseline_commit and (scene, identity, text) in baseline_keys and baseline_cast.get(role) == cast[role]:
+            # An unverified stale manifest row must not defeat subtitle fallback.
+            lines = [line for line in lines if (canonical_speaker(GAME, str(line.get("speaker_id", ""))), str(line.get("text", ""))) != (identity, text)]
+            legacy_subtitle_only.append({"scene":scene, "speaker_id":who, "page_key":key})
+            continue
         if args.dialogue_only and scene.startswith("ambient:"):
             pending.append({"scene":scene, "speaker_id":who, "page_key":key})
             continue
@@ -303,6 +363,8 @@ def main():
     manifest["synthesized_this_run"] = synthesized
     manifest["new_dialogue_bytes"] = new_bytes
     manifest["pending_recordings"] = pending
+    manifest["baseline_commit"] = baseline_commit
+    manifest["retained_legacy_subtitle_only"] = legacy_subtitle_only
     manifest["publication_mode"] = "incremental_living_cast" if args.incremental else ("completed_upgrades_with_existing_fallbacks" if args.finalize_existing else ("dialogue_complete" if args.dialogue_only else "full_cast"))
     if retained and not args.incremental:
         manifest["source"] += "; retained Piper VCTK recordings for unfinished replacements"

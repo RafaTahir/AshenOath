@@ -1,13 +1,18 @@
 extends "res://tools/build_hart_landscape.gd"
 
+const Endings = preload("res://scripts/ending_catalog.gd")
+
 func _initialize() -> void:
-	for covenant in ["witness", "mercy", "duty", "ash"]:
+	for ending: String in Endings.IDS:
+		var covenant := Endings.covenant(ending)
+		if "--only-new" in OS.get_cmdline_user_args() and ending in Endings.ORIGINAL_IDS: continue
 		ground = SurfaceTool.new()
 		stone = SurfaceTool.new()
 		ground.begin(Mesh.PRIMITIVE_TRIANGLES)
 		stone.begin(Mesh.PRIMITIVE_TRIANGLES)
 		var obstacles: Array[Dictionary] = []
 		var earth := Color(0.48, 0.62, 0.42) if covenant == "mercy" else (Color(0.16, 0.15, 0.13) if covenant == "ash" else Color(0.48, 0.50, 0.40))
+		if covenant == "open_road": earth = Color(0.37, 0.33, 0.25)
 		for segment in range(28):
 			var a := TAU * segment / 28.0
 			var b := TAU * (segment + 1) / 28.0
@@ -19,14 +24,24 @@ func _initialize() -> void:
 			var x := (index - 2) * 1.35
 			var position := Vector3(x, 0.055, -12.0 - (2 - absi(index - 2)) * 0.35)
 			var height: float = 1.45 + (2 - absi(index - 2)) * 0.30
+			if covenant == "concord":
+				# Equal low work stones leave empty places between responsibilities;
+				# the actual consenting keepers are recorded by the ending owner.
+				position = Vector3((index - 2) * 1.65, 0.055, -12.0 - (1.0 if index % 2 else 0.0))
+				height = 0.72
+			elif covenant == "open_road":
+				# Boundary stones are laid down beside a clear outward path. Human
+				# records travel in ordinary cases; no replacement magic seal remains.
+				position = Vector3(-3.6 if index % 2 == 0 else 3.6, 0.055, -13.4 + index * 0.7)
 			var fragment := SurfaceTool.new()
 			fragment.begin(Mesh.PRIMITIVE_TRIANGLES)
 			_monolith(fragment, Vector3.ZERO, height, 0.86, 0.48)
 			fragment.generate_normals()
 			var source := fragment.commit()
 			var basis := Basis.IDENTITY
-			if covenant in ["mercy", "ash"]:
+			if covenant in ["mercy", "ash", "open_road"]:
 				basis = Basis(Vector3.UP, 0.20 * (index - 2)) * Basis(Vector3.RIGHT, deg_to_rad(78.0 if covenant == "mercy" else 96.0))
+				if covenant == "open_road": basis = Basis(Vector3.UP, PI / 2) * Basis(Vector3.RIGHT, PI / 2)
 				position.y = 0.055 - (Transform3D(basis, Vector3.ZERO) * source.get_aabb()).position.y
 			var bounds: AABB = Transform3D(basis, position) * source.get_aabb()
 			obstacles.append({"centre": bounds.get_center(), "size": bounds.size})
@@ -54,6 +69,15 @@ func _initialize() -> void:
 				source.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh.get_mesh_arrays())
 				var basis := Basis(Vector3.FORWARD, PI / 2 if link % 2 == 0 else 0.0)
 				_append_fragment(stone, source, Transform3D(basis, Vector3(-2.62 + link * 0.15, 1.15, -11.69)), Color(0.23, 0.27, 0.28))
+		if covenant in ["concord", "open_road"]:
+			for index in 3:
+				var case_mesh := BoxMesh.new()
+				case_mesh.size = Vector3(0.55, 0.20, 0.38)
+				var source := ArrayMesh.new()
+				source.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, case_mesh.get_mesh_arrays())
+				var position := Vector3((index - 1) * 1.65, 0.875, -12.0 - (1.0 if (index + 1) % 2 else 0.0)) if covenant == "concord" else Vector3(4.5, 0.16, -12.2 + index * 0.65)
+				_append_fragment(stone, source, Transform3D(Basis.IDENTITY, position), Color(0.36, 0.25, 0.15))
+				if covenant == "open_road": obstacles.append({"centre":position, "size":case_mesh.size})
 		ground.generate_normals()
 		ground.index()
 		stone.generate_normals()
