@@ -233,9 +233,13 @@ class RetirementPolicy(Fixture):
                 for path in policy["required_authored_roots"]:
                     self.assertTrue(parity.selected(values, path), path)
 
-    def test_tracked_presets_keep_authored_houses_and_no_retired_import_roots(self):
+    def test_regenerated_presets_keep_authored_houses_and_no_retired_import_roots(self):
         config = configparser.ConfigParser(interpolation=None)
         config.read(PROJECT / "export_presets.cfg", encoding="utf-8-sig")
+        sections = {json.loads(config[s]["name"]): s for s in config.sections() if "name" in config[s]}
+        # Presets are generated from the integration checkout's compiled inputs;
+        # apply the source policy in memory without rewriting tracked presets.
+        layout.retire_environment_export_roots(PROJECT, config, sections)
         self.assert_retired(config)
         for path in self.policy()["retired_source_roots"] + self.policy()["required_authored_roots"]:
             self.assertTrue((PROJECT / path.removeprefix("res://")).is_file(), path)
@@ -243,6 +247,24 @@ class RetirementPolicy(Fixture):
         for source in self.policy()["retired_source_roots"]:
             self.assertNotIn(source, anchor)
         self.assertIn('preload("res://assets_external/animations/AnimationLibrary_Godot_Opening.tres")', anchor)
+
+    def test_obsolete_common_tree_does_not_hide_prepared_tree_or_shared_textures(self):
+        retired_tree = "res://assets_external/environment/forest/CommonTree_1.obj"
+        prepared_tree = "res://assets_external/environment/prepared/forest_tree_CommonTree_5.res"
+        texture = "res://assets_external/environment/forest/Bark_NormalTree_Normal.png"
+        self.assertIn(retired_tree, self.policy()["retired_source_roots"])
+        self.assertNotIn("res://assets_external/environment/forest/CommonTree_5.obj", self.policy()["retired_source_roots"])
+        config = configparser.ConfigParser(interpolation=None)
+        config.read(PROJECT / "export_presets.cfg", encoding="utf-8-sig")
+        sections = {json.loads(config[s]["name"]): s for s in config.sections() if "name" in config[s]}
+        opening = config[sections["Runtime Pack Opening"]]
+        opening["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in (retired_tree, prepared_tree, texture)) + ")"
+        opening["include_filter"] = json.dumps("assets_external/environment/forest/*.obj")
+        opening["exclude_filter"] = '""'
+        layout.retire_environment_export_roots(PROJECT, config, sections)
+        self.assertFalse(parity.selected(opening, retired_tree))
+        self.assertTrue(parity.selected(opening, prepared_tree))
+        self.assertTrue(parity.selected(opening, texture))
 
     def test_exact_and_wildcard_reintroductions_are_retired_without_texture_blacklist(self):
         config = configparser.ConfigParser(interpolation=None)

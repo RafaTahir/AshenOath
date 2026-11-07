@@ -4,7 +4,8 @@
     "res://assets_external/environment/village/Wall_Plaster_Door_Flat.obj",
     "res://assets_external/environment/village/Wall_Plaster_Window_Wide_Flat.obj",
     "res://assets_external/environment/village/Wall_Plaster_Straight_Base.obj",
-    "res://assets_external/environment/village/Prop_Chimney.obj"
+    "res://assets_external/environment/village/Prop_Chimney.obj",
+    "res://assets_external/environment/forest/CommonTree_1.obj"
   ],
   "required_authored_roots": [
     "res://assets_external/environment/village/GreyfenHouse_Authored.res",
