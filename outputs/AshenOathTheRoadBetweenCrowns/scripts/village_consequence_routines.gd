@@ -43,11 +43,10 @@ static func for_actor(id: String, state) -> Dictionary:
 			"witness":"The names are ours to keep now. I'm taking a copy to the next household.",
 			"mercy":"No household owes a child. There's still supper to carry, and people to sit beside.",
 			"duty":"Kael carries the oath. That doesn't lift the rest of us from our work.",
-			"ash":"The binding is gone. We still have to decide how to live beside each other.",
-			"concord":"The next keeper has agreed to take this turn. I'll leave the key where we promised.",
-			"open_road":"There's a bed for someone passing through. Staying isn't the price of using it."
+			"ash":"The binding is gone. We still have to decide how to live beside each other."
 		}
+		var expanded_line: String = preload("res://scripts/campaign_story_overlay.gd").ambient(covenant,id,state)
 		result = {"activity":"shrine", "occupation":"keeper of the returned names", "activity_seconds":5.0,
-			"line":str(lines.get(covenant, "We keep the names, and tomorrow's work.")),
+			"line":expanded_line if expanded_line!="" else str(lines.get(covenant, "We keep the names, and tomorrow's work.")),
 			"path":[Vector3(4.6,0,-6.6), Vector3(1.2,0,-4.0), Vector3(-3.6,0,2.6)]}
 	return result

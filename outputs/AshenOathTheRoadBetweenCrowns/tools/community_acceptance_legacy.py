@@ -111,6 +111,15 @@ OVERRIDES = {
 \t\tawait owner._interact("rootbound_challenge")
 \towner._check(bool(game.story_state.get_flag("rootbound_arena_entered",false)),"Actual invitation opens the guardian's memory clearing")
 ''',
+    "_choose_assembly_testimony": '''func _choose_assembly_testimony(game: Node) -> void:
+\tawait owner._interact("witnesses_ready")
+\tawait owner._close_dialogue()
+\towner._check(game.quests.is_objective_done("main_crowns_without_mercy","gather_witnesses"),"Actual witness records complete the assembly preparation")
+\tawait owner._choose_at("assembly_choice","Let every witness speak")
+\towner._check(game.quests.is_completed("main_crowns_without_mercy") and game.quests.is_active("main_hart_remembers"),"Actual public testimony starts the finale")
+\towner._check(str(game.story_state.get_flag("confession_method",""))=="witnesses","The assembly retains the chosen public account")
+\tawait _save_campaign_checkpoint(game)
+''',
     "_fight_senn_guard": '''func _fight_senn_guard(game: Node) -> void:
 \towner._check(game.quests.is_active("main_soldier_without_banner"),"Senn confrontation belongs to the active Soldier chapter")
 \tawait owner._interact("saga_senn_challenge")
@@ -208,9 +217,11 @@ def build_adapter(source: str) -> tuple[str, list[str]]:
     # Older optional visual checks named a machine-local output. Retain their
     # image operation but keep every write under this runner's isolated user://.
     adapter = re.sub(r'save_png\("D:/Temp/AshenOath/([^/"\\]+)"', r'save_png("user://\1"', adapter)
-    for forbidden in [r"\.set_flag\(", r"\.complete_objective\(", r"\.complete_choice\(",
-                      r"\.(?:global_position|position|health|can_control)\s*=(?!=)",
-                      r"\._handle_interaction\(", r"\._apply_mouse_motion\("]:
+    for forbidden in [r"\.(?:set_flag|complete_objective|complete_choice|add_item|add_reward|heal|restore|reset_for_journey_restore|set_meta|set)\(",
+                      r"\.(?:global_position|position|rotation|global_rotation|transform|global_transform|yaw|pitch|health|stamina|can_control)(?:\.[xyzw])?\s*(?:[+*/-]?=)(?!=)",
+                      r"\bgame\.(?:story_state|quests|inventory|progression|save_manager)(?:\.\w+|\[[^\]\n]*\])*\s*[+*/-]?=(?!=)",
+                      r"\.(?:load_state|load_game|save_game|load_save_state|request_load|_write_atomic|_load_zone|_handle_interaction|_apply_mouse_motion)\(",
+                      r"\b(?:game|player|boss|enemy)(?:\.\w+)*\.call\((?!\"_interaction_target_valid\")"]:
         if re.search(forbidden, adapter):
             raise ValueError(f"input adapter acquired a gameplay shortcut: {forbidden}")
     if re.search(r'save_png\("[A-Za-z]:', adapter):

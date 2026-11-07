@@ -19,6 +19,9 @@ static func required_for(zone: String, flags: Dictionary, completed: Dictionary)
 static func ready() -> bool:
 	return not data().is_empty()
 
+static func is_loaded() -> bool:
+	return not _data.is_empty()
+
 static func eligible(state, quests = null) -> bool:
 	if Revision.from_state(state)!=Revision.EXPANDED: return false
 	if quests!=null and quests.is_completed("main_ash_at_the_mill"): return true
@@ -38,7 +41,7 @@ static func data() -> Dictionary:
 
 static func valid_payload(parsed: Variant) -> bool:
 	if not parsed is Dictionary or parsed.get("version")!=1: return false
-	for key: String in ["scenes","catalog","ending_rituals","ending_cards"]:
+	for key: String in ["scenes","catalog","ending_rituals","ending_cards","ending_ambient"]:
 		if not parsed.get(key) is Dictionary: return false
 	for id: String in SCENES:
 		if not parsed.scenes.get(id) is Dictionary or parsed.scenes[id].is_empty(): return false
@@ -55,6 +58,9 @@ static func valid_payload(parsed: Variant) -> bool:
 		if not steps is Array or steps.size()!=3 or str(parsed.ending_cards.get(id,"")).is_empty(): return false
 		for step: Variant in steps:
 			if not step is Array or step.size()!=2 or not step[0] is String or not step[1] is String: return false
+	for id: String in ["concord","open_road"]:
+		var row: Variant = parsed.ending_ambient.get(id)
+		if not row is Dictionary or row.get("speaker_ids")!=["shrine_pilgrim","quality_mourner"] or not row.get("text") is String or row.text.is_empty(): return false
 	return true
 
 static func scene(id: String, state, quests = null) -> Dictionary:
@@ -97,3 +103,8 @@ static func ritual(ending: String, state) -> Array:
 
 static func ending_card(ending: String, state) -> String:
 	return str(data().get("ending_cards",{}).get(ending,"")) if Revision.from_state(state)==Revision.EXPANDED else ""
+
+static func ambient(covenant: String, actor: String, state) -> String:
+	if not eligible(state): return ""
+	var row: Dictionary = data().get("ending_ambient",{}).get(covenant,{})
+	return str(row.get("text","")) if actor in row.get("speaker_ids",[]) else ""

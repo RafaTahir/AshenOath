@@ -99,6 +99,7 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
         self.assertIn("_fight_hart_ending", helpers)
         self.assertIn('owner._button("Quick Save")', adapter)
         self.assertIn('owner._travel("assembly")', adapter)
+        self.assertNotIn('"hart_gate_approach"', adapter)
         self.assertNotIn('focused.text == "Save"', adapter)
         self.assertNotIn('save_png("D:', adapter)
         self.assertNotIn("func _initialize", adapter)
@@ -106,6 +107,18 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
                                  'func _fight_hart_ending(game: Node, covenant: String) -> void:\n\tgame.story_state.set_flag("fake",true)')
         with self.assertRaises(ValueError):
             build_adapter(changed)
+
+    def test_inherited_stat_camera_and_replay_shortcuts_are_rejected(self):
+        source = full.LEGACY_SOURCE.read_text(encoding="utf-8")
+        declaration = 'func _fight_hart_ending(game: Node, covenant: String) -> void:'
+        for shortcut in ['game.player.health_component.health += 100', 'game.player.stamina_component.stamina = 100',
+                         'game.camera_rig.yaw = 0', 'game.player.global_transform = Transform3D.IDENTITY',
+                         'game.save_manager.load_game(game)', 'game.load_save_state({})',
+                         'game.player.set("health",100)', 'game.inventory.add_item("redroot_potion",5)',
+                         'game.player.position.y = 12', 'game.quests.completed["main_hart_remembers"] = true',
+                         'game.call("_load_zone","hart_glade")']:
+            with self.subTest(shortcut=shortcut), self.assertRaises(ValueError):
+                build_adapter(source.replace(declaration, declaration+'\n\t'+shortcut))
 
     def test_full_entry_has_no_progression_or_travel_shortcuts(self):
         source = full.HARNESS.read_text(encoding="utf-8")

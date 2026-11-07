@@ -127,13 +127,14 @@ def main() -> int:
                   "tools/generated_legacy_input.gd": adapter.encode("utf-8"),
                   "tools/source_legacy_input.gd.txt": original}
         receipt, receipt_path = common.prepare(args, script_source=HARNESS, seed_contract=expected,
-                                               extra_files=extras, allow_no_seed=args.case == "full_six_endings")
+                                               extra_files=extras, allow_no_seed=args.case == "full_six_endings",
+                                               runner_sources=[Path(__file__).resolve(), PROJECT / "tools/community_acceptance_legacy.py"])
         receipt["legacy_input_helpers"] = helpers
         common.write(receipt_path, receipt)
         if args.prepare_only:
             print(json.dumps({"status": "prepared", "receipt": str(receipt_path), "engine_started": False}))
             return 0
-        return common.run(receipt, receipt_path)
+        return common.run(receipt, receipt_path, validate_report)
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(2, f"full campaign acceptance preparation failed: {error}\n")
 
