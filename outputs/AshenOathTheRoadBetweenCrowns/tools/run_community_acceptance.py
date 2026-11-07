@@ -80,15 +80,19 @@ def validate_seed(seed: bytes, case: str) -> dict:
     return {"zone": source, "chapter": chapter, "expected_work": tasks}
 
 
-def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
+def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
+            seed_contract: dict | None = None, extra_files: dict[str, bytes] | None = None,
+            allow_no_seed: bool = False) -> tuple[dict, Path]:
     root_pack = args.root_pack.resolve(strict=True)
     pack_dir = args.packs.resolve(strict=True)
     packs = sorted(pack_dir.glob("*.pck"))
     engine = args.godot.resolve(strict=True)
     cache = args.class_cache.resolve(strict=True)
-    seed_path = args.seed_save.resolve(strict=True)
-    seed = seed_path.read_bytes()
-    seed_contract = validate_seed(seed, args.case)
+    seed = args.seed_save.resolve(strict=True).read_bytes() if args.seed_save else None
+    if seed is None and not allow_no_seed:
+        raise ValueError("this case requires an explicit boundary seed")
+    if seed_contract is None:
+        seed_contract = validate_seed(seed, args.case)
     if root_pack.suffix.lower() != ".pck" or not root_pack.is_file() or not packs or root_pack in packs:
         raise ValueError("a separate root PCK and nonempty secondary pack directory are required")
     if not engine.is_file() or not cache.is_file():
@@ -107,22 +111,33 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
     profile = "AshenOathCapture/" + run_id
     (isolated / "project.godot").write_bytes(isolated_configuration(config, profile))
     (isolated / ".godot/global_script_class_cache.cfg").write_bytes(cache.read_bytes())
-    script = isolated / "tools/verify_community_world_input.gd"
-    script.write_bytes(HARNESS.read_bytes())
+    script = isolated / "tools" / script_source.name
+    script.write_bytes(script_source.read_bytes())
+    extras = []
+    for relative, content in (extra_files or {}).items():
+        destination = (isolated / relative).resolve()
+        if not destination.is_relative_to(isolated.resolve()) or destination == script.resolve():
+            raise ValueError("extra fixture input must stay within its isolated project and cannot replace the entry script")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
+        extras.append(destination)
     # Redirect application data before engine startup, including renderer caches.
     app_data = output / "profile/roaming"
     local_data = output / "profile/local"
     user_data = app_data / profile
     user_data.mkdir(parents=True)
     local_data.mkdir(parents=True)
-    (user_data / "ashen_oath_save.json").write_bytes(seed)
-    seed_copy = output / "seed.json"
-    seed_copy.write_bytes(seed)
+    seed_inputs = []
+    if seed is not None:
+        (user_data / "ashen_oath_save.json").write_bytes(seed)
+        seed_copy = output / "seed.json"
+        seed_copy.write_bytes(seed)
+        seed_inputs.append(seed_copy)
     command = [str(engine), "--path", str(isolated), "--rendering-method", "gl_compatibility",
                "--rendering-driver", "opengl3", "--script", str(script), "--log-file", str(output / "godot.log"),
                "--", "--root-pack=" + root_pack.as_posix(), "--packs=" + pack_dir.as_posix(),
                "--case=" + args.case, "--viewport=" + args.viewport, "--output=" + output.as_posix()]
-    immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, seed_copy, engine, root_pack, *packs]
+    immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, *seed_inputs, *extras, engine, root_pack, *packs]
     receipt = {
         "schema_version": 1, "kind": "community_world_input_runner", "status": "prepared",
         "case": args.case, "git_commit": commit, "source_status": git("status", "--short").decode(),
@@ -131,7 +146,8 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
         "profile": profile, "command": command, "timeout_seconds": args.timeout,
         "immutable_inputs": [{"path": str(path), "bytes": path.stat().st_size, "sha256": sha256(path)} for path in immutable],
         "source_project_sha256": hashlib.sha256(config).hexdigest(), "physical_phone_coverage": False,
-        "touch_input_coverage": False, "viewport": args.viewport, "progression_setup": "one supplied seed before engine startup",
+        "touch_input_coverage": False, "viewport": args.viewport,
+        "progression_setup": "one supplied seed before engine startup" if seed is not None else "empty profile; actual New Game",
     }
     receipt_path = output / "runner.json"
     write(receipt_path, receipt)
@@ -171,6 +187,9 @@ def run(receipt: dict, receipt_path: Path) -> int:
             errors.append("physical task coverage differs from requested case")
         if report.get("progression_injection") is not False or report.get("input_events", 0) < 50:
             errors.append("real-input evidence is incomplete")
+        if receipt["seed_contract"].get("suite"):
+            from run_full_campaign_acceptance import validate_report
+            errors.extend(validate_report(report, receipt["seed_contract"]))
         expected = Path(receipt["expected_user_data_dir"]).resolve()
         if Path(report.get("user_data_dir", "")).resolve() != expected:
             errors.append("engine used a different user data directory")

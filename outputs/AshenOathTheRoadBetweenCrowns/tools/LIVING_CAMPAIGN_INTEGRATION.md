@@ -16,6 +16,48 @@ No canonical checkout, export or deployment was changed by this worktree.
 
 ### Actual-input acceptance harness (authored; native execution pending)
 
+The complete journey entry is `tools/run_full_campaign_acceptance.py`. Its
+`full_six_endings` case rejects every seed, starts through visible **New Game**,
+records the actual completion signals for all fourteen chapters in order, and
+then uses the earned **Return to before the covenant** option for the remaining
+alternatives. All six alternatives must enact, reload their completed memorial,
+walk home and present the actual epilogue. Peaceful endings also reload after
+the first of their three physical ritual interactions. The source receipt gate
+rejects missing/reordered chapters, extra progression and incomplete ending
+circuits. The runtime must select revision 2 through its normal New Game
+handoff; a candidate with `EXPANSION_ENABLED=false` correctly fails this case.
+The harness never overrides that switch or the journey's revision.
+
+Four separately labelled boundary cases cover `legacy_ash_missing`,
+`legacy_ash_v1`, `legacy_witness_missing` and `legacy_witness_v1`. Their raw saves
+must contain exactly the first five or eight original chapters and the proper
+next original chapter, at Old Mill or Undercroft respectively. The missing
+marker must really be absent; the explicit marker must be 1. They verify hidden
+expansion topology, actual save/reload, the remaining original chain and the
+four-choice ending UI, then enact Witness through return home. Their seeded
+prefix is always reported separately and never counts as full-journey proof.
+
+`community_acceptance_legacy.py` derives its combat input helpers from the
+maintained `verify_opening_real_input_native.gd`; both original and generated
+bytes are frozen in the run receipt. Explicit current-route overrides use
+normal E at the Wychwood Bog, Rootbound and Senn invitations, the current world
+graph and current save/choice labels. No source helper is allowed to acquire
+direct quest/flag/position mutation. These are authored checks, **not evidence
+that the complete route has run successfully**. Source-only full-run contract
+checks pass **9 tests**, and the region runner checks below pass **8 tests**.
+Full GDScript parsing, combat, movement and all rendered ending circuits remain
+**unrun** pending built resources and the shared serial engine slot.
+
+```powershell
+python tools/run_full_campaign_acceptance.py --case full_six_endings `
+  --root-pack <root.pck> --packs <runtime-packs> `
+  --class-cache <global_script_class_cache.cfg> --viewport desktop --prepare-only
+python tools/run_full_campaign_acceptance.py --case legacy_ash_missing `
+  --seed-save <legacy-boundary-save.json> --root-pack <root.pck> `
+  --packs <runtime-packs> --class-cache <global_script_class_cache.cfg> `
+  --viewport touch --prepare-only
+```
+
 `tools/run_community_acceptance.py` freezes the committed project settings,
 generated class cache, harness, seed and complete PCK inputs. It configures a new
 custom user directory and redirected APPDATA/LOCALAPPDATA **before** starting the
