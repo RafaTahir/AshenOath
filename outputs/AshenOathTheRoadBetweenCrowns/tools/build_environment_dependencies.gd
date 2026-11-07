@@ -2,11 +2,19 @@ extends SceneTree
 
 const PREFIX := "res://assets_external/environment/"
 const OUTPUT := "res://data/environment_material_dependencies.json"
+const RETIREMENTS := "res://data/environment_export_retirements.json"
 var visited: Dictionary = {}
 var textures: Dictionary = {}
 var errors: Array[String] = []
+var retired_sources: Dictionary = {}
 
 func _initialize() -> void:
+	_load_export_retirements()
+	if not errors.is_empty():
+		for error in errors:
+			push_error(error)
+		quit(1)
+		return
 	var config := ConfigFile.new()
 	if config.load("res://export_presets.cfg") != OK:
 		quit(1)
@@ -65,6 +73,37 @@ func _initialize() -> void:
 	print("ENVIRONMENT DEPENDENCIES: %d textures from selected environment resources" % records.size())
 	quit()
 
+func _load_export_retirements() -> void:
+	if not FileAccess.file_exists(RETIREMENTS):
+		errors.append("Environment export retirement policy missing: " + RETIREMENTS)
+		return
+	var policy: Variant = JSON.parse_string(FileAccess.get_file_as_string(RETIREMENTS))
+	if not policy is Dictionary or policy.get("schema_version") != 1 or not policy.get("retired_source_roots") is Array or policy["retired_source_roots"].is_empty():
+		errors.append("Invalid environment export retirement policy: " + RETIREMENTS)
+		return
+	for source: Variant in policy["retired_source_roots"]:
+		if not source is String or not source.begins_with(PREFIX) or not source.ends_with(".obj") or ".." in source.split("/"):
+			errors.append("Invalid retired environment source in " + RETIREMENTS + ": " + str(source))
+			continue
+		retired_sources[source] = source
+		if not FileAccess.file_exists(source + ".import"):
+			continue
+		var remap := ConfigFile.new()
+		if remap.load(source + ".import") != OK:
+			errors.append("Cannot read retired environment import: " + source)
+			continue
+		var imported: String = str(remap.get_value("remap", "path", ""))
+		if not imported.begins_with("res://.godot/imported/"):
+			errors.append("Invalid retired environment import remap: " + source)
+			continue
+		retired_sources[imported] = source
+
+func _reject_retired_dependency(path: String, owner: String, via: String) -> bool:
+	if not retired_sources.has(path):
+		return false
+	errors.append("Retired environment source is still required: %s (source %s; consumer %s; via %s)" % [path, retired_sources[path], owner, via])
+	return true
+
 func _retire_previous_selections(config: ConfigFile, records: Dictionary) -> void:
 	if not errors.is_empty() or not FileAccess.file_exists(OUTPUT):
 		return
@@ -109,13 +148,14 @@ func _matches(path: String, patterns: PackedStringArray) -> bool:
 			return true
 	return false
 
-func _collect(path: String, owner: String) -> void:
+func _collect(path: String, owner: String, via: String = "export root") -> void:
+	# Exclusions remove obsolete roots, but must never hide a live dependency.
+	if _reject_retired_dependency(path, owner, via):
+		return
 	var key := owner + ":" + path
 	if visited.has(key):
 		return
 	visited[key] = true
-	if path.get_extension() == "obj":
-		_collect_obj_materials(path, owner)
 	if not ResourceLoader.exists(path):
 		errors.append("Environment dependency missing: %s (consumer %s)" % [path, owner])
 		return
@@ -134,12 +174,16 @@ func _collect(path: String, owner: String) -> void:
 			errors.append("Cannot read environment import: " + path)
 			return
 		dependency_source = str(remap.get_value("remap", "path", path))
+	if _reject_retired_dependency(dependency_source, owner, path):
+		return
+	if path.get_extension() == "obj":
+		_collect_obj_materials(path, owner)
 	for dependency in ResourceLoader.get_dependencies(dependency_source):
 		# Godot includes UID/type fields when available; the final field is the
 		# retained resource path, which remains portable across native/Web imports.
 		var dependency_path := dependency.get_slice("::", dependency.get_slice_count("::") - 1)
 		if dependency_path.begins_with("res://"):
-			_collect(dependency_path, owner)
+			_collect(dependency_path, owner, path)
 
 func _collect_obj_materials(path: String, owner: String) -> void:
 	# Include-only OBJ sources can load their MTL at runtime. Their import's
@@ -169,6 +213,6 @@ func _collect_obj_materials(path: String, owner: String) -> void:
 			if texture.begins_with("-"):
 				errors.append("Unsupported texture-map options in %s: %s" % [material_path, entry])
 				continue
-			_collect(material_path.get_base_dir().path_join(texture.trim_prefix('"').trim_suffix('"')), owner)
+			_collect(material_path.get_base_dir().path_join(texture.trim_prefix('"').trim_suffix('"')), owner, material_path)
 		material.close()
 	file.close()

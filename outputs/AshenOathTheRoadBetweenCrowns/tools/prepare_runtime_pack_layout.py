@@ -23,6 +23,7 @@ CHAPTER_ART = "assets/ui/story_chapters_atlas.png"
 FORGE_HAMMER = "assets/characters/forge_hammer.tscn"
 HUNTING_ARROW = "assets/characters/kael_arrow.glb"
 SILHOUETTE_DIRECTORY = "assets/characters/silhouette/"
+ENVIRONMENT_RETIREMENTS = "data/environment_export_retirements.json"
 CAMPAIGN_PREFIXES = (
     "assets_external/environment/forest/Campaign_",
     "assets_external/environment/forest/Hart",
@@ -43,6 +44,41 @@ CAMPAIGN_PREFIXES = (
 
 def selected_files(value):
     return json.loads("[" + value.removeprefix("PackedStringArray(").removesuffix(")") + "]")
+
+
+def retire_environment_export_roots(project, config, sections):
+    """Keep baked Greyfen houses while retiring only their unused kit roots.
+
+    Texture ownership remains the environment dependency builder's decision.
+    This policy excludes no texture or authoring file from the source library.
+    """
+    policy = json.loads((project / ENVIRONMENT_RETIREMENTS).read_text(encoding="utf-8-sig"))
+    if not isinstance(policy, dict) or policy.get("schema_version") != 1:
+        raise ValueError("Invalid environment export retirement policy")
+    for field, suffix in (("retired_source_roots", ".obj"), ("required_authored_roots", ".res")):
+        paths = policy.get(field)
+        if (not isinstance(paths, list) or not paths or any(not isinstance(p, str) for p in paths)
+                or len(set(paths)) != len(paths)
+                or any(not p.startswith("res://assets_external/environment/") or not p.endswith(suffix)
+                       or "\\" in p or ".." in p.split("/") for p in paths)):
+            raise ValueError("Invalid environment export retirement policy: " + field)
+    retired = set(policy["retired_source_roots"])
+    for name, section in sections.items():
+        selected = set(selected_files(config[section].get("export_files", "PackedStringArray()")))
+        included = set(json.loads(config[section].get("include_filter", '""')).split(",")) - {""}
+        excluded = set(json.loads(config[section].get("exclude_filter", '""')).split(",")) - {""}
+        selected.difference_update(retired)
+        for source in retired:
+            relative = source.removeprefix("res://")
+            included.discard(relative)
+            excluded.add(relative)
+        if name == "Runtime Pack Opening":
+            selected.update(policy["required_authored_roots"])
+            for path in policy["required_authored_roots"]:
+                excluded.discard(path.removeprefix("res://"))
+        config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in sorted(selected)) + ")"
+        config[section]["include_filter"] = json.dumps(",".join(sorted(included)))
+        config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
 
 
 def prepared_source_exclusions(catalog):
@@ -575,6 +611,9 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
         else:
             excluded.add(forest_pattern)
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
+    # Apply after actor partitioning too: it creates presets and replaces some
+    # inherited filters. No subsequent pass may resurrect these stale imports.
+    retire_environment_export_roots(PROJECT, config, sections)
     # Validate the complete generated graph before either tracked output changes.
     require_valid_pack_graph(manifest)
     with presets_path.open("w", encoding="utf-8", newline="\n") as output:
