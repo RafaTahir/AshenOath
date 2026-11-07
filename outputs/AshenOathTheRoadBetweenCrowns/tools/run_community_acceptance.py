@@ -82,7 +82,7 @@ def validate_seed(seed: bytes, case: str) -> dict:
 
 def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
             seed_contract: dict | None = None, extra_files: dict[str, bytes] | None = None,
-            allow_no_seed: bool = False) -> tuple[dict, Path]:
+            allow_no_seed: bool = False, runner_sources: list[Path] | None = None) -> tuple[dict, Path]:
     root_pack = args.root_pack.resolve(strict=True)
     pack_dir = args.packs.resolve(strict=True)
     packs = sorted(pack_dir.glob("*.pck"))
@@ -137,7 +137,8 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
                "--rendering-driver", "opengl3", "--script", str(script), "--log-file", str(output / "godot.log"),
                "--", "--root-pack=" + root_pack.as_posix(), "--packs=" + pack_dir.as_posix(),
                "--case=" + args.case, "--viewport=" + args.viewport, "--output=" + output.as_posix()]
-    immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, *seed_inputs, *extras, engine, root_pack, *packs]
+    immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, *seed_inputs, *extras,
+                 Path(__file__).resolve(), PROJECT / "tools/run_living_cast_capture.py", *(runner_sources or []), engine, root_pack, *packs]
     receipt = {
         "schema_version": 1, "kind": "community_world_input_runner", "status": "prepared",
         "case": args.case, "git_commit": commit, "source_status": git("status", "--short").decode(),
@@ -161,7 +162,7 @@ def verify_inputs(receipt: dict) -> None:
             raise ValueError(f"frozen input changed: {path}")
 
 
-def run(receipt: dict, receipt_path: Path) -> int:
+def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
     output = Path(receipt["output"])
     process = None
     started = time.monotonic()
@@ -188,8 +189,10 @@ def run(receipt: dict, receipt_path: Path) -> int:
         if report.get("progression_injection") is not False or report.get("input_events", 0) < 50:
             errors.append("real-input evidence is incomplete")
         if receipt["seed_contract"].get("suite"):
-            from run_full_campaign_acceptance import validate_report
-            errors.extend(validate_report(report, receipt["seed_contract"]))
+            if extra_validator is None:
+                errors.append("complete campaign has no frozen receipt validator")
+            else:
+                errors.extend(extra_validator(report, receipt["seed_contract"]))
         expected = Path(receipt["expected_user_data_dir"]).resolve()
         if Path(report.get("user_data_dir", "")).resolve() != expected:
             errors.append("engine used a different user data directory")
