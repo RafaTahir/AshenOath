@@ -47,7 +47,7 @@ def selected_files(value):
 
 
 def retire_environment_export_roots(project, config, sections):
-    """Keep baked Greyfen houses while retiring only their unused kit roots.
+    """Keep current baked visuals while retiring unused import roots.
 
     Texture ownership remains the environment dependency builder's decision.
     This policy excludes no texture or authoring file from the source library.
