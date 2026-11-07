@@ -557,8 +557,66 @@ isolated until complete and will be coordinated before final publication.
   the same evidence directory. Game Assets owns focused teardown attribution;
   isolated 14-driver checks have not reproduced the full-game leak. Do not claim
   the old shutdown pass covers the changed actor lifecycle.
+- Exact prepared-tree compiler `f7da212` passed for CommonTree_5, TwistedTree_2
+  and TwistedTree_4: original geometry/UVs/normals/bounds and effective runtime
+  bark/leaf materials retained. Three standalone resources and their dependency
+  catalog are generated locally. Obsolete source import materials no longer
+  have to decode before being replaced by the existing runtime materials.
+- Follow-up `63432e6`/`d89fce9` retires four unused house-kit export roots while
+  retaining all authoring files and the four baked Greyfen houses. Six focused
+  packaging assertions passed in the packaging chat. The combined environment
+  catalog and actual transport savings still require regeneration/export.
+- A direct SceneData vertex-UBO accessor experiment was rejected: four captured
+  shader programs compiled, but timings were 855/913/966/811 ms baseline versus
+  885/870/967/830 ms candidate. No meaningful improvement; the experimental
+  shader change was removed. Report: `scene-ubo-direct.json` in the combined
+  evidence directory. No lower-quality material substitution was retained.
+- Full-game ID tracing initially exposed a diagnostic freed-object type-check
+  error (`quit-ids-r3`). Corrected tracing completed cleanly (`quit-ids-r4`,
+  49.9 seconds), but invoked lazy Script-valued getters and changed timing.
+  This is not a shutdown fix or a clean uninstrumented result. The probe now
+  skips Script-valued properties; no speculative animation cleanup was applied.
+- Source review found a separate real ownership omission: failed threaded
+  requests were erased without consuming their engine token, and loading-art
+  requests had no pending-exit cleanup. Failed requests now collect their result
+  once; loading artwork uses the existing shared request registry and releases
+  its claim on exit. Focused native failure/retry and final uninstrumented Quit
+  checks are pending, so the earlier 14-object leak remains unattributed.
+  Engine contract inspected:
+  https://github.com/godotengine/godot/blob/4.6.3-stable/core/io/resource_loader.cpp
+- Cache tests: all 30 passed again after making the cache-hit no-rewrite
+  assertion explicit outside the optional-cache error handler.
+- The failed-request ownership check passed: a deliberately invalid resource's
+  failed engine token was consumed, repeated polling stayed stable, and a
+  corrected resource at the same path loaded on Retry. Intentional parser
+  errors are bracketed in `failed-request.log`; no shutdown leak was emitted.
+  The normal role-prewarm fixture also passed (4.2 seconds).
+- Uninstrumented full-game Quit `quit-untraced-r5` still FAILED shutdown
+  ownership after functional PASS (37.4 seconds): one plain RefCounted instance
+  remained with reference count zero. The failure/retry fix is real but does
+  not establish the cause or resolution of this error-free startup/quit leak.
+  A narrow shared-request claim trace, without actor property traversal, is
+  the next diagnostic; no unsafe forced ObjectDB cleanup is authorized.
+- Narrow request tracing `quit-claims-r6` completed functional PASS in 43.6
+  seconds, but shutdown FAILED with seven plain RefCounted instances at count
+  zero. All 31 observed production request paths were consumed (raw engine
+  status INVALID) after Quit. This excludes an outstanding shared-registry
+  user claim in that run; it does not identify the anonymous objects. Preserve
+  the failure rather than treating added diagnostic delay as a fix.
+- The combined environment catalog regenerated successfully (31 textures).
+  The three prepared trees and four retired source house roots are represented
+  by 45 export presets. No final transport savings have been measured yet.
+- Existing startup browser runs used an isolated incognito context. Chromium
+  does not give off-the-record contexts its persistent GPU shader-cache handle.
+  Keep those results intact; an opt-in fresh temporary normal-profile startup
+  comparison is added to the existing driver, with its context recorded.
+  It must not use the user's browser profile or reinterpret incognito results
+  as normal-profile warm-cache evidence. Syntax check passed; this mode has not
+  yet been exercised. Engine cache behavior source:
+  https://chromium.googlesource.com/chromium/src/+/b9cf8b6a08a7aa1c8c82d69e076a4f4fd4a99c34%5E%21/
 - Final stages 2-4, first-view loading reduction, final combined inspection and
-  publication remain in progress. No push has occurred here.
+  publication remain in progress. No push has occurred here. Game Assets owns
+  the serial bake workload; no overlapping graphical/build work is launched.
 
 The corrected startup driver omits pre-control screenshots when requested and
 records the authoritative first-control timestamp separately from observer lag,

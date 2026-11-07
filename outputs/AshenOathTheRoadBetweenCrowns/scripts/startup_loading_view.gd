@@ -5,6 +5,7 @@ signal retry_requested
 const MENU_FONT = preload("res://assets/ui/fonts/Spectral-Medium.ttf")
 const BACKDROP = preload("res://assets_external/ui/greyfen_menu_stylized.png")
 const ATLAS_PATH := "res://assets/ui/story_chapters_atlas.png"
+const SharedResourceRequests = preload("res://scripts/shared_resource_requests.gd")
 const IVORY := Color("e7e0d0")
 const GOLD := Color("c6a66d")
 var reduced_motion := false
@@ -19,6 +20,7 @@ var _bar: ProgressBar
 var _retry: Button
 var _atlas: Texture2D
 var _atlas_requested := false
+var _resource_requests = SharedResourceRequests.acquire()
 var _slide := 0
 var _next_slide_msec := 0
 var _crossfade: Tween
@@ -94,7 +96,7 @@ func _ready() -> void:
 	_retry.hide()
 	_content.add_child(_retry)
 	# The already-exported journal atlas is optional decoration, never a gate.
-	_atlas_requested = ResourceLoader.exists(ATLAS_PATH) and ResourceLoader.load_threaded_request(ATLAS_PATH, "Texture2D") == OK
+	_atlas_requested = ResourceLoader.exists(ATLAS_PATH) and _resource_requests.request(ATLAS_PATH, self) == OK
 	_next_slide_msec = Time.get_ticks_msec() + 8000
 	resized.connect(_layout)
 	_layout()
@@ -170,10 +172,12 @@ func _place_content() -> void:
 
 func _process(_delta: float) -> void:
 	if _atlas_requested and _atlas == null:
-		var status := ResourceLoader.load_threaded_get_status(ATLAS_PATH)
+		var status: int = _resource_requests.status(ATLAS_PATH)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
-			_atlas = ResourceLoader.load_threaded_get(ATLAS_PATH) as Texture2D
+			_atlas = _resource_requests.take(ATLAS_PATH, self) as Texture2D
+			_atlas_requested = false
 		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_resource_requests.release(ATLAS_PATH, self)
 			_atlas_requested = false
 	if _failed:
 		return
@@ -201,3 +205,8 @@ func _process(_delta: float) -> void:
 		_art.texture = image
 		_next_art.modulate.a = 0.0
 	)
+
+func _exit_tree() -> void:
+	if _atlas_requested:
+		_resource_requests.release(ATLAS_PATH, self, "", true)
+		_atlas_requested = false

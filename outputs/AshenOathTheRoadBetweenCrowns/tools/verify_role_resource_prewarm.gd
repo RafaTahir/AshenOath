@@ -36,6 +36,9 @@ func _initialize() -> void:
 	call_deferred("run")
 
 func run() -> void:
+	if "--failed-request-ownership" in OS.get_cmdline_user_args():
+		await _verify_failed_request_ownership()
+		return
 	var helper := Helper.new()
 	var database := Database.new()
 	helper.setup(database)
@@ -136,3 +139,44 @@ func _verify_environment_preflight() -> bool:
 	helper.clear_runtime_caches()
 	helper.free()
 	return passed
+
+func _verify_failed_request_ownership() -> void:
+	# This opt-in case intentionally triggers a resource-parser failure. It runs in
+	# an isolated user directory, separately from the normal no-error verifier.
+	const FAILURE_PATH := "user://failed_request_ownership.tres"
+	var request_owner := RefCounted.new()
+	var requests = preload("res://scripts/shared_resource_requests.gd").acquire()
+	var file := FileAccess.open(FAILURE_PATH, FileAccess.WRITE)
+	if file == null:
+		printerr("FAILED REQUEST OWNERSHIP: FAIL (fixture write)")
+		quit(1)
+		return
+	file.store_string('[gd_resource type="Resource" format=3]\n[resource]\nbroken = SubResource("Missing")\n')
+	file.close()
+	print("EXPECTED RESOURCE FAILURE: BEGIN")
+	var passed: bool = requests.request(FAILURE_PATH, request_owner) == OK
+	var deadline := Time.get_ticks_msec() + 5000
+	var state: int = ResourceLoader.THREAD_LOAD_IN_PROGRESS
+	while state == ResourceLoader.THREAD_LOAD_IN_PROGRESS and Time.get_ticks_msec() < deadline:
+		await process_frame
+		state = requests.status(FAILURE_PATH)
+	print("EXPECTED RESOURCE FAILURE: END")
+	passed = state == ResourceLoader.THREAD_LOAD_FAILED and passed
+	passed = ResourceLoader.load_threaded_get_status(FAILURE_PATH) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE and passed
+	# A second poll must preserve failure without consuming the token twice.
+	passed = requests.status(FAILURE_PATH) == ResourceLoader.THREAD_LOAD_FAILED and passed
+	requests.release(FAILURE_PATH, request_owner)
+	passed = not requests._requests.has(FAILURE_PATH) and passed
+	file = FileAccess.open(FAILURE_PATH, FileAccess.WRITE)
+	if file != null:
+		file.store_string('[gd_resource type="Resource" format=3]\n[resource]\nresource_name = "Recovered"\n')
+		file.close()
+		passed = requests.request(FAILURE_PATH, request_owner) == OK and passed
+		var recovered: Resource = requests.take(FAILURE_PATH, request_owner, "", true)
+		passed = recovered != null and recovered.resource_name == "Recovered" and passed
+		passed = not requests._requests.has(FAILURE_PATH) and passed
+	else:
+		passed = false
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(FAILURE_PATH))
+	print("FAILED REQUEST OWNERSHIP: %s" % ("PASS" if passed else "FAIL"))
+	quit(0 if passed else 1)

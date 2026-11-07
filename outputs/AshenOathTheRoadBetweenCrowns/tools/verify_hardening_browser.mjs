@@ -6,6 +6,7 @@
 // --fault metadata_headers_stall|metadata_body_stall|opening_unavailable selects one Retry case.
 // --inspect validates inputs and candidate transport without launching Chromium.
 // --no-precontrol-captures excludes screenshot work before the measured first control.
+// --profile-context uses the fresh temporary normal profile for startup cache measurements.
 import puppeteer from 'puppeteer-core';
 import { createServer } from 'node:http';
 import { createReadStream, existsSync, mkdirSync, openSync, closeSync, readSync,
@@ -29,6 +30,8 @@ const combatPhase = String(options['combat-phase'] || '');
 const metadataFaults = options.fault ? [String(options.fault)] : ['metadata_headers_stall', 'metadata_body_stall'];
 assert(['all', 'startup', 'smoke', 'metadata', 'cold', 'combat'].includes(scenario), 'Invalid --scenario');
 assert(['both', 'desktop', 'touch'].includes(mode), 'Invalid --mode');
+if (options['profile-context']) assert(scenario === 'startup' && mode !== 'both',
+  '--profile-context requires one startup viewport, avoiding state shared between unrelated cases');
 if (scenario === 'combat') assert(['light', 'heavy', 'bow'].includes(combatPhase),
   'Combat requires --combat-phase light|heavy|bow. Run each phase/viewport in a fresh process/profile; combined combat reloads are not supported.');
 assert(metadataFaults.every(kind => ['metadata_headers_stall', 'metadata_body_stall', 'opening_unavailable'].includes(kind)), 'Invalid --fault');
@@ -55,6 +58,7 @@ const report = {
   harness_sha256: createHash('sha256').update(readFileSync(new URL(import.meta.url))).digest('hex'),
   observation_mode: 'production_read_only', gameplay_input: 'Chromium mouse/keyboard/touch and file picker',
   light_loop_candidate_injected: Boolean(options['light-loop-candidate']),
+  browser_context: options['profile-context'] ? 'fresh_temporary_normal_profile' : 'incognito',
   limits: ['No gameplay mutation API', 'No performance thresholds or hardware/mobile-device certification',
     'Imported fixtures are test journeys, not earned campaign progression'],
   cases: [], requests: [], status: 'running',
@@ -679,7 +683,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
   report.cases.push(currentCase);
   console.log(`HARDENING CASE START: ${name} ${JSON.stringify(currentCase.viewport)}`);
   const result = currentCase;
-  const context = await browser.createBrowserContext();
+  const context = options['profile-context'] ? browser.defaultBrowserContext() : await browser.createBrowserContext();
   const page = await context.newPage();
   if (scenario === 'startup') {
     // A background/occluded desktop pauses preparation. Measure an uninterrupted
@@ -781,7 +785,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
   } finally {
     result.finished_at = new Date().toISOString();
     writeFileSync(reportPath, JSON.stringify(report, null, 2));
-    await boundedClose(context.close());
+    await boundedClose(options['profile-context'] ? page.close() : context.close());
     armFault('', '');
   }
 }

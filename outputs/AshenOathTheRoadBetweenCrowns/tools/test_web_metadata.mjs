@@ -164,9 +164,10 @@ test('new packs persist verified bytes without waiting for optional cache I/O', 
 
 test('valid decoded caches remain readable and hash verified without another write', async () => {
   const data = fixture();
+  let writes = 0;
   const h = harness({ data, cache: { open: async () => ({
     match: async () => ({ ok: true, arrayBuffer: async () => data.bodies.get('campaign').buffer }),
-    put: async () => { assert.fail('A cache hit must not be rewritten'); },
+    put: async () => { writes++; },
     delete: async () => true,
   }) } });
   h.request('campaign');
@@ -174,6 +175,8 @@ test('valid decoded caches remain readable and hash verified without another wri
   assert.equal(h.state('campaign').state, 'preloaded');
   assert.equal(h.count('/packs/campaign.pck'), 0);
   assert.deepEqual(h.copied[0].bytes, data.bodies.get('campaign'));
+  await flush();
+  assert.equal(writes, 0, 'A cache hit must not be rewritten');
 });
 
 test('corrupt cache is removed and Retry persists only verified network bytes', async () => {
