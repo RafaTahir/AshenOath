@@ -71,6 +71,7 @@ class Fixture(unittest.TestCase):
         for relative in ["export_presets.cfg", "runtime_pack_manifest.json", "runtime_asset_manifest.json",
                          "curated_asset_manifest.json", "curated_runtime_assets.json", "visual_upgrade_manifest.json", "data/prepared_actors.json",
                          "data/design_pack_assets.json", "data/environment_material_dependencies.json",
+                         "data/environment_export_retirements.json",
                          "data/zone_actor_requirements.json", "data/design_pack_ecology.json"]:
             source = PROJECT / relative
             if source.is_file():
@@ -210,6 +211,68 @@ class ForestLayout(Fixture):
                     self.assertTrue(any(fnmatch.fnmatchcase(prepared.removeprefix("res://"), pattern) for pattern in excluded))
             if name in layout.ROOT_NAMES:
                 self.assertIn("data/prepared_forest_trees.json", json.loads(config[section]["include_filter"]).split(","))
+        RetirementPolicy.assert_retired(self, config)
+
+
+class RetirementPolicy(Fixture):
+    def policy(self):
+        return json.loads((PROJECT / layout.ENVIRONMENT_RETIREMENTS).read_text(encoding="utf-8"))
+
+    def assert_retired(self, config):
+        policy = json.loads((PROJECT / layout.ENVIRONMENT_RETIREMENTS).read_text(encoding="utf-8"))
+        for section in config.sections():
+            if "name" not in config[section]:
+                continue
+            values = config[section]
+            name = json.loads(values["name"])
+            for source in policy["retired_source_roots"]:
+                self.assertNotIn(source, layout.selected_files(values["export_files"]), name)
+                self.assertNotIn(source.removeprefix("res://"), parity.filters(values, "include_filter"), name)
+                self.assertFalse(parity.selected(values, source), (name, source))
+            if name == "Runtime Pack Opening":
+                for path in policy["required_authored_roots"]:
+                    self.assertTrue(parity.selected(values, path), path)
+
+    def test_tracked_presets_keep_authored_houses_and_no_retired_import_roots(self):
+        config = configparser.ConfigParser(interpolation=None)
+        config.read(PROJECT / "export_presets.cfg", encoding="utf-8-sig")
+        self.assert_retired(config)
+        for path in self.policy()["retired_source_roots"] + self.policy()["required_authored_roots"]:
+            self.assertTrue((PROJECT / path.removeprefix("res://")).is_file(), path)
+        anchor = (PROJECT / "scripts/runtime_asset_anchor.gd").read_text(encoding="utf-8")
+        for source in self.policy()["retired_source_roots"]:
+            self.assertNotIn(source, anchor)
+        self.assertIn('preload("res://assets_external/animations/AnimationLibrary_Godot_Opening.tres")', anchor)
+
+    def test_exact_and_wildcard_reintroductions_are_retired_without_texture_blacklist(self):
+        config = configparser.ConfigParser(interpolation=None)
+        config.read(PROJECT / "export_presets.cfg", encoding="utf-8-sig")
+        sections = {json.loads(config[s]["name"]): s for s in config.sections() if "name" in config[s]}
+        opening = config[sections["Runtime Pack Opening"]]
+        sources = set(self.policy()["retired_source_roots"])
+        textures = {"res://assets_external/environment/village/T_" + stem + "_Normal.png"
+                    for stem in ("Plaster", "WoodTrim", "UnevenBrick", "Brick", "RockTrim")}
+        opening["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(p) for p in sorted(sources | textures)) + ")"
+        opening["include_filter"] = json.dumps(",".join(["assets_external/environment/village/*.obj", *(p.removeprefix("res://") for p in sources)]))
+        opening["exclude_filter"] = '""'
+        layout.retire_environment_export_roots(PROJECT, config, sections)
+        self.assert_retired(config)
+        for texture in textures:
+            self.assertTrue(parity.selected(opening, texture), texture)
+
+    def test_policy_rejects_accidental_texture_retirement_before_mutation(self):
+        project = self.preset_project()
+        path = project / layout.ENVIRONMENT_RETIREMENTS
+        policy = self.policy()
+        policy["retired_source_roots"] = ["res://assets_external/environment/village/T_Plaster_Normal.png"]
+        path.write_text(json.dumps(policy), encoding="utf-8")
+        config = configparser.ConfigParser(interpolation=None)
+        config.read(project / "export_presets.cfg", encoding="utf-8-sig")
+        sections = {json.loads(config[s]["name"]): s for s in config.sections() if "name" in config[s]}
+        before = {name: dict(config[section]) for name, section in sections.items()}
+        with self.assertRaisesRegex(ValueError, "retirement policy"):
+            layout.retire_environment_export_roots(project, config, sections)
+        self.assertEqual(before, {name: dict(config[section]) for name, section in sections.items()})
 
 
 class ArtifactCopy(Fixture):
