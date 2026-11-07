@@ -48,6 +48,7 @@ def validate(topics, scenes, performances):
             assert row["requested"] and len(row["actors"]) == 1 and len(row["turns"]) == 6
             assert row["offer_label"].strip() and row["personal_staging"].strip()
             if person == "merrow": assert row["requires_bound_prop"] == "cup" and row["action"] == "rest"
+            if person == "vale": assert row["requires_workstation"] == "vale" and row["action"] == "read"
             for index, turn in enumerate(row["turns"]):
                 assert len(turn) == 3 and turn[0] in ["player", *row["actors"]]
                 expected[f"world_scene:{row['id']}:turn:{index}"] = turn[0], turn[2]
@@ -62,7 +63,7 @@ def validate(topics, scenes, performances):
         for control in ("body_gesture", "body_listener_gesture"):
             if control in direction:
                 gesture = direction[control]
-                assert gesture in {"drink", "lower_book"}
+                assert gesture in {"drink", "settle_ledger"}
                 actor = key.split("life2_", 1)[1].split("_", 1)[0]
                 target = "player" if (speaker == "player") == (control == "body_gesture") else actor
                 assert target == ("merrow" if gesture == "drink" else "vale"), (key, control, target)
@@ -95,6 +96,9 @@ class PersonalCastContracts(unittest.TestCase):
 
     def test_merrow_requires_real_cup(self):
         self.reject(lambda t, s, p: next(row for row in s["scenes"] if row["id"] == "life2_merrow_no_form").pop("requires_bound_prop"))
+
+    def test_vale_requires_real_workstation(self):
+        self.reject(lambda t, s, p: next(row for row in s["scenes"] if row["id"] == "life2_vale_keep_the_margin").pop("requires_workstation"))
 
     def test_body_cue_must_target_supported_actor(self):
         self.reject(lambda t, s, p: p["sources"]["world_scene:life2_merrow_no_form:turn:3"]["performance"].update(body_gesture="drink"))

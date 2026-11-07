@@ -49,6 +49,10 @@ static func requestable_for(scene: Dictionary, host, actor: Node3D) -> bool:
 	if not required.is_empty():
 		var driver := actor.find_child("CharacterAnimationDriver", true, false)
 		if not is_instance_valid(driver) or not driver.has_method("supports_story_prop") or not driver.supports_story_prop(required): return false
+	var workstation := str(scene.get("requires_workstation", ""))
+	if not workstation.is_empty():
+		var driver := actor.find_child("CharacterAnimationDriver", true, false)
+		if not is_instance_valid(driver) or not driver.has_method("supports_story_workstation") or not driver.supports_story_workstation(workstation): return false
 	return true
 
 static func turns(scene: Dictionary, host) -> Array:

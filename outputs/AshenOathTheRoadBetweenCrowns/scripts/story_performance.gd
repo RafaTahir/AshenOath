@@ -96,12 +96,6 @@ func present_page(entry: Dictionary) -> void:
 	pending_gesture = str(direction.get("gesture", "")) if speaking else str(direction.get("listener_gesture", "remember" if str(direction.get("emotion", "")) == "grieving" else ""))
 	next_beat = elapsed + float(direction.get("reaction_delay", 0.18))
 
-static func speaker_matches(identity: String, speaker_id: String) -> bool:
-	if speaker_id == "narrator" or identity == "": return false
-	var canonical := CastProfile.canonical_identity(identity)
-	if canonical != "": return CastProfile.canonical_identity(speaker_id) == canonical
-	return identity == speaker_id
-
 func start(target: Node3D, player: Node3D, state) -> void:
 	if active:
 		stop()

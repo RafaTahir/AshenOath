@@ -12,14 +12,19 @@ COMMUNITY_FILES = {
     "scripts/community_campaign.gd", "scripts/community_activity.gd",
     "scripts/community_presentation.gd", "scripts/zones/community_section.gd",
     "data/community_campaign.json", "data/community_cast_life.json",
+    "data/community_story_overlay.json",
+    "data/localization/community_en.json",
     "assets_external/environment/forest/HartAftermath_concord_Authored.res",
     "assets_external/environment/forest/HartAftermath_open_road_Authored.res",
 }
+BASE_STORY_FILES = {"data/runtime_story_campaign.json"}
+AUTHORING_ONLY = {"data/story_campaign.json"}
 VOICE_DIRECTORIES = {"living_cast_voice":"living_cast", "community_voice":"community"}
 STATION_OWNERS = {"nessa":"actor_c11", "elna":"actor_c05", "toma":"actor_c06", "nera":"actor_c12", "vale":"actor_c09", "merrow":"actor_c10", "edric":"actor_c08"}
 STATIONS = "assets_external/environment_prepared/living_cast/"
 SCENERY_FILES = {"assets_external/environment_prepared/living_world/" + name + ".scn"
                  for name in ("checkpoint_cloth", "marsh_reeds", "hart_ferns", "ash_mill_wheel")}
+COMPANION_FILES = {"assets_external/characters_prepared/companions/bracken.scn"}
 
 
 def _selected(value):
@@ -34,8 +39,10 @@ def partition_living_campaign_packs(project, config, sections, manifest):
     if not (project / "scripts/campaign_revision.gd").is_file(): return
     startup_before = list(manifest.get("startup_dependencies", []))
     owned = {path:"community" for path in COMMUNITY_FILES}
+    owned.update({path:"base" for path in BASE_STORY_FILES})
     owned.update({path:"campaign" for path in SCENERY_FILES})
-    required = set(COMMUNITY_FILES) | SCENERY_FILES
+    owned.update({path:"actor_m13" for path in COMPANION_FILES})
+    required = set(COMMUNITY_FILES) | SCENERY_FILES | BASE_STORY_FILES | COMPANION_FILES
     for person, owner in STATION_OWNERS.items():
         scene = STATIONS + "station_" + person + ".scn"
         required.add(scene)
@@ -72,6 +79,20 @@ def partition_living_campaign_packs(project, config, sections, manifest):
         record["dependencies"] = ["base"]
         record["required_at_startup"] = False
         record["contents"] = sorted(paths)
+    unknown = sorted(set(owned.values()) - set(manifest["pack_presets"]))
+    if unknown: raise ValueError("Missing resource owner pack(s): " + ", ".join(unknown))
+    # Keep the manifest's resource inventories aligned with the actual selectors,
+    # including additions to packs created by the preceding actor partition.
+    for pack, record in manifest["packs"].items():
+        contents = {path for path in record.get("contents", [])
+                    if path.removeprefix("res://") not in owned
+                    and path.removeprefix("res://") not in AUTHORING_ONLY}
+        contents.update("res://" + path for path, owner in owned.items() if owner == pack)
+        record["contents"] = sorted(contents)
+    actor_owners = manifest.setdefault("actor_resource_owners", {})
+    for path, owner in owned.items():
+        actor_owners.pop("res://" + path, None)
+        if owner.startswith("actor_"): actor_owners["res://" + path] = owner
     presets_to_ids = {name:pack for pack, name in manifest["pack_presets"].items()}
     # Dynamic code imports still depend on base services. Exact exclusions
     # prevent duplicate code while leaving the community's own scripts intact.
@@ -101,10 +122,16 @@ def partition_living_campaign_packs(project, config, sections, manifest):
         for owner, directory in VOICE_DIRECTORIES.items():
             pattern = "assets_external/audio/voices/" + directory + "/*"
             if pack != owner: excluded.add(pattern)
+        for path in AUTHORING_ONLY:
+            selected.discard("res://" + path)
+            included.discard(path)
+            excluded.add(path)
         config[section]["export_files"] = "PackedStringArray(" + ", ".join(json.dumps(path) for path in sorted(selected)) + ")"
         config[section]["include_filter"] = json.dumps(",".join(sorted(included)))
         config[section]["exclude_filter"] = json.dumps(",".join(sorted(excluded)))
-    for zone in ("lantern_reach", "hearthward", "hart_glade"):
+    # Existing regions acquire the overlay through revision/earned-state aware
+    # preparation extras. Legacy Hart journeys must retain their old closure.
+    for zone in ("lantern_reach", "hearthward"):
         if zone not in manifest.get("zone_dependencies", {}):
             raise ValueError("Missing explicit destination ownership: " + zone)
         if "community" not in manifest["zone_dependencies"][zone]:

@@ -229,6 +229,10 @@ def main():
 
     for asset in [MODEL, VOICES]:
         download(MODEL_BASE + asset, args.models / asset)
+    model_inputs = {}
+    for asset in (MODEL, VOICES):
+        with (args.models / asset).open("rb") as source:
+            model_inputs[asset] = hashlib.file_digest(source, "sha256").hexdigest()
     credits = GAME / "docs/audio"
     credits.mkdir(parents=True, exist_ok=True)
     for remote, local in [("README.md", "KOKORO_MODEL_CARD.md"), ("VOICES.md", "KOKORO_VOICES.md")]:
@@ -304,7 +308,7 @@ def main():
         spoken = text.replace("—", ", ").replace("…", "... ")
         for term, pronunciation in PRONUNCIATION.items():
             spoken = re.sub(r"\b" + re.escape(term) + r"\b", pronunciation, spoken)
-        recipe = {"version":RECIPE_VERSION, "cast_revision":cast_data["revision"], "model":cast_data["model"], "role":role, "profile":profile, "speed":speed, "spoken":spoken}
+        recipe = {"version":RECIPE_VERSION, "cast_revision":cast_data["revision"], "model":cast_data["model"], "model_input_sha256":model_inputs, "role":role, "profile":profile, "speed":speed, "spoken":spoken}
         recipe_hash = hashlib.sha256(json.dumps(recipe, sort_keys=True).encode("utf-8")).hexdigest()
         stamp = recipe_cache / (key + ".txt")
         output = GAME / "assets_external/audio/voices" / voice_directory(scene, args.new_directory)
@@ -365,6 +369,8 @@ def main():
     manifest["pending_recordings"] = pending
     manifest["baseline_commit"] = baseline_commit
     manifest["retained_legacy_subtitle_only"] = legacy_subtitle_only
+    manifest["model_input_sha256"] = model_inputs
+    manifest["build_runtime"] = {"kokoro_onnx":"0.6.1", "onnxruntime":ort.__version__, "numpy":np.__version__, "soundfile":sf.__version__, "inference_threads":options.intra_op_num_threads}
     manifest["publication_mode"] = "incremental_living_cast" if args.incremental else ("completed_upgrades_with_existing_fallbacks" if args.finalize_existing else ("dialogue_complete" if args.dialogue_only else "full_cast"))
     if retained and not args.incremental:
         manifest["source"] += "; retained Piper VCTK recordings for unfinished replacements"

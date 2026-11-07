@@ -39,6 +39,8 @@ func _initialize() -> void:
 	quests.completed["main_ash_at_the_mill"]=true
 	for id: String in Revision.NEW_CHAPTERS: quests.completed[id]=true
 	state.set_flag("community_keeper_consent",{"anwen":true,"nessa":true,"vale":true})
+	state.set_flag("community_route_ready",true)
+	state.set_flag("community_refuge_ready",true)
 	var before: Dictionary=quests.save_state().duplicate(true)
 	var dialogue = Dialogue.new()
 	dialogue.setup(state,quests)

@@ -108,12 +108,18 @@ def extra_utterances(game: Path, cast: dict, aliases: dict, pages):
                         for index, child in enumerate(value):
                             yield from routine_lines(child, source + ":" + str(index))
                 yield from routine_lines(definition, f"{prefix}:{zone}:{actor}")
-    consequences = (game / "scripts/village_consequence_routines.gd").read_text(encoding="utf-8-sig")
-    ending_lines = gd_literal(consequences, "var lines :=")
-    for ending in ("concord", "open_road"):
-        if ending not in ending_lines: continue
-        for actor in ("shrine_pilgrim", "quality_mourner"):
-            yield from emit(f"community:aftermath:{ending}:{actor}", actor, ending_lines[ending], "everyday")
+    community_data = read(game, "data/community_campaign.json") if (game / "data/community_campaign.json").exists() else {}
+    if community_data.get("ending_ambient"):
+        for ending, entry in community_data["ending_ambient"].items():
+            for actor in entry["speaker_ids"]:
+                yield from emit(f"community:aftermath:{ending}:{actor}", actor, entry["text"], "everyday")
+    else:
+        consequences = (game / "scripts/village_consequence_routines.gd").read_text(encoding="utf-8-sig")
+        ending_lines = gd_literal(consequences, "var lines :=")
+        for ending in ("concord", "open_road"):
+            if ending not in ending_lines: continue
+            for actor in ("shrine_pilgrim", "quality_mourner"):
+                yield from emit(f"community:aftermath:{ending}:{actor}", actor, ending_lines[ending], "everyday")
 
     saga_source = (game / "scripts/saga_catalog.gd").read_text(encoding="utf-8-sig")
     people = gd_literal(saga_source, "const PEOPLE :=")
@@ -197,11 +203,16 @@ def expansion_captions(game: Path, pages=None):
     for person, text in community.get("public_accounts", {}).items():
         if not isinstance(text, str): raise ValueError("Public account caption schema changed")
         yield {"source_id":f"community:public_account:{person}", "speaker_id":"narrator", "text":text, "caption_only":True}
-    source = (game / "scripts/covenant_resolution.gd").read_text(encoding="utf-8-sig")
-    steps = gd_literal(source, "const STEPS :=")
+    steps = community.get("ending_rituals", {})
+    if not steps:
+        source = (game / "scripts/covenant_resolution.gd").read_text(encoding="utf-8-sig")
+        steps = gd_literal(source, "const STEPS :=")
     for action in ("share", "depart"):
         for index, step in enumerate(steps[action]):
             yield {"source_id":f"community:ending:{action}:{index}", "speaker_id":"narrator", "text":step[1], "caption_only":True}
+    for action, text in community.get("ending_cards", {}).items():
+        if action not in {"share", "depart"} or not isinstance(text, str): raise ValueError("Malformed community ending card")
+        yield {"source_id":f"community:ending_card:{action}", "speaker_id":"narrator", "text":text, "caption_only":True}
     if pages is not None:
         for source_file in ("dialogue.json", "campaign_dialogue.json", "interaction_scenes.json"):
             for scene_id, base in read(game, "data/"+source_file).items():

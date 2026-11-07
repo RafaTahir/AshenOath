@@ -1166,6 +1166,7 @@
     },
     {
       "id": "life2_vale_keep_the_margin",
+      "requires_workstation": "vale",
       "zone": "record_hall",
       "kind": "conversation",
       "actors": [

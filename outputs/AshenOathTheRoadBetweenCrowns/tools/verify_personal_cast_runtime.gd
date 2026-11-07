@@ -22,6 +22,17 @@ class FixtureActor extends Node3D:
 class FixtureDriver extends Node:
 	var prop_ready := false
 	func supports_story_prop(kind: String) -> bool: return prop_ready and kind == "cup"
+	var station_ready := false
+	func supports_story_workstation(kind: String) -> bool: return station_ready and kind == "vale"
+
+class FixturePacks extends Node:
+	var requests: Array[String] = []
+	var states: Dictionary = {}
+	func get_pack(id: String) -> Dictionary: return {"id":id} if id in ["living_cast_voice", "community_voice"] else {}
+	func get_state(id: String) -> String: return str(states.get(id, ""))
+	func request_pack(id: String, _priority: int) -> void:
+		requests.append(id)
+		states[id] = "queued"
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -77,6 +88,19 @@ func _run() -> void:
 	actor.interaction_id = "vargan_steward"
 	host.story_state.flags["world_scenes_heard"] = {str(merrow.id):true}
 	check(not WorldScenes.requestable_for(merrow, host, actor), "completed personal scene stays completed")
+	var vale: Dictionary = {}
+	for scene: Dictionary in scenes.scenes:
+		if str(scene.id) == "life2_vale_keep_the_margin": vale = scene
+	actor.interaction_id = "vargan_record_keeper"
+	host.current_zone_id = str(vale.zone)
+	check(not WorldScenes.requestable_for(vale, host, actor), "ledger scene unavailable before actual workstation/clip readiness")
+	driver.station_ready = true
+	check(WorldScenes.requestable_for(vale, host, actor), "ledger scene offered only with available workstation")
+	driver.station_ready = false
+	check(not WorldScenes.requestable_for(vale, host, actor), "lost workstation is rechecked before scene request")
+	driver.station_ready = true
+	actor.interaction_id = "vargan_steward"
+	check(not WorldScenes.requestable_for(vale, host, actor), "stale actor cannot claim Vale workstation scene")
 	actor.free()
 	var audio := Audio.new()
 	audio.generated_current_recordings_allowed = true
@@ -91,6 +115,20 @@ func _run() -> void:
 	check(not audio.revised_voice_entries.has("stale_fixture"), "stale recording text hash rejected")
 	check(audio._same_voice_speaker("saga_maren", "nera"), "Nera retained regional alias")
 	check(not audio._same_voice_speaker("", ""), "empty identity rejected")
+	var packs := FixturePacks.new()
+	audio.voice_pack_owner = packs
+	audio.runtime_file_assets_available = false
+	check(not audio._prepare_revised_voice("nessa_fixture"), "unmounted optional voice stays subtitle-only")
+	check(packs.requests == ["living_cast_voice"], "optional voice can request its own pack before historical audio readiness")
+	audio._prepare_revised_voice("nessa_fixture")
+	check(packs.requests.size() == 1, "queued voice pack is not requested twice")
+	packs.states["living_cast_voice"] = "failed"
+	audio._prepare_revised_voice("nessa_fixture")
+	check(packs.requests.size() == 1, "failed optional voice remains owned by Retry")
+	audio._on_audio_pack_mounted("living_cast_voice", "")
+	check(not audio.runtime_file_assets_available, "voice-only mount does not mark all recorded audio ready")
+	check(audio.pending_dialogue_voice.is_empty(), "late optional mount does not replay an old subtitle")
+	packs.free()
 	audio.free()
 	dialogue.free()
 	for failure: String in failures: push_error(failure)

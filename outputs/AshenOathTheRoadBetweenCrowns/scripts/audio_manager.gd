@@ -224,7 +224,8 @@ func bind_runtime_packs(packs: Node) -> void:
 
 func _on_audio_pack_mounted(pack_id: String, _path: String) -> void:
 	if pack_id in ["living_cast_voice", "community_voice"]:
-		set_runtime_file_assets_available(true)
+		# This pack owns only its exact voices. It must not mark the unrelated
+		# historical audio pack ready or eagerly decode its missing cue library.
 		return
 	if pack_id not in ["opening", "adjacent", "campaign", "audio"]:
 		return
@@ -487,11 +488,12 @@ func play_dialogue_page(page: Dictionary) -> void:
 		pending_dialogue_delay = clampf(float(page.get("performance", {}).get("reaction_delay", 0.18)), 0.08, 0.45)
 
 func _prepare_revised_voice(id: String) -> bool:
-	if not revised_voice_entries.has(id) or not runtime_file_assets_available:
+	if not revised_voice_entries.has(id):
 		return false
 	var entry: Dictionary = revised_voice_entries[id]
+	var path := str(entry.get("path", entry.get("audio_path", "")))
+	if not runtime_file_assets_available and _deferred_voice_pack(path).is_empty(): return false
 	if not voices.has(id):
-		var path := str(entry.get("path", entry.get("audio_path", "")))
 		if not ResourceLoader.exists(path):
 			_request_deferred_voice(path)
 			return false
@@ -508,11 +510,14 @@ func _prepare_revised_voice(id: String) -> bool:
 				voices.erase(retired)
 	return _has_production_voice(id)
 
+func _deferred_voice_pack(path: String) -> String:
+	if path.begins_with("res://assets_external/audio/voices/community/"): return "community_voice"
+	if path.begins_with("res://assets_external/audio/voices/living_cast/"): return "living_cast_voice"
+	return ""
+
 func _request_deferred_voice(path: String) -> void:
 	if not is_instance_valid(voice_pack_owner): return
-	var pack := ""
-	if path.begins_with("res://assets_external/audio/voices/community/"): pack = "community_voice"
-	elif path.begins_with("res://assets_external/audio/voices/living_cast/"): pack = "living_cast_voice"
+	var pack := _deferred_voice_pack(path)
 	if pack.is_empty() or voice_pack_owner.get_pack(pack).is_empty(): return
 	# A missing recording stays subtitle-only. Mounting never replays an old
 	# page, and a failed optional download is left to the existing Retry owner.
