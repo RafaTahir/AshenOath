@@ -14,7 +14,97 @@ authored checkpoint `e0c0c51`). Find the exact checkpoint with
 below describe earlier gates; this section supersedes their implementation TODOs.
 No canonical checkout, export or deployment was changed by this worktree.
 
+### Deferred story payload (source complete; runtime fixtures unrun)
+
+The maintained `prepare_runtime_dialogue.py` compiler now creates an exclusively
+community-owned `data/community_story_overlay.json`. It contains the complete
+revision-2 Hart projection, six new aftermath scenes, full new chapter/ending
+catalog prose, and the two new ritual/card text sets. Existing per-scene shards
+retain only base content; explicit `source_tag: campaign_revision_2` controls
+separation, never names or a broad text heuristic. Original untagged scenes are
+unchanged. `data/runtime_story_campaign.json` is the base catalog and retains
+only IDs/titles/revision markers for the new rows. Pack integration must exclude
+the authoring `data/story_campaign.json` from every runtime preset. Raw authoring
+catalogs remain available to exact-text voice collection.
+
+The four new quest definitions already consist of compact titles, objective
+labels/kinds, completion identity and unlock edges. Those remain base-owned so
+new-journey revision selection and saved graph validation work before the first
+insertion. No quest state is reloaded or rewritten when story prose appears.
+The compiler runs before layout validation in `build_story_release.ps1`.
+
+`campaign_story_overlay.gd` is a small base helper. Its cache stores immutable
+deferred data, never a journey's projected dialogue. `DialogueManager` and
+`StoryJournal` project per current journey on each request; loading legacy after
+expanded immediately restores original scene/action/catalog visibility. Missing
+data is not cached, and incomplete payloads fail readiness. New ritual text now
+lives in `community_campaign.json` as `ending_rituals[share|depart]`, each with
+three `[label, narrator text]` pairs; `ending_cards` contains the exact two card
+strings. Runtime consumers use those generated overlay values. Both are captions,
+not invented actor speech, for the voice inventory.
+
+`_zone_encounter_packs` adds `community` only for revision 2 in a new region or
+earned post-Ash community context. Initial expanded Greyfen adds nothing and
+does not decode the overlay. Direct saved arrivals use the recorded journey's
+flags/completed chapter set, so old-region scenes prepare their own dependency
+before save ownership is claimed. The existing campaign/opening wait owners
+retain the same extra dependency list through request, progress, retry and
+readiness. Missing/invalid deferred prose fails before destination activation.
+The pack manifest should declare `community` for the two new regions; legacy
+Hart/Greyfen/Assembly must use these state-aware extras, not an unconditional
+community dependency.
+
+Source-only `test_community_story_payload.py`: **6 tests PASS**, including exact
+reconstruction, no substantial new prose in base, preserved legacy rows,
+compiler idempotence and incomplete-input rejection. The newly authored
+`verify_community_story_overlay.gd` is **UNRUN**: it exercises no-read startup,
+recorded arrival requirements, malformed payload rejection, same-manager
+six/four/six journey switching and unchanged quest state. Full native/parser and
+combined PCK resource checks remain required before acceptance.
+
 ### Actual-input acceptance harness (authored; native execution pending)
+
+The complete journey entry is `tools/run_full_campaign_acceptance.py`. Its
+`full_six_endings` case rejects every seed, starts through visible **New Game**,
+records the actual completion signals for all fourteen chapters in order, and
+then uses the earned **Return to before the covenant** option for the remaining
+alternatives. All six alternatives must enact, reload their completed memorial,
+walk home and present the actual epilogue. Peaceful endings also reload after
+the first of their three physical ritual interactions. The source receipt gate
+rejects missing/reordered chapters, extra progression and incomplete ending
+circuits. The runtime must select revision 2 through its normal New Game
+handoff; a candidate with `EXPANSION_ENABLED=false` correctly fails this case.
+The harness never overrides that switch or the journey's revision.
+
+Four separately labelled boundary cases cover `legacy_ash_missing`,
+`legacy_ash_v1`, `legacy_witness_missing` and `legacy_witness_v1`. Their raw saves
+must contain exactly the first five or eight original chapters and the proper
+next original chapter, at Old Mill or Undercroft respectively. The missing
+marker must really be absent; the explicit marker must be 1. They verify hidden
+expansion topology, actual save/reload, the remaining original chain and the
+four-choice ending UI, then enact Witness through return home. Their seeded
+prefix is always reported separately and never counts as full-journey proof.
+
+`community_acceptance_legacy.py` derives its combat input helpers from the
+maintained `verify_opening_real_input_native.gd`; both original and generated
+bytes are frozen in the run receipt. Explicit current-route overrides use
+normal E at the Wychwood Bog, Rootbound and Senn invitations, the current world
+graph and current save/choice labels. No source helper is allowed to acquire
+direct quest/flag/position mutation. These are authored checks, **not evidence
+that the complete route has run successfully**. Source-only full-run contract
+checks pass **9 tests**, and the region runner checks below pass **8 tests**.
+Full GDScript parsing, combat, movement and all rendered ending circuits remain
+**unrun** pending built resources and the shared serial engine slot.
+
+```powershell
+python tools/run_full_campaign_acceptance.py --case full_six_endings `
+  --root-pack <root.pck> --packs <runtime-packs> `
+  --class-cache <global_script_class_cache.cfg> --viewport desktop --prepare-only
+python tools/run_full_campaign_acceptance.py --case legacy_ash_missing `
+  --seed-save <legacy-boundary-save.json> --root-pack <root.pck> `
+  --packs <runtime-packs> --class-cache <global_script_class_cache.cfg> `
+  --viewport touch --prepare-only
+```
 
 `tools/run_community_acceptance.py` freezes the committed project settings,
 generated class cache, harness, seed and complete PCK inputs. It configures a new

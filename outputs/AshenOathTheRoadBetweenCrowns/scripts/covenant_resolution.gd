@@ -17,23 +17,16 @@ const STEPS := {
 		["Set down the old badge", "Kael puts down the badge that once made leaving feel lawful. This oath will have no command behind it."],
 		["Name the limits of the promise", "Kael: I will keep the road and the record. No child's name. No hidden levy. Nobody carries this because I told them to."],
 		["Take the willing burden", "The heat enters Kael's hands. He does not kneel until the Hart waits for his answer. Kael: Mine, then. And only while I keep choosing it."]
-	],
-	"share": [
-		["Read the willing keepers' terms", "The names entered here belong only to people who agreed. Each keeper may leave the work; the promise gives nobody the right to appoint a replacement in their silence."],
-		["Divide the keeping", "Kael sets the record beside separate keys. Care, the road and the copies have different keepers. None can close the whole account, and none inherits another person's burden."],
-		["Take the first shared watch", "The Hart rests while the first willing watch begins. Kael takes his turn among the others. This arrangement will need meetings, spare hands and difficult answers long after tonight."]
-	],
-	"depart": [
-		["Place the open-road provisions", "The prepared crossing and refuge stand ready for people who choose to travel. A place to stay remains available without an oath to stay there."],
-		["Release the road's claim", "Kael removes the binding's claim on households and travelers. The recovered records remain in human custody. The Hart may leave; no road is owed a captive witness."],
-		["Mark a way onward", "Kael turns the last marker toward the open road. People may remain, return or set out. Keeping those choices possible will demand work without the certainty of a single keeper."]
 	]
 }
 const POSITIONS := [Vector3(-4.5, 0.0, -2.5), Vector3(0.0, 0.0, -5.0), Vector3(4.5, 0.0, -2.5)]
 
+static func steps_for(ending: String, state) -> Array:
+	return STEPS[ending] if STEPS.has(ending) else preload("res://scripts/campaign_story_overlay.gd").ritual(ending,state)
+
 static func begin(game, ending: String) -> void:
 	ending = preload("res://scripts/ending_catalog.gd").normalize(ending)
-	if not STEPS.has(ending):
+	if steps_for(ending,game.story_state).is_empty():
 		return
 	game.pending_ending = ending
 	game.story_state.set_flag("covenant_ritual_started", true)
@@ -53,10 +46,11 @@ static func restore(game) -> void:
 	if game.current_zone_id != "hart_glade" or game.zone_root == null:
 		return
 	var ending: String = str(game.pending_ending)
-	if not STEPS.has(ending) or bool(game.story_state.get_flag("final_choice_completed", false)):
+	var steps: Array = steps_for(ending,game.story_state)
+	if steps.is_empty() or bool(game.story_state.get_flag("final_choice_completed", false)):
 		return
 	var completed: int = int(game.story_state.get_flag("covenant_ritual_step", 0))
-	var entries: Array = STEPS[ending]
+	var entries: Array = steps
 	game._remove_interactable("white_hart")
 	if completed >= entries.size():
 		game.story_state.set_flag("covenant_ritual_ready", true)
@@ -93,34 +87,35 @@ static func restore(game) -> void:
 static func activate(game, area) -> void:
 	var ending := str(area.get_meta("covenant_ending", ""))
 	var step := int(area.get_meta("covenant_step", -1))
-	if ending != str(game.pending_ending) or not STEPS.has(ending):
+	var steps: Array = steps_for(ending,game.story_state)
+	if ending != str(game.pending_ending) or steps.is_empty():
 		return
 	var completed := int(game.story_state.get_flag("covenant_ritual_step", 0))
-	if completed >= (STEPS[ending] as Array).size():
+	if completed >= steps.size():
 		return
 	if step != completed:
-		game.hud.toast("First, %s." % str(STEPS[ending][completed][0]).to_lower())
+		game.hud.toast("First, %s." % str(steps[completed][0]).to_lower())
 		return
 	game.story_state.set_flag("covenant_ritual_step", completed + 1)
-	game.story_state.record_evidence(str(area.interaction_id), {"title": str(STEPS[ending][step][0]), "text": str(STEPS[ending][step][1]), "kind": "testimony", "zone": "hart_glade"})
+	game.story_state.record_evidence(str(area.interaction_id), {"title": str(steps[step][0]), "text": str(steps[step][1]), "kind": "testimony", "zone": "hart_glade"})
 	game._mark_interaction_removed(area)
 	game.active_interactable = null
 	game.hud.set_prompt("")
 	area.queue_free()
 	game.audio.play_event("shrine_bell", 0.04)
 	game.hud.show_dialogue({
-		"name": "The covenant", "greeting": str(STEPS[ending][step][1]),
-		"lines": [], "pages": [{"speaker": "The road", "speaker_id": "narrator", "text": str(STEPS[ending][step][1]), "beat": "aftermath"}],
+		"name": "The covenant", "greeting": str(steps[step][1]),
+		"lines": [], "pages": [{"speaker": "The road", "speaker_id": "narrator", "text": str(steps[step][1]), "beat": "aftermath"}],
 		"actions": [], "subtitle_fallback": true
 	})
 	game.get_tree().paused = true
 	game.audio.set_game_paused(true)
 	game.story_save_pending = true
 	game.call_deferred("_persist_story_action")
-	if completed + 1 >= (STEPS[ending] as Array).size():
+	if completed + 1 >= steps.size():
 		game.story_state.set_flag("covenant_ritual_ready", true)
 	else:
-		game.hud.set_guidance_hint(str(STEPS[ending][completed + 1][0]), 12.0)
+		game.hud.set_guidance_hint(str(steps[completed + 1][0]), 12.0)
 
 static func finish_if_ready(game) -> void:
 	if not bool(game.story_state.get_flag("covenant_ritual_ready", false)):
@@ -128,5 +123,5 @@ static func finish_if_ready(game) -> void:
 	if bool(game.story_state.get_flag("final_choice_completed", false)):
 		return
 	var ending := str(game.pending_ending)
-	if STEPS.has(ending):
+	if not steps_for(ending,game.story_state).is_empty():
 		game._show_ending_consequence(ending)

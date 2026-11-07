@@ -17,6 +17,7 @@ var case_id := ""
 var input_events := 0
 var start_ms := 0
 var region := ""
+var report_extra: Dictionary={}
 
 func _initialize() -> void:
 	for argument: String in OS.get_cmdline_user_args():
@@ -260,11 +261,11 @@ func _dialogue_button(label: String) -> void:
 
 func _button(prefix: String) -> void:
 	if not failures.is_empty(): return
-	var deadline := Time.get_ticks_msec()+(120000 if prefix=="Continue" else 10000)
+	var deadline := Time.get_ticks_msec()+(120000 if prefix in ["Continue","New Game"] else 10000)
 	var visible := false
 	while not visible and Time.get_ticks_msec()<deadline:
 		for candidate: Button in root.find_children("*","Button",true,false):
-			if candidate.is_visible_in_tree() and not candidate.disabled and candidate.text.begins_with(prefix):
+			if candidate.is_visible_in_tree() and not candidate.disabled and candidate.text.trim_prefix("Commit: ").begins_with(prefix):
 				visible=true
 				break
 		if not visible: await process_frame
@@ -273,7 +274,7 @@ func _button(prefix: String) -> void:
 		return
 	for index in range(64):
 		var focused := root.gui_get_focus_owner() as Button
-		if focused!=null and focused.is_visible_in_tree() and not focused.disabled and focused.text.begins_with(prefix):
+		if focused!=null and focused.is_visible_in_tree() and not focused.disabled and focused.text.trim_prefix("Commit: ").begins_with(prefix):
 			await _tap(KEY_ENTER)
 			return
 		await _tap(KEY_TAB)
@@ -478,14 +479,9 @@ func _fail(reason: String) -> void:
 
 func _finish() -> void:
 	_release()
-	var expected: Array=[]
-	if rules!=null:
-		if case_id.begins_with("lantern"):
-			expected=["kitchen_trestle","kitchen_screen","kitchen_places"]
-			expected.append_array(rules.chapter("main_road_kept_open").choices["crossing" if case_id=="lantern_crossing" else "ferry"].work)
-		else: expected=["refuge_bunks","refuge_shelves","refuge_places","promise_meal","promise_alarm","promise_records"]
-		_check(completed_work==expected,"Exact six physical tasks for this route were earned")
+	if rules!=null: _check(completed_work==_expected_work(),"Exact physical task set for this route was earned")
 	var report := {"schema_version":1,"kind":"community_world_real_input","case":case_id,"status":"pass" if failures.is_empty() else "fail","failures":failures,"completed_work":completed_work,"observations":observations,"input_events":input_events,"user_data_dir":OS.get_user_data_dir(),"elapsed_ms":Time.get_ticks_msec()-start_ms,"viewport":str(DisplayServer.window_get_size()),"physical_phone_coverage":false,"touch_input_coverage":false,"progression_injection":false}
+	report.merge(report_extra)
 	if output!="":
 		var file := FileAccess.open(output.path_join("report.json"),FileAccess.WRITE)
 		if file!=null: file.store_string(JSON.stringify(report,"\t"))
@@ -498,3 +494,11 @@ func _finish() -> void:
 		await _frames(3)
 	print("COMMUNITY_INPUT "+str(report.status)+" "+case_id)
 	quit(0 if failures.is_empty() else 1)
+
+func _expected_work() -> Array:
+	var expected: Array=[]
+	if case_id.begins_with("lantern"):
+		expected=["kitchen_trestle","kitchen_screen","kitchen_places"]
+		expected.append_array(rules.chapter("main_road_kept_open").choices["crossing" if case_id=="lantern_crossing" else "ferry"].work)
+	else: expected=["refuge_bunks","refuge_shelves","refuge_places","promise_meal","promise_alarm","promise_records"]
+	return expected

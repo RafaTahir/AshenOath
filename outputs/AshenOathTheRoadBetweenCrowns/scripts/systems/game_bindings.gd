@@ -822,7 +822,7 @@ func _zone_encounter_packs(zone_id: String, recorded_journey: Dictionary = {}) -
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void: _systems["zone_lifecycle"]._load_zone_after_runtime_pack(zone_id, spawn_pos)
 func _begin_travel_download(zone_id: String, extras: Array[String] = []) -> void: _systems["zone_lifecycle"]._begin_travel_download(zone_id, extras)
 func _finish_travel_download() -> void: _systems["zone_lifecycle"]._finish_travel_download()
-func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial: int) -> void: await _systems["zone_lifecycle"]._wait_for_campaign_pack(zone_id, spawn_pos, request_serial)
+func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial: int, encounter_packs: Array[String] = []) -> void: await _systems["zone_lifecycle"]._wait_for_campaign_pack(zone_id, spawn_pos, request_serial, encounter_packs)
 func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial: int, encounter_packs: Array[String] = []) -> void: await _systems["zone_lifecycle"]._wait_for_opening_pack(zone_id, spawn_pos, request_serial, encounter_packs)
 func _recover_failed_pack_load(reason: String = "The destination could not load. Please retry.") -> void: _systems["zone_lifecycle"]._recover_failed_pack_load(reason)
 func _zone_requires_campaign_pack(zone_id: String) -> bool: return _systems["zone_lifecycle"]._zone_requires_campaign_pack(zone_id)

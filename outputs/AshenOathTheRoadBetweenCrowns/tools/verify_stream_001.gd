@@ -96,6 +96,17 @@ func _prefetch_contract() -> void:
 	recorded.world_state.boss_states = {"bell_eater": "invalid legacy value"}
 	if game._zone_encounter_packs("greyfen", recorded) != ["monsters"]:
 		errors.append("malformed optional boss record bypassed required content")
+	recorded.quests = {"active":{},"completed":{}}
+	recorded.story_state.flags = {"campaign_revision":2}
+	if not game._zone_encounter_packs("greyfen",recorded).is_empty():
+		errors.append("initial expanded Greyfen requested deferred community content")
+	recorded.quests.completed["main_ash_at_the_mill"]=true
+	for target: String in ["greyfen","assembly","hart_glade"]:
+		if game._zone_encounter_packs(target,recorded)!=["community"]:
+			errors.append("earned expanded saved arrival omitted its own story dependency: "+target)
+	recorded.story_state.flags.clear()
+	if not game._zone_encounter_packs("hart_glade",recorded).is_empty():
+		errors.append("legacy ending arrival inferred expansion from chapter history")
 	# This detached coordinator never runs _ready(), which normally owns this node.
 	game.zone_residency.free()
 	game.free()

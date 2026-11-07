@@ -158,7 +158,7 @@ func _verify_endings() -> void:
 		_check(not cards.is_empty(), "Known ending has consequence cards")
 		headings[cards[0].split("\n")[0]] = true
 		if Endings.is_peaceful(id):
-			_check(Ritual.STEPS.has(id) and Ritual.STEPS[id].size() == 3, "Peaceful ending has three restorable steps")
+			_check(Ritual.steps_for(id,state).size() == 3, "Peaceful ending has three restorable steps")
 			state.set_flag("final_covenant", Endings.covenant(id))
 			state.set_flag("covenant_ritual_started", true)
 			for step in range(3):

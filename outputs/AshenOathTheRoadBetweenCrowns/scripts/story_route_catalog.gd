@@ -250,11 +250,11 @@ static func ending_continuation(state, current_zone: String) -> Dictionary:
 	if not completed and covenant != "":
 		var ending: String = preload("res://scripts/ending_catalog.gd").normalize(covenant)
 		var steps: Dictionary = {}
-		for id: String in preload("res://scripts/covenant_resolution.gd").STEPS:
+		for id: String in preload("res://scripts/ending_catalog.gd").IDS:
 			steps[id] = []
-			for entry: Array in preload("res://scripts/covenant_resolution.gd").STEPS[id]:
+			for entry: Array in preload("res://scripts/covenant_resolution.gd").steps_for(id,state):
 				steps[id].append(str(entry[0]))
-		if steps.has(ending) and bool(state.get_flag("covenant_ritual_started", false)):
+		if not steps.get(ending,[]).is_empty() and bool(state.get_flag("covenant_ritual_started", false)):
 			var step: int = clampi(int(state.get_flag("covenant_ritual_step", 0)), 0, 3)
 			var ritual_result := _continuation("covenant_resolution", "THE CHOSEN PROMISE", "Let the covenant settle" if step >= 3 else str(steps[ending][step]), "hart_glade", "The marked places carry the promise in order.", "Carry out the intention you chose.")
 			if step < 3:

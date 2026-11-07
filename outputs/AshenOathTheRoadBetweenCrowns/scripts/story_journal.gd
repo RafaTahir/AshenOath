@@ -5,20 +5,22 @@ class_name StoryJournal
 ## Quest completion never manufactures consent or an unrecorded choice.
 const CAMPAIGN_PATH := "res://data/story_campaign.json"
 const Model = preload("res://scripts/story_journal_model.gd")
+const CampaignStory = preload("res://scripts/campaign_story_overlay.gd")
 static var _campaign_data: Dictionary = {}
 
 static func campaign() -> Dictionary:
 	if not _campaign_data.is_empty():
 		return _campaign_data
-	if not FileAccess.file_exists(CAMPAIGN_PATH):
+	var path: String = CampaignStory.BASE_CATALOG_PATH if FileAccess.file_exists(CampaignStory.BASE_CATALOG_PATH) else CAMPAIGN_PATH
+	if not FileAccess.file_exists(path):
 		return {}
-	var parsed = JSON.parse_string(FileAccess.get_file_as_string(CAMPAIGN_PATH))
-	_campaign_data = parsed if typeof(parsed) == TYPE_DICTIONARY else {}
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
+	_campaign_data = CampaignStory.base_catalog(parsed) if typeof(parsed) == TYPE_DICTIONARY else {}
 	return _campaign_data
 
 static func campaign_for(state) -> Dictionary:
 	var revision = preload("res://scripts/campaign_revision.gd")
-	return revision.project_catalog(campaign(),revision.from_state(state))
+	return revision.project_catalog(CampaignStory.catalog(campaign(),state),revision.from_state(state))
 
 static func build(game) -> String:
 	return build_from_state(game.quests, game.story_state)
