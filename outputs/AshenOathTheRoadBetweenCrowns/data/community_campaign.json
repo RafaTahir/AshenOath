@@ -729,5 +729,21 @@
   "ending_cards": {
     "share": "CONCORD\nThe willing keepers divide the work of care, passage and memory. Kael holds one turn in a revocable arrangement, not a claim over the other hands. No single keeper can bury every copy or pledge another household. Meetings take time; a withdrawal leaves real work to redistribute. The community has gained a way to answer together, not a guarantee that it always will.",
     "depart": "OPEN ROAD\nThe binding no longer claims the people who live beside it. The prepared route and refuge make departure possible without making it compulsory. The Hart may go, and the human records remain. Some neighbors stay; others carry their lives onward. There is no single keeper to settle every dispute, and maintaining a safe way back will remain the work of those who freely take it up."
+  },
+  "ending_ambient": {
+    "concord": {
+      "speaker_ids": [
+        "shrine_pilgrim",
+        "quality_mourner"
+      ],
+      "text": "The next keeper has agreed to take this turn. I'll leave the key where we promised."
+    },
+    "open_road": {
+      "speaker_ids": [
+        "shrine_pilgrim",
+        "quality_mourner"
+      ],
+      "text": "There's a bed for someone passing through. Staying isn't the price of using it."
+    }
   }
 }

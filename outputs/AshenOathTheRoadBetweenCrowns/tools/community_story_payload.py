@@ -51,3 +51,13 @@ def ending_payload(community):
         if not isinstance(cards[ending], str) or not cards[ending].strip():
             raise ValueError(f"{ending} requires an authored epilogue card")
     return rituals, cards
+
+
+def ambient_payload(community):
+    rows = deepcopy(community.get("ending_ambient", {}))
+    if set(rows) != {"concord", "open_road"}:
+        raise ValueError("both expanded outcomes require their authored ambient lines")
+    for row in rows.values():
+        if not isinstance(row, dict) or row.get("speaker_ids") != ["shrine_pilgrim", "quality_mourner"] or not isinstance(row.get("text"), str) or not row["text"].strip():
+            raise ValueError("ending ambient text must identify its actual two runtime speakers")
+    return rows

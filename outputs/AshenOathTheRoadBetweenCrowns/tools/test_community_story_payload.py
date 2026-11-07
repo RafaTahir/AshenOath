@@ -7,6 +7,7 @@ import unittest
 
 from community_story_payload import NEW_CHAPTERS, NEW_ENDINGS, split_scene, split_catalog, ending_payload
 from prepare_runtime_dialogue import PROJECT, SOURCES, compile_dialogue
+from build_source_catalog import catalogs
 
 
 def read(name):
@@ -88,6 +89,27 @@ class CommunityStoryPayloadTests(unittest.TestCase):
             self.assertEqual(len(row["objectives"]), 4)
             self.assertTrue(all(item["kind"] in ("activity", "choice") for item in row["objectives"]))
             self.assertNotIn("dialogue", row)
+
+    def test_localization_preserves_stable_ids_without_reembedding_late_prose(self):
+        base, deferred = catalogs(PROJECT)
+        self.assertFalse(set(base) & set(deferred))
+        original = read("campaign_dialogue.json")["white_hart"]
+        self.assertEqual(base["campaign_dialogue.white_hart.actions.0.label"]["source"], original["actions"][0]["label"])
+        self.assertEqual(deferred["campaign_dialogue.white_hart.actions.4.label"]["source"], original["actions"][4]["label"])
+        self.assertNotIn("campaign_dialogue.white_hart.actions.4.label", base)
+        for chapter in NEW_CHAPTERS:
+            self.assertIn("story_campaign.chapters."+chapter+".summary", deferred)
+            self.assertNotIn("story_campaign.chapters."+chapter+".summary", base)
+        community = read("community_campaign.json")
+        for ending in NEW_ENDINGS:
+            for index, row in enumerate(community["ending_rituals"][ending]):
+                key = f"community_campaign.ending_rituals.{ending}.{index}.text"
+                self.assertEqual(deferred[key]["source"], row[1])
+                self.assertEqual(deferred[key]["speaker"], "narrator")
+        for covenant, row in community["ending_ambient"].items():
+            self.assertEqual(row["speaker_ids"], ["shrine_pilgrim", "quality_mourner"])
+            self.assertEqual(deferred[f"community_campaign.ending_ambient.{covenant}.text"]["source"], row["text"])
+            self.assertNotIn(row["text"], [entry["source"] for entry in base.values()])
 
 
 if __name__ == "__main__": unittest.main()

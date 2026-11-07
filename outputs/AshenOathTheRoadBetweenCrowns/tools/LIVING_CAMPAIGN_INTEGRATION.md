@@ -62,6 +62,23 @@ recorded arrival requirements, malformed payload rejection, same-manager
 six/four/six journey switching and unchanged quest state. Full native/parser and
 combined PCK resource checks remain required before acceptance.
 
+Follow-up ownership audit also split source localization: `build_source_catalog.py`
+keeps stable untagged keys in base `data/localization/en.json` and emits tagged
+expansion entries into exclusively community-owned
+`data/localization/community_en.json`. `SourceText` only reads the latter after
+the story owner has decoded a needed valid overlay. The two new ending ambient
+lines now live in `community_campaign.json.ending_ambient` and the overlay, with
+their actual `speaker_ids` (`shrine_pilgrim`, `quality_mourner`). They are delivered
+through nearby speech plus subtitles; voice inventory must resolve those actual
+actors or record its caption fallback, never invent a canonical-cast speaker.
+Source tests now pass **7 overlay/localization tests** and **10 full-campaign
+contract tests**, including rejection of inherited stat boosts, camera/player
+teleports, direct save loads and dynamic gameplay calls. The current Assembly
+choice uses actual interactions and the maintained return topology. No unearned
+replay/checkpoint is introduced. Newly extended runtime fixtures remain unrun
+on this isolated checkpoint; root's separately reported integration fixture
+results belong to its exact tested merged bytes.
+
 ### Actual-input acceptance harness (authored; native execution pending)
 
 The complete journey entry is `tools/run_full_campaign_acceptance.py`. Its

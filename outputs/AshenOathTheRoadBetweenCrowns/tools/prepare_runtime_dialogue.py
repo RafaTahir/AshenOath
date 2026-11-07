@@ -2,7 +2,7 @@
 import hashlib
 import json
 from pathlib import Path
-from community_story_payload import split_scene, split_catalog, ending_payload
+from community_story_payload import split_scene, split_catalog, ending_payload, ambient_payload
 
 PROJECT = Path(__file__).resolve().parent.parent
 SOURCES = ("dialogue.json", "campaign_dialogue.json", "interaction_scenes.json")
@@ -37,6 +37,7 @@ def compile_dialogue(project=PROJECT):
     base_catalog, overlay["catalog"] = split_catalog(authored)
     community = json.loads((project / "data/community_campaign.json").read_text(encoding="utf-8-sig"))
     overlay["ending_rituals"], overlay["ending_cards"] = ending_payload(community)
+    overlay["ending_ambient"] = ambient_payload(community)
     for path, value in (("runtime_dialogue_index.json", catalog), ("runtime_story_campaign.json", base_catalog), ("community_story_overlay.json", overlay)):
         (project / "data" / path).write_text(json.dumps(value, ensure_ascii=True, separators=(",", ":")) + "\n", encoding="utf-8")
     print(f"Compiled {sum(len(entries) for entries in catalog.values())} base scenes and {len(overlay['scenes'])} deferred scene projections")

@@ -6,6 +6,7 @@ const State = preload("res://scripts/story_state.gd")
 const Quests = preload("res://scripts/quest_manager.gd")
 const Dialogue = preload("res://scripts/dialogue_manager.gd")
 const Journal = preload("res://scripts/story_journal.gd")
+const Text = preload("res://scripts/source_text.gd")
 var checks := 0
 var failures: Array[String] = []
 
@@ -16,6 +17,10 @@ func _initialize() -> void:
 	quests.configure_campaign_revision(2)
 	state.set_flag("campaign_revision",2)
 	Overlay._data.clear()
+	Text._community_loaded=false
+	Text._community_strings.clear(); Text._community_ids.clear()
+	var ambient_text := "The next keeper has agreed to take this turn. I'll leave the key where we promised."
+	_check(Text.source_id(ambient_text)=="" and not Text._community_loaded,"Initial source localization does not decode community prose")
 	_check(not Overlay.required_for("greyfen",state.flags,{}),"Initial expanded Greyfen has no community dependency")
 	_check(Overlay.scene("white_hart",state,quests).is_empty() and Overlay._data.is_empty(),"Initial dialogue does not even decode the mounted overlay")
 	var original: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/story_campaign.json"))
@@ -27,7 +32,7 @@ func _initialize() -> void:
 		_check(not Overlay.required_for(zone,{"campaign_revision":1},{"main_empty_tables":true}),"Explicit legacy never requests overlay: "+zone)
 	var payload: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(Overlay.PATH))
 	_check(Overlay.valid_payload(payload),"Generated complete overlay is valid")
-	for key: String in ["scenes","catalog","ending_rituals","ending_cards"]:
+	for key: String in ["scenes","catalog","ending_rituals","ending_cards","ending_ambient"]:
 		var broken := payload.duplicate(true)
 		broken[key]={}
 		_check(not Overlay.valid_payload(broken),"Missing story section fails before journey mutation: "+key)
@@ -39,6 +44,8 @@ func _initialize() -> void:
 	quests.completed["main_ash_at_the_mill"]=true
 	for id: String in Revision.NEW_CHAPTERS: quests.completed[id]=true
 	state.set_flag("community_keeper_consent",{"anwen":true,"nessa":true,"vale":true})
+	state.set_flag("community_route_ready",true)
+	state.set_flag("community_refuge_ready",true)
 	var before: Dictionary=quests.save_state().duplicate(true)
 	var dialogue = Dialogue.new()
 	dialogue.setup(state,quests)
@@ -47,6 +54,8 @@ func _initialize() -> void:
 	_check(dialogue.get_dialogue("white_hart").actions.size()==6,"Ready expanded owner resolves six eligible choices")
 	_check(dialogue.has_dialogue("aftermath_names_concord"),"Deferred aftermath becomes available after readiness")
 	_check(Overlay.catalog(base,state)==original,"Journal overlay reconstructs exact authored catalog")
+	_check(Text.source_id(ambient_text)=="community_campaign.ending_ambient.concord.text","Mounted story supplies stable deferred localization identity")
+	_check(Overlay.ambient("concord","shrine_pilgrim",state)==ambient_text and Overlay.ambient("concord","mira",state)=="","Ambient text keeps its actual speaker contract")
 	var projected := Overlay.scene("white_hart",state,quests)
 	projected.actions.clear()
 	_check(Overlay.scene("white_hart",state,quests).actions.size()==6,"Consumer cannot mutate the cached authoritative overlay")
