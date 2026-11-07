@@ -14,6 +14,54 @@ authored checkpoint `e0c0c51`). Find the exact checkpoint with
 below describe earlier gates; this section supersedes their implementation TODOs.
 No canonical checkout, export or deployment was changed by this worktree.
 
+### Deferred story payload (source complete; runtime fixtures unrun)
+
+The maintained `prepare_runtime_dialogue.py` compiler now creates an exclusively
+community-owned `data/community_story_overlay.json`. It contains the complete
+revision-2 Hart projection, six new aftermath scenes, full new chapter/ending
+catalog prose, and the two new ritual/card text sets. Existing per-scene shards
+retain only base content; explicit `source_tag: campaign_revision_2` controls
+separation, never names or a broad text heuristic. Original untagged scenes are
+unchanged. `data/runtime_story_campaign.json` is the base catalog and retains
+only IDs/titles/revision markers for the new rows. Pack integration must exclude
+the authoring `data/story_campaign.json` from every runtime preset. Raw authoring
+catalogs remain available to exact-text voice collection.
+
+The four new quest definitions already consist of compact titles, objective
+labels/kinds, completion identity and unlock edges. Those remain base-owned so
+new-journey revision selection and saved graph validation work before the first
+insertion. No quest state is reloaded or rewritten when story prose appears.
+The compiler runs before layout validation in `build_story_release.ps1`.
+
+`campaign_story_overlay.gd` is a small base helper. Its cache stores immutable
+deferred data, never a journey's projected dialogue. `DialogueManager` and
+`StoryJournal` project per current journey on each request; loading legacy after
+expanded immediately restores original scene/action/catalog visibility. Missing
+data is not cached, and incomplete payloads fail readiness. New ritual text now
+lives in `community_campaign.json` as `ending_rituals[share|depart]`, each with
+three `[label, narrator text]` pairs; `ending_cards` contains the exact two card
+strings. Runtime consumers use those generated overlay values. Both are captions,
+not invented actor speech, for the voice inventory.
+
+`_zone_encounter_packs` adds `community` only for revision 2 in a new region or
+earned post-Ash community context. Initial expanded Greyfen adds nothing and
+does not decode the overlay. Direct saved arrivals use the recorded journey's
+flags/completed chapter set, so old-region scenes prepare their own dependency
+before save ownership is claimed. The existing campaign/opening wait owners
+retain the same extra dependency list through request, progress, retry and
+readiness. Missing/invalid deferred prose fails before destination activation.
+The pack manifest should declare `community` for the two new regions; legacy
+Hart/Greyfen/Assembly must use these state-aware extras, not an unconditional
+community dependency.
+
+Source-only `test_community_story_payload.py`: **6 tests PASS**, including exact
+reconstruction, no substantial new prose in base, preserved legacy rows,
+compiler idempotence and incomplete-input rejection. The newly authored
+`verify_community_story_overlay.gd` is **UNRUN**: it exercises no-read startup,
+recorded arrival requirements, malformed payload rejection, same-manager
+six/four/six journey switching and unchanged quest state. Full native/parser and
+combined PCK resource checks remain required before acceptance.
+
 ### Actual-input acceptance harness (authored; native execution pending)
 
 The complete journey entry is `tools/run_full_campaign_acceptance.py`. Its

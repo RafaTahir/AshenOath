@@ -233,11 +233,12 @@ func _ending_circuit(ending: String) -> void:
 		if game.hud.dialogue_page_index>=game.hud.dialogue_pages.size()-1: break
 		await _tap(KEY_ENTER)
 	var labels: Dictionary={}
-	var authored: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign_dialogue.json"))
-	for action: Dictionary in authored.white_hart.actions:
+	var authored: Dictionary=game.dialogue.get_dialogue("white_hart")
+	for action: Dictionary in authored.actions:
 		if str(action.get("type",""))=="ending": labels[str(action.ending)]=str(action.label)
 	var visible: Array[String]=[]
 	for id: String in endings_script.IDS:
+		if not labels.has(id): continue
 		for button: Button in game.hud.dialogue_actions.get_children():
 			if button.is_visible_in_tree() and not button.disabled and button.text.trim_prefix("Commit: ").begins_with(str(labels[id])):
 				visible.append(id); break

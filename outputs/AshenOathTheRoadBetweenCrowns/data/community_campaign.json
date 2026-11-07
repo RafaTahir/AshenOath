@@ -695,5 +695,39 @@
         "tor"
       ]
     }
+  },
+  "ending_rituals": {
+    "share": [
+      [
+        "Read the willing keepers' terms",
+        "The names entered here belong only to people who agreed. Each keeper may leave the work; the promise gives nobody the right to appoint a replacement in their silence."
+      ],
+      [
+        "Divide the keeping",
+        "Kael sets the record beside separate keys. Care, the road and the copies have different keepers. None can close the whole account, and none inherits another person's burden."
+      ],
+      [
+        "Take the first shared watch",
+        "The Hart rests while the first willing watch begins. Kael takes his turn among the others. This arrangement will need meetings, spare hands and difficult answers long after tonight."
+      ]
+    ],
+    "depart": [
+      [
+        "Place the open-road provisions",
+        "The prepared crossing and refuge stand ready for people who choose to travel. A place to stay remains available without an oath to stay there."
+      ],
+      [
+        "Release the road's claim",
+        "Kael removes the binding's claim on households and travelers. The recovered records remain in human custody. The Hart may leave; no road is owed a captive witness."
+      ],
+      [
+        "Mark a way onward",
+        "Kael turns the last marker toward the open road. People may remain, return or set out. Keeping those choices possible will demand work without the certainty of a single keeper."
+      ]
+    ]
+  },
+  "ending_cards": {
+    "share": "CONCORD\nThe willing keepers divide the work of care, passage and memory. Kael holds one turn in a revocable arrangement, not a claim over the other hands. No single keeper can bury every copy or pledge another household. Meetings take time; a withdrawal leaves real work to redistribute. The community has gained a way to answer together, not a guarantee that it always will.",
+    "depart": "OPEN ROAD\nThe binding no longer claims the people who live beside it. The prepared route and refuge make departure possible without making it compulsory. The Hart may go, and the human records remain. Some neighbors stay; others carry their lives onward. There is no single keeper to settle every dispute, and maintaining a safe way back will remain the work of those who freely take it up."
   }
 }
