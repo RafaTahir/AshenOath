@@ -3,8 +3,37 @@
 This is isolated source work on `codex/living-campaign-expansion`. Runtime
 implementation is now present; this is not an accepted playable release.
 `CampaignRevision.EXPANSION_ENABLED` remains `false`.
-Enable it only after the complete four-chapter/two-region chain, both ending
-alternatives, pack closure and gameplay acceptance have passed together.
+Published releases keep it disabled until the complete four-chapter/two-region
+chain, both ending alternatives, pack closure and gameplay acceptance pass
+together. Once the complete content is assembled, enable it deliberately in the
+unpublished acceptance candidate before export so actual New Game selects
+revision 2. Do not inject a revision flag into the full-campaign test. A failing
+candidate stays local; the preceding published release remains unchanged.
+
+## Final Web freeze and prepared-run resume
+
+`freeze_community_candidate.py` reads a completed maintained Web export, checks
+transport and decoded identities, and writes a separate native snapshot. It
+extracts the class cache from the exact final root, validates the runtime sidecar
+against its embedded copy, and copies only declared external packs. It changes
+no export bytes and launches no engine. Both the native snapshot directory and
+the capture output directory must be new or empty. Substitute the actual final
+export and new disposable output locations in this example:
+
+```powershell
+python tools/freeze_community_candidate.py --export D:/Temp/AshenOath/final-web --output D:/Temp/AshenOath/native-candidate
+python tools/run_full_campaign_acceptance.py --case full_six_endings --root-pack D:/Temp/AshenOath/native-candidate/index.pck --packs D:/Temp/AshenOath/native-candidate/packs --release-manifest D:/Temp/AshenOath/native-candidate/release_manifest.json --class-cache D:/Temp/AshenOath/native-candidate/global_script_class_cache.cfg --viewport desktop --output D:/Temp/AshenOath/full-desktop --prepare-only
+python tools/resume_community_acceptance.py --receipt D:/Temp/AshenOath/full-desktop/runner.json
+```
+
+The same resume command supports regional and legacy prepared receipts. It
+requires status `prepared`, unchanged frozen inputs, the same isolated data
+directories, and the exact initial profile contents. It refuses a previously
+started run or a modified profile. Prepare a new directory to repeat a failed
+run. Full-campaign report validation is retained when resuming; a prepared
+receipt does not constitute executed gameplay evidence. The synthetic freeze,
+resume and existing pack/runner checks pass 43 tests; no actual candidate export
+or engine was used for those tests.
 
 ## Disposable acceptance inputs and exact pack preflight (2026-11-10)
 

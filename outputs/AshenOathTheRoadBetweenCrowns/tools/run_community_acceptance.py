@@ -41,6 +41,17 @@ def write(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
+def profile_snapshot(path: Path) -> list[dict]:
+    root = path.resolve(strict=True)
+    rows = []
+    for item in sorted(root.rglob("*")):
+        if not item.resolve().is_relative_to(root):
+            raise ValueError("isolated profile contains an escaping link")
+        if item.is_file():
+            rows.append({"path":item.relative_to(root).as_posix(), "bytes":item.stat().st_size, "sha256":sha256(item)})
+    return rows
+
+
 def validate_seed(seed: bytes, case: str) -> dict:
     data = json.loads(seed.decode("utf-8-sig"))
     if not isinstance(data, dict):
@@ -146,6 +157,7 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
                "--background-rendered=true"]
     immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, pack_list, *seed_inputs, *extras,
                  Path(__file__).resolve(), PROJECT / "tools/run_living_cast_capture.py", PROJECT / "tools/background_native_capture.py",
+                 PROJECT / "tools/resume_community_acceptance.py",
                  PROJECT / "tools/community_acceptance_packs.py", PROJECT / "tools/runtime_pack_artifacts.py",
                  PROJECT / "tools/runtime_pack_validation.py", PROJECT / "tools/compact_runtime_packs.py",
                  Path(closure["release_manifest"]), *(runner_sources or []), engine, root_pack, *packs]
@@ -161,6 +173,7 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
         "touch_input_coverage": False, "viewport": args.viewport,
         "execution_mode": "background-rendered",
         "progression_setup": "one supplied seed before engine startup" if seed is not None else "empty profile; actual New Game",
+        "initial_profile_files": profile_snapshot(user_data),
     }
     receipt_path = output / "runner.json"
     write(receipt_path, receipt)
@@ -172,6 +185,27 @@ def verify_inputs(receipt: dict) -> None:
         path = Path(row["path"])
         if not path.is_file() or path.stat().st_size != row["bytes"] or sha256(path) != row["sha256"]:
             raise ValueError(f"frozen input changed: {path}")
+
+
+def load_prepared(receipt_path: Path) -> dict:
+    """Resume only a never-started receipt and its unchanged isolated profile."""
+    receipt_path = receipt_path.resolve(strict=True)
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    if receipt.get("kind") != "community_world_input_runner" or receipt.get("status") != "prepared" or "owned_pid" in receipt:
+        raise ValueError("only a never-started prepared acceptance receipt can resume")
+    output = Path(receipt["output"]).resolve(strict=True)
+    if receipt_path != output / "runner.json" or Path(receipt["isolated_project"]).resolve() != output / "project":
+        raise ValueError("prepared receipt has an inconsistent isolated output")
+    expected_environment = {"APPDATA":output / "profile/roaming", "LOCALAPPDATA":output / "profile/local"}
+    if any(Path(receipt["environment"].get(key, "")).resolve() != path for key, path in expected_environment.items()):
+        raise ValueError("prepared environment no longer selects its disposable profile")
+    profile = Path(receipt["expected_user_data_dir"]).resolve(strict=True)
+    if not profile.is_relative_to(expected_environment["APPDATA"]):
+        raise ValueError("prepared user data escaped the disposable profile")
+    if "initial_profile_files" not in receipt or profile_snapshot(profile) != receipt["initial_profile_files"]:
+        raise ValueError("prepared profile changed or has already been used; prepare a new run")
+    verify_inputs(receipt)
+    return receipt
 
 
 def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
