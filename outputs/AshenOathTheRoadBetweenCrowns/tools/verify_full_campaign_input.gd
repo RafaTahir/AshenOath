@@ -39,14 +39,8 @@ func _initialize() -> void:
 	if int(version.major)!=4 or int(version.minor)!=6 or int(version.patch)!=3:
 		_fail("Full campaign input requires pinned Godot 4.6.3")
 		await _finish(); return
-	if not ProjectSettings.load_resource_pack(str(options.get("root-pack","")),true):
-		_fail("Frozen root pack did not mount")
+	if not _mount_verified_candidate():
 		await _finish(); return
-	var folder := str(options.get("packs",""))
-	var names := DirAccess.get_files_at(folder); names.sort()
-	for name: String in names:
-		if name.ends_with(".pck") and not ProjectSettings.load_resource_pack(folder.path_join(name),true): _fail("Pack did not mount: "+name)
-	if not failures.is_empty(): await _finish(); return
 	rules=load("res://scripts/community_campaign.gd")
 	topology=load("res://scripts/world_sector_manifest.gd")
 	revision_script=load("res://scripts/campaign_revision.gd")
@@ -189,6 +183,23 @@ func _choose_at(id: String, label: String) -> void:
 	region=str(game.current_zone_id)
 	await _interact(id)
 	await _dialogue_button(label)
+	await _frames(8)
+
+func _choose_outcome(id: String, flag: String, value: Variant) -> void:
+	if not failures.is_empty(): return
+	region=str(game.current_zone_id)
+	await _interact(id)
+	if not failures.is_empty(): return
+	var labels: Array[String]=[]
+	for action: Dictionary in game.dialogue.get_dialogue(id).get("actions",[]):
+		var recorded: Dictionary=action.get("sets_flags",{})
+		if recorded.has(flag) and recorded[flag]==value: labels.append(str(action.label))
+	if labels.size()!=1:
+		_fail("Expected one currently available authored outcome: "+id+"/"+flag+"/"+str(value))
+		return
+	# Lookup is read-only. The actual visible, keyboard-reached button still owns
+	# its conditions, confirmation, quest mutation and save transaction.
+	await _dialogue_button(labels[0])
 	await _frames(8)
 
 func _close_dialogue() -> void:

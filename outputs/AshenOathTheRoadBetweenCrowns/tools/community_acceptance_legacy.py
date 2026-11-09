@@ -59,24 +59,30 @@ OVERRIDES = {
 \t\tawait owner._close_dialogue()
 \tif not bool(game.story_state.get_flag("bell_eater_defeated",false)):
 \t\tawait _fight_bell_eater_real_input(game)
-\tawait owner._choose_at("crow_shrine_choice","Cleanse the shrine")
+\tawait owner._choose_outcome("crow_shrine_choice","crow_shrine_state","cleansed")
 \towner._check(game.quests.is_completed("main_bell_beneath_greyfen"),"Bell chapter earned after its actual encounter")
 ''',
     "_choose_mill_record": '''func _choose_mill_record(game: Node) -> void:
-\tawait owner._choose_at("miller_record","Preserve the ledger")
+\tawait owner._choose_outcome("miller_record","mill_operation","closed")
 \tvar next := "main_empty_tables" if owner.expanded else "main_soldier_without_banner"
 \towner._check(game.quests.is_completed("main_ash_at_the_mill") and game.quests.is_active(next),"Ash unlocks the correct revision's next chapter")
 \tawait _save_campaign_checkpoint(game)
 ''',
     "_resolve_halvern_witness": '''func _resolve_halvern_witness(game: Node) -> void:
-\tawait owner._choose_at("halvern","Stand as the last witness")
+\tawait owner._choose_outcome("halvern","halvern_fate","witness")
 \tvar next := "main_house_many_names" if owner.expanded else "main_crowns_without_mercy"
 \towner._check(game.quests.is_completed("main_last_witness") and game.quests.is_active(next),"Last Witness unlocks the correct revision's next chapter")
 \towner._check(str(game.story_state.get_flag("halvern_fate",""))=="witness","Halvern retains his authored voluntary outcome")
 \tawait _save_campaign_checkpoint(game)
 ''',
-    "_choose_focused_dialogue_action": '''func _choose_focused_dialogue_action(_game: Node, interaction_id: String, action_prefix: String, _label: String) -> void:
-\tawait owner._choose_at(interaction_id,action_prefix)
+    "_choose_focused_dialogue_action": '''func _choose_focused_dialogue_action(_game: Node, interaction_id: String, _action_prefix: String, _label: String) -> void:
+\tif interaction_id=="edric_campaign":
+\t\tvar outcome := "exposed" if OS.get_cmdline_user_args().has("--edric-exposed") else "compelled" if OS.get_cmdline_user_args().has("--edric-compelled") else "cooperate"
+\t\tawait owner._choose_outcome(interaction_id,"edric_stance",outcome)
+\telif interaction_id=="vargan_ledger_choice":
+\t\tvar flag := "vargan_ledger_hidden" if OS.get_cmdline_user_args().has("--ledger-hidden") else "vargan_ledger_left_copied" if OS.get_cmdline_user_args().has("--ledger-copied") else "vargan_ledger_taken_openly"
+\t\tawait owner._choose_outcome(interaction_id,flag,true)
+\telse: _fail("Unreviewed authored action selector: "+interaction_id)
 ''',
     "_continue_wychwood_teeth": '''func _continue_wychwood_teeth(game: Node) -> void:
 \tawait owner._interact("ritual_stones")
@@ -90,7 +96,7 @@ OVERRIDES = {
 \t\t_fail("Actual northern Wychwood invitation did not stage the Bog Wretch")
 \t\treturn
 \tawait _fight_bog_wretch(game,bog)
-\tawait owner._choose_at("bog_core_choice","Return it to Oren's grave")
+\tawait owner._choose_outcome("bog_core_choice","bog_core_fate","returned")
 \towner._check(game.quests.is_completed("main_teeth_in_rain"),"The current Wychwood encounter and actual memory choice complete Teeth")
 ''',
     "_continue_names_they_burned": '''func _continue_names_they_burned(game: Node) -> void:
@@ -115,7 +121,7 @@ OVERRIDES = {
 \tawait owner._interact("witnesses_ready")
 \tawait owner._close_dialogue()
 \towner._check(game.quests.is_objective_done("main_crowns_without_mercy","gather_witnesses"),"Actual witness records complete the assembly preparation")
-\tawait owner._choose_at("assembly_choice","Let every witness speak")
+\tawait owner._choose_outcome("assembly_choice","confession_method","witnesses")
 \towner._check(game.quests.is_completed("main_crowns_without_mercy") and game.quests.is_active("main_hart_remembers"),"Actual public testimony starts the finale")
 \towner._check(str(game.story_state.get_flag("confession_method",""))=="witnesses","The assembly retains the chosen public account")
 \tawait _save_campaign_checkpoint(game)
@@ -136,7 +142,7 @@ OVERRIDES = {
 \twhile Time.get_ticks_msec()<deadline and failures.is_empty():
 \t\tif game.quests.is_objective_done("main_soldier_without_banner","senn_confrontation"):
 \t\t\towner._release()
-\t\t\tawait owner._choose_at("captain_senn","Testify in Greyfen")
+\t\t\tawait owner._choose_outcome("captain_senn","senn_fate","testimony")
 \t\t\towner._check(game.quests.is_completed("main_soldier_without_banner") and str(game.story_state.get_flag("senn_fate",""))=="testimony","Senn yields alive and receives his actual recorded outcome")
 \t\t\tawait _save_campaign_checkpoint(game)
 \t\t\treturn
@@ -159,6 +165,20 @@ OVERRIDES = {
 ''',
 }
 
+OVERRIDES["_hear_assembly_witnesses"] = '''func _hear_assembly_witnesses(game: Node) -> void:
+\tfor row: Array in [["witness_3","anwen"],["witness_-3","rook"],["witness_-7","mira"]]:
+\t\tvar actor := game.zone_root.find_child(str(row[0]),true,false) as Node3D
+\t\tvar willing := str(game.story_state.get_flag("witness_consent_"+str(row[1]),""))=="voluntary"
+\t\tif not willing:
+\t\t\towner._check(actor==null or not actor.is_visible_in_tree(),"Absent or refusing witness is never staged as willing: "+str(row[1]))
+\t\t\tcontinue
+\t\towner._check(actor!=null and actor.is_visible_in_tree() and not actor.find_children("*","Skeleton3D",true,false).is_empty(),"Willing assembly witness retains native body: "+str(row[1]))
+\t\tawait owner._interact(str(row[0]))
+\t\tawait owner._close_dialogue()
+\tawait owner._interact("witness_7")
+\tawait owner._close_dialogue()
+'''
+
 # The maintained topology no longer has a direct Undercroft/Assembly door.
 # All travel overrides use the game's current allowed graph and actual walking
 # or E on the actual door; they never request a zone through a private method.
@@ -175,7 +195,7 @@ for _method, _destination in {
 
 OVERRIDES["_return_from_rootbound"] = '''func _return_from_rootbound(game: Node) -> void:
 \tawait owner._travel("greyfen")
-\tawait owner._choose_at("names_decision","Publish every recovered name")
+\tawait owner._choose_outcome("names_decision","names_policy","published")
 \towner._check(game.quests.is_completed("main_names_they_burned"),"All recovered register evidence leads to the actual Names choice")
 '''
 

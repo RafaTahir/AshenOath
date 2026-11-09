@@ -6,6 +6,77 @@ implementation is now present; this is not an accepted playable release.
 Enable it only after the complete four-chapter/two-region chain, both ending
 alternatives, pack closure and gameplay acceptance have passed together.
 
+## Disposable acceptance inputs and exact pack preflight (2026-11-10)
+
+`prepare_community_acceptance_seeds.py` prepares nine explicitly synthetic saves
+under this isolated project's `.release-gate/community-runtime/boundary-seeds-*`.
+The immutable manifest records every source hash, each save hash, all initially
+completed chapter IDs, starting flags, authored decision sources and the next
+unfinished chapter. No user profile is inspected. Existing identical seeds are
+reused; changed inputs are preserved and require a new directory.
+
+| Cases | Supplied completed main chapters | Actual input begins at |
+| --- | ---: | --- |
+| `lantern_crossing`, `lantern_ferry` | 5 expanded | Old Mill; Empty Tables unfinished |
+| `hearth_distributed`, `hearth_protected` | 10 expanded | Undercroft; House of Many Names unfinished |
+| `legacy_ash_missing`, `legacy_ash_v1` | 5 original | Old Mill; Soldier Without a Banner unfinished |
+| `legacy_witness_missing`, `legacy_witness_v1` | 8 original | Undercroft; Crowns Without Mercy unfinished |
+| `seeded_departure_ferry` | 13 expanded | Hart Glade; final chapter and ending entirely unfinished |
+
+The two Hearth cases explicitly cover available and absent Senn/Edric/Nera.
+Neither keeper consent nor named relocation consent is supplied. The ferry case
+has a prepared route/refuge and a nonempty human record, but no ritual, loss,
+relocation or ending credit. Inventory is the authoritative starting stock;
+health/stamina use ordinary 100 maxima. No state is injected after Continue.
+These are boundary tests, **never fourteen-chapter proof**. `full_six_endings`
+continues to forbid any seed and must begin with actual New Game in an empty
+disposable profile.
+
+`verify_community_acceptance_seeds.gd` validates all nine through the existing
+in-memory save/import and quest owners. It writes only `native_validation.json`
+beside the explicit gate manifest. At source checkpoint
+`e0056c5dc1dd83affec81c6cb400142ea6e1fb57`, the nine-seed memory fixture passed
+**447 checks**, and both modified input entry scripts passed check-only parsing.
+All four serial Godot 4.6.3 processes exited 0 without parser/runtime/leak errors.
+The gate receipt is `.release-gate/community-runtime/native-boundary-r1/receipt.json`;
+the accepted seed inventory is `boundary-seeds-ff769fea7151/manifest.json` in that
+same community-runtime gate. Python seed/pack/acceptance tests passed **42 tests**.
+No world, model or renderer was loaded. All actual world runs remain pending;
+these results do not prove physical arrivals or the complete campaign.
+
+Both world runners now require `--release-manifest` from the maintained builder's
+final Web export. Native inputs must be lossless **decoded** copies of that final
+`index.pck` and its declared external PCKs. Gzip input is rejected before launch.
+The root, external packs and embedded runtime manifest must match the release
+receipt's decoded hashes/lengths and build identity. The class cache must match
+the exact root's `.godot/global_script_class_cache.cfg`. Raw builder
+`runtime-packs` is an acceptable external source only when its declared files
+match those hashes; its intermediate `base.pck` is ignored and never mounted.
+The final root is not interchangeable with that intermediate base.
+
+`community_acceptance_packs.py` uses the shared manifest/graph validator and
+produces a dependency-ordered explicit mount list. The runtime entry rechecks
+hashes and root manifest authority; it never enumerates a pack directory.
+Unlisted files remain untouched and cannot affect the test. The receipt records
+the actual mounted IDs and candidate build identity. This static PCK inventory
+does not replace maintained export/resource-instantiation gates.
+
+Known acceptance resource closure includes the main scene/remap, community
+runtime/data/overlay, both new Hart aftermath meshes and all seven cemetery
+preloads: `Cemetery_chapel`, `Cemetery_bell_frame`, `Cemetery_bell`,
+`Cemetery_grave_rows`, `Cemetery_boundary`, `Cemetery_grave_earth`, and
+`Cemetery_memory_window`, each at
+`res://assets_external/environment/village/<name>_Authored.res`. The cemetery
+dependency comes from the generated full-route adapter; it must be present in
+the assembled candidate rather than replaced with a sparse-project stub.
+All packs mount before these native routes, so these runs make **no deferred
+download/cold-loading claim**. Browser pack readiness/ownership remains separate.
+
+The generated legacy adapter now reads exact current authored outcome labels,
+then selects their visible button by keyboard. It does not apply outcome flags.
+Assembly checks only stage explicitly willing native witnesses and still read
+the written public record when named witnesses are absent or refuse.
+
 ## Resumed ending correction (2026-11-10)
 
 Open Road is now an unfinished covenant after its three glade acts. The first
