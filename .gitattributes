@@ -90,3 +90,29 @@ outputs/AshenOathTheRoadBetweenCrowns/tools/test_living_scenery_pipeline.py -tex
 
 # New ending memorial proof binds the exact native fixture bytes.
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_aftermath_assets.gd -text whitespace=cr-at-eol
+
+# Exact scenery proof inputs and native transport diagnostics.
+.verification/scenery/actual_pipeline_r3/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/native_transport_diagnostic_r1/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/actual_pipeline_source_ready_r1.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/archive_reproduction_20261110.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/ash_mill_wheel_transport_independent_r1.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/cloth_transport_independent_r1.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/compare_cloth_transport.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/compare_scenery_transport.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/diagnose_native_transport.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/extraction_import_checksums_r1.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/extraction_preflight_r1.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/fidelity_source_receipt_r1.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/freeze_tests_r1.log -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/freeze_tests_r2.log -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/hart_ferns_transport_independent_r1.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/marsh_reeds_transport_independent_r1.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/preflight_extraction_inputs.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/run_final_proof_r3.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/run_native_contract.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/run_native_transport_diagnostic.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/source_review_20261110.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/transport_source_ready_r2.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/LIVING_SCENERY_INTEGRATION.md -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/checkpoint_payload.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

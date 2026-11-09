@@ -1,0 +1,30 @@
+{
+  "sources": [
+    {
+      "original": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\author_living_world_parts.py",
+      "archive": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r2\\source_failure\\author_living_world_parts.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f"
+    },
+    {
+      "original": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\living_world_gltf_transport.py",
+      "archive": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r2\\source_failure\\living_world_gltf_transport.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8"
+    },
+    {
+      "original": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_living_world_blender.gd",
+      "archive": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r2\\source_failure\\build_living_world_blender.gd",
+      "sha256": "ecc8d063e4d2792a2d56cc3aa291de93d6e790edb2012982f3949ef4c5a0ccfd"
+    },
+    {
+      "original": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\living_world_geometry_contract.gd",
+      "archive": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r2\\source_failure\\living_world_geometry_contract.gd",
+      "sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a"
+    },
+    {
+      "original": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_living_scenery_pipeline.py",
+      "archive": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r2\\source_failure\\run_living_scenery_pipeline.py",
+      "sha256": "30bf13f9161b2260ebbc89e5f71c2885d3a94a7686a221ab3bd460a6b102551d"
+    }
+  ],
+  "failure_preserved": true
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "asset": "ash_mill_wheel",
+  "blender_version": "5.2.3 LTS",
+  "source_hashes": {
+    "res://tools/build_ash_mill.gd": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
+    "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+  },
+  "parts": [
+    {
+      "geometry_sha256": "b0b03c93b328f78c2117b24fbe6b0dc6033e95e43734a68120cf5878504c7e44",
+      "kind": "mill_wheel",
+      "mesh_inline": true,
+      "node": "AshMillWaterwheel",
+      "pivot": "(-4.42, 1.55, 1.8)",
+      "pivot_godot": [
+        -4.42000007629395,
+        1.54999995231628,
+        1.79999995231628
+      ],
+      "sources": {
+        "res://tools/build_ash_mill.gd": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2"
+      },
+      "triangles": 912,
+      "editable_triangle_corners": 2736,
+      "editable_triangles": 912,
+      "color_storage": "FLOAT_COLOR",
+      "normal_storage": "_AO_RETAINED_NORMAL/FLOAT_VECTOR/glTF-local",
+      "import_vertex_mapping_error": 0.0,
+      "maximum_float_color_error": 0.0,
+      "maximum_float_normal_error": 0.0,
+      "export_mesh": "AshMillWaterwheel_Geometry",
+      "support_node": "AshMillWaterwheel",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 2736,
+      "world_bounds_blender": {
+        "min": [
+          -4.670000076293945,
+          -3.3499999046325684,
+          0.0
+        ],
+        "max": [
+          -3.890000343322754,
+          -0.25,
+          3.0999999046325684
+        ]
+      }
+    }
+  ],
+  "normal_transport": {
+    "verified": true,
+    "before_sha256": "3bee97e33c1253eb712a0d37985b70bbcf3795f6d8dfcae824c2f26dad7c8367",
+    "after_sha256": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
+    "binary_payload_unchanged": true,
+    "normal_source_attribute": "_AO_RETAINED_NORMAL",
+    "source_glb_sha256": [
+      "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2"
+    ],
+    "parts": {
+      "AshMillWaterwheel": {
+        "wound_triangle_multiplicity_equal": true,
+        "triangles": 912,
+        "corners": 2736,
+        "maximum_component_errors": {
+          "positions": 0.0,
+          "normals": 0.0,
+          "uvs": 2.384185791015625e-07,
+          "colors": 0.0
+        },
+        "world_frame_error": 0.0,
+        "material_role_equal": true,
+        "normal_accessor": 0
+      }
+    },
+    "native_verified": false,
+    "visual_accepted": false
+  },
+  "blender_authored": true,
+  "native_verified": false,
+  "visual_accepted": false,
+  "user_accepted": false,
+  "retained_input": "models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_b7e82d3faea01d66.glb",
+  "retained_input_sha256": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+  "retained_native": "models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_native_c76bb9745e0c7d3c.scn",
+  "retained_native_sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+  "retained_receipt": "models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_receipt_e22ef5514006f0ca.json",
+  "retained_receipt_sha256": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
+  "blend": "models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.blend",
+  "blend_sha256": "97e7b66e380ad1d0b3cee30a76ea3508938687f980fefae3ded16d9cefb878ba",
+  "carrier": "models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.glb",
+  "carrier_sha256": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
+  "recipe": "models/living_assets_stage3_20261107/scenery/ash_mill_wheel/author_recipe_c040d7c37f7a59b7.py",
+  "recipe_sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+  "transport_helper": "models/living_assets_stage3_20261107/scenery/ash_mill_wheel/transport_helper_2c9dcba5ac768071.py",
+  "transport_helper_sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+  "raw_carrier": "models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002_blender_raw.glb",
+  "raw_carrier_sha256": "3bee97e33c1253eb712a0d37985b70bbcf3795f6d8dfcae824c2f26dad7c8367"
+}

@@ -1,0 +1,1165 @@
+{
+  "purpose": "explicit scenery source/v001-v002/retained input/native proof checkpoint",
+  "attribute_file_pending_root_index_release": false,
+  "paths": [
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/00_extract_campaign.log",
+      "sha256": "c390b0d6dc43b6c2d51482be37f4911be5598580f93ffcefeab48d29eec21bbd",
+      "bytes": 4497
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/01_extract_hart.log",
+      "sha256": "b15b8e8e8fbc41cedba685a392b61536377f67bda718a92e498db100b9fcc832",
+      "bytes": 393
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/02_extract_mill.log",
+      "sha256": "cb522c92054fc3bc88b809f7db128c9d0d631e4d74690a5e30af5c840b9d41b5",
+      "bytes": 321
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/03_author_checkpoint_cloth.log",
+      "sha256": "2ea99c54b865044ad19737a4e3ebfce25c4df7eefda2d401184b507d36a2e12c",
+      "bytes": 994
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/04_author_marsh_reeds.log",
+      "sha256": "15387dbbcf347590e455f1f0f6b2b4b821129cb355165130ffa4a3c166b02a13",
+      "bytes": 1381
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/05_author_hart_ferns.log",
+      "sha256": "3b816b461b2f6e5b75d48e3b941beede704ad224571449085408e8c239d7351e",
+      "bytes": 1511
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/06_author_ash_mill_wheel.log",
+      "sha256": "8d6f8115f9b20fdff9ded5a6837001f066d8a3c743a3eabe181c3bc92c87b20d",
+      "bytes": 860
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/07_compile.log",
+      "sha256": "a4579d68a280aa45341cbfc5a7c9b2db076f91865c0fd110a07215ac2d27f602",
+      "bytes": 350
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/pipeline.json",
+      "sha256": "c47a312ba463f02727d932887874eea29950269732331d3447e778343fbb94ba",
+      "bytes": 100576
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/source_failure/author_living_world_parts.py",
+      "sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7",
+      "bytes": 11683
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/source_failure/build_living_world_blender.gd",
+      "sha256": "600bda16a9162135d49c118e35d28418b173d5f4ba32750200502174c1449414",
+      "bytes": 19284
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/source_failure/run_living_scenery_pipeline.py",
+      "sha256": "7dd338eb24d4407229d7e14823b03c446eaeb07f9032187253daf0e891391309",
+      "bytes": 17659
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r1/source_failure_archive.json",
+      "sha256": "0823d351d6b6da87dc2ce20e97e7fea6de00798cfcb57ec4bcbd58fb17dcca86",
+      "bytes": 1228
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/00_extract_campaign.log",
+      "sha256": "75f898fabd910634edcabf6d7e6551d190240d73fbcc4e961620895fb424ecfb",
+      "bytes": 4497
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/01_extract_hart.log",
+      "sha256": "eb5d50b9366928590269c178beeb1b4bf0008ccf1a0cb02af3942253d3ca6395",
+      "bytes": 393
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/02_extract_mill.log",
+      "sha256": "28a761266c8a381aaa47d2335fa5db18ad87fe772257ec0225f65e4dd2648f8d",
+      "bytes": 321
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/03_author_checkpoint_cloth.log",
+      "sha256": "b1f8be0cc7a7b8d3887ea33bfc4e06f40e3f263d65034324a58cbd6122ccaddd",
+      "bytes": 1065
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/04_author_marsh_reeds.log",
+      "sha256": "3e4ad450c6149ebe06ffb938b03f1e9a932d17000cfded95be2f11c877aa49e0",
+      "bytes": 1531
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/05_author_hart_ferns.log",
+      "sha256": "59bb84703fdc56a4eb85fef64945c03d8e4b63e93ddf243989e33e963932371e",
+      "bytes": 1680
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/06_author_ash_mill_wheel.log",
+      "sha256": "e117c579500e822f6e37d50294a913ef2cd207094f5918eebc0ec31ec9a6f2f4",
+      "bytes": 895
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/07_compile.log",
+      "sha256": "63476a89bc19c9e416e62e6aeee6ca8247a3a2e1d5ff0fd333940d9218b3668e",
+      "bytes": 589
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/pipeline.json",
+      "sha256": "7f3d54752fa8848020394cfc45f4870ee47bdb4d3380f1271d309d7d3931a053",
+      "bytes": 121941
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/16c724e98a6b031d_marsh_reeds_baseline.glb",
+      "sha256": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3",
+      "bytes": 12708
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/1c5bc5a71efc4a5b_Campaign_burned_farmstead_Landscape.res",
+      "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "bytes": 6909
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/26e9e55eeaed55be_marsh_reeds_compile.json",
+      "sha256": "26e9e55eeaed55be4d12b41249072ff4d3f93ac70b808a4338dc1c844df1c7a5",
+      "bytes": 2632
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/317d955df0b6f6b4_hart_ferns.scn",
+      "sha256": "317d955df0b6f6b46032a7d72c37e431ab23221731286a0761a6fdc907b37045",
+      "bytes": 53828
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/317d955df0b6f6b4_hart_ferns_baseline.scn",
+      "sha256": "317d955df0b6f6b46032a7d72c37e431ab23221731286a0761a6fdc907b37045",
+      "bytes": 53828
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/35d3a821634e5fb5_hart_ferns_baseline.json",
+      "sha256": "35d3a821634e5fb5efa968e964a53e70927367fba043da688cfd39f0d7adeaad",
+      "bytes": 3734
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/3bdf0d234d94b3c9_ash_mill_wheel_compile.json",
+      "sha256": "3bdf0d234d94b3c9a1191f8bd106f6bc73af0072877bf0456fd00a6f797633f6",
+      "bytes": 1043
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/48f73068fef281a9_checkpoint_cloth_baseline.json",
+      "sha256": "48f73068fef281a9c0b68dae65a8d5730cac5d2cbe6d1a41f3a1ec9ee783134f",
+      "bytes": 1996
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/4b98aeb74b7a3e26_authoring.json",
+      "sha256": "4b98aeb74b7a3e26b2d2555f2dd2c861a21df73b24aa1d851b282978fe117479",
+      "bytes": 3816
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/5116aecf1386b670_AshMill_Authored.res",
+      "sha256": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
+      "bytes": 48615
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/56c26344e1d7965c_authoring.json",
+      "sha256": "56c26344e1d7965cc6a6ef2a9f10ce5b201dfef5b01a12c40c405a8e4a9d9103",
+      "bytes": 2665
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/594d00db96b8b930_RoadCheckpoint_Authored.res",
+      "sha256": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
+      "bytes": 59554
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/5f9e0280e328fce1_FarmsteadEast_Authored.res",
+      "sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+      "bytes": 33915
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/7151d4210af45d0a_hart_ferns_baseline.glb",
+      "sha256": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+      "bytes": 71088
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/77113eb06926b6c5_checkpoint_cloth_compile.json",
+      "sha256": "77113eb06926b6c5620e13f7e40a87c533a4b32c2f0a000767d94e3adaf7709d",
+      "bytes": 1664
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/7e4c4e324ea34950_hart_ferns_compile.json",
+      "sha256": "7e4c4e324ea349509b7905d5be83ddecb85a7c13afe9d77f811c1c2a60a7ee63",
+      "bytes": 3415
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/7f4677039ce0335e_checkpoint_cloth_baseline.glb",
+      "sha256": "7f4677039ce0335e2fcc22b062f6258b3b558df6a89f8748e1d7f39ad1116eeb",
+      "bytes": 14464
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/83855c3fc558a55a_authoring.json",
+      "sha256": "83855c3fc558a55ad20c8cb82e3b4bf2c934f247bb42ca3e6b358ebb732eeb34",
+      "bytes": 6293
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/83aefc3097c553c4_FarmsteadWest_Authored.res",
+      "sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+      "bytes": 34282
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/854f45b3fad6c629_ash_mill_wheel_baseline.json",
+      "sha256": "854f45b3fad6c629a3aa74427cfc24c8dc0d5e0903251491751e9d3fe0269dc4",
+      "bytes": 1370
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/9a01db76d58df602_authoring.json",
+      "sha256": "9a01db76d58df6025405018e085de423737e32581ea21a846979518926fc3b9e",
+      "bytes": 7586
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/9e38989099fa5e4f_HartWoodland_Authored.res",
+      "sha256": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
+      "bytes": 11539
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/b507a7ba3f11bcb1_marsh_reeds_baseline.json",
+      "sha256": "b507a7ba3f11bcb13de0a7c299e2a1f5ad7da11d4082dc32853303661473886b",
+      "bytes": 2954
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/b540b31cfe7baaa7_Campaign_bandit_road_Landscape.res",
+      "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "bytes": 13950
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/b7e82d3faea01d66_ash_mill_wheel_baseline.glb",
+      "sha256": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+      "bytes": 66152
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/c2a3a463f80f60dc_marsh_reeds.scn",
+      "sha256": "c2a3a463f80f60dced0f058388e8c97a6b8477738b2eea6abd64ead933c72a86",
+      "bytes": 5422
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/c2a3a463f80f60dc_marsh_reeds_baseline.scn",
+      "sha256": "c2a3a463f80f60dced0f058388e8c97a6b8477738b2eea6abd64ead933c72a86",
+      "bytes": 5422
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/e506395d20a2d044_Campaign_deep_wood_Landscape.res",
+      "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "bytes": 3998
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/edbff902f66d8733_ash_mill_wheel.scn",
+      "sha256": "edbff902f66d87335ade5b4f8004bd08742445b0894e9f80f74bcd54b9c3b111",
+      "bytes": 12105
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/edbff902f66d8733_ash_mill_wheel_baseline.scn",
+      "sha256": "edbff902f66d87335ade5b4f8004bd08742445b0894e9f80f74bcd54b9c3b111",
+      "bytes": 12105
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/efe5fa2c6dc5f948_Campaign_marsh_crossing_Landscape.res",
+      "sha256": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
+      "bytes": 21209
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/f203e403dcb7b054_checkpoint_cloth.scn",
+      "sha256": "f203e403dcb7b054bd182035ce0efcd9d86889945c1c8747fa6d4dc27f5ef2b3",
+      "bytes": 6642
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/prior_outputs/f203e403dcb7b054_checkpoint_cloth_baseline.scn",
+      "sha256": "f203e403dcb7b054bd182035ce0efcd9d86889945c1c8747fa6d4dc27f5ef2b3",
+      "bytes": 6642
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/source_failure/author_living_world_parts.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/source_failure/build_living_world_blender.gd",
+      "sha256": "ecc8d063e4d2792a2d56cc3aa291de93d6e790edb2012982f3949ef4c5a0ccfd",
+      "bytes": 20281
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/source_failure/living_world_geometry_contract.gd",
+      "sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+      "bytes": 5256
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/source_failure/living_world_gltf_transport.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/source_failure/run_living_scenery_pipeline.py",
+      "sha256": "30bf13f9161b2260ebbc89e5f71c2885d3a94a7686a221ab3bd460a6b102551d",
+      "bytes": 18326
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r2/source_failure_archive.json",
+      "sha256": "43e741b1224091b25ec643559e5b0648b3df67626498f4a980587fdada1e8257",
+      "bytes": 1939
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/compile.log",
+      "sha256": "36f945d7ca4180ff6928af3a4963493cf9d8824b1a1bd266001a7af1c7dcae3c",
+      "bytes": 286
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/equivalence.log",
+      "sha256": "50d00b790a46f4e71631261a9bfe5495a420e488c7ff09146c57f9e249e7cf9c",
+      "bytes": 117
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/parser.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/prior_outputs/0_ash_mill_wheel_compile.json",
+      "sha256": "2ce61876b36d61ddabec1c00f921105b0e5876c8fdf534e02cfa3ce865817609",
+      "bytes": 1043
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/prior_outputs/1_checkpoint_cloth_compile.json",
+      "sha256": "cd2249bea75674895845184f1fba1d4a6540e72f2a554edcb49dd64b8fc4408b",
+      "bytes": 3373
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/prior_outputs/2_hart_ferns_compile.json",
+      "sha256": "38f3b0a42498eae5aeee619aeb5239f5490b10182aee33b6b341cb5737a9a74c",
+      "bytes": 3415
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/prior_outputs/3_marsh_reeds_compile.json",
+      "sha256": "26bbe27778e1e8e6a51b318eeeb9db32073ca3222fefc377fb986bf8d29248b0",
+      "bytes": 2632
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/prior_outputs/4_ash_mill_wheel.scn",
+      "sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+      "bytes": 12105
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/prior_outputs/5_checkpoint_cloth.scn",
+      "sha256": "f927975b7b767d5233b62cc9d49f2a079a5aae61e513f30095112c6419a7f324",
+      "bytes": 8449
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/prior_outputs/6_hart_ferns.scn",
+      "sha256": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+      "bytes": 53828
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/prior_outputs/7_marsh_reeds.scn",
+      "sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+      "bytes": 5420
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/receipt.json",
+      "sha256": "7dd90f8cd20251cdf0bda84e36d56441c83db0be142a939837eb92e9037787b1",
+      "bytes": 77163
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/source/build_living_world_blender.gd",
+      "sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+      "bytes": 20567
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/source/run_final_proof_r3.py",
+      "sha256": "114d91cf612c633e8c93b04b8359ee135f4a047e4412e229b32bb035d5dfc544",
+      "bytes": 6427
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_r3/source/run_living_scenery_pipeline.py",
+      "sha256": "30bf13f9161b2260ebbc89e5f71c2885d3a94a7686a221ab3bd460a6b102551d",
+      "bytes": 18326
+    },
+    {
+      "path": ".verification/scenery/actual_pipeline_source_ready_r1.json",
+      "sha256": "dd3e1bc5e300006f41eb9ca952b9e32b436091b43d69a136a3b7ea7e089b8d29",
+      "bytes": 1131
+    },
+    {
+      "path": ".verification/scenery/archive_reproduction_20261110.json",
+      "sha256": "ccbd9a3d9309e72a7e96d6d80148f4933026abb3fb2ba9b6a7c5d2b883458ee1",
+      "bytes": 873
+    },
+    {
+      "path": ".verification/scenery/ash_mill_wheel_transport_independent_r1.json",
+      "sha256": "65c06fa62f035609a286de598cb03e9a9393a919b5d52df1bdfb2c79835c6592",
+      "bytes": 2449
+    },
+    {
+      "path": ".verification/scenery/cloth_transport_independent_r1.json",
+      "sha256": "e5a0dfc9147ad23b5b53b05f5345955e0505edf459060bca29cac3f7eca82010",
+      "bytes": 4349
+    },
+    {
+      "path": ".verification/scenery/compare_cloth_transport.py",
+      "sha256": "b78468feb423121dafc0025db4a95432efb1e9a170183b54dd82d3ad71d43e66",
+      "bytes": 4900
+    },
+    {
+      "path": ".verification/scenery/compare_scenery_transport.py",
+      "sha256": "3df9893842b7f6450e83243eaae406933eda2472d582395532099ec2a2942d38",
+      "bytes": 5906
+    },
+    {
+      "path": ".verification/scenery/diagnose_native_transport.gd",
+      "sha256": "a22e009fc50bdba0da3ba2a3bdd300a98b10f5ab8fed4978da67ebb5f11b72e1",
+      "bytes": 6236
+    },
+    {
+      "path": ".verification/scenery/extraction_import_checksums_r1.json",
+      "sha256": "fcad3dd8888d5e1f184aa84f556a99eec707b140c2b95b2335e1d8255ece448e",
+      "bytes": 9389
+    },
+    {
+      "path": ".verification/scenery/extraction_preflight_r1.json",
+      "sha256": "837bf1eb88a26cdfcabccbdf694bac7e5ae08a85781b503d3e10b82541095b68",
+      "bytes": 79148
+    },
+    {
+      "path": ".verification/scenery/fidelity_source_receipt_r1.json",
+      "sha256": "a606a358e13398550611661531acaaceb5442ee13ad358b08044a3aa0d5d9999",
+      "bytes": 2461
+    },
+    {
+      "path": ".verification/scenery/freeze_tests_r1.log",
+      "sha256": "62901a8cd2b3c52bde725381996da630d05770bae853f7e4a1171808de11ca23",
+      "bytes": 957
+    },
+    {
+      "path": ".verification/scenery/freeze_tests_r2.log",
+      "sha256": "5f34a5ecca1c834003ba4a901133645c6aa9858032eef6ac7cfde3308a7a5265",
+      "bytes": 1143
+    },
+    {
+      "path": ".verification/scenery/hart_ferns_transport_independent_r1.json",
+      "sha256": "6812290ec1e38647ad7643495336bd2385f17567c3e5802531f1f1260abda327",
+      "bytes": 12950
+    },
+    {
+      "path": ".verification/scenery/marsh_reeds_transport_independent_r1.json",
+      "sha256": "8a1e1054af3d0aa5acd51a0d8ca577ead05e60c40e39e9cea5b3a8bf3e101ce3",
+      "bytes": 11011
+    },
+    {
+      "path": ".verification/scenery/native_transport_diagnostic_r1/channels.json",
+      "sha256": "3bb1f9584a0aba6a07414fab3f06b280df8c2c22312bd21d8aafb4d8bd6b50dc",
+      "bytes": 6767
+    },
+    {
+      "path": ".verification/scenery/native_transport_diagnostic_r1/diagnostic.log",
+      "sha256": "532ce6c5513fa712b3221ed14dcec58fa7d9c74c90595c19663c4946a4bd86fb",
+      "bytes": 146
+    },
+    {
+      "path": ".verification/scenery/native_transport_diagnostic_r1/parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75
+    },
+    {
+      "path": ".verification/scenery/native_transport_diagnostic_r1/project/diagnose_native_transport.gd",
+      "sha256": "a22e009fc50bdba0da3ba2a3bdd300a98b10f5ab8fed4978da67ebb5f11b72e1",
+      "bytes": 6236
+    },
+    {
+      "path": ".verification/scenery/native_transport_diagnostic_r1/project/living_world_geometry_contract.gd",
+      "sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+      "bytes": 5256
+    },
+    {
+      "path": ".verification/scenery/native_transport_diagnostic_r1/project/project.godot",
+      "sha256": "021a97d49e03167f6e3e258ca6278ced825d1616a7e30bac39c49063b78d04bf",
+      "bytes": 218
+    },
+    {
+      "path": ".verification/scenery/native_transport_diagnostic_r1/receipt.json",
+      "sha256": "0aa847ffcb681e95143f8f6ceafb58b5df44d916507b62705742cea06a3f5385",
+      "bytes": 3127
+    },
+    {
+      "path": ".verification/scenery/preflight_extraction_inputs.py",
+      "sha256": "9d571585c1522368379f690fb8e61e4753a5981faa5b813a3a5ff955b967920e",
+      "bytes": 6515
+    },
+    {
+      "path": ".verification/scenery/run_final_proof_r3.py",
+      "sha256": "114d91cf612c633e8c93b04b8359ee135f4a047e4412e229b32bb035d5dfc544",
+      "bytes": 6427
+    },
+    {
+      "path": ".verification/scenery/run_native_contract.py",
+      "sha256": "d9e7b74c8ebeec2a2b4edf14cdb0cb894db7e11253e21577c37067b1ab7070c3",
+      "bytes": 4074
+    },
+    {
+      "path": ".verification/scenery/run_native_transport_diagnostic.py",
+      "sha256": "c0c220b36f991043f08f6162f07d811264e9ffb5ad883cd9e7f5b2884df3b793",
+      "bytes": 4384
+    },
+    {
+      "path": ".verification/scenery/source_review_20261110.json",
+      "sha256": "c7e883639018bfe8eba18c5e90420eccc35bdf93880be2da3f38a8b283b270e7",
+      "bytes": 2062
+    },
+    {
+      "path": ".verification/scenery/transport_source_ready_r2.json",
+      "sha256": "f3abf3ef38909e83a77b86f6ec7e3f8601f29749235a2996840ca8e50c929748",
+      "bytes": 1981
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_baseline.glb",
+      "sha256": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+      "bytes": 66152
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_baseline.json",
+      "sha256": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
+      "bytes": 1370
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_baseline.scn",
+      "sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+      "bytes": 12105
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_compile.json",
+      "sha256": "293f2856a7ba51ccbba0a53274b1df0402c27ce0185ee4004ed88147f0bf8572",
+      "bytes": 2624
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_baseline.glb",
+      "sha256": "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c",
+      "bytes": 14464
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_baseline.json",
+      "sha256": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
+      "bytes": 1996
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_baseline.scn",
+      "sha256": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+      "bytes": 6642
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_compile.json",
+      "sha256": "24270f394e27211821e929bd0cc9fc2900c6fbf628376461c912e2545e652ccb",
+      "bytes": 3373
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/bandit_road_b540b31cfe7baaa7.res",
+      "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "bytes": 13950
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/build_ash_mill_99715fe9e266cdeb.gd",
+      "sha256": "99715fe9e266cdeb9035c9f9293129a20a554bba07a44bf2ef26295b555558ae",
+      "bytes": 6552
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/build_campaign_wilds_89112145507eb915.gd",
+      "sha256": "89112145507eb915095e20a149418b7017f3ef52b4af988f180b67429c1933da",
+      "bytes": 18978
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/build_hart_woodland_4cfdf590f60de0b7.gd",
+      "sha256": "4cfdf590f60de0b7040a4113f65444b7336c61be9341d9933491485e31ffd49a",
+      "bytes": 3969
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/build_record_archive_817fb67034bd8982.gd",
+      "sha256": "817fb67034bd8982720be8516accd2a3ff9ef460f44ca95bf0550ed7d0082bc7",
+      "bytes": 6161
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/burned_farmstead_1c5bc5a71efc4a5b.res",
+      "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "bytes": 6909
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/campaign_wilderness_section_631d40ff53081876.gd",
+      "sha256": "631d40ff530818764246b6df21278919ab3397863c5c1139f8d451ea4327a2a2",
+      "bytes": 20454
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/campaign_wilds_presentation_b3cafa4e17768343.gd",
+      "sha256": "b3cafa4e17768343b9536057d58306c1f9fb30f27fa309a24e689a1c033711e9",
+      "bytes": 3576
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/checkpoint_85e660c2250bb4d3.res",
+      "sha256": "85e660c2250bb4d32353b9007ca639dd9a2ff0670871d212c91a0236151393dc",
+      "bytes": 63047
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/deep_wood_e506395d20a2d044.res",
+      "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "bytes": 3998
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/farmstead_east_5f9e0280e328fce1.res",
+      "sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+      "bytes": 33915
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/farmstead_west_83aefc3097c553c4.res",
+      "sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+      "bytes": 34282
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/hart_26cb52dc8248328a.res",
+      "sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
+      "bytes": 55293
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/hart_woodland_c5e0cacfa62270c5.gd",
+      "sha256": "c5e0cacfa62270c5df229399029059ebfe33f6f3a19d5d803ef37c7eab43b4c3",
+      "bytes": 4110
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/manifest.json",
+      "sha256": "70c8c1fbe890fa83026d9cc80460709182bd7af2891d06de19d81d47fe85219a",
+      "bytes": 5039
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/marsh_crossing_fb6374cdf48eac17.res",
+      "sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
+      "bytes": 23761
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/mill_9fecc6ce7ab50667.res",
+      "sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
+      "bytes": 59294
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original/world_material_library_6e8a2e43e57544e4.gd",
+      "sha256": "6e8a2e43e57544e4b8ac1691563f88dbbcf3d70e4e41c12011b5ca532b45c826",
+      "bytes": 17939
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/fidelity_checkpoint_20261110.json",
+      "sha256": "22445befb2109e8a54de287bc93576c3f88f2306ef65ead7115eef08cb8353ef",
+      "bytes": 3986
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/fidelity_source_receipt_r1.json",
+      "sha256": "a606a358e13398550611661531acaaceb5442ee13ad358b08044a3aa0d5d9999",
+      "bytes": 2461
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/freeze_tests_r2.log",
+      "sha256": "5f34a5ecca1c834003ba4a901133645c6aa9858032eef6ac7cfde3308a7a5265",
+      "bytes": 1143
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_baseline.glb",
+      "sha256": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+      "bytes": 71088
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_baseline.json",
+      "sha256": "672d50e9eb2b99c01720d15f1bea00891b94b7927ab60395defcba3102ed11ad",
+      "bytes": 3734
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_baseline.scn",
+      "sha256": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+      "bytes": 53828
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_compile.json",
+      "sha256": "16d05f6fe29ba1f5bf85040a3ae4f824c35fa0617c42c894d17c0436e4235af1",
+      "bytes": 5896
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_baseline.glb",
+      "sha256": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3",
+      "bytes": 12708
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_baseline.json",
+      "sha256": "a7124b82431df7f987db193ddbb2d83cb4cab9b35a50f4c4cae7bb2277661cf0",
+      "bytes": 2954
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_baseline.scn",
+      "sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+      "bytes": 5420
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_compile.json",
+      "sha256": "fca9904c011a58347e0bb001cd8414d0a68239d82c70272fcf2492d2b8f14d79",
+      "bytes": 5045
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/compiler_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/extractor_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/geometry_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/in_memory_geometry.log",
+      "sha256": "6c76da5365f19d1f0cd9f32d5511bf859020aa6cbbaa4a2123767ca686267e34",
+      "bytes": 138
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/in_memory_split.log",
+      "sha256": "564edaf9b27ed65842cf8ebb05bb7082326f07d4cc67d0f9b8282f1ebe7836f8",
+      "bytes": 136
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/split_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2_receipt.json",
+      "sha256": "441c87602c62eb80dfe98742712eeb6c594a78eda7468ddc63b3b8ee39a20a36",
+      "bytes": 4518
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/split_equivalence.json",
+      "sha256": "569b56f4cfa85f3f4cd8c92bf50171dc92a2800ef84aa6037b66ece0a1ba2f67",
+      "bytes": 4593
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v001.blend",
+      "sha256": "835916d5894640279b723c9e8c268be48c8ebda49e8a3c972624ac4400a49497",
+      "bytes": 111650
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v001.glb",
+      "sha256": "fb0eac1efc2d55a58778a1fa85df8f3960c6d6dff48b8b320755f6b3165a217d",
+      "bytes": 47464
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.blend",
+      "sha256": "97e7b66e380ad1d0b3cee30a76ea3508938687f980fefae3ded16d9cefb878ba",
+      "bytes": 119049
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.glb",
+      "sha256": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
+      "bytes": 160664
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002_blender_raw.glb",
+      "sha256": "3bee97e33c1253eb712a0d37985b70bbcf3795f6d8dfcae824c2f26dad7c8367",
+      "bytes": 160664
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/author_recipe_4887404fc32fdf6b.py",
+      "sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7",
+      "bytes": 11683
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/author_recipe_c040d7c37f7a59b7.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/authoring.json",
+      "sha256": "d3f745628809dbd4fcd0daa524545e797f895d5e0021cbd2ae4173c3def8973b",
+      "bytes": 4359
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/authoring_history_56c26344e1d7965c.json",
+      "sha256": "56c26344e1d7965cc6a6ef2a9f10ce5b201dfef5b01a12c40c405a8e4a9d9103",
+      "bytes": 2665
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_b7e82d3faea01d66.glb",
+      "sha256": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+      "bytes": 66152
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_native_c76bb9745e0c7d3c.scn",
+      "sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+      "bytes": 12105
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_native_edbff902f66d8733.scn",
+      "sha256": "edbff902f66d87335ade5b4f8004bd08742445b0894e9f80f74bcd54b9c3b111",
+      "bytes": 12105
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_receipt_854f45b3fad6c629.json",
+      "sha256": "854f45b3fad6c629a3aa74427cfc24c8dc0d5e0903251491751e9d3fe0269dc4",
+      "bytes": 1370
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_receipt_e22ef5514006f0ca.json",
+      "sha256": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
+      "bytes": 1370
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/transport_helper_2c9dcba5ac768071.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/author_recipe_4887404fc32fdf6b.py",
+      "sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7",
+      "bytes": 11683
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/author_recipe_c040d7c37f7a59b7.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/authoring.json",
+      "sha256": "0732519644c71fa2d4912753014d6d8f6b9da3353698c9e4a1c6cfb352c590d6",
+      "bytes": 6211
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/authoring_history_4b98aeb74b7a3e26.json",
+      "sha256": "4b98aeb74b7a3e26b2d2555f2dd2c861a21df73b24aa1d851b282978fe117479",
+      "bytes": 3816
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v001.blend",
+      "sha256": "a7288947eba5d4965071436dee29777073fce1612d284cc5fd37b97202c8f660",
+      "bytes": 96466
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v001.glb",
+      "sha256": "b7f4a5bbc8e9972e6687e06c05f13b88bc16d8f7c1a925620c6f70fd5b721939",
+      "bytes": 11676
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.blend",
+      "sha256": "11595f168babbf1ad29cfb504e8951da807f7ee958f23794bcb07fc04444c201",
+      "bytes": 98551
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.glb",
+      "sha256": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
+      "bytes": 50344
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002_blender_raw.glb",
+      "sha256": "e9702eeb086df2f18e531cd0794d61fee7d8a3facae8ffc1cef1e558e6df2028",
+      "bytes": 50344
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_7f4677039ce0335e.glb",
+      "sha256": "7f4677039ce0335e2fcc22b062f6258b3b558df6a89f8748e1d7f39ad1116eeb",
+      "bytes": 14464
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_9b21a5bd9eb7a376.glb",
+      "sha256": "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c",
+      "bytes": 14464
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_native_c0839cf4e616a2a7.scn",
+      "sha256": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+      "bytes": 6642
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_native_f203e403dcb7b054.scn",
+      "sha256": "f203e403dcb7b054bd182035ce0efcd9d86889945c1c8747fa6d4dc27f5ef2b3",
+      "bytes": 6642
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_receipt_13800c970b4f34a9.json",
+      "sha256": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
+      "bytes": 1996
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_receipt_48f73068fef281a9.json",
+      "sha256": "48f73068fef281a9c0b68dae65a8d5730cac5d2cbe6d1a41f3a1ec9ee783134f",
+      "bytes": 1996
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/transport_helper_2c9dcba5ac768071.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/author_recipe_4887404fc32fdf6b.py",
+      "sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7",
+      "bytes": 11683
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/author_recipe_c040d7c37f7a59b7.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/authoring.json",
+      "sha256": "f43cf5f49f58d5d70b56296728f40226baf57660b7dc648fde7430022af1f70b",
+      "bytes": 12887
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/authoring_history_9a01db76d58df602.json",
+      "sha256": "9a01db76d58df6025405018e085de423737e32581ea21a846979518926fc3b9e",
+      "bytes": 7586
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v001.blend",
+      "sha256": "b9a4274e1cd8596bc70e43a8fee0ed2fe6634a59800d502a941518b38a74e9da",
+      "bytes": 136442
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v001.glb",
+      "sha256": "69846b22bf5076ff903be119fcee40c63923e4f249e0f0662660487b70715c90",
+      "bytes": 70368
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002.blend",
+      "sha256": "63ae255f502165e6d464c5919c56083e07dcff32ab8cf68fc3eca1a5c3d7b19f",
+      "bytes": 165905
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002.glb",
+      "sha256": "ea11e1766e1b171d6af0b88ecafe8d6abfc98b40d851c32bdc47cb1113947208",
+      "bytes": 300040
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002_blender_raw.glb",
+      "sha256": "0985f058b681604c15796b9f1d2609e8cc6ed223500bdc31d788445e924400ea",
+      "bytes": 300040
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_7151d4210af45d0a.glb",
+      "sha256": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+      "bytes": 71088
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_native_317d955df0b6f6b4.scn",
+      "sha256": "317d955df0b6f6b46032a7d72c37e431ab23221731286a0761a6fdc907b37045",
+      "bytes": 53828
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_native_493b60f24e7f95d2.scn",
+      "sha256": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+      "bytes": 53828
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_receipt_35d3a821634e5fb5.json",
+      "sha256": "35d3a821634e5fb5efa968e964a53e70927367fba043da688cfd39f0d7adeaad",
+      "bytes": 3734
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_receipt_672d50e9eb2b99c0.json",
+      "sha256": "672d50e9eb2b99c01720d15f1bea00891b94b7927ab60395defcba3102ed11ad",
+      "bytes": 3734
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/transport_helper_2c9dcba5ac768071.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/author_recipe_4887404fc32fdf6b.py",
+      "sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7",
+      "bytes": 11683
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/author_recipe_c040d7c37f7a59b7.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/authoring.json",
+      "sha256": "db6690fad9e65124ff5a5a09494aa8972696917ac541341337722527bcecaa21",
+      "bytes": 10771
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/authoring_history_83855c3fc558a55a.json",
+      "sha256": "83855c3fc558a55ad20c8cb82e3b4bf2c934f247bb42ca3e6b358ebb732eeb34",
+      "bytes": 6293
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v001.blend",
+      "sha256": "507abb1a95730300bd0ca3aff4da2a7a149c945cbac97bc5e06633de06077aef",
+      "bytes": 97910
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v001.glb",
+      "sha256": "fd05bee940816757f324f759e3897096d919e0d6e062a5dbe12c7ea9ae5ffbae",
+      "bytes": 11888
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002.blend",
+      "sha256": "6fe669c9fda61799549ffa989cba734debfe18eb5c21f22dadd7d77b378343cf",
+      "bytes": 98785
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002.glb",
+      "sha256": "661e07f782ff9eb508004368fae216f5669a9e24771f145c56c1a42a20211203",
+      "bytes": 22040
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002_blender_raw.glb",
+      "sha256": "52048b25614e4939831893f8a0b198ff2fd6fa832bde8cfcdf838f93925ebd2e",
+      "bytes": 22040
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_16c724e98a6b031d.glb",
+      "sha256": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3",
+      "bytes": 12708
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_native_497f66d8be78a37d.scn",
+      "sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+      "bytes": 5420
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_native_c2a3a463f80f60dc.scn",
+      "sha256": "c2a3a463f80f60dced0f058388e8c97a6b8477738b2eea6abd64ead933c72a86",
+      "bytes": 5422
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_receipt_a7124b82431df7f9.json",
+      "sha256": "a7124b82431df7f987db193ddbb2d83cb4cab9b35a50f4c4cae7bb2277661cf0",
+      "bytes": 2954
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_receipt_b507a7ba3f11bcb1.json",
+      "sha256": "b507a7ba3f11bcb13de0a7c299e2a1f5ad7da11d4082dc32853303661473886b",
+      "bytes": 2954
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/transport_helper_2c9dcba5ac768071.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/author_living_world_parts.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/living_world_gltf_transport.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/test_living_world_gltf_transport.py",
+      "sha256": "5a70085151600bed3c7577e75186f80a7e47fb3c3c14409cd51bc18593e9a28b",
+      "bytes": 6764
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/test_living_world_recipe.py",
+      "sha256": "c41bdb9679753c811d9e20d4404c2fc841c17f9b0198194b53dc6d7df3d36246",
+      "bytes": 2657
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_bandit_road_Landscape.res",
+      "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "bytes": 13950
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res",
+      "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "bytes": 6909
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_deep_wood_Landscape.res",
+      "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "bytes": 3998
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+      "sha256": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
+      "bytes": 21209
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartWoodland_Authored.res",
+      "sha256": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
+      "bytes": 11539
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/AshMill_Authored.res",
+      "sha256": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
+      "bytes": 48615
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/FarmsteadEast_Authored.res",
+      "sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+      "bytes": 33915
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/FarmsteadWest_Authored.res",
+      "sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+      "bytes": 34282
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/RoadCheckpoint_Authored.res",
+      "sha256": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
+      "bytes": 59554
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_world/ash_mill_wheel.scn",
+      "sha256": "1934dfad65964e3e41a3d4e068628fabb6a01877d322b626e6b88d0580cc0907",
+      "bytes": 23369
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_world/checkpoint_cloth.scn",
+      "sha256": "fd990e36da5d6544b75494a636268ad88f7dcb6ac87d694f6e190ff26b1bcd0b",
+      "bytes": 9649
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_world/hart_ferns.scn",
+      "sha256": "fa6252f94c1c678a8ce1820d741d119db6479d6cafdd73337bf6bfe6d9897f0a",
+      "bytes": 70683
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_world/marsh_reeds.scn",
+      "sha256": "3235a0c6434dae9fd7782bbd4fb643dd1a5b40735cc7ccbc85d8277cc7e2de6d",
+      "bytes": 6748
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_world_blender.gd",
+      "sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+      "bytes": 20567
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/LIVING_SCENERY_INTEGRATION.md",
+      "sha256": "d8315f33c94ae30a0fc05cf82164b7d9bbde9aec51cb9cb8d32efbd45097cfbb",
+      "bytes": 3576
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/run_living_scenery_pipeline.py",
+      "sha256": "30bf13f9161b2260ebbc89e5f71c2885d3a94a7686a221ab3bd460a6b102551d",
+      "bytes": 18326
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/test_living_scenery_pipeline.py",
+      "sha256": "4ebad8df9170c7cf5c9ff3348bb14ead7b7cf8bbec17f5db72cec34738300f3d",
+      "bytes": 10697
+    }
+  ],
+  "native_fidelity_verified": true,
+  "actual_level_acceptance": false,
+  "visual_acceptance": false,
+  "user_acceptance": false,
+  "attributes": {
+    "path": ".gitattributes",
+    "sha256": "cba9e23c1f0345922f4d665eab174168316374799cf44ed8747f3db3a7c460b2",
+    "bytes": 11380
+  }
+}

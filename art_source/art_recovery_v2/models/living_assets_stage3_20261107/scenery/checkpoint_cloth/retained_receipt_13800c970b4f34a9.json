@@ -1,0 +1,49 @@
+{
+	"asset": "checkpoint_cloth",
+	"carrier": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_baseline.glb",
+	"carrier_sha256": "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c",
+	"native_baseline": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_baseline.scn",
+	"native_baseline_sha256": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+	"parts": [
+		{
+			"geometry_sha256": "3d360bc5f601bcfaa3e03bd05253e7becc933bf7628a418531f8629c2f6b0bdb",
+			"kind": "cloth",
+			"mesh_inline": true,
+			"node": "CheckpointCloth_0",
+			"pivot": "(-3.65, 2.92, -5.75)",
+			"pivot_godot": [
+				-3.65000009536743,
+				2.92000007629395,
+				-5.75
+			],
+			"sources": {
+				"res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16"
+			},
+			"triangles": 138
+		},
+		{
+			"geometry_sha256": "3d360bc5f601bcfaa3e03bd05253e7becc933bf7628a418531f8629c2f6b0bdb",
+			"kind": "cloth",
+			"mesh_inline": true,
+			"node": "CheckpointCloth_1",
+			"pivot": "(3.65, 2.92, -5.75)",
+			"pivot_godot": [
+				3.65000009536743,
+				2.92000007629395,
+				-5.75
+			],
+			"sources": {
+				"res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16"
+			},
+			"triangles": 138
+		}
+	],
+	"runtime_output": "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn",
+	"schema_version": 2,
+	"source_hashes": {
+		"res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+		"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+	},
+	"visual_accepted": false
+}

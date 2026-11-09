@@ -183,13 +183,20 @@ func _compile(identity: String, art: String) -> String:
 	if not receipt.get("parts") is Array or receipt.parts.size()!=int(COUNTS[identity]) or not receipt.get("source_hashes") is Dictionary or receipt.source_hashes.is_empty():
 		return "Malformed authored Blender scenery contract: "+identity
 	var paths: Dictionary={}
-	for key: String in ["blend","carrier","recipe","retained_input","retained_native","retained_receipt"]:
+	for key: String in ["blend","carrier","recipe","retained_input","retained_native","retained_receipt","transport_helper","raw_carrier"]:
 		var relative := str(receipt.get(key,"")).replace("\\","/")
 		var source := art.path_join(relative).simplify_path()
 		var digest := str(receipt.get(key+"_sha256",""))
 		if relative.is_empty() or relative.is_absolute_path() or not source.begins_with(art + "/") or digest.length()!=64 or not FileAccess.file_exists(source) or FileAccess.get_sha256(source)!=digest:
 			return "Blender scenery provenance changed: " + identity + "/" + key
 		paths[key]=source
+	for key: String in ["recipe","transport_helper"]:
+		var live := art.path_join("tools/author_living_world_parts.py" if key=="recipe" else "tools/living_world_gltf_transport.py")
+		if not FileAccess.file_exists(live) or FileAccess.get_sha256(live)!=str(receipt.get(key+"_sha256","")):
+			return "Authored scenery recipe/helper is stale: "+identity+"/"+key
+	var transport: Variant=receipt.get("normal_transport")
+	if not transport is Dictionary or transport.get("verified")!=true or transport.get("before_sha256")!=receipt.raw_carrier_sha256 or transport.get("after_sha256")!=receipt.carrier_sha256:
+		return "Missing exact raw-to-authored normal transport proof: "+identity
 	var retained: Variant=JSON.parse_string(FileAccess.get_file_as_string(str(paths.retained_receipt)))
 	if not retained is Dictionary or retained.get("schema_version")!=2 or retained.get("asset")!=identity or retained.get("source_hashes")!=receipt.source_hashes or retained.get("carrier_sha256")!=receipt.retained_input_sha256 or retained.get("native_baseline_sha256")!=receipt.retained_native_sha256 or not retained.get("parts") is Array:
 		return "Archived native baseline identity differs from Blender authoring: "+identity
@@ -223,7 +230,10 @@ func _compile(identity: String, art: String) -> String:
 	if baseline==null: return "Archived native baseline has no Node3D root: "+identity
 	var document := GLTFDocument.new()
 	var state := GLTFState.new()
-	var error := document.append_from_file(str(paths.carrier), state)
+	# The retained scenery uses uncompressed position/UV arrays. Automatic
+	# GLTF compression can quantize its authored UVs beyond the strict retained
+	# attribute contract, even when the exported float channels are exact.
+	var error := document.append_from_file(str(paths.carrier), state, EditorSceneFormatImporter.IMPORT_FORCE_DISABLE_MESH_COMPRESSION)
 	if error != OK:
 		baseline.free()
 		return "Cannot import authored Blender scenery: " + identity
@@ -263,8 +273,9 @@ func _compile(identity: String, art: String) -> String:
 		# alone can reject harmless float noise either side of a cell boundary.
 		var original_rows: Dictionary = GeometryContract.triangles(original.mesh as ArrayMesh,original_transform,roles)
 		var authored_rows: Dictionary = GeometryContract.triangles(authored.mesh as ArrayMesh,authored_transform,roles)
-		if not original_rows.error.is_empty() or not authored_rows.error.is_empty() or not GeometryContract.compare(original_rows.rows,authored_rows.rows).passed:
-			failure = "Blender export changed retained triangle-corner attributes or multiplicity: " + str(part.node)
+		var compared: Dictionary=GeometryContract.compare(original_rows.rows,authored_rows.rows)
+		if not original_rows.error.is_empty() or not authored_rows.error.is_empty() or not compared.passed:
+			failure = "Blender export changed retained triangle-corner attributes or multiplicity: " + str(part.node)+" retained_error="+str(original_rows.error)+" authored_error="+str(authored_rows.error)+" comparison="+str(compared)
 			break
 		var expected_pivot := Vector3(float(part.pivot_godot[0]), float(part.pivot_godot[1]), float(part.pivot_godot[2]))
 		var support := _find(imported, str(part.support_node)) as Node3D
@@ -326,6 +337,7 @@ func _compile(identity: String, art: String) -> String:
 		"sha256": FileAccess.get_sha256(output), "bytes": FileAccess.get_file_as_bytes(output).size(),
 		"blender_authored": true, "authoring_receipt": receipt_path, "authoring_receipt_sha256": FileAccess.get_sha256(receipt_path),
 		"source_hashes": receipt.source_hashes, "carrier_sha256": receipt.carrier_sha256,
+		"transport_helper_sha256":receipt.transport_helper_sha256,"raw_carrier_sha256":receipt.raw_carrier_sha256,"normal_transport":transport,
 		"retained_native_sha256":receipt.retained_native_sha256,"retained_receipt_sha256":receipt.retained_receipt_sha256,
 		"compiler_sha256": FileAccess.get_sha256("res://tools/build_living_world_blender.gd"),
 		"geometry_contract_sha256":FileAccess.get_sha256("res://tools/living_world_geometry_contract.gd"),

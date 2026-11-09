@@ -1,0 +1,201 @@
+{
+  "retained_sha256": "7f4677039ce0335e2fcc22b062f6258b3b558df6a89f8748e1d7f39ad1116eeb",
+  "authored_sha256": "b7f4a5bbc8e9972e6687e06c05f13b88bc16d8f7c1a925620c6f70fd5b721939",
+  "scope": "Independent pure GLB diagnostic; no Blender/native gate or visual acceptance",
+  "meshes": {
+    "CheckpointCloth_0": {
+      "source_vertices": 92,
+      "authored_vertices": 92,
+      "mapped_vertex_bijection": true,
+      "wound_triangle_multiplicity_equal": true,
+      "max_component_error": {
+        "position": 0.0,
+        "normal": 0.00015814498287181067,
+        "uv": 0.0,
+        "color": 0.0004518553614616394
+      },
+      "first_source_color": [
+        0.33725491166114807,
+        0.09803921729326248,
+        0.10980392247438431,
+        1.0
+      ],
+      "first_authored_color": [
+        0.33716365694999695,
+        0.09758736193180084,
+        0.1094617173075676,
+        1.0
+      ],
+      "source_material": {
+        "doubleSided": true,
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.9399999976158142
+        }
+      },
+      "authored_material": {
+        "doubleSided": true,
+        "name": "Material_0",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0,
+          "roughnessFactor": 0.9399999976158142
+        }
+      },
+      "source_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -3.6500000953674316
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          2.9200000762939453
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -5.75
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "authored_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -3.6500000953674316
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          2.9200000762939453
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -5.75
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "CheckpointCloth_1": {
+      "source_vertices": 92,
+      "authored_vertices": 92,
+      "mapped_vertex_bijection": true,
+      "wound_triangle_multiplicity_equal": true,
+      "max_component_error": {
+        "position": 0.0,
+        "normal": 0.00015814498287181067,
+        "uv": 0.0,
+        "color": 0.0004518553614616394
+      },
+      "first_source_color": [
+        0.33725491166114807,
+        0.09803921729326248,
+        0.10980392247438431,
+        1.0
+      ],
+      "first_authored_color": [
+        0.33716365694999695,
+        0.09758736193180084,
+        0.1094617173075676,
+        1.0
+      ],
+      "source_material": {
+        "doubleSided": true,
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "metallicFactor": 0.0,
+          "roughnessFactor": 0.9399999976158142
+        }
+      },
+      "authored_material": {
+        "doubleSided": true,
+        "name": "Material_1",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0,
+          "roughnessFactor": 0.9399999976158142
+        }
+      },
+      "source_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          3.6500000953674316
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          2.9200000762939453
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -5.75
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "authored_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          3.6500000953674316
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          2.9200000762939453
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -5.75
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  }
+}

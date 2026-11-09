@@ -1,0 +1,155 @@
+{
+	"asset": "marsh_reeds",
+	"authoring_receipt": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/authoring.json",
+	"authoring_receipt_sha256": "db6690fad9e65124ff5a5a09494aa8972696917ac541341337722527bcecaa21",
+	"blender_authored": true,
+	"bytes": 6748,
+	"carrier_sha256": "661e07f782ff9eb508004368fae216f5669a9e24771f145c56c1a42a20211203",
+	"compiler_sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+	"dependencies": [],
+	"geometry_contract_sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+	"normal_transport": {
+		"after_sha256": "661e07f782ff9eb508004368fae216f5669a9e24771f145c56c1a42a20211203",
+		"before_sha256": "52048b25614e4939831893f8a0b198ff2fd6fa832bde8cfcdf838f93925ebd2e",
+		"binary_payload_unchanged": true,
+		"native_verified": false,
+		"normal_source_attribute": "_AO_RETAINED_NORMAL",
+		"parts": {
+			"MarshReeds_0": {
+				"corners": 54.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.0
+				},
+				"normal_accessor": 0.0,
+				"triangles": 18.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"MarshReeds_1": {
+				"corners": 54.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.0
+				},
+				"normal_accessor": 6.0,
+				"triangles": 18.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"MarshReeds_2": {
+				"corners": 54.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.0
+				},
+				"normal_accessor": 11.0,
+				"triangles": 18.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"MarshReeds_3": {
+				"corners": 54.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.0
+				},
+				"normal_accessor": 16.0,
+				"triangles": 18.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"MarshReeds_4": {
+				"corners": 54.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.0
+				},
+				"normal_accessor": 21.0,
+				"triangles": 18.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			}
+		},
+		"source_glb_sha256": [
+			"16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3"
+		],
+		"verified": true,
+		"visual_accepted": false
+	},
+	"parts": [
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "MarshReeds_0",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 18,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "MarshReeds_1",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 18,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "MarshReeds_2",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 18,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "MarshReeds_3",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 18,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "MarshReeds_4",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 18,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		}
+	],
+	"path": "res://assets_external/environment_prepared/living_world/marsh_reeds.scn",
+	"raw_carrier_sha256": "52048b25614e4939831893f8a0b198ff2fd6fa832bde8cfcdf838f93925ebd2e",
+	"retained_native_sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+	"retained_receipt_sha256": "a7124b82431df7f987db193ddbb2d83cb4cab9b35a50f4c4cae7bb2277661cf0",
+	"runtime_reviewed": false,
+	"schema_version": 1,
+	"sha256": "3235a0c6434dae9fd7782bbd4fb643dd1a5b40735cc7ccbc85d8277cc7e2de6d",
+	"source_hashes": {
+		"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+	},
+	"transport_helper_sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+	"user_accepted": false
+}

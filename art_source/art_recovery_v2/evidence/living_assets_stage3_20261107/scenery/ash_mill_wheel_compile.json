@@ -1,0 +1,63 @@
+{
+	"asset": "ash_mill_wheel",
+	"authoring_receipt": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/authoring.json",
+	"authoring_receipt_sha256": "d3f745628809dbd4fcd0daa524545e797f895d5e0021cbd2ae4173c3def8973b",
+	"blender_authored": true,
+	"bytes": 23369,
+	"carrier_sha256": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
+	"compiler_sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+	"dependencies": [],
+	"geometry_contract_sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+	"normal_transport": {
+		"after_sha256": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
+		"before_sha256": "3bee97e33c1253eb712a0d37985b70bbcf3795f6d8dfcae824c2f26dad7c8367",
+		"binary_payload_unchanged": true,
+		"native_verified": false,
+		"normal_source_attribute": "_AO_RETAINED_NORMAL",
+		"parts": {
+			"AshMillWaterwheel": {
+				"corners": 2736.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.000000238418579101563
+				},
+				"normal_accessor": 0.0,
+				"triangles": 912.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			}
+		},
+		"source_glb_sha256": [
+			"b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2"
+		],
+		"verified": true,
+		"visual_accepted": false
+	},
+	"parts": [
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "AshMillWaterwheel",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 912,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		}
+	],
+	"path": "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn",
+	"raw_carrier_sha256": "3bee97e33c1253eb712a0d37985b70bbcf3795f6d8dfcae824c2f26dad7c8367",
+	"retained_native_sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+	"retained_receipt_sha256": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
+	"runtime_reviewed": false,
+	"schema_version": 1,
+	"sha256": "1934dfad65964e3e41a3d4e068628fabb6a01877d322b626e6b88d0580cc0907",
+	"source_hashes": {
+		"res://tools/build_ash_mill.gd": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
+		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+	},
+	"transport_helper_sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+	"user_accepted": false
+}

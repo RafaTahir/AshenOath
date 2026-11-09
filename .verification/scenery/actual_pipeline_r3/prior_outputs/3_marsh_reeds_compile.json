@@ -1,0 +1,97 @@
+{
+	"asset": "marsh_reeds",
+	"blender_authored": false,
+	"bytes": 5420,
+	"dependencies": [],
+	"parts": [
+		{
+			"geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "MarshReeds_0",
+			"pivot": "(-5.0, 0.0, -9.0)",
+			"pivot_godot": [
+				-5.0,
+				0.0,
+				-9.0
+			],
+			"sources": {
+				"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+			},
+			"triangles": 18
+		},
+		{
+			"geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "MarshReeds_1",
+			"pivot": "(6.0, 0.0, -6.0)",
+			"pivot_godot": [
+				6.0,
+				0.0,
+				-6.0
+			],
+			"sources": {
+				"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+			},
+			"triangles": 18
+		},
+		{
+			"geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "MarshReeds_2",
+			"pivot": "(-7.0, 0.0, 1.0)",
+			"pivot_godot": [
+				-7.0,
+				0.0,
+				1.0
+			],
+			"sources": {
+				"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+			},
+			"triangles": 18
+		},
+		{
+			"geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "MarshReeds_3",
+			"pivot": "(7.0, 0.0, 8.0)",
+			"pivot_godot": [
+				7.0,
+				0.0,
+				8.0
+			],
+			"sources": {
+				"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+			},
+			"triangles": 18
+		},
+		{
+			"geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "MarshReeds_4",
+			"pivot": "(-5.0, 0.0, 11.0)",
+			"pivot_godot": [
+				-5.0,
+				0.0,
+				11.0
+			],
+			"sources": {
+				"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+			},
+			"triangles": 18
+		}
+	],
+	"path": "res://assets_external/environment_prepared/living_world/marsh_reeds.scn",
+	"runtime_reviewed": false,
+	"schema_version": 1,
+	"sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+	"source_hashes": {
+		"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+	},
+	"user_accepted": false
+}

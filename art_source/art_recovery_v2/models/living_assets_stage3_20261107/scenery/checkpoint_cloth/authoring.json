@@ -1,0 +1,152 @@
+{
+  "schema_version": 2,
+  "asset": "checkpoint_cloth",
+  "blender_version": "5.2.3 LTS",
+  "source_hashes": {
+    "res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+    "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+    "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+  },
+  "parts": [
+    {
+      "geometry_sha256": "3d360bc5f601bcfaa3e03bd05253e7becc933bf7628a418531f8629c2f6b0bdb",
+      "kind": "cloth",
+      "mesh_inline": true,
+      "node": "CheckpointCloth_0",
+      "pivot": "(-3.65, 2.92, -5.75)",
+      "pivot_godot": [
+        -3.65000009536743,
+        2.92000007629395,
+        -5.75
+      ],
+      "sources": {
+        "res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16"
+      },
+      "triangles": 138,
+      "editable_triangle_corners": 414,
+      "editable_triangles": 138,
+      "color_storage": "FLOAT_COLOR",
+      "normal_storage": "_AO_RETAINED_NORMAL/FLOAT_VECTOR/glTF-local",
+      "import_vertex_mapping_error": 0.0,
+      "maximum_float_color_error": 0.0,
+      "maximum_float_normal_error": 0.0,
+      "export_mesh": "CheckpointCloth_0_Geometry",
+      "support_node": "CheckpointCloth_0",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 414,
+      "world_bounds_blender": {
+        "min": [
+          -4.100000381469727,
+          5.690000057220459,
+          2.0
+        ],
+        "max": [
+          -3.200000286102295,
+          5.809999942779541,
+          2.9200000762939453
+        ]
+      }
+    },
+    {
+      "geometry_sha256": "3d360bc5f601bcfaa3e03bd05253e7becc933bf7628a418531f8629c2f6b0bdb",
+      "kind": "cloth",
+      "mesh_inline": true,
+      "node": "CheckpointCloth_1",
+      "pivot": "(3.65, 2.92, -5.75)",
+      "pivot_godot": [
+        3.65000009536743,
+        2.92000007629395,
+        -5.75
+      ],
+      "sources": {
+        "res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16"
+      },
+      "triangles": 138,
+      "editable_triangle_corners": 414,
+      "editable_triangles": 138,
+      "color_storage": "FLOAT_COLOR",
+      "normal_storage": "_AO_RETAINED_NORMAL/FLOAT_VECTOR/glTF-local",
+      "import_vertex_mapping_error": 0.0,
+      "maximum_float_color_error": 0.0,
+      "maximum_float_normal_error": 0.0,
+      "export_mesh": "CheckpointCloth_1_Geometry",
+      "support_node": "CheckpointCloth_1",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 414,
+      "world_bounds_blender": {
+        "min": [
+          3.200000047683716,
+          5.690000057220459,
+          2.0
+        ],
+        "max": [
+          4.099999904632568,
+          5.809999942779541,
+          2.9200000762939453
+        ]
+      }
+    }
+  ],
+  "normal_transport": {
+    "verified": true,
+    "before_sha256": "e9702eeb086df2f18e531cd0794d61fee7d8a3facae8ffc1cef1e558e6df2028",
+    "after_sha256": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
+    "binary_payload_unchanged": true,
+    "normal_source_attribute": "_AO_RETAINED_NORMAL",
+    "source_glb_sha256": [
+      "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c"
+    ],
+    "parts": {
+      "CheckpointCloth_0": {
+        "wound_triangle_multiplicity_equal": true,
+        "triangles": 138,
+        "corners": 414,
+        "maximum_component_errors": {
+          "positions": 0.0,
+          "normals": 0.0,
+          "uvs": 0.0,
+          "colors": 0.0
+        },
+        "world_frame_error": 0.0,
+        "material_role_equal": true,
+        "normal_accessor": 0
+      },
+      "CheckpointCloth_1": {
+        "wound_triangle_multiplicity_equal": true,
+        "triangles": 138,
+        "corners": 414,
+        "maximum_component_errors": {
+          "positions": 0.0,
+          "normals": 0.0,
+          "uvs": 0.0,
+          "colors": 0.0
+        },
+        "world_frame_error": 0.0,
+        "material_role_equal": true,
+        "normal_accessor": 6
+      }
+    },
+    "native_verified": false,
+    "visual_accepted": false
+  },
+  "blender_authored": true,
+  "native_verified": false,
+  "visual_accepted": false,
+  "user_accepted": false,
+  "retained_input": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_9b21a5bd9eb7a376.glb",
+  "retained_input_sha256": "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c",
+  "retained_native": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_native_c0839cf4e616a2a7.scn",
+  "retained_native_sha256": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+  "retained_receipt": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_receipt_13800c970b4f34a9.json",
+  "retained_receipt_sha256": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
+  "blend": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.blend",
+  "blend_sha256": "11595f168babbf1ad29cfb504e8951da807f7ee958f23794bcb07fc04444c201",
+  "carrier": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.glb",
+  "carrier_sha256": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
+  "recipe": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/author_recipe_c040d7c37f7a59b7.py",
+  "recipe_sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+  "transport_helper": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/transport_helper_2c9dcba5ac768071.py",
+  "transport_helper_sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+  "raw_carrier": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002_blender_raw.glb",
+  "raw_carrier_sha256": "e9702eeb086df2f18e531cd0794d61fee7d8a3facae8ffc1cef1e558e6df2028"
+}

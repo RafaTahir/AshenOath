@@ -1,0 +1,30 @@
+03:50:24 | INFO: Data are loaded, start creating Blender stuff
+03:50:24 | INFO: Blender create Mesh node 0
+03:50:24 | INFO: Blender create Mesh node 1
+03:50:24 | INFO: Blender create Mesh node 2
+03:50:24 | INFO: Blender create Mesh node 3
+03:50:24 | INFO: Blender create Mesh node 4
+03:50:24 | INFO: Blender create Mesh node 5
+03:50:24 | INFO: glTF import finished in 0.03s
+Info: Saved as "hart_ferns_living_v001.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+03:50:25 | INFO: Starting glTF 2.0 export
+03:50:25 | INFO: Extracting primitive: Mesh_0
+03:50:25 | INFO: Primitives created: 1
+03:50:25 | INFO: Extracting primitive: Mesh_1
+03:50:25 | INFO: Primitives created: 1
+03:50:25 | INFO: Extracting primitive: Mesh_2
+03:50:25 | INFO: Primitives created: 1
+03:50:25 | INFO: Extracting primitive: Mesh_3
+03:50:25 | INFO: Primitives created: 1
+03:50:25 | INFO: Extracting primitive: Mesh_4
+03:50:25 | INFO: Primitives created: 1
+03:50:25 | INFO: Extracting primitive: Mesh_5
+03:50:25 | INFO: Primitives created: 1
+03:50:25 | INFO: Finished glTF 2.0 export in 0.1328597068786621 s
+
+LIVING_WORLD_BLENDER_AUTHORED hart_ferns parts 6
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit
