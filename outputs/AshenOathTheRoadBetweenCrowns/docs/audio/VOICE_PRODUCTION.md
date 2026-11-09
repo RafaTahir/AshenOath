@@ -6,24 +6,24 @@ Cast recipes in `data/voice_cast.json` preserve identity using fixed model voice
 
 The model and inference dependencies stay under ignored work directories. Only compressed audio, recipes and provenance ship. Kokoro's Apache-2.0 model card, license and voice table are retained here. The old VCTK attribution remains for historical provenance.
 
-Manifest contains 509 exact-text performances. This run synthesized 25 files and reused 443 scheduled performances. 372 collected recordings remain unproduced and use subtitles until completed.
+Manifest contains 534 exact-text performances. This run synthesized 25 files and reused 468 scheduled performances. 347 collected recordings remain unproduced and use subtitles until completed.
 
 | Cast role | Clips |
 |---|---:|
-| player | 173 |
-| sister_anwen | 73 |
+| player | 177 |
+| sister_anwen | 78 |
 | rook | 62 |
-| mira | 46 |
+| mira | 49 |
 | tor | 40 |
-| elna | 13 |
-| toma | 14 |
-| edric | 27 |
+| elna | 14 |
+| toma | 15 |
+| edric | 28 |
 | halvern | 6 |
-| senn | 12 |
+| senn | 13 |
 | white_hart | 9 |
 | len | 3 |
 | merrow | 3 |
-| vale | 7 |
+| vale | 8 |
 | guard | 4 |
 | patrol_guard | 2 |
 | servant | 2 |
@@ -37,6 +37,6 @@ Manifest contains 509 exact-text performances. This run synthesized 25 files and
 | young_villager | 0 |
 | water_carrier | 0 |
 | quality_sweeper | 0 |
-| quality_mourner | 0 |
-| nessa | 2 |
-| nera | 9 |
+| quality_mourner | 2 |
+| nessa | 5 |
+| nera | 12 |

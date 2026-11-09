@@ -116,3 +116,7 @@ outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_aftermath_assets.gd -tex
 .verification/scenery/transport_source_ready_r2.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
 outputs/AshenOathTheRoadBetweenCrowns/tools/LIVING_SCENERY_INTEGRATION.md -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
 .verification/scenery/checkpoint_payload.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+
+outputs/AshenOathTheRoadBetweenCrowns/voice_production_manifest.json -text whitespace=cr-at-eol
+
+outputs/AshenOathTheRoadBetweenCrowns/docs/audio/VOICE_PRODUCTION.md -text whitespace=cr-at-eol
