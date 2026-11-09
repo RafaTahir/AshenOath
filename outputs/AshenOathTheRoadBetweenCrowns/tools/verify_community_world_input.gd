@@ -292,7 +292,7 @@ func _save_reload(label: String) -> void:
 	await _ready(region)
 	var after: Dictionary=game.story_state.save_state().flags
 	for key: String in before:
-		if key.begins_with("community_") or key.begins_with("campaign_"):
+		if key.begins_with("community_") or key.begins_with("campaign_") or key.begins_with("open_road_") or key in ["territorial_protection_active","hart_complete_account_access","human_records_preserved","final_keeper_consent"]:
 			_check(before[key]==after.get(key),"Save/load retained "+key)
 	await _snapshot("reload_"+label)
 

@@ -6,6 +6,65 @@ implementation is now present; this is not an accepted playable release.
 Enable it only after the complete four-chapter/two-region chain, both ending
 alternatives, pack closure and gameplay acceptance have passed together.
 
+## Resumed ending correction (2026-11-10)
+
+Open Road is now an unfinished covenant after its three glade acts. The first
+reads authored signed requests from the water-carrier and sweeper households;
+it snapshots only separately consenting, currently available canonical actors.
+The second permanently dismantles territorial protection and ends access to the
+Hart's complete account. Human evidence remains unchanged. The third begins the
+actual passage, without completing the final chapter.
+
+`community_ending.gd` contains pure transitions and belongs exclusively to the
+community pack. Existing `CommunityActivity` owns all load/work timers, the two
+household bodies, bridge following/ferry passage, far-bank delivery and refuge
+arrival. Missing native bodies/drivers cannot earn passage. The last chapter
+finishes only at Hearthward after the actual arrival. Reload restores exact
+progress/costs; invalid completed departure records are rejected. No save-version
+bump, legacy-revision inference, competing process or new reward owner is added.
+
+All twelve named participants have separate `departure_offers` in
+`community_campaign.json`, with explicit speaker_id/question_speaker_id and
+question/yes/no/withdraw text. Keeper consent never doubles as relocation
+consent. The household body pair reuses existing C06/C05 roles. Post-arrival
+Hearthward uses two explicit six-person shifts covering all twelve, so two
+households plus Kael/Bracken remain within ten visible skeletons. Earlier fate
+and absence rules still filter attendance. Named volunteers leave their original
+home presence; refusals and unavailable people are not moved.
+
+Concord preserves `final_keeper_consent` as its immutable initial acceptance.
+Continuing `community_keeper_consent` can be withdrawn or freely renewed through
+the same in-person dialogue owner after the ending. A logistics vacancy places
+physical bridge barriers and denies the ferry, retaining the service footway.
+A released keeper stops that refuge responsibility, including during weather
+schedule changes. Care, food and shelter eligibility remain separate.
+
+Authoritative rituals/cards/aftermath text now states the actual costs. The
+isolated deferred overlay and community locale were regenerated after resumption;
+base English remains 1992 entries (288 deferred here; shared Stage2 source adds
+its own entries on regeneration). Root owns final exact-text voice collection.
+
+Acceptance source: the full earned New Game circuit checks relocation, consent,
+unchanged human evidence, mid-passage reload, restored permanent costs and a
+post-Concord withdrawal/real vacancy. `seeded_departure_ferry` is explicitly
+separate boundary proof: thirteen preceding chapters are setup, then actual
+input records the needed personal answers and enacts only Open Road using the
+prepared ferry. It cannot be labelled full-campaign proof. Both viewports remain
+required. Python receipt tests pass (12) and deferred payload tests pass (9).
+The isolated, disposable-profile native memory round passed ending consequences
+(255), campaign revision (435), community activity (44), and deferred overlay
+(50); the full campaign entry script also passed check-only parsing. Exact logs
+are under `.release-gate/community-runtime/native-resumed-r1/` with `r4` suffixes
+for the first three fixtures and `r5` for overlay/full-entry parsing.
+
+The generated full-game adapter did not pass parsing in the sparse fixture
+project: its inherited cemetery helper requires authored resources absent from
+that memory-only project. That adapter must be checked with integrated assets.
+No actual world, native household contact/geometry, rendered input circuit,
+performance, or six-ending gameplay acceptance is claimed by the memory tests.
+Background rendered execution is a separate runner follow-up; the current
+harness must not be launched until its foreground-window behavior is removed.
+
 ## Current source checkpoint: playable runtime wiring (2026-11-07)
 
 Based on merge `0304f5c` (stable combined source `02d0341`, core `c0800b1`,

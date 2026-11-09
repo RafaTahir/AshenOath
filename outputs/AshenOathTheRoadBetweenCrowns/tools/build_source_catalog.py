@@ -56,6 +56,17 @@ def catalogs(project=ROOT):
                 add(context+".text", row[1], "narrator", context, True)
         for ending, text in value.get("ending_cards", {}).items():
             add("community_campaign.ending_cards."+ending, text, "narrator", "community_campaign.ending_cards", True)
+        for section in ("consent_offers", "departure_offers"):
+            for actor, offer in value.get(section, {}).items():
+                context = f"community_campaign.{section}.{actor}"
+                for field in ("question", "yes", "no", "withdraw"):
+                    if isinstance(offer.get(field), str):
+                        add(context+"."+field, offer[field], "player" if field == "question" else offer.get("speaker_id", actor), context, True)
+        for operation, row in value.get("departure_journey", {}).items():
+            context = "community_campaign.departure_journey."+operation
+            for field in ("text", "action", "prompt"):
+                if isinstance(row.get(field), str):
+                    add(context+"."+field, row[field], "narrator" if field == "text" else "system", context, True)
     return base, community
 
 

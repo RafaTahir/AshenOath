@@ -1652,7 +1652,7 @@
       {
         "speaker": "Narrator",
         "speaker_id": "narrator",
-        "text": "Anwen moves one shift to the uncovered column. No household disappears from the meal list."
+        "text": "Anwen checks the recorded answers against the current rota. Every withdrawal stays a vacancy. No household disappears from the meal list."
       },
       {
         "speaker": "Kael",
@@ -1874,7 +1874,7 @@
   },
   "aftermath_work_open_road": {
     "name": "The last load",
-    "greeting": "The last work at Greyfen is making sure the next home can bear the first night.",
+    "greeting": "The households and their last load have reached Hearthward. The old walls remain without the ward.",
     "lines": [
       {
         "speaker": "Tor",
@@ -1899,12 +1899,12 @@
       {
         "speaker": "Narrator",
         "speaker_id": "narrator",
-        "text": "The old shelter gives no answer as the final strap is tightened. The loaded cart follows the route already tested by the community."
+        "text": "The straps are empty now. The households who requested relocation have reached their prepared beds; no departing name was added without its own agreement."
       },
       {
         "speaker": "Rook",
         "speaker_id": "rook",
-        "text": "Come on. The pots will not move themselves."
+        "text": "The pots have arrived. Tomorrow somebody still has to cook."
       }
     ],
     "actions": [],
@@ -1919,7 +1919,7 @@
       {
         "speaker": "The public work",
         "speaker_id": "narrator",
-        "text": "Tools are packed below the sleeping cloths. Cooking pots are secured beside them, ready for the route the community has already tested.",
+        "text": "The households and their belongings have reached Hearthward over the prepared passage. The old walls remain without the supernatural shelter. Human watch and repairs must now keep the refuge safe.",
         "read_only": true,
         "source_tag": "campaign_revision_2"
       },
@@ -1954,7 +1954,7 @@
       {
         "speaker": "Narrator",
         "speaker_id": "narrator",
-        "text": "The boundary light fades behind the departing households. Ahead, an ordinary lantern marks the next safe turn."
+        "text": "The boundary stones remain dark. At Hearthward, ordinary lanterns light the settled households. No return to Greyfen restores the old ward or the Hart's complete account."
       },
       {
         "speaker": "Kael",

@@ -51,6 +51,7 @@ static func for_existing_route(data: Dictionary, id: String, profile: Dictionary
 	return resolve(data, id, definition, profile, minutes)
 
 static func weather_routine(profile: Dictionary, entry: Dictionary, host, weather: String) -> Dictionary:
+	if bool(profile.get("continuing_obligation_released",false)): return profile
 	profile = shared_work_routine(profile, entry, host)
 	profile = shared_meal_routine(profile, entry, host)
 	if weather != "rain" or bool(profile.get("sleeping",false)): return profile

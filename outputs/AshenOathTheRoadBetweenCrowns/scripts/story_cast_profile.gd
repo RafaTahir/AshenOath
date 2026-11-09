@@ -236,6 +236,16 @@ static func routine(id: String, zone: String, state, quests, phase: String, minu
 		# temporary rest pose from the legacy phase-only projection above.
 		result.activity = activity
 		result = RoutineDirector.resolve(life_data(), id, locations, result, minutes)
+	if zone=="hearthward" and state!=null and str(state.get_flag("final_covenant",""))=="concord" and state.get_flag("final_choice_completed",false)==true:
+		var canonical := canonical_identity(id)
+		var keepers := ["anwen","mira","nera","nessa","vale","merrow"]
+		if canonical in keepers:
+			var accepted: Variant=state.get_flag("community_keeper_consent",{}).get(canonical)
+			result.revision=str(result.revision)+":continuing:"+str(accepted)
+			if typeof(accepted)!=TYPE_BOOL or not accepted:
+				# A withdrawn responsibility stops its work animation. This does not
+				# erase the person's ordinary work at their original home.
+				result.merge({"activity":"rest","activities":["rest"],"path":[Vector3(rest[0],rest[1],rest[2])],"station":{},"hold_activity":true,"prop":"","carry_in_transit":false,"continuing_obligation_released":true},true)
 	return result
 
 static func presence_profile(role: String, seed: String = "") -> Dictionary:

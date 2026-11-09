@@ -19,7 +19,7 @@ from community_acceptance_legacy import build_adapter
 PROJECT = common.PROJECT
 HARNESS = PROJECT / "tools/verify_full_campaign_input.gd"
 LEGACY_SOURCE = PROJECT / "tools/verify_opening_real_input_native.gd"
-CASES = ["full_six_endings", "legacy_ash_missing", "legacy_ash_v1", "legacy_witness_missing", "legacy_witness_v1"]
+CASES = ["full_six_endings", "legacy_ash_missing", "legacy_ash_v1", "legacy_witness_missing", "legacy_witness_v1", "seeded_departure_ferry"]
 ENDINGS = ["expose", "free", "bind", "kill", "share", "depart"]
 FULL_WORK = ["kitchen_trestle", "kitchen_screen", "kitchen_places", "crossing_beam", "crossing_rail", "crossing_load",
              "refuge_bunks", "refuge_shelves", "refuge_places", "promise_meal", "promise_alarm", "promise_records"]
@@ -40,6 +40,8 @@ def chapter_ids(expanded: bool) -> list[str]:
 def contract(case: str, seed: bytes | None) -> dict:
     if case not in CASES:
         raise ValueError("unsupported complete campaign case")
+    if case == "seeded_departure_ferry":
+        return ferry_contract(seed)
     expanded = case == "full_six_endings"
     chapters = chapter_ids(expanded)
     before = []
@@ -77,6 +79,42 @@ def contract(case: str, seed: bytes | None) -> dict:
             "expected_options": ENDINGS if expanded else ENDINGS[:4], "expected_work": FULL_WORK if expanded else []}
 
 
+def ferry_contract(seed: bytes | None) -> dict:
+    """A named ending-boundary setup, never evidence of an earned full chain."""
+    if seed is None:
+        raise ValueError("seeded ferry ending requires an explicit raw ending-boundary save")
+    value = json.loads(seed.decode("utf-8-sig"))
+    if not isinstance(value, dict) or not isinstance(value.get("story_state"), dict) or not isinstance(value.get("quests"), dict):
+        raise ValueError("ferry seed must contain story and quest maps")
+    flags = value.get("story_state", {}).get("flags", {})
+    quests = value.get("quests", {})
+    world = value.get("world_state", {})
+    if not all(isinstance(row, dict) for row in (flags, quests, world, quests.get("completed"), quests.get("active"))):
+        raise ValueError("ferry seed has malformed story or quest records")
+    if type(flags.get("campaign_revision")) not in (int, float) or flags["campaign_revision"] != 2:
+        raise ValueError("ferry ending seed requires an explicit expanded journey")
+    if value.get("zone") != "hart_glade" or value.get("world_sector", "hart_glade") != "hart_glade":
+        raise ValueError("ferry ending boundary must be the Hart glade")
+    chapters = chapter_ids(True)
+    before = [id for id in chapters if quests["completed"].get(id) is True]
+    if before != chapters[:-1] or "main_hart_remembers" not in quests["active"]:
+        raise ValueError("ferry seed must label exactly thirteen preceding chapters as setup")
+    if value.get("replay_session") is True or world.get("pending_ending", "") or flags.get("final_covenant", "") or flags.get("final_choice_completed", False):
+        raise ValueError("ferry seed cannot be a replay or prechosen/completed ending")
+    if flags.get("community_route") != "ferry" or flags.get("community_route_ready") is not True or flags.get("community_refuge_ready") is not True:
+        raise ValueError("ferry seed requires the prepared ferry and refuge")
+    if flags.get("confession_method") not in ("edric", "witnesses", "kael"):
+        raise ValueError("ferry boundary must retain the assembly's actual recorded testimony method")
+    community = json.loads((PROJECT / "data/community_campaign.json").read_text(encoding="utf-8-sig"))
+    tasks = community["chapters"]["main_road_kept_open"]["choices"]["ferry"]["work"] + community["chapters"]["main_house_many_names"]["work"]
+    if any(flags.get("community_work:"+task) is not True for task in tasks):
+        raise ValueError("ferry and refuge preparation must match the authored physical task setup")
+    if any(key.startswith("open_road_") for key in flags) or flags.get("covenant_ritual_started", False) or flags.get("covenant_ritual_step", 0):
+        raise ValueError("ferry seed cannot pre-earn any departure enactment or passage")
+    return {"suite": "seeded_departure", "expected_chapters": chapters, "initial_completed": before,
+            "expected_endings": ["depart"], "expected_options": ENDINGS, "expected_work": [], "required_departure_route": "ferry"}
+
+
 def validate_report(report: dict, expected: dict) -> list[str]:
     failures = []
     full = expected["suite"] == "full_campaign"
@@ -90,7 +128,7 @@ def validate_report(report: dict, expected: dict) -> list[str]:
     if ids[:len(required)] != required or ids[len(required):] != ["main_hart_remembers"] * (len(expected["expected_endings"]) - 1):
         failures.append("chapter completion events skip, reorder or manufacture required chapters")
     endings = report.get("endings", [])
-    if not isinstance(endings, list) or [row.get("ending") for row in endings if isinstance(row, dict)] != expected["expected_endings"]:
+    if not isinstance(endings, list) or not all(isinstance(row, dict) for row in endings) or [row.get("ending") for row in endings] != expected["expected_endings"]:
         failures.append("ending coverage differs from the exact requested alternatives")
     else:
         for row in endings:
@@ -98,6 +136,16 @@ def validate_report(report: dict, expected: dict) -> list[str]:
                 failures.append("visible ending menu exposed the wrong revision's choices")
             if row.get("ritual_steps") != (0 if row["ending"] == "kill" else 3):
                 failures.append("peaceful ending was not enacted through all three physical steps")
+            consequences = row.get("consequences", {})
+            if not isinstance(consequences, dict):
+                failures.append("ending consequences receipt is malformed")
+                continue
+            if row["ending"] == "depart" and not all(consequences.get(key) is True for key in ["route_crossed", "arrival", "losses_persisted", "human_evidence_preserved", "named_consent_only", "native_households"]):
+                failures.append("Open Road omitted actual relocation, consent, evidence preservation or its irreversible costs")
+            if row["ending"] == "depart" and expected.get("required_departure_route") and consequences.get("route") != expected["required_departure_route"]:
+                failures.append("seeded ferry ending did not exercise its explicitly prepared ferry")
+            if row["ending"] == "share" and consequences.get("concord_revocation_verified") is not True:
+                failures.append("Concord did not verify a revocable continuing obligation with a real vacancy")
             if not all(row.get(key) is True for key in ["memorial_reload", "return_home", "epilogue_presented"]) or not row.get("cards"):
                 failures.append("ending omitted its restored memorial, return home or actual epilogue")
     return failures

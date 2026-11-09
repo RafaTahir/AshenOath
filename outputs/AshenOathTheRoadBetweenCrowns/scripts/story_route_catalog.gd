@@ -249,6 +249,12 @@ static func ending_continuation(state, current_zone: String) -> Dictionary:
 	var covenant: String = str(state.get_flag("final_covenant", ""))
 	if not completed and covenant != "":
 		var ending: String = preload("res://scripts/ending_catalog.gd").normalize(covenant)
+		if preload("res://scripts/covenant_resolution.gd").relocation_pending(state):
+			var row: Dictionary=load("res://scripts/community_ending.gd").continuation(state)
+			var result := _continuation(str(row.id),str(row.title),str(row.action),str(row.zone),str(row.text),"The chosen relocation is unfinished until the willing households arrive.")
+			result["target_ids"]=row.get("target_ids",[])
+			result["pinpoint"]=true
+			return result
 		var steps: Dictionary = {}
 		for id: String in preload("res://scripts/ending_catalog.gd").IDS:
 			steps[id] = []

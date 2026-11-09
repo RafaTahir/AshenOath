@@ -59,6 +59,16 @@ static func save_revision_error(data: Dictionary) -> String:
 	# A region identifier is never evidence that an old journey opted in.
 	if from_save(data) != EXPANDED and (str(data.get("zone", "")).strip_edges().to_lower() in NEW_ZONES or str(data.get("world_sector", "")).strip_edges().to_lower() in NEW_ZONES):
 		return "campaign_region_revision_mismatch"
+	var world: Variant=data.get("world_state",{})
+	var pending: String=str(world.get("pending_ending","")) if world is Dictionary else ""
+	var covenant := str(flags.get("final_covenant",""))
+	if from_save(data)!=EXPANDED and (pending in ["share","depart","concord","open_road"] or covenant in ["concord","open_road"]): return "campaign_ending_revision_mismatch"
+	if covenant=="open_road":
+		if flags.get("open_road_protection_dismantled")==true:
+			if flags.get("territorial_protection_active")!=false or flags.get("hart_complete_account_access")!=false or flags.get("human_records_preserved")!=true: return "invalid_departure_consequence"
+		if flags.get("final_choice_completed")==true:
+			for key: String in ["open_road_protection_dismantled","open_road_relocation_started","open_road_player_crossed","open_road_route_crossed","open_road_route_delivered","open_road_relocation_completed"]:
+				if flags.get(key)!=true: return "invalid_departure_consequence"
 	return ""
 
 static func from_state(state) -> int:
