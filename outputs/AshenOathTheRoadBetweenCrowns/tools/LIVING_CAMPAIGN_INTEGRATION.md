@@ -34,9 +34,15 @@ disposable profile.
 
 `verify_community_acceptance_seeds.gd` validates all nine through the existing
 in-memory save/import and quest owners. It writes only `native_validation.json`
-beside the explicit gate manifest. At this source checkpoint it is **UNRUN**,
-as are the two modified input entry scripts' latest native parser checks and all
-actual world runs. Source tests are recorded separately from native proof.
+beside the explicit gate manifest. At source checkpoint
+`e0056c5dc1dd83affec81c6cb400142ea6e1fb57`, the nine-seed memory fixture passed
+**447 checks**, and both modified input entry scripts passed check-only parsing.
+All four serial Godot 4.6.3 processes exited 0 without parser/runtime/leak errors.
+The gate receipt is `.release-gate/community-runtime/native-boundary-r1/receipt.json`;
+the accepted seed inventory is `boundary-seeds-ff769fea7151/manifest.json` in that
+same community-runtime gate. Python seed/pack/acceptance tests passed **42 tests**.
+No world, model or renderer was loaded. All actual world runs remain pending;
+these results do not prove physical arrivals or the complete campaign.
 
 Both world runners now require `--release-manifest` from the maintained builder's
 final Web export. Native inputs must be lossless **decoded** copies of that final
