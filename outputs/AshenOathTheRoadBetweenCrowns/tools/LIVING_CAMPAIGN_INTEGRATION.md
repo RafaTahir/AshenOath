@@ -62,8 +62,27 @@ project: its inherited cemetery helper requires authored resources absent from
 that memory-only project. That adapter must be checked with integrated assets.
 No actual world, native household contact/geometry, rendered input circuit,
 performance, or six-ending gameplay acceptance is claimed by the memory tests.
-Background rendered execution is a separate runner follow-up; the current
-harness must not be launched until its foreground-window behavior is removed.
+The follow-up save validation rejects malformed household/consent/roster shapes,
+unknown or duplicate people, refused roster entries, nonfinite passage progress
+and inconsistent ordered departure consequences before deferred content mounts.
+Its memory-only round passed 368 consequence assertions and 435 campaign
+revision assertions. Both community/full input entry scripts passed check-only
+parsing. See `native-resumed-r1/receipt-r6.json` and the matching `r6` logs.
+The ward projection also removes the witness runes; the blocked-waypost hint
+now directs the pending relocation along its actual route and refuge.
+
+Background acceptance now uses the shared `background_native_capture.py`
+launcher imported byte-for-byte from motion checkpoint `c96be105`, with startup
+no-focus settings, the real compatibility renderer, and ordinary in-process
+input events. It creates an owned non-input Windows desktop and never switches
+desktops or requests foreground. The two entry scripts reject a missing desktop
+marker/no-focus flag, and the receipt checks the desktop, actual viewport size,
+renderer and owned-process/desktop cleanup. The helper is included in frozen
+input hashes. The shared owner observed its separate two-size GPU smoke; this
+does not establish campaign gameplay. Receipt/adapter Python tests pass (23),
+including rejected foreground/cursor shortcuts and mocked timeout cleanup.
+The bridge acceptance endpoint allows the actual followers' lead gap plus the
+input walker's stopping tolerance. All world acceptance listed above is pending.
 
 ## Current source checkpoint: playable runtime wiring (2026-11-07)
 

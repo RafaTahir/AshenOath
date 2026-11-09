@@ -33,6 +33,8 @@ func _initialize() -> void:
 	if DisplayServer.get_name().to_lower()=="headless":
 		_fail("Full campaign input requires a rendered viewport")
 		await _finish(); return
+	if not _background_rendered_ready():
+		await _finish(); return
 	var version: Dictionary=Engine.get_version_info()
 	if int(version.major)!=4 or int(version.minor)!=6 or int(version.patch)!=3:
 		_fail("Full campaign input requires pinned Godot 4.6.3")
@@ -56,7 +58,6 @@ func _initialize() -> void:
 	legacy=adapter.new(); legacy.owner=self
 	expected_chapters=revision_script.chapter_ids(2 if expanded else 1)
 	DisplayServer.window_set_size(Vector2i(960,540) if options.get("viewport","desktop")=="touch" else Vector2i(1280,720))
-	DisplayServer.window_move_to_foreground()
 	var scene := load("res://scenes/main.tscn") as PackedScene
 	if scene==null:
 		_fail("Main scene is missing")
@@ -344,7 +345,8 @@ func _open_road_departure(evidence: Dictionary) -> Dictionary:
 	_check(bodies_visible,"The consenting households have two actual native bodies beside the passage")
 	await _save_reload("departure_load")
 	if str(game.story_state.get_flag("community_route",""))=="crossing":
-		for point: Vector3 in [Vector3(3,1,0),Vector3(5,1,0),Vector3(7.5,1,0),Vector3(10.5,1,0),Vector3(11.5,1,0)]:
+		# Walk beyond the follower's end point plus lead gap and movement tolerance.
+		for point: Vector3 in [Vector3(3,1,0),Vector3(5,1,0),Vector3(7.5,1,0),Vector3(10.5,1,0),Vector3(12,1,0)]:
 			await _walk_direct(point)
 			await _seconds(1.0)
 	else:

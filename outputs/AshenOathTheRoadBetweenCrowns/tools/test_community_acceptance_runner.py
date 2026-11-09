@@ -1,7 +1,14 @@
 """Source-only checks for acceptance isolation and non-injected coverage."""
 import json
+import contextlib
+import io
 from pathlib import Path
+import subprocess
+import sys
+import tempfile
+from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 import run_community_acceptance as runner
 
@@ -89,9 +96,70 @@ class AcceptanceContractTests(unittest.TestCase):
         source = runner.HARNESS.read_text(encoding="utf-8")
         for forbidden in [".set_flag(", ".complete_objective(", ".complete_choice(", ".record_consent(",
                           ".apply_board_action(", ".global_position =", ".global_position=", ".choose(",
-                          ".activate(", "_handle_interaction(", "._apply_mouse_motion(", ".emit_signal("]:
+                          ".activate(", "_handle_interaction(", "._apply_mouse_motion(", ".emit_signal(",
+                          "DisplayServer.window_move_to_foreground(", "Input.warp_mouse("]:
             self.assertNotIn(forbidden, source)
         self.assertIn("Input.parse_input_event(event)", source)
+
+
+class BackgroundReceiptTests(unittest.TestCase):
+    def run_fixture(self, change=None, timeout=False):
+        """Mock only process creation; exercise the complete receipt validator."""
+        with tempfile.TemporaryDirectory() as folder:
+            output = Path(folder)
+            image = output / "observation.png"
+            image.write_bytes(b"mock image; this fixture makes no rendering claim")
+            report = {"status":"pass", "failures":[], "case":"fixture", "completed_work":[],
+                      "progression_injection":False, "input_events":60, "execution_mode":"background-rendered",
+                      "capture_desktop":"owned_fixture", "viewport_size":[1280,720],
+                      "no_focus":True, "headless":False, "renderer":"gl_compatibility",
+                      "user_data_dir":str(output / "profile"), "observations":[{"image":str(image)}]}
+            if change:
+                report.update(change)
+            runner.write(output / "report.json", report)
+            receipt = {"output":str(output), "immutable_inputs":[], "environment":{}, "command":["mock_engine"],
+                       "isolated_project":str(output), "timeout_seconds":1, "case":"fixture",
+                       "seed_contract":{"expected_work":[]}, "viewport":"desktop",
+                       "expected_user_data_dir":str(output / "profile")}
+            process = SimpleNamespace(pid=123, stopped=False, closed=False, desktop_receipt={
+                "desktop":"owned_fixture", "input_desktop_before":"Default", "input_desktop_after_launch":"Default"})
+            def wait(timeout):
+                if should_timeout:
+                    raise subprocess.TimeoutExpired("mock_engine", timeout)
+                return 0
+            def stop(owned):
+                self.assertIs(owned, process)
+                process.stopped = True
+            def close():
+                self.assertTrue(process.stopped)
+                process.closed = True
+                process.desktop_receipt["input_desktop_after_exit"] = "Default"
+            should_timeout = timeout
+            process.wait, process.close = wait, close
+            helper = SimpleNamespace(spawn_background=lambda *args, **kwargs: process)
+            with patch.dict(sys.modules, {"background_native_capture":helper}), patch.object(runner,"stop_owned_process",stop), contextlib.redirect_stdout(io.StringIO()):
+                code = runner.run(receipt,output / "runner.json")
+            self.assertTrue(process.closed)
+            self.assertEqual(receipt["desktop"]["input_desktop_after_exit"],"Default")
+            return code, receipt
+
+    def test_matching_background_receipt_closes_owned_desktop(self):
+        code, receipt = self.run_fixture()
+        self.assertEqual(code,0)
+        self.assertEqual(receipt["status"],"pass")
+
+    def test_wrong_desktop_and_viewport_cannot_pass(self):
+        for change in [{"capture_desktop":"Default"},{"viewport_size":[960,540]},{"execution_mode":"foreground"},
+                       {"no_focus":False},{"headless":True},{"renderer":"dummy"}]:
+            with self.subTest(change=change):
+                code, receipt = self.run_fixture(change)
+                self.assertEqual(code,1)
+                self.assertTrue(receipt["failures"])
+
+    def test_timeout_still_stops_process_and_closes_desktop(self):
+        code, receipt = self.run_fixture(timeout=True)
+        self.assertEqual(code,1)
+        self.assertIn("timed out",receipt["failures"][0])
 
 
 if __name__ == "__main__":

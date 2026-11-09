@@ -133,12 +133,14 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
         seed_copy = output / "seed.json"
         seed_copy.write_bytes(seed)
         seed_inputs.append(seed_copy)
-    command = [str(engine), "--path", str(isolated), "--rendering-method", "gl_compatibility",
+    command = [str(engine), "--path", str(isolated), "--windowed", "--rendering-method", "gl_compatibility",
                "--rendering-driver", "opengl3", "--script", str(script), "--log-file", str(output / "godot.log"),
                "--", "--root-pack=" + root_pack.as_posix(), "--packs=" + pack_dir.as_posix(),
-               "--case=" + args.case, "--viewport=" + args.viewport, "--output=" + output.as_posix()]
+               "--case=" + args.case, "--viewport=" + args.viewport, "--output=" + output.as_posix(),
+               "--background-rendered=true"]
     immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, *seed_inputs, *extras,
-                 Path(__file__).resolve(), PROJECT / "tools/run_living_cast_capture.py", *(runner_sources or []), engine, root_pack, *packs]
+                 Path(__file__).resolve(), PROJECT / "tools/run_living_cast_capture.py", PROJECT / "tools/background_native_capture.py",
+                 *(runner_sources or []), engine, root_pack, *packs]
     receipt = {
         "schema_version": 1, "kind": "community_world_input_runner", "status": "prepared",
         "case": args.case, "git_commit": commit, "source_status": git("status", "--short").decode(),
@@ -148,6 +150,7 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
         "immutable_inputs": [{"path": str(path), "bytes": path.stat().st_size, "sha256": sha256(path)} for path in immutable],
         "source_project_sha256": hashlib.sha256(config).hexdigest(), "physical_phone_coverage": False,
         "touch_input_coverage": False, "viewport": args.viewport,
+        "execution_mode": "background-rendered",
         "progression_setup": "one supplied seed before engine startup" if seed is not None else "empty profile; actual New Game",
     }
     receipt_path = output / "runner.json"
@@ -163,6 +166,10 @@ def verify_inputs(receipt: dict) -> None:
 
 
 def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
+    # The shared launcher creates the renderer on an owned, non-input Windows
+    # desktop from its first native window. There is no foreground fallback.
+    from background_native_capture import spawn_background
+
     output = Path(receipt["output"])
     process = None
     started = time.monotonic()
@@ -173,10 +180,9 @@ def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
         environment = os.environ.copy()
         environment.update(receipt["environment"])
         with (output / "stdout.log").open("wb") as log:
-            process = subprocess.Popen(receipt["command"], cwd=receipt["isolated_project"], env=environment,
-                                       stdout=log, stderr=subprocess.STDOUT,
-                                       creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+            process = spawn_background(receipt["command"], cwd=receipt["isolated_project"], env=environment, stdout=log)
             receipt["owned_pid"] = process.pid
+            receipt["desktop"] = process.desktop_receipt.copy()
             write(receipt_path, receipt)
             receipt["exit_code"] = process.wait(timeout=receipt["timeout_seconds"])
         verify_inputs(receipt)
@@ -188,6 +194,13 @@ def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
             errors.append("physical task coverage differs from requested case")
         if report.get("progression_injection") is not False or report.get("input_events", 0) < 50:
             errors.append("real-input evidence is incomplete")
+        if report.get("execution_mode") != "background-rendered" or report.get("capture_desktop") != receipt["desktop"]["desktop"]:
+            errors.append("rendered fixture did not confirm its isolated desktop")
+        if report.get("no_focus") is not True or report.get("headless") is not False or report.get("renderer") != "gl_compatibility":
+            errors.append("fixture did not retain the unfocusable native compatibility renderer")
+        expected_size = [960, 540] if receipt["viewport"] == "touch" else [1280, 720]
+        if report.get("viewport_size") != expected_size:
+            errors.append("rendered viewport differs from the requested dimensions")
         if receipt["seed_contract"].get("suite"):
             if extra_validator is None:
                 errors.append("complete campaign has no frozen receipt validator")
@@ -217,7 +230,21 @@ def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
         receipt["failures"] = [str(error)]
     finally:
         if process is not None:
-            stop_owned_process(process)
+            try:
+                stop_owned_process(process)
+            except (OSError, ValueError, subprocess.TimeoutExpired) as error:
+                receipt["status"] = "fail"
+                receipt.setdefault("failures", []).append("owned process cleanup: " + str(error))
+            try:
+                process.close()
+            except (OSError, RuntimeError) as error:
+                receipt["status"] = "fail"
+                receipt.setdefault("failures", []).append("owned desktop cleanup: " + str(error))
+            receipt["desktop"] = process.desktop_receipt.copy()
+            desktop = receipt["desktop"]
+            if any(desktop.get(key) == desktop["desktop"] for key in ["input_desktop_before", "input_desktop_after_launch", "input_desktop_after_exit"]):
+                receipt["status"] = "fail"
+                receipt.setdefault("failures", []).append("capture desktop became interactive")
         receipt["elapsed_seconds"] = round(time.monotonic() - started, 3)
         write(receipt_path, receipt)
     print(json.dumps({"status": receipt["status"], "receipt": str(receipt_path)}))

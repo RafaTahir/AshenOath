@@ -278,7 +278,7 @@ static func project_ending(game, parent: Node3D, zone: String) -> void:
 	var state=game.story_state
 	var root: Node3D=parent.get_parent().get_parent()
 	if not Rules._true(state,"open_road_protection_dismantled"): return
-	for pattern: String in ["HartRitualRune*","HartMemoryRoot*","WhiteHartWitnessDisplay","HartWitnessLight","Shrine Beacon"]:
+	for pattern: String in ["HartRitualRune*","HartWitnessRune*","HartMemoryRoot*","WhiteHartWitnessDisplay","HartWitnessLight","Shrine Beacon"]:
 		for node: Node3D in root.find_children(pattern,"Node3D",true,false): node.visible=false
 	if zone=="hart_glade":
 		for x in [-7.0,7.0]:
