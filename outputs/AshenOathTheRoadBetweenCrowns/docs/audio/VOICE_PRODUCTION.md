@@ -6,14 +6,14 @@ Cast recipes in `data/voice_cast.json` preserve identity using fixed model voice
 
 The model and inference dependencies stay under ignored work directories. Only compressed audio, recipes and provenance ship. Kokoro's Apache-2.0 model card, license and voice table are retained here. The old VCTK attribution remains for historical provenance.
 
-Manifest contains 534 exact-text performances. This run synthesized 25 files and reused 468 scheduled performances. 347 collected recordings remain unproduced and use subtitles until completed.
+Manifest contains 559 exact-text performances. This run synthesized 25 files and reused 493 scheduled performances. 322 collected recordings remain unproduced and use subtitles until completed.
 
 | Cast role | Clips |
 |---|---:|
-| player | 177 |
-| sister_anwen | 78 |
+| player | 180 |
+| sister_anwen | 81 |
 | rook | 62 |
-| mira | 49 |
+| mira | 52 |
 | tor | 40 |
 | elna | 14 |
 | toma | 15 |
@@ -22,8 +22,8 @@ Manifest contains 534 exact-text performances. This run synthesized 25 files and
 | senn | 13 |
 | white_hart | 9 |
 | len | 3 |
-| merrow | 3 |
-| vale | 8 |
+| merrow | 9 |
+| vale | 13 |
 | guard | 4 |
 | patrol_guard | 2 |
 | servant | 2 |
@@ -38,5 +38,5 @@ Manifest contains 534 exact-text performances. This run synthesized 25 files and
 | water_carrier | 0 |
 | quality_sweeper | 0 |
 | quality_mourner | 2 |
-| nessa | 5 |
-| nera | 12 |
+| nessa | 8 |
+| nera | 14 |
