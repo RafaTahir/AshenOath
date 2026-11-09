@@ -3,8 +3,14 @@ extends SceneTree
 ## Real motion/presentation owners on a tiny synthetic rig. No model packs,
 ## gameplay world, filesystem saves or external libraries are required.
 const Driver = preload("res://scripts/character_animation_driver.gd")
+const Presentation = preload("res://scripts/character_presentation.gd")
 var failures: Array[String] = []
 var checks := 0
+
+class WorkstationOwner extends Node:
+	var available := false
+	func story_workstation_for(_driver: Node, identity: String) -> Dictionary:
+		return {"verified_fixture":true} if available and identity == "vale" else {}
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -82,6 +88,7 @@ func _run() -> void:
 	driver.set_life_activity("watch")
 	_check(driver.life_clip == &"life/Life_Work", "Senn's contact-free observation can use authored work without a fabricated tool")
 	_check(not driver.supports_story_prop("cup"), "cup eligibility fails without the native drink clip even on a valid hand rig")
+	_verify_story_station_owner(driver,actor)
 	driver.clear_life_activity()
 	driver.life_idle_only = true
 	driver.set_relaxed_idle(true)
@@ -94,14 +101,16 @@ func _run() -> void:
 	driver.stop_story_gesture()
 	driver.life_idle_only = false
 	_check(driver.set_observation_clip("Life_Idle_A"), "creature observation can acquire a native ambient clip")
-	driver.advance_external(0.25)
+	# Let the ordinary 0.14s state crossfade publish across actual updates;
+	# a single large advance can consume only its queued transition reset.
+	for tick in 6: driver.advance_external(0.05)
 	var observation: Dictionary = driver.observation_motion_sample()
 	_check(not observation.is_empty() and observation.clip == "life/Life_Idle_A" and is_equal_approx(float(observation.duration),4.0), "observation samples identify the actual playing native branch")
 	_check(not observation.is_empty() and is_equal_approx(float(observation.time),driver.animation_graph.playback.get_current_play_position()) and is_equal_approx(float(observation.phase),float(observation.time)/4.0), "observation phase comes from the graph clock")
 	var observation_time := float(observation.get("time",0.0))
 	driver.set_observation_clip("Life_Idle_A")
 	driver.advance_external(0.25)
-	_check(absf(float(driver.observation_motion_sample().get("time",0.0))-observation_time-0.25)<0.002, "repeated ambient selection preserves native clip progress")
+	_check(absf(float(driver.observation_motion_sample().get("time",0.0))-observation_time-0.25)<0.002, "repeated ambient selection preserves native clip progress: before=%s after=%s node=%s travel=%s" % [observation_time,driver.observation_motion_sample(),driver.animation_graph.playback.get_current_node(),driver.animation_graph.playback.get_travel_path()])
 	driver.set_distance_suspended(true)
 	_check(not driver.set_observation_clip("Life_Idle_B"), "distance-suspended creatures cannot select a new ambient pose")
 	_check(driver.observation_motion_sample().is_empty(), "suspended ambient poses emit no visible event samples")
@@ -197,7 +206,177 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(not is_instance_valid(final_tool) and is_instance_valid(permanent), "motion-owner teardown cleans generated props and retains borrowed equipment")
+	_verify_measured_grips()
+	await _verify_authored_head()
 	_finish(actor)
+
+func _verify_story_station_owner(driver: Node, actor: Node3D) -> void:
+	var owner := WorkstationOwner.new()
+	actor.add_child(owner)
+	driver.set_story_workstation_owner(owner)
+	owner.available = true
+	_check(not driver.supports_story_workstation("vale"), "physical ledger eligibility alone cannot replace a missing native settle clip")
+	driver.resolved_clip_map["story_settle_ledger"] = &"life/Life_Work"
+	_check(driver.supports_story_workstation("vale"), "a bound native cue consults the existing routine's physical station owner")
+	driver.clear_life_activity()
+	_check(driver.supports_story_workstation("vale"), "dialogue can release the ambient pose without losing station availability")
+	owner.available = false
+	_check(not driver.supports_story_workstation("vale"), "busy or removed station geometry disables the native personal cue")
+	owner.available = true
+	_check(not driver.supports_story_workstation("merrow"), "another actor's task cannot authorize a ledger gesture")
+	driver.distance_suspended = true
+	_check(not driver.supports_story_workstation("vale"), "distance-suspended actors cannot acquire physical story work")
+	driver.distance_suspended = false
+	driver.dead = true
+	_check(not driver.supports_story_workstation("vale"), "terminal actors cannot acquire physical story work")
+	driver.dead = false
+	owner.free()
+	_check(not driver.supports_story_workstation("vale"), "a destroyed routine owner cannot leave a stale station capability")
+	driver.set_story_workstation_owner(null)
+	driver.resolved_clip_map.erase("story_settle_ledger")
+
+func _verify_authored_head() -> void:
+	var actor := Node3D.new()
+	root.add_child(actor)
+	var skeleton := Skeleton3D.new()
+	skeleton.name = "Skeleton3D"
+	actor.add_child(skeleton)
+	for bone: String in ["Head","hand_r"]: skeleton.add_bone(bone)
+	var head_script := preload("res://scripts/story_head_modifier.gd")
+	for control: String in head_script.FACE_CONTROLS:
+		skeleton.add_bone("Face_"+control)
+		skeleton.set_bone_parent(skeleton.get_bone_count()-1,0)
+	var mesh := MeshInstance3D.new()
+	mesh.name = "NativeHeadBody"
+	mesh.mesh = BoxMesh.new()
+	actor.add_child(mesh)
+	var player := AnimationPlayer.new()
+	actor.add_child(player)
+	var native_head := Quaternion.from_euler(Vector3(-0.16,0.08,0.04))
+	var library := AnimationLibrary.new()
+	for name: String in ["Idle","Life_Drink","Life_Cup_Hold"]:
+		var clip := Animation.new()
+		clip.length = 4.0
+		clip.loop_mode = Animation.LOOP_NONE if name == "Life_Drink" else Animation.LOOP_LINEAR
+		var track := clip.add_track(Animation.TYPE_ROTATION_3D)
+		clip.track_set_path(track,NodePath("Skeleton3D:Head"))
+		clip.rotation_track_insert_key(track,0.0,native_head)
+		clip.rotation_track_insert_key(track,4.0,native_head)
+		library.add_animation(name,clip)
+	player.add_animation_library("life",library)
+	var driver := Driver.new()
+	actor.add_child(driver)
+	_check(driver.configure(actor,{"idle":"life/Idle","death":"life/Idle","story_drink":"life/Life_Drink","story_cup_hold":"life/Life_Cup_Hold"}),"sip ownership fixture binds a native head clip")
+	driver.set_external_tick(true)
+	driver.life_extra_clips = {"drink":"Life_Drink","cup_hold":"Life_Cup_Hold"}
+	var face := preload("res://scripts/character_face_driver.gd").new()
+	actor.add_child(face)
+	_check(face.configure(actor,"synthetic_merrow"),"sip ownership fixture binds the actual face owner")
+	face.set_conversation_active(true)
+	face.set_focus_point(Vector3(2,1,-2))
+	face.set_expression("concerned")
+	var attention := face.capture_attention()
+	driver.set_dialogue_pose(true)
+	driver.play_story_gesture("drink")
+	_check(not driver.owns_authored_head_pose(),"an unbound cup cannot acquire the native head")
+	_bind_fixture_cup(driver,skeleton)
+	driver.play_story_gesture("drink")
+	_check(driver.owns_authored_head_pose(),"the actual bound cup and native sip acquire head rotation")
+	await process_frame
+	face.update_timer.stop()
+	var head: Node = face.head_modifier
+	head.current_yaw = 0.22
+	head.current_pitch = 0.27
+	head.current_roll = 0.09
+	head.look_yaw = 0.24
+	head.attention_pitch = 0.2
+	head.blink_closure = 0.8
+	head.speech_amount = 0.25
+	head.gesture("disagree")
+	skeleton.set_bone_pose_rotation(0,native_head)
+	head._process_modification()
+	_check(skeleton.get_bone_pose_rotation(0).is_equal_approx(native_head),"gaze, mood and a concurrent gesture cannot move the calibrated sip head")
+	_check(skeleton.get_bone_pose_position(skeleton.find_bone("Face_LidUpper_L")).y<0.0,"blink remains eligible during a native sip")
+	_check(head.expression_weights.length()>0.0 and head.current_speech>0.0,"expression and jaw delivery remain eligible during a native sip")
+	_check(face.attention_mode==attention.mode and face.focus_point==attention.point and face.expression==attention.expression,"native head ownership leaves the complete attention intent intact")
+	for tick in 100: driver.advance_external(0.05)
+	_check(not driver.owns_authored_head_pose() and driver._holding_story_cup(),"sip completion releases the head while retaining the scene's cup hold")
+	skeleton.set_bone_pose_rotation(0,native_head)
+	head.current_yaw = 0.2
+	head._process_modification()
+	_check(not skeleton.get_bone_pose_rotation(0).is_equal_approx(native_head),"ordinary additive attention resumes after the sip")
+	for interruption: String in ["cancel","distance","death","restore"]:
+		driver.set_distance_suspended(false)
+		driver.reset_for_journey_restore()
+		driver.set_dialogue_pose(true)
+		_bind_fixture_cup(driver,skeleton)
+		driver.play_story_gesture("drink")
+		_check(driver.owns_authored_head_pose(),"sip reacquires before "+interruption)
+		match interruption:
+			"cancel": driver.stop_story_gesture()
+			"distance": driver.set_distance_suspended(true)
+			"death": driver.set_dead()
+			"restore": driver.reset_for_journey_restore()
+		_check(not driver.owns_authored_head_pose(),interruption+" immediately releases native head ownership")
+	actor.free()
+
+func _bind_fixture_cup(driver: Node, skeleton: Skeleton3D) -> void:
+	# Physical calibration belongs to the native asset fixture. This tiny cup
+	# exercises the real attachment/action lifetime without loading that pack.
+	var cup := BoneAttachment3D.new()
+	cup.bone_name = "hand_r"
+	cup.bone_idx = skeleton.find_bone("hand_r")
+	cup.set_meta("kind","cup")
+	skeleton.add_child(cup)
+	var mesh := MeshInstance3D.new()
+	mesh.mesh = CylinderMesh.new()
+	cup.add_child(mesh)
+	driver.story_prop = cup
+
+func _verify_measured_grips() -> void:
+	var actor := Node3D.new()
+	actor.scale=Vector3.ONE*1.25
+	root.add_child(actor)
+	var skeleton := Skeleton3D.new()
+	actor.add_child(skeleton)
+	for side: String in ["l","r"]:
+		skeleton.add_bone("hand_"+side)
+		var bone := skeleton.find_bone("hand_"+side)
+		skeleton.set_bone_rest(bone,Transform3D(Basis(Vector3.UP,0.3),Vector3(0.1,0.9,0)))
+	skeleton.reset_bone_poses()
+	var record := {"verified":true,"source_sha256":"0".repeat(64),"bone":"hand_r","palm":Vector3(0.02,0.04,-0.01),"anchor":Vector3(0,0.115,0.0015),"basis":Basis.IDENTITY}
+	actor.set_meta("activity_prop_grips",{"cloth":record})
+	var socket := Presentation.attach_activity_tool(actor,"cloth") as BoneAttachment3D
+	_check(socket!=null and socket.has_meta("measured_grip"),"measured activity grip binds on a scaled real hand socket")
+	if socket!=null:
+		var grip := socket.get_child(0) as Node3D
+		var visual := grip.get_child(0) as MeshInstance3D
+		var frame := skeleton.global_transform*skeleton.get_bone_global_pose(socket.bone_idx)
+		var physical := frame*grip.transform*visual.transform
+		_check((physical*(record.anchor as Vector3)).distance_to(frame*(record.palm as Vector3))<0.001,"actual cloth surface anchor meets the measured palm")
+		_check(physical.basis.get_scale().is_equal_approx(Vector3.ONE),"measured grip does not resize the retained activity mesh")
+	var invalid := record.duplicate()
+	invalid.basis=Basis.IDENTITY.scaled(Vector3(2,1,1))
+	_check(Presentation.grip_record_error(skeleton,invalid)!="","calibration cannot introduce prop scaling")
+	actor.scale=Vector3(1.25,1.35,1.25)
+	_check(Presentation.grip_record_error(skeleton,record)!="","unexpected nonuniform hand ancestry rejects calibration")
+	actor.scale=Vector3.ONE*1.25
+	Presentation._add_castle_role_equipment(actor,"vargan_record_keeper")
+	var equipment := actor.find_child("CastleRoleEquipment",true,false) as Node3D
+	var book := equipment.get_node("VarganRecordBook") as MeshInstance3D
+	var clasp := equipment.get_node("VarganRecordBookClasp") as Node3D
+	var relative_clasp := clasp.position-book.position
+	var dimensions := book.mesh.get_aabb().size
+	var carried := {"kind":"book","verified":true,"source_sha256":"0".repeat(64),"bone":"hand_l","palm":Vector3(-0.02,0.04,-0.01),"anchor":Vector3(-0.13,0,0),"basis":book.basis}
+	_check(Presentation.fit_carried_equipment(actor,carried),"measured carried book attaches its physical spine edge")
+	var book_socket := equipment.get_parent() as BoneAttachment3D
+	var hand_frame := skeleton.global_transform*skeleton.get_bone_global_pose(book_socket.bone_idx)
+	var actual := hand_frame*equipment.transform*book.transform*(carried.anchor as Vector3)
+	_check(actual.distance_to(hand_frame*(carried.palm as Vector3))<0.001,"book spine anchor meets the actual hand branch")
+	_check(book.mesh.get_aabb().size==dimensions and (clasp.position-book.position).is_equal_approx(relative_clasp),"book fitting retains its dimensions and clasp placement")
+	var fitted := book.transform
+	_check(Presentation.fit_carried_equipment(actor,carried) and book.transform.is_equal_approx(fitted),"carried book fitting is idempotent")
+	actor.free()
 
 func _clip(duration: float) -> Animation:
 	var clip := Animation.new()

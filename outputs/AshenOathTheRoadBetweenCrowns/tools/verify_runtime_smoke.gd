@@ -28,14 +28,17 @@ func _initialize() -> void:
 	while not game.opening_startup_metrics.has("menu_ready_ms") and Time.get_ticks_msec() < deadline:
 		await process_frame
 	_check(game.opening_startup_metrics.has("menu_ready_ms"), "Main menu never reached usable readiness")
+	_teardown_ids(game,"before_new_game")
 	game.call("_new_game")
 	_check(await preload("res://tools/runtime_fixture.gd").ready(game, "greyfen"), "Explicit New Game readiness failed")
 	_check(game.get("world_materials") != null, "World material service was not initialized before control")
 	_check(bool(game.get("game_started")) and game.current_zone_id == "greyfen", "Explicit New Game did not enter Greyfen")
 	_check(game.zone_root != null and game.player != null and bool(game.player.can_control), "Greyfen never reached playable readiness")
+	_teardown_ids(game,"after_playable")
 	if "--quit-through-menu" in OS.get_cmdline_user_args():
 		await game.get_system("session")._handle_quit_request()
 		_check(game.runtime_services == null and game.pending_zone_retirements == 0, "Quit retained services/zones")
+		_teardown_ids(game,"after_quit_cleanup")
 		print("RUNTIME SMOKE: " + ("PASS" if failures.is_empty() else "FAIL") + " (quit after New Game)")
 		return
 
@@ -67,6 +70,10 @@ func _initialize() -> void:
 func _frames(count: int) -> void:
 	for _index in range(count):
 		await process_frame
+
+func _teardown_ids(game: Node, label: String) -> void:
+	if "--trace-refcounted-ids" not in OS.get_cmdline_user_args(): return
+	load("res://tools/animation_teardown_id_probe.gd").emit_snapshot(game,label)
 
 func _check(condition: bool, message: String) -> void:
 	if not condition and not failures.has(message):

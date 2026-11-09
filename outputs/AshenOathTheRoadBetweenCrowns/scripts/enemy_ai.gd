@@ -506,6 +506,11 @@ func set_encounter_active(value: bool) -> void:
 		native_attack_tail_active = false
 		if animation_driver != null:
 			animation_driver.set_external_tick(false)
+			# Suspension cancels the encounter's strike, including its post-contact
+			# tail. Otherwise the frozen action rejects the next authorized Attack
+			# after activation, despite the AI having started a fresh windup.
+			if not dead and animation_driver.action_active and animation_driver.current_state in ["windup", "attack"]:
+				animation_driver.stop_action()
 		# A suspended strike must not reserve the encounter's attack lane or
 		# resume halfway through its telegraph when this actor becomes active.
 		_release_attack_token()

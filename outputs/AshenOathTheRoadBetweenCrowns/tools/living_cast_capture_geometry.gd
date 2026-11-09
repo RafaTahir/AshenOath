@@ -1,5 +1,17 @@
 extends RefCounted
 
+func support_point(space: PhysicsDirectSpaceState3D, feet: Vector3, excluded: Array, max_height_delta: float) -> Vector3:
+	# Spatial clearance expects a ground/feet point, not a capsule centre.
+	# A named activity coordinate alone cannot establish a floor beneath it.
+	if space == null or not feet.is_finite(): return Vector3.INF
+	var excluded_rids: Array[RID] = []
+	excluded_rids.assign(excluded)
+	var query := PhysicsRayQueryParameters3D.create(feet+Vector3.UP*2.0,feet-Vector3.UP*2.0,1,excluded_rids)
+	var hit := space.intersect_ray(query)
+	if hit.is_empty() or (hit.normal as Vector3).y < 0.7: return Vector3.INF
+	var support: Vector3 = hit.position
+	return support if absf(support.y-feet.y) <= max_height_delta else Vector3.INF
+
 ## Capture-only visual geometry. Physics masks do not include decorative facades.
 ## Build each mesh BVH once, outside measured windows; query current transforms.
 var entries: Array[Dictionary] = []

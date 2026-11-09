@@ -69,7 +69,7 @@ const LIFE_MOTION := {
 	"toma":{"library":"res://assets_external/characters_prepared/animations/life_C06.res", "work":["tend", "sort_seeds", "check_supplies"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
 	"nera":{"library":"res://assets_external/characters_prepared/animations/life_C12.res", "work":["check_rope", "check_supplies"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
 	"senn":{"library":"res://assets_external/characters_prepared/animations/life_C07.res", "work":["watch", "lookout"], "contact":0.50},
-	"vale":{"library":"res://assets_external/characters_prepared/animations/life_C09.res", "work":["read", "write"], "contact":0.50, "contact_probe":"palm", "requires_station":true, "extra_clips":{"lower_book":"Life_Lower_Book"}},
+	"vale":{"library":"res://assets_external/characters_prepared/animations/life_C09.res", "work":["read", "write"], "contact":0.50, "contact_probe":"palm", "requires_station":true, "extra_clips":{"settle_ledger":"Life_Settle_Ledger"}},
 	"merrow":{"library":"res://assets_external/characters_prepared/animations/life_C10.res", "work":["check_supplies", "read", "administer"], "contact":0.50, "contact_probe":"palm", "requires_station":true, "extra_clips":{"drink":"Life_Drink", "cup_hold":"Life_Cup_Hold"}},
 	"edric":{"library":"res://assets_external/characters_prepared/animations/life_C08.res", "work":["read", "review_dispatch"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
 }

@@ -118,13 +118,16 @@ func _process_modification() -> void:
 		else:
 			delivery = gesture_offset(gesture_kind, gesture_time / length)
 	var weight := 1.0 - exp(-5.0 * delta)
-	current_yaw = lerpf(current_yaw, clampf(look_yaw + delivery.y, -0.30, 0.30), weight)
+	var motion_ref: WeakRef = skeleton.get_meta("character_motion_owner") if skeleton.has_meta("character_motion_owner") else null
+	var motion: Node = motion_ref.get_ref() if motion_ref != null else null
+	var authored_head := is_instance_valid(motion) and motion.has_method("owns_authored_head_pose") and bool(motion.owns_authored_head_pose())
+	current_yaw = lerpf(current_yaw, 0.0 if authored_head else clampf(look_yaw + delivery.y, -0.30, 0.30), weight)
 	current_speech = lerpf(current_speech, speech_amount, 1.0 - exp(-18.0 * delta))
-	current_pitch = lerpf(current_pitch, clampf(emotion_pitch + attention_pitch + delivery.x + current_speech * 0.012, -0.38, 0.38), weight)
-	current_roll = lerpf(current_roll, emotion_roll + delivery.z, weight)
+	current_pitch = lerpf(current_pitch, 0.0 if authored_head else clampf(emotion_pitch + attention_pitch + delivery.x + current_speech * 0.012, -0.38, 0.38), weight)
+	current_roll = lerpf(current_roll, 0.0 if authored_head else emotion_roll + delivery.z, weight)
 	var base := skeleton.get_bone_pose_rotation(head_index)
 	var target_rotation := base * Quaternion.from_euler(Vector3(current_pitch, current_yaw, current_roll))
-	if base != target_rotation:
+	if not authored_head and base != target_rotation:
 		skeleton.set_bone_pose_rotation(head_index, target_rotation)
 	if jaw_index >= 0:
 		var jaw_base := skeleton.get_bone_pose_rotation(jaw_index)

@@ -100,6 +100,8 @@ func _verify_bow_size(player: Node3D) -> void:
 	if hand_model == null or back_model == null: return
 	var back_span := _projected_extent(back_model,player.bow_back_visual.global_basis.y.normalized())
 	player.equipment_loadout.set_active_weapon("bow")
+	_check(player.weapon_mode=="bow" and player.is_bow_pose_active() and player.equipment_left_arm_ik!=null and player.bow_presentation!=null,"bow size regression exercises the real transfer and archery owners")
+	if player.equipment_left_arm_ik==null or player.bow_presentation==null: return
 	for weight: float in [0.0,0.5,1.0]:
 		var frame: Transform3D = player._equipment_anchor_world(player.bow_back_visual)
 		player._update_bow_equipment_reach({"position":frame.origin,"basis":frame.basis.orthonormalized(),"weight":weight})
@@ -107,6 +109,7 @@ func _verify_bow_size(player: Node3D) -> void:
 		_check(absf(span-back_span)<0.001,"retained bow keeps physical size through transfer weight "+str(weight))
 	player.equipment_left_arm_ik.stop()
 	player.bow_presentation._process_modification()
+	_check(player.bow_pose_valid,"actual archery pose ran before measuring its displayed bow")
 	var active_span := _projected_extent(hand_model,player.bow_visual.global_basis.y.normalized())
 	_check(absf(active_span-back_span)<0.001,"active archery cannot resize the bow after the draw handoff")
 	_check(not player.equipment_loadout.is_transitioning(),"visual size correction does not start an equipment transaction")
@@ -167,6 +170,19 @@ func _actor(role: String, occupation: String) -> void:
 			_check(not is_instance_valid(driver.life_modifier.tool) or not driver.life_modifier.tool.visible, role + " uses real station objects without an intersecting generic held prop")
 		if role == "sister_anwen_human":
 			_verify_staff(visual, driver)
+		if role == "blacksmith_tor":
+			var repair_station := workstation.duplicate()
+			repair_station.activity="repair"
+			repair_station.surface_prop="SupportedRepairBeam"
+			repair_station.held_tool=true
+			driver.set_life_workstation(repair_station)
+			driver.set_life_activity("repair")
+			for tick in 40: driver.advance_external(0.05)
+			driver.life_modifier.pose_weight=1.0
+			driver.life_modifier._process_modification()
+			var repair_sample: Dictionary = driver.life_modifier.last_contact_samples.get("right",{})
+			_check(is_instance_valid(driver.life_modifier.tool) and driver.life_modifier.tool.visible,"Tor keeps the actual hammer when repairing a supported beam")
+			_check(str(repair_sample.get("kind",""))=="hammer" and float(repair_sample.get("error",INF))<=0.06,"repair alias measures the retained hammer head, not the wrist")
 		driver.clear_life_activity()
 	var rest_poses: Array[Transform3D] = []
 	for index in driver.skeleton.get_bone_count():
@@ -236,17 +252,50 @@ func _actor(role: String, occupation: String) -> void:
 		_check(driver.set_story_prop("cup"), "Merrow binds actual cup to a valid hand socket")
 		driver.stop_action()
 		driver.set_dialogue_pose(true)
-		driver.play_story_gesture("drink")
+		driver.play_story_gesture("drink",1.0)
 		_check(driver.action_active and driver.active_action_clip == &"life/Life_Drink", "Merrow uses authored sip, never a generic gesture")
+		for tick in 240:
+			driver.advance_external(0.01)
+			if driver.animation_graph.playback.get_current_node()==&"story_drink" and driver.animation_graph.playback.get_current_play_position()>=2.0-0.00001: break
+		_check(absf(driver.animation_graph.playback.get_current_play_position()-2.0)<0.011,"Merrow contact check samples the actual sip phase")
+		_verify_story_cup(driver)
 		var cup: Node3D = driver.story_prop
 		driver.set_distance_suspended(true)
 		_check(not is_instance_valid(driver.story_prop) and not cup.visible, "distance interruption removes the action-owned cup immediately")
 		driver.set_distance_suspended(false)
 	if role == "vargan_record_keeper":
+		# Bind the real routine owner and physical station rather than allowing
+		# this extra cue merely because an animation exists in the library.
+		visual.reparent(station_host.zone_root, true)
+		var scene_owner := Routine.new()
+		scene_owner.host = station_host
+		station_host.zone_root.add_child(scene_owner)
+		scene_owner.set_process(false)
+		scene_owner.set_physics_process(false)
+		scene_owner.actors = [{"id":"vargan_record_keeper", "node":visual, "driver":driver}]
+		driver.set_story_workstation_owner(scene_owner)
+		_check(driver.supports_story_workstation("vale"), "Vale's cue requires its actual source-verified station ledger")
 		driver.stop_action()
 		driver.set_dialogue_pose(true)
-		driver.play_story_gesture("lower_book")
-		_check(driver.action_active and driver.active_action_clip == &"life/Life_Lower_Book", "Vale owns the authored desk-ledger transition")
+		driver.play_story_gesture("settle_ledger", 1.0)
+		_check(driver.action_active and driver.active_action_clip == &"life/Life_Settle_Ledger", "Vale owns the authored desk-ledger transition")
+		for tick in 240:
+			driver.advance_external(0.01)
+			if driver.animation_graph.playback.get_current_node() == &"story_settle_ledger" and driver.animation_graph.playback.get_current_play_position() >= 2.0-0.00001: break
+		_check(absf(driver.animation_graph.playback.get_current_play_position()-2.0)<0.011, "Vale's supported cue check samples its actual authored contact phase")
+		driver.skeleton.force_update_all_bone_transforms()
+		for side: String in ["left", "right"]:
+			var bone: int = driver.skeleton.find_bone("hand_l" if side == "left" else "hand_r")
+			var probe: Vector3 = driver.life_contact_probes.get(side,Vector3.INF)
+			_check(bone >= 0 and probe.is_finite(), "Vale's cue resolves the source-measured open " + side + " palm")
+			if bone < 0 or not probe.is_finite(): continue
+			var palm: Vector3 = driver.skeleton.global_transform * driver.skeleton.get_bone_global_pose(bone) * probe
+			var error := palm.distance_to(workstation[side])
+			print("LIVING CAST LEDGER: " + JSON.stringify({"side":side,"native_time":driver.animation_graph.playback.get_current_play_position(),"error":error}))
+			_check(error <= 0.006, "Vale's native " + side + " palm settles on the physical ledger within 6mm: " + str(error))
+		driver.set_story_workstation_owner(null)
+		scene_owner.actors.clear()
+		scene_owner.free()
 	driver.stop_story_gesture()
 	if driver.life_requires_station:
 		driver.set_life_workstation({})
@@ -262,10 +311,60 @@ func _actor(role: String, occupation: String) -> void:
 	_check(driver.dead and driver.life_clip == StringName(), role + " death prevents life restarting")
 	driver.reset_for_journey_restore()
 	_check(not driver.dead and driver.life_clip == StringName(), role + " journey restoration clears transient native work")
+	_verify_held_grips(visual,driver,role)
 	for index in driver.skeleton.get_bone_count():
 		_check(driver.skeleton.get_bone_rest(index).is_equal_approx(rest_poses[index]), role + " retains bone rest " + str(index))
 	visual.free()
 	await process_frame
+
+func _verify_story_cup(driver: Node) -> void:
+	var socket: BoneAttachment3D = driver.story_prop
+	_check(is_instance_valid(socket) and socket.get_child_count()==1,"native cup has one action-owned visual")
+	if not is_instance_valid(socket) or socket.get_child_count()!=1: return
+	var visual := socket.get_child(0) as Node3D
+	var grip := visual.get_node_or_null("ActualHandleGrip") as Marker3D
+	var rim := visual.get_node_or_null("ActualDrinkingRim") as Marker3D
+	var lip: Dictionary = visual.get_meta("lip_probe",{})
+	var grip_probe: Dictionary = visual.get_meta("grip_probe",{})
+	_check(grip!=null and rim!=null and not lip.is_empty() and not grip_probe.is_empty(),"native cup exposes source-measured physical handle, closed palm, rim and lip probes")
+	if grip==null or rim==null or lip.is_empty() or grip_probe.is_empty(): return
+	var skeleton: Skeleton3D = driver.skeleton
+	var hand := skeleton.global_transform * skeleton.get_bone_global_pose(socket.bone_idx)
+	var cup_frame := hand * socket.transform * visual.transform
+	var actual_grip := cup_frame * grip.position
+	var actual_rim := cup_frame * rim.position
+	var palm: Vector3 = grip_probe.get("point",Vector3.INF)
+	var bone := skeleton.find_bone(str(lip.get("bone","")))
+	var cup_hand_matches := str(grip_probe.get("bone","")) == str(socket.bone_name)
+	_check(bone>=0 and palm.is_finite() and cup_hand_matches,"cup contact resolves its own closed-palm hand and retained head bones")
+	if bone<0 or not palm.is_finite() or not cup_hand_matches: return
+	var actual_lip: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(bone) * (lip.point as Vector3)
+	var handle_error := actual_grip.distance_to(hand*palm)
+	var rim_error := actual_rim.distance_to(actual_lip)
+	print("LIVING CAST CUP: "+JSON.stringify({"native_time":driver.animation_graph.playback.get_current_play_position(),"handle_error":handle_error,"rim_error":rim_error,"actual_scale":cup_frame.basis.get_scale()}))
+	_check(handle_error<=0.002,"native cup handle meets the measured palm within 2mm: "+str(handle_error))
+	_check(rim_error<=0.004,"native cup rim meets the measured head-local lip within 4mm: "+str(rim_error))
+	_check(cup_frame.basis.get_scale().is_equal_approx(Vector3.ONE),"native cup retains its physical dimensions through the actual hand ancestry")
+	_check(driver.owns_authored_head_pose(),"native sip protects its calibrated head inclination at contact")
+
+func _verify_held_grips(visual: Node3D, driver: Node, role: String) -> void:
+	if role in ["nessa","widow_elna","farmer_toma","saga_nera"]:
+		var records: Dictionary = visual.get_meta("activity_prop_grips",{})
+		for style: String in ["rope","bowl","bread","cloth"]:
+			_check(records.has(style),role+" has a source-verified "+style+" grip")
+			if not records.has(style): continue
+			var socket := Presentation.attach_activity_tool(visual,style) as BoneAttachment3D
+			_check(socket!=null and socket.has_meta("measured_grip"),role+" binds the measured "+style+" surface")
+			if socket==null: continue
+			var grip := socket.get_child(0) as Node3D
+			var prop := grip.get_child(0) as MeshInstance3D
+			var record: Dictionary = records[style]
+			var frame: Transform3D = driver.skeleton.global_transform*driver.skeleton.get_bone_global_pose(socket.bone_idx)
+			var physical := frame*grip.transform*prop.transform
+			var error := (physical*(record.anchor as Vector3)).distance_to(frame*(record.palm as Vector3))
+			print("LIVING CAST HELD GRIP: "+JSON.stringify({"role":role,"style":style,"error":error,"scale":physical.basis.get_scale()}))
+			_check(error<=0.001 and physical.basis.get_scale().is_equal_approx(Vector3.ONE),role+" "+style+" reaches its real palm without scaling the retained mesh")
+			socket.free()
 
 func _pose(skeleton: Skeleton3D) -> Array:
 	var result: Array = []

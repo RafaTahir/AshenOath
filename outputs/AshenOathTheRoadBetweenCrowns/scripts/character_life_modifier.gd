@@ -189,8 +189,9 @@ func _process_modification() -> void:
 	var reached_contact := not authored_work
 	var contact_hands := 0
 	var reached_hands := 0
+	var hammer_work := effective in ["forge", "repair"] and tool_kind == "hammer" and is_instance_valid(tool_contact)
 	for arm: Dictionary in arms:
-		if authored_work and effective == "forge" and float(arm.side) < 0:
+		if authored_work and hammer_work and float(arm.side) < 0:
 			continue
 		# Anwen's fitted right-hand staff remains the sole owner of that arm
 		# while her free hand performs care at the table.
@@ -254,7 +255,7 @@ func _process_modification() -> void:
 			goal = station.get("right" if working_right else "left", goal)
 			var lift := float(station.get("lift", 0.0))
 			if working_right:
-				if effective == "forge" and is_instance_valid(tool_contact):
+				if hammer_work:
 					# BoneAttachment globals may still contain the preceding frame.
 					# The authored socket offset composed with this sampled bone is
 					# stable at every animation/update rate.
@@ -283,7 +284,7 @@ func _process_modification() -> void:
 						probe_local = point
 				probe_kind = "cloth"
 				contact_target.y = (station.point as Vector3).y
-			elif effective == "forge" and is_instance_valid(tool_contact):
+			elif hammer_work:
 				probe_kind = "hammer"
 				probe_local = tool_contact_local
 				contact_target = (station.point as Vector3) + Vector3.UP * 0.035
@@ -294,7 +295,7 @@ func _process_modification() -> void:
 				goal = contact_target - hand_frame * probe_local
 		var contact_weight := smoothstep(0.22, contact_fraction, phase) * (1.0 - smoothstep(contact_fraction + 0.08, 0.80, phase)) if authored_work else 1.0
 		_solve_arm(skeleton, arm, hand.lerp(goal, pose_weight * contact_weight), wrist_target if contact_weight > 0.95 else null)
-		if authored_work and contact_weight > 0.95 and (effective != "forge" or float(arm.side) > 0):
+		if authored_work and contact_weight > 0.95 and (not hammer_work or float(arm.side) > 0):
 			contact_hands += 1
 			var actual: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(int(arm.hand)) * probe_local
 			var error := actual.distance_to(contact_target)
@@ -316,7 +317,7 @@ func _update_tool(kind: String, visible_now: bool) -> void:
 		style = activity_prop
 	var supported_task: bool = station.get("activity", "") == kind and str(station.get("surface_prop", "")) != ""
 	_set_role_book_stowed(visible_now and supported_task)
-	if supported_task:
+	if supported_task and not bool(station.get("held_tool", false)):
 		style = ""
 	if style != "" and (style != tool_kind or not is_instance_valid(tool)):
 		_release_tool()
@@ -349,7 +350,7 @@ func _set_role_book_stowed(stowed: bool) -> void:
 		var reference: WeakRef = stowed_role_equipment.get("node")
 		var borrowed := reference.get_ref() as Node3D if reference != null else null
 		if borrowed != null:
-			var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner", null)
+			var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner") if borrowed.has_meta("book_visibility_owner") else null
 			if owner_ref != null and owner_ref.get_ref() == self:
 				borrowed.visible = bool(stowed_role_equipment.visible)
 				borrowed.remove_meta("book_visibility_owner")
@@ -358,7 +359,7 @@ func _set_role_book_stowed(stowed: bool) -> void:
 	if not stowed_role_equipment.is_empty() or not is_instance_valid(actor): return
 	var borrowed := actor.find_child("CastleRoleEquipment", true, false) as Node3D
 	if borrowed == null or borrowed.find_child("VarganRecordBook", true, false) == null: return
-	var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner", null)
+	var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner") if borrowed.has_meta("book_visibility_owner") else null
 	if owner_ref != null and is_instance_valid(owner_ref.get_ref()): return
 	stowed_role_equipment = {"node":weakref(borrowed),"visible":borrowed.visible}
 	borrowed.set_meta("book_visibility_owner",weakref(self))
@@ -433,8 +434,9 @@ func _ambient_pose(skeleton: Skeleton3D, delta: float, near: bool, effective: St
 		return
 	var amplitude := 0.007 if effective == "sleep" else 0.015
 	var breath := sin(elapsed * TAU * 0.22) * amplitude * ambient_weight
-	var scale := skeleton.get_bone_pose_scale(spine)
-	skeleton.set_bone_pose_scale(spine, scale * Vector3(1.0 + breath * 0.30, 1.0 + breath, 1.0 + breath * 0.65))
+	# Scale on the spine propagates into the hand sockets and stretches rigid
+	# bowls/books. A restrained rib-cage turn preserves every prop's dimensions.
+	skeleton.set_bone_pose_rotation(spine, skeleton.get_bone_pose_rotation(spine) * Quaternion(Vector3.RIGHT, breath * 0.35))
 	if elapsed >= next_shift:
 		next_shift = elapsed + idle_rng.randf_range(6.0, 10.0)
 		shift_target = idle_rng.randf_range(-0.014, 0.014)

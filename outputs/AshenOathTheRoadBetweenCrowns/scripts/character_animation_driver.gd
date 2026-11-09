@@ -99,6 +99,7 @@ var forward_only_locomotion := false
 var _forward_run := false
 var presentation_state := ""
 var observation_clip := StringName()
+var ambient_morph_bindings: Array[Dictionary] = []
 var action_elapsed := 0.0
 var action_looping := false
 var active_action_clip := StringName()
@@ -118,6 +119,7 @@ var life_library_path := ""
 var life_work_kinds: Array = []
 var life_contact_fraction := 0.50
 var life_contact_probes: Dictionary = {}
+var story_workstation_owner: WeakRef
 var life_seated_base := false
 var life_requires_station := false
 var life_idle_only := false
@@ -178,6 +180,8 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	var previous: WeakRef = skeleton.get_meta("character_motion_owner") if skeleton.has_meta("character_motion_owner") else null
 	if previous != null and is_instance_valid(previous.get_ref()) and previous.get_ref() != self:
 		return _fail_contract("skeleton already has an animation owner")
+	_cache_ambient_morphs()
+	if not contract_errors.is_empty(): return _fail_contract("authored ambient morph binding failed")
 	var binding_key := var_to_str([clip_map, animation_player.get_animation_list()]).sha256_text()
 	if _resolved_bindings.has(binding_key):
 		resolved_clip_map = _resolved_bindings[binding_key].resolved.duplicate()
@@ -235,6 +239,12 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 
 func _clear_playback() -> void:
 	clear_story_prop()
+	_reset_ambient_morphs(true)
+	ambient_morph_bindings.clear()
+	if is_instance_valid(character_root):
+		var owner_ref: WeakRef = character_root.get_meta("equipment_grip_owner") if character_root.has_meta("equipment_grip_owner") else null
+		if owner_ref!=null and owner_ref.get_ref()==self:
+			for key: String in ["activity_prop_grips","carried_equipment_grip","equipment_grip_owner"]: character_root.remove_meta(key)
 	configured = false
 	observation_clip = StringName()
 	life_clip = StringName()
@@ -357,6 +367,7 @@ func _reconcile_clock() -> void:
 		player.active = false
 	if is_valid():
 		animation_graph.activate(distance_suspended)
+		_reset_ambient_morphs()
 	set_process(is_valid() and not distance_suspended and not externally_ticked and not manual)
 	if is_instance_valid(manual_tick_timer):
 		if not is_valid() or distance_suspended or externally_ticked or manual_update_interval <= 0.0:
@@ -407,6 +418,7 @@ func _advance_animation(delta: float) -> void:
 			life_idle_variant = 1 - life_idle_variant
 			_play_life_clip("Life_Idle_A" if life_idle_variant == 0 else "Life_Idle_B")
 	animation_graph.advance(delta)
+	_reset_ambient_morphs()
 	if action_active:
 		action_elapsed += delta
 		if not dead and not action_looping and action_elapsed >= action_duration:
@@ -455,7 +467,9 @@ func is_evaluation_scheduled() -> bool:
 	return is_processing() and not timer_running
 
 func set_distance_suspended(suspended: bool) -> void:
-	if suspended: clear_story_prop()
+	if suspended:
+		clear_story_prop()
+		_reset_ambient_morphs(true)
 	if suspended and is_instance_valid(life_modifier):
 		life_modifier.hide_activity_tool()
 	if distance_suspended == suspended:
@@ -521,6 +535,7 @@ func _update_locomotion(speed_ratio: float, world_direction: Vector3, on_ground:
 		presentation_state = ""
 		observation_clip = StringName()
 		current_state = ""
+		_reset_ambient_morphs(true)
 	if not is_valid() or dead or action_active or presentation_state != "":
 		return
 	var previously_moving: bool = locomotion_state in LOCOMOTION_STATES
@@ -589,6 +604,7 @@ func trigger_action(action_name: String, playback_scale: float = 1.0, blend_time
 	if reset_timed_mixer:
 		animation_graph.advance(0.0)
 		animation_graph.advance(0.0)
+	_reset_ambient_morphs(true)
 	action_started.emit(action_name)
 	return true
 
@@ -622,6 +638,7 @@ func stop_action(recover_state: String = "idle", blend_time: float = 0.10) -> vo
 
 func set_dialogue_pose(active: bool) -> void:
 	story_dialogue_active = active
+	if active: _reset_ambient_morphs(true)
 	if dead or not is_valid():
 		return
 	if active:
@@ -645,6 +662,7 @@ func play_story_gesture(kind: String, pace: float = 0.9) -> void:
 	if not story_dialogue_active or dead or kind not in LIFE_STORY_GESTURES and not life_extra_clips.has(kind):
 		return
 	if kind == "drink" and not is_instance_valid(story_prop): return
+	if kind == "settle_ledger" and not supports_story_workstation("vale"): return
 	var state := "story_" + kind
 	if _clip_for(state) == StringName():
 		# Older actors keep their existing body language; head gestures remain
@@ -684,6 +702,7 @@ func set_working(active: bool) -> void:
 		return
 	if active and (action_active or story_dialogue_active):
 		return
+	if active: _reset_ambient_morphs(true)
 	clear_life_activity()
 	if active:
 		if presentation_state == "work":
@@ -701,6 +720,7 @@ func set_working(active: bool) -> void:
 
 func reset_for_journey_restore() -> void:
 	clear_story_prop()
+	_reset_ambient_morphs(true)
 	# A cached player can survive the load; health restoration alone cannot
 	# release the terminal animation state or the final sampled death pose.
 	dead = false
@@ -728,6 +748,7 @@ func reset_for_journey_restore() -> void:
 
 func set_dead() -> void:
 	clear_story_prop()
+	_reset_ambient_morphs(true)
 	if dead:
 		return
 	dead = true
@@ -754,6 +775,7 @@ func set_life_activity(kind: String) -> void:
 		return
 	if presentation_state == "life:" + kind:
 		return
+	_reset_ambient_morphs(true)
 	if life_modifier == null:
 		life_modifier = load("res://scripts/character_life_modifier.gd").new()
 		life_modifier.name = "CharacterLifePose"
@@ -833,6 +855,8 @@ func _bind_life_library() -> void:
 			or not is_finite(life_contact_fraction) or not is_equal_approx(life_contact_fraction, float(recipe.get("contact", 0.50))):
 		contract_errors.append("authored life library identity/contact metadata is invalid: " + life_library_path)
 		return
+	_bind_equipment_grips(library)
+	if not contract_errors.is_empty(): return
 	if animation_player.has_animation_library("life"):
 		animation_player.remove_animation_library("life")
 	animation_player.add_animation_library("life", library)
@@ -873,6 +897,31 @@ func _bind_life_library() -> void:
 		resolved_clip_map["story_" + gesture] = key
 	life_idle_variant = absi(identity.hash()) % 2
 
+func _bind_equipment_grips(library: AnimationLibrary) -> void:
+	var presentation = preload("res://scripts/character_presentation.gd")
+	var grips: Variant = library.get_meta("activity_prop_grips",{})
+	var carried: Variant = library.get_meta("carried_equipment_grip",{})
+	if not grips is Dictionary or not carried is Dictionary:
+		contract_errors.append("authored equipment grips have invalid metadata types")
+		return
+	for style: String in grips:
+		if style not in ["rope","bowl","bread","cloth"]:
+			contract_errors.append("unsupported calibrated activity prop: " + style)
+			continue
+		var error: String = presentation.grip_record_error(skeleton,grips[style])
+		if error!="": contract_errors.append(style+": "+error)
+	if not carried.is_empty():
+		var error: String = presentation.grip_record_error(skeleton,carried)
+		if str(carried.get("kind",""))!="book": error="unsupported carried equipment calibration"
+		if error!="": contract_errors.append(error)
+	if not contract_errors.is_empty(): return
+	character_root.set_meta("equipment_grip_owner",weakref(self))
+	character_root.set_meta("activity_prop_grips",grips.duplicate(true))
+	character_root.set_meta("carried_equipment_grip",carried.duplicate(true))
+	if not carried.is_empty() and character_root.find_child("CastleRoleEquipment",true,false)!=null:
+		if not presentation.fit_carried_equipment(character_root,carried):
+			contract_errors.append("authored carried equipment could not bind its measured hand grip")
+
 func set_relaxed_idle(enabled: bool) -> void:
 	if not life_idle_only: return
 	relaxed_idle = enabled and not dead and not distance_suspended and not action_active and not story_dialogue_active and current_speed_mps <= 0.08
@@ -895,6 +944,7 @@ func _play_life_clip(name: String) -> bool:
 	# Publish a queued same-node restart at time zero. Otherwise the next
 	# elapsed step can be consumed by the reset while contact time advances.
 	animation_graph.advance(0.0)
+	_reset_ambient_morphs()
 	return true
 
 func life_motion_sample() -> Dictionary:
@@ -935,8 +985,32 @@ func supports_story_prop(kind: String) -> bool:
 	if dead or not is_valid() or not STORY_PROPS.has(kind) or skeleton == null: return false
 	if kind == "cup" and (_clip_for("story_drink") == StringName() or _clip_for("story_cup_hold") == StringName()): return false
 	var source := load(str(STORY_PROPS[kind])) as PackedScene if ResourceLoader.exists(str(STORY_PROPS[kind])) else null
-	return source != null and str(source.get_meta("story_prop_kind", "")) == kind and bool(source.get_meta("grip_verified", false)) \
-		and skeleton.find_bone(str(source.get_meta("grip_bone", ""))) >= 0
+	if source == null or str(source.get_meta("story_prop_kind", "")) != kind or not bool(source.get_meta("grip_verified", false)): return false
+	var lip: Variant = source.get_meta("lip_probe",{})
+	if not lip is Dictionary or not lip.get("point") is Vector3 or not (lip.point as Vector3).is_finite() \
+			or skeleton.find_bone(str(lip.get("bone",""))) < 0: return false
+	var grip: Variant = source.get_meta("grip_probe",{})
+	# Work uses open fingers; the cup has its own source-measured closed palm.
+	if not grip is Dictionary or not grip.get("point") is Vector3 or not (grip.point as Vector3).is_finite() \
+			or (grip.point as Vector3).length() > 0.18 or str(grip.get("bone","")) != str(source.get_meta("grip_bone","")) \
+			or str(grip.get("bone","")) != "hand_r": return false
+	var library := animation_player.get_animation_library("life") if animation_player.has_animation_library("life") else null
+	var source_hash := str(source.get_meta("actor_source_sha256",""))
+	return library != null and source_hash.length() == 64 and source_hash == str(library.get_meta("source_sha256","")) \
+		and _story_prop_hand_scale(source) > 0.0
+
+func set_story_workstation_owner(owner: Node) -> void:
+	story_workstation_owner = weakref(owner) if is_instance_valid(owner) else null
+
+func supports_story_workstation(identity: String) -> bool:
+	if identity != "vale" or dead or distance_suspended or not is_valid() or _clip_for("story_settle_ledger") == StringName(): return false
+	var owner := story_workstation_owner.get_ref() as Node if story_workstation_owner != null else null
+	return is_instance_valid(owner) and owner.has_method("story_workstation_for") and not owner.story_workstation_for(self, identity).is_empty()
+
+func _story_prop_hand_scale(source: PackedScene) -> float:
+	var bone := skeleton.find_bone(str(source.get_meta("grip_bone","")))
+	if bone < 0: return 0.0
+	return preload("res://scripts/character_presentation.gd")._uniform_hand_scale(skeleton.global_basis * skeleton.get_bone_global_pose(bone).basis)
 
 func set_story_prop(kind: String, owner_token: int = 0) -> bool:
 	if not supports_story_prop(kind) or distance_suspended or not story_dialogue_active: return false
@@ -953,11 +1027,12 @@ func set_story_prop(kind: String, owner_token: int = 0) -> bool:
 	story_prop.set_meta("owner_token", owner_token)
 	skeleton.add_child(story_prop)
 	story_prop.add_child(instance)
-	var inherited := skeleton.global_basis.get_scale().abs()
-	instance.scale = Vector3(1.0/maxf(inherited.x,0.001),1.0/maxf(inherited.y,0.001),1.0/maxf(inherited.z,0.001))
+	# The compiler calibrates through the unscaled actual hand, including
+	# retained bone ancestry; skeleton-root scale alone is insufficient.
+	instance.scale = Vector3.ONE / _story_prop_hand_scale(source)
 	var borrowed := character_root.find_child("CastleRoleEquipment",true,false) as Node3D
 	if borrowed != null and borrowed.find_child("VarganRecordBook",true,false) != null:
-		var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner",null)
+		var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner") if borrowed.has_meta("book_visibility_owner") else null
 		if owner_ref == null or not is_instance_valid(owner_ref.get_ref()):
 			story_prop_borrowed_book = {"node":weakref(borrowed),"visible":borrowed.visible}
 			borrowed.set_meta("book_visibility_owner",weakref(self))
@@ -970,6 +1045,13 @@ func set_story_prop(kind: String, owner_token: int = 0) -> bool:
 func _holding_story_cup() -> bool:
 	return is_instance_valid(story_prop) and str(story_prop.get_meta("kind", "")) == "cup"
 
+func owns_authored_head_pose() -> bool:
+	# The measured cup-to-lip contact includes the native head inclination.
+	# Keep the attention owner intact while this one-shot owns head rotation.
+	return is_valid() and not dead and not distance_suspended and story_dialogue_active and action_active \
+		and current_state == "story_drink" and active_action_clip == &"life/Life_Drink" \
+		and _holding_story_cup() and story_prop.get_parent() == skeleton and story_prop.bone_idx >= 0
+
 func clear_story_prop(owner_token: int = -1) -> void:
 	if owner_token >= 0 and is_instance_valid(story_prop) and int(story_prop.get_meta("owner_token",0)) != owner_token: return
 	if is_instance_valid(story_prop):
@@ -979,7 +1061,7 @@ func clear_story_prop(owner_token: int = -1) -> void:
 	var reference: WeakRef = story_prop_borrowed_book.get("node")
 	var borrowed := reference.get_ref() as Node3D if reference != null else null
 	if borrowed != null:
-		var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner",null)
+		var owner_ref: WeakRef = borrowed.get_meta("book_visibility_owner") if borrowed.has_meta("book_visibility_owner") else null
 		if owner_ref != null and owner_ref.get_ref() == self:
 			borrowed.visible=bool(story_prop_borrowed_book.visible)
 			borrowed.remove_meta("book_visibility_owner")
@@ -1028,6 +1110,7 @@ func set_observation_clip(requested: String) -> bool:
 
 func clear_observation_clip() -> void:
 	observation_clip = StringName()
+	_reset_ambient_morphs(true)
 	if presentation_state != "ecology": return
 	presentation_state = ""
 	# Releasing ambient presentation must not stop or restart a newer action.
@@ -1047,6 +1130,48 @@ func observation_motion_sample() -> Dictionary:
 	if not is_finite(duration) or duration <= 0.0 or not is_finite(position) or position < 0.0: return {}
 	return {"clip":str(observation_clip), "time":position, "duration":duration, "phase":fposmod(position,duration)/duration}
 
+func _cache_ambient_morphs() -> void:
+	ambient_morph_bindings.clear()
+	if not character_root.has_meta("authored_creature_ambient_morphs"):
+		if bool(character_root.get_meta("authored_creature_ambient",false)):
+			contract_errors.append("verified creature ambient lacks its morph ownership declaration")
+		return
+	var declared: Variant = character_root.get_meta("authored_creature_ambient_morphs")
+	if not declared is Array:
+		contract_errors.append("ambient morph ownership is not an array")
+		return
+	var seen := {}
+	for row: Variant in declared:
+		if not row is Dictionary:
+			contract_errors.append("ambient morph binding is not a dictionary")
+			continue
+		var path := str(row.get("node_path",""))
+		var name := str(row.get("shape_name",""))
+		var neutral: Variant = row.get("neutral_weight")
+		if path=="" or NodePath(path).is_absolute() or ".." in path.split("/") or name=="" or typeof(neutral) not in [TYPE_FLOAT,TYPE_INT] or not is_finite(float(neutral)):
+			contract_errors.append("ambient morph binding has an invalid path, shape or neutral weight")
+			continue
+		var mesh := character_root.get_node_or_null(NodePath(path)) as MeshInstance3D
+		var index := mesh.find_blend_shape_by_name(name) if mesh!=null else -1
+		if mesh==null or index<0:
+			contract_errors.append("ambient morph cannot resolve "+path+":"+name)
+			continue
+		var key := str(mesh.get_instance_id())+":"+str(index)
+		if seen.has(key):
+			contract_errors.append("ambient morph is declared more than once: "+path+":"+name)
+			continue
+		seen[key]=true
+		ambient_morph_bindings.append({"mesh":weakref(mesh),"index":index,"neutral":float(neutral)})
+	_reset_ambient_morphs(true)
+
+func _reset_ambient_morphs(force: bool = false) -> void:
+	if not force and presentation_state=="ecology" and observation_clip!=StringName() and not dead and not distance_suspended and not action_active and not story_dialogue_active: return
+	# AnimationTree crossfades can still sample the outgoing ambient branch.
+	# Restore after every owned graph evaluation while its owner is inactive.
+	for binding: Dictionary in ambient_morph_bindings:
+		var mesh := binding.mesh.get_ref() as MeshInstance3D
+		if mesh!=null: mesh.set_blend_shape_value(int(binding.index),float(binding.neutral))
+
 func _ensure_life_modifier() -> void:
 	if life_modifier == null and is_valid() and skeleton != null:
 		life_modifier = load("res://scripts/character_life_modifier.gd").new()
@@ -1060,6 +1185,7 @@ func get_animation_player() -> AnimationPlayer:
 func sample_pose() -> void:
 	if animation_graph != null:
 		animation_graph.advance(0.0)
+		_reset_ambient_morphs()
 
 func get_playback_direction_for_state(state: String) -> float:
 	# Expose the resolved direction to focused motion tests. A reverse gait may

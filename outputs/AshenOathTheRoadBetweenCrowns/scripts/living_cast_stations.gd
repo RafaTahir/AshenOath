@@ -14,6 +14,7 @@ const STAGE_TWO := {
 ## Called after region construction and before routine enrollment. Furniture is
 ## static; the existing controller owns reservations, movement and all effects.
 static func ensure_region(host) -> void:
+	ensure_doorway_attention(host.zone_root)
 	var definitions: Dictionary = CastProfile.life_data().get("zones", {}).get(str(host.current_zone_id), {}).duplicate(true)
 	if not definitions.has("saga_nera") and CastProfile.registered_actor(host.zone_root,"saga_maren") != null:
 		var routine := CastProfile.routine("saga_maren", str(host.current_zone_id), host.story_state, host.quests, "day")
@@ -29,12 +30,37 @@ static func ensure_region(host) -> void:
 		if actor == null or not actor.visible: continue
 		created[identity] = true
 		var definition: Dictionary = definitions[id]
-		if identity in STAGE_TWO:
+		# A region-owned station is already part of its physical construction.
+		# Do not add a second table at that station's reserved approach point.
+		if identity in STAGE_TWO and not definition.has("station"):
 			_add_regional_work(host, identity, definition.work, "")
 			if definition.has("after_work"):
 				_add_regional_work(host, identity, definition.after_work, "_after")
 		if definition.has("rest"):
 			_add_rest_stool(host, identity, definition.rest)
+
+static func ensure_doorway_attention(zone_root: Node3D) -> void:
+	# The maintained house builder embeds the retained Door_1_Flat timber at
+	# this transform. Require its actual mesh vertex before naming a doorway;
+	# a house label or the unused old procedural doorway is not evidence.
+	var point := Vector3(0.514247,1.313862,0.031246) * Vector3(0.83,0.85,0.90) + Vector3(-0.42,0.35,-1.91)
+	for visual: MeshInstance3D in zone_root.find_children("AuthoredHouse", "MeshInstance3D", true, false):
+		var mesh := visual.mesh as ArrayMesh
+		if mesh == null: continue
+		var matched := false
+		for index in mesh.get_surface_count():
+			if mesh.surface_get_name(index) != "timber": continue
+			var vertices: PackedVector3Array = mesh.surface_get_arrays(index)[Mesh.ARRAY_VERTEX]
+			for vertex: Vector3 in vertices:
+				if vertex.distance_squared_to(point) <= 0.000001:
+					matched = true
+					break
+			if matched: break
+		if not matched: continue
+		var anchor := _marker(visual, "LifeAttention_Doorway", point)
+		anchor.set_meta("attention_anchor", "doorway")
+		anchor.set_meta("geometry_verified", true)
+		anchor.set_meta("geometry_source", mesh.resource_path)
 
 static func _add_regional_work(host, identity: String, raw: Array, suffix: String) -> Node3D:
 	var name := "LivingWork_" + identity + suffix
@@ -179,7 +205,9 @@ static func decorate_place(area: Node3D, id: String) -> void:
 			area.add_child(satchel)
 		# Both hands meet the attached strap. The bag stays on the table when
 		# Rook stops working; the existing life owner restores its knot state.
-		add_work(area, "rook", Vector3(-1.30,1.11,0), Vector3(-1.78,0,0), Vector3(0,0,0.10), 0.0)
+		var station := add_work(area, "rook", Vector3(-1.30,1.11,0), Vector3(-1.78,0,0), Vector3(0,0,0.10), 0.0)
+		station.set_meta("work_identity", "rook")
+		station.set_meta("task_prop", weakref(satchel))
 	elif id == "shrine_prayer":
 		var seat := _marker(area, "LifeRest_anwen", Vector3(0,0.54,0))
 		seat.set_meta("rest_supported", true)
