@@ -1,0 +1,52 @@
+{
+  "kind": "new_ending_memorial_resource_proof",
+  "resource_checks_passed": true,
+  "legacy_byte_identical": true,
+  "visual_acceptance": false,
+  "enactment_verified": false,
+  "gameplay_acceptance": false,
+  "archived": [
+    {
+      "source": ".verification/memorials/native-r1/receipt.json",
+      "archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/receipt.json",
+      "sha256": "735d30abf8310701af61b5bd54df855950698744c9bde18c7450875bc2acdefb",
+      "bytes": 9094
+    },
+    {
+      "source": ".verification/memorials/native-r1/builder_parse.log",
+      "archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/builder_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75
+    },
+    {
+      "source": ".verification/memorials/native-r1/fixture_parse.log",
+      "archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/fixture_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75
+    },
+    {
+      "source": ".verification/memorials/native-r1/build_only_new.log",
+      "archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/build_only_new.log",
+      "sha256": "3949b0f1fefef40766c7a139b3a8c60595b39c5b7807f86bb2a60bef988eafb7",
+      "bytes": 209
+    },
+    {
+      "source": ".verification/memorials/native-r1/validate_all_six.log",
+      "archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/validate_all_six.log",
+      "sha256": "9632ad380fe4e1dd7d4f823c8e8a844fabdb6dc5e81edcf522456c9271e27b62",
+      "bytes": 1693
+    },
+    {
+      "source": ".verification/memorials/run_new_memorials.py",
+      "archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/run_new_memorials.py",
+      "sha256": "93bb01865b98e83a235ca3d1a3d6319a832dde3776c8d51ee45666d2f8716187",
+      "bytes": 6803
+    },
+    {
+      "source": ".verification/memorials/legacy_input_restore.json",
+      "archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/legacy_input_restore.json",
+      "sha256": "592a722deb29d639135644738169b62dc13383123cf5a69d166570b1bf417abc",
+      "bytes": 1653
+    }
+  ]
+}

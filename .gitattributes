@@ -79,3 +79,14 @@ outputs/AshenOathTheRoadBetweenCrowns/tools/verify_community_touch_input.gd -tex
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_community_world_input.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_full_campaign_input.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
 .verification/motion/touch_checkpoint_paths.json -text whitespace=cr-at-eol
+# Scenery interchange repair binds exact live helpers and retained failed runs.
+art_source/art_recovery_v2/tools/living_world_gltf_transport.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/test_living_world_gltf_transport.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/test_living_world_recipe.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/run_living_scenery_pipeline.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/test_living_scenery_pipeline.py -text whitespace=cr-at-eol
+.verification/scenery/actual_pipeline_r1/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/scenery/actual_pipeline_r2/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+
+# New ending memorial proof binds the exact native fixture bytes.
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_hart_aftermath_assets.gd -text whitespace=cr-at-eol
