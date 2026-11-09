@@ -59,7 +59,12 @@ static func presence_shift(minutes: float) -> String:
 static func actor_present(id: String, zone: String, minutes: float, state, quests) -> bool:
 	if not actor_available(id,state,quests) or id not in REGIONAL_ACTORS.get(zone,[]): return false
 	var shifts: Dictionary = data().get("presence_shifts",{}).get(zone,{})
-	return shifts.is_empty() or id in shifts.get(presence_shift(minutes),[])
+	var present: Array=shifts.get(presence_shift(minutes),[]).duplicate()
+	# Two relocated household representatives share the scene with at most six
+	# canonical NPCs, preserving the ten visible skeleton limit with companions.
+	if zone=="hearthward" and _true(state,"open_road_route_delivered"):
+		present=data().get("relocated_presence_shifts",{}).get(zone,{}).get(presence_shift(minutes),[])
+	return shifts.is_empty() or id in present
 
 static func work_ids(quest: String, state) -> Array:
 	var row := chapter(quest)
@@ -173,7 +178,7 @@ static func record_route_crossing(route: String, state, quests) -> bool:
 
 static func consent_available(id: String, state, quests) -> bool:
 	if not data().get("consent_offers",{}).has(id) or not actor_available(id,state,quests): return false
-	if str(state.get_flag("final_covenant","")) != "": return false
+	if str(state.get_flag("final_covenant","")) != "" and not (str(state.get_flag("final_covenant",""))=="concord" and _true(state,"final_choice_completed")): return false
 	return quests != null and (quests.is_active("main_what_we_promise") or quests.is_completed("main_what_we_promise"))
 
 static func record_consent(id: String, accepted: bool, state, quests) -> bool:

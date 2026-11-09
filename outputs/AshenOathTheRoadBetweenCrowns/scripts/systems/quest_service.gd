@@ -219,6 +219,7 @@ func _show_ending_consequence(ending: String) -> void:
 	ending = EndingCatalog.normalize(ending)
 	if ending == "":
 		return
+	if not CovenantResolution.ready_to_finish(ending,story_state): return
 	if bool(story_state.get_flag("final_choice_completed", false)):
 		return
 	story_action_in_progress = true

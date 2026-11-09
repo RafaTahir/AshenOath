@@ -16,6 +16,14 @@ def legacy_seed(case):
             "quests": {"completed": dict.fromkeys(ids[:count], True), "active": {ids[count]: {"objectives": []}}}}
 
 
+def ferry_seed():
+    ids = full.chapter_ids(True)
+    return {"zone": "hart_glade", "world_sector": "hart_glade", "story_state": {"flags": {
+        "campaign_revision": 2, "community_route": "ferry", "community_route_ready": True, "community_refuge_ready": True, "confession_method": "witnesses",
+        **dict.fromkeys(["community_work:"+key for key in ["ferry_landing","ferry_rope","ferry_load","refuge_bunks","refuge_shelves","refuge_places"]], True)}},
+        "quests": {"completed": dict.fromkeys(ids[:-1], True), "active": {ids[-1]: {"objectives": []}}}}
+
+
 def report(expected):
     fresh = expected["suite"] == "full_campaign"
     events = expected["expected_chapters"][len(expected["initial_completed"]):]
@@ -25,7 +33,8 @@ def report(expected):
             "chapter_events": [{"id": id} for id in events],
             "endings": [{"ending": id, "ritual_steps": 0 if id == "kill" else 3,
                          "visible_options": expected["expected_options"].copy(), "memorial_reload": True,
-                         "return_home": True, "epilogue_presented": True, "cards": ["Authored card"]}
+                         "return_home": True, "epilogue_presented": True, "cards": ["Authored card"],
+                         "consequences": {"route": expected.get("required_departure_route", "crossing"), **dict.fromkeys(["route_crossed", "arrival", "losses_persisted", "human_evidence_preserved", "named_consent_only", "native_households", "concord_revocation_verified"], True)}}
                         for id in expected["expected_endings"]]}
 
 
@@ -39,13 +48,13 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
         self.assertEqual(full.validate_report(report(expected), expected), [])
 
     def test_both_legacy_insertion_points_and_marker_forms(self):
-        for case in full.CASES[1:]:
+        for case in [case for case in full.CASES if case.startswith("legacy_")]:
             expected = full.contract(case, json.dumps(legacy_seed(case)).encode())
             self.assertEqual(len(expected["expected_chapters"]), 10)
             self.assertEqual(full.validate_report(report(expected), expected), [])
 
     def test_legacy_marker_never_upgrades_by_case_or_location(self):
-        for case in full.CASES[1:]:
+        for case in [case for case in full.CASES if case.startswith("legacy_")]:
             value = legacy_seed(case)
             value["story_state"]["flags"]["campaign_revision"] = 2
             with self.assertRaises(ValueError):
@@ -56,7 +65,7 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
                 full.contract(case, json.dumps(value).encode())
 
     def test_legacy_seed_cannot_precomplete_remaining_chain(self):
-        for case in full.CASES[1:]:
+        for case in [case for case in full.CASES if case.startswith("legacy_")]:
             value = legacy_seed(case)
             value["quests"]["completed"]["main_hart_remembers"] = True
             with self.assertRaises(ValueError):
@@ -85,6 +94,34 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
         value = report(expected)
         value["endings"].pop()
         self.assertTrue(full.validate_report(value, expected))
+
+    def test_expanded_endings_require_their_actual_costs_and_continuing_choices(self):
+        expected = full.contract("full_six_endings", None)
+        for ending, fields in [("depart", ["route_crossed", "arrival", "losses_persisted", "human_evidence_preserved", "named_consent_only", "native_households"]), ("share", ["concord_revocation_verified"])]:
+            for field in fields:
+                value = report(expected)
+                row = next(row for row in value["endings"] if row["ending"] == ending)
+                row["consequences"][field] = False
+                self.assertTrue(full.validate_report(value, expected))
+
+    def test_ferry_ending_is_separate_seeded_boundary_proof(self):
+        value = ferry_seed()
+        expected = full.contract("seeded_departure_ferry", json.dumps(value).encode())
+        self.assertEqual(expected["suite"], "seeded_departure")
+        self.assertEqual(len(expected["initial_completed"]), 13)
+        self.assertEqual(full.validate_report(report(expected), expected), [])
+        forged = report(expected)
+        forged["suite"] = "full_campaign"
+        forged["started_with_new_game"] = True
+        self.assertTrue(full.validate_report(forged, expected))
+        forged = report(expected)
+        forged["endings"][0]["consequences"]["route"] = "crossing"
+        self.assertTrue(full.validate_report(forged, expected))
+        for key, bad in [("open_road_route_crossed", True), ("covenant_ritual_started", True), ("community_route", "crossing"), ("campaign_revision", 1), ("community_refuge_ready", "true"), ("community_work:ferry_rope", False), ("confession_method", "")]:
+            changed = copy.deepcopy(value)
+            changed["story_state"]["flags"][key] = bad
+            with self.assertRaises(ValueError): full.contract("seeded_departure_ferry", json.dumps(changed).encode())
+        with self.assertRaises(ValueError): full.contract("seeded_departure_ferry", None)
 
     def test_original_four_menu_is_preserved_for_legacy(self):
         case = "legacy_witness_missing"
@@ -125,7 +162,7 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
         for shortcut in [".set_flag(", ".complete_objective(", ".complete_choice(", ".load_save_state(",
                          "._load_zone(", "._load_zone_after_runtime_pack(", ".global_position=", ".global_position ="]:
             self.assertNotIn(shortcut, source)
-        self.assertIn('await _button("New Game" if expanded else "Continue")', source)
+        self.assertIn('await _button("New Game" if expanded and not seeded_ferry else "Continue")', source)
 
 
 if __name__ == "__main__":

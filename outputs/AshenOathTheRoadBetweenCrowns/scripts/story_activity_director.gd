@@ -335,7 +335,7 @@ static func _travel_open(game) -> bool:
 	return bool(game.story_state.get_flag("rootbound_colossus_defeated", false)) or str(game.story_state.get_flag("names_policy", "")) != "" or bool(game.story_state.get_flag("final_choice_completed", false))
 
 static func _danger_near(game) -> bool:
-	if game.player == null or game.pending_ending != "" or game.zone_transition_in_progress:
+	if game.player == null or (game.pending_ending != "" and not preload("res://scripts/covenant_resolution.gd").relocation_pending(game.story_state)) or game.zone_transition_in_progress:
 		return true
 	for enemy in game.active_enemies:
 		if is_instance_valid(enemy) and not enemy.dead and enemy.encounter_active and not bool(enemy.get_meta("story_surrender_protected", false)) and enemy.global_position.distance_to(game.player.global_position) < 13.0:
@@ -755,7 +755,7 @@ func _rest_unavailable(area: Node3D) -> String:
 		return "This resting place is no longer within reach."
 	if not host.zone_root.is_ancestor_of(area) or not area.is_visible_in_tree() or host.player.global_position.distance_to(area.global_position) > 2.8:
 		return "Stay beside the resting place."
-	if host._journey_load_pending() or host.zone_transition_pending or host.zone_load_request_pending or host.story_action_in_progress or not host.pending_player_restore.is_empty() or str(host.pending_ending) != "":
+	if host._journey_load_pending() or host.zone_transition_pending or host.zone_load_request_pending or host.story_action_in_progress or not host.pending_player_restore.is_empty() or (str(host.pending_ending) != "" and not (preload("res://scripts/covenant_resolution.gd").relocation_pending(host.story_state) and area.has_meta("community_action"))):
 		return "Finish the current journey or conversation first."
 	if host.day_night == null or host.day_night.time_locked:
 		return "There is no time to stop during this part of the story."
@@ -986,7 +986,7 @@ func _worker_motion(world_velocity: Vector3, delta: float = 0.016667) -> void:
 			driver.set_locomotion_motion(world_velocity, true)
 
 func _refresh_carried_bundle() -> void:
-	var carried := _flag("cart_sack_carried") or _flag("relief_shares_carried") or _flag("community_route_load_carried")
+	var carried := _flag("cart_sack_carried") or _flag("relief_shares_carried") or _flag("community_route_load_carried") or _flag("open_road_load_carried")
 	var bundle = host.player.get_node_or_null("StoryWorkBundle")
 	if not carried:
 		if bundle != null:

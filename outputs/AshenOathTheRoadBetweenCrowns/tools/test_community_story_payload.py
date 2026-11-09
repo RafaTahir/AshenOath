@@ -111,5 +111,29 @@ class CommunityStoryPayloadTests(unittest.TestCase):
             self.assertEqual(deferred[f"community_campaign.ending_ambient.{covenant}.text"]["source"], row["text"])
             self.assertNotIn(row["text"], [entry["source"] for entry in base.values()])
 
+    def test_relocated_shifts_preserve_every_named_person_and_native_budget(self):
+        community = read("community_campaign.json")
+        shifts = community["relocated_presence_shifts"]["hearthward"]
+        self.assertEqual(set(shifts), {"morning", "evening"})
+        people = shifts["morning"] + shifts["evening"]
+        self.assertEqual(len(people), len(set(people)))
+        self.assertEqual(set(people), set(community["participant_lines"]))
+        self.assertTrue(all(len(rows) <= 6 for rows in shifts.values()))
+
+    def test_departure_spoken_answers_and_runtime_captions_have_one_authoritative_source(self):
+        community = read("community_campaign.json")
+        _, catalog = catalogs(PROJECT)
+        self.assertEqual(set(community["departure_offers"]), set(community["participant_lines"]))
+        for actor, offer in community["departure_offers"].items():
+            self.assertEqual(offer["question_speaker_id"], "player")
+            self.assertTrue(offer["speaker_id"])
+            for field in ("question", "yes", "no", "withdraw"):
+                entry = catalog[f"community_campaign.departure_offers.{actor}.{field}"]
+                self.assertEqual(entry["source"], offer[field])
+                self.assertEqual(entry["speaker"], "player" if field == "question" else offer["speaker_id"])
+        for key, row in community["departure_journey"].items():
+            self.assertEqual(catalog[f"community_campaign.departure_journey.{key}.text"]["source"], row["text"])
+            self.assertEqual(catalog[f"community_campaign.departure_journey.{key}.text"]["speaker"], "narrator")
+
 
 if __name__ == "__main__": unittest.main()

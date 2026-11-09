@@ -46,6 +46,8 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 	root.set_meta("living_road_shrine", str(_flag(game, "crow_shrine_state")))
 	if zone_id in ["assembly", "hart_glade", "vargan_approach"] and root == game.zone_root:
 		_sync_willing_witnesses(game, root, zone_id)
+	if str(game.story_state.get_flag("final_covenant",""))=="open_road" and game.story_state.get_flag("open_road_relocation_started",false)==true:
+		load("res://scripts/community_presentation.gd").apply_relocation_presence(game,root,zone_id)
 	var layer := root.get_node_or_null(LAYER_NAME) as Node3D
 	if layer == null:
 		layer = Node3D.new()
@@ -81,6 +83,12 @@ static func decorate(game, root: Node3D, zone_id: String) -> void:
 		"undercroft": _undercroft(game, presentation)
 		"assembly": _assembly(game, presentation)
 		"hart_glade": _hart(game, presentation)
+	if str(_flag(game,"final_covenant",""))=="open_road":
+		_flag(game,"open_road_protection_dismantled",false)
+		_flag(game,"open_road_relocation_started",false)
+		_flag(game,"open_road_route_delivered",false)
+		_flag(game,"open_road_named_roster",[])
+		load("res://scripts/community_presentation.gd").project_ending(game,presentation,zone_id)
 	_recording_presentation = false
 	keys = _presentation_reads.keys()
 	layer.set_meta("presentation_dependencies", keys)

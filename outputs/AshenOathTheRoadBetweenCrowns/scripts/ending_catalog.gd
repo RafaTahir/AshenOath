@@ -57,7 +57,10 @@ static func record_keeper_consent(state, actor: String, accepted: bool) -> bool:
 	# documents, and other actors cannot manufacture another person's consent.
 	if state == null or Campaign.from_state(state) != Campaign.EXPANDED:
 		return false
-	if str(state.get_flag("final_covenant", "")) != "" or _true_flag(state, "final_choice_completed"):
+	# The locked original acceptance remains in final_keeper_consent. Continuing
+	# obligations may be released or freely renewed after Concord is enacted.
+	var continuing := str(state.get_flag("final_covenant",""))=="concord" and _true_flag(state,"final_choice_completed")
+	if not continuing and (str(state.get_flag("final_covenant", "")) != "" or _true_flag(state, "final_choice_completed")):
 		return false
 	var recognized := false
 	for group: Array in CONSENT_GROUPS:
@@ -70,6 +73,17 @@ static func record_keeper_consent(state, actor: String, accepted: bool) -> bool:
 	consent[actor] = accepted
 	state.set_flag(CONSENT_FLAG, consent)
 	return true
+
+static func keeper_group_covered(state, group: int) -> bool:
+	if group<0 or group>=CONSENT_GROUPS.size(): return false
+	var raw: Variant=state.get_flag(CONSENT_FLAG,{})
+	if not raw is Dictionary: return false
+	for id: String in CONSENT_GROUPS[group]:
+		if typeof(raw.get(id))==TYPE_BOOL and raw[id]: return true
+	return false
+
+static func concord_route_closed(state) -> bool:
+	return Campaign.from_state(state)==Campaign.EXPANDED and str(state.get_flag("final_covenant",""))=="concord" and _true_flag(state,"final_choice_completed") and not keeper_group_covered(state,1)
 
 static func _true_flag(state, key: String) -> bool:
 	var value: Variant = state.get_flag(key, false)

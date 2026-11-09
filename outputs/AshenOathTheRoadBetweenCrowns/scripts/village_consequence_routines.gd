@@ -1,7 +1,7 @@
 extends RefCounted
 
 ## Work follows committed story outcomes. These schedules never commit them.
-const FLAGS := ["cart_helped", "road_repaired", "assembly_relief_ready", "mill_operation", "final_choice_completed", "final_covenant"]
+const FLAGS := ["cart_helped", "road_repaired", "assembly_relief_ready", "mill_operation", "final_choice_completed", "final_covenant", "community_keeper_consent", "open_road_relocation_completed"]
 
 static func signature(state) -> String:
 	var values: Array = []

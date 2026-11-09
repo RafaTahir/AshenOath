@@ -672,7 +672,7 @@
           "ending_available": "share"
         },
         "preview": "Care, logistics and the records each have a willing keeper. Each person confirms their own terms; Kael cannot pledge another person.",
-        "cost": "The work continues. Keepers may withdraw, leaving vacancies and real vulnerability.",
+        "cost": "Continuing obligations can be withdrawn. An uncovered route closes; care and copying wait. The original agreements remain history, not permanent claims.",
         "source_tag": "campaign_revision_2"
       },
       {
@@ -682,7 +682,7 @@
         "conditions": {
           "ending_available": "depart"
         },
-        "preview": "Use the prepared route and refuge. Carry the human evidence and supplies out before dismantling the boundary.",
+        "preview": "Respect the signed household requests and each named person's separate answer. Dismantle the ward, lead the willing households through the prepared passage, and settle them at Hearthward.",
         "cost": "Lose the old supernatural shelter and access to the Hart's complete account. The new home still needs protection and work.",
         "source_tag": "campaign_revision_2"
       }

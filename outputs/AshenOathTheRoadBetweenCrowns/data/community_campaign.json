@@ -713,22 +713,22 @@
     ],
     "depart": [
       [
-        "Place the open-road provisions",
-        "The prepared crossing and refuge stand ready for people who choose to travel. A place to stay remains available without an oath to stay there."
+        "Read the households' signed requests",
+        "The water carrier's household and the sweeper's household have asked to leave the failing shelter for Hearthward. Kael reads their signed requests. Named companions travel only if they separately agreed; nobody else's silence becomes consent."
       ],
       [
-        "Release the road's claim",
-        "Kael removes the binding's claim on households and travelers. The recovered records remain in human custody. The Hart may leave; no road is owed a captive witness."
+        "Dismantle the territorial ward",
+        "Kael unfastens the boundary stones. Their light goes out. Greyfen loses the old supernatural shelter, and the Hart withdraws with the complete account that no copy contains. The human orders, signatures and protected testimony remain intact."
       ],
       [
-        "Mark a way onward",
-        "Kael turns the last marker toward the open road. People may remain, return or set out. Keeping those choices possible will demand work without the certainty of a single keeper."
+        "Take the departure load to Lantern Reach",
+        "The boundary will not rise again. The households wait with their belongings at Lantern Reach. Kael must lead them over the prepared passage and bring them to the dry refuge. Until they arrive, this choice is unfinished."
       ]
     ]
   },
   "ending_cards": {
-    "share": "CONCORD\nThe willing keepers divide the work of care, passage and memory. Kael holds one turn in a revocable arrangement, not a claim over the other hands. No single keeper can bury every copy or pledge another household. Meetings take time; a withdrawal leaves real work to redistribute. The community has gained a way to answer together, not a guarantee that it always will.",
-    "depart": "OPEN ROAD\nThe binding no longer claims the people who live beside it. The prepared route and refuge make departure possible without making it compulsory. The Hart may go, and the human records remain. Some neighbors stay; others carry their lives onward. There is no single keeper to settle every dispute, and maintaining a safe way back will remain the work of those who freely take it up."
+    "share": "CONCORD\nThe willing keepers divide care, passage and memory. Their initial acceptance remains in the record, but their continuing obligations can be withdrawn in person. A withdrawal leaves a real vacancy: uncovered care and copying wait, and an unstaffed public crossing closes until a keeper freely returns. Food, shelter and a safe service footway remain available. Kael cannot assign a replacement or erase a refusal. Meetings and handovers take time; the arrangement protects no one from the work of keeping it voluntary.",
+    "depart": "OPEN ROAD\nThe territorial ward is dismantled. The dependent households who requested relocation cross the prepared route and reach Hearthward with their belongings and the recovered human evidence. Only named people who personally agreed relocate with them; everyone else's answer remains their own. Greyfen's supernatural shelter is gone, and access to the Hart's complete account is lost. The refuge has ordinary walls, beds and a human watch. Those who remain at the old home know its protection will not return. The copies preserve proven responsibility and private terms, without pretending to contain everything that was lost."
   },
   "ending_ambient": {
     "concord": {
@@ -736,14 +736,198 @@
         "shrine_pilgrim",
         "quality_mourner"
       ],
-      "text": "The next keeper has agreed to take this turn. I'll leave the key where we promised."
+      "text": "The rota shows what is covered and what is vacant. We ask before we put a name in either place."
     },
     "open_road": {
       "speaker_ids": [
         "shrine_pilgrim",
         "quality_mourner"
       ],
-      "text": "There's a bed for someone passing through. Staying isn't the price of using it."
+      "text": "The households reached Hearthward. There's no ward there, or here now. We have the copies; the rest of the Hart's memory is gone."
+    }
+  },
+  "departure_journey": {
+    "departure_load": {
+      "id": "open_road_departure",
+      "title": "THE CHOSEN DEPARTURE",
+      "action": "Meet the willing households and collect their departure load",
+      "zone": "lantern_reach",
+      "target_ids": [
+        "community:departure_load"
+      ],
+      "prompt": "Collect the willing households' departure load",
+      "seconds": 4.0,
+      "kind": "haul",
+      "position": [
+        2,
+        0,
+        1.5
+      ],
+      "text": "The two households bring their own belongings. Their signed request is for shelter at Hearthward, not a vow to Kael. Keep close as they cross; the final load includes the protected copies."
+    },
+    "departure_crossing": {
+      "id": "open_road_departure",
+      "title": "THE CHOSEN DEPARTURE",
+      "action": "Lead the households over the prepared passage; stay close",
+      "zone": "lantern_reach",
+      "target_ids": [
+        "community:ferry"
+      ],
+      "text": "The households cross only while Kael stays with them. The unsafe water is not a substitute for the prepared bridge or ferry."
+    },
+    "departure_delivery": {
+      "id": "open_road_departure",
+      "title": "THE CHOSEN DEPARTURE",
+      "action": "Secure the belongings and human records on the far bank",
+      "zone": "lantern_reach",
+      "target_ids": [
+        "community:departure_delivery"
+      ],
+      "prompt": "Secure the households and last load beyond the crossing",
+      "seconds": 3.0,
+      "kind": "haul",
+      "position": [
+        11,
+        0,
+        1.5
+      ],
+      "text": "Both households and the last load are beyond the water. The human records stay sealed under their owners' terms. Follow the ordinary road to Hearthward and open the prepared sleeping places."
+    },
+    "departure_arrival": {
+      "id": "open_road_departure",
+      "title": "THE CHOSEN DEPARTURE",
+      "action": "Welcome the relocated households into the prepared refuge",
+      "zone": "hearthward",
+      "target_ids": [
+        "community:departure_arrival"
+      ],
+      "prompt": "Settle the willing households at the prepared refuge",
+      "seconds": 5.0,
+      "kind": "sort",
+      "position": [
+        -7,
+        0,
+        4.5
+      ],
+      "text": "The households put down their belongings beside the dry beds. The copied evidence reaches its prepared shelves. The old ward and the Hart's complete account are gone; this home depends on ordinary repairs and a watch that people freely take."
+    }
+  },
+  "departure_offers": {
+    "anwen": {
+      "speaker_id": "sister_anwen",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move to the refuge. The shrine's record comes with me; the old stones do not.",
+      "no": "I will remain with the people who stay. Do not put my name on the departure list.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "mira": {
+      "speaker_id": "mira",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will take my own practice to Hearthward. My patients decide for themselves where they go.",
+      "no": "I will keep treating people here. Their need for care is not permission to move them.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "vale": {
+      "speaker_id": "vargan_record_keeper",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I choose Hearthward. The copies need a dry place, and I want to live beyond this archive.",
+      "no": "I will stay with the archive. You can carry the agreed copies without claiming that I have left.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "merrow": {
+      "speaker_id": "vargan_steward",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move and keep the refuge's accounts. That is my answer, not an order for the staff.",
+      "no": "I will stay to account for what remains. Record the households who leave without adding me.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "nessa": {
+      "speaker_id": "saga_nessa",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I choose the refuge. I can take my pots and begin another kitchen.",
+      "no": "I will keep a kitchen for the people who remain. A meal here will not require their promise to stay.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "nera": {
+      "speaker_id": "saga_nera",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will make Hearthward my next home. I am choosing this road now; the abandoned escort is still on the record.",
+      "no": "I will lead my own next journey. The households' passage does not appoint me to follow them.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "elna": {
+      "speaker_id": "widow_elna",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move. I am taking Harl's bell because I choose to, not because the refuge requires a name.",
+      "no": "I choose to stay. You may record the loss of the old ward without deciding where my grief belongs.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "toma": {
+      "speaker_id": "farmer_toma",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move my own belongings to Hearthward. My family's separate choices are not mine to sign.",
+      "no": "I will remain at the fold. I understand that the old shelter will be gone.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "tor": {
+      "speaker_id": "blacksmith_tor",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move my tools to Hearthward. I can build another hearth; I cannot bring the old protection with us.",
+      "no": "I will stay at this forge. The people remaining will still need repairs.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "rook": {
+      "speaker_id": "rook",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will take my bag to Hearthward. I have left places before; this time the list will tell the truth about it.",
+      "no": "I will stay. Keep the route open, but do not mistake knowing a road for agreeing to take it.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "edric": {
+      "speaker_id": "edric_campaign",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will go to Hearthward. The command record travels under its existing custody; this does not put me in charge of it.",
+      "no": "I will remain to answer here. Neither departure nor my title changes the record.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "senn": {
+      "speaker_id": "captain_senn",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will go to Hearthward as a witness, without a command. The signed account remains what I did.",
+      "no": "I will remain. The account is signed; you do not need to move me to preserve it.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    }
+  },
+  "relocated_presence_shifts": {
+    "hearthward": {
+      "morning": [
+        "anwen",
+        "nessa",
+        "toma",
+        "elna",
+        "tor",
+        "rook"
+      ],
+      "evening": [
+        "mira",
+        "vale",
+        "merrow",
+        "nera",
+        "edric",
+        "senn"
+      ]
     }
   }
 }

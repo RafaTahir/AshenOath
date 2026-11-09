@@ -19,7 +19,8 @@ func _initialize() -> void:
 	Overlay._data.clear()
 	Text._community_loaded=false
 	Text._community_strings.clear(); Text._community_ids.clear()
-	var ambient_text := "The next keeper has agreed to take this turn. I'll leave the key where we promised."
+	var authored_community: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/community_campaign.json"))
+	var ambient_text: String=str(authored_community.ending_ambient.concord.text)
 	_check(Text.source_id(ambient_text)=="" and not Text._community_loaded,"Initial source localization does not decode community prose")
 	_check(not Overlay.required_for("greyfen",state.flags,{}),"Initial expanded Greyfen has no community dependency")
 	_check(Overlay.scene("white_hart",state,quests).is_empty() and Overlay._data.is_empty(),"Initial dialogue does not even decode the mounted overlay")

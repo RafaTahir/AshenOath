@@ -183,6 +183,14 @@ static func _choice_arrangements(host, root: Node3D, zone: String) -> void:
 				for z in [-1.1,1.1]: _box(host,route,Vector3(6.5,1.2,z),Vector3(8,0.08,0.08),WOOD)
 				ZoneBuildContext.add_collision_box(route,"CrossingDeck",Vector3(6.5,0.12,0),Vector3(8,0.13,2))
 				for z in [-1.1,1.1]: ZoneBuildContext.add_collision_box(route,"CrossingRail",Vector3(6.5,0.65,z),Vector3(8,1.3,0.08))
+				for x in [2.6,10.5]:
+					var barrier := Node3D.new()
+					barrier.name="UnstaffedRouteBarrier"+str(int(x))
+					barrier.set_meta("concord_barrier",true)
+					route.add_child(barrier)
+					_box(host,barrier,Vector3(x,.85,0),Vector3(.12,.16,2.15),LINEN)
+					_box(host,barrier,Vector3(x,1.35,0),Vector3(.12,.16,2.15),WOOD)
+					ZoneBuildContext.add_collision_box(barrier,"ClosedPassage",Vector3(x,.9,0),Vector3(.15,1.8,2.2))
 			else:
 				for x in [3.0,10.0]:
 					_box(host,route,Vector3(x,0.8,-1),Vector3(0.15,1.6,0.15),WOOD)
@@ -203,9 +211,15 @@ static func refresh(root: Node3D, state) -> void:
 			assembly.visible = str(state.get_flag(str(assembly.get_meta("community_choice_flag")),"")) == str(assembly.get_meta("community_choice"))
 			var usable: bool = assembly.visible and (not str(assembly.name).begins_with("PublicRoute_") or Rules._true(state,"community_route_ready"))
 			for shape: CollisionShape3D in assembly.find_children("*","CollisionShape3D",true,false): shape.set_deferred("disabled",not usable)
+			for barrier: Node3D in assembly.get_children():
+				if not barrier.has_meta("concord_barrier"): continue
+				barrier.visible=usable and Rules.Endings.concord_route_closed(state)
+				for shape: CollisionShape3D in barrier.find_children("*","CollisionShape3D",true,false): shape.set_deferred("disabled",not barrier.visible)
 			if str(assembly.name)=="PublicRoute_ferry":
 				var ferry := assembly.get_node_or_null("Ferry") as Node3D
-				if ferry != null: ferry.position.x=9.5 if Rules._true(state,"community_route_load_crossed") else 3.5
+				if ferry != null:
+					var departing := str(state.get_flag("final_covenant",""))=="open_road"
+					ferry.position.x=9.5 if Rules._true(state,"open_road_route_crossed" if departing else "community_route_load_crossed") else 3.5
 		if not assembly.has_meta("community_work"): continue
 		var piece := assembly.get_node_or_null("WorkingPart") as Node3D
 		if piece != null: piece.rotation = Vector3.ZERO if Rules._true(state,"community_work:"+str(assembly.get_meta("community_work"))) else piece.get_meta("unfinished_rotation",Vector3.ZERO)
@@ -241,3 +255,44 @@ static func _mesh(host, parent: Node3D, mesh: Mesh, position: Vector3, color: Co
 	node.material_override=host._mat(color)
 	parent.add_child(node)
 	return node
+
+static func apply_relocation_presence(game, root: Node3D, zone: String) -> void:
+	var ending=load("res://scripts/community_ending.gd")
+	var state=game.story_state
+	if not ending.departing(state): return
+	# Source roles remain available unless their own answer (or the authored
+	# household request) was recorded. No completed quest implies relocation.
+	if Rules._true(state,"open_road_relocation_started"):
+		for actor: Node3D in root.find_children("*","Node3D",true,false):
+			if actor.get_parent()!=null and str(actor.get_parent().name)=="OpenRoadHouseholds": continue
+			var id := str(actor.get_meta("greyfen_routine_id",actor.name))
+			if actor is Area3D and actor.get("interaction_id")!=null: id=str(actor.get("interaction_id"))
+			if not ending.relocated(id,state): continue
+			if zone=="hearthward" or actor.has_meta("community_actor_id"): continue
+			actor.visible=false
+			actor.process_mode=Node.PROCESS_MODE_DISABLED
+			if actor.has_method("set_interaction_enabled"): actor.set_interaction_enabled(false)
+			game._remove_interaction_candidate(actor)
+
+static func project_ending(game, parent: Node3D, zone: String) -> void:
+	var state=game.story_state
+	var root: Node3D=parent.get_parent().get_parent()
+	if not Rules._true(state,"open_road_protection_dismantled"): return
+	for pattern: String in ["HartRitualRune*","HartMemoryRoot*","WhiteHartWitnessDisplay","HartWitnessLight","Shrine Beacon"]:
+		for node: Node3D in root.find_children(pattern,"Node3D",true,false): node.visible=false
+	if zone=="hart_glade":
+		for x in [-7.0,7.0]:
+			var spent := _box(game,parent,Vector3(x,.12,-7),Vector3(.7,.24,.5),IRON.darkened(.25))
+			spent.name="DismantledTerritorialWard"
+	elif zone=="greyfen":
+		# The original household work stations are left empty; their relocation
+		# belongs to the saved journey, not a temporary ambient schedule.
+		for x in [-4.0,-3.4]: _box(game,parent,Vector3(x,.15,8.8),Vector3(.45,.3,.32),WOOD.darkened(.2))
+	elif zone=="hearthward" and Rules._true(state,"open_road_route_delivered"):
+		for x in [-8.0,-7.4]: _box(game,parent,Vector3(x,.2,3.8),Vector3(.45,.4,.35),LINEN)
+	var notice := Label3D.new()
+	notice.name="OpenRoadPermanentCost"
+	notice.text="THE OLD WARD IS GONE\nHearthward shelters the willing households\nHuman copies survive; the Hart's complete account is lost"
+	notice.position=Vector3(0,2.2,5.7) if zone=="hart_glade" else Vector3(-2,1.8,7)
+	notice.font_size=22; notice.pixel_size=.003
+	parent.add_child(notice)
