@@ -112,6 +112,7 @@ class BackgroundReceiptTests(unittest.TestCase):
             report = {"status":"pass", "failures":[], "case":"fixture", "completed_work":[],
                       "progression_injection":False, "input_events":60, "execution_mode":"background-rendered",
                       "capture_desktop":"owned_fixture", "viewport_size":[1280,720],
+                      "mounted_pack_ids":["community"], "candidate_build_id":"fixture",
                       "no_focus":True, "headless":False, "renderer":"gl_compatibility",
                       "user_data_dir":str(output / "profile"), "observations":[{"image":str(image)}]}
             if change:
@@ -120,6 +121,7 @@ class BackgroundReceiptTests(unittest.TestCase):
             receipt = {"output":str(output), "immutable_inputs":[], "environment":{}, "command":["mock_engine"],
                        "isolated_project":str(output), "timeout_seconds":1, "case":"fixture",
                        "seed_contract":{"expected_work":[]}, "viewport":"desktop",
+                       "candidate_closure":{"packs":[{"id":"community"}],"build_id":"fixture"},
                        "expected_user_data_dir":str(output / "profile")}
             process = SimpleNamespace(pid=123, stopped=False, closed=False, desktop_receipt={
                 "desktop":"owned_fixture", "input_desktop_before":"Default", "input_desktop_after_launch":"Default"})
@@ -150,7 +152,8 @@ class BackgroundReceiptTests(unittest.TestCase):
 
     def test_wrong_desktop_and_viewport_cannot_pass(self):
         for change in [{"capture_desktop":"Default"},{"viewport_size":[960,540]},{"execution_mode":"foreground"},
-                       {"no_focus":False},{"headless":True},{"renderer":"dummy"}]:
+                       {"no_focus":False},{"headless":True},{"renderer":"dummy"},
+                       {"mounted_pack_ids":["base","community"]},{"candidate_build_id":"stale"}]:
             with self.subTest(change=change):
                 code, receipt = self.run_fixture(change)
                 self.assertEqual(code,1)

@@ -43,17 +43,7 @@ func _initialize() -> void:
 		_fail("Acceptance requires the pinned Godot 4.6.3 runtime")
 		await _finish()
 		return
-	if not ProjectSettings.load_resource_pack(str(options.get("root-pack","")),true):
-		_fail("Frozen root pack did not mount")
-		await _finish()
-		return
-	var folder := str(options.get("packs",""))
-	var pack_names := DirAccess.get_files_at(folder)
-	pack_names.sort()
-	for pack: String in pack_names:
-		if pack.ends_with(".pck") and not ProjectSettings.load_resource_pack(folder.path_join(pack),true):
-			_fail("Secondary pack did not mount: "+pack)
-	if not failures.is_empty():
+	if not _mount_verified_candidate():
 		await _finish()
 		return
 	rules=load("res://scripts/community_campaign.gd")
@@ -93,6 +83,36 @@ func _background_rendered_ready() -> bool:
 	if options.get("background-rendered","")!="true" or not OS.get_environment("ASHENOATH_CAPTURE_DESKTOP").begins_with("AshenOathCapture_") or ProjectSettings.get_setting("display/window/size/no_focus",false)!=true or not DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS):
 		_fail("Rendered acceptance requires the isolated background desktop runner and startup no-focus setting")
 		return false
+	return true
+
+func _mount_verified_candidate() -> bool:
+	var path := str(options.get("pack-list",""))
+	var closure: Variant=JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if not closure is Dictionary or closure.get("kind")!="verified_native_candidate_closure" or not closure.get("root") is Dictionary or not closure.get("packs") is Array:
+		_fail("Runner must provide its verified candidate closure")
+		return false
+	var root_path := str(options.get("root-pack",""))
+	if root_path.replace("\\","/")!=str(closure.root.get("path","")).replace("\\","/") or FileAccess.get_sha256(root_path)!=str(closure.root.get("sha256","")):
+		_fail("Frozen root differs from the verified candidate")
+		return false
+	if not ProjectSettings.load_resource_pack(root_path,true):
+		_fail("Frozen root pack did not mount")
+		return false
+	var mounted: Array[String]=[]
+	for row: Variant in closure.packs:
+		if not row is Dictionary or row.get("id") in mounted or str(row.get("id","")) in ["","base"] or str(row.get("path","")).get_file().to_lower()=="base.pck":
+			_fail("Verified pack list has invalid or duplicate ownership")
+			return false
+		var pack_path := str(row.get("path",""))
+		if FileAccess.get_sha256(pack_path)!=str(row.get("sha256","")) or not ProjectSettings.load_resource_pack(pack_path,true):
+			_fail("Verified secondary pack changed or did not mount: "+str(row.get("id","")))
+			return false
+		mounted.append(str(row.id))
+		if FileAccess.get_sha256("res://runtime_pack_manifest.json")!=str(closure.get("runtime_manifest_sha256","")):
+			_fail("Secondary pack replaced the root manifest")
+			return false
+	report_extra["mounted_pack_ids"]=mounted
+	report_extra["candidate_build_id"]=str(closure.get("build_id",""))
 	return true
 
 func _lantern() -> void:

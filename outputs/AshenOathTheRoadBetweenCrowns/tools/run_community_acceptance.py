@@ -85,7 +85,9 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
             allow_no_seed: bool = False, runner_sources: list[Path] | None = None) -> tuple[dict, Path]:
     root_pack = args.root_pack.resolve(strict=True)
     pack_dir = args.packs.resolve(strict=True)
-    packs = sorted(pack_dir.glob("*.pck"))
+    from community_acceptance_packs import verify_candidate
+    closure = verify_candidate(root_pack, pack_dir, args.release_manifest)
+    packs = [Path(row["path"]) for row in closure["packs"]]
     engine = args.godot.resolve(strict=True)
     cache = args.class_cache.resolve(strict=True)
     seed = args.seed_save.resolve(strict=True).read_bytes() if args.seed_save else None
@@ -97,6 +99,8 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
         raise ValueError("a separate root PCK and nonempty secondary pack directory are required")
     if not engine.is_file() or not cache.is_file():
         raise ValueError("pinned Godot and generated global class cache are required")
+    if sha256(cache) != closure["class_cache_sha256"]:
+        raise ValueError("isolated global class cache must match the exact final root metadata")
     commit = git("rev-parse", "HEAD").decode().strip()
     project_path = (PROJECT / "project.godot").relative_to(REPOSITORY).as_posix()
     config = git("show", f"{commit}:{project_path}")
@@ -113,6 +117,8 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
     (isolated / ".godot/global_script_class_cache.cfg").write_bytes(cache.read_bytes())
     script = isolated / "tools" / script_source.name
     script.write_bytes(script_source.read_bytes())
+    pack_list = isolated / "verified_native_packs.json"
+    write(pack_list, closure)
     extras = []
     for relative, content in (extra_files or {}).items():
         destination = (isolated / relative).resolve()
@@ -135,16 +141,19 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
         seed_inputs.append(seed_copy)
     command = [str(engine), "--path", str(isolated), "--windowed", "--rendering-method", "gl_compatibility",
                "--rendering-driver", "opengl3", "--script", str(script), "--log-file", str(output / "godot.log"),
-               "--", "--root-pack=" + root_pack.as_posix(), "--packs=" + pack_dir.as_posix(),
+               "--", "--root-pack=" + root_pack.as_posix(), "--pack-list=" + pack_list.as_posix(),
                "--case=" + args.case, "--viewport=" + args.viewport, "--output=" + output.as_posix(),
                "--background-rendered=true"]
-    immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, *seed_inputs, *extras,
+    immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, pack_list, *seed_inputs, *extras,
                  Path(__file__).resolve(), PROJECT / "tools/run_living_cast_capture.py", PROJECT / "tools/background_native_capture.py",
-                 *(runner_sources or []), engine, root_pack, *packs]
+                 PROJECT / "tools/community_acceptance_packs.py", PROJECT / "tools/runtime_pack_artifacts.py",
+                 PROJECT / "tools/runtime_pack_validation.py", PROJECT / "tools/compact_runtime_packs.py",
+                 Path(closure["release_manifest"]), *(runner_sources or []), engine, root_pack, *packs]
     receipt = {
         "schema_version": 1, "kind": "community_world_input_runner", "status": "prepared",
         "case": args.case, "git_commit": commit, "source_status": git("status", "--short").decode(),
         "seed_contract": seed_contract, "output": str(output), "isolated_project": str(isolated),
+        "candidate_closure": closure,
         "expected_user_data_dir": str(user_data), "environment": {"APPDATA": str(app_data), "LOCALAPPDATA": str(local_data)},
         "profile": profile, "command": command, "timeout_seconds": args.timeout,
         "immutable_inputs": [{"path": str(path), "bytes": path.stat().st_size, "sha256": sha256(path)} for path in immutable],
@@ -192,6 +201,9 @@ def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
             errors.append("engine or acceptance report failed")
         if report.get("case") != receipt["case"] or report.get("completed_work") != receipt["seed_contract"]["expected_work"]:
             errors.append("physical task coverage differs from requested case")
+        closure = receipt["candidate_closure"]
+        if report.get("mounted_pack_ids") != [row["id"] for row in closure["packs"]] or report.get("candidate_build_id") != closure["build_id"]:
+            errors.append("mounted candidate closure differs from the verified release")
         if report.get("progression_injection") is not False or report.get("input_events", 0) < 50:
             errors.append("real-input evidence is incomplete")
         if report.get("execution_mode") != "background-rendered" or report.get("capture_desktop") != receipt["desktop"]["desktop"]:
@@ -257,6 +269,7 @@ def main() -> int:
     parser.add_argument("--seed-save", type=Path, required=True)
     parser.add_argument("--root-pack", type=Path, required=True)
     parser.add_argument("--packs", type=Path, required=True)
+    parser.add_argument("--release-manifest", type=Path, required=True, help="maintained final Web release_manifest.json; native packs must match its decoded hashes")
     parser.add_argument("--class-cache", type=Path, default=PROJECT / ".godot/global_script_class_cache.cfg")
     parser.add_argument("--godot", type=Path, default=GODOT)
     parser.add_argument("--output", type=Path)

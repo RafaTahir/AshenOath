@@ -157,6 +157,7 @@ def main() -> int:
     parser.add_argument("--seed-save", type=Path)
     parser.add_argument("--root-pack", type=Path, required=True)
     parser.add_argument("--packs", type=Path, required=True)
+    parser.add_argument("--release-manifest", type=Path, required=True, help="maintained final Web release receipt; native packs must match decoded hashes")
     parser.add_argument("--class-cache", type=Path, default=PROJECT / ".godot/global_script_class_cache.cfg")
     parser.add_argument("--godot", type=Path, default=common.GODOT)
     parser.add_argument("--output", type=Path)

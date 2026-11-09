@@ -166,6 +166,26 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
             self.assertNotIn(shortcut, source)
         self.assertIn('await _button("New Game" if expanded and not seeded_ferry else "Continue")', source)
 
+    def test_current_authored_choices_replace_obsolete_button_prefixes(self):
+        adapter,_=build_adapter(full.LEGACY_SOURCE.read_text(encoding="utf-8-sig"))
+        definitions=json.loads((full.PROJECT/"data/campaign_dialogue.json").read_text(encoding="utf-8-sig"))
+        for scene,flag,value in [("crow_shrine_choice","crow_shrine_state","cleansed"),
+                                 ("miller_record","mill_operation","closed"),("halvern","halvern_fate","witness"),
+                                 ("bog_core_choice","bog_core_fate","returned"),("assembly_choice","confession_method","witnesses"),
+                                 ("captain_senn","senn_fate","testimony"),("names_decision","names_policy","published")]:
+            actions=[row for row in definitions[scene]["actions"] if row.get("sets_flags",{}).get(flag)==value]
+            self.assertEqual(len(actions),1)
+            self.assertIn(f'owner._choose_outcome("{scene}","{flag}","{value}")',adapter)
+        self.assertNotIn('owner._choose_at("crow_shrine_choice","Cleanse the shrine")',adapter)
+        self.assertIn('game.dialogue.get_dialogue(id)',full.HARNESS.read_text(encoding="utf-8"))
+        self.assertIn('await _dialogue_button(labels[0])',full.HARNESS.read_text(encoding="utf-8"))
+
+    def test_assembly_does_not_require_refusing_or_absent_people(self):
+        adapter,_=build_adapter(full.LEGACY_SOURCE.read_text(encoding="utf-8-sig"))
+        self.assertIn('if not willing:',adapter)
+        self.assertIn('"Absent or refusing witness is never staged as willing:',adapter)
+        self.assertIn('owner._interact("witness_7")',adapter)
+
 
 if __name__ == "__main__":
     unittest.main()
