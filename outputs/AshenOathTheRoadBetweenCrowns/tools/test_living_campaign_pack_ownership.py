@@ -1,6 +1,7 @@
 """Permanent layout fixtures: no engine, network, saves or large asset copies."""
 import configparser
 import fnmatch
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -9,6 +10,7 @@ import unittest
 
 from partition_living_campaign_packs import COMMUNITY_FILES, BASE_STORY_FILES, SCENERY_FILES, COMPANION_FILES, STATION_OWNERS, STATIONS, partition_living_campaign_packs
 from runtime_pack_validation import require_valid_pack_graph
+from verify_web_preset_parity import validate_living_ownership
 
 
 class DeferredOwnership(unittest.TestCase):
@@ -25,6 +27,9 @@ class DeferredOwnership(unittest.TestCase):
             path = self.project / relative
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(b"fixture")
+        self.voice_manifest = {"lines":[{"path":"res://assets_external/audio/voices/"+directory+"/delivered.ogg", "audio_bytes":7,
+                                         "audio_sha256":hashlib.sha256(b"fixture").hexdigest()} for directory in ("living_cast","community")]}
+        (self.project / "voice_production_manifest.json").write_text(json.dumps(self.voice_manifest), encoding="utf-8")
         self.config = configparser.ConfigParser(interpolation=None)
         self.sections = {}
         self.manifest = {"packs":{}, "pack_presets":{}, "startup_dependencies":["base", "opening", "actor_c01"],
@@ -108,10 +113,40 @@ class DeferredOwnership(unittest.TestCase):
         self.assertIn(path, self.manifest["packs"]["actor_c12"]["contents"])
         self.assertEqual(self.manifest["actor_resource_owners"][path], "actor_c12")
 
+    def test_release_gate_rejects_duplicated_or_inventoried_wrong_owner(self):
+        self.compile()
+        owners = {pack:self.config[self.sections[name]] for pack, name in self.manifest["pack_presets"].items()}
+        root = owners["base"]
+        self.assertEqual(validate_living_ownership(self.manifest, owners, root, root), [])
+        resource = "res://" + STATIONS + "station_nera.scn"
+        self.manifest["packs"]["actor_c12"]["contents"].remove(resource)
+        self.assertTrue(any("inventory omits" in error for error in validate_living_ownership(self.manifest, owners, root, root)))
+        self.manifest["packs"]["actor_c12"]["contents"].append(resource)
+        excluded = json.loads(owners["opening"]["exclude_filter"]).split(",")
+        excluded.remove(resource[6:])
+        owners["opening"]["exclude_filter"] = json.dumps(",".join(excluded))
+        self.assertTrue(any("selected by" in error for error in validate_living_ownership(self.manifest, owners, root, root)))
+
     def test_empty_voice_pack_is_not_published(self):
-        (self.project / "assets_external/audio/voices/community/delivered.ogg").unlink()
+        self.voice_manifest["lines"] = self.voice_manifest["lines"][:1]
+        (self.project / "voice_production_manifest.json").write_text(json.dumps(self.voice_manifest), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "community_voice has no delivered"):
             self.compile()
+
+    def test_missing_or_corrupt_delivered_voice_rejects_layout(self):
+        audio = self.project / "assets_external/audio/voices/community/delivered.ogg"
+        audio.write_bytes(b"corrupt")
+        with self.assertRaisesRegex(ValueError, "voice bytes differ"):
+            self.compile()
+        audio.unlink()
+        with self.assertRaisesRegex(ValueError, "Missing deferred voice"):
+            self.compile()
+
+    def test_unreferenced_recordings_are_not_copied_into_voice_pack(self):
+        stale = self.project / "assets_external/audio/voices/community/retired.ogg"
+        stale.write_bytes(b"old")
+        self.compile()
+        self.assertFalse(self.owns("community_voice", stale.relative_to(self.project).as_posix()))
 
     def test_layout_is_idempotent(self):
         self.compile()

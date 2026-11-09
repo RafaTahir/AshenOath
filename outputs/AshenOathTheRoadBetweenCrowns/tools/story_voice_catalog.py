@@ -173,12 +173,13 @@ def extra_utterances(game: Path, cast: dict, aliases: dict, pages):
             for zone in ["lantern_reach", "hearthward"]:
                 if entry.get(zone):
                     yield from emit(f"community:participant:{person}:{zone}", entry["speaker_id"], entry[zone])
-        offers = community.get("consent_offers", {})
-        for person, entry in (offers.items() if isinstance(offers, dict) else ((row["actor"], row) for row in offers)):
-            for kind in ["yes", "no", "withdraw"]:
-                if entry.get(kind): yield from emit(f"community:consent:{person}:{kind}", entry["speaker_id"], entry[kind])
-            if entry.get("question"):
-                yield from emit(f"community:consent:{person}:question", entry["question_speaker_id"], entry["question"])
+        for field, source in (("consent_offers", "consent"), ("departure_offers", "departure")):
+            offers = community.get(field, {})
+            for person, entry in (offers.items() if isinstance(offers, dict) else ((row["actor"], row) for row in offers)):
+                for kind in ["yes", "no", "withdraw"]:
+                    if entry.get(kind): yield from emit(f"community:{source}:{person}:{kind}", entry["speaker_id"], entry[kind])
+                if entry.get("question"):
+                    yield from emit(f"community:{source}:{person}:question", entry["question_speaker_id"], entry["question"])
         def spoken_rows(value, source):
             if isinstance(value, dict):
                 if "speaker_id" in value and "text" in value:
@@ -213,6 +214,9 @@ def expansion_captions(game: Path, pages=None):
     for action, text in community.get("ending_cards", {}).items():
         if action not in {"share", "depart"} or not isinstance(text, str): raise ValueError("Malformed community ending card")
         yield {"source_id":f"community:ending_card:{action}", "speaker_id":"narrator", "text":text, "caption_only":True}
+    for stage, entry in community.get("departure_journey", {}).items():
+        if not isinstance(entry.get("text"), str): raise ValueError("Malformed departure journey caption")
+        yield {"source_id":f"community:departure_journey:{stage}", "speaker_id":"narrator", "text":entry["text"], "caption_only":True}
     if pages is not None:
         for source_file in ("dialogue.json", "campaign_dialogue.json", "interaction_scenes.json"):
             for scene_id, base in read(game, "data/"+source_file).items():

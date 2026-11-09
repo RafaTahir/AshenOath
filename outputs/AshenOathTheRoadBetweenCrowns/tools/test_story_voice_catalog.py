@@ -103,6 +103,15 @@ class VoiceCatalogContracts(unittest.TestCase):
         self.assertEqual(sum(":unattended:" in row["source_id"] for row in captions), 12)
         self.assertTrue(all(row["caption_only"] and row["speaker_id"] in {"narrator", "system"} and row["text"] for row in captions))
 
+    def test_departure_requires_its_own_exact_voluntary_answers(self):
+        community = json.loads((voices.GAME / "data/community_campaign.json").read_text(encoding="utf-8-sig"))
+        offers = community.get("departure_offers", {})
+        actual = {(source, speaker, text) for source, speaker, text, _, _ in self.lines}
+        for person, entry in offers.items():
+            self.assertIn((f"community:departure:{person}:question", entry["question_speaker_id"], entry["question"]), actual)
+            for choice in ("yes", "no", "withdraw"):
+                self.assertIn((f"community:departure:{person}:{choice}", entry["speaker_id"], entry[choice]), actual)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

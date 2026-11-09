@@ -6,10 +6,13 @@ Never attach expansion content or speech to the Greyfen startup dependency set.
 from __future__ import annotations
 
 import fnmatch
+import hashlib
 import json
+from pathlib import PurePosixPath
 
 COMMUNITY_FILES = {
     "scripts/community_campaign.gd", "scripts/community_activity.gd",
+    "scripts/community_ending.gd",
     "scripts/community_presentation.gd", "scripts/zones/community_section.gd",
     "data/community_campaign.json", "data/community_cast_life.json",
     "data/community_story_overlay.json",
@@ -53,9 +56,21 @@ def partition_living_campaign_packs(project, config, sections, manifest):
     owned[STATIONS + "merrow_cup.scn"] = "actor_c10"
     for resource in (project / STATIONS).glob("merrow_cup*.res"):
         owned[resource.relative_to(project).as_posix()] = "actor_c10"
+    deliveries = json.loads((project / "voice_production_manifest.json").read_text(encoding="utf-8-sig"))
     for pack, directory in VOICE_DIRECTORIES.items():
-        for path in (project / "assets_external/audio/voices" / directory).glob("*.ogg"):
-            owned[path.relative_to(project).as_posix()] = pack
+        prefix = "res://assets_external/audio/voices/" + directory + "/"
+        for entry in deliveries.get("lines", []):
+            resource = str(entry.get("path", ""))
+            if not resource.startswith(prefix): continue
+            relative = PurePosixPath(resource[6:])
+            if str(relative.parent) != prefix[6:-1] or relative.suffix != ".ogg" or ".." in relative.parts or "\\" in resource:
+                raise ValueError("Invalid deferred voice path: " + resource)
+            path = (project / relative).resolve()
+            if not path.is_relative_to(project.resolve()) or not path.is_file():
+                raise ValueError("Missing deferred voice: " + resource)
+            if path.stat().st_size != entry.get("audio_bytes") or hashlib.sha256(path.read_bytes()).hexdigest() != entry.get("audio_sha256"):
+                raise ValueError("Deferred voice bytes differ from delivery manifest: " + resource)
+            owned[relative.as_posix()] = pack
     missing = sorted(path for path in required if not (project / path).is_file())
     if missing: raise ValueError("Missing authored community resource(s): " + ", ".join(missing))
     pack_ids = {"community", *VOICE_DIRECTORIES}
