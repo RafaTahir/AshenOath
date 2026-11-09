@@ -1,0 +1,25 @@
+{
+  "scope": "exact r4 changed-source bytes before held-action instrumentation",
+  "files": [
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud\\hud_style.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r4\\source\\hud_style.gd",
+      "sha256": "3be9565963a6e1dbf43767f6f6692e917ef144d9912853667607bff76b1eeb4e"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\community_touch_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r4\\source\\community_touch_input.gd",
+      "sha256": "69276ace7e0173395224691f14c72837fc8a86176e727139ee7a5d04cc6c541d"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_community_touch_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r4\\source\\verify_community_touch_input.gd",
+      "sha256": "03928e1e59c7108ee63650208d2769b2a2e1413d8181ea04d8bf58276368c3d9"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\run_styled_touch_contract.py",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r4\\source\\run_styled_touch_contract.py",
+      "sha256": "1ae3d098d32746599d41e4133ff6dad6ed75958661aa9873a5cb3cce41899dd3"
+    }
+  ]
+}

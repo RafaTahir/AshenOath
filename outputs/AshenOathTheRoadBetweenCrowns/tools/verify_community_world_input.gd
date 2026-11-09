@@ -2,7 +2,7 @@ extends SceneTree
 
 ## Native acceptance, never a progression shortcut. The runner installs one
 ## explicit boundary save before startup. Everything after Continue uses normal
-## keyboard/mouse input; game state, route queries and snapshots are read-only.
+## keyboard/mouse or genuine screen input; game state and queries are read-only.
 ## No preload: the isolated project mounts the exact frozen pack set first.
 var options: Dictionary = {}
 var game
@@ -18,6 +18,10 @@ var input_events := 0
 var start_ms := 0
 var region := ""
 var report_extra: Dictionary={}
+var touch_input
+var keyboard_events := 0
+var mouse_events := 0
+var touch_vendor_prefix := ""
 
 func _initialize() -> void:
 	for argument: String in OS.get_cmdline_user_args():
@@ -27,6 +31,9 @@ func _initialize() -> void:
 	output=str(options.get("output",""))
 	case_id=str(options.get("case",""))
 	start_ms=Time.get_ticks_msec()
+	if not _configure_input_mode():
+		await _finish()
+		return
 	if output=="" or case_id not in ["lantern_crossing","lantern_ferry","hearth_distributed","hearth_protected"]:
 		_fail("Explicit output and supported case are required")
 		await _finish()
@@ -78,6 +85,30 @@ func _initialize() -> void:
 		await _cross_boundary(region)
 		await _snapshot("return_route")
 	await _finish()
+
+func _configure_input_mode() -> bool:
+	var mode := str(options.get("input-mode","keyboard_mouse"))
+	if mode not in ["keyboard_mouse","touch"]:
+		_fail("Unsupported requested input mode")
+		return false
+	if mode=="keyboard_mouse": return true
+	if options.get("viewport","")!="touch":
+		_fail("Touch input requires the requested touch viewport")
+		return false
+	var adapter=load("res://tools/community_touch_input.gd")
+	if adapter==null:
+		_fail("Frozen screen input adapter is missing")
+		return false
+	touch_input=adapter.new()
+	touch_input.owner=self
+	Input.emulate_mouse_from_touch=true
+	# Native ScrollContainer needs the engine's isolated device emulation;
+	# this adapter still injects genuine screen events only.
+	Input.emulate_touch_from_mouse=true
+	if not DisplayServer.is_touchscreen_available():
+		_fail("Native touch emulation did not expose touchscreen controls")
+		return false
+	return true
 
 func _background_rendered_ready() -> bool:
 	if options.get("background-rendered","")!="true" or not OS.get_environment("ASHENOATH_CAPTURE_DESKTOP").begins_with("AshenOathCapture_") or ProjectSettings.get_setting("display/window/size/no_focus",false)!=true or not DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS):
@@ -291,14 +322,19 @@ func _button(prefix: String) -> void:
 	if not failures.is_empty(): return
 	var deadline := Time.get_ticks_msec()+(120000 if prefix in ["Continue","New Game"] else 10000)
 	var visible := false
+	var target: Button
 	while not visible and Time.get_ticks_msec()<deadline:
 		for candidate: Button in root.find_children("*","Button",true,false):
 			if candidate.is_visible_in_tree() and not candidate.disabled and candidate.text.trim_prefix("Commit: ").begins_with(prefix):
 				visible=true
+				target=candidate
 				break
 		if not visible: await process_frame
 	if not visible:
 		_fail("Requested visible menu action did not become available: "+prefix)
+		return
+	if touch_input!=null:
+		await touch_input.button(target)
 		return
 	for index in range(64):
 		var focused := root.gui_get_focus_owner() as Button
@@ -420,7 +456,7 @@ func _walk_direct(target: Vector3, stop_zone: String="") -> void:
 		await _face(target)
 		_key(KEY_W,true)
 		await _frames(2)
-	_release()
+	await _release()
 	if Time.get_ticks_msec()>=deadline: _fail("Movement did not reach "+str(target)+" from "+str(game.player.global_position))
 
 func _face(target: Vector3) -> void:
@@ -430,12 +466,20 @@ func _face(target: Vector3) -> void:
 	var desired := atan2(-offset.x,-offset.z)
 	var turn := angle_difference(float(camera.yaw),desired)
 	if absf(turn)<0.025: return
+	if touch_input!=null:
+		var deadline := Time.get_ticks_msec()+5000
+		while absf(turn)>=0.025 and Time.get_ticks_msec()<deadline and failures.is_empty():
+			await touch_input.look(turn,float(camera.sensitivity))
+			turn=angle_difference(float(camera.yaw),desired)
+		_check(absf(turn)<0.025,"Normal touch swipes reached the requested heading")
+		return
 	var event := InputEventMouseMotion.new()
 	event.device=0
 	event.relative=Vector2(-turn/maxf(float(camera.sensitivity),0.00001),0)
 	event.screen_relative=event.relative
 	Input.parse_input_event(event)
 	input_events+=1
+	mouse_events+=1
 	await process_frame
 
 func _ready(expected: String) -> void:
@@ -473,12 +517,29 @@ func _snapshot(label: String, extra: Dictionary={}) -> void:
 
 func _tap(key: Key) -> void:
 	if not failures.is_empty(): return
+	if touch_input!=null:
+		await _touch_key(key,true)
+		await _frames(2)
+		await _touch_key(key,false)
+		await _frames(3)
+		return
 	_key(key,true)
 	await _frames(2)
 	_key(key,false)
 	await _frames(3)
 
 func _key(key: Key, pressed: bool) -> void:
+	if touch_input!=null:
+		if key not in [KEY_W,KEY_S,KEY_A,KEY_D,KEY_SHIFT]:
+			_fail("Touch discrete actions must use the awaitable screen path: "+str(key))
+			return
+		held[key]=pressed
+		var vector := Vector2(float(bool(held.get(KEY_D,false)))-float(bool(held.get(KEY_A,false))),float(bool(held.get(KEY_S,false)))-float(bool(held.get(KEY_W,false))))
+		# The existing touch router runs above .82 stick deflection. Keep the
+		# legacy adapter's walk/sprint distinction without injecting Shift.
+		var amount := 1.0 if bool(held.get(KEY_SHIFT,false)) else 0.78
+		touch_input.move(vector.normalized()*amount,not vector.is_zero_approx())
+		return
 	if bool(held.get(key,false))==pressed: return
 	held[key]=pressed
 	var event := InputEventKey.new()
@@ -487,8 +548,58 @@ func _key(key: Key, pressed: bool) -> void:
 	event.pressed=pressed
 	Input.parse_input_event(event)
 	input_events+=1
+	keyboard_events+=1
+
+func _touch_key(key: Key, pressed: bool) -> void:
+	if touch_input==null:
+		_fail("Touch-only adapter used without the requested screen input mode")
+		return
+	if key in [KEY_W,KEY_S,KEY_A,KEY_D,KEY_SHIFT]:
+		_key(key,pressed)
+		return
+	if key in [KEY_Q,KEY_C]:
+		touch_input.hold_action("block" if key==KEY_Q else "oathfire_beam",pressed)
+		return
+	if not pressed: return
+	match key:
+		KEY_E: await touch_input.action("interact")
+		KEY_ENTER:
+			if game.hud.dialogue_layer.visible:
+				# Match the maintained helper's first enabled conversation action
+				# by touching its actual button, including the final Close row.
+				for button: Node in game.hud.dialogue_actions.get_children():
+					if button is Button and button.is_visible_in_tree() and not button.disabled:
+						await touch_input.button(button)
+						return
+				_fail("Conversation has no enabled visible screen action")
+			else: await _button(touch_vendor_prefix if game.hud.inventory_layer.visible and touch_vendor_prefix!="" else "Continue")
+		KEY_ESCAPE:
+			if game.hud.dialogue_layer.visible: await _button("Close")
+			elif game.hud.inventory_layer.visible: await _button("Close")
+			elif game.hud.menu_layer.visible: await _button("Resume")
+			else: await touch_input.action("pause")
+		KEY_1: await touch_input.more("weapon_sword")
+		KEY_2: await touch_input.more("weapon_bow")
+		KEY_R: await touch_input.more("use_potion")
+		KEY_F: await touch_input.more("throw_bomb")
+		KEY_T:
+			if touch_input.controls()!=null and touch_input.controls().action_centers.has("target_lock"): await touch_input.action("target_lock")
+			else: await touch_input.more("target_lock")
+		_: _fail("Unsupported genuine-touch campaign action: "+str(key))
+
+func _touch_vendor_target(prefix: String) -> bool:
+	for button: Button in root.find_children("*","Button",true,false):
+		if button.is_visible_in_tree() and not button.disabled and button.text.begins_with(prefix):
+			touch_vendor_prefix=prefix
+			return true
+	_fail("Vendor has no enabled visible screen action: "+prefix)
+	return false
 
 func _release() -> void:
+	if touch_input!=null:
+		held.clear()
+		await touch_input.stop()
+		return
 	for key: Key in held.keys():
 		if held[key]: _key(key,false)
 
@@ -506,9 +617,17 @@ func _fail(reason: String) -> void:
 	push_error("COMMUNITY_INPUT "+reason)
 
 func _finish() -> void:
-	_release()
+	await _release()
 	if rules!=null: _check(completed_work==_expected_work(),"Exact physical task set for this route was earned")
 	var report := {"schema_version":1,"kind":"community_world_real_input","case":case_id,"status":"pass" if failures.is_empty() else "fail","failures":failures,"completed_work":completed_work,"observations":observations,"input_events":input_events,"user_data_dir":OS.get_user_data_dir(),"elapsed_ms":Time.get_ticks_msec()-start_ms,"viewport":str(DisplayServer.window_get_size()),"physical_phone_coverage":false,"touch_input_coverage":false,"progression_injection":false}
+	report["input_mode"]="touch" if touch_input!=null else "keyboard_mouse"
+	if touch_input!=null:
+		report["injected_keyboard_events"]=keyboard_events
+		report["injected_mouse_events"]=mouse_events
+		report["screen_input_counts"]=touch_input.counts.duplicate()
+		report["screen_action_evidence"]=touch_input.evidence()
+		report["native_touchscreen_emulation"]=Input.emulate_touch_from_mouse
+		report["touch_input_coverage"]=touch_input.complete() and keyboard_events==0 and mouse_events==0
 	var size := DisplayServer.window_get_size()
 	report["viewport_size"]=[size.x,size.y]
 	report["execution_mode"]="background-rendered"
@@ -520,6 +639,9 @@ func _finish() -> void:
 	if output!="":
 		var file := FileAccess.open(output.path_join("report.json"),FileAccess.WRITE)
 		if file!=null: file.store_string(JSON.stringify(report,"\t"))
+	if touch_input!=null:
+		touch_input.owner=null
+		touch_input=null
 	if is_instance_valid(game):
 		paused=false
 		game.prepare_resource_shutdown()

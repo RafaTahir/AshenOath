@@ -162,6 +162,7 @@ def main() -> int:
     parser.add_argument("--godot", type=Path, default=common.GODOT)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--viewport", choices=["desktop", "touch"], default="desktop")
+    parser.add_argument("--input-mode", choices=["keyboard_mouse", "touch"], help="defaults to touch at 960x540; keyboard runs at that size do not claim touch coverage")
     parser.add_argument("--timeout", type=int, default=10800)
     parser.add_argument("--prepare-only", action="store_true")
     args = parser.parse_args()
@@ -171,7 +172,8 @@ def main() -> int:
         seed = args.seed_save.resolve(strict=True).read_bytes() if args.seed_save else None
         expected = contract(args.case, seed)
         original = LEGACY_SOURCE.read_bytes()
-        adapter, helpers = build_adapter(original.decode("utf-8-sig"))
+        args.input_mode = args.input_mode or ("touch" if args.viewport == "touch" else "keyboard_mouse")
+        adapter, helpers = build_adapter(original.decode("utf-8-sig"), args.input_mode)
         extras = {"tools/verify_community_world_input.gd": common.HARNESS.read_bytes(),
                   "tools/generated_legacy_input.gd": adapter.encode("utf-8"),
                   "tools/source_legacy_input.gd.txt": original}

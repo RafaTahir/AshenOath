@@ -1,10 +1,16 @@
 """No engine: prove complete-route receipts cannot accept seeded shortcuts."""
 import copy
 import json
+import re
+from pathlib import Path
+import tempfile
+from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 import run_full_campaign_acceptance as full
-from community_acceptance_legacy import build_adapter
+from community_acceptance_legacy import build_adapter, functions, validate_touch_adapter
+from test_community_acceptance_packs import candidate
 
 
 def legacy_seed(case):
@@ -185,6 +191,89 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
         self.assertIn('if not willing:',adapter)
         self.assertIn('"Absent or refusing witness is never staged as willing:',adapter)
         self.assertIn('owner._interact("witness_7")',adapter)
+
+    def test_touch_closure_covers_every_helper_without_keyboard_mouse_or_focus(self):
+        source = full.LEGACY_SOURCE.read_text(encoding="utf-8-sig")
+        desktop, desktop_helpers = build_adapter(source)
+        touch, touch_helpers = build_adapter(source, "touch")
+        self.assertEqual(touch_helpers, desktop_helpers)
+        self.assertGreater(len(touch_helpers), 60)
+        validate_touch_adapter(touch)
+        for forbidden in ["InputEvent", "Input.", "gui_get_focus_owner", "grab_focus", "KEY_TAB", "KEY_LEFT", "KEY_RIGHT", "owner._key(", "owner._mouse_button("]:
+            self.assertNotIn(forbidden, touch)
+        self.assertIn("await owner._touch_key(key,pressed)", touch)
+        self.assertNotIn("CemeterySection", touch) # The selected closure never reads it.
+        self.assertIn("await owner._touch_mouse(button,pressed)", touch)
+        self.assertNotRegex(touch,r"(?<!await )owner\._release\(")
+        self.assertIn("owner._touch_vendor_target(label_prefix)", touch)
+        self.assertIn("await owner._face(game.player.global_position+forward*5.0)", touch)
+        self.assertIn("InputEventKey.new()", desktop) # Existing desktop route is retained.
+
+    def test_touch_coroutines_preserve_caller_ownership(self):
+        touch, _ = build_adapter(full.LEGACY_SOURCE.read_text(encoding="utf-8-sig"), "touch")
+        blocks = functions(touch)
+        for name, block in blocks.items():
+            if not re.search(r"\bawait\b", block): continue
+            for caller, body in blocks.items():
+                for line in body.splitlines():
+                    if line.startswith("func "): continue
+                    with self.subTest(callee=name, caller=caller):
+                        self.assertIsNone(re.search(r"(?<![\w.])(?<!await )"+re.escape(name)+r"\(", line))
+        self.assertIn("await _release_combat_movement()", touch)
+
+    def test_touch_source_changes_fail_closed_before_launch(self):
+        source = full.LEGACY_SOURCE.read_text(encoding="utf-8-sig")
+        declaration = 'func _fight_hart_ending(game: Node, covenant: String) -> void:'
+        for bypass in ["var injected = InputEventKey.new()", "Input.parse_input_event(null)",
+                       "Input.action_press(\"light_attack\")", "game.hud.grab_focus()",
+                       "game.hud.pressed.emit()", "_key(KEY_F12,true)",
+                       "owner._key(KEY_A,true)", "owner._mouse_button(MOUSE_BUTTON_LEFT,true)",
+                       "owner.call(\"_input\",null)"]:
+            with self.subTest(bypass=bypass), self.assertRaises(ValueError):
+                build_adapter(source.replace(declaration, declaration+'\n\t'+bypass), "touch")
+        with self.assertRaisesRegex(ValueError, "bearing changed"):
+            build_adapter(source.replace("bearing_error > 0.04", "bearing_error > 0.05"), "touch")
+
+    def test_touch_preflight_requires_the_exact_generated_closure(self):
+        source = full.LEGACY_SOURCE.read_bytes()
+        touch, _ = build_adapter(source.decode("utf-8-sig"), "touch")
+        extras = {"tools/source_legacy_input.gd.txt":source, "tools/generated_legacy_input.gd":touch.encode()}
+        full.common.validate_touch_source(full.HARNESS, extras)
+        for replacement in [b"", build_adapter(source.decode("utf-8-sig"))[0].encode(), (touch+'\n# Unreviewed replacement\n').encode()]:
+            with self.assertRaises(ValueError):
+                full.common.validate_touch_source(full.HARNESS, {**extras,"tools/generated_legacy_input.gd":replacement})
+        with self.assertRaises(ValueError): full.common.validate_touch_source(full.HARNESS, {})
+        with self.assertRaises(ValueError): full.common.validate_touch_source(full.HARNESS.with_name("unreviewed.gd"), extras)
+
+    def test_full_touch_prepare_freezes_the_complete_screen_closure_and_empty_profile(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory=Path(folder)
+            root,packs,manifest=candidate(directory)
+            engine=directory/"never-launched.exe"
+            engine.write_bytes(b"synthetic identity only")
+            cache=directory/"classes.cfg"
+            cache.write_bytes(b"list=[]\n")
+            source=full.LEGACY_SOURCE.read_bytes()
+            adapter,_=build_adapter(source.decode("utf-8-sig"),"touch")
+            extras={"tools/generated_legacy_input.gd":adapter.encode(),"tools/source_legacy_input.gd.txt":source,
+                    "tools/verify_community_world_input.gd":full.common.HARNESS.read_bytes()}
+            args=SimpleNamespace(root_pack=root,packs=packs,release_manifest=manifest,godot=engine,class_cache=cache,
+                                 seed_save=None,case="full_six_endings",output=directory/"run",viewport="touch",timeout=60,input_mode=None)
+            def git(*arguments):
+                if arguments[0]=="rev-parse": return b"a"*40
+                if arguments[0]=="show": return b'[application]\nconfig/name="Fixture"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n'
+                return b""
+            with patch.object(full.common,"git",git):
+                receipt,path=full.common.prepare(args,script_source=full.HARNESS,seed_contract=full.contract(args.case,None),extra_files=extras,allow_no_seed=True)
+            self.assertEqual(receipt["input_mode"],"touch")
+            self.assertIn("--input-mode=touch",receipt["command"])
+            self.assertEqual(receipt["initial_profile_files"],[])
+            isolated=Path(receipt["isolated_project"])
+            self.assertEqual((isolated/"tools/generated_legacy_input.gd").read_bytes(),adapter.encode())
+            self.assertEqual((isolated/"tools/community_touch_input.gd").read_bytes(),(full.PROJECT/"tools/community_touch_input.gd").read_bytes())
+            self.assertEqual(full.common.load_prepared(path)["status"],"prepared")
+            (isolated/"tools/generated_legacy_input.gd").write_bytes(b"unreviewed keyboard fallback")
+            with self.assertRaisesRegex(ValueError,"frozen input changed"): full.common.load_prepared(path)
 
 
 if __name__ == "__main__":

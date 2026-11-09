@@ -165,5 +165,116 @@ class BackgroundReceiptTests(unittest.TestCase):
         self.assertIn("timed out",receipt["failures"][0])
 
 
+class TouchEvidenceTests(unittest.TestCase):
+    def evidence(self):
+        return {"input_mode":"touch", "touch_input_coverage":True,
+                "native_touchscreen_emulation":True,
+                "physical_phone_coverage":False, "injected_keyboard_events":0,
+                "injected_mouse_events":0, "screen_input_counts":{
+                    "screen_touch":20,"screen_drag":5,"ui":2,"move":2,"look":1,"action":2},
+                "screen_action_evidence":{"open_contacts":0,"simultaneous_aim_fire":0,
+                    "actions":{key:{"pressed":1,"released":1,"held_ms":30} for key in ["interact","pause"]},
+                    "menu_actions":{},"menu_reacquisitions":{},"ui_labels":{"Continue":1,"Quick Save":1}}}
+
+    def test_genuine_screen_route_requires_all_input_paths(self):
+        self.assertEqual(runner.validate_input_report(self.evidence(), {"input_mode":"touch"}), [])
+        for key in self.evidence()["screen_input_counts"]:
+            report = self.evidence()
+            report["screen_input_counts"][key] = 0
+            with self.subTest(missing=key):
+                self.assertTrue(runner.validate_input_report(report, {"input_mode":"touch"}))
+
+    def test_small_viewport_does_not_prove_touch_input(self):
+        report = {"viewport_size":[960,540], "input_events":1000, "status":"pass"}
+        self.assertTrue(runner.validate_input_report(report, {"input_mode":"touch"}))
+
+    def test_keyboard_fallback_and_phone_claim_are_rejected(self):
+        for field, value in [("injected_keyboard_events",1), ("injected_mouse_events",1),
+                             ("injected_keyboard_events",False), ("injected_mouse_events",False),
+                             ("touch_input_coverage",False), ("physical_phone_coverage",True),
+                             ("native_touchscreen_emulation",False),
+                             ("input_mode","keyboard_mouse")]:
+            report = self.evidence()
+            report[field] = value
+            with self.subTest(field=field):
+                self.assertTrue(runner.validate_input_report(report, {"input_mode":"touch"}))
+        self.assertTrue(runner.validate_input_report(self.evidence(), {"input_mode":"keyboard_mouse"}))
+
+    def test_touch_adapter_cannot_shortcut_the_game(self):
+        source = (runner.PROJECT / "tools/community_touch_input.gd").read_text(encoding="utf-8")
+        for forbidden in [".set_flag(", ".complete_objective(", ".global_position=", ".global_position =",
+                          ".set_virtual_axes(", ".request_virtual_action(", ".add_touch_look_delta(",
+                          ".pressed.emit(", ".scroll_vertical=", ".scroll_vertical =", ".grab_focus(",
+                          "Input.action_press(", "InputEventKey.new", "InputEventMouseButton.new"]:
+            self.assertNotIn(forbidden, source)
+        self.assertIn("InputEventScreenTouch.new()", source)
+        self.assertIn("InputEventScreenDrag.new()", source)
+
+    def test_balanced_individual_actions_and_visible_ui_are_required(self):
+        mutations = [lambda row: row.pop("screen_action_evidence"),
+                     lambda row: row["screen_action_evidence"].update(open_contacts=1),
+                     lambda row: row["screen_action_evidence"]["actions"].pop("interact"),
+                     lambda row: row["screen_action_evidence"]["actions"]["interact"].update(released=0),
+                     lambda row: row["screen_action_evidence"]["actions"].update(interact="invalid"),
+                     lambda row: row["screen_action_evidence"].update(ui_labels={"Continue":"invalid"}),
+                     lambda row: row["screen_action_evidence"].update(menu_actions={"use_potion":1}),
+                     lambda row: row["screen_action_evidence"].update(menu_reacquisitions={"fire_bow":1})]
+        for change in mutations:
+            value = self.evidence()
+            change(value)
+            self.assertTrue(runner.validate_input_report(value, {"input_mode":"touch"}))
+
+    def full_evidence(self):
+        value = self.evidence()
+        evidence = value["screen_action_evidence"]
+        for key in ["light_attack","aim_bow","fire_bow","target_lock"]:
+            evidence["actions"][key]={"pressed":1,"released":1,"held_ms":40}
+        evidence["actions"]["touch_more"]={"pressed":2,"released":2,"held_ms":40}
+        evidence["menu_actions"]={"weapon_sword":1,"weapon_bow":1}
+        evidence["ui_labels"].update(Steel=1,Bow=1)
+        evidence["simultaneous_aim_fire"]=1
+        evidence["aim_mode_requests"]=[{"mode":"toggle","initial":False,"requested":True,"final":True},
+                                       {"mode":"toggle","initial":True,"requested":False,"final":False}]
+        value["screen_input_counts"].update(action=8,ui=4)
+        return value
+
+    def test_full_touch_campaign_requires_its_real_combat_and_more_paths(self):
+        receipt={"input_mode":"touch","seed_contract":{"suite":"full_campaign"}}
+        self.assertTrue(runner.validate_input_report(self.evidence(), receipt))
+        self.assertEqual(runner.validate_input_report(self.full_evidence(), receipt), [])
+        for field,key in [("actions","aim_bow"),("actions","fire_bow"),("actions","light_attack"),("menu_actions","weapon_bow")]:
+            value=self.full_evidence()
+            value["screen_action_evidence"][field].pop(key)
+            self.assertTrue(runner.validate_input_report(value, receipt))
+        value=self.full_evidence()
+        value["screen_action_evidence"]["simultaneous_aim_fire"]=0
+        self.assertTrue(runner.validate_input_report(value, receipt))
+
+    def test_more_reacquisition_requires_fresh_press_without_automatic_attack(self):
+        value=self.full_evidence()
+        evidence=value["screen_action_evidence"]
+        evidence["menu_reacquisitions"]={"aim_bow":1}
+        self.assertTrue(runner.validate_input_report(value, {"input_mode":"touch"}))
+        evidence["actions"]["aim_bow"].update(pressed=2,released=2)
+        value["screen_input_counts"]["action"]+=1
+        self.assertEqual(runner.validate_input_report(value, {"input_mode":"touch"}), [])
+        evidence["menu_reacquisitions"]["fire_bow"]=1
+        self.assertTrue(runner.validate_input_report(value, {"input_mode":"touch"}))
+
+    def test_full_touch_aim_policy_requires_confirmed_on_and_off(self):
+        receipt={"input_mode":"touch","seed_contract":{"suite":"full_campaign"}}
+        for bad in [[],None,[{"mode":"toggle","initial":True,"requested":False,"final":True}],
+                    [{"mode":"toggle","initial":False,"requested":True,"final":True}],
+                    [{"mode":"hold","initial":0,"requested":True,"final":True}],
+                    [{"mode":"forced","initial":False,"requested":True,"final":True}]]:
+            value=self.full_evidence()
+            value["screen_action_evidence"]["aim_mode_requests"]=bad
+            self.assertTrue(runner.validate_input_report(value,receipt))
+        for mode in ("hold","toggle"):
+            value=self.full_evidence()
+            for row in value["screen_action_evidence"]["aim_mode_requests"]: row["mode"]=mode
+            self.assertEqual(runner.validate_input_report(value,receipt),[])
+
+
 if __name__ == "__main__":
     unittest.main()

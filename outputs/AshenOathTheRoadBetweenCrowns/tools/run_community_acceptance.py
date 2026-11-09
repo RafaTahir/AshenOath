@@ -91,9 +91,34 @@ def validate_seed(seed: bytes, case: str) -> dict:
     return {"zone": source, "chapter": chapter, "expected_work": tasks}
 
 
+def validate_touch_source(script_source: Path, extra_files: dict[str, bytes] | None) -> None:
+    if script_source == HARNESS:
+        return
+    if script_source != PROJECT / "tools/verify_full_campaign_input.gd":
+        raise ValueError("entry script has no reviewed genuine-touch input contract")
+    from community_acceptance_legacy import build_adapter, validate_touch_adapter
+    supplied = extra_files or {}
+    try:
+        adapter = supplied["tools/generated_legacy_input.gd"].decode("utf-8-sig")
+        source = supplied["tools/source_legacy_input.gd.txt"].decode("utf-8-sig")
+    except (KeyError, UnicodeDecodeError) as error:
+        raise ValueError("full touch route requires its exact maintained source and generated closure") from error
+    validate_touch_adapter(adapter)
+    expected, _ = build_adapter(source, "touch")
+    if adapter != expected:
+        raise ValueError("full touch closure differs from the reviewed source transformation")
+
+
 def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
             seed_contract: dict | None = None, extra_files: dict[str, bytes] | None = None,
             allow_no_seed: bool = False, runner_sources: list[Path] | None = None) -> tuple[dict, Path]:
+    input_mode = getattr(args, "input_mode", None) or ("touch" if args.viewport == "touch" else "keyboard_mouse")
+    if input_mode not in ("keyboard_mouse", "touch"):
+        raise ValueError("unsupported acceptance input mode")
+    if input_mode == "touch":
+        if args.viewport != "touch":
+            raise ValueError("genuine touch acceptance requires the touch viewport")
+        validate_touch_source(script_source, extra_files)
     root_pack = args.root_pack.resolve(strict=True)
     pack_dir = args.packs.resolve(strict=True)
     from community_acceptance_packs import verify_candidate
@@ -131,7 +156,10 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
     pack_list = isolated / "verified_native_packs.json"
     write(pack_list, closure)
     extras = []
-    for relative, content in (extra_files or {}).items():
+    fixture_files = dict(extra_files or {})
+    if input_mode == "touch":
+        fixture_files["tools/community_touch_input.gd"] = (PROJECT / "tools/community_touch_input.gd").read_bytes()
+    for relative, content in fixture_files.items():
         destination = (isolated / relative).resolve()
         if not destination.is_relative_to(isolated.resolve()) or destination == script.resolve():
             raise ValueError("extra fixture input must stay within its isolated project and cannot replace the entry script")
@@ -154,7 +182,7 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
                "--rendering-driver", "opengl3", "--script", str(script), "--log-file", str(output / "godot.log"),
                "--", "--root-pack=" + root_pack.as_posix(), "--pack-list=" + pack_list.as_posix(),
                "--case=" + args.case, "--viewport=" + args.viewport, "--output=" + output.as_posix(),
-               "--background-rendered=true"]
+               "--background-rendered=true", "--input-mode=" + input_mode]
     immutable = [isolated / "project.godot", isolated / ".godot/global_script_class_cache.cfg", script, pack_list, *seed_inputs, *extras,
                  Path(__file__).resolve(), PROJECT / "tools/run_living_cast_capture.py", PROJECT / "tools/background_native_capture.py",
                  PROJECT / "tools/resume_community_acceptance.py",
@@ -170,7 +198,7 @@ def prepare(args: argparse.Namespace, *, script_source: Path = HARNESS,
         "profile": profile, "command": command, "timeout_seconds": args.timeout,
         "immutable_inputs": [{"path": str(path), "bytes": path.stat().st_size, "sha256": sha256(path)} for path in immutable],
         "source_project_sha256": hashlib.sha256(config).hexdigest(), "physical_phone_coverage": False,
-        "touch_input_coverage": False, "viewport": args.viewport,
+        "touch_input_coverage": False, "viewport": args.viewport, "input_mode": input_mode,
         "execution_mode": "background-rendered",
         "progression_setup": "one supplied seed before engine startup" if seed is not None else "empty profile; actual New Game",
         "initial_profile_files": profile_snapshot(user_data),
@@ -206,6 +234,82 @@ def load_prepared(receipt_path: Path) -> dict:
         raise ValueError("prepared profile changed or has already been used; prepare a new run")
     verify_inputs(receipt)
     return receipt
+
+
+def validate_input_report(report: dict, receipt: dict) -> list[str]:
+    """A small viewport alone is never accepted as evidence of touch input."""
+    mode = receipt.get("input_mode", "keyboard_mouse")
+    errors = []
+    if report.get("input_mode", "keyboard_mouse") != mode:
+        errors.append("observed input mode differs from the requested route")
+    if mode == "touch":
+        counts = report.get("screen_input_counts")
+        if not isinstance(counts, dict) or any(type(counts.get(key)) is not int or counts[key] <= 0
+                for key in ("screen_touch", "screen_drag", "ui", "move", "look", "action")):
+            errors.append("touch route lacks screen contact, drag, menu, movement, look or action evidence")
+        if any(type(report.get(key)) is not int or report[key] != 0 for key in ("injected_keyboard_events", "injected_mouse_events")):
+            errors.append("touch route injected keyboard or mouse input")
+        if report.get("touch_input_coverage") is not True:
+            errors.append("touch route did not complete its input coverage")
+        if report.get("physical_phone_coverage") is not False:
+            errors.append("native touch viewport cannot claim physical-phone coverage")
+        if report.get("native_touchscreen_emulation") is not True:
+            errors.append("native touch route did not record its simulated touchscreen")
+        evidence = report.get("screen_action_evidence", {})
+        if not isinstance(evidence, dict):
+            evidence = {}
+        actions = evidence.get("actions", {})
+        if not isinstance(actions, dict):
+            actions = {}
+        menus = evidence.get("menu_actions", {})
+        reacquired = evidence.get("menu_reacquisitions", {})
+        labels = evidence.get("ui_labels", {})
+        if evidence.get("open_contacts") != 0 or type(evidence.get("open_contacts")) is not int:
+            errors.append("touch route left open or unrecorded fingers")
+        valid_actions = True
+        for action, row in actions.items():
+            if (not isinstance(action, str) or not isinstance(row, dict)
+                    or any(type(row.get(key)) is not int for key in ("pressed", "released", "held_ms"))
+                    or row.get("pressed", 0) <= 0 or row.get("pressed") != row.get("released") or row.get("held_ms", -1) < 0):
+                valid_actions = False
+        if not actions or not valid_actions:
+            errors.append("touch action contacts lack balanced press/release evidence")
+        elif isinstance(counts, dict) and sum(row["pressed"] for row in actions.values()) != counts.get("action"):
+            errors.append("touch action totals differ from their per-control evidence")
+        for name, values in [("menu_actions", menus), ("menu_reacquisitions", reacquired), ("ui_labels", labels)]:
+            if not isinstance(values, dict) or any(not isinstance(key, str) or type(value) is not int or value <= 0 for key, value in values.items()):
+                errors.append(f"touch route has malformed {name} evidence")
+        if isinstance(labels, dict) and (not labels or isinstance(counts, dict) and sum(value for value in labels.values() if type(value) is int) != counts.get("ui")):
+            errors.append("touch UI totals differ from their visible-button evidence")
+        if isinstance(menus, dict) and valid_actions:
+            more = actions.get("touch_more", {}).get("pressed", 0)
+            if sum(value for value in menus.values() if type(value) is int) != more:
+                errors.append("More contacts lack one corresponding visible action each")
+        if isinstance(reacquired, dict) and valid_actions:
+            for action, count in reacquired.items():
+                if action not in ("aim_bow", "block") or type(count) is not int or count >= actions.get(action, {}).get("pressed", 0):
+                    errors.append("More reacquisition lacks a new supported held-action contact")
+        required = {"interact", "pause"}
+        if receipt.get("seed_contract", {}).get("suite") == "full_campaign":
+            required.update(["touch_more", "light_attack", "aim_bow", "fire_bow"])
+            if not isinstance(menus, dict) or not all(type(menus.get(key)) is int and menus[key] > 0 for key in ("weapon_sword", "weapon_bow")):
+                errors.append("full touch campaign lacks visible sword/bow selection")
+            if type(evidence.get("simultaneous_aim_fire")) is not int or evidence["simultaneous_aim_fire"] <= 0:
+                errors.append("full touch campaign lacks overlapping Aim and Draw contacts")
+            aim_requests = evidence.get("aim_mode_requests", [])
+            if (not isinstance(aim_requests, list) or not aim_requests
+                    or any(not isinstance(row, dict) or row.get("mode") not in ("hold", "toggle")
+                           or any(type(row.get(key)) is not bool for key in ("requested", "initial", "final"))
+                           or row.get("final") != row.get("requested") for row in aim_requests)
+                    or {row.get("requested") for row in aim_requests if isinstance(row, dict)} != {True, False}):
+                errors.append("full touch campaign did not verify its live Aim policy on and off")
+            if "target_lock" not in actions and (not isinstance(menus, dict) or "target_lock" not in menus):
+                errors.append("full touch campaign lacks its actual visible target-lock action")
+        if required - actions.keys():
+            errors.append("touch route lacks required per-action evidence: " + ", ".join(sorted(required - actions.keys())))
+    elif report.get("touch_input_coverage", False):
+        errors.append("keyboard route cannot claim touch-input coverage")
+    return errors
 
 
 def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
@@ -247,6 +351,7 @@ def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
         expected_size = [960, 540] if receipt["viewport"] == "touch" else [1280, 720]
         if report.get("viewport_size") != expected_size:
             errors.append("rendered viewport differs from the requested dimensions")
+        errors.extend(validate_input_report(report, receipt))
         if receipt["seed_contract"].get("suite"):
             if extra_validator is None:
                 errors.append("complete campaign has no frozen receipt validator")
@@ -271,6 +376,7 @@ def run(receipt: dict, receipt_path: Path, extra_validator=None) -> int:
         receipt["failures"] = errors
         receipt["images"] = images
         receipt["status"] = "pass" if not errors else "fail"
+        receipt["touch_input_coverage"] = not errors and report.get("touch_input_coverage") is True
     except (OSError, ValueError, KeyError, subprocess.TimeoutExpired) as error:
         receipt["status"] = "fail"
         receipt["failures"] = [str(error)]
@@ -308,6 +414,7 @@ def main() -> int:
     parser.add_argument("--godot", type=Path, default=GODOT)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--viewport", choices=["desktop", "touch"], default="desktop")
+    parser.add_argument("--input-mode", choices=["keyboard_mouse", "touch"], help="defaults to genuine screen input at the touch viewport; viewport-only keyboard runs remain explicitly labelled")
     parser.add_argument("--timeout", type=int, default=1800)
     parser.add_argument("--prepare-only", action="store_true", help="freeze inputs and profile without launching Godot")
     args = parser.parse_args()

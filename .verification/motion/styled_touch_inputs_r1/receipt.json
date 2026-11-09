@@ -1,0 +1,397 @@
+{
+  "canonical_read_only": true,
+  "existing_inputs_preserved": true,
+  "resources": [
+    {
+      "path": "scripts/hud/hud_style.gd",
+      "copied": false,
+      "sha256": "06bc6d83d273db236719e78478e9a484c9445059c27f3aec839341ecca4ae375",
+      "canonical_sha256": "06bc6d83d273db236719e78478e9a484c9445059c27f3aec839341ecca4ae375"
+    },
+    {
+      "path": "scripts/hud/hud_component.gd",
+      "copied": false,
+      "sha256": "b4705567d793bf7baec5fea23a8d791fe0e71c397ec7e0a41072be0a236cedf5",
+      "canonical_sha256": "b4705567d793bf7baec5fea23a8d791fe0e71c397ec7e0a41072be0a236cedf5"
+    },
+    {
+      "path": "scripts/story_journal.gd",
+      "copied": false,
+      "sha256": "42b7ac8b6c477e22d4883f2cd199314590f118380cd2c1eac5a24df9de257f25",
+      "canonical_sha256": "8f5201cc4c95eb3e650efb7c5a88576c8ea5c294615ececba1c07e199bb639e5"
+    },
+    {
+      "path": "scripts/story_journal_model.gd",
+      "copied": false,
+      "sha256": "af39b8b9ea54e2be49eb37ee3b53da8d885f9dc0ff1ff270b5af84f4c1680710",
+      "canonical_sha256": "2fecbc4078b31b860a729d93fd659536b050a0119251c593766073fbaa92bee8"
+    },
+    {
+      "path": "scripts/story_route_catalog.gd",
+      "copied": false,
+      "sha256": "f0aa7a5418691275c548d151a7983f2e113f4b290dae6d98d220f52a61653b92",
+      "canonical_sha256": "6e203b75007dd27d8348029e0efb08934534116bec35935727110f78790c8b67"
+    },
+    {
+      "path": "scripts/saga_catalog.gd",
+      "copied": false,
+      "sha256": "8b03a57a2dde10b0e7e819c012e6e0de81dd0d6bd2d12741f3dffc05d7fc9a18",
+      "canonical_sha256": "ca2455ed5b3ae4db1ac0f2f1c14cae2962d29ae187236726c91e844d0eca01ea"
+    },
+    {
+      "path": "scripts/campaign_revision.gd",
+      "copied": false,
+      "sha256": "82020282d1aad2eb7342fdb606a9b3f975fea8509d446208377dec4e43c31930",
+      "canonical_sha256": null
+    },
+    {
+      "path": "scripts/ending_catalog.gd",
+      "copied": false,
+      "sha256": "f8414285cc3fcd6c7eec056345e39641e9b59c3a08083f20e93efdfff8c674c3",
+      "canonical_sha256": null
+    },
+    {
+      "path": "scripts/covenant_resolution.gd",
+      "copied": false,
+      "sha256": "b3b38b2a35a796873e95d8a5aca378b12633725be68714c1447b79cde8bb6bd0",
+      "canonical_sha256": "d9aa229adfe27bc40ec22b6528c13f566b926d9b383d7fa79d8dd8d0b24fc022"
+    },
+    {
+      "path": "scripts/campaign_story_overlay.gd",
+      "copied": false,
+      "sha256": "870a5bdf6cd6506ff045d6382685c931a6ec25a9126a6ed4357d89986d1c2902",
+      "canonical_sha256": null
+    },
+    {
+      "path": "scripts/story_world_director.gd",
+      "copied": false,
+      "sha256": "d9375ab17aea9929cc209230081c4f9115aa0cfaba83bc87419712aeff768e41",
+      "canonical_sha256": "f58c24735193e5cd6ce63b7f6d1ea44041952eafa87534305803f1473a2dea10"
+    },
+    {
+      "path": "scripts/interactable.gd",
+      "copied": false,
+      "sha256": "280611deb57993e45028c475c678e47036075a56af8a1a263a31c15470116f1c",
+      "canonical_sha256": "6c4f42d385f9b5abd3a10c0131d58addec3c84197a4a69bf945164a349331907"
+    },
+    {
+      "path": "scripts/immutable_collision_shapes.gd",
+      "copied": false,
+      "sha256": "5f474f56de9558c373e3bd973baba4393eaa88ccc237fe2126649103a2cec6fa",
+      "canonical_sha256": "1084f33cbdbe4c2fffdaf40272eb7d83c837abcd9f46fa601e8c12973cfdd320"
+    },
+    {
+      "path": "scripts/companion_controller.gd",
+      "copied": false,
+      "sha256": "def6a0da09e360a71efeb7672a0506f2679d9ced8130418248cedf38fc95fe3c",
+      "canonical_sha256": "4e1ce10082eb141a1c38c4251906bfeea2b30378bf18f983719d1f330a300835"
+    },
+    {
+      "path": "scripts/spatial_surface_contract.gd",
+      "copied": false,
+      "sha256": "3e553057111da1cf0a324bfc651e35c648b170c5d886ac1633b78a437f262fb5",
+      "canonical_sha256": "bba25fbb2cd8771a3b2db4b44fe24a3d038cc31f0e8aead95b6e33ae859d4454"
+    },
+    {
+      "path": "scripts/bridge_surface_contract.gd",
+      "copied": false,
+      "sha256": "43afa4d26546c9809cf2da1bcee2040e6d4aebb05d236fb17b8b9b17b361dfff",
+      "canonical_sha256": "feedb2de058e784563478351f5d5e3bd2618e9e3f26b4b45b013da092c27ab14"
+    },
+    {
+      "path": "scripts/world_sector_manifest.gd",
+      "copied": false,
+      "sha256": "35585773d83326cffe629477095dfe0223e68492a8876b32349116aecfe27a24",
+      "canonical_sha256": "de7f53adfce8e8a8438486cee0bfa7361479996c241536f8995da79ce0845b7d"
+    },
+    {
+      "path": "scripts/companion_pose.gd",
+      "copied": false,
+      "sha256": "741cc3345dba7c730546da30216a3f9058977aa922ddf8a16d50cf5ec911316e",
+      "canonical_sha256": "13f2b159cabc9cf828c7ffbe503e56346ebf7de943854d1ffb02df3b3333b58a"
+    },
+    {
+      "path": "scripts/bracken_field_trial.gd",
+      "copied": false,
+      "sha256": "bb0bfa2722ac0bbc4f7a50faa4c27e8e238dd004896d9d087bfa79c93136e9e1",
+      "canonical_sha256": "40a6fd646b32a7c9f8e7a465327f140c254faab888e8d0c97241256d68e1b912"
+    },
+    {
+      "path": "scripts/greyfen_archery_range.gd",
+      "copied": false,
+      "sha256": "87dd327de78b478ff629d3804ec7959ad58e02731d8c8639ac86228bf1eaed4f",
+      "canonical_sha256": "daef8094c1dd55201b5b8a9164edd68c67881632a37494bf61116253494a0983"
+    },
+    {
+      "path": "scripts/greyfen_guidance.gd",
+      "copied": false,
+      "sha256": "3ee55b324a7da50153edf44551e8eca507454569514eb26b7011cde4b225e8ec",
+      "canonical_sha256": "cef80ccf7ada43d54bb827112705f57d358b4d15c5815083323862f13fab62e8"
+    },
+    {
+      "path": "scripts/arrow_flight.gd",
+      "copied": false,
+      "sha256": "149c42dac125c7c0485b4b69e8facfd16e279247fae0516bd03c7b77c69f1b18",
+      "canonical_sha256": "8fb1a46c527d6fca9891d843123244f1bd5b6364a0e15de360ff2200442441e0"
+    },
+    {
+      "path": "scripts/regional_meet.gd",
+      "copied": false,
+      "sha256": "e6d66ef6a8ef92726d499b886e0ff5d922c1dd29905ee0aa516edfa9514b11a9",
+      "canonical_sha256": "49877ad65fa9010f7b7e725addddea5d0a6d215738a4e75b937c7ff273141608"
+    },
+    {
+      "path": "scripts/story_cast_profile.gd",
+      "copied": false,
+      "sha256": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9",
+      "canonical_sha256": "f16a05d851152c6b947bd01bb70aeccb5ee01008451d554ffc9d237c374f4eaa"
+    },
+    {
+      "path": "scripts/systems/character_palette.gd",
+      "copied": false,
+      "sha256": "503977783f9f13d63c88e9e431e1f2cb0cf5b5fc675ecde87151afa5ea4bafcb",
+      "canonical_sha256": "bf86a385979fc126b5393f9be2a67470e2ce7d2f74f2c7ad0cdfb4b9443c12b2"
+    },
+    {
+      "path": "scripts/systems/npc_routine_director.gd",
+      "copied": false,
+      "sha256": "cc4a5f1f622854b5c7db42d2c7fc1773e1f0bee6cf4cf3d525c8c84c1103be9f",
+      "canonical_sha256": "375beb0987e669feb1ed9416e6d11b4131a66b18149e16097e0a6b029a705bf2"
+    },
+    {
+      "path": "scripts/story_world_scenes.gd",
+      "copied": false,
+      "sha256": "c8ae52c926daa583e5416e2d95b5382cb06330e43d499da4814a1f1611a6c16a",
+      "canonical_sha256": "86d967c7050401cbb749755e74bf4cf1ecffe7f83b9dd0ec587caa0ae7ab0543"
+    },
+    {
+      "path": "scripts/greyfen_gathering.gd",
+      "copied": false,
+      "sha256": "80a04e7576e4a37ef42580907540795ea071117d10abffc6ac41fca7397017d8",
+      "canonical_sha256": "c62b9ef55b3afafc8ab11fded6e07b157a1f2a88a67f2ae596d875fb538fc21a"
+    },
+    {
+      "path": "scripts/character_presence.gd",
+      "copied": false,
+      "sha256": "d35cb9e7e1535c987340534da40f875d2dec28354e949c80c0fbd18f03ad5a3e",
+      "canonical_sha256": "f33fb27bc3fd63fcb04ba709f2c5e2366b6258978e889da1dcb90cbe5d12bccc"
+    },
+    {
+      "path": "scripts/arrow_visual.gd",
+      "copied": false,
+      "sha256": "a89ba417fe5600ed7bd88ce903ebfff6c9ce8c480cc0f56392bfbc8c65fe4ae2",
+      "canonical_sha256": "12b0d165c058d9686475d2dde0dd8ffbc56e1db5eeda49b39da9864594070310"
+    },
+    {
+      "path": "scripts/character_role_contract.gd",
+      "copied": false,
+      "sha256": "e23f547fdb5a4dd606aca9fd175bd50c95a2bdf43de6358484524fa514e77f00",
+      "canonical_sha256": "48a85d9c8db57c28a55f538bd646bebd34db4a13babe690e53cd77854f6b1c3a"
+    },
+    {
+      "path": "scripts/character_role_spec.gd",
+      "copied": false,
+      "sha256": "7e6a63df6b8eb60d7af348a2bee001943ea969d2a422f6d004e299ef76b59ed4",
+      "canonical_sha256": "cc546468110367187a4db2e37aece6e873f7f4eac3d00a7f232f2265a77dbd1f"
+    },
+    {
+      "path": "scripts/systems/character_motion_step.gd",
+      "copied": false,
+      "sha256": "29cc74ac77488bdf2cfda8d175bc05076077f8dd0aff1e387b228d3a0251e64b",
+      "canonical_sha256": "102c9b5002280287ea7e0fe5dde57012eb129db6e55caaa85e80901be50eaea3"
+    },
+    {
+      "path": "scripts/epilogue_resolver.gd",
+      "copied": false,
+      "sha256": "637bde477658fa6e5f48f05ebeeba2f49dbd2003ec457d8bd1183555960cb5be",
+      "canonical_sha256": "77014a2a03396ad695a4932a623fdfea7cd97fafc134dd81d8abf5c0f260e529"
+    },
+    {
+      "path": "scripts/dialogue_history.gd",
+      "copied": false,
+      "sha256": "25bd225637fdb60bd6c90e9dd0508ee9c2e7b1556662ebd6e4e688790ebca576",
+      "canonical_sha256": "25bd225637fdb60bd6c90e9dd0508ee9c2e7b1556662ebd6e4e688790ebca576"
+    },
+    {
+      "path": "scripts/source_text.gd",
+      "copied": false,
+      "sha256": "7840e20eb9542d7dbb13e5a6e269b731e98db4969557f2a452dd9d9a44d0a48b",
+      "canonical_sha256": "9b59669a60dc545fd1206b4a607b0569a8acd6fa4d3d740b4318a842114792d4"
+    },
+    {
+      "path": "scripts/hud_navigation_state.gd",
+      "copied": false,
+      "sha256": "65a27d11201ea6d6e604f450d10627d3d4edca4fea5bca4b9cabc2ba5b1c3499",
+      "canonical_sha256": "65a27d11201ea6d6e604f450d10627d3d4edca4fea5bca4b9cabc2ba5b1c3499"
+    },
+    {
+      "path": "scripts/hud_notice_queue.gd",
+      "copied": false,
+      "sha256": "8cd5846028e6058c6faec8770ebf558157a2c87ebba13d7587f6bf7d95d3536c",
+      "canonical_sha256": "8cd5846028e6058c6faec8770ebf558157a2c87ebba13d7587f6bf7d95d3536c"
+    },
+    {
+      "path": "scripts/preparation_view_model.gd",
+      "copied": false,
+      "sha256": "c9a0ae7f1d3210744cbbff69d09ef6895bff67c0c04101656c9238153220de77",
+      "canonical_sha256": "18c57bedc5ef4414764e2d20192a59327b86b2057e1cb7627baa6a2e6139d3ab"
+    },
+    {
+      "path": "scripts/preparation_panel.gd",
+      "copied": false,
+      "sha256": "1ab38e4a4e2fc2e113a294f06af984e0435275b8c8787ebfbdde2d42efe814a9",
+      "canonical_sha256": "bfe5b31adf203e947648ea802c6e16805a4c3f207f4ee2d408e8e67abe7f84c5"
+    },
+    {
+      "path": "scripts/journey_menu_panel.gd",
+      "copied": false,
+      "sha256": "a10a622efd66d0546a6cf72ac228670f3f849845110998ae83a9bf8bb7295f83",
+      "canonical_sha256": "436f7a101d16c1538e39c2a596c7d5e107632c889f818683d1076945461e59e9"
+    },
+    {
+      "path": "scripts/dialogue_topic_navigation.gd",
+      "copied": false,
+      "sha256": "d684f06a27589aab7710c0c8a35eda6cc35ef48abc8651efaa7ce3b38d3ec21d",
+      "canonical_sha256": "d684f06a27589aab7710c0c8a35eda6cc35ef48abc8651efaa7ce3b38d3ec21d"
+    },
+    {
+      "path": "scripts/journal_evidence_navigation.gd",
+      "copied": false,
+      "sha256": "0060f6efdea54e0404ba0f0989c93daa1abd305c9eda05d16fcdb2e574f0e326",
+      "canonical_sha256": "0060f6efdea54e0404ba0f0989c93daa1abd305c9eda05d16fcdb2e574f0e326"
+    },
+    {
+      "path": "scripts/hud_layout_policy.gd",
+      "copied": false,
+      "sha256": "d0df2249d2fa750965e12a36d6053a6682c8401ef68d396474ea8ce751905954",
+      "canonical_sha256": "5340f8391f32c6e93e19e5dd981682a7d94af28fb92190a5f75ca650ff0ccf60"
+    },
+    {
+      "path": "scripts/hud_reflow_state.gd",
+      "copied": false,
+      "sha256": "3bc49ea08afc23b76dbea023ed285910b9d8cd575a0a26a48aa9be022002f3f7",
+      "canonical_sha256": "3bc49ea08afc23b76dbea023ed285910b9d8cd575a0a26a48aa9be022002f3f7"
+    },
+    {
+      "path": "scripts/mobile_touch_layout.gd",
+      "copied": false,
+      "sha256": "e13921b4f950bc1c66cd0caaaebaa09a37a24ace4c52e5bfcc061d8b436578d5",
+      "canonical_sha256": "63a0e26a173a1739df3946d069037ce72e545ec74d79a4e0b02ab7cb84980200"
+    },
+    {
+      "path": "scripts/hud_visual_style.gd",
+      "copied": false,
+      "sha256": "fcf85c7e64e348aba18b2f6a6a3e772ef776cf1929038a493724f7da5b39ceb0",
+      "canonical_sha256": "6d24103643b892a696a98b8846230b0083ef2e0925e65d9a517f1c1156cd0826"
+    },
+    {
+      "path": "scripts/hud_emblem.gd",
+      "copied": false,
+      "sha256": "b736a40bec650a4fdba858a70ad70c1ad61dba33c6fac3b1e8cbe84688e3620f",
+      "canonical_sha256": "a33cfd57568904f779dfc1325b4df545cbf90631e252157f9314588629eca9ff"
+    },
+    {
+      "path": "assets/icons/iron_trap.svg",
+      "copied": true,
+      "sha256": "b22f08b1d5df5dda1c1dc0d1be7caa2ce1eff3ec38b845454bd10e3a6d41e30e",
+      "canonical_sha256": "b22f08b1d5df5dda1c1dc0d1be7caa2ce1eff3ec38b845454bd10e3a6d41e30e"
+    },
+    {
+      "path": "assets/icons/iron_trap.svg.import",
+      "copied": true,
+      "sha256": "c49489dc9db71d2337f73f396f9a0078834a16644a2f9088b6bcdcc999dae913",
+      "canonical_sha256": "c49489dc9db71d2337f73f396f9a0078834a16644a2f9088b6bcdcc999dae913"
+    },
+    {
+      "path": ".godot/imported/iron_trap.svg-9cc4f7719bef6564ebeb93c29a290c89.ctex",
+      "copied": true,
+      "sha256": "836b73708c57aabc001609e58e18ecc8d534eef676feee0315940307a5f05fb8",
+      "canonical_sha256": "836b73708c57aabc001609e58e18ecc8d534eef676feee0315940307a5f05fb8"
+    },
+    {
+      "path": ".godot/imported/iron_trap.svg-9cc4f7719bef6564ebeb93c29a290c89.md5",
+      "copied": true,
+      "sha256": "7351bf5db9982c653a029299b1882963821f5ca04e453a13b9f51880617c97c1",
+      "canonical_sha256": "7351bf5db9982c653a029299b1882963821f5ca04e453a13b9f51880617c97c1"
+    },
+    {
+      "path": "scripts/hud_navigation_dial.gd",
+      "copied": false,
+      "sha256": "8f0b20f21f4b505016595bbef67cbc7355c87c615f5579e6963ad162e9a80aa4",
+      "canonical_sha256": "8f0b20f21f4b505016595bbef67cbc7355c87c615f5579e6963ad162e9a80aa4"
+    },
+    {
+      "path": "scripts/startup_loading_view.gd",
+      "copied": false,
+      "sha256": "79bebd4a4099ac1c1b17acd835c45c62f53a24932b088618d1c5894171a12bb7",
+      "canonical_sha256": "3c4867392c10adc66152235df75bd17aae82980c80ec53cd67eabf69f0cb9440"
+    },
+    {
+      "path": "assets/ui/fonts/Spectral-Medium.ttf",
+      "copied": true,
+      "sha256": "f385bc588599c879112272711d4acecc126674009d747a27284f59e93a240e83",
+      "canonical_sha256": "f385bc588599c879112272711d4acecc126674009d747a27284f59e93a240e83"
+    },
+    {
+      "path": "assets/ui/fonts/Spectral-Medium.ttf.import",
+      "copied": true,
+      "sha256": "cfbf6b7accb85d2b51be489fceb69f9184b38eb41ae280fcf8769b2a7577adea",
+      "canonical_sha256": "cfbf6b7accb85d2b51be489fceb69f9184b38eb41ae280fcf8769b2a7577adea"
+    },
+    {
+      "path": ".godot/imported/Spectral-Medium.ttf-0414a011842b7a91d14f3d1754fb700c.fontdata",
+      "copied": true,
+      "sha256": "2432c34c39e71eabf6c002ba5a23f10d584cbad8ae37c25838344dbd3910e677",
+      "canonical_sha256": "2432c34c39e71eabf6c002ba5a23f10d584cbad8ae37c25838344dbd3910e677"
+    },
+    {
+      "path": ".godot/imported/Spectral-Medium.ttf-0414a011842b7a91d14f3d1754fb700c.md5",
+      "copied": true,
+      "sha256": "30e7399f6829425ec3b71d773fc1dd375f41204d18e48309f2cd85ffd3559349",
+      "canonical_sha256": "30e7399f6829425ec3b71d773fc1dd375f41204d18e48309f2cd85ffd3559349"
+    },
+    {
+      "path": "assets_external/ui/greyfen_menu_stylized.png",
+      "copied": true,
+      "sha256": "0d10a94d72490d2cdca76bbe7f33aa248644e371b860acfc8f32102d0fb56e25",
+      "canonical_sha256": "0d10a94d72490d2cdca76bbe7f33aa248644e371b860acfc8f32102d0fb56e25"
+    },
+    {
+      "path": "assets_external/ui/greyfen_menu_stylized.png.import",
+      "copied": true,
+      "sha256": "48adf34e2a7c410264790a9f0769755ca006c98fb5c145715328051f794304ee",
+      "canonical_sha256": "48adf34e2a7c410264790a9f0769755ca006c98fb5c145715328051f794304ee"
+    },
+    {
+      "path": ".godot/imported/greyfen_menu_stylized.png-2c78763c4c75df20ef13da0894a41bd0.ctex",
+      "copied": true,
+      "sha256": "a9cb548d33cab98a417dcf04beeaac726f580fd438de2ffa4cd6f6267a9a424e",
+      "canonical_sha256": "a9cb548d33cab98a417dcf04beeaac726f580fd438de2ffa4cd6f6267a9a424e"
+    },
+    {
+      "path": ".godot/imported/greyfen_menu_stylized.png-2c78763c4c75df20ef13da0894a41bd0.md5",
+      "copied": true,
+      "sha256": "38cfdd82e81fda87564f18a159db3505f4379bd1d91e915a290274cdbde92059",
+      "canonical_sha256": "38cfdd82e81fda87564f18a159db3505f4379bd1d91e915a290274cdbde92059"
+    },
+    {
+      "path": "scripts/hud/hud_state.gd",
+      "copied": false,
+      "sha256": "150aa0461228194c03705afc48c971cf21249f505249d3418ad2d931a9f8f828",
+      "canonical_sha256": "150aa0461228194c03705afc48c971cf21249f505249d3418ad2d931a9f8f828"
+    },
+    {
+      "path": "scripts/hud/menu_panel.gd",
+      "copied": false,
+      "sha256": "5ff51897aba5a887197414b6f15bf93a7910aefd6f7789eca830b1d7738b1b73",
+      "canonical_sha256": "5ff51897aba5a887197414b6f15bf93a7910aefd6f7789eca830b1d7738b1b73"
+    },
+    {
+      "path": "scripts/hud/dialogue_panel.gd",
+      "copied": false,
+      "sha256": "0a4f463edc4d0d5d988dbda6c269d02c1eb30deec4f7e9f229ca16841c61b9a4",
+      "canonical_sha256": "0a4f463edc4d0d5d988dbda6c269d02c1eb30deec4f7e9f229ca16841c61b9a4"
+    }
+  ],
+  "original_style_sha256": "06bc6d83d273db236719e78478e9a484c9445059c27f3aec839341ecca4ae375"
+}

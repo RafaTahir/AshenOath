@@ -27,6 +27,8 @@ func _initialize() -> void:
 	start_ms=Time.get_ticks_msec()
 	seeded_ferry=case_id=="seeded_departure_ferry"
 	expanded=case_id=="full_six_endings" or seeded_ferry
+	if not _configure_input_mode():
+		await _finish(); return
 	if output=="" or case_id not in ["full_six_endings","legacy_ash_missing","legacy_ash_v1","legacy_witness_missing","legacy_witness_v1","seeded_departure_ferry"]:
 		_fail("Full campaign acceptance requires an explicit supported case")
 		await _finish(); return
@@ -48,6 +50,9 @@ func _initialize() -> void:
 	var adapter=load("res://tools/generated_legacy_input.gd")
 	if rules==null or topology==null or revision_script==null or endings_script==null or adapter==null:
 		_fail("Required runtime or frozen input adapter is missing")
+		await _finish(); return
+	if str(adapter.ACCEPTANCE_INPUT_MODE)!=str(options.get("input-mode","keyboard_mouse")):
+		_fail("Frozen legacy helper input contract differs from the requested mode")
 		await _finish(); return
 	legacy=adapter.new(); legacy.owner=self
 	expected_chapters=revision_script.chapter_ids(2 if expanded else 1)
@@ -125,7 +130,7 @@ func _legacy(method: String) -> void:
 	await _resume()
 	region=str(game.current_zone_id)
 	await legacy.call(method,game)
-	_release()
+	await _release()
 	region=str(game.current_zone_id)
 	await _snapshot(method.trim_prefix("_"))
 
@@ -271,7 +276,7 @@ func _ending_circuit(ending: String) -> void:
 	var ritual_steps := 0
 	if ending=="kill":
 		await legacy._fight_hart_ending(game,"ash")
-		_release()
+		await _release()
 	else:
 		for index in range(3):
 			await _interact("covenant_%s_%d" % [ending,index])
@@ -312,14 +317,40 @@ func _ending_circuit(ending: String) -> void:
 	ending_results.append({"ending":ending,"covenant":covenant,"ritual_steps":ritual_steps,"visible_options":visible,"memorial_reload":memorial_restored,"return_home":str(game.current_zone_id)=="greyfen","epilogue_presented":_flag("epilogue_presented"),"cards":cards,"input_events":input_events,"consequences":consequences})
 
 func _mouse_button(button: MouseButton, pressed: bool) -> void:
+	if touch_input!=null:
+		_fail("Screen combat must use the awaited screen adapter")
+		return
 	if bool(mouse_held.get(button,false))==pressed: return
 	mouse_held[button]=pressed
 	var event := InputEventMouseButton.new()
 	event.button_index=button; event.pressed=pressed
 	Input.parse_input_event(event); input_events+=1
+	mouse_events+=1
+
+func _touch_mouse(button: MouseButton, pressed: bool) -> void:
+	if touch_input==null or button not in [MOUSE_BUTTON_LEFT,MOUSE_BUTTON_RIGHT]:
+		_fail("Unsupported screen combat button")
+		return
+	mouse_held[button]=pressed
+	if not pressed:
+		for action_id: String in ["fire_bow","light_attack"] if button==MOUSE_BUTTON_LEFT else ["block"]:
+			touch_input.hold_action(action_id,false)
+		if button==MOUSE_BUTTON_RIGHT: await touch_input.aim(false)
+		return
+	var control=touch_input.controls()
+	if control==null:
+		if pressed: _fail("Screen combat needs visible touch controls")
+		return
+	var bow := str(control.weapon_mode)=="bow"
+	var action := ("fire_bow" if bow else "light_attack") if button==MOUSE_BUTTON_LEFT else ("aim_bow" if bow else "block")
+	if action=="aim_bow": await touch_input.aim(pressed)
+	else: touch_input.hold_action(action,pressed)
 
 func _release() -> void:
-	super._release()
+	await super._release()
+	if touch_input!=null:
+		mouse_held.clear()
+		return
 	for button: MouseButton in mouse_held.keys():
 		if mouse_held[button]: _mouse_button(button,false)
 

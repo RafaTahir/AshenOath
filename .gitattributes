@@ -59,3 +59,23 @@ outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_stage2_libraries.g
 outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_stage2_props.gd -text whitespace=cr-at-eol
 # Retained engine logs preserve diagnostic whitespace and terminal blank lines.
 art_source/art_recovery_v2/evidence/**/*.log -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+# Exact native touch input source/proof bytes.
+.verification/motion/full_touch_contract_r4/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/motion/full_touch_contract_r5/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/motion/full_touch_contract_r6/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/motion/run_styled_touch_contract.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/motion/styled_touch_inputs_r1/original_hud_style.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/motion/styled_touch_inputs_r1/receipt.json -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/motion/touch_checkpoint_python_tests.log -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/scripts/hud/hud_style.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/LIVING_CAMPAIGN_INTEGRATION.md -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/community_acceptance_legacy.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/community_touch_input.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/run_community_acceptance.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/run_full_campaign_acceptance.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/test_community_acceptance_runner.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/test_full_campaign_acceptance.py -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_community_touch_input.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_community_world_input.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_full_campaign_input.gd -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+.verification/motion/touch_checkpoint_paths.json -text whitespace=cr-at-eol

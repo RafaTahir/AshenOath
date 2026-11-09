@@ -46,7 +46,7 @@ OVERRIDES = {
     "_shutdown_game": '''func _shutdown_game(_game: Node) -> void: owner._fail("Legacy helper requested early world teardown")\n''',
     "_save_campaign_checkpoint": '''func _save_campaign_checkpoint(game: Node) -> Dictionary:
 \towner.region=str(game.current_zone_id)
-\towner._release()
+\tawait owner._release()
 \tawait owner._tap(KEY_ESCAPE)
 \tawait owner._button("Quick Save")
 \tawait owner._frames(12)
@@ -141,7 +141,7 @@ OVERRIDES = {
 \tvar last_potion := 0
 \twhile Time.get_ticks_msec()<deadline and failures.is_empty():
 \t\tif game.quests.is_objective_done("main_soldier_without_banner","senn_confrontation"):
-\t\t\towner._release()
+\t\t\tawait owner._release()
 \t\t\tawait owner._choose_outcome("captain_senn","senn_fate","testimony")
 \t\t\towner._check(game.quests.is_completed("main_soldier_without_banner") and str(game.story_state.get_flag("senn_fate",""))=="testimony","Senn yields alive and receives his actual recorded outcome")
 \t\t\tawait _save_campaign_checkpoint(game)
@@ -157,7 +157,7 @@ OVERRIDES = {
 \t\tif game.player.health_component.health<65 and int(game.inventory.items.get("redroot_potion",0))>0 and now-last_potion>6000:
 \t\t\tawait owner._tap(KEY_R); last_potion=now
 \t\telif float(enemy.pending_attack_time)>0 and float(enemy.pending_attack_time)<game.player.get_parry_window_duration()*0.75:
-\t\t\towner._release()
+\t\t\tawait owner._release()
 \t\t\tawait owner._tap(KEY_Q)
 \t\telse: last_attack=await _drive_contact_strike(game,enemy,last_attack,430)
 \t\tawait owner._frames(3)
@@ -211,7 +211,83 @@ def functions(source: str) -> dict[str, str]:
     return result
 
 
-def build_adapter(source: str) -> tuple[str, list[str]]:
+TOUCH_KEYS = {"KEY_W", "KEY_A", "KEY_S", "KEY_D", "KEY_SHIFT", "KEY_Q", "KEY_C", "KEY_E",
+              "KEY_ENTER", "KEY_ESCAPE", "KEY_1", "KEY_2", "KEY_R", "KEY_F", "KEY_T"}
+
+
+def validate_touch_adapter(adapter: str) -> None:
+    """Fail closed on direct injection or any key without a reviewed screen path."""
+    if "const ACCEPTANCE_INPUT_MODE := \"touch\"" not in adapter:
+        raise ValueError("generated touch adapter lacks its explicit input contract")
+    for pattern in [r"\bInput(?:Event\w*|\.)", r"\bowner\._(?:key|mouse_button)\(",
+                    r"\.call\(\s*[\"'](?:_input|_unhandled_input)[\"']",
+                    r"\.(?:_input|_unhandled_input|grab_focus|set_virtual_axes|request_virtual_action|add_touch_look_delta)\(",
+                    r"\.(?:pressed|button_down|button_up)\.emit\(", r"\.(?:scroll_vertical|scroll_horizontal)\s*="]:
+        if re.search(pattern, adapter, re.MULTILINE):
+            raise ValueError(f"touch helper bypasses its screen-only owner: {pattern}")
+    for line in adapter.splitlines():
+        if not line.startswith("func ") and re.search(r"(?<![\w.])(?<!await )_(?:key|mouse_button)\(", line):
+            raise ValueError("touch helper did not await a screen action")
+    unknown = set(re.findall(r"\bKEY_[A-Z0-9_]+\b", adapter)) - TOUCH_KEYS
+    if unknown:
+        raise ValueError(f"touch helper has unmapped keys: {sorted(unknown)}")
+
+
+def touch_blocks(blocks: dict[str, str]) -> None:
+    previously_async = {name for name, block in blocks.items() if re.search(r"\bawait\b", block)}
+    blocks["_key"] = 'func _key(key: Key, pressed: bool) -> void: await owner._touch_key(key,pressed)\n'
+    blocks["_mouse_button"] = 'func _mouse_button(button: MouseButton, pressed: bool) -> void: await owner._touch_mouse(button,pressed)\n'
+    blocks["_focus_vendor_button"] = '''func _focus_vendor_button(label_prefix: String, _backwards: bool = false) -> bool:
+\t# Select an actual visible row for the subsequent screen tap; never move GUI focus.
+\treturn owner._touch_vendor_target(label_prefix)
+'''
+    for name, yaw, direction in [("_turn_camera_north", "0.0", "FORWARD"), ("_turn_camera_south", "PI", "BACK")]:
+        blocks[name] = f'''func {name}(game: Node) -> void:
+\troute_camera_yaw = {yaw}
+\tawait owner._face(game.player.global_position+Vector3.{direction}*5.0)
+\towner._check(absf(angle_difference(float(game.camera_rig.yaw),route_camera_yaw))<0.06,"Screen swipes restore the route bearing")
+'''
+    original = '''\t\tif stabilize_route_bearing:
+\t\t\tvar bearing_error := wrapf(float(game.camera_rig.yaw) - route_camera_yaw, -PI, PI)
+\t\t\t_key(KEY_RIGHT, bearing_error > 0.04)
+\t\t\t_key(KEY_LEFT, bearing_error < -0.04)
+\tif stabilize_route_bearing:
+\t\t_key(KEY_RIGHT, false)
+\t\t_key(KEY_LEFT, false)
+'''
+    if blocks["_move_until"].count(original) != 1:
+        raise ValueError("maintained movement bearing changed; review its screen adaptation")
+    blocks["_move_until"] = blocks["_move_until"].replace(original, '''\t\tif stabilize_route_bearing and absf(angle_difference(float(game.camera_rig.yaw),route_camera_yaw))>0.04:
+\t\t\tvar forward := Vector3(-sin(route_camera_yaw),0,-cos(route_camera_yaw))
+\t\t\tawait owner._face(game.player.global_position+forward*5.0)
+''')
+    # Discrete More actions must finish before the combat helper proceeds.
+    # Rewrite calls only, retaining the maintained route geometry and assertions.
+    for name, block in list(blocks.items()):
+        blocks[name] = "\n".join(line if line.startswith("func ") else
+            re.sub(r"(?<![\w.])(?<!await )(_(?:key|mouse_button)\()", r"await \1", line)
+            for line in block.split("\n"))
+    # Holding/releasing movement was synchronous in the keyboard route. A
+    # helper which now awaits a screen action becomes a coroutine too; carry
+    # that ownership through every caller, not only the direct input helpers.
+    propagated = set()
+    while True:
+        introduced = {name for name, block in blocks.items() if re.search(r"\bawait\b", block)} - previously_async - propagated
+        if not introduced:
+            break
+        pattern = r"(?<![\w.])(?<!await )(" + "|".join(re.escape(name) for name in sorted(introduced)) + r")\("
+        for name, block in list(blocks.items()):
+            blocks[name] = "\n".join(line if line.startswith("func ") else
+                re.sub(pattern, r"await \1(", line) for line in block.split("\n"))
+        propagated.update(introduced)
+
+
+def build_adapter(source: str, input_mode: str = "keyboard_mouse") -> tuple[str, list[str]]:
+    if input_mode not in ("keyboard_mouse", "touch"):
+        raise ValueError("unsupported legacy adapter input mode")
+    # The untouched source bytes are separately frozen by the runner. Parse
+    # Windows and LF checkouts identically without changing that provenance.
+    source = source.replace("\r\n", "\n")
     blocks = functions(source)
     initializer = blocks.get("_initialize", "")
     marker = '\t\tprint("REAL_INPUT menu_to_greyfen=PASS'
@@ -223,6 +299,8 @@ def build_adapter(source: str) -> tuple[str, list[str]]:
     body = "\n".join(line[1:] if line.startswith("\t") else line for line in opening[0].splitlines())
     blocks.update(OVERRIDES)
     blocks["_run_opening"] = "func _run_opening(game: Node) -> void:\n\tvar anwen_only := false\n\tvar wychwood_only := false\n" + body + "\n"
+    if input_mode == "touch":
+        touch_blocks(blocks)
     required = set()
     pending = list(ROOTS)
     while pending:
@@ -233,7 +311,11 @@ def build_adapter(source: str) -> tuple[str, list[str]]:
             raise ValueError(f"missing maintained input helper: {name}")
         required.add(name)
         pending.extend(set(re.findall(r"(?<![\w.])(_\w+)\(", blocks[name])) - required)
-    adapter = HEADER + "\n\n".join(blocks[name].rstrip() for name in sorted(required)) + "\n"
+    selected = "\n\n".join(blocks[name].rstrip() for name in sorted(required)) + "\n"
+    header = HEADER
+    if not re.search(r"\bCemeterySection\b", selected):
+        header = header.replace('const CemeterySection = preload("res://scripts/zones/cemetery_section.gd")\n', '')
+    adapter = header + f'const ACCEPTANCE_INPUT_MODE := "{input_mode}"\n' + selected
     # Older optional visual checks named a machine-local output. Retain their
     # image operation but keep every write under this runner's isolated user://.
     adapter = re.sub(r'save_png\("D:/Temp/AshenOath/([^/"\\]+)"', r'save_png("user://\1"', adapter)
@@ -247,4 +329,6 @@ def build_adapter(source: str) -> tuple[str, list[str]]:
             raise ValueError(f"input adapter acquired a gameplay shortcut: {forbidden}")
     if re.search(r'save_png\("[A-Za-z]:', adapter):
         raise ValueError("selected input helper writes outside the disposable profile")
+    if input_mode == "touch":
+        validate_touch_adapter(adapter)
     return adapter, sorted(required)
