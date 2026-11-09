@@ -13,3 +13,16 @@ art_source/art_recovery_v2/tools/author_rook_station_satchel.py -text whitespace
 outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_libraries.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_station_props.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/release_reports/living_cast_20261107/** -text whitespace=cr-at-eol
+# Retained Stage2/3 authoring receipts certify raw snapshot bytes as well.
+art_source/art_recovery_v2/models/living_cast_stage2_20261107/** -text whitespace=cr-at-eol
+art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/** -text whitespace=cr-at-eol
+art_source/art_recovery_v2/models/living_assets_stage3_20261107/** -text whitespace=cr-at-eol
+art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/** -text whitespace=cr-at-eol
+# New compiler/probe receipts also bind these exact source bytes.
+art_source/art_recovery_v2/tools/author_merrow_cup.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/inspect_merrow_cup_motion.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/export_living_held_prop_inputs.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_merrow_cup.gd -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/author_living_world_parts.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/living_world_part_baker.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_world_blender.gd -text whitespace=cr-at-eol
