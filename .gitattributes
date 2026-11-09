@@ -120,3 +120,10 @@ outputs/AshenOathTheRoadBetweenCrowns/tools/LIVING_SCENERY_INTEGRATION.md -text 
 outputs/AshenOathTheRoadBetweenCrowns/voice_production_manifest.json -text whitespace=cr-at-eol
 
 outputs/AshenOathTheRoadBetweenCrowns/docs/audio/VOICE_PRODUCTION.md -text whitespace=cr-at-eol
+
+# Current coverage sources and versioned receipt bytes remain exact.
+art_source/art_recovery_v2/tools/build_living_scenery_coverage.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/build_living_equipment_coverage.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/living_coverage_freshness.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/living_asset_coverage.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/test_living_asset_coverage.py -text whitespace=cr-at-eol

@@ -3,7 +3,8 @@ from copy import deepcopy
 import hashlib
 from pathlib import Path
 
-ACCEPTANCE = ("authored", "runtime_verified", "native_verified", "visual_accepted", "user_accepted")
+ACCEPTANCE = ("authored", "runtime_verified", "native_verified", "visual_accepted", "user_accepted",
+              "in_level_accepted", "performance_verified", "browser_accepted", "confirmed_world_usage")
 SOURCE_ACCEPTANCE = ("work_apex_clay_reviewed", "source_contract_verified", "runtime_visual_acceptance")
 
 
