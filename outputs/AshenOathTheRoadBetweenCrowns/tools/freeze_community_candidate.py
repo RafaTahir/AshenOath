@@ -100,9 +100,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--export", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--scope", choices=["campaign", "cast-observation"], default="campaign",
+                        help="campaign requires expansion resources; cast-observation also permits an exact historical release")
     args = parser.parse_args()
     try:
-        result = freeze(args.export, args.output)
+        result = freeze(args.export, args.output, required_resources=["scenes/main.tscn"] if args.scope == "cast-observation" else None)
     except (OSError, ValueError, KeyError, EOFError) as error:
         parser.exit(2, f"native candidate freeze failed: {error}\n")
     print(json.dumps({"status":result["status"], "receipt":str(args.output.resolve() / "freeze.json"), "engine_started":False}))

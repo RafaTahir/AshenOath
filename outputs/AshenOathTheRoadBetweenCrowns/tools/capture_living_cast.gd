@@ -46,27 +46,12 @@ func _initialize() -> void:
 		_finish(1)
 		return
 	report["background_rendered"] = {"desktop":desktop,"no_focus":true,"headless":false}
-	if options.has("root-pack") and not ProjectSettings.load_resource_pack(str(options["root-pack"]), true):
-		_fail("Could not mount frozen root pack")
+	if not _mount_verified_candidate():
 		_finish(1)
 		return
 	report["user_data_dir"] = OS.get_user_data_dir()
 	if DirAccess.make_dir_recursive_absolute(OS.get_user_data_dir()) != OK:
 		_fail("Could not create disposable user directory")
-		_finish(1)
-		return
-	if options.has("packs"):
-		var folder := str(options.packs)
-		var names := DirAccess.get_files_at(folder)
-		var mounted: Array[String] = []
-		for name in names:
-			if name.ends_with(".pck"):
-				if not ProjectSettings.load_resource_pack(folder.path_join(name), true):
-					_fail("Could not mount frozen pack: " + name)
-				else:
-					mounted.append(name)
-		report["mounted_packs"] = mounted
-	if not report.failures.is_empty():
 		_finish(1)
 		return
 	if options.get("viewport", "desktop") == "touch": viewport = Vector2i(960, 540)
@@ -85,6 +70,39 @@ func _initialize() -> void:
 	capture_zone = str(options.get("zone", "greyfen"))
 	report["zone"] = capture_zone
 	call_deferred("_run")
+
+func _mount_verified_candidate() -> bool:
+	var path := str(options.get("pack-list",""))
+	var closure: Variant=JSON.parse_string(FileAccess.get_file_as_string(path)) if not path.is_empty() else null
+	if not closure is Dictionary or closure.get("kind")!="verified_native_candidate_closure" or not closure.get("root") is Dictionary or not closure.get("packs") is Array:
+		_fail("Capture requires the runner's verified final-release closure")
+		return false
+	var root_path := str(options.get("root-pack",""))
+	if root_path.replace("\\","/")!=str(closure.root.get("path","")).replace("\\","/") or FileAccess.get_sha256(root_path)!=str(closure.root.get("sha256","")):
+		_fail("Capture root differs from the verified release")
+		return false
+	if not ProjectSettings.load_resource_pack(root_path,true):
+		_fail("Verified capture root did not mount")
+		return false
+	var mounted: Array[String]=[]
+	for row: Variant in closure.packs:
+		if not row is Dictionary or row.get("id") in mounted or str(row.get("id","")) in ["","base"] or str(row.get("path","")).get_file().to_lower()=="base.pck":
+			_fail("Capture pack list has invalid or duplicate ownership")
+			return false
+		var pack_path := str(row.get("path",""))
+		if FileAccess.get_sha256(pack_path)!=str(row.get("sha256","")) or not ProjectSettings.load_resource_pack(pack_path,true):
+			_fail("Verified capture pack changed or did not mount: "+str(row.get("id","")))
+			return false
+		mounted.append(str(row.id))
+		if FileAccess.get_sha256("res://runtime_pack_manifest.json")!=str(closure.get("runtime_manifest_sha256","")):
+			_fail("Capture pack replaced the authoritative manifest")
+			return false
+	if FileAccess.get_sha256("res://runtime_pack_manifest.json")!=str(closure.get("runtime_manifest_sha256","")):
+		_fail("Capture root has the wrong runtime manifest")
+		return false
+	report["mounted_pack_ids"]=mounted
+	report["candidate_build_id"]=str(closure.get("build_id",""))
+	return true
 
 func _run() -> void:
 	if DisplayServer.get_name().to_lower() == "headless":

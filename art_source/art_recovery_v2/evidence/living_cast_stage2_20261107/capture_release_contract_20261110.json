@@ -1,0 +1,26 @@
+{
+  "scope": "capture parser only; no rendering/world/asset acceptance",
+  "pid": 17036,
+  "exit_code": 0,
+  "timed_out": false,
+  "seconds": 0.937,
+  "source_sha256": "45e23edf0497bc05f0b8b6ec076022d7f71d700332d5e5f1c27694357914767c",
+  "command": [
+    "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+    "--script",
+    "res://tools/capture_living_cast.gd",
+    "--check-only"
+  ],
+  "errors": [],
+  "passed": true,
+  "python_tests": {
+    "suite": "test_living_cast_capture_runner test_freeze_community_candidate",
+    "passed": 28
+  },
+  "gameplay_acceptance": false,
+  "visual_acceptance": false,
+  "deployed": false
+}

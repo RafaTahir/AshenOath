@@ -3,9 +3,13 @@ import json
 import copy
 from pathlib import Path
 import tempfile
+from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 from run_living_cast_capture import observation_state, isolated_configuration, validate_behavior, compare_performance
+import run_living_cast_capture as runner
+from test_community_acceptance_packs import candidate
 
 
 class ObservationSetup(unittest.TestCase):
@@ -60,7 +64,7 @@ class CaptureAcceptance(unittest.TestCase):
     def work(self, identity="mira", activity="sort_herbs"):
         native = {"clip":"life/Life_Work","phase":.50,"contact_fraction":.50,"cycle":2}
         sides = {"right":"hammer"} if identity=="tor" else {"left":"cloth"} if identity=="anwen" else {"left":"palm","right":"palm"}
-        probes = {side:{"kind":kind,"cycle":2,"error":.01,"actual":[.1,1,.1],"target":[.1,1,.11]} for side,kind in sides.items()}
+        probes = {side:{"kind":kind,"cycle":2,"error":.001,"actual":[.1,1,.1],"target":[.1,1,.101]} for side,kind in sides.items()}
         sample = {"activity_active":True,"activity":activity,"native_life":native,"contact_probes":probes}
         return {"actor":identity,"identity":identity,"environment":"day","scenario":"work","initial":copy.deepcopy(sample),"samples":[sample],"final":copy.deepcopy(sample),"contacts":[{"event":"contact","state":copy.deepcopy(sample)}]}
 
@@ -92,6 +96,18 @@ class CaptureAcceptance(unittest.TestCase):
             elif mutation=="wrist": probe["kind"]="wrist"
             else: row["contacts"][0]["state"]["native_life"]["phase"]=.8
             self.assertTrue(self.check_row(row)["errors"],mutation)
+
+    def test_calibrated_palms_use_the_native_six_millimetre_gate(self):
+        for distance, accepted in [(.0059,True),(.0061,False),(.01,False)]:
+            row=self.work()
+            for probe in row["contacts"][0]["state"]["contact_probes"].values():
+                probe.update(error=distance,actual=[0,0,0],target=[0,0,distance])
+            self.assertEqual(self.check_row(row)["candidate_behavior_accepted"],accepted)
+        for identity,activity in [("tor","forge"),("anwen","care")]:
+            row=self.work(identity,activity)
+            for probe in row["contacts"][0]["state"]["contact_probes"].values():
+                probe.update(error=.01,actual=[0,0,0],target=[0,0,.01])
+            self.assertTrue(self.check_row(row)["candidate_behavior_accepted"])
 
     def test_senn_watch_does_not_require_fabricated_contact(self):
         row=self.work("senn","watch")
@@ -135,6 +151,54 @@ class CaptureAcceptance(unittest.TestCase):
         row=self.work()
         row["scenario"]="observe"
         self.assertFalse(self.check_row(row)["candidate_behavior_accepted"])
+
+
+class FrozenCaptureSetup(unittest.TestCase):
+    def prepare(self, folder, *, stale_cache=False):
+        folder=Path(folder)
+        root,packs,manifest=candidate(folder,missing="scripts/community_campaign.gd")
+        (packs/"base.pck").write_bytes(b"unlisted old intermediate")
+        (packs/"stray.pck").write_bytes(b"unlisted unrelated pack")
+        engine=folder/"fake-engine.exe"; engine.write_bytes(b"never executed")
+        cache=folder/"classes.cfg"; cache.write_bytes(b"stale" if stale_cache else b'list=[]\n')
+        args=SimpleNamespace(root_pack=root,packs=packs,release_manifest=manifest,godot=engine,class_cache=cache,
+            output=folder/"capture",observation_state=None,reference_report=None,viewport="desktop",label="baseline",
+            acceptance_mode="baseline-observation",zone="greyfen",actors="anwen",performance=False,scenarios="observe",
+            environments="day",duration=4.4,sample_hz=10.0,idle_duration=16.4,frames_per_scenario=5,timeout=60)
+        def git(*arguments):
+            return b"a"*40 if arguments[0]=="rev-parse" else b'[application]\nconfig/name="Fixture"\n'
+        with patch.object(runner,"GATE",folder/"gate"),patch.object(runner,"git",git):
+            return runner.prepare(args)
+
+    def test_exact_release_ignores_stray_packs_and_isolates_both_app_directories(self):
+        with tempfile.TemporaryDirectory() as folder:
+            receipt,_=self.prepare(folder)
+            self.assertEqual([Path(row["path"]).name for row in receipt["secondary_packs"]],["community.pck"])
+            self.assertTrue(any(arg.startswith("--pack-list=") for arg in receipt["command"]))
+            self.assertFalse(any(arg.startswith("--packs=") for arg in receipt["command"]))
+            for value in receipt["environment"].values():
+                self.assertTrue(Path(value).is_relative_to(Path(receipt["output"])))
+            runner.verify_prepared_inputs(receipt)
+            Path(folder,"runtime-packs/stray.pck").write_bytes(b"changed unlisted input remains ignored")
+            runner.verify_prepared_inputs(receipt)
+
+    def test_class_cache_from_another_release_is_rejected(self):
+        with tempfile.TemporaryDirectory() as folder,self.assertRaisesRegex(ValueError,"class cache differs"):
+            self.prepare(folder,stale_cache=True)
+
+    def test_changed_release_or_mount_list_invalidates_prepared_capture(self):
+        for key in ["pack_list","release_manifest"]:
+            with self.subTest(key=key),tempfile.TemporaryDirectory() as folder:
+                receipt,_=self.prepare(folder)
+                Path(receipt[key]["path"]).write_bytes(b"changed")
+                with self.assertRaisesRegex(ValueError,"prepared capture input changed"):
+                    runner.verify_prepared_inputs(receipt)
+
+    def test_native_capture_does_not_enumerate_pack_folders(self):
+        source=runner.CAPTURE.read_text(encoding="utf-8")
+        self.assertNotIn("DirAccess.get_files_at",source)
+        self.assertIn("_mount_verified_candidate()",source)
+        self.assertIn('FileAccess.get_sha256("res://runtime_pack_manifest.json")',source)
 
 
 class PerformanceAcceptance(unittest.TestCase):

@@ -62,10 +62,11 @@ def measured_contact(event: dict, identity: str) -> bool:
     for side, kind in sides.items():
         probe = probes.get(side, {})
         if probe.get("kind") != kind or probe.get("cycle") != native.get("cycle"): return False
-        if not _finite_number(probe.get("error")) or not 0 <= probe["error"] <= .06: return False
+        limit = .006 if kind == "palm" else .06
+        if not _finite_number(probe.get("error")) or not 0 <= probe["error"] <= limit: return False
         points = [probe.get(name) for name in ("target", "actual")]
         if any(not isinstance(point,list) or len(point)!=3 or not all(_finite_number(v) for v in point) for point in points): return False
-        if math.dist(*points) > .06: return False
+        if math.dist(*points) > limit: return False
     return True
 
 
@@ -272,19 +273,20 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
     root_pack = args.root_pack.resolve(strict=True)
     packs = args.packs.resolve(strict=True)
     godot = args.godot.resolve(strict=True)
+    cache = getattr(args, "class_cache", CLASS_CACHE).resolve(strict=True)
     if not root_pack.is_file() or root_pack.suffix.lower() != ".pck":
         raise ValueError("--root-pack must be an existing PCK file")
     if not packs.is_dir():
         raise ValueError("--packs must be a directory")
-    pack_files = sorted(packs.glob("*.pck"))
-    if not pack_files:
-        raise ValueError("--packs contains no PCK files")
+    from community_acceptance_packs import verify_candidate
+    closure = verify_candidate(root_pack, packs, args.release_manifest, required_resources=["scenes/main.tscn"])
+    pack_files = [Path(row["path"]) for row in closure["packs"]]
     if root_pack in pack_files:
         raise ValueError("root pack must be outside the secondary pack directory")
-    if not godot.is_file() or not CAPTURE.is_file() or not GEOMETRY.is_file() or not CLASS_CACHE.is_file() or not BACKGROUND_LAUNCHER.is_file():
+    if not godot.is_file() or not CAPTURE.is_file() or not GEOMETRY.is_file() or not cache.is_file() or not BACKGROUND_LAUNCHER.is_file():
         raise ValueError("Godot, capture/geometry/background scripts, and existing global class cache are required")
-    if not os.environ.get("APPDATA"):
-        raise ValueError("APPDATA is required for Windows custom user data isolation")
+    if sha256(cache) != closure["class_cache_sha256"]:
+        raise ValueError("capture class cache differs from the exact final root metadata")
     commit = git("rev-parse", "HEAD").decode("ascii").strip()
     relative_project = (PROJECT / "project.godot").relative_to(REPOSITORY).as_posix()
     original = git("show", f"{commit}:{relative_project}")
@@ -299,14 +301,18 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
     (isolated / "source_project.godot").write_bytes(original)
     (isolated / "project.godot").write_bytes(isolated_configuration(original, profile))
     copied_cache = isolated / ".godot/global_script_class_cache.cfg"
-    copied_cache.write_bytes(CLASS_CACHE.read_bytes())
+    copied_cache.write_bytes(cache.read_bytes())
+    pack_list = isolated / "verified_native_packs.json"
+    write_receipt(pack_list, closure)
     # Create the exact user directory before renderer cache initialization as well.
-    user_data = Path(os.environ["APPDATA"]) / Path(profile)
+    app_data, local_data = output / "profile/roaming", output / "profile/local"
+    user_data = app_data / Path(profile)
     user_data.mkdir(parents=True, exist_ok=False)
+    local_data.mkdir(parents=True, exist_ok=False)
     command = [str(godot), "--path", str(isolated), "--windowed",
                "--rendering-method", "gl_compatibility", "--rendering-driver", "opengl3",
                "--script", str(CAPTURE.resolve()), "--log-file", str(output / "godot.log"),
-               "--", "--root-pack=" + root_pack.as_posix(), "--packs=" + packs.as_posix(),
+               "--", "--root-pack=" + root_pack.as_posix(), "--pack-list=" + pack_list.as_posix(),
                "--profile=" + profile, "--output=" + output.as_posix(),
                "--background-rendered=true",
                "--viewport=" + args.viewport, "--label=" + args.label,
@@ -344,6 +350,9 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
         "background_launcher_sha256": sha256(BACKGROUND_LAUNCHER),
         "window_mode":"background-rendered",
         "root_pack": {"path": str(root_pack), "sha256": sha256(root_pack)},
+        "candidate_closure": closure, "pack_list": {"path":str(pack_list),"sha256":sha256(pack_list)},
+        "release_manifest": {"path":str(args.release_manifest.resolve()),"sha256":sha256(args.release_manifest)},
+        "environment": {"APPDATA":str(app_data),"LOCALAPPDATA":str(local_data)},
         "secondary_packs": [{"path": str(path), "bytes": path.stat().st_size,
                              "sha256": sha256(path)} for path in pack_files],
         "command": command, "timeout_seconds": args.timeout,
@@ -374,6 +383,8 @@ def verify_prepared_inputs(receipt: dict) -> None:
         (Path(receipt["root_pack"]["path"]), receipt["root_pack"]["sha256"]),
     ]
     checks.extend((Path(pack["path"]), pack["sha256"]) for pack in receipt["secondary_packs"])
+    for key in ["pack_list", "release_manifest"]:
+        checks.append((Path(receipt[key]["path"]), receipt[key]["sha256"]))
     if receipt.get("reference_report"):
         checks.append((Path(receipt["reference_report"]["path"]), receipt["reference_report"]["sha256"]))
     if receipt.get("observation_state"):
@@ -394,8 +405,10 @@ def run_capture(receipt: dict, receipt_path: Path) -> int:
         if receipt.get("window_mode") != "background-rendered":
             raise ValueError("native capture requires an owned background-rendered desktop")
         verify_prepared_inputs(receipt)
+        environment = os.environ.copy()
+        environment.update(receipt["environment"])
         with (output / "stdout.log").open("wb") as stdout:
-            process = spawn_background(receipt["command"], cwd=receipt["isolated_project"], stdout=stdout)
+            process = spawn_background(receipt["command"], cwd=receipt["isolated_project"], env=environment, stdout=stdout)
             receipt["owned_pid"] = process.pid
             receipt["background_desktop"] = process.desktop_receipt
             write_receipt(receipt_path, receipt)
@@ -409,6 +422,9 @@ def run_capture(receipt: dict, receipt_path: Path) -> int:
             raise ValueError("capture report must be an object")
         if report.get("status") != "pass" or report.get("failures") or not report.get("frames"):
             failures.append("capture report did not pass with rendered frames")
+        closure = receipt["candidate_closure"]
+        if report.get("candidate_build_id") != closure["build_id"] or report.get("mounted_pack_ids") != [row["id"] for row in closure["packs"]]:
+            failures.append("observed packs differ from the exact frozen release")
         background = report.get("background_rendered", {})
         if background.get("desktop") != process.desktop_receipt["desktop"] or background.get("no_focus") is not True or background.get("headless") is not False:
             failures.append("capture report did not confirm the requested background renderer")
@@ -489,6 +505,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root-pack", required=True, type=Path)
     parser.add_argument("--packs", required=True, type=Path)
+    parser.add_argument("--release-manifest", required=True, type=Path, help="maintained final Web receipt matching this candidate or historical baseline")
+    parser.add_argument("--class-cache", type=Path, default=CLASS_CACHE, help="class metadata extracted from this exact final root")
     parser.add_argument("--output", type=Path, help="New or empty capture directory")
     parser.add_argument("--godot", type=Path, default=GODOT)
     parser.add_argument("--background-rendered", action="store_true", default=True,
