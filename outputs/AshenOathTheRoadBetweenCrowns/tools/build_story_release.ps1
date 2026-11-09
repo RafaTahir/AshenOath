@@ -158,6 +158,15 @@ if ($CharacterAssetsOnly) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd"), "--", "--forest-trees-only") "prepared-forest-geometry"
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
+if (Test-Path -LiteralPath (Join-Path $ProjectRoot "scripts/campaign_revision.gd") -PathType Leaf) {
+    # Stages 2-4 deliver separately compiled libraries. Their presence alone
+    # does not establish that they match the current authored Blender sources.
+    $CastDeliveryVerifier = Join-Path $PSScriptRoot "verify_living_cast_delivery.py"
+    if (-not (Test-Path -LiteralPath $CastDeliveryVerifier -PathType Leaf)) {
+        throw "Combined living-cast source requires its delivery verifier; integrate the complete asset handoff before packaging."
+    }
+    Invoke-BuildProcess $PythonPath @($CastDeliveryVerifier, "--repository", $RepositoryRoot, "--output", (Join-Path $LogRoot "living-cast-delivery.json")) "living-cast-delivery"
+}
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
 # Apply the freshly verified tree derivatives before collecting environment
 # dependencies. Otherwise the previous raw OBJ selections resurrect their MTL

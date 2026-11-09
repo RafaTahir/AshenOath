@@ -614,6 +614,23 @@ isolated until complete and will be coordinated before final publication.
   as normal-profile warm-cache evidence. Syntax check passed; this mode has not
   yet been exercised. Engine cache behavior source:
   https://chromium.googlesource.com/chromium/src/+/b9cf8b6a08a7aa1c8c82d69e076a4f4fd4a99c34%5E%21/
+- Fresh normal-profile published-baseline check `baseline-normal-profile-r7`
+  PASSED real New Game, movement, Save, reload and exact selected Continue.
+  Cold menu/control: 111.988/121.696 seconds; warm menu: 101.527 seconds.
+  First-view time remained 59.993/56.742 seconds, despite warm transfer falling
+  from 124,486,990 to 7,588,360 bytes. Therefore normal-profile cache behavior
+  did not resolve the shader/render preparation stall. Preserve the original
+  incognito comparison; neither result establishes the 32-second aim.
+- Source-only engine review confirms a possible token-deletion race in pinned
+  Godot 4.6.3: a loaded result can be collected before the worker's final
+  unchecked unreference. The public loader API exposes no task-join handle.
+  This matches count-zero leaked objects but does not prove their identities.
+  No arbitrary timing delay, forced object deletion, engine replacement or
+  warning suppression has been retained as a supposed repair.
+- Packaging follow-up `f01daa8` retires the unused CommonTree_1 export root,
+  keeping its authoring file and all currently required texture selections.
+  Five focused policy tests passed in the packaging chat; final regenerated
+  dependency closure must still confirm no retained asset references it.
 - Final stages 2-4, first-view loading reduction, final combined inspection and
   publication remain in progress. No push has occurred here. Game Assets owns
   the serial bake workload; no overlapping graphical/build work is launched.
@@ -624,6 +641,149 @@ driver click delay and the optional introduction. This changes measurement, not
 the game. Package savings and theoretical transfer floors must be reported
 separately from actual loading. Do not silently relabel prior 68.6-second evidence
 as satisfying the current 32-second aim.
+
+## Atomic Pause Checkpoint: 2026-11-07 08:51 MYT
+
+State: PAUSED by Rafa through Liz. No automatic continuation, build, test,
+export, push or deployment. Resume only when Rafa explicitly tells Liz to
+continue. The earlier continue-to-completion instruction is superseded.
+
+- Canonical checkout: `D:/Projects/AshenOath`, branch
+  `codex/art-recovery-anwen`, HEAD `70094e2` (17 commits ahead of the last fetched
+  remote tracking ref; no new remote comparison was performed for this pause).
+  Nothing from this combined release has been pushed. Existing live Web bytes
+  remain unchanged.
+- Completed local source checkpoints: `b9079c8` failed-resource/artwork claim
+  ownership, focused failure/retry coverage and optional teardown/profile
+  diagnostics; `70094e2` merges `f01daa8` CommonTree_1 export retirement.
+  Earlier exact prepared-tree and four house-root cleanup commits remain.
+- Latest completed browser run is the unchanged published baseline, not a new
+  candidate: `D:/Temp/AshenOath/combined-release-20261107/baseline-normal-profile-r7.json`.
+  Functional PASS including earned Save/reload/selected Continue. Cold control
+  121.696 seconds, cold/warm menu 111.988/101.527 seconds. First view
+  59.993/56.742 seconds. The 32-second objective remains unachieved.
+- Latest combined exported candidate remains
+  `.release-gate/combined-loading-cast-r2-20261107`; it predates the retained
+  cache restoration, environment cleanup and pending asset stages 2-4.
+  Do not publish or relabel it as the final combined build. Its functional
+  browser run passed, but cold control was 132.667 seconds.
+- Shutdown remains unresolved: `quit-untraced-r5` failed with one anonymous
+  count-zero RefCounted; `quit-claims-r6` failed with seven despite all 31
+  shared-request paths being consumed. Focused failed-resource Retry and normal
+  role-prewarm passed. Do not repeat the rejected shader-UBO experiment, call
+  diagnostic-delay passes a fix, or suppress engine warnings.
+- Preserved generated modifications: 13 prepared character SCNs, prepared Rook
+  satchel and compile receipt, prepared-actor/environment catalogs, export
+  presets, runtime pack manifests, stage-1 coverage/file receipts. Preserved
+  untracked additions: three exact forest-tree RES files and
+  `data/prepared_forest_trees.json`. This record has uncommitted evidence and
+  pause updates. Unrelated historical untracked art/build files remain intact.
+- CommonTree_1 source retirement is merged, but its final environment catalog
+  regeneration and closure check have NOT run. The current generated catalog
+  has 31 textures from the previous cleanup. No new byte-saving claim is made.
+- Game Assets chat `01a1952c-b1b6-7562-a1fc-93da37e94a08` owns the unfinished
+  stage-2/3/4 handoff in `D:/Temp/AO_LivingCast_Stages234` and
+  `D:/Temp/AO_LivingCampaign_20261107`. Latest reported root source checkpoint
+  was `f104f03`; it is not the final handoff. It has ordered all three workers
+  to pause at safe write boundaries. Consult its final pause checkpoint before
+  merging. Keep its final acceptance gates, including prepared-companion
+  equivalence and expansion outcome behavior, visible.
+  Pause acknowledgement: all three workers are stopped and changes preserved.
+  Nessa's latest source animation is newer than its compiled library; inspect
+  that recorded mismatch and rebuild it before any release after resumption.
+  Final asset checkpoint:
+  `D:/Temp/AO_LivingCast_Stages234/.release-gate/stages234/PAUSED_2026-11-07.md`.
+  Shared HEAD `f104f03227f7d893861ce3af13e027397df4d44b`, index empty;
+  campaign HEAD `a0231ddf39ca695fa1b4fa1368161381cb806250`, preserving 21
+  modified and two new files, untested/uncommitted. C11 source is newer than
+  `life_C11.res`; C05 still has a known clearance defect; generated campaign
+  overlay/localization are stale. No publishable asset candidate exists yet.
+  The asset owner confirms no engine, inference, browser/server or worker
+  session remains; its last Blender operation completed normally (exit 0).
+- Packaging handoff worktree: `D:/Temp/AO_TreePackage_20261107`. Its source
+  changes are merged; it is instructed to remain paused. Bundle retained at
+  `.release-gate/common-tree-1-retirement.bundle` in that worktree, SHA-256
+  `67686ffa264a0bb33eb003993b78f4bab5e61f7f2fd9b1c56d8897a3bb17777e`.
+  Packaging confirms paused with no owned running process or unsaved source
+  work requiring attention.
+  Liz's subsequent coordination update confirms the AshenOath tasks have been
+  notified of the pause. Packaging integration remains pending: the source
+  handoff is merged, but regenerated dependency closure and final combined
+  artifact integration/build are unfinished. Preserve the handoff; do not
+  restart packaging or integration until Rafa explicitly tells Liz to continue.
+- Owned process state: browser r7 and its local HTTP server exited; native r6
+  exited; no owned build/export/engine remains. The outstanding compact chat
+  wait was interrupted. Filtered process inventory found only the inventory
+  command itself, not a matching game/browser/build worker. Other chats own
+  their final worker acknowledgements; no unrelated app was terminated.
+
+Precise resumption order, only after explicit continuation:
+
+1. Read Game Assets' final paused checkpoint, preserve its uncommitted state,
+   and agree the next single heavy-work slot. Do not restart passed checks or
+   assume its intermediate root checkpoint is the complete asset delivery.
+2. At the next assigned slot, complete CommonTree_1 closure with the existing
+   layout generator (`--defer-environment --require-prepared-forest`),
+   `tools/build_environment_dependencies.gd`, then the layout generator with
+   `--require-prepared-forest`. Keep all retained dependency failures fatal.
+3. Continue the bounded loading/shutdown work from the evidence above; no
+   proven first-view improvement or complete leak fix exists yet. Asset-stage
+   completion proceeds with its current owners, not a duplicate implementation.
+4. Merge the final asset/campaign handoff, generate one source-aligned combined
+   candidate and run affected combined startup/flow/shutdown checks. Retain
+   content, quality, exact saves, complete pre-control scenery and truthful
+   cold/warm timing. Package below 256 MiB, warning at 200 MiB; Git files below
+   100 MiB. No engine replacement or hidden quality/population downgrade.
+5. Only after the combined work is ready, synchronize exact Web artifacts,
+   fetch/reconcile remote changes without discarding work, commit intended files
+   explicitly, push development and main. Let Vercel deploy; do not wait for it
+   or launch a separate manual deployment. This step is not authorized while
+   paused.
+
+## Resumed Combined Work: 2026-11-09
+
+Rafa explicitly unpaused Local AshenOath and Game Assets through Liz. The
+November 7 pause remains historical; only these two tasks resume. Package it
+better and the cloud coordinator remain paused. No duplicate top-level writer
+or change to models/settings. Existing content, quality and publication gates
+remain in force.
+
+- Canonical tracked status matches the preserved checkpoint at `70094e2`;
+  pending generated assets and this record are retained, not reset or stashed.
+  Read the asset checkpoint before any merge. C11/C05 and campaign stale-output
+  issues remain owned by Game Assets, not silently treated as complete.
+- In the agreed first serial slot, regenerated layout, environment dependency
+  catalog and layout again. PASS: 28 required textures (previously 31), 45
+  presets, no retained dependency on CommonTree_1. Engine exited normally;
+  slot returned to Game Assets. Evidence:
+  `D:/Temp/AshenOath/combined-release-20261109/environment-closure.log`.
+- The ten retired texture dependencies occupied 24,427,166 decoded entry bytes
+  in the old r2 opening PCK (parsed with the existing digest-checking PCK reader).
+  This is an old-payload accounting result, not final compressed savings or a
+  loading-time result. Original authoring textures remain on disk; retained
+  geometry/material closure passed as above.
+- Added and ran a focused engine-only texture request teardown fixture to
+  distinguish raw ResourceLoader ownership from game/actor cleanup. Both modes
+  loaded the same 27 opening textures and released their retained references.
+  Threaded mode consumed every user claim but still leaked one plain RefCounted
+  at exit; synchronous mode exited without the leak warning. Functional PASS
+  is not shutdown PASS. Evidence:
+  `D:/Temp/AshenOath/combined-release-20261109/engine-token-isolation/`.
+  No production-loader workaround or engine change has been made. A narrowly
+  scoped engine-fix decision was requested; other source/asset work continues.
+- Added a production build gate before prepared-actor generation for the
+  combined stages 2-4 source. When `scripts/campaign_revision.gd` is present,
+  the matching asset delivery verifier must validate all eight stage-2 human
+  libraries and P01 against authored sources and native compiler receipts.
+  The verifier arrives with the pending complete asset handoff; an absent
+  verifier is a build failure, not permission to accept stale output.
+  PowerShell syntax and static diff whitespace checks passed; the combined
+  build has not run and these checks do not establish asset acceptance.
+- Inspected shell startup prefetch scheduling: two workers intentionally hold
+  only two additional decoded pack buffers before filesystem readiness. Their
+  wait explains later initial-actor requests, but removing the bound would
+  trade startup overlap for additional retained memory. No unmeasured increase
+  in pre-init retention was applied, and no loading-time improvement is claimed.
 
 ## Consolidated User Checklist
 
