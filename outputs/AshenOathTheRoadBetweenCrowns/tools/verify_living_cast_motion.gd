@@ -18,6 +18,7 @@ var failures: Array[String] = []
 var checks := 0
 var helper: Node
 var station_host: StationHost
+var validate_equipment := true
 
 class StationHost extends Node3D:
 	var zone_root := Node3D.new()
@@ -36,6 +37,7 @@ func _run() -> void:
 	var include_player := true
 	for argument in OS.get_cmdline_user_args():
 		if argument == "--skip-player": include_player = false
+		elif argument == "--motion-only": validate_equipment = false
 		elif argument.begins_with("--roles="):
 			selected.clear()
 			for role: String in argument.trim_prefix("--roles=").split(",", false):
@@ -48,13 +50,13 @@ func _run() -> void:
 		printerr("LIVING CAST MOTION: role subset must not be empty")
 		quit(1)
 		return
-	print("LIVING CAST SCOPE: " + JSON.stringify({"roles":selected,"player":include_player,"complete_cast":selected.size()==CASES.size() and include_player}))
+	print("LIVING CAST SCOPE: " + JSON.stringify({"roles":selected,"player":include_player,"equipment_validation_deferred":not validate_equipment,"complete_cast":selected.size()==CASES.size() and include_player and validate_equipment}))
 	helper = Helper.new()
 	root.add_child(helper)
 	station_host = StationHost.new()
 	root.add_child(station_host)
 	station_host.add_child(station_host.zone_root)
-	_build_stations()
+	_build_stations(selected)
 	for role: String in selected:
 		await _actor(role, CASES[role])
 	if include_player: await _player_idle()
@@ -62,7 +64,7 @@ func _run() -> void:
 	station_host.free()
 	for failure in failures:
 		printerr("LIVING CAST MOTION: " + failure)
-	print("LIVING CAST MOTION: %s checks=%d actors=%d player=%s complete_cast=%s" % ["PASS" if failures.is_empty() else "FAIL", checks, selected.size(),str(include_player),str(selected.size()==CASES.size() and include_player)])
+	print("LIVING CAST MOTION: %s checks=%d actors=%d player=%s equipment_validation_deferred=%s complete_cast=%s" % ["PASS" if failures.is_empty() else "FAIL", checks, selected.size(),str(include_player),str(not validate_equipment),str(selected.size()==CASES.size() and include_player and validate_equipment)])
 	quit(0 if failures.is_empty() else 1)
 
 func _player_idle() -> void:
@@ -159,6 +161,11 @@ func _actor(role: String, occupation: String) -> void:
 	driver.set_external_tick(true)
 	print("LIVING CAST ACTOR: " + JSON.stringify({"role":role, "bones":driver.skeleton.get_bone_count(), "source":visual.get_meta("prepared_actor_source", ""), "fitted_staff":driver.life_modifier.anwen_staff_pose}))
 	var workstation := _workstation(role, occupation)
+	if driver.life_requires_station and workstation.is_empty():
+		# The failed station assertion is authoritative. Sampling the fallback
+		# idle here would misdiagnose missing geometry as a native Work defect.
+		visual.free()
+		return
 	if not workstation.is_empty():
 		visual.global_position = workstation.stand
 		var forward: Vector3 = workstation.get("look", workstation.point) - visual.global_position
@@ -370,6 +377,12 @@ func _verify_story_cup(driver: Node) -> void:
 func _verify_held_grips(visual: Node3D, driver: Node, role: String) -> void:
 	if role in ["nessa","widow_elna","farmer_toma","saga_nera"]:
 		var records: Dictionary = visual.get_meta("activity_prop_grips",{})
+		if not validate_equipment:
+			var missing: Array[String] = []
+			for style: String in ["rope","bowl","bread","cloth"]:
+				if not records.has(style): missing.append(style)
+			print("LIVING CAST EQUIPMENT PENDING: " + JSON.stringify({"role":role,"missing_calibrations":missing,"accepted":false}))
+			return
 		for style: String in ["rope","bowl","bread","cloth"]:
 			_check(records.has(style),role+" has a source-verified "+style+" grip")
 			if not records.has(style): continue
@@ -393,9 +406,11 @@ func _pose(skeleton: Skeleton3D) -> Array:
 		if index >= 0: result.append(skeleton.get_bone_pose(index))
 	return result
 
-func _build_stations() -> void:
-	_check(Stations.add_care_table(station_host.zone_root) != null, "real retained care table loads")
+func _build_stations(selected: Array[String]) -> void:
+	if "sister_anwen_human" in selected:
+		_check(Stations.add_care_table(station_host.zone_root) != null, "real retained care table loads")
 	for id: String in ["mira_apothecary", "common_table"]:
+		if ("mira_human" if id == "mira_apothecary" else "rook_human") not in selected: continue
 		var area := Node3D.new()
 		area.name = id
 		station_host.zone_root.add_child(area)
@@ -405,13 +420,19 @@ func _build_stations() -> void:
 		area.add_child(visual)
 		_check(visual.mesh != null, id + " actual supporting furniture loads")
 		Stations.decorate_place(area, id)
-	var forge := MeshInstance3D.new()
-	forge.name = "BlacksmithFittedWork"
-	forge.mesh = load("res://assets_external/environment/props/GreyfenForgeWork_Authored.res") as ArrayMesh
-	station_host.zone_root.add_child(forge)
-	_check(forge.mesh != null, "real authored anvil loads")
+	if "blacksmith_tor" in selected:
+		var forge := MeshInstance3D.new()
+		forge.name = "BlacksmithFittedWork"
+		forge.mesh = load("res://assets_external/environment/props/GreyfenForgeWork_Authored.res") as ArrayMesh
+		station_host.zone_root.add_child(forge)
+		_check(forge.mesh != null, "real authored anvil loads")
+	var identities: Array[String] = []
+	for role: String in selected: identities.append(Profile.canonical_identity(role))
 	var index := 0
 	for identity: String in Stations.STAGE_TWO:
+		if identity not in identities:
+			index += 1
+			continue
 		var work := Stations._add_regional_work(station_host, identity, [30.0+float(index)*3.0,0,0], "")
 		_check(work != null, identity + " retained table and authored task prop load")
 		index += 1

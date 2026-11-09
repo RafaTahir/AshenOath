@@ -6,6 +6,7 @@ const Life = preload("res://scripts/greyfen_life_controller.gd")
 const Profile = preload("res://scripts/story_cast_profile.gd")
 const Director = preload("res://scripts/systems/npc_routine_director.gd")
 const Fixture = preload("res://tools/verify_greyfen_routine_ownership.gd")
+const Stations = preload("res://scripts/living_cast_stations.gd")
 const PEOPLE := {
 	"saga_nessa":["greyfen","nessa","bake"], "widow_elna":["greyfen","elna","fold_cloth"],
 	"farmer_toma":["greyfen","toma","tend"], "saga_nera":["marsh_crossing","nera","check_rope"],
@@ -68,10 +69,30 @@ func _run() -> void:
 	_verify_satchel_owner(host,life)
 	_verify_story_workstation(host,life)
 	_verify_contact_binding(host,life)
+	_verify_imported_grips(host)
 	host.free()
 	for failure: String in failures: printerr("STAGE2 ROUTINES: "+failure)
 	print("STAGE2 ROUTINES: %s checks=%d" % ["PASS" if failures.is_empty() else "FAIL",checks])
 	quit(0 if failures.is_empty() else 1)
+
+func _verify_imported_grips(host: Node) -> void:
+	var prop := Node3D.new()
+	host.zone_root.add_child(prop)
+	prop.position = Vector3(4,1,-2)
+	for side: String in ["Left","Right"]:
+		var grip := Node3D.new()
+		grip.name="Grip"+side
+		grip.position=Vector3(-0.12 if side=="Left" else 0.12,0.02,0)
+		prop.add_child(grip)
+	var grips := Stations._task_grips(prop)
+	_check(grips.size()==2 and (grips.Left as Vector3).is_equal_approx(Vector3(3.88,1.02,-2)),"verified Blender Node3D grip empties bind their actual world positions")
+	prop.get_node("GripRight").free()
+	_check(Stations._task_grips(prop).is_empty(),"one missing grip rejects both hands before station publication")
+	var invalid := Node.new()
+	invalid.name="GripRight"
+	prop.add_child(invalid)
+	_check(Stations._task_grips(prop).is_empty(),"non-spatial grip labels cannot stand in for physical contact markers")
+	prop.free()
 
 func _entry(life: Node, host: Node, id: String, point: Vector3) -> Dictionary:
 	var actor := Node3D.new()

@@ -5,7 +5,7 @@ const STAGE_TWO := {
 	"nessa":{"source":"res://assets_external/environment_prepared/living_cast/station_nessa.scn", "contact_height":1.02},
 	"elna":{"source":"res://assets_external/environment_prepared/living_cast/station_elna.scn", "contact_height":1.02},
 	"toma":{"source":"res://assets_external/environment_prepared/living_cast/station_toma.scn", "contact_height":1.02},
-	"nera":{"source":"res://assets_external/environment_prepared/living_cast/station_nera.scn", "contact_height":1.10},
+	"nera":{"source":"res://assets_external/environment_prepared/living_cast/station_nera.scn", "contact_height":1.115},
 	"vale":{"source":"res://assets_external/environment_prepared/living_cast/station_vale.scn", "contact_height":1.02},
 	"merrow":{"source":"res://assets_external/environment_prepared/living_cast/station_merrow.scn", "contact_height":1.02},
 	"edric":{"source":"res://assets_external/environment_prepared/living_cast/station_edric.scn", "contact_height":1.02},
@@ -92,20 +92,20 @@ static func _add_regional_work(host, identity: String, raw: Array, suffix: Strin
 			or not bool(prop.get_meta("stationary_supported_prop", false)) or not bool(prop.get_meta("grip_geometry_verified", false)):
 		push_error("Living cast station prop has invalid contact provenance: " + identity)
 		if prop != null: prop.free()
-		root.queue_free()
+		root.free()
 		return null
 	prop.name = "StationWork_" + identity
 	prop.position = Vector3(0,1.0,-0.40)
 	root.add_child(prop)
+	var grips := _task_grips(prop)
+	if grips.is_empty():
+		push_error("Living cast task prop lacks finite calibrated grips: " + identity)
+		root.free()
+		return null
 	var contact := Vector3(0,float(recipe.contact_height),-0.40)
 	var station := add_work(root, identity + suffix, contact, Vector3.ZERO, Vector3(0.12,0,0), 0.0)
 	for side: String in ["Left", "Right"]:
-		var grip := prop.find_child("Grip" + side, true, false) as Marker3D
-		if grip == null:
-			push_error("Living cast task prop lacks a calibrated grip: " + identity + "/" + side)
-			root.queue_free()
-			return null
-		_marker(station, "Work" + side, station.to_local(grip.global_position))
+		_marker(station, "Work" + side, station.to_local(grips[side]))
 	station.set_meta("task_prop", weakref(prop))
 	station.set_meta("work_identity", identity)
 	# Distinct seats around the actual table let shared meals reserve a place
@@ -115,6 +115,17 @@ static func _add_regional_work(host, identity: String, raw: Array, suffix: Strin
 		place.set_meta("meal_supported", true)
 		place.set_meta("table_point", Vector3(0,1.0,-0.76))
 	return root
+
+static func _task_grips(prop: Node3D) -> Dictionary:
+	# Blender's verified grip empties import as Node3D, not editor Marker3D.
+	# Resolve both before publishing a station so rejected geometry cannot be
+	# acquired during the frame in which a queued deletion is still visible.
+	var result: Dictionary = {}
+	for side: String in ["Left", "Right"]:
+		var grip := prop.find_child("Grip" + side, true, false) as Node3D
+		if grip == null or grip.is_queued_for_deletion() or not grip.global_position.is_finite(): return {}
+		result[side] = grip.global_position
+	return result
 
 static func _add_rest_stool(host, identity: String, raw: Array) -> void:
 	var name := "LivingRest_" + identity
