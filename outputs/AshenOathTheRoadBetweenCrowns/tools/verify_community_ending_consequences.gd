@@ -13,6 +13,7 @@ func _run() -> void:
 	OS.add_logger(error_log)
 	for route: String in ["crossing","ferry"]:
 		for replay: bool in [false,true]: _departure(route,replay)
+	_check(Revision.DEPARTURE_ACTORS==Rules.ACTORS.keys(),"Base save-schema identities match the deferred authored cast")
 	_concord()
 	for marker: Variant in [null,1]:
 		var raw := _payload("legacy-ending")
@@ -95,6 +96,19 @@ func _departure(route: String, replay: bool) -> void:
 	state.set_flag("final_choice_completed",true)
 	raw.story_state=state.save_state(); raw.world_state.pending_ending=""
 	_check(Revision.save_revision_error(raw)=="","Completed consequence state is restorable")
+	for field: String in ["open_road_named_roster","open_road_households","community_departure_consent","open_road_crossing_progress","covenant_ritual_step"]:
+		for malformed: Variant in [null,"bad",true,{"unknown":true}]:
+			var corrupt := raw.duplicate(true)
+			corrupt.story_state.flags[field]=malformed
+			_check(Revision.save_revision_error(corrupt)!="","Malformed departure field is rejected: "+field)
+	for malformed: Variant in [["unknown"],["elna","elna"],["toma"],[123]]:
+		var corrupt := raw.duplicate(true)
+		corrupt.story_state.flags.open_road_named_roster=malformed
+		_check(Revision.save_revision_error(corrupt)!="","Unknown, duplicate, refused or malformed roster entry is rejected")
+	for progress: float in [-0.1,1.1,NAN,INF]:
+		var corrupt := raw.duplicate(true)
+		corrupt.story_state.flags.open_road_crossing_progress=progress
+		_check(Revision.save_revision_error(corrupt)!="","Invalid physical crossing progress is rejected")
 	for key: String in ["open_road_route_crossed","open_road_route_delivered","open_road_relocation_completed","territorial_protection_active","hart_complete_account_access","human_records_preserved"]:
 		var corrupt := raw.duplicate(true)
 		corrupt.story_state.flags.erase(key)

@@ -103,5 +103,9 @@ static func continuation(state) -> Dictionary:
 
 static func roster_text(state) -> String:
 	var names: Array[String]=[]
-	for id: String in state.get_flag(RELOCATED,[]): names.append(str(Rules.data().participant_lines[id].name))
+	var roster: Variant=state.get_flag(RELOCATED,[])
+	if roster is Array:
+		for id: Variant in roster:
+			if id is String and id in Rules.ACTORS:
+				names.append(str(Rules.data().participant_lines[id].name))
 	return "Named people who agreed to relocate: "+(", ".join(names) if not names.is_empty() else "none recorded")+". Every other named person's home and answer remain unchanged."

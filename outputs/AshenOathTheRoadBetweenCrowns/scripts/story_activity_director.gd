@@ -324,6 +324,8 @@ static func _travel_unavailable_reason(game) -> String:
 	if game.player == null or game.zone_transition_in_progress:
 		return "The road is still settling. Finish arriving before travelling."
 	if str(game.pending_ending) != "":
+		if preload("res://scripts/covenant_resolution.gd").relocation_pending(game.story_state):
+			return "Walk the prepared route with the households and bring them to the refuge before using a waypost."
 		return "Carry out the chosen covenant before leaving the glade."
 	if not _travel_open(game):
 		return "Safe return routes open after the Deep Wood account is settled. Your marked wayposts are kept."

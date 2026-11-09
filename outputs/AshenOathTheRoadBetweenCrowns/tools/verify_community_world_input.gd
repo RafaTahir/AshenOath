@@ -35,6 +35,9 @@ func _initialize() -> void:
 		_fail("Actual-input acceptance requires a rendered viewport")
 		await _finish()
 		return
+	if not _background_rendered_ready():
+		await _finish()
+		return
 	var version: Dictionary=Engine.get_version_info()
 	if int(version.major)!=4 or int(version.minor)!=6 or int(version.patch)!=3:
 		_fail("Acceptance requires the pinned Godot 4.6.3 runtime")
@@ -62,7 +65,6 @@ func _initialize() -> void:
 	region="lantern_reach" if case_id.begins_with("lantern") else "hearthward"
 	var viewport := Vector2i(960,540) if options.get("viewport","desktop")=="touch" else Vector2i(1280,720)
 	DisplayServer.window_set_size(viewport)
-	DisplayServer.window_move_to_foreground()
 	var scene := load("res://scenes/main.tscn") as PackedScene
 	if scene==null:
 		_fail("Main scene is missing from mounted packs")
@@ -86,6 +88,12 @@ func _initialize() -> void:
 		await _cross_boundary(region)
 		await _snapshot("return_route")
 	await _finish()
+
+func _background_rendered_ready() -> bool:
+	if options.get("background-rendered","")!="true" or not OS.get_environment("ASHENOATH_CAPTURE_DESKTOP").begins_with("AshenOathCapture_") or ProjectSettings.get_setting("display/window/size/no_focus",false)!=true or not DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS):
+		_fail("Rendered acceptance requires the isolated background desktop runner and startup no-focus setting")
+		return false
+	return true
 
 func _lantern() -> void:
 	await _board("Hear the practical needs")
@@ -481,6 +489,13 @@ func _finish() -> void:
 	_release()
 	if rules!=null: _check(completed_work==_expected_work(),"Exact physical task set for this route was earned")
 	var report := {"schema_version":1,"kind":"community_world_real_input","case":case_id,"status":"pass" if failures.is_empty() else "fail","failures":failures,"completed_work":completed_work,"observations":observations,"input_events":input_events,"user_data_dir":OS.get_user_data_dir(),"elapsed_ms":Time.get_ticks_msec()-start_ms,"viewport":str(DisplayServer.window_get_size()),"physical_phone_coverage":false,"touch_input_coverage":false,"progression_injection":false}
+	var size := DisplayServer.window_get_size()
+	report["viewport_size"]=[size.x,size.y]
+	report["execution_mode"]="background-rendered"
+	report["capture_desktop"]=OS.get_environment("ASHENOATH_CAPTURE_DESKTOP")
+	report["no_focus"]=DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS)
+	report["headless"]=DisplayServer.get_name().to_lower()=="headless"
+	report["renderer"]=RenderingServer.get_current_rendering_method()
 	report.merge(report_extra)
 	if output!="":
 		var file := FileAccess.open(output.path_join("report.json"),FileAccess.WRITE)

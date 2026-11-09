@@ -221,6 +221,7 @@ def build_adapter(source: str) -> tuple[str, list[str]]:
                       r"\.(?:global_position|position|rotation|global_rotation|transform|global_transform|yaw|pitch|health|stamina|can_control)(?:\.[xyzw])?\s*(?:[+*/-]?=)(?!=)",
                       r"\bgame\.(?:story_state|quests|inventory|progression|save_manager)(?:\.\w+|\[[^\]\n]*\])*\s*[+*/-]?=(?!=)",
                       r"\.(?:load_state|load_game|save_game|load_save_state|request_load|_write_atomic|_load_zone|_handle_interaction|_apply_mouse_motion)\(",
+                      r"\b(?:DisplayServer\.(?:window_move_to_foreground|mouse_set_mode|mouse_warp)|Input\.warp_mouse)\(",
                       r"\b(?:game|player|boss|enemy)(?:\.\w+)*\.call\((?!\"_interaction_target_valid\")"]:
         if re.search(forbidden, adapter):
             raise ValueError(f"input adapter acquired a gameplay shortcut: {forbidden}")

@@ -153,6 +153,7 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
                          'game.save_manager.load_game(game)', 'game.load_save_state({})',
                          'game.player.set("health",100)', 'game.inventory.add_item("redroot_potion",5)',
                          'game.player.position.y = 12', 'game.quests.completed["main_hart_remembers"] = true',
+                         'DisplayServer.window_move_to_foreground()', 'Input.warp_mouse(Vector2.ZERO)',
                          'game.call("_load_zone","hart_glade")']:
             with self.subTest(shortcut=shortcut), self.assertRaises(ValueError):
                 build_adapter(source.replace(declaration, declaration+'\n\t'+shortcut))
@@ -160,7 +161,8 @@ class FullCampaignAcceptanceTests(unittest.TestCase):
     def test_full_entry_has_no_progression_or_travel_shortcuts(self):
         source = full.HARNESS.read_text(encoding="utf-8")
         for shortcut in [".set_flag(", ".complete_objective(", ".complete_choice(", ".load_save_state(",
-                         "._load_zone(", "._load_zone_after_runtime_pack(", ".global_position=", ".global_position ="]:
+                         "._load_zone(", "._load_zone_after_runtime_pack(", ".global_position=", ".global_position =",
+                         "DisplayServer.window_move_to_foreground(", "Input.warp_mouse("]:
             self.assertNotIn(shortcut, source)
         self.assertIn('await _button("New Game" if expanded and not seeded_ferry else "Continue")', source)
 
