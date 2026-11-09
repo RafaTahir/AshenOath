@@ -23,6 +23,8 @@ import time
 from datetime import datetime, timezone
 import uuid
 
+from background_native_capture import spawn_background
+
 
 PROJECT = Path(__file__).resolve().parents[1]
 REPOSITORY = PROJECT.parents[1]
@@ -31,6 +33,7 @@ GODOT = Path.home() / ".cache/codex-runtimes/godot-4.6.3/Godot_v4.6.3-stable_win
 CAPTURE = PROJECT / "tools/capture_living_cast.gd"
 GEOMETRY = PROJECT / "tools/living_cast_capture_geometry.gd"
 CLASS_CACHE = PROJECT / ".godot/global_script_class_cache.cfg"
+BACKGROUND_LAUNCHER = PROJECT / "tools/background_native_capture.py"
 CAPTURE_ZONES = {"greyfen", "marsh_crossing", "bandit_road", "record_hall", "vargan_court", "ruins", "lantern_reach", "hearthward"}
 WORK_KINDS = {
     "anwen":{"care"}, "tor":{"forge","repair"}, "mira":{"sort_herbs","herb_stall"},
@@ -127,9 +130,11 @@ def compare_performance(candidate: dict, baseline: dict) -> dict:
     errors, comparisons = [], []
     if baseline.get("status") != "pass" or baseline.get("acceptance_mode") != "baseline-observation":
         errors.append("reference is not an explicit passing baseline observation")
+    if any(report.get("configuration",{}).get("window_mode") != "background-rendered" for report in (candidate,baseline)):
+        errors.append("performance requires matching explicit background-rendered observations")
     for key in ("viewport","zone"):
         if candidate.get(key)!=baseline.get(key): errors.append("performance "+key+" differs from baseline")
-    for key in ("quality","renderer","physics_ticks_per_second"):
+    for key in ("quality","renderer","physics_ticks_per_second","window_mode"):
         if candidate.get("configuration",{}).get(key)!=baseline.get("configuration",{}).get(key):
             errors.append("performance configuration differs: "+key)
     anchors=candidate.get("performance_preflight",[])
@@ -186,7 +191,7 @@ def sha256(path: Path) -> str:
 
 
 def isolated_configuration(original: bytes, profile: str) -> bytes:
-    """Preserve the committed config except the two application isolation keys."""
+    """Isolate saves and make the native window unfocusable before creation."""
     if not re.fullmatch(r"AshenOathCapture/[a-zA-Z0-9_-]+", profile):
         raise ValueError("invalid isolated profile name")
     text = original.decode("utf-8")
@@ -211,6 +216,19 @@ def isolated_configuration(original: bytes, profile: str) -> bytes:
             r"(?m)^config/(?:use_custom_user_dir|custom_user_dir_name)=[^\r\n]*(?:\r?\n|$)",
             "", body,
         )
+    text = text[:start] + settings + body.lstrip("\r\n") + text[end:]
+    sections = list(re.finditer(r"(?m)^\[display\]\r?$", text))
+    if len(sections) > 1:
+        raise ValueError("project has duplicate display settings")
+    if not sections:
+        text = text.rstrip("\r\n") + newline + "[display]" + newline
+        sections = list(re.finditer(r"(?m)^\[display\]\r?$", text))
+    start = sections[0].end()
+    if text[start-1] == "\r": start -= 1
+    next_section = re.search(r"(?m)^\[", text[start:])
+    end = start + next_section.start() if next_section else len(text)
+    body = re.sub(r"(?m)^window/size/(?:no_focus|mode)(?:\.[^=\r\n]+)?=[^\r\n]*(?:\r?\n|$)", "", text[start:end])
+    settings = newline + "window/size/no_focus=true" + newline + "window/size/mode=0" + newline
     return (text[:start] + settings + body.lstrip("\r\n") + text[end:]).encode("utf-8")
 
 
@@ -224,7 +242,7 @@ def write_receipt(path: Path, receipt: dict) -> None:
     path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
 
 
-def stop_owned_process(process: subprocess.Popen) -> None:
+def stop_owned_process(process) -> None:
     """Never enumerate or terminate unrelated Godot/editor processes."""
     if process.poll() is not None:
         return
@@ -256,8 +274,8 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
         raise ValueError("--packs contains no PCK files")
     if root_pack in pack_files:
         raise ValueError("root pack must be outside the secondary pack directory")
-    if not godot.is_file() or not CAPTURE.is_file() or not GEOMETRY.is_file() or not CLASS_CACHE.is_file():
-        raise ValueError("Godot, capture/geometry scripts, and existing global class cache are required")
+    if not godot.is_file() or not CAPTURE.is_file() or not GEOMETRY.is_file() or not CLASS_CACHE.is_file() or not BACKGROUND_LAUNCHER.is_file():
+        raise ValueError("Godot, capture/geometry/background scripts, and existing global class cache are required")
     if not os.environ.get("APPDATA"):
         raise ValueError("APPDATA is required for Windows custom user data isolation")
     commit = git("rev-parse", "HEAD").decode("ascii").strip()
@@ -278,11 +296,12 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
     # Create the exact user directory before renderer cache initialization as well.
     user_data = Path(os.environ["APPDATA"]) / Path(profile)
     user_data.mkdir(parents=True, exist_ok=False)
-    command = [str(godot), "--path", str(isolated),
+    command = [str(godot), "--path", str(isolated), "--windowed",
                "--rendering-method", "gl_compatibility", "--rendering-driver", "opengl3",
                "--script", str(CAPTURE.resolve()), "--log-file", str(output / "godot.log"),
                "--", "--root-pack=" + root_pack.as_posix(), "--packs=" + packs.as_posix(),
                "--profile=" + profile, "--output=" + output.as_posix(),
+               "--background-rendered=true",
                "--viewport=" + args.viewport, "--label=" + args.label,
                "--zone=" + args.zone,
                "--acceptance-mode=" + args.acceptance_mode,
@@ -315,6 +334,8 @@ def prepare(args: argparse.Namespace) -> tuple[dict, Path]:
         "isolated_project_sha256": sha256(isolated / "project.godot"),
         "global_class_cache_sha256": sha256(copied_cache), "capture_script_sha256": sha256(CAPTURE),
         "geometry_script_sha256": sha256(GEOMETRY),
+        "background_launcher_sha256": sha256(BACKGROUND_LAUNCHER),
+        "window_mode":"background-rendered",
         "root_pack": {"path": str(root_pack), "sha256": sha256(root_pack)},
         "secondary_packs": [{"path": str(path), "bytes": path.stat().st_size,
                              "sha256": sha256(path)} for path in pack_files],
@@ -342,6 +363,7 @@ def verify_prepared_inputs(receipt: dict) -> None:
         (isolated / ".godot/global_script_class_cache.cfg", receipt["global_class_cache_sha256"]),
         (CAPTURE, receipt["capture_script_sha256"]),
         (GEOMETRY, receipt["geometry_script_sha256"]),
+        (BACKGROUND_LAUNCHER, receipt["background_launcher_sha256"]),
         (Path(receipt["root_pack"]["path"]), receipt["root_pack"]["sha256"]),
     ]
     checks.extend((Path(pack["path"]), pack["sha256"]) for pack in receipt["secondary_packs"])
@@ -362,12 +384,13 @@ def run_capture(receipt: dict, receipt_path: Path) -> int:
     receipt["status"] = "running"
     write_receipt(receipt_path, receipt)
     try:
+        if receipt.get("window_mode") != "background-rendered":
+            raise ValueError("native capture requires an owned background-rendered desktop")
         verify_prepared_inputs(receipt)
         with (output / "stdout.log").open("wb") as stdout:
-            process = subprocess.Popen(receipt["command"], cwd=receipt["isolated_project"],
-                                       stdout=stdout, stderr=subprocess.STDOUT,
-                                       creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+            process = spawn_background(receipt["command"], cwd=receipt["isolated_project"], stdout=stdout)
             receipt["owned_pid"] = process.pid
+            receipt["background_desktop"] = process.desktop_receipt
             write_receipt(receipt_path, receipt)
             receipt["exit_code"] = process.wait(timeout=receipt["timeout_seconds"])
         verify_prepared_inputs(receipt)
@@ -379,6 +402,9 @@ def run_capture(receipt: dict, receipt_path: Path) -> int:
             raise ValueError("capture report must be an object")
         if report.get("status") != "pass" or report.get("failures") or not report.get("frames"):
             failures.append("capture report did not pass with rendered frames")
+        background = report.get("background_rendered", {})
+        if background.get("desktop") != process.desktop_receipt["desktop"] or background.get("no_focus") is not True or background.get("headless") is not False:
+            failures.append("capture report did not confirm the requested background renderer")
         expected = receipt["scenario_configuration"]
         requested = {(actor, environment, scenario) for actor in expected["actors"]
                      for environment in expected["environments"] for scenario in expected["scenarios"]}
@@ -441,6 +467,11 @@ def run_capture(receipt: dict, receipt_path: Path) -> int:
                 receipt["status"] = "fail"
                 receipt.setdefault("failures", []).append(f"owned process cleanup failed: {error}")
             receipt["exit_code"] = process.poll()
+            try:
+                process.close()
+            except (OSError, RuntimeError) as error:
+                receipt["status"] = "fail"
+                receipt.setdefault("failures", []).append(f"owned desktop cleanup failed: {error}")
         receipt["elapsed_seconds"] = round(time.monotonic() - started, 3)
         receipt["finished_at_utc"] = datetime.now(timezone.utc).isoformat()
         write_receipt(receipt_path, receipt)
@@ -453,6 +484,8 @@ def main() -> int:
     parser.add_argument("--packs", required=True, type=Path)
     parser.add_argument("--output", type=Path, help="New or empty capture directory")
     parser.add_argument("--godot", type=Path, default=GODOT)
+    parser.add_argument("--background-rendered", action="store_true", default=True,
+                        help="Required/default: native renderer on an owned non-input Windows desktop")
     parser.add_argument("--viewport", choices=("desktop", "touch"), default="desktop")
     parser.add_argument("--label", default="candidate")
     parser.add_argument("--acceptance-mode", choices=("candidate","baseline-observation"), default="candidate",

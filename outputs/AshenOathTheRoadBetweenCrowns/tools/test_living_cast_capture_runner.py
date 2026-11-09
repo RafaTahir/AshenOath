@@ -32,6 +32,29 @@ class ObservationSetup(unittest.TestCase):
             self.assertIn('config/custom_user_dir_name="AshenOathCapture/regional-fixture"', result)
             self.assertIn('window/size/viewport_width=1280', result)
 
+    def test_focus_flags_are_set_before_any_native_window_exists(self):
+        for newline in ("\n", "\r\n"):
+            source = newline.join(['[application]', 'config/name="Ashen Oath"', '[display]',
+                                   'window/size/no_focus=false', 'window/size/no_focus.windows=false',
+                                   'window/size/mode=3', 'window/size/mode.windows=2',
+                                   'window/stretch/mode="canvas_items"', '[rendering]',
+                                   'renderer/rendering_method="gl_compatibility"', '']).encode()
+            result = isolated_configuration(source,"AshenOathCapture/background-fixture").decode()
+            self.assertEqual(result.count('window/size/no_focus='),1)
+            self.assertIn('window/size/no_focus=true',result)
+            self.assertIn('window/size/mode=0',result)
+            self.assertNotIn('window/size/no_focus.windows',result)
+            self.assertNotIn('window/size/mode.windows',result)
+            self.assertIn('window/stretch/mode="canvas_items"',result)
+            self.assertIn('[rendering]'+newline+'renderer/rendering_method="gl_compatibility"',result)
+
+    def test_background_display_section_is_added_without_duplicate_sections(self):
+        result=isolated_configuration(b'[application]\nconfig/name="Ashen Oath"\n',"AshenOathCapture/background-fixture")
+        self.assertEqual(result.count(b'[display]'),1)
+        self.assertIn(b'window/size/no_focus=true',result)
+        with self.assertRaises(ValueError):
+            isolated_configuration(b'[application]\n[display]\n[display]\n',"AshenOathCapture/background-fixture")
+
 
 class CaptureAcceptance(unittest.TestCase):
     def work(self, identity="mira", activity="sort_herbs"):
@@ -119,7 +142,7 @@ class PerformanceAcceptance(unittest.TestCase):
         anchors=[{"view":index} for index in range(3)]
         rows=[{"anchor":anchor,"repeat":repeat,"samples":100,"p50_ms":10.0,"p95_ms":20.0} for anchor in anchors for repeat in range(3)]
         return {"status":"pass","acceptance_mode":"baseline-observation","viewport":[1280,720],"zone":"greyfen",
-                "configuration":{"quality":"balanced","renderer":"gl_compatibility","physics_ticks_per_second":60},
+                "configuration":{"quality":"balanced","renderer":"gl_compatibility","physics_ticks_per_second":60,"window_mode":"background-rendered"},
                 "performance_preflight":anchors,"performance":rows}
 
     def test_exact_ten_percent_boundary_passes(self):
@@ -141,6 +164,14 @@ class PerformanceAcceptance(unittest.TestCase):
         self.assertFalse(compare_performance(candidate,baseline)["accepted"])
         candidate=copy.deepcopy(baseline)
         candidate["viewport"]=[960,540]
+        self.assertFalse(compare_performance(candidate,baseline)["accepted"])
+
+    def test_foreground_or_unlabelled_performance_is_not_comparable(self):
+        baseline=self.baseline()
+        candidate=copy.deepcopy(baseline)
+        baseline["configuration"].pop("window_mode")
+        self.assertFalse(compare_performance(candidate,baseline)["accepted"])
+        candidate["configuration"].pop("window_mode")
         self.assertFalse(compare_performance(candidate,baseline)["accepted"])
 
 

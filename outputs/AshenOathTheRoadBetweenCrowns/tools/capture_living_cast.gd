@@ -38,6 +38,14 @@ func _initialize() -> void:
 		_fail("Disposable user directory did not resolve: " + OS.get_user_data_dir())
 		_finish(1)
 		return
+	var desktop := OS.get_environment("ASHENOATH_CAPTURE_DESKTOP")
+	if str(options.get("background-rendered", "false")) != "true" or not desktop.begins_with("AshenOathCapture_") \
+			or not bool(ProjectSettings.get_setting("display/window/size/no_focus", false)) \
+			or not DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS):
+		_fail("Use the background-rendered launcher with an unfocusable native window")
+		_finish(1)
+		return
+	report["background_rendered"] = {"desktop":desktop,"no_focus":true,"headless":false}
 	if options.has("root-pack") and not ProjectSettings.load_resource_pack(str(options["root-pack"]), true):
 		_fail("Could not mount frozen root pack")
 		_finish(1)
@@ -137,7 +145,7 @@ func _run() -> void:
 	game.player.set_process_unhandled_input(false)
 	geometry = load(str(options.get("geometry-script", get_script().resource_path.get_base_dir().path_join("living_cast_capture_geometry.gd")))).new()
 	report["geometry"] = geometry.build(game.zone_root, game.player)
-	report["configuration"] = {"quality":"balanced","renderer":RenderingServer.get_current_rendering_method(),"camera":_camera_record(),
+	report["configuration"] = {"quality":"balanced","renderer":RenderingServer.get_current_rendering_method(),"camera":_camera_record(),"window_mode":"background-rendered",
 		"random_scenes":"acquisition cooldown held; existing scene cancelled", "player":"fixture positioning; sword sheathed; input callbacks disabled",
 		"scenarios":str(options.get("scenarios","observe")), "environments":str(options.get("environments","day")),
 		"requested_sample_hz":float(options.get("sample-hz","10")),"scenario_seconds":float(options.get("duration","4.4")),
