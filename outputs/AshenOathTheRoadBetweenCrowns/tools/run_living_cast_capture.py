@@ -132,11 +132,18 @@ def compare_performance(candidate: dict, baseline: dict) -> dict:
         errors.append("reference is not an explicit passing baseline observation")
     if any(report.get("configuration",{}).get("window_mode") != "background-rendered" for report in (candidate,baseline)):
         errors.append("performance requires matching explicit background-rendered observations")
+    if any(report.get("performance_configuration") != {"frame_limit":0,"vsync":0} for report in (candidate,baseline)):
+        errors.append("performance requires explicitly uncapped measurements with VSync disabled")
     for key in ("viewport","zone"):
         if candidate.get(key)!=baseline.get(key): errors.append("performance "+key+" differs from baseline")
     for key in ("quality","renderer","physics_ticks_per_second","window_mode"):
         if candidate.get("configuration",{}).get(key)!=baseline.get("configuration",{}).get(key):
             errors.append("performance configuration differs: "+key)
+    for key in ("rendering_driver","gpu_adapter","gpu_vendor","gpu_api"):
+        current=candidate.get("configuration",{}).get(key)
+        previous=baseline.get("configuration",{}).get(key)
+        if not isinstance(current,str) or not current.strip() or not isinstance(previous,str) or not previous.strip() or current!=previous:
+            errors.append("performance requires matching effective renderer identity: "+key)
     anchors=candidate.get("performance_preflight",[])
     if len(anchors)!=3 or anchors!=baseline.get("performance_preflight"):
         errors.append("performance requires three identical reference anchors")

@@ -69,6 +69,8 @@ func _run() -> void:
 	file.store_string(JSON.stringify({"status":"pass" if failures.is_empty() else "fail", "failures":failures,
 		"desktop":OS.get_environment("ASHENOATH_CAPTURE_DESKTOP"),"no_focus":true,"headless":false,
 		"renderer":RenderingServer.get_current_rendering_method(),"viewport":[size.x,size.y],
+		"rendering_driver":RenderingServer.get_current_rendering_driver_name(),"gpu_adapter":RenderingServer.get_video_adapter_name(),
+		"gpu_vendor":RenderingServer.get_video_adapter_vendor(),"gpu_api":RenderingServer.get_video_adapter_api_version(),
 		"internal_input_events":input_probe.events,"asset_acceptance":false,"gameplay_acceptance":false},"\t"))
 	file.close()
 	world.free()

@@ -146,10 +146,12 @@ func _run() -> void:
 	geometry = load(str(options.get("geometry-script", get_script().resource_path.get_base_dir().path_join("living_cast_capture_geometry.gd")))).new()
 	report["geometry"] = geometry.build(game.zone_root, game.player)
 	report["configuration"] = {"quality":"balanced","renderer":RenderingServer.get_current_rendering_method(),"camera":_camera_record(),"window_mode":"background-rendered",
+		"rendering_driver":RenderingServer.get_current_rendering_driver_name(),"gpu_adapter":RenderingServer.get_video_adapter_name(),
+		"gpu_vendor":RenderingServer.get_video_adapter_vendor(),"gpu_api":RenderingServer.get_video_adapter_api_version(),
 		"random_scenes":"acquisition cooldown held; existing scene cancelled", "player":"fixture positioning; sword sheathed; input callbacks disabled",
 		"scenarios":str(options.get("scenarios","observe")), "environments":str(options.get("environments","day")),
 		"requested_sample_hz":float(options.get("sample-hz","10")),"scenario_seconds":float(options.get("duration","4.4")),
-		"frame_limit":60,"vsync":"disabled","physics_ticks_per_second":Engine.physics_ticks_per_second}
+		"frame_limit":Engine.max_fps,"vsync":DisplayServer.window_get_vsync_mode(),"physics_ticks_per_second":Engine.physics_ticks_per_second}
 	report["scenarios"] = []
 	elapsed_start = Time.get_ticks_msec()
 	_set_environment("day")
@@ -525,7 +527,13 @@ func _performance() -> Array:
 			_fail("Performance camera/config differs from reference report")
 			return []
 	var rows: Array = []
+	var previous_cap := Engine.max_fps
+	var previous_vsync := DisplayServer.window_get_vsync_mode()
 	Engine.max_fps = 0
+	# Settings.apply ran after capture startup. Set and record the effective
+	# measurement pacing here, so VSync cannot hide a rendering regression.
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	report["performance_configuration"] = {"frame_limit":Engine.max_fps,"vsync":DisplayServer.window_get_vsync_mode()}
 	RenderingServer.viewport_set_measure_render_time(root.get_viewport_rid(), true)
 	for anchor: Dictionary in anchors:
 		game.player.global_position = _from_v3(anchor.player)
@@ -551,7 +559,8 @@ func _performance() -> Array:
 			if not frames.is_empty():
 				rows.append({"anchor":anchor,"repeat":repeat,"samples":frames.size(),"p50_ms":frames[int(frames.size()*0.5)],
 					"p95_ms":frames[mini(frames.size()-1,int(frames.size()*0.95))],"process_ms":cpu/frames.size(),"draw_calls":draws/frames.size(),"actual_camera":_camera_record(),"actual_player":_v3(game.player.global_position)})
-	Engine.max_fps = 60
+	Engine.max_fps = previous_cap
+	DisplayServer.window_set_vsync_mode(previous_vsync)
 	return rows
 
 func _wait_seconds(seconds: float) -> void:

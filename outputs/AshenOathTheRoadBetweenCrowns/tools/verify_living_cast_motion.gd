@@ -31,20 +31,38 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	var selected: Array[String] = []
+	selected.assign(CASES.keys())
+	var include_player := true
+	for argument in OS.get_cmdline_user_args():
+		if argument == "--skip-player": include_player = false
+		elif argument.begins_with("--roles="):
+			selected.clear()
+			for role: String in argument.trim_prefix("--roles=").split(",", false):
+				if not CASES.has(role) or selected.has(role):
+					printerr("LIVING CAST MOTION: unknown or duplicate requested role " + role)
+					quit(1)
+					return
+				selected.append(role)
+	if selected.is_empty():
+		printerr("LIVING CAST MOTION: role subset must not be empty")
+		quit(1)
+		return
+	print("LIVING CAST SCOPE: " + JSON.stringify({"roles":selected,"player":include_player,"complete_cast":selected.size()==CASES.size() and include_player}))
 	helper = Helper.new()
 	root.add_child(helper)
 	station_host = StationHost.new()
 	root.add_child(station_host)
 	station_host.add_child(station_host.zone_root)
 	_build_stations()
-	for role: String in CASES:
+	for role: String in selected:
 		await _actor(role, CASES[role])
-	await _player_idle()
+	if include_player: await _player_idle()
 	helper.free()
 	station_host.free()
 	for failure in failures:
 		printerr("LIVING CAST MOTION: " + failure)
-	print("LIVING CAST MOTION: %s checks=%d actors=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, CASES.size()])
+	print("LIVING CAST MOTION: %s checks=%d actors=%d player=%s complete_cast=%s" % ["PASS" if failures.is_empty() else "FAIL", checks, selected.size(),str(include_player),str(selected.size()==CASES.size() and include_player)])
 	quit(0 if failures.is_empty() else 1)
 
 func _player_idle() -> void:
@@ -166,6 +184,8 @@ func _actor(role: String, occupation: String) -> void:
 			print("LIVING CAST CONTACT: " + JSON.stringify({"role":role, "side":side, "sample":sample}))
 			_check(str(sample.get("kind", "")) == expected, "%s %s contact measures the actual %s probe" % [role, side, expected])
 			_check(float(sample.get("error", INF)) <= 0.06, "%s native %s %s reaches actual supported contact: %.4fm" % [role, side, expected, float(sample.get("error", INF))])
+			if expected == "palm":
+				_check(float(sample.get("error", INF)) <= 0.006, "%s native %s calibrated palm meets the physical surface within 6mm: %.4fm" % [role, side, float(sample.get("error", INF))])
 		if role in ["mira_human", "rook_human"]:
 			_check(not is_instance_valid(driver.life_modifier.tool) or not driver.life_modifier.tool.visible, role + " uses real station objects without an intersecting generic held prop")
 		if role == "sister_anwen_human":

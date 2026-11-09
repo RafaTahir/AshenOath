@@ -142,8 +142,9 @@ class PerformanceAcceptance(unittest.TestCase):
         anchors=[{"view":index} for index in range(3)]
         rows=[{"anchor":anchor,"repeat":repeat,"samples":100,"p50_ms":10.0,"p95_ms":20.0} for anchor in anchors for repeat in range(3)]
         return {"status":"pass","acceptance_mode":"baseline-observation","viewport":[1280,720],"zone":"greyfen",
-                "configuration":{"quality":"balanced","renderer":"gl_compatibility","physics_ticks_per_second":60,"window_mode":"background-rendered"},
-                "performance_preflight":anchors,"performance":rows}
+                "configuration":{"quality":"balanced","renderer":"gl_compatibility","physics_ticks_per_second":60,"window_mode":"background-rendered",
+                                 "rendering_driver":"opengl3_angle","gpu_adapter":"Intel HD620 via ANGLE D3D11","gpu_vendor":"Intel","gpu_api":"OpenGL ES3.0 ANGLE"},
+                "performance_configuration":{"frame_limit":0,"vsync":0},"performance_preflight":anchors,"performance":rows}
 
     def test_exact_ten_percent_boundary_passes(self):
         baseline=self.baseline()
@@ -173,6 +174,23 @@ class PerformanceAcceptance(unittest.TestCase):
         self.assertFalse(compare_performance(candidate,baseline)["accepted"])
         candidate["configuration"].pop("window_mode")
         self.assertFalse(compare_performance(candidate,baseline)["accepted"])
+
+    def test_effective_driver_gpu_and_api_must_be_present_and_match(self):
+        for key in ("rendering_driver","gpu_adapter","gpu_vendor","gpu_api"):
+            baseline=self.baseline()
+            candidate=copy.deepcopy(baseline)
+            candidate["configuration"][key]="different backend"
+            self.assertFalse(compare_performance(candidate,baseline)["accepted"],key)
+            candidate["configuration"].pop(key)
+            baseline["configuration"].pop(key)
+            self.assertFalse(compare_performance(candidate,baseline)["accepted"],key)
+
+    def test_frame_pacing_cannot_mask_a_regression(self):
+        for pacing in (None,{"frame_limit":60,"vsync":0},{"frame_limit":0,"vsync":1}):
+            baseline=self.baseline()
+            candidate=copy.deepcopy(baseline)
+            candidate["performance_configuration"]=pacing
+            self.assertFalse(compare_performance(candidate,baseline)["accepted"])
 
 
 if __name__ == "__main__":
