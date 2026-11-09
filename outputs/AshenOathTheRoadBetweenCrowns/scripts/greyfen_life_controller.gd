@@ -1040,6 +1040,10 @@ func _set_activity_attention(entry: Dictionary, active: bool) -> void:
 		face.set_attention("sleep" if _supported_rest(entry) else "neutral")
 	elif activity in ["rest", "idle", "remember", "sit"]:
 		face.set_attention("neutral")
+	elif activity in ["watch", "lookout"] and entry.profile.get("workstation", {}).is_empty():
+		# Observation already has an authored head survey. With no physical
+		# task to inspect, do not invent a low work point in front of the actor.
+		face.set_attention("neutral")
 	else:
 		var station: Dictionary = entry.profile.get("workstation", {})
 		var target: Vector3 = station.get("point", entry.node.global_position + entry.driver.get_visible_forward() * 0.5 + Vector3.UP * 1.0)

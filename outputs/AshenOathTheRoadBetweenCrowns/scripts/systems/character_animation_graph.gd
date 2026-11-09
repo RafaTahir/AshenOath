@@ -23,6 +23,7 @@ var gait_rate := 1.0
 var gait_rates: Dictionary = {}
 var gait_phase := 0.0
 var proportion := 1.0
+var evaluation_suspended := false
 
 func configure(host: Node, player: AnimationPlayer, clips: Dictionary, directions: Dictionary, height_scale: float) -> bool:
 	owner = host
@@ -105,7 +106,13 @@ func _clip(name: String, looped: bool, normalized_cycle: bool = false, backwards
 func activate(suspended: bool = false) -> void:
 	if tree == null or not tree.is_inside_tree():
 		return
-	tree.active = not suspended
+	# This mixer is exclusively manual. Freeze evaluation without toggling
+	# AnimationTree.active: reactivation internally seeks the state machine to
+	# zero, discarding the current clip, fade and pending travel on resume.
+	evaluation_suspended = suspended
+	if suspended:
+		return
+	tree.active = true
 	if playback == null:
 		playback = tree.get("parameters/playback") as AnimationNodeStateMachinePlayback
 		if playback != null:
@@ -127,6 +134,7 @@ func transition(logical: String, blend: float, restart: bool = false) -> void:
 		next = "locomotion"
 	if restart and active_state == next and nodes.has(next + "_repeat"):
 		next += "_repeat"
+	var previous_requested := requested
 	requested = next
 	if playback == null or not tree.is_inside_tree():
 		return
@@ -137,6 +145,11 @@ func transition(logical: String, blend: float, restart: bool = false) -> void:
 		active_state = next
 		if restart:
 			playback.start(next, true)
+		elif previous_requested != next or not playback.get_travel_path().is_empty():
+			# Another owner may have queued travel away without an evaluation.
+			# Reclaim the current branch without restarting its native time;
+			# get_travel_path alone cannot see Godot's pending travel request.
+			playback.travel(next, false)
 		return
 	if not playback.is_playing() or current.is_empty():
 		playback.start(next, true)
@@ -182,14 +195,14 @@ func set_action_rate(value: float) -> void:
 		tree.set("parameters/%s/Rate/scale" % active_state, maxf(value, 0.01))
 
 func advance(delta: float) -> void:
-	if tree == null or not tree.is_inside_tree() or not tree.active:
+	if evaluation_suspended or tree == null or not tree.is_inside_tree() or not tree.active:
 		return
 	tree.advance(delta)
 	if active_state in GAITS:
 		gait_phase += delta * gait_rate
 
 func scheduled() -> bool:
-	return tree != null and tree.active and playback != null and playback.is_playing()
+	return not evaluation_suspended and tree != null and tree.active and playback != null and playback.is_playing()
 
 static func state_for(logical: String) -> String:
 	match logical:

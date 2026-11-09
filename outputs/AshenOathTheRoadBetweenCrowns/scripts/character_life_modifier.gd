@@ -127,14 +127,16 @@ func _process_modification() -> void:
 	if is_instance_valid(viewer):
 		near = actor.global_position.distance_squared_to(viewer.global_position) < 100.0
 	var effective := activity if activity != "" else carried_activity
-	if bool(driver.get("life_requires_station")) and effective in driver.life_work_kinds \
-			and (station.is_empty() or str(station.get("activity", "")) != effective):
+	var waiting_for_station: bool = bool(driver.get("life_requires_station")) and effective in driver.life_work_kinds \
+		and (station.is_empty() or str(station.get("activity", "")) != effective)
+	if waiting_for_station:
 		# A missing/busy task surface is quiet waiting, never a convincing
 		# work clip performed against empty space or a substitute held vessel.
 		effective = "idle"
 	var native_motion: Dictionary = driver.life_motion_sample()
+	var awaiting_native: bool = driver.life_clip != StringName() and native_motion.is_empty()
 	var requested := effective != "" and near and not bool(driver.story_dialogue_active)
-	_ambient_pose(skeleton, delta, near, effective, not native_motion.is_empty())
+	_ambient_pose(skeleton, delta, near, effective, awaiting_native or not native_motion.is_empty())
 	if humanoid and near and garment_arm_clearance > 0.0 and not bool(driver.story_dialogue_active) and float(driver.current_speed_mps) > 0.08 and effective in ["", "idle", "watch", "lookout", "walk", "travel"]:
 		var across := actor.global_basis.x.normalized()
 		var clearance := garment_arm_clearance * actor.global_basis.get_scale().y * clampf(float(driver.current_speed_mps) / 0.6, 0.0, 1.0)
@@ -144,12 +146,12 @@ func _process_modification() -> void:
 			_solve_arm(skeleton, arm, _world(skeleton, int(arm.hand)) + across * side * clearance)
 	if anwen_staff_pose:
 		_staff_pose(skeleton, delta, effective)
-	_update_tool(effective, requested)
+	_update_tool(effective, requested and not waiting_for_station, not waiting_for_station)
 	creature_weight = move_toward(creature_weight, creature_amount if near and not bool(driver.story_dialogue_active) else 0.0, delta*3.0)
 	if creature_weight > 0.001:
 		_creature_pose(skeleton)
 	pose_weight = move_toward(pose_weight, 1.0 if requested else 0.0, delta * 4.5)
-	if pose_weight <= 0.001:
+	if pose_weight <= 0.001 or awaiting_native:
 		return
 	if effective == "sleep":
 		_pose_supported_sleep(skeleton)
@@ -193,9 +195,9 @@ func _process_modification() -> void:
 	for arm: Dictionary in arms:
 		if authored_work and hammer_work and float(arm.side) < 0:
 			continue
-		# Anwen's fitted right-hand staff remains the sole owner of that arm
-		# while her free hand performs care at the table.
-		if anwen_staff_pose and effective == "care" and float(arm.side) > 0:
+		# A visible fitted staff retains its right arm through care, meals and
+		# supply carrying. The free left hand owns those ambient props.
+		if anwen_staff_pose and is_instance_valid(staff_equipment) and staff_equipment.visible and float(arm.side) > 0:
 			continue
 		var shoulder := _world(skeleton, int(arm.upper))
 		var elbow := _world(skeleton, int(arm.lower))
@@ -237,7 +239,8 @@ func _process_modification() -> void:
 			"eat", "seated_eat":
 				across = -0.10 * float(arm.side)
 				depth = 0.23
-				drop = 0.12 + (0.08 * sin(elapsed * 0.9) if float(arm.side) > 0 else 0.25)
+				var eating_hand: bool = float(arm.side) < 0 if anwen_staff_pose else float(arm.side) > 0
+				drop = 0.12 + (0.08 * sin(elapsed * 0.9) if eating_hand else 0.25)
 			"pray":
 				across = -0.30 * float(arm.side)
 				depth = 0.25
@@ -311,14 +314,16 @@ func _process_modification() -> void:
 		if event != "":
 			driver.activity_contact.emit(event, station.get("point", actor.global_position))
 
-func _update_tool(kind: String, visible_now: bool) -> void:
+func _update_tool(kind: String, visible_now: bool, allow_authored_prop: bool = true) -> void:
 	var style := str({"repair":"hammer", "forge":"hammer", "read":"book", "notice_board":"book", "check_rope":"rope", "well":"rope", "bake":"bread", "kitchen":"bread", "care":"cloth", "carry":"supply", "check_supplies":"supply", "sort_supplies":"supply", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "herb_stall":"bowl"}.get(kind, ""))
-	if activity_prop != "":
+	if allow_authored_prop and activity_prop != "":
 		style = activity_prop
 	var supported_task: bool = station.get("activity", "") == kind and str(station.get("surface_prop", "")) != ""
 	_set_role_book_stowed(visible_now and supported_task)
 	if supported_task and not bool(station.get("held_tool", false)):
 		style = ""
+	if style in ["bread", "supply"]:
+		visible_now = visible_now and is_instance_valid(driver) and driver.activity_prop_pose_ready()
 	if style != "" and (style != tool_kind or not is_instance_valid(tool)):
 		_release_tool()
 		tool = preload("res://scripts/character_presentation.gd").attach_activity_tool(actor, style)
@@ -505,7 +510,7 @@ func _staff_pose(skeleton: Skeleton3D, delta: float, effective: String) -> void:
 		staff_equipment = actor.find_child("AnwenStaffEquipment", true, false) as Node3D
 	if not is_instance_valid(staff_equipment):
 		return
-	var holding := effective in ["", "idle", "watch", "lookout", "remember", "rest", "care"]
+	var holding := effective in ["", "idle", "watch", "lookout", "remember", "rest", "care", "eat", "seated_eat", "carry"]
 	staff_weight = move_toward(staff_weight, 1.0 if holding else 0.0, delta * 5.0)
 	staff_equipment.visible = holding
 	if not holding:

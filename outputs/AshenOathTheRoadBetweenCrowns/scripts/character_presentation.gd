@@ -50,12 +50,19 @@ static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
 	var skeleton := _find_skeleton(owner)
 	if skeleton == null:
 		return null
-	var free_care_hand := style == "cloth" and uses_fitted_anwen_staff(skeleton, owner)
+	var free_activity_hand := style in ["cloth", "bread", "supply"] and uses_fitted_anwen_staff(skeleton, owner)
 	var hand_aliases: Array[String] = []
-	hand_aliases.assign(["hand_l", "LeftHand", "Hand.L", "left_hand"] if free_care_hand else ["hand_r", "RightHand", "Hand.R", "right_hand"])
+	hand_aliases.assign(["hand_l", "LeftHand", "Hand.L", "left_hand"] if free_activity_hand else ["hand_r", "RightHand", "Hand.R", "right_hand"])
 	var bone := _find_bone_index(skeleton, hand_aliases)
 	if bone < 0:
 		return null
+	if existing != null:
+		var occupied_socket := existing.get_parent() as BoneAttachment3D
+		if occupied_socket != null and occupied_socket.get_parent() == skeleton and occupied_socket.bone_name == skeleton.get_bone_name(bone):
+			# A journey can enroll directly into a meal or delivery before the
+			# modifier has ever borrowed the occupation prop. Release that hand
+			# immediately; the next explicit work task can borrow it again.
+			existing.visible = false
 	var hand := BoneAttachment3D.new()
 	hand.name = "CastActivityTool"
 	hand.set_meta("life_generated_activity_tool", true)

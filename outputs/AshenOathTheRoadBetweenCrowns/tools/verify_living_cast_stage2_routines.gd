@@ -24,6 +24,9 @@ class Face extends Node:
 	func set_focus_target(target: Node3D) -> void:
 		mode="actor"; focus=target
 
+class AttentionDriver extends Fixture.Driver:
+	var life_modifier: Node
+
 var checks := 0
 var failures: Array[String] = []
 
@@ -37,6 +40,8 @@ func _run() -> void:
 	host.zone_root.add_child(life)
 	life.host=host; life.player=host.player
 	life.set_process(false); life.set_physics_process(false)
+	for identity: String in ["anwen","tor","mira","rook"]:
+		_check(bool(Profile.life_motion_profile(identity).get("requires_station",false)),identity+" physical work requires its real surface, including shelter and alternate routes")
 	for id: String in PEOPLE:
 		var expected: Array = PEOPLE[id]
 		var profile := Profile.routine(id,str(expected[0]),host.story_state,host.quests,"day",600.0)
@@ -97,7 +102,7 @@ func _verify_imported_grips(host: Node) -> void:
 func _entry(life: Node, host: Node, id: String, point: Vector3) -> Dictionary:
 	var actor := Node3D.new()
 	actor.name=id; host.zone_root.add_child(actor); actor.position=point
-	var driver := Fixture.Driver.new()
+	var driver := AttentionDriver.new()
 	actor.add_child(driver)
 	var entry: Dictionary = life._make_entry(id,actor,[point],0.6,driver,true)
 	entry.regional=true; entry.arrived_target=0
@@ -156,6 +161,14 @@ func _verify_work_orientation(host: Node, life: Node) -> void:
 func _verify_attention(host: Node, life: Node, entry: Dictionary) -> void:
 	var face := Face.new()
 	entry.node.add_child(face); entry.face=face
+	var previous: Dictionary = entry.profile
+	entry.profile={"activity":"watch","workstation":{}}
+	life._set_activity_attention(entry,true)
+	_check(face.mode=="neutral","station-free watch preserves the authored head survey without a fabricated task point")
+	entry.profile={"activity":"bake","workstation":{"point":Vector3(0.2,1.02,0.4)}}
+	life._set_activity_attention(entry,true)
+	_check(face.mode=="point" and face.point==Vector3(0.2,1.02,0.4),"physical work retains its measured task attention")
+	entry.profile=previous
 	life._begin_scene_attention(entry,{"mode":"point","offset":[0,3,-4],"seconds":0.8})
 	life._apply_scene_attention(entry,host.player,0.1)
 	_check(face.mode=="point" and face.point.is_equal_approx(Vector3(0,3,-4)),"personal sky glance uses a finite actor-relative point")

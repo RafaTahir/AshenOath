@@ -14,6 +14,17 @@ const CASES := {
 	"nessa":"bake", "widow_elna":"fold_cloth", "farmer_toma":"tend", "saga_nera":"check_rope",
 	"captain_senn":"watch", "vargan_record_keeper":"read", "vargan_steward":"check_supplies", "edric":"review_dispatch"
 }
+## Actual schedule/reaction closure: all twelve eat; the opening four and
+## Nessa/Elna/Toma/Nera carry; Senn/Edric also handle sheltered supplies.
+## Supported occupation props are stationary; they never imply a held duplicate.
+const HELD_ACTIVITY_STYLES := {
+	"anwen":["bread","supply"], "tor":["bread","supply"],
+	"mira":["bread","supply"], "rook":["bread","supply"],
+	"nessa":["bread","supply"], "elna":["bread","supply"],
+	"toma":["bread","supply"], "nera":["bread","supply"],
+	"senn":["bread","supply"], "vale":["bread"],
+	"merrow":["bread"], "edric":["bread","supply"]
+}
 var failures: Array[String] = []
 var checks := 0
 var helper: Node
@@ -22,6 +33,9 @@ var validate_equipment := true
 
 class StationHost extends Node3D:
 	var zone_root := Node3D.new()
+	var quests: Node
+	var day_night: Node
+	var audio: Node
 	func validate_walkable_position(point: Vector3) -> Vector3: return point
 
 class IsolatedPlayer extends Player:
@@ -35,10 +49,14 @@ func _run() -> void:
 	var selected: Array[String] = []
 	selected.assign(CASES.keys())
 	var include_player := true
+	var player_only := false
+	var roles_requested := false
 	for argument in OS.get_cmdline_user_args():
 		if argument == "--skip-player": include_player = false
+		elif argument == "--player-only": player_only = true
 		elif argument == "--motion-only": validate_equipment = false
 		elif argument.begins_with("--roles="):
+			roles_requested = true
 			selected.clear()
 			for role: String in argument.trim_prefix("--roles=").split(",", false):
 				if not CASES.has(role) or selected.has(role):
@@ -46,7 +64,13 @@ func _run() -> void:
 					quit(1)
 					return
 				selected.append(role)
-	if selected.is_empty():
+	if player_only:
+		if not include_player or roles_requested:
+			printerr("LIVING CAST MOTION: --player-only cannot combine with --skip-player or --roles")
+			quit(1)
+			return
+		selected.clear()
+	if selected.is_empty() and not player_only:
 		printerr("LIVING CAST MOTION: role subset must not be empty")
 		quit(1)
 		return
@@ -148,7 +172,13 @@ func _actor(role: String, occupation: String) -> void:
 	var visual: Node3D = helper.spawn_visual_role(role, "characters")
 	_check(visual != null, role + " actual prepared actor loads")
 	if visual == null: return
-	root.add_child(visual)
+	# Production places the actor wrapper on the ground and retains the
+	# prepared visual's normalization offset beneath it. Never replace that
+	# visual origin with WorkStand: native personal clips use the same frame.
+	var placement := Node3D.new()
+	placement.name = "FixtureActor_"+role
+	root.add_child(placement)
+	placement.add_child(visual)
 	Presentation.apply_npc(visual, role, false)
 	var driver := Driver.new()
 	driver.name = "CharacterAnimationDriver"
@@ -156,21 +186,23 @@ func _actor(role: String, occupation: String) -> void:
 	var configured := driver.configure(visual, {"idle":"Idle", "walk":"Walking", "run":"Running", "dialogue":"Interact", "hit":"HitReact", "death":"Death"})
 	_check(configured, role + " real motion owner binds: " + str(driver.contract_errors))
 	if not configured:
-		visual.free()
+		placement.free()
 		return
 	driver.set_external_tick(true)
 	print("LIVING CAST ACTOR: " + JSON.stringify({"role":role, "bones":driver.skeleton.get_bone_count(), "source":visual.get_meta("prepared_actor_source", ""), "fitted_staff":driver.life_modifier.anwen_staff_pose}))
+	var source_origin := visual.position
 	var workstation := _workstation(role, occupation)
 	if driver.life_requires_station and workstation.is_empty():
 		# The failed station assertion is authoritative. Sampling the fallback
 		# idle here would misdiagnose missing geometry as a native Work defect.
-		visual.free()
+		placement.free()
 		return
 	if not workstation.is_empty():
-		visual.global_position = workstation.stand
-		var forward: Vector3 = workstation.get("look", workstation.point) - visual.global_position
+		placement.global_position = workstation.stand
+		var forward: Vector3 = workstation.get("look", workstation.point) - placement.global_position
 		forward.y = 0.0
-		visual.rotate_y(driver.get_visible_forward().signed_angle_to(forward.normalized(), Vector3.UP))
+		placement.rotate_y(driver.get_visible_forward().signed_angle_to(forward.normalized(), Vector3.UP))
+	_check(visual.position.is_equal_approx(source_origin),role+" placement retains the prepared visual's normalized origin")
 	if role == "sister_anwen_human":
 		var staff_socket := visual.find_child("AnwenStaffSocket", true, false) as BoneAttachment3D
 		_check(staff_socket != null and str(staff_socket.bone_name) == "hand_r", "Anwen staff owns the actual right hand on the retained rig")
@@ -178,12 +210,44 @@ func _actor(role: String, occupation: String) -> void:
 		_check(care_tool != null and str(care_tool.bone_name) == "hand_l", "Anwen care cloth uses the free left hand while her right hand owns the staff")
 		if care_tool != null: care_tool.free()
 	var original_root := visual.transform
+	var original_placement := placement.transform
 	if not workstation.is_empty():
+		var contact_events: Array[Dictionary] = []
+		var contact_listener := func(event: String, _point: Vector3) -> void:
+			var sample: Dictionary = driver.life_motion_sample()
+			contact_events.append({"event":event,"time":driver.animation_graph.playback.get_current_play_position(),"phase":sample.get("phase",-1.0),"cycle":sample.get("cycle",-1)})
+		driver.activity_contact.connect(contact_listener)
 		driver.set_life_activity(occupation)
 		driver.set_life_workstation(workstation)
-		for tick in 40: driver.advance_external(0.05)
+		_check(_advance_life_to_elapsed(driver,2.0,true),role+" initial work reaches actual native contact after its queued transition")
+		_check(absf(driver.animation_graph.playback.get_current_play_position()-2.0)<0.011,role+" contact sampling uses the actual native phase")
+		_check(contact_events.is_empty(),role+" queued work has no procedural contact before native contact sampling")
+		if not driver.life_contact_probes.is_empty():
+			for side: String in ["left","right"]:
+				var bone: int = driver.skeleton.find_bone("hand_l" if side == "left" else "hand_r")
+				var raw_palm: Vector3 = driver.skeleton.global_transform * driver.skeleton.get_bone_global_pose(bone) * (driver.life_contact_probes[side] as Vector3)
+				var raw_error := raw_palm.distance_to(workstation[side])
+				print("LIVING CAST RAW PALM: "+JSON.stringify({"role":role,"side":side,"error":raw_error,"native_time":driver.animation_graph.playback.get_current_play_position(),"life_time":driver.life_elapsed}))
+				_check(raw_error<=0.006,role+" authored "+side+" palm reaches the nominal surface before runtime station correction")
 		driver.life_modifier.pose_weight = 1.0
 		driver.life_modifier._process_modification()
+		if str(workstation.get("contact_event",workstation.get("sound",""))) != "":
+			_check(contact_events.size()==1,role+" emits one visible native contact cue")
+			if contact_events.size()==1:
+				_check(absf(float(contact_events[0].time)-2.0)<0.011 and int(contact_events[0].cycle)==0,role+" contact cue is aligned to native playback rather than queued time")
+		if role == "vargan_record_keeper":
+			for tick in 410:
+				driver.advance_external(0.01)
+				driver.life_modifier._process_modification()
+				if contact_events.size()>=2: break
+			_check(contact_events.size()==2 and int(contact_events[1].cycle)==1 and absf(float(contact_events[1].time)-2.0)<0.011,"looping work emits one cue at the next actual native contact, without a wraparound duplicate")
+			driver.clear_life_activity()
+			driver.set_life_workstation(workstation)
+			driver.set_life_activity(occupation)
+			_advance_life_to_elapsed(driver,2.0)
+			driver.life_modifier.pose_weight=1.0
+			driver.life_modifier._process_modification()
+		driver.activity_contact.disconnect(contact_listener)
 		for side: String in ["l", "r"]:
 			if role == "sister_anwen_human" and side == "r" or role == "blacksmith_tor" and side == "l": continue
 			var sample: Dictionary = driver.life_modifier.last_contact_samples.get("left" if side == "l" else "right", {})
@@ -196,7 +260,19 @@ func _actor(role: String, occupation: String) -> void:
 		if role in ["mira_human", "rook_human"]:
 			_check(not is_instance_valid(driver.life_modifier.tool) or not driver.life_modifier.tool.visible, role + " uses real station objects without an intersecting generic held prop")
 		if role == "sister_anwen_human":
-			_verify_staff(visual, driver)
+			_verify_staff(visual, driver, placement.global_position.y)
+			for task: String in ["eat", "carry"]:
+				driver.clear_life_activity()
+				driver.set_life_activity(task)
+				driver.set_activity_prop("bread" if task == "eat" else "supply")
+				for tick in 40: driver.advance_external(0.05)
+				driver.life_modifier.pose_weight=1.0
+				driver.life_modifier._process_modification()
+				var held := driver.life_modifier.tool as BoneAttachment3D
+				_check(held!=null and held.visible and str(held.bone_name)=="hand_l", "Anwen's "+task+" prop belongs to her free left hand")
+				_check(driver.life_modifier.staff_equipment.visible,"Anwen retains her real staff during "+task)
+				_verify_staff(visual, driver, placement.global_position.y)
+			driver.set_activity_prop("")
 		if role == "blacksmith_tor":
 			var repair_station := workstation.duplicate()
 			repair_station.activity="repair"
@@ -204,7 +280,7 @@ func _actor(role: String, occupation: String) -> void:
 			repair_station.held_tool=true
 			driver.set_life_workstation(repair_station)
 			driver.set_life_activity("repair")
-			for tick in 40: driver.advance_external(0.05)
+			_check(_advance_life_to_elapsed(driver,2.0),"repair alias reaches its actual native contact phase")
 			driver.life_modifier.pose_weight=1.0
 			driver.life_modifier._process_modification()
 			var repair_sample: Dictionary = driver.life_modifier.last_contact_samples.get("right",{})
@@ -219,39 +295,48 @@ func _actor(role: String, occupation: String) -> void:
 		_check(int(driver.bound_track_counts.get("life/" + name, 0)) > 0, role + " has bound native tracks for " + name)
 	if driver.life_library_path == "":
 		_check(false, role + " required performance library was not loaded")
-		visual.free()
+		placement.free()
 		return
 	for hz: float in [20.0, 30.0, 60.0, 144.0]:
 		driver.clear_life_activity()
 		driver.set_life_workstation(workstation)
 		driver.set_life_activity(occupation)
+		_check(_advance_life_to_elapsed(driver,0.0),role+" starts its actual native clock before the rate comparison")
+		var native_start: float = driver.life_elapsed
 		var poses: Array = []
 		for sample in range(int(hz * 4.0)):
 			driver.advance_external(1.0 / hz)
 			if sample % maxi(1, int(hz)) == 0: poses.append(_pose(driver.skeleton))
 		var clock := driver.life_motion_sample()
-		_check(not clock.is_empty() and absf(float(clock.get("elapsed", -1.0)) - 4.0) < 0.002, role + " work clock independent of update rate " + str(hz))
+		print("LIVING CAST RATE CLOCK: "+JSON.stringify({"role":role,"hz":hz,"start":native_start,"sample":clock,"native_time":driver.animation_graph.playback.get_current_play_position(),"current":str(driver.animation_graph.playback.get_current_node()),"from":str(driver.animation_graph.playback.get_fading_from_node())}))
+		_check(not clock.is_empty() and absf(float(clock.get("elapsed", -1.0))-native_start-4.0)<0.002 and absf(float(clock.get("phase",-1.0))-fposmod(driver.animation_graph.playback.get_current_play_position(),4.0)/4.0)<0.002, role + " work clock follows native playback at update rate " + str(hz))
 		_check(poses.size() >= 4 and poses[0] != poses[1] and poses[1] != poses[2], role + " native work has distinct anticipation/contact/recovery poses " + str(hz))
-		_check(visual.transform.is_equal_approx(original_root), role + " native work never translates/turns the root")
+		_check(visual.transform.is_equal_approx(original_root) and placement.transform.is_equal_approx(original_placement), role + " native work never translates/turns the root")
+	if role == "captain_senn":
+		_verify_survey_head(driver)
 	driver.set_life_activity("idle")
 	var first_idle := driver.life_clip
 	for tick in 200: driver.advance_external(0.05)
 	_check(driver.life_clip != first_idle, role + " alternates two authored idles at cycle boundaries")
 	driver.set_life_workstation(workstation)
 	driver.set_life_activity(occupation)
-	driver.advance_external(0.25)
+	_check(_advance_life_to_elapsed(driver,1.25),role+" suspension starts from an actually evaluated nonzero work pose")
 	var before_suspend := driver.life_elapsed
+	var native_before_suspend: float = driver.animation_graph.playback.get_current_play_position()
+	var branch_before_suspend: StringName = driver.animation_graph.playback.get_current_node()
 	driver.set_distance_suspended(true)
 	driver.advance_external(3.0)
 	_check(is_equal_approx(driver.life_elapsed, before_suspend), role + " distance suspension freezes native work clock")
 	driver.set_distance_suspended(false)
+	print("LIVING CAST RESUME CLOCK: "+JSON.stringify({"role":role,"elapsed_before":before_suspend,"native_before":native_before_suspend,"branch_before":str(branch_before_suspend),"native_activated":driver.animation_graph.playback.get_current_play_position(),"branch_activated":str(driver.animation_graph.playback.get_current_node()),"requested":driver.animation_graph.requested}))
 	driver.advance_external(0.25)
+	print("LIVING CAST RESUMED CLOCK: "+JSON.stringify({"role":role,"sample":driver.life_motion_sample(),"native_time":driver.animation_graph.playback.get_current_play_position(),"current":str(driver.animation_graph.playback.get_current_node())}))
 	_check(is_equal_approx(driver.life_elapsed, before_suspend + 0.25), role + " native work resumes without catch-up contacts")
 	if role == "sister_anwen_human" or Profile.canonical_identity(role) in Stations.STAGE_TWO or role == "captain_senn":
 		driver.clear_life_activity()
 		driver.set_life_activity("sleep")
 		driver.advance_external(0.25)
-		var stand := visual.global_position
+		var stand := placement.global_position
 		var seat := stand - driver.get_visible_forward() * 0.64 + Vector3.UP * 0.54
 		driver.set_life_rest_anchor({"stand":stand, "seat":seat, "kind":"seated"})
 		driver.life_modifier.pose_weight = 1.0
@@ -273,7 +358,7 @@ func _actor(role: String, occupation: String) -> void:
 		driver.advance_external(0.2)
 		if role == "sister_anwen_human":
 			driver.life_modifier._process_modification()
-			_verify_staff(visual, driver)
+			_verify_staff(visual, driver, placement.global_position.y)
 	if role == "vargan_steward":
 		_check(driver.supports_story_prop("cup"), "Merrow cup requires actual measured grip and native drink clip")
 		_check(driver.set_story_prop("cup"), "Merrow binds actual cup to a valid hand socket")
@@ -293,13 +378,13 @@ func _actor(role: String, occupation: String) -> void:
 	if role == "vargan_record_keeper":
 		# Bind the real routine owner and physical station rather than allowing
 		# this extra cue merely because an animation exists in the library.
-		visual.reparent(station_host.zone_root, true)
+		placement.reparent(station_host.zone_root, true)
 		var scene_owner := Routine.new()
 		scene_owner.host = station_host
 		station_host.zone_root.add_child(scene_owner)
 		scene_owner.set_process(false)
 		scene_owner.set_physics_process(false)
-		scene_owner.actors = [{"id":"vargan_record_keeper", "node":visual, "driver":driver}]
+		scene_owner.actors = [{"id":"vargan_record_keeper", "node":placement, "driver":driver}]
 		driver.set_story_workstation_owner(scene_owner)
 		_check(driver.supports_story_workstation("vale"), "Vale's cue requires its actual source-verified station ledger")
 		driver.stop_action()
@@ -318,7 +403,7 @@ func _actor(role: String, occupation: String) -> void:
 			if bone < 0 or not probe.is_finite(): continue
 			var palm: Vector3 = driver.skeleton.global_transform * driver.skeleton.get_bone_global_pose(bone) * probe
 			var error := palm.distance_to(workstation[side])
-			print("LIVING CAST LEDGER: " + JSON.stringify({"side":side,"native_time":driver.animation_graph.playback.get_current_play_position(),"error":error}))
+			print("LIVING CAST LEDGER: " + JSON.stringify({"side":side,"native_time":driver.animation_graph.playback.get_current_play_position(),"error":error,"palm":palm,"target":workstation[side],"source_origin":source_origin}))
 			_check(error <= 0.006, "Vale's native " + side + " palm settles on the physical ledger within 6mm: " + str(error))
 		driver.set_story_workstation_owner(null)
 		scene_owner.actors.clear()
@@ -341,7 +426,7 @@ func _actor(role: String, occupation: String) -> void:
 	_verify_held_grips(visual,driver,role)
 	for index in driver.skeleton.get_bone_count():
 		_check(driver.skeleton.get_bone_rest(index).is_equal_approx(rest_poses[index]), role + " retains bone rest " + str(index))
-	visual.free()
+	placement.free()
 	await process_frame
 
 func _verify_story_cup(driver: Node) -> void:
@@ -357,7 +442,9 @@ func _verify_story_cup(driver: Node) -> void:
 	if grip==null or rim==null or lip.is_empty() or grip_probe.is_empty(): return
 	var skeleton: Skeleton3D = driver.skeleton
 	var hand := skeleton.global_transform * skeleton.get_bone_global_pose(socket.bone_idx)
-	var cup_frame := hand * socket.transform * visual.transform
+	# BoneAttachment.transform is already the evaluated skeleton-local bone
+	# pose. Compose the sampled bone once, then the actual child visual frame.
+	var cup_frame := hand * visual.transform
 	var actual_grip := cup_frame * grip.position
 	var actual_rim := cup_frame * rim.position
 	var palm: Vector3 = grip_probe.get("point",Vector3.INF)
@@ -375,17 +462,20 @@ func _verify_story_cup(driver: Node) -> void:
 	_check(driver.owns_authored_head_pose(),"native sip protects its calibrated head inclination at contact")
 
 func _verify_held_grips(visual: Node3D, driver: Node, role: String) -> void:
-	if role in ["nessa","widow_elna","farmer_toma","saga_nera"]:
+	var identity := Profile.canonical_identity(role)
+	if HELD_ACTIVITY_STYLES.has(identity):
+		var required: Array = HELD_ACTIVITY_STYLES[identity]
 		var records: Dictionary = visual.get_meta("activity_prop_grips",{})
 		if not validate_equipment:
 			var missing: Array[String] = []
-			for style: String in ["rope","bowl","bread","cloth"]:
+			for style: String in required:
 				if not records.has(style): missing.append(style)
 			print("LIVING CAST EQUIPMENT PENDING: " + JSON.stringify({"role":role,"missing_calibrations":missing,"accepted":false}))
 			return
-		for style: String in ["rope","bowl","bread","cloth"]:
+		for style: String in required:
 			_check(records.has(style),role+" has a source-verified "+style+" grip")
 			if not records.has(style): continue
+			_check(str(records[style].get("bone","")) == ("hand_l" if identity == "anwen" else "hand_r"),role+" "+style+" respects the retained free-hand owner")
 			var socket := Presentation.attach_activity_tool(visual,style) as BoneAttachment3D
 			_check(socket!=null and socket.has_meta("measured_grip"),role+" binds the measured "+style+" surface")
 			if socket==null: continue
@@ -395,9 +485,48 @@ func _verify_held_grips(visual: Node3D, driver: Node, role: String) -> void:
 			var frame: Transform3D = driver.skeleton.global_transform*driver.skeleton.get_bone_global_pose(socket.bone_idx)
 			var physical := frame*grip.transform*prop.transform
 			var error := (physical*(record.anchor as Vector3)).distance_to(frame*(record.palm as Vector3))
-			print("LIVING CAST HELD GRIP: "+JSON.stringify({"role":role,"style":style,"error":error,"scale":physical.basis.get_scale()}))
+			print("LIVING CAST HELD GRIP: "+JSON.stringify({"role":role,"style":style,"mesh":prop.mesh.resource_name,"source_sha256":str(record.get("source_sha256","")),"error":error,"scale":physical.basis.get_scale()}))
 			_check(error<=0.001 and physical.basis.get_scale().is_equal_approx(Vector3.ONE),role+" "+style+" reaches its real palm without scaling the retained mesh")
 			socket.free()
+
+func _advance_life_to_elapsed(driver: Node, target: float, exercise_pending: bool = false) -> bool:
+	for tick in 650:
+		var sample: Dictionary = driver.life_motion_sample()
+		if not sample.is_empty() and float(sample.elapsed)>=target:
+			return absf(float(sample.elapsed)-target)<0.011
+		if exercise_pending and sample.is_empty():
+			driver.life_modifier.pose_weight=1.0
+			driver.life_modifier._process_modification()
+		driver.advance_external(0.01)
+	return false
+
+func _verify_survey_head(driver: Node) -> void:
+	# Native track and zero-offset additive preservation only. The separate
+	# routine fixture exercises attention intent; full face handoff still needs
+	# the in-level approach/work/conversation sequence before visual acceptance.
+	var head := preload("res://scripts/story_head_modifier.gd").new()
+	driver.skeleton.add_child(head)
+	head.configure(driver.skeleton)
+	head.active = false
+	_check(head.head_index >= 0, "Senn's native survey resolves the retained head")
+	if head.head_index < 0:
+		head.free()
+		return
+	driver.clear_life_activity()
+	driver.set_life_activity("watch")
+	var poses: Array[Quaternion] = []
+	for target: float in [1.12, 2.80, 5.12]:
+		for tick in 600:
+			if driver.life_elapsed >= target - 0.00001: break
+			driver.advance_external(0.01)
+		_check(absf(driver.life_elapsed-target) < 0.001, "Senn's native survey reaches the requested sample time " + str(target))
+		var native: Quaternion = driver.skeleton.get_bone_pose_rotation(head.head_index)
+		head._process_modification()
+		_check(driver.skeleton.get_bone_pose_rotation(head.head_index).is_equal_approx(native), "zero-offset head modifier preserves the native survey head at " + str(target))
+		poses.append(native)
+	_check(not poses[0].is_equal_approx(poses[1]), "Senn's actual retained head surveys two distinct directions")
+	_check(driver.life_clip == &"life/Life_Work" and poses[0].is_equal_approx(poses[2]), "Senn's survey repeats its head pose after a complete native work cycle")
+	head.free()
 
 func _pose(skeleton: Skeleton3D) -> Array:
 	var result: Array = []
@@ -437,9 +566,10 @@ func _build_stations(selected: Array[String]) -> void:
 		_check(work != null, identity + " retained table and authored task prop load")
 		index += 1
 
-func _verify_staff(actor: Node3D, driver: Node) -> void:
+func _verify_staff(actor: Node3D, driver: Node, ground_y: float) -> void:
 	var modeled := actor.find_child("AnwenStaffModeled", true, false) as Node3D
-	var meshes := modeled.find_children("*", "MeshInstance3D", true, false) if modeled != null else []
+	var meshes: Array[Node] = []
+	if modeled != null: meshes.assign(modeled.find_children("*", "MeshInstance3D", true, false))
 	if modeled is MeshInstance3D: meshes.push_front(modeled)
 	_check(not meshes.is_empty(), "Anwen retains the actual modeled ash staff")
 	if meshes.is_empty(): return
@@ -458,9 +588,9 @@ func _verify_staff(actor: Node3D, driver: Node) -> void:
 	var tip := frame * Vector3(0, bounds.position.y, 0)
 	var grip := frame.origin
 	var hand: Vector3 = driver.life_modifier._world(driver.skeleton, socket.bone_idx)
-	print("LIVING CAST STAFF: " + JSON.stringify({"state":driver.current_state,"socket":socket.bone_name,"up_dot":shaft.dot(Vector3.UP),"tip_height_error":tip.y-actor.global_position.y,"grip_error":grip.distance_to(hand),"plant_error":tip.distance_to(driver.life_modifier.staff_tip),"tip":tip}))
+	print("LIVING CAST STAFF: " + JSON.stringify({"state":driver.current_state,"socket":socket.bone_name,"up_dot":shaft.dot(Vector3.UP),"tip_height_error":tip.y-ground_y,"grip_error":grip.distance_to(hand),"plant_error":tip.distance_to(driver.life_modifier.staff_tip),"tip":tip}))
 	_check(shaft.dot(Vector3.UP) > 0.985, "Anwen's sampled staff shaft is upright rather than horizontal")
-	_check(absf(tip.y - actor.global_position.y) < 0.025, "Anwen's actual staff tip contacts ground without hovering or penetration")
+	_check(absf(tip.y - ground_y) < 0.025, "Anwen's actual staff tip contacts ground without hovering or penetration")
 	_check(grip.distance_to(hand) < 0.065, "Anwen's real shaft grip remains inside the fitted palm socket")
 	_check(tip.distance_to(driver.life_modifier.staff_tip) < 0.04, "actual modeled staff tip agrees with the planted support target")
 

@@ -47,9 +47,28 @@ func _run() -> void:
 		var key := "life/" + name
 		driver.bound_track_counts[key] = driver._bound_bone_tracks(key)
 		_check(int(driver.bound_track_counts[key]) > 0, "synthetic native clip binds " + name)
+	driver.life_requires_station = true
 	driver.set_life_activity("forge")
-	for index in 24: driver.advance_external(0.05)
-	_check(absf(driver.life_elapsed - 1.2) < 0.001, "native contact clock advances to the authored pose")
+	var initial_contacts: Array = []
+	var initial_listener := func(event: String, _point: Vector3) -> void: initial_contacts.append(event)
+	driver.activity_contact.connect(initial_listener)
+	driver.set_life_workstation({"activity":"forge","surface_prop":"VerifiedFixtureSurface","contact_event":"fixture_contact","point":Vector3(0,1,0)})
+	_check(driver.life_motion_sample().is_empty() and is_zero_approx(driver.life_elapsed), "a queued native work branch cannot publish a detached contact clock")
+	driver.life_modifier.pose_weight=1.0
+	driver.life_modifier._process_modification()
+	_check(initial_contacts.is_empty(), "queued native work cannot emit a procedural fallback contact")
+	var selected_before_evaluation := false
+	var premature_native_sample := false
+	for index in 24:
+		var previous_node: StringName = driver.animation_graph.playback.get_current_node()
+		driver.advance_external(0.05)
+		if driver.animation_graph.playback.get_current_node()!=previous_node and str(driver.animation_graph.playback.get_current_node())=="ecology_"+str(abs("life/Life_Work".hash())):
+			selected_before_evaluation = true
+			premature_native_sample = not driver.life_motion_sample().is_empty()
+	_check(selected_before_evaluation and not premature_native_sample,"a newly selected but not yet evaluated native branch cannot claim time or contact ownership")
+	_check(not driver.life_motion_sample().is_empty() and absf(driver.life_elapsed-driver.animation_graph.playback.get_current_play_position())<0.002 and driver.life_elapsed<1.2, "native work clock excludes queued transition time and matches the evaluated pose")
+	driver.activity_contact.disconnect(initial_listener)
+	driver.life_requires_station = false
 	driver.set_life_activity("repair")
 	driver.advance_external(0.05)
 	_check(absf(driver.animation_graph.playback.get_current_play_position() - 0.05) < 0.002, "switching work kind restarts the same native clip: native=%f" % driver.animation_graph.playback.get_current_play_position())
@@ -67,6 +86,19 @@ func _run() -> void:
 	driver.life_requires_station = true
 	driver.set_life_activity("forge")
 	_check(driver.life_clip != &"life/Life_Work", "a required missing station waits in authored idle")
+	driver.set_activity_prop("supply")
+	driver.life_modifier._process_modification()
+	_check(not is_instance_valid(driver.life_modifier.tool),"missing support cannot create a substitute vessel from the authored work prop")
+	driver.set_life_activity("carry")
+	_check(_settle_graph_branch(driver,"locomotion"), "carry fixture reaches the real locomotion branch after queued work transitions")
+	driver.life_modifier._process_modification()
+	var carried_supply: Node3D = driver.life_modifier.tool
+	_print_prop_graph(driver,"carry_complete")
+	_check(is_instance_valid(carried_supply) and carried_supply.visible,"a genuine scheduled carry retains its supply prop")
+	driver.set_life_activity("forge")
+	driver.life_modifier._process_modification()
+	_check(is_instance_valid(carried_supply) and not carried_supply.visible,"blocked work hides a previously carried vessel instead of silently reusing it")
+	driver.set_activity_prop("")
 	driver.set_life_workstation({"activity":"forge"})
 	_check(driver.life_clip == &"life/Life_Work", "acquiring a task surface starts its native work without changing intent")
 	var station := Node3D.new()
@@ -84,9 +116,40 @@ func _run() -> void:
 	_check(driver.life_clip != &"life/Life_Work", "another activity's station cannot enable the work clip")
 	driver.life_requires_station = false
 	driver.clear_life_activity()
+	driver.life_idle_variant=1
+	driver.set_life_activity("idle")
+	for tick in 10: driver.advance_external(0.025)
+	driver.set_activity_prop("bread")
+	driver.life_modifier._process_modification()
+	_check(not driver.activity_prop_pose_ready() and not driver.life_modifier.tool.visible,"an authored open-hand idle cannot expose a calibrated closed-palm prop")
+	driver.set_life_activity("eat")
+	for tick in 2: driver.advance_external(0.025)
+	driver.life_modifier._process_modification()
+	_print_prop_graph(driver,"meal_fading")
+	_check(not driver.activity_prop_pose_ready() and not driver.life_modifier.tool.visible,"outgoing life-idle crossfade keeps the meal prop hidden until its fingers release ownership")
+	for tick in 10: driver.advance_external(0.025)
+	driver.life_modifier._process_modification()
+	_print_prop_graph(driver,"meal_complete")
+	_check(driver.activity_prop_pose_ready() and driver.life_modifier.tool.visible,"completed native transition enables the meal prop without a detached timer")
+	driver.clear_life_activity()
 	driver.life_work_kinds.append("watch")
 	driver.set_life_activity("watch")
 	_check(driver.life_clip == &"life/Life_Work", "Senn's contact-free observation can use authored work without a fabricated tool")
+	_settle_graph_branch(driver,"ecology_"+str(abs("life/Life_Work".hash())))
+	var watch_start: float = driver.life_elapsed
+	for tick in 180: driver.advance_external(0.05)
+	_check(driver.life_clip == &"life/Life_Work" and absf(driver.life_elapsed-watch_start-9.0)<0.002 and driver.life_native_cycle>=2, "contact-free observation retains its native survey through actual loop wraps")
+	driver.set_life_activity("rest")
+	var idle_before: StringName = driver.life_clip
+	var completed_idle := false
+	for tick in 200:
+		var before: float = driver.life_elapsed
+		driver.advance_external(0.025)
+		if driver.life_clip != idle_before:
+			completed_idle=before+0.025 >= 4.0-0.00001
+			break
+	_check(driver.life_clip != idle_before and str(driver.life_clip).begins_with("life/Life_Idle_"), "ordinary authored rest still alternates its two idle variations")
+	_check(completed_idle,"idle variation waits for the complete evaluated native clip rather than its queued wall time")
 	_check(not driver.supports_story_prop("cup"), "cup eligibility fails without the native drink clip even on a valid hand rig")
 	_verify_story_station_owner(driver,actor)
 	driver.clear_life_activity()
@@ -101,9 +164,9 @@ func _run() -> void:
 	driver.stop_story_gesture()
 	driver.life_idle_only = false
 	_check(driver.set_observation_clip("Life_Idle_A"), "creature observation can acquire a native ambient clip")
-	# Let the ordinary 0.14s state crossfade publish across actual updates;
-	# a single large advance can consume only its queued transition reset.
-	for tick in 6: driver.advance_external(0.05)
+	# Prior public activity/dialogue changes can queue several transitions.
+	# Observe their actual completion instead of assuming one fixed fade time.
+	_check(_settle_graph_branch(driver,"ecology_"+str(abs("life/Life_Idle_A".hash()))), "observation fixture reaches its actual native branch after prior owners release")
 	var observation: Dictionary = driver.observation_motion_sample()
 	_check(not observation.is_empty() and observation.clip == "life/Life_Idle_A" and is_equal_approx(float(observation.duration),4.0), "observation samples identify the actual playing native branch")
 	_check(not observation.is_empty() and is_equal_approx(float(observation.time),driver.animation_graph.playback.get_current_play_position()) and is_equal_approx(float(observation.phase),float(observation.time)/4.0), "observation phase comes from the graph clock")
@@ -111,10 +174,24 @@ func _run() -> void:
 	driver.set_observation_clip("Life_Idle_A")
 	driver.advance_external(0.25)
 	_check(absf(float(driver.observation_motion_sample().get("time",0.0))-observation_time-0.25)<0.002, "repeated ambient selection preserves native clip progress: before=%s after=%s node=%s travel=%s" % [observation_time,driver.observation_motion_sample(),driver.animation_graph.playback.get_current_node(),driver.animation_graph.playback.get_travel_path()])
+	observation_time = float(driver.observation_motion_sample().get("time",0.0))
+	driver.clear_observation_clip()
+	driver.set_observation_clip("Life_Idle_A")
+	driver.advance_external(0.05)
+	_check(not driver.observation_motion_sample().is_empty(), "same-frame ambient release and reacquire cancels the older queued locomotion request")
+	_check(absf(float(driver.observation_motion_sample().get("time",0.0))-observation_time-0.05)<0.002, "reclaiming the current ambient branch preserves native time rather than seeking or restarting")
+	var suspended_native_time: float = driver.animation_graph.playback.get_current_play_position()
+	var suspended_native_node: StringName = driver.animation_graph.playback.get_current_node()
 	driver.set_distance_suspended(true)
 	_check(not driver.set_observation_clip("Life_Idle_B"), "distance-suspended creatures cannot select a new ambient pose")
 	_check(driver.observation_motion_sample().is_empty(), "suspended ambient poses emit no visible event samples")
+	driver.advance_external(3.0)
+	driver.animation_graph.advance(3.0)
+	_check(not driver.is_evaluation_scheduled() and not driver.animation_graph.scheduled() and is_equal_approx(driver.animation_graph.playback.get_current_play_position(),suspended_native_time),"both scheduled and direct manual graph advances are frozen during distance suspension")
 	driver.set_distance_suspended(false)
+	_check(driver.animation_graph.playback.get_current_node()==suspended_native_node and is_equal_approx(driver.animation_graph.playback.get_current_play_position(),suspended_native_time),"reactivation preserves the evaluated native branch and position without an internal reset")
+	driver.advance_external(0.25)
+	_check(absf(float(driver.observation_motion_sample().get("time",-1.0))-suspended_native_time-0.25)<0.002,"resumed native observation advances only its new scheduled time")
 	driver.clear_observation_clip()
 	_check(driver.presentation_state=="" and not driver.action_active,"explicit observation release restores locomotion ownership")
 	_check(driver.observation_motion_sample().is_empty(), "released observation cannot report a stale native sample")
@@ -144,6 +221,15 @@ func _run() -> void:
 	contact.name = "ForgedHead"
 	contact.position.y = 0.23
 	identity.add_child(contact)
+	var fresh_supply := Presentation.attach_activity_tool(actor,"supply")
+	_check(is_instance_valid(fresh_supply) and not permanent.visible and not permanent.is_queued_for_deletion(), "first scheduled carry releases an existing same-hand hammer without deleting it")
+	if is_instance_valid(fresh_supply): fresh_supply.free()
+	permanent_socket.bone_name = "hand_l"
+	permanent.visible = true
+	var opposite_supply := Presentation.attach_activity_tool(actor,"supply")
+	_check(is_instance_valid(opposite_supply) and permanent.visible, "activity attachment preserves equipment owned by the opposite hand")
+	if is_instance_valid(opposite_supply): opposite_supply.free()
+	permanent_socket.bone_name = "hand_r"
 	var life: Node = driver.life_modifier
 	life.active = false
 	var borrowed_book := Node3D.new()
@@ -333,6 +419,20 @@ func _bind_fixture_cup(driver: Node, skeleton: Skeleton3D) -> void:
 	cup.add_child(mesh)
 	driver.story_prop = cup
 
+func _settle_graph_branch(driver: Node, expected: String) -> bool:
+	var playback: AnimationNodeStateMachinePlayback = driver.animation_graph.playback
+	for tick in 80:
+		driver.advance_external(0.025)
+		if str(playback.get_current_node()) == expected and str(playback.get_fading_from_node()).is_empty() and playback.get_travel_path().is_empty():
+			print("LIVING CAST GRAPH SETTLED: "+JSON.stringify({"expected":expected,"ticks":tick+1,"native_time":playback.get_current_play_position()}))
+			return true
+	print("LIVING CAST GRAPH UNSETTLED: "+JSON.stringify({"expected":expected,"current":playback.get_current_node(),"from":playback.get_fading_from_node(),"travel":playback.get_travel_path(),"requested":driver.animation_graph.requested,"active":driver.animation_graph.active_state}))
+	return false
+
+func _print_prop_graph(driver: Node, stage: String) -> void:
+	var playback: AnimationNodeStateMachinePlayback = driver.animation_graph.playback
+	print("LIVING CAST PROP GRAPH: "+JSON.stringify({"stage":stage,"current":playback.get_current_node(),"from":playback.get_fading_from_node(),"fade_length":playback.get_fading_length(),"fade_position":playback.get_fading_position(),"eligible":driver.activity_prop_pose_ready()}))
+
 func _verify_measured_grips() -> void:
 	var actor := Node3D.new()
 	actor.scale=Vector3.ONE*1.25
@@ -355,6 +455,18 @@ func _verify_measured_grips() -> void:
 		var physical := frame*grip.transform*visual.transform
 		_check((physical*(record.anchor as Vector3)).distance_to(frame*(record.palm as Vector3))<0.001,"actual cloth surface anchor meets the measured palm")
 		_check(physical.basis.get_scale().is_equal_approx(Vector3.ONE),"measured grip does not resize the retained activity mesh")
+	var supply := record.duplicate()
+	supply.anchor=Vector3(0.0514,0.115,0)
+	var library := AnimationLibrary.new()
+	library.set_meta("activity_prop_grips",{"supply":supply})
+	var owner_driver := Driver.new()
+	actor.add_child(owner_driver)
+	owner_driver.character_root=actor
+	owner_driver.skeleton=skeleton
+	owner_driver._bind_equipment_grips(library)
+	_check(owner_driver.contract_errors.is_empty() and actor.get_meta("activity_prop_grips",{}).has("supply"),"scheduled supply vessels accept the same verified calibration contract")
+	var supply_socket := Presentation.attach_activity_tool(actor,"supply") as BoneAttachment3D
+	_check(supply_socket!=null and supply_socket.has_meta("measured_grip"),"supply calibration binds an actual retained vessel surface vertex")
 	var invalid := record.duplicate()
 	invalid.basis=Basis.IDENTITY.scaled(Vector3(2,1,1))
 	_check(Presentation.grip_record_error(skeleton,invalid)!="","calibration cannot introduce prop scaling")

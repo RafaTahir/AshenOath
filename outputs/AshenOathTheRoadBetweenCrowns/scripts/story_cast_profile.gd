@@ -60,10 +60,10 @@ static var _design_cast: Dictionary = {}
 
 const LIFE_MOTION := {
 	"kael":{"library":"res://assets_external/characters_prepared/animations/life_P01.res", "work":[], "contact":0.50, "idle_only":true, "clips":["Life_Idle_A", "Life_Idle_B"]},
-	"anwen":{"library":"res://assets_external/characters_prepared/animations/life_C01.res", "work":["care"], "contact":0.50},
-	"tor":{"library":"res://assets_external/characters_prepared/animations/life_C04.res", "work":["forge", "repair"], "contact":0.50},
-	"mira":{"library":"res://assets_external/characters_prepared/animations/life_C03.res", "work":["sort_herbs", "herb_stall", "sort_seeds"], "contact":0.50, "contact_probe":"palm"},
-	"rook":{"library":"res://assets_external/characters_prepared/animations/life_C02.res", "work":["check_supplies", "sort_supplies", "check_rope"], "contact":0.50, "contact_probe":"palm"},
+	"anwen":{"library":"res://assets_external/characters_prepared/animations/life_C01.res", "work":["care"], "contact":0.50, "requires_station":true},
+	"tor":{"library":"res://assets_external/characters_prepared/animations/life_C04.res", "work":["forge", "repair"], "contact":0.50, "requires_station":true},
+	"mira":{"library":"res://assets_external/characters_prepared/animations/life_C03.res", "work":["sort_herbs", "herb_stall", "sort_seeds"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
+	"rook":{"library":"res://assets_external/characters_prepared/animations/life_C02.res", "work":["check_supplies", "sort_supplies", "check_rope"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
 	"nessa":{"library":"res://assets_external/characters_prepared/animations/life_C11.res", "work":["bake", "care"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
 	"elna":{"library":"res://assets_external/characters_prepared/animations/life_C05.res", "work":["fold_cloth"], "contact":0.50, "contact_probe":"palm", "requires_station":true},
 	"toma":{"library":"res://assets_external/characters_prepared/animations/life_C06.res", "work":["tend", "sort_seeds", "check_supplies"], "contact":0.50, "contact_probe":"palm", "requires_station":true},

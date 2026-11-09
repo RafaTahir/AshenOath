@@ -114,6 +114,8 @@ var story_dialogue_active := false
 var life_modifier
 var life_clip := StringName()
 var life_elapsed := 0.0
+var life_native_position := -1.0
+var life_native_cycle := 0
 var life_idle_variant := 0
 var life_library_path := ""
 var life_work_kinds: Array = []
@@ -248,7 +250,7 @@ func _clear_playback() -> void:
 	configured = false
 	observation_clip = StringName()
 	life_clip = StringName()
-	life_elapsed = 0.0
+	_reset_life_clock()
 	life_library_path = ""
 	life_work_kinds.clear()
 	life_requires_station = false
@@ -411,13 +413,16 @@ func _advance_animation(delta: float) -> void:
 	else:
 		current_playback_scale = lerpf(current_playback_scale, target_playback_scale, 1.0 - exp(-10.0 * delta))
 	animation_graph.set_action_rate(current_playback_scale)
-	if life_clip != StringName() and presentation_state.begins_with("life:") and not action_active:
-		life_elapsed += delta * current_playback_scale
+	var evaluated_branch: StringName = animation_graph.playback.get_current_node() if animation_graph.playback != null else StringName()
+	animation_graph.advance(delta)
+	_update_life_clock(evaluated_branch)
+	if _life_playback_ready():
 		var life_kind := presentation_state.trim_prefix("life:")
-		if life_kind in LIFE_IDLE_KINDS and life_elapsed >= animation_player.get_animation(life_clip).length:
+		# A contact-free watch can use Life_Work even though its intent is an
+		# idle kind. Only idle clips alternate; the authored survey must loop.
+		if life_kind in LIFE_IDLE_KINDS and life_clip in [&"life/Life_Idle_A", &"life/Life_Idle_B"] and life_elapsed >= animation_player.get_animation(life_clip).length:
 			life_idle_variant = 1 - life_idle_variant
 			_play_life_clip("Life_Idle_A" if life_idle_variant == 0 else "Life_Idle_B")
-	animation_graph.advance(delta)
 	_reset_ambient_morphs()
 	if action_active:
 		action_elapsed += delta
@@ -456,7 +461,7 @@ func is_valid() -> bool:
 
 func is_evaluation_scheduled() -> bool:
 	# Manual mixers stay active but evaluate only explicit scheduled advances.
-	# Distance suspension disables both the schedule and mixer.
+	# Distance suspension disables the schedule and the graph's advance gate.
 	if not is_valid() or distance_suspended or not is_inside_tree() or not can_process() or not animation_graph.scheduled():
 		return false
 	var timer_running := is_instance_valid(manual_tick_timer) and not manual_tick_timer.is_stopped()
@@ -798,12 +803,12 @@ func set_life_activity(kind: String) -> void:
 		requested = ""
 	if requested == "" or not _play_life_clip(requested):
 		life_clip = StringName()
-		life_elapsed = 0.0
+		_reset_life_clock()
 		_play_state("idle", 0.18)
 
 func clear_life_activity() -> void:
 	life_clip = StringName()
-	life_elapsed = 0.0
+	_reset_life_clock()
 	if life_modifier != null:
 		life_modifier.hide_activity_tool()
 		life_modifier.activity = ""
@@ -905,7 +910,7 @@ func _bind_equipment_grips(library: AnimationLibrary) -> void:
 		contract_errors.append("authored equipment grips have invalid metadata types")
 		return
 	for style: String in grips:
-		if style not in ["rope","bowl","bread","cloth"]:
+		if style not in ["rope","bowl","bread","cloth","supply"]:
 			contract_errors.append("unsupported calibrated activity prop: " + style)
 			continue
 		var error: String = presentation.grip_record_error(skeleton,grips[style])
@@ -938,21 +943,52 @@ func _play_life_clip(name: String) -> bool:
 	if not animation_player.has_animation(key) or not bound_track_counts.has(str(key)):
 		return false
 	life_clip = key
-	life_elapsed = 0.0
+	_reset_life_clock()
 	current_state = "life_clip:" + name
 	animation_graph.ambient_clip(str(key), true)
 	# Publish a queued same-node restart at time zero. Otherwise the next
 	# elapsed step can be consumed by the reset while contact time advances.
+	var evaluated_branch: StringName = animation_graph.playback.get_current_node() if animation_graph.playback != null else StringName()
 	animation_graph.advance(0.0)
+	_update_life_clock(evaluated_branch)
 	_reset_ambient_morphs()
 	return true
 
+func _reset_life_clock() -> void:
+	life_elapsed = 0.0
+	life_native_position = -1.0
+	life_native_cycle = 0
+
+func _life_playback_ready() -> bool:
+	if life_clip == StringName() or not presentation_state.begins_with("life:") or dead or distance_suspended or action_active: return false
+	if animation_graph == null or animation_graph.playback == null: return false
+	var playback: AnimationNodeStateMachinePlayback = animation_graph.playback
+	return playback.is_playing() and str(playback.get_current_node()) == "ecology_"+str(abs(str(life_clip).hash()))
+
+func _update_life_clock(evaluated_branch: StringName) -> void:
+	# Queued travel and outgoing fades are not time spent in the requested
+	# clip. Contact and idle boundaries follow the evaluated native branch.
+	# A state-machine transition publishes its destination with a test-only
+	# time-zero query before that branch's first real pose evaluation.
+	if not _life_playback_ready() or animation_graph.playback.get_current_node() != evaluated_branch:
+		life_native_position = -1.0
+		return
+	var playback: AnimationNodeStateMachinePlayback = animation_graph.playback
+	var duration := playback.get_current_length()
+	var native_time := playback.get_current_play_position()
+	if not is_finite(duration) or duration <= 0.0 or not is_finite(native_time) or native_time < 0.0: return
+	var position := fposmod(native_time,duration)
+	if life_native_position >= 0.0 and position < life_native_position - 0.000001:
+		life_native_cycle += 1
+	life_native_position = position
+	life_elapsed = float(life_native_cycle)*duration+position
+
 func life_motion_sample() -> Dictionary:
-	if life_clip == StringName() or not presentation_state.begins_with("life:"):
+	if not _life_playback_ready() or life_native_position < 0.0:
 		return {}
-	var duration := animation_player.get_animation(life_clip).length
+	var duration: float = animation_graph.playback.get_current_length()
 	return {"clip":str(life_clip), "elapsed":life_elapsed, "duration":duration,
-		"phase":fposmod(life_elapsed, duration) / duration, "cycle":floori(life_elapsed / duration), "contact_fraction":life_contact_fraction, "contact_probes":life_contact_probes}
+		"phase":life_native_position / duration, "cycle":life_native_cycle, "contact_fraction":life_contact_fraction, "contact_probes":life_contact_probes}
 
 func get_skeleton() -> Skeleton3D:
 	return skeleton
@@ -1087,6 +1123,19 @@ func set_activity_prop(kind: String) -> void:
 	_ensure_life_modifier()
 	if life_modifier != null:
 		life_modifier.activity_prop = kind
+
+func activity_prop_pose_ready() -> bool:
+	# Bread/supply probes are calibrated to retained Idle/Walking fingers.
+	# The requested logical state can change before an outgoing open-hand
+	# life clip loses influence, so visibility follows the evaluated graph.
+	if not is_valid() or dead or distance_suspended or action_active or story_dialogue_active: return false
+	if animation_graph == null or animation_graph.playback == null: return false
+	var playback: AnimationNodeStateMachinePlayback = animation_graph.playback
+	if not playback.is_playing() or str(playback.get_current_node()) not in animation_graph.GAITS: return false
+	# Godot 4.6.3 clears fading_from when influence ends, while its cached
+	# fading_time can retain the previous transition's duration.
+	var outgoing := str(playback.get_fading_from_node())
+	return outgoing.is_empty() or outgoing in animation_graph.GAITS
 
 func set_creature_presence(id: String, intent: String, amount: float) -> void:
 	_ensure_life_modifier()

@@ -1,0 +1,355 @@
+{
+  "schema_version": 1,
+  "scope": "All twelve named cast; actual reachable generic held props after quiet-waiting fix. Stationary task objects and native fused accessories are separate owners.",
+  "actors": [
+    {
+      "identity": "anwen",
+      "asset": "C01",
+      "role": "sister_anwen",
+      "library": "res://assets_external/characters_prepared/animations/life_C01.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "cleric_day authored meals and scheduled supply carry",
+      "hand": "hand_l",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "tor",
+      "asset": "C04",
+      "role": "blacksmith_tor",
+      "library": "res://assets_external/characters_prepared/animations/life_C04.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "smith_day authored meals and scheduled supply carry",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "mira",
+      "asset": "C03",
+      "role": "mira",
+      "library": "res://assets_external/characters_prepared/animations/life_C03.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "worker_day authored meals and scheduled supply carry",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "rook",
+      "asset": "C02",
+      "role": "rook",
+      "library": "res://assets_external/characters_prepared/animations/life_C02.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "worker_day authored meals and scheduled supply carry",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "nessa",
+      "asset": "C11",
+      "role": "saga_nessa",
+      "library": "res://assets_external/characters_prepared/animations/life_C11.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "baker_day meals and1080-1140carry; shared everyday_gre_pair sort_supplies and rain shelter",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "elna",
+      "asset": "C05",
+      "role": "widow_elna",
+      "library": "res://assets_external/characters_prepared/animations/life_C05.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "villager_day meals and1080-1140carry; rain shelter supply work",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "toma",
+      "asset": "C06",
+      "role": "farmer_toma",
+      "library": "res://assets_external/characters_prepared/animations/life_C06.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "worker_day meals and1080-1140carry",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "nera",
+      "asset": "C12",
+      "role": "saga_nera",
+      "library": "res://assets_external/characters_prepared/animations/life_C12.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "crossing_watch meals and1080-1140carry",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "senn",
+      "asset": "C07",
+      "role": "captain_senn",
+      "library": "res://assets_external/characters_prepared/animations/life_C07.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "watch_day meals; everyday_roa_pair shared supply work and rain shelter",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "vale",
+      "asset": "C09",
+      "role": "vargan_record_keeper",
+      "library": "res://assets_external/characters_prepared/animations/life_C09.res",
+      "required_activity_prop_grips": [
+        "bread"
+      ],
+      "reachability": "scribe_day meals; supported ledger work suppresses generic handheld book",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "merrow",
+      "asset": "C10",
+      "role": "vargan_steward",
+      "library": "res://assets_external/characters_prepared/animations/life_C10.res",
+      "required_activity_prop_grips": [
+        "bread"
+      ],
+      "reachability": "scribe_day meals; physical receipts remain on station; cup has independent authored scene contract",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    },
+    {
+      "identity": "edric",
+      "asset": "C08",
+      "role": "edric",
+      "library": "res://assets_external/characters_prepared/animations/life_C08.res",
+      "required_activity_prop_grips": [
+        "bread",
+        "supply"
+      ],
+      "reachability": "scribe_day meals; rain shelter uses check_supplies outside read/review_dispatch work kinds",
+      "hand": "hand_r",
+      "metadata_status": "pending_source_mesh_and_closed_palm_calibration",
+      "native_fit_accepted": false,
+      "visual_accepted": false
+    }
+  ],
+  "geometry": {
+    "bread": {
+      "owner": "CharacterPresentation.attach_activity_tool / CastActivityTool / Anwen hand_l, others hand_r",
+      "source": "res://scripts/character_presentation.gd",
+      "construction": "SphereMesh(radius=.5,height=1,radial_segments=32,rings=12), vertex scale(.20,.025,.32); child scores from HeldProps.bread_scores",
+      "surface_anchor_candidate": [
+        0.1,
+        0,
+        0
+      ],
+      "anchor_space": "actual untransformed visual mesh; previous visual Y=-.08 is replaced by calibrated fit",
+      "orientation_and_actual_skin_contact": "pending native source measurement"
+    },
+    "supply": {
+      "owner": "CharacterPresentation.attach_activity_tool / CastActivityTool / Anwen hand_l, others hand_r",
+      "source": "res://scripts/held_prop_geometry.gd",
+      "construction": "HeldProps.vessel(.055,.11,.23,.008,16)",
+      "surface_anchor_candidate": [
+        0.0514,
+        0.115,
+        0
+      ],
+      "anchor_space": "actual untransformed visual mesh; outer top lip profile vertex",
+      "orientation_and_actual_skin_contact": "pending native source measurement"
+    }
+  },
+  "metadata_contract": {
+    "container": "life_Cxx.res AnimationLibrary metadata activity_prop_grips; driver validates and publishes to character_root",
+    "record_fields": {
+      "verified": "true only after actual source calibration",
+      "bone": "hand_l for Anwen; hand_r for the other eleven",
+      "palm": "Godot hand-local Vector3 from measured closed-palm skin appropriate to Idle/eat/carry, not open Work palm",
+      "anchor": "actual visual-mesh-local Vector3 verified against retained mesh vertices",
+      "basis": "proper orthonormal Basis mapping visual axes to unscaled hand frame",
+      "source_sha256": "64-digit exact calibration source hash"
+    },
+    "additional_provenance": "Preserve actual actor/carrier and geometry source hashes in authoring/compiler receipt; no inferred generic anatomy offsets.",
+    "runtime_fit": "Use actual uniform world hand scale s. grip.scale=1/s, visual.basis=basis, visual.position=palm*s-basis*anchor. Unexpected nonuniform/sheared ancestry is rejected.",
+    "existing_native_gate": "actual retained surface anchor to measured palm <=1mm and displayed scale1; this checks attachment identity, not finger clearance or visual acceptance.",
+    "source_requirements": "Measured actual palm/normal and hand/prop/garment clearance across retained base Idle and Walking. eat/carry are outside LIFE_IDLE_KINDS and therefore never select Life_Idle_A/B; work is station-gated and hides generic held substitutes. Native Work open palms are not the calibration pose.",
+    "transition_eligibility": "Existing CharacterAnimationDriver exposes actual evaluated locomotion ownership. Bread/supply remain hidden while current or fading-from branch is a life/action clip, including Nessa open-finger Life_Idle_B. Existing graph timing remains unchanged.",
+    "transition_api_reference": "https://docs.godotengine.org/en/4.6/classes/class_animationnodestatemachineplayback.html#class-animationnodestatemachineplayback-method-get-fading-from-node"
+  },
+  "independent_contracts": {
+    "merrow_cup": {
+      "asset": "C10",
+      "resource": "res://assets_external/environment_prepared/living_cast/merrow_cup.scn",
+      "clips": [
+        "Life_Cup_Hold",
+        "Life_Drink"
+      ],
+      "metadata": [
+        "grip_probe",
+        "lip_probe",
+        "actor_source_sha256",
+        "actor_model_sha256"
+      ],
+      "owners": "CharacterAnimationDriver action-owned story_prop and authored-head protection; existing actual handle <=2mm/rim <=4mm fixture checks remain",
+      "status": "Actual retained-rig action fixture passed for the compiled source-specific cup; actual-level visual acceptance remains pending."
+    },
+    "vale_and_merrow_books": "Production C09/C10 books are fused pelvis/belt accessories; do not move/hide them as hand props. Stationary ledgers remain supported. Legacy procedural CastleRoleEquipment book fit is separate and is not required for these native bodies.",
+    "senn_edric_weapons": "Preserve source-authored equipment; no generic procedural spear/shield calibration is implied by these body IDs.",
+    "anwen_staff": "Right arm remains owned by planted staff during care, meal and supply carry. Bread/supply attach to free left hand. Existing action/combat early-return priority remains intact; actual native shaft/tip/grip regression added.",
+    "tor_hammer_handoff": "A newly enrolled meal/carry releases existing occupation equipment only when it occupies the same retained hand; opposite-hand equipment and borrowed lifetime are preserved. Current lifecycle107 passes replacement, quiet-waiting, suspension and teardown assertions."
+  },
+  "strict_gate_scope": "Default all-cast fixture covers every listed actor/style; explicit --motion-only reports skipped metadata as pending and complete_cast=false.",
+  "source_receipts": [
+    {
+      "path": "res://scripts/character_presentation.gd",
+      "sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+    },
+    {
+      "path": "res://scripts/held_prop_geometry.gd",
+      "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+    },
+    {
+      "path": "res://scripts/character_life_modifier.gd",
+      "sha256": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7"
+    },
+    {
+      "path": "res://scripts/character_animation_driver.gd",
+      "sha256": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a"
+    },
+    {
+      "path": "res://scripts/systems/npc_routine_director.gd",
+      "sha256": "cc4a5f1f622854b5c7db42d2c7fc1773e1f0bee6cf4cf3d525c8c84c1103be9f"
+    },
+    {
+      "path": "res://scripts/story_cast_profile.gd",
+      "sha256": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9"
+    },
+    {
+      "path": "res://data/cast_life.json",
+      "sha256": "7e462c5ca7dff9731c21168a690c24a1908c9a0ef4adb8dcf4742cdc5012c28e"
+    },
+    {
+      "path": "res://data/everyday_scenes.json",
+      "sha256": "d4383180f1ba8f228c50e8a4a7d0532820617b9daafa9c30673d8cce52832284"
+    },
+    {
+      "path": "res://data/community_cast_life.json",
+      "sha256": "f394673ecb1e71f6a66d7fbfd578c0c1637e6dcd9f79536d688731516262f168"
+    },
+    {
+      "path": "res://tools/verify_living_cast_motion.gd",
+      "sha256": "91e7dc9f14de7a667a5f4d075506f80c877f698aa6edbbbe180a836dce4f79ea"
+    },
+    {
+      "path": "res://scripts/systems/character_animation_graph.gd",
+      "sha256": "8c81ae0f11db2de641bc8b13360e344f7a2a5acdfaa31935115104263a01eb25"
+    },
+    {
+      "path": "res://scripts/greyfen_life_controller.gd",
+      "sha256": "fcea8f3c49fff92455c105a08d6213697e5b595f1559ff644f22848bdbfd24a5"
+    },
+    {
+      "path": "res://tools/verify_living_cast_lifecycle.gd",
+      "sha256": "ddb8bd1c5024665970f6d3446e999786150e0dd0763242de934847ee2c1057f5"
+    },
+    {
+      "path": "res://tools/verify_living_cast_stage2_routines.gd",
+      "sha256": "b2e6192b8756438283b55b8d52ac530b781bc36340c78f22cd311be2441a6579"
+    }
+  ],
+  "verification": {
+    "source_audit": true,
+    "new_runtime_changes_tested": true,
+    "new_native_equipment_accepted": false,
+    "user_accepted": false,
+    "anwen_native_ownership": {
+      "accepted": true,
+      "receipt": ".verification/motion/native_work_phase_20261110_r2/receipt.json",
+      "checks": 1776,
+      "scope": "Actual C01 included in twelve-cast motion-only fixture: care contact, left-hand meal/carry attachment, retained right staff, dialogue gestures and native graph timing. No generic held-prop calibration or visual acceptance.",
+      "max_staff_tip_height_error_m": 0.00733363628387451,
+      "max_staff_plant_error_m": 0.0075020962394774,
+      "min_staff_up_dot": 0.99997878074646,
+      "max_staff_grip_error_m": 0.0432986877858639,
+      "cloth_contact_error_m": 4.76837158203125e-07
+    },
+    "routines_checks_passed": 864,
+    "lifecycle_status": "PASS107 in the current native work-phase receipt; includes quiet waiting, borrowed/generated prop lifetime, actual branch eligibility, queued-contact suppression and suspension continuity.",
+    "native_work_phase": {
+      "accepted": true,
+      "receipt": ".verification/motion/native_work_phase_20261110_r2/receipt.json",
+      "receipt_sha256": "977d51b85b7848fac3c6a1d69370ed0913035b6f0af86f25ddec57f1662c3497",
+      "lifecycle_checks": 107,
+      "all_twelve_motion_only_checks": 1776,
+      "separate_player_checks": 23,
+      "native_attack_timing": "pass",
+      "update_rates_hz": [
+        20.0,
+        30.0,
+        60.0,
+        144.0
+      ],
+      "rate_samples": 48,
+      "max_raw_palm_error_before_ik_m": 3.83883525501005e-06,
+      "actual_contact_time_seconds": 2.0,
+      "cup": {
+        "actual_scale": "(1.0, 1.0, 1.0)",
+        "handle_error": 0.00115550146438181,
+        "native_time": 2.0,
+        "rim_error": 0.00199992954730988
+      },
+      "equipment_validation_deferred": true,
+      "complete_cast": false,
+      "visual_acceptance": false,
+      "manual_delta_limit": "Observed loop accounting is verified for scheduled updates up to1s, not a single advance spanning an entire4s clip."
+    }
+  }
+}
