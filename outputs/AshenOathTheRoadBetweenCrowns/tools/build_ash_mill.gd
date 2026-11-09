@@ -3,8 +3,14 @@ extends "res://tools/build_record_archive.gd"
 const VILLAGE := "res://assets_external/environment/village/"
 const KIT := ["Wall_UnevenBrick_Window_Thin_Round.obj", "Wall_Plaster_WoodGrid.obj", "Roof_Front_Brick6.obj", "Roof_RoundTiles_6x10.obj"]
 const OUTPUT_MILL := "res://assets_external/environment/village/AshMill_Authored.res"
+const LivingParts = preload("res://tools/living_world_part_baker.gd")
 
 func _initialize() -> void:
+	var original_error := LivingParts.originals_error(["mill"])
+	if not original_error.is_empty():
+		push_error(original_error)
+		quit(1)
+		return
 	for file in KIT:
 		var source := load(VILLAGE + file) as ArrayMesh
 		if source == null:
@@ -40,7 +46,11 @@ func _initialize() -> void:
 		var source := ArrayMesh.new()
 		source.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, box.get_mesh_arrays())
 		_append(books, source, Transform3D(Basis(Vector3.FORWARD, -0.30), Vector3(2.0, 3.36, z)), Color(0.22, 0.14, 0.09))
-	_make_wheel()
+	var wheel_error := _make_wheel()
+	if not wheel_error.is_empty():
+		push_error(wheel_error)
+		quit(1)
+		return
 	wood.index()
 	books.index()
 	var result := wood.commit()
@@ -90,11 +100,13 @@ func _append_west_roof(source: ArrayMesh, transform: Transform3D) -> void:
 	retained.index()
 	_append(books, retained.commit(), Transform3D.IDENTITY, Color(0.30, 0.19, 0.13))
 
-func _make_wheel() -> void:
+func _make_wheel() -> String:
 	# The axle is perpendicular to the west wall; the rim stays outside masonry.
 	# Moving this visual only leaves all existing route and wall collision intact.
 	var centre := Vector3(-4.42, 1.55, 1.80)
 	var alignment := Transform3D(Basis(Vector3.UP, PI / 2), centre)
+	var wheel := SurfaceTool.new()
+	wheel.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for depth in [-0.12, 0.12]:
 		var rim := TorusMesh.new()
 		rim.inner_radius = 1.29
@@ -103,21 +115,21 @@ func _make_wheel() -> void:
 		rim.ring_segments = 6
 		var source := ArrayMesh.new()
 		source.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, rim.get_mesh_arrays())
-		_append(books, source, alignment * Transform3D(Basis(Vector3.RIGHT, PI / 2), Vector3(0, 0, depth)), Color(0.35, 0.24, 0.15))
+		_append(wheel, source, alignment * Transform3D(Basis(Vector3.RIGHT, PI / 2), Vector3(0, 0, depth)), Color(0.35, 0.24, 0.15))
 	for index in range(8):
 		var angle := index * TAU / 8
 		var spoke := BoxMesh.new()
 		spoke.size = Vector3(1.34, 0.12, 0.22)
 		var source := ArrayMesh.new()
 		source.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, spoke.get_mesh_arrays())
-		_append(books, source, alignment * Transform3D(Basis(Vector3.BACK, angle), Vector3(cos(angle), sin(angle), 0) * 0.67), Color(0.41, 0.29, 0.19))
+		_append(wheel, source, alignment * Transform3D(Basis(Vector3.BACK, angle), Vector3(cos(angle), sin(angle), 0) * 0.67), Color(0.41, 0.29, 0.19))
 	for index in range(16):
 		var angle := index * TAU / 16
 		var paddle := BoxMesh.new()
 		paddle.size = Vector3(0.14, 0.37, 0.44)
 		var source := ArrayMesh.new()
 		source.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, paddle.get_mesh_arrays())
-		_append(books, source, alignment * Transform3D(Basis(Vector3.BACK, angle), Vector3(cos(angle), sin(angle), 0) * 1.43), Color(0.32, 0.22, 0.14))
+		_append(wheel, source, alignment * Transform3D(Basis(Vector3.BACK, angle), Vector3(cos(angle), sin(angle), 0) * 1.43), Color(0.32, 0.22, 0.14))
 	var hub := CylinderMesh.new()
 	hub.top_radius = 0.22
 	hub.bottom_radius = 0.22
@@ -125,4 +137,25 @@ func _make_wheel() -> void:
 	hub.radial_segments = 12
 	var source := ArrayMesh.new()
 	source.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, hub.get_mesh_arrays())
-	_append(books, source, alignment * Transform3D(Basis(Vector3.RIGHT, PI / 2), Vector3(0, 0, 0.14)), Color(0.30, 0.29, 0.26))
+	_append(wheel, source, alignment * Transform3D(Basis(Vector3.RIGHT, PI / 2), Vector3(0, 0, 0.14)), Color(0.30, 0.29, 0.26))
+	wheel.index()
+	var mesh := wheel.commit()
+	mesh.surface_set_name(0, "charred_timber_and_tiles")
+	var material := StandardMaterial3D.new()
+	material.vertex_color_use_as_albedo = true
+	material.roughness = 0.93
+	mesh.surface_set_material(0, material)
+	mesh = LivingParts.rebase_mesh(mesh, centre)
+	var scene := Node3D.new()
+	scene.name = "AshMillLivingWheel"
+	var tool_path := "res://tools/build_ash_mill.gd"
+	var error := LivingParts.add_part(scene, mesh, centre, "mill_wheel", "AshMillWaterwheel", {tool_path: FileAccess.get_sha256(tool_path)})
+	if error.is_empty():
+		var part := scene.get_node("AshMillWaterwheel") as MeshInstance3D
+		part.set_meta("world_prop_spin_axis", Vector3.RIGHT)
+		part.set_meta("world_prop_spin_speed", 0.0)
+		part.set_meta("world_prop_nominal_spin_speed", 0.45)
+		part.set_meta("world_prop_flow_required", true)
+		error = LivingParts.save(scene, "ash_mill_wheel", 1)
+	scene.free()
+	return error

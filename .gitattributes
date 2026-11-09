@@ -1,4 +1,5 @@
 # Certified Web exports must survive Git checkout byte-for-byte.
+.gitattributes -text whitespace=cr-at-eol
 web/** -text
 # Captured verification artifacts keep the bytes used by their evidence hashes.
 outputs/AshenOathTheRoadBetweenCrowns/release_reports/hardening_stage2_20261101/** -text whitespace=cr-at-eol
@@ -26,3 +27,35 @@ outputs/AshenOathTheRoadBetweenCrowns/tools/build_merrow_cup.gd -text whitespace
 art_source/art_recovery_v2/tools/author_living_world_parts.py -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/living_world_part_baker.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_world_blender.gd -text whitespace=cr-at-eol
+# Player, creature and companion receipts bind the maintained compiler bytes.
+art_source/art_recovery_v2/tools/author_living_player.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/verify_living_player_sources.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/inspect_living_player_pose.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/author_living_creature_motion.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/living_creature_motion_profiles.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/preserve_creature_action_bytes.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/graft_creature_ambient.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/prepare_living_creature_inputs.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/verify_living_creature_motion.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/living_creature_preview.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/render_living_creature_source.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_companion.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/creature_ambient_source_contract.gd -text whitespace=cr-at-eol
+# Scenery split proof includes these original builders and its pure contract.
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_campaign_wilds.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_hart_woodland.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_ash_mill.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/living_world_geometry_contract.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_world_split.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/freeze_living_world_originals.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/test_living_world_freeze.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilds_presentation.gd -text whitespace=cr-at-eol
+# Completed cast checkpoints also bind these retained-source preparation tools.
+art_source/art_recovery_v2/tools/extract_stage2_frozen_actors.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/measure_stage2_retained_rigs.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/prepare_stage2_input_closure.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/probe_merrow_cup_grip.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_stage2_libraries.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_stage2_props.gd -text whitespace=cr-at-eol
+# Retained engine logs preserve diagnostic whitespace and terminal blank lines.
+art_source/art_recovery_v2/evidence/**/*.log -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

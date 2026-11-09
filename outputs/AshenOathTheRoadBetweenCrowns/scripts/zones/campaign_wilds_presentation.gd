@@ -38,6 +38,8 @@ static func _living_parts(context: ZoneBuildContext, path: String, id: String) -
 		return
 	var parts := packed.instantiate() as Node3D
 	parts.name = id
+	for child: Node in parts.find_children("*", "MeshInstance3D", true, false):
+		_apply_surface_materials(context, child as MeshInstance3D)
 	# The bake retains world-space placements under each supported pivot.
 	context.add_node(parts)
 
@@ -46,6 +48,12 @@ static func _publish(context: ZoneBuildContext, mesh: ArrayMesh, id: String) -> 
 	node.name = id
 	node.mesh = mesh
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_apply_surface_materials(context, node)
+	context.add_node(node)
+
+static func _apply_surface_materials(context: ZoneBuildContext, node: MeshInstance3D) -> void:
+	# Static and split geometry retain the same semantic texture, quality and
+	# two-sided settings; moving a mesh to a pivot must not replace its surface.
 	for surface in node.mesh.get_surface_count():
 		var surface_id: String = node.mesh.surface_get_name(surface)
 		var material := context.make_world_material(surface_id).duplicate() as StandardMaterial3D
@@ -59,7 +67,6 @@ static func _publish(context: ZoneBuildContext, mesh: ArrayMesh, id: String) -> 
 		elif surface_id == "plaster":
 			material.cull_mode = BaseMaterial3D.CULL_DISABLED
 		node.set_surface_override_material(surface, material)
-	context.add_node(node)
 
 static func burned_home(context: ZoneBuildContext, origin: Vector3, suffix: String) -> void:
 	var node := MeshInstance3D.new()

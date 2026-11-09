@@ -10,6 +10,38 @@ const BUILDERS := {
 	"ash_mill_wheel": "res://tools/build_ash_mill.gd",
 }
 
+static func originals_error(required: Array[String]) -> String:
+	var folder := ProjectSettings.globalize_path("res://").path_join("../../art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/combined_original").simplify_path()
+	var path := folder.path_join("manifest.json")
+	if not FileAccess.file_exists(path): return "Freeze combined originals before baking: tools/freeze_living_world_originals.py"
+	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not manifest is Dictionary or manifest.get("schema_version") != 1 or not manifest.get("meshes") is Array:
+		return "Malformed frozen original scenery manifest"
+	var found: Dictionary = {}
+	for row: Variant in manifest.meshes:
+		if not row is Dictionary or not required.has(str(row.get("id",""))): continue
+		var file := str(row.get("frozen",""))
+		if file.is_empty() or file != file.get_file() or not FileAccess.file_exists(folder.path_join(file)) or FileAccess.get_sha256(folder.path_join(file)) != str(row.get("sha256","")):
+			return "Frozen combined scenery input changed: " + str(row.get("id",""))
+		found[str(row.id)] = true
+	for id: String in required:
+		if not found.has(id): return "Missing frozen combined scenery: " + id
+	return ""
+
+static func rebase_mesh(mesh: ArrayMesh, pivot: Vector3) -> ArrayMesh:
+	# Build in the former combined mesh frame first: its projected UVs and
+	# authored normals belong to that frame. Move only vertices into the pivot.
+	var rebased := ArrayMesh.new()
+	for surface: int in range(mesh.get_surface_count()):
+		var arrays := mesh.surface_get_arrays(surface)
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		for index: int in range(vertices.size()): vertices[index] -= pivot
+		arrays[Mesh.ARRAY_VERTEX] = vertices
+		rebased.add_surface_from_arrays(mesh.surface_get_primitive_type(surface), arrays)
+		rebased.surface_set_name(surface, mesh.surface_get_name(surface))
+		rebased.surface_set_material(surface, mesh.surface_get_material(surface))
+	return rebased
+
 static func add_part(scene: Node3D, mesh: ArrayMesh, pivot: Vector3, kind: String, id: String, sources: Dictionary) -> String:
 	if mesh == null or mesh.get_surface_count() == 0 or kind not in ["cloth", "foliage", "mill_wheel"]:
 		return "Invalid retained moving part: " + id

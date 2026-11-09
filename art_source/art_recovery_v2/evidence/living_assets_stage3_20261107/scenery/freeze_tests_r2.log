@@ -1,0 +1,12 @@
+test_corrupt_archive_is_rejected (test_living_world_freeze.FrozenOriginalsTests.test_corrupt_archive_is_rejected) ... ok
+test_existing_authored_bytes_take_precedence (test_living_world_freeze.FrozenOriginalsTests.test_existing_authored_bytes_take_precedence) ... ok
+test_incomplete_archive_is_preserved (test_living_world_freeze.FrozenOriginalsTests.test_incomplete_archive_is_preserved) ... ok
+test_missing_sparse_source_uses_exact_commit (test_living_world_freeze.FrozenOriginalsTests.test_missing_sparse_source_uses_exact_commit) ... ok
+test_non_native_input_fails_before_any_freeze_write (test_living_world_freeze.FrozenOriginalsTests.test_non_native_input_fails_before_any_freeze_write) ... ok
+test_repeat_does_not_shift_baseline_after_bake (test_living_world_freeze.FrozenOriginalsTests.test_repeat_does_not_shift_baseline_after_bake) ... ok
+test_split_and_static_use_the_unchanged_frozen_surface_policy (test_living_world_freeze.MaterialBindingSourceTests.test_split_and_static_use_the_unchanged_frozen_surface_policy) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 4.649s
+
+OK

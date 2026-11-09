@@ -1,5 +1,7 @@
 extends SceneTree
 
+const GeometryContract = preload("res://tools/living_world_geometry_contract.gd")
+
 ## Compile only the reviewed Blender exports; the existing world owner animates
 ## these inline meshes. Immutable archived native scenes are equivalence inputs;
 ## repeated compilation must never treat its own output as a fresh baseline.
@@ -70,18 +72,20 @@ func _colors(mesh: Mesh, transform: Transform3D) -> Array[String]:
 	var signatures: Dictionary = {}
 	for surface: int in range(mesh.get_surface_count()):
 		var arrays := mesh.surface_get_arrays(surface)
-		if not arrays[Mesh.ARRAY_VERTEX] is PackedVector3Array or not arrays[Mesh.ARRAY_COLOR] is PackedColorArray or not arrays[Mesh.ARRAY_NORMAL] is PackedVector3Array:
+		if not arrays[Mesh.ARRAY_VERTEX] is PackedVector3Array or not arrays[Mesh.ARRAY_COLOR] is PackedColorArray or not arrays[Mesh.ARRAY_NORMAL] is PackedVector3Array or not arrays[Mesh.ARRAY_TEX_UV] is PackedVector2Array:
 			return []
 		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
 		var colors: PackedColorArray = arrays[Mesh.ARRAY_COLOR]
 		var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
-		if colors.size() != vertices.size() or normals.size()!=vertices.size():
+		var uvs: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
+		if colors.size() != vertices.size() or normals.size()!=vertices.size() or uvs.size()!=vertices.size():
 			return []
 		for index: int in range(vertices.size()):
 			var color := colors[index]
-			if not vertices[index].is_finite() or not normals[index].is_finite() or not is_finite(color.r) or not is_finite(color.g) or not is_finite(color.b) or not is_finite(color.a): return []
+			if not vertices[index].is_finite() or not normals[index].is_finite() or not uvs[index].is_finite() or not is_finite(color.r) or not is_finite(color.g) or not is_finite(color.b) or not is_finite(color.a): return []
 			var normal := (transform.basis.inverse().transposed()*normals[index]).normalized()
 			var key := str(surface)+":"+_point_key(transform * vertices[index]) + ":"+_point_key(normal)+":%d,%d,%d,%d" % [roundi(color.r * 10000.0), roundi(color.g * 10000.0), roundi(color.b * 10000.0), roundi(color.a * 10000.0)]
+			key += ":%d,%d" % [roundi(uvs[index].x*10000.0),roundi(uvs[index].y*10000.0)]
 			signatures[key] = true
 	var result: Array[String] = []
 	result.assign(signatures.keys())
@@ -109,11 +113,12 @@ func _run() -> void:
 			return
 	quit(0)
 
-func _test_mesh(order: PackedInt32Array, color: Color=Color.WHITE, normal: Vector3=Vector3.BACK, include_colors: bool=true) -> ArrayMesh:
+func _test_mesh(order: PackedInt32Array, color: Color=Color.WHITE, normal: Vector3=Vector3.BACK, include_colors: bool=true, uv_offset: Vector2=Vector2.ZERO) -> ArrayMesh:
 	var arrays: Array=[]
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX]=PackedVector3Array([Vector3.ZERO,Vector3.RIGHT,Vector3.UP])
 	arrays[Mesh.ARRAY_NORMAL]=PackedVector3Array([normal,normal,normal])
+	arrays[Mesh.ARRAY_TEX_UV]=PackedVector2Array([Vector2.ZERO+uv_offset,Vector2.RIGHT+uv_offset,Vector2.UP+uv_offset])
 	arrays[Mesh.ARRAY_INDEX]=order
 	if include_colors: arrays[Mesh.ARRAY_COLOR]=PackedColorArray([color,color,color])
 	var mesh := ArrayMesh.new()
@@ -128,6 +133,7 @@ func _verify_contract() -> void:
 	var different_color := _test_mesh(PackedInt32Array([0,1,2]),Color(0.2,0.3,0.4))
 	var different_normal := _test_mesh(PackedInt32Array([0,1,2]),Color.WHITE,Vector3.FORWARD)
 	var missing_colors := _test_mesh(PackedInt32Array([0,1,2]),Color.WHITE,Vector3.BACK,false)
+	var different_uv := _test_mesh(PackedInt32Array([0,1,2]),Color.WHITE,Vector3.BACK,true,Vector2(.01,0))
 	var geometry := _geometry(original,Transform3D.IDENTITY)
 	var palette := _colors(original,Transform3D.IDENTITY)
 	var checks: Array[bool]=[
@@ -139,6 +145,7 @@ func _verify_contract() -> void:
 		palette!=_colors(different_color,Transform3D.IDENTITY),
 		palette!=_colors(different_normal,Transform3D.IDENTITY),
 		_colors(missing_colors,Transform3D.IDENTITY).is_empty(),
+		palette!=_colors(different_uv,Transform3D.IDENTITY),
 	]
 	var tree := Node3D.new()
 	var support := Node3D.new()
@@ -243,12 +250,21 @@ func _compile(identity: String, art: String) -> String:
 			failure="Nonfinite or singular retained mesh frame: "+str(part.node)
 			break
 		var geometry := _geometry(original.mesh,original_transform)
-		if geometry.is_empty() or geometry != _geometry(authored.mesh, authored_transform):
+		if geometry.is_empty() or _geometry(authored.mesh, authored_transform).is_empty():
 			failure = "Blender export changed retained triangle geometry: " + str(part.node)
 			break
 		var colors := _colors(original.mesh, original_transform)
-		if colors.is_empty() or colors != _colors(authored.mesh, authored_transform):
-			failure = "Blender export changed retained vertex palette or normals: " + str(part.node)
+		if colors.is_empty() or _colors(authored.mesh, authored_transform).is_empty():
+			failure = "Blender export changed retained vertex palette, normals or UVs: " + str(part.node)
+			break
+		var roles: Dictionary = {}
+		for surface: int in range(original.mesh.get_surface_count()): roles[surface] = str(surface)
+		# Compare complete corners with a metric tolerance. Rounded-cell equality
+		# alone can reject harmless float noise either side of a cell boundary.
+		var original_rows: Dictionary = GeometryContract.triangles(original.mesh as ArrayMesh,original_transform,roles)
+		var authored_rows: Dictionary = GeometryContract.triangles(authored.mesh as ArrayMesh,authored_transform,roles)
+		if not original_rows.error.is_empty() or not authored_rows.error.is_empty() or not GeometryContract.compare(original_rows.rows,authored_rows.rows).passed:
+			failure = "Blender export changed retained triangle-corner attributes or multiplicity: " + str(part.node)
 			break
 		var expected_pivot := Vector3(float(part.pivot_godot[0]), float(part.pivot_godot[1]), float(part.pivot_godot[2]))
 		var support := _find(imported, str(part.support_node)) as Node3D
@@ -272,6 +288,7 @@ func _compile(identity: String, art: String) -> String:
 		for surface: int in range(compiled.mesh.get_surface_count()):
 			var material := original.mesh.surface_get_material(surface)
 			compiled.mesh.surface_set_material(surface, material.duplicate(true) if material != null else null)
+			(compiled.mesh as ArrayMesh).surface_set_name(surface,(original.mesh as ArrayMesh).surface_get_name(surface))
 		compiled.cast_shadow = original.cast_shadow
 		for key: StringName in original.get_meta_list():
 			compiled.set_meta(key, original.get_meta(key))
@@ -279,7 +296,7 @@ func _compile(identity: String, art: String) -> String:
 		final_scene.add_child(compiled)
 		compiled.owner = final_scene
 		reports.append({"node": str(compiled.name), "retained_triangles": compiled.mesh.get_faces().size() / 3,
-			"geometry_palette_equivalent": true, "winding_normals_partitions_equivalent":true, "maximum_quantization_metres": 0.0001,
+			"geometry_palette_equivalent": true, "winding_normals_uvs_partitions_equivalent":true, "triangle_attribute_multiplicity_equivalent":true, "maximum_quantization_metres": 0.0001,
 			"pivot_error_metres": _relative(support, imported).origin.distance_to(expected_pivot)})
 	if failure.is_empty() and reports.size() != baseline.get_child_count():
 		failure = "Blender scenery assembly changed the retained part count: " + identity
@@ -311,6 +328,7 @@ func _compile(identity: String, art: String) -> String:
 		"source_hashes": receipt.source_hashes, "carrier_sha256": receipt.carrier_sha256,
 		"retained_native_sha256":receipt.retained_native_sha256,"retained_receipt_sha256":receipt.retained_receipt_sha256,
 		"compiler_sha256": FileAccess.get_sha256("res://tools/build_living_world_blender.gd"),
+		"geometry_contract_sha256":FileAccess.get_sha256("res://tools/living_world_geometry_contract.gd"),
 		"parts": reports, "dependencies": ResourceLoader.get_dependencies(output),
 		"runtime_reviewed": false, "user_accepted": false}, "\t") + "\n")
 	file.close()
