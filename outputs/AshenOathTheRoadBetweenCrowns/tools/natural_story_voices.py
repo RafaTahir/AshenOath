@@ -197,8 +197,11 @@ def main():
     parser.add_argument("--recipes", type=Path, help="Separate writable recipe cache when model files are shared read-only")
     parser.add_argument("--max-new-bytes", type=int, default=16 * 1024 * 1024, help="Combined living_cast/community voice budget")
     parser.add_argument("--threads", type=int, default=1, help="Bound inference concurrency on the shared workstation")
+    parser.add_argument("--max-new-recordings", type=int, help="Stop inference after this many new clips, retaining an explicit pending list for a later incremental batch")
     parser.add_argument("--baseline-ref", help="With --incremental, synthesize new runtime text and changed cast recipes; retain pre-existing subtitle-only lines")
     args = parser.parse_args()
+    if args.max_new_recordings is not None and args.max_new_recordings < 1:
+        parser.error("--max-new-recordings must be positive")
     cast_data = json.loads((GAME / "data/voice_cast.json").read_text(encoding="utf-8-sig"))
     cast = cast_data["roles"]
     scheduled = list(utterances(cast))
@@ -295,6 +298,10 @@ def main():
                 lines.append(selected)
                 retained += 1
                 continue
+            # A bounded batch publishes the current recipe map even when some
+            # clips remain pending. Remove an unverified old performance now,
+            # so the next batch cannot mislabel it as using the new recipe.
+            lines = [line for line in lines if (canonical_speaker(GAME, str(line.get("speaker_id", ""))), str(line.get("text", ""))) != (identity, text)]
         if baseline_commit and (scene, identity, text) in baseline_keys and baseline_cast.get(role) == cast[role]:
             # An unverified stale manifest row must not defeat subtitle fallback.
             lines = [line for line in lines if (canonical_speaker(GAME, str(line.get("speaker_id", ""))), str(line.get("text", ""))) != (identity, text)]
@@ -327,6 +334,9 @@ def main():
                     retained += 1
                 else:
                     pending.append({"scene":scene, "speaker_id":who, "page_key":key})
+                continue
+            if args.max_new_recordings is not None and synthesized >= args.max_new_recordings:
+                pending.append({"scene":scene, "speaker_id":who, "page_key":key, "reason":"bounded_batch_limit"})
                 continue
             samples, rate = engine.create(spoken, voice=styles[role], speed=speed, lang=profile["lang"])
             samples = master(samples, rate, np)
@@ -365,6 +375,7 @@ def main():
         "pronunciation":PRONUNCIATION, "roles":cast, "lines":lines}
     manifest["retained_previous_recordings"] = retained
     manifest["synthesized_this_run"] = synthesized
+    manifest["batch_new_recording_limit"] = args.max_new_recordings
     manifest["new_dialogue_bytes"] = new_bytes
     manifest["pending_recordings"] = pending
     manifest["baseline_commit"] = baseline_commit
