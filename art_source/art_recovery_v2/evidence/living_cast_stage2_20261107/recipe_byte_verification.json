@@ -1,0 +1,42 @@
+{
+  "status": "pass",
+  "assets": [
+    {
+      "identity": "elna",
+      "recipe_files": [
+        {
+          "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f4f319838209f398\\author_living_cast_stage2_props.py",
+          "sha256": "3665cb014ec8acf8a6559cd9a3069967f1f439d20f220c49e23ce0e7ef9ae2e4",
+          "newline_recovered": false
+        },
+        {
+          "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f4f319838209f398\\living_cast_stage2_profiles.py",
+          "sha256": "e6d9d479a6e34da106ffd0e70b1af87a4b9c8322ca95253ca046e9426e3d6ba3",
+          "newline_recovered": false
+        }
+      ],
+      "blend_and_carrier_verified": true,
+      "retained_source_hashes_verified": true,
+      "receipt_unchanged": true
+    },
+    {
+      "identity": "nessa",
+      "recipe_files": [
+        {
+          "path": "models\\living_cast_stage2_20261107\\props\\recipes\\a403ea2a7895ec97\\author_living_cast_stage2_props.py",
+          "sha256": "97f35212ec2786e4fe491f45bdc49592272806239cb0a42a6b0bb519dcb1eed4",
+          "newline_recovered": true
+        },
+        {
+          "path": "models\\living_cast_stage2_20261107\\props\\recipes\\a403ea2a7895ec97\\living_cast_stage2_profiles.py",
+          "sha256": "e6d9d479a6e34da106ffd0e70b1af87a4b9c8322ca95253ca046e9426e3d6ba3",
+          "newline_recovered": true
+        }
+      ],
+      "blend_and_carrier_verified": true,
+      "retained_source_hashes_verified": true,
+      "receipt_unchanged": true
+    }
+  ],
+  "recorded_hashes_changed": false
+}

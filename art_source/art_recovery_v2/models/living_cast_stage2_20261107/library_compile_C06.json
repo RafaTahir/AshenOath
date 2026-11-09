@@ -1,0 +1,58 @@
+{
+	"libraries": [
+		{
+			"asset": "C06",
+			"bytes": 247354,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.032747745513916,
+					0.0317324995994568,
+					0.0024254322052002
+				],
+				"right": [
+					-0.0327119827270508,
+					0.0317588150501251,
+					0.00238722562789917
+				]
+			},
+			"maximum_rest_error": 0.00000386099145543994,
+			"model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+			"model_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+			"path": "res://assets_external/characters_prepared/animations/life_C06.res",
+			"runtime_reviewed": false,
+			"sha256": "7b1063bf9c956a723d1660d1541c3093a88761d6ff54168d1fc64d0db6da820a",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/C06_life_review.glb",
+			"source_sha256": "685999766336aeb0d1735f8a8758f881fef2999023eb4cbf5a53ab420dc6897e",
+			"user_accepted": false
+		}
+	],
+	"status": "compiled"
+}

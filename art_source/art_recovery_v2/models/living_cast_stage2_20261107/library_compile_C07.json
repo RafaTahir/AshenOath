@@ -1,0 +1,58 @@
+{
+	"libraries": [
+		{
+			"asset": "C07",
+			"bytes": 210129,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0282580256462097,
+					0.0314570069313049,
+					-0.0173485577106476
+				],
+				"right": [
+					-0.0281971096992493,
+					0.0314766764640808,
+					-0.0173996090888977
+				]
+			},
+			"maximum_rest_error": 0.00000379755488211231,
+			"model": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+			"model_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+			"path": "res://assets_external/characters_prepared/animations/life_C07.res",
+			"runtime_reviewed": false,
+			"sha256": "78f24a3a0eeb3588c6ba1f1392170e90f262678f52890aa2d8bfa9b2006b27c8",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/C07_life_review.glb",
+			"source_sha256": "7870c57de09a373f530c59299aa93b00e4ac6980f165b90155b5f539d97ebfac",
+			"user_accepted": false
+		}
+	],
+	"status": "compiled"
+}

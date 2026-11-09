@@ -66,7 +66,7 @@ def render_views(rig, asset, destination, models, profiles, clips, fps):
     moments.extend((name, .5) for name in clips if name not in {value[0] for value in moments})
     for clip, phase in moments:
         for obj in props:
-            obj.hide_render = clip not in ("Life_Work", "Life_Lower_Book")
+            obj.hide_render = clip not in ("Life_Work", "Life_Settle_Ledger")
         action = bpy.data.actions[clip]
         rig.animation_data.action = action
         rig.animation_data.action_slot = action.slots[0]

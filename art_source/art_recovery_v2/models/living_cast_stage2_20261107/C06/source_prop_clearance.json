@@ -1,0 +1,27 @@
+{
+  "asset": "C06",
+  "blend_sha256": "a6193d89b47b9b0c76a62a769cc79d24a9e6a6ee75245efd99ebb2d502bbfc51",
+  "review_glb_sha256": "685999766336aeb0d1735f8a8758f881fef2999023eb4cbf5a53ab420dc6897e",
+  "prop_sha256": "c3844681b45ae016f2d3eba0d4d8d55ee171968495ffc172210627c66e45b7ec",
+  "sample_hz": 30,
+  "solid_parts": [
+    "TrayBack",
+    "TraySide",
+    "TraySide.001",
+    "WorkContactPart"
+  ],
+  "open_parts_not_treated_as_solid": [
+    "RetainedSeedTray",
+    "SeedlingLeaf",
+    "SeedlingLeaf.001",
+    "SeedlingLeaf.002",
+    "SeedlingLeaf.003"
+  ],
+  "open_rigid_supports_checked_by_upward_surface_ray": [
+    "RetainedSeedTray"
+  ],
+  "solid_prop_intrusions": [],
+  "solid_prop_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

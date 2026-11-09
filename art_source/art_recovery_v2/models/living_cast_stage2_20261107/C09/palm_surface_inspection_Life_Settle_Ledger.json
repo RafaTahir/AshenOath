@@ -1,0 +1,124 @@
+{
+  "asset": "C09",
+  "clip": "Life_Settle_Ledger",
+  "phase": 0.5,
+  "method": "independent evaluated-skin check of the recorded front-palm vertex in the authored contact pose; actual normals and full finger surfaces sampled",
+  "blend_sha256": "c3102faa0eac0efa89a0214045fdd84b281d9e1a01b92b5f6aa027ba8f994dd8",
+  "review_glb_sha256": "65ae54bf974efe41d5c02bc7b89df281dbe74897e59e74543ac5262900d6a84f",
+  "measurements": {
+    "l": {
+      "local_grip_anchor": [
+        0.0,
+        0.04500000178813934,
+        -0.012000000104308128
+      ],
+      "world_grip_anchor": [
+        -0.11823977530002594,
+        0.4037259519100189,
+        1.0340825319290161
+      ],
+      "world_wrist": [
+        -0.10705326497554779,
+        0.36177656054496765,
+        1.0340825319290161
+      ],
+      "nearest_retained_hand_surface_local": [
+        0.01510641723871231,
+        0.04100271314382553,
+        -0.013888363726437092
+      ],
+      "world_surface_probe": [
+        -0.12000012397766113,
+        0.3999996483325958,
+        1.0200002193450928
+      ],
+      "source_mesh": "C09_MotionFittedAssembly",
+      "source_vertex_index": 4800,
+      "hand_bone_weight": 0.9047517776489258,
+      "nearest_surface_distance": 0.01574001527032782,
+      "sampled_hand_vertices": 11,
+      "palm_region_bounds": {
+        "min": [
+          -0.021672632545232773,
+          0.03167669475078583,
+          -0.013888363726437092
+        ],
+        "max": [
+          0.01510641723871231,
+          0.05031063035130501,
+          0.0074972412548959255
+        ]
+      },
+      "actual_palm_normal": [
+        0.01481013372540474,
+        -0.004781803116202354,
+        -0.9998788833618164
+      ],
+      "palm_down_alignment": 0.9998788833618164,
+      "finger_surface_vertices": 737,
+      "finger_surface_minimum_height": 1.0183433294296265,
+      "actual_surface_to_recorded_probe_distance": 2.076828459615462e-07,
+      "actual_surface_to_authored_contact_distance": 3.1680303253932744e-07,
+      "finger_clearance_to_work_plane": -0.0016567707061767578
+    },
+    "r": {
+      "local_grip_anchor": [
+        0.0,
+        0.04500000178813934,
+        -0.012000000104308128
+      ],
+      "world_grip_anchor": [
+        0.11823969334363937,
+        0.40372639894485474,
+        1.0340825319290161
+      ],
+      "world_wrist": [
+        0.10705318301916122,
+        0.36177700757980347,
+        1.0340825319290161
+      ],
+      "nearest_retained_hand_surface_local": [
+        -0.015106492675840855,
+        0.04100242629647255,
+        -0.013888386078178883
+      ],
+      "world_surface_probe": [
+        0.12000005692243576,
+        0.39999982714653015,
+        1.0200001001358032
+      ],
+      "source_mesh": "C09_MotionFittedAssembly",
+      "source_vertex_index": 4852,
+      "hand_bone_weight": 0.9047517776489258,
+      "nearest_surface_distance": 0.015740162925147884,
+      "sampled_hand_vertices": 11,
+      "palm_region_bounds": {
+        "min": [
+          -0.015106492675840855,
+          0.03171803429722786,
+          -0.013888386078178883
+        ],
+        "max": [
+          0.021505776792764664,
+          0.05031043291091919,
+          0.007497170940041542
+        ]
+      },
+      "actual_palm_normal": [
+        -0.020099865272641182,
+        -0.0019058604957535863,
+        -0.9997962117195129
+      ],
+      "palm_down_alignment": 0.9997962117195129,
+      "finger_surface_vertices": 737,
+      "finger_surface_minimum_height": 1.0183433294296265,
+      "actual_surface_to_recorded_probe_distance": 3.668985441996196e-07,
+      "actual_surface_to_authored_contact_distance": 3.516800320507868e-07,
+      "finger_clearance_to_work_plane": -0.001656651496887207
+    }
+  },
+  "failures": [],
+  "status": "source_surface_pass",
+  "runtime_verified": false,
+  "user_accepted": false
+}

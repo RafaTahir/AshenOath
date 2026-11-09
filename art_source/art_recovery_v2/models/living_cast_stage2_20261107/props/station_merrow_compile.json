@@ -1,0 +1,63 @@
+{
+	"contact_shape": {
+
+	},
+	"geometry_contact_verified": true,
+	"identity": "merrow",
+	"native_grips_verified": false,
+	"path": "res://assets_external/environment_prepared/living_cast/station_merrow.scn",
+	"resources": [
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_00.res",
+			"sha256": "c14ae726e4385eaff6e0f826ca0c26696cf54b306c5be0469e8cd4b4a5a27979"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_01.res",
+			"sha256": "42e801566f22f9c550ff480b54862bfe8fc0d098d6a43f817b459a745cce0932"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_02.res",
+			"sha256": "09be081c59d5d8b22e7f60be0a2ccd1123567cfea419326c75f46482b403a8ee"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_03.res",
+			"sha256": "93be657a020d6ba45ef36af2edfc5000b5098aac1d7482ef24b5cf63283b7eb9"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_04.res",
+			"sha256": "844f0af5067ce2f26da90b035ce4e532c40cb4188c0ace65035114bd2887d5b4"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_05.res",
+			"sha256": "cd8f41dba657475eb0e0b9e84dfba1ddc07019398e6fb507bf1b28d81041a2a3"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_06.res",
+			"sha256": "7e5033c084e5c63d972ba5a5019dffe80fe5502907fcc0da9277d47dfa892060"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_07.res",
+			"sha256": "8768fb0e3fa20b3eaaf6cf29799745f3bc09fdc8ca2295f88006bd031d5224b8"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_08.res",
+			"sha256": "91d40345e70ab45561ee9c5a2aaf95ed38378abf8c20452a0528bd03d4d5e228"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_09.res",
+			"sha256": "5f8f84791f99a8791568f10c9e20f90525ee9e84415f827128c0587bc7bf437e"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_merrow_10.res",
+			"sha256": "d894daf9d9ce562e7f32aaf38c5beba7a6bdca42334a7e82a39e1ab1b2514ac7"
+		}
+	],
+	"sha256": "026c1dd19e5a71e5d25993c0989c41e58616a9bdb6e35c1b27f31ae4fef973b2",
+	"source_sha256": "714bcacdf8b79d40da2d22bbb64278a738aeab3aa200df4eb014112fbd53edff",
+	"support_bounds_verified": true,
+	"surface_contact_errors": {
+		"GripLeft": 0.0,
+		"GripRight": 0.0
+	},
+	"user_accepted": false
+}

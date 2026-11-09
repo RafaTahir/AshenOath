@@ -11,6 +11,7 @@ from pathlib import Path
 import sys
 
 import bpy
+import bmesh
 from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -59,6 +60,25 @@ def mesh(name, points, faces, mat, parent):
     return obj
 
 
+def outward_closed_surface(obj):
+    """Correct the real closed-surface winding without moving any vertex."""
+    editable=bmesh.new()
+    editable.from_mesh(obj.data)
+    if any(not edge.is_manifold for edge in editable.edges):
+        editable.free()
+        raise ValueError('Expected a closed authored material surface: '+obj.name)
+    bmesh.ops.recalc_face_normals(editable,faces=list(editable.faces))
+    if editable.calc_volume(signed=True)<0:
+        bmesh.ops.reverse_faces(editable,faces=list(editable.faces))
+    if editable.calc_volume(signed=True)<=0:
+        editable.free()
+        raise ValueError('Authored material has no outward closed volume: '+obj.name)
+    editable.to_mesh(obj.data)
+    editable.free()
+    obj.data.update()
+    return obj
+
+
 def retain_obj(game, filename, name, centre, size, mat, parent, provenance, lay_cloth=False):
     source = game / "assets_external/environment/props" / filename
     before = set(bpy.data.objects)
@@ -85,6 +105,14 @@ def retain_obj(game, filename, name, centre, size, mat, parent, provenance, lay_
     for vertex, point in zip(obj.data.vertices, points):
         vertex.co = Vector(tuple((point[i]-low[i])/(high[i]-low[i])*dimensions[i]
                                  for i in range(3))) - dimensions/2
+        if lay_cloth:
+            # Preserve the retained outer fitting box while replacing the
+            # ruler-straight long hem with a small inward linen irregularity.
+            u = vertex.co.x/dimensions.x+.5
+            edge = (abs(vertex.co.y)/(dimensions.y*.5))**3
+            inset = .004*(.5+.5*math.sin(u*math.pi*5))*math.sin(math.pi*u)**2*edge
+            vertex.co.y -= math.copysign(inset, vertex.co.y)
+            vertex.co.z -= .0015*math.sin(math.pi*u)**2*edge*(vertex.co.z/dimensions.z+.5)
     obj.location = xyz(centre)
     obj.data.materials.clear()
     obj.data.materials.append(mat)
@@ -108,7 +136,7 @@ def ribbon(name, points, width, thickness, mat, parent):
             faces.append((index*4+side, index*4+(side+1)%4,
                           (index+1)*4+(side+1)%4, (index+1)*4+side))
     faces.extend([(3, 2, 1, 0), tuple((len(points)-1)*4+i for i in range(4))])
-    return mesh(name, vertices, faces, mat, parent)
+    return outward_closed_surface(mesh(name, vertices, faces, mat, parent))
 
 
 def flattened_dough(mat, parent):
@@ -125,7 +153,7 @@ def flattened_dough(mat, parent):
     for i in range(count):
         faces.append((i, (i+1)%count, count+(i+1)%count, count+i))
     faces.extend([tuple(range(count-1, -1, -1)), tuple(range(count, count*2))])
-    return mesh("WorkContactPart", points, faces, mat, parent)
+    return outward_closed_surface(mesh("WorkContactPart", points, faces, mat, parent))
 
 
 def folded_linen(mat, parent):
@@ -139,7 +167,16 @@ def folded_linen(mat, parent):
             # shallow cloth wrinkles taper away from that contact line.
             y = .012 + .008*math.exp(-(z/.022)**2)
             y += .0028*math.sin((x+.20)*math.pi*5)*math.sin(math.pi*z/.14)**2
-            points.append((x, y, z))
+            away_from_contact = 1-math.exp(-(z/.012)**2)
+            y += .004*math.exp(-((x-.15)/.045)**2-((z+.115)/.025)**2)*away_from_contact
+            # A broken corner crease and gently uneven long edges make the
+            # layer read as folded cloth; exact x=±.12,z=0 hand ridges stay put.
+            edge = (abs(x)/.20)**4
+            fitted_x = x-math.copysign(.003*(.5+.5*math.sin(z*63))*edge*away_from_contact, x)
+            fitted_z = z
+            if z < -.115:
+                fitted_z += .003*(.5+.5*math.sin((x+.2)*37))*((-.115-z)/.025)**2
+            points.append((fitted_x, y, fitted_z))
     for row in range(rows-1):
         for column in range(columns-1):
             a = row*columns+column
@@ -153,6 +190,45 @@ def folded_linen(mat, parent):
     for polygon in obj.data.polygons:
         polygon.use_smooth = True
     return obj
+
+
+def add_task_press(part, identity):
+    """Authored material response with fixed hand-contact patches, no new owner."""
+    if identity not in ('nessa', 'elna'):
+        return {}
+    # Source geometry is already rebased around the supported part pivot.
+    # Leave both z=0 hand ridges fixed throughout the shape interpolation.
+    if identity == 'elna':
+        for vertex in part.data.vertices:
+            point = vertex.co + part.location
+            godot_z = -point.y
+            fold = max(0.0, min(1.0, (-godot_z-.025)/.115))
+            vertex.co.z += .028*math.sin(fold*math.pi/2)**2
+    part.shape_key_add(name='Basis')
+    press = part.shape_key_add(name='TaskPress')
+    for vertex in press.data:
+        point = vertex.co + part.location
+        if identity == 'nessa':
+            point.x *= 1.07
+            point.y = .025 + (point.y-.025)*1.10
+            if point.z < .015:
+                point.z = max(.008, point.z-.001)
+        else:
+            godot_z = -point.y
+            fold = max(0.0, min(1.0, (-godot_z-.025)/.115))
+            amount = math.sin(fold*math.pi/2)**2
+            point.z -= .025*amount
+            point.y -= .009*amount
+        vertex.co = point-part.location
+    press.value = 0.0
+    states = {}
+    for name in ('Basis','TaskPress'):
+        points = [v.co+part.location for v in part.data.shape_keys.key_blocks[name].data]
+        states[name] = {'min_godot':[min(p.x for p in points),min(p.z for p in points),-max(p.y for p in points)],
+                        'max_godot':[max(p.x for p in points),max(p.z for p in points),-min(p.y for p in points)]}
+    return {'name':'TaskPress','neutral_weight':0.0,'contact_weight':1.0,
+            'purpose':'Spread supported dough around fixed palm patches' if identity=='nessa' else 'Settle the loose folded edge around the fixed smoothing ridge',
+            'geometry_bounds':states,'grip_patch_height_preserved':True}
 
 
 def snapshot_recipe():
@@ -221,10 +297,10 @@ def build(identity, game, render):
     elif identity == "nera":
         retain_obj(game, "Crate_Wooden.obj", "RetainedReliefCrate", (0, .0375, -.08),
                    (.50, .075, .24), mats["wood"], root, sources)
-        part = ribbon("WorkContactPart", [(-.24, .055, 0), (-.22, .098, 0),
-                      (-.12, .098, 0), (0, .098, 0), (.12, .098, 0), (.22, .098, 0), (.24, .055, 0)],
+        part = ribbon("WorkContactPart", [(-.24, .055, 0), (-.22, .113, 0),
+                      (-.12, .113, 0), (0, .113, 0), (.12, .113, 0), (.22, .113, 0), (.24, .055, 0)],
                       .024, .004, mats["leather"], root)
-        box("AttachedBuckle", (0, .102, 0), (.036, .006, .032), mats["ink"], root)
+        box("AttachedBuckle", (0, .117, 0), (.036, .006, .032), mats["ink"], root)
     elif identity == "vale":
         retain_obj(game, "Book_7.obj", "RetainedLedgerBinding", (0, .008, -.09),
                    (.46, .016, .25), mats["leather"], root, sources)
@@ -259,7 +335,7 @@ def build(identity, game, render):
     for obj in list(bpy.context.scene.objects):
         if obj.parent == part:
             obj.location -= part.location
-    height = .10 if identity == "nera" else .02
+    height = .115 if identity == "nera" else .02
     grips = {"GripLeft": [-.12, height, 0], "GripRight": [.12, height, 0]}
     for name, point in grips.items():
         marker(name, point, root)
@@ -276,6 +352,12 @@ def build(identity, game, render):
     for child in part.children:
         child.location -= delta
     part.location = pivot
+    contact_shape = add_task_press(part, identity)
+    if contact_shape:
+        part['contact_response'] = 'morph'
+        part['contact_shape'] = 'TaskPress'
+        part['contact_neutral_weight'] = 0.0
+        part['contact_target_weight'] = 1.0
     meshes = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
     triangles = sum(len(p.vertices)-2 for obj in meshes for p in obj.data.polygons)
     if triangles > 6000:
@@ -306,7 +388,8 @@ def build(identity, game, render):
         "grips_godot": grips, "surface_height": height,
         "prop_root_actor_relative_godot": [0, 1, -.40],
         "support_near_limit_godot_z": .04, "contact_part": "WorkContactPart",
-        "contact_response": profile["contact_response"], "contact_amount": profile["contact_amount"],
+        "contact_response": 'morph' if contact_shape else profile["contact_response"], "contact_amount": profile["contact_amount"],
+        "contact_shape": contact_shape,
         "runtime_resource": profile["runtime_prop"], "source_geometry_authored": True,
         "geometry_contact_verified": False, "native_grips_verified": False, "user_accepted": False,
         "notes": ["Actual supported contact geometry; no pickup or carried transition is claimed.",
@@ -331,6 +414,11 @@ def build(identity, game, render):
         scene.camera = camera
         scene.render.filepath = str(OUT / ("station_" + identity + "_review.png"))
         bpy.ops.render.render(write_still=True)
+        if contact_shape:
+            part.data.shape_keys.key_blocks['TaskPress'].value = 1.0
+            scene.render.filepath = str(OUT / ("station_" + identity + "_pressed_review.png"))
+            bpy.ops.render.render(write_still=True)
+            part.data.shape_keys.key_blocks['TaskPress'].value = 0.0
     print("STAGE2_PROP_AUTHORED", identity, triangles, flush=True)
 
 

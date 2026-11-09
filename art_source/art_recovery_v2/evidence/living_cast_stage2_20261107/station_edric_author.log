@@ -1,0 +1,32 @@
+D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\tools\author_living_cast_stage2_props.py:34: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+00:09.250  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Props_BaseColor.png'
+00:09.250  io.obj           | WARNING Cannot load image file: 'T_Trim_Props_BaseColor.png'
+00:09.250  io.obj           | WARNING Cannot load image file: 'T Trim Props BaseColor.png'
+00:09.250  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Props_Normal.png'
+00:09.250  io.obj           | WARNING Cannot load image file: 'T_Trim_Props_Normal.png'
+00:09.265  io.obj           | WARNING Cannot load image file: 'T Trim Props Normal.png'
+Info: Saved as "station_edric.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+08:24:13 | INFO: Starting glTF 2.0 export
+08:24:13 | INFO: Extracting primitive: Scroll_1_Cube.152
+08:24:13 | INFO: Primitives created: 1
+08:24:13 | INFO: Extracting primitive: Cube
+08:24:13 | INFO: Primitives created: 1
+08:24:13 | INFO: Extracting primitive: Cube.001
+08:24:13 | INFO: Primitives created: 1
+08:24:13 | INFO: Extracting primitive: Cube.002
+08:24:13 | INFO: Primitives created: 1
+08:24:13 | INFO: Extracting primitive: Cube.003
+08:24:13 | INFO: Primitives created: 1
+08:24:13 | INFO: Extracting primitive: Cylinder
+08:24:13 | INFO: Primitives created: 1
+08:24:14 | INFO: Finished glTF 2.0 export in 0.7133615016937256 s
+00:18.812  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\props\station_edric_review.png'
+
+STAGE2_PROP_AUTHORED edric 636
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+OBJ import of 'Scroll_1.obj' took 259.94 ms
+
+Blender quit

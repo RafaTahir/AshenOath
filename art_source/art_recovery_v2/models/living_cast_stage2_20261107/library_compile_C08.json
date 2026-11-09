@@ -1,0 +1,58 @@
+{
+	"libraries": [
+		{
+			"asset": "C08",
+			"bytes": 249352,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.032747745513916,
+					0.0317323803901672,
+					0.00242594629526138
+				],
+				"right": [
+					-0.032712459564209,
+					0.0317583382129669,
+					0.00238696485757828
+				]
+			},
+			"maximum_rest_error": 0.00000386099145543994,
+			"model": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+			"model_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+			"path": "res://assets_external/characters_prepared/animations/life_C08.res",
+			"runtime_reviewed": false,
+			"sha256": "7e2b221208812014f9e71426c3344407d5d34fc3125d6b02ec57c2ec7bab3eb1",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/C08_life_review.glb",
+			"source_sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70",
+			"user_accepted": false
+		}
+	],
+	"status": "compiled"
+}

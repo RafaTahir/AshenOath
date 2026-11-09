@@ -66,6 +66,58 @@ func _save_meshes(scene: Node3D, identity: String) -> void:
 		item.mesh = load(path) as ArrayMesh
 		_resources.append({"path": path, "sha256": FileAccess.get_sha256(path)})
 
+func _validate_contact_shape(part: MeshInstance3D, scene: Node3D, receipt: Dictionary) -> Dictionary:
+	var contract: Dictionary = receipt.get("contact_shape", {})
+	if str(receipt.contact_response) != "morph":
+		return {}
+	var shape := part.find_blend_shape_by_name(str(contract.get("name", "")))
+	var source_mesh := part.mesh as ArrayMesh
+	if source_mesh == null or shape < 0 or str(contract.get("name", "")) != "TaskPress" or float(contract.get("neutral_weight", -1.0)) != 0.0:
+		_error = "Stage2 contact morph is absent or has invalid neutral state"
+		return {}
+	var target_mesh := ArrayMesh.new()
+	for surface in source_mesh.get_surface_count():
+		var arrays := source_mesh.surface_get_arrays(surface)
+		var shapes := source_mesh.surface_get_blend_shape_arrays(surface)
+		if shape >= shapes.size():
+			_error = "Stage2 contact morph has an unresolved surface"
+			return {}
+		var base: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		var vertices: PackedVector3Array = shapes[shape][Mesh.ARRAY_VERTEX]
+		if vertices.size() != base.size():
+			_error = "Stage2 contact morph changes vertex topology"
+			return {}
+		for index in vertices.size():
+			if source_mesh.blend_shape_mode == Mesh.BLEND_SHAPE_MODE_RELATIVE:
+				vertices[index] += base[index]
+			var point := _relative_transform(part, scene) * vertices[index]
+			if not point.is_finite() or point.y < -0.001 or point.z > 0.041 or absf(point.x) > 0.55 or point.z < -0.76:
+				_error = "Stage2 contact morph escapes the supported table"
+				return {}
+		arrays[Mesh.ARRAY_VERTEX] = vertices
+		target_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var target := MeshInstance3D.new()
+	target.mesh = target_mesh
+	target.transform = _relative_transform(part, scene)
+	var holder := Node3D.new()
+	holder.add_child(target)
+	var errors: Dictionary = {}
+	for label: String in ["GripLeft", "GripRight"]:
+		var coordinates: Array = receipt.grips_godot[label]
+		var point := Vector3(float(coordinates[0]),float(coordinates[1]),float(coordinates[2]))
+		var residual := _surface_error(holder, point)
+		if not is_finite(residual) or residual > 0.001:
+			_error = "Stage2 contact morph moved its physical grip patch: " + label
+			holder.free()
+			return {}
+		errors[label] = residual
+	holder.free()
+	part.set_meta("contact_shape", "TaskPress")
+	part.set_meta("contact_neutral_weight", 0.0)
+	part.set_meta("contact_target_weight", 1.0)
+	part.set_blend_shape_value(shape, 0.0)
+	return {"name":"TaskPress", "neutral_weight":0.0, "contact_weight":1.0, "target_surface_errors":errors, "support_bounds_verified":true}
+
 func _compile_one(folder: String, identity: String) -> Dictionary:
 	var carrier := folder.path_join("station_" + identity + ".glb")
 	var receipt_path := folder.path_join("station_" + identity + "_authoring.json")
@@ -96,6 +148,9 @@ func _compile_one(folder: String, identity: String) -> Dictionary:
 		return {}
 	part.set_meta("contact_response", str(receipt.contact_response))
 	part.set_meta("contact_amount", clampf(float(receipt.contact_amount), 0.0, 0.08))
+	var shape_proof := _validate_contact_shape(part as MeshInstance3D, scene, receipt)
+	if not _error.is_empty():
+		return {}
 	var contact_errors: Dictionary = {}
 	for label: String in ["GripLeft", "GripRight"]:
 		var grip := _find(scene, label)
@@ -138,6 +193,7 @@ func _compile_one(folder: String, identity: String) -> Dictionary:
 	var report := {"identity": identity, "path": path, "sha256": FileAccess.get_sha256(path),
 		"source_sha256": FileAccess.get_sha256(carrier), "surface_contact_errors": contact_errors,
 		"resources": _resources.duplicate(true), "geometry_contact_verified": true,
+		"contact_shape":shape_proof,
 		"support_bounds_verified": true, "native_grips_verified": false, "user_accepted": false}
 	scene.free()
 	imported.free()

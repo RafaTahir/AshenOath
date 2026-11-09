@@ -1,0 +1,20 @@
+{
+	"asset": "P01",
+	"baseline_sha256": "dc2a645180861ba3f5de414a888f5b3c70acaecc66c54b458762637f81e0b72e",
+	"engine_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"prepared_resource": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
+	"prepared_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
+	"production_resource": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+	"production_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
+	"runtime_verified": false
+}

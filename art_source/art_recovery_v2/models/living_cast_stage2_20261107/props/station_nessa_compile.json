@@ -1,0 +1,42 @@
+{
+	"contact_shape": {
+		"contact_weight": 1.0,
+		"name": "TaskPress",
+		"neutral_weight": 0.0,
+		"support_bounds_verified": true,
+		"target_surface_errors": {
+			"GripLeft": 0.0,
+			"GripRight": 0.0
+		}
+	},
+	"geometry_contact_verified": true,
+	"identity": "nessa",
+	"native_grips_verified": false,
+	"path": "res://assets_external/environment_prepared/living_cast/station_nessa.scn",
+	"resources": [
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_nessa_00.res",
+			"sha256": "b995439775c1dcedf2a542a12c0d292b4f059edc54053882cd136bc2008079be"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_nessa_01.res",
+			"sha256": "51e456c2add7a6f391a30b6d70e8b0be6c1e2768f03b4c5fbc3d2908fdbcf534"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_nessa_02.res",
+			"sha256": "6e60ecbbb55767bc6641619c2f0c619d5cb6c8510f8ef982ea0a961bd392a84e"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_nessa_03.res",
+			"sha256": "2638db3416022ca09cc8d4f3ee36706dea5c820fcd8a4221ade56fbfae030f91"
+		}
+	],
+	"sha256": "febaa16f5437a8503131a365df52c9f2bacf8cd6af8cdc935b89292fbffec2ea",
+	"source_sha256": "8e80e78e3ffba8ecc1624a622ad420f9d0c39c982c4c86ce857f1c4b849cd9e8",
+	"support_bounds_verified": true,
+	"surface_contact_errors": {
+		"GripLeft": 0.0,
+		"GripRight": 0.0
+	},
+	"user_accepted": false
+}

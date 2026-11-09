@@ -23,6 +23,7 @@ FPS = 30
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from living_cast_stage2_profiles import CLIPS, PROFILES
 from living_cast_stage2_motion import apply as apply_stage2_pose
+from living_cast_stage2_motion import relax_work_fingers
 from living_cast_stage2_preview import render_views as render_stage2_views
 CONTACT_PROBES = {}
 
@@ -70,7 +71,7 @@ def pulse(phase, center=.5, width=.3):
     return .5 + .5 * math.cos(math.pi * distance / width)
 
 
-def hand_goal(rig, side, goal, weight):
+def hand_goal(rig, side, goal, weight, elbow_hint=None):
     """Bake a bounded two-bone goal, retaining the native elbow bend plane."""
     if weight <= 0:
         return
@@ -83,7 +84,8 @@ def hand_goal(rig, side, goal, weight):
     direction=goal-shoulder
     distance=max(.01,min(direction.length,l1+l2-.008))
     direction.normalize();goal=shoulder+direction*distance
-    plane=elbow-shoulder-direction*(elbow-shoulder).dot(direction)
+    bend = elbow-shoulder if elbow_hint is None else Vector(elbow_hint)-shoulder
+    plane=bend-direction*bend.dot(direction)
     if plane.length < .001:
         plane=Vector((1 if side=='l' else -1,0,0)).cross(direction)
     plane.normalize()
@@ -97,9 +99,11 @@ def hand_goal(rig, side, goal, weight):
     bpy.context.view_layer.update()
 
 
-def world_hand_goal(rig, side, goal, weight):
+def world_hand_goal(rig, side, goal, weight, elbow_hint=None):
     """Station-relative XYZ here are lateral, forward and height in metres."""
-    hand_goal(rig, side, rig.matrix_world.inverted() @ Vector(goal), weight)
+    inverse = rig.matrix_world.inverted()
+    hint = None if elbow_hint is None else inverse @ Vector(elbow_hint)
+    hand_goal(rig, side, inverse @ Vector(goal), weight, hint)
 
 
 def measure_palm_surfaces(rig):
@@ -108,6 +112,13 @@ def measure_palm_surfaces(rig):
     for side in ['l','r']:
         inverse=(rig.matrix_world @ rig.pose.bones['hand_'+side].matrix).inverted()
         candidates=[];reference=Vector((0,.045,-.012))
+        middle=inverse @ (rig.matrix_world @ rig.pose.bones['middle_01_'+side].head)
+        # The longer retained palm blends its heel into the thumb skin group.
+        # A .90 hand-weight filter selects only the thin knuckle edge there,
+        # not the actual pressure surface. Keep the measured heel and verify
+        # its evaluated surface in the exact authored contact finger pose.
+        minimum_weight=.60 if middle.y>.10 else .90
+        palm_min,palm_max=.025,.085
         for obj in bpy.context.scene.objects:
             if obj.type!='MESH':continue
             group=obj.vertex_groups.get('hand_'+side)
@@ -115,19 +126,31 @@ def measure_palm_surfaces(rig):
             evaluated=obj.evaluated_get(graph);mesh=evaluated.to_mesh()
             for original,vertex in zip(obj.data.vertices,mesh.vertices):
                 weight=sum(g.weight for g in original.groups if g.group==group.index)
-                if weight<.90:continue
+                if weight<minimum_weight:continue
                 point=inverse @ (evaluated.matrix_world @ vertex.co)
-                if .025<=point.y<=.085:candidates.append((point,original.index,obj.name,weight))
+                # Native front-palm vertices include finger skin weights. The
+                # only fully rigid vertex in this region is on the back of the
+                # hand, so calibrate the real palm in its authored contact pose.
+                sign = 1 if side=='l' else -1
+                normal=(inverse.to_3x3().inverted().transposed() @ evaluated.matrix_world.to_3x3().inverted().transposed() @ vertex.normal).normalized()
+                if palm_min<=point.y<=palm_max and point.x*sign>.003:
+                    if minimum_weight<.90 and (normal.x*sign<.90 or abs(point.z)>.025):continue
+                    candidates.append((point,original.index,obj.name,weight,normal))
             evaluated.to_mesh_clear()
         if not candidates:raise ValueError('No retained palm surface: '+side)
-        point,index,name,weight=min(candidates,key=lambda item:(item[0]-reference).length)
+        if minimum_weight<.90:
+            point,index,name,weight,normal=max(candidates,key=lambda item:item[0].x*(1 if side=='l' else -1))
+        else:
+            point,index,name,weight,normal=min(candidates,key=lambda item:(item[0]-reference).length)
         if (point-reference).length>.04:raise ValueError('Retained palm probe is outside the measured grip region')
         result[side]={'local':list(point),'source_mesh':name,'source_vertex_index':index,'hand_weight':weight,
+                      'local_surface_normal':list(normal),
+                      'minimum_hand_weight':minimum_weight,
                       'reference_distance':(point-reference).length}
     return result
 
 
-def world_palm_goal(rig, asset, side, goal, weight):
+def world_palm_goal(rig, asset, side, goal, weight, flat=False, normal_goal=None):
     if weight<=0:return
     hand=rig.pose.bones['hand_'+side]
     point=Vector(CONTACT_PROBES[asset][side]['local'])
@@ -137,6 +160,19 @@ def world_palm_goal(rig, asset, side, goal, weight):
     # wrist so the measured palm surface (rather than its origin) makes contact.
     world_hand_goal(rig,side,goal,weight)
     retained=hand.matrix.copy()
+    if flat or normal_goal is not None:
+        # Retained palms lie in the hand's YZ plane: +X on the left,
+        # -X on the right. Orient that anatomical palm normal downward,
+        # with the finger ray forward, instead of treating local -Z as palm.
+        normal=Vector((1 if side=='l' else -1,0,0))
+        forward=Vector((0,1,0))
+        local=Matrix((forward.cross(normal),forward,normal)).transposed()
+        down=Vector(normal_goal if normal_goal is not None else (0,0,-1)).normalized()
+        forward=(forward-down*forward.dot(down)).normalized()
+        world=Matrix((forward.cross(down),forward,down)).transposed()
+        desired=(rig.matrix_world.to_3x3().normalized().inverted() @ world @ local.transposed()).to_quaternion()
+        rotation=retained.to_quaternion().slerp(desired,weight)
+        retained=Matrix.LocRotScale(retained.translation,rotation,retained.to_scale())
     wrist=target-retained.to_3x3() @ point
     hand_goal(rig,side,wrist,1.0)
     position=hand.matrix.translation.copy()
@@ -150,7 +186,7 @@ def pose(rig, asset, clip, phase):
         'hand_goal': world_hand_goal, 'models': MODELS})
 
 
-def main(asset, render, refresh_work=False):
+def main(asset, render, refresh_work=False, calibrate_contacts=True):
     # External batch coordination on low-memory hosts; never leave a partial bake.
     if (MODELS / (asset + '.hold')).exists():
         print('LIVING_CAST_HELD', asset, flush=True)
@@ -159,6 +195,10 @@ def main(asset, render, refresh_work=False):
     registry = json.loads((GAME/'data/design_pack_assets.json').read_text())
     production = GAME / registry['assets'][asset]['path'][6:]
     production_sha = sha(production)
+    if asset == 'C10':
+        cup = json.loads((MODELS/'props/merrow_cup_calibration.json').read_text())
+        if cup.get('baseline_sha256') != sha(source) or cup.get('carrier_sha256') != sha(MODELS/'props/merrow_cup_world.glb'):
+            raise ValueError('Merrow cup calibration no longer matches this retained actor baseline/geometry')
     prior=None
     if refresh_work:
         prior=json.loads((MODELS/asset/'authoring.json').read_text())
@@ -168,6 +208,7 @@ def main(asset, render, refresh_work=False):
     else:
         bpy.ops.wm.read_factory_settings(use_empty=True)
         bpy.ops.import_scene.gltf(filepath=str(source))
+    bpy.context.preferences.filepaths.save_version = 0
     rigs = [o for o in bpy.context.scene.objects if o.type == 'ARMATURE']
     if len(rigs) != 1:
         raise ValueError('Expected exactly one retained actor skeleton')
@@ -189,7 +230,10 @@ def main(asset, render, refresh_work=False):
     bpy.context.view_layer.update()
     baseline = {b.name: b.matrix_basis.copy() for b in rig.pose.bones}
     baseline_points = {n: list(rig.pose.bones[n].head) for n in ['Head','upperarm_l','upperarm_r','hand_l','hand_r','foot_l','foot_r']}
-    if asset in PROFILES:
+    if calibrate_contacts and asset in PROFILES:
+        if asset not in ('C07','C12'):
+            for side in ('l','r'):relax_work_fingers(rig,side,1.0)
+            bpy.context.view_layer.update()
         CONTACT_PROBES[asset]=measure_palm_surfaces(rig)
     for obj in bpy.data.objects:
         if obj.type=='MESH':obj.hide_set(True)
@@ -200,9 +244,12 @@ def main(asset, render, refresh_work=False):
         if not refresh_work or action.name=='Life_Work':bpy.data.actions.remove(action)
     bpy.context.scene.render.fps = FPS
     # Authored clips omit facial joints: the face owner keeps gaze/blinks/speech.
-    body_bones = [b for b in rig.pose.bones if not b.name.startswith('Face_') and b.name!='root']
+    # The skeletal root's constant native pose is distinct from object/root
+    # locomotion. Keep its two identical endpoint keys; compiler rejects motion.
+    body_bones = [b for b in rig.pose.bones if not b.name.startswith('Face_')]
     moving_bones={'spine_01','spine_02','spine_03','Head','clavicle_l','clavicle_r',
                   'upperarm_l','upperarm_r','lowerarm_l','lowerarm_r','hand_l','hand_r'}
+    moving_bones.update(b.name for b in body_bones if b.name.startswith(('index_','middle_','ring_','pinky_','thumb_')))
     measured = dict(prior['clips']) if refresh_work else {}
     destination = MODELS/asset
     for clip, seconds in CLIPS.items():
@@ -230,7 +277,7 @@ def main(asset, render, refresh_work=False):
                     'world_points':{n:list(rig.matrix_world @ rig.pose.bones[n].head) for n in baseline_points}})
                 if asset in CONTACT_PROBES:
                     values[-1]['world_contact_probes']={side:list(rig.matrix_world @ rig.pose.bones['hand_'+side].matrix @ Vector(data['local'])) for side,data in CONTACT_PROBES[asset].items()}
-        measured[clip] = {'duration_seconds':seconds,'sample_hz':FPS,'loop':not clip in ('Life_Drink','Life_Lower_Book'),'sampled_points':values}
+        measured[clip] = {'duration_seconds':seconds,'sample_hz':FPS,'loop':not clip in ('Life_Drink','Life_Settle_Ledger'),'sampled_points':values}
         rig.animation_data.action = None
         track = rig.animation_data.nla_tracks.new()
         track.name = clip
@@ -281,7 +328,7 @@ def main(asset, render, refresh_work=False):
                  'Exact workstation contact and staff grip remain owned by existing runtime IK.',
                  'Full mesh GLB is an authoring review carrier only; extracted AnimationLibrary ships.']}
     if asset in CONTACT_PROBES:
-        report['contact_probe_method']='nearest retained palm-surface vertex to curled-palm reference in native Idle; hand weight>=.90; source FK preserves wrist orientation'
+        report['contact_probe_method']='actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50'
         report['contact_probes_blender']=CONTACT_PROBES[asset]
     (destination/'authoring.json').write_text(json.dumps(report,indent=2)+'\n')
     if render:

@@ -1,0 +1,34 @@
+{
+	"libraries": [
+		{
+			"asset": "P01",
+			"bytes": 129500,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				}
+			},
+			"contact_probe_method": "not_required",
+			"contact_probes": {
+
+			},
+			"maximum_rest_error": 0.00000386099145543994,
+			"model": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+			"model_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
+			"path": "res://assets_external/characters_prepared/animations/life_P01.res",
+			"runtime_reviewed": false,
+			"sha256": "c0a33e07dcde6120e26dcba6059b41eaf6e0e251d108270523b22c7a5214a2aa",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/P01_life_review.glb",
+			"source_sha256": "f76d08feaa2b105796101ae28e868166b33135c8b1e02a2375e8bf572f4983cd",
+			"user_accepted": false
+		}
+	],
+	"status": "compiled"
+}

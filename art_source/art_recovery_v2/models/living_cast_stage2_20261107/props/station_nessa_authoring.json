@@ -3,9 +3,24 @@
   "asset": "C11",
   "identity": "nessa",
   "sources": [],
-  "authoring_tool_sha256": "97f35212ec2786e4fe491f45bdc49592272806239cb0a42a6b0bb519dcb1eed4",
-  "blend_sha256": "7b1872441aa31582f8613c3f57ad2c6658d55191ba878a028e9e8c06ff7e9683",
-  "carrier_sha256": "3150e4073c71912f52243b64c0425b8f3dce56b4e421ba364a932937f2374280",
+  "authoring_tool_sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+  "blend_sha256": "758111f29b2c67ed95756809fc2dca5ac4ce5fe751d99a6075f3ef37dd4721d6",
+  "carrier_sha256": "8e80e78e3ffba8ecc1624a622ad420f9d0c39c982c4c86ce857f1c4b849cd9e8",
+  "recipe_snapshot": {
+    "sha256": "b7da800a25244c671e8b97fb2faf8f2ebbedad011d57b1f780cfd9eaba7393d7",
+    "files": [
+      {
+        "name": "author_living_cast_stage2_props.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\b7da800a25244c67\\author_living_cast_stage2_props.py",
+        "sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a"
+      },
+      {
+        "name": "living_cast_stage2_profiles.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\b7da800a25244c67\\living_cast_stage2_profiles.py",
+        "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d"
+      }
+    ]
+  },
   "blender_version": "5.2.3 LTS",
   "triangles": 128,
   "grips_godot": {
@@ -28,8 +43,41 @@
   ],
   "support_near_limit_godot_z": 0.04,
   "contact_part": "WorkContactPart",
-  "contact_response": "compress",
+  "contact_response": "morph",
   "contact_amount": 0.055,
+  "contact_shape": {
+    "name": "TaskPress",
+    "neutral_weight": 0.0,
+    "contact_weight": 1.0,
+    "purpose": "Spread supported dough around fixed palm patches",
+    "geometry_bounds": {
+      "Basis": {
+        "min_godot": [
+          -0.2199999988079071,
+          0.008999999612569809,
+          -0.08500000089406967
+        ],
+        "max_godot": [
+          0.2199999988079071,
+          0.019999999552965164,
+          0.03500000014901161
+        ]
+      },
+      "TaskPress": {
+        "min_godot": [
+          -0.23539999127388,
+          0.00800000037997961,
+          -0.09099999815225601
+        ],
+        "max_godot": [
+          0.23539999127388,
+          0.019999999552965164,
+          0.04099999740719795
+        ]
+      }
+    },
+    "grip_patch_height_preserved": true
+  },
   "runtime_resource": "res://assets_external/environment_prepared/living_cast/station_nessa.scn",
   "source_geometry_authored": true,
   "geometry_contact_verified": false,
@@ -38,20 +86,5 @@
   "notes": [
     "Actual supported contact geometry; no pickup or carried transition is claimed.",
     "New work surfaces/details supplement the retained source shapes where listed."
-  ],
-  "recipe_snapshot": {
-    "sha256": "a403ea2a7895ec97298d6cd6c119913076174dbca954ab1bd80097b1f99017ad",
-    "files": [
-      {
-        "name": "author_living_cast_stage2_props.py",
-        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\a403ea2a7895ec97\\author_living_cast_stage2_props.py",
-        "sha256": "97f35212ec2786e4fe491f45bdc49592272806239cb0a42a6b0bb519dcb1eed4"
-      },
-      {
-        "name": "living_cast_stage2_profiles.py",
-        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\a403ea2a7895ec97\\living_cast_stage2_profiles.py",
-        "sha256": "e6d9d479a6e34da106ffd0e70b1af87a4b9c8322ca95253ca046e9426e3d6ba3"
-      }
-    ]
-  }
+  ]
 }

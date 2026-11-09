@@ -15,23 +15,23 @@ ROOT = Path(__file__).resolve().parents[1]
 GAME = ROOT.parents[1] / "outputs/AshenOathTheRoadBetweenCrowns"
 
 
-def main(source, copy, source_only):
+def main(source, copy, source_only, asset=None):
     catalog = json.loads((GAME / "data/prepared_actors.json").read_text())
     designs = json.loads((GAME / "data/design_pack_assets.json").read_text())["assets"]
     required = set()
     expected = {}
     selected = {}
-    for asset in PROFILES:
-        production = designs[asset]["path"]
+    for identity in ([asset] if asset else PROFILES):
+        production = designs[identity]["path"]
         required.add(production)
-        expected[production] = designs[asset]["sha256"]
+        expected[production] = designs[identity]["sha256"]
         candidates = [row for row in catalog.values() if row.get("source") == production]
         if not candidates:
-            raise ValueError("Missing prepared Stage2 actor: " + asset)
+            raise ValueError("Missing prepared retained actor: " + identity)
         # Exporter takes the first retained alias; same canonical body metadata
         # and variant-safe prepared scene are preserved without rebuilding.
         row = candidates[0]
-        selected[asset] = row["path"]
+        selected[identity] = row["path"]
         if not source_only:
             required.add(row["path"])
             expected[row["path"]] = row["compiled_sha256"]
@@ -39,7 +39,14 @@ def main(source, copy, source_only):
         required.update(row.get("animation_resources", []))
         required.update(row.get("source_scene_dependencies", []))
     required.add("res://assets_external/animations/AnimationLibrary_Godot_Opening.tres")
-    for name in ("Banner_1_Cloth.obj", "Crate_Wooden.obj", "Book_7.obj", "Scroll_1.obj", "Mug.gltf", "Mug.bin"):
+    if asset == "P01":
+        # The player-only native gate exercises the actual bow hand/back
+        # transfer and arrow visual. Keep their exact selected import closure.
+        for resource in ("res://assets_external/characters/Ranger_Bow.fbx",
+                         "res://assets/characters/kael_arrow.glb"):
+            required.add(resource)
+            required.add(resource + ".import")
+    for name in (() if asset == "P01" else ("Banner_1_Cloth.obj", "Crate_Wooden.obj", "Book_7.obj", "Scroll_1.obj", "Mug.gltf", "Mug.bin")):
         required.add("res://assets_external/environment/props/" + name)
     visited = {}
     pending = list(sorted(required))
@@ -99,6 +106,8 @@ def main(source, copy, source_only):
               "full_cache_copied": False, "prepared_actors_deferred": source_only,
               "unused_material_textures_omitted": "Mug and OBJ source trim materials are replaced by the authored palette; exact geometry buffers/MTL provenance are retained."}
     output = ROOT / "evidence/living_cast_stage2_20261107/input_closure.json"
+    if asset:
+        output = ROOT / ("evidence/living_assets_stage3_20261107/player/input_closure.json" if asset == "P01" else "evidence/living_cast_stage2_20261107/input_closure_"+asset+".json")
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({"files": len(visited), "bytes": result["total_bytes"], "copied": copy,
@@ -110,5 +119,6 @@ if __name__ == "__main__":
     parser.add_argument("--source-game", required=True, type=Path)
     parser.add_argument("--copy", action="store_true")
     parser.add_argument("--source-only", action="store_true")
+    parser.add_argument("--asset", choices=[*PROFILES, "P01"])
     args = parser.parse_args()
-    main(args.source_game, args.copy, args.source_only)
+    main(args.source_game, args.copy, args.source_only, args.asset)

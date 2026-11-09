@@ -1,0 +1,25 @@
+{
+  "asset": "C08",
+  "clip": "Life_Work",
+  "blend_sha256": "12a0c64d3a56956031507e46417079313a26f3864faf1daced6206ec7ca01cdd",
+  "review_glb_sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70",
+  "sample_hz": 30,
+  "evaluated_region": "forearm, hand and all five finger chains",
+  "table_slab_lateral_forward_height": {
+    "min": [
+      -0.55,
+      0.36,
+      0.95
+    ],
+    "max": [
+      0.55,
+      1.16,
+      1.0
+    ]
+  },
+  "hand_slab_intrusions": [],
+  "garment_surface_candidate": {},
+  "source_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

@@ -1,0 +1,20 @@
+{
+	"asset": "C10",
+	"baseline_sha256": "a02d40c315564be29d3fa703e65019a623a43b64d8dd24a45dcd1e20688ada1f",
+	"engine_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"prepared_resource": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
+	"prepared_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+	"production_resource": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+	"production_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+	"runtime_verified": false
+}

@@ -1,0 +1,17 @@
+{
+  "asset": "C05",
+  "blend_sha256": "3eaafb414a27793dcff3355e68d01ed2dcf9fdd1f2086bd8dc69f35e1351ed15",
+  "review_glb_sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+  "prop_sha256": "5be1ad8c15eb1fda1d45065637871ccd54211cd139da9d1642925cd487901a09",
+  "sample_hz": 30,
+  "solid_parts": [
+    "WorkContactPart"
+  ],
+  "open_parts_not_treated_as_solid": [
+    "RetainedFoldedCloth"
+  ],
+  "solid_prop_intrusions": [],
+  "solid_prop_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

@@ -17,10 +17,12 @@ func _run() -> void:
 		requested.append(args[selected + 1])
 	else:
 		requested.assign(IDS)
+	if requested == ["P01"]:
+		output = ProjectSettings.globalize_path("res://").path_join("../../art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/player").simplify_path()
 	DirAccess.make_dir_recursive_absolute(output)
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/prepared_actors.json"))
 	for id: String in requested:
-		if id not in IDS:
+		if id not in IDS and id != "P01":
 			push_error("Unknown Stage2 actor: " + id)
 			quit(1)
 			return

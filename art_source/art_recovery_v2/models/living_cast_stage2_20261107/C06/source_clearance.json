@@ -1,0 +1,24 @@
+{
+  "asset": "C06",
+  "blend_sha256": "a6193d89b47b9b0c76a62a769cc79d24a9e6a6ee75245efd99ebb2d502bbfc51",
+  "review_glb_sha256": "685999766336aeb0d1735f8a8758f881fef2999023eb4cbf5a53ab420dc6897e",
+  "sample_hz": 30,
+  "evaluated_region": "forearm, hand and all five finger chains",
+  "table_slab_lateral_forward_height": {
+    "min": [
+      -0.55,
+      0.36,
+      0.95
+    ],
+    "max": [
+      0.55,
+      1.16,
+      1.0
+    ]
+  },
+  "hand_slab_intrusions": [],
+  "garment_surface_candidate": {},
+  "source_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

@@ -1,0 +1,20 @@
+{
+	"asset": "C07",
+	"baseline_sha256": "74b511cd7d1da7c3e70381e139c26063b4e10f8ed38c41ce03a0118c6456cb57",
+	"engine_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"prepared_resource": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
+	"prepared_sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
+	"production_resource": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+	"production_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+	"runtime_verified": false
+}

@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "identity": "merrow",
+  "bone": "hand_r",
+  "sources": [
+    {
+      "resource": "res://assets_external/environment/props/Mug.gltf",
+      "sha256": "73c4cb7e575685d0220a5d1dd40f1a68de9e64bfd34a54bcba6085b62a119a9d"
+    },
+    {
+      "resource": "res://assets_external/environment/props/Mug.bin",
+      "sha256": "bbf61011611387a248b9107b13f40a9cddb31e605f677b2102b236147bf31691"
+    }
+  ],
+  "baseline_sha256": "a02d40c315564be29d3fa703e65019a623a43b64d8dd24a45dcd1e20688ada1f",
+  "author_tool_sha256": "a507b280a97d4c0cce0a21a63f6872991d05ced775a3350d1ec766503d071a97",
+  "blend_sha256": "a9addf8eab9f6626c66ad784d3f9039ec7f21998921e0b69fd9bf1900681f19c",
+  "carrier_sha256": "906e690a85c3870b5a12fc1a9813008eed267a7b14098c5d45364774d14e53ed",
+  "actual_handle_surface": {
+    "primitive": 1,
+    "triangle": 97,
+    "gltf": [
+      0.11656129360198975,
+      0.09518145769834518,
+      -0.0020036492496728897
+    ],
+    "method": "Closest point on retained outward handle triangle to centre of vertical grip"
+  },
+  "handle_surface_normal_blender": [
+    0.9972420930862427,
+    -0.0014916531508788466,
+    -0.07420247048139572
+  ],
+  "grip_orientation_method": "Measured closed-palm normal with 5-degree roll and bounded thumb-base opening; actual curved-palm clearance checked against retained handle triangles.",
+  "nominal_palm_surface_clearance_m": 0.0013,
+  "finger_rotations_blender_wxyz": {
+    "thumb_01_r": [
+      0.9959527850151062,
+      0.004043036140501499,
+      -0.03748220205307007,
+      0.08158989250659943
+    ]
+  },
+  "elbow_hint_world_blender": [
+    0.32,
+    0.04,
+    1.02
+  ],
+  "actual_rim_vertex": {
+    "primitive": 1,
+    "vertex": 16,
+    "gltf": [
+      0.01159422006458044,
+      0.1792401522397995,
+      0.06495953351259232
+    ]
+  },
+  "actual_palm": {
+    "local": [
+      -0.02751736156642437,
+      0.033540986478328705,
+      -0.007244091480970383
+    ],
+    "source_mesh": "C10_MotionFittedAssembly",
+    "source_vertex_index": 16357,
+    "hand_weight": 0.7665603160858154,
+    "local_surface_normal": [
+      -0.9273801445960999,
+      -0.015761598944664,
+      -0.37378838658332825
+    ],
+    "minimum_hand_weight": 0.6,
+    "reference_distance": 0.03018497778083929
+  },
+  "actual_lip": {
+    "mesh": "C10_MotionFittedAssembly",
+    "vertex": 1741,
+    "mouth_weight": 0.3071887493133545,
+    "distance_from_mouth_bone_centre": 0.01641106333800541,
+    "world_blender": [
+      0.015029776841402054,
+      0.13609108328819275,
+      1.5657294988632202
+    ]
+  },
+  "poses": {
+    "hold": {
+      "wrist_world_blender": [
+        0.24455872178077698,
+        0.21799470484256744,
+        1.1871204376220703
+      ],
+      "wrist_rotation_armature_blender_wxyz": [
+        0.0085739865899086,
+        -0.2689747214317322,
+        0.0009539244929328561,
+        0.9631085991859436
+      ],
+      "actual_palm_world_blender": [
+        0.21790719032287598,
+        0.25198468565940857,
+        1.1947370767593384
+      ],
+      "palm_residual": 0.001417503265831952,
+      "reach_margin": 0.12583167993886935,
+      "cup_world_blender": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.10000000149011612
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.100000023841858
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "sip": {
+      "wrist_world_blender": [
+        0.1479942798614502,
+        0.1978989988565445,
+        1.4883017539978027
+      ],
+      "wrist_rotation_armature_blender_wxyz": [
+        0.03360847011208534,
+        0.2670043408870697,
+        -0.1516055017709732,
+        -0.9511020183563232
+      ],
+      "actual_palm_world_blender": [
+        0.1211041584610939,
+        0.22742310166358948,
+        1.506532073020935
+      ],
+      "palm_residual": 0.0011565214114381602,
+      "reach_margin": 0.17899701081953495,
+      "cup_world_blender": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0034355567768216133
+        ],
+        [
+          0.0,
+          0.9510565400123596,
+          -0.3090169131755829,
+          0.25525951385498047
+        ],
+        [
+          0.0,
+          0.3090169131755829,
+          0.9510565400123596,
+          1.4153355360031128
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "hold_wrist_goal_lateral_forward_height": [
+    0.24455872178077698,
+    0.21799470484256744,
+    1.1871204376220703
+  ],
+  "wrist_goal_lateral_forward_height": [
+    0.1479942798614502,
+    0.1978989988565445,
+    1.4883017539978027
+  ],
+  "hold_wrist_rotation_blender_wxyz": [
+    0.0085739865899086,
+    -0.2689747214317322,
+    0.0009539244929328561,
+    0.9631085991859436
+  ],
+  "wrist_rotation_blender_wxyz": [
+    0.03360847011208534,
+    0.2670043408870697,
+    -0.1516055017709732,
+    -0.9511020183563232
+  ],
+  "rim_to_lip_distance": 0.0020000040901972183,
+  "grip_verified": true,
+  "rim_calibrated": true,
+  "native_clearance_verified": false,
+  "visual_accepted": false,
+  "user_accepted": false,
+  "runtime_resource": "res://assets_external/environment_prepared/living_cast/merrow_cup.scn",
+  "recipe_snapshot": {
+    "sha256": "f007b954b8a70dde355c81368121e851de16c85e8d5d9d286a17b602557436ad",
+    "files": [
+      {
+        "name": "author_merrow_cup.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f007b954b8a70dde\\author_merrow_cup.py",
+        "sha256": "a507b280a97d4c0cce0a21a63f6872991d05ced775a3350d1ec766503d071a97"
+      },
+      {
+        "name": "author_living_cast_stage2.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f007b954b8a70dde\\author_living_cast_stage2.py",
+        "sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3"
+      },
+      {
+        "name": "living_cast_stage2_motion.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f007b954b8a70dde\\living_cast_stage2_motion.py",
+        "sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca"
+      },
+      {
+        "name": "living_cast_stage2_profiles.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f007b954b8a70dde\\living_cast_stage2_profiles.py",
+        "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d"
+      },
+      {
+        "name": "living_cast_stage2_preview.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\f007b954b8a70dde\\living_cast_stage2_preview.py",
+        "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943"
+      }
+    ]
+  },
+  "source_review_frames": [
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_cast_stage2_20261107\\props\\merrow_cup_hold_review.png",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_cast_stage2_20261107\\props\\merrow_cup_sip_review.png"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+	"contact_shape": {
+
+	},
+	"geometry_contact_verified": true,
+	"identity": "vale",
+	"native_grips_verified": false,
+	"path": "res://assets_external/environment_prepared/living_cast/station_vale.scn",
+	"resources": [
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_00.res",
+			"sha256": "0944fde6acca55c8cfea05928994a94be1319b0871dc4a9a0635cda5c7f1c5e0"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_01.res",
+			"sha256": "4f0fbc3db5edb2d7ee0cec407387391294749cac3ceb05f5bab273c5f6196b21"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_02.res",
+			"sha256": "d25a8c272b0a7be6beefb498caa7299f985bf17d1306a47734dd21a196a99e7d"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_03.res",
+			"sha256": "8452607483872813379a8e6ce31509864970efae9e4351b1f4d5888b0e398bf2"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_04.res",
+			"sha256": "3a766a3c13bfacd454a2210546d77773bf06a2d0d3ae5c95df7f3306d051de8a"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_05.res",
+			"sha256": "27532435057904359fba6b1ace98a4f24057ac9329b5df6ca5e68bce94a11bce"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_06.res",
+			"sha256": "3996d9eb41ae37fc2c1c5f36562b5f4e85587a8054a522dfd5c2583cb8ca9ef0"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_07.res",
+			"sha256": "98abc4f659f7bb6c19977fd37ccd060e9f9ac7befe736f54a2997dc6e655cc17"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_08.res",
+			"sha256": "c81e04eb28b23bf975a7c3d55289bbc655da7ef4e55276be4cc576610a42a2a6"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_09.res",
+			"sha256": "27a5d5114b8686ef829156d6155a7d221a1c7733a7bcf0727a4ef518b8f2f69e"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_10.res",
+			"sha256": "9475c5053e2c3c4772ee30e3e3bbbe3dac94c1c6989a1b99c622a17b16f1dea7"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_11.res",
+			"sha256": "dd4d0336a9f2b09388b23267f49187ecc3f7b79824f9cec7fc2c27257b3cb200"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_vale_12.res",
+			"sha256": "3e5ad658eb8494fade672a896bcd0313d63ec39966e0135a1ddd2169eb47901a"
+		}
+	],
+	"sha256": "b086b8fcc7e4cfcb4376d393429ecc97c170efc63e69679e071f063b1fde4c97",
+	"source_sha256": "9a1ac9a7f19e0df2b3aefec07c6764f3e1f5abfac1349144fb956eab36474aa2",
+	"support_bounds_verified": true,
+	"surface_contact_errors": {
+		"GripLeft": 0.0,
+		"GripRight": 0.0
+	},
+	"user_accepted": false
+}

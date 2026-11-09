@@ -3,7 +3,7 @@ extends SceneTree
 ## Compile reviewed Blender carriers to immutable actor-owned motion libraries.
 ## Does not build a world, mutate source models or claim visual acceptance.
 const IDS := ["C11", "C05", "C06", "C12", "C07", "C09", "C10", "C08"]
-const IDENTITIES := {"C11": "nessa", "C05": "elna", "C06": "toma", "C12": "nera", "C07": "senn", "C09": "vale", "C10": "merrow", "C08": "edric"}
+const IDENTITIES := {"C11": "nessa", "C05": "elna", "C06": "toma", "C12": "nera", "C07": "senn", "C09": "vale", "C10": "merrow", "C08": "edric", "P01": "kael"}
 const CLIPS := {"Life_Idle_A": 6.0, "Life_Idle_B": 8.0, "Life_Work": 4.0, "Life_Listen": 4.0, "Life_Speak": 4.0}
 const FUSION = preload("res://scripts/character_animation_fusion.gd")
 const OUTPUT := "res://assets_external/characters_prepared/animations/"
@@ -31,10 +31,12 @@ func _compile() -> void:
 		requested.append(args[selected + 1])
 	else:
 		requested.assign(IDS)
+	if requested == ["P01"]:
+		source_root = repository.path_join("art_source/art_recovery_v2/models/living_assets_stage3_20261107/player")
 	var reports: Array[Dictionary] = []
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT))
 	for id: String in requested:
-		if id not in IDS:
+		if id not in IDS and id != "P01":
 			push_error("Unknown living cast asset: " + id)
 			quit(1)
 			return
@@ -142,8 +144,10 @@ func _compile() -> void:
 			player.stop()
 		var clip_report: Dictionary = {}
 		var required_clips := CLIPS.duplicate()
+		if id == "P01":
+			required_clips = {"Life_Idle_A": 6.0, "Life_Idle_B": 8.0}
 		if id == "C09":
-			required_clips["Life_Lower_Book"] = 4.0
+			required_clips["Life_Settle_Ledger"] = 4.0
 		if id == "C10":
 			required_clips["Life_Cup_Hold"] = 4.0
 			required_clips["Life_Drink"] = 4.0
@@ -195,7 +199,7 @@ func _compile() -> void:
 						animation.remove_track(track)
 						continue
 				animation.track_set_path(track, NodePath(skeleton_path + ":" + bone))
-			animation.loop_mode = Animation.LOOP_NONE if clip in ["Life_Drink", "Life_Lower_Book"] else Animation.LOOP_LINEAR
+			animation.loop_mode = Animation.LOOP_NONE if clip in ["Life_Drink", "Life_Settle_Ledger"] else Animation.LOOP_LINEAR
 			animation.set_meta("universal_rest_baked", true)
 			animation.set_meta("authored_life_clip", true)
 			animation.set_meta("life_source_sha256", FileAccess.get_sha256(source))

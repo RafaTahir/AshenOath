@@ -1,0 +1,28 @@
+{
+	"actor_source_sha256": "aa5f1ad2d862eb879cba08457d588b519eac8403aa615a70650dc269cc8437f3",
+	"actual_rim_to_lip_residual": 0.00200000405311584,
+	"calibration_archive": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/receipts/merrow_cup_calibration_4e489b2acb9254aa1fc228f1e65a99cf6869a86c3c1f3231161708fd62f5d966.json",
+	"calibration_sha256": "4e489b2acb9254aa1fc228f1e65a99cf6869a86c3c1f3231161708fd62f5d966",
+	"compiler_sha256": "d3a12762cea3e64359318247a1620d1c599690f2d3ec61c2b0cac011ed780fc1",
+	"grip_bone": "hand_r",
+	"grip_probe": {
+		"bone": "hand_r",
+		"point": "(-0.027804, 0.033242, -0.007127)"
+	},
+	"inline_mesh_count": 2,
+	"lip_probe": {
+		"bone": "Head",
+		"point": "(0.013175, 0.04714, 0.107261)"
+	},
+	"native_full_motion_clearance_verified": false,
+	"native_hand_residual": 0.000000843595273636311,
+	"native_palm_residual": 0.00115655863191932,
+	"path": "res://assets_external/environment_prepared/living_cast/merrow_cup.scn",
+	"sha256": "1fd3e0a7e3086e128a7b0f628fd6b02efe4acb33a90ffec12a7e76a0f9fb744c",
+	"source_clearance_sha256": "d66da6bba353422d01549badfb2415ef16183d4a061d4e2b1dfb3389833b5d28",
+	"source_coordinate_conversion": "rebased through actual imported Drink hand orthonormal frame",
+	"source_full_motion_clearance_verified": true,
+	"source_sha256": "906e690a85c3870b5a12fc1a9813008eed267a7b14098c5d45364774d14e53ed",
+	"user_accepted": false,
+	"visual_accepted": false
+}

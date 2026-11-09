@@ -1,0 +1,55 @@
+{
+	"contact_shape": {
+
+	},
+	"geometry_contact_verified": true,
+	"identity": "toma",
+	"native_grips_verified": false,
+	"path": "res://assets_external/environment_prepared/living_cast/station_toma.scn",
+	"resources": [
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_00.res",
+			"sha256": "47599fb61da31db2247f1e60b7dac4afe18b786fd529e070b9064b8006b96414"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_01.res",
+			"sha256": "db006742e1edf092150ca2e457660c26f905e74098537093e9b1443d78bd94fc"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_02.res",
+			"sha256": "952b11f691e0ae1aa675431e70ca8faeb7aee3f1bfae1927161341324c39869f"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_03.res",
+			"sha256": "7ddb5e207ed7429e592219e34212d0abbedeb89b002fd12ad692353c0eeaa05f"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_04.res",
+			"sha256": "17911f3dba3d8167024fcae7aac164f92fb751f29a0d84a97aca721f81ace145"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_05.res",
+			"sha256": "9a9c6b0986e367b7091a234559cc36c92a6bdf4839d553018091642dd799ffaa"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_06.res",
+			"sha256": "c4687a7dcaa52f213b766af76b71005cf395f11d0035792f2af48f62ce67bbb1"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_07.res",
+			"sha256": "aba9f62d2e8696cc188406c6c31141ac50e46e0ea385a63ad2f5d099318422c2"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_toma_08.res",
+			"sha256": "513319e3ca76e2d930bffff9c836ef81c9d2b81c5a7603819d45f6c0089deb91"
+		}
+	],
+	"sha256": "3f7ac2e4cdc5cdc74e8f7d83f1205b7d47ad9dc6333297a348412e840283af79",
+	"source_sha256": "c3844681b45ae016f2d3eba0d4d8d55ee171968495ffc172210627c66e45b7ec",
+	"support_bounds_verified": true,
+	"surface_contact_errors": {
+		"GripLeft": 0.0,
+		"GripRight": 0.0
+	},
+	"user_accepted": false
+}

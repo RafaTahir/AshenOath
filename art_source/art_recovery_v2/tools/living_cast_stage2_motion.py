@@ -5,9 +5,60 @@ never changes a rest transform, actor scale, physics root or planted foot.
 """
 import json
 import math
+import bpy
 from mathutils import Matrix, Quaternion, Vector
 
 from living_cast_stage2_profiles import PROFILES
+
+
+def relax_work_fingers(rig, side, weight):
+    for finger, spread in [('index',-.025),('middle',0),('ring',.020),('pinky',.040)]:
+        for joint in range(1,4):
+            bone = rig.pose.bones[f'{finger}_{joint:02d}_{side}']
+            relaxed = Quaternion((1,0,0), -.030 if joint>1 else 0.0)
+            if joint == 1:
+                relaxed = Quaternion((0,0,1), spread*(-1 if side=='r' else 1)) @ relaxed
+            bone.rotation_quaternion = bone.rotation_quaternion.slerp(relaxed,weight)
+    # Thumb rest geometry is abducted out of the palm plane. Neutral local
+    # rotations alone therefore still point the thumb through a work surface.
+    # Uncurl its joints, then place the retained chain alongside the palm.
+    for joint in range(1,4):
+        thumb = rig.pose.bones[f'thumb_{joint:02d}_{side}']
+        thumb.rotation_quaternion = thumb.rotation_quaternion.slerp(Quaternion(),weight)
+    bpy.context.view_layer.update()
+    hand = rig.pose.bones['hand_'+side]
+    thumb = rig.pose.bones['thumb_01_'+side]
+    tip = rig.pose.bones['thumb_03_'+side].tail.copy()
+    hand_inverse = hand.matrix.inverted()
+    start = hand_inverse @ thumb.head
+    end = hand_inverse @ tip
+    middle = hand_inverse @ rig.pose.bones['middle_01_'+side].head
+    target = end.copy()
+    lift = .070 if middle.y > .10 else .040
+    target.x = start.x - (lift if side == 'l' else -lift)
+    current = tip-thumb.head
+    desired = hand.matrix.to_3x3() @ (target-start)
+    rotation = Quaternion().slerp(current.rotation_difference(desired),weight)
+    position, orientation, scale = thumb.matrix.decompose()
+    thumb.matrix = Matrix.LocRotScale(position, rotation @ orientation, scale)
+    bpy.context.view_layer.update()
+
+
+def smoothstep(start, end, value):
+    amount = max(0.0, min(1.0, (value-start)/(end-start)))
+    return amount*amount*(3.0-2.0*amount)
+
+
+def supported_hand_path(phase, sign, contact_goal):
+    """Raise in front of the body, cross above the edge, then touch/retract."""
+    mirrored = phase if phase <= .5 else 1.0-phase
+    raise_goal = Vector((sign*.22, .16, max(1.16,contact_goal[2]+.14)))
+    hover_goal = Vector((contact_goal[0], contact_goal[1], raise_goal.z))
+    if mirrored < .20:
+        return raise_goal, smoothstep(.02,.20,mirrored)
+    if mirrored < .36:
+        return raise_goal.lerp(hover_goal,smoothstep(.20,.36,mirrored)), 1.0
+    return hover_goal.lerp(Vector(contact_goal),smoothstep(.36,.50,mirrored)), 1.0
 
 
 def apply(rig, asset, clip, phase, helpers):
@@ -29,10 +80,11 @@ def apply(rig, asset, clip, phase, helpers):
     if clip == "Life_Idle_B":
         beat = pulse(phase, .5, .34)
         if asset == "C11":
-            # A low apron-side wipe with a grounded shoulder, not a wave.
-            turn(rig, "upperarm_r", (1, 0, 0), -.15 * beat)
-            turn(rig, "lowerarm_r", (1, 0, 0), -.28 * beat)
-            turn(rig, "hand_r", (0, 0, 1), -.13 * beat)
+            # A brief glance at the flour-bearing palm, followed by a relaxed
+            # finger flex. This does not claim unmeasured apron contact.
+            relax_work_fingers(rig, 'r', .75*beat)
+            palm_goal(rig, asset, 'r', (.25,.24,1.07), beat, normal_goal=(0,-.15,1))
+            turn(rig, "Head", (1, 0, 0), .055 * beat)
             turn(rig, "spine_03", (0, 0, 1), -.025 * beat)
         elif asset == "C05":
             turn(rig, "upperarm_l", (1, 0, 0), -.20 * beat)
@@ -71,7 +123,7 @@ def apply(rig, asset, clip, phase, helpers):
             turn(rig, "Head", (0, 0, 1), .018 * beat)
         return
 
-    if clip in ("Life_Work", "Life_Lower_Book"):
+    if clip in ("Life_Work", "Life_Settle_Ledger"):
         if asset == "C07":
             left = pulse(phase, .28, .26)
             right = pulse(phase, .70, .25)
@@ -86,13 +138,19 @@ def apply(rig, asset, clip, phase, helpers):
         for bone, value in zip(("spine_01", "spine_02", "spine_03"), profile["lean"]):
             turn(rig, bone, (1, 0, 0), value * contact)
         turn(rig, "Head", (1, 0, 0), profile["counter_head"] * contact)
-        if clip == "Life_Lower_Book":
+        if asset == "C11":
+            # Ease the retained asymmetric standing stance into a balanced
+            # two-palm press; the pelvis and both feet stay in their native pose.
+            shoulders = rig.matrix_world.to_3x3() @ (rig.pose.bones['upperarm_r'].head-rig.pose.bones['upperarm_l'].head)
+            turn(rig, 'spine_01', (0, 0, 1), -math.atan2(shoulders.y, shoulders.x)*.70*contact)
+            turn(rig, 'spine_02', (0, 1, 0), -math.atan2(shoulders.z, shoulders.x)*.70*contact)
+        if clip == "Life_Settle_Ledger":
             turn(rig, "Head", (0, 0, 1), -.035 * contact)
         # The lead-in is actor-specific and large enough to read at gameplay
         # distance; its pulse is zero at the calibrated contact moment.
         leading_side = "l" if asset == "C05" else "r"
         turn(rig, "lowerarm_" + leading_side, (1, 0, 0),
-             (-.48 if clip == "Life_Lower_Book" else -.28) * approach)
+             (-.48 if clip == "Life_Settle_Ledger" else -.28) * approach)
         if asset in ("C11", "C12"):
             turn(rig, "lowerarm_l", (1, 0, 0), -.24 * approach)
         elif asset == "C06":
@@ -131,7 +189,13 @@ def apply(rig, asset, clip, phase, helpers):
                 turn(rig, "Head", (0, 0, 1), -.02 * approach)
             # All approach/release contributions vanish at phase .50; the
             # principal contact is the measured physical marker exactly.
-            palm_goal(rig, asset, side, goal, contact)
+            flat = asset != 'C12'
+            goal, hand_weight = supported_hand_path(phase,sign,goal)
+            if flat:
+                # Release the native idle's closed fingers into a modestly
+                # spread palm. Finger locations/scales/rests are unchanged.
+                relax_work_fingers(rig, side, hand_weight)
+            palm_goal(rig, asset, side, goal, hand_weight, flat=flat)
         return
 
     if clip == "Life_Listen":
@@ -156,6 +220,11 @@ def apply(rig, asset, clip, phase, helpers):
         turn(rig, "lowerarm_" + side, (1, 0, 0), -(amount + .12) * beat)
         turn(rig, "hand_" + side, (0, 0, 1), (-.14 if side == "r" else .11) * beat)
         turn(rig, "spine_03", (0, 0, 1), .018 * beat * strength)
+        relax_work_fingers(rig, side, .85*beat)
+        gesture_goals = {'C11':(.30,.30,1.11),'C05':(-.25,.22,1.08),'C06':(.31,.27,1.13),
+                         'C12':(.32,.33,1.18),'C07':(.26,.23,1.12),'C09':(.27,.25,1.12),
+                         'C10':(.29,.28,1.19),'C08':(.28,.25,1.20)}
+        palm_goal(rig, asset, side, gesture_goals[asset], beat, normal_goal=(0,-.15,1))
         if asset == "C11":
             turn(rig, "upperarm_l", (1, 0, 0), -.12 * second)
             turn(rig, "lowerarm_l", (1, 0, 0), -.20 * second)
@@ -172,10 +241,14 @@ def apply(rig, asset, clip, phase, helpers):
         calibration = json.loads(path.read_text())
         if not calibration.get("grip_verified") or not calibration.get("rim_calibrated"):
             raise ValueError("Merrow cup needs measured retained handle/rim calibration")
+        for bone_name, values in calibration['finger_rotations_blender_wxyz'].items():
+            rig.pose.bones[bone_name].rotation_quaternion = Quaternion(values)
+        bpy.context.view_layer.update()
         beat = pulse(phase, .50, .37) if clip == "Life_Drink" else 0.0
         hold_goal = Vector(calibration["hold_wrist_goal_lateral_forward_height"])
         sip_goal = Vector(calibration["wrist_goal_lateral_forward_height"])
-        hand_goal(rig, "r", hold_goal.lerp(sip_goal, beat), 1.0)
+        hand_goal(rig, "r", hold_goal.lerp(sip_goal, beat), 1.0,
+                  calibration["elbow_hint_world_blender"])
         hand = rig.pose.bones["hand_r"]
         hold_rotation = Quaternion(calibration["hold_wrist_rotation_blender_wxyz"])
         sip_rotation = Quaternion(calibration["wrist_rotation_blender_wxyz"])

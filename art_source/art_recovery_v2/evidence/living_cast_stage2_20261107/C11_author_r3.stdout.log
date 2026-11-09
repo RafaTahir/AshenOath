@@ -1,0 +1,31 @@
+00:11.188  blend            | Read blend: "D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\C11_living_cast_v001.blend"
+LIFE_BAKE C11 Life_Work
+Info: Saved as "C11_living_cast_v001.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+08:09:00 | INFO: Starting glTF 2.0 export
+08:09:00 | INFO: Extracting primitive: C11_Nessa_Anwen_Combined_003
+08:09:00 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+08:09:00 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+08:09:01 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+08:09:01 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+08:09:01 | INFO: Primitives created: 5
+08:09:20 | INFO: Finished glTF 2.0 export in 20.63838243484497 s
+
+08:09:22 | INFO: Data are loaded, start creating Blender stuff
+08:09:22 | INFO: Blender create Mesh node Cube.001
+08:09:22 | INFO: Blender create Mesh node Cube.002
+08:09:22 | INFO: Blender create Mesh node Cube
+08:09:22 | INFO: Blender create Mesh node WorkContactPart
+08:09:22 | INFO: glTF import finished in 0.05s
+00:52.984  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\Life_Idle_A_25.png'
+00:53.719  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\Life_Idle_B_50.png'
+00:54.344  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\Life_Work_25.png'
+00:55.000  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\Life_Work_50.png'
+00:55.734  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\Life_Work_75.png'
+00:56.672  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\Life_Listen_56.png'
+00:57.391  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\Life_Speak_43.png'
+LIVING_CAST_AUTHORED C11 D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\C11\C11_life_review.glb
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

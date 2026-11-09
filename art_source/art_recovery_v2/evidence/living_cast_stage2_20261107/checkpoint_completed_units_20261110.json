@@ -1,0 +1,3400 @@
+{
+  "schema_version": 1,
+  "purpose": "Exact proposed completed-authoring checkpoint; no git staging, publication or in-level acceptance performed.",
+  "head_at_audit": "4bdf4ca6703c96f4785ca4f2e1576339eb6f2820",
+  "status": "pass",
+  "errors": [],
+  "units": [
+    {
+      "asset": "C11",
+      "source_sha256": "ebfd6dce71506ea7913eb1c79b90d074c4a909ae3ee0ae237effbd10e77943dc",
+      "output": "res://assets_external/characters_prepared/animations/life_C11.res",
+      "output_sha256": "450163d2f88bab548e1161140f09830948dbb11a7782e6b2b697260c90f58594",
+      "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C11.json",
+      "bytes": 291179,
+      "kind": "cast_motion_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "C05",
+      "source_sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+      "output": "res://assets_external/characters_prepared/animations/life_C05.res",
+      "output_sha256": "cc53cbe9dd92cfc8913eddc573f02f5bbeaf24bab5654fa5f51167ab01cd01a6",
+      "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C05.json",
+      "bytes": 246702,
+      "kind": "cast_motion_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "C06",
+      "source_sha256": "685999766336aeb0d1735f8a8758f881fef2999023eb4cbf5a53ab420dc6897e",
+      "output": "res://assets_external/characters_prepared/animations/life_C06.res",
+      "output_sha256": "7b1063bf9c956a723d1660d1541c3093a88761d6ff54168d1fc64d0db6da820a",
+      "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C06.json",
+      "bytes": 247354,
+      "kind": "cast_motion_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "C12",
+      "source_sha256": "fc61817eb6e9231a7a440e0da563bfab0bcda306f1e54d02005836df452f6ed6",
+      "output": "res://assets_external/characters_prepared/animations/life_C12.res",
+      "output_sha256": "fe5e3ce0a8db84e79faf057a7b8b19d93baba0fa6c561e0bbe0aff6ca217ca8c",
+      "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C12.json",
+      "bytes": 221278,
+      "kind": "cast_motion_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "C07",
+      "source_sha256": "7870c57de09a373f530c59299aa93b00e4ac6980f165b90155b5f539d97ebfac",
+      "output": "res://assets_external/characters_prepared/animations/life_C07.res",
+      "output_sha256": "78f24a3a0eeb3588c6ba1f1392170e90f262678f52890aa2d8bfa9b2006b27c8",
+      "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C07.json",
+      "bytes": 210129,
+      "kind": "cast_motion_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "C09",
+      "source_sha256": "65ae54bf974efe41d5c02bc7b89df281dbe74897e59e74543ac5262900d6a84f",
+      "output": "res://assets_external/characters_prepared/animations/life_C09.res",
+      "output_sha256": "8c91426421c5bd5db5d5f0e64883a54f5e675d0a1fd4258a508286f648c08dfc",
+      "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C09.json",
+      "bytes": 311479,
+      "kind": "cast_motion_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "C10",
+      "source_sha256": "aa5f1ad2d862eb879cba08457d588b519eac8403aa615a70650dc269cc8437f3",
+      "output": "res://assets_external/characters_prepared/animations/life_C10.res",
+      "output_sha256": "ccc5125f12cbbde5b9081a3d17b7a9a65696a7113db974abd83aeeaa64e30c56",
+      "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C10.json",
+      "bytes": 310350,
+      "kind": "cast_motion_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "C08",
+      "source_sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70",
+      "output": "res://assets_external/characters_prepared/animations/life_C08.res",
+      "output_sha256": "7e2b221208812014f9e71426c3344407d5d34fc3125d6b02ec57c2ec7bab3eb1",
+      "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C08.json",
+      "bytes": 249352,
+      "kind": "cast_motion_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "P01",
+      "source_sha256": "f76d08feaa2b105796101ae28e868166b33135c8b1e02a2375e8bf572f4983cd",
+      "output": "res://assets_external/characters_prepared/animations/life_P01.res",
+      "output_sha256": "c0a33e07dcde6120e26dcba6059b41eaf6e0e251d108270523b22c7a5214a2aa",
+      "receipt": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/library_compile_P01.json",
+      "bytes": 129500,
+      "kind": "player_idle_library",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "nessa",
+      "kind": "supported_workstation",
+      "source_sha256": "8e80e78e3ffba8ecc1624a622ad420f9d0c39c982c4c86ce857f1c4b849cd9e8",
+      "output": "res://assets_external/environment_prepared/living_cast/station_nessa.scn",
+      "output_sha256": "febaa16f5437a8503131a365df52c9f2bacf8cd6af8cdc935b89292fbffec2ea",
+      "compiled_resources": [
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nessa.scn",
+          "sha256": "febaa16f5437a8503131a365df52c9f2bacf8cd6af8cdc935b89292fbffec2ea"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nessa_00.res",
+          "sha256": "b995439775c1dcedf2a542a12c0d292b4f059edc54053882cd136bc2008079be"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nessa_01.res",
+          "sha256": "51e456c2add7a6f391a30b6d70e8b0be6c1e2768f03b4c5fbc3d2908fdbcf534"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nessa_02.res",
+          "sha256": "6e60ecbbb55767bc6641619c2f0c619d5cb6c8510f8ef982ea0a961bd392a84e"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nessa_03.res",
+          "sha256": "2638db3416022ca09cc8d4f3ee36706dea5c820fcd8a4221ade56fbfae030f91"
+        }
+      ],
+      "source_freshness": "pass",
+      "geometry_contact_verified": true,
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "elna",
+      "kind": "supported_workstation",
+      "source_sha256": "5be1ad8c15eb1fda1d45065637871ccd54211cd139da9d1642925cd487901a09",
+      "output": "res://assets_external/environment_prepared/living_cast/station_elna.scn",
+      "output_sha256": "b440333d47efb8754afed6dcbaaf29898bff1c0dadbde31b54c030addd08deb0",
+      "compiled_resources": [
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_elna.scn",
+          "sha256": "b440333d47efb8754afed6dcbaaf29898bff1c0dadbde31b54c030addd08deb0"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_elna_00.res",
+          "sha256": "7eb3ae7acc19b0243b571708b2c4ddcc153b1a9376d53d5ef6c63fdc5963c785"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_elna_01.res",
+          "sha256": "6a04e4b5caed6b9f33dacb448b54ffe6ff461207a62d23e24a234f1f9f7fa315"
+        }
+      ],
+      "source_freshness": "pass",
+      "geometry_contact_verified": true,
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "toma",
+      "kind": "supported_workstation",
+      "source_sha256": "c3844681b45ae016f2d3eba0d4d8d55ee171968495ffc172210627c66e45b7ec",
+      "output": "res://assets_external/environment_prepared/living_cast/station_toma.scn",
+      "output_sha256": "3f7ac2e4cdc5cdc74e8f7d83f1205b7d47ad9dc6333297a348412e840283af79",
+      "compiled_resources": [
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma.scn",
+          "sha256": "3f7ac2e4cdc5cdc74e8f7d83f1205b7d47ad9dc6333297a348412e840283af79"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_00.res",
+          "sha256": "47599fb61da31db2247f1e60b7dac4afe18b786fd529e070b9064b8006b96414"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_01.res",
+          "sha256": "db006742e1edf092150ca2e457660c26f905e74098537093e9b1443d78bd94fc"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_02.res",
+          "sha256": "952b11f691e0ae1aa675431e70ca8faeb7aee3f1bfae1927161341324c39869f"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_03.res",
+          "sha256": "7ddb5e207ed7429e592219e34212d0abbedeb89b002fd12ad692353c0eeaa05f"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_04.res",
+          "sha256": "17911f3dba3d8167024fcae7aac164f92fb751f29a0d84a97aca721f81ace145"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_05.res",
+          "sha256": "9a9c6b0986e367b7091a234559cc36c92a6bdf4839d553018091642dd799ffaa"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_06.res",
+          "sha256": "c4687a7dcaa52f213b766af76b71005cf395f11d0035792f2af48f62ce67bbb1"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_07.res",
+          "sha256": "aba9f62d2e8696cc188406c6c31141ac50e46e0ea385a63ad2f5d099318422c2"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_toma_08.res",
+          "sha256": "513319e3ca76e2d930bffff9c836ef81c9d2b81c5a7603819d45f6c0089deb91"
+        }
+      ],
+      "source_freshness": "pass",
+      "geometry_contact_verified": true,
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "nera",
+      "kind": "supported_workstation",
+      "source_sha256": "de6725abab778a6a46d4dcad85886f76bd81cf4f742c03a690801266661901d9",
+      "output": "res://assets_external/environment_prepared/living_cast/station_nera.scn",
+      "output_sha256": "4745dcd5a710b61e6d256f74228b833994719360f27cbd54e0f0bf86287f1ba6",
+      "compiled_resources": [
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nera.scn",
+          "sha256": "4745dcd5a710b61e6d256f74228b833994719360f27cbd54e0f0bf86287f1ba6"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nera_00.res",
+          "sha256": "e7699559d3b30eb3a5743d219db66d377ceba55e9e67c87e0e7208e643f9bc7b"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nera_01.res",
+          "sha256": "8027597a8142932a10a45d035559c4e1f25c420b11ba568dfc2c84fa71321edc"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_nera_02.res",
+          "sha256": "93ee10caa442b89ff6794e27f8a8b2ab4c7d2699bc30bd7c47e6c6690383cb4b"
+        }
+      ],
+      "source_freshness": "pass",
+      "geometry_contact_verified": true,
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "vale",
+      "kind": "supported_workstation",
+      "source_sha256": "9a1ac9a7f19e0df2b3aefec07c6764f3e1f5abfac1349144fb956eab36474aa2",
+      "output": "res://assets_external/environment_prepared/living_cast/station_vale.scn",
+      "output_sha256": "b086b8fcc7e4cfcb4376d393429ecc97c170efc63e69679e071f063b1fde4c97",
+      "compiled_resources": [
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale.scn",
+          "sha256": "b086b8fcc7e4cfcb4376d393429ecc97c170efc63e69679e071f063b1fde4c97"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_00.res",
+          "sha256": "0944fde6acca55c8cfea05928994a94be1319b0871dc4a9a0635cda5c7f1c5e0"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_01.res",
+          "sha256": "4f0fbc3db5edb2d7ee0cec407387391294749cac3ceb05f5bab273c5f6196b21"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_02.res",
+          "sha256": "d25a8c272b0a7be6beefb498caa7299f985bf17d1306a47734dd21a196a99e7d"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_03.res",
+          "sha256": "8452607483872813379a8e6ce31509864970efae9e4351b1f4d5888b0e398bf2"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_04.res",
+          "sha256": "3a766a3c13bfacd454a2210546d77773bf06a2d0d3ae5c95df7f3306d051de8a"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_05.res",
+          "sha256": "27532435057904359fba6b1ace98a4f24057ac9329b5df6ca5e68bce94a11bce"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_06.res",
+          "sha256": "3996d9eb41ae37fc2c1c5f36562b5f4e85587a8054a522dfd5c2583cb8ca9ef0"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_07.res",
+          "sha256": "98abc4f659f7bb6c19977fd37ccd060e9f9ac7befe736f54a2997dc6e655cc17"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_08.res",
+          "sha256": "c81e04eb28b23bf975a7c3d55289bbc655da7ef4e55276be4cc576610a42a2a6"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_09.res",
+          "sha256": "27a5d5114b8686ef829156d6155a7d221a1c7733a7bcf0727a4ef518b8f2f69e"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_10.res",
+          "sha256": "9475c5053e2c3c4772ee30e3e3bbbe3dac94c1c6989a1b99c622a17b16f1dea7"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_11.res",
+          "sha256": "dd4d0336a9f2b09388b23267f49187ecc3f7b79824f9cec7fc2c27257b3cb200"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_vale_12.res",
+          "sha256": "3e5ad658eb8494fade672a896bcd0313d63ec39966e0135a1ddd2169eb47901a"
+        }
+      ],
+      "source_freshness": "pass",
+      "geometry_contact_verified": true,
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "merrow",
+      "kind": "supported_workstation",
+      "source_sha256": "714bcacdf8b79d40da2d22bbb64278a738aeab3aa200df4eb014112fbd53edff",
+      "output": "res://assets_external/environment_prepared/living_cast/station_merrow.scn",
+      "output_sha256": "026c1dd19e5a71e5d25993c0989c41e58616a9bdb6e35c1b27f31ae4fef973b2",
+      "compiled_resources": [
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow.scn",
+          "sha256": "026c1dd19e5a71e5d25993c0989c41e58616a9bdb6e35c1b27f31ae4fef973b2"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_00.res",
+          "sha256": "c14ae726e4385eaff6e0f826ca0c26696cf54b306c5be0469e8cd4b4a5a27979"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_01.res",
+          "sha256": "42e801566f22f9c550ff480b54862bfe8fc0d098d6a43f817b459a745cce0932"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_02.res",
+          "sha256": "09be081c59d5d8b22e7f60be0a2ccd1123567cfea419326c75f46482b403a8ee"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_03.res",
+          "sha256": "93be657a020d6ba45ef36af2edfc5000b5098aac1d7482ef24b5cf63283b7eb9"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_04.res",
+          "sha256": "844f0af5067ce2f26da90b035ce4e532c40cb4188c0ace65035114bd2887d5b4"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_05.res",
+          "sha256": "cd8f41dba657475eb0e0b9e84dfba1ddc07019398e6fb507bf1b28d81041a2a3"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_06.res",
+          "sha256": "7e5033c084e5c63d972ba5a5019dffe80fe5502907fcc0da9277d47dfa892060"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_07.res",
+          "sha256": "8768fb0e3fa20b3eaaf6cf29799745f3bc09fdc8ca2295f88006bd031d5224b8"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_08.res",
+          "sha256": "91d40345e70ab45561ee9c5a2aaf95ed38378abf8c20452a0528bd03d4d5e228"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_09.res",
+          "sha256": "5f8f84791f99a8791568f10c9e20f90525ee9e84415f827128c0587bc7bf437e"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_merrow_10.res",
+          "sha256": "d894daf9d9ce562e7f32aaf38c5beba7a6bdca42334a7e82a39e1ab1b2514ac7"
+        }
+      ],
+      "source_freshness": "pass",
+      "geometry_contact_verified": true,
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "edric",
+      "kind": "supported_workstation",
+      "source_sha256": "09f398c7798a60b5bb2d88e481ef4f5b02bb2770b3aca78d75c62243bae93d6e",
+      "output": "res://assets_external/environment_prepared/living_cast/station_edric.scn",
+      "output_sha256": "ea796d33b6e9bdf63b583217f11ca8e4dfeca6eb56ef84ce11522b1a9d9d48ac",
+      "compiled_resources": [
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_edric.scn",
+          "sha256": "ea796d33b6e9bdf63b583217f11ca8e4dfeca6eb56ef84ce11522b1a9d9d48ac"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_edric_00.res",
+          "sha256": "fd855e6074541224f1dcda72b5da79ea57e3a51c8f64a9ad987328cf24a98a39"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_edric_01.res",
+          "sha256": "dd59547fcfebbcaf9107457e0b1a281acd7b2c4590683bedfd97e65648ce9dcd"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_edric_02.res",
+          "sha256": "5136336e1862bf83c0a94d7076b24a27aee5fa16b0c615cfd9046731515ad6d7"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_edric_03.res",
+          "sha256": "cc408e03264dce01bd90c33a3be48e7587bd0d7ca70d6b2f78fbec441a040adc"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_edric_04.res",
+          "sha256": "262247b514b82f8809dc3605deb8211381b0fbe15d5b1c2181927ea366490a9a"
+        },
+        {
+          "path": "res://assets_external/environment_prepared/living_cast/station_edric_05.res",
+          "sha256": "970b4cde6f6d3510d97ef874fe25a8988752da4fbb0c05bfba0fc9945cf62324"
+        }
+      ],
+      "source_freshness": "pass",
+      "geometry_contact_verified": true,
+      "in_level_accepted": false,
+      "user_accepted": false
+    },
+    {
+      "asset": "merrow_cup",
+      "kind": "native_held_cup",
+      "source_sha256": "906e690a85c3870b5a12fc1a9813008eed267a7b14098c5d45364774d14e53ed",
+      "output": "res://assets_external/environment_prepared/living_cast/merrow_cup.scn",
+      "output_sha256": "1fd3e0a7e3086e128a7b0f628fd6b02efe4acb33a90ffec12a7e76a0f9fb744c",
+      "source_freshness": "pass",
+      "in_level_accepted": false,
+      "user_accepted": false
+    }
+  ],
+  "library_freshness": {
+    "status": "pass",
+    "assets": [
+      {
+        "asset": "C11",
+        "source_sha256": "ebfd6dce71506ea7913eb1c79b90d074c4a909ae3ee0ae237effbd10e77943dc",
+        "output": "res://assets_external/characters_prepared/animations/life_C11.res",
+        "output_sha256": "450163d2f88bab548e1161140f09830948dbb11a7782e6b2b697260c90f58594",
+        "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C11.json",
+        "bytes": 291179
+      },
+      {
+        "asset": "C05",
+        "source_sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+        "output": "res://assets_external/characters_prepared/animations/life_C05.res",
+        "output_sha256": "cc53cbe9dd92cfc8913eddc573f02f5bbeaf24bab5654fa5f51167ab01cd01a6",
+        "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C05.json",
+        "bytes": 246702
+      },
+      {
+        "asset": "C06",
+        "source_sha256": "685999766336aeb0d1735f8a8758f881fef2999023eb4cbf5a53ab420dc6897e",
+        "output": "res://assets_external/characters_prepared/animations/life_C06.res",
+        "output_sha256": "7b1063bf9c956a723d1660d1541c3093a88761d6ff54168d1fc64d0db6da820a",
+        "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C06.json",
+        "bytes": 247354
+      },
+      {
+        "asset": "C12",
+        "source_sha256": "fc61817eb6e9231a7a440e0da563bfab0bcda306f1e54d02005836df452f6ed6",
+        "output": "res://assets_external/characters_prepared/animations/life_C12.res",
+        "output_sha256": "fe5e3ce0a8db84e79faf057a7b8b19d93baba0fa6c561e0bbe0aff6ca217ca8c",
+        "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C12.json",
+        "bytes": 221278
+      },
+      {
+        "asset": "C07",
+        "source_sha256": "7870c57de09a373f530c59299aa93b00e4ac6980f165b90155b5f539d97ebfac",
+        "output": "res://assets_external/characters_prepared/animations/life_C07.res",
+        "output_sha256": "78f24a3a0eeb3588c6ba1f1392170e90f262678f52890aa2d8bfa9b2006b27c8",
+        "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C07.json",
+        "bytes": 210129
+      },
+      {
+        "asset": "C09",
+        "source_sha256": "65ae54bf974efe41d5c02bc7b89df281dbe74897e59e74543ac5262900d6a84f",
+        "output": "res://assets_external/characters_prepared/animations/life_C09.res",
+        "output_sha256": "8c91426421c5bd5db5d5f0e64883a54f5e675d0a1fd4258a508286f648c08dfc",
+        "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C09.json",
+        "bytes": 311479
+      },
+      {
+        "asset": "C10",
+        "source_sha256": "aa5f1ad2d862eb879cba08457d588b519eac8403aa615a70650dc269cc8437f3",
+        "output": "res://assets_external/characters_prepared/animations/life_C10.res",
+        "output_sha256": "ccc5125f12cbbde5b9081a3d17b7a9a65696a7113db974abd83aeeaa64e30c56",
+        "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C10.json",
+        "bytes": 310350
+      },
+      {
+        "asset": "C08",
+        "source_sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70",
+        "output": "res://assets_external/characters_prepared/animations/life_C08.res",
+        "output_sha256": "7e2b221208812014f9e71426c3344407d5d34fc3125d6b02ec57c2ec7bab3eb1",
+        "receipt": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C08.json",
+        "bytes": 249352
+      },
+      {
+        "asset": "P01",
+        "source_sha256": "f76d08feaa2b105796101ae28e868166b33135c8b1e02a2375e8bf572f4983cd",
+        "output": "res://assets_external/characters_prepared/animations/life_P01.res",
+        "output_sha256": "c0a33e07dcde6120e26dcba6059b41eaf6e0e251d108270523b22c7a5214a2aa",
+        "receipt": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/library_compile_P01.json",
+        "bytes": 129500
+      }
+    ],
+    "errors": [],
+    "visual_acceptance": false,
+    "gameplay_acceptance": false
+  },
+  "current_recipe_differences": [
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/author_living_cast_stage2.py",
+      "archive_sha256": "e32d119b8cc757b7c518b6a889328164b361c88c0eb51ee95979fc12bfe4c808",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/living_cast_stage2_motion.py",
+      "archive_sha256": "71d94c7bb839c90fcdd927cc7c74f433f91f671e9fa0bed3523d03dd4a26597d",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_motion.py",
+      "current_sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/living_cast_stage2_profiles.py",
+      "archive_sha256": "4430a86b673ced07b07ea927ed621dea7bbf3abd0930baf985cbf289cfe43225",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "current_sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/author_living_cast_stage2.py",
+      "archive_sha256": "e32d119b8cc757b7c518b6a889328164b361c88c0eb51ee95979fc12bfe4c808",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/living_cast_stage2_motion.py",
+      "archive_sha256": "71d94c7bb839c90fcdd927cc7c74f433f91f671e9fa0bed3523d03dd4a26597d",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_motion.py",
+      "current_sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/living_cast_stage2_profiles.py",
+      "archive_sha256": "4430a86b673ced07b07ea927ed621dea7bbf3abd0930baf985cbf289cfe43225",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "current_sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/8dbb6dc824a92deb/author_living_cast_stage2.py",
+      "archive_sha256": "9dc8b1499be190225fcc4674dc8f502364fa15d207a2208469a492ddfb29934d",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/8dbb6dc824a92deb/living_cast_stage2_motion.py",
+      "archive_sha256": "d4612a90411e19b7294b7e46f0db81d10f57bd0834ec8a2be08083c105602d87",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_motion.py",
+      "current_sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/8dbb6dc824a92deb/living_cast_stage2_profiles.py",
+      "archive_sha256": "4430a86b673ced07b07ea927ed621dea7bbf3abd0930baf985cbf289cfe43225",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "current_sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/author_living_cast_stage2.py",
+      "archive_sha256": "2600ca8cddeee1b36f8cece43788456ffe0368e514475995f7fbb96aa6c80e63",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/living_cast_stage2_motion.py",
+      "archive_sha256": "d4612a90411e19b7294b7e46f0db81d10f57bd0834ec8a2be08083c105602d87",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_motion.py",
+      "current_sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/author_living_cast_stage2.py",
+      "archive_sha256": "2600ca8cddeee1b36f8cece43788456ffe0368e514475995f7fbb96aa6c80e63",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/living_cast_stage2_motion.py",
+      "archive_sha256": "d4612a90411e19b7294b7e46f0db81d10f57bd0834ec8a2be08083c105602d87",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_motion.py",
+      "current_sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/author_living_cast_stage2.py",
+      "archive_sha256": "2600ca8cddeee1b36f8cece43788456ffe0368e514475995f7fbb96aa6c80e63",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/living_cast_stage2_motion.py",
+      "archive_sha256": "d4612a90411e19b7294b7e46f0db81d10f57bd0834ec8a2be08083c105602d87",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_motion.py",
+      "current_sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7c807e06c48b45d/author_living_cast_stage2.py",
+      "archive_sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7c807e06c48b45d/author_living_cast_stage2.py",
+      "archive_sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/author_living_cast_stage2_props.py",
+      "archive_sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2_props.py",
+      "current_sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/living_cast_stage2_profiles.py",
+      "archive_sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "current_sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/author_living_cast_stage2_props.py",
+      "archive_sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2_props.py",
+      "current_sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/living_cast_stage2_profiles.py",
+      "archive_sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "current_sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/author_living_cast_stage2_props.py",
+      "archive_sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2_props.py",
+      "current_sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/living_cast_stage2_profiles.py",
+      "archive_sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "current_sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/author_living_cast_stage2_props.py",
+      "archive_sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2_props.py",
+      "current_sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/living_cast_stage2_profiles.py",
+      "archive_sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "current_sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/author_living_cast_stage2_props.py",
+      "archive_sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2_props.py",
+      "current_sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/living_cast_stage2_profiles.py",
+      "archive_sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6",
+      "current_tool": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "current_sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    },
+    {
+      "archived_recipe": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/f007b954b8a70dde/author_living_cast_stage2.py",
+      "archive_sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3",
+      "current_tool": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "current_sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "assessment": "Current development recipe evolved; this delivery remains reproduced by its exact archived recipe."
+    }
+  ],
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 5543,
+      "sha256": "bfdaaca0c2ebc88d42da4d1b34bfe652b24065d5dfa6184117b094a84fedd889",
+      "kind": "archive_byte_preservation_rules"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/player/P01_baseline.glb",
+      "bytes": 8363124,
+      "sha256": "dc2a645180861ba3f5de414a888f5b3c70acaecc66c54b458762637f81e0b72e",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/player/P01_baseline.json",
+      "bytes": 741,
+      "sha256": "54bfa5e7197e0d6e8b8097afd000faf719a7a8bb4f5fb4ac868d18d59d39fb80",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/player/frozen_prepared_inputs.json",
+      "bytes": 598,
+      "sha256": "097ec76f5b1a4a71371e3a57746a7d487b36d02059b795be2209e855dce2a5f8",
+      "kind": "player_source_or_native_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/player/input_closure.json",
+      "bytes": 14733,
+      "sha256": "e0f23878b5fe88407e602770cb3cbc479b21b520d0263ad406015635bff65f95",
+      "kind": "player_source_or_native_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/player/native_motion_20261110.json",
+      "bytes": 1934,
+      "sha256": "f88f54ef9db42edfebf5d77f885e56f38959c5aad3e777eb564c6fef9e7a2256",
+      "kind": "player_source_or_native_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/player/native_motion_20261110.log",
+      "bytes": 295,
+      "sha256": "c895dfe1cf27fc69a45d6339f3dd2ff854d90c4f689f5aae2ac0fb57ef0f315f",
+      "kind": "player_source_or_native_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C05_author.log",
+      "bytes": 3082,
+      "sha256": "fac333b0d58e446348617a0cd19ed04fb2ce40bc9e7ef67715507a374c199b7d",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C05_baseline.glb",
+      "bytes": 7961960,
+      "sha256": "2b21d65309a983a58a11c6d2bcc0853e1f97bb1c7f573fd8087a40e8f57fb60d",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C05_baseline.json",
+      "bytes": 747,
+      "sha256": "c17427462366014cb00f1a171aaeabd9828f23584dd9bb6841b130eebdc441e9",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C06_baseline.glb",
+      "bytes": 6652772,
+      "sha256": "05a56bc7f0b40fee4f86e5a1f733dc104b6ee9aa15c3ba67727d729b1898c876",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C06_baseline.json",
+      "bytes": 748,
+      "sha256": "d194f2da61c5eb23ed9ccc918c578032e808f43a61cffc6e271477737df6f2a4",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C07_baseline.glb",
+      "bytes": 8393984,
+      "sha256": "74b511cd7d1da7c3e70381e139c26063b4e10f8ed38c41ce03a0118c6456cb57",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C07_baseline.json",
+      "bytes": 752,
+      "sha256": "c8db0acb8198319c1910ba48cde3a5d0be83d2fc4e0d55ac1d31d1c270107caf",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C08_baseline.glb",
+      "bytes": 6660664,
+      "sha256": "ea76d7b0d4e1181734fe9d21ad5ef79435486ec92edcc9fed80e520c9917eea8",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C08_baseline.json",
+      "bytes": 757,
+      "sha256": "a0f75ba8c49bb85d8444f2f4b60cc9cfbf42073c874ce322e7ce718dfab67ca3",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C09_baseline.glb",
+      "bytes": 5435800,
+      "sha256": "d51b9c567b34eef5f8f25aac191124ce8c363d88f00ae804e9f10cac4949f853",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C09_baseline.json",
+      "bytes": 758,
+      "sha256": "eda867efc67abf4de90d590ea61a4a0c927a34fbb404b26fbc09cacacdcf4aff",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C10_baseline.glb",
+      "bytes": 6739948,
+      "sha256": "a02d40c315564be29d3fa703e65019a623a43b64d8dd24a45dcd1e20688ada1f",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C10_baseline.json",
+      "bytes": 754,
+      "sha256": "62b10c53ff374fc01ba03b0b66df5cd60b2cffe5d24283dbca0c32ed8ccdb1b4",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author.stdout.log",
+      "bytes": 3147,
+      "sha256": "bbc71e73314f1a1651b5bad19d11a7dffba0782f59006d023526586683149800",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_clearance.log",
+      "bytes": 3158,
+      "sha256": "80a366086c6fdc6cada1f167c6d93746130811737ec56df20d9bcbe19473a17b",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_final.log",
+      "bytes": 3158,
+      "sha256": "542bcd48b10174e16f5d368c1875f3a11fc96d82095ac5c3007d79de506afff9",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_process.json",
+      "bytes": 83,
+      "sha256": "545c06e09b5480fc485f2f5c4a5d0ca618f5b2a3d1efc35e6975746617b9586c",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_r2.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_r2.stdout.log",
+      "bytes": 3026,
+      "sha256": "49e238ed8ec02dccfab37436944a13d1f130d7c9ebce5d2d60de803005d24dac",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_r2_process.json",
+      "bytes": 83,
+      "sha256": "14a4c8176c1dbbf27bc64e3cbb128be88b53eb38ae73ad15ab6e1ad4ca123a96",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_r3.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_r3.stdout.log",
+      "bytes": 3025,
+      "sha256": "8d50123c907fad4b6c92a4c5d66e4e2737c7e4e6805318c29054b0f8bc4692b3",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_r3_process.json",
+      "bytes": 83,
+      "sha256": "94bf11669a34c50929bf12c1a0d1b78acec0f92d956202631721779e7c142596",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_author_r4.log",
+      "bytes": 3036,
+      "sha256": "5c02fe4e8ad84265446a8e9e3e9f2566cdd0a5ed4a8d7a1f9c1fd340042c156a",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_baseline.glb",
+      "bytes": 5579464,
+      "sha256": "06873bb66c8efae829e98c0e93e583f23c4fae8298beb949c99f276591545e4b",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C11_baseline.json",
+      "bytes": 742,
+      "sha256": "be8a92a07a910173b7d9e8f699224430e77a38b4777f367d0eaef78b927aa025",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C12_baseline.glb",
+      "bytes": 5475404,
+      "sha256": "44ed57fc8cc04e4a7f481efff4e629f64b7f1127b91778b2738d7fbd90cac69d",
+      "kind": "retained_authoring_input"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/C12_baseline.json",
+      "bytes": 741,
+      "sha256": "28db26d1662cb593dd396e8ed7ecedc4cf716b0c6d56e452db494c611d9275dc",
+      "kind": "retained_input_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/capture_release_contract_20261110.json",
+      "bytes": 811,
+      "sha256": "26b2afe10b14535518d23a4ef7b452856369f226ee89610da5bcda7513a8edc9",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/frozen_prepared_inputs.json",
+      "bytes": 4073,
+      "sha256": "472edce5721d33a3a969c6efc85ca78e5bf1d44b95f9abd3915164e9588a6e2a",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/input_closure.json",
+      "bytes": 37591,
+      "sha256": "3237861df8f0a3b3f3da46fe6113571a27a3dfca84faaaea34228f61f2e90558",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/receipt.json",
+      "bytes": 17163,
+      "sha256": "977d51b85b7848fac3c6a1d69370ed0913035b6f0af86f25ddec57f1662c3497",
+      "kind": "scoped_native_motion_proof"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/verify_living_cast_lifecycle.gd.log",
+      "bytes": 912,
+      "sha256": "4268eea4908679a3641ca53a28899b8624336d9b4a411682c75d326975fc80f8",
+      "kind": "scoped_native_motion_proof"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/verify_living_cast_motion.gd.log",
+      "bytes": 39426,
+      "sha256": "736724693ae9504d7b001f57ca7edda14496132d32a28b83e0d3477f4c9bab9a",
+      "kind": "scoped_native_motion_proof"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/verify_living_cast_motion.gd.player.log",
+      "bytes": 295,
+      "sha256": "c895dfe1cf27fc69a45d6339f3dd2ff854d90c4f689f5aae2ac0fb57ef0f315f",
+      "kind": "scoped_native_motion_proof"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/verify_native_attack_timing.gd.log",
+      "bytes": 257,
+      "sha256": "18694e4ec1bf6f8fe84632a85f0b5c6af1c8263a7288b781e8f5a60203385894",
+      "kind": "scoped_native_motion_proof"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_elna.stderr.log",
+      "bytes": 211,
+      "sha256": "7e5395d014568a4a0f1211d3c19f5aba21359c3106264d71153ad10817964c85",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_elna.stdout.log",
+      "bytes": 2647,
+      "sha256": "edc62eb18afa012a264f2090e1f7b14c7211ffb9dcb43f4e66915c75f81d64b5",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_elna_process.json",
+      "bytes": 127,
+      "sha256": "a49f7c36ccc993dec3fc022836965ad6f10d3ac3b10b11b516990ff13a4ac4e9",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_elna_r2.stderr.log",
+      "bytes": 211,
+      "sha256": "7e5395d014568a4a0f1211d3c19f5aba21359c3106264d71153ad10817964c85",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_elna_r2.stdout.log",
+      "bytes": 2482,
+      "sha256": "4d8b558dd44286c4b8d0b228969ba2b776534b383f47cedbe39b7f424fc91cf7",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_elna_r2_process.json",
+      "bytes": 129,
+      "sha256": "9849a8ffa3e57bdcfcc91cb224562bc39e0a0c652bb7696f422c37a7d60d0abc",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_nessa.stderr.log",
+      "bytes": 211,
+      "sha256": "7e5395d014568a4a0f1211d3c19f5aba21359c3106264d71153ad10817964c85",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_nessa.stdout.log",
+      "bytes": 939,
+      "sha256": "77239039e4b9ec59a1e666b43aaf4b8530e8a902a0dde2a53ebb4c9c2b62a2de",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_nessa_process.json",
+      "bytes": 128,
+      "sha256": "2a9e41876957e695cae7e2552d099ee85ebb766a8f1b87ca856e3b6aefdcc891",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/prop_winding.json",
+      "bytes": 9160,
+      "sha256": "759cf3f81b3fb14021df5a325c5a7cc7ad5a5c578cdcd0dec25b13014ad5a878",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/recipe_byte_verification.json",
+      "bytes": 1586,
+      "sha256": "e636c4481c49405ccaa4a66e5065ea5e3c1b8284d6d1cd238cdb1e1fef987df1",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/rest_geometry.json",
+      "bytes": 29836,
+      "sha256": "c51a2cc16541c76d6547cb1218d6e8dd856162b85b1b49d9ca042d786e533f57",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/source_review_20261110.json",
+      "bytes": 3571,
+      "sha256": "5341805d71263108f37fb3398d255e281c36435e650075a63aec2c8770b8b87a",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/station_edric_author.log",
+      "bytes": 2294,
+      "sha256": "24932ec21d7477de86fa9b9b6a9c667cb94a5bc441aced2a393a35fab7cc0280",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/station_elna_morph.log",
+      "bytes": 2881,
+      "sha256": "aa6f38110e759ea363fa99483bfc8df102fe5ce0d80b5a4c6de473518fc8ad43",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/station_merrow_author.log",
+      "bytes": 1938,
+      "sha256": "3df90727240a7273d34d1a2a101289e26f6d56655c059fcb0fc0490145c819b7",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/station_nera_author.log",
+      "bytes": 2815,
+      "sha256": "72e9ad1934da9d6df09541b7fb8382a45f5ff274f497421225df262870f18bd5",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/station_nessa_morph.log",
+      "bytes": 1492,
+      "sha256": "d55974fb0d12e8ae10ce5a6e4e79426c29756bd29482f8ca4a7eaa27d12e7e1d",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/station_toma_author.log",
+      "bytes": 3705,
+      "sha256": "8d867f4368e03d4e0a5abd9e61513afbbaec7845f34cf5b97c9ab77ffcd44717",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/station_vale_author.log",
+      "bytes": 3662,
+      "sha256": "340768e35a116ff8c97ad60d3efa72a56f5fbc645ce1ae2de9cb08caf9962817",
+      "kind": "source_history_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/Life_Idle_A_25.png",
+      "bytes": 297835,
+      "sha256": "3515507623b7d290d84403955ea7d86ead9797d067ebcc6e061c44d1823b6674",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/Life_Idle_A_50.png",
+      "bytes": 298202,
+      "sha256": "41a6d51858c12c8dcf553bb545bd17dd8a69c54ba82c813a42ffaf7b857f794e",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/Life_Idle_B_30.png",
+      "bytes": 298425,
+      "sha256": "063ec90a6b771d964774bb86f62890789b16239731ccbf59dc845e7f71aa278a",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/Life_Idle_B_72.png",
+      "bytes": 297937,
+      "sha256": "e83224d50a3dfa31f540a6f01698e5f097297de077ce68ca1159440144684b23",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/P01_life_review.glb",
+      "bytes": 8218752,
+      "sha256": "f76d08feaa2b105796101ae28e868166b33135c8b1e02a2375e8bf572f4983cd",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/P01_living_cast_v001.blend",
+      "bytes": 8445534,
+      "sha256": "6b1d149ce1d4a8b51245794b8a8581977da8e34bccb51c8977a00423059d850e",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/authoring.json",
+      "bytes": 23048,
+      "sha256": "5d9552ad32e5538b10e09d16a394c674bfea813d341fa1c4cc43fef5035a87f6",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/source_pose_verification.json",
+      "bytes": 1732,
+      "sha256": "ff92f0825cd28cfa8b3074e769ea8f16ffc1f6ba8329b38e62849e441ed25aa5",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/source_verification.json",
+      "bytes": 660,
+      "sha256": "7b3f2b76714ecb52610e44f4576dac8bbb8b56dcfa9f8aacfc3198d56df810b8",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/library_compile_P01.json",
+      "bytes": 1067,
+      "sha256": "15ea0f1f8f0c11e379520b952bb884d868fb91049c6087460db708a3bf843f2a",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/recipes/a6e62a8aaa00a26f/author_living_cast_stage2.py",
+      "bytes": 20356,
+      "sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/recipes/a6e62a8aaa00a26f/author_living_player.py",
+      "bytes": 6153,
+      "sha256": "a6d35e956281cab42623b6b182c3ec2d27127aa2ba97ce256f17b0f479137a9c",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/recipes/a6e62a8aaa00a26f/living_cast_stage2_motion.py",
+      "bytes": 13473,
+      "sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/recipes/a6e62a8aaa00a26f/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/recipes/a6e62a8aaa00a26f/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/C05_life_review.glb",
+      "bytes": 7448700,
+      "sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/C05_living_cast_v001.blend",
+      "bytes": 7919842,
+      "sha256": "3eaafb414a27793dcff3355e68d01ed2dcf9fdd1f2086bd8dc69f35e1351ed15",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/Life_Idle_A_25.png",
+      "bytes": 413704,
+      "sha256": "9604442ee851b06377c3df6e248886a309a51d11122ef6f4d6aa0f58e74a6267",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/Life_Idle_B_50.png",
+      "bytes": 413485,
+      "sha256": "9525fe51d81c6095af30128d6d7abca32c446b1e82ef553d4cd2f2bd983500de",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/Life_Listen_56.png",
+      "bytes": 414010,
+      "sha256": "41a8f20effa4b180cf715acfe1b333c07b6e7f1a7438be5ac6b02414dd139806",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/Life_Speak_43.png",
+      "bytes": 412874,
+      "sha256": "c40f4016f02775596ec9a09c327d28e8c0515bb9aae97d27e9c73cd270902c4c",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/Life_Work_25.png",
+      "bytes": 442082,
+      "sha256": "9e6af366f789af97d426363db7e3a914ff91bd1ed1939b0b44b048aa66b6a6c9",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/Life_Work_50.png",
+      "bytes": 440986,
+      "sha256": "f109063be055cab2bce7e265c21b620dd48e69455e1544cb36b14f5b5b27d663",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/Life_Work_75.png",
+      "bytes": 441953,
+      "sha256": "abb32b7edd8037416a1d08077f0857baebef52c904e0ecc03d5fd0638ea12550",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/authoring.json",
+      "bytes": 57657,
+      "sha256": "029028f0610a467bdf6292f97f09893d886404c8ab33fedd0d96849a9b539150",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/palm_surface_inspection.json",
+      "bytes": 3891,
+      "sha256": "cb55f8f08635bf5ebd20ad988a086c4095cd6ccc7eacbfa7549cd554e22fbef3",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/source_clearance.json",
+      "bytes": 1110,
+      "sha256": "77e7d6ad32aab23400e87c2d347a6accb1619d8ea0cc1e1e4cc87e1ceae3079b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/source_prop_clearance.json",
+      "bytes": 561,
+      "sha256": "e319a25cfdb0271872a840593f0f886735117494e29d6582d6854cdb216a0f22",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/source_reach.json",
+      "bytes": 2401,
+      "sha256": "490c54be5f7da63147880f6800399c1f540adc1abd6355b711c19c04248de86c",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/source_verification.json",
+      "bytes": 1136,
+      "sha256": "e010a8cf6108424a18692a4df4c6a6f7eae46c7931cf98b1119a00644805bb9c",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/work_recipe_probe.json",
+      "bytes": 1451,
+      "sha256": "a705d3638099a0a8cfd0e0a95bea064f64a10e816a1edc0b08cc5e7578d9c474",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/C06_life_review.glb",
+      "bytes": 6607356,
+      "sha256": "685999766336aeb0d1735f8a8758f881fef2999023eb4cbf5a53ab420dc6897e",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/C06_living_cast_v001.blend",
+      "bytes": 7110244,
+      "sha256": "a6193d89b47b9b0c76a62a769cc79d24a9e6a6ee75245efd99ebb2d502bbfc51",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/Life_Idle_A_25.png",
+      "bytes": 414866,
+      "sha256": "3b60ba9dbc0d1884da91d47aa21e2162ce7a85347c4022b0213b7ab7bec066cd",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/Life_Idle_B_50.png",
+      "bytes": 413753,
+      "sha256": "078f3275e9324d746a07512136f5a25e3e12f242ac5028c708719d329d2a7137",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/Life_Listen_56.png",
+      "bytes": 415261,
+      "sha256": "79a5a9e75a25ffad5e7f151fe2a2c29f73a64252df3e30cc81388e5270d5a297",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/Life_Speak_43.png",
+      "bytes": 411208,
+      "sha256": "122b7fddb8ec8ff75d027cf28f701c6af0f0f558137d2df01a249d93a4b52ea8",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/Life_Work_25.png",
+      "bytes": 444444,
+      "sha256": "4ba0bcb772f033f32f73ceb2f33d52dd7913d3720d3a056fa163d6d4d8bddef2",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/Life_Work_50.png",
+      "bytes": 440936,
+      "sha256": "439e284d0ba43e2a008b89d51c3da30668032b07f67039e6ad43046e259dfe60",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/Life_Work_75.png",
+      "bytes": 444369,
+      "sha256": "eb3f99dcc1fd7671102c0781e7344ba86306b5f5d2c78338ad8a59bc37993ff1",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/authoring.json",
+      "bytes": 57825,
+      "sha256": "557db4b99ec6df1d94f032787c954de90e1bdb9d376bde950269561ac4742eed",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/palm_anatomy_candidates.json",
+      "bytes": 45464,
+      "sha256": "a9981f19dfc979e86864da458b5f6295eb5d8cc36b91057401c1c43efd4d5d33",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/palm_surface_inspection.json",
+      "bytes": 3881,
+      "sha256": "d77b12b57f12837466c3f57c790ebc9d79f3b501d2f3c320dbd0e6e8c6942604",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/source_clearance.json",
+      "bytes": 618,
+      "sha256": "4240276581c8a83502da2b3d78b3f2cf1602aca9d24120b339af90a394318e40",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/source_prop_clearance.json",
+      "bytes": 797,
+      "sha256": "d1f5983077695ff7c5ed632ce5bcae1c72a1db9d91888e18d68be856ce6a84a9",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/source_reach.json",
+      "bytes": 2403,
+      "sha256": "0fa8a8e9ac18e24bbaae47ae7e15de47b5396b457e6067d92c8669e966ebb3d7",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/source_verification.json",
+      "bytes": 1135,
+      "sha256": "9ca502c3d167db139fed2bcd9bcc00e99af856fb49ca56acda25228b1c14dbbe",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/work_recipe_probe.json",
+      "bytes": 1718,
+      "sha256": "d229252a6f33c8cef262273ebf5bac11ec46dd1f6c4f26c84cbc7c8187da464e",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/C07_life_review.glb",
+      "bytes": 8352620,
+      "sha256": "7870c57de09a373f530c59299aa93b00e4ac6980f165b90155b5f539d97ebfac",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/C07_living_cast_v001.blend",
+      "bytes": 8868253,
+      "sha256": "bf1e5d51f3a21333c77b14a7620de2c547aea5ea4cab0ab0b3b5199fd0897a2c",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/Life_Idle_A_25.png",
+      "bytes": 415766,
+      "sha256": "17480894ad3d8ab712a3239d2f4713e9331b512c0d5fa4e75925e4d5652e20e0",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/Life_Idle_B_50.png",
+      "bytes": 415772,
+      "sha256": "96a93a9614ee896a49b50625971101f4ca16d903bbdf30544f6a5d7c70f20e3a",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/Life_Listen_56.png",
+      "bytes": 416290,
+      "sha256": "033ae723262a5d28a3b8506edba9d9c06dde7b27c4c00570ffb3d0e684883d24",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/Life_Speak_43.png",
+      "bytes": 412099,
+      "sha256": "e33a5c1012364ec55cbdc7daa27dc070ab43b40cc6c825c6efb935cba0155412",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/Life_Work_25.png",
+      "bytes": 415477,
+      "sha256": "1b9bbc11720cf6f33abc382b271d2de4f68f75b71656f3474a605e3268b00a24",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/Life_Work_50.png",
+      "bytes": 416251,
+      "sha256": "a4a1e69551f09da4f7703169c962ff206b8c4d133c6197f424c28cfcc65d8f5c",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/Life_Work_75.png",
+      "bytes": 416250,
+      "sha256": "879abd05727057acbb0007fb481591529c1cd5a7d0333321791279a78d4b6629",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/authoring.json",
+      "bytes": 58212,
+      "sha256": "c051ba186f5adcc242a71bf2f73157a03401c846285df559878b6d988137a0ee",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/palm_anatomy_candidates.json",
+      "bytes": 26021,
+      "sha256": "0adc8176eb8e8500098b8b1fd62c7dc3f870eb0291240e04b4cbd20f75bb2470",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/source_verification.json",
+      "bytes": 1137,
+      "sha256": "010cf08d24ea38f6b05bef9f896bef1fe5f4076350e9830cb7b9f6e00bb606cf",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/C08_life_review.glb",
+      "bytes": 6606688,
+      "sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/C08_living_cast_v001.blend",
+      "bytes": 7098803,
+      "sha256": "12a0c64d3a56956031507e46417079313a26f3864faf1daced6206ec7ca01cdd",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/Life_Idle_A_25.png",
+      "bytes": 431362,
+      "sha256": "500a78865d30f1990a825044a2466ecd8c78404c96f8e94a6f6e0d2cb6ba79cb",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/Life_Idle_B_50.png",
+      "bytes": 429071,
+      "sha256": "16f769018aadc0cb380f5727044e32bb41b12637b4bb8082b06515b46a1cea52",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/Life_Listen_56.png",
+      "bytes": 431874,
+      "sha256": "cb6feae53a36657c7740b921056fc62d4fa3ed2297946b7aaaea36998644ed51",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/Life_Speak_43.png",
+      "bytes": 426690,
+      "sha256": "db2f27e8400d2897159154db09464bb0ad17c57de1567c222d6cefbaaeb2af0a",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/Life_Work_25.png",
+      "bytes": 455486,
+      "sha256": "ed4294f743f7513826b21fba6090fee65031b847d14e0fd2a7568eedc74daa47",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/Life_Work_50.png",
+      "bytes": 451926,
+      "sha256": "7fff6288b6375d8978e783bf716a68fcf965295eacb88c3c33ee0409e5520faf",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/Life_Work_75.png",
+      "bytes": 456168,
+      "sha256": "b056cdc865f784a2d5d099df8fa960f5c28364b6c9fc4ded7cfe6f6d51e2eb6d",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/authoring.json",
+      "bytes": 58095,
+      "sha256": "1748802fb014e9d79c7a01766866c85afb49b9eb0c9bb7be6725b8c06c15b657",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/palm_anatomy_candidates.json",
+      "bytes": 24517,
+      "sha256": "db6c384e9495b4759051891c4884d107b8ad705679237f3e52a90b7d1c54d81b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/palm_surface_inspection.json",
+      "bytes": 3900,
+      "sha256": "d5a98db578608547e0dd960cf529da492ec0ff2500c0988860a7ac5d8fd7525d",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/source_clearance.json",
+      "bytes": 642,
+      "sha256": "094390ddd372bc27125f126940d9430ba51ee2c13e5491892293aaf7dab88aef",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/source_prop_clearance.json",
+      "bytes": 720,
+      "sha256": "f71b76ce1b198a9086687521fb5e90bf0d75802cd096c04de694802ca9ddb478",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/source_reach.json",
+      "bytes": 2398,
+      "sha256": "f216156609e66c75446822e21f90ce90d09fafe71b67556a26b912bfb3e9bb23",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/source_verification.json",
+      "bytes": 1136,
+      "sha256": "76e9276314a0c426e148f70520f5219eaf010e3644921bb2464167355098f3ae",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/work_recipe_probe.json",
+      "bytes": 1718,
+      "sha256": "654234f335096731eb6d85f4fa224ea108786a458b807ade3729ca82eba5091f",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/C09_life_review.glb",
+      "bytes": 5506432,
+      "sha256": "65ae54bf974efe41d5c02bc7b89df281dbe74897e59e74543ac5262900d6a84f",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/C09_living_cast_v001.blend",
+      "bytes": 5855369,
+      "sha256": "c3102faa0eac0efa89a0214045fdd84b281d9e1a01b92b5f6aa027ba8f994dd8",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/Life_Idle_A_25.png",
+      "bytes": 415985,
+      "sha256": "fc3b9f5ccae2ce2794b9f9e436935f0b384e47c23de3db2dd832cdc36a929a2b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/Life_Idle_B_50.png",
+      "bytes": 414688,
+      "sha256": "4e03989573d3e06d014868eb484f42e35c29fbf4d47c0d02808caaa9237c43ef",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/Life_Listen_56.png",
+      "bytes": 415964,
+      "sha256": "43abd5c8c0b1ebf805c21a10423c6f5e7f3abc92c3885ecaf032e20a00065c04",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/Life_Settle_Ledger_50.png",
+      "bytes": 441417,
+      "sha256": "296df3e5c12bbeb5f8d40c8529e958bbb366e36b604479e8977c90af05943fc0",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/Life_Speak_43.png",
+      "bytes": 412692,
+      "sha256": "19dda5b945e1923916de0baa9647b4a0c847f53f4eee86fa5d3f7a28928f0f7c",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/Life_Work_25.png",
+      "bytes": 446239,
+      "sha256": "5bcdbed57d6161ddbd9ad77c4f0008978b139c56129bb2d87247788b06b81bed",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/Life_Work_50.png",
+      "bytes": 441343,
+      "sha256": "9fb096c6836172fa7a5fb0492801f127a65a5b29850c863b31c6fda5bda910cf",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/Life_Work_75.png",
+      "bytes": 445734,
+      "sha256": "26ef8df4ebc80f62ae7e175638c71d3aa7c1e76ac932ee5d8d5273bfe5ae1be9",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/authoring.json",
+      "bytes": 68499,
+      "sha256": "6e1f17c9172c960e2802c76c5bc8026d323264423fc9ebbd5ead3f9bea32a796",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/palm_anatomy_candidates.json",
+      "bytes": 16153,
+      "sha256": "e298b9846045a8afef12cbc4a2bca7efe93fc8624aed1648b9d91aea5748ea51",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/palm_surface_inspection.json",
+      "bytes": 3914,
+      "sha256": "4b932b251647539ff8d08c47cbdd5022b3a3b5faa30eb656af614dc997a041d0",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/palm_surface_inspection_Life_Settle_Ledger.json",
+      "bytes": 3923,
+      "sha256": "c9f1aa17e2ca11e916193b059bd48b131f559fe14df3bcae422719c7073a188b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/source_clearance.json",
+      "bytes": 642,
+      "sha256": "9d271a6f0330af10947d5415cd15ebbcf1ee63dccd2ad5981b550e98859fdfb2",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/source_clearance_Life_Settle_Ledger.json",
+      "bytes": 651,
+      "sha256": "0fcc9e69178bff2b521faf474aff1ad2c78385406f2ccc5f22f07209090fdae8",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/source_prop_clearance.json",
+      "bytes": 931,
+      "sha256": "db6d92a18c035bdfe5187c8b4c1bfacb20776c5e24cc64f6887b84383b6b9e2a",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/source_reach.json",
+      "bytes": 2401,
+      "sha256": "df52586455ca38c58afc7c054cf2b6cf84f31afe80278b862b78bfef87abd3b1",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/source_verification.json",
+      "bytes": 1303,
+      "sha256": "26b36f864b855109ea09a6ce197057e035df1a1ff0ec212c8e2d806a7d1513df",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/work_recipe_probe.json",
+      "bytes": 1614,
+      "sha256": "b7d99e87ff37bec7881d5da20432f6f9c5f5a12ce8cac045575a761700e672d3",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/C10_life_review.glb",
+      "bytes": 6745356,
+      "sha256": "aa5f1ad2d862eb879cba08457d588b519eac8403aa615a70650dc269cc8437f3",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/C10_living_cast_v001.blend",
+      "bytes": 7417395,
+      "sha256": "1ee4c7daeb77261eb3d80b2657237387b6e8e0599465b24d7aa81d109aff2aa7",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Cup_Hold_50.png",
+      "bytes": 426082,
+      "sha256": "72a65a160dde0195f3a494f19c93233d9ff10e38ca3416c91f7527d303e90b7b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Drink_50.png",
+      "bytes": 425454,
+      "sha256": "f2b2ef3e50a8203484a3ffd543cb6a29d1c0ef9bd8cc9eb32baf7218e0c9a06b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Idle_A_25.png",
+      "bytes": 426568,
+      "sha256": "0adbcb3a4c65e0737012a08b59754ed1af7de1ad5b435f06cf0e460638a17d55",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Idle_B_50.png",
+      "bytes": 428187,
+      "sha256": "7f06b79eb19637499b37f5d90ec9670dfc3dc9399f26b26e8a5df8bb2b1995cb",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Listen_56.png",
+      "bytes": 426660,
+      "sha256": "fd3f0df1142466ec0f1da30af6e49837d097cb471c125ab1e061c33191337d99",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Speak_43.png",
+      "bytes": 425803,
+      "sha256": "6da2603b975ab9f243869c0fd3aa932c3d9ca4a027a8a904074b52a7b52c96db",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Work_25.png",
+      "bytes": 458569,
+      "sha256": "95d62fd70f13c137993d1037567c3b89125af6e0697751ad03515e4e881e0e6b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Work_50.png",
+      "bytes": 454299,
+      "sha256": "b2868007fc57ceddf8c12faf5b619fe4bf6781af72a2094695837a5c471b470b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/Life_Work_75.png",
+      "bytes": 458463,
+      "sha256": "4eff7f6fed4f35728de056ed88db656a00326a131bc1c9fe167a91f0e28da004",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/authoring.json",
+      "bytes": 78748,
+      "sha256": "7d64da6849eda482ad6619cae32305c539589529cbd8e4940d598089c15b7150",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/palm_anatomy_candidates.json",
+      "bytes": 24521,
+      "sha256": "619deb23078605e1eebadcb9216e332efe46b8ad3ebea22f21fdf5736d575a12",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/palm_surface_inspection.json",
+      "bytes": 3905,
+      "sha256": "1ac42c2b2be72ec6507bd2a2cc91dd1e2ffa42c4e4cb1fd23caad989ad13fb52",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/source_clearance.json",
+      "bytes": 642,
+      "sha256": "27ff65b224f04369374cdd32f869c4e87833606b9616f4e84d324a0ab049356d",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/source_cup_clearance.json",
+      "bytes": 2303,
+      "sha256": "d66da6bba353422d01549badfb2415ef16183d4a061d4e2b1dfb3389833b5d28",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/source_cup_probe.json",
+      "bytes": 5935,
+      "sha256": "0864108fea29e431b3b1a5ae30f3679f9bbd38b970012bd087c1a721d26bc376",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/source_prop_clearance.json",
+      "bytes": 847,
+      "sha256": "b11d89ffa8d8302210bb6abfd9859f6ed87983904a9248f9c490de737a06e3c8",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/source_reach.json",
+      "bytes": 2399,
+      "sha256": "991a41443809c47cc7783ebd82b402e087cafee77edba739921a25e85b69ce60",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/source_verification.json",
+      "bytes": 1458,
+      "sha256": "30c2f71c25ad82714a7bd5ba151f0d6a147bf2770b6415a4a18bfc7a222cd339",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/work_recipe_probe.json",
+      "bytes": 1718,
+      "sha256": "f2a1ace1fc234e4b53fde388a9a7165b95df4ad47098400236780a9428467a5b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/C11_life_review.glb",
+      "bytes": 5623140,
+      "sha256": "ebfd6dce71506ea7913eb1c79b90d074c4a909ae3ee0ae237effbd10e77943dc",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/C11_living_cast_v001.blend",
+      "bytes": 5874428,
+      "sha256": "499244d2cf20c6504e1f711c7a2a55047d061f179c2571fea993b0dbdc633823",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/Life_Idle_A_25.png",
+      "bytes": 418933,
+      "sha256": "077055c9d74a5386f5a1e81ba2069be383bf637c31f1debe4dd1830d7df720a9",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/Life_Idle_B_50.png",
+      "bytes": 417834,
+      "sha256": "4b44bbcd43b500187f7d1dc05fe68fdccd306d8e74c5f09f3a95aa32e0a385f9",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/Life_Listen_56.png",
+      "bytes": 418732,
+      "sha256": "f080f7c17cda64ee145e92f3e5e04cd685a4b41279ffa2e2a6ac6b29d2f4204b",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/Life_Speak_43.png",
+      "bytes": 417121,
+      "sha256": "ed56c7bccab95dfe3d5ff612c48c150c5c9a87a8ce721db31e5989567721f156",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/Life_Work_25.png",
+      "bytes": 450292,
+      "sha256": "339867b9debf7d541f4ee9a6e7c96ea6b016834a9d44189af4cd06d2bc0a9af2",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/Life_Work_50.png",
+      "bytes": 447160,
+      "sha256": "8054806bfbdb2d8506124744a71441bfa35c91229672bc9120ca248ef1e1100e",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/Life_Work_75.png",
+      "bytes": 450130,
+      "sha256": "04ba5f748567b0de770759aaef7bc347e2be88973be19da2e75d94b266cb67c0",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/authoring.json",
+      "bytes": 57667,
+      "sha256": "b1a3e1b51a9dbbd68ffc5a03bd6b2c6f0faae4b58b0e371462d280927c7de0a3",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/hand_anatomy.json",
+      "bytes": 22948,
+      "sha256": "2fe0dd6af9a78578c2d8836a34e3a5476a4396bab01e8595df3776876bbb0f9d",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/palm_surface_inspection.json",
+      "bytes": 3884,
+      "sha256": "da3798fe8c3b16557733ea08f1f2c6a02ef96ea8aa2154ee9922e720e72798f3",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/source_clearance.json",
+      "bytes": 618,
+      "sha256": "13f7def256f2d8761091a29b63644d95c9f069107368c461e4cf35917ee7010d",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/source_prop_clearance.json",
+      "bytes": 669,
+      "sha256": "656c863a5b6ff50d88af9cb1a42a8bb00dedb4c4d164ee075a216da97b9e6241",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/source_reach.json",
+      "bytes": 2396,
+      "sha256": "d8b4715c919d2d454898cb4737414c7a44abbd8dc40486cd58cf86287b75d715",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/source_verification.json",
+      "bytes": 1134,
+      "sha256": "ba20027ef85baad48a19c15d603a44b398cadb480d4f3c025707bc79192c04e3",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/work_recipe_probe.json",
+      "bytes": 1450,
+      "sha256": "c4fd55ae025f041c9c8b562744f375a493906a4d7c8148ba6462df1bbf91d23d",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/C12_life_review.glb",
+      "bytes": 5415572,
+      "sha256": "fc61817eb6e9231a7a440e0da563bfab0bcda306f1e54d02005836df452f6ed6",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/C12_living_cast_v001.blend",
+      "bytes": 5602575,
+      "sha256": "66cf12ddb78fdcdecc7719b6db766bee94756812a3835e54c10882e759614caf",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/Life_Idle_A_25.png",
+      "bytes": 408454,
+      "sha256": "8beb5288a986186d6f9b8109f280b5269c4a3b19a27dc5dd50dca80d8849d58a",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/Life_Idle_B_50.png",
+      "bytes": 408407,
+      "sha256": "d890300e5120e9c01f8d959613e176041295bf0a7c5aa16014f7c1f9a6b603a1",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/Life_Listen_56.png",
+      "bytes": 408056,
+      "sha256": "ffd0849d2c7bc1fbdf24967dfddbb63118f0adea4463e056b38f11f740325f5a",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/Life_Speak_43.png",
+      "bytes": 403680,
+      "sha256": "b999afae3d8923c726f9657a9f89dfc452446b804ac581150dfcd4934614b078",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/Life_Work_25.png",
+      "bytes": 442570,
+      "sha256": "6743528ddf4f80fce21cce659223619c6cfe2d8f8de6ba775c229be55706a592",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/Life_Work_50.png",
+      "bytes": 435242,
+      "sha256": "4d0d3f22ac15081aba58cb14da8ae112d450d92dad23bdbdc5edce7ac1740675",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/Life_Work_75.png",
+      "bytes": 442477,
+      "sha256": "8022242c8311e4c83b8dc703a2e5fb12ea07a3c16b65aad79af5f30c3ef6b24e",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/authoring.json",
+      "bytes": 58059,
+      "sha256": "93c4d99e4d2c4a1dfcf1f165e4df030b330b94d4d17656c51c943df38e8248e1",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/palm_anatomy_candidates.json",
+      "bytes": 16162,
+      "sha256": "73fcc7e8baf9fbd800530b25d8c4c95ff9db6a31690caa35c2f893df947799b9",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/palm_surface_inspection.json",
+      "bytes": 3774,
+      "sha256": "70c4de78be27fe98fa0d7dee1eb8317c81ae00e66e3f42348d265482e765c239",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/source_clearance.json",
+      "bytes": 642,
+      "sha256": "23e0e3f39dc488d64ac3c009770e0e59368e63ddd2b5e49520a2829fa008279c",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/source_prop_clearance.json",
+      "bytes": 675,
+      "sha256": "9de5c5892d00f8e57f907c4c2c6390015e1fd8bc8b7636f913c37bb8cbc43988",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/source_reach.json",
+      "bytes": 2402,
+      "sha256": "2ab79a195fd55fd6f3f709b0b3049b96bfad2e5b02ad299137a085da9c1f34c0",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/source_verification.json",
+      "bytes": 1134,
+      "sha256": "2d001509d90aa76d59175fb9a98aa34253866c2c15b62869665d6dc37d6715e9",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/work_recipe_probe.json",
+      "bytes": 1732,
+      "sha256": "dd29fb1b7a712ce76bd9cb78302669b9942d124a39ae8b6e083e0e85cd8cb094",
+      "kind": "authored_source_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C05.json",
+      "bytes": 1784,
+      "sha256": "a5a29ce3d0a131bfe03433b8af25c5f7fe377602959ac693737ded1cfea35833",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C06.json",
+      "bytes": 1817,
+      "sha256": "06a4a8f059434f63a00ca94799abae2e3bb6b1464b8fcfb96940440ae0fa25a4",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C07.json",
+      "bytes": 1820,
+      "sha256": "604df69a174a2c9d12798c5dab4be3b092e641d64fe9dc3dfea57460e88b69fc",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C08.json",
+      "bytes": 1823,
+      "sha256": "3a9346045c9374c9ad922db49ef8c36fb23b62f9f994106d2768545e92ec2202",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C09.json",
+      "bytes": 1944,
+      "sha256": "4d69b2a0427fd6cf25bb242c95310d5ebc694a30b8cfd9406f689588a41a03bc",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C10.json",
+      "bytes": 2048,
+      "sha256": "11e8c0b5342818dd7f33fc68f90ac2089be564cac7e932dc9c9ecc4ae4db6144",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C11.json",
+      "bytes": 1780,
+      "sha256": "b206c9a79ef7991659ef3b263372cca561cb2901694a466cc51a4c9e37a169c9",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/library_compile_C12.json",
+      "bytes": 1810,
+      "sha256": "d49998fea9a7d53d997e6874356452907f6ab12b27ac6510036e423f022b31a7",
+      "kind": "native_compile_receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/merrow_cup.blend",
+      "bytes": 6226610,
+      "sha256": "a9addf8eab9f6626c66ad784d3f9039ec7f21998921e0b69fd9bf1900681f19c",
+      "kind": "authored_cup_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/merrow_cup_calibration.json",
+      "bytes": 7311,
+      "sha256": "4e489b2acb9254aa1fc228f1e65a99cf6869a86c3c1f3231161708fd62f5d966",
+      "kind": "authored_cup_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/merrow_cup_compile.json",
+      "bytes": 1457,
+      "sha256": "4cd01afa245a4faf70b85e36d1aaa63989e62d2839ab7fb8b8ca9623c24515a7",
+      "kind": "authored_cup_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/merrow_cup_hold_review.png",
+      "bytes": 545677,
+      "sha256": "7c2d3fa1b385f16d078463e739ec4f68043b17d7d7165a184ed83202a55aad6e",
+      "kind": "authored_cup_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/merrow_cup_orientation_probe.json",
+      "bytes": 151,
+      "sha256": "63d0aa243e51cad7c3265a77eea4b2dac28b88273593e19a0e75c80ffc3af2f4",
+      "kind": "authored_cup_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/merrow_cup_sip_review.png",
+      "bytes": 547463,
+      "sha256": "2e5d5145955cb99398fbfcce4d51a8c623c06f8387f5e5996b1aabdc2c73369b",
+      "kind": "authored_cup_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/merrow_cup_world.glb",
+      "bytes": 19492,
+      "sha256": "906e690a85c3870b5a12fc1a9813008eed267a7b14098c5d45364774d14e53ed",
+      "kind": "authored_cup_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/receipts/merrow_cup_calibration_4e489b2acb9254aa1fc228f1e65a99cf6869a86c3c1f3231161708fd62f5d966.json",
+      "bytes": 7311,
+      "sha256": "4e489b2acb9254aa1fc228f1e65a99cf6869a86c3c1f3231161708fd62f5d966",
+      "kind": "immutable_calibration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/23481bbadb8faa72/author_living_cast_stage2.py",
+      "bytes": 20308,
+      "sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/23481bbadb8faa72/author_merrow_cup.py",
+      "bytes": 17052,
+      "sha256": "1da7dd5f4a84f9fc36fe248bb34c1f30a33710b1b4cfc61cefd597516bc1b670",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/23481bbadb8faa72/living_cast_stage2_motion.py",
+      "bytes": 13267,
+      "sha256": "38a485f92adc5cdbaec672ffbf57bc551b78b17060ae423b6fa90d511d195542",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/23481bbadb8faa72/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/23481bbadb8faa72/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/485836fa4353b47c/author_living_cast_stage2.py",
+      "bytes": 20112,
+      "sha256": "2600ca8cddeee1b36f8cece43788456ffe0368e514475995f7fbb96aa6c80e63",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/485836fa4353b47c/author_merrow_cup.py",
+      "bytes": 15852,
+      "sha256": "b4be278954541c2478b16adf1e46d6ef0367ed01e6e2256fb7028789926273d1",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/485836fa4353b47c/living_cast_stage2_motion.py",
+      "bytes": 13208,
+      "sha256": "d4612a90411e19b7294b7e46f0db81d10f57bd0834ec8a2be08083c105602d87",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/485836fa4353b47c/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/485836fa4353b47c/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/4a844ba1b7a892bc/author_living_cast_stage2.py",
+      "bytes": 20308,
+      "sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/4a844ba1b7a892bc/author_merrow_cup.py",
+      "bytes": 16520,
+      "sha256": "0b514a96cc934947328b4c099a0b8dc3117cb34dfa750f38c89bf8f61d154cc0",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/4a844ba1b7a892bc/living_cast_stage2_motion.py",
+      "bytes": 13267,
+      "sha256": "38a485f92adc5cdbaec672ffbf57bc551b78b17060ae423b6fa90d511d195542",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/4a844ba1b7a892bc/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/4a844ba1b7a892bc/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/a403ea2a7895ec97/author_living_cast_stage2_props.py",
+      "bytes": 14481,
+      "sha256": "97f35212ec2786e4fe491f45bdc49592272806239cb0a42a6b0bb519dcb1eed4",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/a403ea2a7895ec97/living_cast_stage2_profiles.py",
+      "bytes": 5924,
+      "sha256": "e6d9d479a6e34da106ffd0e70b1af87a4b9c8322ca95253ca046e9426e3d6ba3",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/b7da800a25244c67/author_living_cast_stage2_props.py",
+      "bytes": 21253,
+      "sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/b7da800a25244c67/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/d9f9a62e579b6f03/author_living_cast_stage2_props.py",
+      "bytes": 20426,
+      "sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/d9f9a62e579b6f03/living_cast_stage2_profiles.py",
+      "bytes": 6006,
+      "sha256": "710354f138e64230a4e2376fa4d28277e2ea50d7df989aae322677571668aa1c",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/author_living_cast_stage2_props.py",
+      "bytes": 20426,
+      "sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/e43d5992293f6027/living_cast_stage2_profiles.py",
+      "bytes": 6016,
+      "sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/f007b954b8a70dde/author_living_cast_stage2.py",
+      "bytes": 20308,
+      "sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/f007b954b8a70dde/author_merrow_cup.py",
+      "bytes": 17474,
+      "sha256": "a507b280a97d4c0cce0a21a63f6872991d05ced775a3350d1ec766503d071a97",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/f007b954b8a70dde/living_cast_stage2_motion.py",
+      "bytes": 13473,
+      "sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/f007b954b8a70dde/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/f007b954b8a70dde/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/f4f319838209f398/author_living_cast_stage2_props.py",
+      "bytes": 16790,
+      "sha256": "3665cb014ec8acf8a6559cd9a3069967f1f439d20f220c49e23ce0e7ef9ae2e4",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/recipes/f4f319838209f398/living_cast_stage2_profiles.py",
+      "bytes": 5924,
+      "sha256": "e6d9d479a6e34da106ffd0e70b1af87a4b9c8322ca95253ca046e9426e3d6ba3",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/review_iterations/cup_r1/merrow_cup_calibration.json",
+      "bytes": 6849,
+      "sha256": "f6582b130d6b7f0dd8fa6f033243f45aa745d8bb36cb4e64d8481692c96d8ecc",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/review_iterations/cup_r1/merrow_cup_hold_review.png",
+      "bytes": 534498,
+      "sha256": "81a5e1ccf10c96ba2f35b4276dd5561810ac42a888c067ce5765a9706b469fea",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/review_iterations/cup_r1/merrow_cup_sip_review.png",
+      "bytes": 543072,
+      "sha256": "3e41da5f3b6b6677ff64ad439e3c644ea7ad6ef2955d1fe6ab11d78cc106d2ab",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_edric.blend",
+      "bytes": 105278,
+      "sha256": "bead1df2f63be74f977acf39e43f70e23e2627200a0e87564eb6f6e7073df82f",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_edric.glb",
+      "bytes": 30276,
+      "sha256": "09f398c7798a60b5bb2d88e481ef4f5b02bb2770b3aca78d75c62243bae93d6e",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_edric_authoring.json",
+      "bytes": 2420,
+      "sha256": "f6158c87ab629754ff31e419db2c9e0f40c05ede9d5cfa64b2ba24c01d760e64",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_edric_compile.json",
+      "bytes": 1592,
+      "sha256": "98cb90acd8ff4b0589ab639448e5d87488715abb55f73b70043707cef5709a2f",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_edric_review.png",
+      "bytes": 288026,
+      "sha256": "f90b9d8e60777086472a185c332a71a2b6bf1a3db5f1b900e5ff3dc51ff7a731",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_elna.blend",
+      "bytes": 110209,
+      "sha256": "77703728295a425d93b3863bdbaa9506c7b5fb477aa6fa8e4e0ef04c95fc5e59",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_elna.glb",
+      "bytes": 35848,
+      "sha256": "5be1ad8c15eb1fda1d45065637871ccd54211cd139da9d1642925cd487901a09",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_elna_authoring.json",
+      "bytes": 3259,
+      "sha256": "ad5ab38b2f48756929a50288d3d4c6c85e5c4c429d9da5eef0f272617681f298",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_elna_compile.json",
+      "bytes": 1052,
+      "sha256": "4f2d2566859d4758666277970d03c0a5532b1ab90af1343d3a06b9439d625857",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_elna_pressed_review.png",
+      "bytes": 291504,
+      "sha256": "ddf468d28b65e7044c7ced87b5fbbb9755b0d4839c455dd7c4087a28be515de8",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_elna_review.png",
+      "bytes": 292446,
+      "sha256": "478d507796277115717ba33335bfe90fbb92d97493791957ad248b63eceb7426",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_merrow.blend",
+      "bytes": 95185,
+      "sha256": "1401029e003fcd3e9bdbc67df3b9c82d5c42a7ee296d51350dc9ac7a3f54c795",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_merrow.glb",
+      "bytes": 18128,
+      "sha256": "714bcacdf8b79d40da2d22bbb64278a738aeab3aa200df4eb014112fbd53edff",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_merrow_authoring.json",
+      "bytes": 1957,
+      "sha256": "1aaec7f88513a1f71be18501deda9c729ec29bf7b78272d2e8dc660519306dab",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_merrow_compile.json",
+      "bytes": 2500,
+      "sha256": "20d01bcaa6e8856c21289baad6528383267e9a52cd201ea2f5ce27b987f5361d",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_merrow_review.png",
+      "bytes": 300233,
+      "sha256": "f95975fcd36bbd379e3ba0e1e65ebe8cb7fadefd4c1b63422dd227a57d80ccd2",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nera.blend",
+      "bytes": 116427,
+      "sha256": "b55d0a05fa39673e810603f32a205cfec19d0c4433d2f6f7306fb6a5fa3e6dcb",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nera.glb",
+      "bytes": 61532,
+      "sha256": "de6725abab778a6a46d4dcad85886f76bd81cf4f742c03a690801266661901d9",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nera_authoring.json",
+      "bytes": 2430,
+      "sha256": "4724bfe2516d3c3d1622a151bf75ca8011f04304ffcce81a9aea8876aea5d730",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nera_compile.json",
+      "bytes": 1094,
+      "sha256": "215b094bb10e8819c4dd0e8ab6d9c2515c830f527be6e0e41e846481cd7b37ac",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nera_review.png",
+      "bytes": 320228,
+      "sha256": "615483467f82ecccca2238bc2a273ef88cabc29c0bdffa7fb3f071d6a82ec050",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nessa.blend",
+      "bytes": 94238,
+      "sha256": "758111f29b2c67ed95756809fc2dca5ac4ce5fe751d99a6075f3ef37dd4721d6",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nessa.glb",
+      "bytes": 14328,
+      "sha256": "8e80e78e3ffba8ecc1624a622ad420f9d0c39c982c4c86ce857f1c4b849cd9e8",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nessa_authoring.json",
+      "bytes": 2765,
+      "sha256": "4b72d5ca1722116b966c7c6aeb53c05944d4e35bafd26cc428e79019273659a4",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nessa_compile.json",
+      "bytes": 1414,
+      "sha256": "9f49fa466205e6f6ab24c949eb93db304e2f20bdc56c150908515626b71765a5",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nessa_pressed_review.png",
+      "bytes": 301906,
+      "sha256": "c6ec60a7fef08d2ae0a26d8e10cf81b200483b3b81b8ca1fb3d8b1b82615ff0e",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_nessa_review.png",
+      "bytes": 301601,
+      "sha256": "995d1fafa2595653a3fbd3377efc07c3adfd90f410766116d75f6f17372cec68",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_toma.blend",
+      "bytes": 117859,
+      "sha256": "ce6ec37efbb8063f204a0b817348551f349ae2abc16843de5430dc6652f43253",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_toma.glb",
+      "bytes": 66020,
+      "sha256": "c3844681b45ae016f2d3eba0d4d8d55ee171968495ffc172210627c66e45b7ec",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_toma_authoring.json",
+      "bytes": 2428,
+      "sha256": "c8adcd5a01976a4a49c88061151e7c09f5da28d64ea4260949ad6404ec0e7702",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_toma_compile.json",
+      "bytes": 2118,
+      "sha256": "ec667a8ad7cecf51b15030e7b139353305d82273a63e7a82b934296bb23442f0",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_toma_review.png",
+      "bytes": 316804,
+      "sha256": "a4138c1f3ec0e6ecee2d87c896a0dae8e4d9d1f397bb9b935388eabac21c5811",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_vale.blend",
+      "bytes": 108370,
+      "sha256": "a5a99a191896ef1636f755932c5fd6fc0f64450bca24cb388e2e651fe88c8dcb",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_vale.glb",
+      "bytes": 47800,
+      "sha256": "9a1ac9a7f19e0df2b3aefec07c6764f3e1f5abfac1349144fb956eab36474aa2",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_vale_authoring.json",
+      "bytes": 2410,
+      "sha256": "356c61457b15b03b742bb36ec2d16bc297d22ac093604c04c07b2da0c9a4f1b8",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_vale_compile.json",
+      "bytes": 2830,
+      "sha256": "d26aa3d9d2a69e3e6715bfe8c7bd387a73ecca00255719393bc7bdd80373cb46",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/props/station_vale_review.png",
+      "bytes": 300170,
+      "sha256": "3d420dd558245b8ccbcac0606f82b871165549238054b18ad63853e65728b86e",
+      "kind": "authored_station_or_scoped_evidence"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/4b15caec9f6cc5d2/author_living_cast_stage2.py",
+      "bytes": 19004,
+      "sha256": "e32d119b8cc757b7c518b6a889328164b361c88c0eb51ee95979fc12bfe4c808",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/4b15caec9f6cc5d2/living_cast_stage2_motion.py",
+      "bytes": 11734,
+      "sha256": "fce1083451339e16403679081544e5ed8b2926ceb2bd57410caf6d3bacf88276",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/4b15caec9f6cc5d2/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/4b15caec9f6cc5d2/living_cast_stage2_profiles.py",
+      "bytes": 5992,
+      "sha256": "40dd7616460446dc3621faf77d8842af6f26de7f8e52f70778f7d044600585ac",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/6ba2ac1929093787/author_living_cast_stage2.py",
+      "bytes": 19004,
+      "sha256": "e32d119b8cc757b7c518b6a889328164b361c88c0eb51ee95979fc12bfe4c808",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/6ba2ac1929093787/living_cast_stage2_motion.py",
+      "bytes": 11170,
+      "sha256": "ae5c48c07ac54ecabc495830ec99563b5900e150d8e031aea327bf5f74d0db84",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/6ba2ac1929093787/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/6ba2ac1929093787/living_cast_stage2_profiles.py",
+      "bytes": 6016,
+      "sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/6d27a2ba25f01a99/author_living_cast_stage2.py",
+      "bytes": 19004,
+      "sha256": "e32d119b8cc757b7c518b6a889328164b361c88c0eb51ee95979fc12bfe4c808",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/6d27a2ba25f01a99/living_cast_stage2_motion.py",
+      "bytes": 11170,
+      "sha256": "ae5c48c07ac54ecabc495830ec99563b5900e150d8e031aea327bf5f74d0db84",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/6d27a2ba25f01a99/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/6d27a2ba25f01a99/living_cast_stage2_profiles.py",
+      "bytes": 5992,
+      "sha256": "40dd7616460446dc3621faf77d8842af6f26de7f8e52f70778f7d044600585ac",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/712b7cae1d97a25d/author_living_cast_stage2.py",
+      "bytes": 18643,
+      "sha256": "e469c87c29ec5c5fe7eb05108d198aa86e3ce73d298039425c2d9e1dc5a1cede",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/712b7cae1d97a25d/living_cast_stage2_motion.py",
+      "bytes": 10696,
+      "sha256": "29ba4a3d640d7a12b05814502a0cca4aee3858260a16fc717320940289cc47b0",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/712b7cae1d97a25d/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/712b7cae1d97a25d/living_cast_stage2_profiles.py",
+      "bytes": 6006,
+      "sha256": "710354f138e64230a4e2376fa4d28277e2ea50d7df989aae322677571668aa1c",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/87c36c4d919176b5/author_living_cast_stage2.py",
+      "bytes": 20308,
+      "sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/87c36c4d919176b5/living_cast_stage2_motion.py",
+      "bytes": 13267,
+      "sha256": "38a485f92adc5cdbaec672ffbf57bc551b78b17060ae423b6fa90d511d195542",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/87c36c4d919176b5/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/87c36c4d919176b5/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/8dbb6dc824a92deb/author_living_cast_stage2.py",
+      "bytes": 20031,
+      "sha256": "9dc8b1499be190225fcc4674dc8f502364fa15d207a2208469a492ddfb29934d",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/8dbb6dc824a92deb/living_cast_stage2_motion.py",
+      "bytes": 13208,
+      "sha256": "d4612a90411e19b7294b7e46f0db81d10f57bd0834ec8a2be08083c105602d87",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/8dbb6dc824a92deb/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/8dbb6dc824a92deb/living_cast_stage2_profiles.py",
+      "bytes": 6058,
+      "sha256": "4430a86b673ced07b07ea927ed621dea7bbf3abd0930baf985cbf289cfe43225",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/author_living_cast_stage2.py",
+      "bytes": 19004,
+      "sha256": "e32d119b8cc757b7c518b6a889328164b361c88c0eb51ee95979fc12bfe4c808",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/living_cast_stage2_motion.py",
+      "bytes": 13097,
+      "sha256": "71d94c7bb839c90fcdd927cc7c74f433f91f671e9fa0bed3523d03dd4a26597d",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b0942cb67ff30076/living_cast_stage2_profiles.py",
+      "bytes": 6058,
+      "sha256": "4430a86b673ced07b07ea927ed621dea7bbf3abd0930baf985cbf289cfe43225",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b55453172762c2a1/author_living_cast_stage2.py",
+      "bytes": 17195,
+      "sha256": "e1a7152068483183bde0570881f05ab3a0da78c7a295ac874a6785899bb95517",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b55453172762c2a1/living_cast_stage2_motion.py",
+      "bytes": 9424,
+      "sha256": "e3c48e0fe75ef00cef538f39c2a03467876a6ac79411915d5282914478c655cc",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b55453172762c2a1/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/b55453172762c2a1/living_cast_stage2_profiles.py",
+      "bytes": 6006,
+      "sha256": "19b7e690c95fdefa854df586d58034de5483893e7097e4889d23cfd97034873b",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/c64bb563140678dd/author_living_cast_stage2.py",
+      "bytes": 18275,
+      "sha256": "811b5bdbec148968a0e3fc8f3241bda7a0beda8ff8de70447dab69fc7d6ee5e8",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/c64bb563140678dd/living_cast_stage2_motion.py",
+      "bytes": 10681,
+      "sha256": "e0ed63c1ef92dc1d60d724b35c02cac0e522d2391d424b97f7f817df8ec66b50",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/c64bb563140678dd/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/c64bb563140678dd/living_cast_stage2_profiles.py",
+      "bytes": 6006,
+      "sha256": "710354f138e64230a4e2376fa4d28277e2ea50d7df989aae322677571668aa1c",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/author_living_cast_stage2.py",
+      "bytes": 20112,
+      "sha256": "2600ca8cddeee1b36f8cece43788456ffe0368e514475995f7fbb96aa6c80e63",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/living_cast_stage2_motion.py",
+      "bytes": 13208,
+      "sha256": "d4612a90411e19b7294b7e46f0db81d10f57bd0834ec8a2be08083c105602d87",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7a5aa1e6c7b5792/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7c807e06c48b45d/author_living_cast_stage2.py",
+      "bytes": 20308,
+      "sha256": "abfbd6f8c8012ae7c52590ed65f9b2b448be61d70663232e4b0edcfe15ab85c3",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7c807e06c48b45d/living_cast_stage2_motion.py",
+      "bytes": 13473,
+      "sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7c807e06c48b45d/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/d7c807e06c48b45d/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "immutable_recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/fabdb75dbb542638/author_living_cast_stage2.py",
+      "bytes": 18094,
+      "sha256": "efbf914cac92ded04fed6da775f6305d416e5bdf07f0dd3131d23a5a584d3054",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/fabdb75dbb542638/living_cast_stage2_motion.py",
+      "bytes": 10681,
+      "sha256": "e0ed63c1ef92dc1d60d724b35c02cac0e522d2391d424b97f7f817df8ec66b50",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/fabdb75dbb542638/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/recipes/fabdb75dbb542638/living_cast_stage2_profiles.py",
+      "bytes": 6006,
+      "sha256": "710354f138e64230a4e2376fa4d28277e2ea50d7df989aae322677571668aa1c",
+      "kind": "historical_recipe_or_unaccepted_iteration"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/author_living_cast_stage2.py",
+      "bytes": 20356,
+      "sha256": "198d7b13d7ee502d98851d37f3b5fa9ee8ba96e0b17975734af383c7183918f7",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/author_living_cast_stage2_props.py",
+      "bytes": 21253,
+      "sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/author_living_player.py",
+      "bytes": 6153,
+      "sha256": "a6d35e956281cab42623b6b182c3ec2d27127aa2ba97ce256f17b0f479137a9c",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/author_merrow_cup.py",
+      "bytes": 17474,
+      "sha256": "a507b280a97d4c0cce0a21a63f6872991d05ced775a3350d1ec766503d071a97",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/export_living_cast_stage2_baseline.gd",
+      "bytes": 3826,
+      "sha256": "3fadc4882c4154129d1f3fe5d223de073db7d70aebb829a8b423d24116282648",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/extract_stage2_frozen_actors.py",
+      "bytes": 2823,
+      "sha256": "a5aa2841549ccd9bc0ec443d46cc2878ad509fc6f7f3f2901dc5819786bde23e",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_cast_clearance.py",
+      "bytes": 5147,
+      "sha256": "49fbcf1744462596662ed89b536ded68d71dd8834f68cc7b0f98926c87ecc24a",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_cast_hand_frames.py",
+      "bytes": 3608,
+      "sha256": "7ff63e19f06d4a7ee9eafc4a9ad181fb2545164752d85950eca487592d7b1e7c",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_cast_palm_candidates.py",
+      "bytes": 3585,
+      "sha256": "e6927f1e09d69ab61ec9dd11e36e6fb518487b6a51efe9d906ba64addc1a08ab",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_cast_prop_clearance.py",
+      "bytes": 7107,
+      "sha256": "4d395ee9be17ca05c6aad43bd72ddc0e5b498a4b07a0cce6638b560b88903d54",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_cast_prop_winding.py",
+      "bytes": 2438,
+      "sha256": "028e8bdcb4c7e8ffbffce3170d2e318af52bcb7c0e9d835998da4de37c365517",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_cast_stage2_grips.py",
+      "bytes": 6330,
+      "sha256": "d74b299227eb46a8b360e508c1edaf37bf8a22cb5005c0fe416d0a3110b01472",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_player_pose.py",
+      "bytes": 5555,
+      "sha256": "aa0c3fb1c3c05e02cec46d27255706acb22e48c5275eb29668ba33f5365fa7aa",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/inspect_merrow_cup_motion.py",
+      "bytes": 12127,
+      "sha256": "15e153e0c87be382acdd6352bd8f1a4f6e04f195a74a657dd809d400c94c8b97",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/living_cast_stage2_motion.py",
+      "bytes": 13473,
+      "sha256": "c557ed49028c544263f0aa6340759b4cacabe0b09845534f702581bc8f6d47ca",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/living_cast_stage2_preview.py",
+      "bytes": 3755,
+      "sha256": "5e3d6e6e7613cbef0a4ecfb66ea17e100acde103240ae02082808f2bc7550943",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/living_cast_stage2_profiles.py",
+      "bytes": 6060,
+      "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/measure_stage2_retained_rigs.py",
+      "bytes": 5512,
+      "sha256": "0d4e2e05a1cff394223c9af29983decde4eb08e3245793748d2fb2f8013aba79",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/prepare_stage2_input_closure.py",
+      "bytes": 6861,
+      "sha256": "2c11f6f657452b8727b56143cca9e65cfbe9a964c2ac51ed53fe728023b0728e",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/probe_living_cast_work_clearance.py",
+      "bytes": 6305,
+      "sha256": "434577b55e27eb4fbd33cf449499034b0a2b2c5e888ec0c6c511ac0ea2de3fbe",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/probe_merrow_cup_grip.py",
+      "bytes": 4637,
+      "sha256": "73ba8b37ff2986380484d80034a37bd6f38365cc795e9ec2fe8780e10b68c663",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/verify_living_cast_recipe_bytes.py",
+      "bytes": 3121,
+      "sha256": "2f8ce6601e216e13992abdf99a7bffbd864b625d3d1af0bf3122987ed3f91f10",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/verify_living_cast_stage2_reach.py",
+      "bytes": 4366,
+      "sha256": "b23d5576654a8bd2fef26cfa5e9f6abc5a23885de9f619819f9732d3bc223ac9",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/verify_living_cast_stage2_sources.py",
+      "bytes": 6271,
+      "sha256": "44cad4507b76ae07837bce2e5fb222534ae3ef854545daf6cb30f91f97fd78b0",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/verify_living_player_sources.py",
+      "bytes": 1082,
+      "sha256": "0fe91a214c1ea6de1a247f263d69b5475cdca8b0edaf4f423975f019826bae66",
+      "kind": "maintained_authoring_or_verification_tool"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C05.res",
+      "bytes": 246702,
+      "sha256": "cc53cbe9dd92cfc8913eddc573f02f5bbeaf24bab5654fa5f51167ab01cd01a6",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C06.res",
+      "bytes": 247354,
+      "sha256": "7b1063bf9c956a723d1660d1541c3093a88761d6ff54168d1fc64d0db6da820a",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C07.res",
+      "bytes": 210129,
+      "sha256": "78f24a3a0eeb3588c6ba1f1392170e90f262678f52890aa2d8bfa9b2006b27c8",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C08.res",
+      "bytes": 249352,
+      "sha256": "7e2b221208812014f9e71426c3344407d5d34fc3125d6b02ec57c2ec7bab3eb1",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C09.res",
+      "bytes": 311479,
+      "sha256": "8c91426421c5bd5db5d5f0e64883a54f5e675d0a1fd4258a508286f648c08dfc",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C10.res",
+      "bytes": 310350,
+      "sha256": "ccc5125f12cbbde5b9081a3d17b7a9a65696a7113db974abd83aeeaa64e30c56",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C11.res",
+      "bytes": 291179,
+      "sha256": "450163d2f88bab548e1161140f09830948dbb11a7782e6b2b697260c90f58594",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C12.res",
+      "bytes": 221278,
+      "sha256": "fe5e3ce0a8db84e79faf057a7b8b19d93baba0fa6c561e0bbe0aff6ca217ca8c",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_P01.res",
+      "bytes": 129500,
+      "sha256": "c0a33e07dcde6120e26dcba6059b41eaf6e0e251d108270523b22c7a5214a2aa",
+      "kind": "runtime_animation_library"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/merrow_cup.scn",
+      "bytes": 7941,
+      "sha256": "1fd3e0a7e3086e128a7b0f628fd6b02efe4acb33a90ffec12a7e76a0f9fb744c",
+      "kind": "runtime_measured_cup"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_edric.scn",
+      "bytes": 1035,
+      "sha256": "ea796d33b6e9bdf63b583217f11ca8e4dfeca6eb56ef84ce11522b1a9d9d48ac",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_edric_00.res",
+      "bytes": 8256,
+      "sha256": "fd855e6074541224f1dcda72b5da79ea57e3a51c8f64a9ad987328cf24a98a39",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_edric_01.res",
+      "bytes": 1590,
+      "sha256": "dd59547fcfebbcaf9107457e0b1a281acd7b2c4590683bedfd97e65648ce9dcd",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_edric_02.res",
+      "bytes": 1595,
+      "sha256": "5136336e1862bf83c0a94d7076b24a27aee5fa16b0c615cfd9046731515ad6d7",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_edric_03.res",
+      "bytes": 1595,
+      "sha256": "cc408e03264dce01bd90c33a3be48e7587bd0d7ca70d6b2f78fbec441a040adc",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_edric_04.res",
+      "bytes": 1596,
+      "sha256": "262247b514b82f8809dc3605deb8211381b0fbe15d5b1c2181927ea366490a9a",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_edric_05.res",
+      "bytes": 2726,
+      "sha256": "970b4cde6f6d3510d97ef874fe25a8988752da4fbb0c05bfba0fc9945cf62324",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_elna.scn",
+      "bytes": 993,
+      "sha256": "b440333d47efb8754afed6dcbaaf29898bff1c0dadbde31b54c030addd08deb0",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_elna_00.res",
+      "bytes": 3439,
+      "sha256": "7eb3ae7acc19b0243b571708b2c4ddcc153b1a9376d53d5ef6c63fdc5963c785",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_elna_01.res",
+      "bytes": 22477,
+      "sha256": "6a04e4b5caed6b9f33dacb448b54ffe6ff461207a62d23e24a234f1f9f7fa315",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow.scn",
+      "bytes": 1192,
+      "sha256": "026c1dd19e5a71e5d25993c0989c41e58616a9bdb6e35c1b27f31ae4fef973b2",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_00.res",
+      "bytes": 1600,
+      "sha256": "c14ae726e4385eaff6e0f826ca0c26696cf54b306c5be0469e8cd4b4a5a27979",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_01.res",
+      "bytes": 1595,
+      "sha256": "42e801566f22f9c550ff480b54862bfe8fc0d098d6a43f817b459a745cce0932",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_02.res",
+      "bytes": 1597,
+      "sha256": "09be081c59d5d8b22e7f60be0a2ccd1123567cfea419326c75f46482b403a8ee",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_03.res",
+      "bytes": 1595,
+      "sha256": "93be657a020d6ba45ef36af2edfc5000b5098aac1d7482ef24b5cf63283b7eb9",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_04.res",
+      "bytes": 1595,
+      "sha256": "844f0af5067ce2f26da90b035ce4e532c40cb4188c0ace65035114bd2887d5b4",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_05.res",
+      "bytes": 1595,
+      "sha256": "cd8f41dba657475eb0e0b9e84dfba1ddc07019398e6fb507bf1b28d81041a2a3",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_06.res",
+      "bytes": 1596,
+      "sha256": "7e5033c084e5c63d972ba5a5019dffe80fe5502907fcc0da9277d47dfa892060",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_07.res",
+      "bytes": 1596,
+      "sha256": "8768fb0e3fa20b3eaaf6cf29799745f3bc09fdc8ca2295f88006bd031d5224b8",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_08.res",
+      "bytes": 1596,
+      "sha256": "91d40345e70ab45561ee9c5a2aaf95ed38378abf8c20452a0528bd03d4d5e228",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_09.res",
+      "bytes": 1595,
+      "sha256": "5f8f84791f99a8791568f10c9e20f90525ee9e84415f827128c0587bc7bf437e",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_merrow_10.res",
+      "bytes": 1595,
+      "sha256": "d894daf9d9ce562e7f32aaf38c5beba7a6bdca42334a7e82a39e1ab1b2514ac7",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nera.scn",
+      "bytes": 929,
+      "sha256": "4745dcd5a710b61e6d256f74228b833994719360f27cbd54e0f0bf86287f1ba6",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nera_00.res",
+      "bytes": 1589,
+      "sha256": "e7699559d3b30eb3a5743d219db66d377ceba55e9e67c87e0e7208e643f9bc7b",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nera_01.res",
+      "bytes": 17757,
+      "sha256": "8027597a8142932a10a45d035559c4e1f25c420b11ba568dfc2c84fa71321edc",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nera_02.res",
+      "bytes": 1995,
+      "sha256": "93ee10caa442b89ff6794e27f8a8b2ab4c7d2699bc30bd7c47e6c6690383cb4b",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nessa.scn",
+      "bytes": 1071,
+      "sha256": "febaa16f5437a8503131a365df52c9f2bacf8cd6af8cdc935b89292fbffec2ea",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nessa_00.res",
+      "bytes": 1593,
+      "sha256": "b995439775c1dcedf2a542a12c0d292b4f059edc54053882cd136bc2008079be",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nessa_01.res",
+      "bytes": 1594,
+      "sha256": "51e456c2add7a6f391a30b6d70e8b0be6c1e2768f03b4c5fbc3d2908fdbcf534",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nessa_02.res",
+      "bytes": 1596,
+      "sha256": "6e60ecbbb55767bc6641619c2f0c619d5cb6c8510f8ef982ea0a961bd392a84e",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_nessa_03.res",
+      "bytes": 3502,
+      "sha256": "2638db3416022ca09cc8d4f3ee36706dea5c820fcd8a4221ade56fbfae030f91",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma.scn",
+      "bytes": 1075,
+      "sha256": "3f7ac2e4cdc5cdc74e8f7d83f1205b7d47ad9dc6333297a348412e840283af79",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_00.res",
+      "bytes": 17536,
+      "sha256": "47599fb61da31db2247f1e60b7dac4afe18b786fd529e070b9064b8006b96414",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_01.res",
+      "bytes": 1444,
+      "sha256": "db006742e1edf092150ca2e457660c26f905e74098537093e9b1443d78bd94fc",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_02.res",
+      "bytes": 1448,
+      "sha256": "952b11f691e0ae1aa675431e70ca8faeb7aee3f1bfae1927161341324c39869f",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_03.res",
+      "bytes": 1450,
+      "sha256": "7ddb5e207ed7429e592219e34212d0abbedeb89b002fd12ad692353c0eeaa05f",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_04.res",
+      "bytes": 1450,
+      "sha256": "17911f3dba3d8167024fcae7aac164f92fb751f29a0d84a97aca721f81ace145",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_05.res",
+      "bytes": 1602,
+      "sha256": "9a9c6b0986e367b7091a234559cc36c92a6bdf4839d553018091642dd799ffaa",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_06.res",
+      "bytes": 1603,
+      "sha256": "c4687a7dcaa52f213b766af76b71005cf395f11d0035792f2af48f62ce67bbb1",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_07.res",
+      "bytes": 1602,
+      "sha256": "aba9f62d2e8696cc188406c6c31141ac50e46e0ea385a63ad2f5d099318422c2",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_toma_08.res",
+      "bytes": 1588,
+      "sha256": "513319e3ca76e2d930bffff9c836ef81c9d2b81c5a7603819d45f6c0089deb91",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale.scn",
+      "bytes": 1290,
+      "sha256": "b086b8fcc7e4cfcb4376d393429ecc97c170efc63e69679e071f063b1fde4c97",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_00.res",
+      "bytes": 1598,
+      "sha256": "0944fde6acca55c8cfea05928994a94be1319b0871dc4a9a0635cda5c7f1c5e0",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_01.res",
+      "bytes": 10001,
+      "sha256": "4f0fbc3db5edb2d7ee0cec407387391294749cac3ceb05f5bab273c5f6196b21",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_02.res",
+      "bytes": 1589,
+      "sha256": "d25a8c272b0a7be6beefb498caa7299f985bf17d1306a47734dd21a196a99e7d",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_03.res",
+      "bytes": 1599,
+      "sha256": "8452607483872813379a8e6ce31509864970efae9e4351b1f4d5888b0e398bf2",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_04.res",
+      "bytes": 1599,
+      "sha256": "3a766a3c13bfacd454a2210546d77773bf06a2d0d3ae5c95df7f3306d051de8a",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_05.res",
+      "bytes": 1598,
+      "sha256": "27532435057904359fba6b1ace98a4f24057ac9329b5df6ca5e68bce94a11bce",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_06.res",
+      "bytes": 1598,
+      "sha256": "3996d9eb41ae37fc2c1c5f36562b5f4e85587a8054a522dfd5c2583cb8ca9ef0",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_07.res",
+      "bytes": 1598,
+      "sha256": "98abc4f659f7bb6c19977fd37ccd060e9f9ac7befe736f54a2997dc6e655cc17",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_08.res",
+      "bytes": 1597,
+      "sha256": "c81e04eb28b23bf975a7c3d55289bbc655da7ef4e55276be4cc576610a42a2a6",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_09.res",
+      "bytes": 1598,
+      "sha256": "27a5d5114b8686ef829156d6155a7d221a1c7733a7bcf0727a4ef518b8f2f69e",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_10.res",
+      "bytes": 1596,
+      "sha256": "9475c5053e2c3c4772ee30e3e3bbbe3dac94c1c6989a1b99c622a17b16f1dea7",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_11.res",
+      "bytes": 1599,
+      "sha256": "dd4d0336a9f2b09388b23267f49187ecc3f7b79824f9cec7fc2c27257b3cb200",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/station_vale_12.res",
+      "bytes": 1599,
+      "sha256": "3e5ad658eb8494fade672a896bcd0313d63ec39966e0135a1ddd2169eb47901a",
+      "kind": "runtime_supported_station"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_stage2_libraries.gd",
+      "bytes": 11885,
+      "sha256": "aa4aca3ad1240785581d00818434cf29f190e496eb2280c9bb07e489953affa7",
+      "kind": "native_asset_compiler"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_stage2_props.gd",
+      "bytes": 10110,
+      "sha256": "04d58ebb3528904fd70ce2080cda085f1bbd98fc44bcae3280d7fb8eaed6dea1",
+      "kind": "native_asset_compiler"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_merrow_cup.gd",
+      "bytes": 10402,
+      "sha256": "d3a12762cea3e64359318247a1620d1c599690f2d3ec61c2b0cac011ed780fc1",
+      "kind": "native_asset_compiler"
+    }
+  ],
+  "total_file_bytes": 229182310,
+  "runtime_file_bytes": 2382196,
+  "excluded_pending_units": [
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures",
+      "reason": "Creature candidates are separate delivery; M15 has source/native candidate proof only, no production/profile/full-level acceptance."
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/rook_station_satchel.scn",
+      "reason": "Existing Stage1 derivative changed in working tree; not part of requested eight NPC/seven station/P01 checkpoint. Preserve for separate comparison."
+    }
+  ],
+  "in_level_accepted": false,
+  "user_accepted": false,
+  "specific_observations": {
+    "edric_idle_b": "Source review observed wrist/forearm settling near waist. Archived intent says lapel correction; no actual lapel contact has been verified.",
+    "nessa_work": "High anticipation palms require full-cycle in-level judgment; geometric trajectory clearance alone is not visual acceptance.",
+    "elna_work": "Supported smoothing and source TaskPress are verified; cloth silhouette/material readability must be checked in actual level lighting."
+  },
+  "manifest_sidecars": [
+    "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/checkpoint_completed_units_20261110.json",
+    "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/checkpoint_completed_units_20261110.paths.txt"
+  ],
+  "note": "Source carriers, editable Blender files and baselines are authoring-only, excluded from Web ownership. Historical iteration records are not current approval. Per-file100MiB checked here; completeWeb256MiB remains final packaging gate."
+}

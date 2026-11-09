@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "asset": "C12",
+  "identity": "nera",
+  "sources": [
+    {
+      "resource": "res://assets_external/environment/props/Crate_Wooden.obj",
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Crate_Wooden.obj",
+      "sha256": "5452e2aa770f6bff09db597dcaabe8d9fd221fabb72d970b0a93e34b2544426f",
+      "retained_vertices": 1056,
+      "change": "Retained silhouette normalized to supported workstation dimensions; authored palette."
+    }
+  ],
+  "authoring_tool_sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a",
+  "blend_sha256": "b55d0a05fa39673e810603f32a205cfec19d0c4433d2f6f7306fb6a5fa3e6dcb",
+  "carrier_sha256": "de6725abab778a6a46d4dcad85886f76bd81cf4f742c03a690801266661901d9",
+  "recipe_snapshot": {
+    "sha256": "b7da800a25244c671e8b97fb2faf8f2ebbedad011d57b1f780cfd9eaba7393d7",
+    "files": [
+      {
+        "name": "author_living_cast_stage2_props.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\b7da800a25244c67\\author_living_cast_stage2_props.py",
+        "sha256": "f5ac9b1be399fd25be67670107b0a532e341988fc555710fc3e8555d4e7b357a"
+      },
+      {
+        "name": "living_cast_stage2_profiles.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\b7da800a25244c67\\living_cast_stage2_profiles.py",
+        "sha256": "7e63aa6b4428de224c69c10ed54c1767e60c15f5c0ee2d71eeb38d609e6cb09d"
+      }
+    ]
+  },
+  "blender_version": "5.2.3 LTS",
+  "triangles": 1640,
+  "grips_godot": {
+    "GripLeft": [
+      -0.12,
+      0.115,
+      0
+    ],
+    "GripRight": [
+      0.12,
+      0.115,
+      0
+    ]
+  },
+  "surface_height": 0.115,
+  "prop_root_actor_relative_godot": [
+    0,
+    1,
+    -0.4
+  ],
+  "support_near_limit_godot_z": 0.04,
+  "contact_part": "WorkContactPart",
+  "contact_response": "compress",
+  "contact_amount": 0.06,
+  "contact_shape": {},
+  "runtime_resource": "res://assets_external/environment_prepared/living_cast/station_nera.scn",
+  "source_geometry_authored": true,
+  "geometry_contact_verified": false,
+  "native_grips_verified": false,
+  "user_accepted": false,
+  "notes": [
+    "Actual supported contact geometry; no pickup or carried transition is claimed.",
+    "New work surfaces/details supplement the retained source shapes where listed."
+  ]
+}

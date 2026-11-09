@@ -11,9 +11,9 @@ ROOT=Path(__file__).resolve().parents[1]
 EXPECTED={'Life_Idle_A':6.0,'Life_Idle_B':8.0,'Life_Work':4.0,'Life_Listen':4.0,'Life_Speak':4.0}
 
 
-def verify(asset):
-    expected={**CLIPS, **PROFILES[asset].get('extra_clips', {})}
-    folder=ROOT/'models/living_cast_stage2_20261107'/asset
+def verify(asset, models=None, expected_clips=None):
+    expected=expected_clips if expected_clips is not None else {**CLIPS, **PROFILES[asset].get('extra_clips', {})}
+    folder=(models if models is not None else ROOT/'models/living_cast_stage2_20261107')/asset
     receipt=json.loads((folder/'authoring.json').read_text())
     data=(folder/(asset+'_life_review.glb')).read_bytes()
     if hashlib.sha256(data).hexdigest()!=receipt['review_glb_sha256']:

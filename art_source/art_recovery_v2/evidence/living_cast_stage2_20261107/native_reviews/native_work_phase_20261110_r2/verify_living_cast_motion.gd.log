@@ -1,0 +1,202 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+LIVING CAST SCOPE: {"complete_cast":false,"equipment_validation_deferred":true,"player":false,"roles":["sister_anwen_human","blacksmith_tor","mira_human","rook_human","nessa","widow_elna","farmer_toma","saga_nera","captain_senn","vargan_record_keeper","vargan_steward","edric"]}
+WARNING: 'res://assets_external/design_pack_v1/C01_ash_staff.glb': In external resource #0, invalid UID: 'uid://odrnml024bsb' - using text path instead: 'res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffAshWood_authored_grain.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _instantiate_prop (res://scripts/character_presentation.gd:529)
+       [1] _add_anwen_staff (res://scripts/character_presentation.gd:487)
+       [2] apply_npc (res://scripts/character_presentation.gd:269)
+       [3] _actor (res://tools/verify_living_cast_motion.gd:182)
+       [4] _run (res://tools/verify_living_cast_motion.gd:85)
+WARNING: 'res://assets_external/design_pack_v1/C01_ash_staff.glb': In external resource #1, invalid UID: 'uid://bcd6r6suqis1a' - using text path instead: 'res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffAshWood_fine_normal.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _instantiate_prop (res://scripts/character_presentation.gd:529)
+       [1] _add_anwen_staff (res://scripts/character_presentation.gd:487)
+       [2] apply_npc (res://scripts/character_presentation.gd:269)
+       [3] _actor (res://tools/verify_living_cast_motion.gd:182)
+       [4] _run (res://tools/verify_living_cast_motion.gd:85)
+WARNING: 'res://assets_external/design_pack_v1/C01_ash_staff.glb': In external resource #2, invalid UID: 'uid://c5kau600tgmyd' - using text path instead: 'res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffGrip_authored_grain.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _instantiate_prop (res://scripts/character_presentation.gd:529)
+       [1] _add_anwen_staff (res://scripts/character_presentation.gd:487)
+       [2] apply_npc (res://scripts/character_presentation.gd:269)
+       [3] _actor (res://tools/verify_living_cast_motion.gd:182)
+       [4] _run (res://tools/verify_living_cast_motion.gd:85)
+WARNING: 'res://assets_external/design_pack_v1/C01_ash_staff.glb': In external resource #3, invalid UID: 'uid://mfnavricsgof' - using text path instead: 'res://assets_external/design_pack_v1/C01_ash_staff_C01_StaffGrip_fine_normal.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _instantiate_prop (res://scripts/character_presentation.gd:529)
+       [1] _add_anwen_staff (res://scripts/character_presentation.gd:487)
+       [2] apply_npc (res://scripts/character_presentation.gd:269)
+       [3] _actor (res://tools/verify_living_cast_motion.gd:182)
+       [4] _run (res://tools/verify_living_cast_motion.gd:85)
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":true,"role":"sister_anwen_human","source":"res://assets_external/design_pack_v1/humans/C01_Anwen.glb"}
+LIVING CAST CONTACT: {"role":"sister_anwen_human","sample":{"actual":"(3.38, 1.015, -6.949999)","cycle":0,"error":0.000000476837158203125,"kind":"cloth","target":"(3.38, 1.015, -6.95)"},"side":"l"}
+LIVING CAST STAFF: {"grip_error":0.0432982258498669,"plant_error":0.00000107855453279626,"socket":"hand_r","state":"life_clip:Life_Work","tip":"(3.834692, 0.006443, -6.611643)","tip_height_error":0.0064428448677063,"up_dot":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432984791696072,"plant_error":0.00742833036929369,"socket":"hand_r","state":"idle","tip":"(3.83639, 0.007259, -6.618829)","tip_height_error":0.00725877285003662,"up_dot":0.99997878074646}
+LIVING CAST STAFF: {"grip_error":0.0432984791696072,"plant_error":0.0075020962394774,"socket":"hand_r","state":"idle","tip":"(3.836405, 0.007334, -6.618893)","tip_height_error":0.00733363628387451,"up_dot":0.99997878074646}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"sister_anwen_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"sister_anwen_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"sister_anwen_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"sister_anwen_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"sister_anwen_human"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"sister_anwen_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(3.38, 0.095, -6.349999)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(3.62, 0.095, -6.35)","side":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432986877858639,"plant_error":0.000000242319771359689,"socket":"hand_r","state":"story_offer","tip":"(3.834692, 0.006443, -6.611644)","tip_height_error":0.00644272565841675,"up_dot":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432986877858639,"plant_error":0.0000000759027898311615,"socket":"hand_r","state":"story_explain","tip":"(3.834692, 0.006443, -6.611644)","tip_height_error":0.0064426064491272,"up_dot":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432986877858639,"plant_error":0.000000242319771359689,"socket":"hand_r","state":"story_acknowledge","tip":"(3.834692, 0.006443, -6.611644)","tip_height_error":0.00644272565841675,"up_dot":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432986877858639,"plant_error":0.000000242319771359689,"socket":"hand_r","state":"story_disagree","tip":"(3.834692, 0.006443, -6.611644)","tip_height_error":0.00644272565841675,"up_dot":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432986877858639,"plant_error":0.000000242319771359689,"socket":"hand_r","state":"story_recall","tip":"(3.834692, 0.006443, -6.611644)","tip_height_error":0.00644272565841675,"up_dot":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432986877858639,"plant_error":0.000000242319771359689,"socket":"hand_r","state":"story_remember","tip":"(3.834692, 0.006443, -6.611644)","tip_height_error":0.00644272565841675,"up_dot":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432986877858639,"plant_error":0.000000242319771359689,"socket":"hand_r","state":"story_reassure","tip":"(3.834692, 0.006443, -6.611644)","tip_height_error":0.00644272565841675,"up_dot":1.0}
+LIVING CAST STAFF: {"grip_error":0.0432986877858639,"plant_error":0.000000242319771359689,"socket":"hand_r","state":"story_guarded_listening","tip":"(3.834692, 0.006443, -6.611644)","tip_height_error":0.00644272565841675,"up_dot":1.0}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"sister_anwen_human"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"blacksmith_tor","source":"res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb"}
+LIVING CAST CONTACT: {"role":"blacksmith_tor","sample":{"actual":"(-1.22, 0.955, 0.1)","cycle":0,"error":0.00000019670096662594,"kind":"hammer","target":"(-1.22, 0.955, 0.1)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"blacksmith_tor","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"blacksmith_tor","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"blacksmith_tor","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"blacksmith_tor","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"blacksmith_tor"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"blacksmith_tor","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"blacksmith_tor"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"mira_human","source":"res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb"}
+LIVING CAST RAW PALM: {"error":0.000000223020165890375,"life_time":2.0,"native_time":2.0,"role":"mira_human","side":"left"}
+LIVING CAST RAW PALM: {"error":0.000000342402614705861,"life_time":2.0,"native_time":2.0,"role":"mira_human","side":"right"}
+LIVING CAST CONTACT: {"role":"mira_human","sample":{"actual":"(-0.23, 0.952117, -0.68)","cycle":0,"error":0.000000309714806689954,"kind":"palm","target":"(-0.23, 0.952117, -0.68)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"mira_human","sample":{"actual":"(-0.47, 0.952117, -0.68)","cycle":0,"error":0.000000214907601048253,"kind":"palm","target":"(-0.47, 0.952117, -0.68)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"mira_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042363, -0.014191)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"mira_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042363, -0.014191)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"mira_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042363, -0.014191)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"mira_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042363, -0.014191)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"mira_human"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"mira_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042363, -0.014191)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"mira_human"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"rook_human","source":"res://assets_external/design_pack_v1/humans/C02_Rook.glb"}
+LIVING CAST RAW PALM: {"error":0.000000669765313432436,"life_time":2.0,"native_time":2.0,"role":"rook_human","side":"left"}
+LIVING CAST RAW PALM: {"error":0.000000425727506581097,"life_time":2.0,"native_time":2.0,"role":"rook_human","side":"right"}
+LIVING CAST CONTACT: {"role":"rook_human","sample":{"actual":"(-1.3, 1.11, -0.1)","cycle":0,"error":0.000000676691570333787,"kind":"palm","target":"(-1.3, 1.11, -0.1)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"rook_human","sample":{"actual":"(-1.3, 1.11, 0.1)","cycle":0,"error":0.000000405355422117282,"kind":"palm","target":"(-1.3, 1.11, 0.1)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"rook_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(-0.019279, 0.039112, -0.006203)","right":"(0.019278, 0.039111, -0.006203)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"rook_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(-0.019279, 0.039112, -0.006203)","right":"(0.019278, 0.039111, -0.006203)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"rook_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(-0.019279, 0.039112, -0.006203)","right":"(0.019278, 0.039111, -0.006203)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"rook_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(-0.019279, 0.039112, -0.006203)","right":"(0.019278, 0.039111, -0.006203)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"rook_human"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"rook_human","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(-0.019279, 0.039112, -0.006203)","right":"(0.019278, 0.039111, -0.006203)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"rook_human"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"nessa","source":"res://assets_external/design_pack_v1/humans/C11_Nessa.glb"}
+LIVING CAST RAW PALM: {"error":0.000000190827975643515,"life_time":2.0,"native_time":2.0,"role":"nessa","side":"left"}
+LIVING CAST RAW PALM: {"error":0.000000520475168741541,"life_time":2.0,"native_time":2.0,"role":"nessa","side":"right"}
+LIVING CAST CONTACT: {"role":"nessa","sample":{"actual":"(29.88, 1.02, -0.4)","cycle":0,"error":0.000000190827975643515,"kind":"palm","target":"(29.88, 1.02, -0.4)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"nessa","sample":{"actual":"(30.12, 1.02, -0.400001)","cycle":0,"error":0.000000520475168741541,"kind":"palm","target":"(30.12, 1.02, -0.4)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"nessa","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015107, 0.041003, -0.013889)","right":"(-0.015105, 0.041004, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"nessa","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015107, 0.041003, -0.013889)","right":"(-0.015105, 0.041004, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"nessa","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015107, 0.041003, -0.013889)","right":"(-0.015105, 0.041004, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"nessa","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015107, 0.041003, -0.013889)","right":"(-0.015105, 0.041004, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"nessa"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"nessa","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015107, 0.041003, -0.013889)","right":"(-0.015105, 0.041004, -0.013888)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(29.88, 0.095, 0.22)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(30.12, 0.095, 0.22)","side":1.0}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"nessa"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"widow_elna","source":"res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb"}
+LIVING CAST RAW PALM: {"error":0.000000149011611938477,"life_time":2.0,"native_time":2.0,"role":"widow_elna","side":"left"}
+LIVING CAST RAW PALM: {"error":0.000000417232513427734,"life_time":2.0,"native_time":2.0,"role":"widow_elna","side":"right"}
+LIVING CAST CONTACT: {"role":"widow_elna","sample":{"actual":"(32.88, 1.02, -0.4)","cycle":0,"error":0.000000133280039449346,"kind":"palm","target":"(32.88, 1.02, -0.4)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"widow_elna","sample":{"actual":"(33.12, 1.02, -0.400001)","cycle":0,"error":0.000000559934790089756,"kind":"palm","target":"(33.12, 1.02, -0.4)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"widow_elna","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015107, 0.041003, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"widow_elna","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015107, 0.041003, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"widow_elna","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015107, 0.041003, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"widow_elna","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015107, 0.041003, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"widow_elna"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"widow_elna","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015107, 0.041003, -0.013888)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(32.88, 0.095, 0.22)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(33.12, 0.095, 0.22)","side":1.0}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"widow_elna"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"farmer_toma","source":"res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb"}
+LIVING CAST RAW PALM: {"error":0.000000549527669591043,"life_time":2.0,"native_time":2.0,"role":"farmer_toma","side":"left"}
+LIVING CAST RAW PALM: {"error":0.00000382956932298839,"life_time":2.0,"native_time":2.0,"role":"farmer_toma","side":"right"}
+LIVING CAST CONTACT: {"role":"farmer_toma","sample":{"actual":"(35.88, 1.02, -0.4)","cycle":0,"error":0.000000505762159264123,"kind":"palm","target":"(35.88, 1.02, -0.4)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"farmer_toma","sample":{"actual":"(36.12, 1.02, -0.4)","cycle":0,"error":0.00000384299755751272,"kind":"palm","target":"(36.12, 1.02, -0.4)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"farmer_toma","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002425)","right":"(-0.032712, 0.031759, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"farmer_toma","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002425)","right":"(-0.032712, 0.031759, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"farmer_toma","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002425)","right":"(-0.032712, 0.031759, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"farmer_toma","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002425)","right":"(-0.032712, 0.031759, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"farmer_toma"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"farmer_toma","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002425)","right":"(-0.032712, 0.031759, 0.002387)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(35.88, 0.095, 0.22)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(36.12, 0.094999, 0.22)","side":1.0}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"farmer_toma"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"saga_nera","source":"res://assets_external/design_pack_v1/humans/C12_Nera.glb"}
+LIVING CAST RAW PALM: {"error":0.000000149011611938477,"life_time":2.0,"native_time":2.0,"role":"saga_nera","side":"left"}
+LIVING CAST RAW PALM: {"error":0.000000298023223876953,"life_time":2.0,"native_time":2.0,"role":"saga_nera","side":"right"}
+LIVING CAST CONTACT: {"role":"saga_nera","sample":{"actual":"(38.88, 1.115, -0.4)","cycle":0,"error":0.00000012287812012346,"kind":"palm","target":"(38.88, 1.115, -0.4)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"saga_nera","sample":{"actual":"(39.12, 1.115, -0.4)","cycle":0,"error":0.000000298023223876953,"kind":"palm","target":"(39.12, 1.115, -0.4)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"saga_nera","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042362, -0.01419)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"saga_nera","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042362, -0.01419)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"saga_nera","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042362, -0.01419)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"saga_nera","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042362, -0.01419)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"saga_nera"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"saga_nera","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.011202, 0.042362, -0.014191)","right":"(-0.011202, 0.042362, -0.01419)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(38.88, 0.095, 0.22)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(39.12, 0.095, 0.22)","side":1.0}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"saga_nera"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"captain_senn","source":"res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"captain_senn","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"captain_senn","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"captain_senn","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"captain_senn","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"captain_senn"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"captain_senn","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(-0.12, 0.095, 0.22)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(0.12, 0.095, 0.22)","side":1.0}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"captain_senn"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"vargan_record_keeper","source":"res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb"}
+LIVING CAST RAW PALM: {"error":0.000000190827975643515,"life_time":2.0,"native_time":2.0,"role":"vargan_record_keeper","side":"left"}
+LIVING CAST RAW PALM: {"error":0.00000038165595128703,"life_time":2.0,"native_time":2.0,"role":"vargan_record_keeper","side":"right"}
+LIVING CAST CONTACT: {"role":"vargan_record_keeper","sample":{"actual":"(41.88, 1.02, -0.4)","cycle":0,"error":0.0000000596046447753906,"kind":"palm","target":"(41.88, 1.02, -0.4)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"vargan_record_keeper","sample":{"actual":"(42.12, 1.02, -0.4)","cycle":0,"error":0.000000316803038913349,"kind":"palm","target":"(42.12, 1.02, -0.4)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"vargan_record_keeper","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015106, 0.041003, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"vargan_record_keeper","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015106, 0.041003, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"vargan_record_keeper","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015106, 0.041003, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"vargan_record_keeper","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015106, 0.041003, -0.013888)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"vargan_record_keeper"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"vargan_record_keeper","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.015106, 0.041003, -0.013888)","right":"(-0.015106, 0.041003, -0.013888)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(41.88, 0.095, 0.22)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(42.12, 0.095, 0.22)","side":1.0}
+LIVING CAST LEDGER: {"error":0.000000190827975643515,"native_time":2.0,"palm":"(41.88, 1.02, -0.4)","side":"left","source_origin":"(-0.0, 0.006287, -0.01007)","target":"(41.88, 1.02, -0.4)"}
+LIVING CAST LEDGER: {"error":0.00000038165595128703,"native_time":2.0,"palm":"(42.12, 1.02, -0.4)","side":"right","source_origin":"(-0.0, 0.006287, -0.01007)","target":"(42.12, 1.02, -0.4)"}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread"],"role":"vargan_record_keeper"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"vargan_steward","source":"res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb"}
+LIVING CAST RAW PALM: {"error":0.0000000596046447753906,"life_time":2.0,"native_time":2.0,"role":"vargan_steward","side":"left"}
+LIVING CAST RAW PALM: {"error":0.000000491512480493839,"life_time":2.0,"native_time":2.0,"role":"vargan_steward","side":"right"}
+LIVING CAST CONTACT: {"role":"vargan_steward","sample":{"actual":"(44.88, 1.02, -0.4)","cycle":0,"error":0.000000245756240246919,"kind":"palm","target":"(44.88, 1.02, -0.4)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"vargan_steward","sample":{"actual":"(45.12, 1.019999, -0.4)","cycle":0,"error":0.000000641961662495305,"kind":"palm","target":"(45.12, 1.02, -0.4)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"vargan_steward","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032747, 0.031732, 0.002426)","right":"(-0.032713, 0.031758, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"vargan_steward","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032747, 0.031732, 0.002426)","right":"(-0.032713, 0.031758, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"vargan_steward","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032747, 0.031732, 0.002426)","right":"(-0.032713, 0.031758, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"vargan_steward","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032747, 0.031732, 0.002426)","right":"(-0.032713, 0.031758, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"vargan_steward"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"vargan_steward","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032747, 0.031732, 0.002426)","right":"(-0.032713, 0.031758, 0.002387)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(44.88, 0.095, 0.220001)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(45.12, 0.095, 0.22)","side":1.0}
+LIVING CAST CUP: {"actual_scale":"(1.0, 1.0, 1.0)","handle_error":0.00115550146438181,"native_time":2.0,"rim_error":0.00199992954730988}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread"],"role":"vargan_steward"}
+LIVING CAST ACTOR: {"bones":76,"fitted_staff":false,"role":"edric","source":"res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb"}
+LIVING CAST RAW PALM: {"error":0.000000348827228435766,"life_time":2.0,"native_time":2.0,"role":"edric","side":"left"}
+LIVING CAST RAW PALM: {"error":0.00000383883525501005,"life_time":2.0,"native_time":2.0,"role":"edric","side":"right"}
+LIVING CAST CONTACT: {"role":"edric","sample":{"actual":"(47.88, 1.02, -0.4)","cycle":0,"error":0.000000320980831247653,"kind":"palm","target":"(47.88, 1.02, -0.4)"},"side":"l"}
+LIVING CAST CONTACT: {"role":"edric","sample":{"actual":"(48.12, 1.02, -0.4)","cycle":0,"error":0.00000384299755751272,"kind":"palm","target":"(48.12, 1.02, -0.4)"},"side":"r"}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":20.0,"native_time":4.0,"role":"edric","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002426)","right":"(-0.032712, 0.031758, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":30.0,"native_time":4.0,"role":"edric","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002426)","right":"(-0.032712, 0.031758, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":60.0,"native_time":4.0,"role":"edric","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002426)","right":"(-0.032712, 0.031758, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.0,"phase":0.0},"start":0.0}
+LIVING CAST RATE CLOCK: {"current":"ecology_2417776918","from":"","hz":144.0,"native_time":0.0000000000000506261699229071,"role":"edric","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002426)","right":"(-0.032712, 0.031758, 0.002387)"},"cycle":1,"duration":4.0,"elapsed":4.00000000000005,"phase":0.0000000000000126565424807268},"start":0.0}
+LIVING CAST RESUME CLOCK: {"branch_activated":"ecology_2417776918","branch_before":"ecology_2417776918","elapsed_before":1.25,"native_activated":1.25,"native_before":1.25,"requested":"ecology_2417776918","role":"edric"}
+LIVING CAST RESUMED CLOCK: {"current":"ecology_2417776918","native_time":1.5,"role":"edric","sample":{"clip":"life/Life_Work","contact_fraction":0.5,"contact_probes":{"left":"(0.032748, 0.031732, 0.002426)","right":"(-0.032712, 0.031758, 0.002387)"},"cycle":0,"duration":4.0,"elapsed":1.5,"phase":0.375}}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(47.88, 0.095, 0.220001)","side":-1.0}
+LIVING CAST REST: {"expected_height":0.095,"foot":"(48.12, 0.095, 0.22)","side":1.0}
+LIVING CAST EQUIPMENT PENDING: {"accepted":false,"missing_calibrations":["bread","supply"],"role":"edric"}
+LIVING CAST MOTION: PASS checks=1776 actors=12 player=false equipment_validation_deferred=true complete_cast=false

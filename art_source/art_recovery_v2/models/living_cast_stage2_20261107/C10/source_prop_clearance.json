@@ -1,0 +1,26 @@
+{
+  "asset": "C10",
+  "blend_sha256": "1ee4c7daeb77261eb3d80b2657237387b6e8e0599465b24d7aa81d109aff2aa7",
+  "review_glb_sha256": "aa5f1ad2d862eb879cba08457d588b519eac8403aa615a70650dc269cc8437f3",
+  "prop_sha256": "714bcacdf8b79d40da2d22bbb64278a738aeab3aa200df4eb014112fbd53edff",
+  "sample_hz": 30,
+  "solid_parts": [
+    "ReceiptBacking",
+    "ReceiptDivide",
+    "ReceiptInkLine",
+    "ReceiptInkLine.001",
+    "ReceiptInkLine.002",
+    "ReceiptInkLine.003",
+    "ReceiptInkLine.004",
+    "ReceiptInkLine.005",
+    "ReceiptInkLine.006",
+    "ReceiptInkLine.007",
+    "WorkContactPart"
+  ],
+  "open_parts_not_treated_as_solid": [],
+  "open_rigid_supports_checked_by_upward_surface_ray": [],
+  "solid_prop_intrusions": [],
+  "solid_prop_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

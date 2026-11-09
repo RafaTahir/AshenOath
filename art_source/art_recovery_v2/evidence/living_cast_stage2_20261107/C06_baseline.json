@@ -1,0 +1,20 @@
+{
+	"asset": "C06",
+	"baseline_sha256": "05a56bc7f0b40fee4f86e5a1f733dc104b6ee9aa15c3ba67727d729b1898c876",
+	"engine_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"prepared_resource": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+	"prepared_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+	"production_resource": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+	"production_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+	"runtime_verified": false
+}

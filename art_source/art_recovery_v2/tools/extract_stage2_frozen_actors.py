@@ -12,10 +12,10 @@ from compact_runtime_packs import parse_archive
 from living_cast_stage2_profiles import PROFILES
 
 
-def main(folder):
+def main(folder, selected=None):
     catalog = json.loads((GAME/"data/prepared_actors.json").read_text())
     records = []
-    for asset in PROFILES:
+    for asset in ([selected] if selected else PROFILES):
         row = next(value for value in catalog.values() if "/"+asset+"_" in value.get("source", ""))
         source = folder/("actor_"+asset.lower()+".pck")
         raw = source.read_bytes()
@@ -38,6 +38,8 @@ def main(folder):
                         "frozen_pack_sha256": hashlib.sha256(raw).hexdigest(),
                         "catalog_match": True})
     output = ROOT/"evidence/living_cast_stage2_20261107/frozen_prepared_inputs.json"
+    if selected:
+        output = ROOT/("evidence/living_assets_stage3_20261107/player/frozen_prepared_inputs.json" if selected == "P01" else "evidence/living_cast_stage2_20261107/frozen_prepared_inputs_"+selected+".json")
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps({"schema_version": 1, "old_code_mounted": False,
         "files": records, "total_bytes": sum(row["bytes"] for row in records)}, indent=2)+"\n")
@@ -47,4 +49,6 @@ def main(folder):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--frozen-packs", required=True, type=Path)
-    main(parser.parse_args().frozen_packs)
+    parser.add_argument("--asset", choices=[*PROFILES, "P01"])
+    args = parser.parse_args()
+    main(args.frozen_packs, args.asset)

@@ -1,0 +1,44 @@
+{
+  "asset": "C05",
+  "blend_sha256": "3eaafb414a27793dcff3355e68d01ed2dcf9fdd1f2086bd8dc69f35e1351ed15",
+  "review_glb_sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+  "sample_hz": 30,
+  "evaluated_region": "forearm, hand and all five finger chains",
+  "table_slab_lateral_forward_height": {
+    "min": [
+      -0.55,
+      0.36,
+      0.95
+    ],
+    "max": [
+      0.55,
+      1.16,
+      1.0
+    ]
+  },
+  "hand_slab_intrusions": [],
+  "garment_surface_candidate": {
+    "desired": [
+      -0.14000000059604645,
+      0.1599999964237213,
+      1.2799999713897705
+    ],
+    "actual_surface": [
+      -0.11890344321727753,
+      0.12576451897621155,
+      1.2704309225082397
+    ],
+    "normal": [
+      -0.5016553997993469,
+      0.839046835899353,
+      0.2105758935213089
+    ],
+    "source_mesh": "C05_MotionFittedAssembly",
+    "source_vertex_index": 12121,
+    "distance": 0.04133641715262959,
+    "use_as_contact_approved": false
+  },
+  "source_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

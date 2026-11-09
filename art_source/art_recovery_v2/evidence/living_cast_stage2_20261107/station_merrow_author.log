@@ -1,0 +1,35 @@
+D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\tools\author_living_cast_stage2_props.py:34: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+Info: Saved as "station_merrow.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+08:22:40 | INFO: Starting glTF 2.0 export
+08:22:40 | INFO: Extracting primitive: Cube
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.001
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.010
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.002
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.003
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.004
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.005
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.006
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.007
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.008
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Extracting primitive: Cube.009
+08:22:41 | INFO: Primitives created: 1
+08:22:41 | INFO: Finished glTF 2.0 export in 0.48107337951660156 s
+00:22.297  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\props\station_merrow_review.png'
+
+STAGE2_PROP_AUTHORED merrow 132
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

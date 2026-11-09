@@ -1,0 +1,52 @@
+D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\tools\author_living_cast_stage2_props.py:34: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+00:08.969  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Props_BaseColor.png'
+00:08.969  io.obj           | WARNING Cannot load image file: 'T_Trim_Props_BaseColor.png'
+00:08.969  io.obj           | WARNING Cannot load image file: 'T Trim Props BaseColor.png'
+00:08.969  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Props_Normal.png'
+00:08.985  io.obj           | WARNING Cannot load image file: 'T_Trim_Props_Normal.png'
+00:08.985  io.obj           | WARNING Cannot load image file: 'T Trim Props Normal.png'
+00:08.985  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Metal_BaseColor.png'
+00:08.985  io.obj           | WARNING Cannot load image file: 'T_Trim_Metal_BaseColor.png'
+00:09.000  io.obj           | WARNING Cannot load image file: 'T Trim Metal BaseColor.png'
+00:09.000  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Metal_Normal.png'
+00:09.000  io.obj           | WARNING Cannot load image file: 'T_Trim_Metal_Normal.png'
+00:09.000  io.obj           | WARNING Cannot load image file: 'T Trim Metal Normal.png'
+Info: Saved as "station_vale.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+08:21:10 | INFO: Starting glTF 2.0 export
+08:21:10 | INFO: Extracting primitive: Cube.001
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Book_7_Cube.133
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.002
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.003
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.004
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.005
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.006
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.007
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.008
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.009
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.010
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Extracting primitive: Cube.011
+08:21:10 | INFO: Primitives created: 1
+08:21:10 | INFO: Finished glTF 2.0 export in 0.46610593795776367 s
+00:20.750  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\props\station_vale_review.png'
+
+STAGE2_PROP_AUTHORED vale 868
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+OBJ import of 'Book_7.obj' took 129.12 ms
+
+Blender quit

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "asset": "P01",
+  "scope": "actual native P01 rig and existing bow transfer; --player-only",
+  "checks": 23,
+  "exit_code": 0,
+  "passed": true,
+  "actors": 0,
+  "player": true,
+  "complete_cast": false,
+  "source_inputs_restored_after_initial_missing_bow_arrow_failure": true,
+  "files": {
+    "fixture": {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_cast_motion.gd",
+      "sha256": "d34fd3b81d9ab89fd12e53c36f5c56fccb032a253f813ca69c09b7a6b0c906d4",
+      "bytes": 35192
+    },
+    "library": {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_P01.res",
+      "sha256": "c0a33e07dcde6120e26dcba6059b41eaf6e0e251d108270523b22c7a5214a2aa",
+      "bytes": 129500
+    },
+    "compile_receipt": {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/library_compile_P01.json",
+      "sha256": "15ea0f1f8f0c11e379520b952bb884d868fb91049c6087460db708a3bf843f2a",
+      "bytes": 1067
+    },
+    "source_contract": {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/source_verification.json",
+      "sha256": "7b3f2b76714ecb52610e44f4576dac8bbb8b56dcfa9f8aacfc3198d56df810b8",
+      "bytes": 660
+    },
+    "pose_contract": {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/player/P01/source_pose_verification.json",
+      "sha256": "ff92f0825cd28cfa8b3074e769ea8f16ffc1f6ba8329b38e62849e441ed25aa5",
+      "bytes": 1732
+    },
+    "engine_log": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/player/native_motion_20261110.log",
+      "sha256": "c895dfe1cf27fc69a45d6339f3dd2ff854d90c4f689f5aae2ac0fb57ef0f315f",
+      "bytes": 295
+    }
+  },
+  "actual_level_visual_accepted": false,
+  "browser_accepted": false,
+  "user_accepted": false
+}
