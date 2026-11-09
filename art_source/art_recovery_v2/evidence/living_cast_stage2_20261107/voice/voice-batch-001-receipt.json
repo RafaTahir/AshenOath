@@ -1,0 +1,36 @@
+{
+  "scope": "first three-recording batch only; full required catalog remains pending",
+  "synthesized": 3,
+  "retained": 415,
+  "pending": 422,
+  "new_bytes": 146430,
+  "manifest_sha256": "a40d918039601366c1efac675570bca2fc48c91c1c7a01b70230a040452fce7e",
+  "files": [
+    {
+      "speaker": "kael",
+      "text": "The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
+      "path": "res://assets_external/audio/voices/community/2492793f12f2724d6594cfae8cbb7db3726eded8c57b8c363378e6178891cce6.ogg",
+      "sha256": "34b9ac8c4df48cedf9a6a71b033b67abb121040d0469be549c3020aa2ba7c8ed",
+      "bytes": 57404,
+      "duration_seconds": 7.999333333333333
+    },
+    {
+      "speaker": "white_hart",
+      "text": "Then begin with your own hands. Do not fill the empty places with another person's vow.",
+      "path": "res://assets_external/audio/voices/community/3f993f17f570bcfbc2d0d4d5ee4902fca011e52d7ca517f583b07eb5f8b3dc48.ogg",
+      "sha256": "c31fc1b9eca58a15989bf91ab5f7cdab720a4e87f819cdc7ebe16dfb34d2279b",
+      "bytes": 40219,
+      "duration_seconds": 5.544666666666667
+    },
+    {
+      "speaker": "kael",
+      "text": "Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
+      "path": "res://assets_external/audio/voices/community/306e8429b80719dae10c1a00e614983a7273b5051b86df57635ff52a1d07fa1d.ogg",
+      "sha256": "0c6b6850b5b9c0253d8768f5333d01fdc6486e81a6c1fd70daff32550d07b7ef",
+      "bytes": 48807,
+      "duration_seconds": 6.8192916666666665
+    }
+  ],
+  "listening_acceptance": false,
+  "gameplay_acceptance": false
+}

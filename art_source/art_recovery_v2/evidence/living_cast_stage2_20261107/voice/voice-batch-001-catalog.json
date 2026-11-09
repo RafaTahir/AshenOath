@@ -1,0 +1,71 @@
+{
+  "scope": "first three-recording batch only; full required catalog remains pending",
+  "lines": [
+    {
+      "source_id": "campaign_revision_2:white_hart",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
+      "text_sha256": "837d651fb4ed58a72d91262781ebb0db2275a505a2811d9a4c32ce52227dd07c",
+      "cast_role": "player",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:white_hart",
+      "speaker_id": "white_hart",
+      "canonical_speaker": "white_hart",
+      "text": "Then begin with your own hands. Do not fill the empty places with another person's vow.",
+      "text_sha256": "3113f0bb21eab1f8216dd20f4a351314ee485fbacd1bedd2e15fb9de2b11bfbc",
+      "cast_role": "white_hart",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:white_hart",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
+      "text_sha256": "d78dd2a97ea885de2e9d060a21d52a274fca83b6fe766135f80dd4ed10bc6b4e",
+      "cast_role": "player",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "white_hart",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
+      "text_sha256": "837d651fb4ed58a72d91262781ebb0db2275a505a2811d9a4c32ce52227dd07c",
+      "cast_role": "player",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": false,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "white_hart",
+      "speaker_id": "white_hart",
+      "canonical_speaker": "white_hart",
+      "text": "Then begin with your own hands. Do not fill the empty places with another person's vow.",
+      "text_sha256": "3113f0bb21eab1f8216dd20f4a351314ee485fbacd1bedd2e15fb9de2b11bfbc",
+      "cast_role": "white_hart",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": false,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "white_hart",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
+      "text_sha256": "d78dd2a97ea885de2e9d060a21d52a274fca83b6fe766135f80dd4ed10bc6b4e",
+      "cast_role": "player",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": false,
+      "directory": "living_cast"
+    }
+  ]
+}

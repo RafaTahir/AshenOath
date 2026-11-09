@@ -1,0 +1,280 @@
+{
+  "scope": "batch002 newly delivered recordings only; full catalog remains incomplete",
+  "lines": [
+    {
+      "source_id": "campaign_revision_2:white_hart",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "The kitchen is working. There is a route and a dry refuge. We have tried the shifts, not just written them down.",
+      "text_sha256": "27ac41f70d70ec2c6a02ab9da5711ccfbc3a99a01001ef8908195ae5165218bf",
+      "cast_role": "player",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:white_hart",
+      "speaker_id": "white_hart",
+      "canonical_speaker": "white_hart",
+      "text": "Then there are two more things you may attempt. Share stewardship only with the keepers who still freely offer it. An empty place remains empty until somebody chooses it.",
+      "text_sha256": "41272925f08b06a23ec7ae8e10865cac073fa5582091068d3b715cc60e7a3772",
+      "cast_role": "white_hart",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:white_hart",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "And if we leave?",
+      "text_sha256": "1220feaf12b0dc8ffaa2da27f7d19012be2b7dd1adb1454fe96ba1a371e3d183",
+      "cast_role": "player",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:white_hart",
+      "speaker_id": "white_hart",
+      "canonical_speaker": "white_hart",
+      "text": "Carry the people and their human records through the prepared passage. Undo this boundary, and its shelter will not follow. Neither will the complete account I hold.",
+      "text_sha256": "7323b0fc749afff6fb36524d4584d871dd0c33cdecbc5ad4aa89b47257b2e4cd",
+      "cast_role": "white_hart",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:white_hart",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "A rota can fail. A refuge can fail. Neither makes the old choices disappear.",
+      "text_sha256": "718e7c5cc9e9cf2b3d5a9c5d3cfcb553d0e4208ba053d89905a340baaf1f878e",
+      "cast_role": "player",
+      "direction": "Ancient and patient, never theatrical.",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_concord",
+      "speaker_id": "sister_anwen",
+      "canonical_speaker": "anwen",
+      "text": "There are spaces beside the names now. For the next shift, and for anyone who needs to stop.",
+      "text_sha256": "5dcb7a086fd63acd13ab9fa662eecb0e4d59af71ab0c338069685f37244b0262",
+      "cast_role": "sister_anwen",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_concord",
+      "speaker_id": "kael",
+      "canonical_speaker": "kael",
+      "text": "Who fills a space when somebody leaves?",
+      "text_sha256": "00e69fd1d7be0bd985069ec7f698bff4775d080daaf1f3420553b5b7caa0da08",
+      "cast_role": "player",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_concord",
+      "speaker_id": "anwen",
+      "canonical_speaker": "anwen",
+      "text": "Someone who offers. We ask. We wait. If nobody can, we write that the work is uncovered.",
+      "text_sha256": "7cfd87f9dae46940b85b71bd5ccc92619aba2f93f5975ea15f0121eaf3cee363",
+      "cast_role": "sister_anwen",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_concord",
+      "speaker_id": "kael",
+      "canonical_speaker": "kael",
+      "text": "The Hart did not make the work smaller.",
+      "text_sha256": "49726861b2079b53f7bd657b21c3ff6d586db7cba3af5f00601d1c3e6d8e9d50",
+      "cast_role": "player",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_concord",
+      "speaker_id": "anwen",
+      "canonical_speaker": "anwen",
+      "text": "No. It can no longer make one person carry it in silence.",
+      "text_sha256": "f2f73f1e9e7c93237e101a4f5c2858143b119920965d3f746a9aac892213fbfa",
+      "cast_role": "sister_anwen",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_work_concord",
+      "speaker_id": "tor",
+      "canonical_speaker": "tor",
+      "text": "A hinge, a rail, and the kitchen latch. Those are the jobs. Nobody promised the iron would stop wearing out.",
+      "text_sha256": "c5a6693047a302ec3e9370c9900c6e101a591e64e2dea4e64a81499f9120abeb",
+      "cast_role": "tor",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_work_concord",
+      "speaker_id": "rook",
+      "canonical_speaker": "rook",
+      "text": "The rota leaves a gap for weather. Sensible. Weather has never signed anything I gave it.",
+      "text_sha256": "5c912802d0237cb4d2acaf940d394b3a56584eae3a618b46d190aadfd53a2e19",
+      "cast_role": "rook",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_work_concord",
+      "speaker_id": "kael",
+      "canonical_speaker": "kael",
+      "text": "And if a keeper withdraws?",
+      "text_sha256": "1c97aa6f650984bcc2355cd8c8404716c717ce78a23bc572a005ee037a0d7717",
+      "cast_role": "player",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_work_concord",
+      "speaker_id": "tor",
+      "canonical_speaker": "tor",
+      "text": "We close the unsafe part until somebody can do it. A promise is not a brace.",
+      "text_sha256": "ef37e9fa45b6e241a86d3ac87cf4c327399fbdfb2f790b9f0a7f2d221830c781",
+      "cast_role": "tor",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_work_concord",
+      "speaker_id": "rook",
+      "canonical_speaker": "rook",
+      "text": "Your shift is still on the board. Unless you have something to tell the board.",
+      "text_sha256": "7046c56fd6dec2443c6e983b4a07859dd4603382ad6c854a1e08a63b49534fe6",
+      "cast_role": "rook",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_road_concord",
+      "speaker_id": "nera",
+      "canonical_speaker": "nera",
+      "text": "The passage is open. The watch still changes at the posted hour.",
+      "text_sha256": "55ce888c49020cbb6059d59ea9a7f8d7073c007ae30819a0b6fcf984f1627e46",
+      "cast_role": "nera",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_road_concord",
+      "speaker_id": "nera",
+      "canonical_speaker": "nera",
+      "text": "Some people stayed. Some went on. Their shares were packed either way.",
+      "text_sha256": "f7939d714fe1883eeadd3b558f8c98f590e92cd65e5200829f7827367e92749f",
+      "cast_role": "nera",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_road_concord",
+      "speaker_id": "kael",
+      "canonical_speaker": "kael",
+      "text": "Do the keepers agree about everything?",
+      "text_sha256": "49cf64d8e95edcdf96271ad0092722016dcc2f2a1394bf81ca6f37c534c778d9",
+      "cast_role": "player",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_road_concord",
+      "speaker_id": "nera",
+      "canonical_speaker": "nera",
+      "text": "They agree about the next handover. Tomorrow we may have to talk again.",
+      "text_sha256": "2bf9806dd7e79467a2d4fded15deac2a04e1ce06a2f5c819088cacbe4ca873a0",
+      "cast_role": "nera",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_road_concord",
+      "speaker_id": "kael",
+      "canonical_speaker": "kael",
+      "text": "Then we keep the empty places visible.",
+      "text_sha256": "cac54146284e4345317577f90f622864fbeeb7b3de0d79fb2e6d617dd88091d2",
+      "cast_role": "player",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_road_concord",
+      "speaker_id": "nera",
+      "canonical_speaker": "nera",
+      "text": "And we ask before writing a name in one.",
+      "text_sha256": "e223fdd3e55e64067591cd8f643e52c7898b86d626238f0c732be192699683bc",
+      "cast_role": "nera",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_open_road",
+      "speaker_id": "vale",
+      "canonical_speaker": "vale",
+      "text": "The orders, the signatures and the accounts we recovered are packed. These are human records. They remain evidence.",
+      "text_sha256": "fdebbbb14b98a3872db283e1c0a1ec47a45e3d026adb252b68c43abc741636bc",
+      "cast_role": "vale",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_open_road",
+      "speaker_id": "kael",
+      "canonical_speaker": "kael",
+      "text": "What is missing?",
+      "text_sha256": "2d20f0920daff38d14900dae52f353ab5d810f751ccf59b6aeb4c2a766d4b486",
+      "cast_role": "player",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_open_road",
+      "speaker_id": "vale",
+      "canonical_speaker": "vale",
+      "text": "What only the Hart remembered. We cannot fill that absence by guessing.",
+      "text_sha256": "6b8c1f069d16005c96583c0dc81345427a4eb69b6de88f105ec68b3371169d04",
+      "cast_role": "vale",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "campaign_revision_2:aftermath_names_open_road",
+      "speaker_id": "kael",
+      "canonical_speaker": "kael",
+      "text": "Leave the notice where someone returning can find it.",
+      "text_sha256": "55b0a02b0b21ef3fd53c81e7357aebac4b5caaef0995fd2923a6a29d402d812a",
+      "cast_role": "player",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    }
+  ]
+}
