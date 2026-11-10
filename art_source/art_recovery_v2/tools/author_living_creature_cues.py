@@ -57,14 +57,24 @@ def main() -> None:
             stream.setframerate(RATE)
             stream.writeframes(pcm.tobytes())
         path = output / (kind + ".ogg")
-        subprocess.run([str(args.ffmpeg), "-hide_banner", "-loglevel", "error", "-y", "-i", str(source),
-                        "-c:a", "libvorbis", "-q:a", "3", "-threads", "1", str(path)], check=True,
-                       creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        def encode(destination):
+            subprocess.run([str(args.ffmpeg), "-hide_banner", "-loglevel", "error", "-y", "-i", str(source),
+                            "-map_metadata", "-1", "-fflags", "+bitexact", "-flags:a", "+bitexact",
+                            "-c:a", "libvorbis", "-q:a", "3", "-threads", "1", str(destination)], check=True,
+                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        encode(path)
+        repeated = args.evidence / (kind + "_repeat.ogg")
+        encode(repeated)
+        if repeated.read_bytes() != path.read_bytes():
+            raise RuntimeError("Creature cue regeneration is not byte-identical: " + kind)
+        repeated.unlink()
         receipts.append({"id":kind, "sample_rate":RATE, "frames":len(pcm), "duration":len(pcm)/RATE,
                          "path":"res://"+path.relative_to(args.game.resolve()).as_posix(),
                          "sha256":hashlib.sha256(path.read_bytes()).hexdigest(), "bytes":path.stat().st_size,
-                         "authorship":"Original deterministic synthesis", "listening_accepted":False})
-    (args.evidence / "audio_receipt.json").write_text(json.dumps({"recipe_sha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), "cues":receipts}, indent=2)+"\n", encoding="utf-8")
+                         "authorship":"Original deterministic synthesis", "byte_repeat_verified":True, "listening_accepted":False})
+    with args.ffmpeg.open("rb") as encoder:
+        encoder_hash = hashlib.file_digest(encoder, "sha256").hexdigest()
+    (args.evidence / "audio_receipt.json").write_text(json.dumps({"recipe_sha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), "encoder_sha256":encoder_hash, "cues":receipts}, indent=2)+"\n", encoding="utf-8")
     print(json.dumps({"cues":len(receipts), "bytes":sum(row["bytes"] for row in receipts), "listening_accepted":False}))
 
 
