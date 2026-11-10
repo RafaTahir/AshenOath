@@ -1,0 +1,13 @@
+04:47:06 | INFO: Data are loaded, start creating Blender stuff
+04:47:06 | INFO: Blender create Mesh node C04_Blacksmith_Tor_Kael_Combined_003
+04:47:08 | INFO: glTF import finished in 1.66s
+ACTIVITY_BLENDER_IMPORT_FIDELITY PASS C04 native_original_probes 6840
+04:47:37 | INFO: Data are loaded, start creating Blender stuff
+04:47:37 | INFO: Blender create Mesh node HeldProp_vessel_0_055_0_11_0_23_0_008_16
+04:47:37 | INFO: glTF import finished in 0.01s
+Info: No new files have been packed
+Info: Saved as "C04_supply_fit_proposal.blend"
+C04 HAND FIT PROBE: SOURCE COMPLETE
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

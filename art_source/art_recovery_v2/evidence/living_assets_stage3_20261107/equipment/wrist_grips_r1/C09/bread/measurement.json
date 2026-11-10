@@ -1,0 +1,21 @@
+{
+  "asset": "C09",
+  "style": "bread",
+  "scope": "Source-only strongest minimum-distance projected candidate",
+  "measurement_sha256": "048ec3fb007fd80aeb2e8e49b04097a96b4ea9555665e3175f38bc1097011657",
+  "selected": {
+    "forward_m": 0.015,
+    "outward_m": 0.06,
+    "delta_forward_m": 0,
+    "delta_outward_m": 0.015,
+    "reference_palm_vertex": [
+      2,
+      4759
+    ],
+    "prop_primary_vertex": 206,
+    "twist_degrees": 0,
+    "surviving_seed_count": 12
+  },
+  "grip_verified": false,
+  "runtime_output": false
+}
