@@ -10,6 +10,7 @@ import re
 import subprocess
 import sys
 import tempfile
+from time import monotonic
 import urllib.request
 from story_voice_catalog import extra_utterances, role_for, canonical_speaker, source_identity, voice_directory, expansion_captions
 
@@ -198,10 +199,14 @@ def main():
     parser.add_argument("--max-new-bytes", type=int, default=16 * 1024 * 1024, help="Combined living_cast/community voice budget")
     parser.add_argument("--threads", type=int, default=1, help="Bound inference concurrency on the shared workstation")
     parser.add_argument("--max-new-recordings", type=int, help="Stop inference after this many new clips, retaining an explicit pending list for a later incremental batch")
+    parser.add_argument("--max-inference-seconds", type=int, help="Stop starting new recordings after this elapsed time, then finalize completed clips")
     parser.add_argument("--baseline-ref", help="With --incremental, synthesize new runtime text and changed cast recipes; retain pre-existing subtitle-only lines")
     args = parser.parse_args()
     if args.max_new_recordings is not None and args.max_new_recordings < 1:
         parser.error("--max-new-recordings must be positive")
+    if args.max_inference_seconds is not None and args.max_inference_seconds < 1:
+        parser.error("--max-inference-seconds must be positive")
+    inference_deadline = monotonic() + args.max_inference_seconds if args.max_inference_seconds is not None else None
     cast_data = json.loads((GAME / "data/voice_cast.json").read_text(encoding="utf-8-sig"))
     cast = cast_data["roles"]
     scheduled = list(utterances(cast))
@@ -335,8 +340,13 @@ def main():
                 else:
                     pending.append({"scene":scene, "speaker_id":who, "page_key":key})
                 continue
+            pending_reason = ""
             if args.max_new_recordings is not None and synthesized >= args.max_new_recordings:
-                pending.append({"scene":scene, "speaker_id":who, "page_key":key, "reason":"bounded_batch_limit"})
+                pending_reason = "bounded_batch_limit"
+            elif inference_deadline is not None and monotonic() >= inference_deadline:
+                pending_reason = "bounded_inference_time"
+            if pending_reason:
+                pending.append({"scene":scene, "speaker_id":who, "page_key":key, "reason":pending_reason})
                 continue
             samples, rate = engine.create(spoken, voice=styles[role], speed=speed, lang=profile["lang"])
             samples = master(samples, rate, np)
@@ -376,6 +386,8 @@ def main():
     manifest["retained_previous_recordings"] = retained
     manifest["synthesized_this_run"] = synthesized
     manifest["batch_new_recording_limit"] = args.max_new_recordings
+    if args.max_inference_seconds is not None:
+        manifest["batch_inference_seconds_limit"] = args.max_inference_seconds
     manifest["new_dialogue_bytes"] = new_bytes
     manifest["pending_recordings"] = pending
     manifest["baseline_commit"] = baseline_commit

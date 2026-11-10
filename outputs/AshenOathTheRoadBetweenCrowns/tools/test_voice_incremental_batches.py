@@ -26,6 +26,12 @@ except ImportError:
 @unittest.skipIf(np is None or sf is None, "requires the pinned voice codec runtime")
 class IncrementalVoiceBatch(unittest.TestCase):
     def test_changed_recipe_remains_pending_until_its_own_new_recording(self):
+        self.check_resumable_batch(["--max-new-recordings", "1"], "bounded_batch_limit")
+
+    def test_elapsed_limit_finalizes_the_completed_recording(self):
+        self.check_resumable_batch(["--max-inference-seconds", "2"], "bounded_inference_time", [0, 1, 3])
+
+    def check_resumable_batch(self, first_limits, expected_reason, first_clock=None):
         with tempfile.TemporaryDirectory(prefix="ashen-voice-batch-fixture-") as folder:
             game = Path(folder)
             (game / "data").mkdir()
@@ -81,12 +87,15 @@ class IncrementalVoiceBatch(unittest.TestCase):
                 patches.enter_context(mock.patch.object(sys, "argv", argv))
                 patches.enter_context(mock.patch.object(sys, "path", list(sys.path)))
                 patches.enter_context(contextlib.redirect_stdout(io.StringIO()))
-                voices.main()
+                with mock.patch.object(sys, "argv", argv[:-2] + first_limits):
+                    clock = mock.patch.object(voices, "monotonic", side_effect=first_clock) if first_clock else contextlib.nullcontext()
+                    with clock:
+                        voices.main()
                 first = json.loads(manifest_path.read_text(encoding="utf-8"))
                 self.assertEqual(generated, ["First exact line."])
                 self.assertEqual([line["text"] for line in first["lines"]], ["First exact line."])
                 self.assertEqual(len(first["pending_recordings"]), 1)
-                self.assertEqual(first["pending_recordings"][0]["reason"], "bounded_batch_limit")
+                self.assertEqual(first["pending_recordings"][0]["reason"], expected_reason)
                 original_path = game / first["lines"][0]["path"][6:]
                 first_hash = hashlib.sha256(original_path.read_bytes()).hexdigest()
                 voices.main()
