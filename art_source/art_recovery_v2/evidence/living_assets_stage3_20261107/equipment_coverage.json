@@ -15,7 +15,7 @@
         452,
         502
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "No new mesh or ticker; existing IK owner.",
       "current_visual_evidence": [],
       "native_verified": false,
@@ -106,12 +106,97 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "C01_staff",
+            "retained_geometry_and_material_treatment": "Exact original grip box; worn shaft/lashing arrises; ash-grain and leather albedo/normal maps; distinct roughness",
+            "stage3_treatment": "Retain measured Stage1 right-hand staff grip and planted shaft through left-hand care work.",
+            "assessment": "Stage1 native contact evidence retained; new-stage carry/garment observation pending.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "uses_fitted_anwen_staff",
+            "reference_lines": [
+              53,
+              452,
+              502
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "No new mesh or ticker; existing IK owner.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "CharacterPresentation AnwenStaffSocket / existing CharacterLifeModifier staff solve",
+              "resources": [
+                "res://assets_external/design_pack_v1/C01_ash_staff.glb"
+              ],
+              "scope": "live_named_cast",
+              "changes": [
+                "Retained Stage1 actual right-hand staff fit and upright shaft; left hand owns care cloth."
+              ],
+              "limitations": [
+                "Stage3 actual new-idle, care, interruption and garment capture remains pending."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/character_life_modifier.gd",
+                  "sha256": "7909f5c6e93a62df83ed0343b6a92e99ea78be100cfd98eccdb5cfa01dc3e7f4"
+                },
+                {
+                  "path": "res://scripts/held_prop_geometry.gd",
+                  "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "retained_runtime_owner_pending_context_review",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": null,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://assets_external/design_pack_v1/C01_ash_staff.glb": "b8ab07b0f5a14323498b2276d9e1d102337d37e444218de910f303bf3209a333",
+              "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "native_scope_evidence": {
+              "receipt": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/receipt.json",
+              "scope": {
+                "roles": "all_twelve_named_cast",
+                "player": "separate_player_only_case",
+                "complete_cast": false,
+                "equipment_validation_deferred": true,
+                "visual_acceptance": false
+              },
+              "recorded_pass": true,
+              "errors": [],
+              "inputs_current": true,
+              "complete_equipment_review": false
+            }
+          }
         }
       ],
       "verification_inputs": {
         "res://assets_external/design_pack_v1/C01_ash_staff.glb": "b8ab07b0f5a14323498b2276d9e1d102337d37e444218de910f303bf3209a333",
-        "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+        "res://scripts/character_life_modifier.gd": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
         "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
       },
       "evidence_freshness": {
@@ -120,7 +205,7 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "native_scope_evidence": {
         "receipt": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/receipt.json",
         "scope": {
@@ -131,8 +216,99 @@
           "visual_acceptance": false
         },
         "recorded_pass": true,
-        "errors": [],
-        "inputs_current": true,
+        "errors": [
+          {
+            "path": "res://scripts/character_animation_driver.gd",
+            "expected": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+            "actual": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a"
+          },
+          {
+            "path": "res://scripts/character_life_modifier.gd",
+            "expected": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+            "actual": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f"
+          },
+          {
+            "path": "res://scripts/character_presentation.gd",
+            "expected": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "actual": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
+          },
+          {
+            "path": "res://scripts/greyfen_life_controller.gd",
+            "expected": "fcea8f3c49fff92455c105a08d6213697e5b595f1559ff644f22848bdbfd24a5",
+            "actual": "d3f343f84fd051172658ef631f6fb923047682e03edc979cfc14f01def8ef222"
+          },
+          {
+            "path": "res://scripts/living_cast_stations.gd",
+            "expected": "902c79dd638dcbd5185a2a9a1f42eff601930efba87cd1f675f1c7df4c43ebaa",
+            "actual": "fc688afa56819ec4e5cd0ad9cc49a0900ecd815ee0781ba29fab50edbb406b8e"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C01.res",
+            "expected": "d2318218eefbf952aefc732bd6dacca39bc9dcfcb3d8664c8ddf7399e6d356bd",
+            "actual": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C02.res",
+            "expected": "025cb01ec9eeb950aee7ac541fd841b1176eea2e0fe82f61d0a0789637d71af3",
+            "actual": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C03.res",
+            "expected": "6fa8d3ada8c0e391b5fb2b5aa25b47e8ee09079ced797461b19834d9c0db996f",
+            "actual": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C04.res",
+            "expected": "b4370949eb1ac97928389a4ff42f972dfac930dee2ce571e920aadea474f320f",
+            "actual": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C05.res",
+            "expected": "cc53cbe9dd92cfc8913eddc573f02f5bbeaf24bab5654fa5f51167ab01cd01a6",
+            "actual": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C06.res",
+            "expected": "7b1063bf9c956a723d1660d1541c3093a88761d6ff54168d1fc64d0db6da820a",
+            "actual": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C07.res",
+            "expected": "78f24a3a0eeb3588c6ba1f1392170e90f262678f52890aa2d8bfa9b2006b27c8",
+            "actual": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C08.res",
+            "expected": "7e2b221208812014f9e71426c3344407d5d34fc3125d6b02ec57c2ec7bab3eb1",
+            "actual": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C09.res",
+            "expected": "8c91426421c5bd5db5d5f0e64883a54f5e675d0a1fd4258a508286f648c08dfc",
+            "actual": "a5166199095b2dfb2539bc479b6090c0db32987e9f603ccc07ef9c54543ce1bc"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C10.res",
+            "expected": "ccc5125f12cbbde5b9081a3d17b7a9a65696a7113db974abd83aeeaa64e30c56",
+            "actual": "7d018f2fd58b9efbbd3ab89ca38fcffb0e0a0bbbfb3b80d438ab414f6799ee4b"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C11.res",
+            "expected": "450163d2f88bab548e1161140f09830948dbb11a7782e6b2b697260c90f58594",
+            "actual": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C12.res",
+            "expected": "fe5e3ce0a8db84e79faf057a7b8b19d93baba0fa6c561e0bbe0aff6ca217ca8c",
+            "actual": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57"
+          },
+          {
+            "path": "res://data/prepared_actors.json",
+            "expected": "b7d0a808c12552a942c8cf6b4ba828ca960811d5e5e5f329fcf5e3773650a520",
+            "actual": "bc21f3caf9bae39533555d1f365d2b0e9890412cc6e0a3d35f43a0a9b7c2fac8"
+          }
+        ],
+        "inputs_current": false,
         "complete_equipment_review": false
       }
     },
@@ -280,7 +456,7 @@
         299,
         304
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "No new mesh; existing contact effect owner.",
       "current_visual_evidence": [],
       "native_verified": false,
@@ -379,13 +555,105 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "forge_hammer",
+            "retained_geometry_and_material_treatment": "44-triangle chamfered head, fitted metal collar and leather grip inside original full fitting box",
+            "stage3_treatment": "Retain Stage1 native hammer grip and real anvil strike; check holstered/working silhouette.",
+            "assessment": "Stage1 contact proof retained; new-stage stow/garment observation pending.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "forge_hammer",
+            "reference_lines": [
+              10,
+              77,
+              299,
+              304
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "No new mesh; existing contact effect owner.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "CharacterPresentation OccupationEquipment borrowed by CharacterLifeModifier; generated CastActivityTool only if no matching occupation prop",
+              "resources": [
+                "res://assets/characters/forge_hammer.tscn"
+              ],
+              "scope": "live_named_cast",
+              "changes": [
+                "Native Tor work retains actual hammer-head contact, source contact phase and bounded contact effects.",
+                "Borrowed permanent equipment is hidden/restored instead of deleted; generated tools are disposed on owner teardown."
+              ],
+              "limitations": [
+                "Current Stage2/3 physical work capture and forge spark observation remain pending."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/character_life_modifier.gd",
+                  "sha256": "7909f5c6e93a62df83ed0343b6a92e99ea78be100cfd98eccdb5cfa01dc3e7f4"
+                },
+                {
+                  "path": "res://scripts/held_prop_geometry.gd",
+                  "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+                },
+                {
+                  "path": "res://scripts/greyfen_life_controller.gd",
+                  "sha256": "0fc2f179349b88bcedad3572dcbfa19965ae6048e70d74e01c23de0632b71fce"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "retained_runtime_owner_pending_context_review",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": null,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://assets/characters/forge_hammer.tscn": "beb88feae14185124a83ed546909ee39663c42ee82c35c5825886de417ee1f37",
+              "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/greyfen_life_controller.gd": "fcea8f3c49fff92455c105a08d6213697e5b595f1559ff644f22848bdbfd24a5",
+              "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "native_scope_evidence": {
+              "receipt": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/receipt.json",
+              "scope": {
+                "roles": "all_twelve_named_cast",
+                "player": "separate_player_only_case",
+                "complete_cast": false,
+                "equipment_validation_deferred": true,
+                "visual_acceptance": false
+              },
+              "recorded_pass": true,
+              "errors": [],
+              "inputs_current": true,
+              "complete_equipment_review": false
+            }
+          }
         }
       ],
       "verification_inputs": {
         "res://assets/characters/forge_hammer.tscn": "beb88feae14185124a83ed546909ee39663c42ee82c35c5825886de417ee1f37",
-        "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
-        "res://scripts/greyfen_life_controller.gd": "fcea8f3c49fff92455c105a08d6213697e5b595f1559ff644f22848bdbfd24a5",
+        "res://scripts/character_life_modifier.gd": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
+        "res://scripts/greyfen_life_controller.gd": "d3f343f84fd051172658ef631f6fb923047682e03edc979cfc14f01def8ef222",
         "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
       },
       "evidence_freshness": {
@@ -394,7 +662,7 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "native_scope_evidence": {
         "receipt": "art_source/art_recovery_v2/evidence/living_cast_stage2_20261107/native_reviews/native_work_phase_20261110_r2/receipt.json",
         "scope": {
@@ -405,8 +673,99 @@
           "visual_acceptance": false
         },
         "recorded_pass": true,
-        "errors": [],
-        "inputs_current": true,
+        "errors": [
+          {
+            "path": "res://scripts/character_animation_driver.gd",
+            "expected": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+            "actual": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a"
+          },
+          {
+            "path": "res://scripts/character_life_modifier.gd",
+            "expected": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+            "actual": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f"
+          },
+          {
+            "path": "res://scripts/character_presentation.gd",
+            "expected": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "actual": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
+          },
+          {
+            "path": "res://scripts/greyfen_life_controller.gd",
+            "expected": "fcea8f3c49fff92455c105a08d6213697e5b595f1559ff644f22848bdbfd24a5",
+            "actual": "d3f343f84fd051172658ef631f6fb923047682e03edc979cfc14f01def8ef222"
+          },
+          {
+            "path": "res://scripts/living_cast_stations.gd",
+            "expected": "902c79dd638dcbd5185a2a9a1f42eff601930efba87cd1f675f1c7df4c43ebaa",
+            "actual": "fc688afa56819ec4e5cd0ad9cc49a0900ecd815ee0781ba29fab50edbb406b8e"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C01.res",
+            "expected": "d2318218eefbf952aefc732bd6dacca39bc9dcfcb3d8664c8ddf7399e6d356bd",
+            "actual": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C02.res",
+            "expected": "025cb01ec9eeb950aee7ac541fd841b1176eea2e0fe82f61d0a0789637d71af3",
+            "actual": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C03.res",
+            "expected": "6fa8d3ada8c0e391b5fb2b5aa25b47e8ee09079ced797461b19834d9c0db996f",
+            "actual": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C04.res",
+            "expected": "b4370949eb1ac97928389a4ff42f972dfac930dee2ce571e920aadea474f320f",
+            "actual": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C05.res",
+            "expected": "cc53cbe9dd92cfc8913eddc573f02f5bbeaf24bab5654fa5f51167ab01cd01a6",
+            "actual": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C06.res",
+            "expected": "7b1063bf9c956a723d1660d1541c3093a88761d6ff54168d1fc64d0db6da820a",
+            "actual": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C07.res",
+            "expected": "78f24a3a0eeb3588c6ba1f1392170e90f262678f52890aa2d8bfa9b2006b27c8",
+            "actual": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C08.res",
+            "expected": "7e2b221208812014f9e71426c3344407d5d34fc3125d6b02ec57c2ec7bab3eb1",
+            "actual": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C09.res",
+            "expected": "8c91426421c5bd5db5d5f0e64883a54f5e675d0a1fd4258a508286f648c08dfc",
+            "actual": "a5166199095b2dfb2539bc479b6090c0db32987e9f603ccc07ef9c54543ce1bc"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C10.res",
+            "expected": "ccc5125f12cbbde5b9081a3d17b7a9a65696a7113db974abd83aeeaa64e30c56",
+            "actual": "7d018f2fd58b9efbbd3ab89ca38fcffb0e0a0bbbfb3b80d438ab414f6799ee4b"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C11.res",
+            "expected": "450163d2f88bab548e1161140f09830948dbb11a7782e6b2b697260c90f58594",
+            "actual": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C12.res",
+            "expected": "fe5e3ce0a8db84e79faf057a7b8b19d93baba0fa6c561e0bbe0aff6ca217ca8c",
+            "actual": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57"
+          },
+          {
+            "path": "res://data/prepared_actors.json",
+            "expected": "b7d0a808c12552a942c8cf6b4ba828ca960811d5e5e5f329fcf5e3773650a520",
+            "actual": "bc21f3caf9bae39533555d1f365d2b0e9890412cc6e0a3d35f43a0a9b7c2fac8"
+          }
+        ],
+        "inputs_current": false,
         "complete_equipment_review": false
       }
     },
@@ -545,11 +904,111 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "player_sword_steel_and_oathblade",
+            "retained_geometry_and_material_treatment": "Preserve Metal, Red, Gold and Brown source slots. Blade gets previous readable steel/cyan; brass fittings gain metal response; red/brown grips remain matte. No mesh/markers/reach/socket changes.",
+            "stage3_treatment": "Preserve blade sockets/reach and established steel, cyan, brass and leather response; inspect sheath/cape and hand clearance.",
+            "assessment": "New-stage idle/carry/equip/stow material and fit review pending.",
+            "runtime_reference": "res://scripts/player_controller.gd",
+            "runtime_symbol": "Oathblade",
+            "reference_lines": [
+              405,
+              436,
+              437,
+              1707,
+              1709,
+              1715,
+              1801,
+              1931,
+              1934,
+              1935,
+              1936,
+              1937,
+              1942,
+              1943,
+              1944,
+              1945,
+              1946,
+              1960,
+              1961,
+              1963,
+              1965,
+              1971,
+              1973,
+              1982,
+              1984,
+              1991,
+              1992,
+              1994,
+              2007,
+              2013,
+              2015,
+              2018,
+              2052,
+              2056
+            ],
+            "runtime_source_sha256": "573489b1bb638e7195dbaabc3809aadda54a192d53fa26497b109ec68e51d363",
+            "incremental_performance_cost": "No new mesh or combat tracks.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "PlayerController held sword and back sword sockets; existing attack animation owner",
+              "resources": [
+                "res://assets_external/characters/Sword.fbx"
+              ],
+              "scope": "live_player_equipment",
+              "changes": [
+                "No attack clip, reach, damage, collision or socket change.",
+                "New player idle library is selected only while equipment is stowed; authored output is pending."
+              ],
+              "limitations": [
+                "Actual new-idle garment and carry/stow review remains pending."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/player_controller.gd",
+                  "sha256": "573489b1bb638e7195dbaabc3809aadda54a192d53fa26497b109ec68e51d363"
+                },
+                {
+                  "path": "res://scripts/character_animation_driver.gd",
+                  "sha256": "7d4a3b184905f23f817f0ca6748dc9e16a6bd1b092bc66d9c49331862cf65573"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "retained_runtime_owner_pending_context_review",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": null,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://assets_external/characters/Sword.fbx": null,
+              "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+              "res://scripts/player_controller.gd": "573489b1bb638e7195dbaabc3809aadda54a192d53fa26497b109ec68e51d363"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": false,
+              "changed_inputs": [],
+              "unbound_inputs": [
+                "res://assets_external/characters/Sword.fbx"
+              ]
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "573489b1bb638e7195dbaabc3809aadda54a192d53fa26497b109ec68e51d363"
+          }
         }
       ],
       "verification_inputs": {
         "res://assets_external/characters/Sword.fbx": null,
-        "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+        "res://scripts/character_animation_driver.gd": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a",
         "res://scripts/player_controller.gd": "573489b1bb638e7195dbaabc3809aadda54a192d53fa26497b109ec68e51d363"
       },
       "evidence_freshness": {
@@ -1074,8 +1533,99 @@
           "visual_acceptance": false
         },
         "recorded_pass": true,
-        "errors": [],
-        "inputs_current": true,
+        "errors": [
+          {
+            "path": "res://scripts/character_animation_driver.gd",
+            "expected": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+            "actual": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a"
+          },
+          {
+            "path": "res://scripts/character_life_modifier.gd",
+            "expected": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+            "actual": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f"
+          },
+          {
+            "path": "res://scripts/character_presentation.gd",
+            "expected": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "actual": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
+          },
+          {
+            "path": "res://scripts/greyfen_life_controller.gd",
+            "expected": "fcea8f3c49fff92455c105a08d6213697e5b595f1559ff644f22848bdbfd24a5",
+            "actual": "d3f343f84fd051172658ef631f6fb923047682e03edc979cfc14f01def8ef222"
+          },
+          {
+            "path": "res://scripts/living_cast_stations.gd",
+            "expected": "902c79dd638dcbd5185a2a9a1f42eff601930efba87cd1f675f1c7df4c43ebaa",
+            "actual": "fc688afa56819ec4e5cd0ad9cc49a0900ecd815ee0781ba29fab50edbb406b8e"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C01.res",
+            "expected": "d2318218eefbf952aefc732bd6dacca39bc9dcfcb3d8664c8ddf7399e6d356bd",
+            "actual": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C02.res",
+            "expected": "025cb01ec9eeb950aee7ac541fd841b1176eea2e0fe82f61d0a0789637d71af3",
+            "actual": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C03.res",
+            "expected": "6fa8d3ada8c0e391b5fb2b5aa25b47e8ee09079ced797461b19834d9c0db996f",
+            "actual": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C04.res",
+            "expected": "b4370949eb1ac97928389a4ff42f972dfac930dee2ce571e920aadea474f320f",
+            "actual": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C05.res",
+            "expected": "cc53cbe9dd92cfc8913eddc573f02f5bbeaf24bab5654fa5f51167ab01cd01a6",
+            "actual": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C06.res",
+            "expected": "7b1063bf9c956a723d1660d1541c3093a88761d6ff54168d1fc64d0db6da820a",
+            "actual": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C07.res",
+            "expected": "78f24a3a0eeb3588c6ba1f1392170e90f262678f52890aa2d8bfa9b2006b27c8",
+            "actual": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C08.res",
+            "expected": "7e2b221208812014f9e71426c3344407d5d34fc3125d6b02ec57c2ec7bab3eb1",
+            "actual": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C09.res",
+            "expected": "8c91426421c5bd5db5d5f0e64883a54f5e675d0a1fd4258a508286f648c08dfc",
+            "actual": "a5166199095b2dfb2539bc479b6090c0db32987e9f603ccc07ef9c54543ce1bc"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C10.res",
+            "expected": "ccc5125f12cbbde5b9081a3d17b7a9a65696a7113db974abd83aeeaa64e30c56",
+            "actual": "7d018f2fd58b9efbbd3ab89ca38fcffb0e0a0bbbfb3b80d438ab414f6799ee4b"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C11.res",
+            "expected": "450163d2f88bab548e1161140f09830948dbb11a7782e6b2b697260c90f58594",
+            "actual": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff"
+          },
+          {
+            "path": "res://assets_external/characters_prepared/animations/life_C12.res",
+            "expected": "fe5e3ce0a8db84e79faf057a7b8b19d93baba0fa6c561e0bbe0aff6ca217ca8c",
+            "actual": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57"
+          },
+          {
+            "path": "res://data/prepared_actors.json",
+            "expected": "b7d0a808c12552a942c8cf6b4ba828ca960811d5e5e5f329fcf5e3773650a520",
+            "actual": "bc21f3caf9bae39533555d1f365d2b0e9890412cc6e0a3d35f43a0a9b7c2fac8"
+          }
+        ],
+        "inputs_current": false,
         "complete_equipment_review": false
       }
     },
@@ -1253,7 +1803,7 @@
       "reference_lines": [
         43
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "Existing cached mesh; one attachment fit, no prop ticker.",
       "current_visual_evidence": [],
       "native_verified": false,
@@ -1352,12 +1902,86 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "activity_rope",
+            "retained_geometry_and_material_treatment": "Two twisted rope plies in existing coil envelope, cached single surface.",
+            "stage3_treatment": "Fit retained coil mesh to measured hand palm only for actual carried activity; supported Nera/Rook work uses real station straps.",
+            "assessment": "Per-actor palm and exact coil vertex calibration pending.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "attach_activity_tool",
+            "reference_lines": [
+              43
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "Existing cached mesh; one attachment fit, no prop ticker.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "CharacterLifeModifier generated-tool owner / CharacterPresentation.attach_activity_tool",
+              "resources": [],
+              "scope": "live_conditional_activity_prop",
+              "changes": [
+                "Accepts measured activity_prop_grips metadata only when the exact palm, physical mesh vertex, source hash and uniform actual hand frame validate.",
+                "Retained twisted coil dimensions are preserved; supported work stations suppress unrelated held props.",
+                "Generated and borrowed prop cleanup ownership is explicit."
+              ],
+              "limitations": [
+                "New measured metadata and native per-actor fit are pending authored library compilation.",
+                "Without measured metadata the retained fallback fit remains; no new grip acceptance is claimed."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/character_life_modifier.gd",
+                  "sha256": "7909f5c6e93a62df83ed0343b6a92e99ea78be100cfd98eccdb5cfa01dc3e7f4"
+                },
+                {
+                  "path": "res://scripts/held_prop_geometry.gd",
+                  "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+                },
+                {
+                  "path": "res://scripts/character_animation_driver.gd",
+                  "sha256": "7d4a3b184905f23f817f0ca6748dc9e16a6bd1b092bc66d9c49331862cf65573"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "retained_runtime_owner_pending_context_review",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": null,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+              "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+          }
         }
       ],
       "verification_inputs": {
-        "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
-        "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+        "res://scripts/character_animation_driver.gd": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a",
+        "res://scripts/character_life_modifier.gd": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
         "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
       },
       "evidence_freshness": {
@@ -1366,7 +1990,7 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
     },
     {
       "id": "activity_bowl",
@@ -1378,7 +2002,7 @@
       "reference_lines": [
         43
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "Existing cached vessel mesh; one attachment fit.",
       "current_visual_evidence": [],
       "native_verified": false,
@@ -1477,12 +2101,86 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "activity_bowl",
+            "retained_geometry_and_material_treatment": "Open rim, walls and interior floor, original .20 x .10 x .20 fitting box.",
+            "stage3_treatment": "Fit a real retained bowl rim vertex into the measured palm for meals; preserve open vessel dimensions.",
+            "assessment": "Per-actor palm/rim calibration and meal clearance pending.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "attach_activity_tool",
+            "reference_lines": [
+              43
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "Existing cached vessel mesh; one attachment fit.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "CharacterLifeModifier generated-tool owner / CharacterPresentation.attach_activity_tool",
+              "resources": [],
+              "scope": "live_conditional_activity_prop",
+              "changes": [
+                "Accepts measured activity_prop_grips metadata only when the exact palm, physical mesh vertex, source hash and uniform actual hand frame validate.",
+                "Retained open vessel rim dimensions are preserved; supported work stations suppress unrelated held props.",
+                "Generated and borrowed prop cleanup ownership is explicit."
+              ],
+              "limitations": [
+                "New measured metadata and native per-actor fit are pending authored library compilation.",
+                "Without measured metadata the retained fallback fit remains; no new grip acceptance is claimed."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/character_life_modifier.gd",
+                  "sha256": "7909f5c6e93a62df83ed0343b6a92e99ea78be100cfd98eccdb5cfa01dc3e7f4"
+                },
+                {
+                  "path": "res://scripts/held_prop_geometry.gd",
+                  "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+                },
+                {
+                  "path": "res://scripts/character_animation_driver.gd",
+                  "sha256": "7d4a3b184905f23f817f0ca6748dc9e16a6bd1b092bc66d9c49331862cf65573"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "retained_runtime_owner_pending_context_review",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": null,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+              "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+          }
         }
       ],
       "verification_inputs": {
-        "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
-        "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+        "res://scripts/character_animation_driver.gd": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a",
+        "res://scripts/character_life_modifier.gd": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
         "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
       },
       "evidence_freshness": {
@@ -1491,22 +2189,22 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
     },
     {
       "id": "activity_bread",
       "retained_geometry_and_material_treatment": "Low oval scored flatbread replaces plain rectangular board; original .20 x .025 x .32 fitting dimensions plus .15mm score relief.",
       "stage3_treatment": "Fit an actual baked flatbread side vertex into the measured palm; preserve scores and shape during meals.",
-      "assessment": "12 reachable named-actor fits remain pending actual closed-palm and full activity clearance proof.",
+      "assessment": "12 named-actor grips passed source clearance and strict native verification for standing meals. Current gameplay and visual review are pending.",
       "runtime_reference": "res://scripts/character_presentation.gd",
       "runtime_symbol": "ScoredFlatbreadCrust",
       "reference_lines": [
         122
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "Existing mesh and score child; one attachment fit.",
       "current_visual_evidence": [],
-      "native_verified": false,
+      "native_verified": true,
       "visual_accepted": false,
       "user_accepted": false,
       "runtime_ownership_audit": {
@@ -1559,7 +2257,20 @@
         "C10",
         "C08"
       ],
-      "accepted_actor_fits": [],
+      "accepted_actor_fits": [
+        "C01",
+        "C04",
+        "C03",
+        "C02",
+        "C11",
+        "C05",
+        "C06",
+        "C12",
+        "C07",
+        "C09",
+        "C10",
+        "C08"
+      ],
       "activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062",
       "in_level_accepted": false,
       "performance_verified": false,
@@ -1615,14 +2326,115 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "activity_bread",
+            "retained_geometry_and_material_treatment": "Low oval scored flatbread replaces plain rectangular board; original .20 x .025 x .32 fitting dimensions plus .15mm score relief.",
+            "stage3_treatment": "Fit an actual baked flatbread side vertex into the measured palm; preserve scores and shape during meals.",
+            "assessment": "12 reachable named-actor fits remain pending actual closed-palm and full activity clearance proof.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "ScoredFlatbreadCrust",
+            "reference_lines": [
+              122
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "Existing mesh and score child; one attachment fit.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "CharacterLifeModifier generated-tool owner / CharacterPresentation.attach_activity_tool",
+              "resources": [],
+              "scope": "live_conditional_activity_prop",
+              "changes": [
+                "Accepts measured activity_prop_grips metadata only when the exact palm, physical mesh vertex, source hash and uniform actual hand frame validate.",
+                "Retained scored flatbread side dimensions are preserved; supported work stations suppress unrelated held props.",
+                "Generated and borrowed prop cleanup ownership is explicit."
+              ],
+              "limitations": [
+                "New measured metadata and native per-actor fit are pending authored library compilation.",
+                "Without measured metadata the retained fallback fit remains; no new grip acceptance is claimed."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/character_life_modifier.gd",
+                  "sha256": "7909f5c6e93a62df83ed0343b6a92e99ea78be100cfd98eccdb5cfa01dc3e7f4"
+                },
+                {
+                  "path": "res://scripts/held_prop_geometry.gd",
+                  "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+                },
+                {
+                  "path": "res://scripts/character_animation_driver.gd",
+                  "sha256": "7d4a3b184905f23f817f0ca6748dc9e16a6bd1b092bc66d9c49331862cf65573"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "scheduled_named_cast_prop",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": true,
+            "required_actor_fits": [
+              "C01",
+              "C04",
+              "C03",
+              "C02",
+              "C11",
+              "C05",
+              "C06",
+              "C12",
+              "C07",
+              "C09",
+              "C10",
+              "C08"
+            ],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062",
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+              "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
+              "coverage:activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+          }
         }
       ],
       "verification_inputs": {
-        "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
-        "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+        "res://assets_external/characters_prepared/animations/life_C01.res": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007",
+        "res://assets_external/characters_prepared/animations/life_C02.res": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72",
+        "res://assets_external/characters_prepared/animations/life_C03.res": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07",
+        "res://assets_external/characters_prepared/animations/life_C04.res": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a",
+        "res://assets_external/characters_prepared/animations/life_C05.res": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04",
+        "res://assets_external/characters_prepared/animations/life_C06.res": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16",
+        "res://assets_external/characters_prepared/animations/life_C07.res": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7",
+        "res://assets_external/characters_prepared/animations/life_C08.res": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0",
+        "res://assets_external/characters_prepared/animations/life_C09.res": "a5166199095b2dfb2539bc479b6090c0db32987e9f603ccc07ef9c54543ce1bc",
+        "res://assets_external/characters_prepared/animations/life_C10.res": "7d018f2fd58b9efbbd3ab89ca38fcffb0e0a0bbbfb3b80d438ab414f6799ee4b",
+        "res://assets_external/characters_prepared/animations/life_C11.res": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff",
+        "res://assets_external/characters_prepared/animations/life_C12.res": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57",
+        "res://scripts/character_animation_driver.gd": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a",
+        "res://scripts/character_life_modifier.gd": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
         "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
-        "coverage:activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062"
+        "coverage:activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062",
+        "coverage:activity_grip_strict_sha256": "fb4361971df3cddac4b5338d46d5b58ca8162cb7d0edab78e98c341bbc71f050"
       },
       "evidence_freshness": {
         "inputs_unchanged": true,
@@ -1630,7 +2442,250 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
+      "activity_grip_evidence": [
+        {
+          "asset": "C01",
+          "hand": "hand_l",
+          "library": "res://assets_external/characters_prepared/animations/life_C01.res",
+          "library_sha256": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_20261107/C01/activity_grips.json",
+          "manifest_sha256": "352a72db1871439ed8fae57b15d7a415ed912a20f100dd2ca8144e9445b2aee1",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/fit_receipt.json",
+          "fit_receipt_sha256": "0c2cd0a783335348b10700d2663dda766e7918b774b7d7495d7c2ff79f233dba",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/pose_receipt.json",
+              "sha256": "e7f3e446f2025ee685b2a70b1d52c7f1d62f80556df703303d385cddc0480f9b"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 0.0
+        },
+        {
+          "asset": "C04",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C04.res",
+          "library_sha256": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_20261107/C04/activity_grips.json",
+          "manifest_sha256": "f9c9e5f2ccb2ef90551019baf177cadbddf94e444d42ca77e89d7cd776f981b0",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C04/bread/fit_receipt.json",
+          "fit_receipt_sha256": "2303f58f9e4d8b4344312b28a17144a4189c86d307c167e5046c1cbc7176e8b9",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C04/bread/pose_receipt.json",
+              "sha256": "25a83542f695514ade6fa3beca2e5791a060587f9475843785bad89dd605a87a"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 1.19209289550781e-07
+        },
+        {
+          "asset": "C03",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C03.res",
+          "library_sha256": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_20261107/C03/activity_grips.json",
+          "manifest_sha256": "af5aebc17848a8727c6f42d7f06beec622a499ef939749d5279601267d178ba8",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C03/bread/fit_receipt.json",
+          "fit_receipt_sha256": "57e59f3c733315eb3ab75066c6a92e35b2a1e570f357a4c3204eb619f3f6ce63",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C03/bread/pose_receipt.json",
+              "sha256": "62f77115dc1a821bee7d95d085f8130c455a94846512b155b841e341b598f8d9"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 5.96046447753906e-08
+        },
+        {
+          "asset": "C02",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C02.res",
+          "library_sha256": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_20261107/C02/activity_grips.json",
+          "manifest_sha256": "26e25004c6bd68df413c5d7268272498c74c83a088b526cb8a0c3c00d697e01e",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C02/bread/fit_receipt.json",
+          "fit_receipt_sha256": "320cf8c9c43a44fccea849e22c8acdfd680a0e342f8570d8b3ed95ade85f60cd",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C02/bread/pose_receipt.json",
+              "sha256": "f9f5160b9e29992729b9527bca9a878a40900bb5a9ad5b24a00f62f9f03930e9"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 0.0
+        },
+        {
+          "asset": "C11",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C11.res",
+          "library_sha256": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/activity_grips.json",
+          "manifest_sha256": "826b306397f7011dc0d8b3651c866d34416e315a047b404043567c11b5d1df11",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/fit_receipt.json",
+          "fit_receipt_sha256": "0b70c2b3e50720bcf0f28489630e7e382ed7a7fdf3a4ddb4af346443a374e1fe",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/pose_receipt.json",
+              "sha256": "dc9f576cc8b3068ec96eb3d60e2f4341286aadd1f8b645bc9b51ca1436b87f7f"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 1.58324837684631e-08
+        },
+        {
+          "asset": "C05",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C05.res",
+          "library_sha256": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/activity_grips.json",
+          "manifest_sha256": "9afd05a5d3b62826c090bee3df01c09c82ea49b4389a5f720601e47e7051d3f9",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C05/bread/fit_receipt.json",
+          "fit_receipt_sha256": "9222d5a3e71260618035d792d76b4ca0310e8085f72fc7f8f2e3f83d8688a8e3",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C05/bread/pose_receipt.json",
+              "sha256": "5a46cb2163674b65a6f1a8fd20fb84ac76c8d46bc49749da2498e04dbe8d3d14"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 0.0
+        },
+        {
+          "asset": "C06",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C06.res",
+          "library_sha256": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/activity_grips.json",
+          "manifest_sha256": "6be1ee48bf31c2ba3921244674251c0eef587e30efceefab4ed0b5cc60d00352",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C06/bread/fit_receipt.json",
+          "fit_receipt_sha256": "d480867be2e7e23d68db65c9e113e8fc6b313494608f7b4f2ccaa9b3a7106b33",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C06/bread/pose_receipt.json",
+              "sha256": "b51904f53f30bf48e5b5c720f35167653a42d62ce0be1f65ac166abc0cbf6876"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 0.0
+        },
+        {
+          "asset": "C12",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C12.res",
+          "library_sha256": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/activity_grips.json",
+          "manifest_sha256": "b28ae165a605da01f5cb9ede9b85548cfb23c77516156b5f16d6f07d0ad9582d",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C12/bread/fit_receipt.json",
+          "fit_receipt_sha256": "206bf9cf0f757bb7963abed6fb5e0ab836b26c932048577195d1b2d1f1492598",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C12/bread/pose_receipt.json",
+              "sha256": "4584bab36483bc34973e58813c61e05af6516b9fc5aef2fd0bc874502aec8d3d"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 3.72529029846191e-09
+        },
+        {
+          "asset": "C07",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C07.res",
+          "library_sha256": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/activity_grips.json",
+          "manifest_sha256": "1fd88208f2754e685b46c42a02b116cdf29322c7dc660ecca0b2f13e9dfbc290",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C07/bread/fit_receipt.json",
+          "fit_receipt_sha256": "0bdecc3a7123812c3eb4d348769d1975dd2bc6520913529fe86768bb867621d3",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C07/bread/pose_receipt.json",
+              "sha256": "fb067ddcf776852345b64efcfd3e416c33f53386f0d84126fd2af63240a68ce0"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 7.45058059692383e-09
+        },
+        {
+          "asset": "C09",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C09.res",
+          "library_sha256": "a5166199095b2dfb2539bc479b6090c0db32987e9f603ccc07ef9c54543ce1bc",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/activity_grips.json",
+          "manifest_sha256": "b61548e83c01fb847be9b30356efb7e12bbb90e4716caaee4542122674acaa64",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C09/bread/fit_receipt.json",
+          "fit_receipt_sha256": "c197b0e5dbf242c1d07f5ad044be7a7db449122289455d3549c0515ab9eeef1c",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C09/bread/pose_receipt.json",
+              "sha256": "1d5b743ef0707734f054939e27d1e37c98ab2e7cac664d117a8328937496153b"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 3.814697265625e-06
+        },
+        {
+          "asset": "C10",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C10.res",
+          "library_sha256": "7d018f2fd58b9efbbd3ab89ca38fcffb0e0a0bbbfb3b80d438ab414f6799ee4b",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/activity_grips.json",
+          "manifest_sha256": "845895cdb7b13448c316dd7a128b359d4c54d0af8165b91e85e2ca65bf65d8d5",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C10/bread/fit_receipt.json",
+          "fit_receipt_sha256": "933e33d2afd7584d8873291c9377fbdfbf42c1391c9ac66311c0e2b41ec79b86",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C10/bread/pose_receipt.json",
+              "sha256": "eb5ddb6aa2e0063470e75e2699a8d5ba76aa9a0b5026b19de1439dc395c8887e"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 0.0
+        },
+        {
+          "asset": "C08",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C08.res",
+          "library_sha256": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/activity_grips.json",
+          "manifest_sha256": "405df2c1aceae818d288b3f0d8e4821c9acafad3451767ed16d64cc12ff5d952",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C08/bread/fit_receipt.json",
+          "fit_receipt_sha256": "6341a0ab8d6a20331761607f56dcd1d541b4ffdb2415c43a4a8dfcc65a9e23b8",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C08/bread/pose_receipt.json",
+              "sha256": "0b7587f31ed2805984e0441a1f1800b255239d28b8cc5ed77599d9271610479b"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Eat": 839
+          },
+          "strict_contact_error_m": 7.45058059692383e-09
+        }
+      ],
+      "activity_grip_strict_sha256": "fb4361971df3cddac4b5338d46d5b58ca8162cb7d0edab78e98c341bbc71f050"
     },
     {
       "id": "activity_cloth",
@@ -1642,7 +2697,7 @@
       "reference_lines": [
         43
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "Existing cached mesh; one attachment fit.",
       "current_visual_evidence": [],
       "native_verified": false,
@@ -1743,12 +2798,87 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "activity_cloth",
+            "retained_geometry_and_material_treatment": "Double-sided gently folded linen sheet replaces solid tapered cylinder; original hand socket retained.",
+            "stage3_treatment": "Fit retained folded linen to the real free palm; preserve Anwen right-staff/left-care ownership and suppress unrelated carry cloth during supported work.",
+            "assessment": "Stage1 Anwen contact proof retained; remaining per-actor fit and garment review pending.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "attach_activity_tool",
+            "reference_lines": [
+              43
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "Existing cached mesh; one attachment fit.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "CharacterLifeModifier generated-tool owner / CharacterPresentation.attach_activity_tool",
+              "resources": [],
+              "scope": "live_conditional_activity_prop",
+              "changes": [
+                "Accepts measured activity_prop_grips metadata only when the exact palm, physical mesh vertex, source hash and uniform actual hand frame validate.",
+                "Retained folded cloth surface dimensions are preserved; supported work stations suppress unrelated held props.",
+                "Generated and borrowed prop cleanup ownership is explicit.",
+                "Anwen fitted staff retains right-hand authority and uses the left hand for care cloth."
+              ],
+              "limitations": [
+                "New measured metadata and native per-actor fit are pending authored library compilation.",
+                "Without measured metadata the retained fallback fit remains; no new grip acceptance is claimed."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/character_life_modifier.gd",
+                  "sha256": "7909f5c6e93a62df83ed0343b6a92e99ea78be100cfd98eccdb5cfa01dc3e7f4"
+                },
+                {
+                  "path": "res://scripts/held_prop_geometry.gd",
+                  "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+                },
+                {
+                  "path": "res://scripts/character_animation_driver.gd",
+                  "sha256": "7d4a3b184905f23f817f0ca6748dc9e16a6bd1b092bc66d9c49331862cf65573"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "retained_runtime_owner_pending_context_review",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": null,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+              "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+          }
         }
       ],
       "verification_inputs": {
-        "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
-        "res://scripts/character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+        "res://scripts/character_animation_driver.gd": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a",
+        "res://scripts/character_life_modifier.gd": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
         "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
       },
       "evidence_freshness": {
@@ -1757,7 +2887,7 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
     },
     {
       "id": "Vargan_spear",
@@ -1770,7 +2900,7 @@
         568,
         591
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "No geometry or runtime change claimed yet.",
       "current_visual_evidence": [],
       "native_verified": false,
@@ -1884,13 +3014,97 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "Vargan_spear",
+            "retained_geometry_and_material_treatment": "Faceted forged leaf head with central ridge, existing .10 x .22 x .06 head fitting box and shaft/grip.",
+            "stage3_treatment": "Resolve actual live native versus procedural equipment ownership before grip correction; retain combat reach and existing shaft/head geometry.",
+            "assessment": "Retained conditional fallback. Current authored cast bypasses this helper; no confirmed world use, native fit or geometry improvement is claimed.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "_add_spear",
+            "reference_lines": [
+              568,
+              591
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "No geometry or runtime change claimed yet.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "CharacterPresentation._add_castle_role_equipment -> _add_spear; conditional legacy BoneAttachment only",
+              "resources": [],
+              "scope": "retained_fallback_not_instantiated_for_current_authored_cast",
+              "changes": [
+                "No native grip or geometry change claimed."
+              ],
+              "limitations": [
+                "Authored design-pack humanoids set character_authored_silhouette and skip legacy castle-role equipment.",
+                "Current vargan_patrol aliases Rook/C02; vargan_gate_guard aliases Merrow/C10. Historical inventory membership does not prove a live spear or shield.",
+                "Fallback helper remains available for non-authored skeletal bodies; source-only reconciliation is not a runtime capture."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/asset_spawn_helper.gd",
+                  "sha256": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4"
+                },
+                {
+                  "path": "res://scripts/held_prop_geometry.gd",
+                  "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+                },
+                {
+                  "path": "res://scripts/story_cast_profile.gd",
+                  "sha256": "6c29dbef1498bb833ff3abb39bafb7fcef7c2998b7ed7ab69b505bc6a8811f9d"
+                },
+                {
+                  "path": "res://data/design_pack_assets.json",
+                  "sha256": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e"
+                },
+                {
+                  "path": "res://data/design_pack_cast.json",
+                  "sha256": "67e612b4a6473ef67bea488e139d9c445d2f62a3293dcccbcaf0d988e8563d56"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "conditional_legacy_fallback_not_instantiated_for_authored_cast",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": false,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://data/design_pack_assets.json": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e",
+              "res://data/design_pack_cast.json": "67e612b4a6473ef67bea488e139d9c445d2f62a3293dcccbcaf0d988e8563d56",
+              "res://scripts/asset_spawn_helper.gd": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
+              "res://scripts/story_cast_profile.gd": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+          }
         }
       ],
       "verification_inputs": {
-        "res://data/design_pack_assets.json": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e",
+        "res://data/design_pack_assets.json": "b8515447bae5ecab4e9a88fd0ba034171f88c48d2a0f4a4b6a1ea751996ba9eb",
         "res://data/design_pack_cast.json": "67e612b4a6473ef67bea488e139d9c445d2f62a3293dcccbcaf0d988e8563d56",
         "res://scripts/asset_spawn_helper.gd": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
         "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
         "res://scripts/story_cast_profile.gd": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9"
       },
@@ -1900,7 +3114,7 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
     },
     {
       "id": "Vargan_shield",
@@ -1913,7 +3127,7 @@
         571,
         612
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "No geometry or runtime change claimed yet.",
       "current_visual_evidence": [],
       "native_verified": false,
@@ -2027,13 +3241,97 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "Vargan_shield",
+            "retained_geometry_and_material_treatment": "Shallow dish, bound metal rim and rounded brass boss; existing wrist frame and fitting envelope.",
+            "stage3_treatment": "Resolve actual live native versus procedural equipment ownership; inspect real forearm/shield contact and garment clearance.",
+            "assessment": "Retained conditional fallback. Current authored cast bypasses this helper; no confirmed world use, native fit or geometry improvement is claimed.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "_add_shield",
+            "reference_lines": [
+              571,
+              612
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "No geometry or runtime change claimed yet.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "CharacterPresentation._add_castle_role_equipment -> _add_shield; conditional legacy BoneAttachment only",
+              "resources": [],
+              "scope": "retained_fallback_not_instantiated_for_current_authored_cast",
+              "changes": [
+                "No native grip or geometry change claimed."
+              ],
+              "limitations": [
+                "Authored design-pack humanoids set character_authored_silhouette and skip legacy castle-role equipment.",
+                "Current vargan_patrol aliases Rook/C02; vargan_gate_guard aliases Merrow/C10. Historical inventory membership does not prove a live spear or shield.",
+                "Fallback helper remains available for non-authored skeletal bodies; source-only reconciliation is not a runtime capture."
+              ],
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/asset_spawn_helper.gd",
+                  "sha256": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4"
+                },
+                {
+                  "path": "res://scripts/held_prop_geometry.gd",
+                  "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+                },
+                {
+                  "path": "res://scripts/story_cast_profile.gd",
+                  "sha256": "6c29dbef1498bb833ff3abb39bafb7fcef7c2998b7ed7ab69b505bc6a8811f9d"
+                },
+                {
+                  "path": "res://data/design_pack_assets.json",
+                  "sha256": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e"
+                },
+                {
+                  "path": "res://data/design_pack_cast.json",
+                  "sha256": "67e612b4a6473ef67bea488e139d9c445d2f62a3293dcccbcaf0d988e8563d56"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "conditional_legacy_fallback_not_instantiated_for_authored_cast",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": false,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://data/design_pack_assets.json": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e",
+              "res://data/design_pack_cast.json": "67e612b4a6473ef67bea488e139d9c445d2f62a3293dcccbcaf0d988e8563d56",
+              "res://scripts/asset_spawn_helper.gd": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
+              "res://scripts/story_cast_profile.gd": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+          }
         }
       ],
       "verification_inputs": {
-        "res://data/design_pack_assets.json": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e",
+        "res://data/design_pack_assets.json": "b8515447bae5ecab4e9a88fd0ba034171f88c48d2a0f4a4b6a1ea751996ba9eb",
         "res://data/design_pack_cast.json": "67e612b4a6473ef67bea488e139d9c445d2f62a3293dcccbcaf0d988e8563d56",
         "res://scripts/asset_spawn_helper.gd": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
         "res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
         "res://scripts/story_cast_profile.gd": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9"
       },
@@ -2043,7 +3341,7 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
     },
     {
       "id": "Vargan_record_books",
@@ -2058,7 +3356,7 @@
         649,
         671
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "Native belt geometry unchanged; no extra carried book for these actors.",
       "current_visual_evidence": [],
       "native_verified": false,
@@ -2166,14 +3464,96 @@
               ]
             }
           }
+        },
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "Vargan_record_books",
+            "retained_geometry_and_material_treatment": "Inset parchment page block, chamfered leather covers, bound spine and brass clasp; both clerk and steward dimensions and held transforms retained.",
+            "stage3_treatment": "Retain C09/C10 fused pelvis books. Authored station ledger/receipt work and Merrow cup provide purposeful hand action; legacy carried-book helper is fallback-only.",
+            "assessment": "Native fused belt-book ownership source-confirmed; new-stage belt/garment visual review pending.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "VarganRecordBook",
+            "reference_lines": [
+              182,
+              183,
+              649,
+              671
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "Native belt geometry unchanged; no extra carried book for these actors.",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "user_accepted": false,
+            "runtime_ownership_audit": {
+              "owner": "C09/C10 retained native pelvis-weighted body geometry; CharacterPresentation VarganRecordBook is a separate legacy fallback",
+              "resources": [
+                "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+                "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb"
+              ],
+              "scope": "live_native_belt_books_with_separate_legacy_held_fallback",
+              "changes": [
+                "Native belt books remain unchanged; source book() defaults to pelvis.",
+                "Vale Life_Settle_Ledger uses an actual supported station ledger; Merrow work uses supported receipts and the separately calibrated story cup.",
+                "Measured legacy carried-book fitting is fallback-only and must not be represented as a native belt-book change."
+              ],
+              "limitations": [
+                "Native belt/garment and station-ledger visual review remains pending."
+              ],
+              "authoring_source": "art_source/art_recovery_v2/tools/improve_humans_20261101.py::book / C09 / C10",
+              "source_receipts": [
+                {
+                  "path": "res://scripts/character_presentation.gd",
+                  "sha256": "26057de248417d905bd7a45a9ff37c60354152234a89b771c78bf8593ecaad1e"
+                },
+                {
+                  "path": "res://scripts/asset_spawn_helper.gd",
+                  "sha256": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4"
+                },
+                {
+                  "path": "res://scripts/character_animation_driver.gd",
+                  "sha256": "7d4a3b184905f23f817f0ca6748dc9e16a6bd1b092bc66d9c49331862cf65573"
+                },
+                {
+                  "path": "res://scripts/story_cast_profile.gd",
+                  "sha256": "6c29dbef1498bb833ff3abb39bafb7fcef7c2998b7ed7ab69b505bc6a8811f9d"
+                }
+              ]
+            },
+            "inventory_origin": "retained_thirteen_entry_checklist",
+            "runtime_usage_scope": "retained_runtime_owner_pending_context_review",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": null,
+            "required_actor_fits": [],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": null,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+              "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+              "res://scripts/asset_spawn_helper.gd": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4",
+              "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "res://scripts/story_cast_profile.gd": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+          }
         }
       ],
       "verification_inputs": {
         "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
         "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
         "res://scripts/asset_spawn_helper.gd": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4",
-        "res://scripts/character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+        "res://scripts/character_animation_driver.gd": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
         "res://scripts/story_cast_profile.gd": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9"
       },
       "evidence_freshness": {
@@ -2182,19 +3562,19 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
     },
     {
       "id": "activity_supply",
       "retained_geometry_and_material_treatment": "Existing live supply vessel is distinct from the wider bowl; added to current coverage from actual scheduled carry contract, not newly authored geometry.",
       "stage3_treatment": "Fit the retained narrow supply vessel to actual closed-palm Idle/Walking carry poses for the ten reachable named actors; preserve its distinct .055/.11/.23 dimensions.",
-      "assessment": "10 reachable named-actor fits remain pending actual closed-palm and full activity clearance proof.",
+      "assessment": "10 named-actor grips passed source clearance and strict native verification for stationary carry, full-speed forward Walk, and Nessa\u2019s measured work-to-errand route. Current gameplay and visual review are pending.",
       "runtime_reference": "res://scripts/character_presentation.gd",
       "runtime_symbol": "HeldProps.vessel",
       "reference_lines": [
         109
       ],
-      "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "runtime_source_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
       "incremental_performance_cost": "Existing cached vessel; one attachment fit, no independent ticker.",
       "inventory_origin": "current_reachable_activity_contract",
       "runtime_usage_scope": "scheduled_named_cast_prop",
@@ -2212,17 +3592,39 @@
         "C07",
         "C08"
       ],
-      "accepted_actor_fits": [],
+      "accepted_actor_fits": [
+        "C01",
+        "C04",
+        "C03",
+        "C02",
+        "C11",
+        "C05",
+        "C06",
+        "C12",
+        "C07",
+        "C08"
+      ],
       "activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062",
       "current_visual_evidence": [],
-      "native_verified": false,
+      "native_verified": true,
       "visual_accepted": false,
       "in_level_accepted": false,
       "performance_verified": false,
       "user_accepted": false,
       "verification_inputs": {
-        "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
-        "coverage:activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062"
+        "res://assets_external/characters_prepared/animations/life_C01.res": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007",
+        "res://assets_external/characters_prepared/animations/life_C02.res": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72",
+        "res://assets_external/characters_prepared/animations/life_C03.res": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07",
+        "res://assets_external/characters_prepared/animations/life_C04.res": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a",
+        "res://assets_external/characters_prepared/animations/life_C05.res": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04",
+        "res://assets_external/characters_prepared/animations/life_C06.res": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16",
+        "res://assets_external/characters_prepared/animations/life_C07.res": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7",
+        "res://assets_external/characters_prepared/animations/life_C08.res": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0",
+        "res://assets_external/characters_prepared/animations/life_C11.res": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff",
+        "res://assets_external/characters_prepared/animations/life_C12.res": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57",
+        "res://scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
+        "coverage:activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062",
+        "coverage:activity_grip_strict_sha256": "fb4361971df3cddac4b5338d46d5b58ca8162cb7d0edab78e98c341bbc71f050"
       },
       "evidence_freshness": {
         "inputs_unchanged": true,
@@ -2230,7 +3632,277 @@
         "unbound_inputs": []
       },
       "historical_ownership_audit_inputs_current": false,
-      "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+      "current_runtime_reference_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
+      "activity_grip_evidence": [
+        {
+          "asset": "C01",
+          "hand": "hand_l",
+          "library": "res://assets_external/characters_prepared/animations/life_C01.res",
+          "library_sha256": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_20261107/C01/activity_grips.json",
+          "manifest_sha256": "352a72db1871439ed8fae57b15d7a415ed912a20f100dd2ca8144e9445b2aee1",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/anwen_supply_r2/fit_receipt.json",
+          "fit_receipt_sha256": "689fcf066344f3d4d926599977011e80de9e2f733e1c771bcada04d84d6df493",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/pose_receipt.json",
+              "sha256": "e7f3e446f2025ee685b2a70b1d52c7f1d62f80556df703303d385cddc0480f9b"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 0.0
+        },
+        {
+          "asset": "C04",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C04.res",
+          "library_sha256": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_20261107/C04/activity_grips.json",
+          "manifest_sha256": "f9c9e5f2ccb2ef90551019baf177cadbddf94e444d42ca77e89d7cd776f981b0",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C04/supply/fit_receipt.json",
+          "fit_receipt_sha256": "195dd521b91a528873f9a40ffdd4eb8e2f53bc07873be2d4abc039345cc945c5",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C04/supply/pose_receipt.json",
+              "sha256": "601ba52f823d4ac02f579593d8477a2eeecf2c11090590eb1b3782c3ff6f6f73"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 5.96046447753906e-08
+        },
+        {
+          "asset": "C03",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C03.res",
+          "library_sha256": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_20261107/C03/activity_grips.json",
+          "manifest_sha256": "af5aebc17848a8727c6f42d7f06beec622a499ef939749d5279601267d178ba8",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C03/supply/fit_receipt.json",
+          "fit_receipt_sha256": "b37d1a6a6c53b0c9a4c598eb6884c6d336781e1056fb5f3bf82ea2eb5383502c",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C03/supply/pose_receipt.json",
+              "sha256": "1bbb621c04ebe776e67bcf22b01d6b7baaddc8fae12f9891fff0592fbcfb5020"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 5.96046447753906e-08
+        },
+        {
+          "asset": "C02",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C02.res",
+          "library_sha256": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_20261107/C02/activity_grips.json",
+          "manifest_sha256": "26e25004c6bd68df413c5d7268272498c74c83a088b526cb8a0c3c00d697e01e",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C02/fit_receipt.json",
+          "fit_receipt_sha256": "e0c9ac0d708a5f3eff106a9c08c7a813e258dc077cedee3704a7abb82113d8a3",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C02/native/pose_receipt.json",
+              "sha256": "0b7b2a1d028462c26dee1dd7d2176f532d1e9bfd062491b381e7b245d2432568"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 1.33280039449346e-07
+        },
+        {
+          "asset": "C11",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C11.res",
+          "library_sha256": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/activity_grips.json",
+          "manifest_sha256": "826b306397f7011dc0d8b3651c866d34416e315a047b404043567c11b5d1df11",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/c11_supply_composite_r1/fit/receipt.json",
+          "fit_receipt_sha256": "355c66233b838c4996050f59ebb51e227cd4f2981d0197f3244376573f44edaf",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/c11_supply_composite_r1/standing/pose_receipt.json",
+              "sha256": "b6676fe100d56827c5c7d551a11302a2b73ea63aa1a4dde51cfb0cef37f4eb0f"
+            },
+            "route_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/c11_supply_composite_r1/route/pose_receipt.json",
+              "sha256": "c37ee932cafa0420116bbaa54b43796978fd81a19917f8fff2d9542b7efb57ef"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Scheduler_Route": 959
+          },
+          "strict_contact_error_m": 4.65661287307739e-10
+        },
+        {
+          "asset": "C05",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C05.res",
+          "library_sha256": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/activity_grips.json",
+          "manifest_sha256": "9afd05a5d3b62826c090bee3df01c09c82ea49b4389a5f720601e47e7051d3f9",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C05/fit_receipt.json",
+          "fit_receipt_sha256": "f63fa631395b4f1a1fdd2675808f18263483a6eaaa11e7a0aa891f144cca2b1a",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C05/native/pose_receipt.json",
+              "sha256": "f7e9fc8a1a3eeb5915e0cea25d98df8b62c29c5beea797f4c049a7c8894f66cb"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 3.8146990846144e-06
+        },
+        {
+          "asset": "C06",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C06.res",
+          "library_sha256": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/activity_grips.json",
+          "manifest_sha256": "6be1ee48bf31c2ba3921244674251c0eef587e30efceefab4ed0b5cc60d00352",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C06/fit_receipt.json",
+          "fit_receipt_sha256": "defd211c5cf9876fc336a9713912abfd3e0f98c5fe46466009b2865aa19afb1b",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C06/native/pose_receipt.json",
+              "sha256": "3988e8190ad6a9fdc91963a9bb1f4ebadeb6307379d6c095471e2056b29a15db"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 1.86264514923096e-08
+        },
+        {
+          "asset": "C12",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C12.res",
+          "library_sha256": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/activity_grips.json",
+          "manifest_sha256": "b28ae165a605da01f5cb9ede9b85548cfb23c77516156b5f16d6f07d0ad9582d",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C12/fit_receipt.json",
+          "fit_receipt_sha256": "8094712ab9875e152950c646b0fa62fef753f774698f050027a25468eef35910",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C12/native/pose_receipt.json",
+              "sha256": "1d84587f7a2564dcb8b752f3fc733148e86940f3e7bc288cec7efed118e4fdef"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 3.8146990846144e-06
+        },
+        {
+          "asset": "C07",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C07.res",
+          "library_sha256": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/activity_grips.json",
+          "manifest_sha256": "1fd88208f2754e685b46c42a02b116cdf29322c7dc660ecca0b2f13e9dfbc290",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C07/fit_receipt.json",
+          "fit_receipt_sha256": "cc35221ca11dbd967ee191fdbe77cefafc29514facc3906fd553427e926bd9b7",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C07/native/pose_receipt.json",
+              "sha256": "5c65aa293183a1fac96f208d25dc63d2a0ba9bd55ecec55cf592d24cf358a12b"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 7.45058059692383e-09
+        },
+        {
+          "asset": "C08",
+          "hand": "hand_r",
+          "library": "res://assets_external/characters_prepared/animations/life_C08.res",
+          "library_sha256": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0",
+          "manifest": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/activity_grips.json",
+          "manifest_sha256": "405df2c1aceae818d288b3f0d8e4821c9acafad3451767ed16d64cc12ff5d952",
+          "fit_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C08/fit_receipt.json",
+          "fit_receipt_sha256": "7fab55bf61f850f14cb84a8fb35bea99e3942f94c5ce181d82261310e315dd12",
+          "native_receipts": {
+            "native_pose_evidence": {
+              "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C08/native/pose_receipt.json",
+              "sha256": "e9ad4b1911f145d092210a581bc79d0b77c5d621d28377561fda2ed59b92d7a7"
+            }
+          },
+          "verified_samples_by_clip": {
+            "Authoring_Carry_Idle": 301,
+            "Authoring_Carry_Walking": 121
+          },
+          "strict_contact_error_m": 1.19209289550781e-07
+        }
+      ],
+      "activity_grip_strict_sha256": "fb4361971df3cddac4b5338d46d5b58ca8162cb7d0edab78e98c341bbc71f050",
+      "review_history": [
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "activity_supply",
+            "retained_geometry_and_material_treatment": "Existing live supply vessel is distinct from the wider bowl; added to current coverage from actual scheduled carry contract, not newly authored geometry.",
+            "stage3_treatment": "Fit the retained narrow supply vessel to actual closed-palm Idle/Walking carry poses for the ten reachable named actors; preserve its distinct .055/.11/.23 dimensions.",
+            "assessment": "10 reachable named-actor fits remain pending actual closed-palm and full activity clearance proof.",
+            "runtime_reference": "res://scripts/character_presentation.gd",
+            "runtime_symbol": "HeldProps.vessel",
+            "reference_lines": [
+              109
+            ],
+            "runtime_source_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+            "incremental_performance_cost": "Existing cached vessel; one attachment fit, no independent ticker.",
+            "inventory_origin": "current_reachable_activity_contract",
+            "runtime_usage_scope": "scheduled_named_cast_prop",
+            "confirmed_world_usage": false,
+            "named_cast_runtime_reachable": true,
+            "required_actor_fits": [
+              "C01",
+              "C04",
+              "C03",
+              "C02",
+              "C11",
+              "C05",
+              "C06",
+              "C12",
+              "C07",
+              "C08"
+            ],
+            "accepted_actor_fits": [],
+            "activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062",
+            "current_visual_evidence": [],
+            "native_verified": false,
+            "visual_accepted": false,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "user_accepted": false,
+            "verification_inputs": {
+              "res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+              "coverage:activity_contract_sha256": "2ec03d8aedd3bfe435667856d1f11c43dd99d4ecd41818a9651ff3595be9c062"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": true,
+              "changed_inputs": [],
+              "unbound_inputs": []
+            },
+            "historical_ownership_audit_inputs_current": false,
+            "current_runtime_reference_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15"
+          }
+        }
+      ]
     }
   ],
   "publication_ready": false,
@@ -2240,8 +3912,17 @@
     "current_review_entries": 14,
     "conditional_fallback_entries": 2,
     "required_named_actor_fits": 22,
-    "accepted_named_actor_fits": 0,
+    "accepted_named_actor_fits": 22,
     "confirmed_world_usage_entries": 0
+  },
+  "activity_grip_evidence_sources": {
+    "compiled_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/grip_runtime_r1/compiled_libraries.json",
+    "compiled_receipt_sha256": "6d0a5868464a2c664759622dc2b5982d80fcd8f9ab46b6a184fde984bf770d45",
+    "strict_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/grip_runtime_r1/strict_cast.json",
+    "strict_receipt_sha256": "fb4361971df3cddac4b5338d46d5b58ca8162cb7d0edab78e98c341bbc71f050",
+    "strict_log_sha256": "c2d7e621b67321a8a2b658396fef0f9648876427b14fa0fd7bb4e74dc0c01866",
+    "builder_order_receipt_sha256": "f30932050465a7e52cfd61638712c3a88516b69b82e5b3d22befa3a6e9df3909",
+    "owner_regressions_receipt_sha256": "0a7712e3f912d6f178bfbc810dd0e9ac5f2eb0f8db4b0e7a2c3449fdd259bb2b"
   },
   "ownership_audit_status": "Source-reviewed 2026-11-07; current native visual and performance acceptance remains pending.",
   "removed_from_runtime_scope": []
