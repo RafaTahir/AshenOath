@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "asset": "M15",
+  "status": "source_contract_pass",
+  "candidate_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+  "retained_source_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
+  "candidate_bytes": 3307892,
+  "retained_source_bytes": 3259856,
+  "net_source_bytes": 48036,
+  "protected_action_bytes_equal": true,
+  "protected_action_signatures": {
+    "Attack": "65f05207533bf3e6f0403d77f6c3dd1f32548adf97dbd6e8c97b255e0d9a9981",
+    "AttackHeavy": "44255dde677cd712cd135ca5030b528119aa9af9b1009637ff7f75b958880f6d",
+    "Block": "b1f2b14c01ab9f6e10fdf690393a3706f6ced434812fab30791a2429a657b704",
+    "Death": "3c7e221defc725a0edeea2941805c2d75dfd0a2dc766082326f996de37d5bb02",
+    "HitReact": "9acc1ac5bf37606eef586412c7ac9e7e92e5c5727a96afebdd6fceb04257535f",
+    "Interact": "430013925bfd1ba9d2aae0032576764ab071109f995eb07ccc703223d5c4ce0a",
+    "Recovery": "76aab4294904cfa870000dfed66b87f4c55c1ea4744eb3c499fc4a7bd931ccc3",
+    "Running": "30ed134fe677951a9f37f545772de9a746f94b2cbc5b5f66406dd71bcf84d7ac",
+    "Threaten": "c814c5b013b72b142e826a271872fefcf396ff0a24de65c9d0be34f63fbe94cd",
+    "Walking": "dfbfb15a8e106474211b4109a165bed9e3b23821b392ed11b2ced0fb14102d01",
+    "Windup": "e7e8b71d539ade21d6403df4e99df4eddb4065fff23a714c1728a4c86a54153e"
+  },
+  "retained_base_geometry_unchanged": true,
+  "retained_export_base_bytes_equal": true,
+  "retained_materials_skin_hierarchy_equal": true,
+  "retained_base_mesh_signatures": {
+    "M15_RuntimeAssembly": "00747ab540da166d19c3b484f6bb1bad201d09c0905183b7c317bc1ce0d71fc9",
+    "Icosphere": "141fabce6a7148986d13a7ea4ca0ce60d956edc0e2424b6eaceff31de9f1a975"
+  },
+  "retained_external_source_hashes": {
+    "textures/color_aca92162247d034eb28b7f3b1dad92c6b9fd99aaed36c6f9d63234dbb7c92b57.png": "aca92162247d034eb28b7f3b1dad92c6b9fd99aaed36c6f9d63234dbb7c92b57"
+  },
+  "required_morphs": [
+    "Sac0_Inflate",
+    "Sac1_Inflate",
+    "Sac2_Inflate"
+  ],
+  "durations": {
+    "Idle": 4.0,
+    "Investigate": 2.7916667461395264,
+    "Feed": 3.2083332538604736,
+    "Sleep": 4.583333492279053
+  },
+  "clips": {
+    "Idle": {
+      "active_bones": [
+        "Head",
+        "Jaw"
+      ],
+      "actual_mesh_morph_bindings": {
+        "Sac0_Inflate": "M15_RuntimeAssembly",
+        "Sac1_Inflate": "M15_RuntimeAssembly",
+        "Sac2_Inflate": "M15_RuntimeAssembly"
+      }
+    },
+    "Investigate": {
+      "active_bones": [
+        "Head",
+        "Jaw"
+      ],
+      "actual_mesh_morph_bindings": {
+        "Sac0_Inflate": "M15_RuntimeAssembly",
+        "Sac1_Inflate": "M15_RuntimeAssembly",
+        "Sac2_Inflate": "M15_RuntimeAssembly"
+      }
+    },
+    "Feed": {
+      "active_bones": [
+        "Head",
+        "Jaw"
+      ],
+      "actual_mesh_morph_bindings": {
+        "Sac0_Inflate": "M15_RuntimeAssembly",
+        "Sac1_Inflate": "M15_RuntimeAssembly",
+        "Sac2_Inflate": "M15_RuntimeAssembly"
+      }
+    },
+    "Sleep": {
+      "active_bones": [
+        "Head",
+        "Jaw"
+      ],
+      "actual_mesh_morph_bindings": {
+        "Sac0_Inflate": "M15_RuntimeAssembly",
+        "Sac1_Inflate": "M15_RuntimeAssembly",
+        "Sac2_Inflate": "M15_RuntimeAssembly"
+      }
+    }
+  },
+  "water_probe_bones": [],
+  "native_prepared_binding_verified": false,
+  "attack_recalibration_required": true,
+  "visual_accepted": false,
+  "user_accepted": false
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "asset": "M05",
+  "status": "source_contract_pass",
+  "candidate_sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8",
+  "retained_source_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+  "candidate_bytes": 2429516,
+  "retained_source_bytes": 2314140,
+  "net_source_bytes": 115376,
+  "protected_action_bytes_equal": true,
+  "protected_action_signatures": {
+    "Attack": "a6fbae22d693022ce948ebb9606bd1f264c543f270c6b513b94758d331bc864a",
+    "AttackHeavy": "06536563ec4a68f97662d982f913210c4cb26da334f17d7676ecee6da8406c6e",
+    "Block": "024a0fc7dcb473b1abf07be705e521f9683223ec8157170376f677c8f88734f5",
+    "Death": "6ea0bbb4e50385735dc315748a85da458e00961aaab3e5749639bce27204a2c8",
+    "HitReact": "d78acfeb490de550976e18c5fed6add55cad2beedd7c0b11710e75ca89fdc708",
+    "Interact": "303fd97c19f0d8b421b35d2487b91b8ece5e4648db2a4302477985ee5fd5e962",
+    "Recovery": "d5abe1fe002b9c375048afb1a711df4d7bd849c572a0258d09d6760a0521ef36",
+    "Running": "60deea1ee132d7b74d1ac586b03aaa8428841997456bba03173a3a96fc4052a8",
+    "Threaten": "e1bbeb57b09deb698cc982048d6352600c31e51c83023d1b8b821e6f1a59aa17",
+    "Walking": "db1f60daa36bdf9abce76aa46be08e9912cdd34e3a5ce8efae7e8005936fdfb0",
+    "Windup": "b09f14f54240da5de276b45ae46458603bf9255a85ddb8106edc9b31c35d095a"
+  },
+  "retained_base_geometry_unchanged": true,
+  "retained_export_base_bytes_equal": true,
+  "retained_materials_skin_hierarchy_equal": true,
+  "retained_base_mesh_signatures": {
+    "M05_Connected_Anatomy_SkinnedAssembly": "b7b1095bfd41df43d3d5e3816a62a49e77c0402d40c055aed48ff1dc73bfab07"
+  },
+  "retained_external_source_hashes": {
+    "textures/normal_ada15327a11cdcf241ed262e46e4c0a10fa3846d7a9baadbd2503a8cfefb5cbd.png": "ada15327a11cdcf241ed262e46e4c0a10fa3846d7a9baadbd2503a8cfefb5cbd",
+    "textures/color_0f5e3116608045e3feb233b646cb274b43113306c40c1ef172cbc31717f072df.png": "0f5e3116608045e3feb233b646cb274b43113306c40c1ef172cbc31717f072df",
+    "textures/linear_756bd8a7b8d28576e294531cd4bf2b77631e02a8aedb0db5d8e5fc87b84efbbf.png": "756bd8a7b8d28576e294531cd4bf2b77631e02a8aedb0db5d8e5fc87b84efbbf",
+    "textures/normal_2cf10d18e937dba5635de4997982bf4604d354ed769b28e15a1df37ad2e0049f.png": "2cf10d18e937dba5635de4997982bf4604d354ed769b28e15a1df37ad2e0049f",
+    "textures/color_025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466.png": "025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466",
+    "textures/linear_4b54b5a135bd49e060dd4e7665cfc3ad8dae2bcf8954011de42159b09bcf5b1c.png": "4b54b5a135bd49e060dd4e7665cfc3ad8dae2bcf8954011de42159b09bcf5b1c",
+    "textures/normal_4f48a555dc9b6b59e9795fbb51e3eb11561aaa3909dd236106223b39a2c25477.png": "4f48a555dc9b6b59e9795fbb51e3eb11561aaa3909dd236106223b39a2c25477",
+    "textures/color_bcc3e4b7cc580d27603334ac0f53e34463d2e3399d46c833474de12c8ade6d85.png": "bcc3e4b7cc580d27603334ac0f53e34463d2e3399d46c833474de12c8ade6d85",
+    "textures/linear_a7b9506201f819a3959f015e895b65b0be5deb55b01424520319f853a43df386.png": "a7b9506201f819a3959f015e895b65b0be5deb55b01424520319f853a43df386",
+    "textures/normal_8632ea1e0d2d02ccf74cf120fd7922186a5d07621b06b9482c1a5c3b6f52f4ab.png": "8632ea1e0d2d02ccf74cf120fd7922186a5d07621b06b9482c1a5c3b6f52f4ab",
+    "textures/color_27d309afa00e92aa0db5ae6fe35854a9ba480ef1ac297f510051e299a6783cbe.png": "27d309afa00e92aa0db5ae6fe35854a9ba480ef1ac297f510051e299a6783cbe",
+    "textures/linear_7138fd62cd131fbd6faf85a31d686547d773e80c98f18af7fed4f015cc2dabe2.png": "7138fd62cd131fbd6faf85a31d686547d773e80c98f18af7fed4f015cc2dabe2",
+    "textures/normal_2c5ca271f8c6675cd134f1ede99e8ef3711409064077b2a1d6dea3c0a6c5bd8a.png": "2c5ca271f8c6675cd134f1ede99e8ef3711409064077b2a1d6dea3c0a6c5bd8a",
+    "textures/color_641a0e9e8361d0b3a7382b60f3e551f6b9bb717d204b086b462b1f9864bb0158.png": "641a0e9e8361d0b3a7382b60f3e551f6b9bb717d204b086b462b1f9864bb0158",
+    "textures/linear_62e610de19ca6683b56c4416c07c8ca6e224f8dff6fe34e693b3836658a3b3bb.png": "62e610de19ca6683b56c4416c07c8ca6e224f8dff6fe34e693b3836658a3b3bb"
+  },
+  "required_morphs": [],
+  "durations": {
+    "Idle": 1.7083333730697632,
+    "Investigate": 2.0833332538604736,
+    "Feed": 2.0833332538604736,
+    "Sleep": 0.375
+  },
+  "clips": {
+    "Idle": {
+      "active_bones": [
+        "Head",
+        "clavicle_l",
+        "clavicle_r",
+        "neck_01"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Investigate": {
+      "active_bones": [
+        "Head",
+        "clavicle_l",
+        "clavicle_r",
+        "neck_01"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Feed": {
+      "active_bones": [
+        "Head",
+        "clavicle_l",
+        "clavicle_r",
+        "neck_01"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Sleep": {
+      "active_bones": [
+        "Head",
+        "clavicle_l",
+        "clavicle_r",
+        "neck_01"
+      ],
+      "actual_mesh_morph_bindings": {}
+    }
+  },
+  "water_probe_bones": [],
+  "native_prepared_binding_verified": false,
+  "attack_recalibration_required": true,
+  "visual_accepted": false,
+  "user_accepted": false
+}

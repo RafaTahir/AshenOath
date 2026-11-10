@@ -9,6 +9,7 @@ import numpy as np
 
 from living_creature_motion_profiles import REPLACED_CLIPS, SPECIES
 from preserve_creature_action_bytes import read_glb, action_digest, accessor_bytes
+from graft_creature_ambient import verify_retained_base
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = ROOT/"models/living_assets_stage3_20261107/creatures"
@@ -17,14 +18,36 @@ MODELS = ROOT/"models/living_assets_stage3_20261107/creatures"
 def verify(asset):
     folder = MODELS/asset
     receipt = json.loads((folder/"authoring.json").read_text())
-    source = Path(receipt["production_input_path"])
+    source = folder/(asset+"_retained_input.glb")
     candidate = folder/(asset+"_living_candidate.glb")
     source_digest = hashlib.sha256(source.read_bytes()).hexdigest()
     candidate_digest = hashlib.sha256(candidate.read_bytes()).hexdigest()
     if source_digest != receipt["production_sha256"] or candidate_digest != receipt["candidate_sha256"]:
         raise ValueError("Creature derivative no longer matches authored source bytes")
+    if not receipt.get('retained_base_geometry_unchanged') or not receipt.get('retained_base_mesh_signatures'):
+        raise ValueError('Creature source lacks the retained base geometry, UV and skin proof')
+    for dependency in receipt.get('retained_external_inputs',[]):
+        path = (ROOT/dependency['path']).resolve()
+        if not path.is_relative_to(folder.resolve()) or hashlib.sha256(path.read_bytes()).hexdigest()!=dependency['sha256']:
+            raise ValueError('Retained external creature source bytes changed: '+dependency['uri'])
+    if candidate.stat().st_size >= 100*1024*1024:
+        raise ValueError("Creature derivative exceeds the committed-file limit")
+    snapshot = receipt["recipe_snapshot"]
+    hashes = {}
+    for name, expected in snapshot["files"].items():
+        path = ROOT/snapshot["directory"]/name
+        actual = hashlib.sha256(path.read_bytes()).hexdigest()
+        if actual != expected:
+            raise ValueError("Creature recipe snapshot bytes changed: "+name)
+        hashes[name] = actual
+    if hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest() != snapshot["sha256"]:
+        raise ValueError("Creature recipe identity changed")
     old, old_binary = read_glb(source)
     new, new_binary = read_glb(candidate)
+    added_morphs = verify_retained_base(old, old_binary, new, new_binary)
+    expected_added = ['AntennaProbe_L', 'AntennaProbe_R', 'BrushFeed_L', 'BrushFeed_R'] if asset == 'M16' else []
+    if sorted(added_morphs) != sorted(expected_added):
+        raise ValueError('Unexpected new anatomical morph geometry')
     previous = {clip["name"]: clip for clip in old["animations"]}
     current = {clip["name"]: clip for clip in new["animations"]}
     if set(previous) != set(current):
@@ -51,7 +74,7 @@ def verify(asset):
             times = np.frombuffer(accessor_bytes(new, new_binary, sampler["input"]), dtype="<f4")
             accessor = new["accessors"][sampler["output"]]
             values = np.frombuffer(accessor_bytes(new, new_binary, sampler["output"]), dtype="<f4")
-            if not np.isfinite(times).all() or not np.isfinite(values).all() or np.any(np.diff(times) <= 0):
+            if not len(times) or not len(values) or not np.isfinite(times).all() or not np.isfinite(values).all() or np.any(np.diff(times) <= 0):
                 raise ValueError("Nonfinite or unordered creature animation samples")
             duration = max(duration, float(times[-1]))
             node = new["nodes"][target["node"]]
@@ -88,8 +111,15 @@ def verify(asset):
         durations[name] = duration
     report = {"schema_version": 1, "asset": asset, "status": "source_contract_pass",
               "candidate_sha256": candidate_digest, "retained_source_sha256": source_digest,
+              "candidate_bytes": candidate.stat().st_size, "retained_source_bytes": source.stat().st_size,
+              "net_source_bytes": candidate.stat().st_size-source.stat().st_size,
               "protected_action_bytes_equal": True, "protected_action_signatures": signatures,
+              "retained_base_geometry_unchanged": True,
+              "retained_export_base_bytes_equal": True, "retained_materials_skin_hierarchy_equal": True,
+              "retained_base_mesh_signatures": receipt['retained_base_mesh_signatures'],
+              "retained_external_source_hashes": {row['uri']:row['sha256'] for row in receipt.get('retained_external_inputs',[])},
               "required_morphs": required_morphs, "durations": durations, "clips": reports,
+              "water_probe_bones": [row['bone_name'] for row in receipt.get('retained_water_tip_sources', [])],
               "native_prepared_binding_verified": False, "attack_recalibration_required": True,
               "visual_accepted": False, "user_accepted": False}
     (folder/"source_contract.json").write_text(json.dumps(report, indent=2)+"\n")

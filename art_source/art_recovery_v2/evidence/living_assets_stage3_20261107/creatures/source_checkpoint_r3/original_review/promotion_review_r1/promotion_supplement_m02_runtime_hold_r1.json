@@ -1,0 +1,35 @@
+{
+  "scope": "New runtime hold supplement; frozen promotion manifest remains unchanged",
+  "supersedes_no_historical_file": true,
+  "manifest": {
+    "path": ".verification/creatures/promotion_review_r1/promotion_manifest.json",
+    "bytes": 55299,
+    "sha256": "83457fb9b2bdc9bc5882cf2e36e75d23bc1760830249c6c256a288764f1dae5d"
+  },
+  "asset": "M02",
+  "candidate_native_receipt": {
+    "path": ".verification/motion/candidate_m02_paired_20261110_r1/native.json",
+    "bytes": 312096,
+    "sha256": "54c6e82902409ef39c04b45b7a160fc59d8d22441c76b8e132e651e17b2448d5"
+  },
+  "native_status": "fail",
+  "native_failure_count": 4615,
+  "raw_native_equivalence_verified": true,
+  "runtime_hold": true,
+  "diagnosis_pending": true,
+  "observation": "Parent reports parentless-root pose anchoring failures in Feed/Sleep while visual root and raw bind/rest/bounds remain unchanged. Determine retained-activity baseline behavior before attributing new locomotion.",
+  "source_contract_status_unchanged": true,
+  "promotion_authorized": false,
+  "production_replaced": false,
+  "visual_accepted": false,
+  "receipt": {
+    "path": ".verification/motion/candidate_m02_paired_20261110_r1/receipt.json",
+    "bytes": 7774,
+    "sha256": "62dbd141d8cc754523a29b5f662cb61682656072ce010d8eb5ffaad7f7647589"
+  },
+  "source_root_audit": {
+    "path": ".verification/motion/candidate_m02_paired_20261110_r1/source_root_audit.json",
+    "bytes": 102045,
+    "sha256": "5c49eb8b9681210e8fca5fe0b4e1035c869e728cf87562d66e3fabc8223fd0b0"
+  }
+}

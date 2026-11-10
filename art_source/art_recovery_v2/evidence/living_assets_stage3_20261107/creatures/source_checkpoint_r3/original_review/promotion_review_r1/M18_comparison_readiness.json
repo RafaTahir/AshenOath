@@ -1,0 +1,57 @@
+{
+  "scope": "Prepared read-only identical-camera comparison; not executed",
+  "asset": "M18",
+  "inputs": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\compare_m18_source_preview_r1.py",
+      "sha256": "db83bf42e069a07666980456b4f0d1098f1403328ff080803de7a940e6ef65c9",
+      "bytes": 6846
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M18\\authoring.json",
+      "sha256": "53d053230e5dd7d564c9d117bb6c3c7d5e29f876e1f55e0009254228f8f94c1e",
+      "bytes": 14923
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M18\\M18_retained_input.glb",
+      "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
+      "bytes": 1235028
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M18\\M18_living_candidate.glb",
+      "sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2",
+      "bytes": 1315428
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M18\\textures\\color_b4ad89c56651074b04044916e09e266f06cc8a10bc74288a1ed1508d578c0ef3.png",
+      "sha256": "b4ad89c56651074b04044916e09e266f06cc8a10bc74288a1ed1508d578c0ef3",
+      "bytes": 1163638
+    }
+  ],
+  "ast_parse_passed": true,
+  "blender_api_verified": false,
+  "rendered": false,
+  "output": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M18\\retained_candidate_comparison_r1",
+  "planned_frames": 14,
+  "samples": [
+    "retained/candidate Idle0,25,75 and Sleep0,50 full view",
+    "retained/candidate Sleep0,50 identical head-detail view"
+  ],
+  "rationale": "Sleep0 is the actual retained baseline used in candidate authoring; Sleep50 tests retained native motion separately. Camera is fixed across both sources per view and conservatively fitted in projected space.",
+  "command": [
+    "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe",
+    "--background",
+    "--factory-startup",
+    "--threads",
+    "2",
+    "--python",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\compare_m18_source_preview_r1.py",
+    "--",
+    "--output",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M18\\retained_candidate_comparison_r1"
+  ],
+  "maximum_seconds": 120,
+  "requires_separate_owned_worker_grant": true,
+  "model_writes": false,
+  "visual_accepted": false
+}

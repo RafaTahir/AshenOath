@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "asset": "M15",
+  "reviewer": "root",
+  "candidate_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+  "viewed_frames": [
+    {
+      "path": "source_review/Idle_00.png",
+      "sha256": "b274c6c3d4add2ae338c73b61035b0848af2f12ef446d33c32ce863a723437cf"
+    },
+    {
+      "path": "source_review/Idle_25.png",
+      "sha256": "e73ec920fb325e511625f672d1d0a87459b63ee980d9732f59fc67c45ba0a12b"
+    },
+    {
+      "path": "source_review/Idle_50.png",
+      "sha256": "770d60b9082d64bb9a91ad65f7644d0509de3ac611544c2782545bedbc899091"
+    },
+    {
+      "path": "source_review/Idle_75.png",
+      "sha256": "e4f6cfee7d62d0e34c890aa3d18df50726456484a72d9c4a1abd6e961cdc3dc6"
+    }
+  ],
+  "source_observation": "Successive sac expansion is visibly distinct with unchanged body, feet and camera framing.",
+  "scope": "Clay source still frames only; original authored input receipt is unchanged.",
+  "source_preview_reviewed": true,
+  "material_acceptance": false,
+  "full_cycle_acceptance": false,
+  "native_acceptance": false,
+  "in_level_acceptance": false,
+  "user_acceptance": false
+}

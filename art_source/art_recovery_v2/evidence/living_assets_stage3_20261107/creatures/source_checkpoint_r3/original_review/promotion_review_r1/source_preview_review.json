@@ -1,0 +1,756 @@
+{
+  "scope": "Actual fixed-camera clay PNG inspection only, no render or model changes",
+  "reviewer": "asset_life_plan",
+  "files_viewed": [
+    {
+      "asset": "M13",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Idle_25.png",
+      "bytes": 669476,
+      "sha256": "7b6efc313c35ce831b78d51fef2794f898781bc345ba49a874c5611bf0f88346",
+      "viewed": true
+    },
+    {
+      "asset": "M13",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Idle_75.png",
+      "bytes": 669904,
+      "sha256": "c5a79295f3d04caa11c1fa1d4bdaebfbd9f56b8446a51f6e209daf230ad70d16",
+      "viewed": true
+    },
+    {
+      "asset": "M13",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Feed_38.png",
+      "bytes": 669582,
+      "sha256": "5b1654ab6bf656a7b2c3544c67524374909913d0c54f7cda08ed46849e59c19f",
+      "viewed": true
+    },
+    {
+      "asset": "M13",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Sleep_50.png",
+      "bytes": 670044,
+      "sha256": "e49662b8b6d4f0f2db4efdc4a9f289b9e805a7609844d65b2ad00968fe0f479f",
+      "viewed": true
+    },
+    {
+      "asset": "M07",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+      "bytes": 657357,
+      "sha256": "0f8e984145f69ca472c3ad3fe6e76f2f8f90934443785ea952767f23887d7450",
+      "viewed": true
+    },
+    {
+      "asset": "M07",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+      "bytes": 658394,
+      "sha256": "0a1eedebe663c6b3d7beb475c44be8b434b860d5c3deec87b9335a8372f454b9",
+      "viewed": true
+    },
+    {
+      "asset": "M07",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+      "bytes": 657531,
+      "sha256": "b5e7b6914159ee9686621b9f2eaa68cc4a912becf2fd6187ac0b9b09b132847e",
+      "viewed": true
+    },
+    {
+      "asset": "M07",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+      "bytes": 657421,
+      "sha256": "0aac0ece9fa0ea5d237ca41f6f6067a53d2bc0dd75e80bbd650f301b68ad460b",
+      "viewed": true
+    },
+    {
+      "asset": "M17",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Idle_25.png",
+      "bytes": 704634,
+      "sha256": "f499e86b13c6f5803ae9e7d372e810ce0e7e50a5d02b333679c4bfefb9942aeb",
+      "viewed": true
+    },
+    {
+      "asset": "M17",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Idle_75.png",
+      "bytes": 704580,
+      "sha256": "b1d54fb104a7bed2dbe746a1deaf61cb765e9d59959b5be74080e7254ade785f",
+      "viewed": true
+    },
+    {
+      "asset": "M17",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Feed_38.png",
+      "bytes": 704423,
+      "sha256": "76f27899a1fb05d890c66220511f04e4fe2d7fd366e742c9c27b0f07753a719c",
+      "viewed": true
+    },
+    {
+      "asset": "M17",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Sleep_50.png",
+      "bytes": 701465,
+      "sha256": "778bf8453cd135c339bdf9656024e6d56026403760a3ab31024837f69cf51901",
+      "viewed": true
+    },
+    {
+      "asset": "M18",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Idle_25.png",
+      "bytes": 633756,
+      "sha256": "447e2648890307c2638c2ee2e48abd88a3bceac2d903ff82e44d47361310796d",
+      "viewed": true
+    },
+    {
+      "asset": "M18",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Idle_75.png",
+      "bytes": 633051,
+      "sha256": "069cfc897be9c9473eed14400c030133b959cc2bfb6b884b5cb78b2b267288de",
+      "viewed": true
+    },
+    {
+      "asset": "M18",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Feed_38.png",
+      "bytes": 635348,
+      "sha256": "c0b5e3c6da06832518337a083a8bdd3d14d9ea2edf563bfe6f7c35376c4bfc7d",
+      "viewed": true
+    },
+    {
+      "asset": "M18",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Sleep_50.png",
+      "bytes": 636889,
+      "sha256": "67d392e3b6a0d1f40f69956f7c07731602e504d3f8087b9e2da83036d4a31ff5",
+      "viewed": true
+    },
+    {
+      "asset": "M09",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Idle_25.png",
+      "bytes": 662282,
+      "sha256": "6c96af29fae33310cc0b41f7f9541e5466dc5dcda43cbad3e44086cef43bfabf",
+      "viewed": true
+    },
+    {
+      "asset": "M09",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Idle_75.png",
+      "bytes": 661722,
+      "sha256": "79750334c451ccd8bfe093e68b976ad15f9c15d5f774638517b58722dc12d721",
+      "viewed": true
+    },
+    {
+      "asset": "M09",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Feed_38.png",
+      "bytes": 661960,
+      "sha256": "b5e5b82ad763e478c6accd09dfdd4f4e3c41ec309a4f011de22ac39995a6a8d2",
+      "viewed": true
+    },
+    {
+      "asset": "M09",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Sleep_50.png",
+      "bytes": 664085,
+      "sha256": "7cdb556aa7d65b62884bec2759e41a0c747a2102903b744e45284cc7d887c6d3",
+      "viewed": true
+    },
+    {
+      "asset": "M10",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Idle_25.png",
+      "bytes": 694488,
+      "sha256": "e1f4093ffe653ddb0d37105e269b4a9c8b81e29e277b320d77cdac711d041b92",
+      "viewed": true
+    },
+    {
+      "asset": "M10",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Idle_75.png",
+      "bytes": 695454,
+      "sha256": "99e81add75f7e65f04b35af1e7d3d1bac3b2712468cabcb979806b8a6da85247",
+      "viewed": true
+    },
+    {
+      "asset": "M10",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Feed_38.png",
+      "bytes": 695291,
+      "sha256": "f3ab3fcc5bd68f022fcba4108f31ba22e2cbb38875997b83a99a8a1c83852f3f",
+      "viewed": true
+    },
+    {
+      "asset": "M10",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Sleep_50.png",
+      "bytes": 699914,
+      "sha256": "2a163c31d9d095874d9ab3a6c896b41765e216aa7d59ad8fbcc80668c189e56a",
+      "viewed": true
+    },
+    {
+      "asset": "M11",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Idle_25.png",
+      "bytes": 673322,
+      "sha256": "966752cf64fed658f75f8eb39ec1f5954510d2cc1784023ed3ad5c88f4f23211",
+      "viewed": true
+    },
+    {
+      "asset": "M11",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Idle_75.png",
+      "bytes": 669681,
+      "sha256": "a95377a57fcec7c8a92538d8a87519349e679331fe227b864762d010f34ebb14",
+      "viewed": true
+    },
+    {
+      "asset": "M11",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Feed_38.png",
+      "bytes": 674159,
+      "sha256": "b217a3a0382092fd52f637dfa63758941713786734eff0473c9b57dc387f0b7b",
+      "viewed": true
+    },
+    {
+      "asset": "M11",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Sleep_50.png",
+      "bytes": 672147,
+      "sha256": "fd33a72eccb13c293b6f05ea46435ff99455f9be1167c2b40f8955ba8caa5d39",
+      "viewed": true
+    },
+    {
+      "asset": "M12",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Idle_25.png",
+      "bytes": 678048,
+      "sha256": "f0ff5805912b20a2ce798a95e35c808906b8136ba2871219f829862f24325994",
+      "viewed": true
+    },
+    {
+      "asset": "M12",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Idle_75.png",
+      "bytes": 678158,
+      "sha256": "860ee51f4dc69b09fa0ac7fb3a87081a4953440f9f5f3a06558bfdc4bdb2dfea",
+      "viewed": true
+    },
+    {
+      "asset": "M12",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Feed_38.png",
+      "bytes": 676370,
+      "sha256": "1dc8f8558e63ff1413ae31f4fcc0a0995fa1d82aef7180e1c0c60f98cf724174",
+      "viewed": true
+    },
+    {
+      "asset": "M12",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Sleep_50.png",
+      "bytes": 676862,
+      "sha256": "c5c632fe6d2779dc0b7f8f85d64a67bb158602726af46f56d71bd432f23f9bec",
+      "viewed": true
+    },
+    {
+      "asset": "M14",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Idle_25.png",
+      "bytes": 712536,
+      "sha256": "6795741e994d31b95f61c0ba626a66e9b1196bbff865b271d181ba14c04962eb",
+      "viewed": true
+    },
+    {
+      "asset": "M14",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Idle_75.png",
+      "bytes": 712765,
+      "sha256": "7d8723ea0f99567ae5afac08527fb884f9c77bf2a2f52738f0c040eeee0d53e3",
+      "viewed": true
+    },
+    {
+      "asset": "M14",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Feed_38.png",
+      "bytes": 712219,
+      "sha256": "4463f547c1876c683f6b7f687fb1b0699096d010d06cca58dbca72880a536bab",
+      "viewed": true
+    },
+    {
+      "asset": "M14",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Sleep_50.png",
+      "bytes": 712679,
+      "sha256": "fd5e3f9590fe0fab173144f29285c304b088e0ca67f52571cf93549aff9b4cbf",
+      "viewed": true
+    },
+    {
+      "asset": "M08",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Idle_25.png",
+      "bytes": 679898,
+      "sha256": "8052b136663c05d04fe61793a6e9a3c3f09cdebb12551d0c230492d889902e86",
+      "viewed": true
+    },
+    {
+      "asset": "M08",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Idle_75.png",
+      "bytes": 679714,
+      "sha256": "aba4617f08c2c5be088d6e956832c0f0da3e2cc80182de818869e3a9e05cc578",
+      "viewed": true
+    },
+    {
+      "asset": "M08",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Feed_38.png",
+      "bytes": 679715,
+      "sha256": "827771aa15d791fb97a36b9e31297f7aaa9639f8a37f8db96a5bc7b16ddb4947",
+      "viewed": true
+    },
+    {
+      "asset": "M08",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Sleep_50.png",
+      "bytes": 679470,
+      "sha256": "4f965602d35ab270b60f54a63a714ab88faee86c981ad04aa3c47a0dd00a00c3",
+      "viewed": true
+    },
+    {
+      "asset": "M02",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Idle_25.png",
+      "bytes": 704034,
+      "sha256": "21fa9901ce65763183a6b4154f98f58e987333879735308c2e237a1b3039b748",
+      "viewed": true
+    },
+    {
+      "asset": "M02",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Idle_75.png",
+      "bytes": 705002,
+      "sha256": "05e2e0648e163a00da013e4482e307baea59640f1e095f864ca1b7d6c63323fc",
+      "viewed": true
+    },
+    {
+      "asset": "M02",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Feed_38.png",
+      "bytes": 671840,
+      "sha256": "30592be0d4557d33e929206ddd6bf28fc0477f08e2df7b00fa2efbcc3a3b290a",
+      "viewed": true
+    },
+    {
+      "asset": "M02",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Sleep_50.png",
+      "bytes": 669578,
+      "sha256": "a36de0241d2e93d5e1cc0d3b9ede8938b8f4123eb3dc122043537d614904fc74",
+      "viewed": true
+    },
+    {
+      "asset": "M03",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Idle_25.png",
+      "bytes": 665748,
+      "sha256": "3d564bb58190f87228dd572b99b7121a55b0ba6151562a9a0b3c98857d3aab35",
+      "viewed": true
+    },
+    {
+      "asset": "M03",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Idle_75.png",
+      "bytes": 666218,
+      "sha256": "26d49855bd3186c5a7c59661fae097c330f9d910463a8e22d60077003e36ca9a",
+      "viewed": true
+    },
+    {
+      "asset": "M03",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Feed_38.png",
+      "bytes": 665458,
+      "sha256": "dc0ac1981a50c13fa9be607007c0339ba462e67e9cc8aad2c8951f14ae8b2d2e",
+      "viewed": true
+    },
+    {
+      "asset": "M03",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Sleep_50.png",
+      "bytes": 656137,
+      "sha256": "5872b9116c8dd7ac5434162f7e4888e34c8ea0244fc6de1c7f6f2c1151665a5f",
+      "viewed": true
+    },
+    {
+      "asset": "M04",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Idle_25.png",
+      "bytes": 669174,
+      "sha256": "906db8a78d2cce4f9a6d015c730679683a8aa70f8b4e5cec3a279e590ba53502",
+      "viewed": true
+    },
+    {
+      "asset": "M04",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Idle_75.png",
+      "bytes": 668615,
+      "sha256": "03f0a6b3c4737557b0c60fb5a1da47f05e63733dcfbb3fabefd71686391a5ac9",
+      "viewed": true
+    },
+    {
+      "asset": "M04",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Feed_38.png",
+      "bytes": 668786,
+      "sha256": "7c407ceebd2160f256a58c211a29eb047cbfe7537a6b603ff054fab9a149642c",
+      "viewed": true
+    },
+    {
+      "asset": "M04",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Sleep_50.png",
+      "bytes": 662717,
+      "sha256": "0574b7e30345a5a95e1d57191295dd6b4363c7b704cfde289ede05077d49013d",
+      "viewed": true
+    },
+    {
+      "asset": "M05",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Idle_25.png",
+      "bytes": 671787,
+      "sha256": "25abf4270a59ef27067d6b8917c6eecfcf9152cfde96b3291787292d96978170",
+      "viewed": true
+    },
+    {
+      "asset": "M05",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Idle_75.png",
+      "bytes": 671441,
+      "sha256": "5508ff653e90f88acc852a03ae4560f48d4be337147556eda6720a63a22e1037",
+      "viewed": true
+    },
+    {
+      "asset": "M05",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Feed_38.png",
+      "bytes": 669263,
+      "sha256": "81ce5b6f53a111cea107abfa4f3e27b5080fdf2d303cd1e4615c3623584f06bb",
+      "viewed": true
+    },
+    {
+      "asset": "M05",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Sleep_50.png",
+      "bytes": 690256,
+      "sha256": "fcaa4318ab05f049ac219e50fef9e10cd62d9757296991f6315ec81c86a8efdf",
+      "viewed": true
+    },
+    {
+      "asset": "M06",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Idle_25.png",
+      "bytes": 760011,
+      "sha256": "0621ccdfc5f7db62ae58dd51333f6eb33646ce08d41377880d801bd38f59125e",
+      "viewed": true
+    },
+    {
+      "asset": "M06",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Idle_75.png",
+      "bytes": 761144,
+      "sha256": "0c4f2d7702ae1d171caf090066b4757aa2500f771ae6975599dbfe81aa2a237b",
+      "viewed": true
+    },
+    {
+      "asset": "M06",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Feed_38.png",
+      "bytes": 760305,
+      "sha256": "3000db036f8e6d3cb68d96f1991c9eff0e81960502eb4c82a2a03c9f0759927b",
+      "viewed": true
+    },
+    {
+      "asset": "M06",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Sleep_50.png",
+      "bytes": 760102,
+      "sha256": "d61cdcc9c8e08905eea58544e0626abe013d52f79390083771ec2c37f12bf478",
+      "viewed": true
+    },
+    {
+      "asset": "M19",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Idle_25.png",
+      "bytes": 673527,
+      "sha256": "79a85da699f2efd30a0fc8d9ebb1499b4fb7a3202d930a688f347b9429ac495d",
+      "viewed": true
+    },
+    {
+      "asset": "M19",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Idle_75.png",
+      "bytes": 672831,
+      "sha256": "0d9c827a358a001df9111b3d8375ccc096ba1e8e9e0b19abe99d48988c4a34ae",
+      "viewed": true
+    },
+    {
+      "asset": "M19",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Feed_38.png",
+      "bytes": 668637,
+      "sha256": "144cf921a3c3c4149e2a902c496f27eae0f78032626fcd75bde1250fbd708914",
+      "viewed": true
+    },
+    {
+      "asset": "M19",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Sleep_50.png",
+      "bytes": 665188,
+      "sha256": "9e25428e51b6f4784d056ae3951886f866b37d163f5efe717239db7997fad19e",
+      "viewed": true
+    },
+    {
+      "asset": "M20",
+      "frame": "Idle_25.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Idle_25.png",
+      "bytes": 679105,
+      "sha256": "fd7fae37f9a673ef98eecae78a46d40940ebeb9a4c70f28ee5353a49607831ca",
+      "viewed": true
+    },
+    {
+      "asset": "M20",
+      "frame": "Idle_75.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Idle_75.png",
+      "bytes": 678010,
+      "sha256": "2f45d8062d61f301bb43fb12a49a9f2eaf96c9399185667c0957bda8fdde379d",
+      "viewed": true
+    },
+    {
+      "asset": "M20",
+      "frame": "Feed_38.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Feed_38.png",
+      "bytes": 672855,
+      "sha256": "5cc05df7b1274012d053f7d7c2428b944966c87f1d11e6f6fc05300bc743c472",
+      "viewed": true
+    },
+    {
+      "asset": "M20",
+      "frame": "Sleep_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Sleep_50.png",
+      "bytes": 665496,
+      "sha256": "ccdb4c711016e38684d13c83f61547c929ba14d43b9ce26c62ebb44277283b20",
+      "viewed": true
+    },
+    {
+      "asset": "M18",
+      "frame": "Idle_00.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Idle_00.png",
+      "bytes": 632879,
+      "sha256": "a40a03a0842211649be8512adda36a8cfd41ff3de54a4d621d0ba1ca26ea2513",
+      "viewed": true
+    },
+    {
+      "asset": "M18",
+      "frame": "Investigate_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Investigate_50.png",
+      "bytes": 634437,
+      "sha256": "9d792a790748fc819d26b51ac667f519319524c1e80bc9e345b47d7a2537d4df",
+      "viewed": true
+    },
+    {
+      "asset": "M12",
+      "frame": "Idle_00.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Idle_00.png",
+      "bytes": 678298,
+      "sha256": "eed2c37c4f87536bb1e161774b992b11908d2ec24f16da92e90581da6c26a879",
+      "viewed": true
+    },
+    {
+      "asset": "M12",
+      "frame": "Investigate_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Investigate_50.png",
+      "bytes": 676156,
+      "sha256": "6630504370f08bf11be36fe6a2a9c5920ac747a80d076b554b72538faf24abda",
+      "viewed": true
+    },
+    {
+      "asset": "M07",
+      "frame": "Investigate_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+      "bytes": 658143,
+      "sha256": "3e33caae080defef90f5d618665baca0e4c2274c48e247bcae27e704c441303b",
+      "viewed": true
+    },
+    {
+      "asset": "M05",
+      "frame": "Investigate_50.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Investigate_50.png",
+      "bytes": 672039,
+      "sha256": "506b423fbc9b89584424c4d5485d6ca921974294c95de34b740ac64d2e785cd0",
+      "viewed": true
+    },
+    {
+      "asset": "M04",
+      "frame": "Feed_61.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Feed_61.png",
+      "bytes": 667965,
+      "sha256": "179d500064a017a06bab79530ea20a0b493b1bf34e13e6627d6b7b11a1ca5290",
+      "viewed": true
+    },
+    {
+      "asset": "M11",
+      "frame": "Idle_00.png",
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Idle_00.png",
+      "bytes": 672290,
+      "sha256": "4a5734cef58b8d8b1c619bee3a7d397653ed3048b6ed08864f177b3e1ee90e16",
+      "viewed": true
+    }
+  ],
+  "view_count": 76,
+  "asset_count": 17,
+  "observations": {
+    "M02": {
+      "observed": "Idle quarter frames show a readable small muzzle/neck change with stable broad shoulder silhouette. Feed crouches low and Sleep curls onto the side.",
+      "follow_up": "Feed38 and Sleep50 crop fingers/extremities at the lower frame edge; source camera is insufficient for complete hand/floor clearance review.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M03": {
+      "observed": "Idle glance is restrained. Feed stands much more upright; Sleep is supine, so the states remain visually distinct.",
+      "follow_up": "Feed exposes sharp upward waist/abdominal panels; compare retained pose before classifying a new garment defect. Sleep feet are cropped; floor contact is unassessed.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M04": {
+      "observed": "Helmet/shoulder movement is very subtle; Feed bends deeply and Sleep is supine while retaining the armor silhouette.",
+      "follow_up": "Sword hilt appears offset above the closed fist in Idle25/75 and Feed38/61. Verify retained versus candidate hand/socket alignment; Sleep boot tips are cropped.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M05": {
+      "observed": "Head inclination changes slightly around the bell in idle; Feed bows toward the opening.",
+      "follow_up": "Sleep50 tips the bell above the supine torso with substantial visible separation; compare retained attachment and pose before acceptance. No source contact claim.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M06": {
+      "observed": "Arms and crown shift minimally while large feet and trunk silhouette remain steady.",
+      "follow_up": "Feed and Sleep remain near the standing idle silhouette; full-cycle/game-distance readability is not established by these stills.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M07": {
+      "observed": "Small wing-tip/neck changes are visible; the wing membrane silhouette remains continuous in inspected views.",
+      "follow_up": "All inspected states retain fully spread wings, including Sleep; the folded-wing intent is not demonstrated. Feed reads near alert idle. Held for a real wing-rest/feeding revision review.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M08": {
+      "observed": "Quarter-phase antler/neck positions differ subtly; Sleep lowers the head/body and bends the front legs.",
+      "follow_up": "Feed38 head remains high and resembles idle; a feeding/contact interpretation and floor clearance need contextual/full-cycle review.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M09": {
+      "observed": "Anterior head/jaw and body curvature differ slightly between quarter phases; Sleep lowers the broad head while ring silhouette stays continuous.",
+      "follow_up": "Small substrate-probe motion needs full-cycle and intended-distance review; no actual substrate contact is shown.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M10": {
+      "observed": "Independent claw positions change while shell and support-leg silhouette remain stable; Sleep brings the claws lower.",
+      "follow_up": "Dark triangular openings are visible around both claw ends across frames; determine retained mesh opening versus overlap before declaring a defect. No surface contact proof.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M11": {
+      "observed": "Fore/hind wing angles differ at opposite phases and head lowers in Sleep; the body silhouette is retained.",
+      "follow_up": "Fore/hind wing overlap produces a dark band already present at Idle00. Side/native motion comparison is needed to distinguish underside shadow from sheet intersection. Feed coil motion is subtle.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M12": {
+      "observed": "Anterior suction ring and segment curvature change slightly; Sleep lowers/tilts the ring.",
+      "follow_up": "Sleep50 exposes a dark separation at the mouth-ring/body junction, less exposed in Idle00/25/75 and Investigate50. Retained-versus-candidate comparison required.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M13": {
+      "observed": "Head and tail positions change subtly between quarters; Sleep visibly lowers the head and eyelids. Limbs and dorsal plates remain coherent in these views.",
+      "follow_up": "Feed remains close to idle at this sample. Companion scale/facing, pet/feed contact and actual floor contact remain separate unverified scopes.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M14": {
+      "observed": "Foreleg angles change independently while the other leg silhouette is largely stable; Sleep lowers the head/chelicerae.",
+      "follow_up": "Long legs cross in projection and some outer extremities approach/cross the frame boundary. Actual self/floor clearance and strand contact need native/context checks.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M17": {
+      "observed": "Left/right eye-stalk directions differ between quarters; Sleep lowers the head/stalks against the shell. No newly obvious breakup in the inspected silhouette.",
+      "follow_up": "Lower-feeler/Feed motion is subtle at this framing. No protective-retreat or contact acceptance is inferred from a single Sleep apex.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M18": {
+      "observed": "Idle/Feed fin edge and tail differences are restrained; the ray body remains broadly continuous in those frames.",
+      "follow_up": "Sleep50 exposes a small dark slit/wedge near a dorsal eye region that is not apparent in Idle00/25/75 or Investigate50. Held for identical-camera retained/candidate comparison; no water-contact claim.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M19": {
+      "observed": "Directional head change is visible in idle; Feed leans forward and Sleep is supine. Main body contours remain coherent.",
+      "follow_up": "Sleep foot tips are cropped. Off-hand reset is small and needs a full-cycle/context review; floor contact is unassessed.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    },
+    "M20": {
+      "observed": "Shoulder/head changes are restrained; Feed bows and Sleep lies supine without an obvious new silhouette tear in the visible region.",
+      "follow_up": "Sleep extremities are cropped. Weight/readability and floor contact need full-cycle/context review.",
+      "introduced_by_candidate": null,
+      "source_preview_reviewed": true,
+      "visual_accepted": false
+    }
+  },
+  "explicit_visual_holds": [
+    "M07",
+    "M18"
+  ],
+  "comparison_needed": [
+    "M04",
+    "M05",
+    "M12",
+    "M18"
+  ],
+  "limitations": [
+    "Quarter-phase stills do not prove full-cycle continuity, contact or timing.",
+    "No ground plane, target object, actual materials or level lighting is shown.",
+    "Several extremities are cropped; absence of an observed tear is not complete clearance proof."
+  ],
+  "in_level_accepted": false,
+  "material_accepted": false,
+  "performance_verified": false,
+  "user_accepted": false
+}

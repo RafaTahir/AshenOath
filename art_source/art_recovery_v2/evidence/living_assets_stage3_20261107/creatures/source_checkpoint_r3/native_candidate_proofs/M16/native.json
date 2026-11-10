@@ -1,0 +1,737 @@
+{
+	"asset": "M16",
+	"attack_profiles_recalibrated": false,
+	"binding_proof": {
+		"candidate_only": true,
+		"morph_bindings": [
+			{
+				"neutral_weight": 0.0,
+				"node_path": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
+				"shape_name": "AntennaProbe_L"
+			},
+			{
+				"neutral_weight": 0.0,
+				"node_path": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
+				"shape_name": "AntennaProbe_R"
+			},
+			{
+				"neutral_weight": 0.0,
+				"node_path": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
+				"shape_name": "BrushFeed_L"
+			},
+			{
+				"neutral_weight": 0.0,
+				"node_path": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
+				"shape_name": "BrushFeed_R"
+			}
+		],
+		"native_binding_report": {
+			"Feed": {
+				"bound_bone_tracks": 3,
+				"morph_tracks": {
+					"AntennaProbe_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_L",
+					"AntennaProbe_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_R",
+					"BrushFeed_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_L",
+					"BrushFeed_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_R"
+				}
+			},
+			"Idle": {
+				"bound_bone_tracks": 3,
+				"morph_tracks": {
+					"AntennaProbe_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_L",
+					"AntennaProbe_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_R",
+					"BrushFeed_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_L",
+					"BrushFeed_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_R"
+				}
+			},
+			"Investigate": {
+				"bound_bone_tracks": 3,
+				"morph_tracks": {
+					"AntennaProbe_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_L",
+					"AntennaProbe_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_R",
+					"BrushFeed_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_L",
+					"BrushFeed_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_R"
+				}
+			},
+			"Sleep": {
+				"bound_bone_tracks": 3,
+				"morph_tracks": {
+					"AntennaProbe_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_L",
+					"AntennaProbe_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_R",
+					"BrushFeed_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_L",
+					"BrushFeed_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_R"
+				}
+			}
+		},
+		"receipt_sha256": "97ec6815ea004adde21e3335e35e354b020aa50c371cfa9299ce56f3e180a77f",
+		"source_sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4",
+		"verified": true,
+		"visual_accepted": false,
+		"water_probe_evidence": [],
+		"water_probes": []
+	},
+	"candidate_only": true,
+	"checks": 8105,
+	"expected_binding_count": 4,
+	"expected_interruption_count": 32,
+	"expected_shapes": [
+		"AntennaProbe_L",
+		"AntennaProbe_R",
+		"BrushFeed_L",
+		"BrushFeed_R"
+	],
+	"failures": [],
+	"interruption_samples": [
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.000876524718478322,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.0,
+				"BrushFeed_R": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "movement",
+			"phase": 0.025000000372529,
+			"target_shape": "AntennaProbe_L",
+			"time": 0.100000001490116
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0728572458028793,
+				"AntennaProbe_R": 0.000364498235285282,
+				"BrushFeed_L": 0.0650261789560318,
+				"BrushFeed_R": 0.0650261789560318
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "movement",
+			"phase": 0.470833331346512,
+			"target_shape": "AntennaProbe_R",
+			"time": 1.88333332538605
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "movement",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_L",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "movement",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_R",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.00158208317589015,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.0,
+				"BrushFeed_R": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "attack",
+			"phase": 0.025000000372529,
+			"target_shape": "AntennaProbe_L",
+			"time": 0.100000001490116
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0728572458028793,
+				"AntennaProbe_R": 0.000364498235285282,
+				"BrushFeed_L": 0.0650261789560318,
+				"BrushFeed_R": 0.0650261789560318
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "attack",
+			"phase": 0.470833331346512,
+			"target_shape": "AntennaProbe_R",
+			"time": 1.88333332538605
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "attack",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_L",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "attack",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_R",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.000617162499111146,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.0,
+				"BrushFeed_R": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "hit",
+			"phase": 0.0333333350718021,
+			"target_shape": "AntennaProbe_L",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0728572458028793,
+				"AntennaProbe_R": 0.000364498235285282,
+				"BrushFeed_L": 0.0650261789560318,
+				"BrushFeed_R": 0.0650261789560318
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "hit",
+			"phase": 0.470833331346512,
+			"target_shape": "AntennaProbe_R",
+			"time": 1.88333332538605
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "hit",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_L",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "hit",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_R",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.000617162499111146,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.0,
+				"BrushFeed_R": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "dialogue",
+			"phase": 0.0333333350718021,
+			"target_shape": "AntennaProbe_L",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0728572458028793,
+				"AntennaProbe_R": 0.000364498235285282,
+				"BrushFeed_L": 0.0650261789560318,
+				"BrushFeed_R": 0.0650261789560318
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "dialogue",
+			"phase": 0.470833331346512,
+			"target_shape": "AntennaProbe_R",
+			"time": 1.88333332538605
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "dialogue",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_L",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "dialogue",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_R",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.000617162499111146,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.0,
+				"BrushFeed_R": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "cancel",
+			"phase": 0.0333333350718021,
+			"target_shape": "AntennaProbe_L",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0728572458028793,
+				"AntennaProbe_R": 0.000364498235285282,
+				"BrushFeed_L": 0.0650261789560318,
+				"BrushFeed_R": 0.0650261789560318
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "cancel",
+			"phase": 0.470833331346512,
+			"target_shape": "AntennaProbe_R",
+			"time": 1.88333332538605
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "cancel",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_L",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "cancel",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_R",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0029744659550488,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.0,
+				"BrushFeed_R": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "distance",
+			"phase": 0.025000000372529,
+			"target_shape": "AntennaProbe_L",
+			"time": 0.100000001490116
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0728572458028793,
+				"AntennaProbe_R": 0.000364498235285282,
+				"BrushFeed_L": 0.0650261789560318,
+				"BrushFeed_R": 0.0650261789560318
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "distance",
+			"phase": 0.470833331346512,
+			"target_shape": "AntennaProbe_R",
+			"time": 1.88333332538605
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0635412111878395,
+				"AntennaProbe_R": 0.00109349470585585,
+				"BrushFeed_L": 0.0652689561247826,
+				"BrushFeed_R": 0.0652689561247826
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "distance",
+			"phase": 0.474999994039536,
+			"target_shape": "BrushFeed_L",
+			"time": 1.89999997615814
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0542251765727997,
+				"AntennaProbe_R": 0.00182249560020864,
+				"BrushFeed_L": 0.0655117332935333,
+				"BrushFeed_R": 0.0655117332935333
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "distance",
+			"phase": 0.479166656732559,
+			"target_shape": "BrushFeed_R",
+			"time": 1.91666662693024
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0464201681315899,
+				"AntennaProbe_R": 0.00440757302567363,
+				"BrushFeed_L": 0.0656581223011017,
+				"BrushFeed_R": 0.0656581223011017
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "death",
+			"phase": 0.483333319425583,
+			"target_shape": "AntennaProbe_L",
+			"time": 1.93333327770233
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0728572458028793,
+				"AntennaProbe_R": 0.000364498235285282,
+				"BrushFeed_L": 0.0650261789560318,
+				"BrushFeed_R": 0.0650261789560318
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "death",
+			"phase": 0.470833331346512,
+			"target_shape": "AntennaProbe_R",
+			"time": 1.88333332538605
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "death",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_L",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "death",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_R",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.000617162499111146,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.0,
+				"BrushFeed_R": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "restore",
+			"phase": 0.0333333350718021,
+			"target_shape": "AntennaProbe_L",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.0728572458028793,
+				"AntennaProbe_R": 0.000364498235285282,
+				"BrushFeed_L": 0.0650261789560318,
+				"BrushFeed_R": 0.0650261789560318
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "restore",
+			"phase": 0.470833331346512,
+			"target_shape": "AntennaProbe_R",
+			"time": 1.88333332538605
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "restore",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_L",
+			"time": 0.516666650772095
+		},
+		{
+			"actual_weights": {
+				"AntennaProbe_L": 0.187461793422699,
+				"AntennaProbe_R": 0.0,
+				"BrushFeed_L": 0.000123984355013818,
+				"BrushFeed_R": 0.000123984355013818
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "restore",
+			"phase": 0.129166662693024,
+			"target_shape": "BrushFeed_R",
+			"time": 0.516666650772095
+		}
+	],
+	"native_equivalence": {
+		"aggregate_bounds": {
+			"candidate": {
+				"position": [
+					-0.591250002384186,
+					-0.0114141488447785,
+					-0.5660001039505
+				],
+				"size": [
+					1.18249988555908,
+					0.552414178848267,
+					1.33753168582916
+				]
+			},
+			"maximum_error": 0.0,
+			"owner": "AssetSpawnHelper._calculate_node_bounds",
+			"retained": {
+				"position": [
+					-0.591250002384186,
+					-0.0114141488447785,
+					-0.5660001039505
+				],
+				"size": [
+					1.18249988555908,
+					0.552414178848267,
+					1.33753168582916
+				]
+			}
+		},
+		"collision_dimensions_verified": false,
+		"component_tolerance": 0.000001,
+		"errors": [],
+		"frames": {
+			".": 0.0,
+			"./M16_Rig": 0.0,
+			"./M16_Rig/Skeleton3D": 0.0,
+			"./M16_Rig/Skeleton3D/M16_RuntimeAssembly": 0.0
+		},
+		"mesh_bounds": {
+			"./M16_Rig/Skeleton3D/M16_RuntimeAssembly": {
+				"candidate": {
+					"position": [
+						-0.591250002384186,
+						-0.0114141488447785,
+						-0.5660001039505
+					],
+					"size": [
+						1.18249988555908,
+						0.552414178848267,
+						1.33753168582916
+					]
+				},
+				"maximum_error": 0.0,
+				"retained": {
+					"position": [
+						-0.591250002384186,
+						-0.0114141488447785,
+						-0.5660001039505
+					],
+					"size": [
+						1.18249988555908,
+						0.552414178848267,
+						1.33753168582916
+					]
+				}
+			}
+		},
+		"normalization_applied": false,
+		"prepared_role_scale_verified": false,
+		"protected_clips": {
+			"candidate": {
+				"AnimationPlayer/Attack": "b8fd2cebf3a128331551211001ed156f02faf3b7d6867a82979bcf5ad020c0ee",
+				"AnimationPlayer/AttackHeavy": "2b374fb45a27bba5a91822cf22f364c629a7a7657aacaf7cf07e23712e0cd5c2",
+				"AnimationPlayer/Block": "de560969f1cf71d32a56337dce257d71d21a0f8e22c0854d6815ed0f7aebb7ce",
+				"AnimationPlayer/Death": "9cf0d5649e5e5a3e80ad534893e6e9324cbcd942f703b41595787e83b146b402",
+				"AnimationPlayer/HitReact": "c84332941b4eae34ca6e2eb02bf392a4bbac095c03a69d0b8307ca0eb10352d6",
+				"AnimationPlayer/Interact": "ec1c0f21a6d34db73e2002ba7b20e56e82349c3cab314809e0a991f9cfced5d3",
+				"AnimationPlayer/Recovery": "c6fa2be4673bd85b2a066508229b1df48ed2e6595724b341b3cb8980848cc71c",
+				"AnimationPlayer/Running": "b4812fb09866125c6e10890a2b15a595aee860d96de05b947dd5635519b763b3",
+				"AnimationPlayer/Threaten": "50658f4f5bffc73c7c4360bd60870e495781a91a2285755d87c6487c2c9e3552",
+				"AnimationPlayer/Walking": "27a7a0fc5714d1e05670001b9476aef4149319a0242b3ef8794be642bef0b2ce",
+				"AnimationPlayer/Windup": "345f58e876a64ee6057047619605af61851057a07ba9f17450054ac8b0a16687"
+			},
+			"equal": true,
+			"retained": {
+				"AnimationPlayer/Attack": "b8fd2cebf3a128331551211001ed156f02faf3b7d6867a82979bcf5ad020c0ee",
+				"AnimationPlayer/AttackHeavy": "2b374fb45a27bba5a91822cf22f364c629a7a7657aacaf7cf07e23712e0cd5c2",
+				"AnimationPlayer/Block": "de560969f1cf71d32a56337dce257d71d21a0f8e22c0854d6815ed0f7aebb7ce",
+				"AnimationPlayer/Death": "9cf0d5649e5e5a3e80ad534893e6e9324cbcd942f703b41595787e83b146b402",
+				"AnimationPlayer/HitReact": "c84332941b4eae34ca6e2eb02bf392a4bbac095c03a69d0b8307ca0eb10352d6",
+				"AnimationPlayer/Interact": "ec1c0f21a6d34db73e2002ba7b20e56e82349c3cab314809e0a991f9cfced5d3",
+				"AnimationPlayer/Recovery": "c6fa2be4673bd85b2a066508229b1df48ed2e6595724b341b3cb8980848cc71c",
+				"AnimationPlayer/Running": "b4812fb09866125c6e10890a2b15a595aee860d96de05b947dd5635519b763b3",
+				"AnimationPlayer/Threaten": "50658f4f5bffc73c7c4360bd60870e495781a91a2285755d87c6487c2c9e3552",
+				"AnimationPlayer/Walking": "27a7a0fc5714d1e05670001b9476aef4149319a0242b3ef8794be642bef0b2ce",
+				"AnimationPlayer/Windup": "345f58e876a64ee6057047619605af61851057a07ba9f17450054ac8b0a16687"
+			}
+		},
+		"rests": {
+			"./M16_Rig/Skeleton3D": {
+				"bones": 16,
+				"maximum_error": 0.0
+			}
+		},
+		"retained_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/M16_retained_input.glb",
+		"retained_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
+		"verified": true,
+		"visual_accepted": false
+	},
+	"production_source_changed": false,
+	"samples": [
+		{
+			"actual_mesh_ranges": {
+				"AntennaProbe_L": [
+					-0.00000000000202216585490356,
+					0.549608409404755
+				],
+				"AntennaProbe_R": [
+					0.0,
+					0.549608409404755
+				],
+				"BrushFeed_L": [
+					0.0,
+					0.0659999996423721
+				],
+				"BrushFeed_R": [
+					0.0,
+					0.0659999996423721
+				]
+			},
+			"clip": "Idle",
+			"duration": 4.0
+		},
+		{
+			"actual_mesh_ranges": {
+				"AntennaProbe_L": [
+					-0.0000000332985941042807,
+					0.999493598937988
+				],
+				"AntennaProbe_R": [
+					-0.00000000217980988814759,
+					0.999493539333344
+				],
+				"BrushFeed_L": [
+					-0.00000000010024874680381,
+					0.119885839521885
+				],
+				"BrushFeed_R": [
+					-0.00000000010024874680381,
+					0.119885839521885
+				]
+			},
+			"clip": "Investigate",
+			"duration": 2.79166674613953
+		},
+		{
+			"actual_mesh_ranges": {
+				"AntennaProbe_L": [
+					0.0,
+					0.798969149589539
+				],
+				"AntennaProbe_R": [
+					-0.000000000000000037195264813133,
+					0.798969149589539
+				],
+				"BrushFeed_L": [
+					-0.00000000000000000423190978056111,
+					0.799535095691681
+				],
+				"BrushFeed_R": [
+					0.0,
+					0.799993813037872
+				]
+			},
+			"clip": "Feed",
+			"duration": 3.20833325386047
+		},
+		{
+			"actual_mesh_ranges": {
+				"AntennaProbe_L": [
+					0.0,
+					0.219885215163231
+				],
+				"AntennaProbe_R": [
+					0.0,
+					0.219885215163231
+				],
+				"BrushFeed_L": [
+					0.0,
+					0.0263925474137068
+				],
+				"BrushFeed_R": [
+					0.0,
+					0.0263925474137068
+				]
+			},
+			"clip": "Sleep",
+			"duration": 4.58333349227905
+		}
+	],
+	"source_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/M16_living_candidate.glb",
+	"status": "pass",
+	"visual_accepted": false
+}

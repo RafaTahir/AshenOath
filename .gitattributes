@@ -127,3 +127,7 @@ art_source/art_recovery_v2/tools/build_living_equipment_coverage.py -text whites
 art_source/art_recovery_v2/tools/living_coverage_freshness.py -text whitespace=cr-at-eol
 art_source/art_recovery_v2/tools/living_asset_coverage.py -text whitespace=cr-at-eol
 art_source/art_recovery_v2/tools/test_living_asset_coverage.py -text whitespace=cr-at-eol
+
+# Preserve exact formatting of the archived creature source review scripts.
+art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/source_checkpoint_r3/original_review/prepare_promotion_review_r1.py -text whitespace=cr-at-eol,-blank-at-eof
+art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/source_checkpoint_r3/original_review/prepare_source_checkpoint_r1.py -text whitespace=cr-at-eol,-blank-at-eof

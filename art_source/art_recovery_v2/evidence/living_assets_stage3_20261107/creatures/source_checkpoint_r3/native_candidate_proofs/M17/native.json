@@ -1,0 +1,1285 @@
+{
+	"asset": "M17",
+	"attack_profiles_recalibrated": false,
+	"binding_proof": {
+		"candidate_only": true,
+		"morph_bindings": [],
+		"native_binding_report": {
+			"Feed": {
+				"bound_bone_tracks": 6,
+				"morph_tracks": {
+
+				}
+			},
+			"Idle": {
+				"bound_bone_tracks": 6,
+				"morph_tracks": {
+
+				}
+			},
+			"Investigate": {
+				"bound_bone_tracks": 6,
+				"morph_tracks": {
+
+				}
+			},
+			"Sleep": {
+				"bound_bone_tracks": 6,
+				"morph_tracks": {
+
+				}
+			}
+		},
+		"receipt_sha256": "4e6551ebd5d935b4df3a1689f44b4b61758be0234143c2e39b7ddc6900275f72",
+		"source_sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+		"verified": true,
+		"visual_accepted": false,
+		"water_probe_evidence": [],
+		"water_probes": []
+	},
+	"candidate_only": true,
+	"checks": 19508,
+	"declared_bones": {
+		"Feed": [
+			{
+				"index": 4,
+				"name": "EyeStalk-1",
+				"tracks": [
+					2
+				]
+			},
+			{
+				"index": 3,
+				"name": "EyeStalk1",
+				"tracks": [
+					1
+				]
+			},
+			{
+				"index": 6,
+				"name": "Feeler-1",
+				"tracks": [
+					4
+				]
+			},
+			{
+				"index": 5,
+				"name": "Feeler1",
+				"tracks": [
+					3
+				]
+			},
+			{
+				"index": 2,
+				"name": "Head",
+				"tracks": [
+					0
+				]
+			},
+			{
+				"index": 7,
+				"name": "Jaw",
+				"tracks": [
+					5
+				]
+			}
+		],
+		"Idle": [
+			{
+				"index": 4,
+				"name": "EyeStalk-1",
+				"tracks": [
+					2
+				]
+			},
+			{
+				"index": 3,
+				"name": "EyeStalk1",
+				"tracks": [
+					1
+				]
+			},
+			{
+				"index": 6,
+				"name": "Feeler-1",
+				"tracks": [
+					4
+				]
+			},
+			{
+				"index": 5,
+				"name": "Feeler1",
+				"tracks": [
+					3
+				]
+			},
+			{
+				"index": 2,
+				"name": "Head",
+				"tracks": [
+					0
+				]
+			},
+			{
+				"index": 7,
+				"name": "Jaw",
+				"tracks": [
+					5
+				]
+			}
+		],
+		"Investigate": [
+			{
+				"index": 4,
+				"name": "EyeStalk-1",
+				"tracks": [
+					2
+				]
+			},
+			{
+				"index": 3,
+				"name": "EyeStalk1",
+				"tracks": [
+					1
+				]
+			},
+			{
+				"index": 6,
+				"name": "Feeler-1",
+				"tracks": [
+					4
+				]
+			},
+			{
+				"index": 5,
+				"name": "Feeler1",
+				"tracks": [
+					3
+				]
+			},
+			{
+				"index": 2,
+				"name": "Head",
+				"tracks": [
+					0
+				]
+			},
+			{
+				"index": 7,
+				"name": "Jaw",
+				"tracks": [
+					5
+				]
+			}
+		],
+		"Sleep": [
+			{
+				"index": 4,
+				"name": "EyeStalk-1",
+				"tracks": [
+					2
+				]
+			},
+			{
+				"index": 3,
+				"name": "EyeStalk1",
+				"tracks": [
+					1
+				]
+			},
+			{
+				"index": 6,
+				"name": "Feeler-1",
+				"tracks": [
+					4
+				]
+			},
+			{
+				"index": 5,
+				"name": "Feeler1",
+				"tracks": [
+					3
+				]
+			},
+			{
+				"index": 2,
+				"name": "Head",
+				"tracks": [
+					0
+				]
+			},
+			{
+				"index": 7,
+				"name": "Jaw",
+				"tracks": [
+					5
+				]
+			}
+		]
+	},
+	"expected_interruption_count": 32,
+	"failures": [],
+	"input_sha256": {
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_living_candidate.glb": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_retained_input.glb": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/authoring.json": "ce86e48e02ba5887ec050a84a642dc75500e24e98c4f36a218afff91cf9419f7",
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_contract.json": "4e6551ebd5d935b4df3a1689f44b4b61758be0234143c2e39b7ddc6900275f72"
+	},
+	"interruption_samples": [
+		{
+			"after": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0416666679084301,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0416666679084301,
+				"time": 0.16666667163372
+			},
+			"clip": "Idle",
+			"interruption": "movement",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00014960765838623,
+			"published_node": "locomotion_left",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00014960765838623
+		},
+		{
+			"after": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0416666679084301,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0500000007450581,
+				"time": 0.200000002980232
+			},
+			"clip": "Idle",
+			"interruption": "attack",
+			"original_action_duration": 1.04166662693024,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000388026237487793,
+			"published_node": "attack",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00014960765838623
+		},
+		{
+			"after": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0416666679084301,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0500000007450581,
+				"time": 0.200000002980232
+			},
+			"clip": "Idle",
+			"interruption": "hit",
+			"original_action_duration": 0.583333313465118,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000388026237487793,
+			"published_node": "hurt",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00014960765838623
+		},
+		{
+			"after": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0416666679084301,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0500000007450581,
+				"time": 0.200000002980232
+			},
+			"clip": "Idle",
+			"interruption": "dialogue",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000388026237487793,
+			"published_node": "dialogue",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00014960765838623
+		},
+		{
+			"after": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0416666679084301,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0500000007450581,
+				"time": 0.200000002980232
+			},
+			"clip": "Idle",
+			"interruption": "cancel",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000388026237487793,
+			"published_node": "locomotion",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00014960765838623
+		},
+		{
+			"after": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.058333333581686,
+				"time": 0.233333334326744
+			},
+			"before": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0500000007450581,
+				"time": 0.200000002980232
+			},
+			"clip": "Idle",
+			"interruption": "distance",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000388026237487793,
+			"published_node": "ecology_2089209571",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00056159496307373
+		},
+		{
+			"after": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0416666679084301,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0666666701436043,
+				"time": 0.266666680574417
+			},
+			"clip": "Idle",
+			"interruption": "death",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000729382038116455,
+			"published_node": "death",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00014960765838623
+		},
+		{
+			"after": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0416666679084301,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Idle",
+				"duration": 4.0,
+				"phase": 0.0500000007450581,
+				"time": 0.200000002980232
+			},
+			"clip": "Idle",
+			"interruption": "restore",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000388026237487793,
+			"published_node": "locomotion",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00014960765838623
+		},
+		{
+			"after": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.059701492616981,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.059701492616981,
+				"time": 0.16666667163372
+			},
+			"clip": "Investigate",
+			"interruption": "movement",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00132131576538086,
+			"published_node": "locomotion_left",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00132131576538086
+		},
+		{
+			"after": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.059701492616981,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.0716417900728314,
+				"time": 0.200000002980232
+			},
+			"clip": "Investigate",
+			"interruption": "attack",
+			"original_action_duration": 1.04166662693024,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00215047597885132,
+			"published_node": "attack",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00132131576538086
+		},
+		{
+			"after": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.059701492616981,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.0716417900728314,
+				"time": 0.200000002980232
+			},
+			"clip": "Investigate",
+			"interruption": "hit",
+			"original_action_duration": 0.583333313465118,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00215047597885132,
+			"published_node": "hurt",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00132131576538086
+		},
+		{
+			"after": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.059701492616981,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.0716417900728314,
+				"time": 0.200000002980232
+			},
+			"clip": "Investigate",
+			"interruption": "dialogue",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00215047597885132,
+			"published_node": "dialogue",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00132131576538086
+		},
+		{
+			"after": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.059701492616981,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.0716417900728314,
+				"time": 0.200000002980232
+			},
+			"clip": "Investigate",
+			"interruption": "cancel",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00215047597885132,
+			"published_node": "locomotion",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00132131576538086
+		},
+		{
+			"after": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.0835820875286818,
+				"time": 0.233333334326744
+			},
+			"before": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.0716417900728314,
+				"time": 0.200000002980232
+			},
+			"clip": "Investigate",
+			"interruption": "distance",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00215047597885132,
+			"published_node": "ecology_1096732264",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00270837545394897
+		},
+		{
+			"after": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.059701492616981,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.0955223903222613,
+				"time": 0.266666680574417
+			},
+			"clip": "Investigate",
+			"interruption": "death",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00320881605148315,
+			"published_node": "death",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00132131576538086
+		},
+		{
+			"after": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.059701492616981,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Investigate",
+				"duration": 2.79166674613953,
+				"phase": 0.0716417900728314,
+				"time": 0.200000002980232
+			},
+			"clip": "Investigate",
+			"interruption": "restore",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00215047597885132,
+			"published_node": "locomotion",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00132131576538086
+		},
+		{
+			"after": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0519480547830174,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0519480547830174,
+				"time": 0.16666667163372
+			},
+			"clip": "Feed",
+			"interruption": "movement",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00064462423324585,
+			"published_node": "locomotion_left",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00064462423324585
+		},
+		{
+			"after": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0519480547830174,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0623376648107173,
+				"time": 0.200000002980232
+			},
+			"clip": "Feed",
+			"interruption": "attack",
+			"original_action_duration": 1.04166662693024,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00116699934005737,
+			"published_node": "attack",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00064462423324585
+		},
+		{
+			"after": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0519480547830174,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0623376648107173,
+				"time": 0.200000002980232
+			},
+			"clip": "Feed",
+			"interruption": "hit",
+			"original_action_duration": 0.583333313465118,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00116699934005737,
+			"published_node": "hurt",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00064462423324585
+		},
+		{
+			"after": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0519480547830174,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0623376648107173,
+				"time": 0.200000002980232
+			},
+			"clip": "Feed",
+			"interruption": "dialogue",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00116699934005737,
+			"published_node": "dialogue",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00064462423324585
+		},
+		{
+			"after": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0519480547830174,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0623376648107173,
+				"time": 0.200000002980232
+			},
+			"clip": "Feed",
+			"interruption": "cancel",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00116699934005737,
+			"published_node": "locomotion",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00064462423324585
+		},
+		{
+			"after": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0727272748384172,
+				"time": 0.233333334326744
+			},
+			"before": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0623376648107173,
+				"time": 0.200000002980232
+			},
+			"clip": "Feed",
+			"interruption": "distance",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00116699934005737,
+			"published_node": "ecology_2089102617",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.0015329122543335
+		},
+		{
+			"after": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0519480547830174,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.083116889510635,
+				"time": 0.266666680574417
+			},
+			"clip": "Feed",
+			"interruption": "death",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00187426805496216,
+			"published_node": "death",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00064462423324585
+		},
+		{
+			"after": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0519480547830174,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Feed",
+				"duration": 3.20833325386047,
+				"phase": 0.0623376648107173,
+				"time": 0.200000002980232
+			},
+			"clip": "Feed",
+			"interruption": "restore",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.00116699934005737,
+			"published_node": "locomotion",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.00064462423324585
+		},
+		{
+			"after": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0363636361863002,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0363636361863002,
+				"time": 0.16666667163372
+			},
+			"clip": "Sleep",
+			"interruption": "movement",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.0000179409980773926,
+			"published_node": "locomotion_left",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.0000179409980773926
+		},
+		{
+			"after": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0363636361863002,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0436363627733278,
+				"time": 0.200000002980232
+			},
+			"clip": "Sleep",
+			"interruption": "attack",
+			"original_action_duration": 1.04166662693024,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000088036060333252,
+			"published_node": "attack",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.0000179409980773926
+		},
+		{
+			"after": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0363636361863002,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0436363627733278,
+				"time": 0.200000002980232
+			},
+			"clip": "Sleep",
+			"interruption": "hit",
+			"original_action_duration": 0.583333313465118,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000088036060333252,
+			"published_node": "hurt",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.0000179409980773926
+		},
+		{
+			"after": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0363636361863002,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0436363627733278,
+				"time": 0.200000002980232
+			},
+			"clip": "Sleep",
+			"interruption": "dialogue",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000088036060333252,
+			"published_node": "dialogue",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.0000179409980773926
+		},
+		{
+			"after": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0363636361863002,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0436363627733278,
+				"time": 0.200000002980232
+			},
+			"clip": "Sleep",
+			"interruption": "cancel",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000088036060333252,
+			"published_node": "locomotion",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.0000179409980773926
+		},
+		{
+			"after": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0509090893603554,
+				"time": 0.233333334326744
+			},
+			"before": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0436363627733278,
+				"time": 0.200000002980232
+			},
+			"clip": "Sleep",
+			"interruption": "distance",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000088036060333252,
+			"published_node": "ecology_236578302",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.000142097473144531
+		},
+		{
+			"after": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0363636361863002,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0581818191985453,
+				"time": 0.266666680574417
+			},
+			"clip": "Sleep",
+			"interruption": "death",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000195086002349854,
+			"published_node": "death",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.0000179409980773926
+		},
+		{
+			"after": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0363636361863002,
+				"time": 0.16666667163372
+			},
+			"before": {
+				"clip": "Sleep",
+				"duration": 4.58333349227905,
+				"phase": 0.0436363627733278,
+				"time": 0.200000002980232
+			},
+			"clip": "Sleep",
+			"interruption": "restore",
+			"original_action_duration": 0.0,
+			"owner_published": true,
+			"pre_interrupt_pose_delta": 0.000088036060333252,
+			"published_node": "locomotion",
+			"reacquired": true,
+			"reacquired_pose_delta": 0.0000179409980773926
+		}
+	],
+	"native_equivalence": {
+		"aggregate_bounds": {
+			"candidate": {
+				"position": [
+					-0.735247194766998,
+					0.0149996150285006,
+					-1.76437652111053
+				],
+				"size": [
+					1.48083484172821,
+					1.89010667800903,
+					3.3253698348999
+				]
+			},
+			"maximum_error": 0.0,
+			"owner": "AssetSpawnHelper._calculate_node_bounds",
+			"retained": {
+				"position": [
+					-0.735247194766998,
+					0.0149996150285006,
+					-1.76437652111053
+				],
+				"size": [
+					1.48083484172821,
+					1.89010667800903,
+					3.3253698348999
+				]
+			}
+		},
+		"collision_dimensions_verified": false,
+		"component_tolerance": 0.000001,
+		"errors": [],
+		"frames": {
+			".": 0.0,
+			"./M17_Rig": 0.0,
+			"./M17_Rig/Skeleton3D": 0.0,
+			"./M17_Rig/Skeleton3D/M17_RuntimeAssembly": 0.0
+		},
+		"mesh_bounds": {
+			"./M17_Rig/Skeleton3D/M17_RuntimeAssembly": {
+				"candidate": {
+					"position": [
+						-0.735247194766998,
+						0.0149996150285006,
+						-1.76437652111053
+					],
+					"size": [
+						1.48083484172821,
+						1.89010667800903,
+						3.3253698348999
+					]
+				},
+				"maximum_error": 0.0,
+				"retained": {
+					"position": [
+						-0.735247194766998,
+						0.0149996150285006,
+						-1.76437652111053
+					],
+					"size": [
+						1.48083484172821,
+						1.89010667800903,
+						3.3253698348999
+					]
+				}
+			}
+		},
+		"normalization_applied": false,
+		"prepared_role_scale_verified": false,
+		"protected_clips": {
+			"candidate": {
+				"AnimationPlayer/Attack": "076f2d51e4075eafdf0244d35841b1d82e8b9491a427c127d58c82ea9be22d76",
+				"AnimationPlayer/AttackHeavy": "234f5794d1705d156666f90aab30786f85036945afaeba6d084bd0fb0e15e842",
+				"AnimationPlayer/Block": "e4156c38587b07fd29b97f83aebdc60dcb7a1239feaef029ecc720ec7ce920c1",
+				"AnimationPlayer/Death": "3afddcda16f079c335ef6c795e21836e41fc3282e840643b95ee7f74ac96a16a",
+				"AnimationPlayer/HitReact": "5592343c4af962ee524eaddadc235867c973d8367161644b3dd0857c5903b194",
+				"AnimationPlayer/Interact": "8bd9361adc834b8d5219546d1fd5dec1ebcc26b39013c87359b178ee5afa7c56",
+				"AnimationPlayer/Recovery": "7ee681305011de1651618280f8e93c3dbfea23d321bc9c9455c61f174ec17b2a",
+				"AnimationPlayer/Running": "d7b532a8bfb315f57bc604142b04dcccd5b8443d2265e23127dd9f900354da4d",
+				"AnimationPlayer/Threaten": "e2555952999d264b232fc6b9e1690befa1db21018205410812d168010bac2f3b",
+				"AnimationPlayer/Walking": "0bca030053a13497f3fda57ffbd4d1d36dd73aaa9cdd68476234991864d2adb2",
+				"AnimationPlayer/Windup": "d2cfb1903e38e7a527bcfd6f5f472a7386507c4bd8ef1af47f007775808222c8"
+			},
+			"equal": true,
+			"retained": {
+				"AnimationPlayer/Attack": "076f2d51e4075eafdf0244d35841b1d82e8b9491a427c127d58c82ea9be22d76",
+				"AnimationPlayer/AttackHeavy": "234f5794d1705d156666f90aab30786f85036945afaeba6d084bd0fb0e15e842",
+				"AnimationPlayer/Block": "e4156c38587b07fd29b97f83aebdc60dcb7a1239feaef029ecc720ec7ce920c1",
+				"AnimationPlayer/Death": "3afddcda16f079c335ef6c795e21836e41fc3282e840643b95ee7f74ac96a16a",
+				"AnimationPlayer/HitReact": "5592343c4af962ee524eaddadc235867c973d8367161644b3dd0857c5903b194",
+				"AnimationPlayer/Interact": "8bd9361adc834b8d5219546d1fd5dec1ebcc26b39013c87359b178ee5afa7c56",
+				"AnimationPlayer/Recovery": "7ee681305011de1651618280f8e93c3dbfea23d321bc9c9455c61f174ec17b2a",
+				"AnimationPlayer/Running": "d7b532a8bfb315f57bc604142b04dcccd5b8443d2265e23127dd9f900354da4d",
+				"AnimationPlayer/Threaten": "e2555952999d264b232fc6b9e1690befa1db21018205410812d168010bac2f3b",
+				"AnimationPlayer/Walking": "0bca030053a13497f3fda57ffbd4d1d36dd73aaa9cdd68476234991864d2adb2",
+				"AnimationPlayer/Windup": "d2cfb1903e38e7a527bcfd6f5f472a7386507c4bd8ef1af47f007775808222c8"
+			}
+		},
+		"rests": {
+			"./M17_Rig/Skeleton3D": {
+				"bones": 8,
+				"maximum_error": 0.0
+			}
+		},
+		"retained_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_retained_input.glb",
+		"retained_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+		"verified": true,
+		"visual_accepted": false
+	},
+	"production_source_changed": false,
+	"samples": [
+		{
+			"actual_pose_component_deltas": {
+				"EyeStalk-1": 0.0680702924728394,
+				"EyeStalk1": 0.0678417682647705,
+				"Feeler-1": 0.0435571670532227,
+				"Feeler1": 0.0436961650848389,
+				"Head": 0.0135942101478577,
+				"Jaw": 0.00519061088562012
+			},
+			"clip": "Idle",
+			"cycles": 2,
+			"declared_bones": [
+				{
+					"index": 4,
+					"name": "EyeStalk-1",
+					"tracks": [
+						2
+					]
+				},
+				{
+					"index": 3,
+					"name": "EyeStalk1",
+					"tracks": [
+						1
+					]
+				},
+				{
+					"index": 6,
+					"name": "Feeler-1",
+					"tracks": [
+						4
+					]
+				},
+				{
+					"index": 5,
+					"name": "Feeler1",
+					"tracks": [
+						3
+					]
+				},
+				{
+					"index": 2,
+					"name": "Head",
+					"tracks": [
+						0
+					]
+				},
+				{
+					"index": 7,
+					"name": "Jaw",
+					"tracks": [
+						5
+					]
+				}
+			],
+			"duration": 4.0,
+			"rate_hz": 60,
+			"ticks": 480
+		},
+		{
+			"actual_pose_component_deltas": {
+				"EyeStalk-1": 0.12085098028183,
+				"EyeStalk1": 0.117551743984222,
+				"Feeler-1": 0.0787158608436584,
+				"Feeler1": 0.0808103680610657,
+				"Head": 0.024713397026062,
+				"Jaw": 0.0101783573627472
+			},
+			"clip": "Investigate",
+			"cycles": 2,
+			"declared_bones": [
+				{
+					"index": 4,
+					"name": "EyeStalk-1",
+					"tracks": [
+						2
+					]
+				},
+				{
+					"index": 3,
+					"name": "EyeStalk1",
+					"tracks": [
+						1
+					]
+				},
+				{
+					"index": 6,
+					"name": "Feeler-1",
+					"tracks": [
+						4
+					]
+				},
+				{
+					"index": 5,
+					"name": "Feeler1",
+					"tracks": [
+						3
+					]
+				},
+				{
+					"index": 2,
+					"name": "Head",
+					"tracks": [
+						0
+					]
+				},
+				{
+					"index": 7,
+					"name": "Jaw",
+					"tracks": [
+						5
+					]
+				}
+			],
+			"duration": 2.79166674613953,
+			"rate_hz": 60,
+			"ticks": 336
+		},
+		{
+			"actual_pose_component_deltas": {
+				"EyeStalk-1": 0.0977069735527039,
+				"EyeStalk1": 0.0963917374610901,
+				"Feeler-1": 0.0633285045623779,
+				"Feeler1": 0.0641247630119324,
+				"Head": 0.0197682529687881,
+				"Jaw": 0.0266314446926117
+			},
+			"clip": "Feed",
+			"cycles": 2,
+			"declared_bones": [
+				{
+					"index": 4,
+					"name": "EyeStalk-1",
+					"tracks": [
+						2
+					]
+				},
+				{
+					"index": 3,
+					"name": "EyeStalk1",
+					"tracks": [
+						1
+					]
+				},
+				{
+					"index": 6,
+					"name": "Feeler-1",
+					"tracks": [
+						4
+					]
+				},
+				{
+					"index": 5,
+					"name": "Feeler1",
+					"tracks": [
+						3
+					]
+				},
+				{
+					"index": 2,
+					"name": "Head",
+					"tracks": [
+						0
+					]
+				},
+				{
+					"index": 7,
+					"name": "Jaw",
+					"tracks": [
+						5
+					]
+				}
+			],
+			"duration": 3.20833325386047,
+			"rate_hz": 60,
+			"ticks": 385
+		},
+		{
+			"actual_pose_component_deltas": {
+				"EyeStalk-1": 0.0277059674263,
+				"EyeStalk1": 0.0276651978492737,
+				"Feeler-1": 0.0172443389892578,
+				"Feeler1": 0.017270028591156,
+				"Head": 0.00982900708913803,
+				"Jaw": 0.00202590227127075
+			},
+			"clip": "Sleep",
+			"cycles": 2,
+			"declared_bones": [
+				{
+					"index": 4,
+					"name": "EyeStalk-1",
+					"tracks": [
+						2
+					]
+				},
+				{
+					"index": 3,
+					"name": "EyeStalk1",
+					"tracks": [
+						1
+					]
+				},
+				{
+					"index": 6,
+					"name": "Feeler-1",
+					"tracks": [
+						4
+					]
+				},
+				{
+					"index": 5,
+					"name": "Feeler1",
+					"tracks": [
+						3
+					]
+				},
+				{
+					"index": 2,
+					"name": "Head",
+					"tracks": [
+						0
+					]
+				},
+				{
+					"index": 7,
+					"name": "Jaw",
+					"tracks": [
+						5
+					]
+				}
+			],
+			"duration": 4.58333349227905,
+			"rate_hz": 60,
+			"ticks": 551
+		}
+	],
+	"source_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_living_candidate.glb",
+	"status": "pass",
+	"visual_accepted": false
+}

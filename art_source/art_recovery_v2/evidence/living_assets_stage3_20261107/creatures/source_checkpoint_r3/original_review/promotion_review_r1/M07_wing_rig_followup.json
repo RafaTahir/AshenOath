@@ -1,0 +1,130 @@
+{
+  "scope": "Read-only retained rig/profile feasibility audit, no pose or model edit",
+  "asset": "M07",
+  "source_path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M07\\M07_retained_input.glb",
+  "source_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+  "profile_path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\living_creature_motion_profiles.py",
+  "profile_sha256": "1ec22b85b13c41174738cf3168cd93c4cdb034867309776eb491dddd0eb4b024",
+  "wing_bindings": [
+    {
+      "name": "WingFinger1_0",
+      "node_index": 3,
+      "parent": "Wing1_1",
+      "children": [],
+      "weighted_vertices": 332,
+      "summed_weights": 188.6632537841797
+    },
+    {
+      "name": "WingFinger1_1",
+      "node_index": 4,
+      "parent": "Wing1_1",
+      "children": [],
+      "weighted_vertices": 504,
+      "summed_weights": 290.8174133300781
+    },
+    {
+      "name": "WingFinger1_2",
+      "node_index": 5,
+      "parent": "Wing1_1",
+      "children": [],
+      "weighted_vertices": 768,
+      "summed_weights": 338.9740295410156
+    },
+    {
+      "name": "WingFinger1_3",
+      "node_index": 6,
+      "parent": "Wing1_1",
+      "children": [],
+      "weighted_vertices": 595,
+      "summed_weights": 366.91351318359375
+    },
+    {
+      "name": "Wing1_1",
+      "node_index": 7,
+      "parent": "Wing1_0",
+      "children": [
+        "WingFinger1_0",
+        "WingFinger1_1",
+        "WingFinger1_2",
+        "WingFinger1_3"
+      ],
+      "weighted_vertices": 1127,
+      "summed_weights": 807.4966430664062
+    },
+    {
+      "name": "Wing1_0",
+      "node_index": 8,
+      "parent": "Body",
+      "children": [
+        "Wing1_1"
+      ],
+      "weighted_vertices": 1280,
+      "summed_weights": 689.4796752929688
+    },
+    {
+      "name": "WingFinger-1_0",
+      "node_index": 9,
+      "parent": "Wing-1_1",
+      "children": [],
+      "weighted_vertices": 331,
+      "summed_weights": 191.42498779296875
+    },
+    {
+      "name": "WingFinger-1_1",
+      "node_index": 10,
+      "parent": "Wing-1_1",
+      "children": [],
+      "weighted_vertices": 509,
+      "summed_weights": 292.4271240234375
+    },
+    {
+      "name": "WingFinger-1_2",
+      "node_index": 11,
+      "parent": "Wing-1_1",
+      "children": [],
+      "weighted_vertices": 766,
+      "summed_weights": 334.49664306640625
+    },
+    {
+      "name": "WingFinger-1_3",
+      "node_index": 12,
+      "parent": "Wing-1_1",
+      "children": [],
+      "weighted_vertices": 591,
+      "summed_weights": 357.9423522949219
+    },
+    {
+      "name": "Wing-1_1",
+      "node_index": 13,
+      "parent": "Wing-1_0",
+      "children": [
+        "WingFinger-1_0",
+        "WingFinger-1_1",
+        "WingFinger-1_2",
+        "WingFinger-1_3"
+      ],
+      "weighted_vertices": 1223,
+      "summed_weights": 889.3988037109375
+    },
+    {
+      "name": "Wing-1_0",
+      "node_index": 14,
+      "parent": "Body",
+      "children": [
+        "Wing-1_1"
+      ],
+      "weighted_vertices": 1317,
+      "summed_weights": 703.9073486328125
+    }
+  ],
+  "finding": "Both shoulder Wing+/-1_0, elbow Wing+/-1_1 and four fingers per side are actual retained skinned joints. Current profile does not animate the shoulder joints and uses only tiny elbow/finger oscillations; it does not establish a folded resting pose.",
+  "proposed_revision": {
+    "rest": "Use measured shoulder adduction/rearward sweep plus elbow flexion to bring each wing along the flank, then fan the four fingers inward in order; retain Body, leg and foot transforms. Add small opposed finger release on the resulting folded baseline.",
+    "feed": "Keep wings mostly tucked; use a restrained neck/head dip and beak working motion, with one small balancing wing release that returns to the same folded pose.",
+    "constraints": "Do not choose blind rotation signs from glTF local axes. Establish local anatomical axes in Blender and evaluate actual weighted membrane clearance against torso/legs/opposite wing through entry, apex and exit before baking. Keep all protected clips, hierarchy/rest/scale/collisions unchanged.",
+    "readiness": "Feasible existing controls confirmed; actual folded pose, membrane clearance and world readability unproved."
+  },
+  "source_only": true,
+  "rendered": false,
+  "visual_accepted": false
+}
