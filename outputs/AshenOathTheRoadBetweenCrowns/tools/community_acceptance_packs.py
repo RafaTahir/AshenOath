@@ -57,6 +57,91 @@ def _resource_exists(path: str, resources: dict[str, bytes], visiting=None) -> b
     return bool(match and _resource_exists(match.group(1), resources, visiting))
 
 
+def _relative_resource(value: object) -> str:
+    if not isinstance(value, str) or not value.startswith("res://"):
+        raise ValueError(f"Invalid living resource path: {value!r}")
+    path = value[6:]
+    if any(character in path for character in "\\:\0\r\n") or any(
+        part in ("", ".", "..") for part in path.split("/")
+    ):
+        raise ValueError(f"Invalid living resource path: {value!r}")
+    return path
+
+
+def _redirect_targets(sidecar: str, payload: bytes) -> set[str]:
+    targets = set()
+    in_remap = False
+    for line in payload.decode("utf-8-sig").splitlines():
+        line = line.strip()
+        if line.startswith("["):
+            in_remap = line == "[remap]"
+        if not in_remap:
+            continue
+        key, separator, value = line.partition("=")
+        key = key.strip()
+        if separator and (key == "path" or key.startswith("path.")):
+            try:
+                targets.add(_relative_resource(json.loads(value)))
+            except ValueError as error:
+                raise ValueError(f"Invalid shipped target in {sidecar}: {value.strip()!r}") from error
+    if not targets:
+        raise ValueError("Missing shipped target in " + sidecar)
+    return targets
+
+
+def _verify_living_residency(manifest, residency, resources) -> dict[str, str]:
+    registry = manifest["community_resource_owners"]
+    if not isinstance(registry, dict) or not registry:
+        raise ValueError("Living resource ownership registry must be a nonempty object")
+    declared = {_relative_resource(path): owner for path, owner in registry.items()}
+    pack_records = manifest["packs"]
+    for path, owner in declared.items():
+        if not isinstance(owner, str) or owner not in pack_records:
+            raise ValueError(f"Unknown living resource owner {owner!r}: res://{path}")
+
+    def accessible(owner, dependency):
+        pending, visited = [owner], set()
+        while pending:
+            pack = pending.pop()
+            if pack == dependency:
+                return True
+            if pack not in visited:
+                visited.add(pack)
+                pending.extend(pack_records[pack].get("dependencies", []))
+        return False
+
+    verified = set()
+
+    def verify(path, owner, visiting):
+        identity = (path, owner)
+        if identity in verified:
+            return
+        if path in visiting:
+            raise ValueError("Cyclic living resource redirect: res://" + path)
+        forms = [name for name in (path, path + ".import", path + ".remap") if name in residency]
+        if not forms:
+            raise ValueError(f"Missing living resource res://{path}; expected in {owner}")
+        for name in forms:
+            actual = residency[name]
+            if actual != {owner}:
+                raise ValueError(f"Living resource res://{name}: expected only in {owner}, found {sorted(actual)}")
+        for name in forms:
+            if name == path:
+                continue
+            for target in sorted(_redirect_targets(name, resources[name])):
+                # Generated payloads inherit the logical resource owner. An
+                # explicit alias may point into an already declared dependency.
+                target_owner = declared.get(target, owner)
+                if not accessible(owner, target_owner):
+                    raise ValueError(f"Living resource res://{name} redirects to {target_owner} outside the {owner} dependency closure")
+                verify(target, target_owner, visiting | {path})
+        verified.add(identity)
+
+    for path, owner in sorted(declared.items()):
+        verify(path, owner, set())
+    return declared
+
+
 def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
                      *, required_resources=None) -> dict:
     """Verify exact decoded release bytes, ownership and known fixture resources.
@@ -110,9 +195,19 @@ def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
             order.append(key)
     for key in manifest["packs"]:
         visit(key)
-    # Keep only remap text in the accumulated inventory; actor mesh payloads do
-    # not need to remain resident while the next pack is being inspected.
-    resources = {key:value if key.endswith(".remap") else b"" for key,value in root_resources.items()}
+    # Track actual archive owners before the combined inventory hides overlaps.
+    # Retain only metadata text, never a second copy of actor mesh payloads.
+    track_owners = "community_resource_owners" in manifest
+    resources, residency = {}, {}
+    metadata = (".remap", ".import") if track_owners else (".remap",)
+
+    def remember(owner, entries):
+        for name, value in entries.items():
+            resources[name] = value if name.endswith(metadata) else b""
+            if track_owners:
+                residency.setdefault(name, set()).add(owner)
+
+    remember("base", root_resources)
     mounted = []
     for key in order:
         pack = manifest["packs"][key]
@@ -129,10 +224,11 @@ def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
             raise ValueError("External pack cannot override the root runtime manifest: " + key)
         if classes in entries and entries[classes] != root_resources.get(classes):
             raise ValueError("External pack changes root class metadata: " + key)
-        resources.update({name:value if name.endswith(".remap") else b"" for name,value in entries.items()})
+        remember(key, entries)
         mounted.append({"id":key,"path":str(path),"bytes":len(payload),"sha256":hashlib.sha256(payload).hexdigest()})
+    verified_owners = _verify_living_residency(manifest, residency, resources) if track_owners else {}
     required = REQUIRED_RESOURCES if required_resources is None else required_resources
-    missing = [name for name in required if not _resource_exists(name, resources)]
+    missing = [name for name in required if name not in verified_owners and not _resource_exists(name, resources)]
     if missing:
         raise ValueError("Frozen acceptance closure is missing: " + ", ".join(missing))
     return {"schema_version":1,"kind":"verified_native_candidate_closure","build_id":release["build_id"],
@@ -141,4 +237,5 @@ def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
             "runtime_manifest_sha256":hashlib.sha256(manifest_bytes).hexdigest(),"packs":mounted,
             "class_cache_sha256":hashlib.sha256(root_resources[classes]).hexdigest(),
             "known_required_resources":required,"resource_count":len(resources),"resource_instantiation_validated":False,
-            "unlisted_pack_policy":"ignored; never mounted","deferred_loading_tested":False}
+            "unlisted_pack_policy":"ignored; never mounted","deferred_loading_tested":False,
+            **({"community_resource_owners_verified":len(verified_owners)} if track_owners else {})}
