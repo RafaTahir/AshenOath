@@ -1,0 +1,92 @@
+{
+  "schema_version": 2,
+  "asset": "checkpoint_cloth",
+  "blender_version": "5.2.3 LTS",
+  "source_hashes": {
+    "res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+    "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+    "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+  },
+  "parts": [
+    {
+      "geometry_sha256": "3d360bc5f601bcfaa3e03bd05253e7becc933bf7628a418531f8629c2f6b0bdb",
+      "kind": "cloth",
+      "mesh_inline": true,
+      "node": "CheckpointCloth_0",
+      "pivot": "(-3.65, 2.92, -5.75)",
+      "pivot_godot": [
+        -3.65000009536743,
+        2.92000007629395,
+        -5.75
+      ],
+      "sources": {
+        "res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16"
+      },
+      "triangles": 138,
+      "export_mesh": "CheckpointCloth_0_Geometry",
+      "support_node": "CheckpointCloth_0",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 92,
+      "world_bounds_blender": {
+        "min": [
+          -4.100000381469727,
+          5.690000057220459,
+          2.0
+        ],
+        "max": [
+          -3.200000286102295,
+          5.809999942779541,
+          2.9200000762939453
+        ]
+      }
+    },
+    {
+      "geometry_sha256": "3d360bc5f601bcfaa3e03bd05253e7becc933bf7628a418531f8629c2f6b0bdb",
+      "kind": "cloth",
+      "mesh_inline": true,
+      "node": "CheckpointCloth_1",
+      "pivot": "(3.65, 2.92, -5.75)",
+      "pivot_godot": [
+        3.65000009536743,
+        2.92000007629395,
+        -5.75
+      ],
+      "sources": {
+        "res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16"
+      },
+      "triangles": 138,
+      "export_mesh": "CheckpointCloth_1_Geometry",
+      "support_node": "CheckpointCloth_1",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 92,
+      "world_bounds_blender": {
+        "min": [
+          3.200000047683716,
+          5.690000057220459,
+          2.0
+        ],
+        "max": [
+          4.099999904632568,
+          5.809999942779541,
+          2.9200000762939453
+        ]
+      }
+    }
+  ],
+  "blender_authored": true,
+  "native_verified": false,
+  "visual_accepted": false,
+  "user_accepted": false,
+  "retained_input": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_7f4677039ce0335e.glb",
+  "retained_input_sha256": "7f4677039ce0335e2fcc22b062f6258b3b558df6a89f8748e1d7f39ad1116eeb",
+  "retained_native": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_native_f203e403dcb7b054.scn",
+  "retained_native_sha256": "f203e403dcb7b054bd182035ce0efcd9d86889945c1c8747fa6d4dc27f5ef2b3",
+  "retained_receipt": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_receipt_48f73068fef281a9.json",
+  "retained_receipt_sha256": "48f73068fef281a9c0b68dae65a8d5730cac5d2cbe6d1a41f3a1ec9ee783134f",
+  "blend": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v001.blend",
+  "blend_sha256": "a7288947eba5d4965071436dee29777073fce1612d284cc5fd37b97202c8f660",
+  "carrier": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v001.glb",
+  "carrier_sha256": "b7f4a5bbc8e9972e6687e06c05f13b88bc16d8f7c1a925620c6f70fd5b721939",
+  "recipe": "models/living_assets_stage3_20261107/scenery/checkpoint_cloth/author_recipe_4887404fc32fdf6b.py",
+  "recipe_sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7"
+}

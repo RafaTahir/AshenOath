@@ -1,0 +1,21 @@
+{
+  "asset": "M07",
+  "process": {
+    "passed": true,
+    "timed_out": false,
+    "owned_tree_exited": true,
+    "pid": 9672,
+    "active_processes_after_root_wait": 0,
+    "accounting_quiescence_seconds": 0.0,
+    "termination_requested": false,
+    "active_processes_after_cleanup": 0,
+    "cleanup_seconds": 0.0,
+    "exit_code": 0,
+    "seconds": 20.469
+  },
+  "accepted": true,
+  "visual_accepted": false,
+  "in_level_accepted": false,
+  "frozen_sources_unchanged": true,
+  "verified_probe_outputs": 1
+}

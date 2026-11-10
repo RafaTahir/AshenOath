@@ -3,10 +3,16 @@ extends "res://tools/build_record_archive.gd"
 const WILD_ROOT := "res://assets_external/environment/forest/"
 const VILLAGE_ROOT := "res://assets_external/environment/village/"
 const RUIN_KIT := ["Wall_UnevenBrick_Window_Thin_Round.obj", "Wall_Plaster_WoodGrid.obj", "Roof_RoundTiles_6x10.obj", "Door_1_Flat.obj"]
+const LivingParts = preload("res://tools/living_world_part_baker.gd")
 var surfaces: Dictionary = {}
 var failed := false
 
 func _initialize() -> void:
+	var original_error := LivingParts.originals_error(["deep_wood","burned_farmstead","marsh_crossing","bandit_road","farmstead_west","farmstead_east","checkpoint"])
+	if not original_error.is_empty():
+		push_error(original_error)
+		quit(1)
+		return
 	var bandit_only := OS.get_cmdline_user_args().has("--bandit-only")
 	var marsh_only := OS.get_cmdline_user_args().has("--marsh-only")
 	for zone in (["marsh_crossing"] if marsh_only else (["bandit_road"] if bandit_only else ["deep_wood", "burned_farmstead", "marsh_crossing", "bandit_road"])):
@@ -30,8 +36,7 @@ func _initialize() -> void:
 			for pool in [[Vector3(-8, 0.036, -6), Vector2(4, 3.5)], [Vector3(8, 0.036, 2), Vector2(4.5, 4)], [Vector3(-9, 0.036, 9), Vector2(3.5, 2.5)]]:
 				_patch(terrain, pool[0] - Vector3.UP * 0.004, pool[1] * 1.14, Color(0.26, 0.39, 0.29))
 				_pool(pool[0], pool[1])
-			for position in [Vector3(-5, 0, -9), Vector3(6, 0, -6), Vector3(-7, 0, 1), Vector3(7, 0, 8), Vector3(-5, 0, 11)]:
-				_reeds(_surface("foliage"), position)
+			_build_living_reeds()
 			# Flush boards follow the actual floor: they do not invent a raised deck
 			# that would require the controller to jump over a decorative threshold.
 			for index in range(48):
@@ -76,8 +81,7 @@ func _build_road_post() -> void:
 	for side in [-1.0, 1.0]:
 		_box(_surface("timber"), Vector3(side * 6.4, 2.65, -6.0), Vector3(0.23, 1.08, 0.32), Color(0.31, 0.21, 0.14))
 		_beam_between(_surface("timber"), Vector3(side * 6.4, 2.28, -6.0), Vector3(side * 5.45, 3.0, -6.0), 0.18, Color(0.36, 0.26, 0.17))
-	for x in [-3.65, 3.65]:
-		_append(_surface("plaster"), banner, _fit(banner, Vector3(0.9, 0.92, 0.12), Vector3(x, 2.0, -5.75), 0), Color(0.34, 0.10, 0.11))
+	_build_living_banners(banner)
 	for x in [-11.5, 11.5]:
 		_append(_surface("timber"), fence, _fit(fence, Vector3(2.4, 1.25, 0.25), Vector3(x, 0, -5), 0), Color(0.34, 0.25, 0.16))
 	_append(_surface("timber"), table, _fit(table, Vector3(2.6, 1.1, 1.4), Vector3(9.5, 0, -2.3), 0), Color(0.52, 0.38, 0.24))
@@ -323,6 +327,69 @@ func _reeds(surface: SurfaceTool, origin: Vector3) -> void:
 		var across := Vector3(cos(angle + PI / 2), 0, sin(angle + PI / 2)) * 0.028
 		for vertex in [point - across, tip, point + across, point + across, tip, point - across]:
 			_vertex(surface, vertex, Color(0.49, 0.65, 0.32))
+
+func _build_living_banners(banner: ArrayMesh) -> void:
+	var scene := Node3D.new()
+	scene.name = "CheckpointLivingCloth"
+	var sources := {"res://assets_external/environment/props/Banner_1_Cloth.obj": FileAccess.get_sha256("res://assets_external/environment/props/Banner_1_Cloth.obj")}
+	for index in range(2):
+		var x := -3.65 if index == 0 else 3.65
+		var pivot := Vector3(x, 2.92, -5.75)
+		var tool := SurfaceTool.new()
+		tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+		_append(tool, banner, _fit(banner, Vector3(0.9, 0.92, 0.12), Vector3(x, 2.0, -5.75), 0), Color(0.34, 0.10, 0.11))
+		tool.generate_normals()
+		tool.index()
+		var mesh := tool.commit()
+		mesh.surface_set_name(0, "plaster")
+		mesh.surface_set_material(0, _living_material(true))
+		mesh = LivingParts.rebase_mesh(mesh, pivot)
+		var error := LivingParts.add_part(scene, mesh, pivot, "cloth", "CheckpointCloth_%d" % index, sources)
+		if not error.is_empty():
+			failed = true
+			push_error(error)
+			break
+	if not failed:
+		var error := LivingParts.save(scene, "checkpoint_cloth", 2)
+		if not error.is_empty():
+			failed = true
+			push_error(error)
+	scene.free()
+
+func _build_living_reeds() -> void:
+	var scene := Node3D.new()
+	scene.name = "MarshLivingReeds"
+	var positions := [Vector3(-5, 0, -9), Vector3(6, 0, -6), Vector3(-7, 0, 1), Vector3(7, 0, 8), Vector3(-5, 0, 11)]
+	for index in positions.size():
+		var tool := SurfaceTool.new()
+		tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+		_reeds(tool, positions[index])
+		tool.generate_normals()
+		tool.index()
+		var mesh := tool.commit()
+		mesh.surface_set_name(0, "foliage")
+		mesh.surface_set_material(0, _living_material(true))
+		mesh = LivingParts.rebase_mesh(mesh, positions[index])
+		var source := "res://tools/build_campaign_wilds.gd"
+		var error := LivingParts.add_part(scene, mesh, positions[index], "foliage", "MarshReeds_%d" % index, {source: FileAccess.get_sha256(source)})
+		if not error.is_empty():
+			failed = true
+			push_error(error)
+			break
+	if not failed:
+		var error := LivingParts.save(scene, "marsh_reeds", 5)
+		if not error.is_empty():
+			failed = true
+			push_error(error)
+	scene.free()
+
+func _living_material(two_sided: bool) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.vertex_color_use_as_albedo = true
+	material.roughness = 0.94
+	if two_sided:
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	return material
 
 func _save_surfaces(path: String, source: String) -> void:
 	var mesh := ArrayMesh.new()

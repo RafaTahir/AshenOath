@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "accepted": true,
+  "presentation_sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
+  "historical_presentation_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+  "geometry_sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
+  "fixture_sha256": "b8e1df90f32299de496c77a930d9a859c257a9429f92288a5166d0c6acf2bb6e",
+  "log_sha256": "7ca39ef0c51c9a9ef7f0e587a81bc404df0bf032c3eb2e02b1e37d8a3c540b1f",
+  "props": {
+    "bread": {
+      "retained_receipt_sha256": "555db14802282e814ac6354bd1c867ee8dba6977945d889ea047c9870366e99f",
+      "mesh_manifest_sha256": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10",
+      "channel_manifest_sha256": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b",
+      "fit_receipt_sha256": "0b70c2b3e50720bcf0f28489630e7e382ed7a7fdf3a4ddb4af346443a374e1fe",
+      "prepared_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+      "carrier_sha256": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+      "raw_carrier_sha256": "e38d87b0e9425aa5675c9be0a19f740015b67f95094eb3cc80347125aa1577f5",
+      "fallback": {
+        "anchor_error_m": 0.0,
+        "channel_manifest_sha256": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b",
+        "measured_grip": false,
+        "mesh_count": 2,
+        "mesh_manifest_sha256": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10"
+      },
+      "measured": {
+        "anchor_error_m": 6.08218542197392e-08,
+        "channel_manifest_sha256": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b",
+        "measured_grip": true,
+        "mesh_count": 2,
+        "mesh_manifest_sha256": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10"
+      }
+    },
+    "supply": {
+      "retained_receipt_sha256": "b95562d40dab823dcd8eb06da6d390773db38546771f8cc4016bb2c8eaf983c7",
+      "mesh_manifest_sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528",
+      "channel_manifest_sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+      "fit_receipt_sha256": "e0c9ac0d708a5f3eff106a9c08c7a813e258dc077cedee3704a7abb82113d8a3",
+      "prepared_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+      "carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "raw_carrier_sha256": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e",
+      "fallback": {
+        "anchor_error_m": 0.0,
+        "channel_manifest_sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+        "measured_grip": false,
+        "mesh_count": 1,
+        "mesh_manifest_sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528"
+      },
+      "measured": {
+        "anchor_error_m": 5.96046447753906e-08,
+        "channel_manifest_sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+        "measured_grip": true,
+        "mesh_count": 1,
+        "mesh_manifest_sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528"
+      }
+    }
+  },
+  "engine_sha256": {
+    "console_wrapper": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a",
+    "main_executable": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+  },
+  "in_level_accepted": false
+}

@@ -1,0 +1,32 @@
+D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\tools\author_living_cast_stage2_props.py:34: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+00:09.750  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Furniture_BaseColor.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'T_Trim_Furniture_BaseColor.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'T Trim Furniture BaseColor.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Furniture_Normal.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'T_Trim_Furniture_Normal.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'T Trim Furniture Normal.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Metal_BaseColor.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'T_Trim_Metal_BaseColor.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'T Trim Metal BaseColor.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Metal_Normal.png'
+00:09.750  io.obj           | WARNING Cannot load image file: 'T_Trim_Metal_Normal.png'
+00:09.765  io.obj           | WARNING Cannot load image file: 'T Trim Metal Normal.png'
+Info: Saved as "station_nera.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+08:17:36 | INFO: Starting glTF 2.0 export
+08:17:36 | INFO: Extracting primitive: Cube
+08:17:37 | INFO: Primitives created: 1
+08:17:37 | INFO: Extracting primitive: Crate_Wooden_Cube.017
+08:17:37 | INFO: Primitives created: 1
+08:17:37 | INFO: Extracting primitive: WorkContactPart
+08:17:37 | INFO: Primitives created: 1
+08:17:37 | INFO: Finished glTF 2.0 export in 0.28136324882507324 s
+00:17.156  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\props\station_nera_review.png'
+
+STAGE2_PROP_AUTHORED nera 1640
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+OBJ import of 'Crate_Wooden.obj' took 30.46 ms
+
+Blender quit

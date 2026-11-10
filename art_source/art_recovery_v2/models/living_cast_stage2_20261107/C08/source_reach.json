@@ -1,0 +1,84 @@
+{
+  "status": "source_reach_pass",
+  "coordinate_order": [
+    "lateral",
+    "forward",
+    "height"
+  ],
+  "contacts": [
+    {
+      "asset": "C08",
+      "hand": "hand_l",
+      "goal_lateral_forward_height": [
+        -0.12,
+        0.4,
+        1.02
+      ],
+      "authored_shoulder": [
+        -0.17967532575130463,
+        0.12811608612537384,
+        1.309828758239746
+      ],
+      "authored_hand": [
+        -0.12242437154054642,
+        0.36828336119651794,
+        1.052731990814209
+      ],
+      "authored_contact_probe": [
+        -0.11999990791082382,
+        0.4000001549720764,
+        1.0199998617172241
+      ],
+      "required_wrist_goal": [
+        -0.12242446362972259,
+        0.36828320622444155,
+        1.0527321290969849
+      ],
+      "retained_arm_length": 0.4913031505593804,
+      "required_reach": 0.3564499733579944,
+      "reach_margin": 0.134853177201386,
+      "native_palm_goal_residual": 2.271979025867508e-07,
+      "shoulder_forward_shift": 0.11221806146204472
+    },
+    {
+      "asset": "C08",
+      "hand": "hand_r",
+      "goal_lateral_forward_height": [
+        0.12,
+        0.4,
+        1.02
+      ],
+      "authored_shoulder": [
+        0.17687098681926727,
+        0.021459056064486504,
+        1.359139323234558
+      ],
+      "authored_hand": [
+        0.12238559871912003,
+        0.36825668811798096,
+        1.052696704864502
+      ],
+      "authored_contact_probe": [
+        0.11999999731779099,
+        0.3999999463558197,
+        1.0200003385543823
+      ],
+      "required_wrist_goal": [
+        0.12238560140132904,
+        0.3682567417621613,
+        1.0526963663101196
+      ],
+      "retained_arm_length": 0.4913032250297646,
+      "required_reach": 0.4659877443431294,
+      "reach_margin": 0.025315480686635194,
+      "native_palm_goal_residual": 3.4278850929733896e-07,
+      "shoulder_forward_shift": 0.12298012338578701
+    }
+  ],
+  "runtime_verified": false,
+  "user_accepted": false,
+  "note": "Reachability is measured from source FK and retained bone lengths. Exact native runtime contact still requires the existing IK and in-game fixture.",
+  "asset": "C08",
+  "blend_sha256": "12a0c64d3a56956031507e46417079313a26f3864faf1daced6206ec7ca01cdd",
+  "review_glb_sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70"
+}

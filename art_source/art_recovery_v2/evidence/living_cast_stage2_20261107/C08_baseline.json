@@ -1,0 +1,20 @@
+{
+	"asset": "C08",
+	"baseline_sha256": "ea76d7b0d4e1181734fe9d21ad5ef79435486ec92edcc9fed80e520c9917eea8",
+	"engine_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"prepared_resource": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
+	"prepared_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
+	"production_resource": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+	"production_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+	"runtime_verified": false
+}

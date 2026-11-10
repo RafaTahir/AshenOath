@@ -1,0 +1,280 @@
+{
+  "scope": "New exact runtime utterances in this batch",
+  "lines": [
+    {
+      "source_id": "community:departure:rook:no",
+      "speaker_id": "rook",
+      "canonical_speaker": "rook",
+      "text": "I will stay. Keep the route open, but do not mistake knowing a road for agreeing to take it.",
+      "text_sha256": "9a53d06e32d7d5adc41ef28f707c496b7ad1e84276c81ca222acfb439ddffff1",
+      "cast_role": "rook",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:rook:withdraw",
+      "speaker_id": "rook",
+      "canonical_speaker": "rook",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "cast_role": "rook",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:edric:yes",
+      "speaker_id": "edric_campaign",
+      "canonical_speaker": "edric",
+      "text": "I will go to Hearthward. The command record travels under its existing custody; this does not put me in charge of it.",
+      "text_sha256": "63923a87b13a6247dcfa44bb0d892670d8ee6ca4ebcf7eac49aa18b191be520e",
+      "cast_role": "edric",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:edric:no",
+      "speaker_id": "edric_campaign",
+      "canonical_speaker": "edric",
+      "text": "I will remain to answer here. Neither departure nor my title changes the record.",
+      "text_sha256": "6284d959271357d98cb886b599e0affdd4152a8b9d15922392d22c34a94bd1bc",
+      "cast_role": "edric",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:edric:withdraw",
+      "speaker_id": "edric_campaign",
+      "canonical_speaker": "edric",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "cast_role": "edric",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:senn:yes",
+      "speaker_id": "captain_senn",
+      "canonical_speaker": "senn",
+      "text": "I will go to Hearthward as a witness, without a command. The signed account remains what I did.",
+      "text_sha256": "ec94365ec76a8b246df8a33149ab63194bba37ceca287d4b05f9edf32188842e",
+      "cast_role": "senn",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:senn:no",
+      "speaker_id": "captain_senn",
+      "canonical_speaker": "senn",
+      "text": "I will remain. The account is signed; you do not need to move me to preserve it.",
+      "text_sha256": "1893d83c35b7bb4caf966c94cc887daf4eb592163c565cf5c4870428aa1feecf",
+      "cast_role": "senn",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:senn:withdraw",
+      "speaker_id": "captain_senn",
+      "canonical_speaker": "senn",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "cast_role": "senn",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_five_minutes",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "What do you do when nobody needs you?",
+      "text_sha256": "160fd95348f4c5e44fe49765cc93680bdbdf6ce3b48fefda09fd313219f8e8bb",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_five_minutes",
+      "speaker_id": "sister_anwen",
+      "canonical_speaker": "anwen",
+      "text": "I usually discover that the linen needs me. It is very persuasive linen.",
+      "text_sha256": "ba964783734b01047be9eef2314d413c9ac30f9d87ed6ec5c38169bbae29943a",
+      "cast_role": "sister_anwen",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_five_minutes",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "And if I hid the basket?",
+      "text_sha256": "f9b0c5ccddadac8f14789750046e564c96dda4fc5274cce4d06aab68be4e7589",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_five_minutes",
+      "speaker_id": "sister_anwen",
+      "canonical_speaker": "anwen",
+      "text": "I'd sit outside. There is a patch of afternoon sun beside the wall.",
+      "text_sha256": "a45d535bdb297766182142f30e31ee2108c70c79a97ed6b3fef6b2afd6ab2b14",
+      "cast_role": "sister_anwen",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_five_minutes",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "Do you want company?",
+      "text_sha256": "e3b53acfda04d9e836f934b8ed6f48caa1f153d3ca5da60a5a076f4834524324",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_five_minutes",
+      "speaker_id": "sister_anwen",
+      "canonical_speaker": "anwen",
+      "text": "For five minutes. You may tell me something that doesn't require an answer.",
+      "text_sha256": "8fbce991ccbe0e815fda41b73c9d609e13a7fb00febe1d180ffaa79f47080cc9",
+      "cast_role": "sister_anwen",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_bad_stew",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "Does anyone ever refuse your help?",
+      "text_sha256": "cc51e2facaa8280c8c62adcd57225390acc885844d0bf4495c92694207b9b6f6",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_bad_stew",
+      "speaker_id": "sister_anwen",
+      "canonical_speaker": "anwen",
+      "text": "Nessa has forbidden me to season the stew. She was quite firm.",
+      "text_sha256": "d22944abc051d74da92c57f280dca7d5491c7162dbd0585eb2f60e314473d153",
+      "cast_role": "sister_anwen",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_bad_stew",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "How bad was it?",
+      "text_sha256": "059474a89c1c7869cb70534ad9a43231c79556f8aa03129877f738565ffee0df",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_bad_stew",
+      "speaker_id": "sister_anwen",
+      "canonical_speaker": "anwen",
+      "text": "People were very thirsty. I thought that was encouraging at first.",
+      "text_sha256": "57db91d6f0525cd6f36d242fcb1c2b55fea6d31d1c9d8049533abb65e832ddb7",
+      "cast_role": "sister_anwen",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_bad_stew",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "Have you tried again?",
+      "text_sha256": "5007dae3718b7ad8478d29dddc33558026fb6bfdb1ab9366a47a40022aad0790",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_anwen_bad_stew",
+      "speaker_id": "sister_anwen",
+      "canonical_speaker": "anwen",
+      "text": "I chop onions now. Nessa tastes it, and I try to leave the spoon alone.",
+      "text_sha256": "e9f411ae0aa9d7a2fb936fbfa5bc266371b3d6637e27b5b7c816d56d0e73c996",
+      "cast_role": "sister_anwen",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_rook_losing_well",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "Do you always explain why you lost?",
+      "text_sha256": "016c7588b5f61f62ce6d51386d1a75faa42ff9f25fc7095b2e1bdab168c35562",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_rook_losing_well",
+      "speaker_id": "rook",
+      "canonical_speaker": "rook",
+      "text": "Only when the explanation is more interesting than the game.",
+      "text_sha256": "ce4144a3fae1f9f58a2ba3fba51d2d1b5c578e10b1cfbc37b70a0b95383e1874",
+      "cast_role": "rook",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_rook_losing_well",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "And when it isn't?",
+      "text_sha256": "eadac3a86d588dc4a2b6682798fbe86f9176cfab4bf71d7a570345c7d7c6081e",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_rook_losing_well",
+      "speaker_id": "rook",
+      "canonical_speaker": "rook",
+      "text": "Then I improve it. The light is usually at fault.",
+      "text_sha256": "e42279b2d0f49ffde6564057cb850ad60c11371b0e93bbdc008b13865ef8a6a7",
+      "cast_role": "rook",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "conversation_topic:life2_rook_losing_well",
+      "speaker_id": "player",
+      "canonical_speaker": "kael",
+      "text": "You could just say I played well.",
+      "text_sha256": "de5de61f30e935d65db6ba6b17e169637ac5c5193594c90e4a357a451156da09",
+      "cast_role": "player",
+      "direction": "Quiet, conversational; let the other person finish.",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "scope": "scenery split source/contract checkpoint; no authored bake or visual acceptance",
+  "source_inputs": [
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/living_world_part_baker.gd",
+      "sha256": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_world_blender.gd",
+      "sha256": "600bda16a9162135d49c118e35d28418b173d5f4ba32750200502174c1449414"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_campaign_wilds.gd",
+      "sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_hart_woodland.gd",
+      "sha256": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_ash_mill.gd",
+      "sha256": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/living_world_geometry_contract.gd",
+      "sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_world_split.gd",
+      "sha256": "f252b341974d9d83cb85a191d23990c28054c61e7e1f9e65023c0644afeedb83"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/freeze_living_world_originals.py",
+      "sha256": "920b35c4d05b1351fe0beeac2105a70de612e499258dbf9b24d8755640cb805f"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/test_living_world_freeze.py",
+      "sha256": "22ddf6e12101c4401e9d38e2c96bf77e2f012f8c09892db66f3fd9dae5c17934"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/scripts/zones/campaign_wilds_presentation.gd",
+      "sha256": "1fe7a715f95b28a9f99f656d581170a66755dadd5fcfda001cd79046d8a14f8f"
+    }
+  ],
+  "original_meshes": 9,
+  "original_source_snapshots": 8,
+  "python_freeze_checks": 7,
+  "native_parsers": 4,
+  "native_synthetic_checks": 21,
+  "actual_original_to_split_comparison": "pending",
+  "blender_bakes": "pending",
+  "rendered_gameplay": "pending",
+  "native_sources_fresh": true,
+  "logs": [
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/freeze_tests_r2.log",
+      "sha256": "5f34a5ecca1c834003ba4a901133645c6aa9858032eef6ac7cfde3308a7a5265"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/compiler_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/extractor_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/geometry_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/split_parse.log",
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/in_memory_geometry.log",
+      "sha256": "6c76da5365f19d1f0cd9f32d5511bf859020aa6cbbaa4a2123767ca686267e34"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/native_contract_r2/in_memory_split.log",
+      "sha256": "564edaf9b27ed65842cf8ebb05bb7082326f07d4cc67d0f9b8282f1ebe7836f8"
+    }
+  ],
+  "in_level_accepted": false,
+  "user_accepted": false
+}

@@ -48,6 +48,12 @@ static func finish(target: Node3D) -> void:
 				partner_performance.stop()
 		performance.stop()
 
+static func speaker_matches(identity: String, speaker_id: String) -> bool:
+	if speaker_id == "narrator" or identity.is_empty(): return false
+	var canonical := CastProfile.canonical_identity(identity)
+	if not canonical.is_empty(): return CastProfile.canonical_identity(speaker_id) == canonical
+	return identity == speaker_id
+
 static func page(target: Node3D, entry: Dictionary, audio: Node = null) -> void:
 	if target == null or not is_instance_valid(target):
 		return
@@ -67,7 +73,7 @@ func present_page(entry: Dictionary) -> void:
 	page_speaker = speaker
 	delivery_active = false
 	var id := str(profile.get("id", ""))
-	speaking = speaker != "narrator" and (speaker == "player" if id == "kael" else (id != "" and speaker.contains(id)))
+	speaking = speaker_matches(id, speaker)
 	if not speaking and id != "kael" and actor.has_method("is_interaction_enabled"):
 		var actor_id := str(actor.get("interaction_id"))
 		var supporting_speakers: Dictionary = {

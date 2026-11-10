@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "asset": "M08",
+  "status": "source_contract_pass",
+  "candidate_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+  "retained_source_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
+  "candidate_bytes": 1268008,
+  "retained_source_bytes": 1158008,
+  "net_source_bytes": 110000,
+  "protected_action_bytes_equal": true,
+  "protected_action_signatures": {
+    "Attack": "504b8e0e8bbd3994529fb66f32310546d9c20d99ab7e7899ff179589482a24ac",
+    "Attack_Headbutt": "504b8e0e8bbd3994529fb66f32310546d9c20d99ab7e7899ff179589482a24ac",
+    "Attack_Kick": "636f7ff43564e6dfac5ddda433990277cdbf3e759ad3de768e6024db1ff2d302",
+    "AttackHeavy": "636f7ff43564e6dfac5ddda433990277cdbf3e759ad3de768e6024db1ff2d302",
+    "Block": "c584080e0aeff1a556d548a26597ce25fc9bf976faaebd29a66a5b3d8e82185a",
+    "Death": "331cbb3d61541b84a693452db7a12fbec826b8524786c6758ae95f61753d219f",
+    "Eating": "5bbf2dcd479549785c4f9bb4407a5623fb65f1b2d657938a583e7d1fb84500ae",
+    "Gallop": "661d5f40e374badd6e958747178892c9aceea6ae5f29a1e2bd7e1a09028f1b2d",
+    "Gallop_Jump": "8d348c8948d9cce5312d6dd052a00ff4097ed57428c03cfbdb3b82a706db3522",
+    "HitReact": "353d0f025047e3483d49d9210d1ade6f56908616c303b547bd41e831208c53d4",
+    "Idle_2": "a1c08023db2bfd0ff9aeb376ba2af6f711dad313ac3c94824e456254208b9517",
+    "Idle_Headlow": "c584080e0aeff1a556d548a26597ce25fc9bf976faaebd29a66a5b3d8e82185a",
+    "Idle_HitReact1": "353d0f025047e3483d49d9210d1ade6f56908616c303b547bd41e831208c53d4",
+    "Idle_HitReact2": "229244100c38ebc3c1c38518ca6421b219045492c243062f8faacb1af6d5f7bf",
+    "Interact": "a1c08023db2bfd0ff9aeb376ba2af6f711dad313ac3c94824e456254208b9517",
+    "Jump_toIdle": "39ded86b9824122b14e16c403397e428c4e6af650bda584a06bef62d2e743555",
+    "Recovery": "a1c08023db2bfd0ff9aeb376ba2af6f711dad313ac3c94824e456254208b9517",
+    "Running": "661d5f40e374badd6e958747178892c9aceea6ae5f29a1e2bd7e1a09028f1b2d",
+    "Threaten": "c584080e0aeff1a556d548a26597ce25fc9bf976faaebd29a66a5b3d8e82185a",
+    "Walk": "7af49c1700ef706cf7b08605d2b696edb9c6e06243c097d1b996643d55778c90",
+    "Walking": "7af49c1700ef706cf7b08605d2b696edb9c6e06243c097d1b996643d55778c90",
+    "Windup": "c584080e0aeff1a556d548a26597ce25fc9bf976faaebd29a66a5b3d8e82185a"
+  },
+  "retained_base_geometry_unchanged": true,
+  "retained_export_base_bytes_equal": true,
+  "retained_materials_skin_hierarchy_equal": true,
+  "retained_base_mesh_signatures": {
+    "Stag": "df4ba6a3c4553ab6fbb8a90f57ce88c428ac1a62f76c810b4d588cedd5b1f71b",
+    "Stag_Horns": "16e66d9ec81924e06ab13a2dc2295a4fd145d0617d3f5dd7cdb29e1fce37df3c"
+  },
+  "retained_external_source_hashes": {
+    "textures/color_627cd3f3fd3b9aa4c41ba7064e7cf20662998f7cc01f43117b50556dfd044c1a.png": "627cd3f3fd3b9aa4c41ba7064e7cf20662998f7cc01f43117b50556dfd044c1a"
+  },
+  "required_morphs": [],
+  "durations": {
+    "Idle": 3.3333332538604736,
+    "Investigate": 3.3333332538604736,
+    "Feed": 12.083333015441895,
+    "Sleep": 3.3333332538604736
+  },
+  "clips": {
+    "Idle": {
+      "active_bones": [
+        "Head",
+        "Neck1",
+        "Neck2",
+        "Neck3",
+        "Tail2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Investigate": {
+      "active_bones": [
+        "Head",
+        "Neck1",
+        "Neck2",
+        "Neck3",
+        "Tail2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Feed": {
+      "active_bones": [
+        "Head",
+        "Neck1",
+        "Neck2",
+        "Neck3",
+        "Tail2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Sleep": {
+      "active_bones": [
+        "Head",
+        "Neck1",
+        "Neck2",
+        "Neck3",
+        "Tail2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    }
+  },
+  "water_probe_bones": [],
+  "native_prepared_binding_verified": false,
+  "attack_recalibration_required": true,
+  "visual_accepted": false,
+  "user_accepted": false
+}

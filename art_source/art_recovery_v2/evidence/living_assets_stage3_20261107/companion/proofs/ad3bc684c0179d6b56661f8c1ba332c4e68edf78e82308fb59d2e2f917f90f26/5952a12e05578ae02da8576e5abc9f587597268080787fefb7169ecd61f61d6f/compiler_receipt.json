@@ -1,0 +1,32 @@
+{
+	"ambient_source_receipt_sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244",
+	"care_bones": {
+		"head": "Head",
+		"neck": "",
+		"tail": "Tail_0"
+	},
+	"clips": {
+		"idle": "Idle",
+		"walk": "Walking"
+	},
+	"compiler_sha256": "c6e93a4314300babe08261f3c41da1fb26c12ed56907ed12d7090f9d86335cfd",
+	"exact_roundtrip_verified": true,
+	"native_pose_equivalence_verified": false,
+	"output": "res://assets_external/characters_prepared/companions/bracken.scn",
+	"output_sha256": "5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f",
+	"proof_archive": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f",
+	"proof_stage": "authored_ambient_revision",
+	"raw_root_roundtrip_signature": "0c6953571e2eb6fc484293e0304619488bbef4f564d9e7dcf4aed53dd8669f3b",
+	"resource_dependencies": [
+		"res://assets_external/design_pack_v1/creatures/textures/color_2351fb05d815755187e1a70726f00e6e7acbee0bf59aa636016bb11b4b7cf453.png"
+	],
+	"retained_source_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+	"role_normalization_applied": false,
+	"runtime_scale": 0.62,
+	"runtime_yaw": 3.14159265358979,
+	"schema_version": 2,
+	"source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+	"source_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+	"user_accepted": false,
+	"visual_accepted": false
+}

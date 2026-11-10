@@ -1,0 +1,43 @@
+{
+	"contact_shape": {
+
+	},
+	"geometry_contact_verified": true,
+	"identity": "edric",
+	"native_grips_verified": false,
+	"path": "res://assets_external/environment_prepared/living_cast/station_edric.scn",
+	"resources": [
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_edric_00.res",
+			"sha256": "fd855e6074541224f1dcda72b5da79ea57e3a51c8f64a9ad987328cf24a98a39"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_edric_01.res",
+			"sha256": "dd59547fcfebbcaf9107457e0b1a281acd7b2c4590683bedfd97e65648ce9dcd"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_edric_02.res",
+			"sha256": "5136336e1862bf83c0a94d7076b24a27aee5fa16b0c615cfd9046731515ad6d7"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_edric_03.res",
+			"sha256": "cc408e03264dce01bd90c33a3be48e7587bd0d7ca70d6b2f78fbec441a040adc"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_edric_04.res",
+			"sha256": "262247b514b82f8809dc3605deb8211381b0fbe15d5b1c2181927ea366490a9a"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_edric_05.res",
+			"sha256": "970b4cde6f6d3510d97ef874fe25a8988752da4fbb0c05bfba0fc9945cf62324"
+		}
+	],
+	"sha256": "ea796d33b6e9bdf63b583217f11ca8e4dfeca6eb56ef84ce11522b1a9d9d48ac",
+	"source_sha256": "09f398c7798a60b5bb2d88e481ef4f5b02bb2770b3aca78d75c62243bae93d6e",
+	"support_bounds_verified": true,
+	"surface_contact_errors": {
+		"GripLeft": 0.0,
+		"GripRight": 0.0
+	},
+	"user_accepted": false
+}

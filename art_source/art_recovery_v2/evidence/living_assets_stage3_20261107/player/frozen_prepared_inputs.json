@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "old_code_mounted": false,
+  "files": [
+    {
+      "asset": "P01",
+      "resource": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
+      "sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
+      "bytes": 875477,
+      "frozen_pack": "D:\\Projects\\AshenOath\\.release-gate\\startup-half-r4-20261107\\runtime-packs\\actor_p01.pck",
+      "frozen_pack_sha256": "07f318e6278dd5fd6dc556744be234791a0a40a9ad6a9b3b2edcd60b7e9f5794",
+      "catalog_match": true
+    }
+  ],
+  "total_bytes": 875477
+}

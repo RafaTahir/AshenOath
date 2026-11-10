@@ -1,0 +1,58 @@
+{
+  "scope": "Exact native r4 proof for the archived measured Ashwing source",
+  "source_inventory": {
+    "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/source_inventory.json",
+    "bytes": 27401,
+    "sha256": "9275d8b9f2396b5d78ad495ff797123d8c9aeb6a5683b544ee1c0e4246c83b24"
+  },
+  "candidate_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+  "checks": 13730,
+  "files": [
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/native_run/candidate_pose.gd",
+      "source": ".verification/motion/m07_candidate_pose_r4/candidate_pose.gd",
+      "bytes": 22899,
+      "sha256": "5657e1948b01cdaa1b804b6e70aae962561333d78fe5cdd2c23f57561d945a48"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/native_run/candidate_source_contract.gd",
+      "source": ".verification/motion/m07_candidate_pose_r4/candidate_source_contract.gd",
+      "bytes": 11092,
+      "sha256": "726e3b96f15afd3947acb0a2f40010a9b8d862d6a99fa15e520235d0a93698a1"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/native_run/native.json",
+      "source": ".verification/motion/m07_candidate_pose_r4/native.json",
+      "bytes": 27612,
+      "sha256": "9c2d569db1e4cb8d62615c967765e611e65eebc1de73aa8cd071c294ae062c55"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/native_run/native.log",
+      "source": ".verification/motion/m07_candidate_pose_r4/native.log",
+      "bytes": 162,
+      "sha256": "c4cd409f8950b28ff59b0d1af0c5b3134d12d0b4fa5b116976392ba9dda8147e"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/native_run/parse.log",
+      "source": ".verification/motion/m07_candidate_pose_r4/parse.log",
+      "bytes": 75,
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/native_run/receipt.json",
+      "source": ".verification/motion/m07_candidate_pose_r4/receipt.json",
+      "bytes": 53666,
+      "sha256": "346973a95db79e81d8606a7f9b5d32b96f17c5c99122687d9c8b0e64aae73a5a"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/native_run/run_m07_candidate_pose_r4.py",
+      "source": ".verification/motion/run_m07_candidate_pose_r4.py",
+      "bytes": 12382,
+      "sha256": "dccfd39696bf42a121d66cbda376d0e71a2d1a34fca9e7a53f11707437c589f0"
+    }
+  ],
+  "runtime_installed": false,
+  "attack_recalibrated": false,
+  "in_level_accepted": false,
+  "published": false
+}

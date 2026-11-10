@@ -1,0 +1,325 @@
+{
+  "station_edric": {
+    "carrier_sha256": "09f398c7798a60b5bb2d88e481ef4f5b02bb2770b3aca78d75c62243bae93d6e",
+    "meshes": [
+      {
+        "mesh": "Scroll_1_Cube.152",
+        "closed_edges": true,
+        "signed_volume": 0.00022054533115009657,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.001",
+        "closed_edges": true,
+        "signed_volume": 1.5599999169306842e-07,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.002",
+        "closed_edges": true,
+        "signed_volume": 1.5599999169306842e-07,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.003",
+        "closed_edges": true,
+        "signed_volume": 1.5599999169306842e-07,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cylinder",
+        "closed_edges": true,
+        "signed_volume": 4.177910253863294e-06,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube",
+        "closed_edges": true,
+        "signed_volume": 0.000262400034856795,
+        "outward_closed_winding": true
+      }
+    ]
+  },
+  "station_elna": {
+    "carrier_sha256": "5be1ad8c15eb1fda1d45065637871ccd54211cd139da9d1642925cd487901a09",
+    "meshes": [
+      {
+        "mesh": "Banner_1_Cloth_Cube.227",
+        "closed_edges": false,
+        "signed_volume": 5.1509534882089844e-05,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "WorkContactPart",
+        "closed_edges": true,
+        "signed_volume": 8.116708528671412e-05,
+        "outward_closed_winding": true
+      }
+    ]
+  },
+  "station_merrow": {
+    "carrier_sha256": "714bcacdf8b79d40da2d22bbb64278a738aeab3aa200df4eb014112fbd53edff",
+    "meshes": [
+      {
+        "mesh": "Cube",
+        "closed_edges": true,
+        "signed_volume": 0.0015287999869674428,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.010",
+        "closed_edges": true,
+        "signed_volume": 2.200000197067861e-07,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.002",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.003",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.004",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.005",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.006",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.007",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.008",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.009",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.001",
+        "closed_edges": true,
+        "signed_volume": 0.000387200059270858,
+        "outward_closed_winding": true
+      }
+    ]
+  },
+  "station_nera": {
+    "carrier_sha256": "de6725abab778a6a46d4dcad85886f76bd81cf4f742c03a690801266661901d9",
+    "meshes": [
+      {
+        "mesh": "Cube",
+        "closed_edges": true,
+        "signed_volume": 6.912000090837465e-06,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Crate_Wooden_Cube.017",
+        "closed_edges": false,
+        "signed_volume": 0.007439243144165513,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "WorkContactPart",
+        "closed_edges": true,
+        "signed_volume": 4.6079999771117094e-05,
+        "outward_closed_winding": true
+      }
+    ]
+  },
+  "station_nessa": {
+    "carrier_sha256": "8e80e78e3ffba8ecc1624a622ad420f9d0c39c982c4c86ce857f1c4b849cd9e8",
+    "meshes": [
+      {
+        "mesh": "Cube.001",
+        "closed_edges": true,
+        "signed_volume": 3.120000060871239e-06,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.002",
+        "closed_edges": true,
+        "signed_volume": 3.120000060871239e-06,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube",
+        "closed_edges": true,
+        "signed_volume": 0.0012096001106679467,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "WorkContactPart",
+        "closed_edges": true,
+        "signed_volume": 0.00037466279699277066,
+        "outward_closed_winding": true
+      }
+    ]
+  },
+  "station_toma": {
+    "carrier_sha256": "c3844681b45ae016f2d3eba0d4d8d55ee171968495ffc172210627c66e45b7ec",
+    "meshes": [
+      {
+        "mesh": "Crate_Wooden_Cube.017",
+        "closed_edges": false,
+        "signed_volume": 0.0013886586929556502,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "SeedlingLeaf",
+        "closed_edges": false,
+        "signed_volume": 2.19199908250069e-05,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "SeedlingLeaf.001",
+        "closed_edges": false,
+        "signed_volume": 2.658666480317691e-05,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "SeedlingLeaf.002",
+        "closed_edges": false,
+        "signed_volume": 3.125333561485017e-05,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "SeedlingLeaf.003",
+        "closed_edges": false,
+        "signed_volume": 3.5920003607720766e-05,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.003",
+        "closed_edges": true,
+        "signed_volume": 0.00036652002506613743,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.001",
+        "closed_edges": true,
+        "signed_volume": 0.00020944001113891596,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.002",
+        "closed_edges": true,
+        "signed_volume": 0.00020944001113891596,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube",
+        "closed_edges": true,
+        "signed_volume": 0.00039560007860064744,
+        "outward_closed_winding": true
+      }
+    ]
+  },
+  "station_vale": {
+    "carrier_sha256": "9a1ac9a7f19e0df2b3aefec07c6764f3e1f5abfac1349144fb956eab36474aa2",
+    "meshes": [
+      {
+        "mesh": "Cube.001",
+        "closed_edges": true,
+        "signed_volume": 2.5199998795660226e-07,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Book_7_Cube.133",
+        "closed_edges": false,
+        "signed_volume": 0.0016866755081319665,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.002",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.003",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.004",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.005",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.006",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.007",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.008",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.009",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.010",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube.011",
+        "closed_edges": true,
+        "signed_volume": 9.000000208499836e-08,
+        "outward_closed_winding": true
+      },
+      {
+        "mesh": "Cube",
+        "closed_edges": true,
+        "signed_volume": 0.00036960004703998344,
+        "outward_closed_winding": true
+      }
+    ]
+  }
+}

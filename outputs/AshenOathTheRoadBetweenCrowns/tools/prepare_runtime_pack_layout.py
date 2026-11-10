@@ -14,6 +14,7 @@ from pathlib import Path
 from runtime_pack_validation import require_valid_pack_graph
 from partition_actor_packs import partition_actor_packs
 from prepared_forest_tree_layout import load_prepared_forest_trees
+from partition_living_campaign_packs import partition_living_campaign_packs
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -600,6 +601,8 @@ def compile_layout(defer_environment=False, require_prepared_forest=False):
     manifest["pack_presets"]["opening_materials"] = materials
     manifest["pack_presets"]["quality_materials"] = "Runtime Pack Quality Materials"
     partition_actor_packs(PROJECT, config, sections, manifest, prepared_catalog, standalone_sources)
+    partition_living_campaign_packs(PROJECT, config, sections, manifest,
+                                    require_prepared_companion=not defer_environment)
     # Actor partitioning can create presets and replace inherited exclusion
     # sets. Reapply the forest ownership boundary to the final preset set too.
     for name, section in sections.items():

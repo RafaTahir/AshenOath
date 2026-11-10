@@ -1,0 +1,20 @@
+{
+  "reason": "preserve exact r1 producer and failed compiler before transport repair",
+  "files": [
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\author_living_world_parts.py",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r1\\source_failure\\author_living_world_parts.py",
+      "sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_living_world_blender.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r1\\source_failure\\build_living_world_blender.gd",
+      "sha256": "600bda16a9162135d49c118e35d28418b173d5f4ba32750200502174c1449414"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_living_scenery_pipeline.py",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r1\\source_failure\\run_living_scenery_pipeline.py",
+      "sha256": "7dd338eb24d4407229d7e14823b03c446eaeb07f9032187253daf0e891391309"
+    }
+  ]
+}

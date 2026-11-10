@@ -1,0 +1,20 @@
+{
+	"asset": "C09",
+	"baseline_sha256": "d51b9c567b34eef5f8f25aac191124ce8c363d88f00ae804e9f10cac4949f853",
+	"engine_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"prepared_resource": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
+	"prepared_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
+	"production_resource": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+	"production_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+	"runtime_verified": false
+}

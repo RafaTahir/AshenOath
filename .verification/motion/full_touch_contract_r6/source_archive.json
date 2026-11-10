@@ -1,0 +1,50 @@
+{
+  "scope": "exact passing r6 source bytes",
+  "files": [
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud\\hud_style.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\hud_style.gd",
+      "sha256": "3be9565963a6e1dbf43767f6f6692e917ef144d9912853667607bff76b1eeb4e"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\community_touch_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\community_touch_input.gd",
+      "sha256": "9f0a7d5a2580eaec7fea6d77de285054b0898fdc443cce9f916c939bdb76eb1c"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_community_touch_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\verify_community_touch_input.gd",
+      "sha256": "6121618a5d5c8b47b5a8097065a932aee55a41ee49168abbe98f33a0d6a5c645"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\run_styled_touch_contract.py",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\run_styled_touch_contract.py",
+      "sha256": "accffc2c838e33b596b44ca9228ddc355806b30c8397a986f0dfc27a772bbea0"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\generated_legacy_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\generated_legacy_input.gd",
+      "sha256": "d97dbff7c76b8d0e6d0caacacb54af01092acfc225fff6a6524c1b5849b40f4d"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_opening_real_input_native.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\verify_opening_real_input_native.gd",
+      "sha256": "a0a6f9bba050c01ae07839b06b0be52b879acafe0af086c966539311f851ef95"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\community_acceptance_legacy.py",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\community_acceptance_legacy.py",
+      "sha256": "ba8abe77c502f673bdc8a91f91bb70285c6b15f500561a1d81922bdf55e56a66"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_full_campaign_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\verify_full_campaign_input.gd",
+      "sha256": "ea10e3913de2987982f8145edc11f94860672960c539549d3f4c62ba93739399"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_community_world_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r6\\source\\verify_community_world_input.gd",
+      "sha256": "be4bea344817092e1c984b3ebb8097649057b3ba5b8333dd96aff0cdd202979d"
+    }
+  ]
+}

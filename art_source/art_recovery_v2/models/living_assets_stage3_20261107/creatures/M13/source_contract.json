@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "asset": "M13",
+  "status": "source_contract_pass",
+  "candidate_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+  "retained_source_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+  "candidate_bytes": 1759984,
+  "retained_source_bytes": 1703908,
+  "net_source_bytes": 56076,
+  "protected_action_bytes_equal": true,
+  "protected_action_signatures": {
+    "Attack": "953a2c60494c82a67ad2e1ef1c91379caacc2c7444650769e05785e380014398",
+    "AttackHeavy": "30cb102a2dafe7aabcd1f1bd8850ed696a1f8dbe15d22dacbe52a2388c305fba",
+    "Block": "4c879241fd8e834f01295a82bcfbd0308b5bfb95799cd8130c5e6a6583734db8",
+    "Death": "fb0d41ba81fc35f16fd9a98caa025c242716e4a562667f3cea81a8caadd45fdf",
+    "HitReact": "e8e9aa1b157130452eff68afd5ca46cc4512ab28f5e46371ccde51d010f453b4",
+    "Interact": "77b996b6aa441f558f7016c4ca59dba7f396a01850b46ce13da8a1f204d3cdbb",
+    "Recovery": "9ec4d20611b0d7ca93646451012ae911b2cda6d43ed1e72cf02455c494ab3062",
+    "Running": "3c613e269e8bb9d824d6513b5c442f1b03899d7ff0fa711e37092239805dbfad",
+    "Threaten": "da6f66012ce7d094f0c2cad83fbc6eb6f812f9a8cb3316fcdf37c47f8c3c712c",
+    "Walking": "a47893c3a3978b69f7115733b3c3bb5c5bf6431594a99b73ee963b9c0db81a69",
+    "Windup": "452f52e2a4cfbf0fd86f35313845f2372d7c6f522d2b2df877cd0f48424a036d"
+  },
+  "retained_base_geometry_unchanged": true,
+  "retained_export_base_bytes_equal": true,
+  "retained_materials_skin_hierarchy_equal": true,
+  "retained_base_mesh_signatures": {
+    "M13_CompiledPrivateBody": "d1fb93cee6b2c7004fea17dbd621d86f32dd218b27e04367201e70936d1a0f4a"
+  },
+  "retained_external_source_hashes": {
+    "textures/color_2351fb05d815755187e1a70726f00e6e7acbee0bf59aa636016bb11b4b7cf453.png": "2351fb05d815755187e1a70726f00e6e7acbee0bf59aa636016bb11b4b7cf453"
+  },
+  "required_morphs": [],
+  "durations": {
+    "Idle": 4.0,
+    "Investigate": 2.7916667461395264,
+    "Feed": 3.2083332538604736,
+    "Sleep": 4.583333492279053
+  },
+  "clips": {
+    "Idle": {
+      "active_bones": [
+        "Head",
+        "Jaw",
+        "Tail_0",
+        "Tail_1",
+        "Tail_2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Investigate": {
+      "active_bones": [
+        "Head",
+        "Jaw",
+        "Tail_0",
+        "Tail_1",
+        "Tail_2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Feed": {
+      "active_bones": [
+        "Head",
+        "Jaw",
+        "Tail_0",
+        "Tail_1",
+        "Tail_2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Sleep": {
+      "active_bones": [
+        "Head",
+        "Jaw",
+        "Tail_0",
+        "Tail_1",
+        "Tail_2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    }
+  },
+  "water_probe_bones": [],
+  "native_prepared_binding_verified": false,
+  "attack_recalibration_required": true,
+  "visual_accepted": false,
+  "user_accepted": false
+}

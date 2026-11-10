@@ -620,7 +620,7 @@ func _boss_is_resolved(id: String) -> bool:
 	var saved: Variant = boss_saved_states.get(id, {})
 	if typeof(saved) == TYPE_DICTIONARY:
 		var saved_outcome := str(saved.get("outcome", ""))
-		return saved_outcome in ["defeated", "release", "testimony", "witness", "mercy", "duty", "ash"]
+		return saved_outcome in ["defeated", "release", "testimony", "witness", "mercy", "duty", "ash", "concord", "open_road"]
 	return false
 
 func _ensure_bell_eater() -> void:

@@ -3,7 +3,7 @@ extends CharacterBody3D
 const ID := "bracken"
 const QUEST := "side_bracken_rescue"
 const RESCUE_POSITION := Vector3(-2.0, 0.02, -11.0)
-const BODY_PATH := "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb"
+const BODY_PATH := "res://assets_external/characters_prepared/companions/bracken.scn"
 const Interactable = preload("res://scripts/interactable.gd")
 const Surface = preload("res://scripts/spatial_surface_contract.gd")
 const CompanionPose = preload("res://scripts/companion_pose.gd")

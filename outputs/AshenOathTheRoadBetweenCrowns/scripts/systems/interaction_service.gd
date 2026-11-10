@@ -3,6 +3,7 @@ extends "res://scripts/systems/game_bindings.gd"
 signal interaction_focus_updated(target: Node)
 
 func _handle_interaction(area) -> void:
+	if preload("res://scripts/story_activity_director.gd").handle_community(_host, area): return
 	if current_zone_id == "greyfen" and area != null:
 		preload("res://scripts/greyfen_guidance.gd").learn(_host, "use")
 	if area != null and area.interaction_id == "bracken" and str(story_state.get_flag("bracken_home", "")) == "adopted":

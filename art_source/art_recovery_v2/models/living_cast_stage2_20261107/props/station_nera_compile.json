@@ -1,0 +1,31 @@
+{
+	"contact_shape": {
+
+	},
+	"geometry_contact_verified": true,
+	"identity": "nera",
+	"native_grips_verified": false,
+	"path": "res://assets_external/environment_prepared/living_cast/station_nera.scn",
+	"resources": [
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_nera_00.res",
+			"sha256": "e7699559d3b30eb3a5743d219db66d377ceba55e9e67c87e0e7208e643f9bc7b"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_nera_01.res",
+			"sha256": "8027597a8142932a10a45d035559c4e1f25c420b11ba568dfc2c84fa71321edc"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_nera_02.res",
+			"sha256": "93ee10caa442b89ff6794e27f8a8b2ab4c7d2699bc30bd7c47e6c6690383cb4b"
+		}
+	],
+	"sha256": "4745dcd5a710b61e6d256f74228b833994719360f27cbd54e0f0bf86287f1ba6",
+	"source_sha256": "de6725abab778a6a46d4dcad85886f76bd81cf4f742c03a690801266661901d9",
+	"support_bounds_verified": true,
+	"surface_contact_errors": {
+		"GripLeft": 0.00000000745058059692383,
+		"GripRight": 0.00000000745058059692383
+	},
+	"user_accepted": false
+}

@@ -1,0 +1,1200 @@
+{
+  "schema_version": 1,
+  "scope": "Non-executable promotion preparation only; exact current candidate/source identities",
+  "source_preview_review": {
+    "path": ".verification/creatures/promotion_review_r1/source_preview_review.json",
+    "bytes": 32249,
+    "sha256": "422d510a02de37419e5bec7b7b32b96d696ecec8990daf1e30dffc01e05c47f0"
+  },
+  "assets": [
+    {
+      "asset": "M01",
+      "species": "ghoulkin",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+        "bytes": 1941652,
+        "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/M01_retained_input.glb",
+        "bytes": 1941652,
+        "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/M01_living_candidate.glb",
+        "bytes": 2056556,
+        "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/authoring.json",
+        "bytes": 18811,
+        "sha256": "c4c4ca8c9de2c6993632cdcf148d160d469dae662605143cc69feb1edf3b6c07"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_contract.json",
+        "bytes": 4820,
+        "sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "4982bdacf06e0a024da15716fa8e5672ae8fce711381ab1eaf3fd98fca8f354b",
+        "candidate_sha256": "4982bdacf06e0a024da15716fa8e5672ae8fce711381ab1eaf3fd98fca8f354b",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M01_raw_bind_bounds.json",
+          "bytes": 48769,
+          "sha256": "1fd6a830ad8d5fc4babe3651b0eb179a334026dec837e37f99f53c4aa9b5cd71"
+        }
+      },
+      "native_proof": {
+        "status": "exact_candidate_raw_native_pass",
+        "verified": true,
+        "receipt": {
+          "path": ".verification/motion/candidate_m01_paired_20261110_r1/native.json",
+          "bytes": 27801,
+          "sha256": "d57c422fa6690b17e32d1650973ebaf7e33142c66b9b96e3ca14045373d3354b"
+        },
+        "raw_bind_bounds_proof_sha256": "36e7430fc2ca91675137c7d51a66bd3b67d43b3d40c78686ff35435ee2eeceaf",
+        "prepared_role_scale_verified": false,
+        "collision_dimensions_verified": false
+      },
+      "source_review": {
+        "source_preview_reviewed": false,
+        "scope": "Prior separate source review; not re-reviewed in this17-unit pass"
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M02",
+      "species": "wychwood_stalker",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+        "bytes": 1777228,
+        "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/M02_retained_input.glb",
+        "bytes": 1777228,
+        "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/M02_living_candidate.glb",
+        "bytes": 1906460,
+        "sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/authoring.json",
+        "bytes": 20986,
+        "sha256": "6068bdf517a7ace0ea8782a19dc09f3e7583f87dc9ada5c9a1225cd9ce593801"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_contract.json",
+        "bytes": 3302,
+        "sha256": "5189a8bee86d5260db1a67a731aa7e0504b9af3265408284e4757cea35157e19"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "d8738e1077f9f0a8cbf0f1195ba5dceb9be3daf126e759d124283d3ef856224f",
+        "candidate_sha256": "d8738e1077f9f0a8cbf0f1195ba5dceb9be3daf126e759d124283d3ef856224f",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M02_raw_bind_bounds.json",
+          "bytes": 38971,
+          "sha256": "619dd43a206abfde884b5ffbc8c066257f06187f03c6a0a2ed58665623c2b719"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Idle quarter frames show a readable small muzzle/neck change with stable broad shoulder silhouette. Feed crouches low and Sleep curls onto the side.",
+        "follow_up": "Feed38 and Sleep50 crop fingers/extremities at the lower frame edge; source camera is insufficient for complete hand/floor clearance review.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M03",
+      "species": "bog_wretch",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+        "bytes": 1885396,
+        "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/M03_retained_input.glb",
+        "bytes": 1885396,
+        "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/M03_living_candidate.glb",
+        "bytes": 1980484,
+        "sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/authoring.json",
+        "bytes": 22908,
+        "sha256": "23655d2807b8f1decc2f74dc9e4e372685bcf76d849e48ff6f831544bb1da8d4"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_contract.json",
+        "bytes": 5710,
+        "sha256": "73e9de3fa0a89d759a0b4a6d728cb3f0eb0c88a8f7e19ee8f480a53e98555a3d"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "dc9e33e25cb179f5d5ce7605f4a15af59d0e5cf0bc91c13237fb0470e826e18a",
+        "candidate_sha256": "dc9e33e25cb179f5d5ce7605f4a15af59d0e5cf0bc91c13237fb0470e826e18a",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M03_raw_bind_bounds.json",
+          "bytes": 50253,
+          "sha256": "828922f84dbdce7e929ea90042601c35b507ab5049293c56abe8a64df34f821a"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Idle glance is restrained. Feed stands much more upright; Sleep is supine, so the states remain visually distinct.",
+        "follow_up": "Feed exposes sharp upward waist/abdominal panels; compare retained pose before classifying a new garment defect. Sleep feet are cropped; floor contact is unassessed.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M04",
+      "species": "gravebound_knight",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+        "bytes": 2620992,
+        "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/M04_retained_input.glb",
+        "bytes": 2620992,
+        "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/M04_living_candidate.glb",
+        "bytes": 2744036,
+        "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/authoring.json",
+        "bytes": 13371,
+        "sha256": "93a5fa495a6e7773635cc6d23d2c07f3cc615e1018b47e940f4a38ddad6ec8fd"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_contract.json",
+        "bytes": 3770,
+        "sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "1abd19412fa8ad0abb89ce0e33e66adeb60fd4a935103cde9cd18694f3bce3eb",
+        "candidate_sha256": "1abd19412fa8ad0abb89ce0e33e66adeb60fd4a935103cde9cd18694f3bce3eb",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M04_raw_bind_bounds.json",
+          "bytes": 47278,
+          "sha256": "0ff572e7ee03c9bc4780646d5675b3258c2886198165ff7b4d8d61b84c9fb0d1"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Helmet/shoulder movement is very subtle; Feed bends deeply and Sleep is supine while retaining the armor silhouette.",
+        "follow_up": "Sword hilt appears offset above the closed fist in Idle25/75 and Feed38/61. Verify retained versus candidate hand/socket alignment; Sleep boot tips are cropped.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M05",
+      "species": "bell_eater",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+        "bytes": 2314140,
+        "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/M05_retained_input.glb",
+        "bytes": 2314140,
+        "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/M05_living_candidate.glb",
+        "bytes": 2429516,
+        "sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/authoring.json",
+        "bytes": 20952,
+        "sha256": "90aa76fac4f0a5b224e372837a53a8754698d84d79a74d55cc7ac5c65473c0ab"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_contract.json",
+        "bytes": 5229,
+        "sha256": "a6b4e45e1f24c21e8d0e0effb47a059ef8f6aebca65c76d902a163154ba98fce"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "5e0e7b8dddc5e6b5bda54cfac30dad6a98748101e3888ca7f6ba9781f95e49d0",
+        "candidate_sha256": "5e0e7b8dddc5e6b5bda54cfac30dad6a98748101e3888ca7f6ba9781f95e49d0",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M05_raw_bind_bounds.json",
+          "bytes": 49250,
+          "sha256": "b119007d13ed85cae8a2e38a80434c1093703dd13d6c8f1b2db7cf9674562c33"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Head inclination changes slightly around the bell in idle; Feed bows toward the opening.",
+        "follow_up": "Sleep50 tips the bell above the supine torso with substantial visible separation; compare retained attachment and pose before acceptance. No source contact claim.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M06",
+      "species": "rootbound_colossus",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+        "bytes": 6375916,
+        "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/M06_retained_input.glb",
+        "bytes": 6375916,
+        "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/M06_living_candidate.glb",
+        "bytes": 6424756,
+        "sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/authoring.json",
+        "bytes": 16406,
+        "sha256": "2fa91084025972138a0616d59cbd00e9488031184f373b3d3fdaf37ea5fa4591"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_contract.json",
+        "bytes": 3739,
+        "sha256": "fabf2353fb40202815c1984aff13521bfae322dc6d5692cfe1287cf37afd8520"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "d2ea7b98bd559e263380163c3bb85615a9ed9229d360e386a8c6591d7299f1a7",
+        "candidate_sha256": "d2ea7b98bd559e263380163c3bb85615a9ed9229d360e386a8c6591d7299f1a7",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M06_raw_bind_bounds.json",
+          "bytes": 12551,
+          "sha256": "c0d15a0888d15c2f04eb0e5ef7bf792c2cc433adcd6a619cf2859a9b446298aa"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Arms and crown shift minimally while large feet and trunk silhouette remain steady.",
+        "follow_up": "Feed and Sleep remain near the standing idle silhouette; full-cycle/game-distance readability is not established by these stills.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M07",
+      "species": "ashwing",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+        "bytes": 2097816,
+        "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_retained_input.glb",
+        "bytes": 2097816,
+        "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+        "bytes": 2215112,
+        "sha256": "298fb8e7ae7a03beec4e73b5f960f5f9b71d8bc2fcf46358d54334f80c832944"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+        "bytes": 14215,
+        "sha256": "cdb0c602b8f217f497ab3e93ea54f9669ecc43ffb28cf7ca04109a68a8fc9b77"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+        "bytes": 3778,
+        "sha256": "6b8f653398cd702394d4a600ffcd3a62b013155d5cea1eb00c73fe104a4c0572"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "8dbc10c0a8956a074d0c8608a760f6caa0c45a109c998ee140f6b03def455043",
+        "candidate_sha256": "8dbc10c0a8956a074d0c8608a760f6caa0c45a109c998ee140f6b03def455043",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M07_raw_bind_bounds.json",
+          "bytes": 21102,
+          "sha256": "4ed7d560d5260133f3227dadb9281eb2bb41b0f12815ee1228d126d738b0a9d5"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Small wing-tip/neck changes are visible; the wing membrane silhouette remains continuous in inspected views.",
+        "follow_up": "All inspected states retain fully spread wings, including Sleep; the folded-wing intent is not demonstrated. Feed reads near alert idle. Held for a real wing-rest/feeding revision review.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": true,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M08",
+      "species": "white_hart_avatar",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+        "bytes": 1158008,
+        "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/M08_retained_input.glb",
+        "bytes": 1158008,
+        "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/M08_living_candidate.glb",
+        "bytes": 1268008,
+        "sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/authoring.json",
+        "bytes": 18327,
+        "sha256": "c479d5e5b2d90ed48c45095dd2c14467035db806cb2645957fb64fa705668f86"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_contract.json",
+        "bytes": 4027,
+        "sha256": "6647779d149f936b751a39ed13b6f34ae11eaf21a9a2bd33b43a0183df9f8ea7"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "9157fa0ad29ce6aa63a05dfc120c3c9cfbaaf4d2a8c80714be7e9d30b4788717",
+        "candidate_sha256": "9157fa0ad29ce6aa63a05dfc120c3c9cfbaaf4d2a8c80714be7e9d30b4788717",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M08_raw_bind_bounds.json",
+          "bytes": 29570,
+          "sha256": "5cc14aad5d08d0cbc45d95e9ea625435d26118a510bc6b7e37e03c5ef741e561"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Quarter-phase antler/neck positions differ subtly; Sleep lowers the head/body and bends the front legs.",
+        "follow_up": "Feed38 head remains high and resembles idle; a feeding/contact interpretation and floor clearance need contextual/full-cycle review.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M09",
+      "species": "silt_maw",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+        "bytes": 1036332,
+        "sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/M09_retained_input.glb",
+        "bytes": 1036332,
+        "sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/M09_living_candidate.glb",
+        "bytes": 1100424,
+        "sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/authoring.json",
+        "bytes": 13675,
+        "sha256": "c821cffc3a9d79662a1cb1da76a0e14bb1394874783edf02364ebb951f5d171c"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_contract.json",
+        "bytes": 3261,
+        "sha256": "2e29f0ec8c2c774327ca3c202bbf3923aa80dd1697f8256562305d9c968001a6"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "36ce0e63bf10f6cb57133c58870089e224d8855bcb88b015e2bd8dd9ab12e48f",
+        "candidate_sha256": "36ce0e63bf10f6cb57133c58870089e224d8855bcb88b015e2bd8dd9ab12e48f",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M09_raw_bind_bounds.json",
+          "bytes": 9250,
+          "sha256": "cd3d1b113edd748c2b6d952a8054180db3e4e5a776aa11499ba469b0bd883cae"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Anterior head/jaw and body curvature differ slightly between quarter phases; Sleep lowers the broad head while ring silhouette stays continuous.",
+        "follow_up": "Small substrate-probe motion needs full-cycle and intended-distance review; no actual substrate contact is shown.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M10",
+      "species": "millback",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M10_Millback.glb",
+        "bytes": 949016,
+        "sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/M10_retained_input.glb",
+        "bytes": 949016,
+        "sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/M10_living_candidate.glb",
+        "bytes": 1013396,
+        "sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/authoring.json",
+        "bytes": 13502,
+        "sha256": "28023648f7eea8bf4d6184690b2be30e261580ff5fdc435d0ddf0c8622cdb76b"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_contract.json",
+        "bytes": 3068,
+        "sha256": "aa20054977ed01879dd82970b264494a26983a7f5dc9dc897559a82ea2b1c78e"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "b786a5646fdab988ee0977f610d9334e1dc3ea7b754adc7d4d5898da8d786f99",
+        "candidate_sha256": "b786a5646fdab988ee0977f610d9334e1dc3ea7b754adc7d4d5898da8d786f99",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M10_raw_bind_bounds.json",
+          "bytes": 15739,
+          "sha256": "7b446d4f9896da54da41d5d51002db322fd151763fd2fccc201bbfba290111c8"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Independent claw positions change while shell and support-leg silhouette remain stable; Sleep brings the claws lower.",
+        "follow_up": "Dark triangular openings are visible around both claw ends across frames; determine retained mesh opening versus overlap before declaring a defect. No surface contact proof.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M11",
+      "species": "glassmoth",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+        "bytes": 1356200,
+        "sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/M11_retained_input.glb",
+        "bytes": 1356200,
+        "sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/M11_living_candidate.glb",
+        "bytes": 1426384,
+        "sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/authoring.json",
+        "bytes": 13550,
+        "sha256": "73994d3309beb2b157c44db2f29e1b5f0f8994a23169dcd73c0273dda78a1575"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_contract.json",
+        "bytes": 3117,
+        "sha256": "a3422e4c85267a78d474f06fa71f81135f762791ab2e75912a3aee77ffae9411"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "adeadf743e155a4d3b21496c132e5979148e1d6a6f013e127211a71cd8539cf4",
+        "candidate_sha256": "adeadf743e155a4d3b21496c132e5979148e1d6a6f013e127211a71cd8539cf4",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M11_raw_bind_bounds.json",
+          "bytes": 16539,
+          "sha256": "2ca59b2570d8fd8fbcaeb567e26db773cce448771b9794b49e423c3bfa9700c0"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Fore/hind wing angles differ at opposite phases and head lowers in Sleep; the body silhouette is retained.",
+        "follow_up": "Fore/hind wing overlap produces a dark band already present at Idle00. Side/native motion comparison is needed to distinguish underside shadow from sheet intersection. Feed coil motion is subtle.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M12",
+      "species": "knell_leech",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+        "bytes": 809404,
+        "sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/M12_retained_input.glb",
+        "bytes": 809404,
+        "sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/M12_living_candidate.glb",
+        "bytes": 873484,
+        "sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/authoring.json",
+        "bytes": 13691,
+        "sha256": "318b2806fd3fd82cf7432d12cd26d56d39d2e0c43511ee3909cfa08531f360ac"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_contract.json",
+        "bytes": 3259,
+        "sha256": "8c60446f7c9fcceb1be1e4e6ab40452552f33d6222bf72e116d9a07849a3ac67"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "0cfcc038451a8969a1784467c774204f316ed7f25799c6462f3ad0a339f84e64",
+        "candidate_sha256": "0cfcc038451a8969a1784467c774204f316ed7f25799c6462f3ad0a339f84e64",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M12_raw_bind_bounds.json",
+          "bytes": 9233,
+          "sha256": "6bcec803b1ae2403dd2e4e86a80c1c1f03aa11387a5f0d0eef7ecb1e0bec2ab9"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Anterior suction ring and segment curvature change slightly; Sleep lowers/tilts the ring.",
+        "follow_up": "Sleep50 exposes a dark separation at the mouth-ring/body junction, less exposed in Idle00/25/75 and Investigate50. Retained-versus-candidate comparison required.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M13",
+      "species": "hearthscale",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+        "bytes": 1703908,
+        "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/M13_retained_input.glb",
+        "bytes": 1703908,
+        "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/M13_living_candidate.glb",
+        "bytes": 1759984,
+        "sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/authoring.json",
+        "bytes": 13418,
+        "sha256": "2aca1c1bd236c0f6f99752815af8f388972557e0da821e3e4a58a510161442f1"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_contract.json",
+        "bytes": 2989,
+        "sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "0eca90caa9f74bd70bae775651bb16b7902482aa20b09b50d420aab08fe9e47b",
+        "candidate_sha256": "0eca90caa9f74bd70bae775651bb16b7902482aa20b09b50d420aab08fe9e47b",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M13_raw_bind_bounds.json",
+          "bytes": 12473,
+          "sha256": "706e68a5e82ba9affe48ec0a5f922bf1e224435af554f5c28c1dd72b29e87e69"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Head and tail positions change subtly between quarters; Sleep visibly lowers the head and eyelids. Limbs and dorsal plates remain coherent in these views.",
+        "follow_up": "Feed remains close to idle at this sample. Companion scale/facing, pet/feed contact and actual floor contact remain separate unverified scopes.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M14",
+      "species": "gallows_weaver",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+        "bytes": 1297024,
+        "sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/M14_retained_input.glb",
+        "bytes": 1297024,
+        "sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/M14_living_candidate.glb",
+        "bytes": 1361664,
+        "sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/authoring.json",
+        "bytes": 13469,
+        "sha256": "b3983072441f085a31309b5090548f6d7912eb67908133dd111e8d9899743f0b"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_contract.json",
+        "bytes": 3033,
+        "sha256": "7809c02760e4af80577243e348d42e482fb9801b6237a48cdca523a8c55534d6"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "25b781b0fc4935364b684009e3cd372d807b919d5c1eb1a39d0108ebb91ceaa9",
+        "candidate_sha256": "25b781b0fc4935364b684009e3cd372d807b919d5c1eb1a39d0108ebb91ceaa9",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M14_raw_bind_bounds.json",
+          "bytes": 15710,
+          "sha256": "a945a16d5f39a759dd248a9251555e9e9ff4cd894f75bfd51fbacfe59e27acad"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Foreleg angles change independently while the other leg silhouette is largely stable; Sleep lowers the head/chelicerae.",
+        "follow_up": "Long legs cross in projection and some outer extremities approach/cross the frame boundary. Actual self/floor clearance and strand contact need native/context checks.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M15",
+      "species": "reed_choir",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+        "bytes": 3259856,
+        "sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/M15_retained_input.glb",
+        "bytes": 3259856,
+        "sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/M15_living_candidate.glb",
+        "bytes": 3307892,
+        "sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/authoring.json",
+        "bytes": 12184,
+        "sha256": "5c984b9986e043bf8a4d2057cede386b75d97e9faa2ea944dce24764dda4e78b"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/source_contract.json",
+        "bytes": 3513,
+        "sha256": "79694a8ffa56b3bb19f6371736ed61b96e15f86bbe97a88b90e4f05bbd73fd45"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "08288cbace0f6d0cf6176db5e84fe6a6a6c270e95d3e15b113e1c24ca71b5c89",
+        "candidate_sha256": "08288cbace0f6d0cf6176db5e84fe6a6a6c270e95d3e15b113e1c24ca71b5c89",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M15_raw_bind_bounds.json",
+          "bytes": 13806,
+          "sha256": "2f9c3d45331f86524db97389ac7f4322c385036f85b3c8da62e164b1474c703f"
+        }
+      },
+      "native_proof": {
+        "status": "exact_candidate_raw_native_pass",
+        "verified": true,
+        "receipt": {
+          "path": ".verification/motion/candidate_m15_paired_20261110_r1/native.json",
+          "bytes": 15080,
+          "sha256": "8f605448727bcf259a2bfe17c8fd941463d785547b8bb7dc0a2870d79aedc632"
+        },
+        "raw_bind_bounds_proof_sha256": "7177137d775417d989e1c162f1af3a870ded7b608f6f59b4cb463782c0610a25",
+        "prepared_role_scale_verified": false,
+        "collision_dimensions_verified": false
+      },
+      "source_review": {
+        "source_preview_reviewed": false,
+        "scope": "Prior separate source review; not re-reviewed in this17-unit pass"
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M16",
+      "species": "inkblind",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+        "bytes": 638424,
+        "sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/M16_retained_input.glb",
+        "bytes": 638424,
+        "sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/M16_living_candidate.glb",
+        "bytes": 1108084,
+        "sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/authoring.json",
+        "bytes": 30116,
+        "sha256": "126940df39f619ace391cfad6387817a12d4ee034f31844f38f2cbd28203854c"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_contract.json",
+        "bytes": 3650,
+        "sha256": "97ec6815ea004adde21e3335e35e354b020aa50c371cfa9299ce56f3e180a77f"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "a153439b912769b310fe4d46537825c331c412bf4fe627c1628886aff6ecd6ab",
+        "candidate_sha256": "a153439b912769b310fe4d46537825c331c412bf4fe627c1628886aff6ecd6ab",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M16_raw_bind_bounds.json",
+          "bytes": 13089,
+          "sha256": "8aa99e18f74bfa428c6d115db74927e30f6236ae123c0c9604ba9e2c51c12a8b"
+        }
+      },
+      "native_proof": {
+        "status": "exact_candidate_raw_native_pass",
+        "verified": true,
+        "receipt": {
+          "path": ".verification/motion/candidate_m16_20261110_r1/native.json",
+          "bytes": 19773,
+          "sha256": "5d7c526a15bd407370ded036912a9bbde271583720f0703f3bbdfe505527a72b"
+        },
+        "raw_bind_bounds_proof_sha256": "ec2a14a0b7f1a04376d09a2776e7315130235962827a1df378f4c64e24fda081",
+        "prepared_role_scale_verified": false,
+        "collision_dimensions_verified": false
+      },
+      "source_review": {
+        "source_preview_reviewed": false,
+        "scope": "Prior separate source review; not re-reviewed in this17-unit pass"
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M17",
+      "species": "cairn_mother",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+        "bytes": 1615332,
+        "sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_retained_input.glb",
+        "bytes": 1615332,
+        "sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_living_candidate.glb",
+        "bytes": 1665100,
+        "sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/authoring.json",
+        "bytes": 13541,
+        "sha256": "ce86e48e02ba5887ec050a84a642dc75500e24e98c4f36a218afff91cf9419f7"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_contract.json",
+        "bytes": 3101,
+        "sha256": "4e6551ebd5d935b4df3a1689f44b4b61758be0234143c2e39b7ddc6900275f72"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "6eb53c0df27a22186adfea57ba4b8a5663be1c11a4f81b01c704080c3fa373ee",
+        "candidate_sha256": "6eb53c0df27a22186adfea57ba4b8a5663be1c11a4f81b01c704080c3fa373ee",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M17_raw_bind_bounds.json",
+          "bytes": 7751,
+          "sha256": "b716ab25f08c304f06f3f0fd7f61a7cb16aabe07b25b948640f4c9e05d5b6621"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Left/right eye-stalk directions differ between quarters; Sleep lowers the head/stalks against the shell. No newly obvious breakup in the inspected silhouette.",
+        "follow_up": "Lower-feeler/Feed motion is subtle at this framing. No protective-retreat or contact acceptance is inferred from a single Sleep apex.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M18",
+      "species": "shroud_swimmer",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+        "bytes": 1235028,
+        "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/M18_retained_input.glb",
+        "bytes": 1235028,
+        "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/M18_living_candidate.glb",
+        "bytes": 1315428,
+        "sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/authoring.json",
+        "bytes": 14923,
+        "sha256": "53d053230e5dd7d564c9d117bb6c3c7d5e29f876e1f55e0009254228f8f94c1e"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_contract.json",
+        "bytes": 3519,
+        "sha256": "d8007c5ae49e09825f7ee078c09873be044f940cf17e6ae55c6c36658649f249"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "86eafedb1aee006ad5dad93135ae540fd046eca0a35cb8a8c0b63217db0c8551",
+        "candidate_sha256": "86eafedb1aee006ad5dad93135ae540fd046eca0a35cb8a8c0b63217db0c8551",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M18_raw_bind_bounds.json",
+          "bytes": 11196,
+          "sha256": "149c7669abbc21944d54698190b1b8fabb1fad76bf51e668439f176b2a77c18e"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Idle/Feed fin edge and tail differences are restrained; the ray body remains broadly continuous in those frames.",
+        "follow_up": "Sleep50 exposes a small dark slit/wedge near a dorsal eye region that is not apparent in Idle00/25/75 or Investigate50. Held for identical-camera retained/candidate comparison; no water-contact claim.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": true,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M19",
+      "species": "wychwood_raider",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+        "bytes": 1897900,
+        "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/M19_retained_input.glb",
+        "bytes": 1897900,
+        "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/M19_living_candidate.glb",
+        "bytes": 2013044,
+        "sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/authoring.json",
+        "bytes": 20690,
+        "sha256": "7b37fdd3f140a2bec8c8baa89ac1c6f040206642cb4f150cb7645d5a7897c570"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_contract.json",
+        "bytes": 5216,
+        "sha256": "347fa65f2253b6dda0f3b0eb302d3719719fb03f76c834b6e303c073086f16e0"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "2b5e8f474004744f1756f29faf4257117a837b2967eb74251145150072edc5df",
+        "candidate_sha256": "2b5e8f474004744f1756f29faf4257117a837b2967eb74251145150072edc5df",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M19_raw_bind_bounds.json",
+          "bytes": 49456,
+          "sha256": "ca37f2a82c00f9e8622b14250c14b29557b046cf85e1f77d458830854d853e90"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Directional head change is visible in idle; Feed leans forward and Sleep is supine. Main body contours remain coherent.",
+        "follow_up": "Sleep foot tips are cropped. Off-hand reset is small and needs a full-cycle/context review; floor contact is unassessed.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    },
+    {
+      "asset": "M20",
+      "species": "wychwood_brute",
+      "original": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+        "bytes": 1876176,
+        "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+      },
+      "retained": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/M20_retained_input.glb",
+        "bytes": 1876176,
+        "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+      },
+      "candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/M20_living_candidate.glb",
+        "bytes": 1964088,
+        "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
+      },
+      "authoring": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/authoring.json",
+        "bytes": 21158,
+        "sha256": "6c9e0a631f536dd6a6f6860606a20a2e3f481251895ff571b25612d3b6c5b18b"
+      },
+      "source_contract": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_contract.json",
+        "bytes": 5228,
+        "sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27"
+      },
+      "source_verified": true,
+      "raw_bind_bounds": {
+        "retained_sha256": "5b018ab0dac76d10434ffa10979b5d735a7946cbdd73fdc9802073138dc39896",
+        "candidate_sha256": "5b018ab0dac76d10434ffa10979b5d735a7946cbdd73fdc9802073138dc39896",
+        "equal": true,
+        "evidence": {
+          "path": ".verification/creatures/promotion_review_r1/M20_raw_bind_bounds.json",
+          "bytes": 49471,
+          "sha256": "cd8fa18570e9c87d761475c31a4e70833b363211691907c0471bf9d74db359fc"
+        }
+      },
+      "native_proof": {
+        "status": "pending_remaining17_native",
+        "verified": false
+      },
+      "source_review": {
+        "observed": "Shoulder/head changes are restrained; Feed bows and Sleep lies supine without an obvious new silhouette tear in the visible region.",
+        "follow_up": "Sleep extremities are cropped. Weight/readability and floor contact need full-cycle/context review.",
+        "introduced_by_candidate": null,
+        "source_preview_reviewed": true,
+        "visual_accepted": false
+      },
+      "visual_hold": false,
+      "promotion_authorized": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "user_accepted": false,
+      "attack_profiles_recalibrated": false,
+      "production_replaced": false
+    }
+  ],
+  "asset_count": 20,
+  "source_verified_count": 20,
+  "native_proof_available_count": 3,
+  "remaining_native_count": 17,
+  "promotion_authorized": false,
+  "production_replaced": false,
+  "required_before_replacement": [
+    "Remaining17 exact native proofs",
+    "Resolve per-asset visual holds/follow-ups",
+    "Explicit parent authorization for local runtime replacement",
+    "Prepared role/companion scale/facing and collision proof",
+    "Attack source-profile recalibration",
+    "Actual-level and performance validation before publication"
+  ]
+}

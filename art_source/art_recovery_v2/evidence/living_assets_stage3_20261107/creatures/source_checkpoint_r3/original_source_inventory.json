@@ -1,0 +1,5602 @@
+{
+  "schema_version": 1,
+  "scope": "Source-only checkpoint preparation; no staging, runtime replacement or publication",
+  "audit_head": "54db5b17e55521d9c73b40e10a5fc14cae3371e1",
+  "candidate_count": 20,
+  "units": [
+    {
+      "asset": "M01",
+      "candidate_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+      "source_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/fccdff40fa28c663",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": [
+        "author_living_creature_motion.py",
+        "graft_creature_ambient.py"
+      ]
+    },
+    {
+      "asset": "M02",
+      "candidate_sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a",
+      "source_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M03",
+      "candidate_sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701",
+      "source_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M04",
+      "candidate_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+      "source_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M05",
+      "candidate_sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8",
+      "source_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M06",
+      "candidate_sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a",
+      "source_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M07",
+      "candidate_sha256": "298fb8e7ae7a03beec4e73b5f960f5f9b71d8bc2fcf46358d54334f80c832944",
+      "source_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M08",
+      "candidate_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+      "source_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M09",
+      "candidate_sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f",
+      "source_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M10",
+      "candidate_sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26",
+      "source_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M11",
+      "candidate_sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13",
+      "source_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M12",
+      "candidate_sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0",
+      "source_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M13",
+      "candidate_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+      "source_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M14",
+      "candidate_sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9",
+      "source_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M15",
+      "candidate_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+      "source_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/4892964f9ffde798",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": [
+        "author_living_creature_motion.py",
+        "graft_creature_ambient.py",
+        "living_creature_preview.py"
+      ]
+    },
+    {
+      "asset": "M16",
+      "candidate_sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4",
+      "source_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M17",
+      "candidate_sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+      "source_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M18",
+      "candidate_sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2",
+      "source_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M19",
+      "candidate_sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c",
+      "source_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    },
+    {
+      "asset": "M20",
+      "candidate_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+      "source_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+      "archived_recipe_directory": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5",
+      "source_contract_verified": true,
+      "visual_accepted": false,
+      "runtime_promotion": false,
+      "live_recipe_differs_from_snapshot": []
+    }
+  ],
+  "files": [
+    {
+      "path": ".verification/creatures/prepare_promotion_review_r1.py",
+      "bytes": 15415,
+      "sha256": "325274a6fe11bc4abef3c268471e7fba46ef02634ae8f7ebed7e790dddee65bc",
+      "kinds": [
+        "review_manifest_generator"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/prepare_source_checkpoint_r1.py",
+      "bytes": 6846,
+      "sha256": "c3431d9cd758708d0b6dc5cf61ebd1823cb80b2d003bdc07d63382042bf54124",
+      "kinds": [
+        "checkpoint_manifest_generator"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M01_raw_bind_bounds.json",
+      "bytes": 48769,
+      "sha256": "1fd6a830ad8d5fc4babe3651b0eb179a334026dec837e37f99f53c4aa9b5cd71",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M02_raw_bind_bounds.json",
+      "bytes": 38971,
+      "sha256": "619dd43a206abfde884b5ffbc8c066257f06187f03c6a0a2ed58665623c2b719",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M03_raw_bind_bounds.json",
+      "bytes": 50253,
+      "sha256": "828922f84dbdce7e929ea90042601c35b507ab5049293c56abe8a64df34f821a",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M04_raw_bind_bounds.json",
+      "bytes": 47278,
+      "sha256": "0ff572e7ee03c9bc4780646d5675b3258c2886198165ff7b4d8d61b84c9fb0d1",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M05_raw_bind_bounds.json",
+      "bytes": 49250,
+      "sha256": "b119007d13ed85cae8a2e38a80434c1093703dd13d6c8f1b2db7cf9674562c33",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M06_raw_bind_bounds.json",
+      "bytes": 12551,
+      "sha256": "c0d15a0888d15c2f04eb0e5ef7bf792c2cc433adcd6a619cf2859a9b446298aa",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M07_raw_bind_bounds.json",
+      "bytes": 21102,
+      "sha256": "4ed7d560d5260133f3227dadb9281eb2bb41b0f12815ee1228d126d738b0a9d5",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M07_wing_rig_followup.json",
+      "bytes": 4385,
+      "sha256": "760e80613f618c1a9ad0058a278ec113c4348abdb97a70e639521a48ea933a5e",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M08_raw_bind_bounds.json",
+      "bytes": 29570,
+      "sha256": "5cc14aad5d08d0cbc45d95e9ea625435d26118a510bc6b7e37e03c5ef741e561",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M09_raw_bind_bounds.json",
+      "bytes": 9250,
+      "sha256": "cd3d1b113edd748c2b6d952a8054180db3e4e5a776aa11499ba469b0bd883cae",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M10_raw_bind_bounds.json",
+      "bytes": 15739,
+      "sha256": "7b446d4f9896da54da41d5d51002db322fd151763fd2fccc201bbfba290111c8",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M11_raw_bind_bounds.json",
+      "bytes": 16539,
+      "sha256": "2ca59b2570d8fd8fbcaeb567e26db773cce448771b9794b49e423c3bfa9700c0",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M12_raw_bind_bounds.json",
+      "bytes": 9233,
+      "sha256": "6bcec803b1ae2403dd2e4e86a80c1c1f03aa11387a5f0d0eef7ecb1e0bec2ab9",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M13_raw_bind_bounds.json",
+      "bytes": 12473,
+      "sha256": "706e68a5e82ba9affe48ec0a5f922bf1e224435af554f5c28c1dd72b29e87e69",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M14_raw_bind_bounds.json",
+      "bytes": 15710,
+      "sha256": "a945a16d5f39a759dd248a9251555e9e9ff4cd894f75bfd51fbacfe59e27acad",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M15_raw_bind_bounds.json",
+      "bytes": 13806,
+      "sha256": "2f9c3d45331f86524db97389ac7f4322c385036f85b3c8da62e164b1474c703f",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M16_raw_bind_bounds.json",
+      "bytes": 13089,
+      "sha256": "8aa99e18f74bfa428c6d115db74927e30f6236ae123c0c9604ba9e2c51c12a8b",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M17_raw_bind_bounds.json",
+      "bytes": 7751,
+      "sha256": "b716ab25f08c304f06f3f0fd7f61a7cb16aabe07b25b948640f4c9e05d5b6621",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M18_comparison_readiness.json",
+      "bytes": 2635,
+      "sha256": "0c9c81bf8220acac17ce7ab509d33c9604732f367f93f1d5d5aba7f78042f637",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M18_raw_bind_bounds.json",
+      "bytes": 11196,
+      "sha256": "149c7669abbc21944d54698190b1b8fabb1fad76bf51e668439f176b2a77c18e",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M19_raw_bind_bounds.json",
+      "bytes": 49456,
+      "sha256": "ca37f2a82c00f9e8622b14250c14b29557b046cf85e1f77d458830854d853e90",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/M20_raw_bind_bounds.json",
+      "bytes": 49471,
+      "sha256": "cd8fa18570e9c87d761475c31a4e70833b363211691907c0471bf9d74db359fc",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/promotion_manifest.json",
+      "bytes": 55299,
+      "sha256": "83457fb9b2bdc9bc5882cf2e36e75d23bc1760830249c6c256a288764f1dae5d",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/promotion_supplement_m02_runtime_hold_r1.json",
+      "bytes": 1523,
+      "sha256": "aafd7632d05d339c5019c6f1a9d55c62a4aba013b387d83532b150b8f6a519de",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": ".verification/creatures/promotion_review_r1/source_preview_review.json",
+      "bytes": 32249,
+      "sha256": "422d510a02de37419e5bec7b7b32b96d696ecec8990daf1e30dffc01e05c47f0",
+      "kinds": [
+        "current_review_and_nonexecuting_promotion_evidence"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/M01_living_candidate.glb",
+      "bytes": 2056556,
+      "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/M01_living_export.glb",
+      "bytes": 2338684,
+      "sha256": "fb9c63db4e60de2ee95b240d5f39512bb6214827dd9575eb0e923066d9a2f4ee",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/M01_living_v001.blend",
+      "bytes": 2408188,
+      "sha256": "176a59a4520f7f786b28412775df1dad0b31bc1e48570d5f3989ae5a76e5c28e",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/M01_retained_input.glb",
+      "bytes": 1941652,
+      "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/authoring.json",
+      "bytes": 18811,
+      "sha256": "c4c4ca8c9de2c6993632cdcf148d160d469dae662605143cc69feb1edf3b6c07",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_contract.json",
+      "bytes": 4820,
+      "sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_review/Feed_38.png",
+      "bytes": 647474,
+      "sha256": "afa128bd430e648b04f143f1ec1932203d2cf12c092b15f269b6b667354bed52",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_review/Feed_61.png",
+      "bytes": 646855,
+      "sha256": "b8ba67d9586cb5799294fa73a78935d869453bab5436c789bd7d34d572bc4d9f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_review/Idle_00.png",
+      "bytes": 647967,
+      "sha256": "a2b3e250be8563eab29f6eda93616360fbbe7bc0087b6213a73c777044a8157a",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_review/Idle_25.png",
+      "bytes": 648022,
+      "sha256": "662aeded6d08066b83d19ea7686f8f36658f5a0b83358f9af721470776b038db",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_review/Idle_50.png",
+      "bytes": 648102,
+      "sha256": "783fb5769a4314585bfde36ce6c14fbcc63e51ecfe586567c896f540244ac202",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_review/Idle_75.png",
+      "bytes": 647385,
+      "sha256": "2e1d0feb7519f420702289ba5007554a8f6ff19a1291a54b5e4b73188257eae3",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_review/Investigate_50.png",
+      "bytes": 647784,
+      "sha256": "d544643647873ba004460ee18f3103edda21f9c1f6f6d5420b1839ca4b893346",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/source_review/Sleep_50.png",
+      "bytes": 641839,
+      "sha256": "970cae3810a77e268beffe2133ba3bc948cd3f4914a5e7e4674aab1d367f2222",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/color_025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466.png",
+      "bytes": 73915,
+      "sha256": "025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/color_2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e.png",
+      "bytes": 268,
+      "sha256": "2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/color_962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81.png",
+      "bytes": 268,
+      "sha256": "962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/color_f000cf478ca45fa2cf626e83290e5862749f495b5f0dee728873ac7bc90bcef3.png",
+      "bytes": 25916,
+      "sha256": "f000cf478ca45fa2cf626e83290e5862749f495b5f0dee728873ac7bc90bcef3",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/linear_39e68a05f88243441ae85467b31bdbf7ddbaa2e22709b9a5d7fda0a942d2f440.png",
+      "bytes": 5376,
+      "sha256": "39e68a05f88243441ae85467b31bdbf7ddbaa2e22709b9a5d7fda0a942d2f440",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/linear_441853a0a618092ffb07e8a39289db02fcd09c75d4a404d2e6a7c49039239df2.png",
+      "bytes": 30314,
+      "sha256": "441853a0a618092ffb07e8a39289db02fcd09c75d4a404d2e6a7c49039239df2",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/linear_6a59ffcca1aa84b3cd21050ac1d738fd4a476fcfd3748c2ad4f868f0a790f6cd.png",
+      "bytes": 30305,
+      "sha256": "6a59ffcca1aa84b3cd21050ac1d738fd4a476fcfd3748c2ad4f868f0a790f6cd",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/linear_8409f30051d76e605f3f6a1c991e15c1708f8b36b019dd426aba3ede40f18fee.png",
+      "bytes": 30266,
+      "sha256": "8409f30051d76e605f3f6a1c991e15c1708f8b36b019dd426aba3ede40f18fee",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/normal_0a4a43856c725056d82a8b004fe190ab613ef6185094328937be48d0fc4a2c9c.png",
+      "bytes": 41008,
+      "sha256": "0a4a43856c725056d82a8b004fe190ab613ef6185094328937be48d0fc4a2c9c",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/normal_84e26859d3366192507bf20ffc1ebc89de77bc4f4118a65fcd2f8e4418530328.png",
+      "bytes": 27171,
+      "sha256": "84e26859d3366192507bf20ffc1ebc89de77bc4f4118a65fcd2f8e4418530328",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/normal_9ea989671f6e7a32d867b8d587bda397f9aaaac6e34281cec9054299d2cffed0.png",
+      "bytes": 41870,
+      "sha256": "9ea989671f6e7a32d867b8d587bda397f9aaaac6e34281cec9054299d2cffed0",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M01/textures/normal_eac4c2c768921c87f46b0a2544eb3498d18d9af882463128dcc96eea96c8c59e.png",
+      "bytes": 41135,
+      "sha256": "eac4c2c768921c87f46b0a2544eb3498d18d9af882463128dcc96eea96c8c59e",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/M02_living_candidate.glb",
+      "bytes": 1906460,
+      "sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/M02_living_export.glb",
+      "bytes": 5778968,
+      "sha256": "c8527c2fb66916708a1514b0ff7c05c1bbd352f6827e32e9b59b894824ab8b93",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/M02_living_v001.blend",
+      "bytes": 7623050,
+      "sha256": "626c38cf9d9bc790ab54af5e7f8cde9535013c958f9170138cd014150a7e0b67",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/M02_retained_input.glb",
+      "bytes": 1777228,
+      "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/authoring.json",
+      "bytes": 20986,
+      "sha256": "6068bdf517a7ace0ea8782a19dc09f3e7583f87dc9ada5c9a1225cd9ce593801",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_contract.json",
+      "bytes": 3302,
+      "sha256": "5189a8bee86d5260db1a67a731aa7e0504b9af3265408284e4757cea35157e19",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Feed_38.png",
+      "bytes": 671840,
+      "sha256": "30592be0d4557d33e929206ddd6bf28fc0477f08e2df7b00fa2efbcc3a3b290a",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Feed_61.png",
+      "bytes": 672157,
+      "sha256": "0bdee6e4108e208829d4fd7a2c1730e59dc4f6cf875aae28c4f204fca58ecf74",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Idle_00.png",
+      "bytes": 704578,
+      "sha256": "4d02c5b46120b901dfd68f1277996f4a4a6307135276237493dfa4a7c563471b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Idle_25.png",
+      "bytes": 704034,
+      "sha256": "21fa9901ce65763183a6b4154f98f58e987333879735308c2e237a1b3039b748",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Idle_50.png",
+      "bytes": 704089,
+      "sha256": "b5eb6cee3dc2f05341184175549e1962d0809fc03b4bf2629ae60da71dd33e4f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Idle_75.png",
+      "bytes": 705002,
+      "sha256": "05e2e0648e163a00da013e4482e307baea59640f1e095f864ca1b7d6c63323fc",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Investigate_50.png",
+      "bytes": 677599,
+      "sha256": "0e5491dd8feb6ce791bfcbd43647939113d587aadee795ff41e3205291c8614e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/source_review/Sleep_50.png",
+      "bytes": 669578,
+      "sha256": "a36de0241d2e93d5e1cc0d3b9ede8938b8f4123eb3dc122043537d614904fc74",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/textures/color_76f32f9413ee56694f841a85523b6540c259ffa2a9c8a1cdbc5585d6cab15b70.png",
+      "bytes": 1362167,
+      "sha256": "76f32f9413ee56694f841a85523b6540c259ffa2a9c8a1cdbc5585d6cab15b70",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/textures/linear_21edcbf6c6e724bcbc812b2f90da20b5443358db90a62542b9c57da7536bfb62.png",
+      "bytes": 610722,
+      "sha256": "21edcbf6c6e724bcbc812b2f90da20b5443358db90a62542b9c57da7536bfb62",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M02/textures/normal_25a1bd8b81a9b991433d47d57016a8aa96807763ac982344aeb2ff4d82904e3f.png",
+      "bytes": 1855810,
+      "sha256": "25a1bd8b81a9b991433d47d57016a8aa96807763ac982344aeb2ff4d82904e3f",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M02"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/M03_living_candidate.glb",
+      "bytes": 1980484,
+      "sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/M03_living_export.glb",
+      "bytes": 2621232,
+      "sha256": "4886960bb4b09a64c0b6ee90f4a8b87961d6e8d8cf88effd03dbfe773cf48b8a",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/M03_living_v001.blend",
+      "bytes": 2654899,
+      "sha256": "f554c4721bff12a06c78e8ca872d584df66683039d142a272cd408d0924ec5dd",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/M03_retained_input.glb",
+      "bytes": 1885396,
+      "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/authoring.json",
+      "bytes": 22908,
+      "sha256": "23655d2807b8f1decc2f74dc9e4e372685bcf76d849e48ff6f831544bb1da8d4",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_contract.json",
+      "bytes": 5710,
+      "sha256": "73e9de3fa0a89d759a0b4a6d728cb3f0eb0c88a8f7e19ee8f480a53e98555a3d",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Feed_38.png",
+      "bytes": 665458,
+      "sha256": "dc0ac1981a50c13fa9be607007c0339ba462e67e9cc8aad2c8951f14ae8b2d2e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Feed_61.png",
+      "bytes": 665635,
+      "sha256": "c3a993885fdd58c6ebb631aea6f86239a22aeb828855ebc83e06b21dd70a8115",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Idle_00.png",
+      "bytes": 666318,
+      "sha256": "50d861ef2ebe031066d2d145e53ceefdf6cde8c54da91f5958387a539c4f06a7",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Idle_25.png",
+      "bytes": 665748,
+      "sha256": "3d564bb58190f87228dd572b99b7121a55b0ba6151562a9a0b3c98857d3aab35",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Idle_50.png",
+      "bytes": 666052,
+      "sha256": "ed3091d82af20128864cd02183cf3f34162f5ca42a19e78afc4d964383c34eed",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Idle_75.png",
+      "bytes": 666218,
+      "sha256": "26d49855bd3186c5a7c59661fae097c330f9d910463a8e22d60077003e36ca9a",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Investigate_50.png",
+      "bytes": 665819,
+      "sha256": "7be0c5b6837358aed5313e4f8288c885c6f2d5d29c18e1fde6f53624210447a4",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/source_review/Sleep_50.png",
+      "bytes": 656137,
+      "sha256": "5872b9116c8dd7ac5434162f7e4888e34c8ea0244fc6de1c7f6f2c1151665a5f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/color_025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466.png",
+      "bytes": 73915,
+      "sha256": "025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/color_16258fcd2902e0ed099ba7b89e114af951d8676eaaa8e2470504f8b9582d696d.png",
+      "bytes": 55090,
+      "sha256": "16258fcd2902e0ed099ba7b89e114af951d8676eaaa8e2470504f8b9582d696d",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/color_27baeebc2a81c8f28783c54a556cde2494a64acd8798c2acd5f059d5defedd8e.png",
+      "bytes": 65954,
+      "sha256": "27baeebc2a81c8f28783c54a556cde2494a64acd8798c2acd5f059d5defedd8e",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/color_2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e.png",
+      "bytes": 268,
+      "sha256": "2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/color_962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81.png",
+      "bytes": 268,
+      "sha256": "962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/color_9b842a967088b28cd22315cc67437936b3ae9e86006ac55ec5585c7f3aa3f5a4.png",
+      "bytes": 25014,
+      "sha256": "9b842a967088b28cd22315cc67437936b3ae9e86006ac55ec5585c7f3aa3f5a4",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/linear_1e87d7bb8388ee3d1fbf3b4b8b6044f12be767cf58c05768134008525b867761.png",
+      "bytes": 30176,
+      "sha256": "1e87d7bb8388ee3d1fbf3b4b8b6044f12be767cf58c05768134008525b867761",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/linear_3af329ab3c127698e0422f7284c0d2e6b93bcdffd9837d9088d5d185c1375b3d.png",
+      "bytes": 5496,
+      "sha256": "3af329ab3c127698e0422f7284c0d2e6b93bcdffd9837d9088d5d185c1375b3d",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/linear_5d433d23383979bde579ea312845b326441f3c86d1a2c11e762b0257773e81d1.png",
+      "bytes": 30274,
+      "sha256": "5d433d23383979bde579ea312845b326441f3c86d1a2c11e762b0257773e81d1",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/linear_8444811828d4a4d161fb170cb62c79f0aac37f6b71814661e21a6ebdeb873216.png",
+      "bytes": 33175,
+      "sha256": "8444811828d4a4d161fb170cb62c79f0aac37f6b71814661e21a6ebdeb873216",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/linear_d8f2861652a2f508470adbfc2bf08f7471836a3732052068ae140d03172c1ef0.png",
+      "bytes": 30252,
+      "sha256": "d8f2861652a2f508470adbfc2bf08f7471836a3732052068ae140d03172c1ef0",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/linear_f626eaca6b9949a2c7528bf922a087c85ca0e2bd6a0856181e5beed33552b4a2.png",
+      "bytes": 30134,
+      "sha256": "f626eaca6b9949a2c7528bf922a087c85ca0e2bd6a0856181e5beed33552b4a2",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/normal_20d8ceb4c2665bbf0c7d016334e0c8f78fa63f151b73fe595a136086a0823550.png",
+      "bytes": 27271,
+      "sha256": "20d8ceb4c2665bbf0c7d016334e0c8f78fa63f151b73fe595a136086a0823550",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/normal_33d9591850d148acc08a47b5a2de7b083ded5e017dea0cf26082a2ab1f693308.png",
+      "bytes": 41569,
+      "sha256": "33d9591850d148acc08a47b5a2de7b083ded5e017dea0cf26082a2ab1f693308",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/normal_61e16e752145b076ca9f296ea82d0deca8088717d685f121a8006d7d3c26bc2b.png",
+      "bytes": 78569,
+      "sha256": "61e16e752145b076ca9f296ea82d0deca8088717d685f121a8006d7d3c26bc2b",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/normal_89bba0ba2539e42954f34892a01f318f3f88415a34a0d14d57cb2cac8e1508b2.png",
+      "bytes": 41016,
+      "sha256": "89bba0ba2539e42954f34892a01f318f3f88415a34a0d14d57cb2cac8e1508b2",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/normal_9cca3d03491da10f0e174c9738fcf9e4576795f381a14917e02d84807e384d91.png",
+      "bytes": 41087,
+      "sha256": "9cca3d03491da10f0e174c9738fcf9e4576795f381a14917e02d84807e384d91",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M03/textures/normal_dbef135d6ca0825184b036864e154aace56c921484c14c84dc96b6058345f353.png",
+      "bytes": 41366,
+      "sha256": "dbef135d6ca0825184b036864e154aace56c921484c14c84dc96b6058345f353",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M03"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/M04_living_candidate.glb",
+      "bytes": 2744036,
+      "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/M04_living_export.glb",
+      "bytes": 2957412,
+      "sha256": "8c2161b30022c9a19de9d7d3bb69fe8a43816e051dbc83b6dc447ee47c775b64",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/M04_living_v001.blend",
+      "bytes": 2553563,
+      "sha256": "0c2327e065dca646e75410aee4237d3af60b34895faeef3aece4aa8933b3cd54",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/M04_retained_input.glb",
+      "bytes": 2620992,
+      "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/authoring.json",
+      "bytes": 13371,
+      "sha256": "93a5fa495a6e7773635cc6d23d2c07f3cc615e1018b47e940f4a38ddad6ec8fd",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_contract.json",
+      "bytes": 3770,
+      "sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Feed_38.png",
+      "bytes": 668786,
+      "sha256": "7c407ceebd2160f256a58c211a29eb047cbfe7537a6b603ff054fab9a149642c",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Feed_61.png",
+      "bytes": 667965,
+      "sha256": "179d500064a017a06bab79530ea20a0b493b1bf34e13e6627d6b7b11a1ca5290",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Idle_00.png",
+      "bytes": 668504,
+      "sha256": "8d329645c1f9a771f201a1871ebdbf8bb6eee7aad103b25ef577c6b8bed336a7",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Idle_25.png",
+      "bytes": 669174,
+      "sha256": "906db8a78d2cce4f9a6d015c730679683a8aa70f8b4e5cec3a279e590ba53502",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Idle_50.png",
+      "bytes": 668672,
+      "sha256": "e032e6730c90cb5f146feef28d59f70571fac371b01f2cf83371bc7ddaaa8cf5",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Idle_75.png",
+      "bytes": 668615,
+      "sha256": "03f0a6b3c4737557b0c60fb5a1da47f05e63733dcfbb3fabefd71686391a5ac9",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Investigate_50.png",
+      "bytes": 667007,
+      "sha256": "c960668cfaaaea655c946ed58bf86549c56b707c11336dd68430c1d9e9261837",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/source_review/Sleep_50.png",
+      "bytes": 662717,
+      "sha256": "0574b7e30345a5a95e1d57191295dd6b4363c7b704cfde289ede05077d49013d",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/textures/color_c6d138d3203fddf6f4d66ff610deaefed0fef2a3fd25aa160165d11cc84b1653.png",
+      "bytes": 60909,
+      "sha256": "c6d138d3203fddf6f4d66ff610deaefed0fef2a3fd25aa160165d11cc84b1653",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/textures/color_d0be7380365a214d7761dd80b21cb72fedc317b091acae9a724530e4c137fc8a.png",
+      "bytes": 66479,
+      "sha256": "d0be7380365a214d7761dd80b21cb72fedc317b091acae9a724530e4c137fc8a",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/textures/linear_779ca8967968bbda47a9a1164699fae0ce71519584dd21cf9ffdedeb15bbaf74.png",
+      "bytes": 34315,
+      "sha256": "779ca8967968bbda47a9a1164699fae0ce71519584dd21cf9ffdedeb15bbaf74",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/textures/linear_de82b4e7842b5fe0e0c596b3845f28b4884227213c714e529690fabd4fc11845.png",
+      "bytes": 30168,
+      "sha256": "de82b4e7842b5fe0e0c596b3845f28b4884227213c714e529690fabd4fc11845",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/textures/normal_069158a34e1b18d5e6c9140c6bc3e99d41def8f0b065cd507f28cec643f691a1.png",
+      "bytes": 41205,
+      "sha256": "069158a34e1b18d5e6c9140c6bc3e99d41def8f0b065cd507f28cec643f691a1",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M04/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
+      "bytes": 55055,
+      "sha256": "6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M04"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/M05_living_candidate.glb",
+      "bytes": 2429516,
+      "sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/M05_living_export.glb",
+      "bytes": 3020404,
+      "sha256": "6dc5c20a6f7a785dbf6f80f7022c80bbc7b76a92b99a672c071fdbb257845993",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/M05_living_v001.blend",
+      "bytes": 2823737,
+      "sha256": "78eee344bb40bd1e267d8d7b5364d7ee6ac9636fb969f46fd49ce8c41736e24d",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/M05_retained_input.glb",
+      "bytes": 2314140,
+      "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/authoring.json",
+      "bytes": 20952,
+      "sha256": "90aa76fac4f0a5b224e372837a53a8754698d84d79a74d55cc7ac5c65473c0ab",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_contract.json",
+      "bytes": 5229,
+      "sha256": "a6b4e45e1f24c21e8d0e0effb47a059ef8f6aebca65c76d902a163154ba98fce",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Feed_38.png",
+      "bytes": 669263,
+      "sha256": "81ce5b6f53a111cea107abfa4f3e27b5080fdf2d303cd1e4615c3623584f06bb",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Feed_61.png",
+      "bytes": 669046,
+      "sha256": "becb7f57e92dacc5e247f53a1cd98a07a4a0fb2c07f77501214077658ce35c01",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Idle_00.png",
+      "bytes": 672118,
+      "sha256": "19afc5f56c6c52d5967ea4f74377c1d073e84a77234081b6066d1a30238b3dd9",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Idle_25.png",
+      "bytes": 671787,
+      "sha256": "25abf4270a59ef27067d6b8917c6eecfcf9152cfde96b3291787292d96978170",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Idle_50.png",
+      "bytes": 671877,
+      "sha256": "52ee53d37fbdadcfdd19753b9487de28544b99bd0baa54b0155c38efe3c5981e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Idle_75.png",
+      "bytes": 671441,
+      "sha256": "5508ff653e90f88acc852a03ae4560f48d4be337147556eda6720a63a22e1037",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Investigate_50.png",
+      "bytes": 672039,
+      "sha256": "506b423fbc9b89584424c4d5485d6ca921974294c95de34b740ac64d2e785cd0",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/source_review/Sleep_50.png",
+      "bytes": 690256,
+      "sha256": "fcaa4318ab05f049ac219e50fef9e10cd62d9757296991f6315ec81c86a8efdf",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/color_025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466.png",
+      "bytes": 73915,
+      "sha256": "025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/color_0f5e3116608045e3feb233b646cb274b43113306c40c1ef172cbc31717f072df.png",
+      "bytes": 25859,
+      "sha256": "0f5e3116608045e3feb233b646cb274b43113306c40c1ef172cbc31717f072df",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/color_27d309afa00e92aa0db5ae6fe35854a9ba480ef1ac297f510051e299a6783cbe.png",
+      "bytes": 51983,
+      "sha256": "27d309afa00e92aa0db5ae6fe35854a9ba480ef1ac297f510051e299a6783cbe",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/color_641a0e9e8361d0b3a7382b60f3e551f6b9bb717d204b086b462b1f9864bb0158.png",
+      "bytes": 41982,
+      "sha256": "641a0e9e8361d0b3a7382b60f3e551f6b9bb717d204b086b462b1f9864bb0158",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/color_bcc3e4b7cc580d27603334ac0f53e34463d2e3399d46c833474de12c8ade6d85.png",
+      "bytes": 65069,
+      "sha256": "bcc3e4b7cc580d27603334ac0f53e34463d2e3399d46c833474de12c8ade6d85",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/linear_4b54b5a135bd49e060dd4e7665cfc3ad8dae2bcf8954011de42159b09bcf5b1c.png",
+      "bytes": 5281,
+      "sha256": "4b54b5a135bd49e060dd4e7665cfc3ad8dae2bcf8954011de42159b09bcf5b1c",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/linear_62e610de19ca6683b56c4416c07c8ca6e224f8dff6fe34e693b3836658a3b3bb.png",
+      "bytes": 30064,
+      "sha256": "62e610de19ca6683b56c4416c07c8ca6e224f8dff6fe34e693b3836658a3b3bb",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/linear_7138fd62cd131fbd6faf85a31d686547d773e80c98f18af7fed4f015cc2dabe2.png",
+      "bytes": 33947,
+      "sha256": "7138fd62cd131fbd6faf85a31d686547d773e80c98f18af7fed4f015cc2dabe2",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/linear_756bd8a7b8d28576e294531cd4bf2b77631e02a8aedb0db5d8e5fc87b84efbbf.png",
+      "bytes": 30272,
+      "sha256": "756bd8a7b8d28576e294531cd4bf2b77631e02a8aedb0db5d8e5fc87b84efbbf",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/linear_a7b9506201f819a3959f015e895b65b0be5deb55b01424520319f853a43df386.png",
+      "bytes": 33896,
+      "sha256": "a7b9506201f819a3959f015e895b65b0be5deb55b01424520319f853a43df386",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/normal_2c5ca271f8c6675cd134f1ede99e8ef3711409064077b2a1d6dea3c0a6c5bd8a.png",
+      "bytes": 40929,
+      "sha256": "2c5ca271f8c6675cd134f1ede99e8ef3711409064077b2a1d6dea3c0a6c5bd8a",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/normal_2cf10d18e937dba5635de4997982bf4604d354ed769b28e15a1df37ad2e0049f.png",
+      "bytes": 27380,
+      "sha256": "2cf10d18e937dba5635de4997982bf4604d354ed769b28e15a1df37ad2e0049f",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/normal_4f48a555dc9b6b59e9795fbb51e3eb11561aaa3909dd236106223b39a2c25477.png",
+      "bytes": 54727,
+      "sha256": "4f48a555dc9b6b59e9795fbb51e3eb11561aaa3909dd236106223b39a2c25477",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/normal_8632ea1e0d2d02ccf74cf120fd7922186a5d07621b06b9482c1a5c3b6f52f4ab.png",
+      "bytes": 54614,
+      "sha256": "8632ea1e0d2d02ccf74cf120fd7922186a5d07621b06b9482c1a5c3b6f52f4ab",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M05/textures/normal_ada15327a11cdcf241ed262e46e4c0a10fa3846d7a9baadbd2503a8cfefb5cbd.png",
+      "bytes": 41786,
+      "sha256": "ada15327a11cdcf241ed262e46e4c0a10fa3846d7a9baadbd2503a8cfefb5cbd",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M05"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/M06_living_candidate.glb",
+      "bytes": 6424756,
+      "sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/M06_living_export.glb",
+      "bytes": 6740788,
+      "sha256": "dfcd02af535f613fa5089eedde36ce23f1103fb54af01677c5b96513cb4c1d2e",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/M06_living_v001.blend",
+      "bytes": 2475461,
+      "sha256": "3f251cf1b441f6f37452d4d91b52a8e0cf4220748a2498c6979fba4133f7d7b4",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/M06_retained_input.glb",
+      "bytes": 6375916,
+      "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/authoring.json",
+      "bytes": 16406,
+      "sha256": "2fa91084025972138a0616d59cbd00e9488031184f373b3d3fdaf37ea5fa4591",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_contract.json",
+      "bytes": 3739,
+      "sha256": "fabf2353fb40202815c1984aff13521bfae322dc6d5692cfe1287cf37afd8520",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Feed_38.png",
+      "bytes": 760305,
+      "sha256": "3000db036f8e6d3cb68d96f1991c9eff0e81960502eb4c82a2a03c9f0759927b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Feed_61.png",
+      "bytes": 761066,
+      "sha256": "ad60623fca618cd8f0e56b95836c5777e8b9922b4d21793fafd1b1466372353f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Idle_00.png",
+      "bytes": 760263,
+      "sha256": "d340afee64a08eacfc501ee2328bf552364ce73fa42c67a0e70c6d09714e454b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Idle_25.png",
+      "bytes": 760011,
+      "sha256": "0621ccdfc5f7db62ae58dd51333f6eb33646ce08d41377880d801bd38f59125e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Idle_50.png",
+      "bytes": 760618,
+      "sha256": "379849a8106e6132907fc368b950c9f38a4c4c7ef6042b555eb4619ef9066d6f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Idle_75.png",
+      "bytes": 761144,
+      "sha256": "0c4f2d7702ae1d171caf090066b4757aa2500f771ae6975599dbfe81aa2a237b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Investigate_50.png",
+      "bytes": 760554,
+      "sha256": "83357019c6b960e82bba3ea2f78d3ec6be077cfe5c4e8250f7248b1cb1ac45f6",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/source_review/Sleep_50.png",
+      "bytes": 760102,
+      "sha256": "d61cdcc9c8e08905eea58544e0626abe013d52f79390083771ec2c37f12bf478",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/textures/color_59ddfa655149036ec467b0bb2ad5ae9e67f9d70f624de09499c90880938311fc.png",
+      "bytes": 57248,
+      "sha256": "59ddfa655149036ec467b0bb2ad5ae9e67f9d70f624de09499c90880938311fc",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/textures/color_c0863104425bd02ee54ea163b5d547d0f6ba76c0634a810dbf08d764cd2c20ec.png",
+      "bytes": 57743,
+      "sha256": "c0863104425bd02ee54ea163b5d547d0f6ba76c0634a810dbf08d764cd2c20ec",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/textures/linear_6e2126bd6f7ec71636bdc007636262e98884a438c31af01676a23b52ee721ade.png",
+      "bytes": 33440,
+      "sha256": "6e2126bd6f7ec71636bdc007636262e98884a438c31af01676a23b52ee721ade",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/textures/linear_cfba853a2070731a38dd5e5403bab78e16c9c1ca38ab8892a590ea75d798dc27.png",
+      "bytes": 33104,
+      "sha256": "cfba853a2070731a38dd5e5403bab78e16c9c1ca38ab8892a590ea75d798dc27",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/textures/normal_ad6354940284e3acc315389111b763824c1d32ab1dd9915e8d45ec65e8f702f6.png",
+      "bytes": 78866,
+      "sha256": "ad6354940284e3acc315389111b763824c1d32ab1dd9915e8d45ec65e8f702f6",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M06/textures/normal_ae316c3d8499ed4c2af443418239581fa485b2c66b61750015dfeab765fc714f.png",
+      "bytes": 78874,
+      "sha256": "ae316c3d8499ed4c2af443418239581fa485b2c66b61750015dfeab765fc714f",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M06"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+      "bytes": 2215112,
+      "sha256": "298fb8e7ae7a03beec4e73b5f960f5f9b71d8bc2fcf46358d54334f80c832944",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_export.glb",
+      "bytes": 3310980,
+      "sha256": "c2588e4d4d87a0bd87eb6dddd33524bb43c39e9fb1ef4292fae06edff1b6c46c",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+      "bytes": 3565229,
+      "sha256": "01ff8f82962761ffa79895ead6316c98cfb599a2a2182f59a9bddd2656df06bd",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_retained_input.glb",
+      "bytes": 2097816,
+      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+      "bytes": 14215,
+      "sha256": "cdb0c602b8f217f497ab3e93ea54f9669ecc43ffb28cf7ca04109a68a8fc9b77",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+      "bytes": 3778,
+      "sha256": "6b8f653398cd702394d4a600ffcd3a62b013155d5cea1eb00c73fe104a4c0572",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+      "bytes": 657531,
+      "sha256": "b5e7b6914159ee9686621b9f2eaa68cc4a912becf2fd6187ac0b9b09b132847e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+      "bytes": 658686,
+      "sha256": "78632c46e85d0c140e8f0ea0cebaa529e68e480b7834661b4fc4763f90a2e017",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+      "bytes": 657120,
+      "sha256": "b20718a4d69a4f70c8bb6abc82c45d841b4b50ecfa59f981c0f3167a1c59821e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+      "bytes": 657357,
+      "sha256": "0f8e984145f69ca472c3ad3fe6e76f2f8f90934443785ea952767f23887d7450",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+      "bytes": 657877,
+      "sha256": "50da6e8cabecdd8fd75cd79878b0aaa676d5a5823a36e1bc6229cec042667507",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+      "bytes": 658394,
+      "sha256": "0a1eedebe663c6b3d7beb475c44be8b434b860d5c3deec87b9335a8372f454b9",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+      "bytes": 658143,
+      "sha256": "3e33caae080defef90f5d618665baca0e4c2274c48e247bcae27e704c441303b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+      "bytes": 657421,
+      "sha256": "0aac0ece9fa0ea5d237ca41f6f6067a53d2bc0dd75e80bbd650f301b68ad460b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "bytes": 1115249,
+      "sha256": "0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M07"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/M08_living_candidate.glb",
+      "bytes": 1268008,
+      "sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/M08_living_export.glb",
+      "bytes": 2856884,
+      "sha256": "b06a6bad2bd61ffa1c02dd251e4b4c42df763a6b516606a777351b3c73dcfc0d",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/M08_living_v001.blend",
+      "bytes": 3313782,
+      "sha256": "aa988f4fdb9108601733a2ee6e76ed6dbfe13b418d5ea19852c388503b77b79b",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/M08_retained_input.glb",
+      "bytes": 1158008,
+      "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/authoring.json",
+      "bytes": 18327,
+      "sha256": "c479d5e5b2d90ed48c45095dd2c14467035db806cb2645957fb64fa705668f86",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_contract.json",
+      "bytes": 4027,
+      "sha256": "6647779d149f936b751a39ed13b6f34ae11eaf21a9a2bd33b43a0183df9f8ea7",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Feed_38.png",
+      "bytes": 679715,
+      "sha256": "827771aa15d791fb97a36b9e31297f7aaa9639f8a37f8db96a5bc7b16ddb4947",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Feed_61.png",
+      "bytes": 679113,
+      "sha256": "44b6fddcca0b6225a319521dfcf1c7cbcebbf6cbf66686128a2255a3cb186131",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Idle_00.png",
+      "bytes": 679904,
+      "sha256": "dcedc61fdc868ca3e66a72a18c88a1cf73f8573f131e7bb8cd678c928466ed3a",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Idle_25.png",
+      "bytes": 679898,
+      "sha256": "8052b136663c05d04fe61793a6e9a3c3f09cdebb12551d0c230492d889902e86",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Idle_50.png",
+      "bytes": 680119,
+      "sha256": "08a6f2cee5a748ce9285611a1867b4df6fa9d7f904c6f972a12471c8850aa8d3",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Idle_75.png",
+      "bytes": 679714,
+      "sha256": "aba4617f08c2c5be088d6e956832c0f0da3e2cc80182de818869e3a9e05cc578",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Investigate_50.png",
+      "bytes": 679467,
+      "sha256": "1fdaa745ec35880b74b26b81055b871526df02728e2459eedd5f6988dd2a51e7",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/source_review/Sleep_50.png",
+      "bytes": 679470,
+      "sha256": "4f965602d35ab270b60f54a63a714ab88faee86c981ad04aa3c47a0dd00a00c3",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M08/textures/color_627cd3f3fd3b9aa4c41ba7064e7cf20662998f7cc01f43117b50556dfd044c1a.png",
+      "bytes": 1248397,
+      "sha256": "627cd3f3fd3b9aa4c41ba7064e7cf20662998f7cc01f43117b50556dfd044c1a",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M08"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/M09_living_candidate.glb",
+      "bytes": 1100424,
+      "sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/M09_living_export.glb",
+      "bytes": 2152176,
+      "sha256": "5c6952333de7f724760ffe7b6a660e0e7d02800411634b66f6647d626a0c11b4",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/M09_living_v001.blend",
+      "bytes": 2136519,
+      "sha256": "4073e1a06e155e23436044f876b05570b248d8a39ef91df70383df90104eaca4",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/M09_retained_input.glb",
+      "bytes": 1036332,
+      "sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/authoring.json",
+      "bytes": 13675,
+      "sha256": "c821cffc3a9d79662a1cb1da76a0e14bb1394874783edf02364ebb951f5d171c",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_contract.json",
+      "bytes": 3261,
+      "sha256": "2e29f0ec8c2c774327ca3c202bbf3923aa80dd1697f8256562305d9c968001a6",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Feed_38.png",
+      "bytes": 661960,
+      "sha256": "b5e5b82ad763e478c6accd09dfdd4f4e3c41ec309a4f011de22ac39995a6a8d2",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Feed_61.png",
+      "bytes": 661905,
+      "sha256": "46d51695ff02e0bfee5ebc07836337cbbcc7e51194350a1d8e8fbc47477d7acc",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Idle_00.png",
+      "bytes": 662159,
+      "sha256": "dac05d9f1ce10bd95c1c5bee4e870e0f3440400718eb202cb562b0ca5ffdbe24",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Idle_25.png",
+      "bytes": 662282,
+      "sha256": "6c96af29fae33310cc0b41f7f9541e5466dc5dcda43cbad3e44086cef43bfabf",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Idle_50.png",
+      "bytes": 662076,
+      "sha256": "66a6837b35d5d06df855ee10b3c625ed6ba59159bae2764243c51969ed3e1a75",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Idle_75.png",
+      "bytes": 661722,
+      "sha256": "79750334c451ccd8bfe093e68b976ad15f9c15d5f774638517b58722dc12d721",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Investigate_50.png",
+      "bytes": 661387,
+      "sha256": "f7429bd01a6a83f4261519b59e47083ee440960adf11ddb808722056190ed4b3",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/source_review/Sleep_50.png",
+      "bytes": 664085,
+      "sha256": "7cdb556aa7d65b62884bec2759e41a0c747a2102903b744e45284cc7d887c6d3",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M09/textures/color_afa8c4b21cccf906c896c5fe8311c21d1465f0b75ac55163901264f06e955bc8.png",
+      "bytes": 1077138,
+      "sha256": "afa8c4b21cccf906c896c5fe8311c21d1465f0b75ac55163901264f06e955bc8",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M09"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/M10_living_candidate.glb",
+      "bytes": 1013396,
+      "sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/M10_living_export.glb",
+      "bytes": 2031804,
+      "sha256": "8c0a34717413e03fae468955681203269f0ce1f516e2d7750ef2370633c8b61b",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/M10_living_v001.blend",
+      "bytes": 2044281,
+      "sha256": "01cf941b9c7ac12de2cecfa3013fb23a30b8cf0ac73a981c4fa038e02e03367b",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/M10_retained_input.glb",
+      "bytes": 949016,
+      "sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/authoring.json",
+      "bytes": 13502,
+      "sha256": "28023648f7eea8bf4d6184690b2be30e261580ff5fdc435d0ddf0c8622cdb76b",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_contract.json",
+      "bytes": 3068,
+      "sha256": "aa20054977ed01879dd82970b264494a26983a7f5dc9dc897559a82ea2b1c78e",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Feed_38.png",
+      "bytes": 695291,
+      "sha256": "f3ab3fcc5bd68f022fcba4108f31ba22e2cbb38875997b83a99a8a1c83852f3f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Feed_61.png",
+      "bytes": 695168,
+      "sha256": "1ad7e6d17d4a91bc6bcf6f9df22f9756328ba2c4f6c3d010b0d2bb90e6f6e19e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Idle_00.png",
+      "bytes": 694260,
+      "sha256": "d70b4a0f7f7f972ea84d9e9875033382a9d64f31c0801e6cd9ce65cc12453bf3",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Idle_25.png",
+      "bytes": 694488,
+      "sha256": "e1f4093ffe653ddb0d37105e269b4a9c8b81e29e277b320d77cdac711d041b92",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Idle_50.png",
+      "bytes": 695015,
+      "sha256": "553cced88eccc6bcafaac15d1ef26e4df977067a66c3dc781915658f27b11fdf",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Idle_75.png",
+      "bytes": 695454,
+      "sha256": "99e81add75f7e65f04b35af1e7d3d1bac3b2712468cabcb979806b8a6da85247",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Investigate_50.png",
+      "bytes": 695099,
+      "sha256": "d6f6981ca64f998c9bfc88504dcc9e4181a2f72728d9f9b4c7795ec2cc4f13ed",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/source_review/Sleep_50.png",
+      "bytes": 699914,
+      "sha256": "2a163c31d9d095874d9ab3a6c896b41765e216aa7d59ad8fbcc80668c189e56a",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M10/textures/color_4ea981715797d97e987d9f5e09ac138ab062b50c740c722a605b29680fa10934.png",
+      "bytes": 1080628,
+      "sha256": "4ea981715797d97e987d9f5e09ac138ab062b50c740c722a605b29680fa10934",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M10"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/M11_living_candidate.glb",
+      "bytes": 1426384,
+      "sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/M11_living_export.glb",
+      "bytes": 2534600,
+      "sha256": "b54ee85b0502877dbe2978e4a25f6a5045317edad0e5122dc61e51d2dbd3f4ce",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/M11_living_v001.blend",
+      "bytes": 2205483,
+      "sha256": "b7922b4290bfab55c4963b73b5b0aa879471a7f6f302a95438a92d3a5657c299",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/M11_retained_input.glb",
+      "bytes": 1356200,
+      "sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/authoring.json",
+      "bytes": 13550,
+      "sha256": "73994d3309beb2b157c44db2f29e1b5f0f8994a23169dcd73c0273dda78a1575",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_contract.json",
+      "bytes": 3117,
+      "sha256": "a3422e4c85267a78d474f06fa71f81135f762791ab2e75912a3aee77ffae9411",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Feed_38.png",
+      "bytes": 674159,
+      "sha256": "b217a3a0382092fd52f637dfa63758941713786734eff0473c9b57dc387f0b7b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Feed_61.png",
+      "bytes": 670006,
+      "sha256": "2ae91b68130551981b527da72f090d1ec4ebfeb8758230be767d31a413eab266",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Idle_00.png",
+      "bytes": 672290,
+      "sha256": "4a5734cef58b8d8b1c619bee3a7d397653ed3048b6ed08864f177b3e1ee90e16",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Idle_25.png",
+      "bytes": 673322,
+      "sha256": "966752cf64fed658f75f8eb39ec1f5954510d2cc1784023ed3ad5c88f4f23211",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Idle_50.png",
+      "bytes": 671570,
+      "sha256": "fd4ababf4e61dda56f7e996c6b0b326b072a865b1f2699323fe83457df25e34b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Idle_75.png",
+      "bytes": 669681,
+      "sha256": "a95377a57fcec7c8a92538d8a87519349e679331fe227b864762d010f34ebb14",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Investigate_50.png",
+      "bytes": 671261,
+      "sha256": "820e19adea1572b7dbb2dcdc538012e067412727342d11a27148a3ab431bc549",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/source_review/Sleep_50.png",
+      "bytes": 672147,
+      "sha256": "fd33a72eccb13c293b6f05ea46435ff99455f9be1167c2b40f8955ba8caa5d39",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M11/textures/color_971c8aa6d6b74c3e79bc52c6d82853706199faba23ce8f5785c125f40d9419fa.png",
+      "bytes": 1168857,
+      "sha256": "971c8aa6d6b74c3e79bc52c6d82853706199faba23ce8f5785c125f40d9419fa",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M11"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/M12_living_candidate.glb",
+      "bytes": 873484,
+      "sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/M12_living_export.glb",
+      "bytes": 1927652,
+      "sha256": "c0bcde3ad86378eac258d42d7c24f69bc15e5217bb23b69ae698737e37b3919e",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/M12_living_v001.blend",
+      "bytes": 2086441,
+      "sha256": "80d6ed8ce974aea00ab19f88353c2acd7b6ada050ff6090714146edffec62c77",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/M12_retained_input.glb",
+      "bytes": 809404,
+      "sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/authoring.json",
+      "bytes": 13691,
+      "sha256": "318b2806fd3fd82cf7432d12cd26d56d39d2e0c43511ee3909cfa08531f360ac",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_contract.json",
+      "bytes": 3259,
+      "sha256": "8c60446f7c9fcceb1be1e4e6ab40452552f33d6222bf72e116d9a07849a3ac67",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Feed_38.png",
+      "bytes": 676370,
+      "sha256": "1dc8f8558e63ff1413ae31f4fcc0a0995fa1d82aef7180e1c0c60f98cf724174",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Feed_61.png",
+      "bytes": 678099,
+      "sha256": "5f21d98e35778fd7dec944ce1d9426d2185d14badd66fade779e448761c68952",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Idle_00.png",
+      "bytes": 678298,
+      "sha256": "eed2c37c4f87536bb1e161774b992b11908d2ec24f16da92e90581da6c26a879",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Idle_25.png",
+      "bytes": 678048,
+      "sha256": "f0ff5805912b20a2ce798a95e35c808906b8136ba2871219f829862f24325994",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Idle_50.png",
+      "bytes": 676899,
+      "sha256": "20e242471f427c6c73b815a8ee2c08504be8b807d1cfdc687f1c0148b9dec08a",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Idle_75.png",
+      "bytes": 678158,
+      "sha256": "860ee51f4dc69b09fa0ac7fb3a87081a4953440f9f5f3a06558bfdc4bdb2dfea",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Investigate_50.png",
+      "bytes": 676156,
+      "sha256": "6630504370f08bf11be36fe6a2a9c5920ac747a80d076b554b72538faf24abda",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/source_review/Sleep_50.png",
+      "bytes": 676862,
+      "sha256": "c5c632fe6d2779dc0b7f8f85d64a67bb158602726af46f56d71bd432f23f9bec",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M12/textures/color_40b61e6121fb21358adbb95ec345b0e1e2a201c2050b5da582416051a93b5cc1.png",
+      "bytes": 1079272,
+      "sha256": "40b61e6121fb21358adbb95ec345b0e1e2a201c2050b5da582416051a93b5cc1",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M12"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/M13_living_candidate.glb",
+      "bytes": 1759984,
+      "sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/M13_living_export.glb",
+      "bytes": 2879976,
+      "sha256": "560d903e1173af343cf9eea3df0167a02daf9d651fd9ad7c4ca224ce51e46f6f",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/M13_living_v001.blend",
+      "bytes": 2680894,
+      "sha256": "e00742ebc8c9816ff6063b7ac3e41e36adc80a3a08a6ccd610727eb7a31ea450",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/M13_retained_input.glb",
+      "bytes": 1703908,
+      "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/authoring.json",
+      "bytes": 13418,
+      "sha256": "2aca1c1bd236c0f6f99752815af8f388972557e0da821e3e4a58a510161442f1",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_contract.json",
+      "bytes": 2989,
+      "sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Feed_38.png",
+      "bytes": 669582,
+      "sha256": "5b1654ab6bf656a7b2c3544c67524374909913d0c54f7cda08ed46849e59c19f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Feed_61.png",
+      "bytes": 669507,
+      "sha256": "e138a07fb1a3cf4bb0ea6732c95206557d48f7d9d6ee9c7e8822a6224d471b09",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Idle_00.png",
+      "bytes": 669410,
+      "sha256": "1f4ebdfc5f5f9a2d683d0780198e311a4ef29cabab0344718aa97e84fb02ac64",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Idle_25.png",
+      "bytes": 669476,
+      "sha256": "7b6efc313c35ce831b78d51fef2794f898781bc345ba49a874c5611bf0f88346",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Idle_50.png",
+      "bytes": 669319,
+      "sha256": "ca1b5d358cea1c625aec9b753b4ff2b07e68ab8d2e168f4d9dce8b45e50cbc71",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Idle_75.png",
+      "bytes": 669904,
+      "sha256": "c5a79295f3d04caa11c1fa1d4bdaebfbd9f56b8446a51f6e209daf230ad70d16",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Investigate_50.png",
+      "bytes": 669275,
+      "sha256": "49a161f1f464410e94413184f4d2ac5359223bb66f5de8098e6de5b44815cc6c",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/source_review/Sleep_50.png",
+      "bytes": 670044,
+      "sha256": "e49662b8b6d4f0f2db4efdc4a9f289b9e805a7609844d65b2ad00968fe0f479f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M13/textures/color_2351fb05d815755187e1a70726f00e6e7acbee0bf59aa636016bb11b4b7cf453.png",
+      "bytes": 1161859,
+      "sha256": "2351fb05d815755187e1a70726f00e6e7acbee0bf59aa636016bb11b4b7cf453",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M13"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/M14_living_candidate.glb",
+      "bytes": 1361664,
+      "sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/M14_living_export.glb",
+      "bytes": 2389016,
+      "sha256": "92ed8c649469d9c64e9bee36351d20ee4f16e923db67fc6516fb4bbb3b33977c",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/M14_living_v001.blend",
+      "bytes": 2348149,
+      "sha256": "e051f291ce38011207f536add99e2f2aa240180426b13d1164ccc42ae67a4e16",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/M14_retained_input.glb",
+      "bytes": 1297024,
+      "sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/authoring.json",
+      "bytes": 13469,
+      "sha256": "b3983072441f085a31309b5090548f6d7912eb67908133dd111e8d9899743f0b",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_contract.json",
+      "bytes": 3033,
+      "sha256": "7809c02760e4af80577243e348d42e482fb9801b6237a48cdca523a8c55534d6",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Feed_38.png",
+      "bytes": 712219,
+      "sha256": "4463f547c1876c683f6b7f687fb1b0699096d010d06cca58dbca72880a536bab",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Feed_61.png",
+      "bytes": 712364,
+      "sha256": "23fa39df23b707bd30122496b8cd1b2910c247f8f18dbfa2675f7940d16015d8",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Idle_00.png",
+      "bytes": 712841,
+      "sha256": "696a89d1cd130eb74bcfe29a14840ad7d588be305afff137f8ce7b81cd99523e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Idle_25.png",
+      "bytes": 712536,
+      "sha256": "6795741e994d31b95f61c0ba626a66e9b1196bbff865b271d181ba14c04962eb",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Idle_50.png",
+      "bytes": 713208,
+      "sha256": "3cae0ede8f9cc0e8bd3ba957b03188eb5f94bc21b4103f8f90558d18f8cfbe0e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Idle_75.png",
+      "bytes": 712765,
+      "sha256": "7d8723ea0f99567ae5afac08527fb884f9c77bf2a2f52738f0c040eeee0d53e3",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Investigate_50.png",
+      "bytes": 712867,
+      "sha256": "d1e825c4a2ff9f19ef04765cfaa335a6e475df93ef66ea032d11f88dec3f51ac",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/source_review/Sleep_50.png",
+      "bytes": 712679,
+      "sha256": "fd5e3f9590fe0fab173144f29285c304b088e0ca67f52571cf93549aff9b4cbf",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M14/textures/color_df9aa5ae9f50d0dafb81f342260f573c62d2208a47c944b1036d9cc6c9485751.png",
+      "bytes": 1088608,
+      "sha256": "df9aa5ae9f50d0dafb81f342260f573c62d2208a47c944b1036d9cc6c9485751",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M14"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/M15_living_candidate.glb",
+      "bytes": 3307892,
+      "sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/M15_living_export.glb",
+      "bytes": 4413848,
+      "sha256": "e4c5c59e218d5ff69261fd262d0c546734c64533887f6dba3e722c6e36d64ea3",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/M15_living_v001.blend",
+      "bytes": 4779620,
+      "sha256": "4221f50170f76930a9484fb38285e5756d3778084f4301bb80e11b9a62014181",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/M15_retained_input.glb",
+      "bytes": 3259856,
+      "sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/authoring.json",
+      "bytes": 12184,
+      "sha256": "5c984b9986e043bf8a4d2057cede386b75d97e9faa2ea944dce24764dda4e78b",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/living_creature_preview_809a33a7b132d940.py",
+      "bytes": 3301,
+      "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59",
+      "kinds": [
+        "immutable_preview_recipe"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/preview_receipt.json",
+      "bytes": 2385,
+      "sha256": "5898497e967f8519a634270cff31d4f9fdf67a186d69dbcfcab3e36b5d3a3bb2",
+      "kinds": [
+        "separate_source_preview_evidence"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/render_living_creature_source_2caf21a7e5590422.py",
+      "bytes": 5104,
+      "sha256": "2caf21a7e5590422c8f118cea724c0895d44180d918496c6835160a9af2edb47",
+      "kinds": [
+        "immutable_preview_recipe"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/root_source_review.json",
+      "bytes": 1169,
+      "sha256": "c5e88a84d1cb32a7f834c2c7487a43e04ab16ba841c4e70647cd3c7570304012",
+      "kinds": [
+        "separate_source_preview_evidence"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_review/Feed_38.png",
+      "bytes": 688327,
+      "sha256": "a00bf49bfddc66db9eed59913e8d1503dfa67341264ce458852fc18acfc6d314",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_review/Feed_61.png",
+      "bytes": 687493,
+      "sha256": "7dc3a9063f4e63dec65518c3a0f680ff27fc3ab7c815aefff3d2e8b8b2a9de42",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_review/Idle_00.png",
+      "bytes": 687037,
+      "sha256": "b274c6c3d4add2ae338c73b61035b0848af2f12ef446d33c32ce863a723437cf",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_review/Idle_25.png",
+      "bytes": 688326,
+      "sha256": "e73ec920fb325e511625f672d1d0a87459b63ee980d9732f59fc67c45ba0a12b",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_review/Idle_50.png",
+      "bytes": 688752,
+      "sha256": "770d60b9082d64bb9a91ad65f7644d0509de3ac611544c2782545bedbc899091",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_review/Idle_75.png",
+      "bytes": 685627,
+      "sha256": "e4f6cfee7d62d0e34c890aa3d18df50726456484a72d9c4a1abd6e961cdc3dc6",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_review/Investigate_50.png",
+      "bytes": 687574,
+      "sha256": "d3365ceee1a89e5f43ad2bd800437b04b6d0a93ed5c18b19ed079579bcfa84d2",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_review/Sleep_50.png",
+      "bytes": 685610,
+      "sha256": "70e01a84960009c2e26bdf63f7ae2b67cbc92086926ae1667c3225dc958d1eb6",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/review_iterations/preview_r2/source_visual_review.json",
+      "bytes": 1636,
+      "sha256": "8b8e1d67af393389442a4704bb820cac3369fae2375ae32ee4e7ecbac94db119",
+      "kinds": [
+        "separate_source_preview_evidence"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/source_contract.json",
+      "bytes": 3513,
+      "sha256": "79694a8ffa56b3bb19f6371736ed61b96e15f86bbe97a88b90e4f05bbd73fd45",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/textures/color_aca92162247d034eb28b7f3b1dad92c6b9fd99aaed36c6f9d63234dbb7c92b57.png",
+      "bytes": 1136576,
+      "sha256": "aca92162247d034eb28b7f3b1dad92c6b9fd99aaed36c6f9d63234dbb7c92b57",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/M16_living_candidate.glb",
+      "bytes": 1108084,
+      "sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/M16_living_export.glb",
+      "bytes": 2222448,
+      "sha256": "ad97d686956629f0dcb3ff15ea256dc8fb866666ccdf08cfae44221d07b75d6d",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/M16_living_v001.blend",
+      "bytes": 1859543,
+      "sha256": "9cb1edd4ce39f6af07819af187e60f52b5aa1eceaab1e1fb5a9bd9d32a5ada1a",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/M16_retained_input.glb",
+      "bytes": 638424,
+      "sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/authoring.json",
+      "bytes": 30116,
+      "sha256": "126940df39f619ace391cfad6387817a12d4ee034f31844f38f2cbd28203854c",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_contract.json",
+      "bytes": 3650,
+      "sha256": "97ec6815ea004adde21e3335e35e354b020aa50c371cfa9299ce56f3e180a77f",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_review/Feed_38.png",
+      "bytes": 704301,
+      "sha256": "4f6cb5b0c4438c62fc2ab7fea7e8daa5c21e237fa6cf023c003138025fa4baa2",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_review/Feed_61.png",
+      "bytes": 704215,
+      "sha256": "27f11782527125071eea1d738c77afcdd1a533677da65b82922178587e05d8cc",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_review/Idle_00.png",
+      "bytes": 704488,
+      "sha256": "58bdfd392de3c149fcec3d3839be17dd9134ace78c204bd6fe03e301e6b91c56",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_review/Idle_25.png",
+      "bytes": 704849,
+      "sha256": "58f869da456755a606f0f0fce05f5af5208e00962fbafbe14fc6f5dd049b096f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_review/Idle_50.png",
+      "bytes": 704636,
+      "sha256": "ba156d9a3b664c68d39d9ca3877e6554dd63bf027a51e1973b3359895d68f506",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_review/Idle_75.png",
+      "bytes": 704723,
+      "sha256": "6dd9f16487ed63a35ea3bd812797c579f614dc8b049d8424e20b438a914f1a5f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_review/Investigate_50.png",
+      "bytes": 704720,
+      "sha256": "f3b8859db0a695b124621e8f3f6140e6bcd7b9288f631cc23e131e7b3d018eb0",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/source_review/Sleep_50.png",
+      "bytes": 705572,
+      "sha256": "7020dc9d29c63882d3a7be31f7609208e788a3e5a4c6b94400cad0a5bbe6c569",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M16/textures/color_56bd9bb995a2311444d9b5b4ac764c142794971e12dd043a72aa5fde550fca6a.png",
+      "bytes": 1090422,
+      "sha256": "56bd9bb995a2311444d9b5b4ac764c142794971e12dd043a72aa5fde550fca6a",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M16"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_living_candidate.glb",
+      "bytes": 1665100,
+      "sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_living_export.glb",
+      "bytes": 2837512,
+      "sha256": "d9f631d38c05c284fbb4daa1e46324a6d31f298f0f395eb67145c4e0fb164eb1",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_living_v001.blend",
+      "bytes": 2917399,
+      "sha256": "00f0052a9836ae0ab002d3e64ab6bfc7cb2ebf93c1005ea0f6615b0af20ea9ed",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/M17_retained_input.glb",
+      "bytes": 1615332,
+      "sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/authoring.json",
+      "bytes": 13541,
+      "sha256": "ce86e48e02ba5887ec050a84a642dc75500e24e98c4f36a218afff91cf9419f7",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_contract.json",
+      "bytes": 3101,
+      "sha256": "4e6551ebd5d935b4df3a1689f44b4b61758be0234143c2e39b7ddc6900275f72",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Feed_38.png",
+      "bytes": 704423,
+      "sha256": "76f27899a1fb05d890c66220511f04e4fe2d7fd366e742c9c27b0f07753a719c",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Feed_61.png",
+      "bytes": 705138,
+      "sha256": "124385e4f301a2d4b6adfdf91cc28f6ca9133c7bbe06f811a92c182ac89799fa",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Idle_00.png",
+      "bytes": 704091,
+      "sha256": "b16560b67689e5c6b45d1331a45efe093c2f6c39b6b226c88be9f036c343a667",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Idle_25.png",
+      "bytes": 704634,
+      "sha256": "f499e86b13c6f5803ae9e7d372e810ce0e7e50a5d02b333679c4bfefb9942aeb",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Idle_50.png",
+      "bytes": 703958,
+      "sha256": "b5c19fa1e4354067d62024311edcccd1993f2baaf369a5602d070856c25b830f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Idle_75.png",
+      "bytes": 704580,
+      "sha256": "b1d54fb104a7bed2dbe746a1deaf61cb765e9d59959b5be74080e7254ade785f",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Investigate_50.png",
+      "bytes": 704319,
+      "sha256": "17ec90d47f6ccee7cef57fb6dbc4383fb5f3078aee8b188ac7a7062bd51ff757",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/source_review/Sleep_50.png",
+      "bytes": 701465,
+      "sha256": "778bf8453cd135c339bdf9656024e6d56026403760a3ab31024837f69cf51901",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M17/textures/color_59cb6dc98a4f5446fdd5944e442090f432c2917d8d03d97083e9673150aca400.png",
+      "bytes": 1162618,
+      "sha256": "59cb6dc98a4f5446fdd5944e442090f432c2917d8d03d97083e9673150aca400",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M17"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/M18_living_candidate.glb",
+      "bytes": 1315428,
+      "sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/M18_living_export.glb",
+      "bytes": 2441596,
+      "sha256": "e1d782d77f08bd58b25bb79d7dd669cabb1d3305a05f5d2887f6eaece7f3bc97",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/M18_living_v001.blend",
+      "bytes": 2526538,
+      "sha256": "a2068fc0bbda705bf6d2e5e6952e9039bdaf00087f878945e8877ea925642a91",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/M18_retained_input.glb",
+      "bytes": 1235028,
+      "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/authoring.json",
+      "bytes": 14923,
+      "sha256": "53d053230e5dd7d564c9d117bb6c3c7d5e29f876e1f55e0009254228f8f94c1e",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_contract.json",
+      "bytes": 3519,
+      "sha256": "d8007c5ae49e09825f7ee078c09873be044f940cf17e6ae55c6c36658649f249",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Feed_38.png",
+      "bytes": 635348,
+      "sha256": "c0b5e3c6da06832518337a083a8bdd3d14d9ea2edf563bfe6f7c35376c4bfc7d",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Feed_61.png",
+      "bytes": 633896,
+      "sha256": "e21dbab590233fe97432b7092383683ecd71a3ff4cde2cd317bc0bd35462bac7",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Idle_00.png",
+      "bytes": 632879,
+      "sha256": "a40a03a0842211649be8512adda36a8cfd41ff3de54a4d621d0ba1ca26ea2513",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Idle_25.png",
+      "bytes": 633756,
+      "sha256": "447e2648890307c2638c2ee2e48abd88a3bceac2d903ff82e44d47361310796d",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Idle_50.png",
+      "bytes": 633908,
+      "sha256": "f1a2fce744132a7004b3415c4333710858604ca03e43af309a1d8f8cc71d4905",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Idle_75.png",
+      "bytes": 633051,
+      "sha256": "069cfc897be9c9473eed14400c030133b959cc2bfb6b884b5cb78b2b267288de",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Investigate_50.png",
+      "bytes": 634437,
+      "sha256": "9d792a790748fc819d26b51ac667f519319524c1e80bc9e345b47d7a2537d4df",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/source_review/Sleep_50.png",
+      "bytes": 636889,
+      "sha256": "67d392e3b6a0d1f40f69956f7c07731602e504d3f8087b9e2da83036d4a31ff5",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M18/textures/color_b4ad89c56651074b04044916e09e266f06cc8a10bc74288a1ed1508d578c0ef3.png",
+      "bytes": 1163638,
+      "sha256": "b4ad89c56651074b04044916e09e266f06cc8a10bc74288a1ed1508d578c0ef3",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M18"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/M19_living_candidate.glb",
+      "bytes": 2013044,
+      "sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/M19_living_export.glb",
+      "bytes": 2439500,
+      "sha256": "23c86eb8ea0920be544a6a27fc007228ef9f2eef26691b2b47890db315cc15fe",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/M19_living_v001.blend",
+      "bytes": 2370556,
+      "sha256": "cf176c9dcb7bbfdfc134971c416cdaf0d221ccdd03b895cbded409f09fd3cc71",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/M19_retained_input.glb",
+      "bytes": 1897900,
+      "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/authoring.json",
+      "bytes": 20690,
+      "sha256": "7b37fdd3f140a2bec8c8baa89ac1c6f040206642cb4f150cb7645d5a7897c570",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_contract.json",
+      "bytes": 5216,
+      "sha256": "347fa65f2253b6dda0f3b0eb302d3719719fb03f76c834b6e303c073086f16e0",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Feed_38.png",
+      "bytes": 668637,
+      "sha256": "144cf921a3c3c4149e2a902c496f27eae0f78032626fcd75bde1250fbd708914",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Feed_61.png",
+      "bytes": 668899,
+      "sha256": "7127a6b3084de0f9640fd5bf7bcddc3ca50600cb1e5103f1dcc195633493593e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Idle_00.png",
+      "bytes": 673194,
+      "sha256": "d2b130a03c1ca07dae40cc85ec76c3f3e21e8d18cc0a235158f3e9e63e750f89",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Idle_25.png",
+      "bytes": 673527,
+      "sha256": "79a85da699f2efd30a0fc8d9ebb1499b4fb7a3202d930a688f347b9429ac495d",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Idle_50.png",
+      "bytes": 673241,
+      "sha256": "61f168e3df45f220dccc9701612eeaccb7f66dac0bb43ea21f661e0457198cc7",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Idle_75.png",
+      "bytes": 672831,
+      "sha256": "0d9c827a358a001df9111b3d8375ccc096ba1e8e9e0b19abe99d48988c4a34ae",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Investigate_50.png",
+      "bytes": 673137,
+      "sha256": "b3511b772aad7adcebfdb5bd9bc5f8027b8ddb86ee4bc46ea087060477eccdc4",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/source_review/Sleep_50.png",
+      "bytes": 665188,
+      "sha256": "9e25428e51b6f4784d056ae3951886f866b37d163f5efe717239db7997fad19e",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/color_025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466.png",
+      "bytes": 73915,
+      "sha256": "025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/color_2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e.png",
+      "bytes": 268,
+      "sha256": "2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/color_6114520f7607da9469c72c28ed9b4c2b92041e5e999f1552e03448b17e18ebe6.png",
+      "bytes": 50487,
+      "sha256": "6114520f7607da9469c72c28ed9b4c2b92041e5e999f1552e03448b17e18ebe6",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/color_962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81.png",
+      "bytes": 268,
+      "sha256": "962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/color_fad09498bf72210f7b097bb2f61a612a24e2ceb9d776cfd062e2824886c72d30.png",
+      "bytes": 25718,
+      "sha256": "fad09498bf72210f7b097bb2f61a612a24e2ceb9d776cfd062e2824886c72d30",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/linear_035afad7caa396eb451ae8663acd16d3a75d5509a84fd9fd821901ff33851d5d.png",
+      "bytes": 5045,
+      "sha256": "035afad7caa396eb451ae8663acd16d3a75d5509a84fd9fd821901ff33851d5d",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/linear_a5e6564c9160f0d13dac2ca3bc7da5c4500f5962a179a35be4e77d3cd2c83d29.png",
+      "bytes": 30288,
+      "sha256": "a5e6564c9160f0d13dac2ca3bc7da5c4500f5962a179a35be4e77d3cd2c83d29",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/linear_e3f40cdc6170305d7cbb3691fb172530a829bae2f699c2e9eba8246a40a26ea0.png",
+      "bytes": 30258,
+      "sha256": "e3f40cdc6170305d7cbb3691fb172530a829bae2f699c2e9eba8246a40a26ea0",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/linear_f1c60f76a74cbc0f2d888610fe8738f76125f06f96c4f12790f98164309dc86c.png",
+      "bytes": 30326,
+      "sha256": "f1c60f76a74cbc0f2d888610fe8738f76125f06f96c4f12790f98164309dc86c",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/linear_f5afa6f56b3f6f9b51713ad11b0af418c268430d99e0944acfc1a16cf2691f7f.png",
+      "bytes": 30212,
+      "sha256": "f5afa6f56b3f6f9b51713ad11b0af418c268430d99e0944acfc1a16cf2691f7f",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/normal_358ade508a3368d81664571bb4aaba26a396c5c847a1bc0fdeae40982b0a2c6f.png",
+      "bytes": 41372,
+      "sha256": "358ade508a3368d81664571bb4aaba26a396c5c847a1bc0fdeae40982b0a2c6f",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/normal_46cd1611e590711b276efa70022f863851b734d890f2e523c86d7109001757f7.png",
+      "bytes": 41456,
+      "sha256": "46cd1611e590711b276efa70022f863851b734d890f2e523c86d7109001757f7",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/normal_9dd3cc84163e0de8c924c75f8d69afc009dbe3490d11714bf5efffd5a2543f38.png",
+      "bytes": 40878,
+      "sha256": "9dd3cc84163e0de8c924c75f8d69afc009dbe3490d11714bf5efffd5a2543f38",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/normal_a20ed75fdf0b15f57a1b9396286cc0a767e75a290e828d9f95e281b30c83375e.png",
+      "bytes": 27228,
+      "sha256": "a20ed75fdf0b15f57a1b9396286cc0a767e75a290e828d9f95e281b30c83375e",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M19/textures/normal_eb5e07e07eb082feb855ebe19d04d251f60f11f4a61b7a6b3ae58fd7ebd84fa1.png",
+      "bytes": 41326,
+      "sha256": "eb5e07e07eb082feb855ebe19d04d251f60f11f4a61b7a6b3ae58fd7ebd84fa1",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M19"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/M20_living_candidate.glb",
+      "bytes": 1964088,
+      "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/M20_living_export.glb",
+      "bytes": 2406684,
+      "sha256": "2cbfcd1a5211ff2a99256e981b85ad5184f08d62b85db1337fcdb38e50ff437e",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/M20_living_v001.blend",
+      "bytes": 2424551,
+      "sha256": "c4ab62d18845920040d76ec99a5cecede5205843371b6090fb87216eb437cf05",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/M20_retained_input.glb",
+      "bytes": 1876176,
+      "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/authoring.json",
+      "bytes": 21158,
+      "sha256": "6c9e0a631f536dd6a6f6860606a20a2e3f481251895ff571b25612d3b6c5b18b",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_contract.json",
+      "bytes": 5228,
+      "sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
+      "kinds": [
+        "current_creature_candidate"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Feed_38.png",
+      "bytes": 672855,
+      "sha256": "5cc05df7b1274012d053f7d7c2428b944966c87f1d11e6f6fc05300bc743c472",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Feed_61.png",
+      "bytes": 672507,
+      "sha256": "ba619bdd0b97f202ebbfd2d66052aaf8bbeff4a690f2315e0bbd14bd625b04ae",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Idle_00.png",
+      "bytes": 679026,
+      "sha256": "003f2cbc4d711e7c40df4948011712b456a7f52a83f073dbad0129e84a936631",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Idle_25.png",
+      "bytes": 679105,
+      "sha256": "fd7fae37f9a673ef98eecae78a46d40940ebeb9a4c70f28ee5353a49607831ca",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Idle_50.png",
+      "bytes": 678313,
+      "sha256": "8e3342a6ef5ff9e5d8430760dcf7be6c649bb6aa57f9b3edc87f60a100bcee13",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Idle_75.png",
+      "bytes": 678010,
+      "sha256": "2f45d8062d61f301bb43fb12a49a9f2eaf96c9399185667c0957bda8fdde379d",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Investigate_50.png",
+      "bytes": 678502,
+      "sha256": "b176df57b1db26b28f13de464eeb43f8b7528fe9dc411f6eb66a1fc2d4ea72cb",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/source_review/Sleep_50.png",
+      "bytes": 665496,
+      "sha256": "ccdb4c711016e38684d13c83f61547c929ba14d43b9ce26c62ebb44277283b20",
+      "kinds": [
+        "unaccepted_source_preview"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/color_025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466.png",
+      "bytes": 73915,
+      "sha256": "025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/color_2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e.png",
+      "bytes": 268,
+      "sha256": "2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/color_380ac3f990018a1017a62cae7036ff344033101f149e196480c140e2265cca57.png",
+      "bytes": 72493,
+      "sha256": "380ac3f990018a1017a62cae7036ff344033101f149e196480c140e2265cca57",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/color_962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81.png",
+      "bytes": 268,
+      "sha256": "962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/color_c948a3aba1dec9769d2265cb980c8c57bf90ddd44ea3addb7671a536e949ace1.png",
+      "bytes": 25965,
+      "sha256": "c948a3aba1dec9769d2265cb980c8c57bf90ddd44ea3addb7671a536e949ace1",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/linear_33d73047c11745fb0164ea86f02c170a50687fe110bc1ab7f07440b5c24ae710.png",
+      "bytes": 30263,
+      "sha256": "33d73047c11745fb0164ea86f02c170a50687fe110bc1ab7f07440b5c24ae710",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/linear_3eca686efab5c304928054be5ad4f8a60732ea9d1ed6a5ed59558232d2a8731b.png",
+      "bytes": 5307,
+      "sha256": "3eca686efab5c304928054be5ad4f8a60732ea9d1ed6a5ed59558232d2a8731b",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/linear_889473663e4f3a3168d3ce840427ffed0f33503d00fef08b2eaff526a9288eae.png",
+      "bytes": 30520,
+      "sha256": "889473663e4f3a3168d3ce840427ffed0f33503d00fef08b2eaff526a9288eae",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/linear_9fc88a0491f63afa4be17adbe141081a44dfd37c3cc58a63825ab14b5a5f03eb.png",
+      "bytes": 30447,
+      "sha256": "9fc88a0491f63afa4be17adbe141081a44dfd37c3cc58a63825ab14b5a5f03eb",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/linear_f5a9df426fe12cf7be6156c90ec239e790316db7a5a94da5d9d0b92690e35c07.png",
+      "bytes": 12640,
+      "sha256": "f5a9df426fe12cf7be6156c90ec239e790316db7a5a94da5d9d0b92690e35c07",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/normal_043a6c464e70d5dd1e69e98fa22cf5a3a191fc546e91089cc3ea1e7bae73c65d.png",
+      "bytes": 41110,
+      "sha256": "043a6c464e70d5dd1e69e98fa22cf5a3a191fc546e91089cc3ea1e7bae73c65d",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/normal_525e78ab1ff881d28167a2b6cecb8ba6802b7af143f4bc579860989dc82f470a.png",
+      "bytes": 27189,
+      "sha256": "525e78ab1ff881d28167a2b6cecb8ba6802b7af143f4bc579860989dc82f470a",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/normal_aa5dbe39d025eecaeca724582fc3947e924008b3d7bc15a83fed093b2f563609.png",
+      "bytes": 41880,
+      "sha256": "aa5dbe39d025eecaeca724582fc3947e924008b3d7bc15a83fed093b2f563609",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/normal_b1066ca5b3e79e8e5d0e2527d86bf4109aae9f271c43cd5013d64b75aa601aab.png",
+      "bytes": 20112,
+      "sha256": "b1066ca5b3e79e8e5d0e2527d86bf4109aae9f271c43cd5013d64b75aa601aab",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M20/textures/normal_b41cc6b33472d112c61609a012c1401c3649b0f20a96d243b42451fd521da62b.png",
+      "bytes": 41545,
+      "sha256": "b41cc6b33472d112c61609a012c1401c3649b0f20a96d243b42451fd521da62b",
+      "kinds": [
+        "retained_texture_closure"
+      ],
+      "assets": [
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/4892964f9ffde798/author_living_creature_motion.py",
+      "bytes": 21134,
+      "sha256": "c218992f66a12f09caaa1061792f9a076a83a4ec0b9a865afc1d9425e67c277e",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/4892964f9ffde798/graft_creature_ambient.py",
+      "bytes": 18624,
+      "sha256": "02f3cc3f5506da838702296814f07d6b1f8edfd48f10eca2126b3aecfc6f652b",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/4892964f9ffde798/living_creature_motion_profiles.py",
+      "bytes": 7881,
+      "sha256": "1ec22b85b13c41174738cf3168cd93c4cdb034867309776eb491dddd0eb4b024",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/4892964f9ffde798/living_creature_preview.py",
+      "bytes": 3092,
+      "sha256": "41a548858443a6eeebbb522ceac9ae6e553d1d6263bc74ac406091999b6c291c",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/4892964f9ffde798/preserve_creature_action_bytes.py",
+      "bytes": 9035,
+      "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/4892964f9ffde798/verify_living_creature_motion.py",
+      "bytes": 8003,
+      "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M15"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5/author_living_creature_motion.py",
+      "bytes": 25600,
+      "sha256": "5c3107f813522eac57fdbc5d694b613b1a3dcf2966b2ba8488f6d4c165d0f489",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5/creature_morph_lineage.py",
+      "bytes": 13428,
+      "sha256": "d848da51d00e7e3ca765e852f7390e2046b70834376fe7d2b0a3caa2e4b8f890",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5/graft_creature_ambient.py",
+      "bytes": 20645,
+      "sha256": "babda3e1d65a6ac83f2722d257a6da68c5d334fc4b2222167c07c74ff950be62",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5/living_creature_motion_profiles.py",
+      "bytes": 7881,
+      "sha256": "1ec22b85b13c41174738cf3168cd93c4cdb034867309776eb491dddd0eb4b024",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5/living_creature_preview.py",
+      "bytes": 3301,
+      "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5/preserve_creature_action_bytes.py",
+      "bytes": 9035,
+      "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/5994570fa2cff1d5/verify_living_creature_motion.py",
+      "bytes": 8003,
+      "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/fccdff40fa28c663/author_living_creature_motion.py",
+      "bytes": 21315,
+      "sha256": "eea4f3643398544185d86e8d681157bbc22387d738c557fa2f10c50b728a436d",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/fccdff40fa28c663/graft_creature_ambient.py",
+      "bytes": 18624,
+      "sha256": "02f3cc3f5506da838702296814f07d6b1f8edfd48f10eca2126b3aecfc6f652b",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/fccdff40fa28c663/living_creature_motion_profiles.py",
+      "bytes": 7881,
+      "sha256": "1ec22b85b13c41174738cf3168cd93c4cdb034867309776eb491dddd0eb4b024",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/fccdff40fa28c663/living_creature_preview.py",
+      "bytes": 3301,
+      "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/fccdff40fa28c663/preserve_creature_action_bytes.py",
+      "bytes": 9035,
+      "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/fccdff40fa28c663/verify_living_creature_motion.py",
+      "bytes": 8003,
+      "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d",
+      "kinds": [
+        "immutable_recipe_snapshot"
+      ],
+      "assets": [
+        "M01"
+      ],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/author_living_creature_motion.py",
+      "bytes": 25600,
+      "sha256": "5c3107f813522eac57fdbc5d694b613b1a3dcf2966b2ba8488f6d4c165d0f489",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/creature_morph_lineage.py",
+      "bytes": 13428,
+      "sha256": "d848da51d00e7e3ca765e852f7390e2046b70834376fe7d2b0a3caa2e4b8f890",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/graft_creature_ambient.py",
+      "bytes": 20645,
+      "sha256": "babda3e1d65a6ac83f2722d257a6da68c5d334fc4b2222167c07c74ff950be62",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/living_creature_motion_profiles.py",
+      "bytes": 7881,
+      "sha256": "1ec22b85b13c41174738cf3168cd93c4cdb034867309776eb491dddd0eb4b024",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/living_creature_preview.py",
+      "bytes": 3301,
+      "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/preserve_creature_action_bytes.py",
+      "bytes": 9035,
+      "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/test_creature_morph_lineage.py",
+      "bytes": 14316,
+      "sha256": "244fd4e8e7049a370a2ffb48abfbcb8837f5f29f40233e5dbeeb863e833c8c4a",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/test_graft_creature_ambient.py",
+      "bytes": 7978,
+      "sha256": "90d9e7959685fe7d7c1d8ab371c5c72fb89fd2b36057f685298ac25114513351",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/test_preserve_creature_action_bytes.py",
+      "bytes": 5633,
+      "sha256": "31c6f6925e64cbee3e30116ec4e077aef0eda2e2c009098b5a199fb592439846",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/verify_living_creature_motion.py",
+      "bytes": 8003,
+      "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d",
+      "kinds": [
+        "current_authoring_tool_or_regression"
+      ],
+      "assets": [],
+      "currently_ignored": false
+    }
+  ],
+  "path_count": 443,
+  "total_bytes": 326696732,
+  "maximum_file_bytes": 7623050,
+  "runtime_file_count": 0,
+  "requires_exact_staged_blob_comparison": true,
+  "requires_narrow_attributes_audit_before_staging": true,
+  "ignored_paths": [],
+  "review_holds": {
+    "M02": "Runtime parentless-root anchoring diagnosis pending; source contract remains pass",
+    "M07": "Wing-rest/feeding visual revision required",
+    "M18": "Sleep dorsal slit retained/candidate comparison pending"
+  },
+  "other_review_followups": [
+    "M04 hand/sword alignment",
+    "M05 Sleep bell attachment",
+    "M12 Sleep mouth-ring seam",
+    "Cropped extremities and actual floor contact"
+  ],
+  "current_native_status_scope": "Only prior M01/M15/M16 proof was bound in frozen promotion manifest; remaining17 not accepted",
+  "source_intent_is_not_visual_acceptance": true,
+  "level_accepted": false,
+  "performance_verified": false,
+  "user_accepted": false,
+  "promotion_authorized": false
+}

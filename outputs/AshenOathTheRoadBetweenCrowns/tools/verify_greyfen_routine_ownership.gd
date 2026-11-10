@@ -1,9 +1,10 @@
 extends SceneTree
 ## Regression for named-actor promotion from village to regional routine ownership.
-## Uses the authored CastProfile schedules without loading scenes or writing saves.
+## Uses authored schedules and the prepared station prop with disposable actors.
 
 const Life = preload("res://scripts/greyfen_life_controller.gd")
 const CastProfile = preload("res://scripts/story_cast_profile.gd")
+const Stations = preload("res://scripts/living_cast_stations.gd")
 const Story = preload("res://scripts/story_state.gd")
 const Quests = preload("res://scripts/quest_manager.gd")
 const NAMED := ["blacksmith_tor", "mira", "rook"]
@@ -33,6 +34,8 @@ class Driver extends Node:
 	var rest_anchor: Dictionary = {}
 	var current_state := "idle"
 	var stopped_actions := 0
+	var dead := false
+	var distance_suspended := false
 	func get_visible_forward() -> Vector3: return -(get_parent() as Node3D).global_basis.z
 	func set_distance_suspended(_suspended: bool) -> void: pass
 	func set_update_rate_hz(_rate: float) -> void: pass
@@ -287,13 +290,19 @@ func _verify_work_contact_lifecycle() -> void:
 	var life: Node = fixture.life
 	var entry: Dictionary = life._world_actor("rook")
 	_check(not life._begin_satchel_cinch(entry.node), "absent satchel never fabricates a knot contact")
-	var bag := Node3D.new()
-	bag.name = "RookStationSatchel"
-	fixture.host.zone_root.add_child(bag)
-	var knot := Node3D.new()
-	knot.name = "SatchelKnot"
-	knot.scale = Vector3(0.8, 1.1, 0.9)
-	bag.add_child(knot)
+	var table := Node3D.new()
+	fixture.host.zone_root.add_child(table)
+	Stations.decorate_place(table, "common_table")
+	var station := table.get_node_or_null("LifeWork_rook") as Node3D
+	var bag := table.get_node_or_null("RookStationSatchel") as Node3D
+	var knot := bag.find_child("SatchelKnot", true, false) as Node3D if bag != null else null
+	_check(station != null and knot != null, "common table prepares the actual Rook satchel and attached knot")
+	if station == null or knot == null:
+		_dispose(fixture)
+		return
+	entry.profile["workstation"] = {"node_ref": weakref(station)}
+	_check(not life._begin_satchel_cinch(entry.node), "a bound satchel still requires an active occupation")
+	entry.activity_active = true
 	var base := knot.scale
 	var planted := bag.transform
 	_check(life._begin_satchel_cinch(entry.node), "real attached knot accepts the bounded work contact")
@@ -305,6 +314,8 @@ func _verify_work_contact_lifecycle() -> void:
 	life._release_activity(entry, false)
 	_check(knot.scale.is_equal_approx(base) and life.work_contact_effects.is_empty(), "protected-owner interruption clears transient knot tension")
 	_check(bag.visible and bag.transform.is_equal_approx(planted), "interruption leaves the real satchel on its supported table")
+	_check(not life._begin_satchel_cinch(entry.node), "released work cannot restart the effect")
+	entry.activity_active = true
 	life._begin_satchel_cinch(entry.node)
 	life._tick_work_contact_effects(0.5)
 	_check(knot.scale.is_equal_approx(base) and life.work_contact_effects.is_empty(), "completed contact recovery releases the knot owner")

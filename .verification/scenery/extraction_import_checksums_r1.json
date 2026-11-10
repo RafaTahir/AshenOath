@@ -1,0 +1,202 @@
+{
+  "engine_started": false,
+  "checks": [
+    {
+      "source": "assets_external/environment/props/Table_Large.obj",
+      "checksum": ".godot/imported/Table_Large.obj-94782b3c96a72c173cbcabf48f6b22e3.md5",
+      "source_md5": "e5e5ba522c165d30eb7561b7b2e2cd36",
+      "recorded_md5": "e5e5ba522c165d30eb7561b7b2e2cd36",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/props/Banner_1_Cloth.obj",
+      "checksum": ".godot/imported/Banner_1_Cloth.obj-3efa6ef8439f4f8ce68651549f3af296.md5",
+      "source_md5": "08d3424ee6cdd39ea6f64459abc3357f",
+      "recorded_md5": "08d3424ee6cdd39ea6f64459abc3357f",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/Wall_UnevenBrick_Window_Thin_Round.obj",
+      "checksum": ".godot/imported/Wall_UnevenBrick_Window_Thin_Round.obj-39a6f1abba5c87e28dc9478d3ddf82cc.md5",
+      "source_md5": "39f74c36f31dd2e81cc4db1369180257",
+      "recorded_md5": "39f74c36f31dd2e81cc4db1369180257",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/Wall_Plaster_WoodGrid.obj",
+      "checksum": ".godot/imported/Wall_Plaster_WoodGrid.obj-5a2e30d4ba530afe83978e2104d2d1cd.md5",
+      "source_md5": "5ef85f411448d071afc18cac180bcb01",
+      "recorded_md5": "5ef85f411448d071afc18cac180bcb01",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/Roof_RoundTiles_6x10.obj",
+      "checksum": ".godot/imported/Roof_RoundTiles_6x10.obj-c244553237069e2460d7911e30382b85.md5",
+      "source_md5": "ec64e7be71f4709c5f4de01960dd96d7",
+      "recorded_md5": "ec64e7be71f4709c5f4de01960dd96d7",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/Door_1_Flat.obj",
+      "checksum": ".godot/imported/Door_1_Flat.obj-7486e6e11a034de47c62e5b12dd96652.md5",
+      "source_md5": "a72ae93334d53cd682ca84f044736ed7",
+      "recorded_md5": "a72ae93334d53cd682ca84f044736ed7",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/Prop_WoodenFence_Extension1.obj",
+      "checksum": ".godot/imported/Prop_WoodenFence_Extension1.obj-96558436747054d98d6c9db397a85a56.md5",
+      "source_md5": "bfcbd4d84b10c274e27f7fb7e326d733",
+      "recorded_md5": "bfcbd4d84b10c274e27f7fb7e326d733",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/Roof_Front_Brick6.obj",
+      "checksum": ".godot/imported/Roof_Front_Brick6.obj-648b1dbe3e48d13977096bf04e464772.md5",
+      "source_md5": "1c49cc5690dc0dcb10f2f90b3245bcbd",
+      "recorded_md5": "1c49cc5690dc0dcb10f2f90b3245bcbd",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/forest/Fern_1.obj",
+      "checksum": ".godot/imported/Fern_1.obj-34fe95a42eb3ead8f6d1884a10fd793a.md5",
+      "source_md5": "d25c199472b8c31aba69d39a1c7ec9f8",
+      "recorded_md5": "d25c199472b8c31aba69d39a1c7ec9f8",
+      "matched": true
+    },
+    {
+      "source": "assets_external/textures/runtime/forest_ground_albedo.jpg",
+      "checksum": ".godot/imported/forest_ground_albedo.jpg-9b8ce65ed96151b89e98eb0d0beb98fe.md5",
+      "source_md5": "e1ad06059cb24f980224e2a4d0509172",
+      "recorded_md5": "e1ad06059cb24f980224e2a4d0509172",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/props/T_Trim_Furniture_Normal.png",
+      "checksum": ".godot/imported/T_Trim_Furniture_Normal.png-ffff2f57b147a0103c8d6e94480c837d.md5",
+      "source_md5": "c808b96ea6efd3c6f1faa38fef56fa03",
+      "recorded_md5": "c808b96ea6efd3c6f1faa38fef56fa03",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/props/T_Trim_Furniture_BaseColor.png",
+      "checksum": ".godot/imported/T_Trim_Furniture_BaseColor.png-ec02b9fc0bdd221dc75ef4bab809793c.md5",
+      "source_md5": "30d8a362817a11717246cca8350962f9",
+      "recorded_md5": "30d8a362817a11717246cca8350962f9",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/props/T_Trim_Metal_Normal.png",
+      "checksum": ".godot/imported/T_Trim_Metal_Normal.png-4f56e87e021f231486d5d443cbeb59c5.md5",
+      "source_md5": "9ee116f7bb4921481b711b655b4470d5",
+      "recorded_md5": "9ee116f7bb4921481b711b655b4470d5",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/props/T_Trim_Metal_BaseColor.png",
+      "checksum": ".godot/imported/T_Trim_Metal_BaseColor.png-3cdbaa22e074e465dbdb7a9a94bbdc9f.md5",
+      "source_md5": "a9250ec603a94293e0d8647889c25efe",
+      "recorded_md5": "a9250ec603a94293e0d8647889c25efe",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/props/T_Trim_Cloth_Normal.png",
+      "checksum": ".godot/imported/T_Trim_Cloth_Normal.png-b27ad52cd6d397f3594f2f947bb1df7e.md5",
+      "source_md5": "f214d4cceb252afa6d5a2a816428ac86",
+      "recorded_md5": "f214d4cceb252afa6d5a2a816428ac86",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/props/T_Trim_Cloth_BaseColor.png",
+      "checksum": ".godot/imported/T_Trim_Cloth_BaseColor.png-e368fcbf77e660c09b42e2d2af556172.md5",
+      "source_md5": "2e33286b784b7bee2b59e919af038eef",
+      "recorded_md5": "2e33286b784b7bee2b59e919af038eef",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_Plaster_BaseColor.png",
+      "checksum": ".godot/imported/T_Plaster_BaseColor.png-318531f936b6e8e2a86b97d8148439ee.md5",
+      "source_md5": "f46471d1d667e3979800ed7d27b94e9e",
+      "recorded_md5": "f46471d1d667e3979800ed7d27b94e9e",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_Plaster_Normal.png",
+      "checksum": ".godot/imported/T_Plaster_Normal.png-1b0144f3d2f91bd64f79decc222557fe.md5",
+      "source_md5": "323a781a6fe7316ed2dfedb8162e442e",
+      "recorded_md5": "323a781a6fe7316ed2dfedb8162e442e",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_UnevenBrick_BaseColor.png",
+      "checksum": ".godot/imported/T_UnevenBrick_BaseColor.png-c042c9b99a12671c328f3a4a3454d1b9.md5",
+      "source_md5": "db1cd222a342c220be56e4ef94ddee66",
+      "recorded_md5": "db1cd222a342c220be56e4ef94ddee66",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_UnevenBrick_Roughness.png",
+      "checksum": ".godot/imported/T_UnevenBrick_Roughness.png-9c25fb33d26fa13c8a915b12f4351995.md5",
+      "source_md5": "d9051cb697cb5113e08c04282754d5c1",
+      "recorded_md5": "d9051cb697cb5113e08c04282754d5c1",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_UnevenBrick_Normal.png",
+      "checksum": ".godot/imported/T_UnevenBrick_Normal.png-9999264542987fcf36bb5f8798ed9b18.md5",
+      "source_md5": "d75b562ee9bb69e3a72576d377f2b2ee",
+      "recorded_md5": "d75b562ee9bb69e3a72576d377f2b2ee",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_WoodTrim_BaseColor.png",
+      "checksum": ".godot/imported/T_WoodTrim_BaseColor.png-1735e3af156d02f7fc1b17367a5e3c9a.md5",
+      "source_md5": "e46335d3bba09eefa0a4d7da074440d2",
+      "recorded_md5": "e46335d3bba09eefa0a4d7da074440d2",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_WoodTrim_Roughness.png",
+      "checksum": ".godot/imported/T_WoodTrim_Roughness.png-82672da15f2947fd1d113aa1339c6fc6.md5",
+      "source_md5": "7628a223471660747a85344b9d736a95",
+      "recorded_md5": "7628a223471660747a85344b9d736a95",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_WoodTrim_Normal.png",
+      "checksum": ".godot/imported/T_WoodTrim_Normal.png-224871569c3ecc1cce27c79446650451.md5",
+      "source_md5": "fdabfb9b87b4ea87126818cb9ef45637",
+      "recorded_md5": "fdabfb9b87b4ea87126818cb9ef45637",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_RoundTiles_BaseColor.png",
+      "checksum": ".godot/imported/T_RoundTiles_BaseColor.png-603db2d81bf292090a123f5a551bccc2.md5",
+      "source_md5": "e761a795e0f66df80ae802598595ed1a",
+      "recorded_md5": "e761a795e0f66df80ae802598595ed1a",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_RoundTiles_Roughness.png",
+      "checksum": ".godot/imported/T_RoundTiles_Roughness.png-050e5aada48c67a0646e95a0143e3975.md5",
+      "source_md5": "53552a8eba1ac26d1da8ae458d049e87",
+      "recorded_md5": "53552a8eba1ac26d1da8ae458d049e87",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/village/T_RoundTiles_Normal.png",
+      "checksum": ".godot/imported/T_RoundTiles_Normal.png-720acfb2feff007420e2b64d0ae55b8f.md5",
+      "source_md5": "6731a0d66d3681fa1892fa9bf90e0eb7",
+      "recorded_md5": "6731a0d66d3681fa1892fa9bf90e0eb7",
+      "matched": true
+    },
+    {
+      "source": "assets_external/environment/forest/Leaves.png",
+      "checksum": ".godot/imported/Leaves.png-f6dab29e8ea13586af86fa715a961f2e.md5",
+      "source_md5": "3003dbc8643e5d4a7d51d9d7fd9d1477",
+      "recorded_md5": "3003dbc8643e5d4a7d51d9d7fd9d1477",
+      "matched": true
+    }
+  ],
+  "passed": true
+}

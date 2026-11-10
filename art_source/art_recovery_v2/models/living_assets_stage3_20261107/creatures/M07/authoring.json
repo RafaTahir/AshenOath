@@ -1,0 +1,2816 @@
+{
+  "asset": "M07",
+  "species": "ashwing",
+  "intent": "Measured folded wing rest with a hooked-head watch and a unilateral balancing release during feeding.",
+  "production_resource": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+  "production_input_path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\M07_retained_input.glb",
+  "production_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+  "retained_external_inputs": [
+    {
+      "uri": "textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "source_path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\textures\\color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "path": "models/living_assets_stage3_20261107/creatures/M07/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "sha256": "0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b",
+      "bytes": 1115249
+    }
+  ],
+  "blend_sha256": "d07f00c261ee865b79390e6a40103518f0c3d3cb70ae1efdd053ff43c68b105f",
+  "candidate_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+  "candidate_bytes": 2166936,
+  "blender_export_sha256": "362d34e17e061a32ff9e5db79e7238ab0bd7b082b368ba51a49c4250b48c96a7",
+  "author_tool_sha256": "a0744a5bc4c598a263a9df43b47e6c1ee4a691ff3b39689039235b1be8af8bee",
+  "recipe_sha256": "115aac66956a25126e7d996ac4f021cffaae1a6b706d190402629bfdfc0edfd6",
+  "recipe_snapshot": {
+    "sha256": "215d6ace2cdc27974429e5961ea932ad76b805ff9974334adf8c8fefca7a1134",
+    "directory": "models\\living_assets_stage3_20261107\\recipes\\215d6ace2cdc2797",
+    "files": {
+      "author_living_creature_motion.py": "a0744a5bc4c598a263a9df43b47e6c1ee4a691ff3b39689039235b1be8af8bee",
+      "living_creature_motion_profiles.py": "115aac66956a25126e7d996ac4f021cffaae1a6b706d190402629bfdfc0edfd6",
+      "preserve_creature_action_bytes.py": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017",
+      "graft_creature_ambient.py": "babda3e1d65a6ac83f2722d257a6da68c5d334fc4b2222167c07c74ff950be62",
+      "verify_living_creature_motion.py": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d",
+      "living_creature_preview.py": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59",
+      "creature_morph_lineage.py": "d848da51d00e7e3ca765e852f7390e2046b70834376fe7d2b0a3caa2e4b8f890",
+      "m07_fold_pose_support.py": "373292fdea058dc6162a289171bb0924dd21a7295579b6670c06423f716d0e78",
+      "m07_fold_probe_receipt.json": "90413a7482b29d0c7edaacd2185dc95cf35721628b9f0c5a28ae5805136979d5",
+      "m07_baked_geometry.py": "3cbf097c1907f7f44455fb7380f62ab9d6736a490e917e663d0e026581b073a7",
+      "m07_probe_geometry.py": "e504737faa838fea819f751a12ecf516810c3e518919eee486f0fbbfc3abda3c"
+    }
+  },
+  "retained_activity_baseline_phases": {
+    "Idle": 0.0,
+    "Investigate": 0.0,
+    "Feed": 0.0,
+    "Sleep": 0.0
+  },
+  "retained_rig_signature": "a4bf5970ae5a85a38e3f0b1bfaa95589013dc9018c61858825321d32b49a7ab8",
+  "protected_curve_signatures": {
+    "Attack": "2f804d0d81d98294c992e2860cc2cd0f94d1790e5890abe7e4ffaa311d88cb36",
+    "AttackHeavy": "e56559e15e527d377a1f89561d06d2254f4b28d953dbf5c80673271845a81f3d",
+    "Block": "a1db2b8c12f8a2a427726faedca1d91686d9681eab17e4943fc9c8a9eec4442e",
+    "Death": "e7db26671d0c8b76a90c3b98d5829909901574b9ed892498f95ab84f0f17cc0b",
+    "HitReact": "e6f114d23ca0adc63aef20d93dc0ce6667a1cfd6e1948276c507bf37c4f9f30d",
+    "Interact": "04d853816e0d74beab6ffbab7055bc1679df5af585e38e5a16e8e9df236fbc2f",
+    "Recovery": "1b5dcdb52392dfe5c5bd3a0873c5cb976207a4c8df084eef501ae20b695514b6",
+    "Running": "b5e06ff8788c86c77f3bbdad904d8c90373ff3424d2273e1b8c1cd22188ade9e",
+    "Threaten": "d1bcda0798e693b5b89b7368af848650e4cf017faf7c64be7ee6dd53d6821034",
+    "Walking": "b742110c834e67b92157f21f9ccb71042df678918ac6762afe20b30bc1feef2e",
+    "Windup": "dd609192ea7ebd6a122b9d7b58cb356e3a12d98c045cd77acef2b10e80800964"
+  },
+  "ambient_clips": {
+    "Idle": {
+      "duration_seconds": 4.0,
+      "bones": [
+        "Head",
+        "Neck"
+      ],
+      "morphs": [],
+      "frame_rate": 24,
+      "source_frames": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0,
+        13.0,
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0,
+        20.0,
+        21.0,
+        22.0,
+        23.0,
+        24.0,
+        25.0,
+        26.0,
+        27.0,
+        28.0,
+        29.0,
+        30.0,
+        31.0,
+        32.0,
+        33.0,
+        34.0,
+        35.0,
+        36.0,
+        37.0,
+        38.0,
+        39.0,
+        40.0,
+        41.0,
+        42.0,
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0,
+        48.0,
+        49.0,
+        50.0,
+        51.0,
+        52.0,
+        53.0,
+        54.0,
+        55.0,
+        56.0,
+        57.0,
+        58.0,
+        59.0,
+        60.0,
+        61.0,
+        62.0,
+        63.0,
+        64.0,
+        65.0,
+        66.0,
+        67.0,
+        68.0,
+        69.0,
+        70.0,
+        71.0,
+        72.0,
+        73.0,
+        74.0,
+        75.0,
+        76.0,
+        77.0,
+        78.0,
+        79.0,
+        80.0,
+        81.0,
+        82.0,
+        83.0,
+        84.0,
+        85.0,
+        86.0,
+        87.0,
+        88.0,
+        89.0,
+        90.0,
+        91.0,
+        92.0,
+        93.0,
+        94.0,
+        95.0,
+        96.0
+      ]
+    },
+    "Investigate": {
+      "duration_seconds": 2.7916666666666665,
+      "bones": [
+        "Head",
+        "Neck"
+      ],
+      "morphs": [],
+      "frame_rate": 24,
+      "source_frames": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0,
+        13.0,
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0,
+        20.0,
+        21.0,
+        22.0,
+        23.0,
+        24.0,
+        25.0,
+        26.0,
+        27.0,
+        28.0,
+        29.0,
+        30.0,
+        31.0,
+        32.0,
+        33.0,
+        34.0,
+        35.0,
+        36.0,
+        37.0,
+        38.0,
+        39.0,
+        40.0,
+        41.0,
+        42.0,
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0,
+        48.0,
+        49.0,
+        50.0,
+        51.0,
+        52.0,
+        53.0,
+        54.0,
+        55.0,
+        56.0,
+        57.0,
+        58.0,
+        59.0,
+        60.0,
+        61.0,
+        62.0,
+        63.0,
+        64.0,
+        65.0,
+        66.0,
+        67.0
+      ]
+    },
+    "Feed": {
+      "duration_seconds": 3.2083333333333335,
+      "bones": [
+        "Head",
+        "Neck",
+        "Wing1_0",
+        "Wing1_1",
+        "WingFinger1_0",
+        "WingFinger1_1",
+        "WingFinger1_2",
+        "WingFinger1_3"
+      ],
+      "morphs": [],
+      "frame_rate": 24,
+      "source_frames": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0,
+        13.0,
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0,
+        20.0,
+        21.0,
+        22.0,
+        23.0,
+        24.0,
+        25.0,
+        26.0,
+        27.0,
+        28.0,
+        29.0,
+        30.0,
+        31.0,
+        32.0,
+        33.0,
+        34.0,
+        35.0,
+        36.0,
+        37.0,
+        38.0,
+        39.0,
+        40.0,
+        41.0,
+        42.0,
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0,
+        48.0,
+        49.0,
+        50.0,
+        51.0,
+        52.0,
+        53.0,
+        54.0,
+        55.0,
+        56.0,
+        57.0,
+        58.0,
+        59.0,
+        60.0,
+        61.0,
+        62.0,
+        63.0,
+        64.0,
+        65.0,
+        66.0,
+        67.0,
+        68.0,
+        69.0,
+        70.0,
+        71.0,
+        72.0,
+        73.0,
+        74.0,
+        75.0,
+        76.0,
+        77.0
+      ]
+    },
+    "Sleep": {
+      "duration_seconds": 4.583333333333333,
+      "bones": [
+        "Head",
+        "Neck"
+      ],
+      "morphs": [],
+      "frame_rate": 24,
+      "source_frames": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0,
+        13.0,
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0,
+        20.0,
+        21.0,
+        22.0,
+        23.0,
+        24.0,
+        25.0,
+        26.0,
+        27.0,
+        28.0,
+        29.0,
+        30.0,
+        31.0,
+        32.0,
+        33.0,
+        34.0,
+        35.0,
+        36.0,
+        37.0,
+        38.0,
+        39.0,
+        40.0,
+        41.0,
+        42.0,
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0,
+        48.0,
+        49.0,
+        50.0,
+        51.0,
+        52.0,
+        53.0,
+        54.0,
+        55.0,
+        56.0,
+        57.0,
+        58.0,
+        59.0,
+        60.0,
+        61.0,
+        62.0,
+        63.0,
+        64.0,
+        65.0,
+        66.0,
+        67.0,
+        68.0,
+        69.0,
+        70.0,
+        71.0,
+        72.0,
+        73.0,
+        74.0,
+        75.0,
+        76.0,
+        77.0,
+        78.0,
+        79.0,
+        80.0,
+        81.0,
+        82.0,
+        83.0,
+        84.0,
+        85.0,
+        86.0,
+        87.0,
+        88.0,
+        89.0,
+        90.0,
+        91.0,
+        92.0,
+        93.0,
+        94.0,
+        95.0,
+        96.0,
+        97.0,
+        98.0,
+        99.0,
+        100.0,
+        101.0,
+        102.0,
+        103.0,
+        104.0,
+        105.0,
+        106.0,
+        107.0,
+        108.0,
+        109.0,
+        110.0
+      ]
+    }
+  },
+  "measured_baked_geometry": {
+    "partitions": {
+      "body": 23793,
+      "1": 4336,
+      "-1": 4322
+    },
+    "joint_seam_excluded_triangles": 1548,
+    "maximum_excluded_seam_distance_from_shoulder_m": 0.47049824620613234,
+    "foot_probe_vertices": 1067,
+    "shoulder_seam_control_counts": {
+      "Wing-1_0": 788,
+      "Wing1_0": 760
+    },
+    "shoulder_seam_distance_limit_m": 0.5404998895690708,
+    "baseline": {
+      "label": "retained_idle",
+      "contacts": {
+        "1_body": {
+          "minimum_distance_clipped_at_limit_m": 0.012,
+          "limit_m": 0.012,
+          "pairs_tested": 0,
+          "closest_triangles": null
+        },
+        "-1_body": {
+          "minimum_distance_clipped_at_limit_m": 0.012,
+          "limit_m": 0.012,
+          "pairs_tested": 0,
+          "closest_triangles": null
+        },
+        "1_-1": {
+          "minimum_distance_clipped_at_limit_m": 0.012,
+          "limit_m": 0.012,
+          "pairs_tested": 0,
+          "closest_triangles": null
+        }
+      },
+      "foot_surface_max_drift_m": 0.0,
+      "root_frame_max_error": 0.0,
+      "inner_membrane_signed_lateral_min_m": {
+        "1": 0.7208635496332972,
+        "-1": 0.7208638501928376
+      },
+      "wing_width_m": 8.488762855529707,
+      "wing_floor_clearance_m": 1.3466084897518158,
+      "sample_geometry_pass": true
+    },
+    "clips": {
+      "Idle": [
+        {
+          "label": "Idle_00",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_01",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_02",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_03",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_04",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_05",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_06",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_07",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_08",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_09",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_10",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_11",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_12",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_13",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_14",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_15",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Idle_16",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        }
+      ],
+      "Investigate": [
+        {
+          "label": "Investigate_00",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_01",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_02",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_03",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_04",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_05",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_06",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_07",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_08",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_09",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_10",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_11",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_12",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_13",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_14",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_15",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Investigate_16",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        }
+      ],
+      "Feed": [
+        {
+          "label": "Feed_00",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Feed_01",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3026388403033773,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.369503498633067,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7503453220493581
+        },
+        {
+          "label": "Feed_02",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3067658660522699,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.381595851626711,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7517698350437065
+        },
+        {
+          "label": "Feed_03",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3128960847740474,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.399571660442133,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.753887435584722
+        },
+        {
+          "label": "Feed_04",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3200649740738801,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.420617585608779,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7563667044163324
+        },
+        {
+          "label": "Feed_05",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.32717166592635677,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.4415040087647375,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7588271834650965
+        },
+        {
+          "label": "Feed_06",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.33314312767524434,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.459073790599488,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7608969528924878
+        },
+        {
+          "label": "Feed_07",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3371008166264479,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.47072793028529,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7622698431338745
+        },
+        {
+          "label": "Feed_08",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.33848567099319593,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.4748053652196855,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7627501763701527
+        },
+        {
+          "label": "Feed_09",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3371008166264479,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.47072793028529,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7622698431338745
+        },
+        {
+          "label": "Feed_10",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.33314312767524434,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.459073790599488,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7608969528924878
+        },
+        {
+          "label": "Feed_11",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.32717166592635677,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.4415040087647375,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7588271834650965
+        },
+        {
+          "label": "Feed_12",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3200649740738801,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.420617585608779,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7563667044163324
+        },
+        {
+          "label": "Feed_13",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3128960847740474,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.399571660442133,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.753887435584722
+        },
+        {
+          "label": "Feed_14",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3067658660522699,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.381595851626711,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7517698350437065
+        },
+        {
+          "label": "Feed_15",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.3026388403033773,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.369503498633067,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7503453220493581
+        },
+        {
+          "label": "Feed_16",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        }
+      ],
+      "Sleep": [
+        {
+          "label": "Sleep_00",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_01",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_02",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_03",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_04",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_05",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_06",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_07",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_08",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_09",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_10",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_11",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_12",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_13",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_14",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_15",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        },
+        {
+          "label": "Sleep_16",
+          "contacts": {
+            "1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "-1_body": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            },
+            "1_-1": {
+              "minimum_distance_clipped_at_limit_m": 0.012,
+              "limit_m": 0.012,
+              "pairs_tested": 0,
+              "closest_triangles": null
+            }
+          },
+          "foot_surface_max_drift_m": 0.0,
+          "root_frame_max_error": 0.0,
+          "inner_membrane_signed_lateral_min_m": {
+            "1": 0.30117572503693935,
+            "-1": 0.3011751954018725
+          },
+          "wing_width_m": 6.365219116386411,
+          "wing_floor_clearance_m": 0.9032654464244843,
+          "sample_geometry_pass": true,
+          "width_fraction": 0.7498406098410456
+        }
+      ]
+    },
+    "accepted_fold_probe_sha256": "90413a7482b29d0c7edaacd2185dc95cf35721628b9f0c5a28ae5805136979d5",
+    "retained_entry_exit_samples": 17,
+    "selected_probe_span_fraction": 0.7498405255998334
+  },
+  "retained_base_mesh_signatures": {
+    "M07_CompiledPrivateBody": "1948a2d5736d50d1c9463964dcd8c92be44ee6f76b7ca892aa5ca294dabb2bfa"
+  },
+  "retained_base_geometry_unchanged": true,
+  "protected_curve_data_unchanged": true,
+  "protected_export_buffers": {
+    "retained_base_buffer_sha256": "0d32c4991cc5144ab02fd2b5737365ee9e04a26a2a9188825b3aea77c0e810d8",
+    "retained_base_bytes_equal": true,
+    "retained_materials_skin_hierarchy_equal": true,
+    "protected_action_bytes_equal": true,
+    "protected_action_byte_signatures": {
+      "Attack": "5cd1306997a45b15a5f7e5c9d0cb3ea4e8e6442aeda3bd5b807b30e1017267ae",
+      "AttackHeavy": "88f5110ac52696a8b5efea43b948f8ef312f4757320f57576634c2cb04325a21",
+      "Block": "61b20c1d121aa20d40bd316a2a9164641f990da12b683d7fbb4bc32b4d8b5acf",
+      "Death": "ec9991b0a40ef6d4c7aa7b8b62de1b33b3acfc04c53a2cf9ea58d7fdcf83c6e0",
+      "HitReact": "392e2db047a0fa838e4ded56f24f4abf0d49f11aa57973f4418643f3f4dad7fa",
+      "Interact": "d5e6ac63eee1179f7e024cb13faece207704c8ee0daf16ad9eca14f0af6b938d",
+      "Recovery": "54d2bc3a01c4f522c64a13e1be1f3d2adf8b100709d0b0cb1eda9ffdf0c87db6",
+      "Running": "a57a96f19fdacb815819d268dd0a5360d5acc24eb4b79e874f7f42a89971752c",
+      "Threaten": "0ee31d5c05e387e811e5c46814ddadb85ea88572a32ce86f92275c4592593a13",
+      "Walking": "10882cfa68fc265dc2e6dd195f12b9f8f893201efdef80ba0e4d1d397126b070",
+      "Windup": "eaec445f536ebfd5bcdc29f56aa42a18696ab86ce20b6d0f6a28b247598ccbea"
+    },
+    "maximum_target_rest_error": 1.0132789611816406e-06,
+    "new_morph_mapping": [],
+    "appended_ambient_buffer_bytes": 28776
+  },
+  "anatomical_morph_selections": [],
+  "anatomical_source_lineage": [],
+  "runtime_morph_binding_verified": false,
+  "retained_water_tip_sources": [],
+  "attack_recalibration_required": true,
+  "runtime_verified": false,
+  "visual_accepted": false,
+  "publication_ready": false,
+  "production_overwritten": false,
+  "source_review_frames": [
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Idle_00.png",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Idle_25.png",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Idle_50.png",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Idle_75.png",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Investigate_50.png",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Feed_38.png",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Feed_61.png",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Sleep_50.png"
+  ]
+}

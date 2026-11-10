@@ -1,0 +1,3651 @@
+{
+  "schema_version": 2,
+  "scope": "Current selected authored scenery resources plus separately identified new memorial candidates; source/native evidence is not visual acceptance",
+  "source_inventory_sha256": "32a65bb8e073e039e251097a0e518c1f355d16766346422f9a9ddacaed00026a",
+  "retained_art_direction": true,
+  "runtime_owner": "Existing WorldPropController/VisualDirector/story-state owners",
+  "new_independent_tickers": 0,
+  "required_inline_part_scenes": 4,
+  "new_moving_mesh_children": 14,
+  "selected_export": {
+    "build_id": "startup-half-r4-20261107",
+    "source": {
+      "git_commit": "3c05bdf1c8da7d16b394f98984b1d15a0deaf0cb",
+      "dirty": true
+    },
+    "release_manifest_sha256": "c31563af2b597a4f188879c2a68cc21c3961116f499d0f6c33bf97fe1f7439a1",
+    "runtime_manifest_sha256": "11a56314a2d866dfe21c8508810a1146a2cce6d2fe906f5f03177c8ece89b037"
+  },
+  "current_manifest_sha256": "c60093c1308547d97c275fa26c915c09225fce2519bfe431cecad4deb319108d",
+  "coverage_counts": {
+    "frozen_baseline_entries": 53,
+    "selected_resources": 63,
+    "selected_mesh_derivatives": 62,
+    "selected_artwork": 1,
+    "added_memorial_candidates": 2,
+    "review_items": 65,
+    "native_verified_split_assemblies": 4,
+    "native_verified_memorial_resources": 2
+  },
+  "entries": [
+    {
+      "id": "courtyard_service_ground_and_supplies",
+      "path": "res://assets_external/environment/village/CourtyardService_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_courtyard_service.gd",
+      "source_builder_sha256": "30ee9df1877fd2ea422e900512f4f6b03dbc1461d7f9f76b3891efff6a4c80d4",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 348
+        },
+        {
+          "source": "res://tools/build_courtyard_service.gd",
+          "line": 3
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "a00865b08bf3270044a28b57ae1ee0ba3c2b80959f41a10cd9aaa88008725e00",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/CourtyardService_Authored.res": null,
+        "res://tools/build_courtyard_service.gd": "30ee9df1877fd2ea422e900512f4f6b03dbc1461d7f9f76b3891efff6a4c80d4"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/CourtyardService_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "campaign_record_mill_burned",
+      "path": "res://assets_external/environment/props/CampaignRecord_mill_burned_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_campaign_records.gd",
+      "source_builder_sha256": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "4a68e67d1a90e9fa50dd7872dad2276c10214413a0ffceec86ab8ea2c8f078ed",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/CampaignRecord_mill_burned_Authored.res": null,
+        "res://tools/build_campaign_records.gd": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/props/CampaignRecord_mill_burned_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "campaign_record_mill_exposed",
+      "path": "res://assets_external/environment/props/CampaignRecord_mill_exposed_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_campaign_records.gd",
+      "source_builder_sha256": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "20f61e8786b3476038f91e6de1258aeb1e566e0e2bb3bb05d14ac77be1fd71f9",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/CampaignRecord_mill_exposed_Authored.res": null,
+        "res://tools/build_campaign_records.gd": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/props/CampaignRecord_mill_exposed_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "campaign_record_mill_pending",
+      "path": "res://assets_external/environment/props/CampaignRecord_mill_pending_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "native_candidate_pending_visual_review",
+      "source_builder": "res://tools/build_campaign_records.gd",
+      "source_builder_sha256": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "8cd1fe23a2ac352f5e771b73895630abbd3278c7c1dc5f18339b6f53c10a35dc",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/CampaignRecord_mill_pending_Authored.res": null,
+        "res://tools/build_campaign_records.gd": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/props/CampaignRecord_mill_pending_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "campaign_record_mill_preserved",
+      "path": "res://assets_external/environment/props/CampaignRecord_mill_preserved_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_campaign_records.gd",
+      "source_builder_sha256": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "fc62f6369fa6aca30a77106b2e76430e4f1ca17afc046e44d78ae5421028adf5",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/CampaignRecord_mill_preserved_Authored.res": null,
+        "res://tools/build_campaign_records.gd": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/props/CampaignRecord_mill_preserved_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "campaign_record_register_mira",
+      "path": "res://assets_external/environment/props/CampaignRecord_register_mira_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_campaign_records.gd",
+      "source_builder_sha256": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "5a302d3dbe5bab9e9ffd56eefe0698ff3ff24c96a39e0019038220f6953ffade",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/CampaignRecord_register_mira_Authored.res": null,
+        "res://tools/build_campaign_records.gd": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/props/CampaignRecord_register_mira_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "campaign_record_register_rook",
+      "path": "res://assets_external/environment/props/CampaignRecord_register_rook_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_campaign_records.gd",
+      "source_builder_sha256": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "c3264301ce5b6cbcfc9f94fb8e09efd9f6480c2c6b28aabd200a8ded0cda5dd7",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/CampaignRecord_register_rook_Authored.res": null,
+        "res://tools/build_campaign_records.gd": "a951f65e26ff9ab2e6da7e80233b117a8e3c6efca457c863050e999515db2940"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/props/CampaignRecord_register_rook_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "greyfen_fitted_forge_work",
+      "path": "res://assets_external/environment/props/GreyfenForgeWork_Authored.res",
+      "sha256": "52c52bdc4fb77e1adc58afe20b8da3656ae33d5587ce4419112716ae6d90d82b",
+      "bytes": 148038,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_greyfen_forge_work.gd",
+      "source_builder_sha256": "2806e53ce4e11d1cd42f51b3dd3e8a6d86093245b04c246efae8429ffd670cdc",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zone_construction_host.gd",
+          "line": 1473
+        },
+        {
+          "source": "res://tools/build_greyfen_forge_work.gd",
+          "line": 4
+        }
+      ],
+      "life_integration": {
+        "treatment": "supported_npc_contact_activity",
+        "reason": "Retained furniture remains solid and supported. Authored NPC hands and separately supported work materials provide the visible activity.",
+        "geometry_changed": false,
+        "native_verified": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "52c52bdc4fb77e1adc58afe20b8da3656ae33d5587ce4419112716ae6d90d82b",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/GreyfenForgeWork_Authored.res": "52c52bdc4fb77e1adc58afe20b8da3656ae33d5587ce4419112716ae6d90d82b",
+        "res://tools/build_greyfen_forge_work.gd": "2806e53ce4e11d1cd42f51b3dd3e8a6d86093245b04c246efae8429ffd670cdc"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "greyfen_adjoining_landscape",
+      "path": "res://assets_external/environment/forest/GreyfenFrontier_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "accepted_native_boundary_and_cemetery_visual_scope",
+      "source_builder": "res://tools/build_greyfen_frontier.gd",
+      "source_builder_sha256": "3990f4653eac7041829640d8c788a34fc8f45f2b54eee337b2ef8084161c2547",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/greyfen_frontier.gd",
+          "line": 3
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "fd9ac033b74f7655ac70817939bfdb82873bed631fdefe143f399b8cea74b086",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/GreyfenFrontier_Authored.res": null,
+        "res://tools/build_greyfen_frontier.gd": "3990f4653eac7041829640d8c788a34fc8f45f2b54eee337b2ef8084161c2547"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/GreyfenFrontier_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "greyfen_fitted_frontages",
+      "path": "res://assets_external/environment/village/GreyfenFrontages_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "accepted_native_street_and_work_surface_review",
+      "source_builder": "res://tools/build_greyfen_frontages.gd",
+      "source_builder_sha256": "9f792a7edac961d4b67eb991ade09c083e597d9e7580dca7e881d746dcee62a4",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/greyfen_section.gd",
+          "line": 413
+        },
+        {
+          "source": "res://tools/build_greyfen_frontages.gd",
+          "line": 3
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "221ffe768161d6d40bbbac87881bdadc31417b7c88224066e1dec082e2719eca",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/GreyfenFrontages_Authored.res": null,
+        "res://tools/build_greyfen_frontages.gd": "9f792a7edac961d4b67eb991ade09c083e597d9e7580dca7e881d746dcee62a4"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/GreyfenFrontages_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "far_terrain_ridges",
+      "path": "res://assets/landscape/far_terrain.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "base",
+      "baseline_status": "native_contract_pending_visual_review",
+      "source_builder": "res://tools/build_landscape_foundations.gd",
+      "source_builder_sha256": "b895ee4c8350faaaaa85926f3f53de609ccdd6ffc1a79fdb2dc28ac4b9281e11",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/world_landscape_presentation.gd",
+          "line": 3
+        },
+        {
+          "source": "res://tools/build_landscape_foundations.gd",
+          "line": 25
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "base"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "a4ce6a79b96cc2ca6f0ebc4d2c1d1f123d789e0fce36cb09e72f2893e379d2f1",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets/landscape/far_terrain.res": null,
+        "res://tools/build_landscape_foundations.gd": "b895ee4c8350faaaaa85926f3f53de609ccdd6ffc1a79fdb2dc28ac4b9281e11"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets/landscape/far_terrain.res"
+        ]
+      }
+    },
+    {
+      "id": "bridge_stone_foundation",
+      "path": "res://assets/landscape/bridge_stone_pier.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "base",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_landscape_foundations.gd",
+      "source_builder_sha256": "b895ee4c8350faaaaa85926f3f53de609ccdd6ffc1a79fdb2dc28ac4b9281e11",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/river_section.gd",
+          "line": 5
+        },
+        {
+          "source": "res://tools/build_landscape_foundations.gd",
+          "line": 53
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "base"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "ecfa5bec2c46e355450590b6755b2d8bd1b0e4badf9d71b88a10f058cde52c01",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets/landscape/bridge_stone_pier.res": null,
+        "res://tools/build_landscape_foundations.gd": "b895ee4c8350faaaaa85926f3f53de609ccdd6ffc1a79fdb2dc28ac4b9281e11"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets/landscape/bridge_stone_pier.res"
+        ]
+      }
+    },
+    {
+      "id": "sky_cloud_volume_0",
+      "path": "res://assets/sky/cloud_0.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "base",
+      "baseline_status": "native_candidate_pending_environment_acceptance",
+      "source_builder": "res://tools/build_cloud_volumes.gd",
+      "source_builder_sha256": "5aea7b4645718630333d43ac7e4ea839cd10c7bdb3b1cee45e7fea43991bdf95",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/visual_director.gd",
+          "line": 7
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_existing_atmosphere_owner",
+        "reason": "Cloud geometry already belongs to VisualDirector; preserve its depth, drift and day/night tint without adding a second ticker.",
+        "runtime_owner": "res://scripts/visual_director.gd",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "base"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "bd695b581249b66f8837e74883b560e5ab5848c8e7c296a1aef75a6d7b0713c6",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets/sky/cloud_0.res": null,
+        "res://tools/build_cloud_volumes.gd": "5aea7b4645718630333d43ac7e4ea839cd10c7bdb3b1cee45e7fea43991bdf95"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets/sky/cloud_0.res"
+        ]
+      }
+    },
+    {
+      "id": "sky_cloud_volume_1",
+      "path": "res://assets/sky/cloud_1.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "base",
+      "baseline_status": "native_candidate_pending_environment_acceptance",
+      "source_builder": "res://tools/build_cloud_volumes.gd",
+      "source_builder_sha256": "5aea7b4645718630333d43ac7e4ea839cd10c7bdb3b1cee45e7fea43991bdf95",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/visual_director.gd",
+          "line": 8
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_existing_atmosphere_owner",
+        "reason": "Cloud geometry already belongs to VisualDirector; preserve its depth, drift and day/night tint without adding a second ticker.",
+        "runtime_owner": "res://scripts/visual_director.gd",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "base"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "878c0cc656978dd35b82df861cb4d1209a289b29b03689125982eb379f507aee",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets/sky/cloud_1.res": null,
+        "res://tools/build_cloud_volumes.gd": "5aea7b4645718630333d43ac7e4ea839cd10c7bdb3b1cee45e7fea43991bdf95"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets/sky/cloud_1.res"
+        ]
+      }
+    },
+    {
+      "id": "sky_cloud_volume_2",
+      "path": "res://assets/sky/cloud_2.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "base",
+      "baseline_status": "native_candidate_pending_environment_acceptance",
+      "source_builder": "res://tools/build_cloud_volumes.gd",
+      "source_builder_sha256": "5aea7b4645718630333d43ac7e4ea839cd10c7bdb3b1cee45e7fea43991bdf95",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/visual_director.gd",
+          "line": 9
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_existing_atmosphere_owner",
+        "reason": "Cloud geometry already belongs to VisualDirector; preserve its depth, drift and day/night tint without adding a second ticker.",
+        "runtime_owner": "res://scripts/visual_director.gd",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "base"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "b9cc21c07fe0ef6fc46642a0701e048433567342ba57853bb9df9af993d9d7bc",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets/sky/cloud_2.res": null,
+        "res://tools/build_cloud_volumes.gd": "5aea7b4645718630333d43ac7e4ea839cd10c7bdb3b1cee45e7fea43991bdf95"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets/sky/cloud_2.res"
+        ]
+      }
+    },
+    {
+      "id": "wychwood_evidence_corpse",
+      "path": "res://assets_external/environment/forest/Wychwood_corpse_Evidence.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "adjacent",
+      "baseline_status": "native_contract_pending_visual_review",
+      "source_builder": null,
+      "source_builder_sha256": null,
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_evidence_readability",
+        "reason": "Forensic evidence and the dead body retain their exact physical placement; ambient environment and lighting provide surrounding life.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "adjacent"
+      ],
+      "declared_pack_owner": "opening",
+      "baseline_sha256": "2cfd4932c2a0c2fc5d66a047dc32cbfce325650c6169c0d64eba26bf8b91711d",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Wychwood_corpse_Evidence.res": null
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/Wychwood_corpse_Evidence.res"
+        ]
+      }
+    },
+    {
+      "id": "wychwood_evidence_black_feathers",
+      "path": "res://assets_external/environment/forest/Wychwood_black_feathers_Evidence.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "adjacent",
+      "baseline_status": "native_contract_pending_visual_review",
+      "source_builder": null,
+      "source_builder_sha256": null,
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_evidence_readability",
+        "reason": "Forensic evidence and the dead body retain their exact physical placement; ambient environment and lighting provide surrounding life.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "adjacent"
+      ],
+      "declared_pack_owner": "opening",
+      "baseline_sha256": "8c1ff56d4d04f2505d9c3163d8c4daf7d9dc476016cfafa7ca5666409b872b88",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Wychwood_black_feathers_Evidence.res": null
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/Wychwood_black_feathers_Evidence.res"
+        ]
+      }
+    },
+    {
+      "id": "wychwood_evidence_oren_token",
+      "path": "res://assets_external/environment/forest/Wychwood_oren_token_Evidence.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "adjacent",
+      "baseline_status": "native_contract_pending_visual_review",
+      "source_builder": null,
+      "source_builder_sha256": null,
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_evidence_readability",
+        "reason": "Forensic evidence and the dead body retain their exact physical placement; ambient environment and lighting provide surrounding life.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "adjacent"
+      ],
+      "declared_pack_owner": "opening",
+      "baseline_sha256": "e7973711f844698addad371e390edfedad0d073088089f2416dc9a5b5d2ff02e",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Wychwood_oren_token_Evidence.res": null
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/Wychwood_oren_token_Evidence.res"
+        ]
+      }
+    },
+    {
+      "id": "wychwood_evidence_claw_marks",
+      "path": "res://assets_external/environment/forest/Wychwood_claw_marks_Evidence.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "adjacent",
+      "baseline_status": "native_contract_pending_visual_review",
+      "source_builder": null,
+      "source_builder_sha256": null,
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_evidence_readability",
+        "reason": "Forensic evidence and the dead body retain their exact physical placement; ambient environment and lighting provide surrounding life.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "adjacent"
+      ],
+      "declared_pack_owner": "opening",
+      "baseline_sha256": "95d597a30a3cb1634f00aa81c5ba0ed00293521e5fcc61fa4a9ea474c207107a",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Wychwood_claw_marks_Evidence.res": null
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/Wychwood_claw_marks_Evidence.res"
+        ]
+      }
+    },
+    {
+      "id": "wychwood_evidence_tracks",
+      "path": "res://assets_external/environment/forest/Wychwood_tracks_Evidence.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "adjacent",
+      "baseline_status": "native_contract_pending_visual_review",
+      "source_builder": null,
+      "source_builder_sha256": null,
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_evidence_readability",
+        "reason": "Forensic evidence and the dead body retain their exact physical placement; ambient environment and lighting provide surrounding life.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "adjacent"
+      ],
+      "declared_pack_owner": "opening",
+      "baseline_sha256": "b716dc99a195c840df8fa79b67d11128a39685554b84b59fca70102e6e6c8e67",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Wychwood_tracks_Evidence.res": null
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/Wychwood_tracks_Evidence.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_boundary",
+      "path": "res://assets_external/environment/village/Cemetery_boundary_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/cemetery_section.gd",
+          "line": 14
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "646e966184b5cc96cd9ca9eef107c2530ca2b75d78b25d90f10c34c51c68486a",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_boundary_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_boundary_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_grave_earth",
+      "path": "res://assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/cemetery_section.gd",
+          "line": 15
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "6d5ea3a0b8431c5d5dd387dfa9449eea1d58774eb90e576e318111488178c489",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_grave_earth_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_grave_earth_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_memory_window",
+      "path": "res://assets_external/environment/village/Cemetery_memory_window_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/cemetery_section.gd",
+          "line": 16
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "bf29d17c29b85544350a258a29d9837be0f4b7d6f25c183f6a24b25930e5e5ad",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_memory_window_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_memory_window_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_grave_harl",
+      "path": "res://assets_external/environment/village/Cemetery_grave_harl_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/cemetery_evidence_presentation.gd",
+          "line": 3
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "fdcbc7abbe0a30410cc985155ba57a9ba3043ca08f78a1db7daf6d3c54241eb2",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_grave_harl_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_grave_harl_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_grave_child",
+      "path": "res://assets_external/environment/village/Cemetery_grave_child_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/cemetery_evidence_presentation.gd",
+          "line": 4
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "5d2a7ecd50e0978b37697ee9dab40671dbd1065bdd6796cc3e8b8b164fcfc4a4",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_grave_child_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_grave_child_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_grave_soldier",
+      "path": "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/cemetery_evidence_presentation.gd",
+          "line": 5
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "4ff445ed233ab3ad9a04114c8be05fe6540285414df7d2d7b92d797e956fee35",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_grave_soldier_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_disturbed_soil",
+      "path": "res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/cemetery_evidence_presentation.gd",
+          "line": 6
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "26447a7d303ea35eb04102c37fe82ca27163d51eb7f9d697e5224c0f662da0b5",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_disturbed_soil_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_chapel",
+      "path": "res://assets_external/environment/village/Cemetery_chapel_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/cemetery_section.gd",
+          "line": 9
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "b6c058190b7ecc1fcb01f1eba2aef34d63b902a4424e6d23e92f3e02cc13cf20",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_chapel_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_chapel_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_bell_frame",
+      "path": "res://assets_external/environment/village/Cemetery_bell_frame_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/cemetery_section.gd",
+          "line": 10
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "96342ac7f8b34cfd836d198e6c10dceb62ffcaccf28c51d7df7fdde63be551e2",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_bell_frame_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_bell_frame_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_bell",
+      "path": "res://assets_external/environment/village/Cemetery_bell_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/cemetery_section.gd",
+          "line": 11
+        }
+      ],
+      "life_integration": {
+        "treatment": "separate_clapper_suspension",
+        "reason": "Existing clapper child receives its true upper pivot; bell housing and stone frame retain fixed geometry.",
+        "runtime_owner": "res://scripts/zones/cemetery_section.gd",
+        "moving_kind": "clapper",
+        "geometry_changed": false,
+        "native_verified": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "837ba40d4c970d47c971cbe813501e478e4999617e0945117a3175b47f89da58",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_bell_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_bell_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "cemetery_grave_rows",
+      "path": "res://assets_external/environment/village/Cemetery_grave_rows_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_cemetery_architecture.gd",
+      "source_builder_sha256": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/cemetery_section.gd",
+          "line": 12
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "base",
+      "baseline_sha256": "2824379c0b269eab8e9893afa4e582543c5e07d3de2a2f5ae4f7812479694b5d",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Cemetery_grave_rows_Authored.res": null,
+        "res://tools/build_cemetery_architecture.gd": "829d880e4e75ac84874f320942aadbcc7ff96fdb02d25dd27cd2d71db2f2bc81"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Cemetery_grave_rows_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "greyfen_social_common_table",
+      "path": "res://assets_external/environment/props/GreyfenSocial_common_table.res",
+      "sha256": "6c0322321bdc345430d7aa5373ed9d3908ca23532aa3551058bf26d44f43820a",
+      "bytes": 105705,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_greyfen_social.gd",
+      "source_builder_sha256": "2a754ae72c831a78dd266bc936ed40345490328e2ddadc8c580ae77866fa4854",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/greyfen_social_presentation.gd",
+          "line": 4
+        }
+      ],
+      "life_integration": {
+        "treatment": "supported_npc_contact_activity",
+        "reason": "Retained furniture remains solid and supported. Authored NPC hands and separately supported work materials provide the visible activity.",
+        "geometry_changed": false,
+        "native_verified": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "opening",
+      "baseline_sha256": "6c0322321bdc345430d7aa5373ed9d3908ca23532aa3551058bf26d44f43820a",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/GreyfenSocial_common_table.res": "6c0322321bdc345430d7aa5373ed9d3908ca23532aa3551058bf26d44f43820a",
+        "res://tools/build_greyfen_social.gd": "2a754ae72c831a78dd266bc936ed40345490328e2ddadc8c580ae77866fa4854"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "greyfen_social_barrel_board",
+      "path": "res://assets_external/environment/props/GreyfenSocial_barrel_board.res",
+      "sha256": "3985471b41fd7e86712b849caa65346e7cb155f0516b7df0b20131581bd579d8",
+      "bytes": 105767,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_greyfen_social.gd",
+      "source_builder_sha256": "2a754ae72c831a78dd266bc936ed40345490328e2ddadc8c580ae77866fa4854",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/greyfen_social_presentation.gd",
+          "line": 5
+        },
+        {
+          "source": "res://scripts/living_cast_stations.gd",
+          "line": 258
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "opening",
+      "baseline_sha256": "3985471b41fd7e86712b849caa65346e7cb155f0516b7df0b20131581bd579d8",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/GreyfenSocial_barrel_board.res": "3985471b41fd7e86712b849caa65346e7cb155f0516b7df0b20131581bd579d8",
+        "res://tools/build_greyfen_social.gd": "2a754ae72c831a78dd266bc936ed40345490328e2ddadc8c580ae77866fa4854"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "greyfen_social_mira_apothecary",
+      "path": "res://assets_external/environment/props/GreyfenSocial_mira_apothecary.res",
+      "sha256": "e7e0ccfcf7bc48d87aa666f8e0ed52b15d58c1540b2c04228c3769d972f28213",
+      "bytes": 83054,
+      "pack_owner": "opening",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_greyfen_social.gd",
+      "source_builder_sha256": "2a754ae72c831a78dd266bc936ed40345490328e2ddadc8c580ae77866fa4854",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/greyfen_social_presentation.gd",
+          "line": 6
+        }
+      ],
+      "life_integration": {
+        "treatment": "supported_npc_contact_activity",
+        "reason": "Retained furniture remains solid and supported. Authored NPC hands and separately supported work materials provide the visible activity.",
+        "geometry_changed": false,
+        "native_verified": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "opening"
+      ],
+      "declared_pack_owner": "opening",
+      "baseline_sha256": "e7e0ccfcf7bc48d87aa666f8e0ed52b15d58c1540b2c04228c3769d972f28213",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/GreyfenSocial_mira_apothecary.res": "e7e0ccfcf7bc48d87aa666f8e0ed52b15d58c1540b2c04228c3769d972f28213",
+        "res://tools/build_greyfen_social.gd": "2a754ae72c831a78dd266bc936ed40345490328e2ddadc8c580ae77866fa4854"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "deep_wood_landscape",
+      "path": "res://assets_external/environment/forest/Campaign_deep_wood_Landscape.res",
+      "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "bytes": 3998,
+      "pack_owner": "campaign",
+      "baseline_status": "native_candidate_pending_camera_route_acceptance",
+      "source_builder": "res://tools/build_campaign_wilds.gd",
+      "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+          "line": 5
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Campaign_deep_wood_Landscape.res": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "farmstead_landscape",
+      "path": "res://assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res",
+      "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "bytes": 6909,
+      "pack_owner": "campaign",
+      "baseline_status": "native_candidate_pending_camera_route_acceptance",
+      "source_builder": "res://tools/build_campaign_wilds.gd",
+      "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+          "line": 6
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "marsh_landscape",
+      "path": "res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+      "sha256": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
+      "bytes": 21209,
+      "pack_owner": "campaign",
+      "baseline_status": "native_candidate_pending_camera_route_acceptance",
+      "source_builder": "res://tools/build_campaign_wilds.gd",
+      "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+          "line": 7
+        }
+      ],
+      "life_integration": {
+        "treatment": "extract_retained_moving_part",
+        "reason": "Five retained reed groups move from their ground roots; boardwalk, mud and pool geometry keep their original transforms.",
+        "runtime_scene": "res://assets_external/environment_prepared/living_world/marsh_reeds.scn",
+        "moving_kind": "foliage",
+        "moving_part_count": 5,
+        "source_recipe_implemented": true,
+        "compiled": true,
+        "native_verified": true
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": true,
+      "native_verified": true,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
+        "res://assets_external/environment_prepared/living_world/marsh_reeds.scn": "3235a0c6434dae9fd7782bbd4fb643dd1a5b40735cc7ccbc85d8277cc7e2de6d",
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+        "res://tools/build_living_world_blender.gd": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+        "res://tools/living_world_geometry_contract.gd": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+        "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+        "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_compile.json": "fca9904c011a58347e0bb001cd8414d0a68239d82c70272fcf2492d2b8f14d79",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/authoring.json": "db6690fad9e65124ff5a5a09494aa8972696917ac541341337722527bcecaa21",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002.blend": "6fe669c9fda61799549ffa989cba734debfe18eb5c21f22dadd7d77b378343cf",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002.glb": "661e07f782ff9eb508004368fae216f5669a9e24771f145c56c1a42a20211203",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002_blender_raw.glb": "52048b25614e4939831893f8a0b198ff2fd6fa832bde8cfcdf838f93925ebd2e",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/author_recipe_c040d7c37f7a59b7.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/transport_helper_2c9dcba5ac768071.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_16c724e98a6b031d.glb": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_native_497f66d8be78a37d.scn": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_receipt_a7124b82431df7f9.json": "a7124b82431df7f987db193ddbb2d83cb4cab9b35a50f4c4cae7bb2277661cf0",
+        "repo://art_source/art_recovery_v2/tools/author_living_world_parts.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+        "repo://art_source/art_recovery_v2/tools/living_world_gltf_transport.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [
+          "repo://art_source/art_recovery_v2/tools/author_living_world_parts.py",
+          "repo://art_source/art_recovery_v2/tools/living_world_gltf_transport.py"
+        ],
+        "unbound_inputs": []
+      },
+      "current_authoring": {
+        "authored": true,
+        "compiled": true,
+        "native_verified": true,
+        "errors": [],
+        "runtime_scene": "res://assets_external/environment_prepared/living_world/marsh_reeds.scn",
+        "bytes": 6748,
+        "expected_pack_owner": "campaign",
+        "current_bytes_verified_in_selected_export": false,
+        "moving_part_count": 5,
+        "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_compile.json",
+        "native_scope": "Compiled moving-part geometry/palette/pivot contract; separate union receipt and level observation remain distinct.",
+        "runtime_scene_present_in_selected_export": false,
+        "actual_selected_pack_owners": []
+      },
+      "review_history": [
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "marsh_landscape",
+            "path": "res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+            "sha256": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
+            "bytes": 21209,
+            "pack_owner": "campaign",
+            "baseline_status": "native_candidate_pending_camera_route_acceptance",
+            "source_builder": "res://tools/build_campaign_wilds.gd",
+            "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+            "direct_source_references": [
+              {
+                "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+                "line": 7
+              }
+            ],
+            "life_integration": {
+              "treatment": "extract_retained_moving_part",
+              "reason": "Five retained reed groups move from their ground roots; boardwalk, mud and pool geometry keep their original transforms.",
+              "runtime_scene": "res://assets_external/environment_prepared/living_world/marsh_reeds.scn",
+              "moving_kind": "foliage",
+              "moving_part_count": 5,
+              "source_recipe_implemented": true,
+              "compiled": true,
+              "native_verified": true
+            },
+            "visual_accepted": false,
+            "user_accepted": false,
+            "pack_owners": [
+              "campaign"
+            ],
+            "declared_pack_owner": "campaign",
+            "baseline_sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
+            "resource_present_in_checkout": true,
+            "present_in_selected_export": true,
+            "current_bytes_verified_in_selected_export": false,
+            "previously_enumerated_in_frozen_scenery_inventory": true,
+            "authored": true,
+            "native_verified": true,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
+              "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+              "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_compile.json": "fca9904c011a58347e0bb001cd8414d0a68239d82c70272fcf2492d2b8f14d79",
+              "res://assets_external/environment_prepared/living_world/marsh_reeds.scn": "3235a0c6434dae9fd7782bbd4fb643dd1a5b40735cc7ccbc85d8277cc7e2de6d",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/authoring.json": "db6690fad9e65124ff5a5a09494aa8972696917ac541341337722527bcecaa21",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002.blend": "6fe669c9fda61799549ffa989cba734debfe18eb5c21f22dadd7d77b378343cf",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002.glb": "661e07f782ff9eb508004368fae216f5669a9e24771f145c56c1a42a20211203",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002_blender_raw.glb": "52048b25614e4939831893f8a0b198ff2fd6fa832bde8cfcdf838f93925ebd2e",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/author_recipe_c040d7c37f7a59b7.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/transport_helper_2c9dcba5ac768071.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_16c724e98a6b031d.glb": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_native_497f66d8be78a37d.scn": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_receipt_a7124b82431df7f9.json": "a7124b82431df7f987db193ddbb2d83cb4cab9b35a50f4c4cae7bb2277661cf0",
+              "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+              "res://tools/build_living_world_blender.gd": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+              "res://tools/living_world_geometry_contract.gd": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": false,
+              "changed_inputs": [
+                "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_compile.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/author_recipe_c040d7c37f7a59b7.py",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/authoring.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002.blend",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v002_blender_raw.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_16c724e98a6b031d.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_native_497f66d8be78a37d.scn",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_receipt_a7124b82431df7f9.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/marsh_reeds/transport_helper_2c9dcba5ac768071.py",
+                "res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+                "res://assets_external/environment_prepared/living_world/marsh_reeds.scn",
+                "res://tools/build_campaign_wilds.gd",
+                "res://tools/build_living_world_blender.gd",
+                "res://tools/living_world_geometry_contract.gd",
+                "res://tools/living_world_part_baker.gd"
+              ],
+              "unbound_inputs": []
+            },
+            "current_authoring": {
+              "authored": true,
+              "compiled": true,
+              "native_verified": true,
+              "errors": [],
+              "runtime_scene": "res://assets_external/environment_prepared/living_world/marsh_reeds.scn",
+              "bytes": 6748,
+              "expected_pack_owner": "campaign",
+              "current_bytes_verified_in_selected_export": false,
+              "moving_part_count": 5,
+              "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/marsh_reeds_compile.json",
+              "native_scope": "Compiled moving-part geometry/palette/pivot contract; separate union receipt and level observation remain distinct.",
+              "runtime_scene_present_in_selected_export": false,
+              "actual_selected_pack_owners": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "bandit_road_landscape",
+      "path": "res://assets_external/environment/forest/Campaign_bandit_road_Landscape.res",
+      "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "bytes": 13950,
+      "pack_owner": "campaign",
+      "baseline_status": "native_candidate_pending_camera_route_acceptance",
+      "source_builder": "res://tools/build_campaign_wilds.gd",
+      "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+          "line": 8
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Campaign_bandit_road_Landscape.res": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "farmstead_west",
+      "path": "res://assets_external/environment/village/FarmsteadWest_Authored.res",
+      "sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+      "bytes": 34282,
+      "pack_owner": "campaign",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_campaign_wilds.gd",
+      "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+          "line": 11
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/FarmsteadWest_Authored.res": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "farmstead_east",
+      "path": "res://assets_external/environment/village/FarmsteadEast_Authored.res",
+      "sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+      "bytes": 33915,
+      "pack_owner": "campaign",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_campaign_wilds.gd",
+      "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+          "line": 12
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/FarmsteadEast_Authored.res": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "road_checkpoint",
+      "path": "res://assets_external/environment/village/RoadCheckpoint_Authored.res",
+      "sha256": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
+      "bytes": 59554,
+      "pack_owner": "campaign",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_campaign_wilds.gd",
+      "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+          "line": 14
+        },
+        {
+          "source": "res://tools/build_campaign_wilds.gd",
+          "line": 101
+        },
+        {
+          "source": "res://tools/build_campaign_wilds.gd",
+          "line": 409
+        }
+      ],
+      "life_integration": {
+        "treatment": "extract_retained_moving_part",
+        "reason": "Two existing banner panels pivot at their upper suspension; buildings, beam and poles stay static.",
+        "runtime_scene": "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn",
+        "moving_kind": "cloth",
+        "moving_part_count": 2,
+        "source_recipe_implemented": true,
+        "compiled": true,
+        "native_verified": true
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "85e660c2250bb4d32353b9007ca639dd9a2ff0670871d212c91a0236151393dc",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": true,
+      "native_verified": true,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+        "res://assets_external/environment/village/RoadCheckpoint_Authored.res": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
+        "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn": "fd990e36da5d6544b75494a636268ad88f7dcb6ac87d694f6e190ff26b1bcd0b",
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+        "res://tools/build_living_world_blender.gd": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+        "res://tools/living_world_geometry_contract.gd": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+        "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+        "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_compile.json": "24270f394e27211821e929bd0cc9fc2900c6fbf628376461c912e2545e652ccb",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/authoring.json": "0732519644c71fa2d4912753014d6d8f6b9da3353698c9e4a1c6cfb352c590d6",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.blend": "11595f168babbf1ad29cfb504e8951da807f7ee958f23794bcb07fc04444c201",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.glb": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002_blender_raw.glb": "e9702eeb086df2f18e531cd0794d61fee7d8a3facae8ffc1cef1e558e6df2028",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/author_recipe_c040d7c37f7a59b7.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/transport_helper_2c9dcba5ac768071.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_9b21a5bd9eb7a376.glb": "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_native_c0839cf4e616a2a7.scn": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_receipt_13800c970b4f34a9.json": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
+        "repo://art_source/art_recovery_v2/tools/author_living_world_parts.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+        "repo://art_source/art_recovery_v2/tools/living_world_gltf_transport.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [
+          "repo://art_source/art_recovery_v2/tools/author_living_world_parts.py",
+          "repo://art_source/art_recovery_v2/tools/living_world_gltf_transport.py"
+        ],
+        "unbound_inputs": []
+      },
+      "current_authoring": {
+        "authored": true,
+        "compiled": true,
+        "native_verified": true,
+        "errors": [],
+        "runtime_scene": "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn",
+        "bytes": 9649,
+        "expected_pack_owner": "campaign",
+        "current_bytes_verified_in_selected_export": false,
+        "moving_part_count": 2,
+        "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_compile.json",
+        "native_scope": "Compiled moving-part geometry/palette/pivot contract; separate union receipt and level observation remain distinct.",
+        "runtime_scene_present_in_selected_export": false,
+        "actual_selected_pack_owners": []
+      },
+      "review_history": [
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "road_checkpoint",
+            "path": "res://assets_external/environment/village/RoadCheckpoint_Authored.res",
+            "sha256": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
+            "bytes": 59554,
+            "pack_owner": "campaign",
+            "baseline_status": "refined_static_rebake_pending_regional_user_review",
+            "source_builder": "res://tools/build_campaign_wilds.gd",
+            "source_builder_sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+            "direct_source_references": [
+              {
+                "source": "res://scripts/zones/campaign_wilds_presentation.gd",
+                "line": 14
+              },
+              {
+                "source": "res://tools/build_campaign_wilds.gd",
+                "line": 101
+              },
+              {
+                "source": "res://tools/build_campaign_wilds.gd",
+                "line": 409
+              }
+            ],
+            "life_integration": {
+              "treatment": "extract_retained_moving_part",
+              "reason": "Two existing banner panels pivot at their upper suspension; buildings, beam and poles stay static.",
+              "runtime_scene": "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn",
+              "moving_kind": "cloth",
+              "moving_part_count": 2,
+              "source_recipe_implemented": true,
+              "compiled": true,
+              "native_verified": true
+            },
+            "visual_accepted": false,
+            "user_accepted": false,
+            "pack_owners": [
+              "campaign"
+            ],
+            "declared_pack_owner": "campaign",
+            "baseline_sha256": "85e660c2250bb4d32353b9007ca639dd9a2ff0670871d212c91a0236151393dc",
+            "resource_present_in_checkout": true,
+            "present_in_selected_export": true,
+            "current_bytes_verified_in_selected_export": false,
+            "previously_enumerated_in_frozen_scenery_inventory": true,
+            "authored": true,
+            "native_verified": true,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://assets_external/environment/village/RoadCheckpoint_Authored.res": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
+              "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+              "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_compile.json": "24270f394e27211821e929bd0cc9fc2900c6fbf628376461c912e2545e652ccb",
+              "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn": "fd990e36da5d6544b75494a636268ad88f7dcb6ac87d694f6e190ff26b1bcd0b",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/authoring.json": "0732519644c71fa2d4912753014d6d8f6b9da3353698c9e4a1c6cfb352c590d6",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.blend": "11595f168babbf1ad29cfb504e8951da807f7ee958f23794bcb07fc04444c201",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.glb": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002_blender_raw.glb": "e9702eeb086df2f18e531cd0794d61fee7d8a3facae8ffc1cef1e558e6df2028",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/author_recipe_c040d7c37f7a59b7.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/transport_helper_2c9dcba5ac768071.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_9b21a5bd9eb7a376.glb": "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_native_c0839cf4e616a2a7.scn": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_receipt_13800c970b4f34a9.json": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
+              "res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+              "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+              "res://tools/build_living_world_blender.gd": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+              "res://tools/living_world_geometry_contract.gd": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": false,
+              "changed_inputs": [
+                "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_compile.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/author_recipe_c040d7c37f7a59b7.py",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/authoring.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.blend",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/checkpoint_cloth_living_v002_blender_raw.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_9b21a5bd9eb7a376.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_native_c0839cf4e616a2a7.scn",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/retained_receipt_13800c970b4f34a9.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/transport_helper_2c9dcba5ac768071.py",
+                "res://assets_external/environment/props/Banner_1_Cloth.obj",
+                "res://assets_external/environment/village/RoadCheckpoint_Authored.res",
+                "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn",
+                "res://tools/build_campaign_wilds.gd",
+                "res://tools/build_living_world_blender.gd",
+                "res://tools/living_world_geometry_contract.gd",
+                "res://tools/living_world_part_baker.gd"
+              ],
+              "unbound_inputs": []
+            },
+            "current_authoring": {
+              "authored": true,
+              "compiled": true,
+              "native_verified": true,
+              "errors": [],
+              "runtime_scene": "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn",
+              "bytes": 9649,
+              "expected_pack_owner": "campaign",
+              "current_bytes_verified_in_selected_export": false,
+              "moving_part_count": 2,
+              "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/checkpoint_cloth_compile.json",
+              "native_scope": "Compiled moving-part geometry/palette/pivot contract; separate union receipt and level observation remain distinct.",
+              "runtime_scene_present_in_selected_export": false,
+              "actual_selected_pack_owners": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "record_hall_archive",
+      "path": "res://assets_external/environment/props/RecordArchive_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_record_archive.gd",
+      "source_builder_sha256": "b63ac68f240b6925801a8111133aeb2421bc890016bfd7618b95619686a6bb9b",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 5
+        },
+        {
+          "source": "res://tools/build_record_archive.gd",
+          "line": 3
+        }
+      ],
+      "life_integration": {
+        "treatment": "supported_npc_contact_activity",
+        "reason": "Retained furniture remains solid and supported. Authored NPC hands and separately supported work materials provide the visible activity.",
+        "geometry_changed": false,
+        "native_verified": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "e456f4ba01b81d96f751313a176e2bb81567ff198e6913ca3ee6b808496cc467",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/RecordArchive_Authored.res": null,
+        "res://tools/build_record_archive.gd": "b63ac68f240b6925801a8111133aeb2421bc890016bfd7618b95619686a6bb9b"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/props/RecordArchive_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "record_hall_witness_relief",
+      "path": "res://assets_external/environment/props/record_witness_relief.jpg",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "265677e37490c6d8b72a90758cdcaece07c8f8e56ec2bb5ecc1b271e4747423d",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": null,
+      "source_builder_sha256": null,
+      "direct_source_references": [
+        {
+          "source": "res://scripts/undercroft_memorial.gd",
+          "line": 4
+        },
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 445
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_artwork_readability",
+        "reason": "Existing witness relief artwork remains still and readable in its supported architectural placement; assess light/material response in context.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/props/record_witness_relief.jpg": null
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/props/record_witness_relief.jpg"
+        ]
+      }
+    },
+    {
+      "id": "ash_mill_architecture",
+      "path": "res://assets_external/environment/village/AshMill_Authored.res",
+      "sha256": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
+      "bytes": 48615,
+      "pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_ash_mill.gd",
+      "source_builder_sha256": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_wilderness_section.gd",
+          "line": 3
+        },
+        {
+          "source": "res://tools/build_ash_mill.gd",
+          "line": 5
+        }
+      ],
+      "life_integration": {
+        "treatment": "extract_retained_moving_part",
+        "reason": "Existing wheel spins about its real X-axis axle only when the existing story flow state permits; masonry and roof remain static.",
+        "runtime_scene": "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn",
+        "moving_kind": "mill_wheel",
+        "moving_part_count": 1,
+        "source_recipe_implemented": true,
+        "compiled": true,
+        "native_verified": true
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": true,
+      "native_verified": true,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/AshMill_Authored.res": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
+        "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn": "1934dfad65964e3e41a3d4e068628fabb6a01877d322b626e6b88d0580cc0907",
+        "res://tools/build_ash_mill.gd": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
+        "res://tools/build_living_world_blender.gd": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+        "res://tools/living_world_geometry_contract.gd": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+        "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+        "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_compile.json": "293f2856a7ba51ccbba0a53274b1df0402c27ce0185ee4004ed88147f0bf8572",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/authoring.json": "d3f745628809dbd4fcd0daa524545e797f895d5e0021cbd2ae4173c3def8973b",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.blend": "97e7b66e380ad1d0b3cee30a76ea3508938687f980fefae3ded16d9cefb878ba",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.glb": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002_blender_raw.glb": "3bee97e33c1253eb712a0d37985b70bbcf3795f6d8dfcae824c2f26dad7c8367",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/author_recipe_c040d7c37f7a59b7.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/transport_helper_2c9dcba5ac768071.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_b7e82d3faea01d66.glb": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_native_c76bb9745e0c7d3c.scn": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_receipt_e22ef5514006f0ca.json": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
+        "repo://art_source/art_recovery_v2/tools/author_living_world_parts.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+        "repo://art_source/art_recovery_v2/tools/living_world_gltf_transport.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [
+          "repo://art_source/art_recovery_v2/tools/author_living_world_parts.py",
+          "repo://art_source/art_recovery_v2/tools/living_world_gltf_transport.py"
+        ],
+        "unbound_inputs": []
+      },
+      "current_authoring": {
+        "authored": true,
+        "compiled": true,
+        "native_verified": true,
+        "errors": [],
+        "runtime_scene": "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn",
+        "bytes": 23369,
+        "expected_pack_owner": "campaign",
+        "current_bytes_verified_in_selected_export": false,
+        "moving_part_count": 1,
+        "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_compile.json",
+        "native_scope": "Compiled moving-part geometry/palette/pivot contract; separate union receipt and level observation remain distinct.",
+        "runtime_scene_present_in_selected_export": false,
+        "actual_selected_pack_owners": []
+      },
+      "review_history": [
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "ash_mill_architecture",
+            "path": "res://assets_external/environment/village/AshMill_Authored.res",
+            "sha256": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
+            "bytes": 48615,
+            "pack_owner": "campaign",
+            "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+            "source_builder": "res://tools/build_ash_mill.gd",
+            "source_builder_sha256": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
+            "direct_source_references": [
+              {
+                "source": "res://scripts/zones/campaign_wilderness_section.gd",
+                "line": 3
+              },
+              {
+                "source": "res://tools/build_ash_mill.gd",
+                "line": 5
+              }
+            ],
+            "life_integration": {
+              "treatment": "extract_retained_moving_part",
+              "reason": "Existing wheel spins about its real X-axis axle only when the existing story flow state permits; masonry and roof remain static.",
+              "runtime_scene": "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn",
+              "moving_kind": "mill_wheel",
+              "moving_part_count": 1,
+              "source_recipe_implemented": true,
+              "compiled": true,
+              "native_verified": true
+            },
+            "visual_accepted": false,
+            "user_accepted": false,
+            "pack_owners": [
+              "campaign"
+            ],
+            "declared_pack_owner": "campaign",
+            "baseline_sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
+            "resource_present_in_checkout": true,
+            "present_in_selected_export": true,
+            "current_bytes_verified_in_selected_export": false,
+            "previously_enumerated_in_frozen_scenery_inventory": true,
+            "authored": true,
+            "native_verified": true,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://assets_external/environment/village/AshMill_Authored.res": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
+              "res://tools/build_ash_mill.gd": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
+              "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_compile.json": "293f2856a7ba51ccbba0a53274b1df0402c27ce0185ee4004ed88147f0bf8572",
+              "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn": "1934dfad65964e3e41a3d4e068628fabb6a01877d322b626e6b88d0580cc0907",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/authoring.json": "d3f745628809dbd4fcd0daa524545e797f895d5e0021cbd2ae4173c3def8973b",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.blend": "97e7b66e380ad1d0b3cee30a76ea3508938687f980fefae3ded16d9cefb878ba",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.glb": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002_blender_raw.glb": "3bee97e33c1253eb712a0d37985b70bbcf3795f6d8dfcae824c2f26dad7c8367",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/author_recipe_c040d7c37f7a59b7.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/transport_helper_2c9dcba5ac768071.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_b7e82d3faea01d66.glb": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_native_c76bb9745e0c7d3c.scn": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_receipt_e22ef5514006f0ca.json": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
+              "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+              "res://tools/build_living_world_blender.gd": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+              "res://tools/living_world_geometry_contract.gd": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": false,
+              "changed_inputs": [
+                "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_compile.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.blend",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/ash_mill_wheel_living_v002_blender_raw.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/author_recipe_c040d7c37f7a59b7.py",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/authoring.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_b7e82d3faea01d66.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_native_c76bb9745e0c7d3c.scn",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/retained_receipt_e22ef5514006f0ca.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/transport_helper_2c9dcba5ac768071.py",
+                "res://assets_external/environment/village/AshMill_Authored.res",
+                "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn",
+                "res://tools/build_ash_mill.gd",
+                "res://tools/build_living_world_blender.gd",
+                "res://tools/living_world_geometry_contract.gd",
+                "res://tools/living_world_part_baker.gd"
+              ],
+              "unbound_inputs": []
+            },
+            "current_authoring": {
+              "authored": true,
+              "compiled": true,
+              "native_verified": true,
+              "errors": [],
+              "runtime_scene": "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn",
+              "bytes": 23369,
+              "expected_pack_owner": "campaign",
+              "current_bytes_verified_in_selected_export": false,
+              "moving_part_count": 1,
+              "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_compile.json",
+              "native_scope": "Compiled moving-part geometry/palette/pivot contract; separate union receipt and level observation remain distinct.",
+              "runtime_scene_present_in_selected_export": false,
+              "actual_selected_pack_owners": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "undercroft_vault",
+      "path": "res://assets_external/environment/village/UndercroftVault_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_undercroft_vault.gd",
+      "source_builder_sha256": "7795bd3b3a380454ce1b7779c2bc52e78cb8da98cc02af293dd2fed1d6389381",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_finale_section.gd",
+          "line": 6
+        },
+        {
+          "source": "res://tools/build_prepared_zone_geometry.gd",
+          "line": 61
+        },
+        {
+          "source": "res://tools/build_undercroft_vault.gd",
+          "line": 4
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "30d390d85e1cda811e8a59feabedf29205c0c9f6c3ea792ca1aae6505c0086b4",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/UndercroftVault_Authored.res": null,
+        "res://tools/build_undercroft_vault.gd": "7795bd3b3a380454ce1b7779c2bc52e78cb8da98cc02af293dd2fed1d6389381"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/UndercroftVault_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "assembly_court",
+      "path": "res://assets_external/environment/village/AssemblyCourt_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "refined_static_rebake_pending_regional_user_review",
+      "source_builder": "res://tools/build_assembly_court.gd",
+      "source_builder_sha256": "d219d3ba1c453bd859567ab58ea5a43aeeb48e6a6607a862f480519741346e28",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_finale_section.gd",
+          "line": 7
+        },
+        {
+          "source": "res://tools/build_assembly_court.gd",
+          "line": 3
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "e6b154c9c6b4dd694316f12bdd9e356613a401eebe51ec8fa681beba91dde4da",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/AssemblyCourt_Authored.res": null,
+        "res://tools/build_assembly_court.gd": "d219d3ba1c453bd859567ab58ea5a43aeeb48e6a6607a862f480519741346e28"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/AssemblyCourt_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "hart_landscape",
+      "path": "res://assets_external/environment/forest/HartLandscape_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_hart_landscape.gd",
+      "source_builder_sha256": "5644e43e897c77ce49f18a76544ed433fb17d8a2c4518ac1befbe0e5cfcc0099",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_finale_section.gd",
+          "line": 8
+        },
+        {
+          "source": "res://tools/build_hart_landscape.gd",
+          "line": 51
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "41e86d6f87a332a1a4d8c5380378ea8b68e847ad000aea2e52003f6c9cc91e92",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/HartLandscape_Authored.res": null,
+        "res://tools/build_hart_landscape.gd": "5644e43e897c77ce49f18a76544ed433fb17d8a2c4518ac1befbe0e5cfcc0099"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/HartLandscape_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "hart_witness_stones",
+      "path": "res://assets_external/environment/forest/HartWitnessStones_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "source_builder": "res://tools/build_hart_landscape.gd",
+      "source_builder_sha256": "5644e43e897c77ce49f18a76544ed433fb17d8a2c4518ac1befbe0e5cfcc0099",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/campaign_finale_section.gd",
+          "line": 9
+        },
+        {
+          "source": "res://tools/build_hart_landscape.gd",
+          "line": 60
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "2d8e26ba93ed95e962d553e1151220f0cf876e8708e575e4329edaef561836bc",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/HartWitnessStones_Authored.res": null,
+        "res://tools/build_hart_landscape.gd": "5644e43e897c77ce49f18a76544ed433fb17d8a2c4518ac1befbe0e5cfcc0099"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/HartWitnessStones_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "bandit_adjoining_frontier",
+      "path": "res://assets_external/environment/forest/BanditFrontier_Authored.res",
+      "sha256": null,
+      "bytes": null,
+      "pack_owner": "campaign",
+      "baseline_status": "accepted_native_ground_forest_and_day_night_aftermath_scope",
+      "source_builder": "res://tools/build_bandit_frontier.gd",
+      "source_builder_sha256": "8656dbe75039a93e225d68d05f3ebab92af35eda5f4e33b9bb4d69ff23ec8754",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/bandit_frontier.gd",
+          "line": 3
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "25acd9093488889891a4b5d2f46f77d4545abcb63a9590643cf9c80d32ccbc3f",
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/BanditFrontier_Authored.res": null,
+        "res://tools/build_bandit_frontier.gd": "8656dbe75039a93e225d68d05f3ebab92af35eda5f4e33b9bb4d69ff23ec8754"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/forest/BanditFrontier_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "hart_fitted_woodland",
+      "path": "res://assets_external/environment/forest/HartWoodland_Authored.res",
+      "sha256": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
+      "bytes": 11539,
+      "pack_owner": "campaign",
+      "baseline_status": "accepted_native_woodland_frame_depth_and_day_night_scope",
+      "source_builder": "res://tools/build_hart_woodland.gd",
+      "source_builder_sha256": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/hart_woodland.gd",
+          "line": 3
+        }
+      ],
+      "life_integration": {
+        "treatment": "extract_retained_moving_part",
+        "reason": "Six retained fern clusters move from their roots; adjoining terrain and tree trunks are separate static geometry.",
+        "runtime_scene": "res://assets_external/environment_prepared/living_world/hart_ferns.scn",
+        "moving_kind": "foliage",
+        "moving_part_count": 6,
+        "source_recipe_implemented": true,
+        "compiled": true,
+        "native_verified": true
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": true,
+      "native_verified": true,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86",
+        "res://assets_external/environment/forest/HartWoodland_Authored.res": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
+        "res://assets_external/environment_prepared/living_world/hart_ferns.scn": "fa6252f94c1c678a8ce1820d741d119db6479d6cafdd73337bf6bfe6d9897f0a",
+        "res://tools/build_hart_woodland.gd": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e",
+        "res://tools/build_living_world_blender.gd": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+        "res://tools/living_world_geometry_contract.gd": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+        "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+        "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_compile.json": "16d05f6fe29ba1f5bf85040a3ae4f824c35fa0617c42c894d17c0436e4235af1",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/authoring.json": "f43cf5f49f58d5d70b56296728f40226baf57660b7dc648fde7430022af1f70b",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002.blend": "63ae255f502165e6d464c5919c56083e07dcff32ab8cf68fc3eca1a5c3d7b19f",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002.glb": "ea11e1766e1b171d6af0b88ecafe8d6abfc98b40d851c32bdc47cb1113947208",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002_blender_raw.glb": "0985f058b681604c15796b9f1d2609e8cc6ed223500bdc31d788445e924400ea",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/author_recipe_c040d7c37f7a59b7.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/transport_helper_2c9dcba5ac768071.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_7151d4210af45d0a.glb": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_native_493b60f24e7f95d2.scn": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+        "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_receipt_672d50e9eb2b99c0.json": "672d50e9eb2b99c01720d15f1bea00891b94b7927ab60395defcba3102ed11ad",
+        "repo://art_source/art_recovery_v2/tools/author_living_world_parts.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+        "repo://art_source/art_recovery_v2/tools/living_world_gltf_transport.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [
+          "repo://art_source/art_recovery_v2/tools/author_living_world_parts.py",
+          "repo://art_source/art_recovery_v2/tools/living_world_gltf_transport.py"
+        ],
+        "unbound_inputs": []
+      },
+      "current_authoring": {
+        "authored": true,
+        "compiled": true,
+        "native_verified": true,
+        "errors": [],
+        "runtime_scene": "res://assets_external/environment_prepared/living_world/hart_ferns.scn",
+        "bytes": 70683,
+        "expected_pack_owner": "campaign",
+        "current_bytes_verified_in_selected_export": false,
+        "moving_part_count": 6,
+        "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_compile.json",
+        "native_scope": "Compiled moving-part geometry/palette/pivot contract; separate union receipt and level observation remain distinct.",
+        "runtime_scene_present_in_selected_export": false,
+        "actual_selected_pack_owners": []
+      },
+      "review_history": [
+        {
+          "reason": "verified_inputs_changed_or_unbound",
+          "review": {
+            "id": "hart_fitted_woodland",
+            "path": "res://assets_external/environment/forest/HartWoodland_Authored.res",
+            "sha256": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
+            "bytes": 11539,
+            "pack_owner": "campaign",
+            "baseline_status": "accepted_native_woodland_frame_depth_and_day_night_scope",
+            "source_builder": "res://tools/build_hart_woodland.gd",
+            "source_builder_sha256": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e",
+            "direct_source_references": [
+              {
+                "source": "res://scripts/hart_woodland.gd",
+                "line": 3
+              }
+            ],
+            "life_integration": {
+              "treatment": "extract_retained_moving_part",
+              "reason": "Six retained fern clusters move from their roots; adjoining terrain and tree trunks are separate static geometry.",
+              "runtime_scene": "res://assets_external/environment_prepared/living_world/hart_ferns.scn",
+              "moving_kind": "foliage",
+              "moving_part_count": 6,
+              "source_recipe_implemented": true,
+              "compiled": true,
+              "native_verified": true
+            },
+            "visual_accepted": false,
+            "user_accepted": false,
+            "pack_owners": [
+              "campaign"
+            ],
+            "declared_pack_owner": "campaign",
+            "baseline_sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
+            "resource_present_in_checkout": true,
+            "present_in_selected_export": true,
+            "current_bytes_verified_in_selected_export": false,
+            "previously_enumerated_in_frozen_scenery_inventory": true,
+            "authored": true,
+            "native_verified": true,
+            "in_level_accepted": false,
+            "performance_verified": false,
+            "verification_inputs": {
+              "res://assets_external/environment/forest/HartWoodland_Authored.res": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
+              "res://tools/build_hart_woodland.gd": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e",
+              "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_compile.json": "16d05f6fe29ba1f5bf85040a3ae4f824c35fa0617c42c894d17c0436e4235af1",
+              "res://assets_external/environment_prepared/living_world/hart_ferns.scn": "fa6252f94c1c678a8ce1820d741d119db6479d6cafdd73337bf6bfe6d9897f0a",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/authoring.json": "f43cf5f49f58d5d70b56296728f40226baf57660b7dc648fde7430022af1f70b",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002.blend": "63ae255f502165e6d464c5919c56083e07dcff32ab8cf68fc3eca1a5c3d7b19f",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002.glb": "ea11e1766e1b171d6af0b88ecafe8d6abfc98b40d851c32bdc47cb1113947208",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002_blender_raw.glb": "0985f058b681604c15796b9f1d2609e8cc6ed223500bdc31d788445e924400ea",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/author_recipe_c040d7c37f7a59b7.py": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/transport_helper_2c9dcba5ac768071.py": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_7151d4210af45d0a.glb": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_native_493b60f24e7f95d2.scn": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+              "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_receipt_672d50e9eb2b99c0.json": "672d50e9eb2b99c01720d15f1bea00891b94b7927ab60395defcba3102ed11ad",
+              "res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86",
+              "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+              "res://tools/build_living_world_blender.gd": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+              "res://tools/living_world_geometry_contract.gd": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a"
+            },
+            "evidence_freshness": {
+              "inputs_unchanged": false,
+              "changed_inputs": [
+                "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_compile.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/author_recipe_c040d7c37f7a59b7.py",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/authoring.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002.blend",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/hart_ferns_living_v002_blender_raw.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_7151d4210af45d0a.glb",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_native_493b60f24e7f95d2.scn",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/retained_receipt_672d50e9eb2b99c0.json",
+                "repo://art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/transport_helper_2c9dcba5ac768071.py",
+                "res://assets_external/environment/forest/Fern_1.obj",
+                "res://assets_external/environment/forest/HartWoodland_Authored.res",
+                "res://assets_external/environment_prepared/living_world/hart_ferns.scn",
+                "res://tools/build_hart_woodland.gd",
+                "res://tools/build_living_world_blender.gd",
+                "res://tools/living_world_geometry_contract.gd",
+                "res://tools/living_world_part_baker.gd"
+              ],
+              "unbound_inputs": []
+            },
+            "current_authoring": {
+              "authored": true,
+              "compiled": true,
+              "native_verified": true,
+              "errors": [],
+              "runtime_scene": "res://assets_external/environment_prepared/living_world/hart_ferns.scn",
+              "bytes": 70683,
+              "expected_pack_owner": "campaign",
+              "current_bytes_verified_in_selected_export": false,
+              "moving_part_count": 6,
+              "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_compile.json",
+              "native_scope": "Compiled moving-part geometry/palette/pivot contract; separate union receipt and level observation remain distinct.",
+              "runtime_scene_present_in_selected_export": false,
+              "actual_selected_pack_owners": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "hart_aftermath_witness",
+      "path": "res://assets_external/environment/forest/HartAftermath_witness_Authored.res",
+      "sha256": "0ad8ca711a831fe3dbab622b733473e6ad1149cde8fd2030b4546d6ccf6354d1",
+      "bytes": 3617,
+      "pack_owner": "campaign",
+      "baseline_status": "native_state_reviewed_pending_full_scene_campaign_acceptance",
+      "source_builder": "res://tools/build_hart_aftermath.gd",
+      "source_builder_sha256": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "0ad8ca711a831fe3dbab622b733473e6ad1149cde8fd2030b4546d6ccf6354d1",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/HartAftermath_witness_Authored.res": "0ad8ca711a831fe3dbab622b733473e6ad1149cde8fd2030b4546d6ccf6354d1",
+        "res://tools/build_hart_aftermath.gd": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "hart_aftermath_mercy",
+      "path": "res://assets_external/environment/forest/HartAftermath_mercy_Authored.res",
+      "sha256": "af91f589c7479abce053ea10d48449c3854186d8506dcd9bf075658dac946546",
+      "bytes": 5941,
+      "pack_owner": "campaign",
+      "baseline_status": "native_state_reviewed_pending_full_scene_campaign_acceptance",
+      "source_builder": "res://tools/build_hart_aftermath.gd",
+      "source_builder_sha256": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "af91f589c7479abce053ea10d48449c3854186d8506dcd9bf075658dac946546",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/HartAftermath_mercy_Authored.res": "af91f589c7479abce053ea10d48449c3854186d8506dcd9bf075658dac946546",
+        "res://tools/build_hart_aftermath.gd": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "hart_aftermath_duty",
+      "path": "res://assets_external/environment/forest/HartAftermath_duty_Authored.res",
+      "sha256": "8585e0782d721a72f57e9d7b9a0cadf9c1ec035fb33de393e233ce22f0a8672d",
+      "bytes": 18333,
+      "pack_owner": "campaign",
+      "baseline_status": "native_state_reviewed_pending_full_scene_campaign_acceptance",
+      "source_builder": "res://tools/build_hart_aftermath.gd",
+      "source_builder_sha256": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "8585e0782d721a72f57e9d7b9a0cadf9c1ec035fb33de393e233ce22f0a8672d",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/HartAftermath_duty_Authored.res": "8585e0782d721a72f57e9d7b9a0cadf9c1ec035fb33de393e233ce22f0a8672d",
+        "res://tools/build_hart_aftermath.gd": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "hart_aftermath_ash",
+      "path": "res://assets_external/environment/forest/HartAftermath_ash_Authored.res",
+      "sha256": "6faabbf4bef316ad7efc7f477c78322a08ad36bd09ab9c3bbdf57c81f2c5971c",
+      "bytes": 4182,
+      "pack_owner": "campaign",
+      "baseline_status": "native_state_reviewed_pending_full_scene_campaign_acceptance",
+      "source_builder": "res://tools/build_hart_aftermath.gd",
+      "source_builder_sha256": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8",
+      "direct_source_references": [],
+      "life_integration": {
+        "treatment": "retain_story_selected_static_state",
+        "reason": "This is a consequential state-specific object/arrangement. Its authored evidence remains still; the existing story state selects the appropriate variant.",
+        "geometry_changed": false
+      },
+      "visual_accepted": false,
+      "user_accepted": false,
+      "pack_owners": [
+        "campaign"
+      ],
+      "declared_pack_owner": "campaign",
+      "baseline_sha256": "6faabbf4bef316ad7efc7f477c78322a08ad36bd09ab9c3bbdf57c81f2c5971c",
+      "resource_present_in_checkout": true,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": true,
+      "authored": false,
+      "native_verified": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/HartAftermath_ash_Authored.res": "6faabbf4bef316ad7efc7f477c78322a08ad36bd09ab9c3bbdf57c81f2c5971c",
+        "res://tools/build_hart_aftermath.gd": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      }
+    },
+    {
+      "id": "vargan_architecture_gatehouse",
+      "path": "res://assets_external/environment/village/Vargan_gatehouse_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "gatehouse",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "a0616ca275238e4d0b3d5e7368fc59dea99ac9eb0e14f66a5a5a720d8edfe42f",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 6
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_gatehouse_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_gatehouse_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "vargan_architecture_tower",
+      "path": "res://assets_external/environment/village/Vargan_tower_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "tower",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "552dd69390e088f9e72534146952e05a2c76ef1781a299ba1fab112a7ee222db",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 7
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_tower_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_tower_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "vargan_architecture_keep",
+      "path": "res://assets_external/environment/village/Vargan_keep_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "keep",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "429438daf3529d394f95a6e77b5314b17ee382df49a5b2cf9f9d41b09e444c7e",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 8
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_keep_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_keep_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "vargan_architecture_curtain",
+      "path": "res://assets_external/environment/village/Vargan_curtain_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "curtain",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "3cb9a84c6818e5bbb0a21f8ed54547265c9d9bf1c2a12552eaf580ef748e31e9",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 9
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_curtain_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_curtain_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "vargan_architecture_stable",
+      "path": "res://assets_external/environment/village/Vargan_stable_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "stable",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "7b782ee651f7d182dd6a7a3dea07693513cbea50ebc66156256600134bc0fe44",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 10
+        },
+        {
+          "source": "res://tools/build_assembly_court.gd",
+          "line": 4
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_stable_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_stable_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "vargan_architecture_cistern",
+      "path": "res://assets_external/environment/village/Vargan_cistern_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "cistern",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "cf69c45dbe8fea475470e83368a8a790471ed2fc4f9bb7fb5433723bf0e86db2",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 11
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_cistern_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_cistern_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "vargan_architecture_door",
+      "path": "res://assets_external/environment/village/Vargan_door_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "door",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "e8b8715a9905e98ec3f1a1ad25b2f4007c3341482f42909ace5526a5d0351b7c",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/undercroft_memorial.gd",
+          "line": 3
+        },
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 12
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_door_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_door_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "vargan_architecture_forge",
+      "path": "res://assets_external/environment/village/Vargan_forge_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "forge",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "b8b42f2abc87a309c9524e92ab890a3689c9d1506b5b394e853293acb981c707",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 13
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_forge_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_forge_Authored.res"
+        ]
+      }
+    },
+    {
+      "id": "vargan_architecture_record_entry",
+      "path": "res://assets_external/environment/village/Vargan_record_entry_Authored.res",
+      "pack_owner": "campaign",
+      "pack_owners": [
+        "campaign"
+      ],
+      "group_id": "vargan_architecture",
+      "variant": "record_entry",
+      "declared_pack_owner": "campaign",
+      "baseline_status": "native_camera_reviewed_pending_full_campaign_acceptance",
+      "baseline_sha256": "552fe55901a81e26a93d6a376f93033ea48369ae6d08884efbb97e3d02e50437",
+      "sha256": null,
+      "bytes": null,
+      "resource_present_in_checkout": false,
+      "present_in_selected_export": true,
+      "current_bytes_verified_in_selected_export": false,
+      "previously_enumerated_in_frozen_scenery_inventory": false,
+      "source_builder": "res://tools/build_vargan_architecture.gd",
+      "source_builder_sha256": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e",
+      "direct_source_references": [
+        {
+          "source": "res://scripts/zones/castle_vargan_section.gd",
+          "line": 14
+        }
+      ],
+      "life_integration": {
+        "treatment": "retain_static_material_response",
+        "reason": "Fixed terrain, masonry, timber or supported object geometry remains physically stable. Retained materials respond to the existing light/weather owner; no whole-building or whole-ground sway is introduced.",
+        "geometry_changed": false
+      },
+      "authored": false,
+      "native_verified": false,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "verification_inputs": {
+        "res://assets_external/environment/village/Vargan_record_entry_Authored.res": null,
+        "res://tools/build_vargan_architecture.gd": "3fa6091c59f3eff7ae8c3dc0549b0a74392ef3d46a4133c3abd599961053e14e"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": false,
+        "changed_inputs": [],
+        "unbound_inputs": [
+          "res://assets_external/environment/village/Vargan_record_entry_Authored.res"
+        ]
+      }
+    }
+  ],
+  "stage4_added_derivatives": [
+    {
+      "id": "hart_aftermath_concord",
+      "path": "res://assets_external/environment/forest/HartAftermath_concord_Authored.res",
+      "pack_owner": "community",
+      "source_builder": "res://tools/build_hart_aftermath.gd",
+      "generated": true,
+      "sha256": "a797f54052dc80d9bf3a001bdfdd1a65d31ec96183af7adff0ee1e381c0717f8",
+      "bytes": 3746,
+      "native_verified": true,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "expected_pack_owner": "community",
+      "actual_selected_pack_owners": [],
+      "pack_owner_kind": "expected_current_partition",
+      "current_bytes_verified_in_selected_export": false,
+      "authored": true,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "present_in_selected_export": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/HartAftermath_concord_Authored.res": "a797f54052dc80d9bf3a001bdfdd1a65d31ec96183af7adff0ee1e381c0717f8",
+        "res://tools/build_hart_aftermath.gd": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8",
+        "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/receipt.json": "735d30abf8310701af61b5bd54df855950698744c9bde18c7450875bc2acdefb",
+        "res://tools/build_hart_landscape.gd": "5644e43e897c77ce49f18a76544ed433fb17d8a2c4518ac1befbe0e5cfcc0099",
+        "res://tools/verify_hart_aftermath_assets.gd": "5a9007b88bae0ab832ffde4d536e2bea7ebcfdc38f712a25e187427c8db62737",
+        "res://scripts/ending_catalog.gd": "f8414285cc3fcd6c7eec056345e39641e9b59c3a08083f20e93efdfff8c674c3",
+        "res://scripts/campaign_revision.gd": "82020282d1aad2eb7342fdb606a9b3f975fea8509d446208377dec4e43c31930"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      },
+      "current_authoring": {
+        "authored": true,
+        "compiled": true,
+        "native_verified": true,
+        "errors": [],
+        "path": "res://assets_external/environment/forest/HartAftermath_concord_Authored.res",
+        "sha256": "a797f54052dc80d9bf3a001bdfdd1a65d31ec96183af7adff0ee1e381c0717f8",
+        "bytes": 3746,
+        "pack_owner": "community",
+        "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/receipt.json",
+        "native_scope": "Exact generated memorial resource geometry/obstacles; no in-level or ending enactment acceptance."
+      }
+    },
+    {
+      "id": "hart_aftermath_open_road",
+      "path": "res://assets_external/environment/forest/HartAftermath_open_road_Authored.res",
+      "pack_owner": "community",
+      "source_builder": "res://tools/build_hart_aftermath.gd",
+      "generated": true,
+      "sha256": "ce599b86e7b3223ab8aa04268391b4df69eca9d7ef2b716fa37dd0a130158f39",
+      "bytes": 4038,
+      "native_verified": true,
+      "visual_accepted": false,
+      "user_accepted": false,
+      "expected_pack_owner": "community",
+      "actual_selected_pack_owners": [],
+      "pack_owner_kind": "expected_current_partition",
+      "current_bytes_verified_in_selected_export": false,
+      "authored": true,
+      "in_level_accepted": false,
+      "performance_verified": false,
+      "present_in_selected_export": false,
+      "verification_inputs": {
+        "res://assets_external/environment/forest/HartAftermath_open_road_Authored.res": "ce599b86e7b3223ab8aa04268391b4df69eca9d7ef2b716fa37dd0a130158f39",
+        "res://tools/build_hart_aftermath.gd": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8",
+        "repo://art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/receipt.json": "735d30abf8310701af61b5bd54df855950698744c9bde18c7450875bc2acdefb",
+        "res://tools/build_hart_landscape.gd": "5644e43e897c77ce49f18a76544ed433fb17d8a2c4518ac1befbe0e5cfcc0099",
+        "res://tools/verify_hart_aftermath_assets.gd": "5a9007b88bae0ab832ffde4d536e2bea7ebcfdc38f712a25e187427c8db62737",
+        "res://scripts/ending_catalog.gd": "f8414285cc3fcd6c7eec056345e39641e9b59c3a08083f20e93efdfff8c674c3",
+        "res://scripts/campaign_revision.gd": "82020282d1aad2eb7342fdb606a9b3f975fea8509d446208377dec4e43c31930"
+      },
+      "evidence_freshness": {
+        "inputs_unchanged": true,
+        "changed_inputs": [],
+        "unbound_inputs": []
+      },
+      "current_authoring": {
+        "authored": true,
+        "compiled": true,
+        "native_verified": true,
+        "errors": [],
+        "path": "res://assets_external/environment/forest/HartAftermath_open_road_Authored.res",
+        "sha256": "ce599b86e7b3223ab8aa04268391b4df69eca9d7ef2b716fa37dd0a130158f39",
+        "bytes": 4038,
+        "pack_owner": "community",
+        "compile_receipt": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/endings/native-r1/receipt.json",
+        "native_scope": "Exact generated memorial resource geometry/obstacles; no in-level or ending enactment acceptance."
+      }
+    }
+  ],
+  "removed_from_runtime_scope": []
+}

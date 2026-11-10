@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "asset": "C10",
+  "identity": "merrow",
+  "sources": [],
+  "authoring_tool_sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+  "blend_sha256": "1401029e003fcd3e9bdbc67df3b9c82d5c42a7ee296d51350dc9ac7a3f54c795",
+  "carrier_sha256": "714bcacdf8b79d40da2d22bbb64278a738aeab3aa200df4eb014112fbd53edff",
+  "recipe_snapshot": {
+    "sha256": "e43d5992293f60271505b5a11f26b9811e44f7f40f43a6263cb501bae6054e7f",
+    "files": [
+      {
+        "name": "author_living_cast_stage2_props.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\e43d5992293f6027\\author_living_cast_stage2_props.py",
+        "sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc"
+      },
+      {
+        "name": "living_cast_stage2_profiles.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\e43d5992293f6027\\living_cast_stage2_profiles.py",
+        "sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6"
+      }
+    ]
+  },
+  "blender_version": "5.2.3 LTS",
+  "triangles": 132,
+  "grips_godot": {
+    "GripLeft": [
+      -0.12,
+      0.02,
+      0
+    ],
+    "GripRight": [
+      0.12,
+      0.02,
+      0
+    ]
+  },
+  "surface_height": 0.02,
+  "prop_root_actor_relative_godot": [
+    0,
+    1,
+    -0.4
+  ],
+  "support_near_limit_godot_z": 0.04,
+  "contact_part": "WorkContactPart",
+  "contact_response": "tilt",
+  "contact_amount": 0.025,
+  "contact_shape": {},
+  "runtime_resource": "res://assets_external/environment_prepared/living_cast/station_merrow.scn",
+  "source_geometry_authored": true,
+  "geometry_contact_verified": false,
+  "native_grips_verified": false,
+  "user_accepted": false,
+  "notes": [
+    "Actual supported contact geometry; no pickup or carried transition is claimed.",
+    "New work surfaces/details supplement the retained source shapes where listed."
+  ]
+}

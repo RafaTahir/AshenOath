@@ -1,0 +1,23 @@
+{
+  "kind": "archived_scenery_reproduction_source_checks",
+  "checks": 2,
+  "passed": true,
+  "engine_started": false,
+  "blender_started": false,
+  "native_contract_fixture": "prepared_unrun",
+  "prior_source_contracts": ".verification/scenery/source_review_20261110.json",
+  "sources": [
+    {
+      "path": "art_source\\art_recovery_v2\\tools\\author_living_world_parts.py",
+      "sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7"
+    },
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\living_world_part_baker.gd",
+      "sha256": "9a3489d6bd0df45d3b35aa291e474f45183198927c2fc85948def84cc8ee56da"
+    },
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_living_world_blender.gd",
+      "sha256": "8e8412d9cbd07185148316b4c72a0c842900a279ff07c5b8f7524a59d23fe0fd"
+    }
+  ]
+}

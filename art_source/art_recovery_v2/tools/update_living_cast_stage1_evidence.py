@@ -2,6 +2,8 @@
 import hashlib
 import json
 from pathlib import Path
+from copy import deepcopy
+from living_coverage_freshness import refresh_review, resource_inputs
 
 REPO=Path(__file__).resolve().parents[3]
 GAME=REPO/'outputs/AshenOathTheRoadBetweenCrowns'
@@ -19,6 +21,37 @@ def relative(path):return path.relative_to(REPO).as_posix()
 def read(path):return json.loads(path.read_text())
 
 
+def authored_motion_review(previous, motion, clips, evidence, inputs):
+    """A new authoring proof cannot inherit runtime or user acceptance."""
+    current = deepcopy(previous)
+    current.update({'authored':False, 'runtime_verified':False, 'user_accepted':False,
+                    'candidate_motion':deepcopy(motion)})
+    row = refresh_review(current, previous, inputs)
+    unchanged = row['evidence_freshness']['inputs_unchanged']
+    row['authored'] = True  # Caller has checked source contract and compiled bytes.
+    row['life_status'] = previous['life_status'] if unchanged and row.get('runtime_verified') else 'authored_and_compiled_pending_runtime_review'
+    row['geometry_status'] = 'Production mesh, rest rig, root scale and collision dimensions retained unchanged.'
+    row['source_review'] = {'work_apex_clay_reviewed':bool(unchanged and previous.get('source_review',{}).get('work_apex_clay_reviewed',False)), 'native_clips':list(clips),
+                            'source_contract_verified':True,
+                            'runtime_visual_acceptance':bool(unchanged and previous.get('source_review',{}).get('runtime_visual_acceptance',False))}
+    row['evidence'] = list(dict.fromkeys((previous.get('evidence',[]) if unchanged else []) + list(evidence)))
+    row['notes'] = list(dict.fromkeys(previous.get('notes',[]) + [
+        'Five authored native clips: two idle variants, occupation, listening and speaking.',
+        'Source contract validation does not assert clay review, in-game grip/garment fit or user acceptance.']))
+    return row
+
+
+def refreshed_inputs(row, extra_paths):
+    previous = row.get('verification_inputs', {})
+    paths = [path for path in previous if path.startswith('res://')]
+    paths += row.get('compiled_resources', []) + extra_paths
+    if row.get('source'): paths.append(row['source'])
+    inputs = resource_inputs(GAME, paths)
+    # These identify the selected export, not the local authoring candidate.
+    inputs.update({key:value for key,value in previous.items() if key.startswith('selected_export:')})
+    return inputs
+
+
 def main():
     ledger_path=REPORTS/'asset_coverage.json';ledger=read(ledger_path)
     compiled=read(MODELS/'library_compile_C01_C04_C03_C02.json')
@@ -30,22 +63,16 @@ def main():
         output=GAME/record['path'][6:]
         if checked['status']!='source_contract_pass' or checked['review_glb_sha256']!=record['source_sha256'] or sha(Path(source['review_glb']))!=record['source_sha256'] or sha(output)!=record['sha256']:
             raise ValueError('Authored, verified and compiled bytes differ: '+asset)
-        row=rows[asset];row['authored']=True
-        old_hash=row.get('candidate_motion',{}).get('sha256')
-        if old_hash and old_hash!=record['sha256']:row['runtime_verified']=False
-        row['life_status']='authored_and_compiled_pending_runtime_review' if not row.get('runtime_verified') else row['life_status']
-        row['geometry_status']='Production mesh, rest rig, root scale and collision dimensions retained unchanged.'
-        row['candidate_motion']={key:record[key] for key in ['path','sha256','bytes','source_sha256']}
+        old=rows[asset]
+        motion={key:record[key] for key in ['path','sha256','bytes','source_sha256']}
         packed_paths={entry['path'] for entry in ledger['runtime_asset_resources']}
-        row['candidate_motion']['present_in_selected_export']=record['path'] in packed_paths
-        row['source_review']={'work_apex_clay_reviewed':True,'native_clips':list(source['clips']),
-            'source_contract_verified':True,'runtime_visual_acceptance':False}
-        row['evidence']=[relative(folder/'authoring.json'),relative(folder/'source_verification.json'),
+        motion['present_in_selected_export']=record['path'] in packed_paths
+        evidence=[relative(folder/'authoring.json'),relative(folder/'source_verification.json'),
             relative(folder/'Life_Work_50.png'),relative(MODELS/'source_reach.json'),
             relative(MODELS/'library_compile_C01_C04_C03_C02.json')]
-        if (folder/'palm_surface_inspection.json').exists():row['evidence'].append(relative(folder/'palm_surface_inspection.json'))
-        row['notes']=['Five authored native clips: two idle variants, occupation, listening and speaking.',
-            'Work contacts and source clay review do not assert in-game grip/garment or user acceptance.']
+        if (folder/'palm_surface_inspection.json').exists():evidence.append(relative(folder/'palm_surface_inspection.json'))
+        row=authored_motion_review(old,motion,source['clips'],evidence,refreshed_inputs(old,[record['path']]))
+        old.clear();old.update(row)
         runtime_files.append(output)
     prop=read(MODELS/'props/satchel_compile.json')
     prop_files=[GAME/prop['path'][6:]]+[GAME/item['path'][6:] for item in prop['resources']]
@@ -53,11 +80,15 @@ def main():
     for item,path in zip(prop['resources'],prop_files[1:]):
         if sha(path)!=item['sha256']:raise ValueError('Compiled satchel mesh differs')
     runtime_files+=prop_files
-    ledger['compiled_additions']=[{'id':'rook_station_satchel','path':prop['path'],
+    addition={'id':'rook_station_satchel','path':prop['path'],
         'sha256':prop['sha256'],'authored':True,'runtime_verified':False,'user_accepted':False,
         'present_in_selected_export':prop['path'] in packed_paths,
         'note':'Retained Bag-derived supported station prop; does not claim pickup/carried behavior.',
-        'evidence':[relative(MODELS/'props/satchel_authoring.json'),relative(MODELS/'props/satchel_compile.json')]}]
+        'evidence':[relative(MODELS/'props/satchel_authoring.json'),relative(MODELS/'props/satchel_compile.json')]}
+    existing=next((row for row in ledger.get('compiled_additions',[]) if row['id']==addition['id']),{})
+    addition=refresh_review(addition,existing,refreshed_inputs(existing,[prop['path']]+[item['path'] for item in prop['resources']]))
+    addition['authored']=True
+    ledger['compiled_additions']=[row for row in ledger.get('compiled_additions',[]) if row['id']!=addition['id']]+[addition]
     ledger.pop('compiled_additions_pending_export',None)
     ledger['stage1_authored_runtime_bytes']=sum(path.stat().st_size for path in runtime_files)
     ledger_path.write_text(json.dumps(ledger,indent=2)+'\n')

@@ -1,0 +1,221 @@
+{
+  "asset": "M07",
+  "scope": "Human-readable source preview review of 8 exact frame pairs. Prior local candidate vs measured r4; both use the exact retained source GLB and the same Workbench frame schedule. Each camera was fit to its own candidate bounds.",
+  "pairs": [
+    {
+      "frame": "Idle_00.png",
+      "prior_candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+        "bytes": 657120,
+        "sha256": "b20718a4d69a4f70c8bb6abc82c45d841b4b50ecfa59f981c0f3167a1c59821e"
+      },
+      "measured_r4": {
+        "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+        "bytes": 685044,
+        "sha256": "ad09d725c2bf966e275d525e5987d14045a7df8bc2e7940a753822f40c8e3623"
+      },
+      "observation": "The old straight lateral wing arms become visibly bent at the elbow with the nearer membrane pulled rearward. The far wing rises behind the head in this projection. Toes, head and tail remain fully framed."
+    },
+    {
+      "frame": "Idle_25.png",
+      "prior_candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+        "bytes": 657357,
+        "sha256": "0f8e984145f69ca472c3ad3fe6e76f2f8f90934443785ea952767f23887d7450"
+      },
+      "measured_r4": {
+        "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+        "bytes": 685604,
+        "sha256": "b16ca5792d4e0c86c4e2727c27ff4be07882b17032194f034de8cc0371239e46"
+      },
+      "observation": "The bent-wing silhouette holds. The small shift in head and eye position reads as a restrained glance. No detached body part is visible at this angle."
+    },
+    {
+      "frame": "Idle_50.png",
+      "prior_candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+        "bytes": 657877,
+        "sha256": "50da6e8cabecdd8fd75cd79878b0aaa676d5a5823a36e1bc6229cec042667507"
+      },
+      "measured_r4": {
+        "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+        "bytes": 685282,
+        "sha256": "8cc74735454b7b33972b4b18d8bb7b01d6b5643fe890b5e863abcd808d4d6de4"
+      },
+      "observation": "The beak dips slightly as the compacted pose holds. Membrane folds are more pronounced near the elbow and trailing tips than on the archived spread-wing pose."
+    },
+    {
+      "frame": "Idle_75.png",
+      "prior_candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+        "bytes": 658394,
+        "sha256": "0a1eedebe663c6b3d7beb475c44be8b434b860d5c3deec87b9335a8372f454b9"
+      },
+      "measured_r4": {
+        "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+        "bytes": 684817,
+        "sha256": "624b648cbca57aae5da44eb3019b19f47f65ec98c84d196ee9fa5daa558e68bc"
+      },
+      "observation": "The same resting span remains steady while the head turns subtly back. Fine pale flecks remain on the screen-right trailing membrane."
+    },
+    {
+      "frame": "Investigate_50.png",
+      "prior_candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+        "bytes": 658143,
+        "sha256": "3e33caae080defef90f5d618665baca0e4c2274c48e247bcae27e704c441303b"
+      },
+      "measured_r4": {
+        "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+        "bytes": 685258,
+        "sha256": "ea9460ceb03128e8d702133363c44bb8a9abd0cdc4389d20f7aa3167c7813752"
+      },
+      "observation": "Retains the new bent-wing silhouette. Head and neck motion is restrained enough that this midpoint reads very close to Idle from the source camera."
+    },
+    {
+      "frame": "Feed_38.png",
+      "prior_candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+        "bytes": 657531,
+        "sha256": "b5e7b6914159ee9686621b9f2eaa68cc4a912becf2fd6187ac0b9b09b132847e"
+      },
+      "measured_r4": {
+        "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+        "bytes": 683201,
+        "sha256": "f6c9484f38f2b5951308ac29281146729dbae9fa46490d702b9e9b5eb52cf6cf"
+      },
+      "observation": "The beak and neck dip more visibly than in the old Feed frame. The screen-right wing releases slightly while the opposite wing stays raised behind the head."
+    },
+    {
+      "frame": "Feed_61.png",
+      "prior_candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+        "bytes": 658686,
+        "sha256": "78632c46e85d0c140e8f0ea0cebaa529e68e480b7834661b4fc4763f90a2e017"
+      },
+      "measured_r4": {
+        "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+        "bytes": 683646,
+        "sha256": "b421cde4341dd88db5aeece4d8cb706074b4c6f7b5d53469b90c643074b908bb"
+      },
+      "observation": "The paired later phase shows a similarly dipped beak and slight balancing release, consistent with the measured pulse. The static frame does not establish beak contact with a surface."
+    },
+    {
+      "frame": "Sleep_50.png",
+      "prior_candidate": {
+        "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+        "bytes": 657421,
+        "sha256": "0aac0ece9fa0ea5d237ca41f6f6067a53d2bc0dd75e80bbd650f301b68ad460b"
+      },
+      "measured_r4": {
+        "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+        "bytes": 684272,
+        "sha256": "98c2faa3ab60d9a864725302e2811cc8d77792bc912068e94c64bfc47c6ba150"
+      },
+      "observation": "The retained lower head angle remains visible. The legs stay in the retained standing stance, and the wings still read as a partial tuck rather than a closed-wing perch."
+    }
+  ],
+  "findings": [
+    "The source stills show a smaller, visibly articulated partial fold compared with the prior spread stance. The editable measured pose span is 74.9841 percent of retained Idle.",
+    "The revised feeding pose reads as a beak dip plus a small unilateral release. Investigate and Sleep remain deliberately restrained.",
+    "Small pale marks on the screen-right membrane and darker folds behind the head persist across r4 frames. A single grayscale view cannot distinguish a crease or overlap from lighting.",
+    "The source camera has no visible ground or food surface. Geometry proof covers the measured wing/body and bilateral wing pairs, with the existing bounded shoulder seams outside that test. Within-wing membrane self-contact, actual floor contact, material appearance and in-level readability remain unverified."
+  ],
+  "pose_feasible": true,
+  "source_contract_pass": true,
+  "source_review_observed": true,
+  "same_camera_transform_across_revisions": false,
+  "raw_retained_visual_comparison": false,
+  "native_verified": false,
+  "visual_accepted": false,
+  "in_level_accepted": false,
+  "user_accepted": false,
+  "performance_verified": false,
+  "owned_receipt": {
+    "path": ".verification/creatures/M07/revised_source_r4_owned/receipt.json",
+    "bytes": 5827,
+    "sha256": "e0a465a42a9551cd6cc8a8f9d95b7dd6e23e9b0a6190527f3f3de05890f26ef0"
+  },
+  "retained_source": {
+    "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/M07_retained_input.glb",
+    "bytes": 2097816,
+    "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+  },
+  "editable_blend": {
+    "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+    "bytes": 3413500,
+    "sha256": "d07f00c261ee865b79390e6a40103518f0c3d3cb70ae1efdd053ff43c68b105f"
+  },
+  "runtime_candidate_glb": {
+    "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+    "bytes": 2166936,
+    "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
+  },
+  "source_contract": {
+    "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+    "bytes": 2909,
+    "sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb"
+  },
+  "authoring": {
+    "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+    "bytes": 93354,
+    "sha256": "cee96e7de49b50271d014423810f51acfa40c71505d3e2255c9d07dff5cbb19e"
+  },
+  "recipe_snapshot": [
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/author_living_creature_motion.py",
+      "bytes": 26682,
+      "sha256": "a0744a5bc4c598a263a9df43b47e6c1ee4a691ff3b39689039235b1be8af8bee"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/creature_morph_lineage.py",
+      "bytes": 13428,
+      "sha256": "d848da51d00e7e3ca765e852f7390e2046b70834376fe7d2b0a3caa2e4b8f890"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/graft_creature_ambient.py",
+      "bytes": 20645,
+      "sha256": "babda3e1d65a6ac83f2722d257a6da68c5d334fc4b2222167c07c74ff950be62"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_motion_profiles.py",
+      "bytes": 7900,
+      "sha256": "115aac66956a25126e7d996ac4f021cffaae1a6b706d190402629bfdfc0edfd6"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_preview.py",
+      "bytes": 3301,
+      "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_baked_geometry.py",
+      "bytes": 6842,
+      "sha256": "3cbf097c1907f7f44455fb7380f62ab9d6736a490e917e663d0e026581b073a7"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_pose_support.py",
+      "bytes": 6253,
+      "sha256": "373292fdea058dc6162a289171bb0924dd21a7295579b6670c06423f716d0e78"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_probe_receipt.json",
+      "bytes": 126892,
+      "sha256": "90413a7482b29d0c7edaacd2185dc95cf35721628b9f0c5a28ae5805136979d5"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py",
+      "bytes": 2363,
+      "sha256": "e504737faa838fea819f751a12ecf516810c3e518919eee486f0fbbfc3abda3c"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/preserve_creature_action_bytes.py",
+      "bytes": 9035,
+      "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017"
+    },
+    {
+      "path": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/verify_living_creature_motion.py",
+      "bytes": 8003,
+      "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d"
+    }
+  ]
+}

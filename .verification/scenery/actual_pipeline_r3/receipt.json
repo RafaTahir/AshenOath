@@ -1,0 +1,1393 @@
+{
+  "kind": "living_scenery_final_proof",
+  "parent_failed_pipeline": {
+    "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r2\\pipeline.json",
+    "sha256": "7f3d54752fa8848020394cfc45f4870ee47bdb4d3380f1271d309d7d3931a053",
+    "bytes": 121941
+  },
+  "immutable_inputs": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\manifest.json",
+      "sha256": "70c8c1fbe890fa83026d9cc80460709182bd7af2891d06de19d81d47fe85219a",
+      "bytes": 5039
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\deep_wood_e506395d20a2d044.res",
+      "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "bytes": 3998
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\burned_farmstead_1c5bc5a71efc4a5b.res",
+      "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "bytes": 6909
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\marsh_crossing_fb6374cdf48eac17.res",
+      "sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
+      "bytes": 23761
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\bandit_road_b540b31cfe7baaa7.res",
+      "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "bytes": 13950
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\farmstead_west_83aefc3097c553c4.res",
+      "sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+      "bytes": 34282
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\farmstead_east_5f9e0280e328fce1.res",
+      "sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+      "bytes": 33915
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\checkpoint_85e660c2250bb4d3.res",
+      "sha256": "85e660c2250bb4d32353b9007ca639dd9a2ff0670871d212c91a0236151393dc",
+      "bytes": 63047
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\hart_26cb52dc8248328a.res",
+      "sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
+      "bytes": 55293
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\mill_9fecc6ce7ab50667.res",
+      "sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
+      "bytes": 59294
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\build_campaign_wilds_89112145507eb915.gd",
+      "sha256": "89112145507eb915095e20a149418b7017f3ef52b4af988f180b67429c1933da",
+      "bytes": 18978
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\build_hart_woodland_4cfdf590f60de0b7.gd",
+      "sha256": "4cfdf590f60de0b7040a4113f65444b7336c61be9341d9933491485e31ffd49a",
+      "bytes": 3969
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\build_ash_mill_99715fe9e266cdeb.gd",
+      "sha256": "99715fe9e266cdeb9035c9f9293129a20a554bba07a44bf2ef26295b555558ae",
+      "bytes": 6552
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\build_record_archive_817fb67034bd8982.gd",
+      "sha256": "817fb67034bd8982720be8516accd2a3ff9ef460f44ca95bf0550ed7d0082bc7",
+      "bytes": 6161
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\campaign_wilds_presentation_b3cafa4e17768343.gd",
+      "sha256": "b3cafa4e17768343b9536057d58306c1f9fb30f27fa309a24e689a1c033711e9",
+      "bytes": 3576
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\campaign_wilderness_section_631d40ff53081876.gd",
+      "sha256": "631d40ff530818764246b6df21278919ab3397863c5c1139f8d451ea4327a2a2",
+      "bytes": 20454
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\hart_woodland_c5e0cacfa62270c5.gd",
+      "sha256": "c5e0cacfa62270c5df229399029059ebfe33f6f3a19d5d803ef37c7eab43b4c3",
+      "bytes": 4110
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\combined_original\\world_material_library_6e8a2e43e57544e4.gd",
+      "sha256": "6e8a2e43e57544e4b8ac1691563f88dbbcf3d70e4e41c12011b5ca532b45c826",
+      "bytes": 17939
+    },
+    {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+      "sha256": "9d5df7a9ac2a7c5085aa0669700021bfa5c5e92de167a2510b0d0942c34deab0",
+      "bytes": 113041880
+    },
+    {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a",
+      "bytes": 198152
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\extraction_preflight_r1.json",
+      "sha256": "837bf1eb88a26cdfcabccbdf694bac7e5ae08a85781b503d3e10b82541095b68",
+      "bytes": 79148
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\author_living_world_parts.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\living_world_gltf_transport.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\global_script_class_cache.cfg",
+      "sha256": "8afdbc355b2a3020a7245285121774b65209e744e111e00fea9bc95afe6933f0",
+      "bytes": 5690
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Banner_1_Cloth.obj-3efa6ef8439f4f8ce68651549f3af296.md5",
+      "sha256": "2a2e453f967109d5bf6b160bae40776beae24fed26121e0d4ec44ce3ca2a94ed",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Banner_1_Cloth.obj-3efa6ef8439f4f8ce68651549f3af296.mesh",
+      "sha256": "cb9646d6a60467439420810e0af8c1c86de20388dc9ce50ab92c937776972a72",
+      "bytes": 7222
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Door_1_Flat.obj-7486e6e11a034de47c62e5b12dd96652.md5",
+      "sha256": "8e629165818c4ffb3659cd2f90be61fe18fe1f0510f85a75b5730af4f49c7a40",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Door_1_Flat.obj-7486e6e11a034de47c62e5b12dd96652.mesh",
+      "sha256": "992fd950608e8e62512f206b672a0a950eb3fcea7fe790d1d4fb79873bd80cf6",
+      "bytes": 47050
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Fern_1.obj-34fe95a42eb3ead8f6d1884a10fd793a.md5",
+      "sha256": "7ad59742f0b31402a930bb6a227cbb3b1a11b1839436ac14f46eeade3a8bf204",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Fern_1.obj-34fe95a42eb3ead8f6d1884a10fd793a.mesh",
+      "sha256": "4cf76475fea9c7725d2daa85762930f70feb055caa71d590527933a1d139af32",
+      "bytes": 11579
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\forest_ground_albedo.jpg-9b8ce65ed96151b89e98eb0d0beb98fe.ctex",
+      "sha256": "99db08ce1302f5123d74e7d5bd9aef504b514c481d2e11094384bb7e03861dc7",
+      "bytes": 1877972
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\forest_ground_albedo.jpg-9b8ce65ed96151b89e98eb0d0beb98fe.md5",
+      "sha256": "a1c6e4d286e98b30d57be3be02077c93972476e4c221b2d7763442cea9dea0aa",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Leaves.png-f6dab29e8ea13586af86fa715a961f2e.ctex",
+      "sha256": "2bbafd3a1348ec4b99005e197b76966ecfcc01f9d13eafea7376b5d3c391c2e6",
+      "bytes": 1919646
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Leaves.png-f6dab29e8ea13586af86fa715a961f2e.md5",
+      "sha256": "88ef364ee5f09a1d08efc2835b7e67977805efaabbeb8d00be9b36fc8e6ccf63",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Prop_WoodenFence_Extension1.obj-96558436747054d98d6c9db397a85a56.md5",
+      "sha256": "2bdf658769a9e6fdc7131f5fe4f9069158582926b5e258c31c1278b9c77dbaa5",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Prop_WoodenFence_Extension1.obj-96558436747054d98d6c9db397a85a56.mesh",
+      "sha256": "3073b9875de10b2a664276bb8fd385d5efe6e34303c825deaf405161830af95a",
+      "bytes": 3539
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Roof_Front_Brick6.obj-648b1dbe3e48d13977096bf04e464772.md5",
+      "sha256": "fa850e4bc159531048449d8078a9135a258091b56170e21772881a80780998c2",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Roof_Front_Brick6.obj-648b1dbe3e48d13977096bf04e464772.mesh",
+      "sha256": "402f8ff4ca18330871c38f05fbc1cc8a1aa5f279387bc2c6aa35bdca2be52bc6",
+      "bytes": 18578
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Roof_RoundTiles_6x10.obj-c244553237069e2460d7911e30382b85.md5",
+      "sha256": "c8daa086467d349681e80c4316d596544d14d54782080086f7f03deb6b348666",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Roof_RoundTiles_6x10.obj-c244553237069e2460d7911e30382b85.mesh",
+      "sha256": "cf8e00c1f32e6d54ec78013c5f3aa21c4f123dc19c777d1d47b7677c8147d435",
+      "bytes": 227238
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Plaster_BaseColor.png-318531f936b6e8e2a86b97d8148439ee.ctex",
+      "sha256": "922ed57310f298cb6fa9900e7bde331cd31012cf5e5782224e2141eca4e7b3d9",
+      "bytes": 2428664
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Plaster_BaseColor.png-318531f936b6e8e2a86b97d8148439ee.md5",
+      "sha256": "4e44a79bfa8c739d2c316b92023024629f25fa7d3425791cb44720ebd0e7ac50",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Plaster_Normal.png-1b0144f3d2f91bd64f79decc222557fe.ctex",
+      "sha256": "d817ab921351983cb491ea34e908d5fd39d1b2919a3a77bcd26ac90d598a93a1",
+      "bytes": 3696240
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Plaster_Normal.png-1b0144f3d2f91bd64f79decc222557fe.md5",
+      "sha256": "9b3e84da833c29a2f8b603c3d20015ac1572cd1519c86d4d5173a5e6f7cd738a",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_RoundTiles_BaseColor.png-603db2d81bf292090a123f5a551bccc2.ctex",
+      "sha256": "9a2b6227377202b7553af95ba194c59e464b3ca3c469d868b4479b4adfd3f2d6",
+      "bytes": 2643540
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_RoundTiles_BaseColor.png-603db2d81bf292090a123f5a551bccc2.md5",
+      "sha256": "b74cfe2c4d8993f9cf380872d48462185e78fd21bf8a6e0503eeebff4c2b7d95",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_RoundTiles_Normal.png-720acfb2feff007420e2b64d0ae55b8f.ctex",
+      "sha256": "195c1f1fcea89a170ddc573182e473d9e394b732aafec4a5ac14b48eb5bf8634",
+      "bytes": 2692684
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_RoundTiles_Normal.png-720acfb2feff007420e2b64d0ae55b8f.md5",
+      "sha256": "9c376d672b5bed935b72627d7ddf878b11458875656912be0c2cfe155cdfa522",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_RoundTiles_Roughness.png-050e5aada48c67a0646e95a0143e3975.ctex",
+      "sha256": "4146b2b76bbdf97d5c66ece9eb5619dc79adcc78407e3d553eb8a219258a8b44",
+      "bytes": 818058
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_RoundTiles_Roughness.png-050e5aada48c67a0646e95a0143e3975.md5",
+      "sha256": "56b31eb37f2eb0864dc1eef2036fbca5801e0bd4874811829da59b4f063433d8",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Cloth_BaseColor.png-e368fcbf77e660c09b42e2d2af556172.ctex",
+      "sha256": "f2a7979528d3971d06d5feb15c6dccb5a5a1c94a0dcd9e57d5645946491fa297",
+      "bytes": 59562
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Cloth_BaseColor.png-e368fcbf77e660c09b42e2d2af556172.md5",
+      "sha256": "10279cedbacc773acfddf699cfc57364b85a6d59bfb9a22531bd38b419a66f70",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Cloth_Normal.png-b27ad52cd6d397f3594f2f947bb1df7e.ctex",
+      "sha256": "2f4ed0e4d959912aa59941664f73cb8608b81aaeee4cfea37b2cbcac9da4f61d",
+      "bytes": 111960
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Cloth_Normal.png-b27ad52cd6d397f3594f2f947bb1df7e.md5",
+      "sha256": "3ccedc77f529ab611d68c878d1798f4b3e57ae16a2f4613cf1fa181c9594c069",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Furniture_BaseColor.png-ec02b9fc0bdd221dc75ef4bab809793c.ctex",
+      "sha256": "1051f8cb03ffb571d644d642007d8869abba8432837a05aba8b12b70a1a7f871",
+      "bytes": 88136
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Furniture_BaseColor.png-ec02b9fc0bdd221dc75ef4bab809793c.md5",
+      "sha256": "0834b7aea043744d1d98d531d9d0f1edce81c01a0af6e09f75f123744bc8463d",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Furniture_Normal.png-ffff2f57b147a0103c8d6e94480c837d.ctex",
+      "sha256": "e8b7051753dc6c8bfbd1e2df0c292f676976dbc52cef11ab8d7fece97abb4530",
+      "bytes": 123946
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Furniture_Normal.png-ffff2f57b147a0103c8d6e94480c837d.md5",
+      "sha256": "92e04625567a6a726a0835882b45231b0b44e256534aa47e343e2e4109ba21fc",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Metal_BaseColor.png-3cdbaa22e074e465dbdb7a9a94bbdc9f.ctex",
+      "sha256": "52aa976065e2c794d24f095be250af2855fc6223498dc864f6938fe1a7b43ad0",
+      "bytes": 66350
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Metal_BaseColor.png-3cdbaa22e074e465dbdb7a9a94bbdc9f.md5",
+      "sha256": "0a2e1391741033b92909d973d2ebadd4c544587f953074a5295de60e2b43b98d",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Metal_Normal.png-4f56e87e021f231486d5d443cbeb59c5.ctex",
+      "sha256": "e9ad5ba18ef6a1bb061a33211223ecef2f8283367a0402567d6df0ee9073f452",
+      "bytes": 122324
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_Trim_Metal_Normal.png-4f56e87e021f231486d5d443cbeb59c5.md5",
+      "sha256": "53bf36cf3c9ec0e1baa1475f7bb1a50233fba0bed57ba3081331c99194c534ce",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_UnevenBrick_BaseColor.png-c042c9b99a12671c328f3a4a3454d1b9.ctex",
+      "sha256": "b25f7e9d229c957ed479435e914d9c9b3eb6fa3e0cb650deb83b46101ef5ed76",
+      "bytes": 2262170
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_UnevenBrick_BaseColor.png-c042c9b99a12671c328f3a4a3454d1b9.md5",
+      "sha256": "4e007e7ed9929f693b6313ed4c7aa4023765846c408bc80c70128d5c57c1d36e",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_UnevenBrick_Normal.png-9999264542987fcf36bb5f8798ed9b18.ctex",
+      "sha256": "bb44d66cbb45c0dd759342952bc6355dfcca426ede64284c160a5dca24034cb0",
+      "bytes": 3248222
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_UnevenBrick_Normal.png-9999264542987fcf36bb5f8798ed9b18.md5",
+      "sha256": "e212879b94397a3908fc1c5d080c8d54149086dfb2d98d3e0bdf587ee555d077",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_UnevenBrick_Roughness.png-9c25fb33d26fa13c8a915b12f4351995.ctex",
+      "sha256": "99c82d1d4add0012723f5ec68abe0717f2dcfbbd36277f4c97ad7aa28c7765c6",
+      "bytes": 548842
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_UnevenBrick_Roughness.png-9c25fb33d26fa13c8a915b12f4351995.md5",
+      "sha256": "69037eb8c532c0e477cb4e2097c0d791d97728ca4ff70d99223b600d87764d00",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_WoodTrim_BaseColor.png-1735e3af156d02f7fc1b17367a5e3c9a.ctex",
+      "sha256": "47d28119fdcd643a1e8645aed7e7522528114a0aba802665cce77b2780cccb72",
+      "bytes": 1683930
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_WoodTrim_BaseColor.png-1735e3af156d02f7fc1b17367a5e3c9a.md5",
+      "sha256": "f9b6212447be1df18cbf215095f118d0058db102945b0a3d0548689360393588",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_WoodTrim_Normal.png-224871569c3ecc1cce27c79446650451.ctex",
+      "sha256": "8d0e0f2455887c0236b8896b32a73a9a3adac7232adc7ffe5b403645343e696b",
+      "bytes": 3124812
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_WoodTrim_Normal.png-224871569c3ecc1cce27c79446650451.md5",
+      "sha256": "3e1ec8a0150b4ea613415a7d198fb1ecb5b365c08f494cf24a89d9ac23fb087c",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_WoodTrim_Roughness.png-82672da15f2947fd1d113aa1339c6fc6.ctex",
+      "sha256": "b56cdd4c80d2c40d6394393e06eaaee738b73b3af161a86f15e5405f73b803f8",
+      "bytes": 865164
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\T_WoodTrim_Roughness.png-82672da15f2947fd1d113aa1339c6fc6.md5",
+      "sha256": "e59dfcdfed5cd489429792e5e4539b6de3593e7e16e9e412ebfba9954f496523",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Table_Large.obj-94782b3c96a72c173cbcabf48f6b22e3.md5",
+      "sha256": "3c2637c1078f158faf48c60ecf5d38cf82c6c4bb8184ce8de3e1db2acd35a9c2",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Table_Large.obj-94782b3c96a72c173cbcabf48f6b22e3.mesh",
+      "sha256": "01d47ef27f8c535bc838db2511f34f3f61cdcfbec9e4bf6f9893e20cc429c5f0",
+      "bytes": 136329
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Wall_Plaster_WoodGrid.obj-5a2e30d4ba530afe83978e2104d2d1cd.md5",
+      "sha256": "5eace3471508304627b6d67e4c48b3a8cbe5d10f40239c1a8373064b88396868",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Wall_Plaster_WoodGrid.obj-5a2e30d4ba530afe83978e2104d2d1cd.mesh",
+      "sha256": "6a7713e3b1bb6393608a89e4ad1031d783f3ae3fd4fc65c274b0e7e2a8f63df2",
+      "bytes": 14754
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Wall_UnevenBrick_Window_Thin_Round.obj-39a6f1abba5c87e28dc9478d3ddf82cc.md5",
+      "sha256": "c3e9f41814b14bd641ef54c282015b7f02e9bcd81f60f5cf2346227021bd9a97",
+      "bytes": 91
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Wall_UnevenBrick_Window_Thin_Round.obj-39a6f1abba5c87e28dc9478d3ddf82cc.mesh",
+      "sha256": "69a7e1655af5902b083403dd3ef550908148700722b1df944558826ef794ce4b",
+      "bytes": 8937
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Fern_1.mtl",
+      "sha256": "1212037b2e85954e50b4590cf8602ee2cbabd6a220d60a214ca3c4bd63f41fac",
+      "bytes": 243
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Fern_1.obj",
+      "sha256": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86",
+      "bytes": 20148
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Fern_1.obj.import",
+      "sha256": "68aed1c164ee487bb12f96b76f0e0b75a6f008841ebe2eb32afb66ea9ef1f95c",
+      "bytes": 724
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Leaves.png",
+      "sha256": "23248cebe28a24e78add32db3c2ee2f4d7b9219e9d2467279722f0197a7b6bd5",
+      "bytes": 2586432
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Leaves.png.import",
+      "sha256": "2142ff29256163eae9532f76562743348f3ec49b0ddae9da37749a8d0fe8f63d",
+      "bytes": 957
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Banner_1_Cloth.mtl",
+      "sha256": "fab7e1bc3db526d96baf8b4cec1c2dd9f6a577d800e91d841e3504ae671395c4",
+      "bytes": 589
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Banner_1_Cloth.obj",
+      "sha256": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+      "bytes": 8702
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Banner_1_Cloth.obj.import",
+      "sha256": "df8abc8e074d453972bdd8f2d80cd7371de9be720dd17f69adbc6582efc4d742",
+      "bytes": 763
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Cloth_BaseColor.png",
+      "sha256": "c4d0e14506e05cc56e7ca62ebeeb2d45de055296a55e5a8e9c1330ff8ff1833a",
+      "bytes": 1936754
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Cloth_BaseColor.png.import",
+      "sha256": "76f15bcbaaa6cf4d020f14c274b363a082a5863432f13073a961348bf7fedec4",
+      "bytes": 1007
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Cloth_Normal.png",
+      "sha256": "e91a490f94bc00707fb5be08045e316b4a18962f07a3b6e3d9d7c2058cfc51c0",
+      "bytes": 3920858
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Cloth_Normal.png.import",
+      "sha256": "a55290ddf935538421379358a8d76edb5d76a619bb8ffbbcb23f6ac04daa03ed",
+      "bytes": 998
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Furniture_BaseColor.png",
+      "sha256": "075fbc9ec2fabc15732bd4025b6f63a0b25762df38440d06bf30437565d39bab",
+      "bytes": 2232961
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Furniture_BaseColor.png.import",
+      "sha256": "dedb9bced3c2b127bf3cc024341e170e2a8d451c357b56c40639a99595871e51",
+      "bytes": 1018
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Furniture_Normal.png",
+      "sha256": "3340c4cc47ff06d5e94a2dbe2a2a12d914d0ef055fcf66f63d876666bd160e42",
+      "bytes": 3485710
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Furniture_Normal.png.import",
+      "sha256": "e44f70af51a1bc60f1345db7119ccc8cfc0af4a948a16819da9c6e3ea532278f",
+      "bytes": 1009
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Metal_BaseColor.png",
+      "sha256": "50422bbda9661effc259caf8b386224cac4b5ca811d2c5b3b8b25ae8efc714db",
+      "bytes": 1361221
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Metal_BaseColor.png.import",
+      "sha256": "51ff88cdd5f254a3e9155e90adec9719c8185043cfa605900b4ab85a10cffcdd",
+      "bytes": 1006
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Metal_Normal.png",
+      "sha256": "ab7315c864c9a9e6d716c940a599928506e1569d3b0c9085f8f1a64ec520d790",
+      "bytes": 3625541
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\T_Trim_Metal_Normal.png.import",
+      "sha256": "d679f83ba772f5236b6f00d11947aa17a5efc564a3b44c514edace1db70422a5",
+      "bytes": 997
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Table_Large.mtl",
+      "sha256": "cdbe3dc8ab8fd68341b213654d1a021330e0e70cae31101748f8f261d21e0c9a",
+      "bytes": 604
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Table_Large.obj",
+      "sha256": "18570c9558c9718d616c4fd33393f05bd70370df2575f8a1d1409b314badcf04",
+      "bytes": 156349
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Table_Large.obj.import",
+      "sha256": "753f287f82bc73f83e21e529df97e24a8bca21e55d9fbe7303f4d3b55d0b8fe3",
+      "bytes": 748
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Door_1_Flat.mtl",
+      "sha256": "798fdc8f743e9476231744a357b717761cfaec20da29ae177d41a6373087a6e3",
+      "bytes": 545
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Door_1_Flat.obj",
+      "sha256": "041e1ffde633b65cfa752aa67fdddd11da6563295eb2e7f05c4f80f59518a222",
+      "bytes": 51161
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Door_1_Flat.obj.import",
+      "sha256": "1c23572f08d70eaf484379214fa86407fb2ed732930aeb318b0924dbbbf0e0a6",
+      "bytes": 750
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Prop_WoodenFence_Extension1.mtl",
+      "sha256": "1c53348163ea8af101ef218de2cb3a29ed6a97939e7619355275395626a15241",
+      "bytes": 347
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Prop_WoodenFence_Extension1.obj",
+      "sha256": "45871f72e5bb8593f45664a593da01c92b451d7d52378568c62099bab944cd26",
+      "bytes": 2443
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Prop_WoodenFence_Extension1.obj.import",
+      "sha256": "87463c5ec4ee4e0811c8c5c40179b436c75cdad2af8e42f067bcb65f4f8b131e",
+      "bytes": 830
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Roof_Front_Brick6.mtl",
+      "sha256": "baabb93a5a818b12e090afb80f85e342812a417e6b57879c9955fb9b8823e49c",
+      "bytes": 586
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Roof_Front_Brick6.obj",
+      "sha256": "b7b59bf32dc6e84611d5b76763932686846b84f241376491b0c4a2600f4eeed4",
+      "bytes": 19931
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Roof_Front_Brick6.obj.import",
+      "sha256": "40030267864a0dd1c5c8914d6b723ab9b21c7ebfeacfa75a6618dfe1e6d778dc",
+      "bytes": 780
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Roof_RoundTiles_6x10.mtl",
+      "sha256": "3af5605124400ca25e7f21c5ff47cdc8e2c6ba15b973a3304c469ce98481274a",
+      "bytes": 615
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Roof_RoundTiles_6x10.obj",
+      "sha256": "e9dcc8f8ce517c60648201d3e4bf8768b5152d3dc6906ffbea03cbdedbe8bf03",
+      "bytes": 225663
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Roof_RoundTiles_6x10.obj.import",
+      "sha256": "f408824c4d316bdadfbe637381489c9eb4b4f0a0c55b6f84d185824cd5c96ff7",
+      "bytes": 795
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_Plaster_BaseColor.png",
+      "sha256": "98547ca83888307e3ffa96384ce058b7622affe0a42add3b36d0b48618c5eda4",
+      "bytes": 3316410
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_Plaster_BaseColor.png.import",
+      "sha256": "211f4b9bbc520c2faef774acfc1aa545999db9fdcfe61063376f9de9b1228f00",
+      "bytes": 997
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_Plaster_Normal.png",
+      "sha256": "8b9617b561466cce00d5a0628eae7bef208dcf63445d72570e7f8e5057fed0d4",
+      "bytes": 4607606
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_Plaster_Normal.png.import",
+      "sha256": "3af4298c2f94a639f2a7e2d76b46c68d83c657cba40945c8d941828afeefe718",
+      "bytes": 987
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_RoundTiles_BaseColor.png",
+      "sha256": "acf388ebd1a97346e1e5b59091cfc609ed15b4f70b83a626089f12a82a2d9997",
+      "bytes": 4352034
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_RoundTiles_BaseColor.png.import",
+      "sha256": "b10fbb0bd638308f074864696269752b6c0e785af00f22ab4cb62afc347b0bc4",
+      "bytes": 1006
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_RoundTiles_Normal.png",
+      "sha256": "e8cf202fbc1ec36c3f5389a25ab9c99f015d49ae0ca963d0404614c3e1e8f687",
+      "bytes": 3792369
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_RoundTiles_Normal.png.import",
+      "sha256": "a579189e750ba4e95ea1e64c3d1fd439f78c0a8cf63d4aef19e797b571c9421e",
+      "bytes": 997
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_RoundTiles_Roughness.png",
+      "sha256": "02c5cdbb6768de6ac674a343265c020c5bd6ef70fd7ba555d9b9dc7445179366",
+      "bytes": 1624660
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_RoundTiles_Roughness.png.import",
+      "sha256": "255afc62715745a33ab2caaf8a9fba66e2efdd399320b53a0e64050c542945c5",
+      "bytes": 1006
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_UnevenBrick_BaseColor.png",
+      "sha256": "ee0f096df6110e943cd9739680b61bc0ffd6fe00db752c5c3797941057a95ebc",
+      "bytes": 2945342
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_UnevenBrick_BaseColor.png.import",
+      "sha256": "0fcf0f2d5791308c0088fc51c5d163f439ada4a014ff49b2555d2ed49d83dfc4",
+      "bytes": 1008
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_UnevenBrick_Normal.png",
+      "sha256": "bbf623cc35720d67a02079b20b9a6d9641c3686952b288cda97dec41e4b8acad",
+      "bytes": 3866626
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_UnevenBrick_Normal.png.import",
+      "sha256": "531bea7296c4113b5f7b0cd0eea1c7ca5bfe3bc51728d149f6771e378b90fb03",
+      "bytes": 999
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_UnevenBrick_Roughness.png",
+      "sha256": "da170cb92ac5479b93ca0c0002b783f1186a146e6e3124891ce7bfe6e1a8a942",
+      "bytes": 1246162
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_UnevenBrick_Roughness.png.import",
+      "sha256": "aa8b956411333e3a916ca6efd035adae9943ed8031ad5afe809d8690493eba15",
+      "bytes": 1009
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_WoodTrim_BaseColor.png",
+      "sha256": "a59f410b07a9bc5f0664df3ba7a2c1e37acffc7979795911f3fc8730ab60e33e",
+      "bytes": 2082310
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_WoodTrim_BaseColor.png.import",
+      "sha256": "408e09fa8bae3512f3e7776f1ca8827206dce43a31773f9374be6bced163c519",
+      "bytes": 1000
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_WoodTrim_Normal.png",
+      "sha256": "5847623e4ed6c206e59f32d1718ee75dcb2b49a1d55ede7ef70a254739caf4a8",
+      "bytes": 3596501
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_WoodTrim_Normal.png.import",
+      "sha256": "840442ca7ebbbf00e66c0d5ac259a4d481fdb121f24bd2813ff0c403948d67aa",
+      "bytes": 991
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_WoodTrim_Roughness.png",
+      "sha256": "e888464fd4199d458d8cf39e00fa07d56f8a0bcb658aa03b4a7c95d466ceefa3",
+      "bytes": 1697111
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\T_WoodTrim_Roughness.png.import",
+      "sha256": "884583af457c997151a354dada093510cd33a381a08c27dcfceadd5fb681f073",
+      "bytes": 1000
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Wall_Plaster_WoodGrid.mtl",
+      "sha256": "baabb93a5a818b12e090afb80f85e342812a417e6b57879c9955fb9b8823e49c",
+      "bytes": 586
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Wall_Plaster_WoodGrid.obj",
+      "sha256": "f829bd589eff083c837133ac4b0219d59ea346116970a47f9205cc800f49ac0e",
+      "bytes": 14790
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Wall_Plaster_WoodGrid.obj.import",
+      "sha256": "4b59aab5175315c0d284c8e77e424af734efd27f8437f70aa1801c2e85a13c59",
+      "bytes": 800
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Wall_UnevenBrick_Window_Thin_Round.mtl",
+      "sha256": "36d1d687df6747ab072588e39c6061d05a728061494d6a0f3ed965162a83dc82",
+      "bytes": 858
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Wall_UnevenBrick_Window_Thin_Round.obj",
+      "sha256": "ec90cc905d382471888f4943b63a0a26b840175481cc4eef97505f3001f3c453",
+      "bytes": 10566
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\Wall_UnevenBrick_Window_Thin_Round.obj.import",
+      "sha256": "a83e42531afe939117bd1f0ca37a585b2be8a5570f4dbf28f45d760b4e4be3e7",
+      "bytes": 864
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\textures\\runtime\\forest_ground_albedo.jpg",
+      "sha256": "7d3757656a417d16c9f34f0c77194ad97089dcf195a0bbdf4d411a15bda33c51",
+      "bytes": 320845
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\textures\\runtime\\forest_ground_albedo.jpg.import",
+      "sha256": "d25f78b5f3b5e4b5906eb1437afae45456b793bf388428b32b5c91b046747345",
+      "bytes": 995
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\actor_spatial_index.gd",
+      "sha256": "04575033d1498399f7f3264cf5402b0bb7cf60026c65b5c18f60bec03d07b280",
+      "bytes": 2226
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\campaign_revision.gd",
+      "sha256": "82020282d1aad2eb7342fdb606a9b3f975fea8509d446208377dec4e43c31930",
+      "bytes": 9082
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_animation_driver.gd",
+      "sha256": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+      "bytes": 66856
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_face_driver.gd",
+      "sha256": "2f309a9943d1286329cbb1c736c685552d180ffc4d6e6a218b5ff4dc463cd97d",
+      "bytes": 22199
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_identity_profile.gd",
+      "sha256": "df1a06ac7fe29893df09260bb56ea486c360df9ff68ff82e9a44d50f7d83929c",
+      "bytes": 15406
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_material_bindings.gd",
+      "sha256": "6590f6ec84080893b73b0a31fc602d65eb0a335b4a6b04dbd8bc9a1866ac7eba",
+      "bytes": 6566
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_presence.gd",
+      "sha256": "d35cb9e7e1535c987340534da40f875d2dec28354e949c80c0fbd18f03ad5a3e",
+      "bytes": 3985
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_presentation.gd",
+      "sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+      "bytes": 36039
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_role_spec.gd",
+      "sha256": "7e6a63df6b8eb60d7af348a2bee001943ea969d2a422f6d004e299ef76b59ed4",
+      "bytes": 18068
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_visual_contract.gd",
+      "sha256": "10346d6afbf78ffbf14f50418fb4996cbb92f0e38b6fa0cbe4629a1cfa41b30d",
+      "bytes": 4743
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\ending_catalog.gd",
+      "sha256": "f8414285cc3fcd6c7eec056345e39641e9b59c3a08083f20e93efdfff8c674c3",
+      "bytes": 3761
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\greyfen_gathering.gd",
+      "sha256": "80a04e7576e4a37ef42580907540795ea071117d10abffc6ac41fca7397017d8",
+      "bytes": 7617
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hart_woodland.gd",
+      "sha256": "cee5795878dd0481761883107a2d24fd966201a4c397e30bbfc7ff10b36e4503",
+      "bytes": 4191
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\held_prop_geometry.gd",
+      "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
+      "bytes": 5895
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\immutable_collision_shapes.gd",
+      "sha256": "5f474f56de9558c373e3bd973baba4393eaa88ccc237fe2126649103a2cec6fa",
+      "bytes": 2047
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\prepared_zone_geometry.gd",
+      "sha256": "ac5f61d2eab7550fce9340bc7e7dfe18966fcfffe381311665ba39dbf9a0e018",
+      "bytes": 1402
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\prop_craft_geometry.gd",
+      "sha256": "cc27f3561539dd0d62faaca293e7356da3b7dd00dd54338a397dd309c384c373",
+      "bytes": 3974
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\saga_catalog.gd",
+      "sha256": "8b03a57a2dde10b0e7e819c012e6e0de81dd0d6bd2d12741f3dffc05d7fc9a18",
+      "bytes": 74709
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_cast_profile.gd",
+      "sha256": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9",
+      "bytes": 24396
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_head_modifier.gd",
+      "sha256": "8477ca0d95ce55a0e4ef485fa93e51426301fd1ff69968c6646ef04337269c10",
+      "bytes": 8013
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_wardrobe.gd",
+      "sha256": "49bbf7883bd2ccef52cd63b6241518dfc94fa11b6e383816f8e6d79350400814",
+      "bytes": 2863
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_world_scenes.gd",
+      "sha256": "c8ae52c926daa583e5416e2d95b5382cb06330e43d499da4814a1f1611a6c16a",
+      "bytes": 7054
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\systems\\character_animation_graph.gd",
+      "sha256": "8c81ae0f11db2de641bc8b13360e344f7a2a5acdfaa31935115104263a01eb25",
+      "bytes": 9062
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\systems\\character_palette.gd",
+      "sha256": "503977783f9f13d63c88e9e431e1f2cb0cf5b5fc675ecde87151afa5ea4bafcb",
+      "bytes": 2531
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\systems\\character_silhouette.gd",
+      "sha256": "592dad8e465de8aaf4a05aafad6ec0ce37edc702730b4ec3c8a13ee405b3e9e2",
+      "bytes": 14718
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\systems\\npc_routine_director.gd",
+      "sha256": "cc4a5f1f622854b5c7db42d2c7fc1773e1f0bee6cf4cf3d525c8c84c1103be9f",
+      "bytes": 7162
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\zone_build_context.gd",
+      "sha256": "676524a76eb17370a6ebea2d228ae216977109577fe70912df2b38deb6346d98",
+      "bytes": 20083
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\shaders\\character_region_palette.gdshader",
+      "sha256": "85ecc32d9decb10a6d6628781c19c1696c179d18afbe5fd6e2e87a8f7cba4e0b",
+      "bytes": 843
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_ash_mill.gd",
+      "sha256": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
+      "bytes": 8021
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_campaign_wilds.gd",
+      "sha256": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+      "bytes": 21828
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_hart_woodland.gd",
+      "sha256": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e",
+      "bytes": 4979
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_record_archive.gd",
+      "sha256": "b63ac68f240b6925801a8111133aeb2421bc890016bfd7618b95619686a6bb9b",
+      "bytes": 6274
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\freeze_living_world_originals.py",
+      "sha256": "920b35c4d05b1351fe0beeac2105a70de612e499258dbf9b24d8755640cb805f",
+      "bytes": 4169
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\living_world_geometry_contract.gd",
+      "sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+      "bytes": 5256
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\living_world_part_baker.gd",
+      "sha256": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb",
+      "bytes": 8451
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_living_scenery_pipeline.py",
+      "sha256": "30bf13f9161b2260ebbc89e5f71c2885d3a94a7686a221ab3bd460a6b102551d",
+      "bytes": 18326
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_living_world_split.gd",
+      "sha256": "f252b341974d9d83cb85a191d23990c28054c61e7e1f9e65023c0644afeedb83",
+      "bytes": 8556
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Campaign_deep_wood_Landscape.res",
+      "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "bytes": 3998
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Campaign_burned_farmstead_Landscape.res",
+      "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "bytes": 6909
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Campaign_marsh_crossing_Landscape.res",
+      "sha256": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
+      "bytes": 21209
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\Campaign_bandit_road_Landscape.res",
+      "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "bytes": 13950
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\FarmsteadWest_Authored.res",
+      "sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+      "bytes": 34282
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\FarmsteadEast_Authored.res",
+      "sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+      "bytes": 33915
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\RoadCheckpoint_Authored.res",
+      "sha256": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
+      "bytes": 59554
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth_baseline.scn",
+      "sha256": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+      "bytes": 6642
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth_baseline.glb",
+      "sha256": "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c",
+      "bytes": 14464
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth_baseline.json",
+      "sha256": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
+      "bytes": 1996
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\marsh_reeds_baseline.scn",
+      "sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+      "bytes": 5420
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\marsh_reeds_baseline.glb",
+      "sha256": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3",
+      "bytes": 12708
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\marsh_reeds_baseline.json",
+      "sha256": "a7124b82431df7f987db193ddbb2d83cb4cab9b35a50f4c4cae7bb2277661cf0",
+      "bytes": 2954
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\HartWoodland_Authored.res",
+      "sha256": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
+      "bytes": 11539
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\hart_ferns_baseline.scn",
+      "sha256": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+      "bytes": 53828
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\hart_ferns_baseline.glb",
+      "sha256": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+      "bytes": 71088
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\hart_ferns_baseline.json",
+      "sha256": "672d50e9eb2b99c01720d15f1bea00891b94b7927ab60395defcba3102ed11ad",
+      "bytes": 3734
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\AshMill_Authored.res",
+      "sha256": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
+      "bytes": 48615
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel_baseline.scn",
+      "sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+      "bytes": 12105
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel_baseline.glb",
+      "sha256": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+      "bytes": 66152
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel_baseline.json",
+      "sha256": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
+      "bytes": 1370
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\authoring.json",
+      "sha256": "0732519644c71fa2d4912753014d6d8f6b9da3353698c9e4a1c6cfb352c590d6",
+      "bytes": 6211
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\checkpoint_cloth_living_v002.blend",
+      "sha256": "11595f168babbf1ad29cfb504e8951da807f7ee958f23794bcb07fc04444c201",
+      "bytes": 98551
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\checkpoint_cloth_living_v002.glb",
+      "sha256": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
+      "bytes": 50344
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\author_recipe_c040d7c37f7a59b7.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\retained_9b21a5bd9eb7a376.glb",
+      "sha256": "9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c",
+      "bytes": 14464
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\retained_native_c0839cf4e616a2a7.scn",
+      "sha256": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+      "bytes": 6642
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\retained_receipt_13800c970b4f34a9.json",
+      "sha256": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
+      "bytes": 1996
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\transport_helper_2c9dcba5ac768071.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth\\checkpoint_cloth_living_v002_blender_raw.glb",
+      "sha256": "e9702eeb086df2f18e531cd0794d61fee7d8a3facae8ffc1cef1e558e6df2028",
+      "bytes": 50344
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\authoring.json",
+      "sha256": "db6690fad9e65124ff5a5a09494aa8972696917ac541341337722527bcecaa21",
+      "bytes": 10771
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\marsh_reeds_living_v002.blend",
+      "sha256": "6fe669c9fda61799549ffa989cba734debfe18eb5c21f22dadd7d77b378343cf",
+      "bytes": 98785
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\marsh_reeds_living_v002.glb",
+      "sha256": "661e07f782ff9eb508004368fae216f5669a9e24771f145c56c1a42a20211203",
+      "bytes": 22040
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\author_recipe_c040d7c37f7a59b7.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\retained_16c724e98a6b031d.glb",
+      "sha256": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3",
+      "bytes": 12708
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\retained_native_497f66d8be78a37d.scn",
+      "sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+      "bytes": 5420
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\retained_receipt_a7124b82431df7f9.json",
+      "sha256": "a7124b82431df7f987db193ddbb2d83cb4cab9b35a50f4c4cae7bb2277661cf0",
+      "bytes": 2954
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\transport_helper_2c9dcba5ac768071.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\marsh_reeds_living_v002_blender_raw.glb",
+      "sha256": "52048b25614e4939831893f8a0b198ff2fd6fa832bde8cfcdf838f93925ebd2e",
+      "bytes": 22040
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\authoring.json",
+      "sha256": "f43cf5f49f58d5d70b56296728f40226baf57660b7dc648fde7430022af1f70b",
+      "bytes": 12887
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\hart_ferns_living_v002.blend",
+      "sha256": "63ae255f502165e6d464c5919c56083e07dcff32ab8cf68fc3eca1a5c3d7b19f",
+      "bytes": 165905
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\hart_ferns_living_v002.glb",
+      "sha256": "ea11e1766e1b171d6af0b88ecafe8d6abfc98b40d851c32bdc47cb1113947208",
+      "bytes": 300040
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\author_recipe_c040d7c37f7a59b7.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\retained_7151d4210af45d0a.glb",
+      "sha256": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+      "bytes": 71088
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\retained_native_493b60f24e7f95d2.scn",
+      "sha256": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+      "bytes": 53828
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\retained_receipt_672d50e9eb2b99c0.json",
+      "sha256": "672d50e9eb2b99c01720d15f1bea00891b94b7927ab60395defcba3102ed11ad",
+      "bytes": 3734
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\transport_helper_2c9dcba5ac768071.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\hart_ferns\\hart_ferns_living_v002_blender_raw.glb",
+      "sha256": "0985f058b681604c15796b9f1d2609e8cc6ed223500bdc31d788445e924400ea",
+      "bytes": 300040
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\authoring.json",
+      "sha256": "d3f745628809dbd4fcd0daa524545e797f895d5e0021cbd2ae4173c3def8973b",
+      "bytes": 4359
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\ash_mill_wheel_living_v002.blend",
+      "sha256": "97e7b66e380ad1d0b3cee30a76ea3508938687f980fefae3ded16d9cefb878ba",
+      "bytes": 119049
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\ash_mill_wheel_living_v002.glb",
+      "sha256": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
+      "bytes": 160664
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\author_recipe_c040d7c37f7a59b7.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f",
+      "bytes": 16919
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\retained_b7e82d3faea01d66.glb",
+      "sha256": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+      "bytes": 66152
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\retained_native_c76bb9745e0c7d3c.scn",
+      "sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+      "bytes": 12105
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\retained_receipt_e22ef5514006f0ca.json",
+      "sha256": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
+      "bytes": 1370
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\transport_helper_2c9dcba5ac768071.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+      "bytes": 14845
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel\\ash_mill_wheel_living_v002_blender_raw.glb",
+      "sha256": "3bee97e33c1253eb712a0d37985b70bbcf3795f6d8dfcae824c2f26dad7c8367",
+      "bytes": 160664
+    }
+  ],
+  "compiler": {
+    "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_living_world_blender.gd",
+    "sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+    "bytes": 20567
+  },
+  "allowed_output_destinations": [
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel_compile.json",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth_compile.json",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\hart_ferns_compile.json",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\marsh_reeds_compile.json",
+    "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment_prepared\\living_world\\ash_mill_wheel.scn",
+    "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment_prepared\\living_world\\checkpoint_cloth.scn",
+    "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment_prepared\\living_world\\hart_ferns.scn",
+    "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment_prepared\\living_world\\marsh_reeds.scn"
+  ],
+  "runs": [
+    {
+      "step": "parser",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--check-only",
+        "--script",
+        "res://tools/build_living_world_blender.gd"
+      ],
+      "deadline_seconds": 45,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\parser.log",
+      "passed": true,
+      "pid": 10780,
+      "exit_code": 0,
+      "timed_out": false,
+      "owned_process_exited": true,
+      "seconds": 0.609,
+      "outputs": []
+    },
+    {
+      "step": "compile",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "res://tools/build_living_world_blender.gd"
+      ],
+      "deadline_seconds": 180,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\compile.log",
+      "passed": true,
+      "pid": 14480,
+      "exit_code": 0,
+      "timed_out": false,
+      "owned_process_exited": true,
+      "seconds": 1.375,
+      "outputs": [
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\checkpoint_cloth_compile.json",
+          "sha256": "24270f394e27211821e929bd0cc9fc2900c6fbf628376461c912e2545e652ccb",
+          "bytes": 3373
+        },
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment_prepared\\living_world\\checkpoint_cloth.scn",
+          "sha256": "fd990e36da5d6544b75494a636268ad88f7dcb6ac87d694f6e190ff26b1bcd0b",
+          "bytes": 9649
+        },
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\marsh_reeds_compile.json",
+          "sha256": "fca9904c011a58347e0bb001cd8414d0a68239d82c70272fcf2492d2b8f14d79",
+          "bytes": 5045
+        },
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment_prepared\\living_world\\marsh_reeds.scn",
+          "sha256": "3235a0c6434dae9fd7782bbd4fb643dd1a5b40735cc7ccbc85d8277cc7e2de6d",
+          "bytes": 6748
+        },
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\hart_ferns_compile.json",
+          "sha256": "16d05f6fe29ba1f5bf85040a3ae4f824c35fa0617c42c894d17c0436e4235af1",
+          "bytes": 5896
+        },
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment_prepared\\living_world\\hart_ferns.scn",
+          "sha256": "fa6252f94c1c678a8ce1820d741d119db6479d6cafdd73337bf6bfe6d9897f0a",
+          "bytes": 70683
+        },
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\ash_mill_wheel_compile.json",
+          "sha256": "293f2856a7ba51ccbba0a53274b1df0402c27ce0185ee4004ed88147f0bf8572",
+          "bytes": 2624
+        },
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment_prepared\\living_world\\ash_mill_wheel.scn",
+          "sha256": "1934dfad65964e3e41a3d4e068628fabb6a01877d322b626e6b88d0580cc0907",
+          "bytes": 23369
+        }
+      ]
+    },
+    {
+      "step": "equivalence",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "res://tools/verify_living_world_split.gd"
+      ],
+      "deadline_seconds": 180,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\equivalence.log",
+      "passed": true,
+      "pid": 4792,
+      "exit_code": 0,
+      "timed_out": false,
+      "owned_process_exited": true,
+      "seconds": 3.094,
+      "outputs": [
+        {
+          "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\scenery\\split_equivalence.json",
+          "sha256": "569b56f4cfa85f3f4cd8c92bf50171dc92a2800ef84aa6037b66ece0a1ba2f67",
+          "bytes": 4593
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "visual_acceptance": false,
+  "actual_level_acceptance": false,
+  "user_acceptance": false,
+  "sources": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\source\\build_living_world_blender.gd",
+      "sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+      "bytes": 20567
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\source\\run_final_proof_r3.py",
+      "sha256": "114d91cf612c633e8c93b04b8359ee135f4a047e4412e229b32bb035d5dfc544",
+      "bytes": 6427
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\source\\run_living_scenery_pipeline.py",
+      "sha256": "30bf13f9161b2260ebbc89e5f71c2885d3a94a7686a221ab3bd460a6b102551d",
+      "bytes": 18326
+    }
+  ],
+  "prior_outputs": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\prior_outputs\\0_ash_mill_wheel_compile.json",
+      "sha256": "2ce61876b36d61ddabec1c00f921105b0e5876c8fdf534e02cfa3ce865817609",
+      "bytes": 1043
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\prior_outputs\\1_checkpoint_cloth_compile.json",
+      "sha256": "cd2249bea75674895845184f1fba1d4a6540e72f2a554edcb49dd64b8fc4408b",
+      "bytes": 3373
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\prior_outputs\\2_hart_ferns_compile.json",
+      "sha256": "38f3b0a42498eae5aeee619aeb5239f5490b10182aee33b6b341cb5737a9a74c",
+      "bytes": 3415
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\prior_outputs\\3_marsh_reeds_compile.json",
+      "sha256": "26bbe27778e1e8e6a51b318eeeb9db32073ca3222fefc377fb986bf8d29248b0",
+      "bytes": 2632
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\prior_outputs\\4_ash_mill_wheel.scn",
+      "sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+      "bytes": 12105
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\prior_outputs\\5_checkpoint_cloth.scn",
+      "sha256": "f927975b7b767d5233b62cc9d49f2a079a5aae61e513f30095112c6419a7f324",
+      "bytes": 8449
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\prior_outputs\\6_hart_ferns.scn",
+      "sha256": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+      "bytes": 53828
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\actual_pipeline_r3\\prior_outputs\\7_marsh_reeds.scn",
+      "sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304",
+      "bytes": 5420
+    }
+  ]
+}

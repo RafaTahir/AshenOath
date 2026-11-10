@@ -1,0 +1,25 @@
+{
+  "scope": "exact r5 pre-Aim adapter and instrumented fixture before corrections",
+  "files": [
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud\\hud_style.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r5\\source\\hud_style.gd",
+      "sha256": "3be9565963a6e1dbf43767f6f6692e917ef144d9912853667607bff76b1eeb4e"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\community_touch_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r5\\source\\community_touch_input.gd",
+      "sha256": "69276ace7e0173395224691f14c72837fc8a86176e727139ee7a5d04cc6c541d"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_community_touch_input.gd",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r5\\source\\verify_community_touch_input.gd",
+      "sha256": "c3f09bde0596d220626e2673d1f5e6930feed2ea05e9c5c95a258dc2177ce5dd"
+    },
+    {
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\run_styled_touch_contract.py",
+      "frozen": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r5\\source\\run_styled_touch_contract.py",
+      "sha256": "31da5aa3ee166b49d00768d3e53b09db724e8d52c9e9a74e8473b9859f1313c9"
+    }
+  ]
+}

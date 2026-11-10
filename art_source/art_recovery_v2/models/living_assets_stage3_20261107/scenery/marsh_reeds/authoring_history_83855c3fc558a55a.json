@@ -1,0 +1,187 @@
+{
+  "schema_version": 2,
+  "asset": "marsh_reeds",
+  "blender_version": "5.2.3 LTS",
+  "source_hashes": {
+    "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+    "res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+  },
+  "parts": [
+    {
+      "geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+      "kind": "foliage",
+      "mesh_inline": true,
+      "node": "MarshReeds_0",
+      "pivot": "(-5.0, 0.0, -9.0)",
+      "pivot_godot": [
+        -5.0,
+        0.0,
+        -9.0
+      ],
+      "sources": {
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "triangles": 18,
+      "export_mesh": "MarshReeds_0_Geometry",
+      "support_node": "MarshReeds_0",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 27,
+      "world_bounds_blender": {
+        "min": [
+          -5.482511043548584,
+          8.5267972946167,
+          0.029999999329447746
+        ],
+        "max": [
+          -4.509999752044678,
+          9.488123893737793,
+          1.159999966621399
+        ]
+      }
+    },
+    {
+      "geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+      "kind": "foliage",
+      "mesh_inline": true,
+      "node": "MarshReeds_1",
+      "pivot": "(6.0, 0.0, -6.0)",
+      "pivot_godot": [
+        6.0,
+        0.0,
+        -6.0
+      ],
+      "sources": {
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "triangles": 18,
+      "export_mesh": "MarshReeds_1_Geometry",
+      "support_node": "MarshReeds_1",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 27,
+      "world_bounds_blender": {
+        "min": [
+          5.517488956451416,
+          5.526797294616699,
+          0.029999999329447746
+        ],
+        "max": [
+          6.490000247955322,
+          6.488123893737793,
+          1.159999966621399
+        ]
+      }
+    },
+    {
+      "geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+      "kind": "foliage",
+      "mesh_inline": true,
+      "node": "MarshReeds_2",
+      "pivot": "(-7.0, 0.0, 1.0)",
+      "pivot_godot": [
+        -7.0,
+        0.0,
+        1.0
+      ],
+      "sources": {
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "triangles": 18,
+      "export_mesh": "MarshReeds_2_Geometry",
+      "support_node": "MarshReeds_2",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 27,
+      "world_bounds_blender": {
+        "min": [
+          -7.482511043548584,
+          -1.4732028245925903,
+          0.029999999329447746
+        ],
+        "max": [
+          -6.509999752044678,
+          -0.5118758678436279,
+          1.159999966621399
+        ]
+      }
+    },
+    {
+      "geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+      "kind": "foliage",
+      "mesh_inline": true,
+      "node": "MarshReeds_3",
+      "pivot": "(7.0, 0.0, 8.0)",
+      "pivot_godot": [
+        7.0,
+        0.0,
+        8.0
+      ],
+      "sources": {
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "triangles": 18,
+      "export_mesh": "MarshReeds_3_Geometry",
+      "support_node": "MarshReeds_3",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 27,
+      "world_bounds_blender": {
+        "min": [
+          6.517488956451416,
+          -8.4732027053833,
+          0.029999999329447746
+        ],
+        "max": [
+          7.490000247955322,
+          -7.511876106262207,
+          1.159999966621399
+        ]
+      }
+    },
+    {
+      "geometry_sha256": "8d7baae1ba8afe91d447ce089ac0df1c563742322ef4ed15d8ebfbd549e739e7",
+      "kind": "foliage",
+      "mesh_inline": true,
+      "node": "MarshReeds_4",
+      "pivot": "(-5.0, 0.0, 11.0)",
+      "pivot_godot": [
+        -5.0,
+        0.0,
+        11.0
+      ],
+      "sources": {
+        "res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957"
+      },
+      "triangles": 18,
+      "export_mesh": "MarshReeds_4_Geometry",
+      "support_node": "MarshReeds_4",
+      "maximum_retained_world_vertex_error": 0.0,
+      "vertices": 27,
+      "world_bounds_blender": {
+        "min": [
+          -5.482511043548584,
+          -11.4732027053833,
+          0.029999999329447746
+        ],
+        "max": [
+          -4.509999752044678,
+          -10.511876106262207,
+          1.159999966621399
+        ]
+      }
+    }
+  ],
+  "blender_authored": true,
+  "native_verified": false,
+  "visual_accepted": false,
+  "user_accepted": false,
+  "retained_input": "models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_16c724e98a6b031d.glb",
+  "retained_input_sha256": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3",
+  "retained_native": "models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_native_c2a3a463f80f60dc.scn",
+  "retained_native_sha256": "c2a3a463f80f60dced0f058388e8c97a6b8477738b2eea6abd64ead933c72a86",
+  "retained_receipt": "models/living_assets_stage3_20261107/scenery/marsh_reeds/retained_receipt_b507a7ba3f11bcb1.json",
+  "retained_receipt_sha256": "b507a7ba3f11bcb13de0a7c299e2a1f5ad7da11d4082dc32853303661473886b",
+  "blend": "models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v001.blend",
+  "blend_sha256": "507abb1a95730300bd0ca3aff4da2a7a149c945cbac97bc5e06633de06077aef",
+  "carrier": "models/living_assets_stage3_20261107/scenery/marsh_reeds/marsh_reeds_living_v001.glb",
+  "carrier_sha256": "fd05bee940816757f324f759e3897096d919e0d6e062a5dbe12c7ea9ae5ffbae",
+  "recipe": "models/living_assets_stage3_20261107/scenery/marsh_reeds/author_recipe_4887404fc32fdf6b.py",
+  "recipe_sha256": "4887404fc32fdf6b634507a6083dcbcdb959c428055ee76ad1b5fc0f515a18f7"
+}

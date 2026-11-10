@@ -1,0 +1,65 @@
+{
+  "accepted": true,
+  "runs": [
+    {
+      "stage": "routine",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 18892,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.016,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.016,
+      "exit_code": 0,
+      "seconds": 2.031,
+      "accepted": true,
+      "script_sha256": "055869d5e29b614e9080a63f3585c6a1d0786d118a453a1d0430609f2142dabb",
+      "log_sha256": "6ab7f33bf095b67ee6cecf4da5383d948832ba4a4dd1bf56ee2af1990fbeb781",
+      "summary": [
+        "GREYFEN ROUTINE OWNERSHIP: PASS checks=279 failures=0"
+      ]
+    },
+    {
+      "stage": "lifecycle",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 14184,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.0,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.0,
+      "exit_code": 0,
+      "seconds": 1.296,
+      "accepted": true,
+      "script_sha256": "ddb8bd1c5024665970f6d3446e999786150e0dd0763242de934847ee2c1057f5",
+      "log_sha256": "4268eea4908679a3641ca53a28899b8624336d9b4a411682c75d326975fc80f8",
+      "summary": [
+        "LIVING CAST LIFECYCLE: PASS checks=107"
+      ]
+    },
+    {
+      "stage": "compiler",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 7248,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.0,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.0,
+      "exit_code": 0,
+      "seconds": 5.891,
+      "accepted": true,
+      "script_sha256": "fcf8b304679894cd67e525e61e0dc6897590528f5d41d72265e971ea326d2e2d",
+      "log_sha256": "17ca60a445c6f64ec80d33aaac89744b90958a1db39a37036b18b2c7a2cada9d",
+      "summary": [
+        "ACTIVITY GRIP COMPILE: PASS checks=29"
+      ]
+    }
+  ]
+}

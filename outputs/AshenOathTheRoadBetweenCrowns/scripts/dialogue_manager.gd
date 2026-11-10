@@ -1,6 +1,7 @@
 extends Node
 
 const StoryChoicePresenter = preload("res://scripts/story_choice_presenter.gd")
+const CampaignStory = preload("res://scripts/campaign_story_overlay.gd")
 
 var dialogues = {}
 var conversation_topics: Array[Dictionary] = []
@@ -34,14 +35,21 @@ func load_dialogue(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.READ)
 	var parsed = JSON.parse_string(file.get_as_text())
 	if typeof(parsed) == TYPE_DICTIONARY:
-		dialogues.merge(parsed, true)
 		for id in parsed:
+			var base: Dictionary = CampaignStory.base_scene(parsed[id])
+			if base.is_empty():
+				dialogues.erase(id)
+				_lazy_scenes.erase(id)
+				continue
+			dialogues[id]=base
 			_lazy_scenes.erase(id)
 
 func has_dialogue(id: String) -> bool:
-	return dialogues.has(id) or _lazy_scenes.has(id)
+	return dialogues.has(id) or _lazy_scenes.has(id) or not CampaignStory.scene(id,story_state,quest_manager).is_empty()
 
 func display_name(id: String, fallback: String) -> String:
+	var expanded: Dictionary = CampaignStory.scene(id,story_state,quest_manager)
+	if not expanded.is_empty(): return str(expanded.get("name",fallback))
 	if dialogues.has(id):
 		return str(dialogues[id].get("name", fallback))
 	return str(_lazy_scenes.get(id, {}).get("name", fallback))
@@ -226,12 +234,13 @@ func _conversation_topic_scene(resolved: Dictionary) -> Dictionary:
 
 func get_dialogue(id: String) -> Dictionary:
 	_materialize_scene(id)
-	var base: Dictionary = dialogues.get(id, {
+	var expanded: Dictionary = CampaignStory.scene(id,story_state,quest_manager)
+	var base: Dictionary = (expanded if not expanded.is_empty() else dialogues.get(id, {
 		"name": "Unknown",
 		"greeting": "...",
 		"lines": [],
 		"actions": []
-	}).duplicate(true)
+	})).duplicate(true)
 	var candidates: Array = base.get("variants", [])
 	candidates.sort_custom(func(a, b): return int(a.get("priority", 0)) > int(b.get("priority", 0)))
 	for variant in candidates:
@@ -254,6 +263,9 @@ func get_dialogue(id: String) -> Dictionary:
 	base["presentation"] = _presentation_contract(base.get("presentation", {}))
 	var visible_actions: Array = []
 	for action in base.get("actions", []):
+		if str(action.get("type", "")) in ["ending", "final_choice"]:
+			if not preload("res://scripts/ending_catalog.gd").available(str(action.get("ending", "")), story_state, quest_manager):
+				continue
 		if story_state != null and not story_state.commitment_allows(action):
 			continue
 		if str(action.get("type", "")) == "start_quest" and quest_manager != null and quest_manager.has_method("is_runtime_content_ready"):
@@ -323,6 +335,8 @@ func _build_pages(data: Dictionary) -> Array:
 			page["direction"] = direction
 		if pause_after > 0.0:
 			page["pause_after"] = pause_after
+		if raw_line is Dictionary and raw_line.has("performance"):
+			page["performance"] = preload("res://scripts/story_scene_direction.gd").checked_performance(raw_line.performance)
 		pages.append(page)
 	return pages
 
@@ -363,13 +377,16 @@ func _conditions_match(raw_conditions: Variant) -> bool:
 	if typeof(raw_conditions) != TYPE_DICTIONARY:
 		return true
 	var conditions: Dictionary = raw_conditions
+	if conditions.has("ending_available"):
+		if not preload("res://scripts/ending_catalog.gd").available(str(conditions.ending_available), story_state, quest_manager):
+			return false
 	if conditions.has("flag_unset") and story_state != null:
 		var unset_id := str(conditions.get("flag_unset", ""))
 		if unset_id != "" and story_state.get_flag(unset_id, null) != null:
 			return false
 	var story_conditions: Dictionary = {}
 	for key in conditions:
-		if key not in ["quest_active", "quest_available", "quest_completed", "objectives_done", "objectives_not_done", "flag_unset"]:
+		if key not in ["quest_active", "quest_available", "quest_completed", "objectives_done", "objectives_not_done", "flag_unset", "ending_available"]:
 			story_conditions[key] = conditions[key]
 	if story_state != null and not story_state.matches(story_conditions):
 		return false

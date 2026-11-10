@@ -135,6 +135,7 @@ func configure(game: Node, quality_preset: String, only_registered: bool = false
 	_sync_story_state(true)
 
 func enroll_region() -> void:
+	preload("res://scripts/living_cast_stations.gd").ensure_region(host)
 	var zone_id := str(host.current_zone_id)
 	var definitions: Dictionary = CastProfile.life_data().get("zones", {}).get(zone_id, {}).duplicate()
 	if str(preload("res://scripts/saga_catalog.gd").person_location("saga_maren", host.quests).zone) == zone_id:
@@ -295,6 +296,7 @@ func _physics_process(delta: float) -> void:
 				var hydrated_driver: Node = actor_node.find_child("CharacterAnimationDriver", true, false)
 				if is_instance_valid(hydrated_driver) and hydrated_driver.is_valid():
 					entry.driver = hydrated_driver
+					_connect_activity_contact(entry)
 			var render_distance: float = 8.0 if quality == "potato" else (18.0 if quality == "quality" else 16.0)
 			var was_distant: bool = bool(entry.get("distance_suspended", false))
 			var distance_limit: float = render_distance - 0.8 if was_distant else render_distance + 0.8
@@ -313,6 +315,7 @@ func _physics_process(delta: float) -> void:
 			_update_reaction(entry, float(decision_period) / 1000.0)
 			var driver: Node = entry.driver
 			if distant != was_distant:
+				entry.erase("carry_route_scope")
 				# Keep distant people in the world; only their animation/simulation
 				# budget sleeps. Walking across a distance boundary must not erase them.
 				if driver != null and driver.has_method("set_distance_suspended"):
@@ -576,6 +579,9 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		# prior anchor. Start the next leg from their actual feet every time.
 		entry.route = _routine_route(entry, final_target)
 		entry.route_index = 1 if entry.route.size() > 1 else 0
+		entry.erase("carry_route_scope")
+		var scope := _reviewed_c11_carry_leg(entry)
+		if not scope.is_empty(): entry.carry_route_scope = scope
 		_set_agent_target(entry)
 	if entry.route.is_empty():
 		_brake_actor(entry, delta)
@@ -615,7 +621,9 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	var turn_pace: float = clampf((deg_to_rad(65.0) - turn_error) / deg_to_rad(48.0), 0.0, 1.0)
 	var arrival_pace: float = sqrt(2.0 * WALK_BRAKING * maxf(distance - ARRIVAL_DISTANCE, 0.0))
 	var desired_speed: float = minf(float(entry.speed) * turn_pace, arrival_pace)
-	desired_speed *= _crowd_pace(entry, direction, delta)
+	var crowd_pace := _crowd_pace(entry, direction, delta)
+	if not is_equal_approx(crowd_pace, 1.0): entry.erase("carry_route_scope")
+	desired_speed *= crowd_pace
 	var current_speed: float = float(entry.motion_speed)
 	var rate: float = WALK_ACCELERATION if desired_speed > current_speed else WALK_BRAKING
 	entry.motion_speed = move_toward(current_speed, desired_speed, rate * delta)
@@ -719,7 +727,9 @@ func _move_actor(entry: Dictionary, direction: Vector3, speed: float, delta: flo
 	var start: Vector3 = node.global_position
 	if entry.has("table_approach") and start.distance_to(entry.table_approach) < 0.55:
 		entry.erase("table_approach")
-	var step: float = _player_clear_step(start, direction, minf(speed * delta, remaining_distance))
+	var requested_step := minf(speed * delta, remaining_distance)
+	var step: float = _player_clear_step(start, direction, requested_step)
+	if not is_equal_approx(step, requested_step): entry.erase("carry_route_scope")
 	if direction.length_squared() < 0.001 or step <= 0.00001:
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
@@ -913,6 +923,7 @@ func _end_activity(entry: Dictionary) -> void:
 	_apply_pending_routine(entry)
 
 func _release_activity(entry: Dictionary, release_pose: bool = true) -> void:
+	entry.erase("carry_route_scope")
 	_clear_work_contact_effects(entry.node)
 	var was_active := bool(entry.get("activity_active", false))
 	var station := str(entry.get("station", ""))
@@ -940,6 +951,18 @@ func _bind_workstation(profile: Dictionary, path: Array) -> void:
 	var station: Node3D
 	if definition.has("node"):
 		station = host.zone_root.find_child(str(definition.node), true, false) as Node3D
+		var nearest := INF
+		var names: Array = [str(definition.node)]
+		names.append_array(definition.get("alternates", []))
+		for name: String in names:
+			var candidate := host.zone_root.find_child(name, true, false) as Node3D
+			var stand_marker := candidate.get_node_or_null("WorkStand") as Node3D if candidate != null else null
+			if stand_marker == null: continue
+			for point: Vector3 in path:
+				var distance := point.distance_squared_to(stand_marker.global_position)
+				if distance < nearest:
+					nearest = distance
+					station = candidate
 	else:
 		for candidate in host.zone_root.find_children("RegionalWork", "Node3D", true, false):
 			if str(candidate.get_meta("quest", "")) == str(definition.get("quest", "")):
@@ -957,9 +980,14 @@ func _bind_workstation(profile: Dictionary, path: Array) -> void:
 	if safe.distance_squared_to(standing) > 0.04:
 		return
 	for index in path.size():
-		if str(profile.activities[index]) != str(definition.activity) or path[index].distance_squared_to(standing) > 9.0:
+		var activity := str(profile.activities[index])
+		var supported: Array = definition.get("activities", [str(definition.activity)])
+		if activity not in supported or path[index].distance_squared_to(standing) > 9.0:
 			continue
 		var resolved := definition.duplicate()
+		resolved.activity = activity
+		resolved.stand = standing
+		resolved.node_ref = weakref(station)
 		for key: String in ["point", "left", "right"]:
 			if bool(definition.get("markers", false)):
 				var marker := station.get_node_or_null({"point":"WorkContact", "left":"WorkLeft", "right":"WorkRight"}[key]) as Marker3D
@@ -970,6 +998,11 @@ func _bind_workstation(profile: Dictionary, path: Array) -> void:
 				resolved[key] = station.to_global(definition[key])
 		if definition.has("look"):
 			resolved["look"] = station.to_global(definition.look)
+		elif station.has_meta("work_identity"):
+			var toward: Vector3 = resolved.point - standing
+			toward.y = 0.0
+			if toward.length_squared() > 0.001:
+				resolved["look"] = standing + toward.normalized()
 		profile.workstation = resolved
 		path[index] = safe
 
@@ -980,6 +1013,8 @@ func _bind_rest_anchor(profile: Dictionary, path: Array) -> void:
 	# A scheduled coordinate is not evidence of a bed or seat. Only authored,
 	# physically supported markers may request the seated sleeping performance.
 	for anchor: Node in host.zone_root.find_children("LifeRest_*", "Marker3D", true, false):
+		var owner_identity := str(anchor.get_meta("rest_identity", ""))
+		if owner_identity != "" and owner_identity != str(profile.get("identity", "")): continue
 		if not bool(anchor.get_meta("rest_supported", false)) or str(anchor.get_meta("rest_kind", "")) != "seated":
 			continue
 		var stand: Vector3 = anchor.to_global(anchor.get_meta("stand_offset", Vector3.ZERO))
@@ -1014,6 +1049,10 @@ func _set_activity_attention(entry: Dictionary, active: bool) -> void:
 		face.set_attention("sleep" if _supported_rest(entry) else "neutral")
 	elif activity in ["rest", "idle", "remember", "sit"]:
 		face.set_attention("neutral")
+	elif activity in ["watch", "lookout"] and entry.profile.get("workstation", {}).is_empty():
+		# Observation already has an authored head survey. With no physical
+		# task to inspect, do not invent a low work point in front of the actor.
+		face.set_attention("neutral")
 	else:
 		var station: Dictionary = entry.profile.get("workstation", {})
 		var target: Vector3 = station.get("point", entry.node.global_position + entry.driver.get_visible_forward() * 0.5 + Vector3.UP * 1.0)
@@ -1022,11 +1061,54 @@ func _set_activity_attention(entry: Dictionary, active: bool) -> void:
 		face.set_attention("point", null, target)
 
 func _connect_activity_contact(entry: Dictionary) -> void:
-	if not is_instance_valid(entry.driver):
+	if not is_instance_valid(entry.driver) or not is_instance_valid(entry.node):
 		return
-	var callback := _on_activity_contact.bind(weakref(entry.node))
+	if entry.driver.has_method("set_story_workstation_owner"): entry.driver.set_story_workstation_owner(self)
+	var callback: Callable = entry.get("contact_callback", Callable())
+	var previous_driver: WeakRef = entry.get("contact_driver")
+	var previous_actor: WeakRef = entry.get("contact_actor")
+	var old_driver: Node = previous_driver.get_ref() if previous_driver != null else null
+	if not callback.is_valid() or old_driver != entry.driver or previous_actor == null or previous_actor.get_ref() != entry.node:
+		if is_instance_valid(old_driver) and callback.is_valid() and old_driver.activity_contact.is_connected(callback):
+			old_driver.activity_contact.disconnect(callback)
+		# A new WeakRef makes a different bound Callable. Retain this exact
+		# binding so retry/enrollment cannot install duplicate contact handlers.
+		var actor_ref: WeakRef = weakref(entry.node)
+		callback = _on_activity_contact.bind(actor_ref)
+		entry.contact_callback = callback
+		entry.contact_driver = weakref(entry.driver)
+		entry.contact_actor = actor_ref
 	if not entry.driver.activity_contact.is_connected(callback):
 		entry.driver.activity_contact.connect(callback)
+
+func story_workstation_for(driver: Node, identity: String) -> Dictionary:
+	if identity != "vale" or not is_instance_valid(host) or get_parent() != host.zone_root: return {}
+	var actor: Node3D
+	for entry: Dictionary in actors:
+		if entry.driver == driver and CastProfile.same_person(str(entry.id), identity):
+			actor = entry.node
+			break
+	if not is_instance_valid(actor) or not host.zone_root.is_ancestor_of(actor): return {}
+	var result: Dictionary = {}
+	var nearest := INF
+	for station: Node3D in host.zone_root.find_children("LifeWork_*", "Node3D", true, false):
+		if str(station.get_meta("work_identity", "")) != identity: continue
+		var prop_ref: WeakRef = station.get_meta("task_prop") if station.has_meta("task_prop") else null
+		var prop := prop_ref.get_ref() as Node3D if prop_ref != null else null
+		if prop == null or not prop.is_visible_in_tree() or str(prop.get_meta("actor_identity", "")) != identity \
+				or not bool(prop.get_meta("stationary_supported_prop", false)) or not bool(prop.get_meta("grip_geometry_verified", false)): continue
+		var stand := station.get_node_or_null("WorkStand") as Marker3D
+		var contact := station.get_node_or_null("WorkContact") as Marker3D
+		if stand == null or contact == null or not stand.global_position.is_finite() or not contact.global_position.is_finite(): continue
+		var station_key := str(Vector3(snappedf(stand.global_position.x,0.5),0,snappedf(stand.global_position.z,0.5)))
+		var occupant: Node3D = activity_reservations.get(station_key)
+		if is_instance_valid(occupant) and occupant != actor: continue
+		if host.validate_walkable_position(stand.global_position).distance_squared_to(stand.global_position) > 0.04: continue
+		var distance := actor.global_position.distance_squared_to(stand.global_position)
+		if distance >= nearest: continue
+		nearest = distance
+		result = {"node_ref":weakref(station), "prop_ref":weakref(prop), "stand":stand.global_position, "point":contact.global_position, "reservation":station_key, "identity":identity}
+	return result
 
 func _on_activity_contact(event: String, point: Vector3, source: WeakRef) -> void:
 	var actor := source.get_ref() as Node3D
@@ -1036,18 +1118,97 @@ func _on_activity_contact(event: String, point: Vector3, source: WeakRef) -> voi
 		if not _begin_satchel_cinch(actor):
 			return
 		event = "cloth_wind"
+	elif event.begins_with("life_work:"):
+		var identity := event.trim_prefix("life_work:")
+		if not _begin_station_contact(actor, identity): return
+		event = "record_page" if identity in ["vale", "merrow", "edric"] else "cloth_wind"
+	if event=="forge_hammer" and is_instance_valid(player) and actor.global_position.distance_squared_to(player.global_position)<=121.0:
+		for entry: Dictionary in actors:
+			if entry.node!=actor or not bool(entry.get("activity_active",false)) or str(entry.profile.get("activity",""))!="forge": continue
+			var driver: Node = entry.get("driver")
+			if not is_instance_valid(driver) or not is_instance_valid(driver.life_modifier): continue
+			if str(driver.life_modifier.activity)!="forge": continue
+			var contact: Dictionary = driver.life_modifier.last_contact_samples.get("right",{})
+			var contact_error := float(contact.get("error",INF))
+			if str(contact.get("kind",""))!="hammer" or not is_finite(contact_error) or contact_error>0.06 or not point.is_finite(): continue
+			var effects: Node = host.get("world_vfx")
+			if is_instance_valid(effects) and effects.has_method("emit_work_contact"):
+				effects.emit_work_contact(point,player.global_position,"forge")
+			break
 	if is_instance_valid(host.audio) and is_instance_valid(player):
 		host.audio.play_spatial_event(event, point, player.global_position, 11.0, 0.25, 0.025)
 
 func _begin_satchel_cinch(actor: Node3D) -> bool:
-	var bag := host.zone_root.find_child("RookStationSatchel", true, false) as Node3D
-	var knot := bag.find_child("SatchelKnot", true, false) as Node3D if bag != null else null
-	if knot == null:
-		return false
-	_clear_work_contact_effects(actor)
-	work_contact_effects.append({"actor":weakref(actor), "node":weakref(knot), "scale":knot.scale, "remaining":0.35})
-	knot.scale *= Vector3(0.92, 1.0, 0.92)
+	for entry: Dictionary in actors:
+		if entry.node != actor or not bool(entry.get("activity_active", false)) or not is_instance_valid(entry.driver): continue
+		var station: Dictionary = entry.profile.get("workstation", {})
+		var reference: WeakRef = station.get("node_ref")
+		var station_node := reference.get_ref() as Node3D if reference != null else null
+		if station_node == null or str(station_node.get_meta("work_identity", "")) != "rook": return false
+		var prop_ref: WeakRef = station_node.get_meta("task_prop") if station_node.has_meta("task_prop") else null
+		var bag := prop_ref.get_ref() as Node3D if prop_ref != null else null
+		var knot := bag.find_child("SatchelKnot", true, false) as Node3D if bag != null else null
+		if knot == null: return false
+		_clear_work_contact_effects(actor)
+		work_contact_effects.append({"actor":weakref(actor), "driver":weakref(entry.driver), "node":weakref(knot), "scale":knot.scale, "remaining":0.35})
+		knot.scale *= Vector3(0.92, 1.0, 0.92)
+		return true
+	return false
+
+func _begin_station_contact(actor: Node3D, identity: String) -> bool:
+	for entry: Dictionary in actors:
+		if entry.node != actor or not bool(entry.get("activity_active", false)): continue
+		var station: Dictionary = entry.profile.get("workstation", {})
+		var reference: WeakRef = station.get("node_ref")
+		var station_node := reference.get_ref() as Node3D if reference != null else null
+		if station_node == null or str(station_node.get_meta("work_identity", "")) != identity: return false
+		var prop_ref: WeakRef = station_node.get_meta("task_prop") if station_node.has_meta("task_prop") else null
+		var prop := prop_ref.get_ref() as Node3D if prop_ref != null else null
+		var part := prop.find_child("WorkContactPart", true, false) as Node3D if prop != null else null
+		if part == null: return false
+		_clear_work_contact_effects(actor)
+		var effect := {"actor":weakref(actor),"driver":weakref(entry.driver),"node":weakref(part),"scale":part.scale,"transform":part.transform,"remaining":0.35,"response":str(part.get_meta("contact_response", "compress")),"amount":clampf(float(part.get_meta("contact_amount", 0.04)),0.0,0.08)}
+		if str(effect.response) == "morph":
+			var binding := _station_contact_morph(part)
+			if binding.is_empty(): return false
+			effect["morph"] = binding
+			(part as MeshInstance3D).set_blend_shape_value(int(binding.index),float(binding.target))
+		work_contact_effects.append(effect)
+		return true
+	return false
+
+func _station_contact_morph(part: Node3D) -> Dictionary:
+	var mesh := part as MeshInstance3D
+	if mesh == null or mesh.mesh == null: return {}
+	var resource_id := mesh.mesh.get_instance_id()
+	var cached: Dictionary = part.get_meta("living_contact_morph",{})
+	if int(cached.get("mesh_id",0)) == resource_id: return cached if bool(cached.get("valid",false)) else {}
+	var shape := str(part.get_meta("contact_shape",""))
+	var index := mesh.find_blend_shape_by_name(shape)
+	var neutral: Variant = part.get_meta("contact_neutral_weight",0.0)
+	var target: Variant = part.get_meta("contact_target_weight",1.0)
+	var valid := index >= 0 and typeof(neutral) in [TYPE_FLOAT,TYPE_INT] and typeof(target) in [TYPE_FLOAT,TYPE_INT]
+	valid = valid and is_finite(float(neutral)) and is_finite(float(target)) and float(neutral)>=0.0 and float(target)>float(neutral) and float(target)<=1.0
+	if valid: valid = is_equal_approx(mesh.get_blend_shape_value(index),float(neutral))
+	if not valid:
+		part.set_meta("living_contact_morph",{"mesh_id":resource_id,"valid":false})
+		push_error("Living task contact cannot bind its declared shape/neutral: " + str(part.get_path()))
+		return {}
+	var binding := {"mesh_id":resource_id,"valid":true,"index":index,"shape":shape,"neutral":mesh.get_blend_shape_value(index),"target":float(target)}
+	part.set_meta("living_contact_morph",binding)
+	return binding
+
+func _set_work_contact_morph(node: Node3D, effect: Dictionary, tension: float) -> bool:
+	var mesh := node as MeshInstance3D
+	var binding: Dictionary = effect.get("morph",{})
+	if mesh == null or mesh.mesh == null or int(binding.get("mesh_id",0)) != mesh.mesh.get_instance_id(): return false
+	mesh.set_blend_shape_value(int(binding.index),lerpf(float(binding.neutral),float(binding.target),clampf(tension,0.0,1.0)))
 	return true
+
+func _restore_work_contact_effect(effect: Dictionary, node: Node3D) -> void:
+	if effect.has("morph"): _set_work_contact_morph(node,effect,0.0)
+	elif effect.has("transform"): node.transform = effect.transform
+	else: node.scale = effect.scale
 
 func _tick_work_contact_effects(delta: float) -> void:
 	for index in range(work_contact_effects.size() - 1, -1, -1):
@@ -1056,9 +1217,26 @@ func _tick_work_contact_effects(delta: float) -> void:
 		if not is_instance_valid(knot):
 			work_contact_effects.remove_at(index)
 			continue
+		var actor: Node3D = effect.actor.get_ref()
+		var driver_ref: WeakRef = effect.get("driver")
+		var driver: Node = driver_ref.get_ref() if driver_ref != null else null
+		if not is_instance_valid(actor) or Presence.protected(actor) or is_instance_valid(driver) and (bool(driver.get("dead")) or bool(driver.get("distance_suspended"))):
+			_restore_work_contact_effect(effect,knot)
+			work_contact_effects.remove_at(index)
+			continue
 		effect.remaining = maxf(0.0, float(effect.remaining) - delta)
 		var tension := float(effect.remaining) / 0.35
-		knot.scale = (effect.scale as Vector3) * Vector3(1.0 - tension * 0.08, 1.0, 1.0 - tension * 0.08)
+		if effect.has("morph"):
+			if not _set_work_contact_morph(knot,effect,tension): effect.remaining = 0.0
+		elif effect.has("transform"):
+			knot.transform = effect.transform
+			var amount := float(effect.amount) * tension
+			if str(effect.response) == "tilt":
+				knot.rotate_object_local(Vector3.RIGHT, amount)
+			else:
+				knot.scale = (effect.scale as Vector3) * Vector3(1.0+amount*0.5,1.0-amount,1.0+amount*0.5)
+		else:
+			knot.scale = (effect.scale as Vector3) * Vector3(1.0 - tension * 0.08, 1.0, 1.0 - tension * 0.08)
 		if float(effect.remaining) <= 0.0:
 			work_contact_effects.remove_at(index)
 
@@ -1069,7 +1247,7 @@ func _clear_work_contact_effects(actor: Node3D) -> void:
 			continue
 		var knot := effect.node.get_ref() as Node3D
 		if is_instance_valid(knot):
-			knot.scale = effect.scale
+			_restore_work_contact_effect(effect,knot)
 		work_contact_effects.remove_at(index)
 
 func _apply_pending_routine(entry: Dictionary) -> void:
@@ -1125,6 +1303,7 @@ func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 	if activity == "sleep" and not _supported_rest(entry):
 		activity = "rest"
 	if driver.has_method("set_life_activity"):
+		if active: driver.set_life_workstation(entry.profile.get("workstation", {}))
 		driver.set_life_activity(activity if active else "")
 		if driver.has_method("set_life_rest_anchor"):
 			driver.set_life_rest_anchor(entry.profile.get("rest_anchor", {}) if active and activity == "sleep" else {})
@@ -1477,8 +1656,12 @@ func _end_social_exchange() -> void:
 		host.audio.stop_table_performance(get_instance_id())
 	for record: Dictionary in social_scene.actors:
 		var entry: Dictionary = record.entry
+		_release_story_workstation(record)
 		if not is_instance_valid(entry.node):
 			continue
+		entry.erase("scene_attention")
+		if is_instance_valid(entry.driver) and entry.driver.has_method("clear_story_prop"):
+			entry.driver.clear_story_prop(get_instance_id())
 		Presence.release(entry.node, "social", get_instance_id())
 		var release_pose := not Presence.has_protected_owner(entry.node) and str(entry.node.get_meta("locomotion_owner", "")) in ["", "greyfen_life"]
 		if is_instance_valid(host) and is_instance_valid(host.audio):
@@ -1623,19 +1806,29 @@ func _start_world_scene(scene: Dictionary, selected: Array[Dictionary]) -> void:
 	for entry: Dictionary in selected:
 		if not is_instance_valid(entry.node) or str(entry.node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"]:
 			return
+	var required_station := str(scene.get("requires_workstation", ""))
+	var stations: Dictionary = {}
+	if required_station != "":
+		for entry: Dictionary in selected:
+			if not is_instance_valid(entry.driver) or not entry.driver.supports_story_workstation(required_station): continue
+			var station := story_workstation_for(entry.driver, required_station)
+			if not station.is_empty(): stations[str(entry.id)] = station
+		if stations.is_empty(): return
 	var saved: Array[Dictionary] = []
 	for entry: Dictionary in selected:
 		if not Presence.claim(entry.node, "social", get_instance_id()):
 			for claimed: Dictionary in saved: Presence.release(claimed.entry.node, "social", get_instance_id())
 			return
 		var face: Node = entry.get("face")
-		saved.append({"entry":entry, "attention":face.capture_attention() if is_instance_valid(face) else {}})
+		saved.append({"entry":entry, "attention":face.capture_attention() if is_instance_valid(face) else {}, "workstation":stations.get(str(entry.id), {})})
 	# Claim the whole cast before changing anyone's work or focus. A failed
 	# later claim must leave earlier participants in their original activity.
 	for record: Dictionary in saved:
 		var entry: Dictionary = record.entry
 		entry.node.set_meta("cast_social_cancel", _end_social_exchange)
 		_release_activity(entry)
+		var station: Dictionary = record.workstation
+		if not station.is_empty(): activity_reservations[str(station.reservation)] = entry.node
 		entry.social_time = 2.0
 		entry.motion_speed = 0.0
 		entry.route = []
@@ -1647,6 +1840,18 @@ func _start_world_scene(scene: Dictionary, selected: Array[Dictionary]) -> void:
 	var index := clampi(int(checkpoint.get("index", 0)), 0, turns.size()) if matching else 0
 	var walk_index := clampi(int(checkpoint.get("walk_index", 0)), 0, scene.get("walk", []).size()) if matching else 0
 	social_scene = {"world":scene, "actors":saved, "turns":turns, "signature":signature, "index":index, "remaining":0.0, "speaking":false, "walk_index":walk_index, "staged":false, "waiting":0.0}
+	var required_prop := str(scene.get("requires_bound_prop", ""))
+	if required_prop != "":
+		var bound := false
+		for record: Dictionary in saved:
+			var driver: Node = record.entry.driver
+			if not is_instance_valid(driver) or not driver.supports_story_prop(required_prop): continue
+			driver.set_dialogue_pose(true)
+			bound = driver.set_story_prop(required_prop,get_instance_id())
+			if bound: break
+		if not bound:
+			_end_social_exchange()
+			return
 	social_cooldown = 8.0
 
 func _tick_world_scene(delta: float) -> void:
@@ -1666,6 +1871,9 @@ func _tick_world_scene(delta: float) -> void:
 		if not is_instance_valid(entry.node) or not entry.node.is_visible_in_tree() or Presence.protected(entry.node) or str(entry.node.get_meta("locomotion_owner", "")) not in ["", "greyfen_life"] or float(entry.get("reaction_time", 0.0)) > 0:
 			_end_social_exchange()
 			return
+		if not _story_workstation_valid(record):
+			_end_social_exchange()
+			return
 		entry.social_time = 2.0
 		# Separation waits at the last completed beat, never leashes the player.
 		if entry.node.global_position.distance_to(player.global_position) > (26.0 if not bool(social_scene.staged) else 9.0):
@@ -1676,6 +1884,14 @@ func _tick_world_scene(delta: float) -> void:
 		var arrived := true
 		for record: Dictionary in social_scene.actors:
 			var entry: Dictionary = record.entry
+			var workstation: Dictionary = record.get("workstation", {})
+			if not workstation.is_empty():
+				var at_station := _world_walk_to(entry, workstation.stand, minf(delta,0.05), 0.025)
+				if at_station:
+					_face(entry.node, workstation.point, delta)
+					at_station = _story_workstation_aligned(record)
+				arrived = at_station and arrived
+				continue
 			var raw: Array = scene.get("stage", {}).get(str(entry.id), [])
 			if raw.is_empty():
 				for staged_id: String in scene.get("stage", {}):
@@ -1717,8 +1933,17 @@ func _tick_world_scene(delta: float) -> void:
 					if listener.entry.node != actor:
 						focus = listener.entry.node
 						break
-			_face(actor, focus.global_position, delta)
-			if is_instance_valid(record.entry.get("face")): record.entry.face.set_focus_target(focus)
+			if _story_workstation_action(record):
+				if not _story_workstation_aligned(record):
+					_end_social_exchange()
+					return
+				_face(actor, record.workstation.point, delta)
+			else:
+				_face(actor, focus.global_position, delta)
+			if _story_workstation_action(record) and is_instance_valid(record.entry.get("face")):
+				record.entry.face.set_attention("point", null, record.workstation.point)
+			else:
+				_apply_scene_attention(record.entry, focus, delta)
 		social_scene.remaining = maxf(0.0, float(social_scene.remaining) - delta)
 		return
 	if bool(social_scene.speaking):
@@ -1741,31 +1966,86 @@ func _tick_world_scene(delta: float) -> void:
 		social_cooldown = 12.0
 		return
 	var turn: Array = social_scene.turns[int(social_scene.index)]
+	var direction := preload("res://scripts/story_scene_direction.gd").for_world(str(scene.id), int(social_scene.index), turn)
 	var duration := clampf(str(turn[2]).split(" ", false).size() * 0.32 + 1.5, 3.0, 11.0)
 	if scene.has("music") and int(social_scene.index)==1:duration=14.0
 	for record: Dictionary in social_scene.actors:
 		var entry: Dictionary = record.entry
 		_set_motion(entry, 0.0)
-		_face(entry.node, player.global_position, delta)
 		var speaking := CastProfile.same_person(str(entry.id), str(turn[0]))
+		var gesture := str(direction.get("gesture" if speaking else "listener_gesture", ""))
+		var body_gesture := str(direction.get("body_gesture" if speaking else "body_listener_gesture", gesture))
+		if body_gesture == "settle_ledger":
+			if not _story_workstation_valid(record) or not _story_workstation_aligned(record):
+				_end_social_exchange()
+				return
+			_face(entry.node, record.workstation.point, delta)
+		else:
+			_face(entry.node, player.global_position, delta)
 		if is_instance_valid(entry.driver):
-			entry.driver.set_life_activity(str(scene.get("action", "idle")))
-			var station: Dictionary = entry.profile.get("workstation", {})
-			if not station.is_empty() and entry.node.global_position.distance_to(station.get("stand", entry.node.global_position)) < 1.3:
-				entry.driver.set_life_workstation(station)
-			if speaking: entry.driver.play_story_gesture("explain")
+			if str(scene.get("requires_bound_prop", "")) == "": entry.driver.clear_story_prop(get_instance_id())
+			entry.driver.set_dialogue_pose(true)
+			entry.driver.set_story_listening(not speaking)
+			if body_gesture == "drink":
+				if not entry.driver.set_story_prop("cup", get_instance_id()):
+					_end_social_exchange()
+					return
+			if body_gesture != "": entry.driver.play_story_gesture(body_gesture)
+			if body_gesture in ["drink", "settle_ledger"] and bool(entry.driver.action_active):
+				# A short subtitle such as "You can" still leaves time for the
+				# authored contact and recovery; it cannot cut the cup off mid-sip.
+				duration = maxf(duration,float(entry.driver.action_duration)+0.15)
 		if is_instance_valid(entry.get("face")):
 			entry.face.set_conversation_active(true)
 			entry.face.set_focus_target(player)
-			entry.face.set_expression(CastProfile.expression_for(CastProfile.presence_profile(str(entry.id)), host.story_state))
+			entry.face.set_expression(str(direction.get("emotion" if speaking else "listener_emotion", CastProfile.expression_for(CastProfile.presence_profile(str(entry.id)), host.story_state))))
 			entry.face.set_speech_amount(0.0)
-			entry.face.play_story_gesture("explain" if speaking else "acknowledge")
+			if gesture != "": entry.face.play_story_gesture(gesture)
+		_begin_scene_attention(entry, direction.get("attention" if speaking else "listener_attention", {}))
+		if body_gesture == "settle_ledger" and is_instance_valid(entry.get("face")):
+			entry.face.set_attention("point", null, record.workstation.point)
 		if speaking:
 			duration = maxf(duration, float(host.audio.play_nearby_speech(str(entry.id), str(turn[2]), entry.node)) + 0.3)
 	host.audio.set_ambient_conversation(true)
 	host.hud.show_ambient_subtitle(get_instance_id(), str(turn[1]), str(turn[2]), duration)
 	social_scene.remaining = duration
 	social_scene.speaking = true
+
+func _begin_scene_attention(entry: Dictionary, raw: Variant) -> void:
+	entry.erase("scene_attention")
+	if not raw is Dictionary: return
+	var mode := str(raw.get("mode", "actor"))
+	var seconds := clampf(float(raw.get("seconds", 1.0)),0.0,2.0)
+	if not is_finite(seconds) or seconds <= 0.0: return
+	if mode == "neutral":
+		entry.scene_attention = {"mode":"neutral","remaining":seconds}
+		return
+	if mode != "point": return
+	var target := Vector3.INF
+	var offset: Variant = raw.get("offset")
+	if offset is Array and offset.size() == 3:
+		var point := Vector3(float(offset[0]),float(offset[1]),float(offset[2]))
+		if point.is_finite() and point.length() <= 6.0:
+			target = entry.node.to_global(point)
+	elif str(raw.get("anchor", "")) != "":
+		var nearest := 36.0
+		for anchor: Node3D in host.zone_root.find_children("LifeAttention_*", "Marker3D", true, false):
+			if str(anchor.get_meta("attention_anchor", "")) != str(raw.anchor) or not bool(anchor.get_meta("geometry_verified", false)): continue
+			var distance: float = entry.node.global_position.distance_squared_to(anchor.global_position)
+			if distance < nearest:
+				nearest = distance
+				target = anchor.global_position
+	if target.is_finite(): entry.scene_attention = {"mode":"point","point":target,"remaining":seconds}
+
+func _apply_scene_attention(entry: Dictionary, focus: Node3D, delta: float) -> void:
+	if not is_instance_valid(entry.get("face")): return
+	var intent: Dictionary = entry.get("scene_attention", {})
+	if intent.is_empty() or float(intent.get("remaining",0.0)) <= 0.0:
+		entry.face.set_focus_target(focus)
+		entry.erase("scene_attention")
+		return
+	intent.remaining = maxf(0.0,float(intent.remaining)-delta)
+	entry.face.set_attention(str(intent.mode), null, intent.get("point",Vector3.ZERO))
 
 func _remember_world_scene_progress() -> void:
 	if bool(social_scene.world.get("ephemeral", false)): return
@@ -1775,10 +2055,41 @@ func _remember_world_scene_progress() -> void:
 	host.story_save_pending = true
 	host.call_deferred("_persist_story_action")
 
-func _world_walk_to(entry: Dictionary, target: Vector3, delta: float) -> bool:
+func _story_workstation_valid(record: Dictionary) -> bool:
+	var station: Dictionary = record.get("workstation", {})
+	if station.is_empty(): return true
+	var node: Node3D = station.node_ref.get_ref()
+	var prop: Node3D = station.prop_ref.get_ref()
+	if not is_instance_valid(node) or not is_instance_valid(prop) or not prop.is_visible_in_tree() or not host.zone_root.is_ancestor_of(node): return false
+	if str(node.get_meta("work_identity", "")) != str(station.identity) or not bool(prop.get_meta("grip_geometry_verified", false)): return false
+	var bound: WeakRef = node.get_meta("task_prop") if node.has_meta("task_prop") else null
+	if bound == null or bound.get_ref() != prop or activity_reservations.get(str(station.reservation)) != record.entry.node: return false
+	var stand := node.get_node_or_null("WorkStand") as Marker3D
+	var contact := node.get_node_or_null("WorkContact") as Marker3D
+	return stand != null and contact != null and stand.global_position.is_equal_approx(station.stand) and contact.global_position.is_equal_approx(station.point)
+
+func _release_story_workstation(record: Dictionary) -> void:
+	var station: Dictionary = record.get("workstation", {})
+	if not station.is_empty() and activity_reservations.get(str(station.reservation)) == record.entry.node:
+		activity_reservations.erase(str(station.reservation))
+
+func _story_workstation_aligned(record: Dictionary) -> bool:
+	var station: Dictionary = record.get("workstation", {})
+	if station.is_empty(): return false
+	var actor: Node3D = record.entry.node
+	if actor.global_position.distance_to(station.stand) > 0.035: return false
+	var facing: Vector3 = station.point - actor.global_position
+	facing.y = 0.0
+	return facing.length_squared() > 0.0001 and absf(wrapf(_wanted_yaw(actor,facing) - actor.rotation.y, -PI, PI)) <= 0.01
+
+func _story_workstation_action(record: Dictionary) -> bool:
+	var driver: Node = record.entry.driver
+	return not record.get("workstation", {}).is_empty() and is_instance_valid(driver) and bool(driver.action_active) and str(driver.current_state) == "story_settle_ledger"
+
+func _world_walk_to(entry: Dictionary, target: Vector3, delta: float, arrival_radius: float = 0.2) -> bool:
 	var offset: Vector3 = target - entry.node.global_position
 	offset.y = 0
-	if offset.length() <= 0.2 + 0.005 and float(entry.motion_speed) < 0.12:
+	if offset.length() <= arrival_radius + 0.005 and float(entry.motion_speed) < 0.12:
 		entry.route = []
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
@@ -1796,7 +2107,7 @@ func _world_walk_to(entry: Dictionary, target: Vector3, delta: float) -> bool:
 	if not final_point and offset.length() < 0.2:
 		entry.route_index = int(entry.route_index) + 1
 		return false
-	_walk_scripted_step(entry, point, 0.7, 0.5, 0.2 if final_point else 0.0, delta)
+	_walk_scripted_step(entry, point, 0.7, 0.5, arrival_radius if final_point else 0.0, delta)
 	return false
 
 func _update_gathering_routines() -> void:
@@ -1925,6 +2236,35 @@ func _precompute_routes(entry: Dictionary) -> void:
 func _set_agent_target(entry: Dictionary) -> void:
 	pass
 
+func _c11_carry_scope_live(entry: Dictionary) -> bool:
+	return entry.route.size() == 2 and int(entry.route_index) == 1 and int(entry.target) == 1 \
+		and entry.pending_routine.is_empty() and not entry.has("table_restore") and not entry.has("gathering_restore") \
+		and float(entry.get("pause", 0.0)) <= 0.0 and float(entry.get("greeting_remaining", 0.0)) <= 0.0 \
+		and float(entry.get("reaction_time", 0.0)) <= 0.0
+
+func _reviewed_c11_carry_leg(entry: Dictionary) -> String:
+	if str(entry.id) != "saga_nessa" or not bool(entry.get("regional", false)) or str(entry.get("routine_zone", "")) != "greyfen" \
+			or int(entry.get("arrived_target", -1)) != 0 or not is_equal_approx(float(entry.speed), 0.62) or not _c11_carry_scope_live(entry):
+		return ""
+	var profile: Dictionary = entry.profile
+	if not bool(profile.get("scheduled", false)) or not bool(profile.get("carry_in_transit", false)) \
+			or str(profile.get("intent_key", "")) != "baker_day:4" or str(profile.get("intent", "")) != "carry" \
+			or str(profile.get("activity", "")) != "carry" or str(profile.get("prop", "")) != "supply" \
+			or profile.get("activities", []) != ["carry", "carry"] or entry.path.size() != 2 or profile.get("path", []).size() != 2:
+		return ""
+	var authored: Dictionary = CastProfile.life_data().get("zones", {}).get("greyfen", {}).get("saga_nessa", {})
+	var labels := ["work", "errand"]
+	var tolerance := ARRIVAL_DISTANCE + 0.015
+	for index: int in 2:
+		var raw: Array = authored.get(labels[index], [])
+		if raw.size() != 3: return ""
+		var original := Vector3(float(raw[0]), float(raw[1]), float(raw[2]))
+		var resolved: Vector3 = profile.path[index]
+		var validated: Vector3 = entry.path[index]
+		var routed: Vector3 = entry.route[index]
+		if resolved != original or routed.distance_squared_to(validated) > tolerance * tolerance: return ""
+	return "greyfen:saga_nessa:baker_day:4:work_to_errand"
+
 func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.ZERO) -> void:
 	var driver = entry.driver
 	if driver != null and driver.has_method("set_locomotion"):
@@ -1947,6 +2287,11 @@ func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.Z
 		if bool(entry.profile.get("scheduled", false)):
 			var carrying := speed > 0.05 and bool(entry.profile.get("carry_in_transit", false))
 			driver.set_carried_activity("carry" if carrying else "")
+			if carrying and entry.has("carry_route_scope") and driver.has_method("set_carried_activity_scope"):
+				if _c11_carry_scope_live(entry):
+					driver.set_carried_activity_scope(str(entry.carry_route_scope))
+				else:
+					entry.erase("carry_route_scope")
 			driver.set_activity_prop(str(entry.profile.get("prop", "")) if carrying else "")
 		elif bool(entry.get("regional", false)):
 			driver.set_carried_activity("carry" if speed > 0.05 and int(entry.target) == 1 and routine_phase != "night" else "")

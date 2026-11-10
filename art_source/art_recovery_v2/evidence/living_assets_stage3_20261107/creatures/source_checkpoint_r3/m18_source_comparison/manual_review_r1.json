@@ -1,0 +1,70 @@
+{
+  "asset": "M18",
+  "scope": "Manual comparison of 14 frozen identical-camera source frames",
+  "files": [
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/candidate_Idle_00_full.png",
+      "sha256": "400e6c105d15cdb394e4f06b2cae9812d8c5fa112202c6d8999dafaf96e4b439"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/candidate_Idle_25_full.png",
+      "sha256": "eb5a377a602ce1425b3d73c116a637d8caede168d309517605e6cb30f834ef7a"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/candidate_Idle_75_full.png",
+      "sha256": "1b5d4cf970ecca696ca9b758abeee19284f90326999874a240b994b438f07510"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/candidate_Sleep_00_full.png",
+      "sha256": "8d070330af19fec1b499317d91473dc7be537fec564f63502d123fcbe8dc3ab5"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/candidate_Sleep_00_head_detail.png",
+      "sha256": "798e7e2546444c34f8f84c9ad9e7a57a9c9a270a7138bb908226373a07839ec0"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/candidate_Sleep_50_full.png",
+      "sha256": "7fc95b3aff9fc01327b1dba4e6e3071d56657c982a368595fff62c3299632c75"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/candidate_Sleep_50_head_detail.png",
+      "sha256": "321812e60f892f73e3c033ac6149e8aca55034b8660853c3996faf4fee8d8c5a"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/retained_Idle_00_full.png",
+      "sha256": "1c38bdf1ba732aca131b6c39a6f340aebe99e9a7fc559595997fd5ae3be861fe"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/retained_Idle_25_full.png",
+      "sha256": "4e9fa6a2668bda1a7bbe4575412a991d9d5298c91fc9a9ca82995344963dec49"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/retained_Idle_75_full.png",
+      "sha256": "a15b0a754be7173901c983172d8ee7541dcba5a2db53ddb47f3195480b13c37f"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/retained_Sleep_00_full.png",
+      "sha256": "214688a230c9c2fee518256a566b38a9b0c202d6e12b1f987501b05026550341"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/retained_Sleep_00_head_detail.png",
+      "sha256": "7cac77f4170b17df5dacdf53792bb851c25d82bb753671649ee62a5a84255112"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/retained_Sleep_50_full.png",
+      "sha256": "e2eda546a91bfff0cf90527ff9871c1e2491a3f78a434d207b5e61a19673b5f2"
+    },
+    {
+      "path": ".verification/creatures/M18/retained_candidate_comparison_r3/retained_Sleep_50_head_detail.png",
+      "sha256": "b465ca2468cd87378f68b9f141e954cadf5feaf5d5c8c9f6cde052f190b8e0db"
+    }
+  ],
+  "observations": [
+    "The dark wedge at the left eye appears in both retained and candidate Sleep at phase 0 and phase 50, including matched head detail. The candidate did not introduce this visible feature.",
+    "Fin and tail changes remain subtle, and the full silhouettes remain coherent in these source frames. The candidate Idle 75 avoids the dark streak visible on the retained right eye in that frame.",
+    "These are untextured source previews; water contact, material/lighting, gameplay and performance remain pending."
+  ],
+  "specific_suspected_new_eye_deformation_resolved": true,
+  "in_level_accepted": false,
+  "user_accepted": false
+}

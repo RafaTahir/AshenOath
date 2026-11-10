@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "asset": "M15",
+  "candidate_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+  "source_contract_sha256": "79694a8ffa56b3bb19f6371736ed61b96e15f86bbe97a88b90e4f05bbd73fd45",
+  "authoring_sha256": "5c984b9986e043bf8a4d2057cede386b75d97e9faa2ea944dce24764dda4e78b",
+  "recipe": {
+    "render_living_creature_source.py": {
+      "sha256": "2caf21a7e5590422c8f118cea724c0895d44180d918496c6835160a9af2edb47",
+      "snapshot": "render_living_creature_source_2caf21a7e5590422.py"
+    },
+    "living_creature_preview.py": {
+      "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59",
+      "snapshot": "living_creature_preview_809a33a7b132d940.py"
+    }
+  },
+  "fixed_comparison_camera": true,
+  "imported_candidate_rendered": true,
+  "authored_inputs_unchanged": true,
+  "frames": [
+    {
+      "path": "review_iterations\\preview_r2\\source_review\\Idle_00.png",
+      "sha256": "b274c6c3d4add2ae338c73b61035b0848af2f12ef446d33c32ce863a723437cf"
+    },
+    {
+      "path": "review_iterations\\preview_r2\\source_review\\Idle_25.png",
+      "sha256": "e73ec920fb325e511625f672d1d0a87459b63ee980d9732f59fc67c45ba0a12b"
+    },
+    {
+      "path": "review_iterations\\preview_r2\\source_review\\Idle_50.png",
+      "sha256": "770d60b9082d64bb9a91ad65f7644d0509de3ac611544c2782545bedbc899091"
+    },
+    {
+      "path": "review_iterations\\preview_r2\\source_review\\Idle_75.png",
+      "sha256": "e4f6cfee7d62d0e34c890aa3d18df50726456484a72d9c4a1abd6e961cdc3dc6"
+    },
+    {
+      "path": "review_iterations\\preview_r2\\source_review\\Investigate_50.png",
+      "sha256": "d3365ceee1a89e5f43ad2bd800437b04b6d0a93ed5c18b19ed079579bcfa84d2"
+    },
+    {
+      "path": "review_iterations\\preview_r2\\source_review\\Feed_38.png",
+      "sha256": "a00bf49bfddc66db9eed59913e8d1503dfa67341264ce458852fc18acfc6d314"
+    },
+    {
+      "path": "review_iterations\\preview_r2\\source_review\\Feed_61.png",
+      "sha256": "7dc3a9063f4e63dec65518c3a0f680ff27fc3ab7c815aefff3d2e8b8b2a9de42"
+    },
+    {
+      "path": "review_iterations\\preview_r2\\source_review\\Sleep_50.png",
+      "sha256": "70e01a84960009c2e26bdf63f7ae2b67cbc92086926ae1667c3225dc958d1eb6"
+    }
+  ],
+  "native_gameplay_verified": false,
+  "visual_accepted": false,
+  "user_accepted": false
+}

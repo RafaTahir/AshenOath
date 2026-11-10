@@ -158,8 +158,10 @@ if ($CharacterAssetsOnly) {
     # prepare these three shared meshes without rebaking unrelated zone geometry.
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd"), "--", "--forest-trees-only") "prepared-forest-geometry"
 }
-Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
 $HasLivingCampaign = Test-Path -LiteralPath (Join-Path $ProjectRoot "scripts/campaign_revision.gd") -PathType Leaf
+if (-not $HasLivingCampaign) {
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
+}
 if ($HasLivingCampaign) {
     # Stages 2-4 deliver separately compiled libraries. Their presence alone
     # does not establish that they match the current authored Blender sources.
@@ -167,7 +169,6 @@ if ($HasLivingCampaign) {
     if (-not (Test-Path -LiteralPath $CastDeliveryVerifier -PathType Leaf)) {
         throw "Combined living-cast source requires its delivery verifier; integrate the complete asset handoff before packaging."
     }
-    Invoke-BuildProcess $PythonPath @($CastDeliveryVerifier, "--repository", $RepositoryRoot, "--verify-stage2-props", "--output", (Join-Path $LogRoot "living-cast-delivery.json")) "living-cast-delivery"
     $CommunityPackVerifier = Join-Path $PSScriptRoot "community_acceptance_packs.py"
     if (-not (Test-Path -LiteralPath $CommunityPackVerifier -PathType Leaf)) {
         throw "Combined living-cast source requires the final Web archive verifier; integrate the complete asset handoff before packaging."
@@ -185,6 +186,12 @@ if ($HasLivingCampaign) {
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
 if ($HasLivingCampaign) {
+    # Strict grip metadata binds the final prepared geometry. Refresh only
+    # library ownership afterward so the verified actor bytes stay unchanged.
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd"), "--", "--require-activity-grips") "living-cast-libraries"
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_stage2_libraries.gd"), "--", "--require-activity-grips") "living-cast-stage2-libraries"
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd"), "--", "--refresh-library-ownership") "prepared-actor-library-ownership"
+    Invoke-BuildProcess $PythonPath @($CastDeliveryVerifier, "--repository", $RepositoryRoot, "--verify-stage2-props", "--output", (Join-Path $LogRoot "living-cast-delivery.json")) "living-cast-delivery"
     # The companion preserves its raw-root contract, not enemy-role normalization.
     foreach ($CompanionStep in @('build_prepared_companion.gd', 'verify_prepared_companion.gd')) {
         if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot $CompanionStep) -PathType Leaf)) {

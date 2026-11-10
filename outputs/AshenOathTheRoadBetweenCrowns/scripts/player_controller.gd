@@ -1564,7 +1564,10 @@ func _build_bow_visual() -> void:
 	bow_visual.name = "KaelBowHandEquipment"
 	bow_visual.position = Vector3(0.04, -0.02, 0.04) if hand_parent != visual_root else Vector3(-0.38, 1.20, 0.20)
 	bow_visual.rotation_degrees = Vector3(0.0, 8.0, -12.0)
-	bow_visual.scale = Vector3.ONE * 0.82
+	# The retained source is normalized to .44m-source scale by BowPresentation.
+	# Keep its hand parent unit-sized during transfers too; the former .82
+	# parent made it shrink at draw contact and grow when aiming took ownership.
+	bow_visual.scale = Vector3.ONE
 	bow_visual.visible = false
 	hand_parent.add_child(bow_visual)
 	var modeled_bow := _instantiate_modeled_prop(MODELED_BOW_PATH)
@@ -2225,7 +2228,7 @@ func _update_bow_equipment_reach(pose: Dictionary) -> void:
 		var parent_frame := _equipment_anchor_world(bow_visual.get_parent() as Node3D)
 		var resting := Basis.from_euler(Vector3(0.0, deg_to_rad(8.0), deg_to_rad(-12.0)))
 		var target_basis: Basis = parent_frame.basis.orthonormalized().inverse() * (pose.basis as Basis)
-		bow_visual.basis = resting.slerp(target_basis, float(pose.weight)).scaled(Vector3.ONE * 0.82)
+		bow_visual.basis = resting.slerp(target_basis, float(pose.weight))
 
 func _sword_grip_center_world(skeleton: Skeleton3D) -> Vector3:
 	var center := Vector3.ZERO
@@ -2490,6 +2493,8 @@ func _animate_visuals(delta: float) -> void:
 			animation_driver.set_locomotion(horizontal_speed / maxf(run_speed, 0.1), locomotion_velocity.normalized(), is_on_floor())
 		if moving and equipment_loadout.is_transitioning() and animation_driver.current_state in ["draw", "sheath"]:
 			animation_driver.stop_action("walk", 0.08)
+		if animation_driver.has_method("set_relaxed_idle"):
+			animation_driver.set_relaxed_idle(_relaxed_idle_eligible())
 		animation_driver.advance_external(delta)
 		if movement_state == "dodge" and animation_driver.current_state != "dodge":
 			animation_driver.trigger_action("dodge")
@@ -2585,6 +2590,12 @@ func _animate_visuals(delta: float) -> void:
 	if beam_cast_state in [BEAM_STATE_CHARGING, BEAM_STATE_RELEASING]:
 		_update_beam_charge_visual()
 	_update_hurt_overlay()
+
+func _relaxed_idle_eligible() -> bool:
+	return can_control and not transition_locked and is_on_floor() and locomotion_velocity.length_squared() <= 0.0064 \
+		and not equipment_loadout.is_drawn() and not equipment_loadout.is_transitioning() and not field_tool_aiming \
+		and not bow_aiming and not bow_drawing and beam_cast_state == BEAM_STATE_IDLE and companion_gesture_time <= 0.0 \
+		and attack_anim_time <= 0.0 and dodge_time <= 0.0 and hurt_react_time <= 0.0
 
 func _update_hurt_overlay() -> void:
 	if hurt_flash_time > 0.0 and _hurt_overlay_bindings.is_empty() and is_instance_valid(_mapped_body):

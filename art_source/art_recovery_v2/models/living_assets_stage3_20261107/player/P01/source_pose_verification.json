@@ -1,0 +1,51 @@
+{
+  "asset": "P01",
+  "blend_sha256": "6b1d149ce1d4a8b51245794b8a8581977da8e34bccb51c8977a00423059d850e",
+  "retained_native_baseline_sha256": "dc2a645180861ba3f5de414a888f5b3c70acaecc66c54b458762637f81e0b72e",
+  "carrier_sha256": "f76d08feaa2b105796101ae28e868166b33135c8b1e02a2375e8bf572f4983cd",
+  "sample_hz": 30,
+  "clips": [
+    {
+      "clip": "Life_Idle_A",
+      "frames": 181,
+      "maximum_position_error": {
+        "hand_l": 4.466000071360382e-07,
+        "hand_r": 8.993008185741828e-07,
+        "foot_l": 4.2146848510894035e-08,
+        "foot_r": 9.424321830774485e-08,
+        "root": 0.0
+      },
+      "maximum_basis_error": {
+        "hand_l": 5.364418029785156e-07,
+        "hand_r": 4.76837158203125e-07,
+        "foot_l": 1.1920928955078125e-07,
+        "foot_r": 2.384185791015625e-07,
+        "root": 0.0
+      },
+      "maximum_retained_torso_surface_motion": 0.0033130002966929276
+    },
+    {
+      "clip": "Life_Idle_B",
+      "frames": 241,
+      "maximum_position_error": {
+        "hand_l": 5.760122836443924e-07,
+        "hand_r": 4.2173182064547854e-07,
+        "foot_l": 4.2146848510894035e-08,
+        "foot_r": 9.424321830774485e-08,
+        "root": 0.0
+      },
+      "maximum_basis_error": {
+        "hand_l": 5.364418029785156e-07,
+        "hand_r": 3.5762786865234375e-07,
+        "foot_l": 1.1920928955078125e-07,
+        "foot_r": 2.384185791015625e-07,
+        "root": 0.0
+      },
+      "maximum_retained_torso_surface_motion": 0.003481058222137247
+    }
+  ],
+  "hand_foot_root_frames_preserved": true,
+  "retained_torso_surface_motion_verified": true,
+  "native_equipment_and_garment_fit_verified": false,
+  "visual_accepted": false
+}

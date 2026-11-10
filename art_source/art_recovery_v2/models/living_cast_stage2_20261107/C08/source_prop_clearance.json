@@ -1,0 +1,21 @@
+{
+  "asset": "C08",
+  "blend_sha256": "12a0c64d3a56956031507e46417079313a26f3864faf1daced6206ec7ca01cdd",
+  "review_glb_sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70",
+  "prop_sha256": "09f398c7798a60b5bb2d88e481ef4f5b02bb2770b3aca78d75c62243bae93d6e",
+  "sample_hz": 30,
+  "solid_parts": [
+    "DispatchInkLine",
+    "DispatchInkLine.001",
+    "DispatchInkLine.002",
+    "DispatchSeal",
+    "RetainedDispatchRoll",
+    "WorkContactPart"
+  ],
+  "open_parts_not_treated_as_solid": [],
+  "open_rigid_supports_checked_by_upward_surface_ray": [],
+  "solid_prop_intrusions": [],
+  "solid_prop_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

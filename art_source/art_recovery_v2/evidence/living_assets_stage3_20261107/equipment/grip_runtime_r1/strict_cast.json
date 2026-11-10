@@ -1,0 +1,24 @@
+{
+  "accepted": true,
+  "run": {
+    "passed": true,
+    "timed_out": false,
+    "owned_tree_exited": true,
+    "pid": 18068,
+    "active_processes_after_root_wait": 1,
+    "accounting_quiescence_seconds": 0.0,
+    "termination_requested": false,
+    "active_processes_after_cleanup": 0,
+    "cleanup_seconds": 0.0,
+    "exit_code": 0,
+    "seconds": 10.375
+  },
+  "script_sha256": "91e7dc9f14de7a667a5f4d075506f80c877f698aa6edbbbe180a836dce4f79ea",
+  "compiled_receipt_sha256": "6d0a5868464a2c664759622dc2b5982d80fcd8f9ab46b6a184fde984bf770d45",
+  "log_sha256": "c2d7e621b67321a8a2b658396fef0f9648876427b14fa0fd7bb4e74dc0c01866",
+  "measurements": 22,
+  "maximum_contact_error_m": 3.8146990846144e-06,
+  "summary": [
+    "LIVING CAST MOTION: PASS checks=1887 actors=12 player=true equipment_validation_deferred=false complete_cast=true"
+  ]
+}

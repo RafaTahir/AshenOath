@@ -167,7 +167,7 @@ func show_inventory(inventory, quests, story_state = null, progression = null, r
 		_journal_column.add_child(_world_atlas)
 		_journal_column.move_child(_world_atlas,inventory_text.get_index()+1)
 		var known: Dictionary = _game_owner.seamless_world.discovered_sectors if is_instance_valid(_game_owner) and _game_owner.seamless_world != null else {}
-		_world_atlas.configure(zone_id,known)
+		_world_atlas.configure(zone_id,known,preload("res://scripts/campaign_revision.gd").from_state(story_state))
 	elif not evidence:
 		inventory_text.text = reading
 	_add_preparation_heading("JOURNAL")

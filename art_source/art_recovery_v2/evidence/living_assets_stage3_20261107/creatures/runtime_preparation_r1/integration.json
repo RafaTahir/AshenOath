@@ -1,0 +1,1278 @@
+{
+  "scope": "Locally integrated creature source, prepared actors and Bracken",
+  "parent": "69fa27fa331c60525507ebe21a3301fe50f31ada",
+  "projection": {
+    "path": ".verification/creatures/runtime_delivery_r2/receipt.json",
+    "bytes": 75106,
+    "sha256": "7627161c8f1f8637029b049046fe199d30a4c0a41d17704a3cc641364eb33d44"
+  },
+  "game_files": [
+    {
+      "target": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/prepared_companion.json",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/prepared_companion.json",
+        "bytes": 1542,
+        "sha256": "b45b6ebef9172b7f3395803e19bea4d98b245b07a466966c7c06cd84ee85d514"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/c/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/prepared_companion.json",
+        "bytes": 1542,
+        "sha256": "b45b6ebef9172b7f3395803e19bea4d98b245b07a466966c7c06cd84ee85d514"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f/bracken.scn",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f/bracken.scn",
+        "bytes": 701665,
+        "sha256": "5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/c/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f/bracken.scn",
+        "bytes": 701665,
+        "sha256": "5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f/compiler_receipt.json",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f/compiler_receipt.json",
+        "bytes": 1542,
+        "sha256": "b45b6ebef9172b7f3395803e19bea4d98b245b07a466966c7c06cd84ee85d514"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/c/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f/compiler_receipt.json",
+        "bytes": 1542,
+        "sha256": "b45b6ebef9172b7f3395803e19bea4d98b245b07a466966c7c06cd84ee85d514"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/actor_readback.json",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/actor_readback.json",
+        "bytes": 71702,
+        "sha256": "733f8b8cfa929cc553dfdf95f87e7403557ad3b4478012502f14248fc02c0cb0"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/actor_readback_r3/receipt.json",
+        "bytes": 71702,
+        "sha256": "733f8b8cfa929cc553dfdf95f87e7403557ad3b4478012502f14248fc02c0cb0"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/attack_calibration.json",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/attack_calibration.json",
+        "bytes": 8652,
+        "sha256": "b37192bb8cf491636a033bee82d3bfab5860d0e5e1520090cf318b9c833e81e7"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/calibration_r1/receipt.json",
+        "bytes": 8652,
+        "sha256": "b37192bb8cf491636a033bee82d3bfab5860d0e5e1520090cf318b9c833e81e7"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/bracken_controller.json",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/bracken_controller.json",
+        "bytes": 56164,
+        "sha256": "29f6acc3ae4b6b2836ba2b8986e7828bad690f3784cc5521594d0e91d20c739e"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/bracken_controller_runtime_r1/receipt.json",
+        "bytes": 56164,
+        "sha256": "29f6acc3ae4b6b2836ba2b8986e7828bad690f3784cc5521594d0e91d20c739e"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/bracken_derivative.json",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/bracken_derivative.json",
+        "bytes": 59677,
+        "sha256": "9bfd43c51225b8ca00bf54d01e568d2dbc511dde480f08117a953f6c7de72be5"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/bracken_retry_r2/receipt.json",
+        "bytes": 59677,
+        "sha256": "9bfd43c51225b8ca00bf54d01e568d2dbc511dde480f08117a953f6c7de72be5"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/editor_import.json",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/runtime_preparation_r1/editor_import.json",
+        "bytes": 77612,
+        "sha256": "7cb120e300b59c5988e33762da4337264b96e0edd53acc0002cd0df350478c1a"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/import_resume_r2/receipt.json",
+        "bytes": 77612,
+        "sha256": "7cb120e300b59c5988e33762da4337264b96e0edd53acc0002cd0df350478c1a"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+      "retained_git_sha256": "298fb8e7ae7a03beec4e73b5f960f5f9b71d8bc2fcf46358d54334f80c832944",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+        "bytes": 2166936,
+        "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+        "bytes": 2166936,
+        "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_export.glb",
+      "retained_git_sha256": "c2588e4d4d87a0bd87eb6dddd33524bb43c39e9fb1ef4292fae06edff1b6c46c",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_export.glb",
+        "bytes": 3262804,
+        "sha256": "362d34e17e061a32ff9e5db79e7238ab0bd7b082b368ba51a49c4250b48c96a7"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_export.glb",
+        "bytes": 3262804,
+        "sha256": "362d34e17e061a32ff9e5db79e7238ab0bd7b082b368ba51a49c4250b48c96a7"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+      "retained_git_sha256": "01ff8f82962761ffa79895ead6316c98cfb599a2a2182f59a9bddd2656df06bd",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+        "bytes": 3413500,
+        "sha256": "d07f00c261ee865b79390e6a40103518f0c3d3cb70ae1efdd053ff43c68b105f"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+        "bytes": 3413500,
+        "sha256": "d07f00c261ee865b79390e6a40103518f0c3d3cb70ae1efdd053ff43c68b105f"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+      "retained_git_sha256": "cdb0c602b8f217f497ab3e93ea54f9669ecc43ffb28cf7ca04109a68a8fc9b77",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+        "bytes": 93354,
+        "sha256": "cee96e7de49b50271d014423810f51acfa40c71505d3e2255c9d07dff5cbb19e"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+        "bytes": 93354,
+        "sha256": "cee96e7de49b50271d014423810f51acfa40c71505d3e2255c9d07dff5cbb19e"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+      "retained_git_sha256": "6b8f653398cd702394d4a600ffcd3a62b013155d5cea1eb00c73fe104a4c0572",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+        "bytes": 2909,
+        "sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+        "bytes": 2909,
+        "sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+      "retained_git_sha256": "b5e7b6914159ee9686621b9f2eaa68cc4a912becf2fd6187ac0b9b09b132847e",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+        "bytes": 683201,
+        "sha256": "f6c9484f38f2b5951308ac29281146729dbae9fa46490d702b9e9b5eb52cf6cf"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+        "bytes": 683201,
+        "sha256": "f6c9484f38f2b5951308ac29281146729dbae9fa46490d702b9e9b5eb52cf6cf"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+      "retained_git_sha256": "78632c46e85d0c140e8f0ea0cebaa529e68e480b7834661b4fc4763f90a2e017",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+        "bytes": 683646,
+        "sha256": "b421cde4341dd88db5aeece4d8cb706074b4c6f7b5d53469b90c643074b908bb"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+        "bytes": 683646,
+        "sha256": "b421cde4341dd88db5aeece4d8cb706074b4c6f7b5d53469b90c643074b908bb"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+      "retained_git_sha256": "b20718a4d69a4f70c8bb6abc82c45d841b4b50ecfa59f981c0f3167a1c59821e",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+        "bytes": 685044,
+        "sha256": "ad09d725c2bf966e275d525e5987d14045a7df8bc2e7940a753822f40c8e3623"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+        "bytes": 685044,
+        "sha256": "ad09d725c2bf966e275d525e5987d14045a7df8bc2e7940a753822f40c8e3623"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+      "retained_git_sha256": "0f8e984145f69ca472c3ad3fe6e76f2f8f90934443785ea952767f23887d7450",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+        "bytes": 685604,
+        "sha256": "b16ca5792d4e0c86c4e2727c27ff4be07882b17032194f034de8cc0371239e46"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+        "bytes": 685604,
+        "sha256": "b16ca5792d4e0c86c4e2727c27ff4be07882b17032194f034de8cc0371239e46"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+      "retained_git_sha256": "50da6e8cabecdd8fd75cd79878b0aaa676d5a5823a36e1bc6229cec042667507",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+        "bytes": 685282,
+        "sha256": "8cc74735454b7b33972b4b18d8bb7b01d6b5643fe890b5e863abcd808d4d6de4"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+        "bytes": 685282,
+        "sha256": "8cc74735454b7b33972b4b18d8bb7b01d6b5643fe890b5e863abcd808d4d6de4"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+      "retained_git_sha256": "0a1eedebe663c6b3d7beb475c44be8b434b860d5c3deec87b9335a8372f454b9",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+        "bytes": 684817,
+        "sha256": "624b648cbca57aae5da44eb3019b19f47f65ec98c84d196ee9fa5daa558e68bc"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+        "bytes": 684817,
+        "sha256": "624b648cbca57aae5da44eb3019b19f47f65ec98c84d196ee9fa5daa558e68bc"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+      "retained_git_sha256": "3e33caae080defef90f5d618665baca0e4c2274c48e247bcae27e704c441303b",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+        "bytes": 685258,
+        "sha256": "ea9460ceb03128e8d702133363c44bb8a9abd0cdc4389d20f7aa3167c7813752"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+        "bytes": 685258,
+        "sha256": "ea9460ceb03128e8d702133363c44bb8a9abd0cdc4389d20f7aa3167c7813752"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+      "retained_git_sha256": "0aac0ece9fa0ea5d237ca41f6f6067a53d2bc0dd75e80bbd650f301b68ad460b",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+        "bytes": 684272,
+        "sha256": "98c2faa3ab60d9a864725302e2811cc8d77792bc912068e94c64bfc47c6ba150"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+        "bytes": 684272,
+        "sha256": "98c2faa3ab60d9a864725302e2811cc8d77792bc912068e94c64bfc47c6ba150"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/author_living_creature_motion.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/author_living_creature_motion.py",
+        "bytes": 26682,
+        "sha256": "a0744a5bc4c598a263a9df43b47e6c1ee4a691ff3b39689039235b1be8af8bee"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/author_living_creature_motion.py",
+        "bytes": 26682,
+        "sha256": "a0744a5bc4c598a263a9df43b47e6c1ee4a691ff3b39689039235b1be8af8bee"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/creature_morph_lineage.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/creature_morph_lineage.py",
+        "bytes": 13428,
+        "sha256": "d848da51d00e7e3ca765e852f7390e2046b70834376fe7d2b0a3caa2e4b8f890"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/creature_morph_lineage.py",
+        "bytes": 13428,
+        "sha256": "d848da51d00e7e3ca765e852f7390e2046b70834376fe7d2b0a3caa2e4b8f890"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/graft_creature_ambient.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/graft_creature_ambient.py",
+        "bytes": 20645,
+        "sha256": "babda3e1d65a6ac83f2722d257a6da68c5d334fc4b2222167c07c74ff950be62"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/graft_creature_ambient.py",
+        "bytes": 20645,
+        "sha256": "babda3e1d65a6ac83f2722d257a6da68c5d334fc4b2222167c07c74ff950be62"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_motion_profiles.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_motion_profiles.py",
+        "bytes": 7900,
+        "sha256": "115aac66956a25126e7d996ac4f021cffaae1a6b706d190402629bfdfc0edfd6"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_motion_profiles.py",
+        "bytes": 7900,
+        "sha256": "115aac66956a25126e7d996ac4f021cffaae1a6b706d190402629bfdfc0edfd6"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_preview.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_preview.py",
+        "bytes": 3301,
+        "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_preview.py",
+        "bytes": 3301,
+        "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_baked_geometry.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_baked_geometry.py",
+        "bytes": 6842,
+        "sha256": "3cbf097c1907f7f44455fb7380f62ab9d6736a490e917e663d0e026581b073a7"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_baked_geometry.py",
+        "bytes": 6842,
+        "sha256": "3cbf097c1907f7f44455fb7380f62ab9d6736a490e917e663d0e026581b073a7"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_pose_support.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_pose_support.py",
+        "bytes": 6253,
+        "sha256": "373292fdea058dc6162a289171bb0924dd21a7295579b6670c06423f716d0e78"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_pose_support.py",
+        "bytes": 6253,
+        "sha256": "373292fdea058dc6162a289171bb0924dd21a7295579b6670c06423f716d0e78"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_probe_receipt.json",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_probe_receipt.json",
+        "bytes": 126892,
+        "sha256": "90413a7482b29d0c7edaacd2185dc95cf35721628b9f0c5a28ae5805136979d5"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_probe_receipt.json",
+        "bytes": 126892,
+        "sha256": "90413a7482b29d0c7edaacd2185dc95cf35721628b9f0c5a28ae5805136979d5"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py",
+        "bytes": 2363,
+        "sha256": "e504737faa838fea819f751a12ecf516810c3e518919eee486f0fbbfc3abda3c"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py",
+        "bytes": 2363,
+        "sha256": "e504737faa838fea819f751a12ecf516810c3e518919eee486f0fbbfc3abda3c"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/preserve_creature_action_bytes.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/preserve_creature_action_bytes.py",
+        "bytes": 9035,
+        "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/preserve_creature_action_bytes.py",
+        "bytes": 9035,
+        "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/verify_living_creature_motion.py",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/verify_living_creature_motion.py",
+        "bytes": 8003,
+        "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d"
+      },
+      "exact_source": {
+        "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/verify_living_creature_motion.py",
+        "bytes": 8003,
+        "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/companions/bracken.scn",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/companions/bracken.scn",
+        "bytes": 701665,
+        "sha256": "5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/c/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/companions/bracken.scn",
+        "bytes": 701665,
+        "sha256": "5952a12e05578ae02da8576e5abc9f587597268080787fefb7169ecd61f61d6f"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/095b7a187a44dc0010ec1c27.scn",
+      "retained_git_sha256": "b9541942c2646fee4f2ee47fd81c6105a6089ae5e5c9ffd593324b6d52228ce5",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/095b7a187a44dc0010ec1c27.scn",
+        "bytes": 460883,
+        "sha256": "28af48c401c429bbf86ec1978b15de37adaa232713d99b904a3fa6fa8c804267"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/095b7a187a44dc0010ec1c27.scn",
+        "bytes": 460883,
+        "sha256": "28af48c401c429bbf86ec1978b15de37adaa232713d99b904a3fa6fa8c804267"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
+      "retained_git_sha256": "6dd5f8f5cdbfb3b1ebffc97efcfd5d61e2ae38e23f52a769817a40bf09bc5a05",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
+        "bytes": 704658,
+        "sha256": "6d1bd2008cc4c0604fe5e10ee1eeb57c51e2a6c5ccb6681fed0a12a99df63b8f"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/167225684a08f30a29e2ea17.scn",
+        "bytes": 704658,
+        "sha256": "6d1bd2008cc4c0604fe5e10ee1eeb57c51e2a6c5ccb6681fed0a12a99df63b8f"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/1f7e54e03f6e264c9ff42813.scn",
+      "retained_git_sha256": "faa141bcc4ae607f2b6593d3c00a2927bf092abbfd50c66cfa39652304717870",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/1f7e54e03f6e264c9ff42813.scn",
+        "bytes": 1039279,
+        "sha256": "eebf52d063c2aa412f5cddea5e48807c9b29182973b7a5f23dca6cdefc8257e0"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/1f7e54e03f6e264c9ff42813.scn",
+        "bytes": 1039279,
+        "sha256": "eebf52d063c2aa412f5cddea5e48807c9b29182973b7a5f23dca6cdefc8257e0"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/278595ed8d6f43fe46e39d74.scn",
+      "retained_git_sha256": "d987a20c0d6bb7c220605371392ba3ccafa9e446917144c8a4893ca136c666b6",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/278595ed8d6f43fe46e39d74.scn",
+        "bytes": 844175,
+        "sha256": "4dd92579c5e8fdcf51cc939b2f7152235bf465dcffc025a6e3713784e9b3ced6"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/278595ed8d6f43fe46e39d74.scn",
+        "bytes": 844175,
+        "sha256": "4dd92579c5e8fdcf51cc939b2f7152235bf465dcffc025a6e3713784e9b3ced6"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/2933affd98209470461dfb24.scn",
+      "retained_git_sha256": "8a75a2fa55f0e36626e20ca63e783d6e67fa006bc044de2694d2e90299303293",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/2933affd98209470461dfb24.scn",
+        "bytes": 527341,
+        "sha256": "d471e467a63893932f8825348863be9a5a3b3800b9090c3e9dded8ced49e5c71"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/2933affd98209470461dfb24.scn",
+        "bytes": 527341,
+        "sha256": "d471e467a63893932f8825348863be9a5a3b3800b9090c3e9dded8ced49e5c71"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/3de8e7a438d51d6a9ffa7e04.scn",
+      "retained_git_sha256": "f4aa5ca749072419775dde0809e9ca34f766a1414b19a6ae727c8e1e529b33d5",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/3de8e7a438d51d6a9ffa7e04.scn",
+        "bytes": 583197,
+        "sha256": "8b6614e0c31ffee222ac5d01cadcde44ab28b0c8705a0d0fb93e52c1d0ae75a9"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/3de8e7a438d51d6a9ffa7e04.scn",
+        "bytes": 583197,
+        "sha256": "8b6614e0c31ffee222ac5d01cadcde44ab28b0c8705a0d0fb93e52c1d0ae75a9"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/519e2aed32e63781ce1a2d2f.scn",
+      "retained_git_sha256": "55f40eafc6cc3f6c423dad16bf7c8f8f572d3c41a77fb72e415578a39cf3f99e",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/519e2aed32e63781ce1a2d2f.scn",
+        "bytes": 376797,
+        "sha256": "05c7029b581909dfc3c00324d64db344223fc9cac4f1cd55a1eb27ed05098060"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/519e2aed32e63781ce1a2d2f.scn",
+        "bytes": 376797,
+        "sha256": "05c7029b581909dfc3c00324d64db344223fc9cac4f1cd55a1eb27ed05098060"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/54231b1314fe455ab60b9d77.scn",
+      "retained_git_sha256": "fc85ea3653519c0f1f34a9400c508cef4a708132e4b856e7386071a8a6a1e5c1",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/54231b1314fe455ab60b9d77.scn",
+        "bytes": 817064,
+        "sha256": "b126ede5e0c12daddec3d9e284e18d303dd292d7e52e01d9dddd577a810856c5"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/54231b1314fe455ab60b9d77.scn",
+        "bytes": 817064,
+        "sha256": "b126ede5e0c12daddec3d9e284e18d303dd292d7e52e01d9dddd577a810856c5"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
+      "retained_git_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
+        "bytes": 863533,
+        "sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/5da1537a47b82ffbd14adf0d.scn",
+        "bytes": 863533,
+        "sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn",
+      "retained_git_sha256": "b3d718511b0e6fa3df70407b38ee88e754baf695c37c70936f16ae73c4193cde",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn",
+        "bytes": 667018,
+        "sha256": "07f02712c50cd2f5c97b8ff5e1fe167e353cd5aca04ab38b7801db7166bce3a7"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/6402484f7fbcf29644f7b96f.scn",
+        "bytes": 667018,
+        "sha256": "07f02712c50cd2f5c97b8ff5e1fe167e353cd5aca04ab38b7801db7166bce3a7"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/882b182b58b1daeaf7c8846b.scn",
+      "retained_git_sha256": "f57cd24f43da6bc19ec632885ae31ac95480cd62143cba580cc059c9c29383ba",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/882b182b58b1daeaf7c8846b.scn",
+        "bytes": 549315,
+        "sha256": "9f1b0f262f286b06e82a92a75b027934732efe39970c74a0fb29f9bc0024f962"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/882b182b58b1daeaf7c8846b.scn",
+        "bytes": 549315,
+        "sha256": "9f1b0f262f286b06e82a92a75b027934732efe39970c74a0fb29f9bc0024f962"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn",
+      "retained_git_sha256": "8a406afada0d0cebe0ae0901237d9f2fd8ca800b4282da3eb9c72060321fa168",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn",
+        "bytes": 1224537,
+        "sha256": "ebf75f154a454f6e773759bd70070993c3ec30507aefd7ae9dfafe2c53128074"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/9b917237c5f1da73cb1ee634.scn",
+        "bytes": 1224537,
+        "sha256": "ebf75f154a454f6e773759bd70070993c3ec30507aefd7ae9dfafe2c53128074"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/a35a2660e935cd9714969a25.scn",
+      "retained_git_sha256": "08e533fa4c8de2d6aee7a11e117151730edfb7d9d5a5190c13610e2ced2a97db",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/a35a2660e935cd9714969a25.scn",
+        "bytes": 1917780,
+        "sha256": "db9050380818081314f60981956b93d2491b9a3da749ded0ec3705719fd4dacf"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/a35a2660e935cd9714969a25.scn",
+        "bytes": 1917780,
+        "sha256": "db9050380818081314f60981956b93d2491b9a3da749ded0ec3705719fd4dacf"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/a7339a4811b4f65ff472dfe5.scn",
+      "retained_git_sha256": "c03c85cdcf7125f86fb98f6f64c232df05cf4b60334ad9fd1e26e523ba93d6ec",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/a7339a4811b4f65ff472dfe5.scn",
+        "bytes": 442072,
+        "sha256": "b20492df49407c11aa83c621af28ff7c9a34003bf323ceca1e603de8f431dc5b"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/a7339a4811b4f65ff472dfe5.scn",
+        "bytes": 442072,
+        "sha256": "b20492df49407c11aa83c621af28ff7c9a34003bf323ceca1e603de8f431dc5b"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/b7ba76fa9ecf7af2932916c3.scn",
+      "retained_git_sha256": "7f7b8de9f403f5e9ff173bbbe8985dd82650a15df2f698ed2c9ef4eadaf53f6a",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/b7ba76fa9ecf7af2932916c3.scn",
+        "bytes": 695014,
+        "sha256": "3bf5b5a2a384b8817bcfc3bc7497fd89ea19c4557e266fcb64e5ae628c59675d"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/b7ba76fa9ecf7af2932916c3.scn",
+        "bytes": 695014,
+        "sha256": "3bf5b5a2a384b8817bcfc3bc7497fd89ea19c4557e266fcb64e5ae628c59675d"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
+      "retained_git_sha256": "c375bb1ebfa47648746c72c1cf0fd3599dd8d066af45f6c74f778069b2e14b0e",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
+        "bytes": 686080,
+        "sha256": "52ecfdc624c12ad7154931f45a51f711fe22cc8d196c4eb63fb4c49bf84b2957"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/b8537bed2c4cdb9484d845d2.scn",
+        "bytes": 686080,
+        "sha256": "52ecfdc624c12ad7154931f45a51f711fe22cc8d196c4eb63fb4c49bf84b2957"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/dba592f95e6445d8f28a5632.scn",
+      "retained_git_sha256": "f41b2085f0ed8b3e4f40b9fddb6397b720f2176caa32c943a33b14040e9efcbd",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/dba592f95e6445d8f28a5632.scn",
+        "bytes": 357318,
+        "sha256": "23f7b3d4c135f43f1873bf78ad6b6dbfa6c607925fe23ff1234d3c72cdcb2bca"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/dba592f95e6445d8f28a5632.scn",
+        "bytes": 357318,
+        "sha256": "23f7b3d4c135f43f1873bf78ad6b6dbfa6c607925fe23ff1234d3c72cdcb2bca"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/ff6b5532b47b5f567d0e0e40.scn",
+      "retained_git_sha256": "66f75ca5798320f89f752c9766be2a4dd1d487948cbc30905852298a82f24cf2",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/ff6b5532b47b5f567d0e0e40.scn",
+        "bytes": 503420,
+        "sha256": "31fe048d4c1b229285f11a1a83f656cf3b37396121fcd6119475387dbb3dbe2e"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/monsters/ff6b5532b47b5f567d0e0e40.scn",
+        "bytes": 503420,
+        "sha256": "31fe048d4c1b229285f11a1a83f656cf3b37396121fcd6119475387dbb3dbe2e"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/8d80b59eddd1733dc24b9d1f.scn",
+      "retained_git_sha256": "349d918f08264c7fdcae1287af36c476c3d1912bceb25217ad2bcefdfb73814d",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/8d80b59eddd1733dc24b9d1f.scn",
+        "bytes": 3355760,
+        "sha256": "60939cf8e46dcd14b66f444c97325639cf40ce3a16471e975e48afbf8cee8d27"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/8d80b59eddd1733dc24b9d1f.scn",
+        "bytes": 3355760,
+        "sha256": "60939cf8e46dcd14b66f444c97325639cf40ce3a16471e975e48afbf8cee8d27"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/c261a9a645913615e5e58e3f.scn",
+      "retained_git_sha256": "55e1834512a5a12627021dd77d9ab6fe7d09d4477dbabb2d2a23fcc7eb5b52c6",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/c261a9a645913615e5e58e3f.scn",
+        "bytes": 703157,
+        "sha256": "b8d5ec5bfd401f5e6c747713c6b5f8fddb947bed38a33b82c92f5b54da3ba32c"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/c261a9a645913615e5e58e3f.scn",
+        "bytes": 703157,
+        "sha256": "b8d5ec5bfd401f5e6c747713c6b5f8fddb947bed38a33b82c92f5b54da3ba32c"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "retained_git_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+        "bytes": 2056556,
+        "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+        "bytes": 2056556,
+        "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+      "retained_git_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+        "bytes": 1906460,
+        "sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+        "bytes": 1906460,
+        "sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+      "retained_git_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+        "bytes": 1980484,
+        "sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+        "bytes": 1980484,
+        "sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "retained_git_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+        "bytes": 2744036,
+        "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+        "bytes": 2744036,
+        "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+      "retained_git_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+        "bytes": 2429516,
+        "sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+        "bytes": 2429516,
+        "sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+      "retained_git_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+        "bytes": 6424756,
+        "sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+        "bytes": 6424756,
+        "sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+      "retained_git_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+        "bytes": 2166936,
+        "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+        "bytes": 2166936,
+        "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+      "retained_git_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+        "bytes": 1268008,
+        "sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+        "bytes": 1268008,
+        "sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+      "retained_git_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+        "bytes": 1100424,
+        "sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+        "bytes": 1100424,
+        "sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M10_Millback.glb",
+      "retained_git_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M10_Millback.glb",
+        "bytes": 1013396,
+        "sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M10_Millback.glb",
+        "bytes": 1013396,
+        "sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+      "retained_git_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+        "bytes": 1426384,
+        "sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+        "bytes": 1426384,
+        "sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+      "retained_git_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+        "bytes": 873484,
+        "sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+        "bytes": 873484,
+        "sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+      "retained_git_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+        "bytes": 1759984,
+        "sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+        "bytes": 1759984,
+        "sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+      "retained_git_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+        "bytes": 1361664,
+        "sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+        "bytes": 1361664,
+        "sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+      "retained_git_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+        "bytes": 3307892,
+        "sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+        "bytes": 3307892,
+        "sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+      "retained_git_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+        "bytes": 1108084,
+        "sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+        "bytes": 1108084,
+        "sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+      "retained_git_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+        "bytes": 1665100,
+        "sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+        "bytes": 1665100,
+        "sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+      "retained_git_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+        "bytes": 1315428,
+        "sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+        "bytes": 1315428,
+        "sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+      "retained_git_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+        "bytes": 2013044,
+        "sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+        "bytes": 2013044,
+        "sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "retained_git_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+        "bytes": 1964088,
+        "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+        "bytes": 1964088,
+        "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/data/design_pack_assets.json",
+      "retained_git_sha256": "31a8c144e118a6decc827b99ab3f2a019e11507a39c11aa6d08cccfb319af094",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/data/design_pack_assets.json",
+        "bytes": 78700,
+        "sha256": "b8515447bae5ecab4e9a88fd0ba034171f88c48d2a0f4a4b6a1ea751996ba9eb"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/data/design_pack_assets.json",
+        "bytes": 78700,
+        "sha256": "b8515447bae5ecab4e9a88fd0ba034171f88c48d2a0f4a4b6a1ea751996ba9eb"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/data/native_attack_profiles.json",
+      "retained_git_sha256": "1ebb6922118706ea51174ca32a88416d98aa4bf21646c5a6cf6caaffb698e82b",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/data/native_attack_profiles.json",
+        "bytes": 17518,
+        "sha256": "14e7299e2df9022280510ee7a7559ac2c259210151de4c1123acef61ec45a040"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/data/native_attack_profiles.json",
+        "bytes": 17518,
+        "sha256": "14e7299e2df9022280510ee7a7559ac2c259210151de4c1123acef61ec45a040"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/data/prepared_actors.json",
+      "retained_git_sha256": "a11b4b79bd451153433eb81c9df0d3c7a9213448db798525f75c8abc99661dea",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/data/prepared_actors.json",
+        "bytes": 401713,
+        "sha256": "bc21f3caf9bae39533555d1f365d2b0e9890412cc6e0a3d35f43a0a9b7c2fac8"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/data/prepared_actors.json",
+        "bytes": 401713,
+        "sha256": "bc21f3caf9bae39533555d1f365d2b0e9890412cc6e0a3d35f43a0a9b7c2fac8"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/runtime_asset_manifest.json",
+      "retained_git_sha256": "ac84699e4abd3f015f7dc8a1484055793dd46f3f336b10b188bb44400652dd84",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/runtime_asset_manifest.json",
+        "bytes": 534390,
+        "sha256": "bbe757501ecb8a1de06ff74e6f375fe03bd465574023698a932eb79d1191d031"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/runtime_delivery_r1/payload/outputs/AshenOathTheRoadBetweenCrowns/runtime_asset_manifest.json",
+        "bytes": 534390,
+        "sha256": "bbe757501ecb8a1de06ff74e6f375fe03bd465574023698a932eb79d1191d031"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/scripts/companion_controller.gd",
+      "retained_git_sha256": "4e1ce10082eb141a1c38c4251906bfeea2b30378bf18f983719d1f330a300835",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/scripts/companion_controller.gd",
+        "bytes": 33801,
+        "sha256": "2263ba64091bb4c5f9b4479dad0aa471abbe7a1dea61bc1e7d9eaf6cd64cd823"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/bracken_controller_runtime_r1_inputs/companion_controller.gd",
+        "bytes": 34600,
+        "sha256": "d023b4266ecf60e45848a181a6c0f2afccb0908ab7c648ed3c11adc63e2105a3"
+      },
+      "newline_only_normalization": true
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_actors.gd",
+      "retained_git_sha256": "2ef2943589101add48fec7b5315698be37c3a08b7555ff578c30c27c90e138fd",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_actors.gd",
+        "bytes": 12750,
+        "sha256": "c5fa67da711eab5642c02a99f88cebbf598ab065cba592d1af25e5fda44523d5"
+      },
+      "exact_source": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_actors.gd",
+        "bytes": 13017,
+        "sha256": "0cff88f10b49a4dbe7288049cd4a80961405f677e8432b73908371e48c903aa5"
+      },
+      "newline_only_normalization": true
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_companion.gd",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_companion.gd",
+        "bytes": 11314,
+        "sha256": "c6e93a4314300babe08261f3c41da1fb26c12ed56907ed12d7090f9d86335cfd"
+      },
+      "exact_source": {
+        "path": ".verification/creatures/bracken_compiler_candidate_r2/build_prepared_companion.gd",
+        "bytes": 11314,
+        "sha256": "c6e93a4314300babe08261f3c41da1fb26c12ed56907ed12d7090f9d86335cfd"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/tools/creature_ambient_source_contract.gd",
+      "retained_git_sha256": "4a67eb9d5d850fecbe42ea95b1fb85a3ae53a89ba6045ac4d68c4658a9501b6e",
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/tools/creature_ambient_source_contract.gd",
+        "bytes": 10886,
+        "sha256": "a567892131913f4a3fc881ae198b480ccbcf0decec7329583b6efc98faefd3ce"
+      },
+      "exact_source": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/creature_ambient_source_contract.gd",
+        "bytes": 10886,
+        "sha256": "a567892131913f4a3fc881ae198b480ccbcf0decec7329583b6efc98faefd3ce"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/tools/creature_candidate_native_contract.gd",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/tools/creature_candidate_native_contract.gd",
+        "bytes": 7703,
+        "sha256": "9b5f375957dca1dc820dd525853c474652983d290111f36f180874ec007fea60"
+      },
+      "exact_source": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/creature_candidate_native_contract.gd",
+        "bytes": 7703,
+        "sha256": "9b5f375957dca1dc820dd525853c474652983d290111f36f180874ec007fea60"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_creature_candidate_morphs.gd",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/tools/verify_creature_candidate_morphs.gd",
+        "bytes": 11710,
+        "sha256": "ad5d6a5e12d4736f35043022463eadb054ee5db63ec463b80bf5a87bfb26d0ed"
+      },
+      "exact_source": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_creature_candidate_morphs.gd",
+        "bytes": 11710,
+        "sha256": "ad5d6a5e12d4736f35043022463eadb054ee5db63ec463b80bf5a87bfb26d0ed"
+      },
+      "newline_only_normalization": false
+    },
+    {
+      "target": "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_creature_candidate_poses.gd",
+      "retained_git_sha256": null,
+      "payload": {
+        "path": ".verification/creatures/runtime_delivery_r2/payload/outputs/AshenOathTheRoadBetweenCrowns/tools/verify_creature_candidate_poses.gd",
+        "bytes": 22351,
+        "sha256": "29d93cac9158a7b9bfd58191f6cb7417603635d22669d00f38117138f063a0af"
+      },
+      "exact_source": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_creature_candidate_poses.gd",
+        "bytes": 22351,
+        "sha256": "29d93cac9158a7b9bfd58191f6cb7417603635d22669d00f38117138f063a0af"
+      },
+      "newline_only_normalization": false
+    }
+  ],
+  "imported_creatures": 20,
+  "recalibrated_attack_profiles": 20,
+  "prepared_roles": 45,
+  "bracken_controller_checks": 1372,
+  "production_export": false,
+  "in_level_accepted": false,
+  "published": false
+}

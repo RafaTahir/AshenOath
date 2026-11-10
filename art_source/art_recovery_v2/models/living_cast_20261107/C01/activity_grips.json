@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "asset": "C01",
+  "motion_sha256": "6048b7b8ceb634d2a05d921593476acca605ddc6eaaec653c4235c952a06d567",
+  "model_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
+  "fits": {
+    "bread": {
+      "evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/fit_receipt.json",
+      "evidence_sha256": "0c2cd0a783335348b10700d2663dda766e7918b774b7d7495d7c2ff79f233dba",
+      "native_pose_evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/pose_receipt.json"
+    },
+    "supply": {
+      "evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/anwen_supply_r2/fit_receipt.json",
+      "evidence_sha256": "689fcf066344f3d4d926599977011e80de9e2f733e1c771bcada04d84d6df493",
+      "native_pose_evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/pose_receipt.json"
+    }
+  }
+}

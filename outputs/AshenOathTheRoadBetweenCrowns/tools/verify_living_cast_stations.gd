@@ -60,10 +60,37 @@ func _run() -> void:
 	_check(is_zero_approx(stand.y), "rest stand remains on ground")
 	_check(stand.z > 0.35+0.25, "rest stand clears shrine bench")
 	_check(str(rest.get_meta("interaction_owner", "")) == "shrine_prayer", "rest identifies shared player interaction")
+	_check_doorway_attention(world)
 	world.free()
 	for failure in failures: printerr(failure)
 	print("LIVING CAST STATIONS: %s checks=%d" % ["PASS" if failures.is_empty() else "FAIL",checks])
 	quit(0 if failures.is_empty() else 1)
+
+func _check_doorway_attention(world: Node3D) -> void:
+	for variant in 4:
+		var house := Node3D.new()
+		house.position=Vector3(float(variant)*6.0,0,-3)
+		house.rotation_degrees.y=float(variant)*17.0
+		world.add_child(house)
+		var visual := MeshInstance3D.new()
+		visual.name="AuthoredHouse"
+		visual.mesh=load("res://assets_external/environment/village/GreyfenHouse_Authored%s.res" % ("" if variant==0 else "_"+str(variant))) as ArrayMesh
+		house.add_child(visual)
+		Stations.ensure_doorway_attention(world)
+		var marker := visual.get_node_or_null("LifeAttention_Doorway") as Marker3D
+		_check(marker!=null,"authored house variant "+str(variant)+" proves a real doorway attention vertex")
+		if marker==null: continue
+		var nearest := INF
+		for vertex: Vector3 in visual.mesh.get_faces(): nearest=minf(nearest,marker.global_position.distance_to(visual.to_global(vertex)))
+		_check(nearest<=0.001 and bool(marker.get_meta("geometry_verified",false)),"doorway glance belongs to the rotated live house geometry")
+		Stations.ensure_doorway_attention(world)
+		_check(visual.get_node("LifeAttention_Doorway")==marker,"doorway attention marker is idempotent")
+	var unrelated := MeshInstance3D.new()
+	unrelated.name="AuthoredHouse"
+	unrelated.mesh=BoxMesh.new()
+	world.add_child(unrelated)
+	Stations.ensure_doorway_attention(world)
+	_check(unrelated.get_node_or_null("LifeAttention_Doorway")==null,"a misleading house label cannot invent a doorway")
 
 func _check_work(station: Node3D, visual: MeshInstance3D, identity: String) -> void:
 	for marker: String in ["WorkContact", "WorkLeft", "WorkRight", "WorkStand"]:

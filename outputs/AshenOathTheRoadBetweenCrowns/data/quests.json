@@ -467,9 +467,19 @@
     "title": "A Strap in the Bracken",
     "type": "side",
     "objectives": [
-      {"id": "calm_hound", "text": "Let Bracken, the caught young Hearthscale, settle beside Greyfen's north road."},
-      {"id": "release_strap", "text": "Release the discarded harness strap without hurting him."},
-      {"id": "companion_choice", "text": "Offer Bracken a home or leave him safely at Greyfen.", "kind": "choice"}
+      {
+        "id": "calm_hound",
+        "text": "Let Bracken, the caught young Hearthscale, settle beside Greyfen's north road."
+      },
+      {
+        "id": "release_strap",
+        "text": "Release the discarded harness strap without hurting him."
+      },
+      {
+        "id": "companion_choice",
+        "text": "Offer Bracken a home or leave him safely at Greyfen.",
+        "kind": "choice"
+      }
     ],
     "unlocks": [],
     "reward": {},
@@ -590,5 +600,129 @@
     ],
     "unlocks": [],
     "story_depth": "interlude"
+  },
+  "main_empty_tables": {
+    "title": "The Empty Tables",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "reach_lantern_reach",
+        "text": "Follow the mill's landing path to Lantern Reach.",
+        "kind": "activity"
+      },
+      {
+        "id": "hear_households",
+        "text": "Hear the households' needs at the waiting table.",
+        "kind": "activity"
+      },
+      {
+        "id": "prepare_kitchen",
+        "text": "Brace the cooking table, secure the windscreen and lay the first places.",
+        "kind": "activity"
+      },
+      {
+        "id": "settle_tables",
+        "text": "Agree how the food is shared, then serve the first meal.",
+        "kind": "choice"
+      }
+    ],
+    "unlocks": [
+      "main_road_kept_open"
+    ],
+    "story_depth": "main",
+    "campaign_revision": 2
+  },
+  "main_road_kept_open": {
+    "title": "A Road Kept Open",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "survey_crossing",
+        "text": "Read the current and inspect both landings.",
+        "kind": "activity"
+      },
+      {
+        "id": "agree_route",
+        "text": "Choose a public crossing or an escorted ferry.",
+        "kind": "choice"
+      },
+      {
+        "id": "secure_route",
+        "text": "Work at the chosen route's joints, rail or hauling line.",
+        "kind": "activity"
+      },
+      {
+        "id": "open_route",
+        "text": "Accompany the first load to the far landing.",
+        "kind": "activity"
+      }
+    ],
+    "unlocks": [
+      "main_soldier_without_banner"
+    ],
+    "story_depth": "main",
+    "campaign_revision": 2
+  },
+  "main_house_many_names": {
+    "title": "The House of Many Names",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "reach_hearthward",
+        "text": "Take the upland path to Hearthward.",
+        "kind": "activity"
+      },
+      {
+        "id": "hear_households",
+        "text": "Read the refuge's needs and hear the available keepers.",
+        "kind": "activity"
+      },
+      {
+        "id": "prepare_refuge",
+        "text": "Raise the bunks, dry the record shelves and mark an open sleeping place.",
+        "kind": "activity"
+      },
+      {
+        "id": "settle_records",
+        "text": "Separate the public account from protected testimony and welcome the first arrivals.",
+        "kind": "choice"
+      }
+    ],
+    "unlocks": [
+      "main_what_we_promise"
+    ],
+    "story_depth": "main",
+    "campaign_revision": 2
+  },
+  "main_what_we_promise": {
+    "title": "What We Promise",
+    "type": "main",
+    "objectives": [
+      {
+        "id": "gather_cast",
+        "text": "Open the public meeting; accept written answers from anyone absent.",
+        "kind": "activity"
+      },
+      {
+        "id": "test_arrangements",
+        "text": "Practice the meal round, the alarm and a record handover.",
+        "kind": "activity"
+      },
+      {
+        "id": "choose_responsibilities",
+        "text": "Ask the willing keepers what they will undertake. Record refusals as refusals.",
+        "kind": "choice"
+      },
+      {
+        "id": "carry_promise",
+        "text": "Post the rota with a clear way to withdraw, then complete the first watch.",
+        "kind": "activity"
+      }
+    ],
+    "unlocks": [
+      "main_crowns_without_mercy"
+    ],
+    "story_depth": "main",
+    "campaign_revision": 2
   }
 }

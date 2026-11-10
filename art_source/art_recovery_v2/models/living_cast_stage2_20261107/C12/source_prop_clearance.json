@@ -1,0 +1,21 @@
+{
+  "asset": "C12",
+  "blend_sha256": "66cf12ddb78fdcdecc7719b6db766bee94756812a3835e54c10882e759614caf",
+  "review_glb_sha256": "fc61817eb6e9231a7a440e0da563bfab0bcda306f1e54d02005836df452f6ed6",
+  "prop_sha256": "de6725abab778a6a46d4dcad85886f76bd81cf4f742c03a690801266661901d9",
+  "sample_hz": 30,
+  "solid_parts": [
+    "AttachedBuckle",
+    "WorkContactPart"
+  ],
+  "open_parts_not_treated_as_solid": [
+    "RetainedReliefCrate"
+  ],
+  "open_rigid_supports_checked_by_upward_surface_ray": [
+    "RetainedReliefCrate"
+  ],
+  "solid_prop_intrusions": [],
+  "solid_prop_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

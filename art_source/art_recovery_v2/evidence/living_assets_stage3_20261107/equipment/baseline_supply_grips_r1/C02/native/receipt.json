@@ -1,0 +1,41 @@
+{
+  "asset": "C02",
+  "parse_only": false,
+  "synthetic_skin_fixture": false,
+  "synthetic_weight_fixture": false,
+  "weight_fixture_report": null,
+  "accepted": true,
+  "visual_accepted": false,
+  "grip_verified": false,
+  "body_clearance_verified": false,
+  "engine_sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a",
+  "script_sha256": "5e11ce4f762fade2bf11f516a4e0f5307f7048bcabe7b54cd3081a9744f4fc85",
+  "source_hashes": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\export_living_activity_pose_inputs.gd": "5e11ce4f762fade2bf11f516a4e0f5307f7048bcabe7b54cd3081a9744f4fc85",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\activity_pose_skin_equivalence.gd": "156e4adec932de287f617f9dea9db5a8935d085487e4c3232d6754e99c917e6e",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\activity_pose_weight_transport.gd": "6e51220dac221691141f378d88dc057eae7f8cca8ab1dc1d7a895591d64ecbbf"
+  },
+  "sources_unchanged": true,
+  "command": [
+    "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+    "--headless",
+    "--path",
+    "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+    "--script",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\export_living_activity_pose_inputs.gd",
+    "--",
+    "--asset",
+    "C02"
+  ],
+  "profiles": {
+    "APPDATA": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\activity_pose_remaining10-c02-r1\\profile",
+    "LOCALAPPDATA": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\activity_pose_remaining10-c02-r1\\profile-local"
+  },
+  "pid": 6728,
+  "exit_code": 0,
+  "timeout": false,
+  "fatal_script_load_error": null,
+  "seconds": 21.515,
+  "errors": [],
+  "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\activity_pose_remaining10-c02-r1\\native.log"
+}

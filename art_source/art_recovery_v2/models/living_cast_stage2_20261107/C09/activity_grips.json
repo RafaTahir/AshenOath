@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "asset": "C09",
+  "motion_sha256": "65ae54bf974efe41d5c02bc7b89df281dbe74897e59e74543ac5262900d6a84f",
+  "model_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+  "fits": {
+    "bread": {
+      "evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C09/bread/fit_receipt.json",
+      "evidence_sha256": "c197b0e5dbf242c1d07f5ad044be7a7db449122289455d3549c0515ab9eeef1c",
+      "native_pose_evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C09/bread/pose_receipt.json"
+    }
+  }
+}

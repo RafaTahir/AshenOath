@@ -15,7 +15,7 @@ from runtime_pack_validation import require_valid_pack_graph
 SHELL_ASSETS = {"menu-background.png": "assets_external/ui/greyfen_menu_stylized.png"}
 
 
-def artifact_plan(manifest: dict, pack_dir: Path) -> list[tuple[Path, str]]:
+def artifact_plan(manifest: dict, pack_dir: Path, *, delivered_paths: bool = False) -> list[tuple[Path, str]]:
     """Check every input before copying anything; accept decoded or gzip PCKs."""
     require_valid_pack_graph(manifest)
     root = pack_dir.resolve()
@@ -38,7 +38,7 @@ def artifact_plan(manifest: dict, pack_dir: Path) -> list[tuple[Path, str]]:
         if relative.casefold() in destinations:
             raise ValueError(f"{pack_id}: duplicate pack destination {relative}")
         destinations.add(relative.casefold())
-        artifact = str(pack.get("candidate_artifact") or parts[-1])
+        artifact = "/".join(parts[1:]) if delivered_paths else str(pack.get("candidate_artifact") or parts[-1])
         source = (root / artifact).resolve()
         if not source.is_relative_to(root) or source == root:
             raise ValueError(f"{pack_id}: candidate artifact escapes pack directory")

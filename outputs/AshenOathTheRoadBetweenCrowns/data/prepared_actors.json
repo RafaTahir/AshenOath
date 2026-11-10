@@ -55,7 +55,34 @@
 	},
 	"ashwing_boss|res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "faa141bcc4ae607f2b6593d3c00a2927bf092abbfd50c66cfa39652304717870",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb",
+			"source_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "eebf52d063c2aa412f5cddea5e48807c9b29182973b7a5f23dca6cdefc8257e0",
 		"material_bindings": [
 			{
 				"mesh": "M07_Rig/Skeleton3D/M07_CompiledPrivateBody",
@@ -75,7 +102,34 @@
 	},
 	"ashwing_creature|res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "faa141bcc4ae607f2b6593d3c00a2927bf092abbfd50c66cfa39652304717870",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb",
+			"source_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "eebf52d063c2aa412f5cddea5e48807c9b29182973b7a5f23dca6cdefc8257e0",
 		"material_bindings": [
 			{
 				"mesh": "M07_Rig/Skeleton3D/M07_CompiledPrivateBody",
@@ -95,7 +149,34 @@
 	},
 	"ashwing|res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "faa141bcc4ae607f2b6593d3c00a2927bf092abbfd50c66cfa39652304717870",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 29.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb",
+			"source_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "eebf52d063c2aa412f5cddea5e48807c9b29182973b7a5f23dca6cdefc8257e0",
 		"material_bindings": [
 			{
 				"mesh": "M07_Rig/Skeleton3D/M07_CompiledPrivateBody",
@@ -115,7 +196,34 @@
 	},
 	"bandit_deserter|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+			"source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89",
 		"material_bindings": [
 			{
 				"mesh": "M04_CandidateRoot/Armature/Skeleton3D/M04_FittedArmourAssembly",
@@ -145,7 +253,34 @@
 	},
 	"bandit_tracker|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+			"source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89",
 		"material_bindings": [
 			{
 				"mesh": "M04_CandidateRoot/Armature/Skeleton3D/M04_FittedArmourAssembly",
@@ -175,7 +310,34 @@
 	},
 	"bandit|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+			"source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89",
 		"material_bindings": [
 			{
 				"mesh": "M04_CandidateRoot/Armature/Skeleton3D/M04_FittedArmourAssembly",
@@ -205,7 +367,34 @@
 	},
 	"bell_eater_boss|res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "fc85ea3653519c0f1f34a9400c508cef4a708132e4b856e7386071a8a6a1e5c1",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "a6b4e45e1f24c21e8d0e0effb47a059ef8f6aebca65c76d902a163154ba98fce",
+			"source_sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "b126ede5e0c12daddec3d9e284e18d303dd292d7e52e01d9dddd577a810856c5",
 		"material_bindings": [
 			{
 				"mesh": "M05_ReviewRoot/Armature/Skeleton3D/M05_Connected_Anatomy_SkinnedAssembly",
@@ -259,7 +448,34 @@
 	},
 	"bell_eater|res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "fc85ea3653519c0f1f34a9400c508cef4a708132e4b856e7386071a8a6a1e5c1",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "a6b4e45e1f24c21e8d0e0effb47a059ef8f6aebca65c76d902a163154ba98fce",
+			"source_sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "b126ede5e0c12daddec3d9e284e18d303dd292d7e52e01d9dddd577a810856c5",
 		"material_bindings": [
 			{
 				"mesh": "M05_ReviewRoot/Armature/Skeleton3D/M05_Connected_Anatomy_SkinnedAssembly",
@@ -367,7 +583,34 @@
 	},
 	"bog_wretch_creature|res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "7f7b8de9f403f5e9ff173bbbe8985dd82650a15df2f698ed2c9ef4eadaf53f6a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "73e9de3fa0a89d759a0b4a6d728cb3f0eb0c88a8f7e19ee8f480a53e98555a3d",
+			"source_sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "3bf5b5a2a384b8817bcfc3bc7497fd89ea19c4557e266fcb64e5ae628c59675d",
 		"material_bindings": [
 			{
 				"mesh": "M03_ReviewRoot/Armature/Skeleton3D/M03_Connected_Anatomy_SkinnedAssembly",
@@ -429,7 +672,34 @@
 	},
 	"bog_wretch|res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "7f7b8de9f403f5e9ff173bbbe8985dd82650a15df2f698ed2c9ef4eadaf53f6a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "73e9de3fa0a89d759a0b4a6d728cb3f0eb0c88a8f7e19ee8f480a53e98555a3d",
+			"source_sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "3bf5b5a2a384b8817bcfc3bc7497fd89ea19c4557e266fcb64e5ae628c59675d",
 		"material_bindings": [
 			{
 				"mesh": "M03_ReviewRoot/Armature/Skeleton3D/M03_Connected_Anatomy_SkinnedAssembly",
@@ -491,7 +761,34 @@
 	},
 	"bracken_companion|res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "55e1834512a5a12627021dd77d9ab6fe7d09d4477dbabb2d2a23fcc7eb5b52c6",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244",
+			"source_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "b8d5ec5bfd401f5e6c747713c6b5f8fddb947bed38a33b82c92f5b54da3ba32c",
 		"material_bindings": [
 			{
 				"mesh": "M13_Rig/Skeleton3D/M13_CompiledPrivateBody",
@@ -511,7 +808,34 @@
 	},
 	"bracken|res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "55e1834512a5a12627021dd77d9ab6fe7d09d4477dbabb2d2a23fcc7eb5b52c6",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244",
+			"source_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "b8d5ec5bfd401f5e6c747713c6b5f8fddb947bed38a33b82c92f5b54da3ba32c",
 		"material_bindings": [
 			{
 				"mesh": "M13_Rig/Skeleton3D/M13_CompiledPrivateBody",
@@ -531,7 +855,34 @@
 	},
 	"cairn_mother|res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "d987a20c0d6bb7c220605371392ba3ccafa9e446917144c8a4893ca136c666b6",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 10.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 10.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 10.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 10.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "4e6551ebd5d935b4df3a1689f44b4b61758be0234143c2e39b7ddc6900275f72",
+			"source_sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "4dd92579c5e8fdcf51cc939b2f7152235bf465dcffc025a6e3713784e9b3ced6",
 		"material_bindings": [
 			{
 				"mesh": "M17_Rig/Skeleton3D/M17_RuntimeAssembly",
@@ -1174,7 +1525,34 @@
 	},
 	"gallows_weaver|res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "8a75a2fa55f0e36626e20ca63e783d6e67fa006bc044de2694d2e90299303293",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "7809c02760e4af80577243e348d42e482fb9801b6237a48cdca523a8c55534d6",
+			"source_sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "d471e467a63893932f8825348863be9a5a3b3800b9090c3e9dded8ced49e5c71",
 		"material_bindings": [
 			{
 				"mesh": "M14_Rig/Skeleton3D/M14_RuntimeAssembly",
@@ -1293,7 +1671,34 @@
 	},
 	"ghoul_brute_real|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "c375bb1ebfa47648746c72c1cf0fd3599dd8d066af45f6c74f778069b2e14b0e",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
+			"source_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "52ecfdc624c12ad7154931f45a51f711fe22cc8d196c4eb63fb4c49bf84b2957",
 		"material_bindings": [
 			{
 				"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
@@ -1347,7 +1752,34 @@
 	},
 	"ghoul_gaunt_real|res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "6dd5f8f5cdbfb3b1ebffc97efcfd5d61e2ae38e23f52a769817a40bf09bc5a05",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
+			"source_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "6d1bd2008cc4c0604fe5e10ee1eeb57c51e2a6c5ccb6681fed0a12a99df63b8f",
 		"material_bindings": [
 			{
 				"mesh": "M01_ReviewRoot/Armature/Skeleton3D/M01_Connected_Anatomy_SkinnedAssembly",
@@ -1393,7 +1825,34 @@
 	},
 	"ghoul_stalker_real|res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "8a406afada0d0cebe0ae0901237d9f2fd8ca800b4282da3eb9c72060321fa168",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "5189a8bee86d5260db1a67a731aa7e0504b9af3265408284e4757cea35157e19",
+			"source_sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "ebf75f154a454f6e773759bd70070993c3ec30507aefd7ae9dfafe2c53128074",
 		"material_bindings": [
 			{
 				"mesh": "M02_Stalker_CreatureRoot/Creep/Skeleton3D/Body_lod0",
@@ -1415,7 +1874,34 @@
 	},
 	"ghoulkin_creature|res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "6dd5f8f5cdbfb3b1ebffc97efcfd5d61e2ae38e23f52a769817a40bf09bc5a05",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
+			"source_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "6d1bd2008cc4c0604fe5e10ee1eeb57c51e2a6c5ccb6681fed0a12a99df63b8f",
 		"material_bindings": [
 			{
 				"mesh": "M01_ReviewRoot/Armature/Skeleton3D/M01_Connected_Anatomy_SkinnedAssembly",
@@ -1461,7 +1947,34 @@
 	},
 	"ghoulkin_skeleton|res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "6dd5f8f5cdbfb3b1ebffc97efcfd5d61e2ae38e23f52a769817a40bf09bc5a05",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
+			"source_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "6d1bd2008cc4c0604fe5e10ee1eeb57c51e2a6c5ccb6681fed0a12a99df63b8f",
 		"material_bindings": [
 			{
 				"mesh": "M01_ReviewRoot/Armature/Skeleton3D/M01_Connected_Anatomy_SkinnedAssembly",
@@ -1507,7 +2020,34 @@
 	},
 	"ghoulkin|res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "6dd5f8f5cdbfb3b1ebffc97efcfd5d61e2ae38e23f52a769817a40bf09bc5a05",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
+			"source_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "6d1bd2008cc4c0604fe5e10ee1eeb57c51e2a6c5ccb6681fed0a12a99df63b8f",
 		"material_bindings": [
 			{
 				"mesh": "M01_ReviewRoot/Armature/Skeleton3D/M01_Connected_Anatomy_SkinnedAssembly",
@@ -1553,7 +2093,34 @@
 	},
 	"glassmoth|res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "b9541942c2646fee4f2ee47fd81c6105a6089ae5e5c9ffd593324b6d52228ce5",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "a3422e4c85267a78d474f06fa71f81135f762791ab2e75912a3aee77ffae9411",
+			"source_sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "28af48c401c429bbf86ec1978b15de37adaa232713d99b904a3fa6fa8c804267",
 		"material_bindings": [
 			{
 				"mesh": "M11_Rig/Skeleton3D/M11_RuntimeAssembly",
@@ -1578,7 +2145,34 @@
 	},
 	"gravebound_knight_creature|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+			"source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89",
 		"material_bindings": [
 			{
 				"mesh": "M04_CandidateRoot/Armature/Skeleton3D/M04_FittedArmourAssembly",
@@ -1608,7 +2202,34 @@
 	},
 	"gravebound_knight|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+			"source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89",
 		"material_bindings": [
 			{
 				"mesh": "M04_CandidateRoot/Armature/Skeleton3D/M04_FittedArmourAssembly",
@@ -1689,7 +2310,34 @@
 	},
 	"halvern_boss|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+			"source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89",
 		"material_bindings": [
 			{
 				"mesh": "M04_CandidateRoot/Armature/Skeleton3D/M04_FittedArmourAssembly",
@@ -1719,7 +2367,34 @@
 	},
 	"halvern|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+			"source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89",
 		"material_bindings": [
 			{
 				"mesh": "M04_CandidateRoot/Armature/Skeleton3D/M04_FittedArmourAssembly",
@@ -1749,7 +2424,34 @@
 	},
 	"hearthscale|res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "55e1834512a5a12627021dd77d9ab6fe7d09d4477dbabb2d2a23fcc7eb5b52c6",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244",
+			"source_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "b8d5ec5bfd401f5e6c747713c6b5f8fddb947bed38a33b82c92f5b54da3ba32c",
 		"material_bindings": [
 			{
 				"mesh": "M13_Rig/Skeleton3D/M13_CompiledPrivateBody",
@@ -1817,7 +2519,75 @@
 	},
 	"inkblind|res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "66f75ca5798320f89f752c9766be2a4dd1d487948cbc30905852298a82f24cf2",
+		"authored_creature_ambient": {
+			"morph_bindings": [
+				{
+					"neutral_weight": 0.0,
+					"node_path": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
+					"shape_name": "AntennaProbe_L"
+				},
+				{
+					"neutral_weight": 0.0,
+					"node_path": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
+					"shape_name": "AntennaProbe_R"
+				},
+				{
+					"neutral_weight": 0.0,
+					"node_path": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
+					"shape_name": "BrushFeed_L"
+				},
+				{
+					"neutral_weight": 0.0,
+					"node_path": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
+					"shape_name": "BrushFeed_R"
+				}
+			],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {
+						"AntennaProbe_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_L",
+						"AntennaProbe_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_R",
+						"BrushFeed_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_L",
+						"BrushFeed_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_R"
+					}
+				},
+				"Idle": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {
+						"AntennaProbe_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_L",
+						"AntennaProbe_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_R",
+						"BrushFeed_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_L",
+						"BrushFeed_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_R"
+					}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {
+						"AntennaProbe_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_L",
+						"AntennaProbe_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_R",
+						"BrushFeed_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_L",
+						"BrushFeed_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_R"
+					}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 18.0,
+					"morph_tracks": {
+						"AntennaProbe_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_L",
+						"AntennaProbe_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:AntennaProbe_R",
+						"BrushFeed_L": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_L",
+						"BrushFeed_R": "M16_Rig/Skeleton3D/M16_RuntimeAssembly:BrushFeed_R"
+					}
+				}
+			},
+			"receipt_sha256": "97ec6815ea004adde21e3335e35e354b020aa50c371cfa9299ce56f3e180a77f",
+			"source_sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "31fe048d4c1b229285f11a1a83f656cf3b37396121fcd6119475387dbb3dbe2e",
 		"material_bindings": [
 			{
 				"mesh": "M16_Rig/Skeleton3D/M16_RuntimeAssembly",
@@ -2001,7 +2771,34 @@
 	},
 	"knell_leech|res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "55f40eafc6cc3f6c423dad16bf7c8f8f572d3c41a77fb72e415578a39cf3f99e",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 12.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 12.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 12.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 12.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "8c60446f7c9fcceb1be1e4e6ab40452552f33d6222bf72e116d9a07849a3ac67",
+			"source_sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "05c7029b581909dfc3c00324d64db344223fc9cac4f1cd55a1eb27ed05098060",
 		"material_bindings": [
 			{
 				"mesh": "M12_Rig/Skeleton3D/M12_RuntimeAssembly",
@@ -2372,7 +3169,34 @@
 	},
 	"millback|res://assets_external/design_pack_v1/creatures/M10_Millback.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "f41b2085f0ed8b3e4f40b9fddb6397b720f2176caa32c943a33b14040e9efcbd",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 22.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "aa20054977ed01879dd82970b264494a26983a7f5dc9dc897559a82ea2b1c78e",
+			"source_sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "23f7b3d4c135f43f1873bf78ad6b6dbfa6c607925fe23ff1234d3c72cdcb2bca",
 		"material_bindings": [
 			{
 				"mesh": "M10_Rig/Skeleton3D/M10_RuntimeAssembly",
@@ -2692,7 +3516,34 @@
 	},
 	"orc_skull_real|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "c375bb1ebfa47648746c72c1cf0fd3599dd8d066af45f6c74f778069b2e14b0e",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
+			"source_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "52ecfdc624c12ad7154931f45a51f711fe22cc8d196c4eb63fb4c49bf84b2957",
 		"material_bindings": [
 			{
 				"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
@@ -3025,7 +3876,66 @@
 	},
 	"reed_choir|res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "349d918f08264c7fdcae1287af36c476c3d1912bceb25217ad2bcefdfb73814d",
+		"authored_creature_ambient": {
+			"morph_bindings": [
+				{
+					"neutral_weight": 0.0,
+					"node_path": "M15_Rig/Skeleton3D/M15_RuntimeAssembly",
+					"shape_name": "Sac0_Inflate"
+				},
+				{
+					"neutral_weight": 0.0,
+					"node_path": "M15_Rig/Skeleton3D/M15_RuntimeAssembly",
+					"shape_name": "Sac1_Inflate"
+				},
+				{
+					"neutral_weight": 0.0,
+					"node_path": "M15_Rig/Skeleton3D/M15_RuntimeAssembly",
+					"shape_name": "Sac2_Inflate"
+				}
+			],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 16.0,
+					"morph_tracks": {
+						"Sac0_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac0_Inflate",
+						"Sac1_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac1_Inflate",
+						"Sac2_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac2_Inflate"
+					}
+				},
+				"Idle": {
+					"bound_bone_tracks": 16.0,
+					"morph_tracks": {
+						"Sac0_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac0_Inflate",
+						"Sac1_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac1_Inflate",
+						"Sac2_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac2_Inflate"
+					}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 16.0,
+					"morph_tracks": {
+						"Sac0_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac0_Inflate",
+						"Sac1_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac1_Inflate",
+						"Sac2_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac2_Inflate"
+					}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 16.0,
+					"morph_tracks": {
+						"Sac0_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac0_Inflate",
+						"Sac1_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac1_Inflate",
+						"Sac2_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac2_Inflate"
+					}
+				}
+			},
+			"receipt_sha256": "79694a8ffa56b3bb19f6371736ed61b96e15f86bbe97a88b90e4f05bbd73fd45",
+			"source_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "60939cf8e46dcd14b66f444c97325639cf40ce3a16471e975e48afbf8cee8d27",
 		"material_bindings": [
 			{
 				"mesh": "M15_Rig/Skeleton3D/M15_RuntimeAssembly",
@@ -3093,7 +4003,34 @@
 	},
 	"returned_soldier|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "5fe9f2df75bdb1c459bbe2ea03b71f7849cacd359a698aa6455b2c62cc317f4a",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
+			"source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "892479a75270688892c37b64e2993e711cb906f223552cce91bd7251203bac89",
 		"material_bindings": [
 			{
 				"mesh": "M04_CandidateRoot/Armature/Skeleton3D/M04_FittedArmourAssembly",
@@ -3403,7 +4340,34 @@
 	},
 	"rootbound_colossus_boss|res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "08e533fa4c8de2d6aee7a11e117151730edfb7d9d5a5190c13610e2ced2a97db",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "fabf2353fb40202815c1984aff13521bfae322dc6d5692cfe1287cf37afd8520",
+			"source_sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "db9050380818081314f60981956b93d2491b9a3da749ded0ec3705719fd4dacf",
 		"material_bindings": [
 			{
 				"mesh": "M06_ReviewRoot/M06_Rig/Skeleton3D/M06_Connected_Anatomy_SkinnedAssembly",
@@ -3433,7 +4397,34 @@
 	},
 	"rootbound_colossus|res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "08e533fa4c8de2d6aee7a11e117151730edfb7d9d5a5190c13610e2ced2a97db",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "fabf2353fb40202815c1984aff13521bfae322dc6d5692cfe1287cf37afd8520",
+			"source_sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "db9050380818081314f60981956b93d2491b9a3da749ded0ec3705719fd4dacf",
 		"material_bindings": [
 			{
 				"mesh": "M06_ReviewRoot/M06_Rig/Skeleton3D/M06_Connected_Anatomy_SkinnedAssembly",
@@ -4236,7 +5227,68 @@
 	},
 	"shroud_swimmer|res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "f4aa5ca749072419775dde0809e9ca34f766a1414b19a6ae727c8e1e529b33d5",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 15.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "d8007c5ae49e09825f7ee078c09873be044f940cf17e6ae55c6c36658649f249",
+			"source_sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [
+				{
+					"bone_name": "Fin1_2",
+					"mesh_path": "M18_Rig/Skeleton3D/M18_RuntimeAssembly",
+					"skin_bind": 4.0,
+					"surface": 0.0,
+					"vertex": 390.0,
+					"weight": 1.0
+				},
+				{
+					"bone_name": "Fin-1_2",
+					"mesh_path": "M18_Rig/Skeleton3D/M18_RuntimeAssembly",
+					"skin_bind": 7.0,
+					"surface": 0.0,
+					"vertex": 430.0,
+					"weight": 1.0
+				}
+			],
+			"water_probes": [
+				{
+					"bone_name": "Fin1_2",
+					"offset": [
+						-0.0194392632693052,
+						0.499951958656311,
+						0.013062372803688
+					]
+				},
+				{
+					"bone_name": "Fin-1_2",
+					"offset": [
+						0.0194392614066601,
+						0.499952077865601,
+						0.0130623877048492
+					]
+				}
+			]
+		},
+		"compiled_sha256": "8b6614e0c31ffee222ac5d01cadcde44ab28b0c8705a0d0fb93e52c1d0ae75a9",
 		"material_bindings": [
 			{
 				"mesh": "M18_Rig/Skeleton3D/M18_RuntimeAssembly",
@@ -4256,7 +5308,34 @@
 	},
 	"silt_maw|res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "c03c85cdcf7125f86fb98f6f64c232df05cf4b60334ad9fd1e26e523ba93d6ec",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 12.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 12.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 12.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 12.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "2e29f0ec8c2c774327ca3c202bbf3923aa80dd1697f8256562305d9c968001a6",
+			"source_sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "b20492df49407c11aa83c621af28ff7c9a34003bf323ceca1e603de8f431dc5b",
 		"material_bindings": [
 			{
 				"mesh": "M09_Rig/Skeleton3D/M09_RuntimeAssembly",
@@ -5296,7 +6375,34 @@
 	},
 	"white_hart_avatar|res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "f57cd24f43da6bc19ec632885ae31ac95480cd62143cba580cc059c9c29383ba",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "6647779d149f936b751a39ed13b6f34ae11eaf21a9a2bd33b43a0183df9f8ea7",
+			"source_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "9f1b0f262f286b06e82a92a75b027934732efe39970c74a0fb29f9bc0024f962",
 		"material_bindings": [
 			{
 				"mesh": "M08_AuthoringRoot/AnimalArmature/Skeleton3D/Stag",
@@ -5321,7 +6427,34 @@
 	},
 	"white_hart_boss|res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "f57cd24f43da6bc19ec632885ae31ac95480cd62143cba580cc059c9c29383ba",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "6647779d149f936b751a39ed13b6f34ae11eaf21a9a2bd33b43a0183df9f8ea7",
+			"source_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "9f1b0f262f286b06e82a92a75b027934732efe39970c74a0fb29f9bc0024f962",
 		"material_bindings": [
 			{
 				"mesh": "M08_AuthoringRoot/AnimalArmature/Skeleton3D/Stag",
@@ -5346,7 +6479,34 @@
 	},
 	"white_hart|res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "f57cd24f43da6bc19ec632885ae31ac95480cd62143cba580cc059c9c29383ba",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 42.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "6647779d149f936b751a39ed13b6f34ae11eaf21a9a2bd33b43a0183df9f8ea7",
+			"source_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "9f1b0f262f286b06e82a92a75b027934732efe39970c74a0fb29f9bc0024f962",
 		"material_bindings": [
 			{
 				"mesh": "M08_AuthoringRoot/AnimalArmature/Skeleton3D/Stag",
@@ -5578,7 +6738,34 @@
 	},
 	"wychwood_brute_creature|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "c375bb1ebfa47648746c72c1cf0fd3599dd8d066af45f6c74f778069b2e14b0e",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
+			"source_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "52ecfdc624c12ad7154931f45a51f711fe22cc8d196c4eb63fb4c49bf84b2957",
 		"material_bindings": [
 			{
 				"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
@@ -5632,7 +6819,34 @@
 	},
 	"wychwood_brute|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "c375bb1ebfa47648746c72c1cf0fd3599dd8d066af45f6c74f778069b2e14b0e",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
+			"source_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "52ecfdc624c12ad7154931f45a51f711fe22cc8d196c4eb63fb4c49bf84b2957",
 		"material_bindings": [
 			{
 				"mesh": "M20_ReviewRoot/Armature/Skeleton3D/M20_Connected_Anatomy_SkinnedAssembly",
@@ -5686,7 +6900,34 @@
 	},
 	"wychwood_raider_creature|res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "b3d718511b0e6fa3df70407b38ee88e754baf695c37c70936f16ae73c4193cde",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "347fa65f2253b6dda0f3b0eb302d3719719fb03f76c834b6e303c073086f16e0",
+			"source_sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "07f02712c50cd2f5c97b8ff5e1fe167e353cd5aca04ab38b7801db7166bce3a7",
 		"material_bindings": [
 			{
 				"mesh": "M19_ReviewRoot/Armature/Skeleton3D/M19_Connected_Anatomy_SkinnedAssembly",
@@ -5740,7 +6981,34 @@
 	},
 	"wychwood_raider|res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "b3d718511b0e6fa3df70407b38ee88e754baf695c37c70936f16ae73c4193cde",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 56.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "347fa65f2253b6dda0f3b0eb302d3719719fb03f76c834b6e303c073086f16e0",
+			"source_sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "07f02712c50cd2f5c97b8ff5e1fe167e353cd5aca04ab38b7801db7166bce3a7",
 		"material_bindings": [
 			{
 				"mesh": "M19_ReviewRoot/Armature/Skeleton3D/M19_Connected_Anatomy_SkinnedAssembly",
@@ -5794,7 +7062,34 @@
 	},
 	"wychwood_stalker_creature|res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "8a406afada0d0cebe0ae0901237d9f2fd8ca800b4282da3eb9c72060321fa168",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "5189a8bee86d5260db1a67a731aa7e0504b9af3265408284e4757cea35157e19",
+			"source_sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "ebf75f154a454f6e773759bd70070993c3ec30507aefd7ae9dfafe2c53128074",
 		"material_bindings": [
 			{
 				"mesh": "M02_Stalker_CreatureRoot/Creep/Skeleton3D/Body_lod0",
@@ -5816,7 +7111,34 @@
 	},
 	"wychwood_stalker|res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "8a406afada0d0cebe0ae0901237d9f2fd8ca800b4282da3eb9c72060321fa168",
+		"authored_creature_ambient": {
+			"morph_bindings": [],
+			"native_binding_report": {
+				"Feed": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Idle": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Investigate": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				},
+				"Sleep": {
+					"bound_bone_tracks": 63.0,
+					"morph_tracks": {}
+				}
+			},
+			"receipt_sha256": "5189a8bee86d5260db1a67a731aa7e0504b9af3265408284e4757cea35157e19",
+			"source_sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a",
+			"verified": true,
+			"visual_accepted": false,
+			"water_probe_evidence": [],
+			"water_probes": []
+		},
+		"compiled_sha256": "ebf75f154a454f6e773759bd70070993c3ec30507aefd7ae9dfafe2c53128074",
 		"material_bindings": [
 			{
 				"mesh": "M02_Stalker_CreatureRoot/Creep/Skeleton3D/Body_lod0",

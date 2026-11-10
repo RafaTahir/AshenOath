@@ -1,0 +1,187 @@
+{
+	"actor_carrier_exported": false,
+	"asset": "C11",
+	"body_clearance_verified": false,
+	"grip_verified": false,
+	"input_hashes": {
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_rigid_channel_transport.gd": "0853b45c62819d664689cbceefa3a72f68cace2702db680fd8ec64b631328fb6",
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_rigid_equivalence.gd": "fe0cfc102caa081f42c96f014660689c0f8425f4d5ecebe7f79971eecd1a68e5",
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_weight_transport.gd": "6e51220dac221691141f378d88dc057eae7f8cca8ab1dc1d7a895591d64ecbbf",
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/export_living_held_prop_inputs.gd": "e1e57f14533410016518c74174de12194ec49eeffb1cf6c1a01d0fd29f00336f",
+		"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/held_prop_mesh_contract.gd": "7d5f3d845c927fc3cae531e730bc6d6a432052a3db3e0e52f4b4c8f61054c5fd",
+		"res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+		"res://assets_external/design_pack_v1/humans/C11_Nessa.glb": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+		"res://data/prepared_actors.json": "b7d0a808c12552a942c8cf6b4ba828ca960811d5e5e5f329fcf5e3773650a520",
+		"res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+		"res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+	},
+	"props": [
+		{
+			"body_clearance_verified": false,
+			"carrier_sha256": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+			"channel_manifest_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_channel_manifest.json",
+			"channel_manifest_sha256": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b",
+			"channel_transport": {
+				"body_clearance_verified": false,
+				"changed_bytes": 6415,
+				"corrected_sha256": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+				"grip_verified": false,
+				"input_sha256": "e38d87b0e9425aa5675c9be0a19f740015b67f95094eb3cc80347125aa1577f5",
+				"manifest_sha256": "4eeb146098f5b99e659243c7cf602b7e5cefe0d9c319526dc27836f549b8a3d8",
+				"method": "Exact retained u16 normal/tangent cells; complete original channels, ordered vertices and wound corners; F32 re-packing proof",
+				"native_reimport_verified": false,
+				"only_existing_normal_tangent_bytes_changed": true,
+				"rigid_meshes": 2,
+				"vectors": 1212,
+				"verified": true,
+				"vertices": 606
+			},
+			"geometry_sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
+			"grip_verified": false,
+			"input_hashes": {
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_rigid_channel_transport.gd": "0853b45c62819d664689cbceefa3a72f68cace2702db680fd8ec64b631328fb6",
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_rigid_equivalence.gd": "fe0cfc102caa081f42c96f014660689c0f8425f4d5ecebe7f79971eecd1a68e5",
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_weight_transport.gd": "6e51220dac221691141f378d88dc057eae7f8cca8ab1dc1d7a895591d64ecbbf",
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/export_living_held_prop_inputs.gd": "e1e57f14533410016518c74174de12194ec49eeffb1cf6c1a01d0fd29f00336f",
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/held_prop_mesh_contract.gd": "7d5f3d845c927fc3cae531e730bc6d6a432052a3db3e0e52f4b4c8f61054c5fd",
+				"res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+				"res://assets_external/design_pack_v1/humans/C11_Nessa.glb": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+				"res://data/prepared_actors.json": "b7d0a808c12552a942c8cf6b4ba828ca960811d5e5e5f329fcf5e3773650a520",
+				"res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+				"res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+			},
+			"manifest_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_mesh_manifest.json",
+			"manifest_sha256": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10",
+			"method": "Actual runtime visual, exact retained packed normal/tangent cells and strict full-channel native roundtrip; only old translation removed",
+			"native_roundtrip": {
+				"actual_world_corners": {
+					"corners_sampled": 2640,
+					"maximum_frame_error": 0.0,
+					"maximum_world_vertex_error_m": 0.0,
+					"position_tolerance_m": 0.0001,
+					"verified": true,
+					"worst": {
+
+					}
+				},
+				"complete_visual_inventory": true,
+				"geometry": {
+					"frame_tolerance": 0.0001,
+					"meshes": [
+						{
+							"binding": "scene",
+							"bone": "",
+							"identity": "scene::RetainedActivityVisual_bread",
+							"imported_path": "RetainedActivityVisual_bread",
+							"original_path": "RetainedActivityVisual_bread",
+							"surfaces": 1
+						},
+						{
+							"binding": "scene",
+							"bone": "",
+							"identity": "scene::RetainedActivityVisual_bread/ScoredFlatbreadCrust",
+							"imported_path": "RetainedActivityVisual_bread/ScoredFlatbreadCrust",
+							"original_path": "RetainedActivityVisual_bread/ScoredFlatbreadCrust",
+							"surfaces": 1
+						}
+					],
+					"method": "Complete vertex-channel and cyclic wound-triangle multiplicity; named binding/local frames; refreshed actual world corners",
+					"position_tolerance_m": 0.0001,
+					"triangles_checked": 880,
+					"verified": true,
+					"vertices_checked": 606
+				},
+				"grip_verified": false,
+				"material_semantics_equal": true,
+				"verified": true,
+				"visual_accepted": false
+			},
+			"presentation_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+			"raw_carrier_sha256": "e38d87b0e9425aa5675c9be0a19f740015b67f95094eb3cc80347125aa1577f5",
+			"schema_version": 3,
+			"style": "bread",
+			"visual_accepted": false
+		},
+		{
+			"body_clearance_verified": false,
+			"carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+			"channel_manifest_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_channel_manifest.json",
+			"channel_manifest_sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+			"channel_transport": {
+				"body_clearance_verified": false,
+				"changed_bytes": 6342,
+				"corrected_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+				"grip_verified": false,
+				"input_sha256": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e",
+				"manifest_sha256": "65c5846674b081b5598d5b71298b915752fe17eb311358071ec301f25a3546ce",
+				"method": "Exact retained u16 normal/tangent cells; complete original channels, ordered vertices and wound corners; F32 re-packing proof",
+				"native_reimport_verified": false,
+				"only_existing_normal_tangent_bytes_changed": true,
+				"rigid_meshes": 1,
+				"vectors": 1152,
+				"verified": true,
+				"vertices": 576
+			},
+			"geometry_sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
+			"grip_verified": false,
+			"input_hashes": {
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_rigid_channel_transport.gd": "0853b45c62819d664689cbceefa3a72f68cace2702db680fd8ec64b631328fb6",
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_rigid_equivalence.gd": "fe0cfc102caa081f42c96f014660689c0f8425f4d5ecebe7f79971eecd1a68e5",
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/activity_pose_weight_transport.gd": "6e51220dac221691141f378d88dc057eae7f8cca8ab1dc1d7a895591d64ecbbf",
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/export_living_held_prop_inputs.gd": "e1e57f14533410016518c74174de12194ec49eeffb1cf6c1a01d0fd29f00336f",
+				"D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/tools/held_prop_mesh_contract.gd": "7d5f3d845c927fc3cae531e730bc6d6a432052a3db3e0e52f4b4c8f61054c5fd",
+				"res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+				"res://assets_external/design_pack_v1/humans/C11_Nessa.glb": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+				"res://data/prepared_actors.json": "b7d0a808c12552a942c8cf6b4ba828ca960811d5e5e5f329fcf5e3773650a520",
+				"res://scripts/character_presentation.gd": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+				"res://scripts/held_prop_geometry.gd": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+			},
+			"manifest_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_mesh_manifest.json",
+			"manifest_sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528",
+			"method": "Actual runtime visual, exact retained packed normal/tangent cells and strict full-channel native roundtrip; only old translation removed",
+			"native_roundtrip": {
+				"actual_world_corners": {
+					"corners_sampled": 576,
+					"maximum_frame_error": 0.0,
+					"maximum_world_vertex_error_m": 0.0,
+					"position_tolerance_m": 0.0001,
+					"verified": true,
+					"worst": {
+
+					}
+				},
+				"complete_visual_inventory": true,
+				"geometry": {
+					"frame_tolerance": 0.0001,
+					"meshes": [
+						{
+							"binding": "scene",
+							"bone": "",
+							"identity": "scene::RetainedActivityVisual_supply",
+							"imported_path": "RetainedActivityVisual_supply",
+							"original_path": "RetainedActivityVisual_supply",
+							"surfaces": 1
+						}
+					],
+					"method": "Complete vertex-channel and cyclic wound-triangle multiplicity; named binding/local frames; refreshed actual world corners",
+					"position_tolerance_m": 0.0001,
+					"triangles_checked": 192,
+					"verified": true,
+					"vertices_checked": 576
+				},
+				"grip_verified": false,
+				"material_semantics_equal": true,
+				"verified": true,
+				"visual_accepted": false
+			},
+			"presentation_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+			"raw_carrier_sha256": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e",
+			"schema_version": 3,
+			"style": "supply",
+			"visual_accepted": false
+		}
+	],
+	"props_only": true,
+	"schema_version": 1,
+	"visual_accepted": false
+}

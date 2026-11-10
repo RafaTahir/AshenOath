@@ -1,0 +1,933 @@
+{
+  "version": 1,
+  "campaign_revision": 2,
+  "chapters": {
+    "main_empty_tables": {
+      "title": "The Empty Tables",
+      "region": "lantern_reach",
+      "question": "Who can eat when the mill's promises no longer feed them?",
+      "summary": "At the old river landing, Nessa, Elna and Toma prepare a kitchen and dry sleeping places. The households disagree about where food should be held, but nobody must give testimony to receive it.",
+      "stakes": "A common kitchen saves fuel and concentrates work. Household distribution preserves independence but asks more of the carriers.",
+      "objectives": [
+        {
+          "id": "reach_lantern_reach",
+          "text": "Follow the mill's landing path to Lantern Reach."
+        },
+        {
+          "id": "hear_households",
+          "text": "Hear the households' needs at the waiting table."
+        },
+        {
+          "id": "prepare_kitchen",
+          "text": "Brace the cooking table, secure the windscreen and lay the first places."
+        },
+        {
+          "id": "settle_tables",
+          "text": "Agree how the food is shared, then serve the first meal."
+        }
+      ],
+      "work": [
+        "kitchen_trestle",
+        "kitchen_screen",
+        "kitchen_places"
+      ],
+      "choice": "community_distribution",
+      "choices": {
+        "central": {
+          "label": "Keep a common kitchen, with an open ration book.",
+          "aftermath": "The hearth stays busy. The daily queue is shorter, but a few willing cooks carry most of the work. Meals remain available to households that disagree with the arrangement."
+        },
+        "households": {
+          "label": "Send household shares from the landing each morning.",
+          "aftermath": "Carriers pack smaller parcels. Families prepare meals in their own shelters; the extra journeys consume time and make bad weather harder."
+        }
+      },
+      "aftermath_task": "serve_first_meal",
+      "completed_flag": "campaign_empty_tables_completed"
+    },
+    "main_road_kept_open": {
+      "title": "A Road Kept Open",
+      "region": "lantern_reach",
+      "question": "What kind of passage can people keep working together?",
+      "summary": "The crossing needs sound joints, measured landings and a watch that understands the current. A public bridge and an escorted ferry are both possible; neither maintains itself.",
+      "stakes": "A repaired crossing stays open between patrols but needs watch and repairs. A ferry needs less timber, but people must wait for its crew and weather.",
+      "objectives": [
+        {
+          "id": "survey_crossing",
+          "text": "Read the current and inspect both landings."
+        },
+        {
+          "id": "agree_route",
+          "text": "Choose a public crossing or an escorted ferry."
+        },
+        {
+          "id": "secure_route",
+          "text": "Work at the chosen route's joints, rail or hauling line."
+        },
+        {
+          "id": "open_route",
+          "text": "Accompany the first load to the far landing."
+        }
+      ],
+      "choice": "community_route",
+      "choices": {
+        "crossing": {
+          "label": "Repair the public crossing and publish a repair rota.",
+          "work": [
+            "crossing_beam",
+            "crossing_rail",
+            "crossing_load"
+          ],
+          "aftermath": "People can cross without waiting for a crew. Tor's repair marks remain visible; the watch must check the joints after rain and keep the public approach clear."
+        },
+        "ferry": {
+          "label": "Rig a ferry and keep an escorted sailing rota.",
+          "work": [
+            "ferry_landing",
+            "ferry_rope",
+            "ferry_load"
+          ],
+          "aftermath": "The hauling line keeps the passage measured. Sailing times are posted beside the landing. The crew shares the watch, but queues and weather delays remain part of every journey."
+        }
+      },
+      "aftermath_task": "first_route_load",
+      "completed_flag": "campaign_road_kept_open_completed"
+    },
+    "main_house_many_names": {
+      "title": "The House of Many Names",
+      "region": "hearthward",
+      "question": "Can a house keep an honest account without demanding its occupants' stories?",
+      "summary": "Anwen and Mira inspect an upland refuge while Vale separates the public account from private testimony. Beds, medicine and a dry shelf come before names in a book.",
+      "stakes": "Distributed public copies resist a single keeper's failure. Protected custody limits exposure but depends on fewer people. Shelter is unconditional in either arrangement.",
+      "objectives": [
+        {
+          "id": "reach_hearthward",
+          "text": "Take the upland path to Hearthward."
+        },
+        {
+          "id": "hear_households",
+          "text": "Read the refuge's needs and hear the available keepers."
+        },
+        {
+          "id": "prepare_refuge",
+          "text": "Raise the bunks, dry the record shelves and mark an open sleeping place."
+        },
+        {
+          "id": "settle_records",
+          "text": "Separate the public account from protected testimony and welcome the first arrivals."
+        }
+      ],
+      "work": [
+        "refuge_bunks",
+        "refuge_shelves",
+        "refuge_places"
+      ],
+      "choice": "community_records",
+      "choices": {
+        "distributed": {
+          "label": "Distribute the public account; seal private testimony separately.",
+          "aftermath": "Several open shelves hold the same account of the orders and their consequences. Sealed testimony stays with its owners or their chosen custodians. The copies require regular comparison."
+        },
+        "protected": {
+          "label": "Keep a public summary and entrust the full account to willing custodians.",
+          "aftermath": "The public summary names the responsible institutions and acts. Protected copies remain available through their keepers; fewer hands reduce exposure but make absence and neglect more dangerous."
+        }
+      },
+      "aftermath_task": "welcome_first_arrivals",
+      "completed_flag": "campaign_house_many_names_completed"
+    },
+    "main_what_we_promise": {
+      "title": "What We Promise",
+      "region": "hearthward",
+      "question": "Which responsibilities will people actually choose, and how can they leave them?",
+      "summary": "The community tests a meal round, a night alarm and a record handover. Merrow, Edric and any surviving, willing Senn answer for the powers they still hold. Kael can offer his own work, never somebody else's assent.",
+      "stakes": "A rota is useful only while its keepers can refuse, rest and withdraw. Missing volunteers leave work unfinished; they do not lose food or shelter.",
+      "objectives": [
+        {
+          "id": "gather_cast",
+          "text": "Open the public meeting; accept written answers from anyone absent."
+        },
+        {
+          "id": "test_arrangements",
+          "text": "Practice the meal round, the alarm and a record handover."
+        },
+        {
+          "id": "choose_responsibilities",
+          "text": "Ask the willing keepers what they will undertake. Record refusals as refusals."
+        },
+        {
+          "id": "carry_promise",
+          "text": "Post the rota with a clear way to withdraw, then complete the first watch."
+        }
+      ],
+      "work": [
+        "promise_meal",
+        "promise_alarm",
+        "promise_records"
+      ],
+      "aftermath_task": "first_watch",
+      "completed_flag": "campaign_what_we_promise_completed"
+    }
+  },
+  "work": {
+    "kitchen_trestle": {
+      "region": "lantern_reach",
+      "position": [
+        -5,
+        0,
+        2
+      ],
+      "prompt": "Brace the trestle while its joint is seated",
+      "seconds": 4,
+      "kind": "brace",
+      "actor": "nessa",
+      "result": "The trestle takes the weight without rocking."
+    },
+    "kitchen_screen": {
+      "region": "lantern_reach",
+      "position": [
+        -8,
+        0,
+        -1
+      ],
+      "prompt": "Fasten the kitchen's windscreen",
+      "seconds": 4,
+      "kind": "repair",
+      "actor": "elna",
+      "result": "The canvas holds clear of the hearth."
+    },
+    "kitchen_places": {
+      "region": "lantern_reach",
+      "position": [
+        -4,
+        0,
+        -3
+      ],
+      "prompt": "Lay the first meal places",
+      "seconds": 4,
+      "kind": "sort",
+      "actor": "toma",
+      "result": "There is a place for every waiting household, including those who gave no name."
+    },
+    "crossing_beam": {
+      "region": "lantern_reach",
+      "position": [
+        2,
+        0,
+        -4
+      ],
+      "prompt": "Hold the crossbeam against its seat",
+      "seconds": 5,
+      "kind": "brace",
+      "actor": "tor",
+      "result": "The beam sits square in the retained stone abutment."
+    },
+    "crossing_rail": {
+      "region": "lantern_reach",
+      "position": [
+        5,
+        0,
+        -4
+      ],
+      "prompt": "Secure the public crossing's handrail",
+      "seconds": 4,
+      "kind": "repair",
+      "actor": "rook",
+      "result": "The rail carries a steady hand without shifting."
+    },
+    "crossing_load": {
+      "region": "lantern_reach",
+      "position": [
+        8,
+        0,
+        -4
+      ],
+      "prompt": "Check the loaded wheel over the repaired joint",
+      "seconds": 5,
+      "kind": "inspect",
+      "actor": "nera",
+      "result": "The wheel passes the joint. The repair marks call for inspection after rain."
+    },
+    "ferry_landing": {
+      "region": "lantern_reach",
+      "position": [
+        2,
+        0,
+        4
+      ],
+      "prompt": "Seat the ferry landing board",
+      "seconds": 4,
+      "kind": "brace",
+      "actor": "tor",
+      "result": "The landing board rests firmly above the waterline."
+    },
+    "ferry_rope": {
+      "region": "lantern_reach",
+      "position": [
+        5,
+        0,
+        4
+      ],
+      "prompt": "Tension the ferry's hauling line",
+      "seconds": 5,
+      "kind": "haul",
+      "actor": "rook",
+      "result": "The line carries the test load without dragging the landing."
+    },
+    "ferry_load": {
+      "region": "lantern_reach",
+      "position": [
+        8,
+        0,
+        4
+      ],
+      "prompt": "Balance the first load at the landing",
+      "seconds": 4,
+      "kind": "sort",
+      "actor": "nera",
+      "result": "The load is low and balanced. The crew can wait for a safe passage."
+    },
+    "refuge_bunks": {
+      "region": "hearthward",
+      "position": [
+        -6,
+        0,
+        2
+      ],
+      "prompt": "Raise and brace the sleeping platforms",
+      "seconds": 5,
+      "kind": "brace",
+      "actor": "anwen",
+      "result": "The sleeping places stand above the damp floor."
+    },
+    "refuge_shelves": {
+      "region": "hearthward",
+      "position": [
+        5,
+        0,
+        -4
+      ],
+      "prompt": "Dry and fit the record shelf lining",
+      "seconds": 4,
+      "kind": "repair",
+      "actor": "vale",
+      "result": "The dry lining separates the records from the outer wall."
+    },
+    "refuge_places": {
+      "region": "hearthward",
+      "position": [
+        -5,
+        0,
+        -3
+      ],
+      "prompt": "Prepare an unregistered sleeping place",
+      "seconds": 4,
+      "kind": "sort",
+      "actor": "mira",
+      "result": "The place is ready. Nobody has to trade a memory for it."
+    },
+    "promise_meal": {
+      "region": "hearthward",
+      "position": [
+        -4,
+        0,
+        6
+      ],
+      "prompt": "Practice the meal handover",
+      "seconds": 4,
+      "kind": "sort",
+      "actor": "merrow",
+      "result": "A portion passes to the next keeper without a signature or a pledge."
+    },
+    "promise_alarm": {
+      "region": "hearthward",
+      "position": [
+        7,
+        0,
+        3
+      ],
+      "prompt": "Test the shelter's warning bell",
+      "seconds": 4,
+      "kind": "inspect",
+      "actor": "senn",
+      "result": "The bell can be heard from the sleeping places. The watch records an answer, not a muster."
+    },
+    "promise_records": {
+      "region": "hearthward",
+      "position": [
+        5,
+        0,
+        -2
+      ],
+      "prompt": "Compare a copy and hand it to the next keeper",
+      "seconds": 4,
+      "kind": "inspect",
+      "actor": "vale",
+      "result": "The two public copies agree. The protected envelopes remain closed."
+    }
+  },
+  "consent_offers": {
+    "anwen": {
+      "role": "care",
+      "question": "Will you take a care shift, with the right to step away?",
+      "yes": "I can take the dawn round. If I cannot keep it, I will tell the next keeper. That is what I am offering.",
+      "no": "Not another promise today. The beds are still open; my answer need not close them.",
+      "withdraw": "I need to leave the dawn round. Put my place back on the board, without putting another name in it.",
+      "speaker_id": "sister_anwen",
+      "question_speaker_id": "player"
+    },
+    "mira": {
+      "role": "care",
+      "question": "Would you choose to share the care work?",
+      "yes": "I will take the evening round, and teach someone willing to cover it. No one learns by being volunteered.",
+      "no": "I can help with this room. I cannot promise a standing shift.",
+      "withdraw": "I cannot carry the evening round now. The medicines and instructions stay here.",
+      "speaker_id": "mira",
+      "question_speaker_id": "player"
+    },
+    "nera": {
+      "role": "logistics",
+      "question": "Will you keep a route shift under these terms?",
+      "yes": "One crossing round in the morning. Weather can stop it, and I can leave it. Write both beside my name.",
+      "no": "I can explain the route. I am not agreeing to keep it every day.",
+      "withdraw": "Take me off the crossing rota. Leave the route marks for whoever comes next.",
+      "speaker_id": "saga_nera",
+      "question_speaker_id": "player"
+    },
+    "nessa": {
+      "role": "logistics",
+      "question": "Would you take a share of the food and delivery rota?",
+      "yes": "I will keep the kitchen's count for now. If I stop, the bowls do not stop with me.",
+      "no": "I have already promised today's meal. That is all I can give you now.",
+      "withdraw": "Someone else must keep the count after today. Nobody loses their share because I am tired.",
+      "speaker_id": "saga_nessa",
+      "question_speaker_id": "player"
+    },
+    "vale": {
+      "role": "records",
+      "question": "Will you keep a copy without claiming its people's choices?",
+      "yes": "I will check one public copy and protect what was entrusted to me. A record is evidence. It is never somebody's consent.",
+      "no": "I can finish these shelves. I cannot become their permanent keeper.",
+      "withdraw": "I am leaving this copy with the agreed custodian. The sealed accounts remain under their owners' terms.",
+      "speaker_id": "vargan_record_keeper",
+      "question_speaker_id": "player"
+    },
+    "merrow": {
+      "role": "records",
+      "question": "Will you take a record shift with a public handover?",
+      "yes": "A weekly comparison and an open handover. If I withdraw, the book will show the vacancy. I will not fill it with an order.",
+      "no": "I owe you an account of what I administered. That debt is not a promise to take this office.",
+      "withdraw": "Mark my shift vacant. The records stay available, and the reasons for my old orders stay in them.",
+      "speaker_id": "vargan_steward",
+      "question_speaker_id": "player"
+    }
+  },
+  "public_accounts": {
+    "main_empty_tables": "The households ask for a dry place to cook, a steady table and bowls that do not depend on a name in a ledger. Some want one warm hearth; others want to take their shares home. First make both arrangements possible. Then choose where the daily work will fall.",
+    "main_house_many_names": "The requests pinned here concern beds, clean dressings and dry records. Public copies can show who gave orders without exposing the people who sought shelter. No private name is required to enter. Prepare the room before deciding who may hold its accounts.",
+    "main_what_we_promise": "The meeting has three practical questions: who can pass on the meal round, how will the watch answer an alarm, and who checks a copy when its keeper leaves? Test those arrangements first. Ask people for their own answers afterward. An empty shift is an honest result; an absent person has not agreed to anything."
+  },
+  "participant_lines": {
+    "anwen": {
+      "name": "Sister Anwen",
+      "hearthward": "A bed should not become another confessional. Let the person sleep first. If they want to tell us anything tomorrow, tomorrow has room for it.",
+      "speaker_id": "sister_anwen"
+    },
+    "mira": {
+      "name": "Mira",
+      "hearthward": "Keep the dressings where a stranger can find them. If only I know where they are, we have built a room that stops working whenever I am tired.",
+      "speaker_id": "mira"
+    },
+    "tor": {
+      "name": "Tor",
+      "lantern_reach": "A beam can look straight and still have a rotten seat. Hold it while I check the bearing. We are building for the cart after ours, too.",
+      "hearthward": "These bunks come apart with common pegs. A room that cannot be repaired by the people using it is only waiting to close.",
+      "speaker_id": "blacksmith_tor"
+    },
+    "rook": {
+      "name": "Rook",
+      "lantern_reach": "The water is slow here until the mill lets a pulse through. Read the wet marks on both banks before you promise anyone a quick crossing.",
+      "hearthward": "I have spent half my life learning which doors want payment before they open. Leave this one easy to find from the road.",
+      "speaker_id": "rook"
+    },
+    "elna": {
+      "name": "Elna",
+      "lantern_reach": "People keep bringing me empty bowls as if I can fill them with a speech. Give me a table that stays upright. I can begin there.",
+      "hearthward": "Leave a place by the door for anyone who cannot sleep among strangers yet. They are still staying with us.",
+      "speaker_id": "widow_elna"
+    },
+    "toma": {
+      "name": "Toma",
+      "lantern_reach": "A common fire saves wood. Carrying shares home saves arguments. I can tell you what either costs; I cannot tell every household which cost to bear.",
+      "hearthward": "The next meal will use what we kept dry today. That is a small promise, but it is one I can check with my own hands.",
+      "speaker_id": "farmer_toma"
+    },
+    "nessa": {
+      "name": "Nessa",
+      "lantern_reach": "Count the portions, not the mouths into debts. A person can eat here and still disagree with us afterward.",
+      "hearthward": "If the rota has a gap, put the gap on the board. Hiding it only means the same tired person fills it again.",
+      "speaker_id": "saga_nessa"
+    },
+    "nera": {
+      "name": "Nera",
+      "lantern_reach": "Mark where a load can wait safely. A route is not open just because someone brave enough can get through it.",
+      "hearthward": "A handover needs an answer from the next pair of hands. Leaving a bundle beside someone is not the same thing.",
+      "speaker_id": "saga_nera"
+    },
+    "vale": {
+      "name": "Vale",
+      "hearthward": "These are two different shelves. The public account belongs where anyone can compare it. A private statement stays sealed under its owner's terms. Do not let the shelves teach us to forget the difference.",
+      "speaker_id": "vargan_record_keeper"
+    },
+    "merrow": {
+      "name": "Merrow",
+      "hearthward": "I used to call an empty column an administrative problem. Sometimes it means no one agreed to do the work. That is a fact the book must preserve.",
+      "speaker_id": "vargan_steward"
+    },
+    "edric": {
+      "name": "Edric",
+      "hearthward": "I can account for the authority I used. I cannot lend you the consent of anyone who once answered to it. Put my answer beside the others, not above them.",
+      "speaker_id": "edric_campaign"
+    },
+    "senn": {
+      "name": "Senn",
+      "hearthward": "That bell is a warning, not a muster. If I answer it, I will come because I chose a watch. Keep my old rank off the board.",
+      "speaker_id": "captain_senn"
+    }
+  },
+  "public_account_speaker_id": "narrator",
+  "station_assignments": {
+    "lantern_reach": {
+      "nessa": {
+        "actor": "nessa",
+        "node": "LifeWork_nessa_community",
+        "stand": [
+          -7,
+          0,
+          0.4
+        ],
+        "activity": "bake"
+      },
+      "elna": {
+        "actor": "elna",
+        "node": "LifeWork_elna_community",
+        "stand": [
+          -9.5,
+          0,
+          -3.8
+        ],
+        "activity": "fold_cloth"
+      },
+      "toma": {
+        "actor": "toma",
+        "node": "LifeWork_toma_community",
+        "stand": [
+          -3,
+          0,
+          0.6
+        ],
+        "activity": "sort_seeds"
+      },
+      "tor": {
+        "actor": "tor",
+        "node": "LifeWork_tor_community",
+        "stand": [
+          1,
+          0,
+          -2.2
+        ],
+        "activity": "repair"
+      },
+      "rook": {
+        "actor": "rook",
+        "node": "LifeWork_rook_community",
+        "stand": [
+          -12.5,
+          0,
+          3.5
+        ],
+        "activity": "check_rope"
+      },
+      "nera": {
+        "actor": "nera",
+        "node": "LifeWork_nera_community",
+        "stand": [
+          11.5,
+          0,
+          -3.5
+        ],
+        "activity": "check_supplies"
+      }
+    },
+    "hearthward": {
+      "anwen": {
+        "actor": "anwen",
+        "node": "LifeWork_anwen_community",
+        "stand": [
+          -8,
+          0,
+          2.28
+        ],
+        "activity": "care"
+      },
+      "mira": {
+        "actor": "mira",
+        "node": "LifeWork_mira_community",
+        "stand": [
+          -8.35,
+          0,
+          -3.32
+        ],
+        "activity": "sort_herbs"
+      },
+      "vale": {
+        "actor": "vale",
+        "node": "LifeWork_vale_community",
+        "stand": [
+          7.5,
+          0,
+          -3.3
+        ],
+        "activity": "read"
+      },
+      "merrow": {
+        "actor": "merrow",
+        "node": "LifeWork_merrow_community",
+        "stand": [
+          -2.5,
+          0,
+          4
+        ],
+        "activity": "administer"
+      },
+      "nessa": {
+        "actor": "nessa",
+        "node": "LifeWork_nessa_community",
+        "stand": [
+          -5.4,
+          0,
+          4.2
+        ],
+        "activity": "bake"
+      },
+      "nera": {
+        "actor": "nera",
+        "node": "LifeWork_nera_community",
+        "stand": [
+          11,
+          0,
+          5.5
+        ],
+        "activity": "check_rope"
+      },
+      "rook": {
+        "actor": "rook",
+        "node": "LifeWork_rook_community",
+        "stand": [
+          3.22,
+          0,
+          8.5
+        ],
+        "activity": "check_supplies"
+      },
+      "tor": {
+        "actor": "tor",
+        "node": "LifeWork_tor_community",
+        "stand": [
+          -11.2,
+          0,
+          -0.5
+        ],
+        "activity": "repair"
+      },
+      "elna": {
+        "actor": "elna",
+        "node": "LifeWork_elna_community",
+        "stand": [
+          -9.8,
+          0,
+          2.1
+        ],
+        "activity": "fold_cloth"
+      },
+      "toma": {
+        "actor": "toma",
+        "node": "LifeWork_toma_community",
+        "stand": [
+          -2,
+          0,
+          -3.4
+        ],
+        "activity": "sort_seeds"
+      },
+      "edric": {
+        "actor": "edric",
+        "node": "LifeWork_edric_community",
+        "stand": [
+          3,
+          0,
+          -3
+        ],
+        "activity": "review_dispatch"
+      }
+    }
+  },
+  "presence_shifts": {
+    "hearthward": {
+      "morning": [
+        "anwen",
+        "vale",
+        "nessa",
+        "elna",
+        "toma",
+        "tor",
+        "rook",
+        "merrow"
+      ],
+      "evening": [
+        "mira",
+        "vale",
+        "merrow",
+        "nera",
+        "edric",
+        "senn",
+        "elna",
+        "tor"
+      ]
+    }
+  },
+  "ending_rituals": {
+    "share": [
+      [
+        "Read the willing keepers' terms",
+        "The names entered here belong only to people who agreed. Each keeper may leave the work; the promise gives nobody the right to appoint a replacement in their silence."
+      ],
+      [
+        "Divide the keeping",
+        "Kael sets the record beside separate keys. Care, the road and the copies have different keepers. None can close the whole account, and none inherits another person's burden."
+      ],
+      [
+        "Take the first shared watch",
+        "The Hart rests while the first willing watch begins. Kael takes his turn among the others. This arrangement will need meetings, spare hands and difficult answers long after tonight."
+      ]
+    ],
+    "depart": [
+      [
+        "Read the households' signed requests",
+        "The water carrier's household and the sweeper's household have asked to leave the failing shelter for Hearthward. Kael reads their signed requests. Named companions travel only if they separately agreed; nobody else's silence becomes consent."
+      ],
+      [
+        "Dismantle the territorial ward",
+        "Kael unfastens the boundary stones. Their light goes out. Greyfen loses the old supernatural shelter, and the Hart withdraws with the complete account that no copy contains. The human orders, signatures and protected testimony remain intact."
+      ],
+      [
+        "Take the departure load to Lantern Reach",
+        "The boundary will not rise again. The households wait with their belongings at Lantern Reach. Kael must lead them over the prepared passage and bring them to the dry refuge. Until they arrive, this choice is unfinished."
+      ]
+    ]
+  },
+  "ending_cards": {
+    "share": "CONCORD\nThe willing keepers divide care, passage and memory. Their initial acceptance remains in the record, but their continuing obligations can be withdrawn in person. A withdrawal leaves a real vacancy: uncovered care and copying wait, and an unstaffed public crossing closes until a keeper freely returns. Food, shelter and a safe service footway remain available. Kael cannot assign a replacement or erase a refusal. Meetings and handovers take time; the arrangement protects no one from the work of keeping it voluntary.",
+    "depart": "OPEN ROAD\nThe territorial ward is dismantled. The dependent households who requested relocation cross the prepared route and reach Hearthward with their belongings and the recovered human evidence. Only named people who personally agreed relocate with them; everyone else's answer remains their own. Greyfen's supernatural shelter is gone, and access to the Hart's complete account is lost. The refuge has ordinary walls, beds and a human watch. Those who remain at the old home know its protection will not return. The copies preserve proven responsibility and private terms, without pretending to contain everything that was lost."
+  },
+  "ending_ambient": {
+    "concord": {
+      "speaker_ids": [
+        "shrine_pilgrim",
+        "quality_mourner"
+      ],
+      "text": "The rota shows what is covered and what is vacant. We ask before we put a name in either place."
+    },
+    "open_road": {
+      "speaker_ids": [
+        "shrine_pilgrim",
+        "quality_mourner"
+      ],
+      "text": "The households reached Hearthward. There's no ward there, or here now. We have the copies; the rest of the Hart's memory is gone."
+    }
+  },
+  "departure_journey": {
+    "departure_load": {
+      "id": "open_road_departure",
+      "title": "THE CHOSEN DEPARTURE",
+      "action": "Meet the willing households and collect their departure load",
+      "zone": "lantern_reach",
+      "target_ids": [
+        "community:departure_load"
+      ],
+      "prompt": "Collect the willing households' departure load",
+      "seconds": 4.0,
+      "kind": "haul",
+      "position": [
+        2,
+        0,
+        1.5
+      ],
+      "text": "The two households bring their own belongings. Their signed request is for shelter at Hearthward, not a vow to Kael. Keep close as they cross; the final load includes the protected copies."
+    },
+    "departure_crossing": {
+      "id": "open_road_departure",
+      "title": "THE CHOSEN DEPARTURE",
+      "action": "Lead the households over the prepared passage; stay close",
+      "zone": "lantern_reach",
+      "target_ids": [
+        "community:ferry"
+      ],
+      "text": "The households cross only while Kael stays with them. The unsafe water is not a substitute for the prepared bridge or ferry."
+    },
+    "departure_delivery": {
+      "id": "open_road_departure",
+      "title": "THE CHOSEN DEPARTURE",
+      "action": "Secure the belongings and human records on the far bank",
+      "zone": "lantern_reach",
+      "target_ids": [
+        "community:departure_delivery"
+      ],
+      "prompt": "Secure the households and last load beyond the crossing",
+      "seconds": 3.0,
+      "kind": "haul",
+      "position": [
+        11,
+        0,
+        1.5
+      ],
+      "text": "Both households and the last load are beyond the water. The human records stay sealed under their owners' terms. Follow the ordinary road to Hearthward and open the prepared sleeping places."
+    },
+    "departure_arrival": {
+      "id": "open_road_departure",
+      "title": "THE CHOSEN DEPARTURE",
+      "action": "Welcome the relocated households into the prepared refuge",
+      "zone": "hearthward",
+      "target_ids": [
+        "community:departure_arrival"
+      ],
+      "prompt": "Settle the willing households at the prepared refuge",
+      "seconds": 5.0,
+      "kind": "sort",
+      "position": [
+        -7,
+        0,
+        4.5
+      ],
+      "text": "The households put down their belongings beside the dry beds. The copied evidence reaches its prepared shelves. The old ward and the Hart's complete account are gone; this home depends on ordinary repairs and a watch that people freely take."
+    }
+  },
+  "departure_offers": {
+    "anwen": {
+      "speaker_id": "sister_anwen",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move to the refuge. The shrine's record comes with me; the old stones do not.",
+      "no": "I will remain with the people who stay. Do not put my name on the departure list.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "mira": {
+      "speaker_id": "mira",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will take my own practice to Hearthward. My patients decide for themselves where they go.",
+      "no": "I will keep treating people here. Their need for care is not permission to move them.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "vale": {
+      "speaker_id": "vargan_record_keeper",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I choose Hearthward. The copies need a dry place, and I want to live beyond this archive.",
+      "no": "I will stay with the archive. You can carry the agreed copies without claiming that I have left.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "merrow": {
+      "speaker_id": "vargan_steward",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move and keep the refuge's accounts. That is my answer, not an order for the staff.",
+      "no": "I will stay to account for what remains. Record the households who leave without adding me.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "nessa": {
+      "speaker_id": "saga_nessa",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I choose the refuge. I can take my pots and begin another kitchen.",
+      "no": "I will keep a kitchen for the people who remain. A meal here will not require their promise to stay.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "nera": {
+      "speaker_id": "saga_nera",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will make Hearthward my next home. I am choosing this road now; the abandoned escort is still on the record.",
+      "no": "I will lead my own next journey. The households' passage does not appoint me to follow them.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "elna": {
+      "speaker_id": "widow_elna",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move. I am taking Harl's bell because I choose to, not because the refuge requires a name.",
+      "no": "I choose to stay. You may record the loss of the old ward without deciding where my grief belongs.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "toma": {
+      "speaker_id": "farmer_toma",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move my own belongings to Hearthward. My family's separate choices are not mine to sign.",
+      "no": "I will remain at the fold. I understand that the old shelter will be gone.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "tor": {
+      "speaker_id": "blacksmith_tor",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will move my tools to Hearthward. I can build another hearth; I cannot bring the old protection with us.",
+      "no": "I will stay at this forge. The people remaining will still need repairs.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "rook": {
+      "speaker_id": "rook",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will take my bag to Hearthward. I have left places before; this time the list will tell the truth about it.",
+      "no": "I will stay. Keep the route open, but do not mistake knowing a road for agreeing to take it.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "edric": {
+      "speaker_id": "edric_campaign",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will go to Hearthward. The command record travels under its existing custody; this does not put me in charge of it.",
+      "no": "I will remain to answer here. Neither departure nor my title changes the record.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    },
+    "senn": {
+      "speaker_id": "captain_senn",
+      "question": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "yes": "I will go to Hearthward as a witness, without a command. The signed account remains what I did.",
+      "no": "I will remain. The account is signed; you do not need to move me to preserve it.",
+      "withdraw": "Take my name off the departure list. I am not agreeing to move.",
+      "question_speaker_id": "player"
+    }
+  },
+  "relocated_presence_shifts": {
+    "hearthward": {
+      "morning": [
+        "anwen",
+        "nessa",
+        "toma",
+        "elna",
+        "tor",
+        "rook"
+      ],
+      "evening": [
+        "mira",
+        "vale",
+        "merrow",
+        "nera",
+        "edric",
+        "senn"
+      ]
+    }
+  }
+}

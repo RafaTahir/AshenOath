@@ -1,0 +1,32 @@
+00:11.407  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Metal_BaseColor.png'
+00:11.422  io.obj           | WARNING Cannot load image file: 'T_Trim_Metal_BaseColor.png'
+00:11.454  io.obj           | WARNING Cannot load image file: 'T Trim Metal BaseColor.png'
+00:11.454  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Metal_Normal.png'
+00:11.454  io.obj           | WARNING Cannot load image file: 'T_Trim_Metal_Normal.png'
+00:11.469  io.obj           | WARNING Cannot load image file: 'T Trim Metal Normal.png'
+00:11.469  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Cloth_BaseColor.png'
+00:11.469  io.obj           | WARNING Cannot load image file: 'T_Trim_Cloth_BaseColor.png'
+00:11.485  io.obj           | WARNING Cannot load image file: 'T Trim Cloth BaseColor.png'
+00:11.485  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Cloth_Normal.png'
+00:11.485  io.obj           | WARNING Cannot load image file: 'T_Trim_Cloth_Normal.png'
+00:11.500  io.obj           | WARNING Cannot load image file: 'T Trim Cloth Normal.png'
+Info: Saved as "station_elna.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+06:50:12 | INFO: Starting glTF 2.0 export
+06:50:12 | INFO: Extracting primitive: Banner_1_Cloth_Cube.227
+06:50:13 | INFO: Primitives created: 1
+06:50:13 | INFO: Extracting primitive: Cube
+06:50:13 | INFO: Primitives created: 1
+06:50:13 | INFO: Extracting primitive: Cube.001
+06:50:13 | INFO: Primitives created: 1
+06:50:13 | INFO: Extracting primitive: Cube.002
+06:50:13 | INFO: Primitives created: 1
+06:50:13 | INFO: Finished glTF 2.0 export in 0.824458122253418 s
+00:21.782  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\props\station_elna_review.png'
+
+STAGE2_PROP_AUTHORED elna 174
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+OBJ import of 'Banner_1_Cloth.obj' took 221.69 ms
+
+Blender quit

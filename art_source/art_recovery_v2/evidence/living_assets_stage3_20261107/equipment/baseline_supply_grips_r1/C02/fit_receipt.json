@@ -1,0 +1,110 @@
+{
+  "asset": "C02",
+  "status": "source_probe_complete",
+  "scope": "Stationary Eat, stationary Carry and forward Carry cycles. Other reachable supply aliases, gait blends, and interruption/reacquisition remain separate.",
+  "grip_verified": false,
+  "body_clearance_verified": false,
+  "runtime_output": false,
+  "visual_accepted": false,
+  "fits": {
+    "supply": {
+      "reference_trials": {
+        "reference pass": 1333,
+        "prop crossed retained body triangle": 587
+      },
+      "verified_frames": 422,
+      "expected_frames": 422,
+      "measured_palm_candidates": 12,
+      "shortlist_count": 12,
+      "failures": [],
+      "proposal": {
+        "bone": "hand_r",
+        "palm": [
+          0.015568827278912067,
+          0.03916318342089653,
+          0.020475905388593674
+        ],
+        "anchor": [
+          -2.0206004043975837e-17,
+          -0.11500000208616257,
+          -0.10999999940395355
+        ],
+        "basis": [
+          [
+            -0.05442620441317558,
+            0.9958477020263672,
+            -0.07297459989786148
+          ],
+          [
+            -0.2866230905056,
+            0.05442607402801514,
+            0.9564962983131409
+          ],
+          [
+            0.9564962983131409,
+            0.07297459989786148,
+            0.2824706435203552
+          ]
+        ],
+        "palm_source": [
+          "C02_MotionFittedAssembly",
+          3,
+          595
+        ],
+        "prop_primary_vertex": 34,
+        "maximum_contact_error_m": 0.00030039879493415356
+      },
+      "surface_clearance_verified": true,
+      "closed_component_containment_verified": true,
+      "open_prop_components": 0,
+      "degenerate_prop_triangles": 0,
+      "editable_scene": {
+        "path": "C02_supply_fit_proposal.blend",
+        "sha256": "736bcba53a8c86986226c566b2e2f3da20d9028528741b187149e1ad11aa172d"
+      }
+    }
+  },
+  "errors": [],
+  "source_sha256": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_r1\\tools\\inspect_living_activity_carrier.py": "07e20b4c555f43c53381384f3bd50d33c74409ca52158b38a4b75c96b0fb2609",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_r1\\tools\\activity_pose_weight_transport.py": "30a43b20aa5c93d63a7cab6f41357bc635ad9e547b9ca660f8682f4d7e921260",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_r1\\tools\\probe_c11_activity_fits.py": "c1088e3930603a75e775f30377e1bfc81709fa4596f024dc9c74321ad07e96df",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_r1\\tools\\inspect_retained_prop_carrier.py": "92858cc41fd262f69a05ed6938864419a16e3bcf2c92b607ec0e0620cab3ac74",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_r1\\tools\\activity_pose_rigid_channel_transport.py": "94e78ae488d83428c9c23de591846722f9f31a7d9fa28faa4536544945a64d01",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_r1\\receipt.json": "20e40a0df100a97dccf1f7aa939ed0f66fe3d0e3e6ff2168317490f5752bf655",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C02\\6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c\\receipt.json": "0b7b2a1d028462c26dee1dd7d2176f532d1e9bfd062491b381e7b245d2432568",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C02\\6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c\\C02_activity_poses.glb": "adea6afd223452c03cd1d5a5281c79efa80744e4f416149bee51ee6e2a3d9d59",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C02\\6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c\\C02_activity_poses_raw.glb": "a5bad0d93fa8aa8e0205235b0d2676a1bef286da5e4ce2660ff6c083296a53a1",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C02\\6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c\\retained_skin_manifest.json": "2d040cc5cc3a7dc4c036e7fccbdc12e4a79fd623e750005fb32272a3bd505d1f",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\compatible_c02_supply_fit_r1\\compatible_activity_inspector.py": "ee86c68fa65c323ec53c7e1064beff2765ade90331fa47b1ac085741be3baf3d",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\activity_pose_weight_transport.py": "30a43b20aa5c93d63a7cab6f41357bc635ad9e547b9ca660f8682f4d7e921260",
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\__init__.py": "29b040a623c4f32ab12d00e795e3d6610bbae67f6c517302f122e7a6b2ecaa0a",
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\mesh.py": "9fbedc0de7e97f0370800b98bfd86f2b53117c72fee59e38a460f08a54fd0f71",
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\vnode.py": "08a72727a16f78b965e53b27f0ac326b32b460d9ea9db61ed21312652387d0b5",
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\animation_utils.py": "7dc9201b1ce8d90e1827f1523ef86367af466d402671f00c695abacac2d8d74e",
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\animation_node.py": "5fcda6905c3c60912366973153518b1e10a9fb30f221f7d3a51876b306ae3845",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_held_props_postcheck_r1\\receipt.json": "7ff0fd58756ed88eb463e81fefa2066bb589901a01e690a2c48acca2b8dca965",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_props_C11.json": "7fa29b6aaf6a514ad341ea9f3254376df09eb4c0db64f44f095a0855a43ccf84",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread.glb": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread.json": "555db14802282e814ac6354bd1c867ee8dba6977945d889ea047c9870366e99f",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_mesh_manifest.json": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_raw.glb": "e38d87b0e9425aa5675c9be0a19f740015b67f95094eb3cc80347125aa1577f5",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_channel_manifest.json": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply.glb": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply.json": "b95562d40dab823dcd8eb06da6d390773db38546771f8cc4016bb2c8eaf983c7",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_mesh_manifest.json": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_raw.glb": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_channel_manifest.json": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\compatible_c02_supply_fit_r1\\inspection.json": "280387c3cdfb41a77c408cbba6c6feb3a82de50ff2436834daa3f4f044c6376e",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\compatible_c02_supply_fit_r1\\compatible_activity_fit.py": "a27f0a212cf6ca35e9055da53b1179ca942b2bce017e40fe066fed6acaf00ae7"
+  },
+  "body_meshes": [
+    {
+      "name": "C02_MotionFittedAssembly",
+      "triangles": 28362,
+      "degenerate_triangles": 3,
+      "closed_components": 127,
+      "open_components": 24
+    }
+  ]
+}

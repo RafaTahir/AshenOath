@@ -1,0 +1,1736 @@
+{
+  "schema": 1,
+  "locale": "en",
+  "source_locale": "en",
+  "font_policy": "Use runtime text, font fallback and scrollable layouts; add licensed font coverage before enabling a locale.",
+  "strings": {
+    "campaign_dialogue.white_hart.actions.4.cost": {
+      "source": "Continuing obligations can be withdrawn. An uncovered route closes; care and copying wait. The original agreements remain history, not permanent claims.",
+      "text": "Continuing obligations can be withdrawn. An uncovered route closes; care and copying wait. The original agreements remain history, not permanent claims.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.actions.4"
+    },
+    "campaign_dialogue.white_hart.actions.4.label": {
+      "source": "Concord — share stewardship with the keepers who freely agreed.",
+      "text": "Concord — share stewardship with the keepers who freely agreed.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.actions.4"
+    },
+    "campaign_dialogue.white_hart.actions.4.preview": {
+      "source": "Care, logistics and the records each have a willing keeper. Each person confirms their own terms; Kael cannot pledge another person.",
+      "text": "Care, logistics and the records each have a willing keeper. Each person confirms their own terms; Kael cannot pledge another person.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.actions.4"
+    },
+    "campaign_dialogue.white_hart.actions.5.cost": {
+      "source": "Lose the old supernatural shelter and access to the Hart's complete account. The new home still needs protection and work.",
+      "text": "Lose the old supernatural shelter and access to the Hart's complete account. The new home still needs protection and work.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.actions.5"
+    },
+    "campaign_dialogue.white_hart.actions.5.label": {
+      "source": "Open Road — relinquish the old shelter and lead the community to the refuge.",
+      "text": "Open Road — relinquish the old shelter and lead the community to the refuge.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.actions.5"
+    },
+    "campaign_dialogue.white_hart.actions.5.preview": {
+      "source": "Respect the signed household requests and each named person's separate answer. Dismantle the ward, lead the willing households through the prepared passage, and settle them at Hearthward.",
+      "text": "Respect the signed household requests and each named person's separate answer. Dismantle the ward, lead the willing households through the prepared passage, and settle them at Hearthward.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.actions.5"
+    },
+    "campaign_dialogue.white_hart.variants.0.greeting": {
+      "source": "You have kept the account where a living hand can reach it. That is something the old oath would not allow.",
+      "text": "You have kept the account where a living hand can reach it. That is something the old oath would not allow.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.0": {
+      "source": "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
+      "text": "Kael: The grain condition is broken. No one standing here has to promise you anything to eat.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.1": {
+      "source": "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+      "text": "The White Hart: I remember the gate shut. I remember the road hidden. I remember the soldiers entering. I will not tell you those were one man's act.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.10": {
+      "source": "The White Hart: Carry the people and their human records through the prepared passage. Undo this boundary, and its shelter will not follow. Neither will the complete account I hold.",
+      "text": "The White Hart: Carry the people and their human records through the prepared passage. Undo this boundary, and its shelter will not follow. Neither will the complete account I hold.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.11": {
+      "source": "Kael: A rota can fail. A refuge can fail. Neither makes the old choices disappear.",
+      "text": "Kael: A rota can fail. A refuge can fail. Neither makes the old choices disappear.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.12": {
+      "source": "The White Hart: Then choose whose work begins when mine ends.",
+      "text": "The White Hart: Then choose whose work begins when mine ends.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.2": {
+      "source": "Kael: The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
+      "text": "Kael: The copies survive. I will keep them. Some people said no when I asked them to stand beside me. Their answer stays no.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.3": {
+      "source": "The White Hart: Then begin with your own hands. Do not fill the empty places with another person's vow.",
+      "text": "The White Hart: Then begin with your own hands. Do not fill the empty places with another person's vow.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.4": {
+      "source": "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
+      "text": "The White Hart: Make the account public and I will leave its judgment with you. Release me quietly and preserve the record without opening every private memory.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.5": {
+      "source": "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
+      "text": "The White Hart: Or carry the unresolved binding yourself. Or destroy me and lose what no copy holds.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.6": {
+      "source": "Kael: Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
+      "text": "Kael: Whatever I choose, the order stays in the book. Families still need a road home. Edric still has to answer.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.7": {
+      "source": "Kael: The kitchen is working. There is a route and a dry refuge. We have tried the shifts, not just written them down.",
+      "text": "Kael: The kitchen is working. There is a route and a dry refuge. We have tried the shifts, not just written them down.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.8": {
+      "source": "The White Hart: Then there are two more things you may attempt. Share stewardship only with the keepers who still freely offer it. An empty place remains empty until somebody chooses it.",
+      "text": "The White Hart: Then there are two more things you may attempt. Share stewardship only with the keepers who still freely offer it. An empty place remains empty until somebody chooses it.",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "campaign_dialogue.white_hart.variants.0.lines.9": {
+      "source": "Kael: And if we leave?",
+      "text": "Kael: And if we leave?",
+      "speaker": "",
+      "context": "campaign_dialogue.white_hart.variants.0.lines"
+    },
+    "community_campaign.chapters.main_empty_tables.choices.central.label": {
+      "source": "Keep a common kitchen, with an open ration book.",
+      "text": "Keep a common kitchen, with an open ration book.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables.choices.central"
+    },
+    "community_campaign.chapters.main_empty_tables.choices.households.label": {
+      "source": "Send household shares from the landing each morning.",
+      "text": "Send household shares from the landing each morning.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables.choices.households"
+    },
+    "community_campaign.chapters.main_empty_tables.objectives.hear_households.text": {
+      "source": "Hear the households' needs at the waiting table.",
+      "text": "Hear the households' needs at the waiting table.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables.objectives.hear_households"
+    },
+    "community_campaign.chapters.main_empty_tables.objectives.prepare_kitchen.text": {
+      "source": "Brace the cooking table, secure the windscreen and lay the first places.",
+      "text": "Brace the cooking table, secure the windscreen and lay the first places.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables.objectives.prepare_kitchen"
+    },
+    "community_campaign.chapters.main_empty_tables.objectives.reach_lantern_reach.text": {
+      "source": "Follow the mill's landing path to Lantern Reach.",
+      "text": "Follow the mill's landing path to Lantern Reach.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables.objectives.reach_lantern_reach"
+    },
+    "community_campaign.chapters.main_empty_tables.objectives.settle_tables.text": {
+      "source": "Agree how the food is shared, then serve the first meal.",
+      "text": "Agree how the food is shared, then serve the first meal.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables.objectives.settle_tables"
+    },
+    "community_campaign.chapters.main_empty_tables.question": {
+      "source": "Who can eat when the mill's promises no longer feed them?",
+      "text": "Who can eat when the mill's promises no longer feed them?",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables"
+    },
+    "community_campaign.chapters.main_empty_tables.stakes": {
+      "source": "A common kitchen saves fuel and concentrates work. Household distribution preserves independence but asks more of the carriers.",
+      "text": "A common kitchen saves fuel and concentrates work. Household distribution preserves independence but asks more of the carriers.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables"
+    },
+    "community_campaign.chapters.main_empty_tables.summary": {
+      "source": "At the old river landing, Nessa, Elna and Toma prepare a kitchen and dry sleeping places. The households disagree about where food should be held, but nobody must give testimony to receive it.",
+      "text": "At the old river landing, Nessa, Elna and Toma prepare a kitchen and dry sleeping places. The households disagree about where food should be held, but nobody must give testimony to receive it.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables"
+    },
+    "community_campaign.chapters.main_empty_tables.title": {
+      "source": "The Empty Tables",
+      "text": "The Empty Tables",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_empty_tables"
+    },
+    "community_campaign.chapters.main_house_many_names.choices.distributed.label": {
+      "source": "Distribute the public account; seal private testimony separately.",
+      "text": "Distribute the public account; seal private testimony separately.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names.choices.distributed"
+    },
+    "community_campaign.chapters.main_house_many_names.choices.protected.label": {
+      "source": "Keep a public summary and entrust the full account to willing custodians.",
+      "text": "Keep a public summary and entrust the full account to willing custodians.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names.choices.protected"
+    },
+    "community_campaign.chapters.main_house_many_names.objectives.hear_households.text": {
+      "source": "Read the refuge's needs and hear the available keepers.",
+      "text": "Read the refuge's needs and hear the available keepers.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names.objectives.hear_households"
+    },
+    "community_campaign.chapters.main_house_many_names.objectives.prepare_refuge.text": {
+      "source": "Raise the bunks, dry the record shelves and mark an open sleeping place.",
+      "text": "Raise the bunks, dry the record shelves and mark an open sleeping place.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names.objectives.prepare_refuge"
+    },
+    "community_campaign.chapters.main_house_many_names.objectives.reach_hearthward.text": {
+      "source": "Take the upland path to Hearthward.",
+      "text": "Take the upland path to Hearthward.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names.objectives.reach_hearthward"
+    },
+    "community_campaign.chapters.main_house_many_names.objectives.settle_records.text": {
+      "source": "Separate the public account from protected testimony and welcome the first arrivals.",
+      "text": "Separate the public account from protected testimony and welcome the first arrivals.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names.objectives.settle_records"
+    },
+    "community_campaign.chapters.main_house_many_names.question": {
+      "source": "Can a house keep an honest account without demanding its occupants' stories?",
+      "text": "Can a house keep an honest account without demanding its occupants' stories?",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names"
+    },
+    "community_campaign.chapters.main_house_many_names.stakes": {
+      "source": "Distributed public copies resist a single keeper's failure. Protected custody limits exposure but depends on fewer people. Shelter is unconditional in either arrangement.",
+      "text": "Distributed public copies resist a single keeper's failure. Protected custody limits exposure but depends on fewer people. Shelter is unconditional in either arrangement.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names"
+    },
+    "community_campaign.chapters.main_house_many_names.summary": {
+      "source": "Anwen and Mira inspect an upland refuge while Vale separates the public account from private testimony. Beds, medicine and a dry shelf come before names in a book.",
+      "text": "Anwen and Mira inspect an upland refuge while Vale separates the public account from private testimony. Beds, medicine and a dry shelf come before names in a book.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names"
+    },
+    "community_campaign.chapters.main_house_many_names.title": {
+      "source": "The House of Many Names",
+      "text": "The House of Many Names",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_house_many_names"
+    },
+    "community_campaign.chapters.main_road_kept_open.choices.crossing.label": {
+      "source": "Repair the public crossing and publish a repair rota.",
+      "text": "Repair the public crossing and publish a repair rota.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open.choices.crossing"
+    },
+    "community_campaign.chapters.main_road_kept_open.choices.ferry.label": {
+      "source": "Rig a ferry and keep an escorted sailing rota.",
+      "text": "Rig a ferry and keep an escorted sailing rota.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open.choices.ferry"
+    },
+    "community_campaign.chapters.main_road_kept_open.objectives.agree_route.text": {
+      "source": "Choose a public crossing or an escorted ferry.",
+      "text": "Choose a public crossing or an escorted ferry.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open.objectives.agree_route"
+    },
+    "community_campaign.chapters.main_road_kept_open.objectives.open_route.text": {
+      "source": "Accompany the first load to the far landing.",
+      "text": "Accompany the first load to the far landing.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open.objectives.open_route"
+    },
+    "community_campaign.chapters.main_road_kept_open.objectives.secure_route.text": {
+      "source": "Work at the chosen route's joints, rail or hauling line.",
+      "text": "Work at the chosen route's joints, rail or hauling line.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open.objectives.secure_route"
+    },
+    "community_campaign.chapters.main_road_kept_open.objectives.survey_crossing.text": {
+      "source": "Read the current and inspect both landings.",
+      "text": "Read the current and inspect both landings.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open.objectives.survey_crossing"
+    },
+    "community_campaign.chapters.main_road_kept_open.question": {
+      "source": "What kind of passage can people keep working together?",
+      "text": "What kind of passage can people keep working together?",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open"
+    },
+    "community_campaign.chapters.main_road_kept_open.stakes": {
+      "source": "A repaired crossing stays open between patrols but needs watch and repairs. A ferry needs less timber, but people must wait for its crew and weather.",
+      "text": "A repaired crossing stays open between patrols but needs watch and repairs. A ferry needs less timber, but people must wait for its crew and weather.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open"
+    },
+    "community_campaign.chapters.main_road_kept_open.summary": {
+      "source": "The crossing needs sound joints, measured landings and a watch that understands the current. A public bridge and an escorted ferry are both possible; neither maintains itself.",
+      "text": "The crossing needs sound joints, measured landings and a watch that understands the current. A public bridge and an escorted ferry are both possible; neither maintains itself.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open"
+    },
+    "community_campaign.chapters.main_road_kept_open.title": {
+      "source": "A Road Kept Open",
+      "text": "A Road Kept Open",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_road_kept_open"
+    },
+    "community_campaign.chapters.main_what_we_promise.objectives.carry_promise.text": {
+      "source": "Post the rota with a clear way to withdraw, then complete the first watch.",
+      "text": "Post the rota with a clear way to withdraw, then complete the first watch.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_what_we_promise.objectives.carry_promise"
+    },
+    "community_campaign.chapters.main_what_we_promise.objectives.choose_responsibilities.text": {
+      "source": "Ask the willing keepers what they will undertake. Record refusals as refusals.",
+      "text": "Ask the willing keepers what they will undertake. Record refusals as refusals.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_what_we_promise.objectives.choose_responsibilities"
+    },
+    "community_campaign.chapters.main_what_we_promise.objectives.gather_cast.text": {
+      "source": "Open the public meeting; accept written answers from anyone absent.",
+      "text": "Open the public meeting; accept written answers from anyone absent.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_what_we_promise.objectives.gather_cast"
+    },
+    "community_campaign.chapters.main_what_we_promise.objectives.test_arrangements.text": {
+      "source": "Practice the meal round, the alarm and a record handover.",
+      "text": "Practice the meal round, the alarm and a record handover.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_what_we_promise.objectives.test_arrangements"
+    },
+    "community_campaign.chapters.main_what_we_promise.question": {
+      "source": "Which responsibilities will people actually choose, and how can they leave them?",
+      "text": "Which responsibilities will people actually choose, and how can they leave them?",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_what_we_promise"
+    },
+    "community_campaign.chapters.main_what_we_promise.stakes": {
+      "source": "A rota is useful only while its keepers can refuse, rest and withdraw. Missing volunteers leave work unfinished; they do not lose food or shelter.",
+      "text": "A rota is useful only while its keepers can refuse, rest and withdraw. Missing volunteers leave work unfinished; they do not lose food or shelter.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_what_we_promise"
+    },
+    "community_campaign.chapters.main_what_we_promise.summary": {
+      "source": "The community tests a meal round, a night alarm and a record handover. Merrow, Edric and any surviving, willing Senn answer for the powers they still hold. Kael can offer his own work, never somebody else's assent.",
+      "text": "The community tests a meal round, a night alarm and a record handover. Merrow, Edric and any surviving, willing Senn answer for the powers they still hold. Kael can offer his own work, never somebody else's assent.",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_what_we_promise"
+    },
+    "community_campaign.chapters.main_what_we_promise.title": {
+      "source": "What We Promise",
+      "text": "What We Promise",
+      "speaker": "",
+      "context": "community_campaign.chapters.main_what_we_promise"
+    },
+    "community_campaign.consent_offers.anwen.no": {
+      "source": "Not another promise today. The beds are still open; my answer need not close them.",
+      "text": "Not another promise today. The beds are still open; my answer need not close them.",
+      "speaker": "sister_anwen",
+      "context": "community_campaign.consent_offers.anwen"
+    },
+    "community_campaign.consent_offers.anwen.question": {
+      "source": "Will you take a care shift, with the right to step away?",
+      "text": "Will you take a care shift, with the right to step away?",
+      "speaker": "player",
+      "context": "community_campaign.consent_offers.anwen"
+    },
+    "community_campaign.consent_offers.anwen.withdraw": {
+      "source": "I need to leave the dawn round. Put my place back on the board, without putting another name in it.",
+      "text": "I need to leave the dawn round. Put my place back on the board, without putting another name in it.",
+      "speaker": "sister_anwen",
+      "context": "community_campaign.consent_offers.anwen"
+    },
+    "community_campaign.consent_offers.anwen.yes": {
+      "source": "I can take the dawn round. If I cannot keep it, I will tell the next keeper. That is what I am offering.",
+      "text": "I can take the dawn round. If I cannot keep it, I will tell the next keeper. That is what I am offering.",
+      "speaker": "sister_anwen",
+      "context": "community_campaign.consent_offers.anwen"
+    },
+    "community_campaign.consent_offers.merrow.no": {
+      "source": "I owe you an account of what I administered. That debt is not a promise to take this office.",
+      "text": "I owe you an account of what I administered. That debt is not a promise to take this office.",
+      "speaker": "vargan_steward",
+      "context": "community_campaign.consent_offers.merrow"
+    },
+    "community_campaign.consent_offers.merrow.question": {
+      "source": "Will you take a record shift with a public handover?",
+      "text": "Will you take a record shift with a public handover?",
+      "speaker": "player",
+      "context": "community_campaign.consent_offers.merrow"
+    },
+    "community_campaign.consent_offers.merrow.withdraw": {
+      "source": "Mark my shift vacant. The records stay available, and the reasons for my old orders stay in them.",
+      "text": "Mark my shift vacant. The records stay available, and the reasons for my old orders stay in them.",
+      "speaker": "vargan_steward",
+      "context": "community_campaign.consent_offers.merrow"
+    },
+    "community_campaign.consent_offers.merrow.yes": {
+      "source": "A weekly comparison and an open handover. If I withdraw, the book will show the vacancy. I will not fill it with an order.",
+      "text": "A weekly comparison and an open handover. If I withdraw, the book will show the vacancy. I will not fill it with an order.",
+      "speaker": "vargan_steward",
+      "context": "community_campaign.consent_offers.merrow"
+    },
+    "community_campaign.consent_offers.mira.no": {
+      "source": "I can help with this room. I cannot promise a standing shift.",
+      "text": "I can help with this room. I cannot promise a standing shift.",
+      "speaker": "mira",
+      "context": "community_campaign.consent_offers.mira"
+    },
+    "community_campaign.consent_offers.mira.question": {
+      "source": "Would you choose to share the care work?",
+      "text": "Would you choose to share the care work?",
+      "speaker": "player",
+      "context": "community_campaign.consent_offers.mira"
+    },
+    "community_campaign.consent_offers.mira.withdraw": {
+      "source": "I cannot carry the evening round now. The medicines and instructions stay here.",
+      "text": "I cannot carry the evening round now. The medicines and instructions stay here.",
+      "speaker": "mira",
+      "context": "community_campaign.consent_offers.mira"
+    },
+    "community_campaign.consent_offers.mira.yes": {
+      "source": "I will take the evening round, and teach someone willing to cover it. No one learns by being volunteered.",
+      "text": "I will take the evening round, and teach someone willing to cover it. No one learns by being volunteered.",
+      "speaker": "mira",
+      "context": "community_campaign.consent_offers.mira"
+    },
+    "community_campaign.consent_offers.nera.no": {
+      "source": "I can explain the route. I am not agreeing to keep it every day.",
+      "text": "I can explain the route. I am not agreeing to keep it every day.",
+      "speaker": "saga_nera",
+      "context": "community_campaign.consent_offers.nera"
+    },
+    "community_campaign.consent_offers.nera.question": {
+      "source": "Will you keep a route shift under these terms?",
+      "text": "Will you keep a route shift under these terms?",
+      "speaker": "player",
+      "context": "community_campaign.consent_offers.nera"
+    },
+    "community_campaign.consent_offers.nera.withdraw": {
+      "source": "Take me off the crossing rota. Leave the route marks for whoever comes next.",
+      "text": "Take me off the crossing rota. Leave the route marks for whoever comes next.",
+      "speaker": "saga_nera",
+      "context": "community_campaign.consent_offers.nera"
+    },
+    "community_campaign.consent_offers.nera.yes": {
+      "source": "One crossing round in the morning. Weather can stop it, and I can leave it. Write both beside my name.",
+      "text": "One crossing round in the morning. Weather can stop it, and I can leave it. Write both beside my name.",
+      "speaker": "saga_nera",
+      "context": "community_campaign.consent_offers.nera"
+    },
+    "community_campaign.consent_offers.nessa.no": {
+      "source": "I have already promised today's meal. That is all I can give you now.",
+      "text": "I have already promised today's meal. That is all I can give you now.",
+      "speaker": "saga_nessa",
+      "context": "community_campaign.consent_offers.nessa"
+    },
+    "community_campaign.consent_offers.nessa.question": {
+      "source": "Would you take a share of the food and delivery rota?",
+      "text": "Would you take a share of the food and delivery rota?",
+      "speaker": "player",
+      "context": "community_campaign.consent_offers.nessa"
+    },
+    "community_campaign.consent_offers.nessa.withdraw": {
+      "source": "Someone else must keep the count after today. Nobody loses their share because I am tired.",
+      "text": "Someone else must keep the count after today. Nobody loses their share because I am tired.",
+      "speaker": "saga_nessa",
+      "context": "community_campaign.consent_offers.nessa"
+    },
+    "community_campaign.consent_offers.nessa.yes": {
+      "source": "I will keep the kitchen's count for now. If I stop, the bowls do not stop with me.",
+      "text": "I will keep the kitchen's count for now. If I stop, the bowls do not stop with me.",
+      "speaker": "saga_nessa",
+      "context": "community_campaign.consent_offers.nessa"
+    },
+    "community_campaign.consent_offers.vale.no": {
+      "source": "I can finish these shelves. I cannot become their permanent keeper.",
+      "text": "I can finish these shelves. I cannot become their permanent keeper.",
+      "speaker": "vargan_record_keeper",
+      "context": "community_campaign.consent_offers.vale"
+    },
+    "community_campaign.consent_offers.vale.question": {
+      "source": "Will you keep a copy without claiming its people's choices?",
+      "text": "Will you keep a copy without claiming its people's choices?",
+      "speaker": "player",
+      "context": "community_campaign.consent_offers.vale"
+    },
+    "community_campaign.consent_offers.vale.withdraw": {
+      "source": "I am leaving this copy with the agreed custodian. The sealed accounts remain under their owners' terms.",
+      "text": "I am leaving this copy with the agreed custodian. The sealed accounts remain under their owners' terms.",
+      "speaker": "vargan_record_keeper",
+      "context": "community_campaign.consent_offers.vale"
+    },
+    "community_campaign.consent_offers.vale.yes": {
+      "source": "I will check one public copy and protect what was entrusted to me. A record is evidence. It is never somebody's consent.",
+      "text": "I will check one public copy and protect what was entrusted to me. A record is evidence. It is never somebody's consent.",
+      "speaker": "vargan_record_keeper",
+      "context": "community_campaign.consent_offers.vale"
+    },
+    "community_campaign.departure_journey.departure_arrival.action": {
+      "source": "Welcome the relocated households into the prepared refuge",
+      "text": "Welcome the relocated households into the prepared refuge",
+      "speaker": "system",
+      "context": "community_campaign.departure_journey.departure_arrival"
+    },
+    "community_campaign.departure_journey.departure_arrival.prompt": {
+      "source": "Settle the willing households at the prepared refuge",
+      "text": "Settle the willing households at the prepared refuge",
+      "speaker": "system",
+      "context": "community_campaign.departure_journey.departure_arrival"
+    },
+    "community_campaign.departure_journey.departure_arrival.text": {
+      "source": "The households put down their belongings beside the dry beds. The copied evidence reaches its prepared shelves. The old ward and the Hart's complete account are gone; this home depends on ordinary repairs and a watch that people freely take.",
+      "text": "The households put down their belongings beside the dry beds. The copied evidence reaches its prepared shelves. The old ward and the Hart's complete account are gone; this home depends on ordinary repairs and a watch that people freely take.",
+      "speaker": "narrator",
+      "context": "community_campaign.departure_journey.departure_arrival"
+    },
+    "community_campaign.departure_journey.departure_arrival.title": {
+      "source": "THE CHOSEN DEPARTURE",
+      "text": "THE CHOSEN DEPARTURE",
+      "speaker": "",
+      "context": "community_campaign.departure_journey.departure_arrival"
+    },
+    "community_campaign.departure_journey.departure_crossing.action": {
+      "source": "Lead the households over the prepared passage; stay close",
+      "text": "Lead the households over the prepared passage; stay close",
+      "speaker": "system",
+      "context": "community_campaign.departure_journey.departure_crossing"
+    },
+    "community_campaign.departure_journey.departure_crossing.text": {
+      "source": "The households cross only while Kael stays with them. The unsafe water is not a substitute for the prepared bridge or ferry.",
+      "text": "The households cross only while Kael stays with them. The unsafe water is not a substitute for the prepared bridge or ferry.",
+      "speaker": "narrator",
+      "context": "community_campaign.departure_journey.departure_crossing"
+    },
+    "community_campaign.departure_journey.departure_crossing.title": {
+      "source": "THE CHOSEN DEPARTURE",
+      "text": "THE CHOSEN DEPARTURE",
+      "speaker": "",
+      "context": "community_campaign.departure_journey.departure_crossing"
+    },
+    "community_campaign.departure_journey.departure_delivery.action": {
+      "source": "Secure the belongings and human records on the far bank",
+      "text": "Secure the belongings and human records on the far bank",
+      "speaker": "system",
+      "context": "community_campaign.departure_journey.departure_delivery"
+    },
+    "community_campaign.departure_journey.departure_delivery.prompt": {
+      "source": "Secure the households and last load beyond the crossing",
+      "text": "Secure the households and last load beyond the crossing",
+      "speaker": "system",
+      "context": "community_campaign.departure_journey.departure_delivery"
+    },
+    "community_campaign.departure_journey.departure_delivery.text": {
+      "source": "Both households and the last load are beyond the water. The human records stay sealed under their owners' terms. Follow the ordinary road to Hearthward and open the prepared sleeping places.",
+      "text": "Both households and the last load are beyond the water. The human records stay sealed under their owners' terms. Follow the ordinary road to Hearthward and open the prepared sleeping places.",
+      "speaker": "narrator",
+      "context": "community_campaign.departure_journey.departure_delivery"
+    },
+    "community_campaign.departure_journey.departure_delivery.title": {
+      "source": "THE CHOSEN DEPARTURE",
+      "text": "THE CHOSEN DEPARTURE",
+      "speaker": "",
+      "context": "community_campaign.departure_journey.departure_delivery"
+    },
+    "community_campaign.departure_journey.departure_load.action": {
+      "source": "Meet the willing households and collect their departure load",
+      "text": "Meet the willing households and collect their departure load",
+      "speaker": "system",
+      "context": "community_campaign.departure_journey.departure_load"
+    },
+    "community_campaign.departure_journey.departure_load.prompt": {
+      "source": "Collect the willing households' departure load",
+      "text": "Collect the willing households' departure load",
+      "speaker": "system",
+      "context": "community_campaign.departure_journey.departure_load"
+    },
+    "community_campaign.departure_journey.departure_load.text": {
+      "source": "The two households bring their own belongings. Their signed request is for shelter at Hearthward, not a vow to Kael. Keep close as they cross; the final load includes the protected copies.",
+      "text": "The two households bring their own belongings. Their signed request is for shelter at Hearthward, not a vow to Kael. Keep close as they cross; the final load includes the protected copies.",
+      "speaker": "narrator",
+      "context": "community_campaign.departure_journey.departure_load"
+    },
+    "community_campaign.departure_journey.departure_load.title": {
+      "source": "THE CHOSEN DEPARTURE",
+      "text": "THE CHOSEN DEPARTURE",
+      "speaker": "",
+      "context": "community_campaign.departure_journey.departure_load"
+    },
+    "community_campaign.departure_offers.anwen.no": {
+      "source": "I will remain with the people who stay. Do not put my name on the departure list.",
+      "text": "I will remain with the people who stay. Do not put my name on the departure list.",
+      "speaker": "sister_anwen",
+      "context": "community_campaign.departure_offers.anwen"
+    },
+    "community_campaign.departure_offers.anwen.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.anwen"
+    },
+    "community_campaign.departure_offers.anwen.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "sister_anwen",
+      "context": "community_campaign.departure_offers.anwen"
+    },
+    "community_campaign.departure_offers.anwen.yes": {
+      "source": "I will move to the refuge. The shrine's record comes with me; the old stones do not.",
+      "text": "I will move to the refuge. The shrine's record comes with me; the old stones do not.",
+      "speaker": "sister_anwen",
+      "context": "community_campaign.departure_offers.anwen"
+    },
+    "community_campaign.departure_offers.edric.no": {
+      "source": "I will remain to answer here. Neither departure nor my title changes the record.",
+      "text": "I will remain to answer here. Neither departure nor my title changes the record.",
+      "speaker": "edric_campaign",
+      "context": "community_campaign.departure_offers.edric"
+    },
+    "community_campaign.departure_offers.edric.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.edric"
+    },
+    "community_campaign.departure_offers.edric.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "edric_campaign",
+      "context": "community_campaign.departure_offers.edric"
+    },
+    "community_campaign.departure_offers.edric.yes": {
+      "source": "I will go to Hearthward. The command record travels under its existing custody; this does not put me in charge of it.",
+      "text": "I will go to Hearthward. The command record travels under its existing custody; this does not put me in charge of it.",
+      "speaker": "edric_campaign",
+      "context": "community_campaign.departure_offers.edric"
+    },
+    "community_campaign.departure_offers.elna.no": {
+      "source": "I choose to stay. You may record the loss of the old ward without deciding where my grief belongs.",
+      "text": "I choose to stay. You may record the loss of the old ward without deciding where my grief belongs.",
+      "speaker": "widow_elna",
+      "context": "community_campaign.departure_offers.elna"
+    },
+    "community_campaign.departure_offers.elna.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.elna"
+    },
+    "community_campaign.departure_offers.elna.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "widow_elna",
+      "context": "community_campaign.departure_offers.elna"
+    },
+    "community_campaign.departure_offers.elna.yes": {
+      "source": "I will move. I am taking Harl's bell because I choose to, not because the refuge requires a name.",
+      "text": "I will move. I am taking Harl's bell because I choose to, not because the refuge requires a name.",
+      "speaker": "widow_elna",
+      "context": "community_campaign.departure_offers.elna"
+    },
+    "community_campaign.departure_offers.merrow.no": {
+      "source": "I will stay to account for what remains. Record the households who leave without adding me.",
+      "text": "I will stay to account for what remains. Record the households who leave without adding me.",
+      "speaker": "vargan_steward",
+      "context": "community_campaign.departure_offers.merrow"
+    },
+    "community_campaign.departure_offers.merrow.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.merrow"
+    },
+    "community_campaign.departure_offers.merrow.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "vargan_steward",
+      "context": "community_campaign.departure_offers.merrow"
+    },
+    "community_campaign.departure_offers.merrow.yes": {
+      "source": "I will move and keep the refuge's accounts. That is my answer, not an order for the staff.",
+      "text": "I will move and keep the refuge's accounts. That is my answer, not an order for the staff.",
+      "speaker": "vargan_steward",
+      "context": "community_campaign.departure_offers.merrow"
+    },
+    "community_campaign.departure_offers.mira.no": {
+      "source": "I will keep treating people here. Their need for care is not permission to move them.",
+      "text": "I will keep treating people here. Their need for care is not permission to move them.",
+      "speaker": "mira",
+      "context": "community_campaign.departure_offers.mira"
+    },
+    "community_campaign.departure_offers.mira.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.mira"
+    },
+    "community_campaign.departure_offers.mira.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "mira",
+      "context": "community_campaign.departure_offers.mira"
+    },
+    "community_campaign.departure_offers.mira.yes": {
+      "source": "I will take my own practice to Hearthward. My patients decide for themselves where they go.",
+      "text": "I will take my own practice to Hearthward. My patients decide for themselves where they go.",
+      "speaker": "mira",
+      "context": "community_campaign.departure_offers.mira"
+    },
+    "community_campaign.departure_offers.nera.no": {
+      "source": "I will lead my own next journey. The households' passage does not appoint me to follow them.",
+      "text": "I will lead my own next journey. The households' passage does not appoint me to follow them.",
+      "speaker": "saga_nera",
+      "context": "community_campaign.departure_offers.nera"
+    },
+    "community_campaign.departure_offers.nera.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.nera"
+    },
+    "community_campaign.departure_offers.nera.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "saga_nera",
+      "context": "community_campaign.departure_offers.nera"
+    },
+    "community_campaign.departure_offers.nera.yes": {
+      "source": "I will make Hearthward my next home. I am choosing this road now; the abandoned escort is still on the record.",
+      "text": "I will make Hearthward my next home. I am choosing this road now; the abandoned escort is still on the record.",
+      "speaker": "saga_nera",
+      "context": "community_campaign.departure_offers.nera"
+    },
+    "community_campaign.departure_offers.nessa.no": {
+      "source": "I will keep a kitchen for the people who remain. A meal here will not require their promise to stay.",
+      "text": "I will keep a kitchen for the people who remain. A meal here will not require their promise to stay.",
+      "speaker": "saga_nessa",
+      "context": "community_campaign.departure_offers.nessa"
+    },
+    "community_campaign.departure_offers.nessa.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.nessa"
+    },
+    "community_campaign.departure_offers.nessa.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "saga_nessa",
+      "context": "community_campaign.departure_offers.nessa"
+    },
+    "community_campaign.departure_offers.nessa.yes": {
+      "source": "I choose the refuge. I can take my pots and begin another kitchen.",
+      "text": "I choose the refuge. I can take my pots and begin another kitchen.",
+      "speaker": "saga_nessa",
+      "context": "community_campaign.departure_offers.nessa"
+    },
+    "community_campaign.departure_offers.rook.no": {
+      "source": "I will stay. Keep the route open, but do not mistake knowing a road for agreeing to take it.",
+      "text": "I will stay. Keep the route open, but do not mistake knowing a road for agreeing to take it.",
+      "speaker": "rook",
+      "context": "community_campaign.departure_offers.rook"
+    },
+    "community_campaign.departure_offers.rook.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.rook"
+    },
+    "community_campaign.departure_offers.rook.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "rook",
+      "context": "community_campaign.departure_offers.rook"
+    },
+    "community_campaign.departure_offers.rook.yes": {
+      "source": "I will take my bag to Hearthward. I have left places before; this time the list will tell the truth about it.",
+      "text": "I will take my bag to Hearthward. I have left places before; this time the list will tell the truth about it.",
+      "speaker": "rook",
+      "context": "community_campaign.departure_offers.rook"
+    },
+    "community_campaign.departure_offers.senn.no": {
+      "source": "I will remain. The account is signed; you do not need to move me to preserve it.",
+      "text": "I will remain. The account is signed; you do not need to move me to preserve it.",
+      "speaker": "captain_senn",
+      "context": "community_campaign.departure_offers.senn"
+    },
+    "community_campaign.departure_offers.senn.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.senn"
+    },
+    "community_campaign.departure_offers.senn.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "captain_senn",
+      "context": "community_campaign.departure_offers.senn"
+    },
+    "community_campaign.departure_offers.senn.yes": {
+      "source": "I will go to Hearthward as a witness, without a command. The signed account remains what I did.",
+      "text": "I will go to Hearthward as a witness, without a command. The signed account remains what I did.",
+      "speaker": "captain_senn",
+      "context": "community_campaign.departure_offers.senn"
+    },
+    "community_campaign.departure_offers.toma.no": {
+      "source": "I will remain at the fold. I understand that the old shelter will be gone.",
+      "text": "I will remain at the fold. I understand that the old shelter will be gone.",
+      "speaker": "farmer_toma",
+      "context": "community_campaign.departure_offers.toma"
+    },
+    "community_campaign.departure_offers.toma.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.toma"
+    },
+    "community_campaign.departure_offers.toma.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "farmer_toma",
+      "context": "community_campaign.departure_offers.toma"
+    },
+    "community_campaign.departure_offers.toma.yes": {
+      "source": "I will move my own belongings to Hearthward. My family's separate choices are not mine to sign.",
+      "text": "I will move my own belongings to Hearthward. My family's separate choices are not mine to sign.",
+      "speaker": "farmer_toma",
+      "context": "community_campaign.departure_offers.toma"
+    },
+    "community_campaign.departure_offers.tor.no": {
+      "source": "I will stay at this forge. The people remaining will still need repairs.",
+      "text": "I will stay at this forge. The people remaining will still need repairs.",
+      "speaker": "blacksmith_tor",
+      "context": "community_campaign.departure_offers.tor"
+    },
+    "community_campaign.departure_offers.tor.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.tor"
+    },
+    "community_campaign.departure_offers.tor.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "blacksmith_tor",
+      "context": "community_campaign.departure_offers.tor"
+    },
+    "community_campaign.departure_offers.tor.yes": {
+      "source": "I will move my tools to Hearthward. I can build another hearth; I cannot bring the old protection with us.",
+      "text": "I will move my tools to Hearthward. I can build another hearth; I cannot bring the old protection with us.",
+      "speaker": "blacksmith_tor",
+      "context": "community_campaign.departure_offers.tor"
+    },
+    "community_campaign.departure_offers.vale.no": {
+      "source": "I will stay with the archive. You can carry the agreed copies without claiming that I have left.",
+      "text": "I will stay with the archive. You can carry the agreed copies without claiming that I have left.",
+      "speaker": "vargan_record_keeper",
+      "context": "community_campaign.departure_offers.vale"
+    },
+    "community_campaign.departure_offers.vale.question": {
+      "source": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "text": "If the old shelter is dismantled, do you want to make Hearthward your home?",
+      "speaker": "player",
+      "context": "community_campaign.departure_offers.vale"
+    },
+    "community_campaign.departure_offers.vale.withdraw": {
+      "source": "Take my name off the departure list. I am not agreeing to move.",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "speaker": "vargan_record_keeper",
+      "context": "community_campaign.departure_offers.vale"
+    },
+    "community_campaign.departure_offers.vale.yes": {
+      "source": "I choose Hearthward. The copies need a dry place, and I want to live beyond this archive.",
+      "text": "I choose Hearthward. The copies need a dry place, and I want to live beyond this archive.",
+      "speaker": "vargan_record_keeper",
+      "context": "community_campaign.departure_offers.vale"
+    },
+    "community_campaign.ending_ambient.concord.text": {
+      "source": "The rota shows what is covered and what is vacant. We ask before we put a name in either place.",
+      "text": "The rota shows what is covered and what is vacant. We ask before we put a name in either place.",
+      "speaker": "",
+      "context": "community_campaign.ending_ambient.concord"
+    },
+    "community_campaign.ending_ambient.open_road.text": {
+      "source": "The households reached Hearthward. There's no ward there, or here now. We have the copies; the rest of the Hart's memory is gone.",
+      "text": "The households reached Hearthward. There's no ward there, or here now. We have the copies; the rest of the Hart's memory is gone.",
+      "speaker": "",
+      "context": "community_campaign.ending_ambient.open_road"
+    },
+    "community_campaign.ending_cards.depart": {
+      "source": "OPEN ROAD\nThe territorial ward is dismantled. The dependent households who requested relocation cross the prepared route and reach Hearthward with their belongings and the recovered human evidence. Only named people who personally agreed relocate with them; everyone else's answer remains their own. Greyfen's supernatural shelter is gone, and access to the Hart's complete account is lost. The refuge has ordinary walls, beds and a human watch. Those who remain at the old home know its protection will not return. The copies preserve proven responsibility and private terms, without pretending to contain everything that was lost.",
+      "text": "OPEN ROAD\nThe territorial ward is dismantled. The dependent households who requested relocation cross the prepared route and reach Hearthward with their belongings and the recovered human evidence. Only named people who personally agreed relocate with them; everyone else's answer remains their own. Greyfen's supernatural shelter is gone, and access to the Hart's complete account is lost. The refuge has ordinary walls, beds and a human watch. Those who remain at the old home know its protection will not return. The copies preserve proven responsibility and private terms, without pretending to contain everything that was lost.",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_cards"
+    },
+    "community_campaign.ending_cards.share": {
+      "source": "CONCORD\nThe willing keepers divide care, passage and memory. Their initial acceptance remains in the record, but their continuing obligations can be withdrawn in person. A withdrawal leaves a real vacancy: uncovered care and copying wait, and an unstaffed public crossing closes until a keeper freely returns. Food, shelter and a safe service footway remain available. Kael cannot assign a replacement or erase a refusal. Meetings and handovers take time; the arrangement protects no one from the work of keeping it voluntary.",
+      "text": "CONCORD\nThe willing keepers divide care, passage and memory. Their initial acceptance remains in the record, but their continuing obligations can be withdrawn in person. A withdrawal leaves a real vacancy: uncovered care and copying wait, and an unstaffed public crossing closes until a keeper freely returns. Food, shelter and a safe service footway remain available. Kael cannot assign a replacement or erase a refusal. Meetings and handovers take time; the arrangement protects no one from the work of keeping it voluntary.",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_cards"
+    },
+    "community_campaign.ending_rituals.depart.0.label": {
+      "source": "Read the households' signed requests",
+      "text": "Read the households' signed requests",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.depart.0"
+    },
+    "community_campaign.ending_rituals.depart.0.text": {
+      "source": "The water carrier's household and the sweeper's household have asked to leave the failing shelter for Hearthward. Kael reads their signed requests. Named companions travel only if they separately agreed; nobody else's silence becomes consent.",
+      "text": "The water carrier's household and the sweeper's household have asked to leave the failing shelter for Hearthward. Kael reads their signed requests. Named companions travel only if they separately agreed; nobody else's silence becomes consent.",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.depart.0"
+    },
+    "community_campaign.ending_rituals.depart.1.label": {
+      "source": "Dismantle the territorial ward",
+      "text": "Dismantle the territorial ward",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.depart.1"
+    },
+    "community_campaign.ending_rituals.depart.1.text": {
+      "source": "Kael unfastens the boundary stones. Their light goes out. Greyfen loses the old supernatural shelter, and the Hart withdraws with the complete account that no copy contains. The human orders, signatures and protected testimony remain intact.",
+      "text": "Kael unfastens the boundary stones. Their light goes out. Greyfen loses the old supernatural shelter, and the Hart withdraws with the complete account that no copy contains. The human orders, signatures and protected testimony remain intact.",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.depart.1"
+    },
+    "community_campaign.ending_rituals.depart.2.label": {
+      "source": "Take the departure load to Lantern Reach",
+      "text": "Take the departure load to Lantern Reach",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.depart.2"
+    },
+    "community_campaign.ending_rituals.depart.2.text": {
+      "source": "The boundary will not rise again. The households wait with their belongings at Lantern Reach. Kael must lead them over the prepared passage and bring them to the dry refuge. Until they arrive, this choice is unfinished.",
+      "text": "The boundary will not rise again. The households wait with their belongings at Lantern Reach. Kael must lead them over the prepared passage and bring them to the dry refuge. Until they arrive, this choice is unfinished.",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.depart.2"
+    },
+    "community_campaign.ending_rituals.share.0.label": {
+      "source": "Read the willing keepers' terms",
+      "text": "Read the willing keepers' terms",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.share.0"
+    },
+    "community_campaign.ending_rituals.share.0.text": {
+      "source": "The names entered here belong only to people who agreed. Each keeper may leave the work; the promise gives nobody the right to appoint a replacement in their silence.",
+      "text": "The names entered here belong only to people who agreed. Each keeper may leave the work; the promise gives nobody the right to appoint a replacement in their silence.",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.share.0"
+    },
+    "community_campaign.ending_rituals.share.1.label": {
+      "source": "Divide the keeping",
+      "text": "Divide the keeping",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.share.1"
+    },
+    "community_campaign.ending_rituals.share.1.text": {
+      "source": "Kael sets the record beside separate keys. Care, the road and the copies have different keepers. None can close the whole account, and none inherits another person's burden.",
+      "text": "Kael sets the record beside separate keys. Care, the road and the copies have different keepers. None can close the whole account, and none inherits another person's burden.",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.share.1"
+    },
+    "community_campaign.ending_rituals.share.2.label": {
+      "source": "Take the first shared watch",
+      "text": "Take the first shared watch",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.share.2"
+    },
+    "community_campaign.ending_rituals.share.2.text": {
+      "source": "The Hart rests while the first willing watch begins. Kael takes his turn among the others. This arrangement will need meetings, spare hands and difficult answers long after tonight.",
+      "text": "The Hart rests while the first willing watch begins. Kael takes his turn among the others. This arrangement will need meetings, spare hands and difficult answers long after tonight.",
+      "speaker": "narrator",
+      "context": "community_campaign.ending_rituals.share.2"
+    },
+    "community_campaign.participant_lines.anwen.name": {
+      "source": "Sister Anwen",
+      "text": "Sister Anwen",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.anwen"
+    },
+    "community_campaign.participant_lines.edric.name": {
+      "source": "Edric",
+      "text": "Edric",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.edric"
+    },
+    "community_campaign.participant_lines.elna.name": {
+      "source": "Elna",
+      "text": "Elna",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.elna"
+    },
+    "community_campaign.participant_lines.merrow.name": {
+      "source": "Merrow",
+      "text": "Merrow",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.merrow"
+    },
+    "community_campaign.participant_lines.mira.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.mira"
+    },
+    "community_campaign.participant_lines.nera.name": {
+      "source": "Nera",
+      "text": "Nera",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.nera"
+    },
+    "community_campaign.participant_lines.nessa.name": {
+      "source": "Nessa",
+      "text": "Nessa",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.nessa"
+    },
+    "community_campaign.participant_lines.rook.name": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.rook"
+    },
+    "community_campaign.participant_lines.senn.name": {
+      "source": "Senn",
+      "text": "Senn",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.senn"
+    },
+    "community_campaign.participant_lines.toma.name": {
+      "source": "Toma",
+      "text": "Toma",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.toma"
+    },
+    "community_campaign.participant_lines.tor.name": {
+      "source": "Tor",
+      "text": "Tor",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.tor"
+    },
+    "community_campaign.participant_lines.vale.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "community_campaign.participant_lines.vale"
+    },
+    "community_campaign.work.crossing_beam.result": {
+      "source": "The beam sits square in the retained stone abutment.",
+      "text": "The beam sits square in the retained stone abutment.",
+      "speaker": "",
+      "context": "community_campaign.work.crossing_beam"
+    },
+    "community_campaign.work.crossing_load.result": {
+      "source": "The wheel passes the joint. The repair marks call for inspection after rain.",
+      "text": "The wheel passes the joint. The repair marks call for inspection after rain.",
+      "speaker": "",
+      "context": "community_campaign.work.crossing_load"
+    },
+    "community_campaign.work.crossing_rail.result": {
+      "source": "The rail carries a steady hand without shifting.",
+      "text": "The rail carries a steady hand without shifting.",
+      "speaker": "",
+      "context": "community_campaign.work.crossing_rail"
+    },
+    "community_campaign.work.ferry_landing.result": {
+      "source": "The landing board rests firmly above the waterline.",
+      "text": "The landing board rests firmly above the waterline.",
+      "speaker": "",
+      "context": "community_campaign.work.ferry_landing"
+    },
+    "community_campaign.work.ferry_load.result": {
+      "source": "The load is low and balanced. The crew can wait for a safe passage.",
+      "text": "The load is low and balanced. The crew can wait for a safe passage.",
+      "speaker": "",
+      "context": "community_campaign.work.ferry_load"
+    },
+    "community_campaign.work.ferry_rope.result": {
+      "source": "The line carries the test load without dragging the landing.",
+      "text": "The line carries the test load without dragging the landing.",
+      "speaker": "",
+      "context": "community_campaign.work.ferry_rope"
+    },
+    "community_campaign.work.kitchen_places.result": {
+      "source": "There is a place for every waiting household, including those who gave no name.",
+      "text": "There is a place for every waiting household, including those who gave no name.",
+      "speaker": "",
+      "context": "community_campaign.work.kitchen_places"
+    },
+    "community_campaign.work.kitchen_screen.result": {
+      "source": "The canvas holds clear of the hearth.",
+      "text": "The canvas holds clear of the hearth.",
+      "speaker": "",
+      "context": "community_campaign.work.kitchen_screen"
+    },
+    "community_campaign.work.kitchen_trestle.result": {
+      "source": "The trestle takes the weight without rocking.",
+      "text": "The trestle takes the weight without rocking.",
+      "speaker": "",
+      "context": "community_campaign.work.kitchen_trestle"
+    },
+    "community_campaign.work.promise_alarm.result": {
+      "source": "The bell can be heard from the sleeping places. The watch records an answer, not a muster.",
+      "text": "The bell can be heard from the sleeping places. The watch records an answer, not a muster.",
+      "speaker": "",
+      "context": "community_campaign.work.promise_alarm"
+    },
+    "community_campaign.work.promise_meal.result": {
+      "source": "A portion passes to the next keeper without a signature or a pledge.",
+      "text": "A portion passes to the next keeper without a signature or a pledge.",
+      "speaker": "",
+      "context": "community_campaign.work.promise_meal"
+    },
+    "community_campaign.work.promise_records.result": {
+      "source": "The two public copies agree. The protected envelopes remain closed.",
+      "text": "The two public copies agree. The protected envelopes remain closed.",
+      "speaker": "",
+      "context": "community_campaign.work.promise_records"
+    },
+    "community_campaign.work.refuge_bunks.result": {
+      "source": "The sleeping places stand above the damp floor.",
+      "text": "The sleeping places stand above the damp floor.",
+      "speaker": "",
+      "context": "community_campaign.work.refuge_bunks"
+    },
+    "community_campaign.work.refuge_places.result": {
+      "source": "The place is ready. Nobody has to trade a memory for it.",
+      "text": "The place is ready. Nobody has to trade a memory for it.",
+      "speaker": "",
+      "context": "community_campaign.work.refuge_places"
+    },
+    "community_campaign.work.refuge_shelves.result": {
+      "source": "The dry lining separates the records from the outer wall.",
+      "text": "The dry lining separates the records from the outer wall.",
+      "speaker": "",
+      "context": "community_campaign.work.refuge_shelves"
+    },
+    "interaction_scenes.aftermath_names_concord.greeting": {
+      "source": "There are spaces beside the names now. For the next shift, and for anyone who needs to stop.",
+      "text": "There are spaces beside the names now. For the next shift, and for anyone who needs to stop.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_concord"
+    },
+    "interaction_scenes.aftermath_names_concord.lines.0.text": {
+      "source": "Who fills a space when somebody leaves?",
+      "text": "Who fills a space when somebody leaves?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_names_concord.lines.0"
+    },
+    "interaction_scenes.aftermath_names_concord.lines.1.text": {
+      "source": "Someone who offers. We ask. We wait. If nobody can, we write that the work is uncovered.",
+      "text": "Someone who offers. We ask. We wait. If nobody can, we write that the work is uncovered.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.aftermath_names_concord.lines.1"
+    },
+    "interaction_scenes.aftermath_names_concord.lines.2.text": {
+      "source": "Anwen checks the recorded answers against the current rota. Every withdrawal stays a vacancy. No household disappears from the meal list.",
+      "text": "Anwen checks the recorded answers against the current rota. Every withdrawal stays a vacancy. No household disappears from the meal list.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_concord.lines.2"
+    },
+    "interaction_scenes.aftermath_names_concord.lines.3.text": {
+      "source": "The Hart did not make the work smaller.",
+      "text": "The Hart did not make the work smaller.",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_names_concord.lines.3"
+    },
+    "interaction_scenes.aftermath_names_concord.lines.4.text": {
+      "source": "No. It can no longer make one person carry it in silence.",
+      "text": "No. It can no longer make one person carry it in silence.",
+      "speaker": "Anwen",
+      "context": "interaction_scenes.aftermath_names_concord.lines.4"
+    },
+    "interaction_scenes.aftermath_names_concord.lines.5.text": {
+      "source": "Beside the public account, the rota records the next handover. The protected pages remain sealed under their owners' terms.",
+      "text": "Beside the public account, the rota records the next handover. The protected pages remain sealed under their owners' terms.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_concord.lines.5"
+    },
+    "interaction_scenes.aftermath_names_concord.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_concord"
+    },
+    "interaction_scenes.aftermath_names_concord.unattended_pages.0.text": {
+      "source": "The public rota leaves uncovered shifts visible. Food and shelter remain available to households whether or not a name appears beside a responsibility.",
+      "text": "The public rota leaves uncovered shifts visible. Food and shelter remain available to households whether or not a name appears beside a responsibility.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_names_concord.unattended_pages.0"
+    },
+    "interaction_scenes.aftermath_names_concord.unattended_pages.1.text": {
+      "source": "The copied orders stay open to scrutiny. Private statements stay under their owners' terms; the new arrangement does not release them into public custody.",
+      "text": "The copied orders stay open to scrutiny. Private statements stay under their owners' terms; the new arrangement does not release them into public custody.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_names_concord.unattended_pages.1"
+    },
+    "interaction_scenes.aftermath_names_open_road.greeting": {
+      "source": "The public notice gives the location of the copies at Hearthward. The old oath cannot keep them here.",
+      "text": "The public notice gives the location of the copies at Hearthward. The old oath cannot keep them here.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_open_road"
+    },
+    "interaction_scenes.aftermath_names_open_road.lines.0.text": {
+      "source": "The orders, the signatures and the accounts we recovered are packed. These are human records. They remain evidence.",
+      "text": "The orders, the signatures and the accounts we recovered are packed. These are human records. They remain evidence.",
+      "speaker": "Vale",
+      "context": "interaction_scenes.aftermath_names_open_road.lines.0"
+    },
+    "interaction_scenes.aftermath_names_open_road.lines.1.text": {
+      "source": "What is missing?",
+      "text": "What is missing?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_names_open_road.lines.1"
+    },
+    "interaction_scenes.aftermath_names_open_road.lines.2.text": {
+      "source": "What only the Hart remembered. We cannot fill that absence by guessing.",
+      "text": "What only the Hart remembered. We cannot fill that absence by guessing.",
+      "speaker": "Vale",
+      "context": "interaction_scenes.aftermath_names_open_road.lines.2"
+    },
+    "interaction_scenes.aftermath_names_open_road.lines.3.text": {
+      "source": "Vale checks the sealed envelopes against their owners' instructions. The departure list records places needed, not testimony owed.",
+      "text": "Vale checks the sealed envelopes against their owners' instructions. The departure list records places needed, not testimony owed.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_names_open_road.lines.3"
+    },
+    "interaction_scenes.aftermath_names_open_road.lines.4.text": {
+      "source": "Leave the notice where someone returning can find it.",
+      "text": "Leave the notice where someone returning can find it.",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_names_open_road.lines.4"
+    },
+    "interaction_scenes.aftermath_names_open_road.lines.5.text": {
+      "source": "A road to the record. Not a claim that we carried everything.",
+      "text": "A road to the record. Not a claim that we carried everything.",
+      "speaker": "Vale",
+      "context": "interaction_scenes.aftermath_names_open_road.lines.5"
+    },
+    "interaction_scenes.aftermath_names_open_road.name": {
+      "source": "The departing record",
+      "text": "The departing record",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_names_open_road"
+    },
+    "interaction_scenes.aftermath_names_open_road.unattended_pages.0.text": {
+      "source": "A public notice points toward the copied orders at Hearthward. Human records survive the departure. Nothing on the notice claims to contain the Hart's complete account.",
+      "text": "A public notice points toward the copied orders at Hearthward. Human records survive the departure. Nothing on the notice claims to contain the Hart's complete account.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_names_open_road.unattended_pages.0"
+    },
+    "interaction_scenes.aftermath_names_open_road.unattended_pages.1.text": {
+      "source": "Sealed statements remain subject to their owners' terms. The departure list records the places needed without demanding testimony from the people using them.",
+      "text": "Sealed statements remain subject to their owners' terms. The departure list records the places needed without demanding testimony from the people using them.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_names_open_road.unattended_pages.1"
+    },
+    "interaction_scenes.aftermath_road_concord.greeting": {
+      "source": "The passage is open. The watch still changes at the posted hour.",
+      "text": "The passage is open. The watch still changes at the posted hour.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_concord"
+    },
+    "interaction_scenes.aftermath_road_concord.lines.0.text": {
+      "source": "Some people stayed. Some went on. Their shares were packed either way.",
+      "text": "Some people stayed. Some went on. Their shares were packed either way.",
+      "speaker": "Nera",
+      "context": "interaction_scenes.aftermath_road_concord.lines.0"
+    },
+    "interaction_scenes.aftermath_road_concord.lines.1.text": {
+      "source": "Do the keepers agree about everything?",
+      "text": "Do the keepers agree about everything?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_road_concord.lines.1"
+    },
+    "interaction_scenes.aftermath_road_concord.lines.2.text": {
+      "source": "They agree about the next handover. Tomorrow we may have to talk again.",
+      "text": "They agree about the next handover. Tomorrow we may have to talk again.",
+      "speaker": "Nera",
+      "context": "interaction_scenes.aftermath_road_concord.lines.2"
+    },
+    "interaction_scenes.aftermath_road_concord.lines.3.text": {
+      "source": "At the landing, one worker finishes while another checks the route marks. The work has owners; the road does not have a new lord.",
+      "text": "At the landing, one worker finishes while another checks the route marks. The work has owners; the road does not have a new lord.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_road_concord.lines.3"
+    },
+    "interaction_scenes.aftermath_road_concord.lines.4.text": {
+      "source": "Then we keep the empty places visible.",
+      "text": "Then we keep the empty places visible.",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_road_concord.lines.4"
+    },
+    "interaction_scenes.aftermath_road_concord.lines.5.text": {
+      "source": "And we ask before writing a name in one.",
+      "text": "And we ask before writing a name in one.",
+      "speaker": "Nera",
+      "context": "interaction_scenes.aftermath_road_concord.lines.5"
+    },
+    "interaction_scenes.aftermath_road_concord.name": {
+      "source": "Nera",
+      "text": "Nera",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_concord"
+    },
+    "interaction_scenes.aftermath_road_concord.unattended_pages.0.text": {
+      "source": "The public route marks name the next handover. Household shares are packed for people staying and people going on; neither choice appoints a keeper.",
+      "text": "The public route marks name the next handover. Household shares are packed for people staying and people going on; neither choice appoints a keeper.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_road_concord.unattended_pages.0"
+    },
+    "interaction_scenes.aftermath_road_concord.unattended_pages.1.text": {
+      "source": "Uncovered shifts remain visible beside the agreed ones. The community has a way to ask for help, not a right to fill the spaces with other people's names.",
+      "text": "Uncovered shifts remain visible beside the agreed ones. The community has a way to ask for help, not a right to fill the spaces with other people's names.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_road_concord.unattended_pages.1"
+    },
+    "interaction_scenes.aftermath_road_open_road.greeting": {
+      "source": "Beyond the old boundary, the route marks continue toward Hearthward.",
+      "text": "Beyond the old boundary, the route marks continue toward Hearthward.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_open_road"
+    },
+    "interaction_scenes.aftermath_road_open_road.lines.0.text": {
+      "source": "The refuge has beds. It has no oath around it. We keep watch with people now.",
+      "text": "The refuge has beds. It has no oath around it. We keep watch with people now.",
+      "speaker": "Nera",
+      "context": "interaction_scenes.aftermath_road_open_road.lines.0"
+    },
+    "interaction_scenes.aftermath_road_open_road.lines.1.text": {
+      "source": "Can the road remain open behind us?",
+      "text": "Can the road remain open behind us?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_road_open_road.lines.1"
+    },
+    "interaction_scenes.aftermath_road_open_road.lines.2.text": {
+      "source": "While we maintain it. Whoever comes later deserves to know both where it goes and what it costs.",
+      "text": "While we maintain it. Whoever comes later deserves to know both where it goes and what it costs.",
+      "speaker": "Nera",
+      "context": "interaction_scenes.aftermath_road_open_road.lines.2"
+    },
+    "interaction_scenes.aftermath_road_open_road.lines.3.text": {
+      "source": "The boundary stones remain dark. At Hearthward, ordinary lanterns light the settled households. No return to Greyfen restores the old ward or the Hart's complete account.",
+      "text": "The boundary stones remain dark. At Hearthward, ordinary lanterns light the settled households. No return to Greyfen restores the old ward or the Hart's complete account.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_road_open_road.lines.3"
+    },
+    "interaction_scenes.aftermath_road_open_road.lines.4.text": {
+      "source": "And the Hart?",
+      "text": "And the Hart?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_road_open_road.lines.4"
+    },
+    "interaction_scenes.aftermath_road_open_road.lines.5.text": {
+      "source": "We chose to leave its shelter and its full account. Keep the copies dry. Do not call them the whole of what we lost.",
+      "text": "We chose to leave its shelter and its full account. Keep the copies dry. Do not call them the whole of what we lost.",
+      "speaker": "Nera",
+      "context": "interaction_scenes.aftermath_road_open_road.lines.5"
+    },
+    "interaction_scenes.aftermath_road_open_road.name": {
+      "source": "The open road",
+      "text": "The open road",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_road_open_road"
+    },
+    "interaction_scenes.aftermath_road_open_road.unattended_pages.0.text": {
+      "source": "The route marks continue toward the prepared refuge. An ordinary lantern identifies the next turn; no new oath binds the people travelling beneath it.",
+      "text": "The route marks continue toward the prepared refuge. An ordinary lantern identifies the next turn; no new oath binds the people travelling beneath it.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_road_open_road.unattended_pages.0"
+    },
+    "interaction_scenes.aftermath_road_open_road.unattended_pages.1.text": {
+      "source": "The copied human record can be carried and checked. The Hart's complete account was not copied, and the open road makes no claim to restore what was lost.",
+      "text": "The copied human record can be carried and checked. The Hart's complete account was not copied, and the open road makes no claim to restore what was lost.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_road_open_road.unattended_pages.1"
+    },
+    "interaction_scenes.aftermath_work_concord.greeting": {
+      "source": "The first shared week has already needed a repair.",
+      "text": "The first shared week has already needed a repair.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_concord"
+    },
+    "interaction_scenes.aftermath_work_concord.lines.0.text": {
+      "source": "A hinge, a rail, and the kitchen latch. Those are the jobs. Nobody promised the iron would stop wearing out.",
+      "text": "A hinge, a rail, and the kitchen latch. Those are the jobs. Nobody promised the iron would stop wearing out.",
+      "speaker": "Tor",
+      "context": "interaction_scenes.aftermath_work_concord.lines.0"
+    },
+    "interaction_scenes.aftermath_work_concord.lines.1.text": {
+      "source": "The rota leaves a gap for weather. Sensible. Weather has never signed anything I gave it.",
+      "text": "The rota leaves a gap for weather. Sensible. Weather has never signed anything I gave it.",
+      "speaker": "Rook",
+      "context": "interaction_scenes.aftermath_work_concord.lines.1"
+    },
+    "interaction_scenes.aftermath_work_concord.lines.2.text": {
+      "source": "And if a keeper withdraws?",
+      "text": "And if a keeper withdraws?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_work_concord.lines.2"
+    },
+    "interaction_scenes.aftermath_work_concord.lines.3.text": {
+      "source": "We close the unsafe part until somebody can do it. A promise is not a brace.",
+      "text": "We close the unsafe part until somebody can do it. A promise is not a brace.",
+      "speaker": "Tor",
+      "context": "interaction_scenes.aftermath_work_concord.lines.3"
+    },
+    "interaction_scenes.aftermath_work_concord.lines.4.text": {
+      "source": "Rook checks the marked strap before loading. Tor leaves the repair tools where the next willing worker can find them.",
+      "text": "Rook checks the marked strap before loading. Tor leaves the repair tools where the next willing worker can find them.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_work_concord.lines.4"
+    },
+    "interaction_scenes.aftermath_work_concord.lines.5.text": {
+      "source": "Your shift is still on the board. Unless you have something to tell the board.",
+      "text": "Your shift is still on the board. Unless you have something to tell the board.",
+      "speaker": "Rook",
+      "context": "interaction_scenes.aftermath_work_concord.lines.5"
+    },
+    "interaction_scenes.aftermath_work_concord.name": {
+      "source": "Tor and Rook",
+      "text": "Tor and Rook",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_concord"
+    },
+    "interaction_scenes.aftermath_work_concord.unattended_pages.0.text": {
+      "source": "Repair tools wait beside a marked strap and a list of worn joints. The next willing worker can see both the task and the space left for weather.",
+      "text": "Repair tools wait beside a marked strap and a list of worn joints. The next willing worker can see both the task and the space left for weather.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_work_concord.unattended_pages.0"
+    },
+    "interaction_scenes.aftermath_work_concord.unattended_pages.1.text": {
+      "source": "An uncovered shift is still written as uncovered. An unsafe part of the route can close until someone freely takes the work; a promise cannot brace a rail.",
+      "text": "An uncovered shift is still written as uncovered. An unsafe part of the route can close until someone freely takes the work; a promise cannot brace a rail.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_work_concord.unattended_pages.1"
+    },
+    "interaction_scenes.aftermath_work_open_road.greeting": {
+      "source": "The households and their last load have reached Hearthward. The old walls remain without the ward.",
+      "text": "The households and their last load have reached Hearthward. The old walls remain without the ward.",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_open_road"
+    },
+    "interaction_scenes.aftermath_work_open_road.lines.0.text": {
+      "source": "Dry tools underneath. Sleeping cloths on top. Nobody should have to unpack a whole cart to lie down.",
+      "text": "Dry tools underneath. Sleeping cloths on top. Nobody should have to unpack a whole cart to lie down.",
+      "speaker": "Tor",
+      "context": "interaction_scenes.aftermath_work_open_road.lines.0"
+    },
+    "interaction_scenes.aftermath_work_open_road.lines.1.text": {
+      "source": "I would prefer a lighter future. This one has cooking pots.",
+      "text": "I would prefer a lighter future. This one has cooking pots.",
+      "speaker": "Rook",
+      "context": "interaction_scenes.aftermath_work_open_road.lines.1"
+    },
+    "interaction_scenes.aftermath_work_open_road.lines.2.text": {
+      "source": "What stays?",
+      "text": "What stays?",
+      "speaker": "Kael",
+      "context": "interaction_scenes.aftermath_work_open_road.lines.2"
+    },
+    "interaction_scenes.aftermath_work_open_road.lines.3.text": {
+      "source": "The walls. What we cannot carry. The people who freely chose another road know where we are going.",
+      "text": "The walls. What we cannot carry. The people who freely chose another road know where we are going.",
+      "speaker": "Tor",
+      "context": "interaction_scenes.aftermath_work_open_road.lines.3"
+    },
+    "interaction_scenes.aftermath_work_open_road.lines.4.text": {
+      "source": "The straps are empty now. The households who requested relocation have reached their prepared beds; no departing name was added without its own agreement.",
+      "text": "The straps are empty now. The households who requested relocation have reached their prepared beds; no departing name was added without its own agreement.",
+      "speaker": "Narrator",
+      "context": "interaction_scenes.aftermath_work_open_road.lines.4"
+    },
+    "interaction_scenes.aftermath_work_open_road.lines.5.text": {
+      "source": "The pots have arrived. Tomorrow somebody still has to cook.",
+      "text": "The pots have arrived. Tomorrow somebody still has to cook.",
+      "speaker": "Rook",
+      "context": "interaction_scenes.aftermath_work_open_road.lines.5"
+    },
+    "interaction_scenes.aftermath_work_open_road.name": {
+      "source": "The last load",
+      "text": "The last load",
+      "speaker": "",
+      "context": "interaction_scenes.aftermath_work_open_road"
+    },
+    "interaction_scenes.aftermath_work_open_road.unattended_pages.0.text": {
+      "source": "The households and their belongings have reached Hearthward over the prepared passage. The old walls remain without the supernatural shelter. Human watch and repairs must now keep the refuge safe.",
+      "text": "The households and their belongings have reached Hearthward over the prepared passage. The old walls remain without the supernatural shelter. Human watch and repairs must now keep the refuge safe.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_work_open_road.unattended_pages.0"
+    },
+    "interaction_scenes.aftermath_work_open_road.unattended_pages.1.text": {
+      "source": "The walls remain. A notice gives the refuge's location for anyone returning. The people who stay behind have not been entered into a promise to follow.",
+      "text": "The walls remain. A notice gives the refuge's location for anyone returning. The people who stay behind have not been entered into a promise to follow.",
+      "speaker": "The public work",
+      "context": "interaction_scenes.aftermath_work_open_road.unattended_pages.1"
+    },
+    "quests.main_empty_tables.objectives.hear_households.text": {
+      "source": "Hear the households' needs at the waiting table.",
+      "text": "Hear the households' needs at the waiting table.",
+      "speaker": "",
+      "context": "quests.main_empty_tables.objectives.hear_households"
+    },
+    "quests.main_empty_tables.objectives.prepare_kitchen.text": {
+      "source": "Brace the cooking table, secure the windscreen and lay the first places.",
+      "text": "Brace the cooking table, secure the windscreen and lay the first places.",
+      "speaker": "",
+      "context": "quests.main_empty_tables.objectives.prepare_kitchen"
+    },
+    "quests.main_empty_tables.objectives.reach_lantern_reach.text": {
+      "source": "Follow the mill's landing path to Lantern Reach.",
+      "text": "Follow the mill's landing path to Lantern Reach.",
+      "speaker": "",
+      "context": "quests.main_empty_tables.objectives.reach_lantern_reach"
+    },
+    "quests.main_empty_tables.objectives.settle_tables.text": {
+      "source": "Agree how the food is shared, then serve the first meal.",
+      "text": "Agree how the food is shared, then serve the first meal.",
+      "speaker": "",
+      "context": "quests.main_empty_tables.objectives.settle_tables"
+    },
+    "quests.main_empty_tables.title": {
+      "source": "The Empty Tables",
+      "text": "The Empty Tables",
+      "speaker": "",
+      "context": "quests.main_empty_tables"
+    },
+    "quests.main_house_many_names.objectives.hear_households.text": {
+      "source": "Read the refuge's needs and hear the available keepers.",
+      "text": "Read the refuge's needs and hear the available keepers.",
+      "speaker": "",
+      "context": "quests.main_house_many_names.objectives.hear_households"
+    },
+    "quests.main_house_many_names.objectives.prepare_refuge.text": {
+      "source": "Raise the bunks, dry the record shelves and mark an open sleeping place.",
+      "text": "Raise the bunks, dry the record shelves and mark an open sleeping place.",
+      "speaker": "",
+      "context": "quests.main_house_many_names.objectives.prepare_refuge"
+    },
+    "quests.main_house_many_names.objectives.reach_hearthward.text": {
+      "source": "Take the upland path to Hearthward.",
+      "text": "Take the upland path to Hearthward.",
+      "speaker": "",
+      "context": "quests.main_house_many_names.objectives.reach_hearthward"
+    },
+    "quests.main_house_many_names.objectives.settle_records.text": {
+      "source": "Separate the public account from protected testimony and welcome the first arrivals.",
+      "text": "Separate the public account from protected testimony and welcome the first arrivals.",
+      "speaker": "",
+      "context": "quests.main_house_many_names.objectives.settle_records"
+    },
+    "quests.main_house_many_names.title": {
+      "source": "The House of Many Names",
+      "text": "The House of Many Names",
+      "speaker": "",
+      "context": "quests.main_house_many_names"
+    },
+    "quests.main_road_kept_open.objectives.agree_route.text": {
+      "source": "Choose a public crossing or an escorted ferry.",
+      "text": "Choose a public crossing or an escorted ferry.",
+      "speaker": "",
+      "context": "quests.main_road_kept_open.objectives.agree_route"
+    },
+    "quests.main_road_kept_open.objectives.open_route.text": {
+      "source": "Accompany the first load to the far landing.",
+      "text": "Accompany the first load to the far landing.",
+      "speaker": "",
+      "context": "quests.main_road_kept_open.objectives.open_route"
+    },
+    "quests.main_road_kept_open.objectives.secure_route.text": {
+      "source": "Work at the chosen route's joints, rail or hauling line.",
+      "text": "Work at the chosen route's joints, rail or hauling line.",
+      "speaker": "",
+      "context": "quests.main_road_kept_open.objectives.secure_route"
+    },
+    "quests.main_road_kept_open.objectives.survey_crossing.text": {
+      "source": "Read the current and inspect both landings.",
+      "text": "Read the current and inspect both landings.",
+      "speaker": "",
+      "context": "quests.main_road_kept_open.objectives.survey_crossing"
+    },
+    "quests.main_road_kept_open.title": {
+      "source": "A Road Kept Open",
+      "text": "A Road Kept Open",
+      "speaker": "",
+      "context": "quests.main_road_kept_open"
+    },
+    "quests.main_what_we_promise.objectives.carry_promise.text": {
+      "source": "Post the rota with a clear way to withdraw, then complete the first watch.",
+      "text": "Post the rota with a clear way to withdraw, then complete the first watch.",
+      "speaker": "",
+      "context": "quests.main_what_we_promise.objectives.carry_promise"
+    },
+    "quests.main_what_we_promise.objectives.choose_responsibilities.text": {
+      "source": "Ask the willing keepers what they will undertake. Record refusals as refusals.",
+      "text": "Ask the willing keepers what they will undertake. Record refusals as refusals.",
+      "speaker": "",
+      "context": "quests.main_what_we_promise.objectives.choose_responsibilities"
+    },
+    "quests.main_what_we_promise.objectives.gather_cast.text": {
+      "source": "Open the public meeting; accept written answers from anyone absent.",
+      "text": "Open the public meeting; accept written answers from anyone absent.",
+      "speaker": "",
+      "context": "quests.main_what_we_promise.objectives.gather_cast"
+    },
+    "quests.main_what_we_promise.objectives.test_arrangements.text": {
+      "source": "Practice the meal round, the alarm and a record handover.",
+      "text": "Practice the meal round, the alarm and a record handover.",
+      "speaker": "",
+      "context": "quests.main_what_we_promise.objectives.test_arrangements"
+    },
+    "quests.main_what_we_promise.title": {
+      "source": "What We Promise",
+      "text": "What We Promise",
+      "speaker": "",
+      "context": "quests.main_what_we_promise"
+    },
+    "story_campaign.chapters.main_empty_tables.question": {
+      "source": "Who can eat when the mill's promises no longer feed them?",
+      "text": "Who can eat when the mill's promises no longer feed them?",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_empty_tables"
+    },
+    "story_campaign.chapters.main_empty_tables.stakes": {
+      "source": "A common kitchen saves fuel and concentrates work. Household distribution preserves independence but asks more of the carriers.",
+      "text": "A common kitchen saves fuel and concentrates work. Household distribution preserves independence but asks more of the carriers.",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_empty_tables"
+    },
+    "story_campaign.chapters.main_empty_tables.summary": {
+      "source": "At the old river landing, Nessa, Elna and Toma prepare a kitchen and dry sleeping places. The households disagree about where food should be held, but nobody must give testimony to receive it.",
+      "text": "At the old river landing, Nessa, Elna and Toma prepare a kitchen and dry sleeping places. The households disagree about where food should be held, but nobody must give testimony to receive it.",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_empty_tables"
+    },
+    "story_campaign.chapters.main_empty_tables.title": {
+      "source": "The Empty Tables",
+      "text": "The Empty Tables",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_empty_tables"
+    },
+    "story_campaign.chapters.main_house_many_names.question": {
+      "source": "Can a house keep an honest account without demanding its occupants' stories?",
+      "text": "Can a house keep an honest account without demanding its occupants' stories?",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_house_many_names"
+    },
+    "story_campaign.chapters.main_house_many_names.stakes": {
+      "source": "Distributed public copies resist a single keeper's failure. Protected custody limits exposure but depends on fewer people. Shelter is unconditional in either arrangement.",
+      "text": "Distributed public copies resist a single keeper's failure. Protected custody limits exposure but depends on fewer people. Shelter is unconditional in either arrangement.",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_house_many_names"
+    },
+    "story_campaign.chapters.main_house_many_names.summary": {
+      "source": "Anwen and Mira inspect an upland refuge while Vale separates the public account from private testimony. Beds, medicine and a dry shelf come before names in a book.",
+      "text": "Anwen and Mira inspect an upland refuge while Vale separates the public account from private testimony. Beds, medicine and a dry shelf come before names in a book.",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_house_many_names"
+    },
+    "story_campaign.chapters.main_house_many_names.title": {
+      "source": "The House of Many Names",
+      "text": "The House of Many Names",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_house_many_names"
+    },
+    "story_campaign.chapters.main_road_kept_open.question": {
+      "source": "What kind of passage can people keep working together?",
+      "text": "What kind of passage can people keep working together?",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_road_kept_open"
+    },
+    "story_campaign.chapters.main_road_kept_open.stakes": {
+      "source": "A repaired crossing stays open between patrols but needs watch and repairs. A ferry needs less timber, but people must wait for its crew and weather.",
+      "text": "A repaired crossing stays open between patrols but needs watch and repairs. A ferry needs less timber, but people must wait for its crew and weather.",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_road_kept_open"
+    },
+    "story_campaign.chapters.main_road_kept_open.summary": {
+      "source": "Nera measures the crossing while Rook reads the current and Tor examines the old joints. A public bridge and an escorted ferry are both possible; neither maintains itself.",
+      "text": "Nera measures the crossing while Rook reads the current and Tor examines the old joints. A public bridge and an escorted ferry are both possible; neither maintains itself.",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_road_kept_open"
+    },
+    "story_campaign.chapters.main_road_kept_open.title": {
+      "source": "A Road Kept Open",
+      "text": "A Road Kept Open",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_road_kept_open"
+    },
+    "story_campaign.chapters.main_what_we_promise.question": {
+      "source": "Which responsibilities will people actually choose, and how can they leave them?",
+      "text": "Which responsibilities will people actually choose, and how can they leave them?",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_what_we_promise"
+    },
+    "story_campaign.chapters.main_what_we_promise.stakes": {
+      "source": "A rota is useful only while its keepers can refuse, rest and withdraw. Missing volunteers leave work unfinished; they do not lose food or shelter.",
+      "text": "A rota is useful only while its keepers can refuse, rest and withdraw. Missing volunteers leave work unfinished; they do not lose food or shelter.",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_what_we_promise"
+    },
+    "story_campaign.chapters.main_what_we_promise.summary": {
+      "source": "The community tests a meal round, a night alarm and a record handover. Merrow, Edric and any surviving, willing Senn answer for the powers they still hold. Kael can offer his own work, never somebody else's assent.",
+      "text": "The community tests a meal round, a night alarm and a record handover. Merrow, Edric and any surviving, willing Senn answer for the powers they still hold. Kael can offer his own work, never somebody else's assent.",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_what_we_promise"
+    },
+    "story_campaign.chapters.main_what_we_promise.title": {
+      "source": "What We Promise",
+      "text": "What We Promise",
+      "speaker": "",
+      "context": "story_campaign.chapters.main_what_we_promise"
+    },
+    "story_campaign.endings.depart.cost": {
+      "source": "The old supernatural shelter is lost, and the Hart's complete account becomes inaccessible. The new refuge still needs labor and protection.",
+      "text": "The old supernatural shelter is lost, and the Hart's complete account becomes inaccessible. The new refuge still needs labor and protection.",
+      "speaker": "",
+      "context": "story_campaign.endings.depart"
+    },
+    "story_campaign.endings.depart.title": {
+      "source": "Open Road",
+      "text": "Open Road",
+      "speaker": "",
+      "context": "story_campaign.endings.depart"
+    },
+    "story_campaign.endings.share.cost": {
+      "source": "The shifts continue. Keepers can withdraw; an empty shift leaves the community vulnerable until another person freely accepts it.",
+      "text": "The shifts continue. Keepers can withdraw; an empty shift leaves the community vulnerable until another person freely accepts it.",
+      "speaker": "",
+      "context": "story_campaign.endings.share"
+    },
+    "story_campaign.endings.share.title": {
+      "source": "Concord",
+      "text": "Concord",
+      "speaker": "",
+      "context": "story_campaign.endings.share"
+    }
+  }
+}

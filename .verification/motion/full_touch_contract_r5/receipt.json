@@ -1,0 +1,2156 @@
+{
+  "scope": "real_hud_builder_native_dispatch_comparison",
+  "world_instantiated": false,
+  "renderer": "headless",
+  "gameplay_acceptance": false,
+  "physical_phone_coverage": false,
+  "sources": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud\\hud_style.gd",
+      "sha256": "3be9565963a6e1dbf43767f6f6692e917ef144d9912853667607bff76b1eeb4e"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud\\hud_component.gd",
+      "sha256": "b4705567d793bf7baec5fea23a8d791fe0e71c397ec7e0a41072be0a236cedf5"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_journal.gd",
+      "sha256": "42b7ac8b6c477e22d4883f2cd199314590f118380cd2c1eac5a24df9de257f25"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_journal_model.gd",
+      "sha256": "af39b8b9ea54e2be49eb37ee3b53da8d885f9dc0ff1ff270b5af84f4c1680710"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_route_catalog.gd",
+      "sha256": "f0aa7a5418691275c548d151a7983f2e113f4b290dae6d98d220f52a61653b92"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\saga_catalog.gd",
+      "sha256": "8b03a57a2dde10b0e7e819c012e6e0de81dd0d6bd2d12741f3dffc05d7fc9a18"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\campaign_revision.gd",
+      "sha256": "82020282d1aad2eb7342fdb606a9b3f975fea8509d446208377dec4e43c31930"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\ending_catalog.gd",
+      "sha256": "f8414285cc3fcd6c7eec056345e39641e9b59c3a08083f20e93efdfff8c674c3"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\covenant_resolution.gd",
+      "sha256": "b3b38b2a35a796873e95d8a5aca378b12633725be68714c1447b79cde8bb6bd0"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\campaign_story_overlay.gd",
+      "sha256": "870a5bdf6cd6506ff045d6382685c931a6ec25a9126a6ed4357d89986d1c2902"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_world_director.gd",
+      "sha256": "d9375ab17aea9929cc209230081c4f9115aa0cfaba83bc87419712aeff768e41"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\interactable.gd",
+      "sha256": "280611deb57993e45028c475c678e47036075a56af8a1a263a31c15470116f1c"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\immutable_collision_shapes.gd",
+      "sha256": "5f474f56de9558c373e3bd973baba4393eaa88ccc237fe2126649103a2cec6fa"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\companion_controller.gd",
+      "sha256": "def6a0da09e360a71efeb7672a0506f2679d9ced8130418248cedf38fc95fe3c"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\spatial_surface_contract.gd",
+      "sha256": "3e553057111da1cf0a324bfc651e35c648b170c5d886ac1633b78a437f262fb5"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\bridge_surface_contract.gd",
+      "sha256": "43afa4d26546c9809cf2da1bcee2040e6d4aebb05d236fb17b8b9b17b361dfff"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\world_sector_manifest.gd",
+      "sha256": "35585773d83326cffe629477095dfe0223e68492a8876b32349116aecfe27a24"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\companion_pose.gd",
+      "sha256": "741cc3345dba7c730546da30216a3f9058977aa922ddf8a16d50cf5ec911316e"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\bracken_field_trial.gd",
+      "sha256": "bb0bfa2722ac0bbc4f7a50faa4c27e8e238dd004896d9d087bfa79c93136e9e1"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\greyfen_archery_range.gd",
+      "sha256": "87dd327de78b478ff629d3804ec7959ad58e02731d8c8639ac86228bf1eaed4f"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\greyfen_guidance.gd",
+      "sha256": "3ee55b324a7da50153edf44551e8eca507454569514eb26b7011cde4b225e8ec"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\arrow_flight.gd",
+      "sha256": "149c42dac125c7c0485b4b69e8facfd16e279247fae0516bd03c7b77c69f1b18"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\regional_meet.gd",
+      "sha256": "e6d66ef6a8ef92726d499b886e0ff5d922c1dd29905ee0aa516edfa9514b11a9"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_cast_profile.gd",
+      "sha256": "c0f9c99404ba5f1f53407d7a7cf6c915cd711ed0c26ef4fbf84098321ddc14d9"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\systems\\character_palette.gd",
+      "sha256": "503977783f9f13d63c88e9e431e1f2cb0cf5b5fc675ecde87151afa5ea4bafcb"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\systems\\npc_routine_director.gd",
+      "sha256": "cc4a5f1f622854b5c7db42d2c7fc1773e1f0bee6cf4cf3d525c8c84c1103be9f"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\story_world_scenes.gd",
+      "sha256": "c8ae52c926daa583e5416e2d95b5382cb06330e43d499da4814a1f1611a6c16a"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\greyfen_gathering.gd",
+      "sha256": "80a04e7576e4a37ef42580907540795ea071117d10abffc6ac41fca7397017d8"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_presence.gd",
+      "sha256": "d35cb9e7e1535c987340534da40f875d2dec28354e949c80c0fbd18f03ad5a3e"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\arrow_visual.gd",
+      "sha256": "a89ba417fe5600ed7bd88ce903ebfff6c9ce8c480cc0f56392bfbc8c65fe4ae2"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_role_contract.gd",
+      "sha256": "e23f547fdb5a4dd606aca9fd175bd50c95a2bdf43de6358484524fa514e77f00"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_role_spec.gd",
+      "sha256": "7e6a63df6b8eb60d7af348a2bee001943ea969d2a422f6d004e299ef76b59ed4"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\systems\\character_motion_step.gd",
+      "sha256": "29cc74ac77488bdf2cfda8d175bc05076077f8dd0aff1e387b228d3a0251e64b"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\epilogue_resolver.gd",
+      "sha256": "637bde477658fa6e5f48f05ebeeba2f49dbd2003ec457d8bd1183555960cb5be"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\dialogue_history.gd",
+      "sha256": "25bd225637fdb60bd6c90e9dd0508ee9c2e7b1556662ebd6e4e688790ebca576"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\source_text.gd",
+      "sha256": "7840e20eb9542d7dbb13e5a6e269b731e98db4969557f2a452dd9d9a44d0a48b"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud_navigation_state.gd",
+      "sha256": "65a27d11201ea6d6e604f450d10627d3d4edca4fea5bca4b9cabc2ba5b1c3499"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud_notice_queue.gd",
+      "sha256": "8cd5846028e6058c6faec8770ebf558157a2c87ebba13d7587f6bf7d95d3536c"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\preparation_view_model.gd",
+      "sha256": "c9a0ae7f1d3210744cbbff69d09ef6895bff67c0c04101656c9238153220de77"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\preparation_panel.gd",
+      "sha256": "1ab38e4a4e2fc2e113a294f06af984e0435275b8c8787ebfbdde2d42efe814a9"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\journey_menu_panel.gd",
+      "sha256": "a10a622efd66d0546a6cf72ac228670f3f849845110998ae83a9bf8bb7295f83"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\dialogue_topic_navigation.gd",
+      "sha256": "d684f06a27589aab7710c0c8a35eda6cc35ef48abc8651efaa7ce3b38d3ec21d"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\journal_evidence_navigation.gd",
+      "sha256": "0060f6efdea54e0404ba0f0989c93daa1abd305c9eda05d16fcdb2e574f0e326"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud_layout_policy.gd",
+      "sha256": "d0df2249d2fa750965e12a36d6053a6682c8401ef68d396474ea8ce751905954"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud_reflow_state.gd",
+      "sha256": "3bc49ea08afc23b76dbea023ed285910b9d8cd575a0a26a48aa9be022002f3f7"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\mobile_touch_layout.gd",
+      "sha256": "e13921b4f950bc1c66cd0caaaebaa09a37a24ace4c52e5bfcc061d8b436578d5"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud_visual_style.gd",
+      "sha256": "fcf85c7e64e348aba18b2f6a6a3e772ef776cf1929038a493724f7da5b39ceb0"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud_emblem.gd",
+      "sha256": "b736a40bec650a4fdba858a70ad70c1ad61dba33c6fac3b1e8cbe84688e3620f"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets\\icons\\iron_trap.svg",
+      "sha256": "b22f08b1d5df5dda1c1dc0d1be7caa2ce1eff3ec38b845454bd10e3a6d41e30e"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets\\icons\\iron_trap.svg.import",
+      "sha256": "c49489dc9db71d2337f73f396f9a0078834a16644a2f9088b6bcdcc999dae913"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\iron_trap.svg-9cc4f7719bef6564ebeb93c29a290c89.ctex",
+      "sha256": "836b73708c57aabc001609e58e18ecc8d534eef676feee0315940307a5f05fb8"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\iron_trap.svg-9cc4f7719bef6564ebeb93c29a290c89.md5",
+      "sha256": "7351bf5db9982c653a029299b1882963821f5ca04e453a13b9f51880617c97c1"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud_navigation_dial.gd",
+      "sha256": "8f0b20f21f4b505016595bbef67cbc7355c87c615f5579e6963ad162e9a80aa4"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\startup_loading_view.gd",
+      "sha256": "79bebd4a4099ac1c1b17acd835c45c62f53a24932b088618d1c5894171a12bb7"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets\\ui\\fonts\\Spectral-Medium.ttf",
+      "sha256": "f385bc588599c879112272711d4acecc126674009d747a27284f59e93a240e83"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets\\ui\\fonts\\Spectral-Medium.ttf.import",
+      "sha256": "cfbf6b7accb85d2b51be489fceb69f9184b38eb41ae280fcf8769b2a7577adea"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Spectral-Medium.ttf-0414a011842b7a91d14f3d1754fb700c.fontdata",
+      "sha256": "2432c34c39e71eabf6c002ba5a23f10d584cbad8ae37c25838344dbd3910e677"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\Spectral-Medium.ttf-0414a011842b7a91d14f3d1754fb700c.md5",
+      "sha256": "30e7399f6829425ec3b71d773fc1dd375f41204d18e48309f2cd85ffd3559349"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\ui\\greyfen_menu_stylized.png",
+      "sha256": "0d10a94d72490d2cdca76bbe7f33aa248644e371b860acfc8f32102d0fb56e25"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\ui\\greyfen_menu_stylized.png.import",
+      "sha256": "48adf34e2a7c410264790a9f0769755ca006c98fb5c145715328051f794304ee"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\greyfen_menu_stylized.png-2c78763c4c75df20ef13da0894a41bd0.ctex",
+      "sha256": "a9cb548d33cab98a417dcf04beeaac726f580fd438de2ffa4cd6f6267a9a424e"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\imported\\greyfen_menu_stylized.png-2c78763c4c75df20ef13da0894a41bd0.md5",
+      "sha256": "38cfdd82e81fda87564f18a159db3505f4379bd1d91e915a290274cdbde92059"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud\\hud_state.gd",
+      "sha256": "150aa0461228194c03705afc48c971cf21249f505249d3418ad2d931a9f8f828"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud\\menu_panel.gd",
+      "sha256": "5ff51897aba5a887197414b6f15bf93a7910aefd6f7789eca830b1d7738b1b73"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\hud\\dialogue_panel.gd",
+      "sha256": "0a4f463edc4d0d5d988dbda6c269d02c1eb30deec4f7e9f229ca16841c61b9a4"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\community_touch_input.gd",
+      "sha256": "69276ace7e0173395224691f14c72837fc8a86176e727139ee7a5d04cc6c541d"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_community_touch_input.gd",
+      "sha256": "c3f09bde0596d220626e2673d1f5e6930feed2ea05e9c5c95a258dc2177ce5dd"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\styled_touch_inputs_r1\\original_hud_style.gd",
+      "sha256": "06bc6d83d273db236719e78478e9a484c9445059c27f3aec839341ecca4ae375"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\run_styled_touch_contract.py",
+      "sha256": "31da5aa3ee166b49d00768d3e53b09db724e8d52c9e9a74e8473b9859f1313c9"
+    }
+  ],
+  "runs": [
+    {
+      "label": "fixture_parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_community_touch_input.gd",
+        "--check-only"
+      ],
+      "pid": 14644,
+      "exit_code": 0,
+      "timed_out": false,
+      "passed": true,
+      "expected_original_failure": false,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r5\\fixture_parse.log",
+      "dispatch": {}
+    },
+    {
+      "label": "fixed_policy",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_community_touch_input.gd"
+      ],
+      "pid": 9632,
+      "exit_code": 1,
+      "timed_out": false,
+      "passed": false,
+      "expected_original_failure": false,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\full_touch_contract_r5\\fixed_policy.log",
+      "dispatch": {
+        "actions": {
+          "actions": {
+            "block": {
+              "held_ms": 21,
+              "pressed": 1,
+              "released": 1,
+              "started_ms": 2629
+            },
+            "interact": {
+              "held_ms": 12,
+              "pressed": 1,
+              "released": 1,
+              "started_ms": 2596
+            }
+          },
+          "menu_actions": {},
+          "menu_reacquisitions": {},
+          "open_contacts": 0,
+          "scroll_gestures": [
+            {
+              "after": 192,
+              "ancestors": [
+                {
+                  "clip": false,
+                  "mouse_filter": 1,
+                  "name": "@Button@21",
+                  "rect": "[P: (40.0, 425.0), S: (252.0, 65.0)]",
+                  "type": "Button"
+                },
+                {
+                  "clip": false,
+                  "mouse_filter": 1,
+                  "name": "@VBoxContainer@15",
+                  "rect": "[P: (40.0, 80.0), S: (252.0, 410.0)]",
+                  "type": "VBoxContainer"
+                },
+                {
+                  "clip": true,
+                  "mouse_filter": 1,
+                  "name": "@ScrollContainer@14",
+                  "rect": "[P: (40.0, 80.0), S: (260.0, 150.0)]",
+                  "type": "ScrollContainer"
+                },
+                {
+                  "clip": false,
+                  "mouse_filter": 0,
+                  "name": "@Control@4",
+                  "rect": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+                  "type": "Control"
+                }
+              ],
+              "attempt": 0,
+              "before": 0,
+              "clipped_rect": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+              "scroll_rect": "[P: (40.0, 80.0), S: (260.0, 150.0)]",
+              "scrollbar_rect": "[P: (292.0, 80.0), S: (8.0, 150.0)]",
+              "start": "(282.0, 200.0)",
+              "target": "menu Target 5",
+              "target_rect": "[P: (40.0, 425.0), S: (252.0, 65.0)]"
+            },
+            {
+              "after": 260,
+              "ancestors": [
+                {
+                  "clip": false,
+                  "mouse_filter": 1,
+                  "name": "@Button@21",
+                  "rect": "[P: (40.0, 233.0), S: (252.0, 65.0)]",
+                  "type": "Button"
+                },
+                {
+                  "clip": false,
+                  "mouse_filter": 1,
+                  "name": "@VBoxContainer@15",
+                  "rect": "[P: (40.0, -112.0), S: (252.0, 410.0)]",
+                  "type": "VBoxContainer"
+                },
+                {
+                  "clip": true,
+                  "mouse_filter": 1,
+                  "name": "@ScrollContainer@14",
+                  "rect": "[P: (40.0, 80.0), S: (260.0, 150.0)]",
+                  "type": "ScrollContainer"
+                },
+                {
+                  "clip": false,
+                  "mouse_filter": 0,
+                  "name": "@Control@4",
+                  "rect": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+                  "type": "Control"
+                }
+              ],
+              "attempt": 1,
+              "before": 192,
+              "clipped_rect": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+              "scroll_rect": "[P: (40.0, 80.0), S: (260.0, 150.0)]",
+              "scrollbar_rect": "[P: (292.0, 80.0), S: (8.0, 150.0)]",
+              "start": "(282.0, 200.0)",
+              "target": "menu Target 5",
+              "target_rect": "[P: (40.0, 233.0), S: (252.0, 65.0)]"
+            },
+            {
+              "after": 182,
+              "ancestors": [
+                {
+                  "clip": false,
+                  "mouse_filter": 1,
+                  "name": "@Button@37",
+                  "rect": "[P: (40.0, 360.0), S: (252.0, 52.0)]",
+                  "type": "Button"
+                },
+                {
+                  "clip": false,
+                  "mouse_filter": 1,
+                  "name": "@VBoxContainer@25",
+                  "rect": "[P: (40.0, 80.0), S: (252.0, 332.0)]",
+                  "type": "VBoxContainer"
+                },
+                {
+                  "clip": true,
+                  "mouse_filter": 1,
+                  "name": "@ScrollContainer@24",
+                  "rect": "[P: (40.0, 80.0), S: (260.0, 150.0)]",
+                  "type": "ScrollContainer"
+                },
+                {
+                  "clip": false,
+                  "mouse_filter": 0,
+                  "name": "@Control@4",
+                  "rect": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+                  "type": "Control"
+                }
+              ],
+              "attempt": 0,
+              "before": 0,
+              "clipped_rect": "[P: (0.0, 0.0), S: (0.0, 0.0)]",
+              "scroll_rect": "[P: (40.0, 80.0), S: (260.0, 150.0)]",
+              "scrollbar_rect": "[P: (292.0, 80.0), S: (8.0, 150.0)]",
+              "start": "(282.0, 200.0)",
+              "target": "dialogue Target 5",
+              "target_rect": "[P: (40.0, 360.0), S: (252.0, 52.0)]"
+            }
+          ],
+          "simultaneous_aim_fire": 0,
+          "ui_labels": {
+            "dialogue Target 0": 1,
+            "dialogue Target 5": 1,
+            "menu Target 0": 1,
+            "menu Target 5": 1
+          }
+        },
+        "actual_hud_builders": true,
+        "counts": {
+          "action": 2,
+          "look": 1,
+          "move": 3,
+          "screen_drag": 22,
+          "screen_touch": 26,
+          "ui": 4
+        },
+        "failures": [
+          "Releasing Guard clears the actual router hold",
+          "Independent fingers hold movement, Aim and Draw together",
+          "Loose releases Draw while Aim remains held",
+          "More action uses its actual visible screen button exactly once",
+          "More reacquires Aim with a fresh contact without resuming Draw or movement",
+          "Reacquisition records a second physical Aim press",
+          "Evidence retains actual simultaneous Aim/Draw contact"
+        ],
+        "gameplay_acceptance": false,
+        "gui_events": [
+          {
+            "event": "InputEventMouseButton",
+            "frame": 4,
+            "owner": "@Button@16",
+            "position": "(126.0, 32.5)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 4,
+            "owner": "@VBoxContainer@15",
+            "position": "(126.0, 32.5)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 4,
+            "owner": "@ScrollContainer@14",
+            "position": "(126.0, 32.5)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 4,
+            "owner": "@Button@16",
+            "position": "(126.0, 32.5)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 4,
+            "owner": "@VBoxContainer@15",
+            "position": "(126.0, 32.5)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 4,
+            "owner": "@ScrollContainer@14",
+            "position": "(126.0, 32.5)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 6,
+            "owner": "@Button@16",
+            "position": "(126.0, 32.5)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 6,
+            "owner": "@VBoxContainer@15",
+            "position": "(126.0, 32.5)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 6,
+            "owner": "@ScrollContainer@14",
+            "position": "(126.0, 32.5)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 6,
+            "owner": "@Button@16",
+            "position": "(126.0, 32.5)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 6,
+            "owner": "@VBoxContainer@15",
+            "position": "(126.0, 32.5)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 6,
+            "owner": "@ScrollContainer@14",
+            "position": "(126.0, 32.5)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 10,
+            "owner": "@Button@17",
+            "position": "(242.0, 51.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 10,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 10,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 10,
+            "owner": "@Button@17",
+            "position": "(242.0, 51.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 10,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 10,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 10,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 0,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 10,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 0,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 10,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 0,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 10,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 10,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 10,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 11,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 11,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 11,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 90.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 11,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 11,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 11,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 90.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 12,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 12,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 12,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 75.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 12,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 12,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 12,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 75.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 13,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 13,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 13,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 60.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 13,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 13,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 13,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 60.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 14,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 14,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 14,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 45.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 14,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 14,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 14,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 45.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 15,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 15,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 15,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 30.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 15,
+            "owner": "@Button@17",
+            "position": "(242.0, 36.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 90,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 15,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 90,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 15,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 30.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 90,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 16,
+            "owner": "@Button@17",
+            "position": "(242.0, 51.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 16,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 120.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 16,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 30.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 16,
+            "owner": "@Button@17",
+            "position": "(242.0, 51.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "menu",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 16,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 120.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 16,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 30.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 24,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 327.0)",
+            "pressed": true,
+            "scroll": 207,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 24,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 207,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 24,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 327.0)",
+            "pressed": true,
+            "scroll": 207,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 24,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 207,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 24,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 312.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 207,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 24,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 207,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 24,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 312.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 222,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 24,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 222,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 25,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 312.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 222,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 25,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 90.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 222,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 25,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 312.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 237,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 25,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 90.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 237,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 26,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 312.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 237,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 26,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 75.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 237,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 26,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 312.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 252,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 26,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 75.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 252,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 27,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 312.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 252,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 27,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 60.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 252,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 27,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 312.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 27,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 60.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 28,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 305.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 28,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 45.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 28,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 305.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 28,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 45.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 29,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 290.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 29,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 30.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 29,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 290.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 29,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 30.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 30,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 290.0)",
+            "pressed": false,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 30,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 30.0)",
+            "pressed": false,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 30,
+            "owner": "@VBoxContainer@15",
+            "position": "(242.0, 290.0)",
+            "pressed": false,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 30,
+            "owner": "@ScrollContainer@14",
+            "position": "(242.0, 30.0)",
+            "pressed": false,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 38,
+            "owner": "@VBoxContainer@15",
+            "position": "(126.0, 377.5)",
+            "pressed": true,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 38,
+            "owner": "@ScrollContainer@14",
+            "position": "(126.0, 117.5)",
+            "pressed": true,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 38,
+            "owner": "@VBoxContainer@15",
+            "position": "(126.0, 377.5)",
+            "pressed": true,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 38,
+            "owner": "@ScrollContainer@14",
+            "position": "(126.0, 117.5)",
+            "pressed": true,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 40,
+            "owner": "@VBoxContainer@15",
+            "position": "(126.0, 377.5)",
+            "pressed": false,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 40,
+            "owner": "@ScrollContainer@14",
+            "position": "(126.0, 117.5)",
+            "pressed": false,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 40,
+            "owner": "@VBoxContainer@15",
+            "position": "(126.0, 377.5)",
+            "pressed": false,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 40,
+            "owner": "@ScrollContainer@14",
+            "position": "(126.0, 117.5)",
+            "pressed": false,
+            "scroll": 260,
+            "surface": "menu",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 51,
+            "owner": "@Button@27",
+            "position": "(126.0, 26.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 51,
+            "owner": "@VBoxContainer@25",
+            "position": "(126.0, 26.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 51,
+            "owner": "@ScrollContainer@24",
+            "position": "(126.0, 26.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 51,
+            "owner": "@Button@27",
+            "position": "(126.0, 26.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 51,
+            "owner": "@VBoxContainer@25",
+            "position": "(126.0, 26.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 51,
+            "owner": "@ScrollContainer@24",
+            "position": "(126.0, 26.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 53,
+            "owner": "@Button@27",
+            "position": "(126.0, 26.0)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 53,
+            "owner": "@VBoxContainer@25",
+            "position": "(126.0, 26.0)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 53,
+            "owner": "@ScrollContainer@24",
+            "position": "(126.0, 26.0)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 53,
+            "owner": "@Button@27",
+            "position": "(126.0, 26.0)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "Button"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 53,
+            "owner": "@VBoxContainer@25",
+            "position": "(126.0, 26.0)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 53,
+            "owner": "@ScrollContainer@24",
+            "position": "(126.0, 26.0)",
+            "pressed": false,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 57,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 57,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 57,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 57,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 120.0)",
+            "pressed": true,
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 57,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 57,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 0,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 57,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 57,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 58,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 58,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 90.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 15,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 58,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 58,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 90.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 59,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 59,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 75.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 30,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 59,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 59,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 75.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 60,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 60,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 60.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 45,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 60,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 60,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 60.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 61,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 61,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 45.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 60,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 61,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 61,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 45.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 62,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseMotion",
+            "frame": 62,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 30.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 75,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 62,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 105.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 90,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenDrag",
+            "frame": 62,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 30.0)",
+            "relative": "(0.0, -15.0)",
+            "scroll": 90,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 63,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 120.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 63,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 30.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 63,
+            "owner": "@VBoxContainer@25",
+            "position": "(242.0, 120.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 63,
+            "owner": "@ScrollContainer@24",
+            "position": "(242.0, 30.0)",
+            "pressed": false,
+            "scroll": 90,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 71,
+            "owner": "@VBoxContainer@25",
+            "position": "(126.0, 306.0)",
+            "pressed": true,
+            "scroll": 182,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 71,
+            "owner": "@ScrollContainer@24",
+            "position": "(126.0, 124.0)",
+            "pressed": true,
+            "scroll": 182,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 71,
+            "owner": "@VBoxContainer@25",
+            "position": "(126.0, 306.0)",
+            "pressed": true,
+            "scroll": 182,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 71,
+            "owner": "@ScrollContainer@24",
+            "position": "(126.0, 124.0)",
+            "pressed": true,
+            "scroll": 182,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 73,
+            "owner": "@VBoxContainer@25",
+            "position": "(126.0, 306.0)",
+            "pressed": false,
+            "scroll": 182,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventMouseButton",
+            "frame": 73,
+            "owner": "@ScrollContainer@24",
+            "position": "(126.0, 124.0)",
+            "pressed": false,
+            "scroll": 182,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 73,
+            "owner": "@VBoxContainer@25",
+            "position": "(126.0, 306.0)",
+            "pressed": false,
+            "scroll": 182,
+            "surface": "dialogue",
+            "type": "VBoxContainer"
+          },
+          {
+            "event": "InputEventScreenTouch",
+            "frame": 73,
+            "owner": "@ScrollContainer@24",
+            "position": "(126.0, 124.0)",
+            "pressed": false,
+            "scroll": 182,
+            "surface": "dialogue",
+            "type": "ScrollContainer"
+          }
+        ],
+        "held_samples": [
+          {
+            "action_touches": {},
+            "active_device": "touch",
+            "adapter_contacts": "{ 12: (796.0, 496.0) }",
+            "awaiting_release": {},
+            "cancelled_touches": {},
+            "context": "gameplay",
+            "down_touches": {},
+            "guard_snapshot": {
+              "held": false,
+              "pressed": false,
+              "released": false
+            },
+            "label": "guard_queued",
+            "pending_pressed": {},
+            "physics_frame": 23,
+            "process_frame": 93,
+            "snapshot_frame": 23,
+            "suppressed_frame": 20,
+            "ticks_ms": 2629,
+            "virtual_actions": {},
+            "visible_controls": true
+          },
+          {
+            "action_touches": {
+              "12": "block"
+            },
+            "active_device": "touch",
+            "adapter_contacts": "{ 12: (796.0, 496.0) }",
+            "awaiting_release": {},
+            "cancelled_touches": {},
+            "context": "gameplay",
+            "down_touches": {
+              "12": true
+            },
+            "guard_snapshot": {
+              "held": true,
+              "pressed": true,
+              "released": false
+            },
+            "label": "guard_frame_1",
+            "pending_pressed": {},
+            "physics_frame": 24,
+            "process_frame": 94,
+            "snapshot_frame": 24,
+            "suppressed_frame": 20,
+            "ticks_ms": 2637,
+            "virtual_actions": {
+              "block": true
+            },
+            "visible_controls": true
+          },
+          {
+            "action_touches": {
+              "12": "block"
+            },
+            "active_device": "touch",
+            "adapter_contacts": "{ 12: (796.0, 496.0) }",
+            "awaiting_release": {},
+            "cancelled_touches": {},
+            "context": "gameplay",
+            "down_touches": {
+              "12": true
+            },
+            "guard_snapshot": {
+              "held": true,
+              "pressed": true,
+              "released": false
+            },
+            "label": "guard_frame_2",
+            "pending_pressed": {},
+            "physics_frame": 24,
+            "process_frame": 95,
+            "snapshot_frame": 24,
+            "suppressed_frame": 20,
+            "ticks_ms": 2643,
+            "virtual_actions": {
+              "block": true
+            },
+            "visible_controls": true
+          },
+          {
+            "action_touches": {
+              "12": "block"
+            },
+            "active_device": "touch",
+            "adapter_contacts": "{ 12: (796.0, 496.0) }",
+            "awaiting_release": {},
+            "cancelled_touches": {},
+            "context": "gameplay",
+            "down_touches": {
+              "12": true
+            },
+            "guard_snapshot": {
+              "held": true,
+              "pressed": true,
+              "released": false
+            },
+            "label": "guard_frame_3",
+            "pending_pressed": {},
+            "physics_frame": 24,
+            "process_frame": 96,
+            "snapshot_frame": 24,
+            "suppressed_frame": 20,
+            "ticks_ms": 2650,
+            "virtual_actions": {
+              "block": true
+            },
+            "visible_controls": true
+          }
+        ],
+        "input_events": 48,
+        "original_style": false,
+        "physical_phone_coverage": false,
+        "status": "fail",
+        "ui_surfaces": {
+          "dialogue": {
+            "clicked": [
+              "dialogue Target 0",
+              "dialogue Target 5"
+            ],
+            "gameplay_requests": 0,
+            "native_motion": true,
+            "scrolled": true
+          },
+          "menu": {
+            "clicked": [
+              "menu Target 0",
+              "menu Target 5"
+            ],
+            "gameplay_requests": 0,
+            "native_motion": true,
+            "scrolled": true
+          }
+        }
+      }
+    }
+  ],
+  "passed": false,
+  "held_diagnostic": true,
+  "sources_unchanged": true
+}

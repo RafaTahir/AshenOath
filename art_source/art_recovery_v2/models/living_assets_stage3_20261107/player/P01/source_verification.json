@@ -1,0 +1,21 @@
+{
+  "asset": "P01",
+  "status": "source_contract_pass",
+  "animations": {
+    "Life_Idle_A": {
+      "duration_seconds": 6.0,
+      "body_variation": 0.015957415103912354,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Idle_B": {
+      "duration_seconds": 8.0,
+      "body_variation": 0.03187153488397598,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    }
+  },
+  "retained_production_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
+  "review_glb_sha256": "f76d08feaa2b105796101ae28e868166b33135c8b1e02a2375e8bf572f4983cd",
+  "runtime_workstation_and_visual_acceptance": false
+}

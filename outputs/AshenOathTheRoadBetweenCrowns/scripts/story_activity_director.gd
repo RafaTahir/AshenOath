@@ -17,7 +17,9 @@ const REST_PLACES := {
 	"old_mill": {"id":"rest_mill", "name":"The workers' dry bench", "position":Vector3(-5.6,0,11)},
 	"vargan_approach": {"id":"rest_castle", "name":"The waiting bench", "position":Vector3(-4.4,0,9.5)},
 	"ruins": {"id":"rest_ruins", "name":"The stoneworker's resting stone", "position":Vector3(-2.4,0,5.6)},
-	"bandit_road": {"id": "rest_long_road", "name": "The old supply cart", "position": Vector3(-8, 0, 5.6)}
+	"bandit_road": {"id": "rest_long_road", "name": "The old supply cart", "position": Vector3(-8, 0, 5.6)},
+	"lantern_reach": {"id":"rest_lantern", "name":"The landing shelter bench", "position":Vector3(-9,0,4)},
+	"hearthward": {"id":"rest_hearthward", "name":"The refuge shelter bench", "position":Vector3(-9,0,4)}
 }
 const REST_SECONDS := 4.0
 const REST_MINUTES := 30.0
@@ -53,6 +55,7 @@ var friend_work := ""
 var friend_work_elapsed := 0.0
 var friend_work_start := Vector3.ZERO
 var friend_gesture_started := false
+var community: RefCounted
 
 static func personal_scenes(game, actor_id: String) -> Array[Dictionary]:
 	var scenes: Array[Dictionary] = []
@@ -187,6 +190,10 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		director.zone = zone_id
 		root.add_child(director)
 		director._build(root)
+	if community_zone(zone_id) and director.community == null and preload("res://scripts/campaign_revision.gd").from_state(game.story_state) == 2:
+		# The destination pack has mounted before its published activity owner.
+		director.community = load("res://scripts/community_activity.gd").new()
+		director.community.configure(director)
 	director.refresh()
 	preload("res://scripts/saga_activities.gd").install(game, director, zone_id)
 	load("res://scripts/everyday_life.gd").install(game, director)
@@ -197,7 +204,22 @@ static func install(game, root: Node3D, zone_id: String) -> void:
 		preload("res://scripts/greyfen_gathering.gd").install(game)
 		preload("res://scripts/greyfen_village_details.gd").install(game)
 
+static func community_zone(zone_id: String) -> bool:
+	return zone_id in ["lantern_reach", "hearthward"]
+
+static func handle_community(game, area) -> bool:
+	if area == null or not (area.has_meta("community_action") or area.has_meta("community_actor_id")): return false
+	var owner: Node = game.zone_root.get_node_or_null(LAYER) if is_instance_valid(game.zone_root) else null
+	if owner != null and owner.community != null: owner.community.activate(area)
+	return true
+
+static func choose_community(game, action: Dictionary) -> void:
+	var owner: Node = game.zone_root.get_node_or_null(LAYER) if is_instance_valid(game.zone_root) else null
+	if owner != null and owner.community != null: owner.community.choose(action)
+	else: game._resume_game()
+
 static func handle(game, area) -> void:
+	if handle_community(game, area): return
 	if area.has_meta("everyday_action"):
 		var everyday: Node = game.zone_root.get_node_or_null("StoryActivities/EverydayLife")
 		if everyday != null: everyday.activate(area)
@@ -302,6 +324,8 @@ static func _travel_unavailable_reason(game) -> String:
 	if game.player == null or game.zone_transition_in_progress:
 		return "The road is still settling. Finish arriving before travelling."
 	if str(game.pending_ending) != "":
+		if preload("res://scripts/covenant_resolution.gd").relocation_pending(game.story_state):
+			return "Walk the prepared route with the households and bring them to the refuge before using a waypost."
 		return "Carry out the chosen covenant before leaving the glade."
 	if not _travel_open(game):
 		return "Safe return routes open after the Deep Wood account is settled. Your marked wayposts are kept."
@@ -313,7 +337,7 @@ static func _travel_open(game) -> bool:
 	return bool(game.story_state.get_flag("rootbound_colossus_defeated", false)) or str(game.story_state.get_flag("names_policy", "")) != "" or bool(game.story_state.get_flag("final_choice_completed", false))
 
 static func _danger_near(game) -> bool:
-	if game.player == null or game.pending_ending != "" or game.zone_transition_in_progress:
+	if game.player == null or (game.pending_ending != "" and not preload("res://scripts/covenant_resolution.gd").relocation_pending(game.story_state)) or game.zone_transition_in_progress:
 		return true
 	for enemy in game.active_enemies:
 		if is_instance_valid(enemy) and not enemy.dead and enemy.encounter_active and not bool(enemy.get_meta("story_surrender_protected", false)) and enemy.global_position.distance_to(game.player.global_position) < 13.0:
@@ -383,6 +407,7 @@ func refresh() -> void:
 	for area in get_tree().get_nodes_in_group("story_activity"):
 		if not host.zone_root.is_ancestor_of(area):
 			continue
+		if area.has_meta("community_action"): continue
 		var id := str(area.interaction_id)
 		var enabled := true
 		if id.begins_with("lr_work_"):
@@ -420,6 +445,7 @@ func refresh() -> void:
 	var saga := get_node_or_null("SixWorldStories")
 	if saga != null:
 		saga.refresh()
+	if community != null: community.refresh()
 
 func activate(id: String) -> void:
 	if id.begins_with("approach_"):
@@ -579,6 +605,20 @@ func _open_waypost() -> void:
 
 func _scene(id: String) -> void:
 	var content: Dictionary = host.dialogue.get_dialogue(id)
+	var community_scene := str(content.get("source_tag","")) == "campaign_revision_2"
+	var present: Dictionary = {}
+	if community_scene:
+		for actor_id: String in content.get("required_actors",[]):
+			var actor := preload("res://scripts/story_cast_profile.gd").registered_actor(host.zone_root,actor_id)
+			if not is_instance_valid(actor) or not actor.is_visible_in_tree() or actor.global_position.distance_to(host.player.global_position)>12.0: continue
+			if actor.has_method("is_interaction_enabled") and not actor.is_interaction_enabled(): continue
+			var driver := actor.find_child("CharacterAnimationDriver",true,false)
+			if driver != null and driver.get("dead") == true: continue
+			present[actor_id]=actor
+		content = community_aftermath_projection(content,present.keys())
+		for page: Dictionary in content.get("pages",[]):
+			var identity := preload("res://scripts/story_cast_profile.gd").canonical_identity(str(page.get("speaker_id","")))
+			if present.has(identity): page["speaker_actor_id"] = present[identity].get_instance_id()
 	if id.begins_with("aftermath_") and _flag("final_choice_completed"):
 		content = content.duplicate(true)
 		var pages: Array = content.get("pages", [])
@@ -594,11 +634,28 @@ func _scene(id: String) -> void:
 		content["pages"] = pages
 	var actor_id := "sister_anwen" if id.begins_with("aftermath_names_") else "blacksmith_tor" if id.begins_with("aftermath_work_") or id.begins_with("work_road_") else "mira" if id.begins_with("work_relief_") else "captain_senn" if id == "soldiers_stand_down" else "rook"
 	var scene_actor = host.zone_root.find_child(actor_id, true, false)
+	if community_scene: scene_actor = present.get(str(content.get("primary_actor","")))
 	if scene_actor != null:
 		host._stage_dialogue_moment(scene_actor)
+		if community_scene: preload("res://scripts/story_performance.gd").begin(scene_actor,host.player,content,host.story_state)
 	host.get_tree().paused = true
 	host.audio.set_game_paused(true)
 	host.hud.show_dialogue(host._prepare_dialogue_presence(content))
+
+static func community_aftermath_projection(content: Dictionary, present: Array) -> Dictionary:
+	if str(content.get("source_tag","")) != "campaign_revision_2": return content
+	for actor_id: String in content.get("required_actors",[]):
+		if actor_id in present: continue
+		# A missing person did not make a recording or give testimony. Present the
+		# authored public work itself, without borrowing the absent person's words.
+		var projected := content.duplicate(true)
+		projected["pages"] = content.get("unattended_pages",[]).duplicate(true)
+		projected["greeting"] = ""
+		projected["lines"] = []
+		projected["primary_actor"] = ""
+		projected["fallback_text"] = str(projected.pages[0].get("text","")) if not projected.pages.is_empty() else ""
+		return projected
+	return content
 
 func _commit(flags: Dictionary, cue: String) -> void:
 	host.story_state.begin_change()
@@ -700,7 +757,7 @@ func _rest_unavailable(area: Node3D) -> String:
 		return "This resting place is no longer within reach."
 	if not host.zone_root.is_ancestor_of(area) or not area.is_visible_in_tree() or host.player.global_position.distance_to(area.global_position) > 2.8:
 		return "Stay beside the resting place."
-	if host._journey_load_pending() or host.zone_transition_pending or host.zone_load_request_pending or host.story_action_in_progress or not host.pending_player_restore.is_empty() or str(host.pending_ending) != "":
+	if host._journey_load_pending() or host.zone_transition_pending or host.zone_load_request_pending or host.story_action_in_progress or not host.pending_player_restore.is_empty() or (str(host.pending_ending) != "" and not (preload("res://scripts/covenant_resolution.gd").relocation_pending(host.story_state) and area.has_meta("community_action"))):
 		return "Finish the current journey or conversation first."
 	if host.day_night == null or host.day_night.time_locked:
 		return "There is no time to stop during this part of the story."
@@ -843,15 +900,18 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_PAUSED or what == NOTIFICATION_EXIT_TREE or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		_cancel_rest()
 		_cancel_friend_work()
+		if community != null: community.cancel(what != NOTIFICATION_PAUSED)
 
 func _physics_process(delta: float) -> void:
 	delta = preload("res://scripts/systems/character_motion_step.gd").simulation_delta(delta)
 	if host == null or host.current_zone_id != zone or host.player == null:
 		_cancel_rest()
 		_cancel_friend_work()
+		if community != null: community.cancel()
 		return
 	_tick_rest(delta)
 	_tick_friend_work(delta)
+	if community != null: community.tick(delta)
 	escort_tick += delta
 	if escort_tick >= 0.1:
 		escort_tick = 0.0
@@ -928,7 +988,7 @@ func _worker_motion(world_velocity: Vector3, delta: float = 0.016667) -> void:
 			driver.set_locomotion_motion(world_velocity, true)
 
 func _refresh_carried_bundle() -> void:
-	var carried := _flag("cart_sack_carried") or _flag("relief_shares_carried")
+	var carried := _flag("cart_sack_carried") or _flag("relief_shares_carried") or _flag("community_route_load_carried") or _flag("open_road_load_carried")
 	var bundle = host.player.get_node_or_null("StoryWorkBundle")
 	if not carried:
 		if bundle != null:

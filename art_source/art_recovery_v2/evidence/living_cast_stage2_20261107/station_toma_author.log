@@ -1,0 +1,48 @@
+D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\tools\author_living_cast_stage2_props.py:34: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+00:09.063  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Furniture_BaseColor.png'
+00:09.063  io.obj           | WARNING Cannot load image file: 'T_Trim_Furniture_BaseColor.png'
+00:09.063  io.obj           | WARNING Cannot load image file: 'T Trim Furniture BaseColor.png'
+00:09.063  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Furniture_Normal.png'
+00:09.063  io.obj           | WARNING Cannot load image file: 'T_Trim_Furniture_Normal.png'
+00:09.063  io.obj           | WARNING Cannot load image file: 'T Trim Furniture Normal.png'
+00:09.078  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Metal_BaseColor.png'
+00:09.078  io.obj           | WARNING Cannot load image file: 'T_Trim_Metal_BaseColor.png'
+00:09.078  io.obj           | WARNING Cannot load image file: 'T Trim Metal BaseColor.png'
+00:09.078  io.obj           | WARNING Cannot load image file: 'D:\Temp\AO_LivingCast_Stages234\outputs\AshenOathTheRoadBetweenCrowns\assets_external\environment\props\T_Trim_Metal_Normal.png'
+00:09.078  io.obj           | WARNING Cannot load image file: 'T_Trim_Metal_Normal.png'
+00:09.078  io.obj           | WARNING Cannot load image file: 'T Trim Metal Normal.png'
+Info: Saved as "station_toma.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+08:16:26 | INFO: Starting glTF 2.0 export
+08:16:26 | INFO: Extracting primitive: Crate_Wooden_Cube.017
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | WARNING: Mesh SeedlingLeaf is not valid, and may be exported wrongly
+08:16:26 | INFO: Extracting primitive: SeedlingLeaf
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | WARNING: Mesh SeedlingLeaf.001 is not valid, and may be exported wrongly
+08:16:26 | INFO: Extracting primitive: SeedlingLeaf.001
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | WARNING: Mesh SeedlingLeaf.002 is not valid, and may be exported wrongly
+08:16:26 | INFO: Extracting primitive: SeedlingLeaf.002
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | WARNING: Mesh SeedlingLeaf.003 is not valid, and may be exported wrongly
+08:16:26 | INFO: Extracting primitive: SeedlingLeaf.003
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | INFO: Extracting primitive: Cube.003
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | INFO: Extracting primitive: Cube.001
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | INFO: Extracting primitive: Cube.002
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | INFO: Extracting primitive: Cube
+08:16:26 | INFO: Primitives created: 1
+08:16:26 | INFO: Finished glTF 2.0 export in 0.3841891288757324 s
+00:19.141  render           | Saved: 'D:\Temp\AO_LivingCast_Stages234\art_source\art_recovery_v2\models\living_cast_stage2_20261107\props\station_toma_review.png'
+
+STAGE2_PROP_AUTHORED toma 1640
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+OBJ import of 'Crate_Wooden.obj' took 96.41 ms
+
+Blender quit

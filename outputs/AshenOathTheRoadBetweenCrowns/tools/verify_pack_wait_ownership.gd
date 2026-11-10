@@ -120,7 +120,8 @@ func _watch(context: Dictionary) -> void:
 		var extras: Array[String] = ["monsters"]
 		await context.waiter._wait_for_opening_pack("greyfen", Vector3.ZERO, 2, extras)
 	else:
-		await context.waiter._wait_for_campaign_pack("hart_glade", Vector3.ZERO, 2)
+		var extras: Array[String] = ["community"]
+		await context.waiter._wait_for_campaign_pack("hart_glade", Vector3.ZERO, 2,extras)
 	context.done = true
 
 func _slow_success(opening: bool) -> void:
@@ -137,6 +138,8 @@ func _slow_success(opening: bool) -> void:
 	_check(context.packs.ready_checks > 900, _label(context, "fixture must exercise more than 900 polling frames"))
 	if opening:
 		_check(context.packs.last_extras == ["monsters"], "opening wait must retain encounter pack requirements")
+	else:
+		_check(context.packs.last_extras == ["community"], "campaign wait must retain deferred story requirements")
 	await _dispose(context)
 
 func _expiry(opening: bool) -> void:

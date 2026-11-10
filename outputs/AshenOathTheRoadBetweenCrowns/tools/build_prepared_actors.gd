@@ -4,12 +4,14 @@ extends SceneTree
 const Helper = preload("res://scripts/asset_spawn_helper.gd")
 const NodeManifest = preload("res://scripts/character_node_manifest.gd")
 const MaterialBindings = preload("res://scripts/character_material_bindings.gd")
+const CreatureAmbientContract = preload("res://tools/creature_ambient_source_contract.gd")
 const OUTPUT := "res://assets_external/characters_prepared/"
 var helper: Node
 var presets := ConfigFile.new()
 var entries: Dictionary = {}
 var templates: Dictionary = {}
 var template_materials: Dictionary = {}
+var template_creature_ambient: Dictionary = {}
 var failed := false
 const NativeFace = preload("res://tools/build_native_facial_bindings.gd")
 const FACIAL_ASSEMBLIES := ["Kael_A_Set_Atlas.gltf", "Anwen_A_Set_Atlas.gltf", "Villager_Male_Atlas.gltf", "Villager_Female_Atlas.gltf", "Villager_Worker_Atlas.gltf", "Villager_Hooded_Atlas.gltf", "Bandit_Deserter_Atlas.gltf", "Bandit_Tracker_Atlas.gltf", "Male_Ranger_Runtime.gltf"]
@@ -111,6 +113,8 @@ func _compile() -> void:
 		var variant_safe := normalized.contains("_atlas.gltf") or normalized.ends_with("male_ranger_runtime.gltf") or normalized.begins_with("res://assets_external/design_pack_v1/")
 		if templates.has(assembly_key):
 			entries[key] = {"path": templates[assembly_key], "source": source, "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
+			if template_creature_ambient.has(assembly_key):
+				entries[key]["authored_creature_ambient"] = template_creature_ambient[assembly_key]
 			continue
 		var source_resource := load(source) as PackedScene
 		if source_resource == null:
@@ -143,6 +147,11 @@ func _compile() -> void:
 		visual.set_meta("prepared_facial_controls", facial_controls)
 		visual.set_meta("prepared_source_transform", source_transform)
 		visual.set_meta("prepared_source_bounds", source_bounds)
+		var creature_ambient: Dictionary = CreatureAmbientContract.apply_to(visual, source)
+		if creature_ambient.has("error"):
+			_failed(str(creature_ambient.error))
+			visual.free()
+			continue
 		NodeManifest.compile(visual)
 		_own(visual, visual)
 		var packed := PackedScene.new()
@@ -150,6 +159,16 @@ func _compile() -> void:
 			_failed("Cannot serialize actor: %s" % key)
 			visual.free()
 			continue
+		if bool(creature_ambient.get("verified", false)):
+			var proof := packed.instantiate()
+			var persisted := bool(proof.get_meta("authored_creature_ambient", false)) and str(proof.get_meta("authored_creature_ambient_source_sha256", "")) == str(creature_ambient.source_sha256)
+			persisted = persisted and proof.get_meta("authored_creature_ambient_morphs", []) == creature_ambient.get("morph_bindings", [])
+			persisted = persisted and proof.get_meta("authored_creature_water_probes", []) == creature_ambient.get("water_probes", [])
+			proof.free()
+			if not persisted:
+				_failed("Verified creature metadata did not survive PackedScene compilation: " + source)
+				visual.free()
+				continue
 		var directory := OUTPUT + owner + "/"
 		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
 		var path := directory + assembly_key.sha256_text().substr(0, 24) + ".scn"
@@ -157,7 +176,11 @@ func _compile() -> void:
 			_failed("Cannot save actor: %s" % key)
 		templates[assembly_key] = path
 		template_materials[assembly_key] = MaterialBindings.descriptors(visual)
+		if bool(creature_ambient.get("verified", false)):
+			template_creature_ambient[assembly_key] = creature_ambient
 		entries[key] = {"path": path, "source": source, "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
+		if template_creature_ambient.has(assembly_key):
+			entries[key]["authored_creature_ambient"] = template_creature_ambient[assembly_key]
 		visual.free()
 	if failed:
 		helper.clear_runtime_caches()

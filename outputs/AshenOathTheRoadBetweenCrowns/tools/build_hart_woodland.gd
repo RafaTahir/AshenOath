@@ -2,8 +2,14 @@ extends SceneTree
 
 const Woodland = preload("res://scripts/hart_woodland.gd")
 const FERN_PATH := "res://assets_external/environment/forest/Fern_1.obj"
+const LivingParts = preload("res://tools/living_world_part_baker.gd")
 
 func _initialize() -> void:
+	var original_error := LivingParts.originals_error(["hart"])
+	if not original_error.is_empty():
+		push_error(original_error)
+		quit(1)
+		return
 	var ground := SurfaceTool.new()
 	ground.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for row in range(Woodland.Z_KNOTS.size() - 1):
@@ -27,8 +33,8 @@ func _initialize() -> void:
 	ground.generate_normals()
 	ground.index()
 	var mesh := ground.commit()
-	var foliage := SurfaceTool.new()
-	foliage.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var living_ferns := Node3D.new()
+	living_ferns.name = "HartLivingFerns"
 	var fern := load(FERN_PATH) as ArrayMesh
 	if fern == null:
 		push_error("Required licensed Hart understory mesh is missing")
@@ -39,9 +45,11 @@ func _initialize() -> void:
 	var positions: Array[Vector3] = [Vector3(-12.8, 0.027, -7), Vector3(-14.6, 0.027, 3), Vector3(-12, 0.027, 10), Vector3(13.6, 0.027, -8), Vector3(14.8, 0.027, 4), Vector3(12.5, 0.027, 12)]
 	# Native leaves, fitted to the existing tree flanks, never the battle lanes.
 	for index in positions.size():
+		var foliage := SurfaceTool.new()
+		foliage.begin(Mesh.PRIMITIVE_TRIANGLES)
 		var size := Vector3(1.7, 0.68 + float(index % 3) * 0.10, 1.6)
 		var basis := Basis(Vector3.UP, float(index) * 1.73).scaled_local(size / bounds.size)
-		var transform := Transform3D(basis, positions[index] - basis * bottom)
+		var transform := Transform3D(basis, -(basis * bottom))
 		for surface in fern.get_surface_count():
 			var arrays := fern.surface_get_arrays(surface)
 			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
@@ -51,19 +59,35 @@ func _initialize() -> void:
 				foliage.set_uv(Vector2(vertex.x, vertex.z))
 				foliage.set_color(Color(0.20, 0.38, 0.16).lerp(Color(0.40, 0.53, 0.23), clampf((vertex.y - bounds.position.y) / bounds.size.y, 0, 1)))
 				foliage.add_vertex(transform * vertex)
-	foliage.generate_normals()
-	foliage.index()
-	foliage.commit(mesh)
+		foliage.generate_normals()
+		foliage.index()
+		var fern_mesh := foliage.commit()
+		var leaf_material := StandardMaterial3D.new()
+		leaf_material.vertex_color_use_as_albedo = true
+		leaf_material.roughness = 1.0
+		leaf_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		fern_mesh.surface_set_material(0, leaf_material)
+		fern_mesh.surface_set_name(0, "foliage")
+		var error := LivingParts.add_part(living_ferns, fern_mesh, positions[index], "foliage", "HartFern_%d" % index, {FERN_PATH: FileAccess.get_sha256(FERN_PATH)})
+		if not error.is_empty():
+			push_error(error)
+			living_ferns.free()
+			quit(1)
+			return
+	var parts_error := LivingParts.save(living_ferns, "hart_ferns", 6)
+	living_ferns.free()
+	if not parts_error.is_empty():
+		push_error(parts_error)
+		quit(1)
+		return
 	for surface in mesh.get_surface_count():
 		var material := StandardMaterial3D.new()
 		if surface == 0:
 			material.albedo_texture = load("res://assets_external/textures/runtime/forest_ground_albedo.jpg")
 		material.vertex_color_use_as_albedo = true
 		material.roughness = 1.0
-		if surface == 1:
-			material.cull_mode = BaseMaterial3D.CULL_DISABLED
 		mesh.surface_set_material(surface, material)
-	mesh.set_meta("source", "Original authored Hart woodland terrain, fitted Quaternius CC0 Fern_1; retained Quaternius tree stands are separate instances")
+	mesh.set_meta("source", "Original authored Hart woodland terrain; retained Quaternius fern parts and tree stands are separate rooted instances")
 	mesh.set_meta("source_sha256", {FERN_PATH: FileAccess.get_sha256(FERN_PATH)})
 	mesh.set_meta("visual_only", true)
 	var result := ResourceSaver.save(mesh, Woodland.MESH_PATH, ResourceSaver.FLAG_COMPRESS)

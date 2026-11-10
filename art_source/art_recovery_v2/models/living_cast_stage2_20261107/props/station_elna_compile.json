@@ -1,0 +1,34 @@
+{
+	"contact_shape": {
+		"contact_weight": 1.0,
+		"name": "TaskPress",
+		"neutral_weight": 0.0,
+		"support_bounds_verified": true,
+		"target_surface_errors": {
+			"GripLeft": 0.0,
+			"GripRight": 0.0
+		}
+	},
+	"geometry_contact_verified": true,
+	"identity": "elna",
+	"native_grips_verified": false,
+	"path": "res://assets_external/environment_prepared/living_cast/station_elna.scn",
+	"resources": [
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_elna_00.res",
+			"sha256": "7eb3ae7acc19b0243b571708b2c4ddcc153b1a9376d53d5ef6c63fdc5963c785"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/station_elna_01.res",
+			"sha256": "6a04e4b5caed6b9f33dacb448b54ffe6ff461207a62d23e24a234f1f9f7fa315"
+		}
+	],
+	"sha256": "b440333d47efb8754afed6dcbaaf29898bff1c0dadbde31b54c030addd08deb0",
+	"source_sha256": "5be1ad8c15eb1fda1d45065637871ccd54211cd139da9d1642925cd487901a09",
+	"support_bounds_verified": true,
+	"surface_contact_errors": {
+		"GripLeft": 0.0,
+		"GripRight": 0.0
+	},
+	"user_accepted": false
+}

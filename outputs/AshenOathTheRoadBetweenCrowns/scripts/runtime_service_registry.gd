@@ -200,7 +200,7 @@ func configure(owner: Node) -> void:
 	dialogue.setup(story_state, quests)
 	inventory.load_items("res://data/items.json")
 	inventory.set_progression(progression)
-	save_manager.set_summary_definitions(quests.quest_defs, inventory.item_defs)
+	save_manager.set_summary_definitions(quests.source_quest_defs, inventory.item_defs)
 	vendor_service.load_vendors("res://data/vendors.json")
 	crafting.setup(inventory, quests, story_state)
 	hud.set_preparation_services(crafting)

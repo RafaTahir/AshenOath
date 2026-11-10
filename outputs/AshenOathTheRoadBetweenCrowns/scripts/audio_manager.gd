@@ -15,6 +15,7 @@ var ambient_streams = {}
 const SHARED_MUSIC := ["main_menu"]
 const AUTHORIZED_ARRANGEMENTS := {"greyfen_explore":"greyfen_belonging", "wychwood_tension":"road_uncertainty", "ghoulkin_combat":"hold_the_road"}
 var prepared_audio_zone := ""
+var voice_pack_owner: Node
 var prepared_music_states: Dictionary = {}
 var prepared_encounter_state := ""
 const AUTHORED_AMBIENCE := {
@@ -139,7 +140,7 @@ var generated_current_recordings_allowed := false
 var revised_voice_cache_order: Array[String] = []
 var story_music_override := ""
 const STORY_SCORE_PATH := "res://assets_external/audio/story_score/"
-const STORY_SCORE_STATES := ["story_road", "story_names", "story_renewal", "ending_witness", "ending_mercy", "ending_duty", "ending_ash"]
+const STORY_SCORE_STATES := ["story_road", "story_names", "story_renewal", "ending_witness", "ending_mercy", "ending_duty", "ending_ash", "ending_concord", "ending_open_road"]
 
 func _process(delta: float) -> void:
 	if pending_dialogue_voice != "" and dialogue_active and not dialogue_review_paused:
@@ -213,6 +214,7 @@ func _ready() -> void:
 	_publish_audio_status()
 
 func bind_runtime_packs(packs: Node) -> void:
+	voice_pack_owner = packs
 	if not packs.is_connected("pack_mounted", _on_audio_pack_mounted):
 		packs.connect("pack_mounted", _on_audio_pack_mounted)
 	# A resumed/embedded pack may already be ready before services are wired.
@@ -221,6 +223,10 @@ func bind_runtime_packs(packs: Node) -> void:
 			_on_audio_pack_mounted(id, "")
 
 func _on_audio_pack_mounted(pack_id: String, _path: String) -> void:
+	if pack_id in ["living_cast_voice", "community_voice"]:
+		# This pack owns only its exact voices. It must not mark the unrelated
+		# historical audio pack ready or eagerly decode its missing cue library.
+		return
 	if pack_id not in ["opening", "adjacent", "campaign", "audio"]:
 		return
 	prepared_audio.mark_pack_available(pack_id)
@@ -468,25 +474,30 @@ func play_dialogue_page(page: Dictionary) -> void:
 	var text := str(page.get("text", "")).strip_edges()
 	if text.is_empty():
 		return
-	var key := (speaker + "|" + text).sha256_text()
+	var key := _exact_voice_key(speaker, text)
 	var id := str(dialogue_voice_keys.get(key, ""))
 	if id == "" or not revised_voice_entries.has(id):
 		return
 	var entry: Dictionary = revised_voice_entries[id]
 	# Match current content exactly. A reused page/voice ID cannot play lines
 	# left over from the previous campaign or a different speaker.
-	if str(entry.get("text", "")).strip_edges() != text or str(entry.get("speaker_id", "")).strip_edges() != speaker:
+	if str(entry.get("text", "")).strip_edges() != text or not _same_voice_speaker(str(entry.get("speaker_id", "")), speaker):
 		return
 	if _prepare_revised_voice(id):
 		pending_dialogue_voice = id
 		pending_dialogue_delay = clampf(float(page.get("performance", {}).get("reaction_delay", 0.18)), 0.08, 0.45)
 
 func _prepare_revised_voice(id: String) -> bool:
-	if not revised_voice_entries.has(id) or not runtime_file_assets_available:
+	if not revised_voice_entries.has(id):
 		return false
 	var entry: Dictionary = revised_voice_entries[id]
+	var path := str(entry.get("path", entry.get("audio_path", "")))
+	if not runtime_file_assets_available and _deferred_voice_pack(path).is_empty(): return false
 	if not voices.has(id):
-		var stream := _load_audio_stream(str(entry.get("path", entry.get("audio_path", ""))))
+		if not ResourceLoader.exists(path):
+			_request_deferred_voice(path)
+			return false
+		var stream := _load_audio_stream(path)
 		if stream == null:
 			return false
 		stream.set_meta("narrative_revision", narrative_revision)
@@ -499,10 +510,23 @@ func _prepare_revised_voice(id: String) -> bool:
 				voices.erase(retired)
 	return _has_production_voice(id)
 
+func _deferred_voice_pack(path: String) -> String:
+	if path.begins_with("res://assets_external/audio/voices/community/"): return "community_voice"
+	if path.begins_with("res://assets_external/audio/voices/living_cast/"): return "living_cast_voice"
+	return ""
+
+func _request_deferred_voice(path: String) -> void:
+	if not is_instance_valid(voice_pack_owner): return
+	var pack := _deferred_voice_pack(path)
+	if pack.is_empty() or voice_pack_owner.get_pack(pack).is_empty(): return
+	# A missing recording stays subtitle-only. Mounting never replays an old
+	# page, and a failed optional download is left to the existing Retry owner.
+	if str(voice_pack_owner.get_state(pack)).is_empty(): voice_pack_owner.request_pack(pack, 30)
+
 func play_nearby_speech(speaker: String, text: String, actor: Node3D) -> float:
 	if dialogue_active or game_paused or is_instance_valid(nearby_voice_player) or (is_instance_valid(voice_player) and voice_player.playing) or not is_instance_valid(actor):
 		return 0.0
-	var id := str(dialogue_voice_keys.get((speaker + "|" + text.strip_edges()).sha256_text(), ""))
+	var id := str(dialogue_voice_keys.get(_exact_voice_key(speaker, text.strip_edges()), ""))
 	if not _prepare_revised_voice(id): return 0.0
 	nearby_voice_entry = revised_voice_entries[id]
 	nearby_voice_actor = weakref(actor)
@@ -579,8 +603,8 @@ func _story_music_state(state: Node, zone_id: String) -> String:
 	if state == null:
 		return ""
 	var ending := str(state.get_flag("final_covenant", ""))
-	ending = str({"expose":"witness", "free":"mercy", "bind":"duty", "kill":"ash"}.get(ending, ending))
-	if zone_id in ["greyfen", "assembly", "hart_glade"] and bool(state.get_flag("final_choice_completed", false)) and ending in ["witness", "mercy", "duty", "ash"]:
+	ending = preload("res://scripts/ending_catalog.gd").covenant(ending)
+	if zone_id in ["greyfen", "assembly", "hart_glade"] and bool(state.get_flag("final_choice_completed", false)) and ending != "":
 		return "ending_" + ending
 	elif zone_id == "greyfen" and bool(state.get_flag("renewal_announced", false)):
 		return "story_road" if bool(state.get_flag("renewal_stopped", false)) else "story_renewal"
@@ -1326,6 +1350,7 @@ const RECORDED_RPG := {
 	"village_life": ["creak1.ogg", "creak2.ogg"],
 }
 const RECORDED_AUTHORED := {
+	"reed_choir_call": "reed_choir_call.ogg", "inkblind_brush": "inkblind_brush.ogg",
 	"flesh_contact":"flesh_cut.ogg", "arrow_contact":"arrow_pierce.ogg", "wood_contact":"forest_twigs.ogg",
 	"step_wood": "wood_step.ogg", "light_hit": "sword_clash_light.ogg", "heavy_hit": "sword_clash_heavy.ogg",
 	"parry": "sword_clash_light.ogg", "oathfire_sheathe": "sword_sheathe.ogg",
@@ -1458,11 +1483,21 @@ func _load_scratch_voice_library() -> void:
 				stream.set_meta("scratch_voice", true)
 				voices[voice_id] = stream
 
+func _canonical_voice_speaker(speaker: String) -> String:
+	var identity: String = preload("res://scripts/story_cast_profile.gd").canonical_identity(speaker.strip_edges())
+	return identity if not identity.is_empty() else speaker.strip_edges()
+
+func _same_voice_speaker(first: String, second: String) -> bool:
+	return not first.strip_edges().is_empty() and _canonical_voice_speaker(first) == _canonical_voice_speaker(second)
+
+func _exact_voice_key(speaker: String, text: String) -> String:
+	return (_canonical_voice_speaker(speaker) + "|" + text).sha256_text()
+
 func _register_revised_voice_entry(id: String, entry: Dictionary) -> void:
 	if id == "" or str(entry.get("narrative_revision", "")) != narrative_revision:
 		return
 	var authored := bool(entry.get("human_reviewed", false)) and str(entry.get("status", "")) not in ["scratch", "draft"]
-	var generated_current := generated_current_recordings_allowed and str(entry.get("production_mode", "")) == "generated" and str(entry.get("review_status", "")) == "not_performed_user_requested"
+	var generated_current := generated_current_recordings_allowed and str(entry.get("production_mode", "")) == "generated" and str(entry.get("review_status", "")) in ["not_performed_user_requested", "pending_listening_review"]
 	if not authored and not generated_current:
 		return
 	var path := str(entry.get("path", entry.get("audio_path", "")))
@@ -1476,7 +1511,7 @@ func _register_revised_voice_entry(id: String, entry: Dictionary) -> void:
 	if text_hash != text.sha256_text():
 		return
 	revised_voice_entries[id] = entry.duplicate()
-	dialogue_voice_keys[(speaker + "|" + text).sha256_text()] = id
+	dialogue_voice_keys[_exact_voice_key(speaker, text)] = id
 
 func _build_music_library() -> void:
 	for state_id in ["main_menu", "greyfen_explore", "shrine_anwen", "wychwood_tension", "ghoulkin_combat", "return_report", "castle_silence", "deep_wood", "ash_mill", "marsh_crossing", "bandit_road", "record_hall", "undercroft", "assembly", "hart_glade", "boss_bell_eater", "boss_rootbound_colossus", "boss_ashwing", "boss_halvern_boss", "boss_white_hart_avatar"]:
@@ -1505,7 +1540,7 @@ func _build_music_state(state_id: String) -> void:
 		if stream != null:
 			music[state_id] = stream
 		else:
-			var fallback := str({"story_road":"greyfen_explore", "story_names":"record_hall", "story_renewal":"undercroft", "ending_witness":"assembly", "ending_mercy":"hart_glade", "ending_duty":"shrine_anwen", "ending_ash":"castle_silence"}.get(state_id, "greyfen_explore"))
+			var fallback := str({"story_road":"greyfen_explore", "story_names":"record_hall", "story_renewal":"undercroft", "ending_witness":"assembly", "ending_mercy":"hart_glade", "ending_duty":"shrine_anwen", "ending_ash":"castle_silence", "ending_concord":"assembly", "ending_open_road":"hart_glade"}.get(state_id, "greyfen_explore"))
 			var fallback_stream: AudioStream = prepared_audio.stream("music", fallback)
 			if fallback_stream != null:
 				music[state_id] = fallback_stream

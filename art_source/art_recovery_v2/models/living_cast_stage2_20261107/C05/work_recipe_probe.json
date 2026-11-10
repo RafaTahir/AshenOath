@@ -1,0 +1,50 @@
+{
+  "asset": "C05",
+  "saved_input_blend_sha256": "dcc9cc7ae2631ab244da58baf1dfd0001be46f4eefea68629ef984fcc24f0a35",
+  "recipe_sha256": "71d94c7bb839c90fcdd927cc7c74f433f91f671e9fa0bed3523d03dd4a26597d",
+  "source_trajectory_clear": true,
+  "intrusions": [],
+  "contact": {
+    "l": {
+      "surface": [
+        -0.12000001221895218,
+        0.39999979734420776,
+        1.0200001001358032
+      ],
+      "normal": [
+        0.01794418692588806,
+        -0.0026426950935274363,
+        -0.9998354911804199
+      ],
+      "target_distance": 2.407356265396403e-07,
+      "finger_minimum_height": 1.0183444023132324,
+      "finger_minimum_vertex": 34027,
+      "finger_minimum_weights": {
+        "thumb_01_l": 1.0
+      },
+      "finger_clearance_to_work_plane": -0.00165557861328125
+    },
+    "r": {
+      "surface": [
+        0.12000000476837158,
+        0.39999985694885254,
+        1.0200002193450928
+      ],
+      "normal": [
+        -0.02295013889670372,
+        0.0004231665807310492,
+        -0.9997365474700928
+      ],
+      "target_distance": 2.8125324976707805e-07,
+      "finger_minimum_height": 1.018344521522522,
+      "finger_minimum_vertex": 35051,
+      "finger_minimum_weights": {
+        "thumb_01_r": 1.0
+      },
+      "finger_clearance_to_work_plane": -0.0016554594039916992
+    }
+  },
+  "saved_output_verified": false,
+  "native_verified": false,
+  "visual_accepted": false
+}

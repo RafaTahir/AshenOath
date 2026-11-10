@@ -1,0 +1,135 @@
+{
+	"failures": [],
+	"meshes": [
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 144
+			},
+			"id": "deep_wood",
+			"original_sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+			"parts": 0,
+			"parts_sha256": "",
+			"rebuilt_sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
+		},
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 304
+			},
+			"id": "burned_farmstead",
+			"original_sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+			"parts": 0,
+			"parts_sha256": "",
+			"rebuilt_sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
+		},
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 1354
+			},
+			"id": "marsh_crossing",
+			"original_sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
+			"parts": 5,
+			"parts_sha256": "3235a0c6434dae9fd7782bbd4fb643dd1a5b40735cc7ccbc85d8277cc7e2de6d",
+			"rebuilt_sha256": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
+		},
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 768
+			},
+			"id": "bandit_road",
+			"original_sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+			"parts": 0,
+			"parts_sha256": "",
+			"rebuilt_sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
+		},
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 2168
+			},
+			"id": "farmstead_west",
+			"original_sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+			"parts": 0,
+			"parts_sha256": "",
+			"rebuilt_sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
+		},
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 2156
+			},
+			"id": "farmstead_east",
+			"original_sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+			"parts": 0,
+			"parts_sha256": "",
+			"rebuilt_sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
+		},
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 4450
+			},
+			"id": "checkpoint",
+			"original_sha256": "85e660c2250bb4d32353b9007ca639dd9a2ff0670871d212c91a0236151393dc",
+			"parts": 2,
+			"parts_sha256": "fd990e36da5d6544b75494a636268ad88f7dcb6ac87d694f6e190ff26b1bcd0b",
+			"rebuilt_sha256": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
+		},
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 2432
+			},
+			"id": "hart",
+			"original_sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
+			"parts": 6,
+			"parts_sha256": "fa6252f94c1c678a8ce1820d741d119db6479d6cafdd73337bf6bfe6d9897f0a",
+			"rebuilt_sha256": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
+		},
+		{
+			"comparison": {
+				"attribute_tolerance": 0.0002,
+				"passed": true,
+				"position_tolerance": 0.0001,
+				"triangles": 4271
+			},
+			"id": "mill",
+			"original_sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
+			"parts": 1,
+			"parts_sha256": "1934dfad65964e3e41a3d4e068628fabb6a01877d322b626e6b88d0580cc0907",
+			"rebuilt_sha256": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
+			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 0, -5.25)"
+		}
+	],
+	"original_manifest_sha256": "70c8c1fbe890fa83026d9cc80460709182bd7af2891d06de19d81d47fe85219a",
+	"passed": true,
+	"source_commit": "f6331345c6b03478d228568b1e3197f55413c176",
+	"world_or_visual_acceptance": false
+}

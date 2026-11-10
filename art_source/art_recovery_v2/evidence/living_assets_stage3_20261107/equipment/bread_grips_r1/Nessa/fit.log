@@ -1,0 +1,16 @@
+02:04:02 | INFO: Data are loaded, start creating Blender stuff
+02:04:02 | INFO: Blender create Mesh node C11_Nessa_Anwen_Combined_003
+02:04:05 | INFO: glTF import finished in 2.48s
+02:04:06 | INFO: Data are loaded, start creating Blender stuff
+02:04:06 | INFO: Blender create Mesh node 0
+02:04:06 | INFO: Blender create Mesh node FlatbreadScoredCrust
+02:04:06 | INFO: glTF import finished in 0.02s
+02:04:06 | INFO: Data are loaded, start creating Blender stuff
+02:04:06 | INFO: Blender create Mesh node HeldProp_vessel_0_055_0_11_0_23_0_008_16
+02:04:06 | INFO: glTF import finished in 0.01s
+Info: No new files have been packed
+Info: Saved as "C11_bread_fit_proposal.blend"
+C11 HAND FIT PROBE: SOURCE COMPLETE
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

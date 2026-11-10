@@ -1,0 +1,209 @@
+{
+  "actor_blend_sha256": "0ae01af01ae28d6f7b73617fa35492303a761de6143ac0320aa94b2c4b7941c2",
+  "actor_carrier_sha256": "6f0e2f748283f4625849ff5176f724007260818896d9a16e476564c059ed1756",
+  "cup_carrier_sha256": "8876b0a651498e87792b87109ad2e5d8a6c252910c89058e09657d4c883aefa1",
+  "sample_hz": 30,
+  "sampled_frames": [
+    0,
+    60,
+    120
+  ],
+  "full_trajectory_sampled": false,
+  "closed_retained_cup": false,
+  "nonmanifold_or_open_edges": 52,
+  "surface_crossings_checked": true,
+  "maximum_skin_intrusion_m": 0.002,
+  "clips": [
+    {
+      "clip": "Life_Cup_Hold",
+      "intrusions": [
+        {
+          "phase": 0.0,
+          "vertices": 11,
+          "deepest": {
+            "mesh": "C10_MotionFittedAssembly",
+            "edge": [
+              16145,
+              17036
+            ],
+            "depth": 0.0053429003191922675,
+            "edge_crossing_depth": 0.005564145068181113,
+            "cup_face": 143,
+            "cup_local_intersection": [
+              0.11726830899715424,
+              0.013595463708043098,
+              0.1636309176683426
+            ],
+            "skin_groups": [
+              [
+                "thumb_01_r"
+              ],
+              [
+                "thumb_01_r"
+              ]
+            ],
+            "method": "actual skin edge crosses retained cup triangle",
+            "body_part": "hand_forearm"
+          }
+        },
+        {
+          "phase": 0.5,
+          "vertices": 11,
+          "deepest": {
+            "mesh": "C10_MotionFittedAssembly",
+            "edge": [
+              16145,
+              17036
+            ],
+            "depth": 0.0053429003191922675,
+            "edge_crossing_depth": 0.005564145068181113,
+            "cup_face": 143,
+            "cup_local_intersection": [
+              0.11726830899715424,
+              0.013595463708043098,
+              0.1636309176683426
+            ],
+            "skin_groups": [
+              [
+                "thumb_01_r"
+              ],
+              [
+                "thumb_01_r"
+              ]
+            ],
+            "method": "actual skin edge crosses retained cup triangle",
+            "body_part": "hand_forearm"
+          }
+        },
+        {
+          "phase": 1.0,
+          "vertices": 11,
+          "deepest": {
+            "mesh": "C10_MotionFittedAssembly",
+            "edge": [
+              16145,
+              17036
+            ],
+            "depth": 0.0053429003191922675,
+            "edge_crossing_depth": 0.005564145068181113,
+            "cup_face": 143,
+            "cup_local_intersection": [
+              0.11726830899715424,
+              0.013595463708043098,
+              0.1636309176683426
+            ],
+            "skin_groups": [
+              [
+                "thumb_01_r"
+              ],
+              [
+                "thumb_01_r"
+              ]
+            ],
+            "method": "actual skin edge crosses retained cup triangle",
+            "body_part": "hand_forearm"
+          }
+        }
+      ],
+      "maximum_grip_error": 0.00020026126979725894,
+      "clear": false
+    },
+    {
+      "clip": "Life_Drink",
+      "intrusions": [
+        {
+          "phase": 0.0,
+          "vertices": 11,
+          "deepest": {
+            "mesh": "C10_MotionFittedAssembly",
+            "edge": [
+              16145,
+              17036
+            ],
+            "depth": 0.0053429003191922675,
+            "edge_crossing_depth": 0.005564145068181113,
+            "cup_face": 143,
+            "cup_local_intersection": [
+              0.11726830899715424,
+              0.013595463708043098,
+              0.1636309176683426
+            ],
+            "skin_groups": [
+              [
+                "thumb_01_r"
+              ],
+              [
+                "thumb_01_r"
+              ]
+            ],
+            "method": "actual skin edge crosses retained cup triangle",
+            "body_part": "hand_forearm"
+          }
+        },
+        {
+          "phase": 0.5,
+          "vertices": 13,
+          "deepest": {
+            "mesh": "C10_MotionFittedAssembly",
+            "edge": [
+              16145,
+              17036
+            ],
+            "depth": 0.0053428378937496745,
+            "edge_crossing_depth": 0.0055640890531536945,
+            "cup_face": 143,
+            "cup_local_intersection": [
+              0.11726829409599304,
+              0.013595463708043098,
+              0.163630872964859
+            ],
+            "skin_groups": [
+              [
+                "thumb_01_r"
+              ],
+              [
+                "thumb_01_r"
+              ]
+            ],
+            "method": "actual skin edge crosses retained cup triangle",
+            "body_part": "hand_forearm"
+          }
+        },
+        {
+          "phase": 1.0,
+          "vertices": 11,
+          "deepest": {
+            "mesh": "C10_MotionFittedAssembly",
+            "edge": [
+              16145,
+              17036
+            ],
+            "depth": 0.0053429003191922675,
+            "edge_crossing_depth": 0.005564145068181113,
+            "cup_face": 143,
+            "cup_local_intersection": [
+              0.11726830899715424,
+              0.013595463708043098,
+              0.1636309176683426
+            ],
+            "skin_groups": [
+              [
+                "thumb_01_r"
+              ],
+              [
+                "thumb_01_r"
+              ]
+            ],
+            "method": "actual skin edge crosses retained cup triangle",
+            "body_part": "hand_forearm"
+          }
+        }
+      ],
+      "maximum_grip_error": 0.0005303625043360523,
+      "clear": false
+    }
+  ],
+  "source_trajectory_clear": false,
+  "native_verified": false,
+  "visual_accepted": false
+}

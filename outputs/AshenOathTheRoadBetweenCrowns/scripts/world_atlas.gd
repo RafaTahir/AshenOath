@@ -13,11 +13,11 @@ var _buttons: Dictionary = {}
 var _legend: Label
 var _detail_scroll: ScrollContainer
 
-func configure(zone: String, known: Dictionary) -> void:
+func configure(zone: String, known: Dictionary, revision: int = 1) -> void:
 	current = Manifest.canonical(zone)
 	discovered = known.duplicate()
 	discovered[current] = true
-	model = Manifest.atlas()
+	model = Manifest.atlas(revision)
 	var legend := Label.new(); legend.text = "ASHEN OATH | ROAD ATLAS\nConnected passages: solid | Legacy return journey: dashed | Not to scale"
 	_legend = legend
 	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(legend)

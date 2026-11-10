@@ -7,6 +7,7 @@ const Settings = preload("res://scripts/settings_manager.gd")
 const Finale = preload("res://scripts/zones/campaign_finale_section.gd")
 const Helper = preload("res://scripts/asset_spawn_helper.gd")
 const Woodland = preload("res://scripts/hart_woodland.gd")
+const Endings = preload("res://scripts/ending_catalog.gd")
 const COURT := "res://assets_external/environment/village/AssemblyCourt_Authored.res"
 const LANDSCAPE := "res://assets_external/environment/forest/HartLandscape_Authored.res"
 const STONES := "res://assets_external/environment/forest/HartWitnessStones_Authored.res"
@@ -152,9 +153,9 @@ func _check_hart_woodland() -> void:
 	if layer != null:
 		check(layer.find_children("*", "CollisionObject3D", true, false).is_empty(), "Woodland modifies encounter collision")
 		var ground := layer.get_node("HartAdjoiningWoodlandGround") as MeshInstance3D
-		check(ground.mesh.get_surface_count() == 2 and ground.mesh.get_faces().size() / 3 <= 2500, "Woodland geometry exceeds its bounded footprint")
+		check(ground.mesh.get_surface_count() == 1 and ground.mesh.get_faces().size() / 3 <= 2500, "Woodland ground geometry exceeds its bounded footprint")
 		check(FileAccess.get_file_as_bytes(Woodland.MESH_PATH).size() < 60000, "Woodland byte budget exceeded")
-		for surface in range(2):
+		for surface in ground.mesh.get_surface_count():
 			var material := ground.get_active_material(surface) as StandardMaterial3D
 			check(material != null and (surface != 0 or material.albedo_texture != null), "Woodland material/ground texture is missing")
 			var arrays := ground.mesh.surface_get_arrays(surface)
@@ -166,6 +167,19 @@ func _check_hart_woodland() -> void:
 				check(surface != 1 or absf(point.x) > 10.0, "Understory obstructs the central encounter/return sightline")
 		for source in ground.mesh.get_meta("source_sha256", {}):
 			check(ground.mesh.get_meta("source_sha256")[source] == FileAccess.get_sha256(source), "Hart understory source identity drift")
+		var fern_count := 0
+		var total_triangles := ground.mesh.get_faces().size() / 3
+		for fern: MeshInstance3D in layer.find_children("*", "MeshInstance3D", true, false):
+			if fern == ground: continue
+			fern_count += 1
+			check(fern.get_meta("world_prop_kind", "") == "foliage", "Fern must animate at its authored root")
+			total_triangles += fern.mesh.get_faces().size() / 3
+			for surface in fern.mesh.get_surface_count():
+				check(fern.get_active_material(surface) != null, "Fern material is missing")
+				for vertex in fern.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
+					var point: Vector3 = layer.global_transform.affine_inverse() * fern.global_transform * vertex
+					check(point.is_finite() and absf(point.x) > 10.0, "Understory obstructs encounter sightline")
+		check(fern_count == 6 and total_triangles <= 2500, "Separated understory changed its retained geometry budget")
 		var trees := layer.get_node("HartWoodlandTreeBatch") as MultiMeshInstance3D
 		check(trees.multimesh.instance_count == 32, "Balanced woodland stand is incomplete")
 		for index in trees.multimesh.instance_count:
@@ -193,11 +207,8 @@ func _check_hart_aftermath() -> void:
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://runtime_asset_manifest.json"))
 	var presets := ConfigFile.new()
 	check(presets.load("res://export_presets.cfg") == OK, "Export configuration invalid")
-	var filter := ""
-	for section in presets.get_sections():
-		if presets.get_value(section, "name", "") == "Runtime Pack Campaign":
-			filter = presets.get_value(section, "include_filter", "")
-	for covenant in ["witness", "mercy", "duty", "ash"]:
+	for ending: String in Endings.IDS:
+		var covenant := Endings.covenant(ending)
 		var path := "res://assets_external/environment/forest/HartAftermath_%s_Authored.res" % covenant
 		var mesh := load(path) as ArrayMesh
 		check(mesh != null and mesh.get_surface_count() == 2, "Missing two-surface aftermath: " + covenant)
@@ -205,7 +216,9 @@ func _check_hart_aftermath() -> void:
 			continue
 		check(FileAccess.get_file_as_bytes(path).size() < 20000, "Aftermath byte budget exceeded")
 		check(mesh.get_meta("covenant", "") == covenant, "Wrong covenant geometry")
-		check(filter.contains(path.trim_prefix("res://")), "Campaign omits aftermath")
+		var owner := "Runtime Pack Campaign" if ending in Endings.ORIGINAL_IDS else "Runtime Pack community"
+		check(_preset_owns(presets, owner, path), "Declared pack omits aftermath: " + owner)
+		check(not _preset_owns(presets, "Runtime Pack Opening", path), "Opening pack contains later aftermath")
 		var registered := false
 		for entry in manifest.get("authored_environment_derivatives", []):
 			if entry.get("path", "") == path:
@@ -230,7 +243,8 @@ func _check_hart_aftermath() -> void:
 		check(seal.mesh == mesh and seal.get_surface_override_material(0) != null and seal.get_surface_override_material(1) != null, "Runtime aftermath is incomplete")
 		check(game.zone_root.get_node("HartCovenantInscription").text != "", "Missing covenant inscription")
 		var obstacles: Array = mesh.get_meta("obstacles", [])
-		check(obstacles.size() == 5 and game.prop_collision_body.get_child_count() == 5, "Memorial collision count drift")
+		var obstacle_count := 8 if covenant == "open_road" else 5
+		check(obstacles.size() == obstacle_count and game.prop_collision_body.get_child_count() == obstacle_count, "Memorial collision count drift")
 		for index in obstacles.size():
 			var collision := game.prop_collision_body.get_child(index) as CollisionShape3D
 			check(collision.position.is_equal_approx(obstacles[index].centre) and collision.shape.size.is_equal_approx(obstacles[index].size), "Memorial stone collision does not match geometry")
@@ -257,8 +271,19 @@ func _check_hart_aftermath() -> void:
 		game.free()
 		await process_frame
 	RenderingServer.force_sync()
-	print("HART AFTERMATH CONTRACT: %s (four resource/material/collision/physical capsule states; NOT earned endings, visual or performance acceptance)" % ("PASS" if failures == 0 else "FAIL"))
+	print("HART AFTERMATH CONTRACT: %s (six resource/material/collision/physical capsule states; NOT earned endings, visual or performance acceptance)" % ("PASS" if failures == 0 else "FAIL"))
 	quit(0 if failures == 0 else 1)
+
+func _preset_owns(presets: ConfigFile, name: String, path: String) -> bool:
+	var relative := path.trim_prefix("res://")
+	for section in presets.get_sections():
+		if presets.get_value(section, "name", "") != name: continue
+		for pattern: String in str(presets.get_value(section, "exclude_filter", "")).split(",", false):
+			if relative.match(pattern): return false
+		if path in presets.get_value(section, "export_files", PackedStringArray()): return true
+		for pattern: String in str(presets.get_value(section, "include_filter", "")).split(",", false):
+			if relative.match(pattern): return true
+	return false
 
 func sweep(player: CharacterBody3D, start: Vector3, finish: Vector3, label: String) -> void:
 	for reverse in [false, true]:

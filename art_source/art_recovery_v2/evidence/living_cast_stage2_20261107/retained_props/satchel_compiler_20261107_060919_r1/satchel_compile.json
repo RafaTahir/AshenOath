@@ -1,0 +1,24 @@
+{
+	"attached_grips_verified": true,
+	"body_bounds_verified": true,
+	"path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel.scn",
+	"resources": [
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel_body.res",
+			"sha256": "c36bcb1cccb05a08b40d478e3ee7f682ee32ff9ec9fa62e7c9c35b55df58a882"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel_strap.res",
+			"sha256": "ce249302e8a7e7b6f1db3ddf056085cc310ab6ad90d59bb08b536bb324eb5322"
+		},
+		{
+			"path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel_knot.res",
+			"sha256": "1297e5a88117b0944fb0b089a14b88678e976a43f3e267ec603edabad7ebffbf"
+		}
+	],
+	"runtime_verified": false,
+	"sha256": "551a8e31e9f5c5bc9b89a74a3733153a6e2c15f9b6e599d9ac62b0fe5d03f0b8",
+	"source_sha256": "eaa6b63303f2b60fa8f49b6d907f91f0dd9eddf7f1c9026e30ed2f9b82947913",
+	"status": "compiled",
+	"user_accepted": false
+}

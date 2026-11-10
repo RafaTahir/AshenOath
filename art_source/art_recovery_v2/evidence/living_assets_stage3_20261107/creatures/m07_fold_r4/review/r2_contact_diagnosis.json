@@ -1,0 +1,101 @@
+{
+  "scope": "Read-only diagnosis of actual M07 r2 measured poses and retained glTF anatomy",
+  "prior_measurements": {
+    "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\retained_fold_probe_r2\\receipt.json",
+    "sha256": "e86c7910748f97e2779e8e0a9f69bafc6f343a8e052a6f4a1c2f1b5acd961cce"
+  },
+  "prior_owned_process": {
+    "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\retained_fold_probe_r2_owned\\receipt.json",
+    "sha256": "425d5b9b031ba926b246871cebf1f80f8f634f5b748dce05746a496ef8565855"
+  },
+  "sampled_constraints": {
+    "apex_count": 12,
+    "torso_intersection_count_both_sides": 11,
+    "wing_to_wing_intersection_count": 12,
+    "baseline_close_pairs_all_measured_groups": 0,
+    "max_foot_drift_m": 0.0,
+    "max_root_frame_component_error": 0.0,
+    "min_wing_floor_clearance_m": 1.148565262556076,
+    "min_width_fraction": 0.3293995560555709,
+    "max_width_fraction": 0.5486545841340835,
+    "excluded_torso_shoulder_seam_triangles": 1548
+  },
+  "body_clear_reference_apex": {
+    "label": "fold_apex",
+    "contacts": {
+      "1_body": {
+        "minimum_distance_clipped_at_limit_m": 0.012,
+        "limit_m": 0.012,
+        "pairs_tested": 0,
+        "closest_triangles": null
+      },
+      "-1_body": {
+        "minimum_distance_clipped_at_limit_m": 0.012,
+        "limit_m": 0.012,
+        "pairs_tested": 0,
+        "closest_triangles": null
+      },
+      "1_-1": {
+        "minimum_distance_clipped_at_limit_m": 0.0,
+        "limit_m": 0.012,
+        "pairs_tested": 881,
+        "closest_triangles": [
+          33785,
+          30764
+        ]
+      }
+    },
+    "foot_surface_max_drift_m": 0.0,
+    "root_frame_max_error": 0.0,
+    "wing_width_m": 2.7961950302124023,
+    "wing_floor_clearance_m": 1.3301317393779755,
+    "sample_geometry_pass": false,
+    "parameters": {
+      "back_degrees": 55,
+      "down_degrees": 25,
+      "finger_fan_fraction": 0.65
+    },
+    "width_fraction": 0.3293995560555709
+  },
+  "witness_source_anatomy": {
+    "pair": [
+      33785,
+      30764
+    ],
+    "source_import_mapping": "Single indexed TRIANGLES primitive. Pinned Blender importer maps indices through sorted unique vertices without changing triangle order; merge_vertices disabled. No additional candidate glTF import or pose run.",
+    "triangle_positive_side": {
+      "retained_bind_centroid_y_up_m": [
+        1.4567,
+        2.4839,
+        -0.1808
+      ],
+      "dominant_controls": [
+        "WingFinger1_3",
+        "WingFinger1_2"
+      ]
+    },
+    "triangle_negative_side": {
+      "retained_bind_centroid_y_up_m": [
+        -1.4946,
+        2.4381,
+        -0.2164
+      ],
+      "dominant_controls": [
+        "WingFinger-1_3",
+        "WingFinger-1_2"
+      ]
+    },
+    "finding": "Both witnesses are inner trailing finger membrane. No measured retained Idle close pair; the new intersection is outside the exact torso/shoulder seam exclusions."
+  },
+  "proposal": [
+    "Probe increasingly folded fractions of the 55/25/.65 retained-to-target local rotation path. Measure exact real triangle clearance and signed lateral extent of inner-finger membrane at each fraction; stop at the first unsafe sample. Seek a modest fold within the existing 75% retained span criterion before attempting the over-folded 33% span.",
+    "If no safe prefix qualifies, keep the measured shoulder geometry as a starting point and vary elbow outward cant and membrane roll around anatomical shoulder/elbow/wrist directions. Set controls from actual joint centers, retain the original finger ordering, vary finger fan and test each side against torso before pairing. Use signed lateral extents for search guidance only and retain the exact bilateral triangle test.",
+    "A passing apex must retain the existing 12mm pair separation, 10mm floor clearance, root and planted-foot tolerances, and protected action signatures. Validate the complete sampled entry/exit trajectory and distinct feeding pose, preserve all previously frozen evidence, and review in context before production replacement."
+  ],
+  "production_modified": false,
+  "model_or_profile_modified": false,
+  "engine_launched": false,
+  "pose_feasible": false,
+  "visual_accepted": false,
+  "in_level_accepted": false
+}

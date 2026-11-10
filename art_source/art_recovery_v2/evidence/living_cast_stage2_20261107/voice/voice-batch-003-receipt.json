@@ -1,0 +1,215 @@
+{
+  "scope": "batch003 newly delivered recordings only; full catalog remains incomplete",
+  "synthesized": 25,
+  "retained": 443,
+  "pending": 372,
+  "new_bytes_this_batch": 1102114,
+  "new_voice_bytes_total": 2059456,
+  "total_new_recordings": 53,
+  "previous_batch_bytes_unchanged": true,
+  "manifest_sha256": "82d87d38a181e5408d0238461749403dd5a23e97a0d10d5dbc4bdb8611509442",
+  "files": [
+    {
+      "speaker": "vale",
+      "text": "A road to the record. Not a claim that we carried everything.",
+      "path": "res://assets_external/audio/voices/community/80f92913382f9bdb50ab08404c99025512deedaf5c555d3dfd6226a2643fab39.ogg",
+      "sha256": "7931c095fb95fc0b90252d8292f33b7c852bbc984e06896b3ec8cd6e83ee67fd",
+      "bytes": 27773,
+      "duration_seconds": 3.6173333333333333
+    },
+    {
+      "speaker": "tor",
+      "text": "Dry tools underneath. Sleeping cloths on top. Nobody should have to unpack a whole cart to lie down.",
+      "path": "res://assets_external/audio/voices/community/7065453aec6c6ce0a58e23bbd333c272ba491e916d12860241c0603627643476.ogg",
+      "sha256": "f5552aaa0ee1b90c3303a95e0a8116235eabff2ec164adbf6054341a04389f7d",
+      "bytes": 47003,
+      "duration_seconds": 7.22
+    },
+    {
+      "speaker": "rook",
+      "text": "I would prefer a lighter future. This one has cooking pots.",
+      "path": "res://assets_external/audio/voices/community/9f9e4b4875bf9048d8c9f382f286c3b61727a48aa2559b4314234564dee55fb9.ogg",
+      "sha256": "b55f915b4736c2cd7066717f3d50afc0a6bfd74f2d67b55f2deae94e76eafa77",
+      "bytes": 28322,
+      "duration_seconds": 4.197333333333333
+    },
+    {
+      "speaker": "kael",
+      "text": "What stays?",
+      "path": "res://assets_external/audio/voices/community/94ee934d28c92e58356cce0a576fe7af7b9bde6f16a312f7f8f4bfb8544936c8.ogg",
+      "sha256": "32057ee2c1305dd39e7adc93d45f069722bd86bdd63569cb7dfe9da3d78572e4",
+      "bytes": 9745,
+      "duration_seconds": 1.0659583333333333
+    },
+    {
+      "speaker": "tor",
+      "text": "The walls. What we cannot carry. The people who freely chose another road know where we are going.",
+      "path": "res://assets_external/audio/voices/community/79bac40b6de45c916c6ecdd43111c1a3cf5bf65e8bd183a47696362dd147bcad.ogg",
+      "sha256": "5aef2f387a29ce40cdf89178d318f53e09a518720aedccbee2cafdb07366096e",
+      "bytes": 39394,
+      "duration_seconds": 6.112
+    },
+    {
+      "speaker": "rook",
+      "text": "The pots have arrived. Tomorrow somebody still has to cook.",
+      "path": "res://assets_external/audio/voices/community/dbc41f5abe8ff6314dabeaa12b1de0ee0b021657c4eb92a3f6d352de984e8aaa.ogg",
+      "sha256": "b4a40032971a28cdbbc6bd393031c1de80cfe6c45c13bd2ebc374cca442fbf99",
+      "bytes": 27864,
+      "duration_seconds": 4.156
+    },
+    {
+      "speaker": "nera",
+      "text": "The refuge has beds. It has no oath around it. We keep watch with people now.",
+      "path": "res://assets_external/audio/voices/community/d7c5f220cb6c3a89402109ec21468f2353e0b4cdb4351eaf60ce557180e138a9.ogg",
+      "sha256": "9ced3f8b0e8cffd9989d586d075a0cf2f1f22ee7cac84a988e0d15326430dc58",
+      "bytes": 35320,
+      "duration_seconds": 4.744666666666666
+    },
+    {
+      "speaker": "kael",
+      "text": "Can the road remain open behind us?",
+      "path": "res://assets_external/audio/voices/community/ad210e86aab31ff493be67f8789b79cc038b5f730533d08c5f27d967574d993b.ogg",
+      "sha256": "83e3400f14049f475761b7476bc56e2699ac3d7660800cd3d3bee0860d02463f",
+      "bytes": 18693,
+      "duration_seconds": 2.3233333333333333
+    },
+    {
+      "speaker": "nera",
+      "text": "While we maintain it. Whoever comes later deserves to know both where it goes and what it costs.",
+      "path": "res://assets_external/audio/voices/community/8db31ece70cfc38ac7dbf3d804f4a98fbe2f87769428c69ff8cb28d6655e4c8b.ogg",
+      "sha256": "290dcee76fc12e5a90e91a5a0c4e550008f6364479f2d6a9e778ab9194e98ad9",
+      "bytes": 42145,
+      "duration_seconds": 5.76
+    },
+    {
+      "speaker": "kael",
+      "text": "And the Hart?",
+      "path": "res://assets_external/audio/voices/community/cfe94bb35e286c63d46dc974b89bf399c8a48f3d45d04a30c128ec5dd1229a18.ogg",
+      "sha256": "3bafc77aae4000d07f29f88dc8889681a39fa5a674e6a8bd2ae52efa10835d5e",
+      "bytes": 8856,
+      "duration_seconds": 0.9706666666666667
+    },
+    {
+      "speaker": "nera",
+      "text": "We chose to leave its shelter and its full account. Keep the copies dry. Do not call them the whole of what we lost.",
+      "path": "res://assets_external/audio/voices/community/78eb35605a124d05bce880123e115acfd7c0dec46b0170180a58e82e70f74466.ogg",
+      "sha256": "e3b6ae141b3d3439b7e2d50397fbbee32060939375d4e842caf376bf7dc57036",
+      "bytes": 47637,
+      "duration_seconds": 6.806
+    },
+    {
+      "speaker": "nessa",
+      "text": "Count the portions, not the mouths into debts. A person can eat here and still disagree with us afterward.",
+      "path": "res://assets_external/audio/voices/community/940c66458c11741c136bb16c74189bd595056eee069f37dc8cf36acb9fa5a497.ogg",
+      "sha256": "823ffd4cfd875f054be7400a78f1c5c8a011b5eca8421d4fb325e9708314ccb7",
+      "bytes": 43450,
+      "duration_seconds": 5.962666666666666
+    },
+    {
+      "speaker": "elna",
+      "text": "People keep bringing me empty bowls as if I can fill them with a speech. Give me a table that stays upright. I can begin there.",
+      "path": "res://assets_external/audio/voices/community/24b100654015e086a9e5de39a3dbd00cba6dec1323f21db94cd0875150b71fe8.ogg",
+      "sha256": "206a04c1ca1af7a6c4e485076e2878a4a265af8a8fa5858b770be2789a4c15ce",
+      "bytes": 65947,
+      "duration_seconds": 9.609333333333334
+    },
+    {
+      "speaker": "toma",
+      "text": "A common fire saves wood. Carrying shares home saves arguments. I can tell you what either costs; I cannot tell every household which cost to bear.",
+      "path": "res://assets_external/audio/voices/community/0c22547619f2bbaaaade5dca480328d642751ee638ed3a4c594a708bc994773d.ogg",
+      "sha256": "53a9d6a7dcf50ec0bd80d2a480cdba2f1a8e103404f40d2da3ed8e3621322778",
+      "bytes": 59629,
+      "duration_seconds": 9.41
+    },
+    {
+      "speaker": "tor",
+      "text": "A beam can look straight and still have a rotten seat. Hold it while I check the bearing. We are building for the cart after ours, too.",
+      "path": "res://assets_external/audio/voices/community/13b1e62b7a8d409f640285d2fcfd5e347f51a483ed03076c369c3697f06927be.ogg",
+      "sha256": "ffb151b7fc7d923bfcdb635610aa678062e1f83f68f87dbc1cd3b99167845856",
+      "bytes": 54345,
+      "duration_seconds": 8.346666666666666
+    },
+    {
+      "speaker": "rook",
+      "text": "The water is slow here until the mill lets a pulse through. Read the wet marks on both banks before you promise anyone a quick crossing.",
+      "path": "res://assets_external/audio/voices/community/14d9152042cf0b4259077d9cf2af5a1deaabd3df42b6489544290d14a7e40a6e.ogg",
+      "sha256": "783de75d25993f1034952b77ad86968219f0475b27e671465fd56beea37ee012",
+      "bytes": 53622,
+      "duration_seconds": 7.922
+    },
+    {
+      "speaker": "nera",
+      "text": "Mark where a load can wait safely. A route is not open just because someone brave enough can get through it.",
+      "path": "res://assets_external/audio/voices/community/161f74c52eb2163250a4456fbef9f7c70d396a082c03fa0a33d0719bf1e25995.ogg",
+      "sha256": "3bf0c7d5638d23fb7be8e27ab9db2fe87746e814065f4838ef0cc44a8d092a96",
+      "bytes": 46384,
+      "duration_seconds": 6.464
+    },
+    {
+      "speaker": "anwen",
+      "text": "A bed should not become another confessional. Let the person sleep first. If they want to tell us anything tomorrow, tomorrow has room for it.",
+      "path": "res://assets_external/audio/voices/community/5f937904956d09154d20761349146e9d5e05b41c86609c0a5ef8f8957bbb3427.ogg",
+      "sha256": "d5b6fbfe83892436398f3a191ddaaf83a5c684cd8d1b67838bf53b884766a95e",
+      "bytes": 56087,
+      "duration_seconds": 8.025333333333334
+    },
+    {
+      "speaker": "mira",
+      "text": "Keep the dressings where a stranger can find them. If only I know where they are, we have built a room that stops working whenever I am tired.",
+      "path": "res://assets_external/audio/voices/community/e6f5e899a30307ff841691fe1b65023aa2bd591e799c3916e75974373a730a8a.ogg",
+      "sha256": "17b1c4744e1d0851a0598ff9b07f15c8acbd928ef36bb4c8ae69cbf4382dcb6c",
+      "bytes": 58091,
+      "duration_seconds": 8.314625
+    },
+    {
+      "speaker": "vale",
+      "text": "These are two different shelves. The public account belongs where anyone can compare it. A private statement stays sealed under its owner's terms. Do not let the shelves teach us to forget the difference.",
+      "path": "res://assets_external/audio/voices/community/f31b08fa77fc6a5426874d0ebff1543686b53fd3cf352b95461d715de88575d2.ogg",
+      "sha256": "b1002b3f87b886bc888c0d39c1a8d1c68c368717ae7cae93d3293b285e008476",
+      "bytes": 78108,
+      "duration_seconds": 11.326
+    },
+    {
+      "speaker": "merrow",
+      "text": "I used to call an empty column an administrative problem. Sometimes it means no one agreed to do the work. That is a fact the book must preserve.",
+      "path": "res://assets_external/audio/voices/community/8ec0de65477d932af8aae499b8ef8f3635b92445e09c182c892854f990ea4f8a.ogg",
+      "sha256": "4563cf923c2ae1b6369e7b63c5306d4f2bd01114e93aa9a3fbe67e7bca826347",
+      "bytes": 57635,
+      "duration_seconds": 8.963958333333334
+    },
+    {
+      "speaker": "nessa",
+      "text": "If the rota has a gap, put the gap on the board. Hiding it only means the same tired person fills it again.",
+      "path": "res://assets_external/audio/voices/community/3d4aaf72eedd10bae5a2263dac39deee757e11dadb346faede6b9fe2dd8b979d.ogg",
+      "sha256": "a033db2315db878b681032777e7e3a4c73dea74fab62a11b11e3af6765d17471",
+      "bytes": 46179,
+      "duration_seconds": 6.324
+    },
+    {
+      "speaker": "nera",
+      "text": "A handover needs an answer from the next pair of hands. Leaving a bundle beside someone is not the same thing.",
+      "path": "res://assets_external/audio/voices/community/bc2aed8bc0ab047df5e0b470d522094735a852480a83e075e911d2f59d18200c.ogg",
+      "sha256": "c07f1859e9e5dbac8bf94575a814000d38cc201c6cce545f314c5a98cc662280",
+      "bytes": 47675,
+      "duration_seconds": 6.656
+    },
+    {
+      "speaker": "rook",
+      "text": "I have spent half my life learning which doors want payment before they open. Leave this one easy to find from the road.",
+      "path": "res://assets_external/audio/voices/community/d38f00c7aaa1fd393918c5c56b772d4a67808640b62f569f691f540ad03c925f.ogg",
+      "sha256": "6ea6e94e59f2e224f9312f8b049eb893d3fde3cddb392d618b79f3bee574db8b",
+      "bytes": 48941,
+      "duration_seconds": 7.000666666666667
+    },
+    {
+      "speaker": "tor",
+      "text": "These bunks come apart with common pegs. A room that cannot be repaired by the people using it is only waiting to close.",
+      "path": "res://assets_external/audio/voices/community/04e1c0fb780257c566232227c9d4cdf5aa1971ed2343aa9b1d611d3890db09da.ogg",
+      "sha256": "509f0ccf7b90866921172b9748215ce79c0c9112c857d2412de7810b72ba4a54",
+      "bytes": 53269,
+      "duration_seconds": 8.265333333333333
+    }
+  ],
+  "listening_acceptance": false,
+  "gameplay_acceptance": false
+}

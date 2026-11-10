@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "asset": "M15",
+  "candidate_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+  "preview_receipt_sha256": "5898497e967f8519a634270cff31d4f9fdf67a186d69dbcfcab3e36b5d3a3bb2",
+  "source_preview_reviewed": true,
+  "viewed_frames": [
+    "review_iterations\\preview_r2\\source_review\\Idle_00.png",
+    "review_iterations\\preview_r2\\source_review\\Idle_25.png",
+    "review_iterations\\preview_r2\\source_review\\Idle_50.png",
+    "review_iterations\\preview_r2\\source_review\\Idle_75.png",
+    "review_iterations\\preview_r2\\source_review\\Investigate_50.png",
+    "review_iterations\\preview_r2\\source_review\\Feed_38.png",
+    "review_iterations\\preview_r2\\source_review\\Feed_61.png",
+    "review_iterations\\preview_r2\\source_review\\Sleep_50.png"
+  ],
+  "observations": [
+    "Fixed-camera Idle00/25/50/75 show sequential left/middle/right sac expansion with retained feet and body placement.",
+    "Feed38/61 show stronger overlapping bellows motion and restrained jaw movement.",
+    "Sleep50 retains the source lower-head posture and subdued sac movement.",
+    "Clay source frames assess motion silhouette; runtime material data are retained by exact GLB base proof."
+  ],
+  "limitations": [
+    "Eight still frames, not a full-cycle rendered review.",
+    "Native driver interruption/attack profile and in-level lighting, contact and performance remain pending."
+  ],
+  "full_cycle_visual_reviewed": false,
+  "native_prepared_verified": false,
+  "visual_accepted": false,
+  "user_accepted": false,
+  "production_overwritten": false
+}

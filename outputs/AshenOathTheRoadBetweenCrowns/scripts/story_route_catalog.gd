@@ -8,12 +8,36 @@ const ZONE_NAMES := {
 	"bandit_road":"Bandit Road", "vargan_approach":"Castle Vargan Approach",
 	"vargan_court":"Castle Vargan Courtyard", "record_hall":"Vargan Record Hall",
 	"undercroft":"Vargan Undercroft", "assembly":"Greyfen Assembly", "hart_glade":"White Hart Glade",
-	"cemetery":"Greyfen Cemetery", "ruins":"Old Ruins"
+	"cemetery":"Greyfen Cemetery", "ruins":"Old Ruins", "lantern_reach":"Lantern Reach", "hearthward":"Hearthward"
 }
 
 # zone, public interaction IDs, local context, why the step matters. Empty IDs
 # deliberately leave investigation and combat as areas rather than hidden pins.
 const ROUTES := {
+	"main_empty_tables": {
+		"reach_lantern_reach":["lantern_reach",[],"Take the west landing road from the mill's south yard.","Make food and shelter possible without demanding testimony."],
+		"hear_households":["lantern_reach",["community:board"],"Read the households' public requests at the waiting table.","Separate practical needs from private accounts."],
+		"prepare_kitchen":["lantern_reach",["community:work:kitchen_trestle","community:work:kitchen_screen","community:work:kitchen_places"],"Brace the table, secure the screen and lay the meal places.","Complete the work before deciding who will carry it."],
+		"settle_tables":["lantern_reach",["community:board"],"Choose the food arrangement at the table, then serve the first meal.","An agreement becomes real through its first meal."]
+	},
+	"main_road_kept_open": {
+		"survey_crossing":["lantern_reach",["community:survey:near","community:survey:far"],"Inspect both banks; the old service footway runs north of the water.","Check the real passage before choosing its upkeep."],
+		"agree_route":["lantern_reach",["community:board"],"Compare the crossing and ferry at the waiting table.","Each route needs different work and a continuing watch."],
+		"secure_route":["lantern_reach",[],"Complete the three marked tasks on your chosen route.","A decision alone does not repair a landing."],
+		"open_route":["lantern_reach",["community:aftermath:main_road_kept_open"],"Load the first passage, cross with it and set it down at the far landing.","Test the working route with a real load."]
+	},
+	"main_house_many_names": {
+		"reach_hearthward":["hearthward",[],"Leave the Undercroft through the northern witness doorway and follow the refuge path.","Prepare a house where shelter does not require a story."],
+		"hear_households":["hearthward",["community:board"],"Read the refuge's practical requests at the public table.","Keep needs separate from sealed testimony."],
+		"prepare_refuge":["hearthward",["community:work:refuge_bunks","community:work:refuge_shelves","community:work:refuge_places"],"Raise the bunks, line the shelves and prepare an open place.","Beds and medicine come before names in a book."],
+		"settle_records":["hearthward",["community:board"],"Choose the custody arrangement, then welcome the first arrivals.","Enact the difference between public evidence and private testimony."]
+	},
+	"main_what_we_promise": {
+		"gather_cast":["hearthward",["community:board"],"Open the meeting at the public table. Absent people have not agreed to anything.","Ask what this community can actually maintain."],
+		"test_arrangements":["hearthward",["community:work:promise_meal","community:work:promise_alarm","community:work:promise_records"],"Practice the meal handover, alarm and record comparison.","Test how work survives a keeper's absence."],
+		"choose_responsibilities":["hearthward",["community:board"],"Ask available keepers directly; record their answers and post any vacancies at the table.","A refused shift never closes food or shelter."],
+		"carry_promise":["hearthward",["community:aftermath:main_what_we_promise"],"Keep the first watch beside the posted rota.","Keep withdrawal possible after the meeting ends."]
+	},
 	"main_road_of_crows": {
 		"speak_anwen":["greyfen", ["sister_anwen"], "Anwen cares for a traveler by the north shrine.", "Ask about Bram, Sella and Oren, who have not come home."],
 		"evidence_ready":["wychwood", [], "Follow the north road into Wychwood; inspect the broken cart and disturbed roadside.", "Bring Anwen an account of what happened to the missing travelers."],
@@ -151,6 +175,7 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 			entry = _unfinished_group_route(quest_id, ["evidence_mile_marker", "evidence_supply_cart", "evidence_gate_notice", "evidence_iron_binding", "evidence_ledger_fragment"], quests, current_zone, entry)
 	if current_zone == "assembly" and (quest_id == "side_millers_measure" and objective_id == "ash_choice" or quest_id == "side_soldiers_debt" and objective_id == "debt_choice"):
 		entry = ["assembly", ["assembly_choice"], "Bring the recovered account to the assembly.", "Keep this record available without claiming anyone's consent."]
+	entry = _community_progress(quest_id,objective_id,entry,state)
 	var ids: Array[String] = []
 	for id in entry[1]:
 		ids.append(str(id))
@@ -179,6 +204,29 @@ static func for_objective(quest_id: String, objective_id: String, state = null, 
 		result["next_action"] = "Optional: corroborate the road closure; the command proof remains in the archive"
 	return result
 
+static func _community_progress(quest: String, objective: String, entry: Array, state) -> Array:
+	if state == null or quest not in preload("res://scripts/campaign_revision.gd").NEW_CHAPTERS: return entry
+	var result := entry.duplicate(true)
+	if objective=="secure_route":
+		result[1]=[]
+		var ids: Array = ["crossing_beam","crossing_rail","crossing_load"] if str(state.get_flag("community_route",""))=="crossing" else ["ferry_landing","ferry_rope","ferry_load"]
+		for id: String in ids: result[1].append("community:work:"+id)
+	var targets: Array = []
+	for id: String in result[1]:
+		if id.begins_with("community:work:") and bool(state.get_flag("community_work:"+id.trim_prefix("community:work:"),false)): continue
+		if id.begins_with("community:survey:") and bool(state.get_flag("community_survey:"+id.trim_prefix("community:survey:"),false)): continue
+		targets.append(id)
+	result[1]=targets
+	var choice_flag := "community_distribution" if quest=="main_empty_tables" else "community_records"
+	if objective in ["settle_tables","settle_records"] and str(state.get_flag(choice_flag,""))!="": result[1]=["community:aftermath:"+quest]
+	if objective=="open_route" and bool(state.get_flag("community_route_load_carried",false)):
+		if bool(state.get_flag("community_route_load_crossed",false)): result[1]=["community:delivery"]
+		elif str(state.get_flag("community_route",""))=="ferry": result[1]=["community:ferry"]
+		else:
+			result[1]=[]
+			result[2]="Carry the load over the repaired crossing between the two railings."
+	return result
+
 static func _unfinished_group_route(quest_id: String, members: Array, quests, current_zone: String, fallback: Array) -> Array:
 	# Prefer unfinished evidence in this place without revealing a hidden pin.
 	# Quest completion also preserves discoveries from saves predating evidence history.
@@ -200,13 +248,19 @@ static func ending_continuation(state, current_zone: String) -> Dictionary:
 	var completed: bool = bool(state.get_flag("final_choice_completed", false))
 	var covenant: String = str(state.get_flag("final_covenant", ""))
 	if not completed and covenant != "":
-		var ending: String = str({"witness":"expose", "mercy":"free", "duty":"bind", "ash":"kill"}.get(covenant, ""))
-		var steps: Dictionary = {
-			"expose":["Lay the command ledger", "Speak the recovered names", "Speak of the retreat"],
-			"free":["Return the family tokens", "Keep the public record", "Untie the witness"],
-			"bind":["Set down the old badge", "Name the limits of the promise", "Take the willing burden"]
-		}
-		if steps.has(ending) and bool(state.get_flag("covenant_ritual_started", false)):
+		var ending: String = preload("res://scripts/ending_catalog.gd").normalize(covenant)
+		if preload("res://scripts/covenant_resolution.gd").relocation_pending(state):
+			var row: Dictionary=load("res://scripts/community_ending.gd").continuation(state)
+			var result := _continuation(str(row.id),str(row.title),str(row.action),str(row.zone),str(row.text),"The chosen relocation is unfinished until the willing households arrive.")
+			result["target_ids"]=row.get("target_ids",[])
+			result["pinpoint"]=true
+			return result
+		var steps: Dictionary = {}
+		for id: String in preload("res://scripts/ending_catalog.gd").IDS:
+			steps[id] = []
+			for entry: Array in preload("res://scripts/covenant_resolution.gd").steps_for(id,state):
+				steps[id].append(str(entry[0]))
+		if not steps.get(ending,[]).is_empty() and bool(state.get_flag("covenant_ritual_started", false)):
 			var step: int = clampi(int(state.get_flag("covenant_ritual_step", 0)), 0, 3)
 			var ritual_result := _continuation("covenant_resolution", "THE CHOSEN PROMISE", "Let the covenant settle" if step >= 3 else str(steps[ending][step]), "hart_glade", "The marked places carry the promise in order.", "Carry out the intention you chose.")
 			if step < 3:

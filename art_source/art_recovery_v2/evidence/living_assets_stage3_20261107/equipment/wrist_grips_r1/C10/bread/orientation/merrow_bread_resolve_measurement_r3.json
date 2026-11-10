@@ -1,0 +1,423 @@
+{
+  "asset": "C10",
+  "style": "bread",
+  "scope": "Actual r2 checkpoints and fully re-skinned bounded arm projections, source guidance",
+  "failed_r2_verified_frames": 146,
+  "expected_fit_frames": 839,
+  "failed_r2_midpoint_passes": 606,
+  "failure_times_s": [
+    0.0,
+    0.0166666666666667,
+    0.0333333333333333,
+    0.0666666666666667,
+    0.075,
+    0.175,
+    1.20833333333333,
+    1.21666666666667
+  ],
+  "checkpoints": [
+    {
+      "index": 0,
+      "time_s": 0.0,
+      "from_failed_fit": true,
+      "native_skin_probe": true
+    },
+    {
+      "index": 2,
+      "time_s": 0.0166666666666667,
+      "from_failed_fit": true,
+      "native_skin_probe": false
+    },
+    {
+      "index": 4,
+      "time_s": 0.0333333333333333,
+      "from_failed_fit": true,
+      "native_skin_probe": false
+    },
+    {
+      "index": 8,
+      "time_s": 0.0666666666666667,
+      "from_failed_fit": true,
+      "native_skin_probe": false
+    },
+    {
+      "index": 9,
+      "time_s": 0.075,
+      "from_failed_fit": true,
+      "native_skin_probe": false
+    },
+    {
+      "index": 21,
+      "time_s": 0.175,
+      "from_failed_fit": true,
+      "native_skin_probe": false
+    },
+    {
+      "index": 105,
+      "time_s": 0.875,
+      "from_failed_fit": false,
+      "native_skin_probe": false
+    },
+    {
+      "index": 145,
+      "time_s": 1.20833333333333,
+      "from_failed_fit": true,
+      "native_skin_probe": false
+    },
+    {
+      "index": 146,
+      "time_s": 1.21666666666667,
+      "from_failed_fit": true,
+      "native_skin_probe": false
+    },
+    {
+      "index": 209,
+      "time_s": 1.74166666666667,
+      "from_failed_fit": false,
+      "native_skin_probe": true
+    },
+    {
+      "index": 210,
+      "time_s": 1.75,
+      "from_failed_fit": false,
+      "native_skin_probe": false
+    },
+    {
+      "index": 314,
+      "time_s": 2.61666666666667,
+      "from_failed_fit": false,
+      "native_skin_probe": false
+    },
+    {
+      "index": 419,
+      "time_s": 3.49166666666667,
+      "from_failed_fit": false,
+      "native_skin_probe": true
+    },
+    {
+      "index": 524,
+      "time_s": 4.36666666666667,
+      "from_failed_fit": false,
+      "native_skin_probe": false
+    },
+    {
+      "index": 628,
+      "time_s": 5.23333333333333,
+      "from_failed_fit": false,
+      "native_skin_probe": true
+    },
+    {
+      "index": 733,
+      "time_s": 6.10833333333333,
+      "from_failed_fit": false,
+      "native_skin_probe": false
+    },
+    {
+      "index": 838,
+      "time_s": 6.98131704330444,
+      "from_failed_fit": false,
+      "native_skin_probe": true
+    }
+  ],
+  "max_native_skin_probe_error_m": 6.792009757742307e-05,
+  "heldout_r1_to_r2": {
+    "0": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004018939572658439,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.00347129112534107,
+      "elbow_error_m": 0.0027531058016549382
+    },
+    "2": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004027649009183577,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471221803623912,
+      "elbow_error_m": 0.002738093793768497
+    },
+    "4": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.0040364392516374775,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.0034712578379389046,
+      "elbow_error_m": 0.002723180866671962
+    },
+    "8": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004055125008208071,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471226629802333,
+      "elbow_error_m": 0.002691672258440748
+    },
+    "9": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.00405996131946829,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.0034712652749446455,
+      "elbow_error_m": 0.002683959000057649
+    },
+    "21": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004120908610229498,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.0034712789281270734,
+      "elbow_error_m": 0.002578601163848037
+    },
+    "105": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004289525640393273,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.00347172653386724,
+      "elbow_error_m": 0.0022009276316052526
+    },
+    "145": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004276343175778195,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471318118776394,
+      "elbow_error_m": 0.0022696414271836797
+    },
+    "146": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004277862353064925,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471341988790926,
+      "elbow_error_m": 0.0022689658882206276
+    },
+    "209": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004436453520912338,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.0034715388376328,
+      "elbow_error_m": 0.002015983176104503
+    },
+    "210": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004437064987980558,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471557152033294,
+      "elbow_error_m": 0.0020130428233536227
+    },
+    "314": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004282830422762363,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471268447422228,
+      "elbow_error_m": 0.0023013359038849125
+    },
+    "419": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004059539727426032,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.0034715200435208506,
+      "elbow_error_m": 0.002649729722046639
+    },
+    "524": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.0038767930804163085,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471732306557459,
+      "elbow_error_m": 0.0030298964540906464
+    },
+    "628": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.0039630117465074615,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.0034713530668549894,
+      "elbow_error_m": 0.00350906429235365
+    },
+    "733": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.003793006514516616,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471448826670445,
+      "elbow_error_m": 0.0033731310067347158
+    },
+    "838": {
+      "affected_vertices": 2630,
+      "maximum_owning_surface_error_m": 0.004133267543520882,
+      "maximum_untouched_surface_error_m": 0.0,
+      "wrist_error_m": 0.003471743039075634,
+      "elbow_error_m": 0.0024984899069495914
+    }
+  },
+  "max_owning_surface_model_error_m": 0.004437064987980558,
+  "model_guidance_limit_m": 0.002,
+  "exact_r2": {
+    "tested": 179,
+    "midpoint_surface_passes": 69,
+    "checkpoint_contact_passes": 69,
+    "first_blocker_counts": {
+      "torso": 67
+    },
+    "first_blocker_witnesses": {
+      "torso": {
+        "index": 0,
+        "vertices": [
+          [
+            1,
+            1070
+          ],
+          [
+            1,
+            1069
+          ],
+          [
+            1,
+            1068
+          ]
+        ],
+        "dominant_joints": [
+          "clavicle_r",
+          "clavicle_r",
+          "clavicle_r"
+        ],
+        "prop_triangle": 323
+      }
+    },
+    "whole_checkpoint_survivors": [
+      {
+        "retained_grip": {
+          "palm_vertex": [
+            3,
+            1974
+          ],
+          "prop_primary_vertex": 198,
+          "prop_support_direction_index": 8,
+          "twist_degrees": 0,
+          "contact_offset_m": 0.0003,
+          "hand_local_palm": [
+            0.019360490813407915,
+            0.044843550868914575,
+            -0.021257152270507534
+          ],
+          "prop_local_anchor": [
+            0.0,
+            0.00150670844595879,
+            0.158833414316177
+          ],
+          "basis_columns": [
+            [
+              0.08499511408530525,
+              0.6708779458205775,
+              0.7366808076726229
+            ],
+            [
+              -0.7366808076726229,
+              0.5401314403723625,
+              -0.40688992949947644
+            ],
+            [
+              -0.6708779458205775,
+              -0.5081149564152183,
+              0.5401314403723625
+            ]
+          ]
+        },
+        "maximum_sampled_contact_error_m": 0.000300100352333606
+      },
+      {
+        "retained_grip": {
+          "palm_vertex": [
+            3,
+            1974
+          ],
+          "prop_primary_vertex": 198,
+          "prop_support_direction_index": 8,
+          "twist_degrees": 0,
+          "contact_offset_m": 0.00085,
+          "hand_local_palm": [
+            0.019908161114391178,
+            0.0448310935008923,
+            -0.021308995519098133
+          ],
+          "prop_local_anchor": [
+            0.0,
+            0.00150670844595879,
+            0.158833414316177
+          ],
+          "basis_columns": [
+            [
+              0.08499511408530525,
+              0.6708779458205775,
+              0.7366808076726229
+            ],
+            [
+              -0.7366808076726229,
+              0.5401314403723625,
+              -0.40688992949947644
+            ],
+            [
+              -0.6708779458205775,
+              -0.5081149564152183,
+              0.5401314403723625
+            ]
+          ]
+        },
+        "maximum_sampled_contact_error_m": 0.0008501003429676374
+      }
+    ]
+  },
+  "projected": [],
+  "selected": {
+    "kind": "exact_r2_alternate_orientation",
+    "retained_grip": {
+      "palm_vertex": [
+        3,
+        1974
+      ],
+      "prop_primary_vertex": 198,
+      "prop_support_direction_index": 8,
+      "twist_degrees": 0,
+      "contact_offset_m": 0.0003,
+      "hand_local_palm": [
+        0.019360490813407915,
+        0.044843550868914575,
+        -0.021257152270507534
+      ],
+      "prop_local_anchor": [
+        0.0,
+        0.00150670844595879,
+        0.158833414316177
+      ],
+      "basis_columns": [
+        [
+          0.08499511408530525,
+          0.6708779458205775,
+          0.7366808076726229
+        ],
+        [
+          -0.7366808076726229,
+          0.5401314403723625,
+          -0.40688992949947644
+        ],
+        [
+          -0.6708779458205775,
+          -0.5081149564152183,
+          0.5401314403723625
+        ]
+      ]
+    },
+    "maximum_sampled_contact_error_m": 0.000300100352333606
+  },
+  "remaining_gate": "Native exact right-arm/clip/skin proof for retarget; full Blender 839 frames, 1 mm contact, complete skin surface and containment",
+  "grip_verified": false,
+  "runtime_output": false,
+  "visual_accepted": false,
+  "source_sha256": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C10\\90c73fddbfc6e1225ef6b984faa9e35bfb1cd8a51008b17496cf444fa706eb3f\\receipt.json": "471715adf6bf21a990a1b5d4f32f2b873aa7b622a77316a05f9ca89d9e926b48",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C10\\49446da4b512350640f0d67d5906d19d7fb078cfa145c6d2431c1e108be182b5\\receipt.json": "4fc2beae1237fba003f3d7c5a04d92e89533a000ef4fce8864aab34baae42be4",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C10\\0b92db237e216f37acc577cd3a0f7a66faeb18dca3be052156c1216fb604f5ff\\receipt.json": "eb5ddb6aa2e0063470e75e2699a8d5ba76aa9a0b5026b19de1439dc395c8887e",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C10\\90c73fddbfc6e1225ef6b984faa9e35bfb1cd8a51008b17496cf444fa706eb3f\\C10_activity_poses.glb": "ec4abb515bbd2425295818699c0b9735067a561ebc782f2ffeaebef6f4bc0315",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C10\\49446da4b512350640f0d67d5906d19d7fb078cfa145c6d2431c1e108be182b5\\C10_activity_poses.glb": "43a80115596ec99e4db53b188489d92f1bfe401b3c3c52dd5b0d1d817e1031d3",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C10\\0b92db237e216f37acc577cd3a0f7a66faeb18dca3be052156c1216fb604f5ff\\C10_activity_poses.glb": "62e6e4fb2942324ee4907c892c541d73c306c50cbed714b3d806e2bc17e54498",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\compatible_c10_bread_direction_wrist_fit_r4\\fit\\receipt.json": "d694af9e0dc0e9553cb04310ac9af4ec3eb8e45c49c965c8acc5569d52149771",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\compatible_c10_bread_direction_wrist_fit_r4\\receipt.json": "22e4186fde7f27551bcca21c04269159a96afe75632b4a05eb11d8c02e5d055f",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread.glb": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\measure_merrow_bread_direction.py": "a2bc1ff91226d0f55fa1d8ff6c7fc5f90fffcf32b8b0fffc2652db44a592ff9b",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\measure_remaining_wrist_goals.py": "49933fab0107554df3989e3e5172226748c206b0aa0509d62a27ac1581be8c58",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\diagnose_c02_bread_midpoint.py": "dbbd534d48b219dc924a616b00dc32350ecd78e95335e75d893771642479ba5e",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\run_merrow_bread_wrist_r2_fit.py": "05070a2f12e3ad7c87bf737ca84b7c2c0ca605f0c1203c4178ff2ab6d42cd9e7",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\measure_merrow_bread_resolve_r3.py": "87479e819da10f0881794a9a23194d7094a8e110fcfb57325bc4e49f0c5befee"
+  }
+}

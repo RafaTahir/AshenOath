@@ -1,0 +1,607 @@
+{
+  "retained_sha256": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+  "authored_sha256": "69846b22bf5076ff903be119fcee40c63923e4f249e0f0662660487b70715c90",
+  "scope": "Independent pure GLB diagnostic; no Blender/native gate or visual acceptance",
+  "meshes": {
+    "HartFern_0": {
+      "source_triangles": 288,
+      "authored_triangles": 288,
+      "first_missing_triangles": "[]",
+      "first_added_triangles": "[]",
+      "source_vertices": 234,
+      "authored_vertices": 234,
+      "mapped_vertex_bijection": true,
+      "wound_triangle_multiplicity_equal": true,
+      "max_component_error": {
+        "position": 0.0,
+        "normal": 0.00023834986384541068,
+        "uv": 2.384185791015625e-07,
+        "color": 0.002995908260345459
+      },
+      "first_source_color": [
+        0.35686275362968445,
+        0.49803921580314636,
+        0.21176470816135406,
+        1.0
+      ],
+      "first_authored_color": [
+        0.35640016198158264,
+        0.4969330430030823,
+        0.21223078668117523,
+        1.0
+      ],
+      "source_material": {
+        "doubleSided": true,
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "metallicFactor": 0.0,
+          "roughnessFactor": 1.0
+        }
+      },
+      "authored_material": {
+        "doubleSided": true,
+        "name": "Material_0",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0
+        }
+      },
+      "source_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.800000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -7.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "authored_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.800000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -7.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "HartFern_1": {
+      "source_triangles": 288,
+      "authored_triangles": 288,
+      "first_missing_triangles": "[]",
+      "first_added_triangles": "[]",
+      "source_vertices": 234,
+      "authored_vertices": 234,
+      "mapped_vertex_bijection": true,
+      "wound_triangle_multiplicity_equal": true,
+      "max_component_error": {
+        "position": 0.0,
+        "normal": 0.00015301519421972998,
+        "uv": 2.384185791015625e-07,
+        "color": 0.002995908260345459
+      },
+      "first_source_color": [
+        0.35686275362968445,
+        0.49803921580314636,
+        0.21176470816135406,
+        1.0
+      ],
+      "first_authored_color": [
+        0.35640016198158264,
+        0.4969330430030823,
+        0.21223078668117523,
+        1.0
+      ],
+      "source_material": {
+        "doubleSided": true,
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "metallicFactor": 0.0,
+          "roughnessFactor": 1.0
+        }
+      },
+      "authored_material": {
+        "doubleSided": true,
+        "name": "Material_1",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0
+        }
+      },
+      "source_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          3.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "authored_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          3.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "HartFern_2": {
+      "source_triangles": 288,
+      "authored_triangles": 288,
+      "first_missing_triangles": "[]",
+      "first_added_triangles": "[]",
+      "source_vertices": 234,
+      "authored_vertices": 234,
+      "mapped_vertex_bijection": true,
+      "wound_triangle_multiplicity_equal": true,
+      "max_component_error": {
+        "position": 0.0,
+        "normal": 0.00011980733302247026,
+        "uv": 2.384185791015625e-07,
+        "color": 0.002995908260345459
+      },
+      "first_source_color": [
+        0.35686275362968445,
+        0.49803921580314636,
+        0.21176470816135406,
+        1.0
+      ],
+      "first_authored_color": [
+        0.35640016198158264,
+        0.4969330430030823,
+        0.21223078668117523,
+        1.0
+      ],
+      "source_material": {
+        "doubleSided": true,
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "metallicFactor": 0.0,
+          "roughnessFactor": 1.0
+        }
+      },
+      "authored_material": {
+        "doubleSided": true,
+        "name": "Material_2",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0
+        }
+      },
+      "source_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          10.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "authored_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          10.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "HartFern_3": {
+      "source_triangles": 288,
+      "authored_triangles": 288,
+      "first_missing_triangles": "[]",
+      "first_added_triangles": "[]",
+      "source_vertices": 234,
+      "authored_vertices": 234,
+      "mapped_vertex_bijection": true,
+      "wound_triangle_multiplicity_equal": true,
+      "max_component_error": {
+        "position": 0.0,
+        "normal": 0.00029093744783004194,
+        "uv": 2.384185791015625e-07,
+        "color": 0.002995908260345459
+      },
+      "first_source_color": [
+        0.35686275362968445,
+        0.49803921580314636,
+        0.21176470816135406,
+        1.0
+      ],
+      "first_authored_color": [
+        0.35640016198158264,
+        0.4969330430030823,
+        0.21223078668117523,
+        1.0
+      ],
+      "source_material": {
+        "doubleSided": true,
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "metallicFactor": 0.0,
+          "roughnessFactor": 1.0
+        }
+      },
+      "authored_material": {
+        "doubleSided": true,
+        "name": "Material_3",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0
+        }
+      },
+      "source_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          13.600000381469727
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -8.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "authored_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          13.600000381469727
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -8.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "HartFern_4": {
+      "source_triangles": 288,
+      "authored_triangles": 288,
+      "first_missing_triangles": "[]",
+      "first_added_triangles": "[]",
+      "source_vertices": 234,
+      "authored_vertices": 234,
+      "mapped_vertex_bijection": true,
+      "wound_triangle_multiplicity_equal": true,
+      "max_component_error": {
+        "position": 0.0,
+        "normal": 0.00024813799401846026,
+        "uv": 2.384185791015625e-07,
+        "color": 0.002995908260345459
+      },
+      "first_source_color": [
+        0.35686275362968445,
+        0.49803921580314636,
+        0.21176470816135406,
+        1.0
+      ],
+      "first_authored_color": [
+        0.35640016198158264,
+        0.4969330430030823,
+        0.21223078668117523,
+        1.0
+      ],
+      "source_material": {
+        "doubleSided": true,
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "metallicFactor": 0.0,
+          "roughnessFactor": 1.0
+        }
+      },
+      "authored_material": {
+        "doubleSided": true,
+        "name": "Material_4",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0
+        }
+      },
+      "source_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          14.800000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          4.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "authored_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          14.800000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          4.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "HartFern_5": {
+      "source_triangles": 288,
+      "authored_triangles": 288,
+      "first_missing_triangles": "[]",
+      "first_added_triangles": "[]",
+      "source_vertices": 234,
+      "authored_vertices": 234,
+      "mapped_vertex_bijection": true,
+      "wound_triangle_multiplicity_equal": true,
+      "max_component_error": {
+        "position": 0.0,
+        "normal": 0.0014079781740320985,
+        "uv": 2.384185791015625e-07,
+        "color": 0.002995908260345459
+      },
+      "first_source_color": [
+        0.35686275362968445,
+        0.49803921580314636,
+        0.21176470816135406,
+        1.0
+      ],
+      "first_authored_color": [
+        0.35640016198158264,
+        0.4969330430030823,
+        0.21223078668117523,
+        1.0
+      ],
+      "source_material": {
+        "doubleSided": true,
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "metallicFactor": 0.0,
+          "roughnessFactor": 1.0
+        }
+      },
+      "authored_material": {
+        "doubleSided": true,
+        "name": "Material_5",
+        "pbrMetallicRoughness": {
+          "metallicFactor": 0
+        }
+      },
+      "source_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          12.5
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          12.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "authored_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          12.5
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.027000000700354576
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          12.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  }
+}

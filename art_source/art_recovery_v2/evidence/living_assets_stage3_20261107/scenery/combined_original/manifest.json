@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "source_commit": "f6331345c6b03478d228568b1e3197f55413c176",
+  "purpose": "combined-static-before-scenery-split",
+  "native_validation": "pending",
+  "meshes": [
+    {
+      "id": "deep_wood",
+      "runtime": "res://assets_external/environment/forest/Campaign_deep_wood_Landscape.res",
+      "frozen": "deep_wood_e506395d20a2d044.res",
+      "sha256": "e506395d20a2d0448c68930cd0a80596cb3a55237762ab74227748481d3b7dca",
+      "bytes": 3998,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    },
+    {
+      "id": "burned_farmstead",
+      "runtime": "res://assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res",
+      "frozen": "burned_farmstead_1c5bc5a71efc4a5b.res",
+      "sha256": "1c5bc5a71efc4a5bbae8963f126331dea1bb2d466c44b62ee80dd8ed32ae05f9",
+      "bytes": 6909,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    },
+    {
+      "id": "marsh_crossing",
+      "runtime": "res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res",
+      "frozen": "marsh_crossing_fb6374cdf48eac17.res",
+      "sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
+      "bytes": 23761,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    },
+    {
+      "id": "bandit_road",
+      "runtime": "res://assets_external/environment/forest/Campaign_bandit_road_Landscape.res",
+      "frozen": "bandit_road_b540b31cfe7baaa7.res",
+      "sha256": "b540b31cfe7baaa7af821ef698f13ad378d252be433b80e8e096bd2bd9a78f3c",
+      "bytes": 13950,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    },
+    {
+      "id": "farmstead_west",
+      "runtime": "res://assets_external/environment/village/FarmsteadWest_Authored.res",
+      "frozen": "farmstead_west_83aefc3097c553c4.res",
+      "sha256": "83aefc3097c553c46de29fbe9ef7406516cd16d2de62fdf4ca4aba4e77f72a34",
+      "bytes": 34282,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    },
+    {
+      "id": "farmstead_east",
+      "runtime": "res://assets_external/environment/village/FarmsteadEast_Authored.res",
+      "frozen": "farmstead_east_5f9e0280e328fce1.res",
+      "sha256": "5f9e0280e328fce10f50c4977b5510bbfac50f50e705fa53cc11bdb252109e79",
+      "bytes": 33915,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    },
+    {
+      "id": "checkpoint",
+      "runtime": "res://assets_external/environment/village/RoadCheckpoint_Authored.res",
+      "frozen": "checkpoint_85e660c2250bb4d3.res",
+      "sha256": "85e660c2250bb4d32353b9007ca639dd9a2ff0670871d212c91a0236151393dc",
+      "bytes": 63047,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    },
+    {
+      "id": "hart",
+      "runtime": "res://assets_external/environment/forest/HartWoodland_Authored.res",
+      "frozen": "hart_26cb52dc8248328a.res",
+      "sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
+      "bytes": 55293,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    },
+    {
+      "id": "mill",
+      "runtime": "res://assets_external/environment/village/AshMill_Authored.res",
+      "frozen": "mill_9fecc6ce7ab50667.res",
+      "sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
+      "bytes": 59294,
+      "origin": "git:f6331345c6b03478d228568b1e3197f55413c176"
+    }
+  ],
+  "source_snapshots": [
+    {
+      "path": "tools/build_campaign_wilds.gd",
+      "frozen": "build_campaign_wilds_89112145507eb915.gd",
+      "sha256": "89112145507eb915095e20a149418b7017f3ef52b4af988f180b67429c1933da"
+    },
+    {
+      "path": "tools/build_hart_woodland.gd",
+      "frozen": "build_hart_woodland_4cfdf590f60de0b7.gd",
+      "sha256": "4cfdf590f60de0b7040a4113f65444b7336c61be9341d9933491485e31ffd49a"
+    },
+    {
+      "path": "tools/build_ash_mill.gd",
+      "frozen": "build_ash_mill_99715fe9e266cdeb.gd",
+      "sha256": "99715fe9e266cdeb9035c9f9293129a20a554bba07a44bf2ef26295b555558ae"
+    },
+    {
+      "path": "tools/build_record_archive.gd",
+      "frozen": "build_record_archive_817fb67034bd8982.gd",
+      "sha256": "817fb67034bd8982720be8516accd2a3ff9ef460f44ca95bf0550ed7d0082bc7"
+    },
+    {
+      "path": "scripts/zones/campaign_wilds_presentation.gd",
+      "frozen": "campaign_wilds_presentation_b3cafa4e17768343.gd",
+      "sha256": "b3cafa4e17768343b9536057d58306c1f9fb30f27fa309a24e689a1c033711e9"
+    },
+    {
+      "path": "scripts/zones/campaign_wilderness_section.gd",
+      "frozen": "campaign_wilderness_section_631d40ff53081876.gd",
+      "sha256": "631d40ff530818764246b6df21278919ab3397863c5c1139f8d451ea4327a2a2"
+    },
+    {
+      "path": "scripts/hart_woodland.gd",
+      "frozen": "hart_woodland_c5e0cacfa62270c5.gd",
+      "sha256": "c5e0cacfa62270c5df229399029059ebfe33f6f3a19d5d803ef37c7eab43b4c3"
+    },
+    {
+      "path": "scripts/world_material_library.gd",
+      "frozen": "world_material_library_6e8a2e43e57544e4.gd",
+      "sha256": "6e8a2e43e57544e4b8ac1691563f88dbbcf3d70e4e41c12011b5ca532b45c826"
+    }
+  ]
+}

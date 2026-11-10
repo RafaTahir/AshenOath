@@ -1,0 +1,23 @@
+{
+  "kind": "four_scenery_source_contracts",
+  "tests": 10,
+  "pass": true,
+  "engine_started": false,
+  "blender_started": false,
+  "native_verified": false,
+  "sources": [
+    {
+      "path": "art_source\\art_recovery_v2\\tools\\author_living_world_parts.py",
+      "sha256": "566541b2f8056691502f67eac0de4ca2509bdfa3c62e390473a8aa486da256cc"
+    },
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\living_world_part_baker.gd",
+      "sha256": "9a3489d6bd0df45d3b35aa291e474f45183198927c2fc85948def84cc8ee56da"
+    },
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_living_world_blender.gd",
+      "sha256": "3e8a959223035ca9405469c0f2ed4d45f87f5e4db908a4f0b2596733601c7f06"
+    }
+  ],
+  "log": "test_all_four_exact_retained_rosters (__main__.Contracts.test_all_four_exact_retained_rosters) ... ok\ntest_archive_reuse_retains_exact_bytes (__main__.Contracts.test_archive_reuse_retains_exact_bytes) ... ok\ntest_archived_recipe_finds_same_art_root (__main__.Contracts.test_archived_recipe_finds_same_art_root) ... ok\ntest_baseline_checks_exact_carrier_native_and_source (__main__.Contracts.test_baseline_checks_exact_carrier_native_and_source) ... ok\ntest_native_compiler_never_uses_runtime_output_as_baseline (__main__.Contracts.test_native_compiler_never_uses_runtime_output_as_baseline) ... ok\ntest_nonfinite_wrong_kind_and_wrong_axle_reject (__main__.Contracts.test_nonfinite_wrong_kind_and_wrong_axle_reject) ... ok\ntest_old_mutable_baseline_contract_rejects (__main__.Contracts.test_old_mutable_baseline_contract_rejects) ... ok\ntest_paths_cannot_escape_art_root (__main__.Contracts.test_paths_cannot_escape_art_root) ... ok\ntest_previous_authored_source_is_not_overwritten (__main__.Contracts.test_previous_authored_source_is_not_overwritten) ... ok\ntest_wrong_duplicate_or_missing_meshes_reject (__main__.Contracts.test_wrong_duplicate_or_missing_meshes_reject) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 0.314s\n\nOK\n"
+}

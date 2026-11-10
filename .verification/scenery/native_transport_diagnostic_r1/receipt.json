@@ -1,0 +1,70 @@
+{
+  "inputs": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\diagnose_native_transport.gd",
+      "sha256": "a22e009fc50bdba0da3ba2a3bdd300a98b10f5ab8fed4978da67ebb5f11b72e1"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\living_world_geometry_contract.gd",
+      "sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\authoring.json",
+      "sha256": "db6690fad9e65124ff5a5a09494aa8972696917ac541341337722527bcecaa21"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\retained_native_497f66d8be78a37d.scn",
+      "sha256": "497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\retained_16c724e98a6b031d.glb",
+      "sha256": "16c724e98a6b031db3029a8dbfa7c80917eb4e7289cd5b8b0af607f6f839adf3"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\scenery\\marsh_reeds\\marsh_reeds_living_v002.glb",
+      "sha256": "661e07f782ff9eb508004368fae216f5669a9e24771f145c56c1a42a20211203"
+    }
+  ],
+  "runs": [
+    {
+      "label": "parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_transport_diagnostic_r1\\project",
+        "--check-only",
+        "--script",
+        "res://diagnose_native_transport.gd"
+      ],
+      "pid": 10532,
+      "exit_code": 0,
+      "timed_out": false,
+      "owned_process_exited": true,
+      "passed": true,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_transport_diagnostic_r1\\parse.log"
+    },
+    {
+      "label": "diagnostic",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_transport_diagnostic_r1\\project",
+        "--script",
+        "res://diagnose_native_transport.gd",
+        "--",
+        "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_transport_diagnostic_r1\\channels.json"
+      ],
+      "pid": 1744,
+      "exit_code": 0,
+      "timed_out": false,
+      "owned_process_exited": true,
+      "passed": true,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_transport_diagnostic_r1\\diagnostic.log"
+    }
+  ],
+  "passed": true,
+  "acceptance": false
+}

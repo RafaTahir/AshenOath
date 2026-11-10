@@ -1,0 +1,2626 @@
+{
+  "version": 1,
+  "sources": {
+    "conversation_topic:life2_anwen_five_minutes:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "160fd95348f4c5e44fe49765cc93680bdbdf6ce3b48fefda09fd313219f8e8bb",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_anwen_five_minutes:line:1": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "ba964783734b01047be9eef2314d413c9ac30f9d87ed6ec5c38169bbae29943a",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_five_minutes:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "f9b0c5ccddadac8f14789750046e564c96dda4fc5274cce4d06aab68be4e7589",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_five_minutes:line:3": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "a45d535bdb297766182142f30e31ee2108c70c79a97ed6b3fef6b2afd6ab2b14",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_five_minutes:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "e3b53acfda04d9e836f934b8ed6f48caa1f153d3ca5da60a5a076f4834524324",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_five_minutes:line:5": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "8fbce991ccbe0e815fda41b73c9d609e13a7fb00febe1d180ffaa79f47080cc9",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_bad_stew:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "cc51e2facaa8280c8c62adcd57225390acc885844d0bf4495c92694207b9b6f6",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_anwen_bad_stew:line:1": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "d22944abc051d74da92c57f280dca7d5491c7162dbd0585eb2f60e314473d153",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_bad_stew:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "059474a89c1c7869cb70534ad9a43231c79556f8aa03129877f738565ffee0df",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_bad_stew:line:3": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "57db91d6f0525cd6f36d242fcb1c2b55fea6d31d1c9d8049533abb65e832ddb7",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_bad_stew:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "5007dae3718b7ad8478d29dddc33558026fb6bfdb1ab9366a47a40022aad0790",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_anwen_bad_stew:line:5": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "e9f411ae0aa9d7a2fb936fbfa5bc266371b3d6637e27b5b7c816d56d0e73c996",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_losing_well:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "016c7588b5f61f62ce6d51386d1a75faa42ff9f25fc7095b2e1bdab168c35562",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_rook_losing_well:line:1": {
+      "speaker_id": "rook",
+      "text_sha256": "ce4144a3fae1f9f58a2ba3fba51d2d1b5c578e10b1cfbc37b70a0b95383e1874",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_losing_well:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "eadac3a86d588dc4a2b6682798fbe86f9176cfab4bf71d7a570345c7d7c6081e",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_losing_well:line:3": {
+      "speaker_id": "rook",
+      "text_sha256": "e42279b2d0f49ffde6564057cb850ad60c11371b0e93bbdc008b13865ef8a6a7",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_losing_well:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "de5de61f30e935d65db6ba6b17e169637ac5c5193594c90e4a357a451156da09",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_losing_well:line:5": {
+      "speaker_id": "rook",
+      "text_sha256": "d2512c0405e4d29492ea7ebb3fa89650d51dbf15c739a79629922513fdaff593",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_quiet_company:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "48a1ca189b274a746c21e12789670034a19c5e34ed254abc3e6ae92af0ac1708",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_rook_quiet_company:line:1": {
+      "speaker_id": "rook",
+      "text_sha256": "12bec66d4b368da90a473e5fcd094dbd0e9a0844e97851836ceb5816aecdb07d",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_quiet_company:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "eecba2d8b6c7044310cce96874e5a65001f1cf976f430cdbeba9515ffc262225",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_quiet_company:line:3": {
+      "speaker_id": "rook",
+      "text_sha256": "851091abdbc1488995af992e7cd4e67ddc28f22a2b226727a89bd6700f7d5a93",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_quiet_company:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "38976f265cbaf88b0c733990df3b732ff7ab43988b8c07b0599b0f3d5bed4a41",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_rook_quiet_company:line:5": {
+      "speaker_id": "rook",
+      "text_sha256": "2c608635d3fb6eff7e27579b13eb85edf240707f3739cff7412dca082e1038cb",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_yellow_flowers:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "b1b01e3e6f83f2d8d6e8074f87dda0943e3605066c8396cc0cc989886781bf04",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_mira_yellow_flowers:line:1": {
+      "speaker_id": "mira",
+      "text_sha256": "4eb4a21ab615a9c28049a56c8b64b758cf5935d6aafffed58cbbf98de82d5ef2",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_yellow_flowers:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "762a8643b44c2956865fc55231651bd8d4a673ec7ff5aeab45ac6e4a3d0efd39",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_yellow_flowers:line:3": {
+      "speaker_id": "mira",
+      "text_sha256": "3bb97c62585cf1497dc99b05196d015b24cdf9929ebe809dfdc35f8f15812668",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_yellow_flowers:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "3b8e97f480d4feff31e2f8005d7fed8f2ec16c6dbea8956df4ab6c8ab829aed3",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_yellow_flowers:line:5": {
+      "speaker_id": "mira",
+      "text_sha256": "802a7d0c83c308e845977a7a20be6c1b838e6d4a7f9cf7839a02e886b3037202",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_rain_reading:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "85b773ae86149fd2dfec5fb2ca6172280930ca29bcf9b93bd2f4798780599279",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_mira_rain_reading:line:1": {
+      "speaker_id": "mira",
+      "text_sha256": "47a81d7d6edd85610621766f70a117bdf703b7c9ecc523686df39252db372da6",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_rain_reading:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "27b027f9abdd3b7197b6a5d537e5b47f5571b9861d08179385b968ce4aac89aa",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_rain_reading:line:3": {
+      "speaker_id": "mira",
+      "text_sha256": "4ef18e5e44d69ad06690b2f5d1139a026a848221196f90c2461e4bd40c9aac3b",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_rain_reading:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "58c1501cae2f48cf2b490fd390d65f45939896967663156f0317fae32f16922b",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_mira_rain_reading:line:5": {
+      "speaker_id": "mira",
+      "text_sha256": "15f270f6f05c50cc6d269e73a255ff4628549651b41b4a9453e67eb300a6ed2f",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_ornament:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "083af0a8dfce7419e2111fac6012b6b5ed1a65a0f7a9f8f657000a2b84f100ff",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_tor_ornament:line:1": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "81664a729965eca1f4ab396641349d13dceca59ff9eb7d4885a34d57cc680ef4",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_ornament:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "21568b8fdef232ac7c97d426192b7b9bdf7a98d66e60f1d432b51e7044bc691f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_ornament:line:3": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "e157d690f5ee68312b206b3e202d01a0a7d9c05ed004e772b0a1f2f30f3cc24f",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_ornament:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "5a8c978f0f0e161857edf81252e14852eebdf79d28af74a87e48434305bd484e",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_ornament:line:5": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "b8cc4507047ea106818b1088be36591ddcab40bd5d360278534fa6e625fc66c9",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_teaching:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "1ae827d790aca58bfeb2dc817bb9173ac423f9f8a9ad4dcb7cb0fcfde496c262",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_tor_teaching:line:1": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "0ce961e5351bb3b10fc1c9687a423e59bea90a084db387d4e50d0585fc2763f4",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_teaching:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "aba8f3fdff2d534e4ccb571b479b1a44986903501da708bfd585319d71c0bb43",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_teaching:line:3": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "d90b88175f61d9a4e4973cb28fc538cd81577909ff8c10132561520e275a2158",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_teaching:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "fc8214b706650877dd44e59c8f9e9336dcd7ef9f8131ba37bfa96113bb60d54d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_tor_teaching:line:5": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "66a0a7abc8fb623517bff080d97cfc924fbd8b674b8a134a9220dc02a2b1dfc9",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_blue:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "98ab99d52ddd446f9ed5b9e876e98978913594cdef209ff6fd8199cc9f4fd361",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_elna_blue:line:1": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "dca6a377340ad0d468b9bd0a4a83a5f9ba8f3c67cdbed7bee03ba82abc2a5559",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_blue:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "0928679e7de0d031bd4572bbe1b8ed7e10b1232c05733a85f1976a23e75d593a",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_blue:line:3": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "436e9680da887b1ada1887ea8d2f7585329503427a0429adec5103641a8903d3",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_blue:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "f5755ff8f2263cc42dfc2479a7690376be13fae7d1e164d887fea1cb5f86efc2",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_blue:line:5": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "5dc68ebe92e22a54331936e03025f2c266a1ee1ac6ce4e501e10e21761549b7d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_visitor:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "a8d400d721f7f45da148bd1ca79bf01f3cd35dea0356a2e7a9839733109205e2",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_elna_visitor:line:1": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "9de75425f12959c58edf62c3b6fd0a40c83c8bc0289de68d37be7cc1ff98af43",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_visitor:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "554e6ec0bec97ecc209b48546b45280204074b5fb33144fa949856ab16fada6f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_visitor:line:3": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "edca3926d57fde8d2c52f9bf4505ff334a8b189a7f72fafdf2c92be7d9962be3",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_visitor:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "211b6befa39a1314a73372485c5eaa71403aff40e871e859134a64790afe4ed4",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_elna_visitor:line:5": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "07a3d110c937413cc9c609526b09876fae473ec5b2b2833d1d6d1a91900f3550",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_daughter_choices:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "335c729c432eff4c06c93f76f8a56a2482029b8e045c15bce6329436d3ae6c72",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_toma_daughter_choices:line:1": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "d0cf9465354878a29278ef3814b7e902405dc335ba7a4ccc58befd7dcf5ac5f6",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_daughter_choices:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "650e967bc2841717c4925e7d39d854001e01fe5012ae660b1bd4c54b15bc56fe",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_daughter_choices:line:3": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "8b3a374e1d6a6e752c084cee80c4aee73b152f141837617acc832212e0bf541e",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_daughter_choices:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "a6a80bd6f3ce9a2b20ae1696915d3ec8ab740b590725425097b1ca1851d0e0cd",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_daughter_choices:line:5": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "962cdcf74931d7fb84f7d2b085957f0e668089354b25434ffa45aab35a55ff95",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_supper:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "bffe3e3d49ef2e80b3fc596309284fb0316a52e7e2de0f7ca3e531664e1d15de",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_toma_supper:line:1": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "08f53954cfbe57f522b848477f1a52f75cd9bebc6e47a75b21dca03da8e3d036",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_supper:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "ab6b37bc6c3b488514d160a96f376f7e49a30ec350bc2ab9e3f24771151d39ca",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_supper:line:3": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "060e0f04988878cc5e0c9b10997e3161c2d8f947de8b1dac9d833858eba7a35e",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_supper:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "9d2b48e73da7b5a299cc255fba9876b377a6cd2c8395d28356fbd0ac43b5f791",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_toma_supper:line:5": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "a2e22deb7dc58a1afd921fdd8509feb0af2771d955bf00988c8aa1e13a8548fb",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_request:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "f9032a275b7182a733f88c9b186713fddcfbd8ae0c348c5bb5f5ec68c3aa4abe",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_senn_request:line:1": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "0ac95cbfd3e1c693755e0bbcb85b39431123bbcab473205711390b98bf3b3180",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_request:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "5106b4b07667ea89813f468d41765658d0905e74e36adf57e304672613b25a50",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_request:line:3": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "50686831823e4e82125d50c2e2f97741886a63b4442bbe5631ea16b4ce4d834e",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_request:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "7025244f3388053d82b0368a7058d6054afae41ce9d23a1220aacbdf6deb3938",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_request:line:5": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "f447b265e5e851806b5beaf7db65b8bb5d44ae7ac5392e0cbb60f946625d04b7",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_song:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "c7f93d6adc755c80e1f414976d434dbc2cf5130029c20527abd63759a1b96b67",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_senn_song:line:1": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "50eb2b5f12092a3e8fcf7e9ab7059515e6eacb3183276d0d943b603bb1b1f24f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_song:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "5a7b498571951e096c41cf160859d404e6b9997ebaf8c6474b74daff0c3b3e88",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_song:line:3": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "eb967f413f91dc48fab06935fe45f992f69270f28516124c812ade348c7f1a90",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_song:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "3cd854e846168298fc204b4f48af55a49a5470a6fd181fba517bf4b5feeb052e",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_senn_song:line:5": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "0449098b2d6a6916565aa0dcf0600e63554eba443314f8888174bd8854499f13",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_breakfast:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "74a5460f8ced97535721e9d22e75e4935b07c1a47c537622d3dbc4b56cacb6a1",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_edric_breakfast:line:1": {
+      "speaker_id": "edric",
+      "text_sha256": "62ec59134a48f3426ea838ded7606a0dfad4d343a0ad2c3a2ba257b5c190c67e",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_breakfast:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "93e4d3a00f2c07d27f5b8ee7d39fc745f3e92a851d4db65e8d41aa9bd80ec4eb",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_breakfast:line:3": {
+      "speaker_id": "edric",
+      "text_sha256": "b923196862cddb754d10d3b9c3c4e95577d3bdd9f68f0a7ba8dfdddbe9bb5f46",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_breakfast:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "0cb090da61d72d59807598300417b41c1f3ecfe4bd2f2f0920c6cb9c55f13324",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_breakfast:line:5": {
+      "speaker_id": "edric",
+      "text_sha256": "db7b9245c3368233ca24cb69b6cd4fe9f251fbcc2b15d19811996065fc13204b",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_tune:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "fada4aaa8a9fd4805da1685d767fccc9429a1469e8562d387c747dd1599512ed",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_edric_tune:line:1": {
+      "speaker_id": "edric",
+      "text_sha256": "34da41ae217ff4769123c11b8c7e4f88b857be34c27c1a2147cf964c2c0e7293",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_tune:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "5a2981e8dbf96a2dde177875971ea4642ac1b72c941c32640743ebc27c8917ef",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_tune:line:3": {
+      "speaker_id": "edric",
+      "text_sha256": "e30b12d9046f0ec8c21277865ebcb7547a8897ca411dc92fae6efbb6251ce4f8",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_tune:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "b0116c9dc19ddbfb0f8f385dbe19babaa6421ab1dcb23458eb19d99f34b4af05",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_edric_tune:line:5": {
+      "speaker_id": "edric",
+      "text_sha256": "81bdc7e1c8a223bb692324912ff00866a7e2d4b35484625aaec87d5cc39a8990",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_weather_sentence:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "31e23ad6bea1a3663771b327319ac2b56c9065b669a4e7800d4c9bb184323b67",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_vale_weather_sentence:line:1": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "20d2c67e7d4273624ebe3e1d7fb624d30251008aed91cc0806369dfc5cc39cc1",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_weather_sentence:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "7d79d8e88079fdef81392d81c4aac9d953c5282eedd58571dde5b31bcea4ea21",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_weather_sentence:line:3": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "30524cc55f32e5b86538742eb14de3c488cf7c45b92f5a8f9504d3a88daaa3b6",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_weather_sentence:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "6db20d6a199249652ffee55b99910ec131aa7001ee6a885024d5bd0c957e164b",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_weather_sentence:line:5": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "f25c5f029f286727a601005b40f4b53c10d7fbe3dfc5ac46fd9f06487b328aba",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_untidy_page:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "a9c4cd200200a2394474f86bc20eb491570641456420aab56cff6b33c4c0df13",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_vale_untidy_page:line:1": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "57a57639b75da92d12498c01acff32b234646b63de4e3442ab25bd52c4fb865e",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_untidy_page:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "fa7de9df2a47d62c3ab8343b408163be6107652754ee585f93ead5f13fee6434",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_untidy_page:line:3": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "676fda6ba50e936ea4a44490b35da71a5f3c96bdc90f9e4b8a83e748fc9c1e2d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_untidy_page:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "0356cab41079e51f3b4bfd38c59dc8b4cb4fd8afb9d39c34fa203a0a398b5720",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_vale_untidy_page:line:5": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "c3d120f2008b554807a17c0b062d9a08b68a998bdd054b4b52f3567a04b9215d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_tea:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "0afb19156ad5aa7f3d2d710998acc7bdfb4fde983816d1b8d8b3309ac6a72e3b",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_merrow_tea:line:1": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "c59bf638d6dc916d607946878e9d055cda7791d46457a112711f83c2227a0bf8",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_tea:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "60fc74109bf007a3e29ee365116222885cdcad6d8da70c7a2e984ec7a26f47f2",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_tea:line:3": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "30f428660da6455d35d545c4d39df57ab26c6c2be3ac588533518f9337ae821f",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_tea:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "6fc5c62ff5094c72eb920a2103e581e40e6383482c4448c2da1e5470b51bd8de",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_tea:line:5": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "4b6c879207e1278da36d998e23631c68cb932d9275e11939ba2b897440bafa47",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_garden_gate:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "53a1c0d5d357a741f6e802bab6a5cd0a5909d8f66fcee8082d24fa1f8457470a",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_merrow_garden_gate:line:1": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "734e199ea564fa048eb0656fe9877823d1285c405ef969666d6d66665e072b01",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_garden_gate:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "7abc4b88b4a5cbcf0ea47d34bc162b94c47aaf5df90738b7854de584a3f96555",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_garden_gate:line:3": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "265591d2935a187c1a2a6d35c6b5420c0783d2aea8b1e79939e3e97bc97283e9",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_garden_gate:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "e8c1fbce7499506da9280513addc40fc317e5ea77529a6e6734d40fdd4f359ea",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_merrow_garden_gate:line:5": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "0ee0d42a88b40822e523e892625e7fe7eaeac93952126f29d926ea3caf528a45",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_carved_animals:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "ea59d114cf10b7a3915974c10c01c87e8cba1a8a9b73f6a30dc109e7cb915d25",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_nessa_carved_animals:line:1": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "00da776f6d2d4a1d4e5958ca63accde4949ab388ccd57db71a5156559a8bca1d",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_carved_animals:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "72ad842092f38cbb4c2dae09e4f64d6e167c68fa1fcd52e0c2c97d0583ff228d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_carved_animals:line:3": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "afb1422c918db55d579a7248cf8e5f114221d8731b0f79328f6024874970aee2",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_carved_animals:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "e274dbf0228159817c598745b23892ad6ad280088550ec56057d19aaf416d531",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_carved_animals:line:5": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "7a2dfe5fae14ce3cde310904c0e211e7ba0005da8e255b366501186f9aa44722",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_being_hosted:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "133c57ccf8438247091217aca9ec6b0ec7918fe999cc243951abed551d8ff549",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_nessa_being_hosted:line:1": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "659dca338fbabd7f54c0b73ff1a27c6d1f5a70c3c2673ad2aed8859660d577d5",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_being_hosted:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "8cab3adb22d97d306578e64eb35d87ac92e1bcd5d17ee5186bd7b0368385e32d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_being_hosted:line:3": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "49ce63e180ba5ab32abf423a4402286dc17e919102fec59a2cf2498a721b6bf9",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_being_hosted:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "e05cf834e3503a5feb3b940fea6ca8c26853182d935f456e1a64b2ce9ccc6a47",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nessa_being_hosted:line:5": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "4bd4d10e370c168d0b7d5afaef5b08701dd4dbf90106e5c6103355b3ec79dee9",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_next_place:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "ed1f071e2eee1449037d86a2693ee85dbd773ef65b6d8587055cb89b73975e9a",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_nera_next_place:line:1": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "b8568025628cd4d8f0b5c9324903ddb5e15af58694b551b776eba1d4f9dc0f6f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_next_place:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "1ec53c2fde8cf57cdc100f2b1bac5c07aea16c8c0675563e40c9035024b67f4c",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_next_place:line:3": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "561d38b7c1790dbc7e0a1822da5ad5ff03d071708d57fe901f4c09f3b5b4302e",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_next_place:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "3c1bfb92faa8667e5cb214a66b09cfff82ac9080f4bde6e75952e4649cae1816",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_next_place:line:5": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "66299a39fea3b76a7ed90b8bcacb6124411619f99a75a62c6e154ebf4fb82ab3",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_small_quarrel:line:0": {
+      "speaker_id": "player",
+      "text_sha256": "a2712940076a0272ef20e30ef4988d692685afc579fa69ac593209d08aed208d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "conversation_topic:life2_nera_small_quarrel:line:1": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "88b15ae3828d841314e40942e1685efeaa39fa0d9a431df605a1306778193d30",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_small_quarrel:line:2": {
+      "speaker_id": "player",
+      "text_sha256": "d140d6a7e59baa085f853123e83d3a064d21614a8da3c45898f62f59ff2e6470",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_small_quarrel:line:3": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "1d16ba9e1d14f1244486721ef34859a7d69eb50d073fe7ac224c25d2960eb180",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_small_quarrel:line:4": {
+      "speaker_id": "player",
+      "text_sha256": "f1b2240cb1ab4cab5656181a3fe0dfb1cc97611a0a4f04613b63bff8b9ad8e50",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "explain",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "conversation_topic:life2_nera_small_quarrel:line:5": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "af7654864393796b761e70b4ecde4b1de7cd4e9e87843e93385144e888751dbf",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.28,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_anwen_take_a_breath:turn:0": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "82e8bd3c6e1abf7bd6a87fa363283fea1bede06718f0e1fb696fe9923928a231",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_anwen_take_a_breath:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "180a02cac08829b7309fa9ec2b9a22b0f654376220b4e0509bb8d36c700a258f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_anwen_take_a_breath:turn:2": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "daf99773de8134929875cb429788a27b226dcd0fa18bc420ea401d90b56cdc5b",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_anwen_take_a_breath:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "ce2fe3ead6c22e549714990d1f95213961c19b5912f91436c5a5d11eced77cab",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_anwen_take_a_breath:turn:4": {
+      "speaker_id": "sister_anwen",
+      "text_sha256": "59ba98b295a84f05f3c6df4e40af4da8fa45b70e889bbff1364b3a68c39dde06",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_anwen_take_a_breath:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "a9a89aea48aa524e934e09bf85925dc96f7fc6225bcb96a9231b9dd06d3abfd9",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_rook_lost_word:turn:0": {
+      "speaker_id": "rook",
+      "text_sha256": "695a8a8a142fb4d88a26148318734a6a16372754d6dadfbaff9cf386a385e89a",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_rook_lost_word:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "8077e6e1a5dd7e5598d34d413454b7e1524e4bf53ffff42472e66aa1e4a5b029",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_rook_lost_word:turn:2": {
+      "speaker_id": "rook",
+      "text_sha256": "56b12d13663fed4e0c6c979054e77ca81b729ea82fddef4e097ac71b815e7511",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_rook_lost_word:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "10857e7b4b33d8d06390a52ac12c3017c42cbdb65bd35e1daee985c4f478657f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_rook_lost_word:turn:4": {
+      "speaker_id": "rook",
+      "text_sha256": "e5149f22d3b1c8060b38f671d371054400be5caa4410cb59c024d2fbe0d99a8d",
+      "performance": {
+        "emotion": "wry",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_rook_lost_word:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "d609574c687b59d4e577d019a13f03aca251e60b24be8806449aabd4ecfa859f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_mira_good_color:turn:0": {
+      "speaker_id": "mira",
+      "text_sha256": "689103a08ba8a25390f5050e8bf0a8259c1c626b3b5900c1fe0b962407a32625",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_mira_good_color:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "742b32f67a9f171838214f630efbb7aea5fa2c331dab4d0a2826f11dd399273d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_mira_good_color:turn:2": {
+      "speaker_id": "mira",
+      "text_sha256": "3a162f1f5c6ae70d5f737687c7765ce5fbc4ca3ab4bf806b41207c1d9a69a206",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker",
+        "attention": {
+          "mode": "point",
+          "anchor": "doorway",
+          "seconds": 1.0
+        }
+      }
+    },
+    "world_scene:life2_mira_good_color:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "c2331b54bea3b0cd2117600dfda1fd53150de0544a0b9624e54da2be65f0b873",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_mira_good_color:turn:4": {
+      "speaker_id": "mira",
+      "text_sha256": "e245d3547a5641d92d2875fd4f0abe8a204690590ec88f8ec1bc974f2a67bab4",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_mira_good_color:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "bab2f55e32550770a9e1c6d50f9841d3cf7b3176b4b56731c8ecd63401e43131",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_tor_hands_behind_back:turn:0": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "719d7bca150cc201e1189cbb960ac1836073dd3f75d82380e54e88abe63638d9",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_tor_hands_behind_back:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "f567875ee63c613650f7f4c52b9caf1adf4e05b996416048a8117611b1acfcb6",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_tor_hands_behind_back:turn:2": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "4a8654ff466227441266643f429eded668fe923add625e5e9987383cd171098d",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_tor_hands_behind_back:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "06bdc8a96701ca712eb14b8a758a0d0bd85e3a2e5c1d1def8f125fa950b7fa70",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_tor_hands_behind_back:turn:4": {
+      "speaker_id": "blacksmith_tor",
+      "text_sha256": "d2cd80ca67613709aba5f85d7b1a49efe9dd8cc65154b8100f68a0b36cab5ba2",
+      "performance": {
+        "emotion": "resolute",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_tor_hands_behind_back:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "406cd70852373c470dd77502644301ab87bfe5c0f2f803a0b377910e45930ed3",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_elna_ordinary_question:turn:0": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "bb067dae49daa6ad75e7419a9369550ef0ad72ec54b6fd8dd130c662d5d4771f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_elna_ordinary_question:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "3e246df4ace607c44892fd61c6a6943de92ba629c1958e3d2de0aafe0f84aa9d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_elna_ordinary_question:turn:2": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "35c224615e46a7b1657188e9ad2d3ae6e51a43af0950af789f74b2d49c5ef49d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_elna_ordinary_question:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "65513bbb4e757fc6b0146c100d0fd6e3db0a92cd2753e381128d43eafd81fd6d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_elna_ordinary_question:turn:4": {
+      "speaker_id": "widow_elna",
+      "text_sha256": "640b6cbdbe350a3befbb4b31bd63570da1c25a740d2ae532b1befc291b577587",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_elna_ordinary_question:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "a164b25a55c4da90b5d425d052680ac895e97302a4a643f81130d263df85ee97",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_toma_unanswered_weather:turn:0": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "ad0556791f92c562f8dbcc7c98a578975faf36faea9b5cd6414a1ebaa2c4d645",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot",
+        "attention": {
+          "mode": "point",
+          "offset": [
+            0,
+            3,
+            -4
+          ],
+          "seconds": 1.2
+        }
+      }
+    },
+    "world_scene:life2_toma_unanswered_weather:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "d008eb2fafffa3719e9430345c28ca0544622c5d98efde87453188c1d692e9b8",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_toma_unanswered_weather:turn:2": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "4f94e9484ced789d0404a1a9d89c6223d293f44ec3f9bf3cf9a11c29aeb04d66",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_toma_unanswered_weather:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "769db3825d95fac15e129ca81d25e56da15e0d983fe33dbbe94805500751fdd3",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_toma_unanswered_weather:turn:4": {
+      "speaker_id": "farmer_toma",
+      "text_sha256": "a5340792cf67ec5b14ca933a51c8fdc773153c56b53f72f2d944033f0bd98f63",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_toma_unanswered_weather:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "51245d15f02c5c3afaff6f8e3109ced88d759fd5825e7db36784a5e3ac956bbe",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_senn_ask_again:turn:0": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "ce03638ea45e4dccd3090998adf3dcb2728f90e185553bb075d627aa4b30bae3",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_senn_ask_again:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "733bd471a6e13858fec85518cf8235ac050ce0710abc18d81709b6fa61c9b475",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_senn_ask_again:turn:2": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "3e2d2f26b72fa5830925b7606f3b2d7e83fe58545e3dbb73ecc2ae2ee99d95e2",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_senn_ask_again:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "80192b35a46317da4ab39757943ced7a71b9e12eed73bd91b32dbeeaf9807c60",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_senn_ask_again:turn:4": {
+      "speaker_id": "captain_senn",
+      "text_sha256": "aed3b0a92c3380b80240ce95b315e53ac75a4a379266df508a12a6b09e17f06d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_senn_ask_again:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "22746fd3efc4e3feb00a4cfcda4c3bf72f7dccddbfc73801c73342962c0cbb5c",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_edric_poor_audience:turn:0": {
+      "speaker_id": "edric",
+      "text_sha256": "b933a10693fc23edf101ce296003a08b386fe815237cb5c45ce5cba81b79a13d",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_edric_poor_audience:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "10f8645fc1e269326504d30346660e48c6b5ed27ff2bdaf2e9741f11c72605b2",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_edric_poor_audience:turn:2": {
+      "speaker_id": "edric",
+      "text_sha256": "2ecda3c3cbb8e7ab57739a60f87fdde4bbebcd463c776d2affd67ebb4716a9ce",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_edric_poor_audience:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "c955147bb11cafef90b9eb6cbe6e3dc6a122a19a0b73e6b77d6febe851bcc0cd",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_edric_poor_audience:turn:4": {
+      "speaker_id": "edric",
+      "text_sha256": "7ebfeb25111d14b48be2d3137f75b11c9b3397c6ec198ba05d0fe5490b88f916",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_edric_poor_audience:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "86d79a7fa5fc26c690f73843e435c94ce9eff979cb3f3beac6de9e9bc2e6b38c",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "guarded_listening",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_vale_keep_the_margin:turn:0": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "d6f7fb6e8d35aacb8fa1326e1082ee758b54d73db129acba2bb133bca5fcfeff",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot",
+        "body_gesture": "settle_ledger"
+      }
+    },
+    "world_scene:life2_vale_keep_the_margin:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "0b7f05070abcb93319cf9f9a2a7ce3303d4a362750996e1999df46c29f70518e",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_vale_keep_the_margin:turn:2": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "4f5f5a8722a1c20a9c4474aab49068087c39eea639d02667897f8716773569c9",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_vale_keep_the_margin:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "3175b8b221a776c89f1444dcb00688355076ab32b2664e04add0752941b351ef",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_vale_keep_the_margin:turn:4": {
+      "speaker_id": "vargan_record_keeper",
+      "text_sha256": "07f0b14faf3c5b9550a5d5616839e0d83d44df0c0287bd6722d24af9cdc870c7",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_vale_keep_the_margin:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "7263abdefb1d0d59e8eff6a6952feecba5a505a7772d5883f8835870235696ee",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_merrow_no_form:turn:0": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "0de12627191c0d0f4b4c3f245582bb53b5b8180eb17fb1ea676193c6d1536dd1",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_merrow_no_form:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "38178a20b470cfd18299fb1593dd4ba706f1a83321dac051d01086efd8b7a96f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_merrow_no_form:turn:2": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "c4e5348c959f5d8a81768cce78ecf6fdf1e46a830ba58bbed0f981088f3458fd",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_merrow_no_form:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "471d182f02dccc43bb2ad08dcc982d8f5b60853986b51f60ece26dddca569847",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker",
+        "body_listener_gesture": "drink"
+      }
+    },
+    "world_scene:life2_merrow_no_form:turn:4": {
+      "speaker_id": "vargan_steward",
+      "text_sha256": "d84e5e8a29e68bdf319fb61ca272a842f919bb1dbe78a8434a24dc8236bde52e",
+      "performance": {
+        "emotion": "concerned",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_merrow_no_form:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "989ef6eac8698b6bce85006e391cad3fb94315e8f485b42fedbc7b10166b21a7",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nessa_guest_for_once:turn:0": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "ac76c4cb7a96501491190fa3b19a1b71aa20d8f14882ef0b0f8872bf578c9ef7",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_nessa_guest_for_once:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "abf2016bd8016398069d7a69a56c2ced7d5ca8d77a4ef77114843c15665a1545",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nessa_guest_for_once:turn:2": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "58fb9256018ca6f31c53f8e685bf7778dbbc4ecaaf3259c823e6e26703a289ed",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nessa_guest_for_once:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "c0ae3aed43d3f028c6ecfd93ed7b97f911b66a0a0cbde19648a59f8262ff05e4",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nessa_guest_for_once:turn:4": {
+      "speaker_id": "saga_nessa",
+      "text_sha256": "757978c5592fb2454b07d11152aa8238488489c2c8aba1227cbcc2ac0b44fbdb",
+      "performance": {
+        "emotion": "warmth",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nessa_guest_for_once:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "4f8f26550ca653943b47a2599dc817e45da97445c877848a67e2e653582ce9a3",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nera_off_duty:turn:0": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "aa87e9d365442e2cc78a6cc8dd6af279b28ad88d56ec098602677f9792c7ed20",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "two_shot"
+      }
+    },
+    "world_scene:life2_nera_off_duty:turn:1": {
+      "speaker_id": "player",
+      "text_sha256": "672946f614f0c7149632ce0afbdc09637e7e29869ec194e5a1df230009fef89a",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nera_off_duty:turn:2": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "4f9190d7277ce1d185d3ae6c2f6c29dcbd8d10ab1d7b441f3207c0cf7e3ae051",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "recall",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nera_off_duty:turn:3": {
+      "speaker_id": "player",
+      "text_sha256": "ec2dcc94263cd2cc301570b786cb91a91953c5b80f45aa8dcd05d33a1148706f",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker",
+        "attention": {
+          "mode": "point",
+          "offset": [
+            2,
+            1.6,
+            -3
+          ],
+          "seconds": 1.0
+        }
+      }
+    },
+    "world_scene:life2_nera_off_duty:turn:4": {
+      "speaker_id": "saga_nera",
+      "text_sha256": "101fdf8befa90861a87c1bd56de50b25a7d47c9ba87559805b9b9bce6e550ef5",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "reassure",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker"
+      }
+    },
+    "world_scene:life2_nera_off_duty:turn:5": {
+      "speaker_id": "player",
+      "text_sha256": "77e091a74771c79c9f9e9cc5c1a0a7be72ec4930b2904fa76fde65d9af5d44d5",
+      "performance": {
+        "emotion": "guarded",
+        "gesture": "acknowledge",
+        "listener_gesture": "acknowledge",
+        "reaction_delay": 0.32,
+        "listener_emotion": "concerned",
+        "framing": "speaker",
+        "attention": {
+          "mode": "neutral",
+          "seconds": 1.2
+        }
+      }
+    }
+  }
+}

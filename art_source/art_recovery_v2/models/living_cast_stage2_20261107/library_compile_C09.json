@@ -1,0 +1,63 @@
+{
+	"libraries": [
+		{
+			"asset": "C09",
+			"bytes": 311479,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Settle_Ledger": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0151059627532959,
+					0.0410032272338867,
+					-0.0138884633779526
+				],
+				"right": [
+					-0.0151057243347168,
+					0.0410031974315643,
+					-0.01388830691576
+				]
+			},
+			"maximum_rest_error": 0.00000351316634805698,
+			"model": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+			"model_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+			"path": "res://assets_external/characters_prepared/animations/life_C09.res",
+			"runtime_reviewed": false,
+			"sha256": "8c91426421c5bd5db5d5f0e64883a54f5e675d0a1fd4258a508286f648c08dfc",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/C09_life_review.glb",
+			"source_sha256": "65ae54bf974efe41d5c02bc7b89df281dbe74897e59e74543ac5262900d6a84f",
+			"user_accepted": false
+		}
+	],
+	"status": "compiled"
+}

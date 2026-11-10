@@ -21,7 +21,19 @@ const STEPS := {
 }
 const POSITIONS := [Vector3(-4.5, 0.0, -2.5), Vector3(0.0, 0.0, -5.0), Vector3(4.5, 0.0, -2.5)]
 
+static func steps_for(ending: String, state) -> Array:
+	return STEPS[ending] if STEPS.has(ending) else preload("res://scripts/campaign_story_overlay.gd").ritual(ending,state)
+
+static func relocation_pending(state) -> bool:
+	return preload("res://scripts/campaign_revision.gd").from_state(state)==2 and str(state.get_flag("final_covenant",""))=="open_road" and state.get_flag("open_road_relocation_started",false)==true and state.get_flag("final_choice_completed",false)!=true
+
+static func ready_to_finish(ending: String, state) -> bool:
+	return ending!="depart" or load("res://scripts/community_ending.gd").ready_to_finish(state)
+
 static func begin(game, ending: String) -> void:
+	ending = preload("res://scripts/ending_catalog.gd").normalize(ending)
+	if steps_for(ending,game.story_state).is_empty():
+		return
 	game.pending_ending = ending
 	game.story_state.set_flag("covenant_ritual_started", true)
 	game.story_state.set_flag("covenant_ritual_step", 0)
@@ -40,13 +52,14 @@ static func restore(game) -> void:
 	if game.current_zone_id != "hart_glade" or game.zone_root == null:
 		return
 	var ending: String = str(game.pending_ending)
-	if not STEPS.has(ending) or bool(game.story_state.get_flag("final_choice_completed", false)):
+	var steps: Array = steps_for(ending,game.story_state)
+	if steps.is_empty() or bool(game.story_state.get_flag("final_choice_completed", false)):
 		return
 	var completed: int = int(game.story_state.get_flag("covenant_ritual_step", 0))
-	var entries: Array = STEPS[ending]
+	var entries: Array = steps
 	game._remove_interactable("white_hart")
 	if completed >= entries.size():
-		game.story_state.set_flag("covenant_ritual_ready", true)
+		game.story_state.set_flag("covenant_ritual_ready", ready_to_finish(ending,game.story_state))
 		return
 	for index in entries.size():
 		var id := "covenant_%s_%d" % [ending, index]
@@ -80,34 +93,37 @@ static func restore(game) -> void:
 static func activate(game, area) -> void:
 	var ending := str(area.get_meta("covenant_ending", ""))
 	var step := int(area.get_meta("covenant_step", -1))
-	if ending != str(game.pending_ending) or not STEPS.has(ending):
+	var steps: Array = steps_for(ending,game.story_state)
+	if ending != str(game.pending_ending) or steps.is_empty():
 		return
 	var completed := int(game.story_state.get_flag("covenant_ritual_step", 0))
-	if completed >= (STEPS[ending] as Array).size():
+	if completed >= steps.size():
 		return
 	if step != completed:
-		game.hud.toast("First, %s." % str(STEPS[ending][completed][0]).to_lower())
+		game.hud.toast("First, %s." % str(steps[completed][0]).to_lower())
 		return
+	if ending=="depart" and not load("res://scripts/community_ending.gd").enact(step,game.story_state,game.quests): return
 	game.story_state.set_flag("covenant_ritual_step", completed + 1)
-	game.story_state.record_evidence(str(area.interaction_id), {"title": str(STEPS[ending][step][0]), "text": str(STEPS[ending][step][1]), "kind": "testimony", "zone": "hart_glade"})
+	game.story_state.record_evidence(str(area.interaction_id), {"title": str(steps[step][0]), "text": str(steps[step][1]), "kind": "testimony", "zone": "hart_glade"})
 	game._mark_interaction_removed(area)
 	game.active_interactable = null
 	game.hud.set_prompt("")
 	area.queue_free()
 	game.audio.play_event("shrine_bell", 0.04)
 	game.hud.show_dialogue({
-		"name": "The covenant", "greeting": str(STEPS[ending][step][1]),
-		"lines": [], "pages": [{"speaker": "The road", "speaker_id": "narrator", "text": str(STEPS[ending][step][1]), "beat": "aftermath"}],
+		"name": "The covenant", "greeting": str(steps[step][1]),
+		"lines": [], "pages": [{"speaker": "The road", "speaker_id": "narrator", "text": str(steps[step][1]), "beat": "aftermath"}],
 		"actions": [], "subtitle_fallback": true
 	})
 	game.get_tree().paused = true
 	game.audio.set_game_paused(true)
 	game.story_save_pending = true
 	game.call_deferred("_persist_story_action")
-	if completed + 1 >= (STEPS[ending] as Array).size():
-		game.story_state.set_flag("covenant_ritual_ready", true)
+	if ending=="depart": preload("res://scripts/story_world_director.gd").refresh(game)
+	if completed + 1 >= steps.size():
+		game.story_state.set_flag("covenant_ritual_ready", ready_to_finish(ending,game.story_state))
 	else:
-		game.hud.set_guidance_hint(str(STEPS[ending][completed + 1][0]), 12.0)
+		game.hud.set_guidance_hint(str(steps[completed + 1][0]), 12.0)
 
 static func finish_if_ready(game) -> void:
 	if not bool(game.story_state.get_flag("covenant_ritual_ready", false)):
@@ -115,5 +131,5 @@ static func finish_if_ready(game) -> void:
 	if bool(game.story_state.get_flag("final_choice_completed", false)):
 		return
 	var ending := str(game.pending_ending)
-	if STEPS.has(ending):
+	if not steps_for(ending,game.story_state).is_empty() and ready_to_finish(ending,game.story_state):
 		game._show_ending_consequence(ending)

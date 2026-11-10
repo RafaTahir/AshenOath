@@ -1,7 +1,10 @@
 extends RefCounted
 
 static func resolve(ending: String, state) -> Array[String]:
-	var cards: Array[String] = [_covenant_card(ending), _greyfen_card(state), _anwen_card(state), _vargan_card(state)]
+	ending = preload("res://scripts/ending_catalog.gd").normalize(ending)
+	if ending == "":
+		return []
+	var cards: Array[String] = [_covenant_card(ending,state), _greyfen_card(state), _anwen_card(state), _vargan_card(state)]
 	for actor in ["elna", "tor", "mira", "rook", "toma", "senn", "memorials", "mill"]:
 		var card := _person_card(actor, state)
 		if card != "":
@@ -92,7 +95,10 @@ static func living_road_cards(state) -> Array[String]:
 static func _flag(state, key: String, fallback: String = "") -> String:
 	return str(state.get_flag(key, fallback))
 
-static func _covenant_card(ending: String) -> String:
+static func _covenant_card(ending: String, state = null) -> String:
+	ending = preload("res://scripts/ending_catalog.gd").normalize(ending)
+	if ending in ["share","depart"]:
+		return preload("res://scripts/campaign_story_overlay.gd").ending_card(ending,state)
 	match ending:
 		"kill":
 			return "ASH\nThe Hart dies. The pressure beneath the road ends, and Greyfen sleeps without waiting for another summons. The complete memory dies with its witness; the human records Kael recovered remain. In the wood, pale shoots fail to return. The living must decide what repair means without the dead to answer them."
@@ -100,8 +106,9 @@ static func _covenant_card(ending: String) -> String:
 			return "MERCY\nKael dismantles the binding and releases the Hart. The recovered record survives, but intimate memories and vulnerable families are not offered for public display. Proven wrongdoing stays on the record. Keeping it safe becomes human work: visits, copies, and a promise to ask before speaking for another person."
 		"bind":
 			return "DUTY\nKael takes stewardship of the binding upon himself. Greyfen has time to mend its roofs and feed its children. The obligation follows him beyond the glade; no villager inherits it merely by living there. He has contained the danger, not settled the debt. Each season brings another reason to return."
-		_:
+		"expose":
 			return "WITNESS\nThe public record can no longer be buried. Names replace the village's comfortable account of its founding. Restitution costs iron, food, labor, and the authority of people who once decided what could be known. Kael keeps the account alive; willing witnesses may share that work, but no refusal is turned into agreement."
+	return ""
 
 static func _greyfen_card(state) -> String:
 	var public_names := _flag(state, "names_policy") == "published"

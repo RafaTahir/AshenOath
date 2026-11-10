@@ -1,0 +1,16 @@
+03:12:22 | INFO: Data are loaded, start creating Blender stuff
+03:12:22 | INFO: Blender create Mesh node C01_ash_staff_C01_AshStaff
+03:12:22 | INFO: Blender create Mesh node C01_Anwen_Anwen_Continuous_Leather_Belt
+03:12:22 | INFO: Blender create Mesh node C01_Anwen_Anwen_EyeCorrected_-1
+03:12:23 | INFO: Blender create Mesh node C01_Anwen_Anwen_Brow_v004_-1
+03:12:23 | INFO: Blender create Mesh node C01_Anwen_Anwen_Hair_Stylized_LowCoil_0
+03:12:24 | INFO: glTF import finished in 2.36s
+03:14:06 | INFO: Data are loaded, start creating Blender stuff
+03:14:06 | INFO: Blender create Mesh node HeldProp_vessel_0_055_0_11_0_23_0_008_16
+03:14:06 | INFO: glTF import finished in 0.01s
+Info: No new files have been packed
+Info: Saved as "C01_supply_fit_proposal.blend"
+C01 HAND FIT PROBE: SOURCE COMPLETE
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

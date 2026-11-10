@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "matching_existing_canonical_satchel_compiler_receipt",
+  "files": [
+    {
+      "path": "satchel_compile.json",
+      "sha256": "40d835410de5e0a895e32d05f7139d264f8c90038cd72087b49ceb9cbaf8dc1c",
+      "bytes": 985,
+      "source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\living_cast_20261107\\props\\satchel_compile.json",
+      "source_mtime_ns": 1794002959108562200
+    },
+    {
+      "path": "living-cast-station-props.stdout.log",
+      "sha256": "2deefd1bad59027fb6abf536d29e36c4b0462f5151cb685187173fbe66b02436",
+      "bytes": 186,
+      "source_path": "D:\\Projects\\AshenOath\\.release-gate\\combined-loading-cast-20261107\\logs\\living-cast-station-props.stdout.log",
+      "source_mtime_ns": 1794002959089207700
+    },
+    {
+      "path": "living-cast-station-props.engine.log",
+      "sha256": "f0ff096d34ae2631c832b75cd17bf036d9609705fc33a8882b90b9a1c9be30ee",
+      "bytes": 183,
+      "source_path": "D:\\Projects\\AshenOath\\.release-gate\\combined-loading-cast-20261107\\logs\\living-cast-station-props.engine.log",
+      "source_mtime_ns": 1794002959108562200
+    }
+  ],
+  "current_runtime_resources": [
+    {
+      "path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel.scn",
+      "sha256": "551a8e31e9f5c5bc9b89a74a3733153a6e2c15f9b6e599d9ac62b0fe5d03f0b8"
+    },
+    {
+      "path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel_body.res",
+      "sha256": "c36bcb1cccb05a08b40d478e3ee7f682ee32ff9ec9fa62e7c9c35b55df58a882"
+    },
+    {
+      "path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel_strap.res",
+      "sha256": "ce249302e8a7e7b6f1db3ddf056085cc310ab6ad90d59bb08b536bb324eb5322"
+    },
+    {
+      "path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel_knot.res",
+      "sha256": "1297e5a88117b0944fb0b089a14b88678e976a43f3e267ec603edabad7ebffbf"
+    }
+  ],
+  "carrier": {
+    "path": "art_source/art_recovery_v2/models/living_cast_20261107/props/rook_station_satchel.glb",
+    "sha256": "eaa6b63303f2b60fa8f49b6d907f91f0dd9eddf7f1c9026e30ed2f9b82947913"
+  },
+  "historical_receipt": {
+    "path": "art_source/art_recovery_v2/models/living_cast_20261107/props/satchel_compile.json",
+    "sha256": "30b6858e6df4d47081294c797c5d8ce78fddf95a80280e4bcb0691261f92ce21",
+    "preserved": true
+  },
+  "receipt_field_differences": [
+    "sha256"
+  ],
+  "verified_exact_source_and_output_bytes": true,
+  "recompiled": false,
+  "semantic_acceptance_inferred": false,
+  "native_motion_acceptance_inferred": false,
+  "visual_accepted": false,
+  "user_accepted": false,
+  "note": "Copied existing successful compiler receipt and original logs byte-for-byte after matching the retained GLB, current scene and all three components. Native motion evidence is a separate scope; compressed byte-size difference is not semantic proof."
+}

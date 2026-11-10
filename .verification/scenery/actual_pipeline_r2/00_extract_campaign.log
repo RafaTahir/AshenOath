@@ -1,0 +1,43 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+CAMPAIGN WILDS BAKE: PASS path=res://assets_external/environment/forest/Campaign_deep_wood_Landscape.res surfaces=2 triangles=144 bytes=3998
+CAMPAIGN WILDS BAKE: PASS path=res://assets_external/environment/forest/Campaign_burned_farmstead_Landscape.res surfaces=3 triangles=304 bytes=6909
+LIVING_WORLD_PARTS_COMPILED res://assets_external/environment_prepared/living_world/marsh_reeds.scn children=5 sha256=497f66d8be78a37d45f2b7396de4fd617a340b2718045a628f6f06bbda68c304
+CAMPAIGN WILDS BAKE: PASS path=res://assets_external/environment/forest/Campaign_marsh_crossing_Landscape.res surfaces=4 triangles=1264 bytes=21209
+CAMPAIGN WILDS BAKE: PASS path=res://assets_external/environment/forest/Campaign_bandit_road_Landscape.res surfaces=2 triangles=768 bytes=13950
+WARNING: 'res://assets_external/environment/village/Door_1_Flat.obj': In external resource #0, invalid UID: 'uid://crijjxwc5qc78' - using text path instead: 'res://assets_external/environment/village/T_WoodTrim_BaseColor.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tools/build_campaign_wilds.gd:55)
+WARNING: 'res://assets_external/environment/village/Door_1_Flat.obj': In external resource #1, invalid UID: 'uid://c6co7di6dkfex' - using text path instead: 'res://assets_external/environment/village/T_WoodTrim_Roughness.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tools/build_campaign_wilds.gd:55)
+WARNING: 'res://assets_external/environment/village/Door_1_Flat.obj': In external resource #2, invalid UID: 'uid://d205q73nygnp5' - using text path instead: 'res://assets_external/environment/village/T_WoodTrim_Normal.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://tools/build_campaign_wilds.gd:55)
+CAMPAIGN WILDS BAKE: PASS path=res://assets_external/environment/village/FarmsteadWest_Authored.res surfaces=2 triangles=2168 bytes=34282
+CAMPAIGN WILDS BAKE: PASS path=res://assets_external/environment/village/FarmsteadEast_Authored.res surfaces=2 triangles=2156 bytes=33915
+WARNING: 'res://assets_external/environment/props/Table_Large.obj': In external resource #0, invalid UID: 'uid://vdfji2t177gf' - using text path instead: 'res://assets_external/environment/props/T_Trim_Furniture_BaseColor.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _build_road_post (res://tools/build_campaign_wilds.gd:69)
+       [1] _initialize (res://tools/build_campaign_wilds.gd:63)
+WARNING: 'res://assets_external/environment/props/Table_Large.obj': In external resource #1, invalid UID: 'uid://2oagu6bkbwis' - using text path instead: 'res://assets_external/environment/props/T_Trim_Furniture_Normal.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _build_road_post (res://tools/build_campaign_wilds.gd:69)
+       [1] _initialize (res://tools/build_campaign_wilds.gd:63)
+WARNING: 'res://assets_external/environment/props/Table_Large.obj': In external resource #2, invalid UID: 'uid://tdgphujrwewr' - using text path instead: 'res://assets_external/environment/props/T_Trim_Metal_BaseColor.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _build_road_post (res://tools/build_campaign_wilds.gd:69)
+       [1] _initialize (res://tools/build_campaign_wilds.gd:63)
+WARNING: 'res://assets_external/environment/props/Table_Large.obj': In external resource #3, invalid UID: 'uid://ugqj2ohfhek1' - using text path instead: 'res://assets_external/environment/props/T_Trim_Metal_Normal.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _build_road_post (res://tools/build_campaign_wilds.gd:69)
+       [1] _initialize (res://tools/build_campaign_wilds.gd:63)
+LIVING_WORLD_PARTS_COMPILED res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn children=2 sha256=c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6
+CAMPAIGN WILDS BAKE: PASS path=res://assets_external/environment/village/RoadCheckpoint_Authored.res surfaces=3 triangles=4174 bytes=59554

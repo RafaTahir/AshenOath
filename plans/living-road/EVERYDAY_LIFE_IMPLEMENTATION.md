@@ -1159,6 +1159,24 @@ The complete asset handoff and combined production execution remain pending.
   This was a read-only evidence/settings check, not a new browser run or proof
   that host conditions and elapsed timings will be identical.
 
+### Complete Asset Source Handoff: 2026-11-11
+
+Game Assets delivered all 78 ordered source commits through `44f9af3`.
+The handoff receipt SHA-256 is
+`b290830c03262049f4b386914d29122d993b7ed7fe5e41857efd2748605cd6ee`.
+Source/native gates cover 22 grips, 12 compiled production libraries, all 20
+creature profiles, and 431 delivered voice lines. These are not in-level,
+listening, performance, or user acceptance results.
+
+The canonical merge preserves the prior prepared derivative snapshot
+(`d1eebef`), startup shell, tree ownership, and native teardown diagnostics.
+The maintained release builder runs strict grip compilers after actor
+preparation, refreshes only library ownership, validates the scenery union
+and Bracken, and uses the asset-owned final Web archive checker before copying.
+Revision 2 is enabled for the isolated combined candidate; revision 1 saves
+retain their existing graph. No combined export or Git push is implied by
+source integration.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

@@ -1,0 +1,51 @@
+{
+  "asset": "C10",
+  "status": "source_contract_pass",
+  "animations": {
+    "Life_Cup_Hold": {
+      "duration_seconds": 4,
+      "body_variation": 0.0033922791481018066,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Drink": {
+      "duration_seconds": 4,
+      "body_variation": 0.34411007165908813,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Idle_A": {
+      "duration_seconds": 6,
+      "body_variation": 0.002975426548800897,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Idle_B": {
+      "duration_seconds": 8,
+      "body_variation": 0.1262493133544922,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Listen": {
+      "duration_seconds": 4,
+      "body_variation": 0.015979405492544174,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Speak": {
+      "duration_seconds": 4,
+      "body_variation": 0.7714864630252123,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Work": {
+      "duration_seconds": 4,
+      "body_variation": 0.775105289882049,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    }
+  },
+  "retained_production_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+  "review_glb_sha256": "aa5f1ad2d862eb879cba08457d588b519eac8403aa615a70650dc269cc8437f3",
+  "runtime_workstation_and_visual_acceptance": false
+}

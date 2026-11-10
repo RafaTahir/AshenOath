@@ -34,6 +34,10 @@ func _run() -> void:
 			_timing_case(fraction, fps)
 	for kind: String in ["stagger", "cancel", "deactivate", "death", "parry", "boss_interrupt"]:
 		_interrupt_case(kind)
+	for after_contact in [false, true]:
+		_reactivated_strike(after_contact)
+	for state: String in ["hit", "death"]:
+		_dormant_protected_pose(state)
 	_repeated_parries()
 	for rate in [12.0,30.0]:
 		for fps in [20.0,60.0,144.0]:
@@ -148,6 +152,47 @@ func _interrupt_case(kind: String) -> void:
 	_check(actor.pending_attack_time == 0.0, "interruption must clear the pending contact: " + kind)
 	actor._tick_pending_attack(1.0)
 	_check(context.defender.contacts == (1 if kind == "parry" else 0), "interrupted windups must not deliver stale damage: " + kind)
+	_dispose(context)
+
+func _reactivated_strike(after_contact: bool) -> void:
+	var context := _rig(0.5)
+	var actor = context.actor
+	var driver = context.driver
+	_begin(context)
+	actor._tick_pending_attack(0.46 if after_contact else 0.23)
+	if after_contact:
+		actor.windup_time = 0.0
+		_check(actor.native_attack_tail_active and actor.pending_attack_time == 0.0, "tail suspension must exercise a contacted strike without a pending windup")
+	var contacts_before := int(context.defender.contacts)
+	var recovery_before := float(actor.attack_recovery_time)
+	actor.set_encounter_active(false)
+	_check(not driver.action_active and driver.current_state == "idle" and is_zero_approx(driver.action_elapsed), "deactivation must cancel the displayed strike, including a post-contact tail")
+	_check(not actor.native_attack_tail_active and not driver.externally_ticked and actor.pending_attack_time == 0.0 and actor.windup_time == 0.0, "deactivation must relinquish both presentation and AI strike ownership")
+	_check(is_equal_approx(actor.attack_cooldown, 7.0) and is_equal_approx(actor.attack_recovery_time, recovery_before), "cancelling presentation must preserve cooldown and recovery balance")
+	actor.set_encounter_active(false)
+	actor.set_encounter_active(true)
+	actor.set_physics_process(false)
+	_check(not driver.action_active and not driver.distance_suspended and driver.current_state == "idle", "reactivation must not resume the cancelled strike")
+	_check(context.finished.is_empty(), "cancellation must not falsely report a completed attack")
+	_begin(context)
+	_check(context.actions.count("attack") == 2 and driver.externally_ticked and is_zero_approx(driver.action_elapsed), "reactivation must accept a fresh strike at phase zero")
+	actor._tick_pending_attack(0.459)
+	_check(context.defender.contacts == contacts_before, "fresh attack must retain its full windup after reactivation")
+	actor._tick_pending_attack(0.00101)
+	_check(context.defender.contacts == contacts_before + 1 and absf(context.skeleton.get_bone_pose_position(0).z + 1.0) < 0.015, "reactivated strike must deliver one contact at the calibrated visible pose")
+	_dispose(context)
+
+func _dormant_protected_pose(state: String) -> void:
+	var context := _rig(0.5)
+	if state == "death":
+		context.actor._on_died()
+	else:
+		context.driver.trigger_action(state)
+	context.actor.set_encounter_active(false)
+	_check(context.driver.current_state == state and context.driver.action_active, "encounter strike cancellation must preserve a protected non-strike pose: " + state)
+	context.actor.set_encounter_active(true)
+	context.actor.set_physics_process(false)
+	_check(context.driver.current_state == state and context.driver.action_active and (context.driver.dead if state == "death" else not context.driver.dead), "reactivation must preserve terminal and non-strike action ownership: " + state)
 	_dispose(context)
 
 func _dimensions() -> void:

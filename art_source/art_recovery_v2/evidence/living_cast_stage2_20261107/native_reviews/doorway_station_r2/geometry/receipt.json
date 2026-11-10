@@ -1,0 +1,206 @@
+{
+  "scope": "Measured retained doorway/house vertex diagnostic",
+  "accepted": true,
+  "input": {
+    "path": ".verification/motion/doorway_source_diagnostic.gd",
+    "bytes": 2891,
+    "sha256": "b05c694c77f26f30ec0321b03ccc634d6889b2cf025bfcdf52855c6210d1ca94"
+  },
+  "engine": {
+    "console_wrapper": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+    },
+    "main_executable": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+      "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+    }
+  },
+  "process": {
+    "passed": true,
+    "timed_out": false,
+    "owned_tree_exited": true,
+    "pid": 17600,
+    "active_processes_after_root_wait": 1,
+    "accounting_quiescence_seconds": 0.016,
+    "termination_requested": false,
+    "active_processes_after_cleanup": 0,
+    "cleanup_seconds": 0.016,
+    "exit_code": 0,
+    "seconds": 3.531
+  },
+  "proof": {
+    "expected": "(0.006825, 1.466783, -1.881879)",
+    "houses": [
+      {
+        "path": "res://assets_external/environment/village/GreyfenHouse_Authored.res",
+        "surfaces": {
+          "glazing": {
+            "distance_m": 3.99351119995117e-06,
+            "nearest": "(0.006821, 1.466783, -1.881879)",
+            "vertices": 220
+          },
+          "medieval_brick": {
+            "distance_m": 0.780410888176615,
+            "nearest": "(0.459975, 0.858, -1.7)",
+            "vertices": 156
+          },
+          "metal": {
+            "distance_m": 3.40509265521521,
+            "nearest": "(-1.21, 3.64, 0.44)",
+            "vertices": 24
+          },
+          "plaster": {
+            "distance_m": 0.493123693041405,
+            "nearest": "(0.459932, 1.64761, -1.81)",
+            "vertices": 198
+          },
+          "roof_tiles": {
+            "distance_m": 1.57426638093361,
+            "nearest": "(0.846149, 2.79816, -1.917711)",
+            "vertices": 1164
+          },
+          "timber": {
+            "distance_m": 0.0235552709738108,
+            "matched_door_vertex_count": 911,
+            "nearest": "(0.006826, 1.443299, -1.883713)",
+            "nearest_matched_door_distance_m": 0.0235552709738108,
+            "nearest_matched_door_point": "(0.006826, 1.443299, -1.883713)",
+            "vertices": 4833
+          }
+        },
+        "variant": 0
+      },
+      {
+        "path": "res://assets_external/environment/village/GreyfenHouse_Authored_1.res",
+        "surfaces": {
+          "glazing": {
+            "distance_m": 3.99351119995117e-06,
+            "nearest": "(0.006821, 1.466783, -1.881879)",
+            "vertices": 220
+          },
+          "medieval_brick": {
+            "distance_m": 0.780410888176615,
+            "nearest": "(0.459975, 0.858, -1.7)",
+            "vertices": 156
+          },
+          "metal": {
+            "distance_m": 3.38629154736056,
+            "nearest": "(1.17, 3.64, 0.44)",
+            "vertices": 24
+          },
+          "plaster": {
+            "distance_m": 0.493123693041405,
+            "nearest": "(0.459932, 1.64761, -1.81)",
+            "vertices": 198
+          },
+          "roof_tiles": {
+            "distance_m": 1.14500755840622,
+            "nearest": "(1.04, 1.96, -1.9)",
+            "vertices": 1168
+          },
+          "timber": {
+            "distance_m": 0.0235552709738108,
+            "matched_door_vertex_count": 911,
+            "nearest": "(0.006826, 1.443299, -1.883713)",
+            "nearest_matched_door_distance_m": 0.0235552709738108,
+            "nearest_matched_door_point": "(0.006826, 1.443299, -1.883713)",
+            "vertices": 4905
+          }
+        },
+        "variant": 1
+      },
+      {
+        "path": "res://assets_external/environment/village/GreyfenHouse_Authored_2.res",
+        "surfaces": {
+          "glazing": {
+            "distance_m": 3.99351119995117e-06,
+            "nearest": "(0.006821, 1.466783, -1.881879)",
+            "vertices": 220
+          },
+          "medieval_brick": {
+            "distance_m": 0.780410888176615,
+            "nearest": "(0.459975, 0.858, -1.7)",
+            "vertices": 156
+          },
+          "metal": {
+            "distance_m": 3.40509265521521,
+            "nearest": "(-1.21, 3.64, 0.44)",
+            "vertices": 24
+          },
+          "plaster": {
+            "distance_m": 0.493123693041405,
+            "nearest": "(0.459932, 1.64761, -1.81)",
+            "vertices": 198
+          },
+          "roof_tiles": {
+            "distance_m": 1.57426638093361,
+            "nearest": "(0.846149, 2.79816, -1.917711)",
+            "vertices": 1168
+          },
+          "timber": {
+            "distance_m": 0.0235552709738108,
+            "matched_door_vertex_count": 911,
+            "nearest": "(0.006826, 1.443299, -1.883713)",
+            "nearest_matched_door_distance_m": 0.0235552709738108,
+            "nearest_matched_door_point": "(0.006826, 1.443299, -1.883713)",
+            "vertices": 4857
+          }
+        },
+        "variant": 2
+      },
+      {
+        "path": "res://assets_external/environment/village/GreyfenHouse_Authored_3.res",
+        "surfaces": {
+          "glazing": {
+            "distance_m": 3.99351119995117e-06,
+            "nearest": "(0.006821, 1.466783, -1.881879)",
+            "vertices": 244
+          },
+          "medieval_brick": {
+            "distance_m": 0.780410888176615,
+            "nearest": "(0.459975, 0.858, -1.7)",
+            "vertices": 156
+          },
+          "metal": {
+            "distance_m": 3.38629154736056,
+            "nearest": "(1.17, 3.64, 0.44)",
+            "vertices": 24
+          },
+          "plaster": {
+            "distance_m": 0.493123693041405,
+            "nearest": "(0.459932, 1.64761, -1.81)",
+            "vertices": 198
+          },
+          "roof_tiles": {
+            "distance_m": 1.57426638093361,
+            "nearest": "(0.846149, 2.79816, -1.917711)",
+            "vertices": 1164
+          },
+          "timber": {
+            "distance_m": 0.0235552709738108,
+            "matched_door_vertex_count": 911,
+            "nearest": "(0.006826, 1.443299, -1.883713)",
+            "nearest_matched_door_distance_m": 0.0235552709738108,
+            "nearest_matched_door_point": "(0.006826, 1.443299, -1.883713)",
+            "vertices": 4929
+          }
+        },
+        "variant": 3
+      }
+    ],
+    "raw_point": "(0.514247, 1.313862, 0.031246)",
+    "retained_obj": {
+      "MI_WindowGlass": {
+        "distance_m": 4.82797622680664e-06,
+        "nearest": "(0.514242, 1.313862, 0.031246)",
+        "vertices": 28
+      },
+      "MI_WoodTrim": {
+        "distance_m": 0.0277030112672462,
+        "nearest": "(0.514248, 1.286234, 0.029208)",
+        "vertices": 911
+      }
+    }
+  }
+}

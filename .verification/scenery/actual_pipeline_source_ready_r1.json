@@ -1,0 +1,32 @@
+{
+  "scope": "actual scenery pipeline source readiness",
+  "sources": [
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_living_scenery_pipeline.py",
+      "sha256": "7dd338eb24d4407229d7e14823b03c446eaeb07f9032187253daf0e891391309"
+    },
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\test_living_scenery_pipeline.py",
+      "sha256": "7ee9a41914f40f9354551b33ca993809e97896965d95f8bd1a9f10ba82210a83"
+    }
+  ],
+  "pure_tests": {
+    "command": "python -m unittest -v test_living_scenery_pipeline",
+    "passed": 11,
+    "exit_code": 0,
+    "child_processes": "mocked; no native engine"
+  },
+  "read_only_preflight": {
+    "original_inputs": 18,
+    "verified_source_inputs": 164
+  },
+  "engine_started": false,
+  "actual_bakes": "unrun",
+  "geometry_acceptance": "unrun",
+  "visual_acceptance": false,
+  "native_deadline_seconds": 180,
+  "blender_deadline_seconds": 480,
+  "first_granted_boundary": "extract_mill",
+  "stop_request": "OUTPUT/STOP_AFTER_STEP",
+  "source_review": "asset owner checked author/native recipe contract; no mismatch found"
+}

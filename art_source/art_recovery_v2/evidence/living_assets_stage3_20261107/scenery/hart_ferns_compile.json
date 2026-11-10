@@ -1,0 +1,179 @@
+{
+	"asset": "hart_ferns",
+	"authoring_receipt": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/authoring.json",
+	"authoring_receipt_sha256": "f43cf5f49f58d5d70b56296728f40226baf57660b7dc648fde7430022af1f70b",
+	"blender_authored": true,
+	"bytes": 70683,
+	"carrier_sha256": "ea11e1766e1b171d6af0b88ecafe8d6abfc98b40d851c32bdc47cb1113947208",
+	"compiler_sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
+	"dependencies": [],
+	"geometry_contract_sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+	"normal_transport": {
+		"after_sha256": "ea11e1766e1b171d6af0b88ecafe8d6abfc98b40d851c32bdc47cb1113947208",
+		"before_sha256": "0985f058b681604c15796b9f1d2609e8cc6ed223500bdc31d788445e924400ea",
+		"binary_payload_unchanged": true,
+		"native_verified": false,
+		"normal_source_attribute": "_AO_RETAINED_NORMAL",
+		"parts": {
+			"HartFern_0": {
+				"corners": 864.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.000000238418579101563
+				},
+				"normal_accessor": 0.0,
+				"triangles": 288.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"HartFern_1": {
+				"corners": 864.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.000000238418579101563
+				},
+				"normal_accessor": 6.0,
+				"triangles": 288.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"HartFern_2": {
+				"corners": 864.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.000000238418579101563
+				},
+				"normal_accessor": 11.0,
+				"triangles": 288.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"HartFern_3": {
+				"corners": 864.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.000000238418579101563
+				},
+				"normal_accessor": 16.0,
+				"triangles": 288.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"HartFern_4": {
+				"corners": 864.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.000000238418579101563
+				},
+				"normal_accessor": 21.0,
+				"triangles": 288.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"HartFern_5": {
+				"corners": 864.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.000000238418579101563
+				},
+				"normal_accessor": 26.0,
+				"triangles": 288.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			}
+		},
+		"source_glb_sha256": [
+			"7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed"
+		],
+		"verified": true,
+		"visual_accepted": false
+	},
+	"parts": [
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "HartFern_0",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 288,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "HartFern_1",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 288,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "HartFern_2",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 288,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "HartFern_3",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 288,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "HartFern_4",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 288,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "HartFern_5",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 288,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		}
+	],
+	"path": "res://assets_external/environment_prepared/living_world/hart_ferns.scn",
+	"raw_carrier_sha256": "0985f058b681604c15796b9f1d2609e8cc6ed223500bdc31d788445e924400ea",
+	"retained_native_sha256": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+	"retained_receipt_sha256": "672d50e9eb2b99c01720d15f1bea00891b94b7927ab60395defcba3102ed11ad",
+	"runtime_reviewed": false,
+	"schema_version": 1,
+	"sha256": "fa6252f94c1c678a8ce1820d741d119db6479d6cafdd73337bf6bfe6d9897f0a",
+	"source_hashes": {
+		"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86",
+		"res://tools/build_hart_woodland.gd": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e",
+		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+	},
+	"transport_helper_sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+	"user_accepted": false
+}

@@ -1,0 +1,31 @@
+{
+  "asset": "C09",
+  "blend_sha256": "c3102faa0eac0efa89a0214045fdd84b281d9e1a01b92b5f6aa027ba8f994dd8",
+  "review_glb_sha256": "65ae54bf974efe41d5c02bc7b89df281dbe74897e59e74543ac5262900d6a84f",
+  "prop_sha256": "9a1ac9a7f19e0df2b3aefec07c6764f3e1f5abfac1349144fb956eab36474aa2",
+  "sample_hz": 30,
+  "solid_parts": [
+    "LedgerFold",
+    "LedgerInkLine",
+    "LedgerInkLine.001",
+    "LedgerInkLine.002",
+    "LedgerInkLine.003",
+    "LedgerInkLine.004",
+    "LedgerInkLine.005",
+    "LedgerInkLine.006",
+    "LedgerInkLine.007",
+    "LedgerInkLine.008",
+    "LedgerInkLine.009",
+    "WorkContactPart"
+  ],
+  "open_parts_not_treated_as_solid": [
+    "RetainedLedgerBinding"
+  ],
+  "open_rigid_supports_checked_by_upward_surface_ray": [
+    "RetainedLedgerBinding"
+  ],
+  "solid_prop_intrusions": [],
+  "solid_prop_trajectory_clear": true,
+  "native_verified": false,
+  "visual_accepted": false
+}

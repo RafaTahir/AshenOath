@@ -1,0 +1,1912 @@
+{
+  "source_pack": "AshenOath_32_Asset_Design_Pack_v1",
+  "runtime_acceptance": "unverified",
+  "assets": {
+    "P01": {
+      "path": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
+      "owner": "opening",
+      "sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
+      "bytes": 1325004,
+      "baseline_blender_report": {
+        "id": "P01",
+        "name": "Kael",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Kael_A_Set_Atlas.gltf",
+        "source_sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.6093254089355469e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 23084,
+        "vertices": 13485,
+        "glb_bytes": 1550576,
+        "sha256": "3f0aeff37b5222464736814c03cc47a277fa89d6ebdf2c2bbd63522e18eea15a",
+        "props": [
+          "hunter_panels",
+          "oath_cord",
+          "boot_cuffs"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.8994148808993716,
+          -0.003968038182141457,
+          -0.21184968779993224
+        ],
+        "size": [
+          1.7988298885456786,
+          1.8250336218589505,
+          0.37939024914733177
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\P01_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\P01_Kael.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\P01\\candidate.json"
+    },
+    "C01": {
+      "path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
+      "owner": "opening",
+      "sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
+      "bytes": 2982208,
+      "baseline_blender_report": {
+        "id": "C01",
+        "status": "source_model_draft",
+        "integrated": false,
+        "reference": "AshenOath_Asset_Pack/images/characters/C01_Anwen.png",
+        "base_topology": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Anwen_A_Set_Atlas.gltf",
+        "base_sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb",
+        "license": "Quaternius Universal CC0; existing topology and facial skin weights",
+        "meshes": [
+          {
+            "name": "C01_Anwen_Skinned",
+            "vertices": 17010,
+            "triangles": 29347
+          }
+        ],
+        "bones": 76,
+        "runtime_acceptance": "not_performed",
+        "retained_rig_contract": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.4901161193847656e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "runtime_material_surfaces": 2,
+        "glb_bytes": 1809712,
+        "glb_sha256": "cd0c69e3f6c7780d5b64e597046bc7a94e30e3c7672c32aee77cc8a4a294e157",
+        "remaining": [
+          "Reference-specific facial surface and detailed hair refinement",
+          "Arm deformation and long-skirt stride clearance",
+          "Authored staff socket and retained clip integration",
+          "Godot wrapper, dependency manifests and in-game appearance"
+        ]
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.8319625545864983,
+          -0.00692984769748587,
+          -0.1857413763522459
+        ],
+        "size": [
+          1.663925527111656,
+          1.8070336638816822,
+          0.36106945952872105
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C01_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C01_Anwen.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C01\\candidate.json"
+    },
+    "C02": {
+      "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "owner": "opening",
+      "sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
+      "bytes": 1730700,
+      "baseline_blender_report": {
+        "id": "C02",
+        "name": "Rook",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Kael_A_Set_Atlas.gltf",
+        "source_sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.6093254089355469e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 27524,
+        "vertices": 16249,
+        "glb_bytes": 1755308,
+        "sha256": "a28134b40e1bfbfb24e9b5c8a4f2de79cb9b0066de0495bec1adc237cf24b518",
+        "props": [
+          "map_case",
+          "road_knot"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.19491147365912265
+        ],
+        "size": [
+          1.798829769336356,
+          1.822484689636608,
+          0.36245203500652223
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C02_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C02_Rook.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C02\\candidate.json"
+    },
+    "C03": {
+      "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
+      "owner": "opening",
+      "sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+      "bytes": 1549112,
+      "baseline_blender_report": {
+        "id": "C03",
+        "name": "Mira_Fen",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Anwen_A_Set_Atlas.gltf",
+        "source_sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.4901161193847656e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 23650,
+        "vertices": 13605,
+        "glb_bytes": 1590016,
+        "sha256": "0508daf1f8439dbba1c338bcc43e4e1fa15e2dbedd252523c906bb9fb080203c",
+        "props": [
+          "apron",
+          "medicine_pouches",
+          "root_bundle",
+          "measure"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.17210379935174083
+        ],
+        "size": [
+          1.6638829918113327,
+          1.780994333375914,
+          0.3643063896747857
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+        "garment_arm_clearance_m": 0.1
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C03_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C03_Mira_Fen.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C03\\candidate.json"
+    },
+    "C04": {
+      "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
+      "owner": "opening",
+      "sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+      "bytes": 1593020,
+      "baseline_blender_report": {
+        "id": "C04",
+        "name": "Blacksmith_Tor",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Kael_A_Set_Atlas.gltf",
+        "source_sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.6093254089355469e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 18398,
+        "vertices": 10802,
+        "glb_bytes": 1389076,
+        "sha256": "bc1ef98ec530499e4f4f2ae4070ec750b12e4027636ad488a3c66f0f2aed93de",
+        "props": [
+          "smith_apron",
+          "hammer_loop",
+          "iron_ring"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.23476407244243325
+        ],
+        "size": [
+          1.798829769336356,
+          1.8140447915997224,
+          0.4600619146821181
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+        "garment_arm_clearance_m": 0.1
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C04_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C04_Blacksmith_Tor.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C04\\candidate.json"
+    },
+    "C05": {
+      "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "owner": "opening",
+      "sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+      "bytes": 3794792,
+      "baseline_blender_report": {
+        "id": "C05",
+        "name": "Widow_Elna",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Anwen_A_Set_Atlas.gltf",
+        "source_sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.4901161193847656e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 25208,
+        "vertices": 14421,
+        "glb_bytes": 1677520,
+        "sha256": "85e730426a55f32cdbcdc65aa57d08245c3b259b847a34da9a880203f8fbf7a2",
+        "props": [
+          "shawl",
+          "name_packet",
+          "linen_band"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.1672547985611091
+        ],
+        "size": [
+          1.6638829918113327,
+          1.780994333375914,
+          0.3513447462841781
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C05_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C05_Widow_Elna.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C05\\candidate.json"
+    },
+    "C06": {
+      "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "owner": "opening",
+      "sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+      "bytes": 1774668,
+      "baseline_blender_report": {
+        "id": "C06",
+        "name": "Farmer_Toma",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Kael_A_Set_Atlas.gltf",
+        "source_sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.6093254089355469e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 20630,
+        "vertices": 12187,
+        "glb_bytes": 1531900,
+        "sha256": "a710f8e1a7e4b3174a6d61edd0b9dca2b4f266a54744fa83bd008dfd08a5a14f",
+        "props": [
+          "open_vest",
+          "grain_packet",
+          "utility_sheath"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.19584862122243543
+        ],
+        "size": [
+          1.798829769336356,
+          1.823052006989258,
+          0.363389182569835
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C06_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C06_Farmer_Toma.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C06\\candidate.json"
+    },
+    "C07": {
+      "path": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+      "owner": "characters",
+      "sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+      "bytes": 1351564,
+      "baseline_blender_report": {
+        "id": "C07",
+        "name": "Captain_Senn",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Kael_A_Set_Atlas.gltf",
+        "source_sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.6093254089355469e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 20450,
+        "vertices": 11930,
+        "glb_bytes": 1434472,
+        "sha256": "a2ada6d15539db90c3b8ca2a84e46b354c40db406ec14f1b06e2e5599f57043c",
+        "props": [
+          "breastplate",
+          "oath_ribbon",
+          "sword_scabbard",
+          "boot_cuffs"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.8994148808993716,
+          -0.003968038182141457,
+          -0.21921957768625347
+        ],
+        "size": [
+          1.7988298885456786,
+          1.8167521532906692,
+          0.386760139033653
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C07_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C07_Captain_Senn.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C07\\candidate.json"
+    },
+    "C08": {
+      "path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "owner": "characters",
+      "sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+      "bytes": 1828876,
+      "baseline_blender_report": {
+        "id": "C08",
+        "name": "Lord_Edric_Vargan",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Kael_A_Set_Atlas.gltf",
+        "source_sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.6093254089355469e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 28084,
+        "vertices": 15910,
+        "glb_bytes": 1710728,
+        "sha256": "b544aebd6e00ca4fffec7ee739a642e0f1e3ddde451d9547eb9e658ecf39eb9a",
+        "props": [
+          "seal_case",
+          "signet",
+          "coat_fasteners",
+          "boot_cuffs"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.20292944517778014
+        ],
+        "size": [
+          1.798829769336356,
+          1.820859150396343,
+          0.3704700065251797
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C08_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C08_Lord_Edric_Vargan.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C08\\candidate.json"
+    },
+    "C09": {
+      "path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+      "owner": "characters",
+      "sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+      "bytes": 1384804,
+      "baseline_blender_report": {
+        "id": "C09",
+        "name": "Record_Keeper_Vale",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Anwen_A_Set_Atlas.gltf",
+        "source_sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.4901161193847656e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 24802,
+        "vertices": 14591,
+        "glb_bytes": 1680824,
+        "sha256": "301163838a26a7f7c90e134794daa1d136527734bd65dc546f9d19bc6d3f5943",
+        "props": [
+          "tabard",
+          "archive_pockets",
+          "drawer_key",
+          "sleeve_ties"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.1672547985611091
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7807175301512195,
+          0.3561134731328286
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+        "garment_arm_clearance_m": 0.1
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C09_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C09_Record_Keeper_Vale.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C09\\candidate.json"
+    },
+    "C10": {
+      "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+      "owner": "characters",
+      "sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+      "bytes": 1885436,
+      "baseline_blender_report": {
+        "id": "C10",
+        "name": "Steward_Merrow",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Kael_A_Set_Atlas.gltf",
+        "source_sha256": "a71cc82b47110eca039d538fc5f17ffe138d06645916f7a5d1ff320de6f9ae77",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.6093254089355469e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 24408,
+        "vertices": 14019,
+        "glb_bytes": 1863548,
+        "sha256": "f4015724fce92e9bdfee39e535bdb162a436967b64ab72db993a09f7a6cdc240",
+        "props": [
+          "store_keys",
+          "tally_board",
+          "wax_pencil"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.899414761690049,
+          -0.003968038182141457,
+          -0.25824235328796763
+        ],
+        "size": [
+          1.798829769336356,
+          1.8208591503963378,
+          0.5036183976432693
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C10_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C10_Steward_Merrow.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C10\\candidate.json"
+    },
+    "C11": {
+      "path": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+      "owner": "opening",
+      "sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+      "bytes": 1502736,
+      "baseline_blender_report": {
+        "id": "C11",
+        "name": "Nessa",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Anwen_A_Set_Atlas.gltf",
+        "source_sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.4901161193847656e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 21898,
+        "vertices": 12737,
+        "glb_bytes": 1576052,
+        "sha256": "141544d3523011544ccd502b1101fa7760b2ecaad068d05d928ec82cf88d1fd9",
+        "props": [
+          "baker_apron",
+          "bodice",
+          "kerchief",
+          "counterweight"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.18159480405117198
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7809943333755858,
+          0.46849976816439964
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+        "garment_arm_clearance_m": 0.1
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C11_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C11_Nessa.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C11\\candidate.json"
+    },
+    "C12": {
+      "path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "owner": "opening",
+      "sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+      "bytes": 1443260,
+      "baseline_blender_report": {
+        "id": "C12",
+        "name": "Nera",
+        "status": "authored_pending_runtime_integration",
+        "source": "outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\characters_universal\\runtime\\Anwen_A_Set_Atlas.gltf",
+        "source_sha256": "71f758d925d59dc72312d9fb96d891cbdde29cc3608b24ba4308f53a118722eb",
+        "license": "CC0 Quaternius anatomy and rig; design-derived authoring recorded in source",
+        "rig": {
+          "joint_count": 76,
+          "max_rest_component_error": 1.4901161193847656e-06,
+          "scope": "joint names, hierarchy and local rest transforms; not runtime motion acceptance"
+        },
+        "triangles": 30586,
+        "vertices": 17418,
+        "glb_bytes": 1813052,
+        "sha256": "cbcdb167ae6247fe31bb0bd05810104b6543f070ace8e6ab75e99c119e00ca2b",
+        "props": [
+          "rust_scarf",
+          "rescue_rope",
+          "lantern",
+          "signal_baton",
+          "boot_cuffs"
+        ],
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.831941257126721,
+          -0.006743813886206205,
+          -0.16725481346227097
+        ],
+        "size": [
+          1.6638829918113327,
+          1.7756538775914201,
+          0.33479480286152813
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C12_tailored_v001.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C12_Nera.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C12\\candidate.json"
+    },
+    "M01": {
+      "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
+      "owner": "monsters",
+      "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
+      "bytes": 1941652,
+      "baseline_blender_report": {
+        "id": "M01",
+        "name": "Ghoulkin",
+        "family": "cursed_biped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 64586,
+        "bones": 14,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6402112,
+        "sha256": "8eb08909214c5fa23b84a734d16d7179aaadb8d480ce423d6a9cfca3a879138e",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.9338698563641634,
+          -1.1567418319067099e-07,
+          -0.15274317611240096
+        ],
+        "size": [
+          1.8677394550062032,
+          1.6299568011965258,
+          0.31610481952307296
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M01_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M01_Ghoulkin.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M01\\candidate.json"
+    },
+    "M02": {
+      "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
+      "owner": "monsters",
+      "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
+      "bytes": 1777228,
+      "baseline_blender_report": {
+        "id": "M02",
+        "name": "Wychwood_Stalker",
+        "family": "cursed_biped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 60774,
+        "bones": 14,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6183316,
+        "sha256": "b97414deff8c6ebea45a7c971384a931449ae59c60956e0f51668129915f8b4d",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.6994987692460932,
+          3.4466735305470725e-08,
+          -0.1815542632233743
+        ],
+        "size": [
+          1.3989975384921864,
+          1.6000000062472401,
+          0.9026474652488815
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M02_refined_timing_v003.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M02_Wychwood_Stalker.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M02\\candidate.json"
+    },
+    "M03": {
+      "path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
+      "owner": "monsters",
+      "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
+      "bytes": 1885396,
+      "baseline_blender_report": {
+        "id": "M03",
+        "name": "Bog_Wretch",
+        "family": "cursed_biped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 61792,
+        "bones": 14,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6275772,
+        "sha256": "996d8957135263e837c8fd0d659abce2b91d7333420cae7d825c71a1e8537d94",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.9488054812381107,
+          -2.0972779497016994e-07,
+          -0.15650492550592
+        ],
+        "size": [
+          1.8976104889282615,
+          1.72000002662849,
+          0.37625713251358295
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M03_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M03_Bog_Wretch.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M03\\candidate.json"
+    },
+    "M04": {
+      "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
+      "owner": "monsters",
+      "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
+      "bytes": 2620992,
+      "baseline_blender_report": {
+        "id": "M04",
+        "name": "Gravebound_Knight",
+        "family": "cursed_biped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 56409,
+        "bones": 14,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6000344,
+        "sha256": "822bc9fcbb0d6e3d49a139af9b2eb3f51c9177dfeb488fb0e1affd5dcccc67af",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.9168259380738812,
+          -3.937675359597051e-07,
+          -0.22878498402358335
+        ],
+        "size": [
+          1.8682609363029576,
+          1.9467800538126125,
+          1.080713219513266
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M04_refined_timing_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M04_Gravebound_Knight.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M04\\candidate.json"
+    },
+    "M05": {
+      "path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
+      "owner": "monsters",
+      "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
+      "bytes": 2314140,
+      "baseline_blender_report": {
+        "id": "M05",
+        "name": "Bell_Eater",
+        "family": "cursed_biped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 68316,
+        "bones": 14,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6575332,
+        "sha256": "8f692e03741345b12cb800664c4b28b6e025e3ef175b1a0b5cbff71782692ece",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -2.179340766588867,
+          -6.268044427544053e-07,
+          -0.35403226135055155
+        ],
+        "size": [
+          4.358681403445887,
+          3.8000005331480247,
+          1.9577498108917526
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M05_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M05_Bell_Eater.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M05\\candidate.json"
+    },
+    "M06": {
+      "path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
+      "owner": "monsters",
+      "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee",
+      "bytes": 6375916,
+      "baseline_blender_report": {
+        "id": "M06",
+        "name": "Rootbound_Colossus",
+        "family": "cursed_biped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 52914,
+        "bones": 14,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 5937500,
+        "sha256": "aedb08eeeaad8a7b99a878a9d04b8bd8da9be0ec9f07c1141dea79f30f1f9852",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -1.9475834654465642,
+          0.004817713607956083,
+          -0.656647556230569
+        ],
+        "size": [
+          3.952188085486183,
+          4.395630878443169,
+          1.771133246103501
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M06_refined_timing_v003.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M06_Rootbound_Colossus.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M06\\candidate.json"
+    },
+    "M07": {
+      "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+      "owner": "monsters",
+      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+      "bytes": 2097816,
+      "baseline_blender_report": {
+        "id": "M07",
+        "name": "Ashwing_Carrion_Drake",
+        "family": "wyvern_two_wing_two_leg",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 56436,
+        "bones": 28,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6241348,
+        "sha256": "f9199fc65a7bed7bb42aa0da6f46200fb9048563c23704ad9a578f357893ae53",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -4.255001790583045,
+          0.059957563213626504,
+          -3.5978787345398104
+        ],
+        "size": [
+          8.509866710626255,
+          4.151676731916755,
+          5.113207568330971
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M07\\M07_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M07_Ashwing_Carrion_Drake.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M07\\candidate.json"
+    },
+    "M08": {
+      "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
+      "owner": "monsters",
+      "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
+      "bytes": 1158008,
+      "baseline_blender_report": {
+        "id": "M08",
+        "name": "White_Hart_Avatar",
+        "family": "cervid_quadruped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 55844,
+        "bones": 20,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6278076,
+        "sha256": "6c8890721da9ab09848597a0d82a405f4dd73a66a88f189c55b48f87faf3426c",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.703903772363953,
+          0.5612116365493366,
+          -1.3443827377231679
+        ],
+        "size": [
+          1.4078073605591979,
+          3.0387891815058796,
+          2.688764454002704
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M08\\M08_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M08_White_Hart_Avatar.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M08\\candidate.json"
+    },
+    "M09": {
+      "path": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
+      "owner": "monsters",
+      "sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26",
+      "bytes": 1036332,
+      "baseline_blender_report": {
+        "id": "M09",
+        "name": "Silt_Maw",
+        "family": "limbless_burrower",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 15092,
+        "bones": 10,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 4226032,
+        "sha256": "92bdf89d9f3eb6e0f3e90f34e22ee818d80e39c43d2c54c70d60fca937ce87ca",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.4825578950610379,
+          -0.001599795945034417,
+          -1.585684861307649
+        ],
+        "size": [
+          0.9661337778549486,
+          0.5254849324074891,
+          3.234753935222572
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M09\\v002\\M09_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M09_Silt_Maw.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M09\\v002\\candidate.json"
+    },
+    "M10": {
+      "path": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
+      "owner": "monsters",
+      "sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5",
+      "bytes": 949016,
+      "baseline_blender_report": {
+        "id": "M10",
+        "name": "Millback",
+        "family": "crustacean_six_leg_two_claw",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 13472,
+        "bones": 20,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 4372508,
+        "sha256": "b619a18689232e12837668beef3b806f784a97fd24a5db222c8a76ed33c645ce",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -1.0750001816367334,
+          -0.019573774511726236,
+          -1.032800154485565
+        ],
+        "size": [
+          2.150000589037357,
+          0.8726017089441054,
+          2.33344226786703
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M10\\v002\\M10_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M10_Millback.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M10\\v002\\candidate.json"
+    },
+    "M11": {
+      "path": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
+      "owner": "monsters",
+      "sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e",
+      "bytes": 1356200,
+      "baseline_blender_report": {
+        "id": "M11",
+        "name": "Glassmoth",
+        "family": "four_wing_six_leg_moth",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 19126,
+        "bones": 20,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 4716412,
+        "sha256": "419bdb9335ff8b0914c2e900864833669f6db3554d65c7172e80a346bd317d57",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -1.0660617390601117,
+          0.03384760236058715,
+          -0.7045105466712216
+        ],
+        "size": [
+          2.132123468755906,
+          1.095818207702744,
+          1.3257619066259758
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M11\\M11_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M11_Glassmoth.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M11\\candidate.json"
+    },
+    "M12": {
+      "path": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
+      "owner": "monsters",
+      "sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1",
+      "bytes": 809404,
+      "baseline_blender_report": {
+        "id": "M12",
+        "name": "Knell_Leech",
+        "family": "annelid_two_suckers",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 13410,
+        "bones": 10,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 4167004,
+        "sha256": "cf954b8f19f213fe1ff33f4df2d29955e2e9f086d57b291ca5b4b2f787e51948",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.29375495168842397,
+          0.017999985448132715,
+          -0.9008629279757312
+        ],
+        "size": [
+          0.5875099033768147,
+          0.4098607912149902,
+          1.6748630924361327
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M12\\v002\\M12_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M12_Knell_Leech.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M12\\v002\\candidate.json"
+    },
+    "M13": {
+      "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
+      "owner": "opening",
+      "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
+      "bytes": 1703908,
+      "baseline_blender_report": {
+        "id": "M13",
+        "name": "Hearthscale",
+        "family": "reptile_four_limb",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 53344,
+        "bones": 15,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6004004,
+        "sha256": "6decf8eecca00eaea0e882aa352382cb1089888d071510a64838a78227e94e40",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.7892792497172404,
+          0.010760108778636113,
+          -1.9449246396255946
+        ],
+        "size": [
+          1.5785585041511099,
+          0.7578263225856833,
+          2.7225876844460863
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M13\\M13_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M13_Hearthscale.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M13\\candidate.json"
+    },
+    "M14": {
+      "path": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
+      "owner": "monsters",
+      "sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
+      "bytes": 1297024,
+      "baseline_blender_report": {
+        "id": "M14",
+        "name": "Gallows_Weaver",
+        "family": "arachnid_eight_leg",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 28046,
+        "bones": 20,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 4972884,
+        "sha256": "4dcb1e8e3d85ab22942d60d7a334971f9c7cd1c06d8babfefd94b63d6353ae19",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -1.210627386622005,
+          0.09123322021935751,
+          -1.0618066908717414
+        ],
+        "size": [
+          2.4213543348276887,
+          0.9449885072919373,
+          2.079201077296844
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M14\\v002\\M14_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M14_Gallows_Weaver.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M14\\v002\\candidate.json"
+    },
+    "M15": {
+      "path": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
+      "owner": "opening",
+      "sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
+      "bytes": 3259856,
+      "baseline_blender_report": {
+        "id": "M15",
+        "name": "Reed_Choir",
+        "family": "amphibian_four_limb",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 57176,
+        "bones": 17,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6253416,
+        "sha256": "01ae6f30c17e79f1d323dec3e4c82f1f43bada81d4020fe5c6d8ace73d3ecdcf",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.8440129697280057,
+          0.0030200773207633693,
+          -0.6907511672363023
+        ],
+        "size": [
+          1.6876917502648507,
+          1.0443773245852153,
+          1.4696289625483248
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M15\\M15_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M15_Reed_Choir.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M15\\candidate.json"
+    },
+    "M16": {
+      "path": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
+      "owner": "monsters",
+      "sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
+      "bytes": 638424,
+      "baseline_blender_report": {
+        "id": "M16",
+        "name": "Inkblind",
+        "family": "insect_six_leg",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 9172,
+        "bones": 16,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 4147288,
+        "sha256": "42384de89575168d4f8665fd2a153aeed2f121cfc6542393600db9ed5e0e0eba",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.5912499394403778,
+          -0.011414077159595368,
+          -0.5660000863709909
+        ],
+        "size": [
+          1.1824997994296131,
+          0.5524140707344906,
+          1.3375316947540459
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M16\\v002\\M16_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M16_Inkblind.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M16\\v002\\candidate.json"
+    },
+    "M17": {
+      "path": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
+      "owner": "monsters",
+      "sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+      "bytes": 1615332,
+      "baseline_blender_report": {
+        "id": "M17",
+        "name": "Cairn_Mother",
+        "family": "gastropod_muscular_foot",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 54958,
+        "bones": 8,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 5727916,
+        "sha256": "71e4c3d4883f344e828643eed2e8de137fbcd0a364b0a9ea06c3034b70ce09a2",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -0.7352471947698981,
+          0.01499959687805524,
+          -1.7643765274960481
+        ],
+        "size": [
+          1.4808348417343447,
+          1.890106725029025,
+          3.3253697729945086
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M17\\M17_refined_20261101.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M17_Cairn_Mother.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M17\\candidate.json"
+    },
+    "M18": {
+      "path": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
+      "owner": "monsters",
+      "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
+      "bytes": 1235028,
+      "baseline_blender_report": {
+        "id": "M18",
+        "name": "Shroud_Swimmer",
+        "family": "freshwater_ray",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 24746,
+        "bones": 13,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 4834624,
+        "sha256": "ef93c28eba404d3ea28d53271194704522f6c270beffe48be23909b8ba9231db",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -1.4000000547751574,
+          0.05801952617678125,
+          -2.9204385623594726
+        ],
+        "size": [
+          2.799999940024254,
+          0.4949803207869677,
+          3.860438932048889
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\wildlife\\M18\\v003\\M18_contact_repaired_v003.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M18_Shroud_Swimmer.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\wildlife\\M18\\v003\\candidate.json"
+    },
+    "M19": {
+      "path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
+      "owner": "monsters",
+      "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
+      "bytes": 1897900,
+      "baseline_blender_report": {
+        "id": "M19",
+        "name": "Wychwood_Raider",
+        "family": "cursed_biped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 60774,
+        "bones": 14,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6232920,
+        "sha256": "b4304b746ecfba4c1f2b75c963886ceed563170f0c10ca5b6d9d45ba62d150fd",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -1.0114085271150837,
+          -4.821231483984577e-07,
+          -0.16406770221245473
+        ],
+        "size": [
+          2.0228169283018085,
+          1.8599999843669097,
+          0.31178636430865503
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M19_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M19_Wychwood_Raider.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M19\\candidate.json"
+    },
+    "M20": {
+      "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
+      "owner": "monsters",
+      "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
+      "bytes": 1876176,
+      "baseline_blender_report": {
+        "id": "M20",
+        "name": "Wychwood_Brute",
+        "family": "cursed_biped",
+        "status": "authored_pending_runtime_integration",
+        "triangles": 61099,
+        "bones": 14,
+        "clips": {
+          "Idle": 4.0,
+          "Walking": 1.15,
+          "Running": 0.72,
+          "Attack": 1.05,
+          "AttackHeavy": 1.4,
+          "Windup": 0.7,
+          "Recovery": 0.8,
+          "Block": 1.0,
+          "HitReact": 0.6,
+          "Death": 1.7,
+          "Investigate": 2.8,
+          "Threaten": 2.3,
+          "Feed": 3.2,
+          "Sleep": 4.6,
+          "Interact": 2.0
+        },
+        "glb_bytes": 6243532,
+        "sha256": "a1044a7eb55e074de4dba29ef34e271b8ae2105fc0ee659b5d39dfbc9dc0512e",
+        "gameplay_tested": false,
+        "user_accepted": false
+      },
+      "authored_bind_bounds": {
+        "position": [
+          -1.093387805856079,
+          -1.2569194358303524e-07,
+          -0.21202274218429945
+        ],
+        "size": [
+          2.1867755703885665,
+          1.9720798667325385,
+          0.3924963930126658
+        ],
+        "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
+        "asset_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+      },
+      "private_review_only": false,
+      "user_accepted": false,
+      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\bipeds\\M20_refined_timing_skin_v004.blend",
+      "status": "user_authorized_release_candidate",
+      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\creatures\\M20_Wychwood_Brute.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\bipeds\\M20\\candidate.json"
+    }
+  },
+  "roles": {
+    "kael": "P01",
+    "player": "P01",
+    "player_kael": "P01",
+    "player_human": "P01",
+    "anwen": "C01",
+    "sister_anwen": "C01",
+    "sister_anwen_human": "C01",
+    "shrine_pilgrim": "C01",
+    "witness_3": "C01",
+    "rook": "C02",
+    "rook_smuggler": "C02",
+    "rook_human": "C02",
+    "traveler": "C02",
+    "walker_board": "C02",
+    "vargan_patrol": "C02",
+    "tavin": "C02",
+    "saga_tavin": "C02",
+    "witness_-3": "C02",
+    "mira": "C03",
+    "mira_herbalist": "C03",
+    "mira_human": "C03",
+    "edda": "C03",
+    "saga_edda": "C03",
+    "maelin": "C03",
+    "saga_maelin": "C03",
+    "witness_-7": "C03",
+    "tor": "C04",
+    "blacksmith_tor": "C04",
+    "villager_worker_human": "C04",
+    "forge_helper": "C04",
+    "jory": "C04",
+    "saga_jory": "C04",
+    "dain": "C04",
+    "saga_dain": "C04",
+    "mill_worker": "C04",
+    "oris": "C04",
+    "saga_oris": "C04",
+    "elna": "C05",
+    "widow_elna": "C05",
+    "generic_villager_02": "C05",
+    "villager_female_human": "C05",
+    "walker_well": "C05",
+    "ressa": "C05",
+    "saga_ressa": "C05",
+    "injured_traveler": "C05",
+    "toma": "C06",
+    "farmer_toma": "C06",
+    "generic_villager_01": "C06",
+    "villager": "C06",
+    "villager_human": "C06",
+    "iven": "C06",
+    "saga_iven": "C06",
+    "odran": "C06",
+    "saga_odran": "C06",
+    "senn": "C07",
+    "captain_senn": "C07",
+    "road_ranger": "C07",
+    "road_ranger_human": "C07",
+    "edric": "C08",
+    "lord_edric": "C08",
+    "edric_castle": "C08",
+    "edric_campaign": "C08",
+    "edric_vargan": "C08",
+    "vale": "C09",
+    "vargan_record_keeper": "C09",
+    "record_keeper_vale": "C09",
+    "lysa": "C09",
+    "saga_lysa": "C09",
+    "merrow": "C10",
+    "vargan_steward": "C10",
+    "castle_guard": "C10",
+    "castle_guard_human": "C10",
+    "guard": "C10",
+    "steward_merrow": "C10",
+    "vargan_gate_guard": "C10",
+    "nessa": "C11",
+    "saga_nessa": "C11",
+    "vargan_servant": "C11",
+    "mill_second_worker": "C11",
+    "nera": "C12",
+    "saga_nera": "C12",
+    "villager_hooded_human": "C12",
+    "maren": "C12",
+    "saga_maren": "C12",
+    "ghoulkin": "M01",
+    "ghoulkin_creature": "M01",
+    "ghoulkin_skeleton": "M01",
+    "ghoul_gaunt_real": "M01",
+    "wychwood_stalker": "M02",
+    "wychwood_stalker_creature": "M02",
+    "ghoul_stalker_real": "M02",
+    "bog_wretch": "M03",
+    "bog_wretch_creature": "M03",
+    "gravebound_knight": "M04",
+    "gravebound_knight_creature": "M04",
+    "halvern": "M04",
+    "halvern_boss": "M04",
+    "returned_soldier": "M04",
+    "bandit": "M04",
+    "bandit_deserter": "M04",
+    "bandit_tracker": "M04",
+    "bell_eater": "M05",
+    "bell_eater_boss": "M05",
+    "rootbound_colossus": "M06",
+    "rootbound_colossus_boss": "M06",
+    "ashwing": "M07",
+    "ashwing_creature": "M07",
+    "ashwing_boss": "M07",
+    "white_hart": "M08",
+    "white_hart_avatar": "M08",
+    "white_hart_boss": "M08",
+    "silt_maw": "M09",
+    "millback": "M10",
+    "glassmoth": "M11",
+    "knell_leech": "M12",
+    "hearthscale": "M13",
+    "bracken": "M13",
+    "bracken_companion": "M13",
+    "gallows_weaver": "M14",
+    "reed_choir": "M15",
+    "inkblind": "M16",
+    "cairn_mother": "M17",
+    "shroud_swimmer": "M18",
+    "wychwood_raider": "M19",
+    "wychwood_raider_creature": "M19",
+    "wychwood_brute": "M20",
+    "wychwood_brute_creature": "M20",
+    "ghoul_brute_real": "M20",
+    "orc_skull_real": "M20"
+  },
+  "staff": {
+    "path": "res://assets_external/design_pack_v1/C01_ash_staff.glb",
+    "bytes": 231112,
+    "sha256": "b8ab07b0f5a14323498b2276d9e1d102337d37e444218de910f303bf3209a333",
+    "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\equipment\\C01_ash_staff_refined_candidate.json"
+  },
+  "private_review_only": false
+}

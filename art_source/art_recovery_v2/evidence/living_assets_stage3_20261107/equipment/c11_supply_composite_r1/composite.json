@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "asset": "C11",
+  "style": "supply",
+  "owning_hand": "hand_r",
+  "sample_hz": 120,
+  "source_fit_accepted": true,
+  "runtime_approved": false,
+  "visual_accepted": false,
+  "verified_by_clip": {
+    "Authoring_Carry_Idle": 301,
+    "Authoring_Carry_Scheduler_Route": 959
+  },
+  "maximum_contact_error_m": 0.0003009040665347129,
+  "maximum_native_socket_frame_error_m": 2.2696772530654706e-06,
+  "native_socket_frames": 959,
+  "placement_sha256": "e6b8431e7b03c8569ea4f08935fcf8f4d0b4a38a738ef6a4d0b6918e1f1bf10b",
+  "goals": {
+    "stationary": {
+      "forward_m": 0.075,
+      "outward_m": 0.12,
+      "vertical_m": 0.0
+    },
+    "moving_route": {
+      "forward_m": 0.087,
+      "outward_m": 0.12,
+      "vertical_m": 0.0,
+      "route_only": true
+    }
+  },
+  "actor_inputs": {
+    "res://assets_external/design_pack_v1/humans/C11_Nessa.glb": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+    "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769"
+  },
+  "prop_inputs": {
+    "receipt": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.json",
+      "sha256": "b95562d40dab823dcd8eb06da6d390773db38546771f8cc4016bb2c8eaf983c7"
+    },
+    "carrier": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.glb",
+      "sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0"
+    },
+    "mesh_manifest": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_mesh_manifest.json",
+      "sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528"
+    },
+    "channel_manifest": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_channel_manifest.json",
+      "sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26"
+    }
+  },
+  "fit": {
+    "path": "fit/receipt.json",
+    "sha256": "355c66233b838c4996050f59ebb51e227cd4f2981d0197f3244376573f44edaf"
+  },
+  "blender_run": {
+    "path": "blender_run.json",
+    "sha256": "8dde9e8f95ebce51247c52d5d1dde892aadaf69478e4c84be226e2a505a8d452"
+  },
+  "editable_scene": {
+    "path": "fit/C11_supply_fit_proposal.blend",
+    "sha256": "39431b925ef3547edb12e577d7768eae8cd74aefc22c3890137052a2256ab579"
+  },
+  "stationary": {
+    "pose_receipt": {
+      "path": "standing/pose_receipt.json",
+      "sha256": "b6676fe100d56827c5c7d551a11302a2b73ea63aa1a4dde51cfb0cef37f4eb0f"
+    },
+    "import_fidelity": {
+      "path": "standing/import_fidelity.json",
+      "sha256": "006f175d3b5534e8ed207b36df8a6dc67667d157b76c3100cb45329e5adcd118"
+    },
+    "alias_proof": {
+      "path": "standing/alias_run.json",
+      "sha256": "6d9a731e7f7a175b39716bc86e0fa3602e66cf7d209a6edd7c12814f92610a0e"
+    },
+    "selected_clip": "Authoring_Carry_Idle",
+    "selected_frames": 301
+  },
+  "route": {
+    "pose_receipt": {
+      "path": "route/pose_receipt.json",
+      "sha256": "c37ee932cafa0420116bbaa54b43796978fd81a19917f8fff2d9542b7efb57ef"
+    },
+    "import_fidelity": {
+      "path": "route/import_fidelity.json",
+      "sha256": "82b0ed7bb477e6c1aef4ddeb96a4120b9c64a8bca3c7c434134c04e3de7af1d4"
+    },
+    "selected_clip": "Authoring_Carry_Scheduler_Route",
+    "native_frames": 1081,
+    "visible_frames": 959,
+    "visible_ranges_inclusive": [
+      [
+        121,
+        783
+      ],
+      [
+        785,
+        1080
+      ]
+    ],
+    "scope": {
+      "actual_controller": true,
+      "arrival_observed": true,
+      "braking_observed": true,
+      "destination": [
+        -5.59999990463257,
+        0.0,
+        10.3000001907349
+      ],
+      "disposable_spatial_fixture": true,
+      "intent_key": "baker_day:4",
+      "minute": 1100.0,
+      "outbound_target_index": 1,
+      "revealed_after_owning_solve": true,
+      "schedule": "baker_day",
+      "start": [
+        -3.70000004768372,
+        0.0,
+        7.40000009536743
+      ],
+      "visible_moving_frames": 663,
+      "visible_standing_frames": 296
+    }
+  },
+  "source": {
+    "standing_forward": {
+      "path": "source/c11_supply_forward_trial_modifier.gd",
+      "sha256": "387efa6cc0cdf817ecd3fe7837bccc110f330448e3ff077b8bb0f86bf5ae54e9"
+    },
+    "shared_outward": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/source/c11_activity_goal_trial_modifier.gd",
+      "sha256": "8514ac40f89281a00c7ff98e34b198fd0651faa817b3d21fa80ca099a1c1bbe8"
+    },
+    "moving_extra": {
+      "path": "source/route_tools/c11_supply_route_paired_mode.gd",
+      "sha256": "053f83d4729ba92fb62e9577bc6a6b2916c32d45b2d19e6785baff7e260526f4"
+    }
+  }
+}

@@ -83,6 +83,17 @@ func _run() -> void:
 	other.make_current()
 	_check(not geometry.validate_actor(camera,actor,root.size,Vector3.FORWARD).is_empty(),"camera ownership change rejected")
 	_check(body.is_visible_in_tree(),"actor was not hidden to make validation pass")
+	var floor := _solid(scene,Vector3(0,-0.1,0),Vector3(10,0.2,10))
+	var obstacle := _solid(scene,Vector3(2,0.35,0),Vector3(0.5,0.7,0.5))
+	await physics_frame
+	await physics_frame
+	var space := scene.get_world_3d().direct_space_state
+	_check(geometry.support_point(space,Vector3.ZERO,[],0.18).is_equal_approx(Vector3.ZERO),"staging resolves the actual floor at NPC feet")
+	_check(not geometry.support_point(space,Vector3(2,0,0),[],0.18).is_finite(),"low furniture cannot pass a lifted staging-clearance probe")
+	_check(not geometry.support_point(space,Vector3(20,0,0),[],0.18).is_finite(),"unsupported coordinates cannot stage an actor over empty space")
+	_check(geometry.support_point(space,Vector3(2,0.7,0),[],0.18).is_equal_approx(Vector3(2,0.7,0)),"a correctly authored raised support keeps its actual floor height")
+	floor.free()
+	obstacle.free()
 	other.free()
 	camera.free()
 	scene.free()
@@ -100,6 +111,17 @@ func _box(parent: Node3D, label: String, position: Vector3, size: Vector3) -> Me
 	parent.add_child(node)
 	node.position = position
 	return node
+
+func _solid(parent: Node3D, position: Vector3, size: Vector3) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.position = position
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = size
+	collision.shape = shape
+	body.add_child(collision)
+	parent.add_child(body)
+	return body
 
 func _check(value: bool, message: String) -> void:
 	checks += 1

@@ -1,0 +1,50 @@
+{
+  "scope": "lossless editable scenery transport source repair",
+  "sources": [
+    {
+      "path": "art_source\\art_recovery_v2\\tools\\author_living_world_parts.py",
+      "sha256": "c040d7c37f7a59b7f647c3783961addfe0ad80e96a91628c0aa4a9e128f8092f"
+    },
+    {
+      "path": "art_source\\art_recovery_v2\\tools\\living_world_gltf_transport.py",
+      "sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8"
+    },
+    {
+      "path": "art_source\\art_recovery_v2\\tools\\test_living_world_gltf_transport.py",
+      "sha256": "5a70085151600bed3c7577e75186f80a7e47fb3c3c14409cd51bc18593e9a28b"
+    },
+    {
+      "path": "art_source\\art_recovery_v2\\tools\\test_living_world_recipe.py",
+      "sha256": "c41bdb9679753c811d9e20d4404c2fc841c17f9b0198194b53dc6d7df3d36246"
+    },
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_living_world_blender.gd",
+      "sha256": "ecc8d063e4d2792a2d56cc3aa291de93d6e790edb2012982f3949ef4c5a0ccfd"
+    },
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_living_scenery_pipeline.py",
+      "sha256": "30bf13f9161b2260ebbc89e5f71c2885d3a94a7686a221ab3bd460a6b102551d"
+    },
+    {
+      "path": "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\test_living_scenery_pipeline.py",
+      "sha256": "4ebad8df9170c7cf5c9ff3348bb14ead7b7cf8bbec17f5db72cec34738300f3d"
+    }
+  ],
+  "pure_checks": {
+    "transport": 14,
+    "archive_reproduction": 4,
+    "pipeline": 11
+  },
+  "read_only_preflight": {
+    "original_inputs": 18,
+    "source_inputs": 165
+  },
+  "native_parser": "unrun",
+  "v002_authoring": "unrun",
+  "native_equivalence": "unrun",
+  "visual_acceptance": false,
+  "engine_started": false,
+  "preserved_failed_run": ".verification/scenery/actual_pipeline_r1",
+  "next_run": ".verification/scenery/actual_pipeline_r2",
+  "independent_recipe_review": "asset owner: no additional mapping, API or identity issue found"
+}

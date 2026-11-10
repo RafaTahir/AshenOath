@@ -1,0 +1,9 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+LIVING CAST GRAPH SETTLED: {"expected":"locomotion","native_time":0.125,"ticks":12}
+LIVING CAST PROP GRAPH: {"current":"locomotion","eligible":true,"fade_length":0.140000000596046,"fade_position":0.150000005960464,"from":"","stage":"carry_complete"}
+LIVING CAST PROP GRAPH: {"current":"locomotion","eligible":false,"fade_length":0.140000000596046,"fade_position":0.025000000372529,"from":"ecology_3877918962","stage":"meal_fading"}
+LIVING CAST PROP GRAPH: {"current":"locomotion","eligible":true,"fade_length":0.140000000596046,"fade_position":0.150000005960464,"from":"","stage":"meal_complete"}
+LIVING CAST GRAPH SETTLED: {"expected":"ecology_2417776918","native_time":0.125,"ticks":6}
+LIVING CAST GRAPH SETTLED: {"expected":"ecology_3877918961","native_time":0.025000000372529,"ticks":1}
+LIVING CAST LIFECYCLE: PASS checks=107

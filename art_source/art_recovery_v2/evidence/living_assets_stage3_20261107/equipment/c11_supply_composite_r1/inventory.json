@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "scope": "Exact source-only C11 supply composite",
+  "files": {
+    "blender_run.json": {
+      "sha256": "8dde9e8f95ebce51247c52d5d1dde892aadaf69478e4c84be226e2a505a8d452",
+      "bytes": 56041,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/receipt.json"
+    },
+    "fit/receipt.json": {
+      "sha256": "355c66233b838c4996050f59ebb51e227cd4f2981d0197f3244376573f44edaf",
+      "bytes": 10705,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/fit/receipt.json"
+    },
+    "fit/C11_supply_fit_proposal.blend": {
+      "sha256": "39431b925ef3547edb12e577d7768eae8cd74aefc22c3890137052a2256ab579",
+      "bytes": 10058736,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/fit/C11_supply_fit_proposal.blend"
+    },
+    "route/import_fidelity.json": {
+      "sha256": "82b0ed7bb477e6c1aef4ddeb96a4120b9c64a8bca3c7c434134c04e3de7af1d4",
+      "bytes": 821615,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/route_import_fidelity.json"
+    },
+    "standing/import_fidelity.json": {
+      "sha256": "006f175d3b5534e8ed207b36df8a6dc67667d157b76c3100cb45329e5adcd118",
+      "bytes": 829934,
+      "original": ".verification/motion/c11_supply_forward_trial_blender_r1/import_fidelity.json"
+    },
+    "standing/alias_run.json": {
+      "sha256": "6d9a731e7f7a175b39716bc86e0fa3602e66cf7d209a6edd7c12814f92610a0e",
+      "bytes": 10890,
+      "original": ".verification/motion/c11_supply_alias_trial_native_r2/receipt.json"
+    },
+    "standing/alias.log": {
+      "sha256": "4361370a396a5b8c29554420def0c59eb96c780191748827f602e33e48b668f5",
+      "bytes": 122,
+      "original": ".verification/motion/c11_supply_alias_trial_native_r2/native.log"
+    },
+    "source/verify_c11_supply_alias_trial.gd": {
+      "sha256": "f15223f89ac067d6242f6cbe784dcb03b59804df036e256f7be31a0338e22c2d",
+      "bytes": 6475,
+      "original": ".verification/motion/c11_supply_alias_trial_native_r2/tools/verify_c11_supply_alias_trial.gd"
+    },
+    "standing/pose_receipt.json": {
+      "sha256": "b6676fe100d56827c5c7d551a11302a2b73ea63aa1a4dde51cfb0cef37f4eb0f",
+      "bytes": 2926571,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e/receipt.json"
+    },
+    "standing/native_run.json": {
+      "sha256": "2fc021dca1e5125489924f32e444b4cc5c69b5252f2f386b8fd02de989920a9b",
+      "bytes": 10346,
+      "original": ".verification/motion/c11_supply_forward_trial_native_r1/receipt.json"
+    },
+    "standing/carrier/C11_activity_poses.glb": {
+      "sha256": "d64378dbdc1efc5a3881d6d02dbed9d04574edbb5b46b4fe3d1e497564e7ed87",
+      "bytes": 8966908,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e/C11_activity_poses.glb"
+    },
+    "standing/carrier/C11_activity_poses_raw.glb": {
+      "sha256": "76e76d53d90b182993a12560f69e50483da3c509cea34a95cf328f51b76f2f3a",
+      "bytes": 8966908,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e/C11_activity_poses_raw.glb"
+    },
+    "standing/carrier/C11_activity_poses_weights.glb": {
+      "sha256": "d64378dbdc1efc5a3881d6d02dbed9d04574edbb5b46b4fe3d1e497564e7ed87",
+      "bytes": 8966908,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e/C11_activity_poses_weights.glb"
+    },
+    "standing/carrier/retained_skin_manifest.json": {
+      "sha256": "6b64df9299166816a0f22e035ef1c0ce3714658dc4e225b7e1312bbe4a42f6fe",
+      "bytes": 5855212,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e/retained_skin_manifest.json"
+    },
+    "standing/carrier/retained_rigid_channels.json": {
+      "sha256": "bbd4c2874973702e0ef0cfc8dcd447fe6ee4b92704f0d25efa66ab1150d671d9",
+      "bytes": 71,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e/retained_rigid_channels.json"
+    },
+    "route/pose_receipt.json": {
+      "sha256": "c37ee932cafa0420116bbaa54b43796978fd81a19917f8fff2d9542b7efb57ef",
+      "bytes": 2672864,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7/receipt.json"
+    },
+    "route/native_run.json": {
+      "sha256": "e1bdbd6b1aa4d17abf0a71ddf98435466a460bacc6cf84e240eaf2e460d88b1a",
+      "bytes": 46590,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/receipt.json"
+    },
+    "route/carrier/C11_activity_poses.glb": {
+      "sha256": "1a8fabe4c493759c9f0a0e9a3abf08c8e91578affffc31e838024611ef90cde4",
+      "bytes": 8188316,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7/C11_activity_poses.glb"
+    },
+    "route/carrier/C11_activity_poses_raw.glb": {
+      "sha256": "09813e3c0e9c7cdbfe9d11c27aedc22de7c230fbb474f708290c02f14429074a",
+      "bytes": 8188316,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7/C11_activity_poses_raw.glb"
+    },
+    "route/carrier/C11_activity_poses_weights.glb": {
+      "sha256": "1a8fabe4c493759c9f0a0e9a3abf08c8e91578affffc31e838024611ef90cde4",
+      "bytes": 8188316,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7/C11_activity_poses_weights.glb"
+    },
+    "route/carrier/retained_skin_manifest.json": {
+      "sha256": "6b64df9299166816a0f22e035ef1c0ce3714658dc4e225b7e1312bbe4a42f6fe",
+      "bytes": 5855212,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7/retained_skin_manifest.json"
+    },
+    "route/carrier/retained_rigid_channels.json": {
+      "sha256": "bbd4c2874973702e0ef0cfc8dcd447fe6ee4b92704f0d25efa66ab1150d671d9",
+      "bytes": 71,
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7/retained_rigid_channels.json"
+    },
+    "source/c11_supply_forward_trial_modifier.gd": {
+      "sha256": "387efa6cc0cdf817ecd3fe7837bccc110f330448e3ff077b8bb0f86bf5ae54e9",
+      "bytes": 1574,
+      "original": "art_source/art_recovery_v2/tools/c11_supply_forward_trial_modifier.gd"
+    },
+    "source/route_tools/export_c11_supply_scheduler_route_trial.gd": {
+      "sha256": "6004db8189be1012e6a58fef3d0e3eead006e587bf550af8562ddc205fade4a3",
+      "bytes": 9255,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/export_c11_supply_scheduler_route_trial.gd"
+    },
+    "source/route_tools/export_c11_supply_forward_trial.gd": {
+      "sha256": "ced3e44a9069c63acc986ddd0ecb4101f32685211819463e78663ab42eef0adb",
+      "bytes": 1112,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/export_c11_supply_forward_trial.gd"
+    },
+    "source/route_tools/export_c11_activity_goal_trial.gd": {
+      "sha256": "5eb0d8c72d93b14ef55859c7e1281e56b5fff86c84a9b92cfeb1efe93bb5afcb",
+      "bytes": 2206,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/export_c11_activity_goal_trial.gd"
+    },
+    "source/route_tools/export_living_activity_pose_inputs.gd": {
+      "sha256": "b99e711d28220b6b31e21a108aded515c17b8301fcb6400340433c64654ff11f",
+      "bytes": 33033,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/export_living_activity_pose_inputs.gd"
+    },
+    "source/route_tools/c11_supply_forward_trial_modifier.gd": {
+      "sha256": "387efa6cc0cdf817ecd3fe7837bccc110f330448e3ff077b8bb0f86bf5ae54e9",
+      "bytes": 1574,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/c11_supply_forward_trial_modifier.gd"
+    },
+    "source/route_tools/c11_activity_goal_trial_modifier.gd": {
+      "sha256": "8514ac40f89281a00c7ff98e34b198fd0651faa817b3d21fa80ca099a1c1bbe8",
+      "bytes": 2453,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/c11_activity_goal_trial_modifier.gd"
+    },
+    "source/route_tools/activity_pose_skin_equivalence.gd": {
+      "sha256": "156e4adec932de287f617f9dea9db5a8935d085487e4c3232d6754e99c917e6e",
+      "bytes": 15141,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/activity_pose_skin_equivalence.gd"
+    },
+    "source/route_tools/activity_pose_rigid_equivalence.gd": {
+      "sha256": "fe0cfc102caa081f42c96f014660689c0f8425f4d5ecebe7f79971eecd1a68e5",
+      "bytes": 16200,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/activity_pose_rigid_equivalence.gd"
+    },
+    "source/route_tools/activity_pose_weight_transport.gd": {
+      "sha256": "6e51220dac221691141f378d88dc057eae7f8cca8ab1dc1d7a895591d64ecbbf",
+      "bytes": 18534,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/activity_pose_weight_transport.gd"
+    },
+    "source/route_tools/activity_pose_rigid_channel_transport.gd": {
+      "sha256": "0853b45c62819d664689cbceefa3a72f68cace2702db680fd8ec64b631328fb6",
+      "bytes": 18441,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/activity_pose_rigid_channel_transport.gd"
+    },
+    "source/route_tools/verify_c11_route_host_cleanup.gd": {
+      "sha256": "ee243190f95aa47bec13f0ea43c094fa0e61c29c5490c2c345a2e3be38f9db94",
+      "bytes": 550,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/verify_c11_route_host_cleanup.gd"
+    },
+    "source/route_tools/c11_supply_route_paired_modifier.gd": {
+      "sha256": "dc0b5db16c905befdccad135b3278d043486fbabcb6b9036bb87819245e0f603",
+      "bytes": 2580,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/c11_supply_route_paired_modifier.gd"
+    },
+    "source/route_tools/c11_supply_route_paired_mode.gd": {
+      "sha256": "053f83d4729ba92fb62e9577bc6a6b2916c32d45b2d19e6785baff7e260526f4",
+      "bytes": 48,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/c11_supply_route_paired_mode.gd"
+    },
+    "source/route_tools/c11_supply_route_reveal_trial_modifier.gd": {
+      "sha256": "56559679203713f36f3e99fb62ce770d766ebcc7c000dac50b34d326346d44e8",
+      "bytes": 2448,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/c11_supply_route_reveal_trial_modifier.gd"
+    },
+    "source/route_tools/c11_supply_route_reveal_fixture_grip.gd": {
+      "sha256": "117d7e56f4eee9e50b4262b2bbf36814712e5ccdcb288318f51d4068556d97b4",
+      "bytes": 748,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/tools/c11_supply_route_reveal_fixture_grip.gd"
+    },
+    "source/blender_tools/inspect_living_activity_carrier.py": {
+      "sha256": "7d75e01b26287df41895e5ba15ebd8266ebd0f79fd4e06b74433c0b9a2a4dfb6",
+      "bytes": 28488,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/inspect_living_activity_carrier.py"
+    },
+    "source/blender_tools/activity_pose_weight_transport.py": {
+      "sha256": "30a43b20aa5c93d63a7cab6f41357bc635ad9e547b9ca660f8682f4d7e921260",
+      "bytes": 3531,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/activity_pose_weight_transport.py"
+    },
+    "source/blender_tools/probe_c11_activity_fits.py": {
+      "sha256": "88c400e07f69b0b647e068b6cf1f04691f87957b2b2ab7483f71146e1a7b370d",
+      "bytes": 32733,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/probe_c11_activity_fits.py"
+    },
+    "source/blender_tools/inspect_retained_prop_carrier.py": {
+      "sha256": "92858cc41fd262f69a05ed6938864419a16e3bcf2c92b607ec0e0620cab3ac74",
+      "bytes": 7015,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/inspect_retained_prop_carrier.py"
+    },
+    "source/blender_tools/activity_pose_rigid_channel_transport.py": {
+      "sha256": "94e78ae488d83428c9c23de591846722f9f31a7d9fa28faa4536544945a64d01",
+      "bytes": 3670,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/activity_pose_rigid_channel_transport.py"
+    },
+    "source/blender_tools/inspect_c11_route_carrier.py": {
+      "sha256": "e5503dabbdaf7a9e896646881229bb43a5083895ea107d959fb43805e2d24aa8",
+      "bytes": 28453,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/inspect_c11_route_carrier.py"
+    },
+    "source/blender_tools/c11_supply_dual_fit_adapter.py": {
+      "sha256": "cf4c62a2b52a3084b6f721daf9abae292cf4f119c1c155e622d5b9206edd4778",
+      "bytes": 4666,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/c11_supply_dual_fit_adapter.py"
+    },
+    "source/blender_tools/c11_supply_route_reveal_fit_contract.py": {
+      "sha256": "07abfd68fd79f517735b273dc960a2376bb1c7b81967b57fc7cc4aecac59a60f",
+      "bytes": 1158,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/c11_supply_route_reveal_fit_contract.py"
+    },
+    "source/blender_tools/c11_supply_route_diagnostic.py": {
+      "sha256": "3f2f48d17fe369c78665fb2f960270a9fe67af9901ccf62a440691fbcb57d869",
+      "bytes": 3389,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/tools/c11_supply_route_diagnostic.py"
+    },
+    "standing/parse.log": {
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75,
+      "original": ".verification/motion/c11_supply_forward_trial_native_r1/parse.log"
+    },
+    "standing/native.log": {
+      "sha256": "a725df792ef70156ddb2a7618d905b22b76a50f293c58656487862cbfbf7e7d5",
+      "bytes": 324,
+      "original": ".verification/motion/c11_supply_forward_trial_native_r1/native.log"
+    },
+    "route/parse.log": {
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "bytes": 75,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/parse.log"
+    },
+    "route/cleanup.log": {
+      "sha256": "a057d697bb91e6f032bce67eef9a4711483986d78274c83c87fffa964018be09",
+      "bytes": 105,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/cleanup.log"
+    },
+    "route/native.log": {
+      "sha256": "fae046d309dbb3a9dc260daa4534bca75c2a9edce0e056b75952d8261d7986c0",
+      "bytes": 324,
+      "original": ".verification/motion/c11_supply_route_reveal_native_r1/native.log"
+    },
+    "fit/route_inspection.log": {
+      "sha256": "103bf48edea3d15fa62c78930b57d7662b01a73c74c56875773450c26bae5501",
+      "bytes": 333,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/route_inspection.log"
+    },
+    "fit/shared_fit.log": {
+      "sha256": "59c29c0c3360b55607480a8eba44ccea04b3596671e72e59aea5c2b680584b01",
+      "bytes": 764,
+      "original": ".verification/motion/c11_supply_route_reveal_dual_fit_r1/shared_fit.log"
+    },
+    "composite.json": {
+      "sha256": "980d7ba329ec6a8d06b951cc2610ad64026a413475b8d9ade75d4a5002f8fc70",
+      "bytes": 4983,
+      "original": null
+    }
+  }
+}

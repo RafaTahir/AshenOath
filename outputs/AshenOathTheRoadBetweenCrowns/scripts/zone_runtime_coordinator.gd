@@ -57,6 +57,8 @@ func normalize_zone_request(zone_id: String, spawn_position: Vector3) -> Diction
 		registered = [normalized]
 	if normalized == "" or (not registered.is_empty() and normalized not in registered):
 		return {"ok": false, "zone_id": normalized, "spawn_position": spawn_position, "error": "unknown_zone"}
+	if not preload("res://scripts/campaign_revision.gd").zone_available(normalized,host.get("story_state") if host != null else null):
+		return {"ok":false,"zone_id":normalized,"spawn_position":spawn_position,"error":"campaign_region_revision_mismatch"}
 	return {"ok": true, "zone_id": normalized, "spawn_position": spawn_position}
 
 func sync_zone(zone_id: String) -> Dictionary:
@@ -446,7 +448,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	# Authored arrivals are already reserved by the zone builder. Preserve their
 	# exact route position here; nearest_safe() is an emergency recovery API and
 	# can otherwise move a valid arrival to a distant edge anchor.
-	var safe_spawn: Vector3 = _continuous_arrival.position if not _continuous_arrival.is_empty() else (spawn_pos if WorldSectorManifest.connector_contains(zone_id,spawn_pos) else host.spatial_service.validate_position(spawn_pos, 0.8, host.spatial_service.bank_for(spawn_pos)))
+	var safe_spawn: Vector3 = _continuous_arrival.position if not _continuous_arrival.is_empty() else (spawn_pos if WorldSectorManifest.connector_contains(zone_id,spawn_pos,0.0,host.story_state) else host.spatial_service.validate_position(spawn_pos, 0.8, host.spatial_service.bank_for(spawn_pos)))
 	if host.player == null:
 		host._spawn_player(safe_spawn)
 	else:

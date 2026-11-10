@@ -62,13 +62,15 @@ func _perform_requested_zone_load() -> void:
 
 func _zone_encounter_packs(zone_id: String, recorded_journey: Dictionary = {}) -> Array[String]:
 	var encounter_packs: Array[String] = []
+	var flags: Dictionary = story_state.flags if recorded_journey.is_empty() else recorded_journey.get("story_state",{}).get("flags",{})
+	var completed: Dictionary = quests.completed if recorded_journey.is_empty() else recorded_journey.get("quests",{}).get("completed",{})
+	if preload("res://scripts/campaign_story_overlay.gd").required_for(zone_id,flags,completed): encounter_packs.append("community")
 	if zone_id != "greyfen":
 		return encounter_packs
 	var bell_pending: bool
 	if recorded_journey.is_empty():
 		bell_pending = quests.is_active("main_bell_beneath_greyfen") and not _boss_is_resolved("bell_eater")
 	else:
-		var flags: Dictionary = recorded_journey.get("story_state", {}).get("flags", {})
 		var boss: Variant = recorded_journey.get("world_state", {}).get("boss_states", {}).get("bell_eater", {})
 		bell_pending = recorded_journey.get("quests", {}).get("active", {}).has("main_bell_beneath_greyfen") \
 			and not bool(flags.get("bell_eater_defeated", false)) and not bool(flags.get("bell_eater_legacy_retired", false)) \
@@ -114,13 +116,13 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 	# The production and QA Web candidates may embed the campaign builder in the
 	# root PCK, but campaign art remains owned by the external campaign pack. The
 	# manifest-backed check below keeps the builder from bypassing that pack.
-	if not runtime_packs.zone_packs_ready(zone_id):
+	if not runtime_packs.zone_packs_ready(zone_id,encounter_packs):
 		campaign_pack_waiting = true
 		if hud != null and hud.has_method("arm_loading"):
 			hud.arm_loading("Preparing the road beyond Greyfen...")
-		runtime_packs.request_zone_packs(zone_id)
-		_begin_travel_download(zone_id)
-		_wait_for_campaign_pack(zone_id, spawn_pos, zone_pack_request_serial)
+		runtime_packs.request_zone_packs(zone_id,encounter_packs)
+		_begin_travel_download(zone_id,encounter_packs)
+		_wait_for_campaign_pack(zone_id, spawn_pos, zone_pack_request_serial,encounter_packs)
 		return
 	_load_zone(zone_id, spawn_pos)
 
@@ -143,25 +145,25 @@ func _finish_travel_download() -> void:
 func _pack_wait_now_msec() -> int:
 	return Time.get_ticks_msec()
 
-func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial: int) -> void:
+func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial: int, encounter_packs: Array[String] = []) -> void:
 	var deadline := _pack_wait_now_msec() + RuntimePacks.PREPARATION_TIMEOUT_MSEC
 	while true:
 		await _host.get_tree().process_frame
 		if request_serial != zone_pack_request_serial or not campaign_pack_waiting:
 			return
 		# Mounted content wins at the deadline; stale work never owns recovery.
-		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id):
+		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id,encounter_packs):
 			campaign_pack_waiting = false
 			_finish_travel_download()
 			if not neighbor_arrival_pending and hud != null and hud.has_method("hide_loading"):
 				hud.hide_loading()
 			_load_zone(zone_id, spawn_pos)
 			return
-		if runtime_packs == null or not runtime_packs.zone_pack_failures(zone_id).is_empty():
+		if runtime_packs == null or not runtime_packs.zone_pack_failures(zone_id,encounter_packs).is_empty():
 			break
 		if _pack_wait_now_msec() >= deadline:
 			break
-		if neighbor_crossing_pending: hud.update_journey_load_progress(zone_id,runtime_packs.zone_pack_progress(zone_id),"Downloading verified destination content...")
+		if neighbor_crossing_pending: hud.update_journey_load_progress(zone_id,runtime_packs.zone_pack_progress(zone_id,encounter_packs),"Downloading verified destination content...")
 	campaign_pack_waiting = false
 	_recover_failed_pack_load("The road pack could not be prepared. Your current location remains open; use the crossing to retry.")
 
@@ -219,10 +221,7 @@ func _recover_failed_pack_load(reason: String = "The destination could not load.
 	_finish_gameplay_handoff()
 
 func _zone_requires_campaign_pack(zone_id: String) -> bool:
-	return zone_id in [
-		"deep_wood", "old_mill", "burned_farmstead", "marsh_crossing", "bandit_road",
-		"vargan_approach", "vargan_court", "record_hall", "undercroft", "assembly", "hart_glade",
-	]
+	return zone_id in preload("res://scripts/zone_composition_router.gd").CAMPAIGN_ZONES
 
 func _zone_requires_opening_pack(zone_id: String) -> bool:
 	return zone_id in ["greyfen", "wychwood", "cemetery", "ruins"]
@@ -235,10 +234,16 @@ func _start_new_game_world() -> void:
 	var prepared_root := route_zone_cache.get("greyfen") as Node3D
 	if prepared_root == null or not bool(prepared_root.get_meta("opening_presentation_ready", false)):
 		return
+	var revision := preload("res://scripts/campaign_revision.gd").new_journey_revision()
+	if not quests.can_load_campaign_revision(revision):
+		hud.set_new_game_status("The campaign chapters could not be prepared. Please retry the download.")
+		return
 	new_game_start_pending = false
 	# Identity and reading history belong to the accepted world handoff, not a
 	# request that can remain queued while files or the first view are prepared.
 	save_manager.begin_new_journey()
+	quests.configure_campaign_revision(revision)
+	story_state.set_flag("campaign_revision", revision)
 	hud.load_text_history([])
 	if hud != null and hud.has_method("set_new_game_ready"):
 		hud.set_new_game_ready(true)
@@ -458,6 +463,10 @@ func _bind_spatial_player_body() -> void:
 			service.set_player_body(body)
 
 func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
+	var story_overlay = preload("res://scripts/campaign_story_overlay.gd")
+	if story_overlay.required_for(zone_id,story_state.flags,quests.completed) and not story_overlay.ready():
+		_recover_failed_pack_load("The destination's community story could not be prepared. Your current road remains open.")
+		return
 	_begin_gameplay_handoff("zone_activation")
 	var paired_crossing := game_started and seamless_world != null and current_zone_id != zone_id and not journey_loading.pending(_host) and ZoneCompositionRouter.supports(zone_id)
 	if paired_crossing and seamless_world != null and is_instance_valid(zone_root) and is_instance_valid(player) and not seamless_world.has_prepared(zone_id):
@@ -958,7 +967,7 @@ func release_session() -> void:
 func _keep_player_in_world() -> void:
 	if player == null:
 		return
-	var in_passage := WorldSectorManifest.connector_contains(current_zone_id,player.global_position) or (seamless_world != null and seamless_world.contains_resident_passage(player.global_position))
+	var in_passage := WorldSectorManifest.connector_contains(current_zone_id,player.global_position,0.0,story_state) or (seamless_world != null and seamless_world.contains_resident_passage(player.global_position))
 	if in_passage and player.global_position.y > -2.0: return
 	if _is_river_recovery_position(current_zone_id, player.global_position):
 		_recover_from_river(player, _river_center(current_zone_id), 3.4)
@@ -990,7 +999,7 @@ func _keep_player_in_world() -> void:
 		hud.toast("Kael catches himself before the dark takes him.")
 
 func _safe_loaded_position(zone: String, pos: Vector3) -> Vector3:
-	if WorldSectorManifest.connector_contains(zone,pos) and pos.y > -2.0 and pos.y < 4.0:
+	if WorldSectorManifest.connector_contains(zone,pos,0.0,story_state) and pos.y > -2.0 and pos.y < 4.0:
 		return Vector3(pos.x,maxf(0.95,pos.y),pos.z)
 	var river_z := _river_center(zone)
 	if spatial_service != null and spatial_service.zone_id == zone:

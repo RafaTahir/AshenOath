@@ -1,0 +1,130 @@
+{
+  "authored_assets_loaded": false,
+  "world_loaded": false,
+  "renderer": "headless",
+  "sources": [
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_world_blender.gd",
+      "sha256": "600bda16a9162135d49c118e35d28418b173d5f4ba32750200502174c1449414"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/living_world_part_baker.gd",
+      "sha256": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/living_world_geometry_contract.gd",
+      "sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_world_split.gd",
+      "sha256": "f252b341974d9d83cb85a191d23990c28054c61e7e1f9e65023c0644afeedb83"
+    }
+  ],
+  "runs": [
+    {
+      "label": "compiler_parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_contract_r2\\project",
+        "--check-only",
+        "--script",
+        "res://tools/build_living_world_blender.gd"
+      ],
+      "pid": 16752,
+      "exit_code": 0,
+      "timed_out": false,
+      "passed": true,
+      "log": ".verification/scenery/native_contract_r2/compiler_parse.log"
+    },
+    {
+      "label": "extractor_parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_contract_r2\\project",
+        "--check-only",
+        "--script",
+        "res://tools/living_world_part_baker.gd"
+      ],
+      "pid": 18340,
+      "exit_code": 0,
+      "timed_out": false,
+      "passed": true,
+      "log": ".verification/scenery/native_contract_r2/extractor_parse.log"
+    },
+    {
+      "label": "geometry_parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_contract_r2\\project",
+        "--check-only",
+        "--script",
+        "res://tools/living_world_geometry_contract.gd"
+      ],
+      "pid": 6020,
+      "exit_code": 0,
+      "timed_out": false,
+      "passed": true,
+      "log": ".verification/scenery/native_contract_r2/geometry_parse.log"
+    },
+    {
+      "label": "split_parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_contract_r2\\project",
+        "--check-only",
+        "--script",
+        "res://tools/verify_living_world_split.gd"
+      ],
+      "pid": 17524,
+      "exit_code": 0,
+      "timed_out": false,
+      "passed": true,
+      "log": ".verification/scenery/native_contract_r2/split_parse.log"
+    },
+    {
+      "label": "in_memory_geometry",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_contract_r2\\project",
+        "--script",
+        "res://tools/build_living_world_blender.gd",
+        "--",
+        "--verify-contract"
+      ],
+      "pid": 11104,
+      "exit_code": 0,
+      "timed_out": false,
+      "passed": true,
+      "log": ".verification/scenery/native_contract_r2/in_memory_geometry.log"
+    },
+    {
+      "label": "in_memory_split",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\scenery\\native_contract_r2\\project",
+        "--script",
+        "res://tools/verify_living_world_split.gd",
+        "--",
+        "--verify-contract"
+      ],
+      "pid": 10616,
+      "exit_code": 0,
+      "timed_out": false,
+      "passed": true,
+      "log": ".verification/scenery/native_contract_r2/in_memory_split.log"
+    }
+  ],
+  "passed": true
+}

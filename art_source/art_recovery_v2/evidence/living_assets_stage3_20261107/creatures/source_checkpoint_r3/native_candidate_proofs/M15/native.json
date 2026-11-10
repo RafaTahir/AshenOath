@@ -1,0 +1,575 @@
+{
+	"asset": "M15",
+	"attack_profiles_recalibrated": false,
+	"binding_proof": {
+		"candidate_only": true,
+		"morph_bindings": [
+			{
+				"neutral_weight": 0.0,
+				"node_path": "M15_Rig/Skeleton3D/M15_RuntimeAssembly",
+				"shape_name": "Sac0_Inflate"
+			},
+			{
+				"neutral_weight": 0.0,
+				"node_path": "M15_Rig/Skeleton3D/M15_RuntimeAssembly",
+				"shape_name": "Sac1_Inflate"
+			},
+			{
+				"neutral_weight": 0.0,
+				"node_path": "M15_Rig/Skeleton3D/M15_RuntimeAssembly",
+				"shape_name": "Sac2_Inflate"
+			}
+		],
+		"native_binding_report": {
+			"Feed": {
+				"bound_bone_tracks": 5,
+				"morph_tracks": {
+					"Sac0_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac0_Inflate",
+					"Sac1_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac1_Inflate",
+					"Sac2_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac2_Inflate"
+				}
+			},
+			"Idle": {
+				"bound_bone_tracks": 5,
+				"morph_tracks": {
+					"Sac0_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac0_Inflate",
+					"Sac1_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac1_Inflate",
+					"Sac2_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac2_Inflate"
+				}
+			},
+			"Investigate": {
+				"bound_bone_tracks": 5,
+				"morph_tracks": {
+					"Sac0_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac0_Inflate",
+					"Sac1_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac1_Inflate",
+					"Sac2_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac2_Inflate"
+				}
+			},
+			"Sleep": {
+				"bound_bone_tracks": 5,
+				"morph_tracks": {
+					"Sac0_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac0_Inflate",
+					"Sac1_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac1_Inflate",
+					"Sac2_Inflate": "M15_Rig/Skeleton3D/M15_RuntimeAssembly:Sac2_Inflate"
+				}
+			}
+		},
+		"receipt_sha256": "79694a8ffa56b3bb19f6371736ed61b96e15f86bbe97a88b90e4f05bbd73fd45",
+		"source_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+		"verified": true,
+		"visual_accepted": false,
+		"water_probe_evidence": [],
+		"water_probes": []
+	},
+	"candidate_only": true,
+	"checks": 5896,
+	"expected_binding_count": 3,
+	"expected_interruption_count": 24,
+	"expected_shapes": [
+		"Sac0_Inflate",
+		"Sac1_Inflate",
+		"Sac2_Inflate"
+	],
+	"failures": [],
+	"interruption_samples": [
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.000288602721411735,
+				"Sac1_Inflate": 0.0,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "movement",
+			"phase": 0.025000000372529,
+			"target_shape": "Sac0_Inflate",
+			"time": 0.100000001490116
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.352922797203064,
+				"Sac1_Inflate": 0.000541659886948764,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "movement",
+			"phase": 0.283333331346512,
+			"target_shape": "Sac1_Inflate",
+			"time": 1.13333332538605
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.0,
+				"Sac1_Inflate": 0.352922797203064,
+				"Sac2_Inflate": 0.000541658489964902
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "movement",
+			"phase": 0.533333361148834,
+			"target_shape": "Sac2_Inflate",
+			"time": 2.13333344459534
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.00138673023320735,
+				"Sac1_Inflate": 0.0,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "attack",
+			"phase": 0.025000000372529,
+			"target_shape": "Sac0_Inflate",
+			"time": 0.100000001490116
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.352922797203064,
+				"Sac1_Inflate": 0.000541659886948764,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "attack",
+			"phase": 0.283333331346512,
+			"target_shape": "Sac1_Inflate",
+			"time": 1.13333332538605
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.0,
+				"Sac1_Inflate": 0.352922797203064,
+				"Sac2_Inflate": 0.000541658489964902
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "attack",
+			"phase": 0.533333361148834,
+			"target_shape": "Sac2_Inflate",
+			"time": 2.13333344459534
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.000541659363079816,
+				"Sac1_Inflate": 0.0,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "hit",
+			"phase": 0.0333333350718021,
+			"target_shape": "Sac0_Inflate",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.352922797203064,
+				"Sac1_Inflate": 0.000541659886948764,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "hit",
+			"phase": 0.283333331346512,
+			"target_shape": "Sac1_Inflate",
+			"time": 1.13333332538605
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.0,
+				"Sac1_Inflate": 0.352922797203064,
+				"Sac2_Inflate": 0.000541658489964902
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "hit",
+			"phase": 0.533333361148834,
+			"target_shape": "Sac2_Inflate",
+			"time": 2.13333344459534
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.000541659363079816,
+				"Sac1_Inflate": 0.0,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "dialogue",
+			"phase": 0.0333333350718021,
+			"target_shape": "Sac0_Inflate",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.352922797203064,
+				"Sac1_Inflate": 0.000541659886948764,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "dialogue",
+			"phase": 0.283333331346512,
+			"target_shape": "Sac1_Inflate",
+			"time": 1.13333332538605
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.0,
+				"Sac1_Inflate": 0.352922797203064,
+				"Sac2_Inflate": 0.000541658489964902
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "dialogue",
+			"phase": 0.533333361148834,
+			"target_shape": "Sac2_Inflate",
+			"time": 2.13333344459534
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.000541659363079816,
+				"Sac1_Inflate": 0.0,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "cancel",
+			"phase": 0.0333333350718021,
+			"target_shape": "Sac0_Inflate",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.352922797203064,
+				"Sac1_Inflate": 0.000541659886948764,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "cancel",
+			"phase": 0.283333331346512,
+			"target_shape": "Sac1_Inflate",
+			"time": 1.13333332538605
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.0,
+				"Sac1_Inflate": 0.352922797203064,
+				"Sac2_Inflate": 0.000541658489964902
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "cancel",
+			"phase": 0.533333361148834,
+			"target_shape": "Sac2_Inflate",
+			"time": 2.13333344459534
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.00260267267003655,
+				"Sac1_Inflate": 0.0,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "distance",
+			"phase": 0.025000000372529,
+			"target_shape": "Sac0_Inflate",
+			"time": 0.100000001490116
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.352922797203064,
+				"Sac1_Inflate": 0.000541659886948764,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "distance",
+			"phase": 0.283333331346512,
+			"target_shape": "Sac1_Inflate",
+			"time": 1.13333332538605
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.0,
+				"Sac1_Inflate": 0.352922797203064,
+				"Sac2_Inflate": 0.000541658489964902
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "distance",
+			"phase": 0.533333361148834,
+			"target_shape": "Sac2_Inflate",
+			"time": 2.13333344459534
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.000541659363079816,
+				"Sac1_Inflate": 0.0,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "death",
+			"phase": 0.0333333350718021,
+			"target_shape": "Sac0_Inflate",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.352922797203064,
+				"Sac1_Inflate": 0.000541659886948764,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "death",
+			"phase": 0.283333331346512,
+			"target_shape": "Sac1_Inflate",
+			"time": 1.13333332538605
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.0,
+				"Sac1_Inflate": 0.352922797203064,
+				"Sac2_Inflate": 0.000541658489964902
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "death",
+			"phase": 0.533333361148834,
+			"target_shape": "Sac2_Inflate",
+			"time": 2.13333344459534
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.000541659363079816,
+				"Sac1_Inflate": 0.0,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "restore",
+			"phase": 0.0333333350718021,
+			"target_shape": "Sac0_Inflate",
+			"time": 0.133333340287209
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.352922797203064,
+				"Sac1_Inflate": 0.000541659886948764,
+				"Sac2_Inflate": 0.0
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "restore",
+			"phase": 0.283333331346512,
+			"target_shape": "Sac1_Inflate",
+			"time": 1.13333332538605
+		},
+		{
+			"actual_weights": {
+				"Sac0_Inflate": 0.0,
+				"Sac1_Inflate": 0.352922797203064,
+				"Sac2_Inflate": 0.000541658489964902
+			},
+			"clip": "Idle",
+			"duration": 4.0,
+			"interruption": "restore",
+			"phase": 0.533333361148834,
+			"target_shape": "Sac2_Inflate",
+			"time": 2.13333344459534
+		}
+	],
+	"native_equivalence": {
+		"aggregate_bounds": {
+			"candidate": {
+				"position": [
+					-0.844012916088104,
+					0.0030201047193259,
+					-0.690751194953918
+				],
+				"size": [
+					1.6876916885376,
+					1.24437749385834,
+					1.46962904930115
+				]
+			},
+			"maximum_error": 0.0,
+			"owner": "AssetSpawnHelper._calculate_node_bounds",
+			"retained": {
+				"position": [
+					-0.844012916088104,
+					0.0030201047193259,
+					-0.690751194953918
+				],
+				"size": [
+					1.6876916885376,
+					1.24437749385834,
+					1.46962904930115
+				]
+			}
+		},
+		"collision_dimensions_verified": false,
+		"component_tolerance": 0.000001,
+		"errors": [],
+		"frames": {
+			".": 0.0,
+			"./M15_Rig": 0.0,
+			"./M15_Rig/Skeleton3D": 0.0,
+			"./M15_Rig/Skeleton3D/M15_RuntimeAssembly": 0.0
+		},
+		"mesh_bounds": {
+			"./M15_Rig/Skeleton3D/M15_RuntimeAssembly": {
+				"candidate": {
+					"position": [
+						-0.844012916088104,
+						0.0030201047193259,
+						-0.690751194953918
+					],
+					"size": [
+						1.6876916885376,
+						1.24437749385834,
+						1.46962904930115
+					]
+				},
+				"maximum_error": 0.0,
+				"retained": {
+					"position": [
+						-0.844012916088104,
+						0.0030201047193259,
+						-0.690751194953918
+					],
+					"size": [
+						1.6876916885376,
+						1.24437749385834,
+						1.46962904930115
+					]
+				}
+			}
+		},
+		"normalization_applied": false,
+		"prepared_role_scale_verified": false,
+		"protected_clips": {
+			"candidate": {
+				"AnimationPlayer/Attack": "ceacf9c4f83e58d7963611beb0db398cbec59b76d5553b2d5a5dad5d013c702b",
+				"AnimationPlayer/AttackHeavy": "73257e315eafca5c9f69ff12450e31591e30737a1c58e684f2c64e23310b43c6",
+				"AnimationPlayer/Block": "fbc7b7c7bca87919ff057265fe3c4589dd1f675ce584b9aa95d02e6e05b03489",
+				"AnimationPlayer/Death": "abd1feeba540e8bfabc7b3bf3bc0db9932121fbdffc45b5f8f0c272de30d98f6",
+				"AnimationPlayer/HitReact": "c3629281eb47dda36d13583b978e08e5a45c03f826bbb56fa32f1117233d5c50",
+				"AnimationPlayer/Interact": "e85cf7c2a490205c79947ceb38cce4a503c4c8473bf7b96cf584de5e4a776643",
+				"AnimationPlayer/Recovery": "12f670722a3b4597da8fbfbe7bcec23af3455adfbbbea6e9b1499cc49a914645",
+				"AnimationPlayer/Running": "5e001f7e0103301e51b72fca1a9e725ba8f518b43bc80906f5c3d243cd1bf1d7",
+				"AnimationPlayer/Threaten": "0112e7bacde7dcff6411714ce5d46166b17a1cc53d0af91ae7e0d9df6825d734",
+				"AnimationPlayer/Walking": "bb87d29d928244139f50ebd380a9f992c8b3ce73a86145bb3f19286759e3e2e0",
+				"AnimationPlayer/Windup": "994f841fd8fc337af66139575787383a1ed211e69b6a151cf53759955dd7dd8d"
+			},
+			"equal": true,
+			"retained": {
+				"AnimationPlayer/Attack": "ceacf9c4f83e58d7963611beb0db398cbec59b76d5553b2d5a5dad5d013c702b",
+				"AnimationPlayer/AttackHeavy": "73257e315eafca5c9f69ff12450e31591e30737a1c58e684f2c64e23310b43c6",
+				"AnimationPlayer/Block": "fbc7b7c7bca87919ff057265fe3c4589dd1f675ce584b9aa95d02e6e05b03489",
+				"AnimationPlayer/Death": "abd1feeba540e8bfabc7b3bf3bc0db9932121fbdffc45b5f8f0c272de30d98f6",
+				"AnimationPlayer/HitReact": "c3629281eb47dda36d13583b978e08e5a45c03f826bbb56fa32f1117233d5c50",
+				"AnimationPlayer/Interact": "e85cf7c2a490205c79947ceb38cce4a503c4c8473bf7b96cf584de5e4a776643",
+				"AnimationPlayer/Recovery": "12f670722a3b4597da8fbfbe7bcec23af3455adfbbbea6e9b1499cc49a914645",
+				"AnimationPlayer/Running": "5e001f7e0103301e51b72fca1a9e725ba8f518b43bc80906f5c3d243cd1bf1d7",
+				"AnimationPlayer/Threaten": "0112e7bacde7dcff6411714ce5d46166b17a1cc53d0af91ae7e0d9df6825d734",
+				"AnimationPlayer/Walking": "bb87d29d928244139f50ebd380a9f992c8b3ce73a86145bb3f19286759e3e2e0",
+				"AnimationPlayer/Windup": "994f841fd8fc337af66139575787383a1ed211e69b6a151cf53759955dd7dd8d"
+			}
+		},
+		"rests": {
+			"./M15_Rig/Skeleton3D": {
+				"bones": 17,
+				"maximum_error": 0.0
+			}
+		},
+		"retained_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/M15_retained_input.glb",
+		"retained_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
+		"verified": true,
+		"visual_accepted": false
+	},
+	"production_source_changed": false,
+	"samples": [
+		{
+			"actual_mesh_ranges": {
+				"Sac0_Inflate": [
+					-0.00000000000177565156588705,
+					0.374000012874603
+				],
+				"Sac1_Inflate": [
+					-0.0000000000284102533165687,
+					0.374000012874603
+				],
+				"Sac2_Inflate": [
+					0.0,
+					0.374000012874603
+				]
+			},
+			"clip": "Idle",
+			"duration": 4.0
+		},
+		{
+			"actual_mesh_ranges": {
+				"Sac0_Inflate": [
+					-0.0000000107408046901014,
+					0.249822601675987
+				],
+				"Sac1_Inflate": [
+					0.0,
+					0.249290883541107
+				],
+				"Sac2_Inflate": [
+					-0.0000000019485157931598,
+					0.249822601675987
+				]
+			},
+			"clip": "Investigate",
+			"duration": 2.79166674613953
+		},
+		{
+			"actual_mesh_ranges": {
+				"Sac0_Inflate": [
+					0.0,
+					0.543707728385925
+				],
+				"Sac1_Inflate": [
+					0.0,
+					0.542831480503082
+				],
+				"Sac2_Inflate": [
+					0.0,
+					0.543707728385925
+				]
+			},
+			"clip": "Feed",
+			"duration": 3.20833325386047
+		},
+		{
+			"actual_mesh_ranges": {
+				"Sac0_Inflate": [
+					0.0,
+					0.0549420900642872
+				],
+				"Sac1_Inflate": [
+					-0.0000000000353563810173707,
+					0.054953720420599
+				],
+				"Sac2_Inflate": [
+					-0.000000000649264975116637,
+					0.0549420900642872
+				]
+			},
+			"clip": "Sleep",
+			"duration": 4.58333349227905
+		}
+	],
+	"source_path": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M15/M15_living_candidate.glb",
+	"status": "pass",
+	"visual_accepted": false
+}

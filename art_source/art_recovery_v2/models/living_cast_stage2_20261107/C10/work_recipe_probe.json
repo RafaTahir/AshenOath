@@ -1,0 +1,54 @@
+{
+  "asset": "C10",
+  "saved_input_blend_sha256": null,
+  "input_path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_cast_stage2_20261107\\C10_baseline.glb",
+  "input_sha256": "a02d40c315564be29d3fa703e65019a623a43b64d8dd24a45dcd1e20688ada1f",
+  "recipe_sha256": "d4612a90411e19b7294b7e46f0db81d10f57bd0834ec8a2be08083c105602d87",
+  "source_trajectory_clear": true,
+  "intrusions": [],
+  "contact": {
+    "l": {
+      "surface": [
+        -0.1186126098036766,
+        0.39944639801979065,
+        1.0206403732299805
+      ],
+      "normal": [
+        -0.2955801784992218,
+        -0.18642635643482208,
+        -0.936951220035553
+      ],
+      "target_distance": 0.0016252471141213517,
+      "finger_minimum_height": 1.0177968740463257,
+      "finger_minimum_vertex": 16474,
+      "finger_minimum_weights": {
+        "thumb_01_l": 0.9285409450531006,
+        "hand_l": 0.0714590847492218
+      },
+      "finger_clearance_to_work_plane": -0.0022031068801879883
+    },
+    "r": {
+      "surface": [
+        0.11867580562829971,
+        0.3997385799884796,
+        1.020792841911316
+      ],
+      "normal": [
+        0.29490649700164795,
+        -0.21097487211227417,
+        -0.9319440722465515
+      ],
+      "target_distance": 0.0015653931397332152,
+      "finger_minimum_height": 1.0177606344223022,
+      "finger_minimum_vertex": 17215,
+      "finger_minimum_weights": {
+        "thumb_01_r": 0.9285409450531006,
+        "hand_r": 0.0714590847492218
+      },
+      "finger_clearance_to_work_plane": -0.0022393465042114258
+    }
+  },
+  "saved_output_verified": false,
+  "native_verified": false,
+  "visual_accepted": false
+}

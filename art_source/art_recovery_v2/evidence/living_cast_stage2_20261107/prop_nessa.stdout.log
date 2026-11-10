@@ -1,0 +1,18 @@
+Info: Saved as "station_nessa.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+06:48:24 | INFO: Starting glTF 2.0 export
+06:48:24 | INFO: Extracting primitive: Cube.001
+06:48:24 | INFO: Primitives created: 1
+06:48:24 | INFO: Extracting primitive: Cube.002
+06:48:24 | INFO: Primitives created: 1
+06:48:24 | INFO: Extracting primitive: Cube
+06:48:24 | INFO: Primitives created: 1
+06:48:24 | INFO: Extracting primitive: WorkContactPart
+06:48:24 | INFO: Primitives created: 1
+06:48:24 | INFO: Finished glTF 2.0 export in 0.5702321529388428 s
+
+STAGE2_PROP_AUTHORED nessa 128
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

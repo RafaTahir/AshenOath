@@ -1,0 +1,37 @@
+{
+  "scope": "exact restoration of four retained memorial inputs in isolated worktree only",
+  "canonical_checkout_written": false,
+  "existing_differing_files_overwritten": false,
+  "head": "63da125afb4681837302a6d1427386141a0fbe66",
+  "files": [
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartAftermath_witness_Authored.res",
+      "bytes": 3617,
+      "sha256": "0ad8ca711a831fe3dbab622b733473e6ad1149cde8fd2030b4546d6ccf6354d1",
+      "copied_missing": true,
+      "origin": "git:63da125afb4681837302a6d1427386141a0fbe66"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartAftermath_mercy_Authored.res",
+      "bytes": 5941,
+      "sha256": "af91f589c7479abce053ea10d48449c3854186d8506dcd9bf075658dac946546",
+      "copied_missing": true,
+      "origin": "git:63da125afb4681837302a6d1427386141a0fbe66"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartAftermath_duty_Authored.res",
+      "bytes": 18333,
+      "sha256": "8585e0782d721a72f57e9d7b9a0cadf9c1ec035fb33de393e233ce22f0a8672d",
+      "copied_missing": true,
+      "origin": "git:63da125afb4681837302a6d1427386141a0fbe66"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/HartAftermath_ash_Authored.res",
+      "bytes": 4182,
+      "sha256": "6faabbf4bef316ad7efc7f477c78322a08ad36bd09ab9c3bbdf57c81f2c5971c",
+      "copied_missing": true,
+      "origin": "git:63da125afb4681837302a6d1427386141a0fbe66"
+    }
+  ],
+  "engine_started": false
+}

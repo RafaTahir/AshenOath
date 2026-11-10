@@ -47,7 +47,8 @@ static func tree_positions() -> Array[Vector3]:
 static func build(context: ZoneBuildContext) -> void:
 	var mesh := load(MESH_PATH) as ArrayMesh
 	var tree := context.forest_tree_mesh("res://assets_external/environment/forest/TwistedTree_2.obj")
-	if mesh == null or mesh.get_surface_count() != 2 or tree == null:
+	var ferns := load("res://assets_external/environment_prepared/living_world/hart_ferns.scn") as PackedScene
+	if mesh == null or mesh.get_surface_count() != 1 or tree == null or ferns == null:
 		push_error("Hart Glade requires its fitted woodland ground and approved tree source")
 		return
 	var layer := Node3D.new()
@@ -57,6 +58,7 @@ static func build(context: ZoneBuildContext) -> void:
 	ground.mesh = mesh
 	ground.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	layer.add_child(ground)
+	layer.add_child(ferns.instantiate())
 	var positions := tree_positions()
 	var count := 20 if context.quality_preset() == "potato" else positions.size()
 	var multimesh := MultiMesh.new()

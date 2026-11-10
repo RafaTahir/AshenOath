@@ -1,0 +1,232 @@
+{
+  "kind": "new_hart_memorial_resources",
+  "sources": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\memorials\\run_new_memorials.py",
+      "sha256": "93bb01865b98e83a235ca3d1a3d6319a832dde3776c8d51ee45666d2f8716187",
+      "bytes": 6803
+    },
+    {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a",
+      "bytes": 198152
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\project.godot",
+      "sha256": "9483348efecd04dd61b2873e932e574e409745e1b6831aa4b9b2591eae32a39f",
+      "bytes": 6073
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\.godot\\global_script_class_cache.cfg",
+      "sha256": "8afdbc355b2a3020a7245285121774b65209e744e111e00fea9bc95afe6933f0",
+      "bytes": 5690
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_hart_aftermath.gd",
+      "sha256": "c1b2c4e21744164a270a43f05697d5d4767d9f19b59c4e6a230f877f4fd76fc8",
+      "bytes": 6475
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\build_hart_landscape.gd",
+      "sha256": "5644e43e897c77ce49f18a76544ed433fb17d8a2c4518ac1befbe0e5cfcc0099",
+      "bytes": 4163
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_hart_aftermath_assets.gd",
+      "sha256": "5a9007b88bae0ab832ffde4d536e2bea7ebcfdc38f712a25e187427c8db62737",
+      "bytes": 4389
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\ending_catalog.gd",
+      "sha256": "f8414285cc3fcd6c7eec056345e39641e9b59c3a08083f20e93efdfff8c674c3",
+      "bytes": 3761
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\campaign_revision.gd",
+      "sha256": "82020282d1aad2eb7342fdb606a9b3f975fea8509d446208377dec4e43c31930",
+      "bytes": 9082
+    }
+  ],
+  "legacy_before": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\HartAftermath_witness_Authored.res",
+      "sha256": "0ad8ca711a831fe3dbab622b733473e6ad1149cde8fd2030b4546d6ccf6354d1",
+      "bytes": 3617
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\HartAftermath_mercy_Authored.res",
+      "sha256": "af91f589c7479abce053ea10d48449c3854186d8506dcd9bf075658dac946546",
+      "bytes": 5941
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\HartAftermath_duty_Authored.res",
+      "sha256": "8585e0782d721a72f57e9d7b9a0cadf9c1ec035fb33de393e233ce22f0a8672d",
+      "bytes": 18333
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\HartAftermath_ash_Authored.res",
+      "sha256": "6faabbf4bef316ad7efc7f477c78322a08ad36bd09ab9c3bbdf57c81f2c5971c",
+      "bytes": 4182
+    }
+  ],
+  "new_before": [],
+  "runs": [
+    {
+      "label": "builder_parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "res://tools/build_hart_aftermath.gd",
+        "--check-only"
+      ],
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\memorials\\native-r1\\builder_parse.log",
+      "passed": true,
+      "timed_out": false,
+      "pid": 17852,
+      "exit_code": 0,
+      "owned_process_exited": true,
+      "seconds": 0.485
+    },
+    {
+      "label": "fixture_parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "res://tools/verify_hart_aftermath_assets.gd",
+        "--check-only"
+      ],
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\memorials\\native-r1\\fixture_parse.log",
+      "passed": true,
+      "timed_out": false,
+      "pid": 688,
+      "exit_code": 0,
+      "owned_process_exited": true,
+      "seconds": 0.437
+    },
+    {
+      "label": "build_only_new",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "res://tools/build_hart_aftermath.gd",
+        "--",
+        "--only-new"
+      ],
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\memorials\\native-r1\\build_only_new.log",
+      "passed": true,
+      "timed_out": false,
+      "pid": 14064,
+      "exit_code": 0,
+      "owned_process_exited": true,
+      "seconds": 0.547
+    },
+    {
+      "label": "validate_all_six",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "res://tools/verify_hart_aftermath_assets.gd"
+      ],
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\memorials\\native-r1\\validate_all_six.log",
+      "passed": true,
+      "timed_out": false,
+      "pid": 1744,
+      "exit_code": 0,
+      "owned_process_exited": true,
+      "seconds": 0.515
+    }
+  ],
+  "passed": true,
+  "visual_acceptance": false,
+  "enactment_verified": false,
+  "gameplay_acceptance": false,
+  "resource_validation": {
+    "enactment_verified": false,
+    "failures": [],
+    "gameplay_acceptance": false,
+    "only_new": false,
+    "resources": [
+      {
+        "action": "expose",
+        "bytes": 3617,
+        "covenant": "witness",
+        "obstacles": 5,
+        "path": "res://assets_external/environment/forest/HartAftermath_witness_Authored.res",
+        "sha256": "0ad8ca711a831fe3dbab622b733473e6ad1149cde8fd2030b4546d6ccf6354d1",
+        "triangles": 108
+      },
+      {
+        "action": "free",
+        "bytes": 5941,
+        "covenant": "mercy",
+        "obstacles": 5,
+        "path": "res://assets_external/environment/forest/HartAftermath_mercy_Authored.res",
+        "sha256": "af91f589c7479abce053ea10d48449c3854186d8506dcd9bf075658dac946546",
+        "triangles": 180
+      },
+      {
+        "action": "bind",
+        "bytes": 18333,
+        "covenant": "duty",
+        "obstacles": 5,
+        "path": "res://assets_external/environment/forest/HartAftermath_duty_Authored.res",
+        "sha256": "8585e0782d721a72f57e9d7b9a0cadf9c1ec035fb33de393e233ce22f0a8672d",
+        "triangles": 2412
+      },
+      {
+        "action": "kill",
+        "bytes": 4182,
+        "covenant": "ash",
+        "obstacles": 5,
+        "path": "res://assets_external/environment/forest/HartAftermath_ash_Authored.res",
+        "sha256": "6faabbf4bef316ad7efc7f477c78322a08ad36bd09ab9c3bbdf57c81f2c5971c",
+        "triangles": 108
+      },
+      {
+        "action": "share",
+        "bytes": 3746,
+        "covenant": "concord",
+        "obstacles": 5,
+        "path": "res://assets_external/environment/forest/HartAftermath_concord_Authored.res",
+        "sha256": "a797f54052dc80d9bf3a001bdfdd1a65d31ec96183af7adff0ee1e381c0717f8",
+        "triangles": 144
+      },
+      {
+        "action": "depart",
+        "bytes": 4038,
+        "covenant": "open_road",
+        "obstacles": 8,
+        "path": "res://assets_external/environment/forest/HartAftermath_open_road_Authored.res",
+        "sha256": "ce599b86e7b3223ab8aa04268391b4df69eca9d7ef2b716fa37dd0a130158f39",
+        "triangles": 144
+      }
+    ],
+    "status": "pass",
+    "visual_acceptance": false
+  },
+  "new_outputs": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\HartAftermath_concord_Authored.res",
+      "sha256": "a797f54052dc80d9bf3a001bdfdd1a65d31ec96183af7adff0ee1e381c0717f8",
+      "bytes": 3746
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\forest\\HartAftermath_open_road_Authored.res",
+      "sha256": "ce599b86e7b3223ab8aa04268391b4df69eca9d7ef2b716fa37dd0a130158f39",
+      "bytes": 4038
+    }
+  ],
+  "legacy_byte_identical": true
+}

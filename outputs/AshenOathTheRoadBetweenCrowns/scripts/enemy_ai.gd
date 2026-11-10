@@ -97,6 +97,9 @@ var boss_visual_time := 0.0
 var boss_identity_base_scale := Vector3.ONE
 var encounter_peers: Array = []
 var ambient_state := "resting"
+var native_ambient_authored := false
+var native_ambient_elapsed := 0.0
+var native_ambient_phase := -1
 var ambient_elapsed := 0.0
 var ambient_remaining := 0.0
 var ambient_target := Vector3.INF
@@ -279,6 +282,7 @@ func _physics_process(delta: float) -> void:
 		ambient_target = Vector3.INF
 		if animation_driver != null:
 			animation_driver.clear_life_activity()
+			animation_driver.clear_observation_clip()
 	var pursuit_position: Vector3 = player.global_position if can_see_player else last_known_player_position
 	var pursuit_distance := global_position.distance_to(pursuit_position) if pursuit_position != Vector3.INF else INF
 	var home_distance: float = global_position.distance_to(home_position)
@@ -383,7 +387,37 @@ func _step_motion(delta: float) -> void:
 		if achieved.length_squared() > 0.01:
 			animation_driver.clear_life_activity()
 		animation_driver.set_locomotion_motion(achieved, is_on_floor(), maxf(move_speed, 0.1))
+		_update_native_ambient(delta, achieved)
 	_animate_visuals(delta)
+
+func _update_native_ambient(delta: float, achieved: Vector3) -> void:
+	if not native_ambient_authored: return
+	# Physics, perception, actions and terminal state keep their existing
+	# authority. Ambient clips never move the root or delay an attack.
+	var eligible: bool = not dead and encounter_active and is_on_floor() and achieved.length_squared() <= 0.0064 \
+		and not can_see_player and perception_memory_time <= 0.0 and pending_attack_time <= 0.0 \
+		and attack_recovery_time <= 0.0 and stagger_time <= 0.0 and not animation_driver.has_active_action() \
+		and not animation_driver.story_dialogue_active and not animation_driver.distance_suspended
+	if not eligible:
+		animation_driver.clear_observation_clip()
+		native_ambient_elapsed = 0.0
+		native_ambient_phase = -1
+		return
+	native_ambient_elapsed += delta
+	var phase := floori(native_ambient_elapsed / 8.0) % 4
+	if phase == native_ambient_phase and str(animation_driver.presentation_state) == "ecology": return
+	var clip := native_ambient_clip(enemy_id, phase, is_boss, tag)
+	if animation_driver.set_observation_clip(clip) or animation_driver.set_observation_clip("Idle"):
+		native_ambient_phase = phase
+
+static func native_ambient_clip(identity: String, phase: int, boss: bool, creature_tag: String) -> String:
+	if boss or creature_tag in ["human", "undead"]:
+		return "Investigate" if phase % 4 == 2 else "Idle"
+	if identity in ["hearthscale", "cairn_mother"]:
+		return ["Idle", "Sleep", "Investigate", "Idle"][posmod(phase, 4)]
+	if identity in ["glassmoth", "inkblind", "silt_maw", "millback", "gallows_weaver", "knell_leech"]:
+		return ["Idle", "Feed", "Investigate", "Feed"][posmod(phase, 4)]
+	return ["Idle", "Investigate", "Feed", "Idle"][posmod(phase, 4)]
 
 func _navigation_direction(target: Vector3, force_refresh: bool = false) -> Vector3:
 	if spatial_service == null or navigation_agent == null:
@@ -472,6 +506,11 @@ func set_encounter_active(value: bool) -> void:
 		native_attack_tail_active = false
 		if animation_driver != null:
 			animation_driver.set_external_tick(false)
+			# Suspension cancels the encounter's strike, including its post-contact
+			# tail. Otherwise the frozen action rejects the next authorized Attack
+			# after activation, despite the AI having started a fresh windup.
+			if not dead and animation_driver.action_active and animation_driver.current_state in ["windup", "attack"]:
+				animation_driver.stop_action()
 		# A suspended strike must not reserve the encounter's attack lane or
 		# resume halfway through its telegraph when this actor becomes active.
 		_release_attack_token()
@@ -821,7 +860,8 @@ func _update_ambient_life(delta: float) -> void:
 	if direction.length_squared() > 0.01:
 		look_at(global_position + direction, Vector3.UP)
 	elif animation_driver != null:
-		animation_driver.set_life_activity("scavenge" if ambient_state == "scavenging" else "watch")
+		if not native_ambient_authored:
+			animation_driver.set_life_activity("scavenge" if ambient_state == "scavenging" else "watch")
 		if is_instance_valid(native_face) and ambient_state == "scavenging" and fmod(ambient_elapsed, 2.8) < delta:
 			native_face.play_story_gesture("remember")
 
@@ -869,7 +909,7 @@ func _update_boss_presence(delta: float) -> void:
 			sweep = sin(presence_clock*0.20)*0.035
 	rotation.y = lerp_angle(rotation.y, presence_home_yaw+sweep, minf(delta*1.2,1.0))
 	if animation_driver != null and Vector2(velocity.x,velocity.z).length_squared() < 0.01:
-		animation_driver.set_life_activity("watch")
+		if not native_ambient_authored: animation_driver.set_life_activity("watch")
 
 func _has_perception_line() -> bool:
 	if not is_inside_tree() or player == null or not player.is_inside_tree():
@@ -1145,6 +1185,7 @@ func _try_build_mapped_body() -> bool:
 	animation_driver.name = "CharacterAnimationDriver"
 	mapped.add_child(animation_driver)
 	if native_design:
+		native_ambient_authored = bool(mapped.get_meta("authored_creature_ambient", false))
 		animation_driver.configure(mapped, {
 			"idle":"Idle", "walk":"Walking", "run":"Running", "windup":"Windup",
 			"attack":"Attack", "attack_heavy":"AttackHeavy", "hit":"HitReact", "death":"Death",

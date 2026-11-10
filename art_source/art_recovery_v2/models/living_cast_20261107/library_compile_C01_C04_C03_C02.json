@@ -1,8 +1,9 @@
 {
 	"libraries": [
 		{
+			"activity_grip_receipt_sha256": "352a72db1871439ed8fae57b15d7a415ed912a20f100dd2ca8144e9445b2aee1",
 			"asset": "C01",
-			"bytes": 195202,
+			"bytes": 195655,
 			"clips": {
 				"Life_Idle_A": {
 					"duration": 6.0,
@@ -39,14 +40,15 @@
 			"model_sha256": "4f27ebedacfad33059d14bfb2dbdeaecfb134bb9a54bdcb040b960bd20ee6387",
 			"path": "res://assets_external/characters_prepared/animations/life_C01.res",
 			"runtime_reviewed": false,
-			"sha256": "d2318218eefbf952aefc732bd6dacca39bc9dcfcb3d8664c8ddf7399e6d356bd",
-			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C01/C01_life_review.glb",
+			"sha256": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_20261107/C01/C01_life_review.glb",
 			"source_sha256": "6048b7b8ceb634d2a05d921593476acca605ddc6eaaec653c4235c952a06d567",
 			"user_accepted": false
 		},
 		{
+			"activity_grip_receipt_sha256": "f9c9e5f2ccb2ef90551019baf177cadbddf94e444d42ca77e89d7cd776f981b0",
 			"asset": "C04",
-			"bytes": 199305,
+			"bytes": 199759,
 			"clips": {
 				"Life_Idle_A": {
 					"duration": 6.0,
@@ -83,14 +85,15 @@
 			"model_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
 			"path": "res://assets_external/characters_prepared/animations/life_C04.res",
 			"runtime_reviewed": false,
-			"sha256": "b4370949eb1ac97928389a4ff42f972dfac930dee2ce571e920aadea474f320f",
-			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C04/C04_life_review.glb",
+			"sha256": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_20261107/C04/C04_life_review.glb",
 			"source_sha256": "1b5132ffa7460a23b2d193e7b1162bcedb83e16f2d0304ddda23efcfbf9b849d",
 			"user_accepted": false
 		},
 		{
+			"activity_grip_receipt_sha256": "af5aebc17848a8727c6f42d7f06beec622a499ef939749d5279601267d178ba8",
 			"asset": "C03",
-			"bytes": 202547,
+			"bytes": 203226,
 			"clips": {
 				"Life_Idle_A": {
 					"duration": 6.0,
@@ -136,14 +139,15 @@
 			"model_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
 			"path": "res://assets_external/characters_prepared/animations/life_C03.res",
 			"runtime_reviewed": false,
-			"sha256": "6fa8d3ada8c0e391b5fb2b5aa25b47e8ee09079ced797461b19834d9c0db996f",
-			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C03/C03_life_review.glb",
+			"sha256": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_20261107/C03/C03_life_review.glb",
 			"source_sha256": "652a6bba9772b7fe8477a7f2c0afad30d665c86bebe0facef053b2b074a7f1aa",
 			"user_accepted": false
 		},
 		{
+			"activity_grip_receipt_sha256": "26e25004c6bd68df413c5d7268272498c74c83a088b526cb8a0c3c00d697e01e",
 			"asset": "C02",
-			"bytes": 202486,
+			"bytes": 203131,
 			"clips": {
 				"Life_Idle_A": {
 					"duration": 6.0,
@@ -189,8 +193,8 @@
 			"model_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
 			"path": "res://assets_external/characters_prepared/animations/life_C02.res",
 			"runtime_reviewed": false,
-			"sha256": "025cb01ec9eeb950aee7ac541fd841b1176eea2e0fe82f61d0a0789637d71af3",
-			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C02/C02_life_review.glb",
+			"sha256": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_20261107/C02/C02_life_review.glb",
 			"source_sha256": "a9ef10665a13385ec91c439c82e6eff5ba926961258d231978aaded44fcf96ae",
 			"user_accepted": false
 		}

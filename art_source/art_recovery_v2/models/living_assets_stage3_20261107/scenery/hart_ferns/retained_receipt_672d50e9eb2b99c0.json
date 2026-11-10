@@ -1,0 +1,113 @@
+{
+	"asset": "hart_ferns",
+	"carrier": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_baseline.glb",
+	"carrier_sha256": "7151d4210af45d0a5deae48b22c2c32fc96ff0d2e0d3820adcb74bb2a07251ed",
+	"native_baseline": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/hart_ferns_baseline.scn",
+	"native_baseline_sha256": "493b60f24e7f95d20e4835048eb740335bab60a0863ab0335030d117c99e4a1b",
+	"parts": [
+		{
+			"geometry_sha256": "3306328eacc025e7f13db03b4d30fe5670ed9a747b2d6ddd29fe1d2f601643fd",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "HartFern_0",
+			"pivot": "(-12.8, 0.027, -7.0)",
+			"pivot_godot": [
+				-12.8000001907349,
+				0.0270000007003546,
+				-7.0
+			],
+			"sources": {
+				"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86"
+			},
+			"triangles": 288
+		},
+		{
+			"geometry_sha256": "a2296041d7e1c11cc25d1f1e30e7c2fafaa6d646721f6cb2ec8d4e2958a66bef",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "HartFern_1",
+			"pivot": "(-14.6, 0.027, 3.0)",
+			"pivot_godot": [
+				-14.6000003814697,
+				0.0270000007003546,
+				3.0
+			],
+			"sources": {
+				"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86"
+			},
+			"triangles": 288
+		},
+		{
+			"geometry_sha256": "3b003eafc0e1001fce896ad166d7455ef7ef1e42cceb4cbb54c239ef3f126102",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "HartFern_2",
+			"pivot": "(-12.0, 0.027, 10.0)",
+			"pivot_godot": [
+				-12.0,
+				0.0270000007003546,
+				10.0
+			],
+			"sources": {
+				"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86"
+			},
+			"triangles": 288
+		},
+		{
+			"geometry_sha256": "94e132070cb61ebd2aaf44f4c750b7ba7971a73166cbb50a46afe1ab0f12885d",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "HartFern_3",
+			"pivot": "(13.6, 0.027, -8.0)",
+			"pivot_godot": [
+				13.6000003814697,
+				0.0270000007003546,
+				-8.0
+			],
+			"sources": {
+				"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86"
+			},
+			"triangles": 288
+		},
+		{
+			"geometry_sha256": "9903afa8ca2a5df33c4a47c7748c70db94de811b2f70eee76c9d2c878cae7211",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "HartFern_4",
+			"pivot": "(14.8, 0.027, 4.0)",
+			"pivot_godot": [
+				14.8000001907349,
+				0.0270000007003546,
+				4.0
+			],
+			"sources": {
+				"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86"
+			},
+			"triangles": 288
+		},
+		{
+			"geometry_sha256": "4503f0538cc62d6d72d1f4ac6e672ad9cfe6a2e49103b310000f0d213a4ff9f4",
+			"kind": "foliage",
+			"mesh_inline": true,
+			"node": "HartFern_5",
+			"pivot": "(12.5, 0.027, 12.0)",
+			"pivot_godot": [
+				12.5,
+				0.0270000007003546,
+				12.0
+			],
+			"sources": {
+				"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86"
+			},
+			"triangles": 288
+		}
+	],
+	"runtime_output": "res://assets_external/environment_prepared/living_world/hart_ferns.scn",
+	"schema_version": 2,
+	"source_hashes": {
+		"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86",
+		"res://tools/build_hart_woodland.gd": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e",
+		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+	},
+	"visual_accepted": false
+}

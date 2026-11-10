@@ -1,0 +1,124 @@
+{
+  "scope": {
+    "asset": "M17",
+    "candidate_only": true,
+    "visual_accepted": false,
+    "production_source_changed": false,
+    "attack_profiles_recalibrated": false
+  },
+  "engine_identity_before": {
+    "console_wrapper": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+    },
+    "main_executable": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+      "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+    }
+  },
+  "input_sha256": {
+    "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\verify_creature_candidate_poses.gd": "29d93cac9158a7b9bfd58191f6cb7417603635d22669d00f38117138f063a0af",
+    "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\creature_ambient_source_contract.gd": "a567892131913f4a3fc881ae198b480ccbcf0decec7329583b6efc98faefd3ce",
+    "outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_animation_driver.gd": "22e9865c30f752f001d5cf2ed05d9f9d0a1207b815f70f7a934cfddb9fc2d19a",
+    "outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\systems\\character_animation_graph.gd": "8c81ae0f11db2de641bc8b13360e344f7a2a5acdfaa31935115104263a01eb25",
+    "outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\character_life_modifier.gd": "da8ca6d6f8bdbadfb0085bac4e249fd9ec76608701e65c55b96362545b972fb7",
+    "outputs\\AshenOathTheRoadBetweenCrowns\\data\\design_pack_assets.json": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e",
+    "outputs\\AshenOathTheRoadBetweenCrowns\\tools\\creature_candidate_native_contract.gd": "9b5f375957dca1dc820dd525853c474652983d290111f36f180874ec007fea60",
+    "outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\asset_spawn_helper.gd": "898cc657bd2978e7e02c6dd3728053bb95b1d6c9f9de5d58ad47118c704492b4",
+    ".verification\\motion\\run_candidate_poses.py": "903d08d9b5ae9aa213c649b7513b1a3c5c21e6819baa3342b1f8ddfdd182ce7e",
+    ".verification\\motion\\run_candidate_morph_allowlist.py": "5f08ec65a0fd8c65113d2f199503e31d184822fad71cc49c6f86133fca45af30",
+    "art_source\\art_recovery_v2\\tools\\native_engine_identity.py": "7cb8d4839d5190e934a788b8d6f95b61b3822c153ec0c2e7377e72861872b10f",
+    "art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M17\\M17_living_candidate.glb": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+    "art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M17\\M17_retained_input.glb": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
+    "art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M17\\authoring.json": "ce86e48e02ba5887ec050a84a642dc75500e24e98c4f36a218afff91cf9419f7",
+    "art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M17\\source_contract.json": "4e6551ebd5d935b4df3a1689f44b4b61758be0234143c2e39b7ddc6900275f72",
+    "art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M17\\textures\\color_59cb6dc98a4f5446fdd5944e442090f432c2917d8d03d97083e9673150aca400.png": "59cb6dc98a4f5446fdd5944e442090f432c2917d8d03d97083e9673150aca400"
+  },
+  "profiles": {
+    "APPDATA": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\candidate_m17_fade_free_20261111_r1\\profile",
+    "LOCALAPPDATA": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\candidate_m17_fade_free_20261111_r1\\profile-local"
+  },
+  "results": [
+    {
+      "name": "parse",
+      "pid": 19776,
+      "exit_code": 0,
+      "seconds": 2.156,
+      "timeout": false,
+      "accepted": true,
+      "errors": [],
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "res://tools/verify_creature_candidate_poses.gd",
+        "--check-only"
+      ],
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\candidate_m17_fade_free_20261111_r1\\parse.log",
+      "engine_identity_before": {
+        "console_wrapper": {
+          "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+          "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+        },
+        "main_executable": {
+          "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+          "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+        }
+      },
+      "engine_identity_after": {
+        "console_wrapper": {
+          "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+          "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+        },
+        "main_executable": {
+          "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+          "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+        }
+      }
+    },
+    {
+      "name": "native",
+      "pid": 996,
+      "exit_code": 0,
+      "seconds": 2.578,
+      "timeout": false,
+      "accepted": true,
+      "errors": [],
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "res://tools/verify_creature_candidate_poses.gd",
+        "--",
+        "--asset=M17",
+        "--output=D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\candidate_m17_fade_free_20261111_r1\\native.json"
+      ],
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\candidate_m17_fade_free_20261111_r1\\native.log",
+      "engine_identity_before": {
+        "console_wrapper": {
+          "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+          "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+        },
+        "main_executable": {
+          "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+          "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+        }
+      },
+      "engine_identity_after": {
+        "console_wrapper": {
+          "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+          "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+        },
+        "main_executable": {
+          "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+          "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+        }
+      }
+    }
+  ],
+  "accepted": true
+}

@@ -1,0 +1,20 @@
+{
+	"asset": "C05",
+	"baseline_sha256": "2b21d65309a983a58a11c6d2bcc0853e1f97bb1c7f573fd8087a40e8f57fb60d",
+	"engine_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"prepared_resource": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+	"prepared_sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
+	"production_resource": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+	"production_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+	"runtime_verified": false
+}

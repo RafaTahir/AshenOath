@@ -1,0 +1,198 @@
+{
+  "asset": "C11",
+  "status": "source_probe_complete",
+  "grip_verified": false,
+  "body_clearance_verified": false,
+  "runtime_output": false,
+  "visual_accepted": false,
+  "fits": {
+    "supply": {
+      "reference_time": 1.25,
+      "measured_palm_candidates": 11,
+      "reference_trials": {
+        "body/prop triangle crossing or contact": 5228,
+        "reference pass": 52
+      },
+      "verified_frames": 1260,
+      "expected_frames": 1260,
+      "verified_by_clip": {
+        "Authoring_Carry_Idle": 301,
+        "Authoring_Carry_Scheduler_Route": 959
+      },
+      "surface_clearance_verified": true,
+      "closed_component_containment_verified": true,
+      "open_prop_components": 0,
+      "degenerate_prop_triangles": 0,
+      "shortlist_count": 8,
+      "failures": [],
+      "proposal": {
+        "bone": "hand_r",
+        "palm": [
+          0.022031597793102264,
+          0.04926716908812523,
+          -0.005724687594920397
+        ],
+        "anchor": [
+          6.735335094915585e-18,
+          -0.11500000208616257,
+          0.10999999940395355
+        ],
+        "basis": [
+          [
+            0.07462304830551147,
+            -0.11677957326173782,
+            0.9903504252433777
+          ],
+          [
+            -0.11677957326173782,
+            0.9852628111839294,
+            0.12497901171445847
+          ],
+          [
+            -0.9903504252433777,
+            -0.12497901171445847,
+            0.05988584831357002
+          ]
+        ],
+        "measured_scale": 0.9320635960051032,
+        "palm_source": {
+          "mesh": "C11_MotionFittedAssembly",
+          "surface": 2,
+          "vertex": 4741
+        },
+        "prop_primary_vertex": 10,
+        "maximum_contact_error_m": 0.0003009040665347129
+      },
+      "reference_conflicts_by_dominant_bone": {
+        "index_01_r": 19306,
+        "index_02_r": 24456,
+        "middle_03_r": 70249,
+        "middle_02_r": 22722,
+        "middle_01_l": 40094,
+        "hand_l": 91837,
+        "middle_02_l": 16027,
+        "middle_04_leaf_r": 23227,
+        "ring_03_r": 77417,
+        "ring_04_leaf_r": 27918,
+        "ring_01_l": 39653,
+        "pinky_02_l": 25128,
+        "pinky_01_l": 36295,
+        "ring_02_l": 18233,
+        "ring_03_l": 32547,
+        "spine_01": 964328,
+        "ring_04_leaf_l": 6389,
+        "pinky_03_l": 23958,
+        "pinky_04_leaf_l": 8317,
+        "spine_02": 1157044,
+        "lowerarm_l": 164100,
+        "pinky_02_r": 46573,
+        "pinky_03_r": 62877,
+        "pinky_04_leaf_r": 31939,
+        "ring_01_r": 35217,
+        "ring_02_r": 30758,
+        "pelvis": 49544,
+        "hand_r": 93489,
+        "pinky_01_r": 39849,
+        "lowerarm_r": 275060,
+        "thumb_01_r": 40665,
+        "thumb_02_r": 41084,
+        "middle_03_l": 30231,
+        "middle_04_leaf_l": 6434,
+        "thumb_01_l": 31993,
+        "index_03_r": 38340,
+        "index_01_l": 37717,
+        "thumb_03_r": 37689,
+        "index_02_l": 15848,
+        "thumb_03_l": 27619,
+        "index_03_l": 19843,
+        "thumb_02_l": 24358,
+        "middle_01_r": 24689,
+        "spine_03": 210103,
+        "thigh_r": 3378,
+        "clavicle_l": 4475,
+        "upperarm_r": 10481,
+        "clavicle_r": 4736
+      },
+      "closest_reference_overlap": {
+        "count": 4,
+        "palm_vertex": 9995,
+        "prop_primary_vertex": 22,
+        "offset_m": 0.0003,
+        "pairs": [
+          {
+            "body_face": 12966,
+            "prop_face": 7,
+            "dominant_bone": "hand_r"
+          },
+          {
+            "body_face": 12966,
+            "prop_face": 30,
+            "dominant_bone": "hand_r"
+          },
+          {
+            "body_face": 12968,
+            "prop_face": 7,
+            "dominant_bone": "hand_r"
+          },
+          {
+            "body_face": 12968,
+            "prop_face": 30,
+            "dominant_bone": "hand_r"
+          }
+        ]
+      },
+      "placement_sha256": "e6b8431e7b03c8569ea4f08935fcf8f4d0b4a38a738ef6a4d0b6918e1f1bf10b",
+      "native_socket_frames": 959,
+      "maximum_native_socket_frame_error_m": 2.2696772530654706e-06,
+      "editable_scene": {
+        "path": "C11_supply_fit_proposal.blend",
+        "sha256": "39431b925ef3547edb12e577d7768eae8cd74aefc22c3890137052a2256ab579"
+      }
+    }
+  },
+  "errors": [],
+  "route_visibility": {
+    "native_frames": 1081,
+    "visible_frames": 959,
+    "visible_departure_ramp_frames": 0,
+    "first_visible_frame": 121,
+    "arrival_visible_frame": 785
+  },
+  "input_sha256": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_held_props_postcheck_r1\\receipt.json": "7ff0fd58756ed88eb463e81fefa2066bb589901a01e690a2c48acca2b8dca965",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_props_C11.json": "7fa29b6aaf6a514ad341ea9f3254376df09eb4c0db64f44f095a0855a43ccf84",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread.glb": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread.json": "555db14802282e814ac6354bd1c867ee8dba6977945d889ea047c9870366e99f",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_mesh_manifest.json": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_raw.glb": "e38d87b0e9425aa5675c9be0a19f740015b67f95094eb3cc80347125aa1577f5",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_channel_manifest.json": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply.glb": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply.json": "b95562d40dab823dcd8eb06da6d390773db38546771f8cc4016bb2c8eaf983c7",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_mesh_manifest.json": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_raw.glb": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_channel_manifest.json": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_supply_forward_trial_blender_r1\\import_fidelity.json": "006f175d3b5534e8ed207b36df8a6dc67667d157b76c3100cb45329e5adcd118",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e\\receipt.json": "b6676fe100d56827c5c7d551a11302a2b73ea63aa1a4dde51cfb0cef37f4eb0f",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e\\C11_activity_poses.glb": "d64378dbdc1efc5a3881d6d02dbed9d04574edbb5b46b4fe3d1e497564e7ed87",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e\\C11_activity_poses_raw.glb": "76e76d53d90b182993a12560f69e50483da3c509cea34a95cf328f51b76f2f3a",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\304e7bc6247ec09aea3c7efd13f9a88b0b3a4810feb5dcf772a31996d610f42e\\retained_skin_manifest.json": "6b64df9299166816a0f22e035ef1c0ce3714658dc4e225b7e1312bbe4a42f6fe",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_supply_route_reveal_dual_fit_r1\\tools\\probe_c11_activity_fits.py": "88c400e07f69b0b647e068b6cf1f04691f87957b2b2ab7483f71146e1a7b370d",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_supply_route_reveal_dual_fit_r1\\route_import_fidelity.json": "82b0ed7bb477e6c1aef4ddeb96a4120b9c64a8bca3c7c434134c04e3de7af1d4",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7\\receipt.json": "c37ee932cafa0420116bbaa54b43796978fd81a19917f8fff2d9542b7efb57ef",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7\\C11_activity_poses.glb": "1a8fabe4c493759c9f0a0e9a3abf08c8e91578affffc31e838024611ef90cde4",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7\\C11_activity_poses_raw.glb": "09813e3c0e9c7cdbfe9d11c27aedc22de7c230fbb474f708290c02f14429074a",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\afc080f9b12746f2fc1683f3f7866476f91b2a91fe7a2b7a477da807d41197b7\\retained_skin_manifest.json": "6b64df9299166816a0f22e035ef1c0ce3714658dc4e225b7e1312bbe4a42f6fe",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_supply_route_reveal_dual_fit_r1\\tools\\c11_supply_dual_fit_adapter.py": "cf4c62a2b52a3084b6f721daf9abae292cf4f119c1c155e622d5b9206edd4778"
+  },
+  "contact_limit_m": 0.001,
+  "contact_offsets_m": [
+    0.0003,
+    0.00085
+  ],
+  "body_topology": {
+    "triangles": 23549,
+    "closed_components": 26,
+    "open_components": 24,
+    "degenerate_triangles": 4
+  }
+}

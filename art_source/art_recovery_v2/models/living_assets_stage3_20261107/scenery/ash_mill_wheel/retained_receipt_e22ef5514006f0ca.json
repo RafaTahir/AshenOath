@@ -1,0 +1,32 @@
+{
+	"asset": "ash_mill_wheel",
+	"carrier": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_baseline.glb",
+	"carrier_sha256": "b7e82d3faea01d66fd6f7a2897cdbfb3c2977f5c157e36e40563a7572f52adb2",
+	"native_baseline": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/scenery/ash_mill_wheel_baseline.scn",
+	"native_baseline_sha256": "c76bb9745e0c7d3cc40093744e626af2ddc1ebd2da1bc2bea1117ac28141e2fd",
+	"parts": [
+		{
+			"geometry_sha256": "b0b03c93b328f78c2117b24fbe6b0dc6033e95e43734a68120cf5878504c7e44",
+			"kind": "mill_wheel",
+			"mesh_inline": true,
+			"node": "AshMillWaterwheel",
+			"pivot": "(-4.42, 1.55, 1.8)",
+			"pivot_godot": [
+				-4.42000007629395,
+				1.54999995231628,
+				1.79999995231628
+			],
+			"sources": {
+				"res://tools/build_ash_mill.gd": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2"
+			},
+			"triangles": 912
+		}
+	],
+	"runtime_output": "res://assets_external/environment_prepared/living_world/ash_mill_wheel.scn",
+	"schema_version": 2,
+	"source_hashes": {
+		"res://tools/build_ash_mill.gd": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
+		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+	},
+	"visual_accepted": false
+}

@@ -30,6 +30,8 @@ func configure(root: Node3D, id: String, quality_preset: String, state_owner: No
 	_scan(zone_root)
 	_bind_components()
 	_sync_story_states()
+	if story_state != null and story_state.has_signal("changed") and not story_state.is_connected("changed", _on_story_state_changed):
+		story_state.connect("changed", _on_story_state_changed)
 	_rebuild_active_entries()
 
 func _process(delta: float) -> void:
@@ -68,6 +70,7 @@ func _rebuild_active_entries() -> void:
 		var node := entry.get("node") as Node3D
 		if node == null or not is_instance_valid(node) or not node.visible:
 			continue
+		if not _needs_motion(entry): continue
 		var distance := 0.0
 		if player != null and is_instance_valid(player):
 			distance = node.global_position.distance_to(player.global_position)
@@ -82,11 +85,16 @@ func _rebuild_active_entries() -> void:
 		if active_entries.size() >= cap:
 			break
 		active_entries.append(candidate.get("entry", {}))
-	if active_entries.is_empty() and not entries.is_empty():
+	if active_entries.is_empty() and not entries.is_empty() and not is_instance_valid(player):
 		# Keep the controller useful during the one frame before the player is
 		# registered, without returning to a scene-wide animation loop.
 		for entry in entries.slice(0, mini(cap, entries.size())):
-			active_entries.append(entry)
+			if _needs_motion(entry): active_entries.append(entry)
+
+func _needs_motion(entry: Dictionary) -> bool:
+	var kind := str(entry.get("kind", ""))
+	if kind == "wheel": return absf(float(entry.node.get_meta("world_prop_spin_speed", 0.0))) > 0.0001
+	return kind in ["flame", "forge", "candle", "cloth", "sign", "paper", "mill_wheel", "bell", "clapper", "foliage"]
 
 func _is_priority_kind(kind: String) -> bool:
 	return kind in ["flame", "forge", "lantern", "candle", "bell", "shrine", "notice_board", "door", "gate"]
@@ -107,6 +115,10 @@ func _register(node: Node3D, id: String, kind: String, persistent_key: String) -
 	for existing in entries:
 		if existing.get("node") == node:
 			return
+	# Legacy lantern tags referred to the glow mesh. Housing stays fixed and
+	# visible when the light is extinguished; only a verified flame is animated.
+	if kind == "lantern" and (str(node.get_meta("visual_name", "")) == "LanternGlow" or bool(node.get_meta("world_prop_moving_part", false))):
+		kind = "flame"
 	entries.append({
 		"node": node,
 		"id": id,
@@ -115,6 +127,9 @@ func _register(node: Node3D, id: String, kind: String, persistent_key: String) -
 		"base_position": node.position,
 		"base_rotation": node.rotation,
 		"base_scale": node.scale,
+		"base_basis": node.basis,
+		"spin_angle": 0.0,
+		"ring_remaining": 0.0,
 		"phase": float(abs(id.hash()) % 31) * 0.21,
 		"state": "idle",
 	})
@@ -178,13 +193,27 @@ func _emissive_material(color: Color, energy: float) -> StandardMaterial3D:
 	material.emission_energy_multiplier = energy
 	return material
 
-func _sync_story_states() -> void:
+func _on_story_state_changed() -> void:
+	_sync_story_states(true)
+	_rebuild_active_entries()
+
+func _sync_story_states(animate_change: bool = false) -> void:
 	for entry in entries:
+		var node := entry.get("node") as Node3D
+		if not is_instance_valid(node): continue
+		var previous := str(entry.state)
 		var key := str(entry.get("state_key", ""))
+		if bool(node.get_meta("world_prop_flow_required", false)):
+			var flowing: bool = story_state != null and story_state.has_method("get_flag") \
+				and str(story_state.get_flag("mill_operation", "")) in ["supervised", "restitution"] \
+				and bool(story_state.get_flag("mill_ventilation_open", false)) and bool(story_state.get_flag("ashwing_defeated", false))
+			node.set_meta("world_prop_spin_speed", float(node.get_meta("world_prop_nominal_spin_speed", 0.45)) if flowing else 0.0)
+			entry.state = "running" if flowing else "stopped"
 		if key != "" and story_state != null and story_state.has_method("get_flag"):
 			var saved: Variant = story_state.get_flag(key, null)
 			if saved != null and str(saved) != "":
-				entry.state = str(saved)
+				entry.state = ("rung" if saved else "silent") if typeof(saved) == TYPE_BOOL and str(entry.kind) in ["bell", "clapper"] else str(saved)
+		if animate_change and previous != str(entry.state) and str(entry.state) == "rung": entry.ring_remaining = 4.0
 		_apply_entry_state(entry)
 
 func activate_prop(prop_id: String) -> bool:
@@ -233,15 +262,28 @@ func _update_entry(entry: Dictionary, _delta: float) -> void:
 	var wave := sin(_elapsed * (2.7 if kind in ["flame", "forge"] else 0.82) + phase)
 	var base_rotation: Vector3 = entry.get("base_rotation", Vector3.ZERO)
 	var base_scale: Vector3 = entry.get("base_scale", Vector3.ONE)
-	if kind in ["flame", "forge", "candle", "lantern"]:
+	if kind in ["flame", "forge", "candle"]:
 		node.scale = Vector3(base_scale.x * (1.0 + wave * 0.05), base_scale.y * (1.0 + wave * 0.08), base_scale.z * (1.0 - wave * 0.03))
 		node.rotation = Vector3(base_rotation.x, base_rotation.y, base_rotation.z + wave * 0.035)
 	elif kind in ["cloth", "sign", "paper"]:
 		node.rotation = Vector3(base_rotation.x, base_rotation.y, base_rotation.z + wave * 0.045)
-	elif kind == "wheel":
-		node.rotation = Vector3(base_rotation.x + _delta * 0.45, base_rotation.y, base_rotation.z)
+	elif kind in ["wheel", "mill_wheel"]:
+		var speed := float(node.get_meta("world_prop_spin_speed", 0.45 if kind == "mill_wheel" else 0.0))
+		if str(entry.get("state", "")) in ["stopped", "off"]: speed = 0.0
+		var axis: Vector3 = node.get_meta("world_prop_spin_axis", Vector3.UP)
+		if not axis.is_finite() or axis.length_squared() < 0.0001 or not is_finite(speed): return
+		entry.spin_angle = fposmod(float(entry.spin_angle) + maxf(_delta, 0.0) * speed, TAU)
+		node.basis = (entry.base_basis as Basis) * Basis(axis.normalized(), float(entry.spin_angle))
+	elif kind == "foliage":
+		var exposure := clampf(float(node.get_meta("world_prop_wind_exposure", 1.0)), 0.0, 1.0)
+		node.rotation = base_rotation + Vector3(sin(_elapsed * 0.63 + phase) * 0.007, 0.0, wave * 0.012) * exposure
+	elif kind == "clapper":
+		entry.ring_remaining = maxf(float(entry.ring_remaining) - _delta, 0.0)
+		var amount := 0.12 * clampf(float(entry.ring_remaining) / 4.0, 0.0, 1.0)
+		node.rotation = base_rotation + Vector3(0.0, 0.0, sin(_elapsed * 2.0 + phase + 1.4) * amount)
 	elif kind == "bell":
-		var amount := 0.08 if str(entry.get("state", "")) == "rung" else 0.018
+		entry.ring_remaining = maxf(float(entry.ring_remaining) - _delta, 0.0)
+		var amount := 0.08 * clampf(float(entry.ring_remaining) / 4.0, 0.0, 1.0)
 		node.rotation = Vector3(base_rotation.x, base_rotation.y, base_rotation.z + sin(_elapsed * 2.0 + phase) * amount)
 
 func _apply_entry_state(entry: Dictionary) -> void:
@@ -250,13 +292,14 @@ func _apply_entry_state(entry: Dictionary) -> void:
 		return
 	var state := str(entry.get("state", "idle"))
 	var inactive := state == "extinguished" or state == "off"
-	if str(entry.get("kind", "")) in ["flame", "candle", "lantern"]:
+	if str(entry.get("kind", "")) in ["flame", "candle"]:
 		node.visible = not inactive
 
 func _on_component_state_changed(prop_id: String, state: String) -> void:
 	for entry in entries:
 		if str(entry.id) == prop_id and str(entry.state_key) not in ["evidence_report", "iron_fate"]:
 			entry.state = state
+			if state == "rung": entry.ring_remaining = 4.0
 			_apply_entry_state(entry)
 	_play_prop_audio("interaction")
 

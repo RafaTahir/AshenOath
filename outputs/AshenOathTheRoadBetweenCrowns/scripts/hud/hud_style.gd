@@ -2,6 +2,10 @@ extends "res://scripts/hud/hud_component.gd"
 ## Hud style: explicit view operations; requests leave through typed signals.
 
 func _style_button(button: Button) -> void:
+	# Let the containing ScrollContainer receive a finger's press/drag. Its
+	# native SCROLL_BEGIN notification cancels the button before release.
+	# The surrounding HUD panel still owns and blocks gameplay input.
+	button.mouse_filter = Control.MOUSE_FILTER_PASS
 	if button.text != "" and not button.has_meta("wrapped_label"):
 		var label := Label.new()
 		label.text = button.text

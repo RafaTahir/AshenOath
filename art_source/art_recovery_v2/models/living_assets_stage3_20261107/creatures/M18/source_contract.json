@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "asset": "M18",
+  "status": "source_contract_pass",
+  "candidate_sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2",
+  "retained_source_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
+  "candidate_bytes": 1315428,
+  "retained_source_bytes": 1235028,
+  "net_source_bytes": 80400,
+  "protected_action_bytes_equal": true,
+  "protected_action_signatures": {
+    "Attack": "003fc3f5c03dd3136578ae13284faaaae2196c9d5b754908bdf7b00df4c597af",
+    "AttackHeavy": "f39f4aff16e8b746f4f8a261f7cffed3208e65aa44f322cf9240b73fc2a45296",
+    "Block": "2f4d34f39420c3742c89d824c1734d4f8c150b0e0867f085ae5eb6baafa7f87f",
+    "Death": "573d09ad2ad3d85a3cb7a480c9490e61b7d64d449186c4f717f64298176ea892",
+    "HitReact": "7bb473163ddf98a6356942fc04cbc8a6f63f8a0fbc01e0e4c74634e2019d0c43",
+    "Interact": "e7636a7f1cbc0dc19dcda565298393e293ebec29cb7c574cebd386124294dfbd",
+    "Recovery": "7dbdc34faec6730386660f9cf6d6488faefd4e01c7829e21593a2f0a7c033598",
+    "Running": "c846b45f2aab9052da1e690bdc6a14cab0ba410af584ae7915ac493ed4c9ed17",
+    "Threaten": "5f3174b41e090dfd76aeb50ea4ac1dab2947842af91000d7d601e41735d6222d",
+    "Walking": "fb1701c3cdf717a7cf7af7cb699086b6b0de77c111d0211f6cf359fbbf991b9d",
+    "Windup": "9f03b829cf1f59f22b4ee933d141efdb385a45d34f4700f8d128c8c2b231c774"
+  },
+  "retained_base_geometry_unchanged": true,
+  "retained_export_base_bytes_equal": true,
+  "retained_materials_skin_hierarchy_equal": true,
+  "retained_base_mesh_signatures": {
+    "M18_RuntimeAssembly": "3f40a6fc1329fccba0e29fe2d13a4b76d6c877bf5ee8502650a156446f0a1cfc"
+  },
+  "retained_external_source_hashes": {
+    "textures/color_b4ad89c56651074b04044916e09e266f06cc8a10bc74288a1ed1508d578c0ef3.png": "b4ad89c56651074b04044916e09e266f06cc8a10bc74288a1ed1508d578c0ef3"
+  },
+  "required_morphs": [],
+  "durations": {
+    "Idle": 4.0,
+    "Investigate": 2.7916667461395264,
+    "Feed": 3.2083332538604736,
+    "Sleep": 4.583333492279053
+  },
+  "clips": {
+    "Idle": {
+      "active_bones": [
+        "Fin-1_0",
+        "Fin-1_1",
+        "Fin-1_2",
+        "Fin1_0",
+        "Fin1_1",
+        "Fin1_2",
+        "Head",
+        "UnbarbedTail_0",
+        "UnbarbedTail_1",
+        "UnbarbedTail_2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Investigate": {
+      "active_bones": [
+        "Fin-1_0",
+        "Fin-1_1",
+        "Fin-1_2",
+        "Fin1_0",
+        "Fin1_1",
+        "Fin1_2",
+        "Head",
+        "UnbarbedTail_0",
+        "UnbarbedTail_1",
+        "UnbarbedTail_2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Feed": {
+      "active_bones": [
+        "Fin-1_0",
+        "Fin-1_1",
+        "Fin-1_2",
+        "Fin1_0",
+        "Fin1_1",
+        "Fin1_2",
+        "Head",
+        "UnbarbedTail_0",
+        "UnbarbedTail_1",
+        "UnbarbedTail_2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Sleep": {
+      "active_bones": [
+        "Fin-1_0",
+        "Fin-1_1",
+        "Fin-1_2",
+        "Fin1_0",
+        "Fin1_1",
+        "Fin1_2",
+        "Head",
+        "UnbarbedTail_0",
+        "UnbarbedTail_1",
+        "UnbarbedTail_2"
+      ],
+      "actual_mesh_morph_bindings": {}
+    }
+  },
+  "water_probe_bones": [
+    "Fin1_2",
+    "Fin-1_2"
+  ],
+  "native_prepared_binding_verified": false,
+  "attack_recalibration_required": true,
+  "visual_accepted": false,
+  "user_accepted": false
+}

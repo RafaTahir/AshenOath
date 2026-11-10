@@ -40,7 +40,7 @@ static func make_hart_witness(helper: Node, position: Vector3) -> Node3D:
 	driver.set_update_rate_hz(12.0)
 	return root
 
-static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
+static func attach_activity_tool(owner: Node3D, style: String, use_measured_grip: bool = true) -> Node3D:
 	var existing := owner.find_child("OccupationEquipment", true, false) as Node3D
 	if existing != null:
 		var hammer := existing.find_child("OccupationProp_blacksmith_tor", true, false) != null or existing.find_child("OccupationProp_forge_helper", true, false) != null
@@ -50,12 +50,19 @@ static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
 	var skeleton := _find_skeleton(owner)
 	if skeleton == null:
 		return null
-	var free_care_hand := style == "cloth" and uses_fitted_anwen_staff(skeleton, owner)
+	var free_activity_hand := style in ["cloth", "bread", "supply"] and uses_fitted_anwen_staff(skeleton, owner)
 	var hand_aliases: Array[String] = []
-	hand_aliases.assign(["hand_l", "LeftHand", "Hand.L", "left_hand"] if free_care_hand else ["hand_r", "RightHand", "Hand.R", "right_hand"])
+	hand_aliases.assign(["hand_l", "LeftHand", "Hand.L", "left_hand"] if free_activity_hand else ["hand_r", "RightHand", "Hand.R", "right_hand"])
 	var bone := _find_bone_index(skeleton, hand_aliases)
 	if bone < 0:
 		return null
+	if existing != null:
+		var occupied_socket := existing.get_parent() as BoneAttachment3D
+		if occupied_socket != null and occupied_socket.get_parent() == skeleton and occupied_socket.bone_name == skeleton.get_bone_name(bone):
+			# A journey can enroll directly into a meal or delivery before the
+			# modifier has ever borrowed the occupation prop. Release that hand
+			# immediately; the next explicit work task can borrow it again.
+			existing.visible = false
 	var hand := BoneAttachment3D.new()
 	hand.name = "CastActivityTool"
 	hand.set_meta("life_generated_activity_tool", true)
@@ -116,7 +123,82 @@ static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
 		scores.mesh = HeldProps.bread_scores()
 		scores.material_override = _mat(Color(.64,.42,.20),.94)
 		visual.add_child(scores)
+	var measured: Dictionary = owner.get_meta("activity_prop_grips", {})
+	if use_measured_grip and measured.has(style):
+		if not _fit_activity_grip(hand, grip, visual, measured[style]):
+			push_error("Measured activity grip could not bind: " + style)
+			hand.queue_free()
+			return null
 	return hand
+
+static func grip_record_error(skeleton: Skeleton3D, raw: Variant) -> String:
+	if not raw is Dictionary or not bool(raw.get("verified", false)): return "grip lacks a verified source receipt"
+	var bone := str(raw.get("bone", ""))
+	if bone not in ["hand_l", "hand_r"] or skeleton.find_bone(bone) < 0: return "grip hand is missing"
+	var palm: Variant = raw.get("palm")
+	var anchor: Variant = raw.get("anchor")
+	var basis: Variant = raw.get("basis")
+	if not palm is Vector3 or not palm.is_finite() or palm.length() < 0.005 or palm.length() > 0.18: return "grip palm is not calibrated"
+	if not anchor is Vector3 or not anchor.is_finite() or anchor.length() > 1.5: return "grip surface anchor is invalid"
+	if not basis is Basis or not basis.x.is_finite() or not basis.y.is_finite() or not basis.z.is_finite(): return "grip orientation is invalid"
+	if not basis.is_equal_approx(basis.orthonormalized()) or not is_equal_approx(basis.determinant(),1.0): return "grip orientation would distort the retained prop"
+	var source_hash := str(raw.get("source_sha256", ""))
+	if source_hash.length()!=64 or not source_hash.is_valid_hex_number(false): return "grip source hash is invalid"
+	var frame := skeleton.global_transform * skeleton.get_bone_global_rest(skeleton.find_bone(bone))
+	if _uniform_hand_scale(frame.basis) <= 0.0: return "retained hand frame is nonuniform or sheared"
+	return ""
+
+static func _uniform_hand_scale(basis: Basis) -> float:
+	if not basis.x.is_finite() or not basis.y.is_finite() or not basis.z.is_finite() or basis.determinant() <= 0.0: return 0.0
+	var scale := basis.get_scale().abs()
+	if scale.x <= 0.001 or absf(scale.x-scale.y)>0.0001 or absf(scale.x-scale.z)>0.0001: return 0.0
+	var unit := basis.scaled(Vector3.ONE/scale.x)
+	return scale.x if unit.is_equal_approx(unit.orthonormalized()) else 0.0
+
+static func _fit_activity_grip(socket: BoneAttachment3D, grip: Node3D, visual: MeshInstance3D, record: Dictionary) -> bool:
+	var skeleton := socket.get_parent() as Skeleton3D
+	if skeleton==null or grip_record_error(skeleton,record)!="" or str(record.bone)!=str(socket.bone_name): return false
+	# Sample the actual hand branch, not a stale BoneAttachment transform or
+	# skeleton-root scale; imported bone transforms may carry their own scale.
+	var hand_frame := skeleton.global_transform * skeleton.get_bone_global_pose(socket.bone_idx)
+	var scale := _uniform_hand_scale(hand_frame.basis)
+	if scale <= 0.0: return false
+	var anchor: Vector3 = record.anchor
+	var nearest := INF
+	for point: Vector3 in visual.mesh.get_faces(): nearest=minf(nearest,point.distance_to(anchor))
+	if nearest>0.001: return false
+	grip.scale=Vector3.ONE/scale
+	visual.basis=record.basis
+	visual.position=(record.palm as Vector3)*scale-visual.basis*anchor
+	socket.set_meta("measured_grip",record.duplicate(true))
+	return true
+
+static func fit_carried_equipment(owner: Node3D, record: Dictionary) -> bool:
+	var equipment := owner.find_child("CastleRoleEquipment",true,false) as Node3D
+	if equipment==null or str(record.get("kind",""))!="book": return false
+	var socket := equipment.get_parent() as BoneAttachment3D
+	var skeleton := socket.get_parent() as Skeleton3D if socket!=null else null
+	if skeleton==null or grip_record_error(skeleton,record)!="" or str(record.bone)!=str(socket.bone_name): return false
+	var book := equipment.get_node_or_null("VarganRecordBook") as MeshInstance3D
+	var clasp := equipment.get_node_or_null("VarganRecordBookClasp") as MeshInstance3D
+	if book==null or clasp==null or not book.basis.is_equal_approx(record.basis): return false
+	# This is the actual retained spine's outer edge, not the book's centre.
+	if not (record.anchor as Vector3).is_equal_approx(Vector3(-0.13,0,0)): return false
+	var spine := book.get_node_or_null("RecordBoundSpine") as MeshInstance3D
+	if spine==null or spine.mesh==null: return false
+	var spine_anchor := spine.transform.affine_inverse()*(record.anchor as Vector3)
+	var spine_bounds := spine.mesh.get_aabb()
+	if not spine_bounds.grow(0.00001).has_point(spine_anchor) or absf(spine_anchor.x-spine_bounds.position.x)>0.001: return false
+	var frame := skeleton.global_transform * skeleton.get_bone_global_pose(socket.bone_idx)
+	if _uniform_hand_scale(frame.basis)<=0.0: return false
+	var parent_frame := frame*equipment.transform
+	if _uniform_hand_scale(parent_frame.basis)<=0.0: return false
+	var palm := parent_frame.affine_inverse() * (frame*(record.palm as Vector3))
+	var offset := palm-book.basis*(record.anchor as Vector3)-book.position
+	book.position+=offset
+	clasp.position+=offset
+	equipment.set_meta("measured_grip",record.duplicate(true))
+	return true
 
 class WorldOrientedEquipment extends Node3D:
 	var actor: Node3D
@@ -482,11 +564,17 @@ static func _add_castle_role_equipment(owner: Node3D, role: String) -> void:
 	equipment.scale = _inverse_attachment_scale(attachment)
 	attachment.add_child(equipment)
 	if castle_role.contains("patrol") or castle_role.contains("ranger"):
+		equipment.set_meta("equipment_kind", "spear")
 		_add_spear(equipment)
 	elif castle_role.contains("guard"):
+		equipment.set_meta("equipment_kind", "shield")
 		_add_shield(equipment)
 	else:
+		equipment.set_meta("equipment_kind", "book")
 		_add_record_book(equipment, castle_role.contains("steward"))
+		var measured: Dictionary = owner.get_meta("carried_equipment_grip",{})
+		if not measured.is_empty() and not fit_carried_equipment(owner,measured):
+			push_error("Measured carried book grip could not bind: " + castle_role)
 
 static func _inverse_attachment_scale(attachment: BoneAttachment3D) -> Vector3:
 	var inherited := attachment.global_basis.get_scale()

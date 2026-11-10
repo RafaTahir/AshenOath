@@ -1,0 +1,30 @@
+{
+  "recipe_sha256": "36567711a35e9a1e50baa7ab3e21a8c92c4801233423bfea3b44e7cd4b436397",
+  "encoder_sha256": "2ce797a0f88d7f067180338fb227f7b1928ea727bd9a4d7a1d022f7c52af71a3",
+  "cues": [
+    {
+      "id": "reed_choir_call",
+      "sample_rate": 24000,
+      "frames": 16320,
+      "duration": 0.68,
+      "path": "res://assets_external/audio/authored/reed_choir_call.ogg",
+      "sha256": "0faff4f0d110a8bde0d379aae4b330eec88882f9809bd6fc5ad54a38f15b5d54",
+      "bytes": 4819,
+      "authorship": "Original deterministic synthesis",
+      "byte_repeat_verified": true,
+      "listening_accepted": false
+    },
+    {
+      "id": "inkblind_brush",
+      "sample_rate": 24000,
+      "frames": 5760,
+      "duration": 0.24,
+      "path": "res://assets_external/audio/authored/inkblind_brush.ogg",
+      "sha256": "dac980e085fc432cb799b7e502128f53a07abe2164e56eee6834c4fc5981ca6a",
+      "bytes": 4634,
+      "authorship": "Original deterministic synthesis",
+      "byte_repeat_verified": true,
+      "listening_accepted": false
+    }
+  ]
+}

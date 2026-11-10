@@ -1,0 +1,143 @@
+{
+  "accepted": true,
+  "runs": [
+    {
+      "stage": "opening",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 17120,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.015,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.015,
+      "exit_code": 0,
+      "seconds": 14.782
+    },
+    {
+      "stage": "stage2",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 15916,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.015,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.015,
+      "exit_code": 0,
+      "seconds": 20.484
+    }
+  ],
+  "source_sha256": {
+    "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
+    "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a",
+    "outputs/AshenOathTheRoadBetweenCrowns/scripts/character_life_modifier.gd": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f",
+    "outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd": "d3f343f84fd051172658ef631f6fb923047682e03edc979cfc14f01def8ef222",
+    "outputs/AshenOathTheRoadBetweenCrowns/tools/living_activity_grip_compile.gd": "0ca8e8c60206b1a1687b380b99a392a9fcaf9bff49c398abce6a356ab9777ee2",
+    "outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_activity_grip_compile.gd": "caa5d4fd321412840537e444f204e9131399525eb261cb4cfdfd90046dc77115",
+    "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_libraries.gd": "b82ceb333aeac4f7ba377c6aad852189078e84b77c06b18083d5892671a4ab2f",
+    "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_stage2_libraries.gd": "f8c86ec538e7b1a5b90a397fb2492d2b2a5ded1a125394f39a73672ab7fac9df",
+    "outputs/AshenOathTheRoadBetweenCrowns/tools/build_story_release.ps1": "1a561c558b6fe329079f84076db249d17bbe2232d72b703fdffec61828aeb84a",
+    "art_source/art_recovery_v2/models/living_cast_20261107/C01/activity_grips.json": "352a72db1871439ed8fae57b15d7a415ed912a20f100dd2ca8144e9445b2aee1",
+    "art_source/art_recovery_v2/models/living_cast_20261107/C04/activity_grips.json": "f9c9e5f2ccb2ef90551019baf177cadbddf94e444d42ca77e89d7cd776f981b0",
+    "art_source/art_recovery_v2/models/living_cast_20261107/C03/activity_grips.json": "af5aebc17848a8727c6f42d7f06beec622a499ef939749d5279601267d178ba8",
+    "art_source/art_recovery_v2/models/living_cast_20261107/C02/activity_grips.json": "26e25004c6bd68df413c5d7268272498c74c83a088b526cb8a0c3c00d697e01e",
+    "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/activity_grips.json": "826b306397f7011dc0d8b3651c866d34416e315a047b404043567c11b5d1df11",
+    "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/activity_grips.json": "9afd05a5d3b62826c090bee3df01c09c82ea49b4389a5f720601e47e7051d3f9",
+    "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/activity_grips.json": "6be1ee48bf31c2ba3921244674251c0eef587e30efceefab4ed0b5cc60d00352",
+    "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/activity_grips.json": "b28ae165a605da01f5cb9ede9b85548cfb23c77516156b5f16d6f07d0ad9582d",
+    "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/activity_grips.json": "1fd88208f2754e685b46c42a02b116cdf29322c7dc660ecca0b2f13e9dfbc290",
+    "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/activity_grips.json": "b61548e83c01fb847be9b30356efb7e12bbb90e4716caaee4542122674acaa64",
+    "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/activity_grips.json": "845895cdb7b13448c316dd7a128b359d4c54d0af8165b91e85e2ca65bf65d8d5",
+    "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/activity_grips.json": "405df2c1aceae818d288b3f0d8e4821c9acafad3451767ed16d64cc12ff5d952"
+  },
+  "compiled": [
+    {
+      "asset": "C01",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C01.res",
+      "bytes": 195655,
+      "sha256": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007",
+      "grip_manifest_sha256": "352a72db1871439ed8fae57b15d7a415ed912a20f100dd2ca8144e9445b2aee1"
+    },
+    {
+      "asset": "C04",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C04.res",
+      "bytes": 199759,
+      "sha256": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a",
+      "grip_manifest_sha256": "f9c9e5f2ccb2ef90551019baf177cadbddf94e444d42ca77e89d7cd776f981b0"
+    },
+    {
+      "asset": "C03",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C03.res",
+      "bytes": 203226,
+      "sha256": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07",
+      "grip_manifest_sha256": "af5aebc17848a8727c6f42d7f06beec622a499ef939749d5279601267d178ba8"
+    },
+    {
+      "asset": "C02",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C02.res",
+      "bytes": 203131,
+      "sha256": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72",
+      "grip_manifest_sha256": "26e25004c6bd68df413c5d7268272498c74c83a088b526cb8a0c3c00d697e01e"
+    },
+    {
+      "asset": "C11",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C11.res",
+      "bytes": 291599,
+      "sha256": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff",
+      "grip_manifest_sha256": "826b306397f7011dc0d8b3651c866d34416e315a047b404043567c11b5d1df11"
+    },
+    {
+      "asset": "C05",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C05.res",
+      "bytes": 247011,
+      "sha256": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04",
+      "grip_manifest_sha256": "9afd05a5d3b62826c090bee3df01c09c82ea49b4389a5f720601e47e7051d3f9"
+    },
+    {
+      "asset": "C06",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C06.res",
+      "bytes": 247667,
+      "sha256": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16",
+      "grip_manifest_sha256": "6be1ee48bf31c2ba3921244674251c0eef587e30efceefab4ed0b5cc60d00352"
+    },
+    {
+      "asset": "C12",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C12.res",
+      "bytes": 221835,
+      "sha256": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57",
+      "grip_manifest_sha256": "b28ae165a605da01f5cb9ede9b85548cfb23c77516156b5f16d6f07d0ad9582d"
+    },
+    {
+      "asset": "C07",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C07.res",
+      "bytes": 210719,
+      "sha256": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7",
+      "grip_manifest_sha256": "1fd88208f2754e685b46c42a02b116cdf29322c7dc660ecca0b2f13e9dfbc290"
+    },
+    {
+      "asset": "C09",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C09.res",
+      "bytes": 311627,
+      "sha256": "a5166199095b2dfb2539bc479b6090c0db32987e9f603ccc07ef9c54543ce1bc",
+      "grip_manifest_sha256": "b61548e83c01fb847be9b30356efb7e12bbb90e4716caaee4542122674acaa64"
+    },
+    {
+      "asset": "C10",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C10.res",
+      "bytes": 310594,
+      "sha256": "7d018f2fd58b9efbbd3ab89ca38fcffb0e0a0bbbfb3b80d438ab414f6799ee4b",
+      "grip_manifest_sha256": "845895cdb7b13448c316dd7a128b359d4c54d0af8165b91e85e2ca65bf65d8d5"
+    },
+    {
+      "asset": "C08",
+      "library": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C08.res",
+      "bytes": 249648,
+      "sha256": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0",
+      "grip_manifest_sha256": "405df2c1aceae818d288b3f0d8e4821c9acafad3451767ed16d64cc12ff5d952"
+    }
+  ],
+  "deadline_utc": "2026-11-10T21:24:00.480114+00:00"
+}

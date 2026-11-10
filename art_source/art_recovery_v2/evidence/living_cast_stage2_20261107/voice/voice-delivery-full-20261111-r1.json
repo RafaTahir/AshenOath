@@ -1,0 +1,9 @@
+{
+  "status": "pass",
+  "failures": [],
+  "required_exact_utterances": 431,
+  "decoded_recordings": 431,
+  "new_voice_bytes": 12318501,
+  "listening_acceptance": false,
+  "gameplay_acceptance": false
+}

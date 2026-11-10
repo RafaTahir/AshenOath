@@ -1,0 +1,20 @@
+{
+	"asset": "C12",
+	"baseline_sha256": "44ed57fc8cc04e4a7f481efff4e629f64b7f1127b91778b2738d7fbd90cac69d",
+	"engine_version": {
+		"build": "official",
+		"hash": "7d41c59c457bd5a245092b4e7eb2d833e3b3f8c3",
+		"hex": 263683,
+		"major": 4,
+		"minor": 6,
+		"patch": 3,
+		"status": "stable",
+		"string": "4.6.3-stable (official)",
+		"timestamp": 0
+	},
+	"prepared_resource": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+	"prepared_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
+	"production_resource": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+	"production_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+	"runtime_verified": false
+}

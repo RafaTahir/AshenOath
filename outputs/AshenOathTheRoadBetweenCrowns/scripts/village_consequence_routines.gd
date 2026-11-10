@@ -1,7 +1,7 @@
 extends RefCounted
 
 ## Work follows committed story outcomes. These schedules never commit them.
-const FLAGS := ["cart_helped", "road_repaired", "assembly_relief_ready", "mill_operation", "final_choice_completed", "final_covenant"]
+const FLAGS := ["cart_helped", "road_repaired", "assembly_relief_ready", "mill_operation", "final_choice_completed", "final_covenant", "community_keeper_consent", "open_road_relocation_completed"]
 
 static func signature(state) -> String:
 	var values: Array = []
@@ -45,7 +45,8 @@ static func for_actor(id: String, state) -> Dictionary:
 			"duty":"Kael carries the oath. That doesn't lift the rest of us from our work.",
 			"ash":"The binding is gone. We still have to decide how to live beside each other."
 		}
+		var expanded_line: String = preload("res://scripts/campaign_story_overlay.gd").ambient(covenant,id,state)
 		result = {"activity":"shrine", "occupation":"keeper of the returned names", "activity_seconds":5.0,
-			"line":str(lines.get(covenant, "We keep the names, and tomorrow's work.")),
+			"line":expanded_line if expanded_line!="" else str(lines.get(covenant, "We keep the names, and tomorrow's work.")),
 			"path":[Vector3(4.6,0,-6.6), Vector3(1.2,0,-4.0), Vector3(-3.6,0,2.6)]}
 	return result

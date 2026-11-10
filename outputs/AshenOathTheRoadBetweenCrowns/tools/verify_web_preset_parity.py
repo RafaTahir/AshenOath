@@ -23,6 +23,30 @@ def selected(section, resource):
         fnmatch.fnmatchcase(relative, pattern) for pattern in filters(section, "include_filter"))
 
 
+def validate_living_ownership(runtime, owners, production, qa):
+    registry = runtime.get("community_resource_owners")
+    if registry is None: return []
+    if not isinstance(registry, dict) or not registry:
+        return ["Living resource ownership registry must be a nonempty object"]
+    errors = []
+    for resource, owner in registry.items():
+        if not isinstance(resource, str) or not resource.startswith("res://") or ".." in resource[6:].split("/"):
+            errors.append("Invalid living resource path: " + str(resource))
+            continue
+        if not isinstance(owner, str) or owner not in owners:
+            errors.append(f"Unknown living resource owner {owner}: {resource}")
+            continue
+        actual = {pack for pack, section in owners.items() if selected(section, resource)}
+        if actual != {owner}: errors.append(f"Living resource {resource}: declared {owner}, selected by {sorted(actual)}")
+        if owner != "base" and (selected(production, resource) or selected(qa, resource)):
+            errors.append("Root PCK duplicates deferred living resource " + resource)
+        if resource not in runtime["packs"][owner].get("contents", []):
+            errors.append(f"{owner}: resource inventory omits {resource}")
+        if str(owner).startswith("actor_") and runtime.get("actor_resource_owners", {}).get(resource) != owner:
+            errors.append("Actor and living resource ownership disagree: " + resource)
+    return errors
+
+
 def validate(path):
     config = configparser.ConfigParser(interpolation=None, strict=True)
     config.read(path, encoding="utf-8-sig")
@@ -45,6 +69,7 @@ def validate(path):
     require_valid_pack_graph(runtime)
     owners = {pack_id: presets[runtime.get("pack_presets", {}).get(pack_id, "Runtime Pack " + pack_id.replace("_", " ").title())]
               for pack_id in runtime["packs"]}
+    errors.extend(validate_living_ownership(runtime, owners, production, qa))
     actors = json.loads((project / "data/prepared_actors.json").read_text(encoding="utf-8-sig"))
     check(bool(actors), "Current prepared actor catalog is empty")
     declared_owners = runtime.get("actor_resource_owners")

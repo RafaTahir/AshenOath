@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "asset": "C05",
+  "identity": "elna",
+  "sources": [
+    {
+      "resource": "res://assets_external/environment/props/Banner_1_Cloth.obj",
+      "source": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\props\\Banner_1_Cloth.obj",
+      "sha256": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+      "retained_vertices": 92,
+      "change": "Retained silhouette normalized to supported workstation dimensions; authored palette."
+    }
+  ],
+  "authoring_tool_sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc",
+  "blend_sha256": "77703728295a425d93b3863bdbaa9506c7b5fb477aa6fa8e4e0ef04c95fc5e59",
+  "carrier_sha256": "5be1ad8c15eb1fda1d45065637871ccd54211cd139da9d1642925cd487901a09",
+  "recipe_snapshot": {
+    "sha256": "e43d5992293f60271505b5a11f26b9811e44f7f40f43a6263cb501bae6054e7f",
+    "files": [
+      {
+        "name": "author_living_cast_stage2_props.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\e43d5992293f6027\\author_living_cast_stage2_props.py",
+        "sha256": "14a5f8bfd521c9dc4e1f8862ffe2d748afd854a85272aa426600edb17ba5d5fc"
+      },
+      {
+        "name": "living_cast_stage2_profiles.py",
+        "path": "models\\living_cast_stage2_20261107\\props\\recipes\\e43d5992293f6027\\living_cast_stage2_profiles.py",
+        "sha256": "4744e75b65e7e7565a6c5c710105bd95c69d4c4717b52612742ae53fce1a21e6"
+      }
+    ]
+  },
+  "blender_version": "5.2.3 LTS",
+  "triangles": 1154,
+  "grips_godot": {
+    "GripLeft": [
+      -0.12,
+      0.02,
+      0
+    ],
+    "GripRight": [
+      0.12,
+      0.02,
+      0
+    ]
+  },
+  "surface_height": 0.02,
+  "prop_root_actor_relative_godot": [
+    0,
+    1,
+    -0.4
+  ],
+  "support_near_limit_godot_z": 0.04,
+  "contact_part": "WorkContactPart",
+  "contact_response": "morph",
+  "contact_amount": 0.035,
+  "contact_shape": {
+    "name": "TaskPress",
+    "neutral_weight": 0.0,
+    "contact_weight": 1.0,
+    "purpose": "Settle the loose folded edge around the fixed smoothing ridge",
+    "geometry_bounds": {
+      "Basis": {
+        "min_godot": [
+          -0.20000751316547394,
+          0.011690710671246052,
+          -0.14002394676208496
+        ],
+        "max_godot": [
+          0.20000754296779633,
+          0.04294005408883095,
+          0.030330311506986618
+        ]
+      },
+      "TaskPress": {
+        "min_godot": [
+          -0.20000751316547394,
+          0.009992804378271103,
+          -0.13102394342422485
+        ],
+        "max_godot": [
+          0.20000754296779633,
+          0.021199701353907585,
+          0.030330311506986618
+        ]
+      }
+    },
+    "grip_patch_height_preserved": true
+  },
+  "runtime_resource": "res://assets_external/environment_prepared/living_cast/station_elna.scn",
+  "source_geometry_authored": true,
+  "geometry_contact_verified": false,
+  "native_grips_verified": false,
+  "user_accepted": false,
+  "notes": [
+    "Actual supported contact geometry; no pickup or carried transition is claimed.",
+    "New work surfaces/details supplement the retained source shapes where listed."
+  ]
+}

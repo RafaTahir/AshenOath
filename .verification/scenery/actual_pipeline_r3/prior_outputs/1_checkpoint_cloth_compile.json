@@ -1,0 +1,87 @@
+{
+	"asset": "checkpoint_cloth",
+	"authoring_receipt": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/authoring.json",
+	"authoring_receipt_sha256": "0732519644c71fa2d4912753014d6d8f6b9da3353698c9e4a1c6cfb352c590d6",
+	"blender_authored": true,
+	"bytes": 8449,
+	"carrier_sha256": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
+	"compiler_sha256": "ecc8d063e4d2792a2d56cc3aa291de93d6e790edb2012982f3949ef4c5a0ccfd",
+	"dependencies": [],
+	"geometry_contract_sha256": "0bf525fc8b38927a3883a8343981c1c44a6690d94c1e6408672d9f29357f6f8a",
+	"normal_transport": {
+		"after_sha256": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
+		"before_sha256": "e9702eeb086df2f18e531cd0794d61fee7d8a3facae8ffc1cef1e558e6df2028",
+		"binary_payload_unchanged": true,
+		"native_verified": false,
+		"normal_source_attribute": "_AO_RETAINED_NORMAL",
+		"parts": {
+			"CheckpointCloth_0": {
+				"corners": 414.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.0
+				},
+				"normal_accessor": 0.0,
+				"triangles": 138.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			},
+			"CheckpointCloth_1": {
+				"corners": 414.0,
+				"material_role_equal": true,
+				"maximum_component_errors": {
+					"colors": 0.0,
+					"normals": 0.0,
+					"positions": 0.0,
+					"uvs": 0.0
+				},
+				"normal_accessor": 6.0,
+				"triangles": 138.0,
+				"world_frame_error": 0.0,
+				"wound_triangle_multiplicity_equal": true
+			}
+		},
+		"source_glb_sha256": [
+			"9b21a5bd9eb7a376345c73e9404b282c9d75ddf2075b01296b17a3f1256b2a3c"
+		],
+		"verified": true,
+		"visual_accepted": false
+	},
+	"parts": [
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "CheckpointCloth_0",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 138,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		},
+		{
+			"geometry_palette_equivalent": true,
+			"maximum_quantization_metres": 0.0001,
+			"node": "CheckpointCloth_1",
+			"pivot_error_metres": 0.0,
+			"retained_triangles": 138,
+			"triangle_attribute_multiplicity_equivalent": true,
+			"winding_normals_uvs_partitions_equivalent": true
+		}
+	],
+	"path": "res://assets_external/environment_prepared/living_world/checkpoint_cloth.scn",
+	"raw_carrier_sha256": "e9702eeb086df2f18e531cd0794d61fee7d8a3facae8ffc1cef1e558e6df2028",
+	"retained_native_sha256": "c0839cf4e616a2a7423e8ec373060cf2cdc7cc0797d0923ed17c408d80a1f2e6",
+	"retained_receipt_sha256": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
+	"runtime_reviewed": false,
+	"schema_version": 1,
+	"sha256": "f927975b7b767d5233b62cc9d49f2a079a5aae61e513f30095112c6419a7f324",
+	"source_hashes": {
+		"res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+		"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",
+		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"
+	},
+	"transport_helper_sha256": "2c9dcba5ac768071e8e9aea33a51f6686abb39762ced4f09488a7df1dcdd83b8",
+	"user_accepted": false
+}

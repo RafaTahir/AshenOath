@@ -96,6 +96,15 @@ func request(game, prepared: Dictionary) -> void:
 		var detail: String = game.runtime_services.preparation_error
 		cancel(game, (detail if detail != "" else "Journey services could not be prepared.") + " Select the saved journey to retry.")
 		return
+	var campaign_revision := preload("res://scripts/campaign_revision.gd").from_save(prepared.get("data", {}))
+	var story_overlay = preload("res://scripts/campaign_story_overlay.gd")
+	var recorded: Dictionary = prepared.get("data",{})
+	if story_overlay.required_for(target,recorded.get("story_state",{}).get("flags",{}),recorded.get("quests",{}).get("completed",{})) and not story_overlay.ready():
+		cancel(game,"The recorded community story could not be prepared. Your current session is unchanged.")
+		return
+	if not game.quests.can_load_campaign_revision(campaign_revision):
+		cancel(game, "This journey needs campaign chapters that are not present in this release. Your current session is unchanged.")
+		return
 	if game.runtime_packs == null:
 		cancel(game, "The destination's content is unavailable. Select the saved journey to retry.")
 		return

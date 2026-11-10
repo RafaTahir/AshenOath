@@ -1,0 +1,39 @@
+{
+  "asset": "C05",
+  "status": "source_contract_pass",
+  "animations": {
+    "Life_Idle_A": {
+      "duration_seconds": 6,
+      "body_variation": 0.0018556267023086548,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Idle_B": {
+      "duration_seconds": 8,
+      "body_variation": 0.17763862013816833,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Listen": {
+      "duration_seconds": 4,
+      "body_variation": 0.012582277995534241,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Speak": {
+      "duration_seconds": 4,
+      "body_variation": 0.8766162684187293,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    },
+    "Life_Work": {
+      "duration_seconds": 4,
+      "body_variation": 0.7424593332689255,
+      "root_variation": 0.0,
+      "loop_error": 0.0
+    }
+  },
+  "retained_production_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+  "review_glb_sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+  "runtime_workstation_and_visual_acceptance": false
+}

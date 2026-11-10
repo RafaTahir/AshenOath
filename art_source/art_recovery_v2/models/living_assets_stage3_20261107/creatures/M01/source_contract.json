@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "asset": "M01",
+  "status": "source_contract_pass",
+  "candidate_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+  "retained_source_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
+  "candidate_bytes": 2056556,
+  "retained_source_bytes": 1941652,
+  "net_source_bytes": 114904,
+  "protected_action_bytes_equal": true,
+  "protected_action_signatures": {
+    "Attack": "31d167710a4406b52b548761b4392c973e31acc522f0b53abd68e5bfd6c6da9b",
+    "AttackHeavy": "a12bca106fa3b85dbb9b2a046e0fa86ffdb5b843e64bcfe26beac6eb51ffc0f0",
+    "Block": "3c2bcf9225a4c67a8d2f720739334c410c3b5b7bce72b51e7024e22a0e911965",
+    "Death": "3902c96ba4e57c9e06722941c4b5b24c482d5eaae589a263db83dd9f445e06b5",
+    "HitReact": "bea4190b2d90eded5c77390602d5cc0cadef995f4f542f9d7c94e14c902d4bfa",
+    "Interact": "3f0b63ce810925e334063d2cd535376be5c61ce97840418420327132baa12bee",
+    "Recovery": "f272f718ed0a56e41c3ce53a032dd3ff779b3435a416c004c10d5e65526a9587",
+    "Running": "07296984f5a4b2e0073b1ca94caddaa6c13c6904e6b19cb7e0f886805fdda1fa",
+    "Threaten": "3e6c3bf180b6d4e09a00141f60ccef570f17d8c01db94e4eff3b52449e33848b",
+    "Walking": "db041c8bb446a243091e843d8045993666e67e8d12376fb2943189cdc261c543",
+    "Windup": "97c733e9ccb2a2311221d526e16ed02f0784f3d3b37704e102a8f18754ec6344"
+  },
+  "retained_base_geometry_unchanged": true,
+  "retained_export_base_bytes_equal": true,
+  "retained_materials_skin_hierarchy_equal": true,
+  "retained_base_mesh_signatures": {
+    "M01_Connected_Anatomy_SkinnedAssembly": "394f278d87dd4b3c8391209551a37ff393eee1510f252019cf32435c237f7e3e",
+    "Icosphere": "141fabce6a7148986d13a7ea4ca0ce60d956edc0e2424b6eaceff31de9f1a975"
+  },
+  "retained_external_source_hashes": {
+    "textures/normal_0a4a43856c725056d82a8b004fe190ab613ef6185094328937be48d0fc4a2c9c.png": "0a4a43856c725056d82a8b004fe190ab613ef6185094328937be48d0fc4a2c9c",
+    "textures/color_f000cf478ca45fa2cf626e83290e5862749f495b5f0dee728873ac7bc90bcef3.png": "f000cf478ca45fa2cf626e83290e5862749f495b5f0dee728873ac7bc90bcef3",
+    "textures/linear_8409f30051d76e605f3f6a1c991e15c1708f8b36b019dd426aba3ede40f18fee.png": "8409f30051d76e605f3f6a1c991e15c1708f8b36b019dd426aba3ede40f18fee",
+    "textures/normal_84e26859d3366192507bf20ffc1ebc89de77bc4f4118a65fcd2f8e4418530328.png": "84e26859d3366192507bf20ffc1ebc89de77bc4f4118a65fcd2f8e4418530328",
+    "textures/color_025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466.png": "025b22d919c650d02f73fa93624f1c153cf70b860de34fb5bd99be315344d466",
+    "textures/linear_39e68a05f88243441ae85467b31bdbf7ddbaa2e22709b9a5d7fda0a942d2f440.png": "39e68a05f88243441ae85467b31bdbf7ddbaa2e22709b9a5d7fda0a942d2f440",
+    "textures/normal_9ea989671f6e7a32d867b8d587bda397f9aaaac6e34281cec9054299d2cffed0.png": "9ea989671f6e7a32d867b8d587bda397f9aaaac6e34281cec9054299d2cffed0",
+    "textures/color_962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81.png": "962e202cc9cf1f7a689113c59f2d704d0dbfc96143283e5037e55c6a70a01b81",
+    "textures/linear_441853a0a618092ffb07e8a39289db02fcd09c75d4a404d2e6a7c49039239df2.png": "441853a0a618092ffb07e8a39289db02fcd09c75d4a404d2e6a7c49039239df2",
+    "textures/normal_eac4c2c768921c87f46b0a2544eb3498d18d9af882463128dcc96eea96c8c59e.png": "eac4c2c768921c87f46b0a2544eb3498d18d9af882463128dcc96eea96c8c59e",
+    "textures/color_2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e.png": "2e4b4f21c69c9104ba7905f7c2eb724671069c30af3e17e164c0ef919d133a5e",
+    "textures/linear_6a59ffcca1aa84b3cd21050ac1d738fd4a476fcfd3748c2ad4f868f0a790f6cd.png": "6a59ffcca1aa84b3cd21050ac1d738fd4a476fcfd3748c2ad4f868f0a790f6cd"
+  },
+  "required_morphs": [],
+  "durations": {
+    "Idle": 1.375,
+    "Investigate": 2.0833332538604736,
+    "Feed": 2.0833332538604736,
+    "Sleep": 0.375
+  },
+  "clips": {
+    "Idle": {
+      "active_bones": [
+        "Head",
+        "clavicle_l",
+        "clavicle_r",
+        "neck_01"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Investigate": {
+      "active_bones": [
+        "Head",
+        "clavicle_l",
+        "clavicle_r",
+        "neck_01"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Feed": {
+      "active_bones": [
+        "Head",
+        "clavicle_l",
+        "clavicle_r",
+        "neck_01"
+      ],
+      "actual_mesh_morph_bindings": {}
+    },
+    "Sleep": {
+      "active_bones": [
+        "Head",
+        "clavicle_l",
+        "clavicle_r",
+        "neck_01"
+      ],
+      "actual_mesh_morph_bindings": {}
+    }
+  },
+  "water_probe_bones": [],
+  "native_prepared_binding_verified": false,
+  "attack_recalibration_required": true,
+  "visual_accepted": false,
+  "user_accepted": false
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "asset": "C11",
+  "motion_sha256": "ebfd6dce71506ea7913eb1c79b90d074c4a909ae3ee0ae237effbd10e77943dc",
+  "model_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+  "fits": {
+    "bread": {
+      "evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/fit_receipt.json",
+      "evidence_sha256": "0b70c2b3e50720bcf0f28489630e7e382ed7a7fdf3a4ddb4af346443a374e1fe",
+      "native_pose_evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/pose_receipt.json",
+      "legacy_wrist_source": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/source/c11_activity_goal_trial_modifier.gd"
+    },
+    "supply": {
+      "evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/c11_supply_composite_r1/fit/receipt.json",
+      "native_pose_evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/c11_supply_composite_r1/standing/pose_receipt.json",
+      "route_pose_evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/c11_supply_composite_r1/route/pose_receipt.json",
+      "legacy_wrist_source": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/source/c11_activity_goal_trial_modifier.gd",
+      "standing_wrist_source": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/c11_supply_composite_r1/source/c11_supply_forward_trial_modifier.gd",
+      "evidence_sha256": "355c66233b838c4996050f59ebb51e227cd4f2981d0197f3244376573f44edaf"
+    }
+  }
+}

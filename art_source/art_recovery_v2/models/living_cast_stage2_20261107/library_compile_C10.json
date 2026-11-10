@@ -1,0 +1,68 @@
+{
+	"libraries": [
+		{
+			"asset": "C10",
+			"bytes": 310350,
+			"clips": {
+				"Life_Cup_Hold": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Drink": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0327473878860474,
+					0.031731903553009,
+					0.00242564082145691
+				],
+				"right": [
+					-0.0327126979827881,
+					0.0317582786083221,
+					0.00238729268312454
+				]
+			},
+			"maximum_rest_error": 0.00000386099145543994,
+			"model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+			"model_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+			"path": "res://assets_external/characters_prepared/animations/life_C10.res",
+			"runtime_reviewed": false,
+			"sha256": "ccc5125f12cbbde5b9081a3d17b7a9a65696a7113db974abd83aeeaa64e30c56",
+			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/C10_life_review.glb",
+			"source_sha256": "aa5f1ad2d862eb879cba08457d588b519eac8403aa615a70650dc269cc8437f3",
+			"user_accepted": false
+		}
+	],
+	"status": "compiled"
+}
