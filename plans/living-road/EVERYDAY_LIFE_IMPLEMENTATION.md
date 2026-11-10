@@ -1238,6 +1238,48 @@ The package meets the retained 256 MiB ceiling without reducing visual quality.
 The exact candidate has been returned to Game Assets for the remaining
 combined acceptance checks. Production is unchanged; no Git push has run.
 
+### Combined Candidate Follow-up
+
+- The same Web export passed the isolated 960x540 cold touch route: cancel a
+  delayed crossing, regain Greyfen control, and re-approach to enter Wychwood.
+  Receipt: `D:/Temp/AO_945101e_r2_QA/browser_touch_cold_r1.json`, SHA-256
+  `313e22187b29aa40600e87a8a71dfacca8c5fbe1bc2d1d22a9680efda300addc`.
+  This is browser touch emulation, not phone hardware or WebKit coverage.
+- At the same viewport, one injected opening-pack HTTP 503 was recovered by
+  tapping Retry and then New Game; no unexpected runtime errors. Receipt:
+  `D:/Temp/AO_945101e_r2_QA/browser_touch_opening_503_r1.json`, SHA-256
+  `79dfe47dbe60245882073c6d0df3ceafa98b0bc4bfb59de9da65f3c6d2b526df`.
+- The native campaign run stopped before New Game. A passive native diagnostic
+  reached an enabled New Game action at 107.196 s on the same exact export;
+  its first-view wait was 89.843 s. This shows the action can become enabled,
+  not that native startup meets any timing goal or that the campaign passed.
+  The campaign run's teardown also logged
+  three `mesh.is_null()` errors: zone residency detached the mesh before the
+  animation driver's final ambient-morph reset. This is separate from the
+  stock threaded loader leak. Retirement now clears the retiring skeleton's
+  registered playback owner before detaching geometry. The source repair and
+  focused ownership check are not yet compiled or run on corrected bytes.
+- The expanded Hearthward crossing recovered Undercroft position and control
+  after an `actor_c08` HTTP 503, and the second request mounted the pack. It
+  then failed destination construction, not network Retry: both builders
+  produced no ground, bounds or gate. Receipt:
+  `D:/Temp/AO_945101e_r2_QA/browser_touch_hearthward_http503_r1.json`, SHA-256
+  `a8d137fb24f32a4d20715565d8dd6b950fb056d0eb1cc81ee038e24e029b0fd4`.
+  The actual archive contains the dedicated community builder and the routing
+  constants. Its conditional return did not context-type the array literal
+  as `Array[Callable]`; the builder now returns an explicitly typed step list
+  for both expansion regions. The existing route verifier now checks the
+  actual builder step count. This source correction awaits rebuilt bytes and
+  a focused real-input retest.
+- Fixed fixture-bound village tasks now keep their in-world prop without an
+  extra generic rope, cloth or bowl on Kael. Measured held objects and Anwen's
+  fitted care cloth are untouched. The separate authored saga and ambient
+  carries not covered by the 22 measured grips remain unmeasured.
+- Archive inspection puts the retirement and workstation corrections only
+  in `index.pck`, and the expansion builder only in `community.pck`. Preserve
+  the other exact packs if the rebuilt archives pass ownership and artifact
+  checks.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

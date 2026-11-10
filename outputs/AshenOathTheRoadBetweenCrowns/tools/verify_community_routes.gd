@@ -41,6 +41,9 @@ func _run() -> void:
 		_check(Sectors.crossing_transform(reverse)*Sectors.crossing_transform(edge)==Transform3D.IDENTITY or (Sectors.crossing_transform(reverse)*Sectors.crossing_transform(edge)).is_equal_approx(Transform3D.IDENTITY),"two-way crossing transforms round trip")
 		_check(Router.resource_paths(target)==[Router.COMMUNITY_BUILDER_PATH],"new destination uses deferred dedicated builder")
 		_check(Router.COMMUNITY_BUILDER_PATH not in Router.resource_paths(source),"old builder does not preload expansion")
+		var script := load(Router.builder_path(target)) as Script
+		var builder = script.new() if script != null and script.can_instantiate() else null
+		_check(builder != null and builder.step_count(target) == 5,"dedicated builder has five callable construction steps for "+target)
 	var old_atlas := Sectors.atlas(1)
 	var new_atlas := Sectors.atlas(2)
 	for id: String in Revision.NEW_ZONES:
@@ -63,7 +66,9 @@ func _run() -> void:
 	expanded.set_flag("community_route_load_crossed",true)
 	route=Routes.for_objective("main_road_kept_open","open_route",expanded,quests)
 	_check(route.target_ids==["community:delivery"],"crossed load points to actual delivery")
-	_check(not Revision.EXPANSION_ENABLED,"release switch remains closed during integration")
+	_check(Revision.from_state(legacy)==Revision.LEGACY,"new-journey switch cannot upgrade legacy saves")
+	if "--require-expansion" in OS.get_cmdline_user_args():
+		_check(Revision.new_journey_revision()==Revision.EXPANDED,"combined release enables expanded new journeys")
 	for actor: String in ["vale","merrow"]:
 		var speaker := "vargan_record_keeper" if actor=="vale" else "vargan_steward"
 		_check(preload("res://scripts/story_performance.gd").speaker_matches(actor,speaker),"canonical speaker alias drives actual facial delivery")
@@ -83,7 +88,7 @@ func _run() -> void:
 	_check(Community.presence_shift(420)=="morning" and Community.presence_shift(1080)=="evening","existing rest waits land exactly on the intended shift")
 	_check(not Community.actor_present("senn","hearthward",1080,legacy,quests),"shift cannot introduce a legacy actor")
 	for failure: String in failures: printerr("COMMUNITY ROUTES: "+failure)
-	print("COMMUNITY ROUTES: %s checks=%d (pure graph, no world/input claim)" % ["PASS" if failures.is_empty() else "FAIL",checks])
+	print("COMMUNITY ROUTES: %s checks=%d (graph and builder steps, no world/input claim)" % ["PASS" if failures.is_empty() else "FAIL",checks])
 	legacy.free(); expanded.free(); quests.free()
 	quit(0 if failures.is_empty() else 1)
 

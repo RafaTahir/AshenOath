@@ -74,6 +74,15 @@ func _deferred_free_zone(retired_root: Node) -> void:
 func _release_zone_render_resources(root: Node) -> void:
 	if root == null or not is_instance_valid(root):
 		return
+	# Playback cleanup restores morphs on the still-bound mesh. Clear it before
+	# detaching geometry, and never touch a driver owned by another branch.
+	for skeleton in root.find_children("*", "Skeleton3D", true, false):
+		if not skeleton.has_meta("character_motion_owner"):
+			continue
+		var reference := skeleton.get_meta("character_motion_owner") as WeakRef
+		var driver := reference.get_ref() as Node if reference != null else null
+		if is_instance_valid(driver) and root.is_ancestor_of(driver) and driver.has_method("_clear_playback"):
+			driver.call("_clear_playback")
 	# CollisionShape3D owns a PhysicsServer shape RID while its shape property is
 	# populated. Clear it after the zone is disabled so the server can release
 	# the RID before the parent hierarchy is destroyed.

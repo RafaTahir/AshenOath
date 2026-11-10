@@ -3,6 +3,7 @@ extends SceneTree
 ## Actual AnimationTree morph blending on a disposable triangle and skeleton.
 ## The protected clips intentionally contain no blend-shape tracks.
 const Driver = preload("res://scripts/character_animation_driver.gd")
+const Residency = preload("res://scripts/zone_residency_service.gd")
 var checks := 0
 var failures: Array[String] = []
 
@@ -88,6 +89,19 @@ func _run() -> void:
 	_check(not invalid.configure(actor,{"idle":"Idle"}),"a nonfinite authored neutral fails the animation contract")
 	actor.set_meta("authored_creature_ambient_morphs",ownership+ownership)
 	_check(not invalid.configure(actor,{"idle":"Idle"}),"duplicate ownership of a native morph is rejected")
+	invalid.free()
+	actor.set_meta("authored_creature_ambient_morphs",ownership)
+	var retiring := Driver.new()
+	actor.add_child(retiring)
+	_check(retiring.configure(actor,{"idle":"Idle","walk":"Idle"}),"retiring branch starts with a valid playback owner")
+	if retiring.is_valid():
+		retiring.set_external_tick(true)
+		_start_ambient(retiring,mesh)
+	var residency := Residency.new()
+	residency._release_zone_render_resources(actor)
+	_check(mesh.mesh==null,"retirement detaches mesh resources")
+	_check(not retiring.is_valid() and retiring.ambient_morph_bindings.is_empty() and not skeleton.has_meta("character_motion_owner"),"retirement clears playback bindings before final deletion")
+	residency.free()
 	_finish(actor)
 
 func _clip(morph: bool) -> Animation:

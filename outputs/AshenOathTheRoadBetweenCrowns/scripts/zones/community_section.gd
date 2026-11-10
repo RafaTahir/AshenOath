@@ -16,10 +16,17 @@ func build_step(context: ZoneBuildContext, index: int) -> bool:
 	return index >= 0 and index < steps.size() and steps[index].call(context) == true
 
 func construction_steps(zone: String) -> Array[Callable]:
-	return [_ground,_shelters,_work,_people,_routes] if zone in ACTOR_POSITIONS else []
+	if not ACTOR_POSITIONS.has(zone):
+		return []
+	var steps: Array[Callable] = [_ground, _shelters, _work, _people, _routes]
+	return steps
 
 func build(context: ZoneBuildContext) -> void:
-	for step: Callable in construction_steps(context.zone_id):
+	var steps := construction_steps(context.zone_id)
+	if steps.is_empty():
+		push_error("Community construction has no steps: " + context.zone_id)
+		return
+	for step: Callable in steps:
 		if step.call(context) != true:
 			push_error("Community construction failed: "+context.zone_id)
 			return

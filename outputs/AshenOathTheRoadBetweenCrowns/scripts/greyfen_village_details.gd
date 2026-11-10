@@ -407,7 +407,7 @@ func _begin_work(area: Node3D, key: String, kind: String) -> void:
 	game.player.face_target(Vector3(point.x,game.player.global_position.y,point.z))
 	var activity := "check_rope" if kind in ["bucket","mechanism"] else "care"
 	game.player.animation_driver.set_life_activity(activity)
-	game.player.animation_driver.set_life_workstation({"point":point,"left":point+Vector3(-0.08,0,0),"right":point+Vector3(0.08,0,0),"activity":activity,"period":1.2,"lift":0.04})
+	game.player.animation_driver.set_life_workstation({"point":point,"left":point+Vector3(-0.08,0,0),"right":point+Vector3(0.08,0,0),"activity":activity,"surface_prop":key,"period":1.2,"lift":0.04})
 
 func _advance_work() -> void:
 	if _work.is_empty(): return

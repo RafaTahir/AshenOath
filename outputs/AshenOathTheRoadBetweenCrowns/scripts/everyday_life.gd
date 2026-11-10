@@ -364,14 +364,14 @@ func tick_work(delta: float) -> void:
 		return
 	if host.player.equipment_loadout.is_transitioning() or host.player.equipment_loadout.is_drawn(): return
 	var activity:="sort_herbs" if str(work.scene).contains("mira") else "check_rope"
+	var binding:=area.get_node_or_null("WorkBinding") as Node3D
 	host.player.animation_driver.set_life_activity(activity)
-	host.player.animation_driver.set_life_workstation({"activity":activity,"point":area.global_position+Vector3.UP*0.38,"left":area.global_position+Vector3(-0.12,0.38,0),"right":area.global_position+Vector3(0.12,0.38,0),"lift":0.04})
+	host.player.animation_driver.set_life_workstation({"activity":activity,"surface_prop":"work_binding" if binding!=null else "","point":area.global_position+Vector3.UP*0.38,"left":area.global_position+Vector3(-0.12,0.38,0),"right":area.global_position+Vector3(0.12,0.38,0),"lift":0.04})
 	work.elapsed = float(work.elapsed) + delta
 	if float(work.elapsed) < 3.0: return
 	host.story_state.set_flag("everyday_work:" + str(work.scene), true)
 	if host.world_vfx != null: host.world_vfx.pulse_interaction(area.global_position)
 	host.audio.play_event("wood_contact")
-	var binding:=area.get_node_or_null("WorkBinding") as Node3D
 	if binding!=null:binding.rotation.y=0.0
 	cancel_work()
 	persist()
