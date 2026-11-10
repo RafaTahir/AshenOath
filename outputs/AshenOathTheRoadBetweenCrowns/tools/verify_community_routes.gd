@@ -53,6 +53,20 @@ func _run() -> void:
 				var id := "campaign_road_" + PreparedGeometry.geometry_key(road[1], road[0])
 				var mesh := PreparedGeometry.mesh(id)
 				_check(mesh != null and mesh.get_surface_count() > 0, "prepared road exists for %s: %s" % [target, id])
+	for link: Array in Sectors.WALKABLE_LINKS:
+		for side: int in [0, 3]:
+			var source := str(link[side])
+			var target := str(link[3 - side])
+			var edge := Sectors.connection_between(source, target)
+			var reverse := Sectors.connection_between(target, source)
+			var source_frame := Sectors.crossing_frame(edge)
+			var reverse_inverse := Sectors.crossing_frame(reverse).affine_inverse()
+			var seam := Sectors.crossing_transform(edge)
+			for depth: float in [-1.25, -0.1, 0.0, 0.6]:
+				var arrival := Sectors.crossing_arrival_transform(seam, Sectors.direction(str(edge.id)), depth)
+				var local := reverse_inverse * (arrival * (source_frame * Vector3(0.3, 0.0, depth)))
+				var expected := -Sectors.COLD_ARRIVAL_INSET if depth < 0.0 else -depth
+				_check(is_equal_approx(local.z, expected) and is_equal_approx(local.x, -0.3) and arrival.basis == seam.basis, "supported ingress preserves lateral position and facing: %s -> %s at %s" % [source, target, depth])
 	var old_atlas := Sectors.atlas(1)
 	var new_atlas := Sectors.atlas(2)
 	for id: String in Revision.NEW_ZONES:

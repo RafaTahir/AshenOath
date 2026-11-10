@@ -1304,6 +1304,54 @@ combined acceptance checks. Production is unchanged; no Git push has run.
   compiler receipts validate all three existing forest meshes; their resource
   bytes are unchanged. The rebuilt export and real-input route recheck are
   still separate release gates.
+- Build `combined-loading-cast-20261111-1fa6900-r4`, source `1fa6900`, complete
+  **173,562,052 bytes (165.5 MiB)**; release manifest SHA-256
+  `35cdaaed8068fd6a427a1b077ea1dea7d31150b47632fe8d8660da14ac8747cc`.
+  Exact archive comparison confirmed only three decoded additions to
+  `campaign.pck`; each of the new road meshes has that pack as its sole
+  deployed owner. `community.pck` changed only its builder bytecode. The
+  root changed its forest compiler provenance, pack manifest and two scene
+  `node_ids` arrays. The engine, actor packs, opening pack and audio are
+  byte-identical to r3. Pack integrity and resource checks passed before
+  handoff for Hearthward and Lantern Reach normal-input verification.
+- Exact r4 960x540 touch checks both passed with no unexpected runtime errors.
+  Hearthward: deliberate `actor_c08` HTTP 503 restored Undercroft position and
+  control, the retry downloaded and verified the full pack, and re-approach
+  reached controllable Hearthward. Receipt
+  `D:/Temp/AO_1fa6900_r4_QA/browser_touch_hearthward_http503_r1.json`, SHA-256
+  `9f1fc82887f2be8c3b4168f294624af8595692737d2255a62881cff292d9bdc3`.
+  Lantern Reach: Old Mill to Lantern and back, valid ground/control on both
+  sides, revision 2 and the earned arrival objective retained on return.
+  Receipt `D:/Temp/AO_1fa6900_r4_QA/browser_touch_lantern_reciprocal_r1.json`,
+  SHA-256 `97bf5dc1cab27cbe735cdd19b29cdaba4e3f979965425289088b94df914d8421`.
+  Both runs used disposable imported saves, not earned whole-campaign or
+  physical-phone acceptance.
+- The patched native loader executable passed a fresh combined-source
+  New Game to Quit run in 69.945 s, exit 0, no morph/mesh errors and no
+  leak diagnostics. Receipt `D:/Temp/AshenOath/engine-loader-diagnostic-20261110/results/patched-combined-1fa6900-r4-quit/results.json`,
+  SHA-256 `772eee2e65af8b5b406894f26593dd53f9b0a33aecbf2080a005724e80e0ca32`.
+  This is headless native lifecycle evidence on the corrected source. It
+  does not claim Web loader changes or a memory/performance pass. Sampled
+  native private bytes peaked at 735,784,960 in this diagnostic run.
+
+### Cold Crossing Placement Follow-up
+
+- The corrected simulation-clock desktop driver crossed Greyfen's bridge,
+  earned Anwen's objective, and reached controllable Wychwood on exact r4.
+  Its post-arrival attempt to follow the reverse road from the outer bend
+  failed. The genuine Wychwood auto save is intact, revision 2 with only the
+  earned opening objective. It records z=16, not the road's ingress.
+- The physical handoff began at z=-23.779, 1.221 m short of Greyfen's plane.
+  The shared world transform therefore placed Kael beyond Wychwood's
+  destination-owned road at z=26.221, where the support probe had to use
+  an interior recovery point. Early handoff now maps the capsule 0.55 m
+  inside the destination's road and rebases the camera by the same amount.
+  Geometry preview still uses the exact reciprocal seam transform. Warm
+  crossings at or beyond the plane preserve their exact transform.
+- Route verification now covers early and normal ingress in both directions
+  for every registered physical pair. Archive inspection found all three
+  changed travel scripts exclusively in the Web root; no asset-pack rebuild
+  or visual change is required. Exact rebuilt runtime verification is pending.
 
 ## Consolidated User Checklist
 

@@ -3,6 +3,7 @@ class_name WorldSectorManifest
 
 const PATH := "res://world_sector_manifest.json"
 const Revision = preload("res://scripts/campaign_revision.gd")
+const COLD_ARRIVAL_INSET := 0.55
 static var _data: Dictionary = {}
 static var _load_error := ""
 static var _connection_cache: Dictionary = {}
@@ -161,6 +162,13 @@ static func crossing_frame(edge: Dictionary) -> Transform3D:
 static func crossing_transform(edge: Dictionary) -> Transform3D:
 	var reverse := connection_between(str(edge.target),str(edge.source))
 	return crossing_frame(reverse)*Transform3D(Basis(Vector3.UP,PI),Vector3.ZERO)*crossing_frame(edge).affine_inverse()
+
+static func crossing_arrival_transform(seam: Transform3D, outward: Vector3, source_depth: float) -> Transform3D:
+	# Cold travel locks before the seam. The reverse road ends at its seam,
+	# so map the capsule just inside it rather than onto source-owned ground.
+	if source_depth < 0.0:
+		seam.origin += (seam.basis * outward) * (COLD_ARRIVAL_INSET - source_depth)
+	return seam
 
 static func connector_contains(zone_id: String, position: Vector3, margin: float = 0.0, story = null) -> bool:
 	var point := Vector2(position.x,position.z)

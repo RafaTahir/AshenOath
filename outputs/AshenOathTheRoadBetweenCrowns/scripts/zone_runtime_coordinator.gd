@@ -493,7 +493,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		host.player.velocity = Vector3.ZERO
 		host.player.reset_physics_interpolation()
 		if host.camera_rig != null:
-			if not _continuous_arrival.is_empty(): host.camera_rig.rebase_world(_continuous_arrival.transform)
+			if not _continuous_arrival.is_empty(): host.camera_rig.rebase_world(_continuous_arrival.view_transform)
 			else: host.camera_rig.reset_follow()
 		host.player.set_transition_locked(true)
 		host.zone_transition_frames = 0

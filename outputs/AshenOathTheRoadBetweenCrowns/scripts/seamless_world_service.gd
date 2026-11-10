@@ -503,7 +503,8 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 			var normal := WorldSectorManifest.direction(str(connection.id))
 			if actor.velocity.dot(normal) <= 0.05: continue
 			var transform := WorldSectorManifest.crossing_transform(connection)
-			_crossing = {"source":source,"target":str(connection.target),"transform":transform,"position":transform*actor.global_position,"velocity":transform.basis*actor.velocity,"basis":transform.basis*actor.global_basis}
+			var arrival := WorldSectorManifest.crossing_arrival_transform(transform, normal, point.z)
+			_crossing = {"source":source,"target":str(connection.target),"transform":transform,"view_transform":arrival,"position":arrival*actor.global_position,"velocity":arrival.basis*actor.velocity,"basis":arrival.basis*actor.global_basis}
 			pending_transition = {"source":source,"target":str(connection.target),"edge":str(connection.id),"physical":true}
 			if host.request_seamless_boundary_transition(str(connection.target),_crossing.position,str(connection.id)):
 				transition_count += 1; return true
