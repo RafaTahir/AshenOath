@@ -784,6 +784,380 @@ remain in force.
   wait explains later initial-actor requests, but removing the bound would
   trade startup overlap for additional retained memory. No unmeasured increase
   in pre-init retention was applied, and no loading-time improvement is claimed.
+- On 2026-11-10, extended the combined-source production build gate to require
+  `build_living_world_blender.gd` followed by `verify_living_world_split.gd`
+  before final dependency collection and pack hashes. This follows the asset
+  handoff's maintained scenery integration contract: rebuilt static surroundings
+  and all fourteen moving parts must be compiled and checked together. Missing
+  helpers stop packaging; the build does not launch Blender or reauthor assets.
+  PowerShell syntax and diff whitespace checks passed. The combined pipeline
+  remains unexecuted pending the complete handoff; no runtime acceptance follows.
+
+## Official-Engine Loader Investigation: 2026-11-10
+
+Rafa approved a bounded investigation through Liz: retain official Godot, test
+project-side ownership first, and use an isolated engine-patch comparison only
+if needed. This supersedes the pending investigation decision above, not the
+production engine pin. Custom-engine adoption remains unauthorized and would
+require an explicit **Decision needed from Rafa** with options and recommendation.
+
+- Extended only `tools/verify_resource_token_teardown.gd` with a dedicated
+  `Thread` batch, explicit join, elapsed/poll reporting, prepared-actor selection
+  and an opt-in immediate-join negative case. The game registry is unchanged.
+  A worker-pool wrapper was rejected during source review because Godot 4.6.3
+  redirects synchronous loads from pool workers into another engine task.
+- In the first exclusive slot, all five fixture processes exited normally.
+  The same 27 textures loaded successfully in both dedicated-thread runs,
+  both engine-threaded controls and the synchronous control. Dedicated-thread
+  and synchronous exits were clean. One engine-threaded control leaked two
+  plain RefCounted instances; the other exited cleanly. The leak is intermittent.
+  Evidence: `D:/Temp/AshenOath/combined-release-20261110/owned-thread-diagnostic/`.
+- Dedicated-thread texture loading took 2,961.905 and 1,486.808 ms; engine
+  threaded controls took 1,813.166 and 1,413.169 ms; synchronous control took
+  1,615.743 ms. Dedicated-thread maximum observed main-loop polling intervals
+  were 7.929 and 7.143 ms. These ordered, headless component runs do not establish
+  cold-start, frame-rate, process-memory or game-loading improvement.
+- The second exclusive slot used the existing prepared Anwen scene. Polled
+  dedicated-thread and stock-threaded loads passed and exited cleanly (1,289.125
+  and 163.368 ms load components, respectively; not a cache-controlled timing
+  comparison). Immediate main-thread join hung at its join marker and the
+  owned 15-second watchdog stopped that process: exit 124, no functional PASS.
+  A killed process is not a clean-shutdown result. All owned processes ended
+  before returning the slot. Evidence:
+  `D:/Temp/AshenOath/combined-release-20261110/owned-thread-actor-join/`.
+- Therefore a direct dedicated-thread replacement is rejected: existing
+  blocking `take`, cache-clear and teardown contracts can deadlock while the
+  worker awaits main-thread resource-change binding. A broader asynchronous
+  loader migration is not silently substituted for this bounded repair.
+- Source references: pinned [ResourceLoader](https://github.com/godotengine/godot/blob/4.6.3-stable/core/io/resource_loader.cpp),
+  [thread safety](https://docs.godotengine.org/en/4.6/tutorials/performance/thread_safe_apis.html),
+  and the still-unmerged [upstream LoadToken proposal](https://github.com/godotengine/godot/pull/121025).
+  That proposal targets newer loader code and is not an approved drop-in fix
+  for this engine version. Any isolated backport must preserve task joining,
+  nested-load lifetime and shutdown, not merely hide leaked-object warnings.
+- No C++ compiler or SCons was found in the current tool/runtime discovery.
+  Downloaded the official portable LLVM-MinGW archive to the D: diagnostic
+  directory, with its release-published SHA-256 verified:
+  `552191b5754c49a5a20723276a6fc56541ea1922c4c50b7b669022333fc1b40f`.
+  The SCons 4.11.1 wheel also matches its PyPI-published SHA-256:
+  `454cef364348053422696e3d2ecb4fa593c96a624f955842eaaea64f95c8d11d`.
+  No system compiler installation, engine build, game configuration change or
+  custom-engine adoption has occurred. Extraction/build waits for a coordinated
+  heavy-work window; production and the final combined release remain untouched.
+- Binary provenance checked independently: the retained official Windows ZIP
+  matches the GitHub release digest
+  `e39986a178d585ce7ac198fb8de6ea436366dc0cc00e594810c2e3e104c04b90`;
+  its console and engine executable entries match both installed executables.
+  The engine reports `4.6.3.stable.official.7d41c59c4`, but the currently exposed
+  source tag resolves to `35e80b3a8822a9df9be390814b62f44c0a9c69e8` and the
+  public commit lookup for `7d41c59c4` returned no commit. The separately published
+  release source archive must be reconciled before claiming an exact-source
+  patched-engine comparison; the tag alone is not that proof. No binary was
+  replaced. Its first source-archive download stalled and was terminated by its
+  verified owned PID, preserving the partial file; a bounded download is pending.
+
+### Resumed Isolated Comparison: 2026-11-10
+
+- Rafa directly approved **"Authorize the narrow engine fix"** in this thread.
+  The loader-only custom build is authorized; this does not waive comparison,
+  shutdown/resource correctness or combined-game testing. It does not establish
+  a loading-speed improvement or authorize unrelated engine/renderer changes.
+- Rafa approved a resumable source transfer and completion of the isolated
+  comparison, then clarified that necessary validated changes may proceed.
+  The earlier blanket custom-build approval hold is superseded by that direction;
+  untested patches and warning suppression still cannot establish a repair.
+  No engine adoption, game configuration change or publication has occurred.
+- The 120-second transfer failed with 23,443,921 bytes retained. Resuming those
+  bytes with a 600-second allowance completed the official release source:
+  44,471,880 bytes, SHA-256
+  `2261028c0dfc10e0cf4800a5b2e5a57ea241f72965162327f5764d536a69a46a`.
+  This matches the release-published digest. Compiler and SCons archives remain
+  intact. The source archive identifies 4.6.3 but does not contain the generated
+  version hash, so the previously reported binary/tag discrepancy is not claimed
+  resolved. Use an unmodified local build as a same-toolchain control as well as
+  the official executable when comparing the narrow patch.
+- Added `--blocking-get` to the existing isolated fixture. This exercises the
+  engine's own blocking request/get contract, not the rejected dedicated-thread
+  immediate join. Added bounded repeated rounds and per-round object/static-memory
+  observations; no sleeps are inserted between rounds. Execution and comparative
+  results remain pending.
+- The official release archive's `core/io/resource_loader.cpp` exactly matches
+  the separately downloaded public source tag file (SHA-256
+  `08e5a8a5b77d4e9e430a0da90bcbab4677f8b540b07cb2b3e8b7abcf5bb6a6bf`).
+  This identifies the comparison source, not the unresolved executable version
+  banner. Keep the official binary as a separate control.
+- Official source extraction completed. Portable compiler extraction exceeded
+  the shared window; only its verified owned process tree was stopped and the
+  slot returned. Partial files remain recoverable. The D: diagnostic helper now
+  resumes required x86_64 entries using ZIP size/CRC, atomically replacing only
+  incomplete diagnostic files and leaving other owners untouched.
+- A one-file candidate is staged separately from the unmodified build source:
+  release the worker's final token reference after its last task/TLS access,
+  hold a completion reference while borrowed task data is used, and reap a task
+  through the main queue if its final token was released on that same worker.
+  It introduces no sleep, warning suppression or production engine change.
+  Compilation and execution are pending; it is not a proven universal loader
+  repair. Early shutdown with unclaimed work remains a distinct compatibility
+  case, not implied by the all-claims-consumed diagnostic.
+- Static review tightened the draft's final worker release and task removal
+  under the existing loader mutex, so a new request cannot observe the zero-ref
+  token between those operations and wait on its still-cleaning worker. The
+  previous draft is retained separately; neither draft has been compiled or
+  adopted. The unmodified control source remains byte-identical.
+- Comparison tooling preserves separate evidence directories, fixture/binary
+  hashes, functional results, exit diagnostics and 20-ms sampled private bytes.
+  These samples are component observations, not certification of OS peak memory,
+  gameplay performance, first-control time or the approximately 32-second goal.
+- Portable compiler extraction now preserves 5,200 of 5,666 selected entries.
+  The configuration-only window ended on a checkpoint replacement sharing error:
+  an owned `Get-Content -Tail` reader held the single-line receipt open. That
+  reader was terminated; the extractor exited without starting a build. The
+  pending receipt is intact. The scratch extractor now recovers both receipts,
+  emits progress directly and preserves a pending checkpoint if replacement is
+  temporarily busy. No production files or user processes were removed.
+- Configuration/build/comparison PowerShell scripts pass syntax parsing. SCons
+  configuration, both source builds and the new comparative runs are still
+  pending; setup progress is not a shutdown repair or a loading improvement.
+- The next exclusive setup window completed all 5,666 compiler entries (466
+  remaining files extracted in 24.328 seconds) and installed verified SCons
+  locally. SCons successfully read the configuration and began enumerating the
+  Windows x86_64 debug-template target graph. Its dry run exceeded the 60-second
+  budget and the owned watchdog stopped it; no C++ compiler or game was run.
+  Preserve that timeout as incomplete enumeration, not a compilation pass.
+  The next reserved window is for the unmodified-source baseline build, rather
+  than another dry-run enumeration. The official engine remains untouched.
+- `baseline-01` ran the unmodified source with two compiler workers for
+  751.988 seconds, then deliberately checkpointed its two owned compiler leaves
+  before the hard deadline so SCons could save its index normally. It exited 2;
+  this is an incomplete build, not a successful compilation. The source archive
+  also emitted a nonfatal Git-metadata lookup diagnostic. Both messages remain
+  in the raw logs. No other process was stopped.
+- The checkpoint retained 613 object files (29,640,225 bytes) and a 2,723,292-byte
+  `.sconsign5.dblite`; the pinned SCons parser found 613 object entries with 613
+  action signatures. Reuse is to be confirmed by the next same-configuration
+  build, not inferred as a completed executable. All owned processes exited
+  before returning the exclusive machine slot. Future runs request SCons'
+  graceful interrupt before the hard watchdog, preserving incremental metadata.
+- `baseline-02` confirmed reuse of all 613 earlier objects and retained 1,078
+  completed objects (45,765,954 bytes), with a 5,843,904-byte saved SCons index.
+  It remains an incomplete control build. At 859.557 seconds its two verified
+  owned compiler leaves were stopped so SCons could save normally; the hard
+  watchdog did not fire and all owned children exited before returning the slot.
+  The failed OpenXR compilation entries are deliberate checkpoint interruptions,
+  not diagnosed source compilation defects.
+- The scheduled Python interrupt was emitted but Windows deferred its SCons
+  handler until active workers ended. The scratch wrapper now calls the pinned
+  SCons cooperative stop handler directly from its timer and starts that timer
+  before importing SCons. The next control resume must establish that behavior;
+  no game shutdown result is inferred from this build-tool change.
+- The resource comparison runner now exits unsuccessfully if any case times out,
+  fails its functional checks or reports a shutdown error/leak. PowerShell syntax
+  parsing passes; the new matrix remains unexecuted. Draft loader v2 SHA-256 is
+  `f068c6d4108f7693c72db87ba5da2c537358d142c5b2c33e1cc0d30346d21a72`;
+  the control loader source still matches the verified release source.
+- `baseline-03` retained 1,616 objects (76,751,981 bytes) and an 8,256,847-byte
+  signature index. All prior 1,078 objects were reused. The corrected cooperative
+  checkpoint stopped SCons normally at 726.150 seconds, without killing compiler
+  jobs or reaching the hard watchdog; exit 2 records an intentional incomplete
+  build, not a compiler-source failure. Only the retained source-archive Git
+  metadata warning and deliberate interruption appeared on stderr. All owned
+  processes exited before returning the shared worker. The loader source is still
+  unmodified, no executable is complete, and no shutdown comparison has run.
+  Python tooling bytecode is cached privately on D: for subsequent build windows;
+  the compiler configuration and game files are unchanged.
+
+Further unmodified-control checkpoints (not completed engine builds):
+
+| Resume | Elapsed | Retained objects | Object bytes | Outcome |
+|---|---:|---:|---:|---|
+| `baseline-04` | 759.987 s | 1,798 | 118,891,817 | All prior 1,616 reused; cooperative stop, exit 2, no forced termination or watchdog; index 9,297,879 bytes. |
+| `baseline-05` | 735.291 s | 1,985 | 168,404,885 | All prior 1,798 reused; scene library linked; cooperative stop, exit 2, no forced termination or watchdog; index 10,385,380 bytes. |
+| `baseline-06` | 787.328 s | 2,238 | 210,785,422 | All prior 1,985 reused; unmodified loader compiled; cooperative stop, exit 2, no forced termination or watchdog; index 11,614,363 bytes. |
+
+Each resumed build retains its raw logs and receipt in the existing D: engine
+diagnostic directory. The loader source remains unchanged; all owned children
+exited before returning the worker. No shutdown or loading-speed pass follows
+from these compilation checkpoints.
+
+`baseline-07` completed the unchanged control build in 203.176 seconds, exit 0,
+without reaching either deadline. All owned compiler children exited. The
+preserved control executable is 81,204,224 bytes, SHA-256
+`b5475f5af3fdad75855fb5d7c30a4e6b7e545f210052e4a330e5f7444879a8c5`,
+under the diagnostic directory's `control/`. Its loader source still has the
+verified release-source hash above. This establishes compilation only; the
+patched build and official/control/patched lifecycle comparisons remain pending.
+
+The first control launch (`control-resources-01`) failed before executing any
+fixture: export templates disable `--path` and `--script` by default. Preserve
+this runner failure; it is not a loader result. The existing comparison wrapper
+now launches the same inherited fixture as an isolated project's configured main
+loop, with a placeholder scene, private user-data directory and read-through
+source/import links. The engine configuration and fixture logic are unchanged.
+`control-resources-02` prepared that project but mishandled a GUI executable's
+exit status; its outputs remain. Explicit owned-process setup corrected that
+runner failure and retains its stdout/stderr and timeout cleanup.
+
+`control-resources-03` then completed all five resource cases, ten rounds each,
+with functional success and no observed exit leaks. The unchanged control's
+asynchronous texture case retained 1,382 objects at each observation. This is a
+bounded observation, not proof of universal leak freedom. The build target is
+`template_debug`: SConstruct enables `DEBUG_ENABLED`, ObjectDB cleanup contains
+zero-reference/verbose reporting, and the exact leak-warning string is present
+in the preserved executable. Diagnostics were not disabled or filtered.
+
+`official-resources-01` used the same isolated bootstrap and exact fixture. Its
+ten asynchronous texture rounds succeeded functionally but reported **22
+zero-reference RefCounted leaks** on exit. Ten blocking Anwen rounds exited
+cleanly. The overall shared-worker deadline interrupted the blocking-texture
+case; two remaining cases never started. That matrix is **incomplete/failed**,
+not a passing comparison. Resume only its unfinished cases; preserve the
+completed observations and the native binary/source-banner distinction above.
+
+The one-file loader draft v2 is now applied only to the diagnostic source tree,
+SHA-256 `f068c6d4108f7693c72db87ba5da2c537358d142c5b2c33e1cc0d30346d21a72`.
+The unmodified executable is preserved. Incremental patch compilation, repeated
+patched resource checks and actual preparation/playable Quit checks remain
+pending. All owned children exited before the 21:41:30 UTC slot handoff; no
+patched engine, game release or Web artifact has been adopted or published.
+
+The verified source also distinguishes the current non-threaded Web target:
+`main/main.cpp:2098` initializes a zero-worker pool without `THREADS_ENABLED`,
+and `core/object/worker_thread_pool.cpp:222` executes ordinary tasks on the
+calling thread when that pool is empty. This source path does not expose the
+same worker-versus-caller final-reference race. It is not a new Web shutdown
+observation or proof that every loader cleanup path is correct. Do not claim
+the native loader patch improves browser startup or replace the current Web
+engine merely to carry the race repair reproduced here. A future threaded Web
+target would require its own lifecycle checks.
+
+### Patched Loader Resource Comparison: 2026-11-10
+
+`patched-01` compiled only the changed loader and relinked its library/executable
+with unchanged control flags: exit 0, 105.142 seconds. Preserved candidate:
+`D:/Temp/AshenOath/engine-loader-diagnostic-20261110/patched/godot.windows.template_debug.x86_64.llvm.exe`,
+81,205,760 bytes, SHA-256
+`c5088a1c7074cbdc069fadbed45335f0b57c3426ebefad8634847977471e4a4d`.
+The original control remains separate and unchanged.
+
+The remaining official cases completed in `official-resources-02`: blocking
+textures loaded successfully but leaked 58 zero-reference RefCounted instances;
+asynchronous Anwen and synchronous textures passed with clean exits. Together
+with the earlier completed cases, both official texture-threading paths reproduce
+the leak. The deadline-interrupted earlier case remains recorded, not overwritten.
+
+`patched-resources-01` completed three repetitions of all five cases, ten rounds
+per case: **150 functional rounds and 15 clean process exits**, no timeouts or
+reported errors/leaks. Fixture SHA-256:
+`bb04475fabb0b71399411369511a6d88abef125254869e3ea8f0e55e62b7c587`.
+Receipts retain source/executed executable hashes, bootstrap identity, input
+catalog hashes and unfiltered output. The unchanged same-compiler control also
+exited cleanly in its bounded resource matrix, so this is not a statistical
+proof that the patch alone explains every difference from the separately built
+official engine. Actual game Quit cases are in progress. No Web speed, final
+combined-candidate, performance-limit or publication claim follows from these
+native resource checks.
+
+### Game Quit Checkpoint: 2026-11-11
+
+- `patched-game-01`: both cases invalidated by missing shader preloads in the
+  isolated comparison project, despite exit 0 and functional markers. This was
+  a runner defect; it is not a passing game check or evidence of a loader leak.
+- The runner now links the canonical `shaders` directory in its isolated
+  project. The game, engine binary, and fixture were unchanged.
+- `patched-game-02`: preparation-time Quit passed cleanly (174.433 s elapsed).
+  The playable case hit the watchdog at 243.149 s and was terminated. Its
+  retained log shows a 30-second environment texture timeout, a retry, and
+  ongoing cemetery geometry loads, not a hang in the Quit code. It never
+  established playable shutdown. The host was also slow for unrelated shell
+  reads, so these are not comparable startup timings.
+- No matching new official/control game runs started. The serial slot was
+  returned with every owned engine child exited. Preserve the successful
+  preparation-time result; the next game comparison should target playable
+  startup and Quit without repeating the successful resource matrix.
+- `patched-game-03` stopped before gameplay: the isolated-project bootstrap
+  hit its 20-second setup watchdog. `patched-game-04` reused the hash-checked
+  `patched-game-02` project and copied engine, with the same fixture and a new
+  private profile. The playable Quit case **passed**, exit 0 with no error or
+  leak diagnostics, 122.263 s elapsed. The preparation case and 150 successful
+  resource rounds were not repeated. The native cases now have clean observed
+  exits on the preserved candidate. Earlier failures remain evidence.
+- This is bounded validation of a diagnostic Windows template. It does not
+  certify the reference memory budget, every engine shutdown path, or the
+  combined art candidate. The separately built official executable still
+  differs in provenance from the same-compiler control. No native executable
+  has replaced the non-threaded Web engine or been published.
+- The exact one-file candidate is retained in
+  [godot-4.6.3-load-token.patch](engine-patches/godot-4.6.3-load-token.patch).
+  The baseline was extracted from the retained public tag archive and checked
+  against its original loader SHA-256. The patch reverse-check passed against
+  the compiled source. This carries no engine binary into the Web package.
+
+### Combined Companion Build Ownership: 2026-11-10
+
+Static review confirmed the maintained release builder did not transitively
+compile the staged Bracken derivative. Under the existing living-campaign
+condition, it now requires `build_prepared_companion.gd` and
+`verify_prepared_companion.gd`, compiles after prepared actors and performs the
+resource/pose comparison with `--visual-only` before dependency layout and pack
+hashes. This retains the raw M13 root, 0.62 runtime scale, PI yaw and companion
+contract rather than applying enemy-role normalization. Missing handoff helpers
+block packaging. Source-change attack calibration remains an independent gate;
+the builder does not recalibrate it automatically. PowerShell parsing passed.
+The complete asset handoff and combined production execution remain pending.
+
+### Fresh-Start Pack Ownership and Handoff: 2026-11-11
+
+- The in-memory actor partition using the current catalog and presets removes
+  only `actor_m05` from fresh startup. The original Greyfen and cemetery zone
+  requirements, the boss pack preset, and every other startup pack are retained.
+  Road of Crows requires the Wychwood clearing and village report before it
+  unlocks Bell Beneath Greyfen. Fresh New Game uses the covered Greyfen world;
+  returning to Greyfen and Continue still use the full destination pack gate.
+  The retained r2 M05 transport is 1,178,217 bytes; no combined timing gain or
+  return-path runtime pass is claimed.
+- The r2 opening PCK has no byte-identical nonempty payload duplicates. Its
+  largest resources are imported textures. A bounded scratch probe for stronger
+  lossless WebP encoding timed out before reporting a verified sample. No
+  repacking change or savings estimate was adopted.
+- The Game Assets layout compiler branch adds
+  `partition_living_campaign_packs` but does not have the canonical prepared
+  forest switch. At the ordered handoff keep both imports, the canonical
+  `compile_layout(defer_environment=False, require_prepared_forest=False)` and
+  CLI argument, and call the community partition after actor partitioning and
+  before reapplying forest ownership and environment-root retirement. Preserve
+  the canonical release builder's cast, scenery, companion and closure gates.
+  The first layout runs before the companion compiler, so allow its derivative
+  to be unbuilt in the provisional pass only; the final layout requires the
+  exact prepared file and retains its declared owner. Use the Game Assets
+  archive ownership verifier at commit `76bacd0` after generating the final
+  Web manifest, before copying or publishing. No overlapping checker or partial
+  branch/generated presets were merged at this checkpoint.
+
+### Retained First-View Evidence Review: 2026-11-10
+
+- Read the existing `startup-half/browser-final-profiled_evidence/desktop-smoke-webgl-0.json`,
+  not a new run: 36,160.3 ms accumulated in program-status queries and 3,462.4 ms
+  in shader-status queries; texture upload calls accumulated 749.1 ms. These are
+  historical diagnostic observations, not current combined-candidate timings.
+- The verified 4.6.3 source's `_compile_specialization` immediately queries each
+  stage's compile status and then program link status. This supports focusing
+  the remaining first-view work on shader compilation/publication, rather than
+  assuming all of it is resource download or texture upload.
+- Khronos documents nonblocking completion polling and batched compile/link
+  submission, but explicitly does not promise shorter total wall time:
+  https://registry.khronos.org/webgl/extensions/KHR_parallel_shader_compile/.
+  No renderer patch, new experiment or speedup claim was made in this review.
+  Preserve prior rejected shader/UBO experiments instead of repeating them.
+- The current `tools/verify_hardening_browser.mjs` still matches the retained
+  `combined-release-20261107/baseline-normal-profile-r7.json` harness SHA-256
+  `23d16ebd487eaa25bfe4723f7af1ee1ee16a3039c8bcde5d6a430edb56cb129d`.
+  Its reference uses the startup scenario, desktop 1280x720, a fresh temporary
+  normal profile, foreground emulation and no loading/precontrol captures.
+  Retain `--profile-context --no-precontrol-captures`, exact exported bytes and
+  source-aligned shader behavior for the final combined observation; do not
+  substitute the generic Web smoke or inject a different shader candidate.
+  This was a read-only evidence/settings check, not a new browser run or proof
+  that host conditions and elapsed timings will be identical.
 
 ## Consolidated User Checklist
 

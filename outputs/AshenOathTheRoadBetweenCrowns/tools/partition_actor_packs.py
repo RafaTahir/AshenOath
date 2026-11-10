@@ -194,7 +194,15 @@ def partition_actor_packs(project, config, sections, manifest, catalog, standalo
     manifest["zone_dependencies"] = zones
     manifest["actor_packs"] = roles
     manifest["actor_resource_owners"] = owners
-    manifest["startup_dependencies"] = zones["greyfen"]
+    # The covered fresh start is not a saved or returning Greyfen destination.
+    # Keep those complete requirements unchanged for the existing travel gate.
+    fresh_exclusions = requirements.get("fresh_start_exclusions", {})
+    excluded_packs = {"actor_" + asset.lower() for asset in fresh_exclusions}
+    if not excluded_packs.issubset(zones["greyfen"]) or any(
+        not isinstance(reason, str) or not reason.strip() for reason in fresh_exclusions.values()
+    ):
+        raise ValueError("Fresh-start actor exclusions must name Greyfen actors and document the later gate")
+    manifest["startup_dependencies"] = [pack for pack in zones["greyfen"] if pack not in excluded_packs]
 
     # Godot stops reading presets at the first missing numeric index.
     # Removing the retired transport must not hide later actor presets.

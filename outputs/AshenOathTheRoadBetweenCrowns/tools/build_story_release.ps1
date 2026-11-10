@@ -17,8 +17,9 @@ param(
 )
 
 # Production packaging by default. The explicit -Publish option also commits
-# explicitly selected source/artifacts, pushes development/main and deploys to Vercel.
-# Neither mode invokes gameplay tests or browsers. Publication checks HTTP artifact identity.
+# explicitly selected source/artifacts and pushes development/main for Vercel's
+# automatic deployment. Neither mode invokes gameplay tests or browsers, and
+# publication does not wait for the remote build or manually deploy it.
 $ErrorActionPreference = "Stop"
 $ProjectRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $RepositoryRoot = [System.IO.Path]::GetFullPath((Split-Path -Parent (Split-Path -Parent $ProjectRoot)))
@@ -158,16 +159,41 @@ if ($CharacterAssetsOnly) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_zone_geometry.gd"), "--", "--forest-trees-only") "prepared-forest-geometry"
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
-if (Test-Path -LiteralPath (Join-Path $ProjectRoot "scripts/campaign_revision.gd") -PathType Leaf) {
+$HasLivingCampaign = Test-Path -LiteralPath (Join-Path $ProjectRoot "scripts/campaign_revision.gd") -PathType Leaf
+if ($HasLivingCampaign) {
     # Stages 2-4 deliver separately compiled libraries. Their presence alone
     # does not establish that they match the current authored Blender sources.
     $CastDeliveryVerifier = Join-Path $PSScriptRoot "verify_living_cast_delivery.py"
     if (-not (Test-Path -LiteralPath $CastDeliveryVerifier -PathType Leaf)) {
         throw "Combined living-cast source requires its delivery verifier; integrate the complete asset handoff before packaging."
     }
-    Invoke-BuildProcess $PythonPath @($CastDeliveryVerifier, "--repository", $RepositoryRoot, "--output", (Join-Path $LogRoot "living-cast-delivery.json")) "living-cast-delivery"
+    Invoke-BuildProcess $PythonPath @($CastDeliveryVerifier, "--repository", $RepositoryRoot, "--verify-stage2-props", "--output", (Join-Path $LogRoot "living-cast-delivery.json")) "living-cast-delivery"
+    $CommunityPackVerifier = Join-Path $PSScriptRoot "community_acceptance_packs.py"
+    if (-not (Test-Path -LiteralPath $CommunityPackVerifier -PathType Leaf)) {
+        throw "Combined living-cast source requires the final Web archive verifier; integrate the complete asset handoff before packaging."
+    }
+    # Moving scenery and its rebuilt static surroundings are one delivery.
+    # Validate their union before collecting dependencies or hashing packs.
+    foreach ($SceneryStep in @('build_living_world_blender.gd', 'verify_living_world_split.gd')) {
+        $SceneryScript = Join-Path $PSScriptRoot $SceneryStep
+        if (-not (Test-Path -LiteralPath $SceneryScript -PathType Leaf)) {
+            throw "Combined living-cast source requires $SceneryStep; integrate the complete scenery handoff before packaging."
+        }
+    }
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_world_blender.gd")) "living-world-compile"
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "verify_living_world_split.gd")) "living-world-union"
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
+if ($HasLivingCampaign) {
+    # The companion preserves its raw-root contract, not enemy-role normalization.
+    foreach ($CompanionStep in @('build_prepared_companion.gd', 'verify_prepared_companion.gd')) {
+        if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot $CompanionStep) -PathType Leaf)) {
+            throw "Combined living-cast source requires $CompanionStep; integrate the complete companion handoff before packaging."
+        }
+    }
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_companion.gd")) "prepared-companion"
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "verify_prepared_companion.gd"), "--", "--visual-only") "prepared-companion-integrity"
+}
 # Apply the freshly verified tree derivatives before collecting environment
 # dependencies. Otherwise the previous raw OBJ selections resurrect their MTL
 # textures for another build, despite no runtime tree using those materials.
@@ -246,6 +272,9 @@ Copy-Item -LiteralPath $runtimeManifest -Destination (Join-Path $ExportRoot "run
 # Existing hosting serves index.wasm with Content-Encoding: gzip. The builder
 # preserves that format, injects the shell build/cache identity and writes hashes.
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "build_web_runtime_manifest.py"), $ExportRoot, "--runtime-pack-manifest", $runtimeManifest, "--pack-dir", $PackRoot, "--source-commit", $SourceCommit, "--compress-wasm") "web-manifest"
+if ($HasLivingCampaign) {
+    Invoke-BuildProcess $PythonPath @($CommunityPackVerifier, "--export", $ExportRoot) "community-web-residency"
+}
 
 $releaseManifest = Get-Content -LiteralPath (Join-Path $ExportRoot "release_manifest.json") -Raw | ConvertFrom-Json
 if ($ArtGate -and $ArtGate.full_release_max_bytes) {
@@ -318,7 +347,7 @@ if ($Publish) {
 } else {
     Write-Host "Packaging completed; publication was not requested."
 }
-Write-Host "No gameplay, browser QA or benchmark was run. Publication, when requested, checks HTTP artifact identity."
+Write-Host "No gameplay, browser QA or benchmark was run. Publication, when requested, pushes Git; the remote Vercel build is not awaited or verified."
 } finally {
     [AshenOathBuildPower]::SetThreadExecutionState([uint32]2147483648) | Out-Null
 }

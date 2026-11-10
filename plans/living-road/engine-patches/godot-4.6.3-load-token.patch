@@ -1,0 +1,52 @@
+diff --git a/core/io/resource_loader.cpp b/core/io/resource_loader.cpp
+index 952a7e9..a84729d 100644
+--- a/core/io/resource_loader.cpp
++++ b/core/io/resource_loader.cpp
+@@ -277,8 +277,13 @@ void ResourceLoader::LoadToken::clear() {
+ 	// If task is unused, await it here, locally, now the token data is consistent.
+ 	if (task_to_await) {
+ 		PREPARE_FOR_WTP_WAIT
+-		WorkerThreadPool::get_singleton()->wait_for_task_completion(task_to_await);
++		Error wait_error = WorkerThreadPool::get_singleton()->wait_for_task_completion(task_to_await);
+ 		RESTORE_AFTER_WTP_WAIT
++		if (wait_error == ERR_BUSY) {
++			// The final token may be released by its own worker. Reap the pool
++			// task from the main queue instead of retaining an unclaimed task.
++			MessageQueue::get_main_singleton()->push_callable(callable_mp(WorkerThreadPool::get_singleton(), &WorkerThreadPool::wait_for_task_completion).bind(task_to_await));
++		}
+ 	}
+ }
+ 
+@@ -484,8 +489,7 @@ void ResourceLoader::_run_load_task(void *p_userdata) {
+ 		}
+ 	}
+ 
+-	// It's safe now to let the task go in case no one else was grabbing the token.
+-	load_task.load_token->unreference();
++	LoadToken *token = load_task.load_token;
+ 
+ 	if (unlock_pending) {
+ 		thread_load_mutex.unlock();
+@@ -500,6 +504,13 @@ void ResourceLoader::_run_load_task(void *p_userdata) {
+ 	}
+ 
+ 	curr_load_task = curr_load_task_backup;
++	// Release only after the last task/TLS access, including the zero-reference
++	// case when the user already collected a result published by this worker.
++	// Keep the final release and task removal atomic with new load requests.
++	MutexLock thread_load_lock(thread_load_mutex);
++	if (token->unreference()) {
++		memdelete(token);
++	}
+ }
+ 
+ String ResourceLoader::_validate_local_path(const String &p_path) {
+@@ -816,6 +827,8 @@ void ResourceLoader::set_is_import_thread(bool p_import_thread) {
+ }
+ 
+ Ref<Resource> ResourceLoader::_load_complete_inner(LoadToken &p_load_token, Error *r_error, MutexLock<SafeBinaryMutex<BINARY_MUTEX_TAG>> &p_thread_load_lock) {
++	// Nested task retries and signal migration retain borrowed task pointers.
++	Ref<LoadToken> completion_guard(&p_load_token);
+ 	if (r_error) {
+ 		*r_error = OK;
+ 	}
