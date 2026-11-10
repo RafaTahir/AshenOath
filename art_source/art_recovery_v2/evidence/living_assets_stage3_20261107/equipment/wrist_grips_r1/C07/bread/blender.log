@@ -1,0 +1,14 @@
+04:32:01 | INFO: Data are loaded, start creating Blender stuff
+04:32:01 | INFO: Blender create Mesh node C07_Captain_Senn_Kael_Combined_002
+04:32:03 | INFO: glTF import finished in 1.66s
+ACTIVITY_BLENDER_IMPORT_FIDELITY PASS C07 native_original_probes 7995
+04:33:14 | INFO: Data are loaded, start creating Blender stuff
+04:33:14 | INFO: Blender create Mesh node 0
+04:33:14 | INFO: Blender create Mesh node FlatbreadScoredCrust
+04:33:14 | INFO: glTF import finished in 0.01s
+Info: No new files have been packed
+Info: Saved as "C07_bread_fit_proposal.blend"
+C07 HAND FIT PROBE: SOURCE COMPLETE
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

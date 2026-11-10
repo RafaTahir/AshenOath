@@ -1,0 +1,123 @@
+{
+  "actor": "C08",
+  "style": "bread",
+  "scope": "Measured source fit, no runtime output or visual acceptance",
+  "verified_frames": 839,
+  "maximum_contact_error_m": 0.0003002986195497215,
+  "owning_wrist_forward_outward_m": [
+    0.035,
+    0.025
+  ],
+  "files": {
+    "fit_receipt.json": {
+      "bytes": 9204,
+      "sha256": "6341a0ab8d6a20331761607f56dcd1d541b4ffdb2415c43a4a8dfcc65a9e23b8",
+      "original": ".verification/motion/compatible_c08_bread_measured_wrist_fit_r3/fit/receipt.json"
+    },
+    "C08_bread_fit_proposal.blend": {
+      "bytes": 8829907,
+      "sha256": "0c6c7d83021cd0fb16494ed3c7b409decd96323d411ff00229e3371eefdaa842",
+      "original": ".verification/motion/compatible_c08_bread_measured_wrist_fit_r3/fit/C08_bread_fit_proposal.blend"
+    },
+    "inspection.json": {
+      "bytes": 652977,
+      "sha256": "fa5cedb3085867c31a5ca01b75ed5244a0f5660acc2cb7cf203e10795dc773e2",
+      "original": ".verification/motion/compatible_c08_bread_measured_wrist_fit_r3/inspection.json"
+    },
+    "receipt.json": {
+      "bytes": 28309,
+      "sha256": "c2fc9224a66d3e70628a7f29508b12bb1fbe6bd21405a1aac8d55ca34c89f6ab",
+      "original": ".verification/motion/compatible_c08_bread_measured_wrist_fit_r3/receipt.json"
+    },
+    "blender.log": {
+      "bytes": 686,
+      "sha256": "943765b3b810d05c920f91a4fcb03d46dcc16582a5cd1a57587a2f61a496574e",
+      "original": ".verification/motion/compatible_c08_bread_measured_wrist_fit_r3/blender.log"
+    },
+    "compatible_activity_fit.py": {
+      "bytes": 24733,
+      "sha256": "737a2c744207f13931a5f54c434ea4c566ff21afc5d9e39c0cc106720d39c83d",
+      "original": ".verification/motion/compatible_c08_bread_measured_wrist_fit_r3/compatible_activity_fit.py"
+    },
+    "compatible_activity_inspector.py": {
+      "bytes": 28629,
+      "sha256": "a645e411d5769ad86603b2cb372590d433f97496cb23892169f3fff1ac4c6479",
+      "original": ".verification/motion/compatible_c08_bread_measured_wrist_fit_r3/compatible_activity_inspector.py"
+    },
+    "pose_receipt.json": {
+      "bytes": 2933782,
+      "sha256": "0b7587f31ed2805984e0441a1f1800b255239d28b8cc5ed77599d9271610479b",
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/975feed30907c44b0154c80895e348b195bfc16ebb21d58deb36fb2411023c67/receipt.json"
+    },
+    "native_trial_receipt.json": {
+      "bytes": 20799,
+      "sha256": "3e089c988fe6ccd7ee13192668ada82816aca28b6a4c1c0b82433ae7e0b5d540",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/receipt.json"
+    },
+    "native_parse.log": {
+      "bytes": 75,
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/parse.log"
+    },
+    "native_bake.log": {
+      "bytes": 324,
+      "sha256": "b84f8af1c884bb36217c6a7b2057a2940239cd263076d25da9d597da49a8f60e",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/native.log"
+    },
+    "carrier/C08_activity_poses.glb": {
+      "bytes": 10059300,
+      "sha256": "c8d99e59c6469624bfce8b92ef1e7454ea2157041d6b33dbc31545c64735f0bb",
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/975feed30907c44b0154c80895e348b195bfc16ebb21d58deb36fb2411023c67/C08_activity_poses.glb"
+    },
+    "carrier/retained_skin_manifest.json": {
+      "bytes": 6649467,
+      "sha256": "ee4b4a7d10a7e15e695e667ce6a36da0acc70f99708f953747af0ca13ba37c57",
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/975feed30907c44b0154c80895e348b195bfc16ebb21d58deb36fb2411023c67/retained_skin_manifest.json"
+    },
+    "carrier/retained_rigid_channels.json": {
+      "bytes": 71,
+      "sha256": "bbd4c2874973702e0ef0cfc8dcd447fe6ee4b92704f0d25efa66ab1150d671d9",
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/975feed30907c44b0154c80895e348b195bfc16ebb21d58deb36fb2411023c67/retained_rigid_channels.json"
+    },
+    "measurement.json": {
+      "bytes": 4036,
+      "sha256": "67e772fbb0c84b3d8b5c4dc5f4aa375e4ae66286c1859216e291f456f2694ca3",
+      "original": ".verification/motion/wrist_goal_measurement_c08_bread_r1.json"
+    },
+    "native_tools/activity_pose_rigid_channel_transport.gd": {
+      "bytes": 18441,
+      "sha256": "0853b45c62819d664689cbceefa3a72f68cace2702db680fd8ec64b631328fb6",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/native_tools/activity_pose_rigid_channel_transport.gd"
+    },
+    "native_tools/activity_pose_rigid_equivalence.gd": {
+      "bytes": 16200,
+      "sha256": "fe0cfc102caa081f42c96f014660689c0f8425f4d5ecebe7f79971eecd1a68e5",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/native_tools/activity_pose_rigid_equivalence.gd"
+    },
+    "native_tools/activity_pose_skin_equivalence.gd": {
+      "bytes": 15141,
+      "sha256": "156e4adec932de287f617f9dea9db5a8935d085487e4c3232d6754e99c917e6e",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/native_tools/activity_pose_skin_equivalence.gd"
+    },
+    "native_tools/activity_pose_weight_transport.gd": {
+      "bytes": 18534,
+      "sha256": "6e51220dac221691141f378d88dc057eae7f8cca8ab1dc1d7a895591d64ecbbf",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/native_tools/activity_pose_weight_transport.gd"
+    },
+    "native_tools/actor_wrist_goal_trial_modifier.gd": {
+      "bytes": 2809,
+      "sha256": "52f91091c0b1b245a7f2e34bac66821b275ba99a7d7505c5cccd473b0dc33437",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/native_tools/actor_wrist_goal_trial_modifier.gd"
+    },
+    "native_tools/export_actor_wrist_goal_trial.gd": {
+      "bytes": 3697,
+      "sha256": "e31005ecd9cf96472cbd63c6ae449f5812d3eb02550fc5f9b5b29eb6bf205091",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/native_tools/export_actor_wrist_goal_trial.gd"
+    },
+    "native_tools/export_living_activity_pose_inputs.gd": {
+      "bytes": 33585,
+      "sha256": "cc44d5825efc267bb5d969dbeb0afe97e8397402edbaf05c972fa15a539cbabb",
+      "original": ".verification/motion/wrist_goal_c08_bread_measured_r1/native_tools/export_living_activity_pose_inputs.gd"
+    }
+  }
+}

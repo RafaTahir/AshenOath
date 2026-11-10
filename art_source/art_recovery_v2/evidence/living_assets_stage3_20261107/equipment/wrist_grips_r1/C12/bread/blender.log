@@ -1,0 +1,14 @@
+04:35:50 | INFO: Data are loaded, start creating Blender stuff
+04:35:50 | INFO: Blender create Mesh node C12_Nera_Anwen_Combined_002
+04:35:53 | INFO: glTF import finished in 2.51s
+ACTIVITY_BLENDER_IMPORT_FIDELITY PASS C12 native_original_probes 6705
+04:37:17 | INFO: Data are loaded, start creating Blender stuff
+04:37:17 | INFO: Blender create Mesh node 0
+04:37:17 | INFO: Blender create Mesh node FlatbreadScoredCrust
+04:37:17 | INFO: glTF import finished in 0.01s
+Info: No new files have been packed
+Info: Saved as "C12_bread_fit_proposal.blend"
+C12 HAND FIT PROBE: SOURCE COMPLETE
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

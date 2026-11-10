@@ -1,0 +1,259 @@
+{
+  "asset": "C12",
+  "style": "bread",
+  "native_receipt": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C12\\2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7\\receipt.json",
+  "native_receipt_sha256": "1d84587f7a2564dcb8b752f3fc733148e86940f3e7bc288cec7efed118e4fdef",
+  "native_carrier_sha256": "00a6c6d76e925b90c91fd468c1de030ef314c99c753e0acf17265fab5e9d1fc2",
+  "baseline_receipt": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\compatible_c12_bread_fit_r1\\receipt.json",
+  "baseline_receipt_sha256": "b05878a0513c80b3cc63331e7622d34cb8486a0dee9f8ffd79f37de20680f691",
+  "baseline_fit_receipt_sha256": "663da271a59ed8791cbb324670837d1d39c0fbeaf0ceab4cb645306d62db890d",
+  "clip": "Authoring_Eat",
+  "reference_s": 3.49166666666667,
+  "witness_s": 0.133333333333333,
+  "reference_trials_in_blender": {
+    "prop crossed retained body triangle": 1707,
+    "reference pass": 53
+  },
+  "source_shape_candidates_tested": 144,
+  "source_blocker_counts": {
+    "right arm": 36,
+    "torso": 144,
+    "right hand": 28,
+    "right fingers": 72,
+    "head and neck": 22,
+    "left fingers": 9,
+    "left hand": 4,
+    "left arm": 42
+  },
+  "source_blocker_witnesses": {
+    "torso": {
+      "vertices": [
+        [
+          1,
+          520
+        ],
+        [
+          1,
+          166
+        ],
+        [
+          1,
+          519
+        ]
+      ],
+      "joints": [
+        "spine_03",
+        "spine_03",
+        "spine_03"
+      ],
+      "prop_triangle": 559
+    },
+    "right fingers": {
+      "vertices": [
+        [
+          2,
+          667
+        ],
+        [
+          2,
+          2722
+        ],
+        [
+          2,
+          2723
+        ]
+      ],
+      "joints": [
+        "pinky_01_r",
+        "pinky_01_r",
+        "pinky_01_r"
+      ],
+      "prop_triangle": 103
+    },
+    "right arm": {
+      "vertices": [
+        [
+          2,
+          2831
+        ],
+        [
+          2,
+          5078
+        ],
+        [
+          2,
+          5076
+        ]
+      ],
+      "joints": [
+        "lowerarm_r",
+        "lowerarm_r",
+        "lowerarm_r"
+      ],
+      "prop_triangle": 79
+    },
+    "right hand": {
+      "vertices": [
+        [
+          2,
+          5076
+        ],
+        [
+          2,
+          5078
+        ],
+        [
+          2,
+          5079
+        ]
+      ],
+      "joints": [
+        "lowerarm_r",
+        "lowerarm_r",
+        "hand_r"
+      ],
+      "prop_triangle": 79
+    },
+    "head and neck": {
+      "vertices": [
+        [
+          0,
+          1582
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          0,
+          6
+        ]
+      ],
+      "joints": [
+        "neck_01",
+        "neck_01",
+        "neck_01"
+      ],
+      "prop_triangle": 452
+    },
+    "left arm": {
+      "vertices": [
+        [
+          2,
+          3610
+        ],
+        [
+          2,
+          3609
+        ],
+        [
+          2,
+          2281
+        ]
+      ],
+      "joints": [
+        "upperarm_l",
+        "upperarm_l",
+        "upperarm_l"
+      ],
+      "prop_triangle": 368
+    },
+    "left fingers": {
+      "vertices": [
+        [
+          2,
+          2345
+        ],
+        [
+          2,
+          3941
+        ],
+        [
+          2,
+          3938
+        ]
+      ],
+      "joints": [
+        "thumb_03_l",
+        "thumb_03_l",
+        "thumb_03_l"
+      ],
+      "prop_triangle": 669
+    },
+    "left hand": {
+      "vertices": [
+        [
+          2,
+          2349
+        ],
+        [
+          2,
+          3980
+        ],
+        [
+          2,
+          3984
+        ]
+      ],
+      "joints": [
+        "thumb_02_l",
+        "thumb_02_l",
+        "hand_l"
+      ],
+      "prop_triangle": 610
+    }
+  },
+  "native_midpoint_probe_error_m": 6.619034220573894e-05,
+  "native_first_probe_error_m": 6.652027178474687e-05,
+  "screened_obstacle_samples_s": [
+    0.0,
+    0.133333333333333
+  ],
+  "exploratory_seeds": [
+    {
+      "forward_m": 0.015,
+      "outward_m": 0.025,
+      "palm_vertex": [
+        2,
+        4766
+      ],
+      "prop_primary_vertex": 222,
+      "twist_degrees": 0
+    },
+    {
+      "forward_m": 0.035,
+      "outward_m": 0.025,
+      "palm_vertex": [
+        2,
+        4766
+      ],
+      "prop_primary_vertex": 0,
+      "twist_degrees": 0
+    },
+    {
+      "forward_m": 0.015,
+      "outward_m": 0.045,
+      "palm_vertex": [
+        2,
+        4766
+      ],
+      "prop_primary_vertex": 0,
+      "twist_degrees": 0
+    }
+  ],
+  "trial": {
+    "forward_m": 0.015,
+    "outward_m": 0.025
+  },
+  "excluded_from_guidance_projection": [
+    "right arm",
+    "right fingers",
+    "right hand"
+  ],
+  "remaining_gate": "Actual native right arm IK, opposite arm/clip preservation, complete Blender overlap and containment, gameplay",
+  "scope": "Source-only exploratory measured geometry, no runtime or grip approval",
+  "grip_verified": false,
+  "geometry_tool_sha256": "dbbd534d48b219dc924a616b00dc32350ecd78e95335e75d893771642479ba5e",
+  "measurement_tool_sha256": "49933fab0107554df3989e3e5172226748c206b0aa0509d62a27ac1581be8c58",
+  "exact_prop_sha256": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef"
+}
