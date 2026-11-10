@@ -1,0 +1,23 @@
+{
+  "synthesized": 2,
+  "pending": 0,
+  "total_new_recordings": 425,
+  "new_voice_bytes_total": 12318501,
+  "manifest_sha256": "777034b427505f2fa0ff2d330a5e854b8d4734abc6dc27428e1d7b30eed0cfee",
+  "previous_batch_bytes_unchanged": true,
+  "listening_acceptance": false,
+  "gameplay_acceptance": false,
+  "files": [
+    {
+      "path": "assets_external/audio/voices/living_cast/7ae5cd8eca083d2af465418dd100491e9210a15a0ebe3f4ecea620ef45412393.ogg",
+      "bytes": 109778,
+      "sha256": "2007ecc2e6eed2f088e2ae99aaa8dbe237acd785d09152262ffde3986ca90d15"
+    },
+    {
+      "path": "assets_external/audio/voices/living_cast/95b58f03fa22759a532653c4752329484fd74de3b28112b8b8bcb5aeecf9c90c.ogg",
+      "bytes": 61742,
+      "sha256": "9f418437e589614f8f1c4d78ebe2e30c7ab7cf361869661a9d276643cb4ea153"
+    }
+  ],
+  "new_bytes_this_batch": 171520
+}

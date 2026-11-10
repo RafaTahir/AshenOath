@@ -1,0 +1,27 @@
+{
+  "scope": "New exact runtime utterances in this batch",
+  "lines": [
+    {
+      "source_id": "regional:nera:parting:distance",
+      "speaker_id": "saga_maren",
+      "canonical_speaker": "nera",
+      "text": "Nera kept a little distance while the relief work was handed over. Kael respected it and completed the existing homecoming. Cooperation did not erase the abandoned escort.\n\nNera: 'The next route is mine to choose. We can work together without sharing the rest.'",
+      "text_sha256": "2fd175331da671fce854119bae62aa8688c29af690a89f22472869ca1b2abc6a",
+      "cast_role": "nera",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    },
+    {
+      "source_id": "opening_arrival:saga_maren",
+      "speaker_id": "saga_maren",
+      "canonical_speaker": "nera",
+      "text": "Heavy sacks over this wheel. One at a time. ... Kael? I remember you. Not now. Help Anwen find her missing people. This load is my business.",
+      "text_sha256": "d95e45e74bb6d5c8be0b78f9c519ab8525551fc8d5cea97f7a005357e8b8f1e6",
+      "cast_role": "nera",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "living_cast"
+    }
+  ]
+}

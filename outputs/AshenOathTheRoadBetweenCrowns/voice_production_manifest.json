@@ -57015,7 +57015,8 @@
         0.129
       ],
       "duration_seconds": 1.1939583333333332,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_308b831d0d990e7d9e9f",
@@ -57101,7 +57102,8 @@
         0.099
       ],
       "duration_seconds": 2.041333333333333,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_f09224b5a472056a4d76",
@@ -57175,7 +57177,8 @@
         0.126
       ],
       "duration_seconds": 1.6632916666666666,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_47135b7936dbed5fd9bd",
@@ -57339,7 +57342,8 @@
         0.193
       ],
       "duration_seconds": 4.66,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_d924f0894a20d9ba8e19",
@@ -57410,7 +57414,8 @@
         0.118
       ],
       "duration_seconds": 1.556625,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_2a6b6b8a7c81afb97b15",
@@ -57592,7 +57597,8 @@
         0.195
       ],
       "duration_seconds": 5.257333333333333,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_03e650674dc7980af2fa",
@@ -57655,7 +57661,8 @@
         0.101
       ],
       "duration_seconds": 1.2792916666666667,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_8b5f294caeb97384be27",
@@ -57755,7 +57762,8 @@
         0.152
       ],
       "duration_seconds": 2.5212916666666665,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_79fd11926f1baf470dc8",
@@ -57838,7 +57846,8 @@
         0.176
       ],
       "duration_seconds": 1.952,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_6c2ad18a245463c8e098",
@@ -57951,7 +57960,8 @@
         0.137
       ],
       "duration_seconds": 2.958666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_eb990b72a902e950ce95",
@@ -58018,7 +58028,8 @@
         0.136
       ],
       "duration_seconds": 1.43,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_d998c5bf9d2e36edbbbf",
@@ -58128,7 +58139,8 @@
         0.094
       ],
       "duration_seconds": 2.8426666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_c71e6fbcc77e0e8e52d7",
@@ -58199,7 +58211,8 @@
         0.107
       ],
       "duration_seconds": 1.556625,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_8304fac909fd4a82d46f",
@@ -58330,7 +58343,8 @@
         0.113
       ],
       "duration_seconds": 3.5646666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_539a552717b6cbe06aaa",
@@ -58399,7 +58413,8 @@
         0.127
       ],
       "duration_seconds": 1.4826666666666666,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_b5b5abced9fadf678c57",
@@ -58576,7 +58591,8 @@
         0.162
       ],
       "duration_seconds": 5.093333333333334,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_572916a5881afa6e5a76",
@@ -58623,7 +58639,8 @@
         0.124
       ],
       "duration_seconds": 0.756,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_b304f7b98e130e619c85",
@@ -58752,7 +58769,8 @@
         0.175
       ],
       "duration_seconds": 3.4993333333333334,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_6ddaf4d65b8474971f1d",
@@ -58803,7 +58821,8 @@
         0.108
       ],
       "duration_seconds": 0.8952916666666667,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_4b9c6f49227aaa319bbf",
@@ -58928,7 +58947,8 @@
         0.157
       ],
       "duration_seconds": 3.3666666666666667,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_90b073ea2aba4c3745c1",
@@ -59002,7 +59022,8 @@
         0.163
       ],
       "duration_seconds": 1.6646666666666667,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_84ce8058bced082b21c2",
@@ -59116,7 +59137,8 @@
         0.16
       ],
       "duration_seconds": 2.997333333333333,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_8a27cde43c61684f0693",
@@ -59215,7 +59237,8 @@
         0.128
       ],
       "duration_seconds": 2.494666666666667,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_aa26bb9bb3a039389ba0",
@@ -59314,7 +59337,8 @@
         0.103
       ],
       "duration_seconds": 2.492,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_719d8168cbbf5a3988ec",
@@ -59383,7 +59407,8 @@
         0.078
       ],
       "duration_seconds": 1.4726666666666666,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_bb28464709935140745d",
@@ -59537,7 +59562,8 @@
         0.126
       ],
       "duration_seconds": 4.316,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_29dc004abb4274cf47c6",
@@ -59610,7 +59636,8 @@
         0.124
       ],
       "duration_seconds": 1.620625,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_e696b4572e27b30341d9",
@@ -59753,7 +59780,8 @@
         0.088
       ],
       "duration_seconds": 3.941291666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_db528adaaed53ad8503e",
@@ -59814,7 +59842,8 @@
         0.126
       ],
       "duration_seconds": 1.2266666666666666,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_b9a313e93f5de841ca41",
@@ -59913,7 +59942,8 @@
         0.1
       ],
       "duration_seconds": 2.474666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_b877fd464df1a60ac436",
@@ -59979,7 +60009,8 @@
         0.106
       ],
       "duration_seconds": 1.3859583333333334,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_55e93b89f79b3a2d7fce",
@@ -60109,7 +60140,8 @@
         0.087
       ],
       "duration_seconds": 3.508,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_05211ad5e56428637e51",
@@ -60169,7 +60201,8 @@
         0.069
       ],
       "duration_seconds": 1.172625,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_dca95c5b8c00dbaeb074",
@@ -60286,7 +60319,8 @@
         0.134
       ],
       "duration_seconds": 3.082666666666667,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_321713a2f61faa30d06f",
@@ -60455,7 +60489,8 @@
         0.117
       ],
       "duration_seconds": 4.822666666666667,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_86f4932eebad8e4a3570",
@@ -60591,7 +60626,8 @@
         0.12
       ],
       "duration_seconds": 3.711291666666667,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_709c1d51cf3c135cbad8",
@@ -60769,7 +60805,8 @@
         0.126
       ],
       "duration_seconds": 5.129333333333333,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_8002e7d39dd98b6d1e95",
@@ -60889,7 +60926,8 @@
         0.136
       ],
       "duration_seconds": 3.177958333333333,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_b9ed47250d9dd204cc58",
@@ -60965,7 +61003,8 @@
         0.127
       ],
       "duration_seconds": 1.7312916666666667,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_f43164fb514d550299e4",
@@ -61059,7 +61098,8 @@
         0.111
       ],
       "duration_seconds": 2.312666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_15828bc44713465f8c60",
@@ -61216,7 +61256,8 @@
         0.139
       ],
       "duration_seconds": 4.432,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_aaa43ec0190582eaac29",
@@ -61347,7 +61388,8 @@
         0.122
       ],
       "duration_seconds": 3.5572916666666665,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_c440991f189aaaf35325",
@@ -61502,7 +61544,8 @@
         0.12
       ],
       "duration_seconds": 4.352,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_8c3c9de75b719e9fe002",
@@ -61618,7 +61661,8 @@
         0.09
       ],
       "duration_seconds": 3.0412916666666665,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_24c32d5f4cb5b9194061",
@@ -61692,7 +61736,8 @@
         0.108
       ],
       "duration_seconds": 1.6486666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_3b26e767a80780075992",
@@ -61939,7 +61984,8 @@
         0.014
       ],
       "duration_seconds": 7.402666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_83d0b0871e7abf40dae6",
@@ -62167,7 +62213,8 @@
         0.132
       ],
       "duration_seconds": 6.783291666666667,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_92bb1d66818e1e957b07",
@@ -62377,7 +62424,8 @@
         0.112
       ],
       "duration_seconds": 6.174666666666667,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_ac78433e659a29ad64ab",
@@ -62549,7 +62597,8 @@
         0.082
       ],
       "duration_seconds": 4.905958333333333,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_3aa278d3fbc432631d2e",
@@ -62682,7 +62731,8 @@
         0.145
       ],
       "duration_seconds": 3.625958333333333,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_7601ed69613cf2ded467",
@@ -62793,7 +62843,8 @@
         0.106
       ],
       "duration_seconds": 2.8853333333333335,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_811a05460ada3796f1ca",
@@ -62958,7 +63009,8 @@
         0.104
       ],
       "duration_seconds": 4.676666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_cdc1c32d77e3cc4078a8",
@@ -63108,7 +63160,8 @@
         0.112
       ],
       "duration_seconds": 4.181333333333333,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_2e9e89488ddee4780168",
@@ -63251,7 +63304,8 @@
         0.117
       ],
       "duration_seconds": 3.957333333333333,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_2ccc1131e956b4af0350",
@@ -63409,7 +63463,8 @@
         0.121
       ],
       "duration_seconds": 4.458666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_e2981289a360530a1696",
@@ -63535,7 +63590,8 @@
         0.049
       ],
       "duration_seconds": 3.3699583333333334,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_6f1f04293f2bb0d18f5d",
@@ -63689,7 +63745,8 @@
         0.088
       ],
       "duration_seconds": 4.307333333333333,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_f134d5bf03de46c5dc86",
@@ -63854,7 +63911,8 @@
         0.071
       ],
       "duration_seconds": 4.672,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_b97e4ab7552ea2fe6b92",
@@ -64042,7 +64100,8 @@
         0.109
       ],
       "duration_seconds": 5.465333333333334,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_307268d73373049d7fb9",
@@ -64204,7 +64263,8 @@
         0.138
       ],
       "duration_seconds": 4.596,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_090e0f7b480d2bc6bea9",
@@ -64346,7 +64406,8 @@
         0.138
       ],
       "duration_seconds": 3.924625,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_e52bbde7d0fb6ba997fb",
@@ -64514,7 +64575,8 @@
         0.058
       ],
       "duration_seconds": 4.771333333333334,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_07bef8290a4d17703fcb",
@@ -64664,7 +64726,8 @@
         0.12
       ],
       "duration_seconds": 4.188625,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_a747f9dfc0481a483f6f",
@@ -64787,7 +64850,8 @@
         0.072
       ],
       "duration_seconds": 3.272,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_2d457303337fba9b1fcf",
@@ -64932,7 +64996,8 @@
         0.125
       ],
       "duration_seconds": 4.0179583333333335,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_87efadf0270b57cdc374",
@@ -65197,7 +65262,8 @@
         0.139
       ],
       "duration_seconds": 8.021333333333333,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_715d79565b51a4df3672",
@@ -65419,7 +65485,8 @@
         0.132
       ],
       "duration_seconds": 6.596625,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_6af6fc0caea118027bc7",
@@ -65552,7 +65619,8 @@
         0.044
       ],
       "duration_seconds": 3.6039583333333334,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_90cd829699674b48f010",
@@ -65716,7 +65784,8 @@
         0.028
       ],
       "duration_seconds": 4.636625,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_c56aa1091db94062c6d3",
@@ -65818,7 +65887,8 @@
         0.106
       ],
       "duration_seconds": 2.59,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_873ccefcd2388d36277f",
@@ -65945,7 +66015,8 @@
         0.128
       ],
       "duration_seconds": 3.429291666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_8e3128085ddcb0ce95a0",
@@ -66028,7 +66099,8 @@
         0.109
       ],
       "duration_seconds": 1.96,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_30ec6b73a65f9ad7a452",
@@ -66232,7 +66304,8 @@
         0.09
       ],
       "duration_seconds": 5.973291666666666,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_b2ffe20f9179d87cbfff",
@@ -66384,7 +66457,8 @@
         0.122
       ],
       "duration_seconds": 4.248625,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_50a20312e53011ca96b7",
@@ -66530,7 +66604,8 @@
         0.123
       ],
       "duration_seconds": 4.060625,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_2403dd5edd906b932655",
@@ -66694,7 +66769,8 @@
         0.12
       ],
       "duration_seconds": 4.650666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_18d3be2efab01bc9bd51",
@@ -66879,7 +66955,8 @@
         0.051
       ],
       "duration_seconds": 5.338,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_448b9f7350637eb6cafb",
@@ -67022,7 +67099,8 @@
         0.122
       ],
       "duration_seconds": 3.9553333333333334,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_b4884aaf794d00313f2b",
@@ -67124,7 +67202,8 @@
         0.133
       ],
       "duration_seconds": 2.5886666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_29db34939eb898eafe4a",
@@ -67438,7 +67517,8 @@
         0.125
       ],
       "duration_seconds": 9.648,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_f61d7c07d3b16488903c",
@@ -67603,7 +67683,8 @@
         0.006
       ],
       "duration_seconds": 4.668666666666667,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_3cd9b3cc1272260842ae",
@@ -67886,7 +67967,8 @@
         0.055
       ],
       "duration_seconds": 8.604625,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_dd89be70399e3cbe52b3",
@@ -68157,7 +68239,8 @@
         0.137
       ],
       "duration_seconds": 8.219333333333333,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_2083e5c18f4849b0abce",
@@ -68338,7 +68421,8 @@
         0.0
       ],
       "duration_seconds": 5.200666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_8c22cfc7eda118f09f7c",
@@ -68565,7 +68649,8 @@
         0.133
       ],
       "duration_seconds": 6.763958333333333,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_0f621541a1db4c8fbfe6",
@@ -69014,6 +69099,820 @@
         0.074
       ],
       "duration_seconds": 14.139291666666667,
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
+    },
+    {
+      "id": "story_7ae5cd8eca083d2af465",
+      "speaker_id": "nera",
+      "cast_role": "nera",
+      "text": "Nera kept a little distance while the relief work was handed over. Kael respected it and completed the existing homecoming. Cooperation did not erase the abandoned escort.\n\nNera: 'The next route is mine to choose. We can work together without sharing the rest.'",
+      "text_sha256": "2fd175331da671fce854119bae62aa8688c29af690a89f22472869ca1b2abc6a",
+      "page_key": "7ae5cd8eca083d2af465418dd100491e9210a15a0ebe3f4ecea620ef45412393",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/living_cast/7ae5cd8eca083d2af465418dd100491e9210a15a0ebe3f4ecea620ef45412393.ogg",
+      "scene": "regional:nera:parting:distance",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "344944ba4b8b4eef17e37e71080b5a4483ddc1d7fce1992f111d71eb5751b6af",
+      "audio_sha256": "2007ecc2e6eed2f088e2ae99aaa8dbe237acd785d09152262ffde3986ca90d15",
+      "audio_bytes": 109778,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.125,
+        0.341,
+        0.763,
+        0.986,
+        1.0,
+        0.961,
+        0.937,
+        0.835,
+        0.712,
+        0.642,
+        0.572,
+        0.597,
+        0.571,
+        0.434,
+        0.251,
+        0.124,
+        0.132,
+        0.091,
+        0.29,
+        0.464,
+        0.212,
+        0.125,
+        0.124,
+        0.207,
+        0.646,
+        0.47,
+        0.415,
+        0.706,
+        0.536,
+        0.111,
+        0.42,
+        0.621,
+        0.435,
+        0.181,
+        0.126,
+        0.188,
+        1.0,
+        0.779,
+        0.234,
+        0.284,
+        0.268,
+        0.129,
+        0.16,
+        0.438,
+        0.355,
+        0.293,
+        0.126,
+        0.215,
+        0.24,
+        0.114,
+        0.209,
+        0.536,
+        0.601,
+        0.552,
+        0.175,
+        0.565,
+        0.454,
+        0.295,
+        0.535,
+        0.733,
+        0.518,
+        0.429,
+        0.497,
+        0.732,
+        0.612,
+        0.524,
+        0.125,
+        0.123,
+        0.118,
+        0.11,
+        0.535,
+        0.711,
+        0.574,
+        0.44,
+        0.172,
+        0.125,
+        0.12,
+        0.112,
+        0.373,
+        0.465,
+        0.269,
+        0.246,
+        0.109,
+        0.142,
+        0.203,
+        0.451,
+        0.523,
+        0.602,
+        0.633,
+        0.39,
+        0.481,
+        0.515,
+        0.177,
+        0.315,
+        0.104,
+        0.322,
+        0.509,
+        0.566,
+        0.498,
+        0.265,
+        0.121,
+        0.144,
+        0.236,
+        0.169,
+        0.123,
+        0.115,
+        0.124,
+        0.131,
+        0.131,
+        0.131,
+        0.133,
+        0.133,
+        0.132,
+        0.134,
+        0.133,
+        0.132,
+        0.132,
+        0.132,
+        0.132,
+        0.12,
+        0.097,
+        0.659,
+        0.989,
+        1.0,
+        1.0,
+        1.0,
+        0.969,
+        0.889,
+        0.611,
+        0.289,
+        0.455,
+        0.608,
+        0.276,
+        0.329,
+        0.259,
+        0.117,
+        0.128,
+        0.676,
+        0.484,
+        0.218,
+        0.121,
+        0.127,
+        0.124,
+        0.413,
+        0.356,
+        0.11,
+        0.477,
+        0.404,
+        0.352,
+        0.186,
+        0.114,
+        0.102,
+        0.11,
+        0.373,
+        0.615,
+        0.31,
+        0.12,
+        0.116,
+        0.652,
+        0.63,
+        0.184,
+        0.097,
+        0.096,
+        0.242,
+        0.721,
+        0.586,
+        0.311,
+        0.12,
+        0.157,
+        0.592,
+        0.581,
+        0.154,
+        0.124,
+        0.118,
+        0.484,
+        0.622,
+        0.704,
+        0.597,
+        0.223,
+        0.133,
+        0.166,
+        0.232,
+        0.255,
+        0.603,
+        0.672,
+        0.248,
+        0.279,
+        0.265,
+        0.129,
+        0.161,
+        0.521,
+        0.458,
+        0.517,
+        0.381,
+        0.17,
+        0.123,
+        0.452,
+        0.67,
+        0.663,
+        0.627,
+        0.643,
+        0.405,
+        0.132,
+        0.09,
+        0.182,
+        0.311,
+        0.348,
+        0.284,
+        0.175,
+        0.165,
+        0.187,
+        0.187,
+        0.121,
+        0.127,
+        0.131,
+        0.131,
+        0.131,
+        0.131,
+        0.132,
+        0.133,
+        0.13,
+        0.132,
+        0.134,
+        0.132,
+        0.134,
+        0.132,
+        0.133,
+        0.121,
+        0.109,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.587,
+        0.104,
+        0.098,
+        0.512,
+        0.685,
+        0.973,
+        1.0,
+        1.0,
+        0.907,
+        0.612,
+        0.24,
+        0.298,
+        0.227,
+        0.493,
+        0.716,
+        0.814,
+        0.741,
+        0.261,
+        0.541,
+        0.651,
+        0.194,
+        0.433,
+        0.826,
+        0.787,
+        0.688,
+        0.574,
+        0.295,
+        0.353,
+        0.631,
+        0.613,
+        0.391,
+        0.328,
+        0.716,
+        0.904,
+        0.809,
+        0.766,
+        0.793,
+        0.845,
+        0.585,
+        0.265,
+        0.341,
+        0.134,
+        0.11,
+        0.566,
+        0.674,
+        0.857,
+        0.739,
+        0.232,
+        0.122,
+        0.478,
+        0.698,
+        0.559,
+        0.561,
+        0.614,
+        0.755,
+        0.561,
+        0.424,
+        0.664,
+        0.6,
+        0.684,
+        0.231,
+        0.263,
+        0.117,
+        0.312,
+        0.532,
+        0.469,
+        0.216,
+        0.319,
+        0.25,
+        0.111,
+        0.116,
+        0.095,
+        0.394,
+        0.325,
+        0.322,
+        0.095,
+        0.123,
+        0.133,
+        0.136,
+        0.136,
+        0.136,
+        0.136,
+        0.135,
+        0.124,
+        0.136,
+        0.625,
+        0.72,
+        0.81,
+        0.851,
+        0.866,
+        0.798,
+        0.656,
+        0.451,
+        0.347,
+        0.261,
+        0.213,
+        0.184,
+        0.165,
+        0.124,
+        0.124,
+        0.127,
+        0.13,
+        0.13,
+        0.131,
+        0.131,
+        0.124,
+        0.796,
+        1.0,
+        1.0,
+        1.0,
+        0.744,
+        0.3,
+        0.118,
+        0.151,
+        0.287,
+        0.155,
+        0.131,
+        0.193,
+        0.648,
+        1.0,
+        1.0,
+        0.858,
+        0.542,
+        0.133,
+        0.106,
+        0.102,
+        0.499,
+        0.355,
+        0.272,
+        0.134,
+        0.74,
+        0.865,
+        0.604,
+        0.541,
+        0.525,
+        0.509,
+        0.495,
+        0.536,
+        0.468,
+        0.211,
+        0.144,
+        0.169,
+        0.176,
+        0.123,
+        0.213,
+        0.249,
+        0.141,
+        0.616,
+        0.723,
+        0.561,
+        0.464,
+        0.383,
+        0.33,
+        0.205,
+        0.174,
+        0.228,
+        0.181,
+        0.123,
+        0.129,
+        0.13,
+        0.13,
+        0.131,
+        0.132,
+        0.133,
+        0.133,
+        0.131,
+        0.131,
+        0.327,
+        0.814,
+        0.24,
+        0.126,
+        0.626,
+        1.0,
+        0.998,
+        0.927,
+        0.696,
+        0.66,
+        1.0,
+        0.913,
+        0.54,
+        0.105,
+        0.121,
+        0.126,
+        0.193,
+        0.493,
+        0.149,
+        0.18,
+        0.795,
+        0.614,
+        0.458,
+        0.13,
+        0.467,
+        0.504,
+        0.337,
+        0.277,
+        0.508,
+        0.38,
+        0.099,
+        0.421,
+        0.505,
+        0.461,
+        0.451,
+        0.128,
+        0.12,
+        0.18,
+        0.249,
+        0.277,
+        0.225,
+        0.391,
+        0.551,
+        0.467,
+        0.45,
+        0.373,
+        0.368,
+        0.364,
+        0.346,
+        0.423,
+        0.394,
+        0.395,
+        0.311,
+        0.19,
+        0.362,
+        0.343,
+        0.27,
+        0.128,
+        0.083,
+        0.107,
+        0.128,
+        0.186,
+        0.194,
+        0.176,
+        0.137,
+        0.128,
+        0.117,
+        0.13,
+        0.133,
+        0.132,
+        0.132,
+        0.132,
+        0.132,
+        0.131,
+        0.132,
+        0.132,
+        0.132,
+        0.119
+      ],
+      "duration_seconds": 15.955333333333334,
+      "delivery_speed": 0.99
+    },
+    {
+      "id": "story_95b58f03fa22759a5326",
+      "speaker_id": "nera",
+      "cast_role": "nera",
+      "text": "Heavy sacks over this wheel. One at a time. ... Kael? I remember you. Not now. Help Anwen find her missing people. This load is my business.",
+      "text_sha256": "d95e45e74bb6d5c8be0b78f9c519ab8525551fc8d5cea97f7a005357e8b8f1e6",
+      "page_key": "95b58f03fa22759a532653c4752329484fd74de3b28112b8b8bcb5aeecf9c90c",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/living_cast/95b58f03fa22759a532653c4752329484fd74de3b28112b8b8bcb5aeecf9c90c.ogg",
+      "scene": "opening_arrival:saga_maren",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "f54164d928327a898859117a166025bf0938e2288502536b884bdb3676bfcf1d",
+      "audio_sha256": "9f418437e589614f8f1c4d78ebe2e30c7ab7cf361869661a9d276643cb4ea153",
+      "audio_bytes": 61742,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.129,
+        0.131,
+        0.131,
+        0.409,
+        0.914,
+        0.579,
+        0.192,
+        0.757,
+        0.789,
+        0.562,
+        0.194,
+        0.338,
+        0.32,
+        0.343,
+        0.348,
+        0.662,
+        0.481,
+        0.346,
+        0.182,
+        0.105,
+        0.132,
+        0.127,
+        0.211,
+        0.255,
+        0.563,
+        0.857,
+        0.912,
+        0.644,
+        0.224,
+        0.448,
+        0.702,
+        0.153,
+        0.459,
+        0.809,
+        0.452,
+        0.239,
+        0.316,
+        0.176,
+        0.112,
+        0.156,
+        0.603,
+        0.651,
+        0.593,
+        0.595,
+        0.527,
+        0.382,
+        0.299,
+        0.219,
+        0.126,
+        0.131,
+        0.133,
+        0.135,
+        0.136,
+        0.136,
+        0.137,
+        0.138,
+        0.137,
+        0.137,
+        0.215,
+        0.548,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.948,
+        0.647,
+        0.104,
+        0.187,
+        0.477,
+        0.229,
+        0.124,
+        0.201,
+        0.116,
+        0.398,
+        0.613,
+        0.581,
+        0.606,
+        0.576,
+        0.578,
+        0.543,
+        0.577,
+        0.605,
+        0.577,
+        0.347,
+        0.109,
+        0.121,
+        0.131,
+        0.137,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.139,
+        0.136,
+        0.132,
+        0.146,
+        0.101,
+        0.252,
+        0.838,
+        1.0,
+        1.0,
+        1.0,
+        0.878,
+        0.784,
+        0.705,
+        0.669,
+        0.298,
+        0.124,
+        0.135,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.138,
+        0.136,
+        0.384,
+        0.61,
+        0.814,
+        0.938,
+        0.497,
+        0.778,
+        1.0,
+        0.964,
+        1.0,
+        1.0,
+        1.0,
+        0.888,
+        0.876,
+        1.0,
+        1.0,
+        0.571,
+        0.941,
+        0.695,
+        0.388,
+        0.437,
+        0.645,
+        0.617,
+        0.573,
+        0.508,
+        0.582,
+        0.657,
+        0.68,
+        0.714,
+        0.6,
+        0.312,
+        0.115,
+        0.251,
+        0.636,
+        0.659,
+        0.602,
+        0.552,
+        0.479,
+        0.437,
+        0.356,
+        0.353,
+        0.302,
+        0.212,
+        0.114,
+        0.113,
+        0.123,
+        0.127,
+        0.122,
+        0.123,
+        0.188,
+        0.714,
+        1.0,
+        0.782,
+        0.115,
+        0.155,
+        0.218,
+        0.376,
+        0.624,
+        0.721,
+        0.826,
+        0.825,
+        0.762,
+        0.759,
+        0.812,
+        0.704,
+        0.809,
+        0.559,
+        0.109,
+        0.134,
+        0.336,
+        0.622,
+        0.562,
+        0.598,
+        0.619,
+        0.569,
+        0.148,
+        0.263,
+        0.599,
+        0.627,
+        0.738,
+        0.753,
+        0.58,
+        0.27,
+        0.313,
+        0.19,
+        0.452,
+        0.513,
+        0.481,
+        0.164,
+        0.12,
+        0.105,
+        0.298,
+        0.413,
+        0.278,
+        0.127,
+        0.128,
+        0.207,
+        0.227,
+        0.196,
+        0.107,
+        0.121,
+        0.125,
+        0.129,
+        0.132,
+        0.135,
+        0.138,
+        0.138,
+        0.137,
+        0.133,
+        0.134,
+        0.145,
+        0.677,
+        0.314,
+        0.387,
+        0.302,
+        0.285,
+        0.831,
+        0.81,
+        0.743,
+        0.734,
+        0.693,
+        0.533,
+        0.112,
+        0.231,
+        0.231,
+        0.443,
+        0.284,
+        0.226,
+        0.254,
+        0.705,
+        0.503,
+        0.383,
+        0.419,
+        0.467,
+        0.276,
+        0.123,
+        0.268,
+        0.645,
+        0.447,
+        0.19,
+        0.27,
+        0.102,
+        0.268,
+        0.225,
+        0.104,
+        0.096,
+        0.141,
+        0.215,
+        0.219,
+        0.18,
+        0.142,
+        0.132,
+        0.136,
+        0.136,
+        0.137,
+        0.136,
+        0.136,
+        0.135,
+        0.135,
+        0.136,
+        0.136,
+        0.137,
+        0.118
+      ],
+      "duration_seconds": 9.515333333333333,
       "delivery_speed": 0.99
     },
     {
@@ -129548,25 +130447,12 @@
       "retained_previous_performance": true
     }
   ],
-  "retained_previous_recordings": 752,
-  "synthesized_this_run": 86,
-  "batch_new_recording_limit": 88,
-  "batch_inference_seconds_limit": 450,
-  "new_dialogue_bytes": 12146981,
-  "pending_recordings": [
-    {
-      "scene": "regional:nera:parting:distance",
-      "speaker_id": "saga_maren",
-      "page_key": "7ae5cd8eca083d2af465418dd100491e9210a15a0ebe3f4ecea620ef45412393",
-      "reason": "bounded_inference_time"
-    },
-    {
-      "scene": "opening_arrival:saga_maren",
-      "speaker_id": "saga_maren",
-      "page_key": "95b58f03fa22759a532653c4752329484fd74de3b28112b8b8bcb5aeecf9c90c",
-      "reason": "bounded_inference_time"
-    }
-  ],
+  "retained_previous_recordings": 838,
+  "synthesized_this_run": 2,
+  "batch_new_recording_limit": 2,
+  "batch_inference_seconds_limit": 120,
+  "new_dialogue_bytes": 12318501,
+  "pending_recordings": [],
   "baseline_commit": "02d03412986cd8dca84833a19b93852d19ed43d3",
   "retained_legacy_subtitle_only": [
     {
