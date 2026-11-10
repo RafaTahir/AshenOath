@@ -1,0 +1,126 @@
+{
+  "scope": "New exact runtime utterances in this batch",
+  "lines": [
+    {
+      "source_id": "community:departure:nera:withdraw",
+      "speaker_id": "saga_nera",
+      "canonical_speaker": "nera",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "cast_role": "nera",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:elna:yes",
+      "speaker_id": "widow_elna",
+      "canonical_speaker": "elna",
+      "text": "I will move. I am taking Harl's bell because I choose to, not because the refuge requires a name.",
+      "text_sha256": "8193376d6df38599fd2c4a3d47b9d2654b4ffb74f3cef638e775ac8fe78ca3e5",
+      "cast_role": "elna",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:elna:no",
+      "speaker_id": "widow_elna",
+      "canonical_speaker": "elna",
+      "text": "I choose to stay. You may record the loss of the old ward without deciding where my grief belongs.",
+      "text_sha256": "28b7504eb4cc2151b949f2a47875d890fbf1f1a8821fc55c2d5315ea0c651e01",
+      "cast_role": "elna",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:elna:withdraw",
+      "speaker_id": "widow_elna",
+      "canonical_speaker": "elna",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "cast_role": "elna",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:toma:yes",
+      "speaker_id": "farmer_toma",
+      "canonical_speaker": "toma",
+      "text": "I will move my own belongings to Hearthward. My family's separate choices are not mine to sign.",
+      "text_sha256": "f6a10be2e9cfecfcbbb67d6b0dae9b77ba06dea2e327f7a8466904e70af66ccc",
+      "cast_role": "toma",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:toma:no",
+      "speaker_id": "farmer_toma",
+      "canonical_speaker": "toma",
+      "text": "I will remain at the fold. I understand that the old shelter will be gone.",
+      "text_sha256": "62ec3c0695d517010135097184393a9590f55d7dbe2c60d1d601787b8f9582d6",
+      "cast_role": "toma",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:toma:withdraw",
+      "speaker_id": "farmer_toma",
+      "canonical_speaker": "toma",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "cast_role": "toma",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:tor:yes",
+      "speaker_id": "blacksmith_tor",
+      "canonical_speaker": "tor",
+      "text": "I will move my tools to Hearthward. I can build another hearth; I cannot bring the old protection with us.",
+      "text_sha256": "0142cd73753fec83c261fa88b9c1bb3254f6d167c0e3e16fc582ccf3e4e47495",
+      "cast_role": "tor",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:tor:no",
+      "speaker_id": "blacksmith_tor",
+      "canonical_speaker": "tor",
+      "text": "I will stay at this forge. The people remaining will still need repairs.",
+      "text_sha256": "3de42382459be1ac47e8f4e5b1ad099f9e4c99cbbbe7627aff1783895e4b330f",
+      "cast_role": "tor",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:tor:withdraw",
+      "speaker_id": "blacksmith_tor",
+      "canonical_speaker": "tor",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "cast_role": "tor",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    },
+    {
+      "source_id": "community:departure:rook:yes",
+      "speaker_id": "rook",
+      "canonical_speaker": "rook",
+      "text": "I will take my bag to Hearthward. I have left places before; this time the list will tell the truth about it.",
+      "text_sha256": "2e22d269b902173fad315f64e8cfb2f57ba7df37b6c7f61b6bb5acfd5c6b46cd",
+      "cast_role": "rook",
+      "direction": "",
+      "required_new_or_recipe_changed": true,
+      "directory": "community"
+    }
+  ]
+}

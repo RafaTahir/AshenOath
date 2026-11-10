@@ -23201,7 +23201,8 @@
         0.114
       ],
       "duration_seconds": 4.022666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_d75531a446df3d6c47af",
@@ -23401,7 +23402,8 @@
         0.14
       ],
       "duration_seconds": 5.8646666666666665,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_4c8f432e14fe14fbfd0c",
@@ -23524,7 +23526,8 @@
         0.112
       ],
       "duration_seconds": 3.283333333333333,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_63ea53c8f4a2c9972fb9",
@@ -23782,7 +23785,8 @@
         0.165
       ],
       "duration_seconds": 7.79,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_227c83b2385a87f34bef",
@@ -23980,7 +23984,8 @@
         0.159
       ],
       "duration_seconds": 5.79,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_c3f322b4d824d5b0bf75",
@@ -24195,7 +24200,8 @@
         0.152
       ],
       "duration_seconds": 6.346,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_f79427c1a22389c33283",
@@ -24306,7 +24312,8 @@
         0.11
       ],
       "duration_seconds": 2.8893333333333335,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_f053f3254a389c14e958",
@@ -24481,7 +24488,8 @@
         0.12
       ],
       "duration_seconds": 5.028666666666667,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_c865b826de20c37f0394",
@@ -24640,7 +24648,8 @@
         0.147
       ],
       "duration_seconds": 4.489333333333334,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_893c9b2c7908c17b942b",
@@ -24781,7 +24790,8 @@
         0.15
       ],
       "duration_seconds": 3.892,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_33fce53c0e530565a4d3",
@@ -24930,7 +24940,8 @@
         0.026
       ],
       "duration_seconds": 4.136666666666667,
-      "delivery_speed": 0.98
+      "delivery_speed": 0.98,
+      "retained_previous_performance": true
     },
     {
       "id": "story_d87277ea43abe8c5280b",
@@ -25116,7 +25127,8 @@
         0.141
       ],
       "duration_seconds": 5.399333333333334,
-      "delivery_speed": 1.0
+      "delivery_speed": 1.0,
+      "retained_previous_performance": true
     },
     {
       "id": "story_65ea155a2bdd6c0ecbb3",
@@ -25283,7 +25295,8 @@
         0.056
       ],
       "duration_seconds": 4.738,
-      "delivery_speed": 1.0
+      "delivery_speed": 1.0,
+      "retained_previous_performance": true
     },
     {
       "id": "story_9ff481e7f22d68b86836",
@@ -25424,7 +25437,8 @@
         0.102
       ],
       "duration_seconds": 3.8733333333333335,
-      "delivery_speed": 1.0
+      "delivery_speed": 1.0,
+      "retained_previous_performance": true
     },
     {
       "id": "story_abe3493d1dbec6263f16",
@@ -25598,7 +25612,8 @@
         0.001
       ],
       "duration_seconds": 4.968666666666667,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_fafcf6d19b85d9e030dc",
@@ -25777,7 +25792,8 @@
         0.118
       ],
       "duration_seconds": 5.149333333333334,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_74af20bd2f944b868b5b",
@@ -25920,7 +25936,8 @@
         0.13
       ],
       "duration_seconds": 3.957333333333333,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_25648524845adae0cfda",
@@ -26120,7 +26137,8 @@
         0.131
       ],
       "duration_seconds": 5.85,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_5cab17349b7ef5bede2e",
@@ -26316,7 +26334,8 @@
         0.13
       ],
       "duration_seconds": 5.707291666666666,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_5ceea6274a67a011fa1a",
@@ -26475,7 +26494,8 @@
         0.168
       ],
       "duration_seconds": 4.488666666666667,
-      "delivery_speed": 1.03
+      "delivery_speed": 1.03,
+      "retained_previous_performance": true
     },
     {
       "id": "story_db09cb79567f4f4aa6dc",
@@ -26621,7 +26641,8 @@
         0.144
       ],
       "duration_seconds": 4.064,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_8ff545e5d27f8f934af0",
@@ -26804,7 +26825,8 @@
         0.0
       ],
       "duration_seconds": 5.267333333333333,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_fea6aca28b0f0a01d709",
@@ -26946,7 +26968,8 @@
         0.003
       ],
       "duration_seconds": 3.902,
-      "delivery_speed": 1.01
+      "delivery_speed": 1.01,
+      "retained_previous_performance": true
     },
     {
       "id": "story_dd78023ce6cae3ac05c0",
@@ -27173,7 +27196,8 @@
         0.12
       ],
       "duration_seconds": 6.746,
-      "delivery_speed": 0.99
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
     },
     {
       "id": "story_3e6425a8db00c1ad0d96",
@@ -27361,7 +27385,2099 @@
         0.147
       ],
       "duration_seconds": 5.461333333333333,
+      "delivery_speed": 0.99,
+      "retained_previous_performance": true
+    },
+    {
+      "id": "story_ab5489953ce812064633",
+      "speaker_id": "nera",
+      "cast_role": "nera",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "page_key": "ab5489953ce81206463396bda14384adb0c61e62cfed9e07fc2d97a69cff15a4",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/ab5489953ce81206463396bda14384adb0c61e62cfed9e07fc2d97a69cff15a4.ogg",
+      "scene": "community:departure:nera:withdraw",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "f0bdbf81f9e6a5a28558c6d973ad33b7d518902125f9de767db44ea6dddacbf3",
+      "audio_sha256": "486372c21b270bd6eb32c56f9114c6ccd08bec29f519e4701c0de7295e957b00",
+      "audio_bytes": 30897,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.137,
+        0.165,
+        0.112,
+        0.598,
+        1.0,
+        1.0,
+        0.209,
+        0.13,
+        0.121,
+        0.323,
+        1.0,
+        0.854,
+        0.707,
+        0.754,
+        0.883,
+        0.974,
+        0.994,
+        0.925,
+        0.831,
+        0.788,
+        0.792,
+        0.797,
+        0.792,
+        0.8,
+        0.697,
+        0.303,
+        0.195,
+        0.654,
+        0.468,
+        0.142,
+        0.135,
+        0.135,
+        0.132,
+        0.603,
+        0.44,
+        0.118,
+        0.578,
+        0.579,
+        0.12,
+        0.135,
+        0.104,
+        0.109,
+        0.301,
+        0.554,
+        0.548,
+        0.351,
+        0.106,
+        0.139,
+        0.281,
+        0.173,
+        0.417,
+        0.314,
+        0.215,
+        0.294,
+        0.247,
+        0.182,
+        0.147,
+        0.261,
+        0.342,
+        0.243,
+        0.137,
+        0.143,
+        0.138,
+        0.141,
+        0.142,
+        0.144,
+        0.143,
+        0.144,
+        0.144,
+        0.133,
+        0.484,
+        0.686,
+        0.855,
+        0.868,
+        0.798,
+        0.825,
+        0.951,
+        1.0,
+        0.953,
+        0.959,
+        0.825,
+        0.604,
+        0.21,
+        0.371,
+        0.74,
+        0.242,
+        0.124,
+        0.118,
+        0.527,
+        0.761,
+        0.659,
+        0.624,
+        0.547,
+        0.483,
+        0.536,
+        0.407,
+        0.134,
+        0.232,
+        0.279,
+        0.542,
+        0.632,
+        0.64,
+        0.65,
+        0.625,
+        0.48,
+        0.385,
+        0.27,
+        0.204,
+        0.148,
+        0.113,
+        0.12,
+        0.132,
+        0.137,
+        0.133,
+        0.137,
+        0.143,
+        0.144,
+        0.143,
+        0.146,
+        0.144,
+        0.146,
+        0.135
+      ],
+      "duration_seconds": 4.062,
       "delivery_speed": 0.99
+    },
+    {
+      "id": "story_54a8b8fcbc471da20fce",
+      "speaker_id": "elna",
+      "cast_role": "elna",
+      "text": "I will move. I am taking Harl's bell because I choose to, not because the refuge requires a name.",
+      "text_sha256": "8193376d6df38599fd2c4a3d47b9d2654b4ffb74f3cef638e775ac8fe78ca3e5",
+      "page_key": "54a8b8fcbc471da20fcedad39416723ce32c5e5c9e9f4917d846d364ffe4091a",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/54a8b8fcbc471da20fcedad39416723ce32c5e5c9e9f4917d846d364ffe4091a.ogg",
+      "scene": "community:departure:elna:yes",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "671dbab5fc9297183c29c4234256f4d889c8b033fd7fe384a96d830c2b364847",
+      "audio_sha256": "0c20ff19aa2a6e004631289cf87082fd87a5281a2f7b69edfc9cf1528accf6cc",
+      "audio_bytes": 51577,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.108,
+        0.171,
+        0.546,
+        0.963,
+        1.0,
+        0.414,
+        0.681,
+        0.928,
+        0.74,
+        0.882,
+        0.975,
+        1.0,
+        1.0,
+        1.0,
+        0.752,
+        0.533,
+        0.366,
+        0.22,
+        0.105,
+        0.089,
+        0.118,
+        0.122,
+        0.11,
+        0.102,
+        0.112,
+        0.116,
+        0.117,
+        0.117,
+        0.118,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.159,
+        0.418,
+        0.945,
+        1.0,
+        0.995,
+        0.896,
+        0.809,
+        0.763,
+        0.344,
+        0.201,
+        0.228,
+        0.106,
+        0.845,
+        1.0,
+        0.292,
+        0.171,
+        0.115,
+        0.565,
+        0.647,
+        0.528,
+        0.28,
+        0.115,
+        0.151,
+        0.127,
+        0.656,
+        0.888,
+        0.907,
+        0.829,
+        0.765,
+        0.675,
+        0.619,
+        0.355,
+        0.266,
+        0.288,
+        0.112,
+        0.112,
+        0.385,
+        0.968,
+        0.811,
+        0.701,
+        0.551,
+        0.411,
+        0.294,
+        0.189,
+        0.158,
+        0.094,
+        0.105,
+        0.305,
+        0.275,
+        0.097,
+        0.17,
+        0.498,
+        0.351,
+        0.303,
+        0.489,
+        0.507,
+        0.525,
+        0.217,
+        0.114,
+        0.382,
+        0.479,
+        0.343,
+        0.379,
+        0.796,
+        0.75,
+        0.549,
+        0.31,
+        0.213,
+        0.331,
+        0.163,
+        0.186,
+        0.444,
+        0.166,
+        0.395,
+        0.158,
+        0.101,
+        0.066,
+        0.09,
+        0.111,
+        0.115,
+        0.114,
+        0.114,
+        0.114,
+        0.116,
+        0.116,
+        0.115,
+        0.116,
+        0.115,
+        0.117,
+        0.117,
+        0.117,
+        0.116,
+        0.102,
+        0.514,
+        1.0,
+        1.0,
+        0.576,
+        0.085,
+        0.11,
+        0.109,
+        0.105,
+        0.473,
+        0.461,
+        0.098,
+        0.172,
+        0.1,
+        0.576,
+        0.809,
+        0.488,
+        0.414,
+        0.198,
+        0.106,
+        0.646,
+        0.543,
+        0.209,
+        0.878,
+        0.928,
+        0.548,
+        0.131,
+        0.099,
+        0.108,
+        0.131,
+        0.144,
+        0.386,
+        0.329,
+        0.217,
+        0.139,
+        0.114,
+        0.262,
+        0.269,
+        0.127,
+        0.094,
+        0.445,
+        0.129,
+        0.11,
+        0.211,
+        0.077,
+        0.335,
+        0.627,
+        0.652,
+        0.538,
+        0.471,
+        0.419,
+        0.359,
+        0.249,
+        0.352,
+        0.186,
+        0.324,
+        0.442,
+        0.473,
+        0.507,
+        0.478,
+        0.451,
+        0.319,
+        0.234,
+        0.185,
+        0.134,
+        0.108,
+        0.07,
+        0.097,
+        0.107,
+        0.115,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.099
+      ],
+      "duration_seconds": 7.315333333333333,
+      "delivery_speed": 0.95
+    },
+    {
+      "id": "story_9aa9cb8bd4912a6f15e9",
+      "speaker_id": "elna",
+      "cast_role": "elna",
+      "text": "I choose to stay. You may record the loss of the old ward without deciding where my grief belongs.",
+      "text_sha256": "28b7504eb4cc2151b949f2a47875d890fbf1f1a8821fc55c2d5315ea0c651e01",
+      "page_key": "9aa9cb8bd4912a6f15e910232e65ba912dc6c8f1fb1db4c03f4d545b3b5fae70",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/9aa9cb8bd4912a6f15e910232e65ba912dc6c8f1fb1db4c03f4d545b3b5fae70.ogg",
+      "scene": "community:departure:elna:no",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "bfe2a94bc411a58fa38a45b7bc79d1f2263817336fbbe9251a9244343371d2d2",
+      "audio_sha256": "bdb5794dd686d638b08bc72bdf9ce27d1e70c5a7d568afb36ab528f7f01ed753",
+      "audio_bytes": 50301,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.11,
+        0.21,
+        0.735,
+        0.863,
+        0.233,
+        0.132,
+        0.567,
+        0.493,
+        0.164,
+        1.0,
+        0.984,
+        0.793,
+        0.509,
+        0.239,
+        0.358,
+        0.114,
+        0.452,
+        0.223,
+        0.268,
+        0.324,
+        0.286,
+        0.152,
+        0.201,
+        0.591,
+        0.516,
+        0.41,
+        0.261,
+        0.163,
+        0.127,
+        0.086,
+        0.104,
+        0.113,
+        0.117,
+        0.116,
+        0.117,
+        0.117,
+        0.117,
+        0.118,
+        0.119,
+        0.12,
+        0.117,
+        0.119,
+        0.12,
+        0.119,
+        0.119,
+        0.119,
+        0.12,
+        0.117,
+        0.119,
+        0.12,
+        0.117,
+        0.12,
+        0.119,
+        0.119,
+        0.117,
+        0.118,
+        0.117,
+        0.12,
+        0.12,
+        0.119,
+        0.115,
+        0.098,
+        0.594,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.778,
+        0.219,
+        0.508,
+        0.745,
+        0.083,
+        0.103,
+        0.201,
+        0.185,
+        0.101,
+        0.589,
+        0.957,
+        0.952,
+        0.998,
+        1.0,
+        0.147,
+        0.111,
+        0.108,
+        0.522,
+        0.781,
+        0.49,
+        0.481,
+        0.662,
+        0.819,
+        0.704,
+        0.399,
+        0.106,
+        0.173,
+        0.226,
+        0.25,
+        0.169,
+        0.278,
+        0.135,
+        0.095,
+        0.107,
+        0.505,
+        0.532,
+        0.331,
+        0.088,
+        0.509,
+        0.906,
+        0.714,
+        0.584,
+        0.568,
+        0.131,
+        0.133,
+        0.102,
+        0.344,
+        0.743,
+        0.777,
+        0.653,
+        0.517,
+        0.424,
+        0.282,
+        0.158,
+        0.108,
+        0.086,
+        0.097,
+        0.172,
+        0.095,
+        0.109,
+        0.115,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.117,
+        0.105,
+        0.547,
+        0.606,
+        0.061,
+        0.781,
+        0.876,
+        0.829,
+        0.478,
+        0.084,
+        0.108,
+        0.113,
+        0.263,
+        0.331,
+        0.222,
+        0.3,
+        0.272,
+        0.262,
+        0.117,
+        0.601,
+        0.63,
+        0.739,
+        0.634,
+        0.701,
+        0.21,
+        0.251,
+        0.334,
+        0.232,
+        0.239,
+        0.175,
+        0.128,
+        0.083,
+        0.254,
+        0.51,
+        0.582,
+        0.485,
+        0.49,
+        0.476,
+        0.408,
+        0.434,
+        0.454,
+        0.13,
+        0.111,
+        0.17,
+        0.176,
+        0.666,
+        0.551,
+        0.315,
+        0.119,
+        0.124,
+        0.113,
+        0.113,
+        0.206,
+        0.662,
+        0.442,
+        0.444,
+        0.608,
+        0.588,
+        0.511,
+        0.383,
+        0.317,
+        0.233,
+        0.161,
+        0.082,
+        0.073,
+        0.082,
+        0.107,
+        0.194,
+        0.214,
+        0.182,
+        0.113,
+        0.116,
+        0.12,
+        0.12,
+        0.12,
+        0.12,
+        0.12,
+        0.119,
+        0.104
+      ],
+      "duration_seconds": 7.187333333333333,
+      "delivery_speed": 0.95
+    },
+    {
+      "id": "story_372940994d04affa4810",
+      "speaker_id": "elna",
+      "cast_role": "elna",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "page_key": "372940994d04affa481005cab8f21f0121f1791660bc2bdcaa9a672d24034ae2",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/372940994d04affa481005cab8f21f0121f1791660bc2bdcaa9a672d24034ae2.ogg",
+      "scene": "community:departure:elna:withdraw",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "3f6993a27e1ee8fe752ee82f0f53507ac9ebc8e3266b6a0edd4e5de4f5bf9c35",
+      "audio_sha256": "a18c42e26d4e493229854669e60c5c5036df74f18ba27bb8872a1095293ad40c",
+      "audio_bytes": 36007,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.132,
+        0.209,
+        0.13,
+        0.25,
+        1.0,
+        0.937,
+        0.205,
+        0.125,
+        0.263,
+        0.084,
+        0.577,
+        1.0,
+        0.848,
+        0.806,
+        0.879,
+        0.805,
+        0.782,
+        0.797,
+        0.9,
+        0.966,
+        0.885,
+        0.773,
+        0.71,
+        0.613,
+        0.599,
+        0.531,
+        0.395,
+        0.274,
+        0.333,
+        0.778,
+        0.393,
+        0.124,
+        0.143,
+        0.141,
+        0.134,
+        0.102,
+        0.983,
+        0.128,
+        0.351,
+        0.85,
+        0.113,
+        0.122,
+        0.165,
+        0.175,
+        0.144,
+        0.617,
+        0.554,
+        0.391,
+        0.144,
+        0.129,
+        0.162,
+        0.541,
+        0.415,
+        0.371,
+        0.357,
+        0.229,
+        0.263,
+        0.48,
+        0.355,
+        0.244,
+        0.133,
+        0.136,
+        0.229,
+        0.266,
+        0.282,
+        0.323,
+        0.137,
+        0.258,
+        0.13,
+        0.141,
+        0.142,
+        0.142,
+        0.142,
+        0.141,
+        0.141,
+        0.141,
+        0.141,
+        0.142,
+        0.142,
+        0.143,
+        0.143,
+        0.143,
+        0.143,
+        0.142,
+        0.141,
+        0.141,
+        0.141,
+        0.142,
+        0.141,
+        0.141,
+        0.141,
+        0.142,
+        0.142,
+        0.172,
+        0.432,
+        0.988,
+        1.0,
+        0.931,
+        0.9,
+        0.758,
+        0.834,
+        0.874,
+        0.897,
+        1.0,
+        1.0,
+        0.532,
+        0.215,
+        0.227,
+        0.593,
+        0.229,
+        0.131,
+        0.223,
+        0.455,
+        0.859,
+        0.946,
+        0.797,
+        0.731,
+        0.598,
+        0.512,
+        0.485,
+        0.278,
+        0.214,
+        0.408,
+        0.226,
+        0.539,
+        0.616,
+        0.697,
+        0.809,
+        0.792,
+        0.604,
+        0.442,
+        0.287,
+        0.154,
+        0.122,
+        0.104,
+        0.109,
+        0.142,
+        0.149,
+        0.139,
+        0.128,
+        0.138,
+        0.142,
+        0.141,
+        0.141,
+        0.141,
+        0.142,
+        0.142,
+        0.124
+      ],
+      "duration_seconds": 4.917333333333334,
+      "delivery_speed": 0.95
+    },
+    {
+      "id": "story_d95f1bf21c8f63376b48",
+      "speaker_id": "toma",
+      "cast_role": "toma",
+      "text": "I will move my own belongings to Hearthward. My family's separate choices are not mine to sign.",
+      "text_sha256": "f6a10be2e9cfecfcbbb67d6b0dae9b77ba06dea2e327f7a8466904e70af66ccc",
+      "page_key": "d95f1bf21c8f63376b486a3f48f382d056d6568fc794c0114858d7d50c8454b1",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/d95f1bf21c8f63376b486a3f48f382d056d6568fc794c0114858d7d50c8454b1.ogg",
+      "scene": "community:departure:toma:yes",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "44bdee7bf6244d0718da16689448acd5cf32c37368b38911d41d507e5860e89c",
+      "audio_sha256": "b76a5e476e9b387029ca314c2a678cb252f572737caad71386795c8d3f952afc",
+      "audio_bytes": 39304,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.177,
+        0.591,
+        0.953,
+        0.92,
+        0.957,
+        0.895,
+        0.959,
+        0.957,
+        1.0,
+        1.0,
+        0.883,
+        0.841,
+        0.616,
+        0.32,
+        0.126,
+        0.669,
+        0.856,
+        0.642,
+        0.667,
+        0.487,
+        0.124,
+        0.185,
+        0.617,
+        0.791,
+        0.776,
+        0.709,
+        0.643,
+        0.592,
+        0.581,
+        0.541,
+        0.433,
+        0.208,
+        0.179,
+        0.748,
+        0.769,
+        0.735,
+        0.793,
+        0.832,
+        0.721,
+        0.707,
+        0.688,
+        0.635,
+        0.577,
+        0.526,
+        0.531,
+        0.492,
+        0.334,
+        0.25,
+        0.231,
+        0.179,
+        0.159,
+        0.564,
+        0.546,
+        0.182,
+        0.127,
+        0.653,
+        0.685,
+        0.583,
+        0.556,
+        0.421,
+        0.138,
+        0.156,
+        0.13,
+        0.205,
+        0.381,
+        0.318,
+        0.238,
+        0.146,
+        0.147,
+        0.159,
+        0.181,
+        0.189,
+        0.189,
+        0.19,
+        0.192,
+        0.19,
+        0.19,
+        0.19,
+        0.192,
+        0.195,
+        0.195,
+        0.19,
+        0.185,
+        0.652,
+        0.824,
+        0.868,
+        0.864,
+        0.204,
+        0.144,
+        0.163,
+        0.639,
+        1.0,
+        0.685,
+        0.636,
+        0.691,
+        0.681,
+        0.74,
+        0.665,
+        0.499,
+        0.556,
+        0.555,
+        0.521,
+        0.465,
+        0.308,
+        0.265,
+        0.254,
+        0.258,
+        0.28,
+        0.279,
+        0.271,
+        0.704,
+        0.784,
+        0.253,
+        0.172,
+        0.156,
+        0.646,
+        0.243,
+        0.167,
+        0.175,
+        0.284,
+        0.352,
+        0.204,
+        0.953,
+        0.796,
+        0.771,
+        0.603,
+        0.304,
+        0.269,
+        0.217,
+        0.525,
+        0.502,
+        0.379,
+        0.337,
+        0.243,
+        0.16,
+        0.179,
+        0.185,
+        0.19,
+        0.191,
+        0.195,
+        0.716,
+        0.961,
+        0.965,
+        1.0,
+        0.84,
+        0.392,
+        0.154,
+        0.164,
+        0.376,
+        0.83,
+        0.921,
+        0.675,
+        0.632,
+        0.585,
+        0.508,
+        0.517,
+        0.486,
+        0.368,
+        0.159,
+        0.148,
+        0.342,
+        0.371,
+        0.33,
+        0.288,
+        0.198,
+        0.807,
+        0.598,
+        0.491,
+        0.4,
+        0.287,
+        0.208,
+        0.192,
+        0.158,
+        0.111,
+        0.139,
+        0.176,
+        0.187,
+        0.19,
+        0.191,
+        0.195,
+        0.191,
+        0.19,
+        0.191,
+        0.142
+      ],
+      "duration_seconds": 6.108625,
+      "delivery_speed": 1.01
+    },
+    {
+      "id": "story_4554efe2f386a8f67195",
+      "speaker_id": "toma",
+      "cast_role": "toma",
+      "text": "I will remain at the fold. I understand that the old shelter will be gone.",
+      "text_sha256": "62ec3c0695d517010135097184393a9590f55d7dbe2c60d1d601787b8f9582d6",
+      "page_key": "4554efe2f386a8f6719586b7259b35b4695a31fdf5a30546920f65efb0336405",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/4554efe2f386a8f6719586b7259b35b4695a31fdf5a30546920f65efb0336405.ogg",
+      "scene": "community:departure:toma:no",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "31b9070171d4fc0f83d2671f3ae231d784839e80afc5e71e4d8b80cd18941d63",
+      "audio_sha256": "f679a866dfaad43a2baffb853dc08061d2016d1825147193a4f7625084131f50",
+      "audio_bytes": 29522,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.199,
+        0.328,
+        0.84,
+        0.96,
+        1.0,
+        0.623,
+        0.879,
+        1.0,
+        1.0,
+        0.679,
+        0.635,
+        1.0,
+        0.951,
+        0.873,
+        0.898,
+        0.858,
+        0.806,
+        0.72,
+        0.675,
+        0.726,
+        0.78,
+        0.79,
+        0.692,
+        0.334,
+        0.174,
+        0.197,
+        0.467,
+        0.39,
+        0.163,
+        0.192,
+        0.191,
+        0.189,
+        0.828,
+        0.843,
+        0.817,
+        0.769,
+        0.562,
+        0.416,
+        0.274,
+        0.134,
+        0.239,
+        0.197,
+        0.184,
+        0.162,
+        0.194,
+        0.203,
+        0.21,
+        0.211,
+        0.21,
+        0.211,
+        0.21,
+        0.21,
+        0.211,
+        0.213,
+        0.211,
+        0.368,
+        0.865,
+        1.0,
+        0.963,
+        0.787,
+        0.924,
+        0.523,
+        0.613,
+        0.634,
+        0.508,
+        0.433,
+        0.249,
+        0.187,
+        0.904,
+        0.775,
+        0.702,
+        0.664,
+        0.669,
+        0.679,
+        0.663,
+        0.385,
+        0.618,
+        0.314,
+        0.175,
+        0.198,
+        0.38,
+        0.575,
+        0.19,
+        0.115,
+        0.492,
+        0.845,
+        0.835,
+        0.648,
+        0.621,
+        0.408,
+        0.304,
+        0.405,
+        0.39,
+        0.38,
+        0.418,
+        0.891,
+        0.748,
+        0.582,
+        0.389,
+        0.176,
+        0.387,
+        0.166,
+        0.611,
+        0.469,
+        0.344,
+        0.485,
+        0.582,
+        0.377,
+        0.202,
+        0.406,
+        0.67,
+        0.335,
+        0.208,
+        0.146,
+        0.749,
+        0.823,
+        0.703,
+        0.548,
+        0.379,
+        0.288,
+        0.242,
+        0.179,
+        0.164,
+        0.147,
+        0.187,
+        0.202,
+        0.211,
+        0.212,
+        0.215,
+        0.212,
+        0.21,
+        0.212,
+        0.205,
+        0.0
+      ],
+      "duration_seconds": 4.434666666666667,
+      "delivery_speed": 1.01
+    },
+    {
+      "id": "story_edb0de26b3259c67b5cd",
+      "speaker_id": "toma",
+      "cast_role": "toma",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "page_key": "edb0de26b3259c67b5cd1667757cde3dc848b6bc2c0f81f10d47ae7bc2059de5",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/edb0de26b3259c67b5cd1667757cde3dc848b6bc2c0f81f10d47ae7bc2059de5.ogg",
+      "scene": "community:departure:toma:withdraw",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "f9092e7757956e5b1fce0761e73d38b2fb55f801c2da5cb237bc54d13a3b8a47",
+      "audio_sha256": "6406ef6d60d07affda8e2c6853e2d31fdf14d9f5f3e13e1ef9c80e5e61c12d6e",
+      "audio_bytes": 28287,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.196,
+        0.294,
+        0.738,
+        1.0,
+        1.0,
+        0.488,
+        0.184,
+        0.169,
+        0.158,
+        0.872,
+        1.0,
+        0.848,
+        0.709,
+        0.697,
+        0.872,
+        0.82,
+        0.801,
+        0.843,
+        0.753,
+        0.716,
+        0.697,
+        0.695,
+        0.745,
+        0.687,
+        0.698,
+        0.534,
+        0.211,
+        0.164,
+        0.65,
+        0.681,
+        0.262,
+        0.183,
+        0.187,
+        0.196,
+        0.643,
+        0.62,
+        0.314,
+        0.622,
+        0.734,
+        0.215,
+        0.198,
+        0.145,
+        0.117,
+        0.721,
+        0.791,
+        0.688,
+        0.473,
+        0.14,
+        0.182,
+        0.316,
+        0.364,
+        0.355,
+        0.68,
+        0.445,
+        0.43,
+        0.438,
+        0.401,
+        0.316,
+        0.214,
+        0.379,
+        0.381,
+        0.214,
+        0.209,
+        0.182,
+        0.204,
+        0.205,
+        0.211,
+        0.212,
+        0.212,
+        0.211,
+        0.211,
+        0.212,
+        0.21,
+        0.453,
+        0.966,
+        1.0,
+        0.92,
+        0.85,
+        0.914,
+        0.996,
+        0.954,
+        0.948,
+        0.789,
+        0.453,
+        0.236,
+        0.644,
+        0.692,
+        0.425,
+        0.196,
+        0.356,
+        0.896,
+        0.838,
+        0.815,
+        0.674,
+        0.618,
+        0.593,
+        0.588,
+        0.423,
+        0.301,
+        0.187,
+        0.629,
+        0.811,
+        0.795,
+        0.825,
+        0.852,
+        0.819,
+        0.631,
+        0.55,
+        0.339,
+        0.33,
+        0.271,
+        0.136,
+        0.166,
+        0.182,
+        0.185,
+        0.193,
+        0.204,
+        0.207,
+        0.211,
+        0.214,
+        0.211,
+        0.212,
+        0.211,
+        0.195
+      ],
+      "duration_seconds": 4.124625,
+      "delivery_speed": 1.01
+    },
+    {
+      "id": "story_3a9f251bb04e6bc87f87",
+      "speaker_id": "tor",
+      "cast_role": "tor",
+      "text": "I will move my tools to Hearthward. I can build another hearth; I cannot bring the old protection with us.",
+      "text_sha256": "0142cd73753fec83c261fa88b9c1bb3254f6d167c0e3e16fc582ccf3e4e47495",
+      "page_key": "3a9f251bb04e6bc87f878e4e1659ed0665e463057a9f8537918523930c0976fd",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/3a9f251bb04e6bc87f878e4e1659ed0665e463057a9f8537918523930c0976fd.ogg",
+      "scene": "community:departure:tor:yes",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "dcf062f813285430fca7be94d696d6403e8dc8eacec40452262336d16ad8076f",
+      "audio_sha256": "5dc6fcde9d57e42819e43d6b24944cf8e04c0218fea1bcfe6313a1e8fbacd861",
+      "audio_bytes": 44331,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.177,
+        0.476,
+        0.972,
+        1.0,
+        0.788,
+        0.989,
+        0.858,
+        0.837,
+        0.957,
+        0.949,
+        0.974,
+        0.848,
+        0.829,
+        0.787,
+        0.478,
+        0.29,
+        0.384,
+        0.84,
+        0.7,
+        0.542,
+        0.593,
+        0.558,
+        0.218,
+        0.182,
+        0.345,
+        0.18,
+        0.656,
+        0.791,
+        0.674,
+        0.579,
+        0.489,
+        0.435,
+        0.425,
+        0.36,
+        0.32,
+        0.241,
+        0.184,
+        0.22,
+        0.716,
+        0.394,
+        0.163,
+        0.139,
+        0.125,
+        0.653,
+        0.707,
+        0.689,
+        0.648,
+        0.615,
+        0.172,
+        0.172,
+        0.153,
+        0.177,
+        0.29,
+        0.374,
+        0.254,
+        0.169,
+        0.138,
+        0.143,
+        0.165,
+        0.188,
+        0.189,
+        0.191,
+        0.193,
+        0.192,
+        0.193,
+        0.192,
+        0.19,
+        0.193,
+        0.192,
+        0.193,
+        0.192,
+        0.19,
+        0.555,
+        1.0,
+        0.877,
+        0.21,
+        0.169,
+        1.0,
+        1.0,
+        0.996,
+        0.949,
+        0.517,
+        0.397,
+        0.979,
+        0.915,
+        0.775,
+        0.688,
+        0.713,
+        0.508,
+        0.356,
+        0.728,
+        0.85,
+        0.727,
+        0.829,
+        0.818,
+        0.764,
+        0.767,
+        0.39,
+        0.532,
+        0.707,
+        0.552,
+        0.336,
+        0.141,
+        0.123,
+        0.516,
+        0.804,
+        0.722,
+        0.745,
+        0.708,
+        0.458,
+        0.345,
+        0.265,
+        0.24,
+        0.151,
+        0.175,
+        0.173,
+        0.178,
+        0.187,
+        0.189,
+        0.19,
+        0.19,
+        0.189,
+        0.191,
+        0.19,
+        0.192,
+        0.19,
+        0.28,
+        0.782,
+        0.815,
+        0.217,
+        0.184,
+        0.194,
+        0.776,
+        1.0,
+        0.819,
+        0.803,
+        0.946,
+        0.739,
+        0.345,
+        0.141,
+        0.148,
+        0.197,
+        0.185,
+        0.818,
+        0.926,
+        0.801,
+        0.704,
+        0.695,
+        0.668,
+        0.62,
+        0.434,
+        0.698,
+        0.548,
+        0.202,
+        0.171,
+        0.477,
+        0.769,
+        0.784,
+        0.675,
+        0.574,
+        0.333,
+        0.176,
+        0.185,
+        0.169,
+        0.329,
+        0.619,
+        0.21,
+        0.253,
+        0.222,
+        0.889,
+        0.762,
+        0.295,
+        0.164,
+        0.277,
+        0.397,
+        0.317,
+        0.448,
+        0.632,
+        0.522,
+        0.477,
+        0.522,
+        0.491,
+        0.604,
+        0.454,
+        0.14,
+        0.359,
+        0.377,
+        0.275,
+        0.15,
+        0.127,
+        0.232,
+        0.309,
+        0.319,
+        0.273,
+        0.242,
+        0.186,
+        0.186,
+        0.193,
+        0.193,
+        0.192,
+        0.193,
+        0.193,
+        0.193,
+        0.167
+      ],
+      "duration_seconds": 6.783291666666667,
+      "delivery_speed": 0.96
+    },
+    {
+      "id": "story_902ff136b2cde5ddb4ba",
+      "speaker_id": "tor",
+      "cast_role": "tor",
+      "text": "I will stay at this forge. The people remaining will still need repairs.",
+      "text_sha256": "3de42382459be1ac47e8f4e5b1ad099f9e4c99cbbbe7627aff1783895e4b330f",
+      "page_key": "902ff136b2cde5ddb4ba8cc298997c8c945b2509af533d9eb288e1d9e0711d26",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/902ff136b2cde5ddb4ba8cc298997c8c945b2509af533d9eb288e1d9e0711d26.ogg",
+      "scene": "community:departure:tor:no",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "e9caad9d80fc3e169b46ad2b1a5413f32fcd78afae7e82a28444140f9a10992a",
+      "audio_sha256": "f0bbe0d7d73dff59f26f75d0699abc16e95224236c0bceeceb018f6691c9ee1a",
+      "audio_bytes": 30582,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.195,
+        0.663,
+        1.0,
+        1.0,
+        0.74,
+        0.835,
+        0.805,
+        0.489,
+        0.343,
+        0.361,
+        0.313,
+        0.203,
+        0.196,
+        0.922,
+        1.0,
+        0.841,
+        0.887,
+        0.796,
+        0.765,
+        0.408,
+        0.18,
+        0.182,
+        0.421,
+        0.807,
+        0.569,
+        0.309,
+        0.284,
+        0.188,
+        0.187,
+        0.19,
+        0.352,
+        1.0,
+        0.839,
+        0.869,
+        0.709,
+        0.553,
+        0.392,
+        0.254,
+        0.215,
+        0.219,
+        0.177,
+        0.257,
+        0.231,
+        0.192,
+        0.206,
+        0.207,
+        0.21,
+        0.21,
+        0.211,
+        0.211,
+        0.21,
+        0.211,
+        0.211,
+        0.21,
+        0.21,
+        0.324,
+        0.935,
+        0.367,
+        0.188,
+        0.279,
+        1.0,
+        1.0,
+        0.88,
+        0.264,
+        0.189,
+        0.583,
+        0.846,
+        0.809,
+        0.555,
+        0.621,
+        0.975,
+        0.838,
+        0.906,
+        0.838,
+        0.868,
+        0.757,
+        0.81,
+        0.761,
+        0.794,
+        0.829,
+        0.782,
+        0.687,
+        0.598,
+        0.526,
+        0.503,
+        0.503,
+        0.518,
+        0.494,
+        0.543,
+        0.532,
+        0.372,
+        0.296,
+        0.295,
+        0.292,
+        0.222,
+        0.204,
+        0.178,
+        0.952,
+        0.945,
+        0.79,
+        0.736,
+        0.845,
+        0.888,
+        0.857,
+        0.95,
+        0.855,
+        0.822,
+        0.716,
+        0.73,
+        0.345,
+        0.319,
+        0.452,
+        0.769,
+        0.639,
+        0.259,
+        0.194,
+        0.159,
+        0.386,
+        0.908,
+        0.771,
+        0.76,
+        0.661,
+        0.536,
+        0.422,
+        0.288,
+        0.19,
+        0.126,
+        0.122,
+        0.151,
+        0.209,
+        0.268,
+        0.224,
+        0.194,
+        0.203,
+        0.209,
+        0.211,
+        0.211,
+        0.211,
+        0.211,
+        0.21,
+        0.124
+      ],
+      "duration_seconds": 4.672666666666666,
+      "delivery_speed": 0.96
+    },
+    {
+      "id": "story_108fa662d9704026e2fe",
+      "speaker_id": "tor",
+      "cast_role": "tor",
+      "text": "Take my name off the departure list. I am not agreeing to move.",
+      "text_sha256": "ce5b833a6ebe09b7140369d5a670594c0dc7aed4b1f0a4fccd1c1dd3592eb6ab",
+      "page_key": "108fa662d9704026e2fe0044287ec42c22549f84893eca091e39d248fe8e2033",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/108fa662d9704026e2fe0044287ec42c22549f84893eca091e39d248fe8e2033.ogg",
+      "scene": "community:departure:tor:withdraw",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "4f6e27af11a12e1885d4d39cab5dbd4be7a965e1f3fb9c36acb7893dacac29f7",
+      "audio_sha256": "3a5a68c3e83a9248b8d24843e18fb5cdb474ef94e4eda3295476b73a1320958b",
+      "audio_bytes": 30561,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.191,
+        0.3,
+        0.445,
+        1.0,
+        1.0,
+        0.757,
+        0.204,
+        0.172,
+        0.167,
+        0.669,
+        0.97,
+        0.934,
+        0.787,
+        0.702,
+        0.675,
+        0.775,
+        0.769,
+        0.723,
+        0.806,
+        0.717,
+        0.746,
+        0.712,
+        0.693,
+        0.642,
+        0.649,
+        0.659,
+        0.663,
+        0.471,
+        0.183,
+        0.171,
+        0.432,
+        0.754,
+        0.581,
+        0.186,
+        0.185,
+        0.194,
+        0.194,
+        0.54,
+        0.7,
+        0.372,
+        0.456,
+        0.891,
+        0.38,
+        0.188,
+        0.189,
+        0.144,
+        0.144,
+        0.641,
+        0.774,
+        0.669,
+        0.532,
+        0.252,
+        0.183,
+        0.328,
+        0.393,
+        0.455,
+        0.721,
+        0.434,
+        0.438,
+        0.449,
+        0.439,
+        0.286,
+        0.219,
+        0.271,
+        0.378,
+        0.282,
+        0.202,
+        0.193,
+        0.194,
+        0.204,
+        0.206,
+        0.207,
+        0.208,
+        0.208,
+        0.207,
+        0.208,
+        0.207,
+        0.209,
+        0.209,
+        0.204,
+        0.572,
+        0.958,
+        1.0,
+        1.0,
+        0.876,
+        0.812,
+        0.896,
+        1.0,
+        0.894,
+        0.952,
+        0.779,
+        0.725,
+        0.385,
+        0.546,
+        0.772,
+        0.443,
+        0.337,
+        0.206,
+        0.537,
+        0.774,
+        0.843,
+        0.751,
+        0.69,
+        0.651,
+        0.593,
+        0.583,
+        0.613,
+        0.381,
+        0.241,
+        0.18,
+        0.683,
+        0.729,
+        0.788,
+        0.819,
+        0.838,
+        0.829,
+        0.806,
+        0.668,
+        0.562,
+        0.411,
+        0.295,
+        0.13,
+        0.134,
+        0.118,
+        0.139,
+        0.174,
+        0.186,
+        0.191,
+        0.203,
+        0.209,
+        0.208,
+        0.209,
+        0.208,
+        0.208,
+        0.208,
+        0.171
+      ],
+      "duration_seconds": 4.512,
+      "delivery_speed": 0.96
+    },
+    {
+      "id": "story_9ef2a77b6fee368f8732",
+      "speaker_id": "rook",
+      "cast_role": "rook",
+      "text": "I will take my bag to Hearthward. I have left places before; this time the list will tell the truth about it.",
+      "text_sha256": "2e22d269b902173fad315f64e8cfb2f57ba7df37b6c7f61b6bb5acfd5c6b46cd",
+      "page_key": "9ef2a77b6fee368f87328a0ab7dcbc880546b324c72cdb3530f998da576f6cc5",
+      "narrative_revision": "road-renewal-1",
+      "path": "res://assets_external/audio/voices/community/9ef2a77b6fee368f87328a0ab7dcbc880546b324c72cdb3530f998da576f6cc5.ogg",
+      "scene": "community:departure:rook:yes",
+      "production_mode": "generated",
+      "human_reviewed": false,
+      "review_status": "pending_listening_review",
+      "status": "generated_current",
+      "voice_model": "Kokoro-82M-v1.0-fp32",
+      "render_recipe_sha256": "e1faa48666504f4a977154a5a21346f2fe2fece54d7af542f63be0e3cff25505",
+      "audio_sha256": "0ec212a3a1603d7715fd2d0e84e464e766acf7c4e26e88681d68460d38ce6aa8",
+      "audio_bytes": 45177,
+      "speech_envelope_hz": 30.0,
+      "speech_envelope": [
+        0.143,
+        0.149,
+        0.119,
+        0.643,
+        0.977,
+        0.798,
+        0.986,
+        0.293,
+        0.606,
+        0.381,
+        1.0,
+        1.0,
+        0.796,
+        0.135,
+        0.129,
+        0.216,
+        0.854,
+        0.766,
+        0.753,
+        0.79,
+        0.655,
+        0.228,
+        0.155,
+        0.949,
+        0.85,
+        0.751,
+        0.692,
+        0.527,
+        0.287,
+        0.144,
+        0.14,
+        0.233,
+        0.33,
+        0.301,
+        0.142,
+        0.098,
+        0.428,
+        0.632,
+        0.595,
+        0.472,
+        0.213,
+        0.091,
+        0.106,
+        0.118,
+        0.13,
+        0.339,
+        0.252,
+        0.178,
+        0.128,
+        0.087,
+        0.145,
+        0.13,
+        0.166,
+        0.126,
+        0.112,
+        0.165,
+        0.118,
+        0.125,
+        0.171,
+        0.163,
+        0.163,
+        0.163,
+        0.163,
+        0.163,
+        0.163,
+        0.164,
+        0.132,
+        0.326,
+        0.828,
+        0.938,
+        1.0,
+        0.391,
+        0.172,
+        0.728,
+        1.0,
+        1.0,
+        0.897,
+        0.178,
+        0.14,
+        0.128,
+        0.157,
+        0.164,
+        0.17,
+        0.822,
+        1.0,
+        0.911,
+        0.524,
+        0.554,
+        0.566,
+        0.269,
+        0.378,
+        0.341,
+        0.178,
+        0.15,
+        0.131,
+        0.392,
+        0.197,
+        0.108,
+        0.111,
+        0.135,
+        0.418,
+        0.662,
+        0.512,
+        0.507,
+        0.432,
+        0.278,
+        0.304,
+        0.09,
+        0.106,
+        0.141,
+        0.142,
+        0.146,
+        0.114,
+        0.152,
+        0.163,
+        0.163,
+        0.166,
+        0.092,
+        0.952,
+        0.829,
+        1.0,
+        1.0,
+        0.165,
+        0.321,
+        0.475,
+        0.727,
+        0.78,
+        0.771,
+        0.723,
+        0.702,
+        0.783,
+        0.634,
+        0.326,
+        0.58,
+        0.515,
+        0.6,
+        0.685,
+        0.753,
+        0.337,
+        0.764,
+        0.21,
+        0.146,
+        0.09,
+        0.274,
+        0.408,
+        0.141,
+        0.319,
+        0.333,
+        0.197,
+        0.549,
+        0.626,
+        0.578,
+        0.426,
+        0.179,
+        0.324,
+        0.24,
+        0.146,
+        0.263,
+        0.163,
+        0.523,
+        0.679,
+        0.403,
+        0.116,
+        0.12,
+        0.327,
+        0.143,
+        0.251,
+        0.379,
+        0.312,
+        0.261,
+        0.254,
+        0.119,
+        0.135,
+        0.148,
+        0.105,
+        0.13,
+        0.157,
+        0.113,
+        0.115,
+        0.143,
+        0.156,
+        0.112,
+        0.138,
+        0.126,
+        0.095,
+        0.117,
+        0.099,
+        0.162,
+        0.111,
+        0.156,
+        0.134,
+        0.163,
+        0.163,
+        0.163,
+        0.163,
+        0.163,
+        0.163,
+        0.152
+      ],
+      "duration_seconds": 6.6,
+      "delivery_speed": 1.04
     },
     {
       "id": "story_78f8c71223f63105870c",
@@ -87895,1942 +90011,1565 @@
       "retained_previous_performance": true
     }
   ],
-  "retained_previous_recordings": 493,
-  "synthesized_this_run": 25,
+  "retained_previous_recordings": 518,
+  "synthesized_this_run": 0,
   "batch_new_recording_limit": 25,
-  "new_dialogue_bytes": 3909831,
+  "new_dialogue_bytes": 4326377,
   "pending_recordings": [
-    {
-      "scene": "community:departure:nera:withdraw",
-      "speaker_id": "saga_nera",
-      "page_key": "ab5489953ce81206463396bda14384adb0c61e62cfed9e07fc2d97a69cff15a4",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:elna:yes",
-      "speaker_id": "widow_elna",
-      "page_key": "54a8b8fcbc471da20fcedad39416723ce32c5e5c9e9f4917d846d364ffe4091a",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:elna:no",
-      "speaker_id": "widow_elna",
-      "page_key": "9aa9cb8bd4912a6f15e910232e65ba912dc6c8f1fb1db4c03f4d545b3b5fae70",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:elna:withdraw",
-      "speaker_id": "widow_elna",
-      "page_key": "372940994d04affa481005cab8f21f0121f1791660bc2bdcaa9a672d24034ae2",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:toma:yes",
-      "speaker_id": "farmer_toma",
-      "page_key": "d95f1bf21c8f63376b486a3f48f382d056d6568fc794c0114858d7d50c8454b1",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:toma:no",
-      "speaker_id": "farmer_toma",
-      "page_key": "4554efe2f386a8f6719586b7259b35b4695a31fdf5a30546920f65efb0336405",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:toma:withdraw",
-      "speaker_id": "farmer_toma",
-      "page_key": "edb0de26b3259c67b5cd1667757cde3dc848b6bc2c0f81f10d47ae7bc2059de5",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:tor:yes",
-      "speaker_id": "blacksmith_tor",
-      "page_key": "3a9f251bb04e6bc87f878e4e1659ed0665e463057a9f8537918523930c0976fd",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:tor:no",
-      "speaker_id": "blacksmith_tor",
-      "page_key": "902ff136b2cde5ddb4ba8cc298997c8c945b2509af533d9eb288e1d9e0711d26",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:tor:withdraw",
-      "speaker_id": "blacksmith_tor",
-      "page_key": "108fa662d9704026e2fe0044287ec42c22549f84893eca091e39d248fe8e2033",
-      "reason": "bounded_batch_limit"
-    },
-    {
-      "scene": "community:departure:rook:yes",
-      "speaker_id": "rook",
-      "page_key": "9ef2a77b6fee368f87328a0ab7dcbc880546b324c72cdb3530f998da576f6cc5",
-      "reason": "bounded_batch_limit"
-    },
     {
       "scene": "community:departure:rook:no",
       "speaker_id": "rook",
-      "page_key": "30a9f740b07dd0f0761a30152ecd8d5b5fd44ad028b934087aab236296ad3ea9",
-      "reason": "bounded_batch_limit"
+      "page_key": "30a9f740b07dd0f0761a30152ecd8d5b5fd44ad028b934087aab236296ad3ea9"
     },
     {
       "scene": "community:departure:rook:withdraw",
       "speaker_id": "rook",
-      "page_key": "14cede34a4a721fe0fd45390195fb61d7a893779d64b8c69d740556e55747d7f",
-      "reason": "bounded_batch_limit"
+      "page_key": "14cede34a4a721fe0fd45390195fb61d7a893779d64b8c69d740556e55747d7f"
     },
     {
       "scene": "community:departure:edric:yes",
       "speaker_id": "edric_campaign",
-      "page_key": "5fff06ec81f4f7f865ff52bd6dadf9e1a030d2466b9b5a7e54ea1ba1c8d2cda7",
-      "reason": "bounded_batch_limit"
+      "page_key": "5fff06ec81f4f7f865ff52bd6dadf9e1a030d2466b9b5a7e54ea1ba1c8d2cda7"
     },
     {
       "scene": "community:departure:edric:no",
       "speaker_id": "edric_campaign",
-      "page_key": "234a9f3662dd50d78b42469361d1bbd06ac5daa6abe5a6726209bcb94bbf31a8",
-      "reason": "bounded_batch_limit"
+      "page_key": "234a9f3662dd50d78b42469361d1bbd06ac5daa6abe5a6726209bcb94bbf31a8"
     },
     {
       "scene": "community:departure:edric:withdraw",
       "speaker_id": "edric_campaign",
-      "page_key": "46eb68da34e10e2d7249848bb3d6eab0ac00e6f6eacea06c4d68c64b4d581e41",
-      "reason": "bounded_batch_limit"
+      "page_key": "46eb68da34e10e2d7249848bb3d6eab0ac00e6f6eacea06c4d68c64b4d581e41"
     },
     {
       "scene": "community:departure:senn:yes",
       "speaker_id": "captain_senn",
-      "page_key": "1fb192352a90663efeec0b39b7e3ea8389b695ffbe614371903fcc1a05a20cb7",
-      "reason": "bounded_batch_limit"
+      "page_key": "1fb192352a90663efeec0b39b7e3ea8389b695ffbe614371903fcc1a05a20cb7"
     },
     {
       "scene": "community:departure:senn:no",
       "speaker_id": "captain_senn",
-      "page_key": "5f3282faf6393f89adc74c834ac76e126f7d01fde581920ca22f350afce408a8",
-      "reason": "bounded_batch_limit"
+      "page_key": "5f3282faf6393f89adc74c834ac76e126f7d01fde581920ca22f350afce408a8"
     },
     {
       "scene": "community:departure:senn:withdraw",
       "speaker_id": "captain_senn",
-      "page_key": "ba2abb2757e2e14161f8bb476651cfdba14ae63ec899d12d94964bdcc5bc8a03",
-      "reason": "bounded_batch_limit"
+      "page_key": "ba2abb2757e2e14161f8bb476651cfdba14ae63ec899d12d94964bdcc5bc8a03"
     },
     {
       "scene": "conversation_topic:life2_anwen_five_minutes",
       "speaker_id": "player",
-      "page_key": "d55b6da8b3293eb0cb285b14b48115ef852139d181cc20384a3621a961a68b3b",
-      "reason": "bounded_batch_limit"
+      "page_key": "d55b6da8b3293eb0cb285b14b48115ef852139d181cc20384a3621a961a68b3b"
     },
     {
       "scene": "conversation_topic:life2_anwen_five_minutes",
       "speaker_id": "sister_anwen",
-      "page_key": "e5140acb1a5d20dd8d780c477b68ba4e05320e31e7397b7ab3f2536e4035f9c9",
-      "reason": "bounded_batch_limit"
+      "page_key": "e5140acb1a5d20dd8d780c477b68ba4e05320e31e7397b7ab3f2536e4035f9c9"
     },
     {
       "scene": "conversation_topic:life2_anwen_five_minutes",
       "speaker_id": "player",
-      "page_key": "8793abf3c1e765d18d4e60830578eea6a1b5858143e8359467fa761cf1c195f6",
-      "reason": "bounded_batch_limit"
+      "page_key": "8793abf3c1e765d18d4e60830578eea6a1b5858143e8359467fa761cf1c195f6"
     },
     {
       "scene": "conversation_topic:life2_anwen_five_minutes",
       "speaker_id": "sister_anwen",
-      "page_key": "6a7e5a7b0a0632f365c9712369d9a32ceb7f68b005810c0a4acc442a48414514",
-      "reason": "bounded_batch_limit"
+      "page_key": "6a7e5a7b0a0632f365c9712369d9a32ceb7f68b005810c0a4acc442a48414514"
     },
     {
       "scene": "conversation_topic:life2_anwen_five_minutes",
       "speaker_id": "player",
-      "page_key": "863e000304da2304371eb59db93856e9e5e0477d654c85272062e9b153a263cb",
-      "reason": "bounded_batch_limit"
+      "page_key": "863e000304da2304371eb59db93856e9e5e0477d654c85272062e9b153a263cb"
     },
     {
       "scene": "conversation_topic:life2_anwen_five_minutes",
       "speaker_id": "sister_anwen",
-      "page_key": "8f9d7afb94ddd5eca8869f0051210e40319dcac9ce9a5857e17095a21ed11293",
-      "reason": "bounded_batch_limit"
+      "page_key": "8f9d7afb94ddd5eca8869f0051210e40319dcac9ce9a5857e17095a21ed11293"
     },
     {
       "scene": "conversation_topic:life2_anwen_bad_stew",
       "speaker_id": "player",
-      "page_key": "d8e0593a9a603b315a59b1ad7af695cf37649344c0f374d097aa61e03cf7b181",
-      "reason": "bounded_batch_limit"
+      "page_key": "d8e0593a9a603b315a59b1ad7af695cf37649344c0f374d097aa61e03cf7b181"
     },
     {
       "scene": "conversation_topic:life2_anwen_bad_stew",
       "speaker_id": "sister_anwen",
-      "page_key": "feb5e544c00ba9a14553d708251604034755ad5f08be965c847581b069ebba48",
-      "reason": "bounded_batch_limit"
+      "page_key": "feb5e544c00ba9a14553d708251604034755ad5f08be965c847581b069ebba48"
     },
     {
       "scene": "conversation_topic:life2_anwen_bad_stew",
       "speaker_id": "player",
-      "page_key": "ae548c6716cf9d121cc45ad2da02cd4f4d0fb67d4aab273c2cd80ca4b4d2ac32",
-      "reason": "bounded_batch_limit"
+      "page_key": "ae548c6716cf9d121cc45ad2da02cd4f4d0fb67d4aab273c2cd80ca4b4d2ac32"
     },
     {
       "scene": "conversation_topic:life2_anwen_bad_stew",
       "speaker_id": "sister_anwen",
-      "page_key": "57d38f98cc5761216503ef1bca9dd08ff0fe932e8f1b4197934ae8bb35c28f9f",
-      "reason": "bounded_batch_limit"
+      "page_key": "57d38f98cc5761216503ef1bca9dd08ff0fe932e8f1b4197934ae8bb35c28f9f"
     },
     {
       "scene": "conversation_topic:life2_anwen_bad_stew",
       "speaker_id": "player",
-      "page_key": "7a7106922f94d5c67fa50ab981353a29be083f13b7b3390786c3d252de2f29da",
-      "reason": "bounded_batch_limit"
+      "page_key": "7a7106922f94d5c67fa50ab981353a29be083f13b7b3390786c3d252de2f29da"
     },
     {
       "scene": "conversation_topic:life2_anwen_bad_stew",
       "speaker_id": "sister_anwen",
-      "page_key": "f16ff1050c5083d26918c2e91f4095618ce514788eaeac27a7ac7d4292996f1f",
-      "reason": "bounded_batch_limit"
+      "page_key": "f16ff1050c5083d26918c2e91f4095618ce514788eaeac27a7ac7d4292996f1f"
     },
     {
       "scene": "conversation_topic:life2_rook_losing_well",
       "speaker_id": "player",
-      "page_key": "2e54aaa0a4fd5263656c14d4c6f4a8bda91a63ee6045620342459b5cd1bcf256",
-      "reason": "bounded_batch_limit"
+      "page_key": "2e54aaa0a4fd5263656c14d4c6f4a8bda91a63ee6045620342459b5cd1bcf256"
     },
     {
       "scene": "conversation_topic:life2_rook_losing_well",
       "speaker_id": "rook",
-      "page_key": "3cc470037c54179fa9d79dc5535fa8aeaad0636d59e6759f671d92c4939254dd",
-      "reason": "bounded_batch_limit"
+      "page_key": "3cc470037c54179fa9d79dc5535fa8aeaad0636d59e6759f671d92c4939254dd"
     },
     {
       "scene": "conversation_topic:life2_rook_losing_well",
       "speaker_id": "player",
-      "page_key": "8f504c102778a39979e5b7da91c99d4fcd4591cd7fc78a55c3bbc31e3708e0ff",
-      "reason": "bounded_batch_limit"
+      "page_key": "8f504c102778a39979e5b7da91c99d4fcd4591cd7fc78a55c3bbc31e3708e0ff"
     },
     {
       "scene": "conversation_topic:life2_rook_losing_well",
       "speaker_id": "rook",
-      "page_key": "f1da0df46ef83937087bbe3f7a1e80c883fc6f9d6483c7bad8dc64660c446767",
-      "reason": "bounded_batch_limit"
+      "page_key": "f1da0df46ef83937087bbe3f7a1e80c883fc6f9d6483c7bad8dc64660c446767"
     },
     {
       "scene": "conversation_topic:life2_rook_losing_well",
       "speaker_id": "player",
-      "page_key": "e3b61afbbde255e53890b24636d2a80d18d73f93ea51aff7b858ce871bf9461a",
-      "reason": "bounded_batch_limit"
+      "page_key": "e3b61afbbde255e53890b24636d2a80d18d73f93ea51aff7b858ce871bf9461a"
     },
     {
       "scene": "conversation_topic:life2_rook_losing_well",
       "speaker_id": "rook",
-      "page_key": "1065f9e72d77b208fad5055a079d5ca656eccbb6cf9bb664b1a79401214e3877",
-      "reason": "bounded_batch_limit"
+      "page_key": "1065f9e72d77b208fad5055a079d5ca656eccbb6cf9bb664b1a79401214e3877"
     },
     {
       "scene": "conversation_topic:life2_rook_quiet_company",
       "speaker_id": "player",
-      "page_key": "e5eee32875e58c908b38e1a45fa2af18eadf37a8d0a0e721726023791b1e79ce",
-      "reason": "bounded_batch_limit"
+      "page_key": "e5eee32875e58c908b38e1a45fa2af18eadf37a8d0a0e721726023791b1e79ce"
     },
     {
       "scene": "conversation_topic:life2_rook_quiet_company",
       "speaker_id": "rook",
-      "page_key": "6e1f3f55a883772fe27cafab605e5f1a202c8b6cfe792c28a58c02da55c66324",
-      "reason": "bounded_batch_limit"
+      "page_key": "6e1f3f55a883772fe27cafab605e5f1a202c8b6cfe792c28a58c02da55c66324"
     },
     {
       "scene": "conversation_topic:life2_rook_quiet_company",
       "speaker_id": "player",
-      "page_key": "3578dd5329b39e062d829f824818b061bad5af6980f8f0c22b167065aeeb7339",
-      "reason": "bounded_batch_limit"
+      "page_key": "3578dd5329b39e062d829f824818b061bad5af6980f8f0c22b167065aeeb7339"
     },
     {
       "scene": "conversation_topic:life2_rook_quiet_company",
       "speaker_id": "rook",
-      "page_key": "0d36ec17fab9a701312bcabed71e45853a82639d9b04637aec78464ae87a765d",
-      "reason": "bounded_batch_limit"
+      "page_key": "0d36ec17fab9a701312bcabed71e45853a82639d9b04637aec78464ae87a765d"
     },
     {
       "scene": "conversation_topic:life2_rook_quiet_company",
       "speaker_id": "player",
-      "page_key": "136547de5bdd3be8cefb6025bf559a7b9ff4e40ae5199e1ff53b2eb8cf77b347",
-      "reason": "bounded_batch_limit"
+      "page_key": "136547de5bdd3be8cefb6025bf559a7b9ff4e40ae5199e1ff53b2eb8cf77b347"
     },
     {
       "scene": "conversation_topic:life2_rook_quiet_company",
       "speaker_id": "rook",
-      "page_key": "7e01051e65e9cd8e3b37fd2fb1d65cc19c46f6cd0362a31ce26ccbf8fd117b0b",
-      "reason": "bounded_batch_limit"
+      "page_key": "7e01051e65e9cd8e3b37fd2fb1d65cc19c46f6cd0362a31ce26ccbf8fd117b0b"
     },
     {
       "scene": "conversation_topic:life2_mira_yellow_flowers",
       "speaker_id": "player",
-      "page_key": "fff821afcf57af3a19b3352aa4913cb26f484ad71dd2082cb3d6a9d4c955257e",
-      "reason": "bounded_batch_limit"
+      "page_key": "fff821afcf57af3a19b3352aa4913cb26f484ad71dd2082cb3d6a9d4c955257e"
     },
     {
       "scene": "conversation_topic:life2_mira_yellow_flowers",
       "speaker_id": "mira",
-      "page_key": "14a31b1908e3f3a89a32d3031a8f38acdcb4ff9210e012858bb5fe9106e58536",
-      "reason": "bounded_batch_limit"
+      "page_key": "14a31b1908e3f3a89a32d3031a8f38acdcb4ff9210e012858bb5fe9106e58536"
     },
     {
       "scene": "conversation_topic:life2_mira_yellow_flowers",
       "speaker_id": "player",
-      "page_key": "06442ab846f0dd218fa699c5b52b80b4a0b84a6c5e268c52b762d7f6af63fab8",
-      "reason": "bounded_batch_limit"
+      "page_key": "06442ab846f0dd218fa699c5b52b80b4a0b84a6c5e268c52b762d7f6af63fab8"
     },
     {
       "scene": "conversation_topic:life2_mira_yellow_flowers",
       "speaker_id": "mira",
-      "page_key": "47934a66b6c97cad07c3f48453fdab68c1e2e02ad43303c459b3942feda89be6",
-      "reason": "bounded_batch_limit"
+      "page_key": "47934a66b6c97cad07c3f48453fdab68c1e2e02ad43303c459b3942feda89be6"
     },
     {
       "scene": "conversation_topic:life2_mira_yellow_flowers",
       "speaker_id": "player",
-      "page_key": "87df426325faeef0ab1ccd861ff796b68e40caf43a7d117539d52ea3ee744b36",
-      "reason": "bounded_batch_limit"
+      "page_key": "87df426325faeef0ab1ccd861ff796b68e40caf43a7d117539d52ea3ee744b36"
     },
     {
       "scene": "conversation_topic:life2_mira_yellow_flowers",
       "speaker_id": "mira",
-      "page_key": "cf60a9122eaba5eec1d5f66c8b77b6061dcd9cd1b5642ada09fc571fae52a0c7",
-      "reason": "bounded_batch_limit"
+      "page_key": "cf60a9122eaba5eec1d5f66c8b77b6061dcd9cd1b5642ada09fc571fae52a0c7"
     },
     {
       "scene": "conversation_topic:life2_mira_rain_reading",
       "speaker_id": "player",
-      "page_key": "f5f18d8d65dc47424b7cc7b6e10e16a7f1f3f689d5207f8293596283f26fa364",
-      "reason": "bounded_batch_limit"
+      "page_key": "f5f18d8d65dc47424b7cc7b6e10e16a7f1f3f689d5207f8293596283f26fa364"
     },
     {
       "scene": "conversation_topic:life2_mira_rain_reading",
       "speaker_id": "mira",
-      "page_key": "e43d49d37b7b211d94a623ab927980faa1aa73714383ad0f684b612c28d0d79c",
-      "reason": "bounded_batch_limit"
+      "page_key": "e43d49d37b7b211d94a623ab927980faa1aa73714383ad0f684b612c28d0d79c"
     },
     {
       "scene": "conversation_topic:life2_mira_rain_reading",
       "speaker_id": "player",
-      "page_key": "2d830b236593ae1e88f001e4195e09c068cf9e483a517c4c255dfc6664347e86",
-      "reason": "bounded_batch_limit"
+      "page_key": "2d830b236593ae1e88f001e4195e09c068cf9e483a517c4c255dfc6664347e86"
     },
     {
       "scene": "conversation_topic:life2_mira_rain_reading",
       "speaker_id": "mira",
-      "page_key": "29f85a923d5ca34c6958b7ff52dacf1db8209e444dc991959b146fca20a72e93",
-      "reason": "bounded_batch_limit"
+      "page_key": "29f85a923d5ca34c6958b7ff52dacf1db8209e444dc991959b146fca20a72e93"
     },
     {
       "scene": "conversation_topic:life2_mira_rain_reading",
       "speaker_id": "player",
-      "page_key": "5090b8a543cdcea360ae2db43aa193fba3db0cb6319b506df2051c786852e49a",
-      "reason": "bounded_batch_limit"
+      "page_key": "5090b8a543cdcea360ae2db43aa193fba3db0cb6319b506df2051c786852e49a"
     },
     {
       "scene": "conversation_topic:life2_mira_rain_reading",
       "speaker_id": "mira",
-      "page_key": "d1511a4022432de8fbda039eb30c1e537bb3d76fbab9d67b05f794ca177e342a",
-      "reason": "bounded_batch_limit"
+      "page_key": "d1511a4022432de8fbda039eb30c1e537bb3d76fbab9d67b05f794ca177e342a"
     },
     {
       "scene": "conversation_topic:life2_tor_ornament",
       "speaker_id": "player",
-      "page_key": "68efcb2f030af3bc042e808caa1578b9f77e7ee3a78536e8af1896c4785a7f94",
-      "reason": "bounded_batch_limit"
+      "page_key": "68efcb2f030af3bc042e808caa1578b9f77e7ee3a78536e8af1896c4785a7f94"
     },
     {
       "scene": "conversation_topic:life2_tor_ornament",
       "speaker_id": "blacksmith_tor",
-      "page_key": "dac70d1c878fc25cd5858810617c1d6903363874950bd25f9184af8cd602abdc",
-      "reason": "bounded_batch_limit"
+      "page_key": "dac70d1c878fc25cd5858810617c1d6903363874950bd25f9184af8cd602abdc"
     },
     {
       "scene": "conversation_topic:life2_tor_ornament",
       "speaker_id": "player",
-      "page_key": "d523546d0d085c218783c82bec26d7bd23d4026032163dd44e1d9a046d9cc5c8",
-      "reason": "bounded_batch_limit"
+      "page_key": "d523546d0d085c218783c82bec26d7bd23d4026032163dd44e1d9a046d9cc5c8"
     },
     {
       "scene": "conversation_topic:life2_tor_ornament",
       "speaker_id": "blacksmith_tor",
-      "page_key": "55955135b407eb076b98533ad6361789311e964500fb2938e55d89608c8f0436",
-      "reason": "bounded_batch_limit"
+      "page_key": "55955135b407eb076b98533ad6361789311e964500fb2938e55d89608c8f0436"
     },
     {
       "scene": "conversation_topic:life2_tor_ornament",
       "speaker_id": "player",
-      "page_key": "5ee122b2f15f1ae7232eeeda6c987b8b01f707afd9b4c2407caddaac14e56fad",
-      "reason": "bounded_batch_limit"
+      "page_key": "5ee122b2f15f1ae7232eeeda6c987b8b01f707afd9b4c2407caddaac14e56fad"
     },
     {
       "scene": "conversation_topic:life2_tor_ornament",
       "speaker_id": "blacksmith_tor",
-      "page_key": "3fd9878cedf7b552be01811ab0dcafcdd256a23e6ed89f84f04f2ee269daba25",
-      "reason": "bounded_batch_limit"
+      "page_key": "3fd9878cedf7b552be01811ab0dcafcdd256a23e6ed89f84f04f2ee269daba25"
     },
     {
       "scene": "conversation_topic:life2_tor_teaching",
       "speaker_id": "player",
-      "page_key": "241231dfe2bd07c417e8efb6728794df77fb2767b904297683cf0bd714d789d0",
-      "reason": "bounded_batch_limit"
+      "page_key": "241231dfe2bd07c417e8efb6728794df77fb2767b904297683cf0bd714d789d0"
     },
     {
       "scene": "conversation_topic:life2_tor_teaching",
       "speaker_id": "blacksmith_tor",
-      "page_key": "628ef31b835c74f77bcc522a32d56eec1e38e94827854a322f3d91e4fe98b249",
-      "reason": "bounded_batch_limit"
+      "page_key": "628ef31b835c74f77bcc522a32d56eec1e38e94827854a322f3d91e4fe98b249"
     },
     {
       "scene": "conversation_topic:life2_tor_teaching",
       "speaker_id": "player",
-      "page_key": "870e159839aca11d4858415d9a0814856c3b1f7d6520016665fb118e27935f70",
-      "reason": "bounded_batch_limit"
+      "page_key": "870e159839aca11d4858415d9a0814856c3b1f7d6520016665fb118e27935f70"
     },
     {
       "scene": "conversation_topic:life2_tor_teaching",
       "speaker_id": "blacksmith_tor",
-      "page_key": "34c69aa3ef30095ab114328e6ca97cb8d9b4d9bf2bfbf3cd1bf036bc00912d7a",
-      "reason": "bounded_batch_limit"
+      "page_key": "34c69aa3ef30095ab114328e6ca97cb8d9b4d9bf2bfbf3cd1bf036bc00912d7a"
     },
     {
       "scene": "conversation_topic:life2_tor_teaching",
       "speaker_id": "player",
-      "page_key": "f7c4b7b53e1b4701808d7220e17a5934c3a6785a8e205ea4fc0f179b9f3a4705",
-      "reason": "bounded_batch_limit"
+      "page_key": "f7c4b7b53e1b4701808d7220e17a5934c3a6785a8e205ea4fc0f179b9f3a4705"
     },
     {
       "scene": "conversation_topic:life2_tor_teaching",
       "speaker_id": "blacksmith_tor",
-      "page_key": "352b3816cc50370ea9dc6cce533f095c8be141f0cebaa7b3a51654f8a124383a",
-      "reason": "bounded_batch_limit"
+      "page_key": "352b3816cc50370ea9dc6cce533f095c8be141f0cebaa7b3a51654f8a124383a"
     },
     {
       "scene": "conversation_topic:life2_elna_blue",
       "speaker_id": "player",
-      "page_key": "d8b0ffb3b5bee6aecaeb5c8566e0d6760a3c1d04a2ae922f672ebaabbe9b9178",
-      "reason": "bounded_batch_limit"
+      "page_key": "d8b0ffb3b5bee6aecaeb5c8566e0d6760a3c1d04a2ae922f672ebaabbe9b9178"
     },
     {
       "scene": "conversation_topic:life2_elna_blue",
       "speaker_id": "widow_elna",
-      "page_key": "ea47e59a3fda6f7c81ca77a17fb8d14302e954fdb08e0f8b0f68dd588e0ea246",
-      "reason": "bounded_batch_limit"
+      "page_key": "ea47e59a3fda6f7c81ca77a17fb8d14302e954fdb08e0f8b0f68dd588e0ea246"
     },
     {
       "scene": "conversation_topic:life2_elna_blue",
       "speaker_id": "player",
-      "page_key": "c3803b2ecdc3209aed00224a5fed733d847e329661b9a3d813f30aa4205afeab",
-      "reason": "bounded_batch_limit"
+      "page_key": "c3803b2ecdc3209aed00224a5fed733d847e329661b9a3d813f30aa4205afeab"
     },
     {
       "scene": "conversation_topic:life2_elna_blue",
       "speaker_id": "widow_elna",
-      "page_key": "d3c1a1a7073fea8f93306583ae299b6c5c8bc938a135a7bab1d49f3313f36d26",
-      "reason": "bounded_batch_limit"
+      "page_key": "d3c1a1a7073fea8f93306583ae299b6c5c8bc938a135a7bab1d49f3313f36d26"
     },
     {
       "scene": "conversation_topic:life2_elna_blue",
       "speaker_id": "player",
-      "page_key": "64dd8c5468f4cc2938b885b7c1e327301758396ef3ea61d87c983d5e7e92b0ab",
-      "reason": "bounded_batch_limit"
+      "page_key": "64dd8c5468f4cc2938b885b7c1e327301758396ef3ea61d87c983d5e7e92b0ab"
     },
     {
       "scene": "conversation_topic:life2_elna_blue",
       "speaker_id": "widow_elna",
-      "page_key": "72b5384810e800ccfa83740972cfbbd56fe30caf20a9ae14bb6b856ebb40af5e",
-      "reason": "bounded_batch_limit"
+      "page_key": "72b5384810e800ccfa83740972cfbbd56fe30caf20a9ae14bb6b856ebb40af5e"
     },
     {
       "scene": "conversation_topic:life2_elna_visitor",
       "speaker_id": "player",
-      "page_key": "c0bbafe0d67b136975a2fd083d59fb919976ee456a19f89a660a60286cb73e4f",
-      "reason": "bounded_batch_limit"
+      "page_key": "c0bbafe0d67b136975a2fd083d59fb919976ee456a19f89a660a60286cb73e4f"
     },
     {
       "scene": "conversation_topic:life2_elna_visitor",
       "speaker_id": "widow_elna",
-      "page_key": "c4f54c82d644ae9d1c38d06b9d07e61042a233a315e5ec0680822327296d7a56",
-      "reason": "bounded_batch_limit"
+      "page_key": "c4f54c82d644ae9d1c38d06b9d07e61042a233a315e5ec0680822327296d7a56"
     },
     {
       "scene": "conversation_topic:life2_elna_visitor",
       "speaker_id": "player",
-      "page_key": "774d9d42891508e22ccd4aa0e443838afd08b2eaf36a9f83af4d604ab2ddd72f",
-      "reason": "bounded_batch_limit"
+      "page_key": "774d9d42891508e22ccd4aa0e443838afd08b2eaf36a9f83af4d604ab2ddd72f"
     },
     {
       "scene": "conversation_topic:life2_elna_visitor",
       "speaker_id": "widow_elna",
-      "page_key": "4875a7a621b897b0f06a499422d68cd7c88dad64a5643afa2d9bf0d1065deaf2",
-      "reason": "bounded_batch_limit"
+      "page_key": "4875a7a621b897b0f06a499422d68cd7c88dad64a5643afa2d9bf0d1065deaf2"
     },
     {
       "scene": "conversation_topic:life2_elna_visitor",
       "speaker_id": "player",
-      "page_key": "139efef22091dda5893c37120ef5e9c2645af90aa36ebda01a6308d93a915782",
-      "reason": "bounded_batch_limit"
+      "page_key": "139efef22091dda5893c37120ef5e9c2645af90aa36ebda01a6308d93a915782"
     },
     {
       "scene": "conversation_topic:life2_elna_visitor",
       "speaker_id": "widow_elna",
-      "page_key": "aede391b8de897c076a85bb8cbfb94cfcd2a9b3573859330e2a7345c13942eb8",
-      "reason": "bounded_batch_limit"
+      "page_key": "aede391b8de897c076a85bb8cbfb94cfcd2a9b3573859330e2a7345c13942eb8"
     },
     {
       "scene": "conversation_topic:life2_toma_daughter_choices",
       "speaker_id": "player",
-      "page_key": "5015f4242f729d8ed686b924cb45be6fa86a8832e2f492a9ced25ec788323819",
-      "reason": "bounded_batch_limit"
+      "page_key": "5015f4242f729d8ed686b924cb45be6fa86a8832e2f492a9ced25ec788323819"
     },
     {
       "scene": "conversation_topic:life2_toma_daughter_choices",
       "speaker_id": "farmer_toma",
-      "page_key": "8aacfce9a4abf9b872ed9152a21177ba1ba999d073a63ddc5da6b7c7c51d86f6",
-      "reason": "bounded_batch_limit"
+      "page_key": "8aacfce9a4abf9b872ed9152a21177ba1ba999d073a63ddc5da6b7c7c51d86f6"
     },
     {
       "scene": "conversation_topic:life2_toma_daughter_choices",
       "speaker_id": "player",
-      "page_key": "1e7189880026b7b0e06599eff34bf7f4001b8d9e0c3a0e767dc838272d7ff95c",
-      "reason": "bounded_batch_limit"
+      "page_key": "1e7189880026b7b0e06599eff34bf7f4001b8d9e0c3a0e767dc838272d7ff95c"
     },
     {
       "scene": "conversation_topic:life2_toma_daughter_choices",
       "speaker_id": "farmer_toma",
-      "page_key": "ecb9f0209df60ffac984d2f4191610c0f3fa052a23cc97f44c241ce57c210c2e",
-      "reason": "bounded_batch_limit"
+      "page_key": "ecb9f0209df60ffac984d2f4191610c0f3fa052a23cc97f44c241ce57c210c2e"
     },
     {
       "scene": "conversation_topic:life2_toma_daughter_choices",
       "speaker_id": "player",
-      "page_key": "f7988641604e43d040d53fa712ac40b1b138b02a42aac348659a1cb75a5385bc",
-      "reason": "bounded_batch_limit"
+      "page_key": "f7988641604e43d040d53fa712ac40b1b138b02a42aac348659a1cb75a5385bc"
     },
     {
       "scene": "conversation_topic:life2_toma_daughter_choices",
       "speaker_id": "farmer_toma",
-      "page_key": "32ef1a2442cbb941ae71483170a39008986836b9cf2979891c465509db55ebec",
-      "reason": "bounded_batch_limit"
+      "page_key": "32ef1a2442cbb941ae71483170a39008986836b9cf2979891c465509db55ebec"
     },
     {
       "scene": "conversation_topic:life2_toma_supper",
       "speaker_id": "player",
-      "page_key": "ac47de954a6c4b5b6a40464f8dd57cf864b6eff80e3dabe7815b4dd64cab43b5",
-      "reason": "bounded_batch_limit"
+      "page_key": "ac47de954a6c4b5b6a40464f8dd57cf864b6eff80e3dabe7815b4dd64cab43b5"
     },
     {
       "scene": "conversation_topic:life2_toma_supper",
       "speaker_id": "farmer_toma",
-      "page_key": "6e0cf9f2d25701f2b9d6c25095fdc906c0c2af85829449f87c71bb3671d85077",
-      "reason": "bounded_batch_limit"
+      "page_key": "6e0cf9f2d25701f2b9d6c25095fdc906c0c2af85829449f87c71bb3671d85077"
     },
     {
       "scene": "conversation_topic:life2_toma_supper",
       "speaker_id": "player",
-      "page_key": "4321a7b4e8a64be017ffee31099db9d226cb199769d3d497f046deb94059d444",
-      "reason": "bounded_batch_limit"
+      "page_key": "4321a7b4e8a64be017ffee31099db9d226cb199769d3d497f046deb94059d444"
     },
     {
       "scene": "conversation_topic:life2_toma_supper",
       "speaker_id": "farmer_toma",
-      "page_key": "0d27ab8b07186a10e980ebba5d53e86dc5da3fa4be26d654aaf4714e7782a840",
-      "reason": "bounded_batch_limit"
+      "page_key": "0d27ab8b07186a10e980ebba5d53e86dc5da3fa4be26d654aaf4714e7782a840"
     },
     {
       "scene": "conversation_topic:life2_toma_supper",
       "speaker_id": "player",
-      "page_key": "6e6344b890897ca8e433a4f6df1ab41dc4add32964cf7be45b725d5d5181302f",
-      "reason": "bounded_batch_limit"
+      "page_key": "6e6344b890897ca8e433a4f6df1ab41dc4add32964cf7be45b725d5d5181302f"
     },
     {
       "scene": "conversation_topic:life2_toma_supper",
       "speaker_id": "farmer_toma",
-      "page_key": "f0149f62f5135be500d028c7f5afbf4dbdd0f8da5ab04580ce6ea02f8e87c51b",
-      "reason": "bounded_batch_limit"
+      "page_key": "f0149f62f5135be500d028c7f5afbf4dbdd0f8da5ab04580ce6ea02f8e87c51b"
     },
     {
       "scene": "conversation_topic:life2_senn_request",
       "speaker_id": "player",
-      "page_key": "8e7d0a025e3fe122f560c212f8e35fbff79cd04c4ce6bf40a37d71a0906cf722",
-      "reason": "bounded_batch_limit"
+      "page_key": "8e7d0a025e3fe122f560c212f8e35fbff79cd04c4ce6bf40a37d71a0906cf722"
     },
     {
       "scene": "conversation_topic:life2_senn_request",
       "speaker_id": "captain_senn",
-      "page_key": "0e05fc02f9e9fd7f861b4aea317cd0752837870993f30aaa1e9ae3afd5d372f4",
-      "reason": "bounded_batch_limit"
+      "page_key": "0e05fc02f9e9fd7f861b4aea317cd0752837870993f30aaa1e9ae3afd5d372f4"
     },
     {
       "scene": "conversation_topic:life2_senn_request",
       "speaker_id": "player",
-      "page_key": "b4f9ba6a76d2aa96782e97cc3741385f936325534116d02ad47f412a32d8e70c",
-      "reason": "bounded_batch_limit"
+      "page_key": "b4f9ba6a76d2aa96782e97cc3741385f936325534116d02ad47f412a32d8e70c"
     },
     {
       "scene": "conversation_topic:life2_senn_request",
       "speaker_id": "captain_senn",
-      "page_key": "a7a69a2b882e072866e6be6702a05f5aaf981cba7566c1ec75d2da0c03cddbbd",
-      "reason": "bounded_batch_limit"
+      "page_key": "a7a69a2b882e072866e6be6702a05f5aaf981cba7566c1ec75d2da0c03cddbbd"
     },
     {
       "scene": "conversation_topic:life2_senn_request",
       "speaker_id": "player",
-      "page_key": "dd560430bab0df518225ffdc278f4761307fb2197820e33bfc9134c7746049bd",
-      "reason": "bounded_batch_limit"
+      "page_key": "dd560430bab0df518225ffdc278f4761307fb2197820e33bfc9134c7746049bd"
     },
     {
       "scene": "conversation_topic:life2_senn_request",
       "speaker_id": "captain_senn",
-      "page_key": "1911e31d40a80f26cec8bde93ccb0c54eceb5f22de30517c7921873cb4b4cfe2",
-      "reason": "bounded_batch_limit"
+      "page_key": "1911e31d40a80f26cec8bde93ccb0c54eceb5f22de30517c7921873cb4b4cfe2"
     },
     {
       "scene": "conversation_topic:life2_senn_song",
       "speaker_id": "player",
-      "page_key": "00584f52e8518bde269a5ce6e4740592edfcbcaeeb541b6f3b55069e6c16ed36",
-      "reason": "bounded_batch_limit"
+      "page_key": "00584f52e8518bde269a5ce6e4740592edfcbcaeeb541b6f3b55069e6c16ed36"
     },
     {
       "scene": "conversation_topic:life2_senn_song",
       "speaker_id": "captain_senn",
-      "page_key": "333b815bf4c16a18016d0a967ffa1aa5f235abe448caead87a47de09d5e29d4b",
-      "reason": "bounded_batch_limit"
+      "page_key": "333b815bf4c16a18016d0a967ffa1aa5f235abe448caead87a47de09d5e29d4b"
     },
     {
       "scene": "conversation_topic:life2_senn_song",
       "speaker_id": "player",
-      "page_key": "cfafed331592730afc300e672612a2fbfec88ff6008a6e0354176277fffbde3f",
-      "reason": "bounded_batch_limit"
+      "page_key": "cfafed331592730afc300e672612a2fbfec88ff6008a6e0354176277fffbde3f"
     },
     {
       "scene": "conversation_topic:life2_senn_song",
       "speaker_id": "captain_senn",
-      "page_key": "8427d60b887a5d17821c307be504caac6f0efb4b42940f170c5c21f237e83625",
-      "reason": "bounded_batch_limit"
+      "page_key": "8427d60b887a5d17821c307be504caac6f0efb4b42940f170c5c21f237e83625"
     },
     {
       "scene": "conversation_topic:life2_senn_song",
       "speaker_id": "player",
-      "page_key": "09101c7a556de5c461371280a1f8bc8a0aa4e7069daa3bc51bc558d857f76eea",
-      "reason": "bounded_batch_limit"
+      "page_key": "09101c7a556de5c461371280a1f8bc8a0aa4e7069daa3bc51bc558d857f76eea"
     },
     {
       "scene": "conversation_topic:life2_senn_song",
       "speaker_id": "captain_senn",
-      "page_key": "a08812882e679d51f10a160ec71b88aa0397d58ce9870c0009417c299d83a2eb",
-      "reason": "bounded_batch_limit"
+      "page_key": "a08812882e679d51f10a160ec71b88aa0397d58ce9870c0009417c299d83a2eb"
     },
     {
       "scene": "conversation_topic:life2_edric_breakfast",
       "speaker_id": "player",
-      "page_key": "b70a2873cb04d6e6de26f88029c010deb1ea8a3f4c93ddc8d1280c6efbe79559",
-      "reason": "bounded_batch_limit"
+      "page_key": "b70a2873cb04d6e6de26f88029c010deb1ea8a3f4c93ddc8d1280c6efbe79559"
     },
     {
       "scene": "conversation_topic:life2_edric_breakfast",
       "speaker_id": "edric",
-      "page_key": "78cbdacaae22209dc5f2978c7ed911cd32c4f63c70e4a0c70cff6b5f993625ac",
-      "reason": "bounded_batch_limit"
+      "page_key": "78cbdacaae22209dc5f2978c7ed911cd32c4f63c70e4a0c70cff6b5f993625ac"
     },
     {
       "scene": "conversation_topic:life2_edric_breakfast",
       "speaker_id": "player",
-      "page_key": "4b1b17037f69680e510ee5c301c04dc78a37afc63fa60e3b6dab3313c34bf620",
-      "reason": "bounded_batch_limit"
+      "page_key": "4b1b17037f69680e510ee5c301c04dc78a37afc63fa60e3b6dab3313c34bf620"
     },
     {
       "scene": "conversation_topic:life2_edric_breakfast",
       "speaker_id": "edric",
-      "page_key": "c00047eb2295560a63c9790fdb9e07c6e4cf405da9ae3382cf57c82ad5187ad2",
-      "reason": "bounded_batch_limit"
+      "page_key": "c00047eb2295560a63c9790fdb9e07c6e4cf405da9ae3382cf57c82ad5187ad2"
     },
     {
       "scene": "conversation_topic:life2_edric_breakfast",
       "speaker_id": "player",
-      "page_key": "7a6e6f13167eeae3f9fc4146f94aa9eaa5c3877ef0198dca3b7f2c445165cf1f",
-      "reason": "bounded_batch_limit"
+      "page_key": "7a6e6f13167eeae3f9fc4146f94aa9eaa5c3877ef0198dca3b7f2c445165cf1f"
     },
     {
       "scene": "conversation_topic:life2_edric_breakfast",
       "speaker_id": "edric",
-      "page_key": "47195811061e6eec5295b7d0ddf74f6e4a31976dc2717bdd1aba5472a5aee0af",
-      "reason": "bounded_batch_limit"
+      "page_key": "47195811061e6eec5295b7d0ddf74f6e4a31976dc2717bdd1aba5472a5aee0af"
     },
     {
       "scene": "conversation_topic:life2_edric_tune",
       "speaker_id": "player",
-      "page_key": "0e8adcbbf96578e4acfa1ddd5edd8df2bcf232e94b14acadc5da23e932ec0add",
-      "reason": "bounded_batch_limit"
+      "page_key": "0e8adcbbf96578e4acfa1ddd5edd8df2bcf232e94b14acadc5da23e932ec0add"
     },
     {
       "scene": "conversation_topic:life2_edric_tune",
       "speaker_id": "edric",
-      "page_key": "b9a1a1d329345a326e5f66167cde3e725c83fab118adcd6c045fa2fb18b297ee",
-      "reason": "bounded_batch_limit"
+      "page_key": "b9a1a1d329345a326e5f66167cde3e725c83fab118adcd6c045fa2fb18b297ee"
     },
     {
       "scene": "conversation_topic:life2_edric_tune",
       "speaker_id": "player",
-      "page_key": "ef215386e87f60479d7d2770a0737f7a156c885dc49a6931d0d479353c3043a1",
-      "reason": "bounded_batch_limit"
+      "page_key": "ef215386e87f60479d7d2770a0737f7a156c885dc49a6931d0d479353c3043a1"
     },
     {
       "scene": "conversation_topic:life2_edric_tune",
       "speaker_id": "edric",
-      "page_key": "9dd663d2cc22a243e8f5c96a0b6e41e5cc40b1dafd4fc25142f2982e3ab60064",
-      "reason": "bounded_batch_limit"
+      "page_key": "9dd663d2cc22a243e8f5c96a0b6e41e5cc40b1dafd4fc25142f2982e3ab60064"
     },
     {
       "scene": "conversation_topic:life2_edric_tune",
       "speaker_id": "player",
-      "page_key": "fcdfccf65d4cbb7be7fe1b3ae2503614f06c7b8c90bfaeec5d1de47de1bb3c4a",
-      "reason": "bounded_batch_limit"
+      "page_key": "fcdfccf65d4cbb7be7fe1b3ae2503614f06c7b8c90bfaeec5d1de47de1bb3c4a"
     },
     {
       "scene": "conversation_topic:life2_edric_tune",
       "speaker_id": "edric",
-      "page_key": "564c71c041cc20c3479f0e6a7a8e09aceb8b813596daeaa067a0066bbba81162",
-      "reason": "bounded_batch_limit"
+      "page_key": "564c71c041cc20c3479f0e6a7a8e09aceb8b813596daeaa067a0066bbba81162"
     },
     {
       "scene": "conversation_topic:life2_vale_weather_sentence",
       "speaker_id": "player",
-      "page_key": "0c3558a76633000946fad0810459572b180dc8aaf677a4e4d0436e37018e1637",
-      "reason": "bounded_batch_limit"
+      "page_key": "0c3558a76633000946fad0810459572b180dc8aaf677a4e4d0436e37018e1637"
     },
     {
       "scene": "conversation_topic:life2_vale_weather_sentence",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "0a60ab0966e8c2111ebf45ed90e5731b82ea4b9d90c49bd938963e39ce0a027e",
-      "reason": "bounded_batch_limit"
+      "page_key": "0a60ab0966e8c2111ebf45ed90e5731b82ea4b9d90c49bd938963e39ce0a027e"
     },
     {
       "scene": "conversation_topic:life2_vale_weather_sentence",
       "speaker_id": "player",
-      "page_key": "f1a6e3f649bf8b612eab2183958d1c26803754e288941bb1e390c81ca5b9c4ad",
-      "reason": "bounded_batch_limit"
+      "page_key": "f1a6e3f649bf8b612eab2183958d1c26803754e288941bb1e390c81ca5b9c4ad"
     },
     {
       "scene": "conversation_topic:life2_vale_weather_sentence",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "92790bb95d2494165dbe130ff8d4b200625201298ab12475779043598d20b032",
-      "reason": "bounded_batch_limit"
+      "page_key": "92790bb95d2494165dbe130ff8d4b200625201298ab12475779043598d20b032"
     },
     {
       "scene": "conversation_topic:life2_vale_weather_sentence",
       "speaker_id": "player",
-      "page_key": "3d2dcd8f2617b37ff2d935b50849cc3f04b697e3251a93d4af50aa8b080f9035",
-      "reason": "bounded_batch_limit"
+      "page_key": "3d2dcd8f2617b37ff2d935b50849cc3f04b697e3251a93d4af50aa8b080f9035"
     },
     {
       "scene": "conversation_topic:life2_vale_weather_sentence",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "b95ac4c1ef56f188c652abbf1e007d88199f274e720c15c34b3f3d73f63b8756",
-      "reason": "bounded_batch_limit"
+      "page_key": "b95ac4c1ef56f188c652abbf1e007d88199f274e720c15c34b3f3d73f63b8756"
     },
     {
       "scene": "conversation_topic:life2_vale_untidy_page",
       "speaker_id": "player",
-      "page_key": "63a6ff21c3654f628c9a549e8b861f9b758d75d5befcd544a9b49c44b8b0127a",
-      "reason": "bounded_batch_limit"
+      "page_key": "63a6ff21c3654f628c9a549e8b861f9b758d75d5befcd544a9b49c44b8b0127a"
     },
     {
       "scene": "conversation_topic:life2_vale_untidy_page",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "4dacd991b1f7529cab7dfc94242debd2054ca989114b5ecffa3dadccff970972",
-      "reason": "bounded_batch_limit"
+      "page_key": "4dacd991b1f7529cab7dfc94242debd2054ca989114b5ecffa3dadccff970972"
     },
     {
       "scene": "conversation_topic:life2_vale_untidy_page",
       "speaker_id": "player",
-      "page_key": "bcf1e30ea73889e4feaea1f4fa1d65c56c909cf3c98ba47d14fe22761d1a31a5",
-      "reason": "bounded_batch_limit"
+      "page_key": "bcf1e30ea73889e4feaea1f4fa1d65c56c909cf3c98ba47d14fe22761d1a31a5"
     },
     {
       "scene": "conversation_topic:life2_vale_untidy_page",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "35f94b044b96313761311ddc9eed75dafa4a229e4095070eda9e8518043d7b98",
-      "reason": "bounded_batch_limit"
+      "page_key": "35f94b044b96313761311ddc9eed75dafa4a229e4095070eda9e8518043d7b98"
     },
     {
       "scene": "conversation_topic:life2_vale_untidy_page",
       "speaker_id": "player",
-      "page_key": "a074a6d814ebf4a20d49a75a9e2429ef6ebd3fbbddf619a260b353f39e7c1da0",
-      "reason": "bounded_batch_limit"
+      "page_key": "a074a6d814ebf4a20d49a75a9e2429ef6ebd3fbbddf619a260b353f39e7c1da0"
     },
     {
       "scene": "conversation_topic:life2_vale_untidy_page",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "6f80adec95b970f82887dfe673f4f23e3e5e93d0b78aa49f35ea9b1c60923d2c",
-      "reason": "bounded_batch_limit"
+      "page_key": "6f80adec95b970f82887dfe673f4f23e3e5e93d0b78aa49f35ea9b1c60923d2c"
     },
     {
       "scene": "conversation_topic:life2_merrow_tea",
       "speaker_id": "player",
-      "page_key": "9b9a3a9673ffc803a78a95803a7e456bf23f6106e0c3b14237d1da701943e8a2",
-      "reason": "bounded_batch_limit"
+      "page_key": "9b9a3a9673ffc803a78a95803a7e456bf23f6106e0c3b14237d1da701943e8a2"
     },
     {
       "scene": "conversation_topic:life2_merrow_tea",
       "speaker_id": "vargan_steward",
-      "page_key": "c0e3a3cf60d5ec5503a82a1806a954bee0ca5fb7957b4dc901f46259b8e86f42",
-      "reason": "bounded_batch_limit"
+      "page_key": "c0e3a3cf60d5ec5503a82a1806a954bee0ca5fb7957b4dc901f46259b8e86f42"
     },
     {
       "scene": "conversation_topic:life2_merrow_tea",
       "speaker_id": "player",
-      "page_key": "ab3a95b2d74d6af5cb428eb410f061cfb61275316629b37f1c8b37c9d7b4f0c3",
-      "reason": "bounded_batch_limit"
+      "page_key": "ab3a95b2d74d6af5cb428eb410f061cfb61275316629b37f1c8b37c9d7b4f0c3"
     },
     {
       "scene": "conversation_topic:life2_merrow_tea",
       "speaker_id": "vargan_steward",
-      "page_key": "ac975369fd0fea3835b012d9b6852304ef3e217dd88746619808049ddf1e10ad",
-      "reason": "bounded_batch_limit"
+      "page_key": "ac975369fd0fea3835b012d9b6852304ef3e217dd88746619808049ddf1e10ad"
     },
     {
       "scene": "conversation_topic:life2_merrow_tea",
       "speaker_id": "player",
-      "page_key": "3d96a24bb00c3c0d84bb65629d022ec5ccdb8c954ca007ffdff0cffbd864e671",
-      "reason": "bounded_batch_limit"
+      "page_key": "3d96a24bb00c3c0d84bb65629d022ec5ccdb8c954ca007ffdff0cffbd864e671"
     },
     {
       "scene": "conversation_topic:life2_merrow_tea",
       "speaker_id": "vargan_steward",
-      "page_key": "b654c39d54486ba55a7c2adbad56cb50d522d915c4bab3560539ebc2d50fa391",
-      "reason": "bounded_batch_limit"
+      "page_key": "b654c39d54486ba55a7c2adbad56cb50d522d915c4bab3560539ebc2d50fa391"
     },
     {
       "scene": "conversation_topic:life2_merrow_garden_gate",
       "speaker_id": "player",
-      "page_key": "4ca7fe0464ce08b39e2970a59a6d109a24db6ac2a62c818fce4a7f70008d2331",
-      "reason": "bounded_batch_limit"
+      "page_key": "4ca7fe0464ce08b39e2970a59a6d109a24db6ac2a62c818fce4a7f70008d2331"
     },
     {
       "scene": "conversation_topic:life2_merrow_garden_gate",
       "speaker_id": "vargan_steward",
-      "page_key": "ecce0e5d60109d76c53443df7558ae1f6c18177a0fe2b3d16f1d1f2c7c6fec9f",
-      "reason": "bounded_batch_limit"
+      "page_key": "ecce0e5d60109d76c53443df7558ae1f6c18177a0fe2b3d16f1d1f2c7c6fec9f"
     },
     {
       "scene": "conversation_topic:life2_merrow_garden_gate",
       "speaker_id": "player",
-      "page_key": "2447b96e0bcde2a45c704a0220b160221c090576423b7e87cc74e8d7d1d553b3",
-      "reason": "bounded_batch_limit"
+      "page_key": "2447b96e0bcde2a45c704a0220b160221c090576423b7e87cc74e8d7d1d553b3"
     },
     {
       "scene": "conversation_topic:life2_merrow_garden_gate",
       "speaker_id": "vargan_steward",
-      "page_key": "99e3fecb33739c49241cd878030c8031fcbdfd78b91dfe62ede9d689fd5bd5cc",
-      "reason": "bounded_batch_limit"
+      "page_key": "99e3fecb33739c49241cd878030c8031fcbdfd78b91dfe62ede9d689fd5bd5cc"
     },
     {
       "scene": "conversation_topic:life2_merrow_garden_gate",
       "speaker_id": "player",
-      "page_key": "9fe9aa9c967c98cdb3c9d52466f4cf6b242b1b67618a03b724cec2f371eda158",
-      "reason": "bounded_batch_limit"
+      "page_key": "9fe9aa9c967c98cdb3c9d52466f4cf6b242b1b67618a03b724cec2f371eda158"
     },
     {
       "scene": "conversation_topic:life2_merrow_garden_gate",
       "speaker_id": "vargan_steward",
-      "page_key": "5f1af71caeb5d41be2d9970f364740df053c76a467cd3a95cc532e983f7323c2",
-      "reason": "bounded_batch_limit"
+      "page_key": "5f1af71caeb5d41be2d9970f364740df053c76a467cd3a95cc532e983f7323c2"
     },
     {
       "scene": "conversation_topic:life2_nessa_carved_animals",
       "speaker_id": "player",
-      "page_key": "965ac95850e3983febaf907958307d1fb0ebdb550235c542dffefd8996f4666a",
-      "reason": "bounded_batch_limit"
+      "page_key": "965ac95850e3983febaf907958307d1fb0ebdb550235c542dffefd8996f4666a"
     },
     {
       "scene": "conversation_topic:life2_nessa_carved_animals",
       "speaker_id": "saga_nessa",
-      "page_key": "d9c3a3d3baf1b6e6d4bb7bf419bb14dfc555d259cc6097a8d79897ac339fc47d",
-      "reason": "bounded_batch_limit"
+      "page_key": "d9c3a3d3baf1b6e6d4bb7bf419bb14dfc555d259cc6097a8d79897ac339fc47d"
     },
     {
       "scene": "conversation_topic:life2_nessa_carved_animals",
       "speaker_id": "player",
-      "page_key": "a763b653ecd890020a36d74eabe9b86b76aaac1aa89653dec154f072729df952",
-      "reason": "bounded_batch_limit"
+      "page_key": "a763b653ecd890020a36d74eabe9b86b76aaac1aa89653dec154f072729df952"
     },
     {
       "scene": "conversation_topic:life2_nessa_carved_animals",
       "speaker_id": "saga_nessa",
-      "page_key": "7d6c3ad3c70db197d98d5e2f4a90fd33f51e2105aa68a921680da9ab5cfe0ddb",
-      "reason": "bounded_batch_limit"
+      "page_key": "7d6c3ad3c70db197d98d5e2f4a90fd33f51e2105aa68a921680da9ab5cfe0ddb"
     },
     {
       "scene": "conversation_topic:life2_nessa_carved_animals",
       "speaker_id": "player",
-      "page_key": "bc87eb874d5e10a4b70a3056a8ae9c8bf0157d43436b20646d641b864cb8b5e3",
-      "reason": "bounded_batch_limit"
+      "page_key": "bc87eb874d5e10a4b70a3056a8ae9c8bf0157d43436b20646d641b864cb8b5e3"
     },
     {
       "scene": "conversation_topic:life2_nessa_carved_animals",
       "speaker_id": "saga_nessa",
-      "page_key": "09a5e1be6888c3cb064241dc5d0832c91a50dd719d638931918172f01172d38f",
-      "reason": "bounded_batch_limit"
+      "page_key": "09a5e1be6888c3cb064241dc5d0832c91a50dd719d638931918172f01172d38f"
     },
     {
       "scene": "conversation_topic:life2_nessa_being_hosted",
       "speaker_id": "player",
-      "page_key": "2a1c22debe913f6201c80ad70f4faf7f51f1945ddb3beebaf82c220e5de2e4c2",
-      "reason": "bounded_batch_limit"
+      "page_key": "2a1c22debe913f6201c80ad70f4faf7f51f1945ddb3beebaf82c220e5de2e4c2"
     },
     {
       "scene": "conversation_topic:life2_nessa_being_hosted",
       "speaker_id": "saga_nessa",
-      "page_key": "6e48b0d8f5ddf5dd5a81b8db42da84a0c67e8ba1f94d2929298da2bd831a6c61",
-      "reason": "bounded_batch_limit"
+      "page_key": "6e48b0d8f5ddf5dd5a81b8db42da84a0c67e8ba1f94d2929298da2bd831a6c61"
     },
     {
       "scene": "conversation_topic:life2_nessa_being_hosted",
       "speaker_id": "player",
-      "page_key": "19683058604e6390e910489c0385e7e7db1115f63c4cbafde45bebca0003cbec",
-      "reason": "bounded_batch_limit"
+      "page_key": "19683058604e6390e910489c0385e7e7db1115f63c4cbafde45bebca0003cbec"
     },
     {
       "scene": "conversation_topic:life2_nessa_being_hosted",
       "speaker_id": "saga_nessa",
-      "page_key": "6560f438a01faeea04e16810f06bbd36d657286d9c3b0c6ceb6f981adef9e1db",
-      "reason": "bounded_batch_limit"
+      "page_key": "6560f438a01faeea04e16810f06bbd36d657286d9c3b0c6ceb6f981adef9e1db"
     },
     {
       "scene": "conversation_topic:life2_nessa_being_hosted",
       "speaker_id": "player",
-      "page_key": "40f5eaaf8e61e7f2755adcf243ee284eb3ccd5e8ad755f35ea6e9443ea16ea5c",
-      "reason": "bounded_batch_limit"
+      "page_key": "40f5eaaf8e61e7f2755adcf243ee284eb3ccd5e8ad755f35ea6e9443ea16ea5c"
     },
     {
       "scene": "conversation_topic:life2_nessa_being_hosted",
       "speaker_id": "saga_nessa",
-      "page_key": "7262329d5c782e1456186feb24717093a365b42504947a1190cfaa6adf5f7d7d",
-      "reason": "bounded_batch_limit"
+      "page_key": "7262329d5c782e1456186feb24717093a365b42504947a1190cfaa6adf5f7d7d"
     },
     {
       "scene": "conversation_topic:life2_nera_next_place",
       "speaker_id": "player",
-      "page_key": "b272360eb8fa550d43172f7af7eb31f7a9f59e11f74ff89d3b649026934c995c",
-      "reason": "bounded_batch_limit"
+      "page_key": "b272360eb8fa550d43172f7af7eb31f7a9f59e11f74ff89d3b649026934c995c"
     },
     {
       "scene": "conversation_topic:life2_nera_next_place",
       "speaker_id": "saga_nera",
-      "page_key": "b80ec4612cb05968c855943a66b8a4a30a9c5b6306a086bfcd605faa70debb5f",
-      "reason": "bounded_batch_limit"
+      "page_key": "b80ec4612cb05968c855943a66b8a4a30a9c5b6306a086bfcd605faa70debb5f"
     },
     {
       "scene": "conversation_topic:life2_nera_next_place",
       "speaker_id": "player",
-      "page_key": "58e6233a2c3cd776390a8b513fcec5b72d065ae6a745b3792cfdc478ba1dc437",
-      "reason": "bounded_batch_limit"
+      "page_key": "58e6233a2c3cd776390a8b513fcec5b72d065ae6a745b3792cfdc478ba1dc437"
     },
     {
       "scene": "conversation_topic:life2_nera_next_place",
       "speaker_id": "saga_nera",
-      "page_key": "23bf22408f599685278aa07a0bda460425ff6546981162b84b91f456b21a49eb",
-      "reason": "bounded_batch_limit"
+      "page_key": "23bf22408f599685278aa07a0bda460425ff6546981162b84b91f456b21a49eb"
     },
     {
       "scene": "conversation_topic:life2_nera_next_place",
       "speaker_id": "player",
-      "page_key": "db01919779b3ce5340d9bbaa6732036ef9f22ab6933bf76721a32578ae7b04c4",
-      "reason": "bounded_batch_limit"
+      "page_key": "db01919779b3ce5340d9bbaa6732036ef9f22ab6933bf76721a32578ae7b04c4"
     },
     {
       "scene": "conversation_topic:life2_nera_next_place",
       "speaker_id": "saga_nera",
-      "page_key": "7171c114d2a7c9c35b891a2d7ff4f9dbb0fde262d0885fe82cb025fe31e0c831",
-      "reason": "bounded_batch_limit"
+      "page_key": "7171c114d2a7c9c35b891a2d7ff4f9dbb0fde262d0885fe82cb025fe31e0c831"
     },
     {
       "scene": "conversation_topic:life2_nera_small_quarrel",
       "speaker_id": "player",
-      "page_key": "a1725561d1f7cf8084499b21b18fae337904aae1d5968ca962a6791373fe40fb",
-      "reason": "bounded_batch_limit"
+      "page_key": "a1725561d1f7cf8084499b21b18fae337904aae1d5968ca962a6791373fe40fb"
     },
     {
       "scene": "conversation_topic:life2_nera_small_quarrel",
       "speaker_id": "saga_nera",
-      "page_key": "7dfc893878e7c377473390d6687acec9cd12410dfd66725c059d805cc632ec22",
-      "reason": "bounded_batch_limit"
+      "page_key": "7dfc893878e7c377473390d6687acec9cd12410dfd66725c059d805cc632ec22"
     },
     {
       "scene": "conversation_topic:life2_nera_small_quarrel",
       "speaker_id": "player",
-      "page_key": "d17a3dac9fd532ca8e2a204abc9172465d533d852123012466b297c7e3baec03",
-      "reason": "bounded_batch_limit"
+      "page_key": "d17a3dac9fd532ca8e2a204abc9172465d533d852123012466b297c7e3baec03"
     },
     {
       "scene": "conversation_topic:life2_nera_small_quarrel",
       "speaker_id": "saga_nera",
-      "page_key": "eb712d73b317cc2f01f55d5af75ebf112b501e0586b7bc0884cce321fb92437d",
-      "reason": "bounded_batch_limit"
+      "page_key": "eb712d73b317cc2f01f55d5af75ebf112b501e0586b7bc0884cce321fb92437d"
     },
     {
       "scene": "conversation_topic:life2_nera_small_quarrel",
       "speaker_id": "player",
-      "page_key": "ba82bb4b474f0159bb842cff3a3f5ff35801ded2be034b46228696ddcb3196d3",
-      "reason": "bounded_batch_limit"
+      "page_key": "ba82bb4b474f0159bb842cff3a3f5ff35801ded2be034b46228696ddcb3196d3"
     },
     {
       "scene": "conversation_topic:life2_nera_small_quarrel",
       "speaker_id": "saga_nera",
-      "page_key": "d6b1f30c3862af6b5e35b9c76e6393a5cb7ed694490f3bae9171e5d4023c16db",
-      "reason": "bounded_batch_limit"
+      "page_key": "d6b1f30c3862af6b5e35b9c76e6393a5cb7ed694490f3bae9171e5d4023c16db"
     },
     {
       "scene": "world_scene:gre_arrival",
       "speaker_id": "saga_nessa",
-      "page_key": "9a422a281688b6805d9002c2de8b6b97607b5111542e77112bf16dc2b4435d37",
-      "reason": "bounded_batch_limit"
+      "page_key": "9a422a281688b6805d9002c2de8b6b97607b5111542e77112bf16dc2b4435d37"
     },
     {
       "scene": "world_scene:gre_arrival",
       "speaker_id": "saga_nessa",
-      "page_key": "898bc8cb9ede155d2b0836170f3ea72dfee5b8b8133b92f33280a9e8d0ce46d7",
-      "reason": "bounded_batch_limit"
+      "page_key": "898bc8cb9ede155d2b0836170f3ea72dfee5b8b8133b92f33280a9e8d0ce46d7"
     },
     {
       "scene": "world_scene:gre_company",
       "speaker_id": "saga_nessa",
-      "page_key": "b3f96823f3abdf1e7c0a5dc793e57aaf78da569c50aa7e68a2787c203eebae89",
-      "reason": "bounded_batch_limit"
+      "page_key": "b3f96823f3abdf1e7c0a5dc793e57aaf78da569c50aa7e68a2787c203eebae89"
     },
     {
       "scene": "world_scene:dep_rebuild",
       "speaker_id": "mill_second_worker",
-      "page_key": "1901877217e5bc7e5c931b151b19ef02c85d436978055a2d712ebf26478fc80b",
-      "reason": "bounded_batch_limit"
+      "page_key": "1901877217e5bc7e5c931b151b19ef02c85d436978055a2d712ebf26478fc80b"
     },
     {
       "scene": "world_scene:dep_rebuild",
       "speaker_id": "mill_second_worker",
-      "page_key": "9d20abdbe74a9737106eb164a523e44d61ce0ff7e0d75ded92684d4fc11f790e",
-      "reason": "bounded_batch_limit"
+      "page_key": "9d20abdbe74a9737106eb164a523e44d61ce0ff7e0d75ded92684d4fc11f790e"
     },
     {
       "scene": "world_scene:roa_crossing",
       "speaker_id": "saga_nera",
-      "page_key": "86dbc9b140567531278968a1ab98863049f5d648b9599fcd9223e34fa9afe832",
-      "reason": "bounded_batch_limit"
+      "page_key": "86dbc9b140567531278968a1ab98863049f5d648b9599fcd9223e34fa9afe832"
     },
     {
       "scene": "world_scene:roa_crossing",
       "speaker_id": "saga_nera",
-      "page_key": "71a31ec7143a636db4143afc4882c2c54b634c08f6d57dedd4fb9a0218e306b3",
-      "reason": "bounded_batch_limit"
+      "page_key": "71a31ec7143a636db4143afc4882c2c54b634c08f6d57dedd4fb9a0218e306b3"
     },
     {
       "scene": "world_scene:gre_exchange_before",
       "speaker_id": "saga_nessa",
-      "page_key": "a4052fa83ba6954e402187c899644e67c49c67e4ae6c051ab9dbe9a51ac2962d",
-      "reason": "bounded_batch_limit"
+      "page_key": "a4052fa83ba6954e402187c899644e67c49c67e4ae6c051ab9dbe9a51ac2962d"
     },
     {
       "scene": "world_scene:gre_exchange_after",
       "speaker_id": "saga_nessa",
-      "page_key": "85c6e111909f41d6ef5f2465a496f226914c917c53af443091d7cfd5f01cd372",
-      "reason": "bounded_batch_limit"
+      "page_key": "85c6e111909f41d6ef5f2465a496f226914c917c53af443091d7cfd5f01cd372"
     },
     {
       "scene": "world_scene:dep_exchange_before",
       "speaker_id": "mill_second_worker",
-      "page_key": "47bc6f07357c563a6b6003d8144e6fc741e8bb6bc5fd5ff33e3d7fe38cbbdb00",
-      "reason": "bounded_batch_limit"
+      "page_key": "47bc6f07357c563a6b6003d8144e6fc741e8bb6bc5fd5ff33e3d7fe38cbbdb00"
     },
     {
       "scene": "world_scene:dep_exchange_after",
       "speaker_id": "mill_second_worker",
-      "page_key": "8775bab895cc293f08bcbc5ad37bc8e2c941ea31d7c9b2462766e90fac4adc2c",
-      "reason": "bounded_batch_limit"
+      "page_key": "8775bab895cc293f08bcbc5ad37bc8e2c941ea31d7c9b2462766e90fac4adc2c"
     },
     {
       "scene": "world_scene:escort_greyfen_arrival",
       "speaker_id": "saga_maren",
-      "page_key": "2f92f4f64ba407c4ab6e31f2c6f711dc0617f0fb826a3832a6e3529abc8671ea",
-      "reason": "bounded_batch_limit"
+      "page_key": "2f92f4f64ba407c4ab6e31f2c6f711dc0617f0fb826a3832a6e3529abc8671ea"
     },
     {
       "scene": "world_scene:escort_greyfen_arrival",
       "speaker_id": "saga_maren",
-      "page_key": "cbfb8e5e40d5e50a678dacf8e035b375ac810a91abd8f3ef8d09e6dd709e0bbd",
-      "reason": "bounded_batch_limit"
+      "page_key": "cbfb8e5e40d5e50a678dacf8e035b375ac810a91abd8f3ef8d09e6dd709e0bbd"
     },
     {
       "scene": "world_scene:escort_crossing_return",
       "speaker_id": "saga_nera",
-      "page_key": "a3be7cc389b81daac6d402576f5ccdf4adce972708958dc5c7e573394ce630e4",
-      "reason": "bounded_batch_limit"
+      "page_key": "a3be7cc389b81daac6d402576f5ccdf4adce972708958dc5c7e573394ce630e4"
     },
     {
       "scene": "world_scene:escort_crossing_return",
       "speaker_id": "saga_nera",
-      "page_key": "58228670202d7befb24d2ec436a7c553018cafca4111e179ae089375d11e4122",
-      "reason": "bounded_batch_limit"
+      "page_key": "58228670202d7befb24d2ec436a7c553018cafca4111e179ae089375d11e4122"
     },
     {
       "scene": "world_scene:everyday_gre_pair",
       "speaker_id": "saga_nessa",
-      "page_key": "da8f0ac06c316c222316fb6cb543853ebb39e67112abb8da3f472315c13a25a4",
-      "reason": "bounded_batch_limit"
+      "page_key": "da8f0ac06c316c222316fb6cb543853ebb39e67112abb8da3f472315c13a25a4"
     },
     {
       "scene": "world_scene:everyday_gre_pair",
       "speaker_id": "saga_nessa",
-      "page_key": "a28a531ad613d377df69dc4ad7acc09b8ce9fcad669dc8a183fe1bb7c13abfaf",
-      "reason": "bounded_batch_limit"
+      "page_key": "a28a531ad613d377df69dc4ad7acc09b8ce9fcad669dc8a183fe1bb7c13abfaf"
     },
     {
       "scene": "world_scene:everyday_dep_pair",
       "speaker_id": "mill_second_worker",
-      "page_key": "34a3f82a9e1b211b8773680b68a2be49e90f289ed09b7fe2ce1e7197314acd5f",
-      "reason": "bounded_batch_limit"
+      "page_key": "34a3f82a9e1b211b8773680b68a2be49e90f289ed09b7fe2ce1e7197314acd5f"
     },
     {
       "scene": "world_scene:everyday_var_pair_before",
       "speaker_id": "vargan_servant",
-      "page_key": "72c8329a671cd7d92f0fdea2b44598a76bcee5dec02eee6716c02be0acfb6fbd",
-      "reason": "bounded_batch_limit"
+      "page_key": "72c8329a671cd7d92f0fdea2b44598a76bcee5dec02eee6716c02be0acfb6fbd"
     },
     {
       "scene": "world_scene:everyday_var_pair_before",
       "speaker_id": "vargan_servant",
-      "page_key": "e40716b71e0c74ca7c7fed7416d235d0834de65e20726a9fb9717a0c2e6dea70",
-      "reason": "bounded_batch_limit"
+      "page_key": "e40716b71e0c74ca7c7fed7416d235d0834de65e20726a9fb9717a0c2e6dea70"
     },
     {
       "scene": "world_scene:everyday_var_pair_after",
       "speaker_id": "vargan_servant",
-      "page_key": "c0e7c080e23640016fdf18697f25b61e83dbd4a8f03f7d978179c12fd035227b",
-      "reason": "bounded_batch_limit"
+      "page_key": "c0e7c080e23640016fdf18697f25b61e83dbd4a8f03f7d978179c12fd035227b"
     },
     {
       "scene": "world_scene:everyday_nessa_traveler_1",
       "speaker_id": "saga_nessa",
-      "page_key": "f5bc5419be1a2fc3f93c37503632ed30ee423025303a7393fc0aaa0e590d44cf",
-      "reason": "bounded_batch_limit"
+      "page_key": "f5bc5419be1a2fc3f93c37503632ed30ee423025303a7393fc0aaa0e590d44cf"
     },
     {
       "scene": "world_scene:everyday_nessa_traveler_1",
       "speaker_id": "saga_nessa",
-      "page_key": "f3d0b53dd077e7309da15ef198d31d270950b5d602400202739b2ff2c2b1dbf7",
-      "reason": "bounded_batch_limit"
+      "page_key": "f3d0b53dd077e7309da15ef198d31d270950b5d602400202739b2ff2c2b1dbf7"
     },
     {
       "scene": "world_scene:everyday_nessa_traveler_2",
       "speaker_id": "mill_second_worker",
-      "page_key": "bc9acb4a229e8ba53e3fc088340e9836902013f4514388a9cfcf8748d89797c6",
-      "reason": "bounded_batch_limit"
+      "page_key": "bc9acb4a229e8ba53e3fc088340e9836902013f4514388a9cfcf8748d89797c6"
     },
     {
       "scene": "world_scene:everyday_nessa_traveler_2",
       "speaker_id": "mill_second_worker",
-      "page_key": "3aa049045f2d2b1bfffb3d8c4f758160021e011e42814a7196438d24cd0170a2",
-      "reason": "bounded_batch_limit"
+      "page_key": "3aa049045f2d2b1bfffb3d8c4f758160021e011e42814a7196438d24cd0170a2"
     },
     {
       "scene": "world_scene:everyday_nessa_traveler_3",
       "speaker_id": "saga_nessa",
-      "page_key": "63f38f29a752d368889df3f6309585350e28caabe57f3b44eb256f3d2c51427d",
-      "reason": "bounded_batch_limit"
+      "page_key": "63f38f29a752d368889df3f6309585350e28caabe57f3b44eb256f3d2c51427d"
     },
     {
       "scene": "world_scene:everyday_nessa_traveler_3",
       "speaker_id": "saga_nessa",
-      "page_key": "91041a0e9f2501cabcb7eb2090b602449ad83e4e241d59417968338abd43a7b8",
-      "reason": "bounded_batch_limit"
+      "page_key": "91041a0e9f2501cabcb7eb2090b602449ad83e4e241d59417968338abd43a7b8"
     },
     {
       "scene": "world_scene:everyday_nera_outing",
       "speaker_id": "saga_nera",
-      "page_key": "4a64d4cd1f6002bb82bbdf4a3dc465ef3620b3fe3cd02174b06e095055fcb6b0",
-      "reason": "bounded_batch_limit"
+      "page_key": "4a64d4cd1f6002bb82bbdf4a3dc465ef3620b3fe3cd02174b06e095055fcb6b0"
     },
     {
       "scene": "world_scene:everyday_nera_outing",
       "speaker_id": "saga_nera",
-      "page_key": "5bc912d43e3761a83ba494703ad95dafa52c1aaa0a324e6b0357896b53dcae1b",
-      "reason": "bounded_batch_limit"
+      "page_key": "5bc912d43e3761a83ba494703ad95dafa52c1aaa0a324e6b0357896b53dcae1b"
     },
     {
       "scene": "world_scene:everyday_nera_outing",
       "speaker_id": "saga_nera",
-      "page_key": "aa1d076ea1efe4923d9dfa62131da21905889803f0ffb02e02b69deb264663b2",
-      "reason": "bounded_batch_limit"
+      "page_key": "aa1d076ea1efe4923d9dfa62131da21905889803f0ffb02e02b69deb264663b2"
     },
     {
       "scene": "world_scene:everyday_performance_table",
       "speaker_id": "saga_nessa",
-      "page_key": "eaf9dfb36f5503df619bd9d256d2d62ea07677c9c83215573bebe786629317d0",
-      "reason": "bounded_batch_limit"
+      "page_key": "eaf9dfb36f5503df619bd9d256d2d62ea07677c9c83215573bebe786629317d0"
     },
     {
       "scene": "world_scene:everyday_performance_table",
       "speaker_id": "saga_nessa",
-      "page_key": "742669c16d6333abf59a62174046a62700363605c36b951ba8bcf2ac973de632",
-      "reason": "bounded_batch_limit"
+      "page_key": "742669c16d6333abf59a62174046a62700363605c36b951ba8bcf2ac973de632"
     },
     {
       "scene": "world_scene:life2_anwen_take_a_breath",
       "speaker_id": "sister_anwen",
-      "page_key": "a1d12f6e74b747b7cf95158b6905f876dbccccfb2294190decc9c8a678c2a1b8",
-      "reason": "bounded_batch_limit"
+      "page_key": "a1d12f6e74b747b7cf95158b6905f876dbccccfb2294190decc9c8a678c2a1b8"
     },
     {
       "scene": "world_scene:life2_anwen_take_a_breath",
       "speaker_id": "player",
-      "page_key": "8a4f6bc2ef07c0b8ae2f2138e9bfcfe352ae04a44a32951e5f02774f5d3ed1d0",
-      "reason": "bounded_batch_limit"
+      "page_key": "8a4f6bc2ef07c0b8ae2f2138e9bfcfe352ae04a44a32951e5f02774f5d3ed1d0"
     },
     {
       "scene": "world_scene:life2_anwen_take_a_breath",
       "speaker_id": "sister_anwen",
-      "page_key": "d217ace48d5c6e7d322c6b6b20bd8fdbdd9664aef298d38a6e9e86e6ff78c2da",
-      "reason": "bounded_batch_limit"
+      "page_key": "d217ace48d5c6e7d322c6b6b20bd8fdbdd9664aef298d38a6e9e86e6ff78c2da"
     },
     {
       "scene": "world_scene:life2_anwen_take_a_breath",
       "speaker_id": "player",
-      "page_key": "d27b52e587b3a962fa048514388ee259f9f8eda1ed65fdcabbbd971fcacf71a5",
-      "reason": "bounded_batch_limit"
+      "page_key": "d27b52e587b3a962fa048514388ee259f9f8eda1ed65fdcabbbd971fcacf71a5"
     },
     {
       "scene": "world_scene:life2_anwen_take_a_breath",
       "speaker_id": "sister_anwen",
-      "page_key": "4b713b36f94a6f12f2dbdb91df9121c37f5cd216aef664602a46fbad117be367",
-      "reason": "bounded_batch_limit"
+      "page_key": "4b713b36f94a6f12f2dbdb91df9121c37f5cd216aef664602a46fbad117be367"
     },
     {
       "scene": "world_scene:life2_anwen_take_a_breath",
       "speaker_id": "player",
-      "page_key": "bb60186c2f892f45858afd4b81833a268b325b8ab95b1d257bacd887d5d442f5",
-      "reason": "bounded_batch_limit"
+      "page_key": "bb60186c2f892f45858afd4b81833a268b325b8ab95b1d257bacd887d5d442f5"
     },
     {
       "scene": "world_scene:life2_rook_lost_word",
       "speaker_id": "rook",
-      "page_key": "2a010346a3196c2a65ee6080f25854470debb91ede49d93b3885164491f25b97",
-      "reason": "bounded_batch_limit"
+      "page_key": "2a010346a3196c2a65ee6080f25854470debb91ede49d93b3885164491f25b97"
     },
     {
       "scene": "world_scene:life2_rook_lost_word",
       "speaker_id": "player",
-      "page_key": "2a2c0b0bab013dae53e5b8fafa54e2dea88f0d9b0ac9d41987287538315c3169",
-      "reason": "bounded_batch_limit"
+      "page_key": "2a2c0b0bab013dae53e5b8fafa54e2dea88f0d9b0ac9d41987287538315c3169"
     },
     {
       "scene": "world_scene:life2_rook_lost_word",
       "speaker_id": "rook",
-      "page_key": "7fb7e50458e9ca8e309f06d7480cfc113e09281d04bc2db435b3642f17050682",
-      "reason": "bounded_batch_limit"
+      "page_key": "7fb7e50458e9ca8e309f06d7480cfc113e09281d04bc2db435b3642f17050682"
     },
     {
       "scene": "world_scene:life2_rook_lost_word",
       "speaker_id": "player",
-      "page_key": "2a8e62044a3ea1da8f70392ba2cbbeb2fb6cd03f026efb25fad86694365fea75",
-      "reason": "bounded_batch_limit"
+      "page_key": "2a8e62044a3ea1da8f70392ba2cbbeb2fb6cd03f026efb25fad86694365fea75"
     },
     {
       "scene": "world_scene:life2_rook_lost_word",
       "speaker_id": "rook",
-      "page_key": "e8c6b6e0dfde9568e5fd50d262f2050aa9a2e01fc0b251f36ecfb8d0056c9c71",
-      "reason": "bounded_batch_limit"
+      "page_key": "e8c6b6e0dfde9568e5fd50d262f2050aa9a2e01fc0b251f36ecfb8d0056c9c71"
     },
     {
       "scene": "world_scene:life2_rook_lost_word",
       "speaker_id": "player",
-      "page_key": "d6f9c28caa83c1abf1ad1ba5da83a2fad4606de08b92d2e08f43aacb6e776c15",
-      "reason": "bounded_batch_limit"
+      "page_key": "d6f9c28caa83c1abf1ad1ba5da83a2fad4606de08b92d2e08f43aacb6e776c15"
     },
     {
       "scene": "world_scene:life2_mira_good_color",
       "speaker_id": "mira",
-      "page_key": "cd6c60d84d66ede054fc09a0b9121b510f2b58e571cc401e101ebbad596c7606",
-      "reason": "bounded_batch_limit"
+      "page_key": "cd6c60d84d66ede054fc09a0b9121b510f2b58e571cc401e101ebbad596c7606"
     },
     {
       "scene": "world_scene:life2_mira_good_color",
       "speaker_id": "player",
-      "page_key": "6ed9161aa1a2a4c00a93b6e3060d543bb1f6ceb55eda6bf1d9c47a7ccd5ca503",
-      "reason": "bounded_batch_limit"
+      "page_key": "6ed9161aa1a2a4c00a93b6e3060d543bb1f6ceb55eda6bf1d9c47a7ccd5ca503"
     },
     {
       "scene": "world_scene:life2_mira_good_color",
       "speaker_id": "mira",
-      "page_key": "c192166415ad949d7c0076634ff5ba15f05af6a10ad24dccda23e7f1d047a961",
-      "reason": "bounded_batch_limit"
+      "page_key": "c192166415ad949d7c0076634ff5ba15f05af6a10ad24dccda23e7f1d047a961"
     },
     {
       "scene": "world_scene:life2_mira_good_color",
       "speaker_id": "player",
-      "page_key": "9c59bc993118167368dc9a04d0191b92d550c3620c07d1d024bd75c3c254ad22",
-      "reason": "bounded_batch_limit"
+      "page_key": "9c59bc993118167368dc9a04d0191b92d550c3620c07d1d024bd75c3c254ad22"
     },
     {
       "scene": "world_scene:life2_mira_good_color",
       "speaker_id": "mira",
-      "page_key": "a6a9debbfb79e0665c616551a8bd36828810b8f24ce22c9dafd7e4cb23543d53",
-      "reason": "bounded_batch_limit"
+      "page_key": "a6a9debbfb79e0665c616551a8bd36828810b8f24ce22c9dafd7e4cb23543d53"
     },
     {
       "scene": "world_scene:life2_mira_good_color",
       "speaker_id": "player",
-      "page_key": "d36fec4973973c478c34270c9ccb6567dc4a17ef31c1931d211f3e1baaca07d1",
-      "reason": "bounded_batch_limit"
+      "page_key": "d36fec4973973c478c34270c9ccb6567dc4a17ef31c1931d211f3e1baaca07d1"
     },
     {
       "scene": "world_scene:life2_tor_hands_behind_back",
       "speaker_id": "blacksmith_tor",
-      "page_key": "b19054c572589e962ad58f8a89f636b9bdc49315d40d6a19a9a35846d41917b5",
-      "reason": "bounded_batch_limit"
+      "page_key": "b19054c572589e962ad58f8a89f636b9bdc49315d40d6a19a9a35846d41917b5"
     },
     {
       "scene": "world_scene:life2_tor_hands_behind_back",
       "speaker_id": "player",
-      "page_key": "a9608c2fba2557f6d5b851a499b56847906196dc3a06fd5afde5c72cefae3b73",
-      "reason": "bounded_batch_limit"
+      "page_key": "a9608c2fba2557f6d5b851a499b56847906196dc3a06fd5afde5c72cefae3b73"
     },
     {
       "scene": "world_scene:life2_tor_hands_behind_back",
       "speaker_id": "blacksmith_tor",
-      "page_key": "30fe9e92d9b273afda63f2799f7721839703501e6650a1dda6584acdc949ee78",
-      "reason": "bounded_batch_limit"
+      "page_key": "30fe9e92d9b273afda63f2799f7721839703501e6650a1dda6584acdc949ee78"
     },
     {
       "scene": "world_scene:life2_tor_hands_behind_back",
       "speaker_id": "player",
-      "page_key": "2900a8dabbb952fe288c896c8f98e110aa391d07e3953594333809bc32afedbf",
-      "reason": "bounded_batch_limit"
+      "page_key": "2900a8dabbb952fe288c896c8f98e110aa391d07e3953594333809bc32afedbf"
     },
     {
       "scene": "world_scene:life2_tor_hands_behind_back",
       "speaker_id": "blacksmith_tor",
-      "page_key": "f944c205858180fe867f47aeca0b05e9bd8b74a2e43568b28bb2a5d8f2462a76",
-      "reason": "bounded_batch_limit"
+      "page_key": "f944c205858180fe867f47aeca0b05e9bd8b74a2e43568b28bb2a5d8f2462a76"
     },
     {
       "scene": "world_scene:life2_tor_hands_behind_back",
       "speaker_id": "player",
-      "page_key": "2844bdce7364e0252bb70852af11291c5a70add52e2cb62d3bf321e30a84d9cd",
-      "reason": "bounded_batch_limit"
+      "page_key": "2844bdce7364e0252bb70852af11291c5a70add52e2cb62d3bf321e30a84d9cd"
     },
     {
       "scene": "world_scene:life2_elna_ordinary_question",
       "speaker_id": "widow_elna",
-      "page_key": "8a469027edb71c7724cbd868b14841b5189dec9baa07cdcb760efd68adb23efa",
-      "reason": "bounded_batch_limit"
+      "page_key": "8a469027edb71c7724cbd868b14841b5189dec9baa07cdcb760efd68adb23efa"
     },
     {
       "scene": "world_scene:life2_elna_ordinary_question",
       "speaker_id": "player",
-      "page_key": "386b9eadcb93da828d10c553cc8f33a0f7e3c25ab9af925f768dba369ad3120b",
-      "reason": "bounded_batch_limit"
+      "page_key": "386b9eadcb93da828d10c553cc8f33a0f7e3c25ab9af925f768dba369ad3120b"
     },
     {
       "scene": "world_scene:life2_elna_ordinary_question",
       "speaker_id": "widow_elna",
-      "page_key": "7ac1b7dc53b0f70938068e73a7a7a3505ac788be9128008701ee3c7ad98828ec",
-      "reason": "bounded_batch_limit"
+      "page_key": "7ac1b7dc53b0f70938068e73a7a7a3505ac788be9128008701ee3c7ad98828ec"
     },
     {
       "scene": "world_scene:life2_elna_ordinary_question",
       "speaker_id": "player",
-      "page_key": "44d130a3ef2dea567c6d16912074879ff78f95b99d8437bbb8c5ed8fc3f324e7",
-      "reason": "bounded_batch_limit"
+      "page_key": "44d130a3ef2dea567c6d16912074879ff78f95b99d8437bbb8c5ed8fc3f324e7"
     },
     {
       "scene": "world_scene:life2_elna_ordinary_question",
       "speaker_id": "widow_elna",
-      "page_key": "833093f9b98d4399c950de161ad955723d624f82aa5c701e252e50faf0d05c9b",
-      "reason": "bounded_batch_limit"
+      "page_key": "833093f9b98d4399c950de161ad955723d624f82aa5c701e252e50faf0d05c9b"
     },
     {
       "scene": "world_scene:life2_elna_ordinary_question",
       "speaker_id": "player",
-      "page_key": "683412c39bb9810c43e84c5c2201e0d6b3f2131e526ecb3e37ef62789892c770",
-      "reason": "bounded_batch_limit"
+      "page_key": "683412c39bb9810c43e84c5c2201e0d6b3f2131e526ecb3e37ef62789892c770"
     },
     {
       "scene": "world_scene:life2_toma_unanswered_weather",
       "speaker_id": "farmer_toma",
-      "page_key": "995c37ec9a4e45ebd76626e9486a2185d27c11372dbd52b09f42fca705bc8f90",
-      "reason": "bounded_batch_limit"
+      "page_key": "995c37ec9a4e45ebd76626e9486a2185d27c11372dbd52b09f42fca705bc8f90"
     },
     {
       "scene": "world_scene:life2_toma_unanswered_weather",
       "speaker_id": "player",
-      "page_key": "7fcb1d9df5684e62f38739e13fdb950726bc0041c6c14ea8306aa27b306bd48c",
-      "reason": "bounded_batch_limit"
+      "page_key": "7fcb1d9df5684e62f38739e13fdb950726bc0041c6c14ea8306aa27b306bd48c"
     },
     {
       "scene": "world_scene:life2_toma_unanswered_weather",
       "speaker_id": "farmer_toma",
-      "page_key": "14e459b5ef2f50b68c3d96805acbcec36955bb271eaaa72618e2f54d6ee2cb15",
-      "reason": "bounded_batch_limit"
+      "page_key": "14e459b5ef2f50b68c3d96805acbcec36955bb271eaaa72618e2f54d6ee2cb15"
     },
     {
       "scene": "world_scene:life2_toma_unanswered_weather",
       "speaker_id": "player",
-      "page_key": "631020705806c5f4677082c839f909bc2f3e61b062d39626b6548ee553fe2d8f",
-      "reason": "bounded_batch_limit"
+      "page_key": "631020705806c5f4677082c839f909bc2f3e61b062d39626b6548ee553fe2d8f"
     },
     {
       "scene": "world_scene:life2_toma_unanswered_weather",
       "speaker_id": "farmer_toma",
-      "page_key": "fca889c911e03f7f0c11574c66e3bd26a8a93eacb9edbd7a7f3e9a411a613c91",
-      "reason": "bounded_batch_limit"
+      "page_key": "fca889c911e03f7f0c11574c66e3bd26a8a93eacb9edbd7a7f3e9a411a613c91"
     },
     {
       "scene": "world_scene:life2_toma_unanswered_weather",
       "speaker_id": "player",
-      "page_key": "dde90fb9dfd3b0d8782d3e4b372b1a2a78bb63cbdccce167a1b19a03194cae55",
-      "reason": "bounded_batch_limit"
+      "page_key": "dde90fb9dfd3b0d8782d3e4b372b1a2a78bb63cbdccce167a1b19a03194cae55"
     },
     {
       "scene": "world_scene:life2_senn_ask_again",
       "speaker_id": "captain_senn",
-      "page_key": "30d2bc989261b7dd5f57640dc25309dc81f2c26eb2a707cd4c1e9f256b72916e",
-      "reason": "bounded_batch_limit"
+      "page_key": "30d2bc989261b7dd5f57640dc25309dc81f2c26eb2a707cd4c1e9f256b72916e"
     },
     {
       "scene": "world_scene:life2_senn_ask_again",
       "speaker_id": "player",
-      "page_key": "24ce63f916f6922017a62c4f55e94633bb6001bcb9651912f0acc357a58e1d99",
-      "reason": "bounded_batch_limit"
+      "page_key": "24ce63f916f6922017a62c4f55e94633bb6001bcb9651912f0acc357a58e1d99"
     },
     {
       "scene": "world_scene:life2_senn_ask_again",
       "speaker_id": "captain_senn",
-      "page_key": "bf1ef30882edf7d999a34aea934f06f05eb7779830049a7602c4b1a02399db7e",
-      "reason": "bounded_batch_limit"
+      "page_key": "bf1ef30882edf7d999a34aea934f06f05eb7779830049a7602c4b1a02399db7e"
     },
     {
       "scene": "world_scene:life2_senn_ask_again",
       "speaker_id": "player",
-      "page_key": "6be2f911f354c7f34e8e39672672dfbe1295baef58b5fcf1c6f849b157b8371a",
-      "reason": "bounded_batch_limit"
+      "page_key": "6be2f911f354c7f34e8e39672672dfbe1295baef58b5fcf1c6f849b157b8371a"
     },
     {
       "scene": "world_scene:life2_senn_ask_again",
       "speaker_id": "captain_senn",
-      "page_key": "308b831d0d990e7d9e9f3e5902d1a13e52c080675cc51de54636856212e0cd31",
-      "reason": "bounded_batch_limit"
+      "page_key": "308b831d0d990e7d9e9f3e5902d1a13e52c080675cc51de54636856212e0cd31"
     },
     {
       "scene": "world_scene:life2_senn_ask_again",
       "speaker_id": "player",
-      "page_key": "f09224b5a472056a4d766c482ea7b845599a63855f0a4bd0c7455d5de7260b8e",
-      "reason": "bounded_batch_limit"
+      "page_key": "f09224b5a472056a4d766c482ea7b845599a63855f0a4bd0c7455d5de7260b8e"
     },
     {
       "scene": "world_scene:life2_edric_poor_audience",
       "speaker_id": "edric",
-      "page_key": "47135b7936dbed5fd9bd994f6d706df3761dba8f43f300038f54fccc316a85ac",
-      "reason": "bounded_batch_limit"
+      "page_key": "47135b7936dbed5fd9bd994f6d706df3761dba8f43f300038f54fccc316a85ac"
     },
     {
       "scene": "world_scene:life2_edric_poor_audience",
       "speaker_id": "player",
-      "page_key": "d924f0894a20d9ba8e195eb1e4caded3367656be90a8266b4aa2483d9a9fd7de",
-      "reason": "bounded_batch_limit"
+      "page_key": "d924f0894a20d9ba8e195eb1e4caded3367656be90a8266b4aa2483d9a9fd7de"
     },
     {
       "scene": "world_scene:life2_edric_poor_audience",
       "speaker_id": "edric",
-      "page_key": "2a6b6b8a7c81afb97b158060fe95969e2da26b116cf0bd0bc198608dc405fa34",
-      "reason": "bounded_batch_limit"
+      "page_key": "2a6b6b8a7c81afb97b158060fe95969e2da26b116cf0bd0bc198608dc405fa34"
     },
     {
       "scene": "world_scene:life2_edric_poor_audience",
       "speaker_id": "player",
-      "page_key": "03e650674dc7980af2fab6b38909471bd632b50679fae39cd7ad56b8906940e7",
-      "reason": "bounded_batch_limit"
+      "page_key": "03e650674dc7980af2fab6b38909471bd632b50679fae39cd7ad56b8906940e7"
     },
     {
       "scene": "world_scene:life2_edric_poor_audience",
       "speaker_id": "edric",
-      "page_key": "8b5f294caeb97384be276b819a2a0f4243401f8d28c61620dbd77d1d4910adff",
-      "reason": "bounded_batch_limit"
+      "page_key": "8b5f294caeb97384be276b819a2a0f4243401f8d28c61620dbd77d1d4910adff"
     },
     {
       "scene": "world_scene:life2_edric_poor_audience",
       "speaker_id": "player",
-      "page_key": "79fd11926f1baf470dc8094400b94fd3155d03d0236fcdacd2fbe050c8cc069e",
-      "reason": "bounded_batch_limit"
+      "page_key": "79fd11926f1baf470dc8094400b94fd3155d03d0236fcdacd2fbe050c8cc069e"
     },
     {
       "scene": "world_scene:life2_vale_keep_the_margin",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "6c2ad18a245463c8e09848ce241f191f02221671221f2dea571239a386f80c59",
-      "reason": "bounded_batch_limit"
+      "page_key": "6c2ad18a245463c8e09848ce241f191f02221671221f2dea571239a386f80c59"
     },
     {
       "scene": "world_scene:life2_vale_keep_the_margin",
       "speaker_id": "player",
-      "page_key": "eb990b72a902e950ce95dca284d627faf449738bd6bd069c5d1d5fbaa86e6947",
-      "reason": "bounded_batch_limit"
+      "page_key": "eb990b72a902e950ce95dca284d627faf449738bd6bd069c5d1d5fbaa86e6947"
     },
     {
       "scene": "world_scene:life2_vale_keep_the_margin",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "d998c5bf9d2e36edbbbf0e3d1007dcda9240cd2d45ce23094f1cd4ac775283e3",
-      "reason": "bounded_batch_limit"
+      "page_key": "d998c5bf9d2e36edbbbf0e3d1007dcda9240cd2d45ce23094f1cd4ac775283e3"
     },
     {
       "scene": "world_scene:life2_vale_keep_the_margin",
       "speaker_id": "player",
-      "page_key": "c71e6fbcc77e0e8e52d7589fa66530b2758bb9310e6dde653f501a49a2c86b2b",
-      "reason": "bounded_batch_limit"
+      "page_key": "c71e6fbcc77e0e8e52d7589fa66530b2758bb9310e6dde653f501a49a2c86b2b"
     },
     {
       "scene": "world_scene:life2_vale_keep_the_margin",
       "speaker_id": "vargan_record_keeper",
-      "page_key": "8304fac909fd4a82d46ff79bf91fdafe540b0beb45e67ec1d59a91128fdf0e14",
-      "reason": "bounded_batch_limit"
+      "page_key": "8304fac909fd4a82d46ff79bf91fdafe540b0beb45e67ec1d59a91128fdf0e14"
     },
     {
       "scene": "world_scene:life2_vale_keep_the_margin",
       "speaker_id": "player",
-      "page_key": "539a552717b6cbe06aaa0909cab0745d099a62c9f6ada8609654ac08a579d21f",
-      "reason": "bounded_batch_limit"
+      "page_key": "539a552717b6cbe06aaa0909cab0745d099a62c9f6ada8609654ac08a579d21f"
     },
     {
       "scene": "world_scene:life2_merrow_no_form",
       "speaker_id": "vargan_steward",
-      "page_key": "b5b5abced9fadf678c57c3edea20c57e1ac584ceba6142cc5086d81ce83e3567",
-      "reason": "bounded_batch_limit"
+      "page_key": "b5b5abced9fadf678c57c3edea20c57e1ac584ceba6142cc5086d81ce83e3567"
     },
     {
       "scene": "world_scene:life2_merrow_no_form",
       "speaker_id": "player",
-      "page_key": "572916a5881afa6e5a766b0e72ae6ba812856b05951cc88e5b6c43fdde917312",
-      "reason": "bounded_batch_limit"
+      "page_key": "572916a5881afa6e5a766b0e72ae6ba812856b05951cc88e5b6c43fdde917312"
     },
     {
       "scene": "world_scene:life2_merrow_no_form",
       "speaker_id": "vargan_steward",
-      "page_key": "b304f7b98e130e619c85c4d9dfb653053b55ca67d939e54cbf5ae55ac03ba8f7",
-      "reason": "bounded_batch_limit"
+      "page_key": "b304f7b98e130e619c85c4d9dfb653053b55ca67d939e54cbf5ae55ac03ba8f7"
     },
     {
       "scene": "world_scene:life2_merrow_no_form",
       "speaker_id": "player",
-      "page_key": "6ddaf4d65b8474971f1d7d635dd72c64c417c5af523a235879cda91a70ff3c0d",
-      "reason": "bounded_batch_limit"
+      "page_key": "6ddaf4d65b8474971f1d7d635dd72c64c417c5af523a235879cda91a70ff3c0d"
     },
     {
       "scene": "world_scene:life2_merrow_no_form",
       "speaker_id": "vargan_steward",
-      "page_key": "4b9c6f49227aaa319bbfd14a004ae36695f74ba886abd5728fa101e33da34b34",
-      "reason": "bounded_batch_limit"
+      "page_key": "4b9c6f49227aaa319bbfd14a004ae36695f74ba886abd5728fa101e33da34b34"
     },
     {
       "scene": "world_scene:life2_merrow_no_form",
       "speaker_id": "player",
-      "page_key": "90b073ea2aba4c3745c115d9634fdf44486edd1a8f55cbc160427b41b468f886",
-      "reason": "bounded_batch_limit"
+      "page_key": "90b073ea2aba4c3745c115d9634fdf44486edd1a8f55cbc160427b41b468f886"
     },
     {
       "scene": "world_scene:life2_nessa_guest_for_once",
       "speaker_id": "saga_nessa",
-      "page_key": "84ce8058bced082b21c265833b758118e19181089762ecf81c00bfbb25c119a9",
-      "reason": "bounded_batch_limit"
+      "page_key": "84ce8058bced082b21c265833b758118e19181089762ecf81c00bfbb25c119a9"
     },
     {
       "scene": "world_scene:life2_nessa_guest_for_once",
       "speaker_id": "player",
-      "page_key": "8a27cde43c61684f0693294e9dadb432304af7f698c95db1334e260f2176fec0",
-      "reason": "bounded_batch_limit"
+      "page_key": "8a27cde43c61684f0693294e9dadb432304af7f698c95db1334e260f2176fec0"
     },
     {
       "scene": "world_scene:life2_nessa_guest_for_once",
       "speaker_id": "saga_nessa",
-      "page_key": "aa26bb9bb3a039389ba03b7a94b328db820e77d0b198be0a2ffe5e59220e6f6f",
-      "reason": "bounded_batch_limit"
+      "page_key": "aa26bb9bb3a039389ba03b7a94b328db820e77d0b198be0a2ffe5e59220e6f6f"
     },
     {
       "scene": "world_scene:life2_nessa_guest_for_once",
       "speaker_id": "player",
-      "page_key": "719d8168cbbf5a3988ecaa8d6b1552e342359db6b767756d03455910a5e59460",
-      "reason": "bounded_batch_limit"
+      "page_key": "719d8168cbbf5a3988ecaa8d6b1552e342359db6b767756d03455910a5e59460"
     },
     {
       "scene": "world_scene:life2_nessa_guest_for_once",
       "speaker_id": "saga_nessa",
-      "page_key": "bb28464709935140745d3743f856901d87709b397ffdb8c5f84f468b11accb80",
-      "reason": "bounded_batch_limit"
+      "page_key": "bb28464709935140745d3743f856901d87709b397ffdb8c5f84f468b11accb80"
     },
     {
       "scene": "world_scene:life2_nessa_guest_for_once",
       "speaker_id": "player",
-      "page_key": "29dc004abb4274cf47c6aeb4b25d46a61fbd68e6a66108787fe083b3bd5a6ddc",
-      "reason": "bounded_batch_limit"
+      "page_key": "29dc004abb4274cf47c6aeb4b25d46a61fbd68e6a66108787fe083b3bd5a6ddc"
     },
     {
       "scene": "world_scene:life2_nera_off_duty",
       "speaker_id": "saga_nera",
-      "page_key": "e696b4572e27b30341d9762ce5fc7100531c8448952a80d12c9c2053745d4adf",
-      "reason": "bounded_batch_limit"
+      "page_key": "e696b4572e27b30341d9762ce5fc7100531c8448952a80d12c9c2053745d4adf"
     },
     {
       "scene": "world_scene:life2_nera_off_duty",
       "speaker_id": "player",
-      "page_key": "db528adaaed53ad8503e144c4ab92f455446d6c8a51ff15fc3a48d724030eae8",
-      "reason": "bounded_batch_limit"
+      "page_key": "db528adaaed53ad8503e144c4ab92f455446d6c8a51ff15fc3a48d724030eae8"
     },
     {
       "scene": "world_scene:life2_nera_off_duty",
       "speaker_id": "saga_nera",
-      "page_key": "b9a313e93f5de841ca41801c814203115588978b59441b0f10a9498b8fcd367a",
-      "reason": "bounded_batch_limit"
+      "page_key": "b9a313e93f5de841ca41801c814203115588978b59441b0f10a9498b8fcd367a"
     },
     {
       "scene": "world_scene:life2_nera_off_duty",
       "speaker_id": "player",
-      "page_key": "b877fd464df1a60ac4360d03e6ce2fa9d94c19f497cb66fee0ba5c39a15368bd",
-      "reason": "bounded_batch_limit"
+      "page_key": "b877fd464df1a60ac4360d03e6ce2fa9d94c19f497cb66fee0ba5c39a15368bd"
     },
     {
       "scene": "world_scene:life2_nera_off_duty",
       "speaker_id": "saga_nera",
-      "page_key": "55e93b89f79b3a2d7fce0d4244d4d9f18ce4d8cd0238b2d495f1cfd437d0ceae",
-      "reason": "bounded_batch_limit"
+      "page_key": "55e93b89f79b3a2d7fce0d4244d4d9f18ce4d8cd0238b2d495f1cfd437d0ceae"
     },
     {
       "scene": "world_scene:life2_nera_off_duty",
       "speaker_id": "player",
-      "page_key": "05211ad5e56428637e513b5797301816e0a7040d3e138271174f7b4da11a25e5",
-      "reason": "bounded_batch_limit"
+      "page_key": "05211ad5e56428637e513b5797301816e0a7040d3e138271174f7b4da11a25e5"
     },
     {
       "scene": "everyday:nessa:greet",
       "speaker_id": "nessa",
-      "page_key": "dca95c5b8c00dbaeb07457424118ff4c83c2a2e565e47535eadd07fc9154ae7b",
-      "reason": "bounded_batch_limit"
+      "page_key": "dca95c5b8c00dbaeb07457424118ff4c83c2a2e565e47535eadd07fc9154ae7b"
     },
     {
       "scene": "everyday:nessa:joke",
       "speaker_id": "nessa",
-      "page_key": "321713a2f61faa30d06f27674739af94873db14e616017df69cc3c5d0a18e6a7",
-      "reason": "bounded_batch_limit"
+      "page_key": "321713a2f61faa30d06f27674739af94873db14e616017df69cc3c5d0a18e6a7"
     },
     {
       "scene": "everyday:nessa:reassure",
       "speaker_id": "nessa",
-      "page_key": "86f4932eebad8e4a3570aac40a7c2f1284ae2d3f00040139d1eb1b169a0c0951",
-      "reason": "bounded_batch_limit"
+      "page_key": "86f4932eebad8e4a3570aac40a7c2f1284ae2d3f00040139d1eb1b169a0c0951"
     },
     {
       "scene": "everyday:nessa:work",
       "speaker_id": "nessa",
-      "page_key": "709c1d51cf3c135cbad82a920f6ccc3b653ee2ac86ec1d3f9663b7b2591b0e8f",
-      "reason": "bounded_batch_limit"
+      "page_key": "709c1d51cf3c135cbad82a920f6ccc3b653ee2ac86ec1d3f9663b7b2591b0e8f"
     },
     {
       "scene": "everyday:nessa:apology",
       "speaker_id": "nessa",
-      "page_key": "8002e7d39dd98b6d1e95d95e6af99adf38e78c0d11389845ff110fa6cad62907",
-      "reason": "bounded_batch_limit"
+      "page_key": "8002e7d39dd98b6d1e95d95e6af99adf38e78c0d11389845ff110fa6cad62907"
     },
     {
       "scene": "everyday:social_menu",
       "speaker_id": "nessa",
-      "page_key": "b9ed47250d9dd204cc58c4f5a8fd97970452150b463ad636d213d9b11049f081",
-      "reason": "bounded_batch_limit"
+      "page_key": "b9ed47250d9dd204cc58c4f5a8fd97970452150b463ad636d213d9b11049f081"
     },
     {
       "scene": "everyday:nera:greet",
       "speaker_id": "nera",
-      "page_key": "f43164fb514d550299e425dfa08aa01a22d1390624eb3cb0b0297b00eabb444c",
-      "reason": "bounded_batch_limit"
+      "page_key": "f43164fb514d550299e425dfa08aa01a22d1390624eb3cb0b0297b00eabb444c"
     },
     {
       "scene": "everyday:nera:joke",
       "speaker_id": "nera",
-      "page_key": "15828bc44713465f8c60333426d518b59b59f194ee6f7a0cb45c1481b00295b4",
-      "reason": "bounded_batch_limit"
+      "page_key": "15828bc44713465f8c60333426d518b59b59f194ee6f7a0cb45c1481b00295b4"
     },
     {
       "scene": "everyday:nera:reassure",
       "speaker_id": "nera",
-      "page_key": "aaa43ec0190582eaac2981586646d50ab0d2b6155c3122f606775600422d764e",
-      "reason": "bounded_batch_limit"
+      "page_key": "aaa43ec0190582eaac2981586646d50ab0d2b6155c3122f606775600422d764e"
     },
     {
       "scene": "everyday:nera:work",
       "speaker_id": "nera",
-      "page_key": "c440991f189aaaf353259560c938a9adabb4f0a2345f511f8ef2af73a49ac00b",
-      "reason": "bounded_batch_limit"
+      "page_key": "c440991f189aaaf353259560c938a9adabb4f0a2345f511f8ef2af73a49ac00b"
     },
     {
       "scene": "everyday:nera:apology",
       "speaker_id": "nera",
-      "page_key": "8c3c9de75b719e9fe002659d3bd5d342f807fa584e9162fbbafc3e4e830f9aea",
-      "reason": "bounded_batch_limit"
+      "page_key": "8c3c9de75b719e9fe002659d3bd5d342f807fa584e9162fbbafc3e4e830f9aea"
     },
     {
       "scene": "everyday:social_menu",
       "speaker_id": "nera",
-      "page_key": "24c32d5f4cb5b919406135badad7bc2539f9212d3eceb32fa377ec25fad1806b",
-      "reason": "bounded_batch_limit"
+      "page_key": "24c32d5f4cb5b919406135badad7bc2539f9212d3eceb32fa377ec25fad1806b"
     },
     {
       "scene": "everyday:favour:cord",
       "speaker_id": "nera",
-      "page_key": "3b26e767a8078007599261377026473b38d0442428ad6777d6b652644483ddec",
-      "reason": "bounded_batch_limit"
+      "page_key": "3b26e767a8078007599261377026473b38d0442428ad6777d6b652644483ddec"
     },
     {
       "scene": "everyday:favour:parcel",
       "speaker_id": "nessa",
-      "page_key": "83d0b0871e7abf40dae6d5c27814527fe5fd3ecabb51d504edc85b033f87ecba",
-      "reason": "bounded_batch_limit"
+      "page_key": "83d0b0871e7abf40dae6d5c27814527fe5fd3ecabb51d504edc85b033f87ecba"
     },
     {
       "scene": "everyday:rumour:deep",
       "speaker_id": "nessa",
-      "page_key": "92bb1d66818e1e957b070726715c94cfbc3888803fc3b1211999c102afe7111c",
-      "reason": "bounded_batch_limit"
+      "page_key": "92bb1d66818e1e957b070726715c94cfbc3888803fc3b1211999c102afe7111c"
     },
     {
       "scene": "routine:greyfen:saga_nessa:line",
       "speaker_id": "saga_nessa",
-      "page_key": "ac78433e659a29ad64abbe7b95a87e285fcfc33374758fd40d8d6f4db0aa8eb4",
-      "reason": "bounded_batch_limit"
+      "page_key": "ac78433e659a29ad64abbe7b95a87e285fcfc33374758fd40d8d6f4db0aa8eb4"
     },
     {
       "scene": "routine:old_mill:mill_second_worker:line",
       "speaker_id": "mill_second_worker",
-      "page_key": "3aa278d3fbc432631d2ee31f563d92e2ae6a601626f508846827946b5582b903",
-      "reason": "bounded_batch_limit"
+      "page_key": "3aa278d3fbc432631d2ee31f563d92e2ae6a601626f508846827946b5582b903"
     },
     {
       "scene": "routine:marsh_crossing:saga_nera:line",
       "speaker_id": "saga_nera",
-      "page_key": "7601ed69613cf2ded4671dd2fede7a89d0c9d235ad4ced0621ed1fd462b5c5dc",
-      "reason": "bounded_batch_limit"
+      "page_key": "7601ed69613cf2ded4671dd2fede7a89d0c9d235ad4ced0621ed1fd462b5c5dc"
     },
     {
       "scene": "routine:marsh_crossing:saga_nera:after_line",
       "speaker_id": "saga_nera",
-      "page_key": "811a05460ada3796f1caa3a7ba590c8b7f1da986a315705f89e90f0e0faf49c2",
-      "reason": "bounded_batch_limit"
+      "page_key": "811a05460ada3796f1caa3a7ba590c8b7f1da986a315705f89e90f0e0faf49c2"
     },
     {
       "scene": "routine:marsh_crossing:saga_nera:consequences:0:line",
       "speaker_id": "saga_nera",
-      "page_key": "cdc1c32d77e3cc4078a86d31c52bd3e3543520970b587e36ec1afc3175d3c772",
-      "reason": "bounded_batch_limit"
+      "page_key": "cdc1c32d77e3cc4078a86d31c52bd3e3543520970b587e36ec1afc3175d3c772"
     },
     {
       "scene": "routine:marsh_crossing:saga_nera:consequences:1:line",
       "speaker_id": "saga_nera",
-      "page_key": "2e9e89488ddee47801682387a91e2ac125c504710e6184783e3c17fab974e852",
-      "reason": "bounded_batch_limit"
+      "page_key": "2e9e89488ddee47801682387a91e2ac125c504710e6184783e3c17fab974e852"
     },
     {
       "scene": "routine:marsh_crossing:saga_nera:consequences:2:line",
       "speaker_id": "saga_nera",
-      "page_key": "2ccc1131e956b4af03502b248de18a29fdf89a6f8e8734389c7dbad68d981775",
-      "reason": "bounded_batch_limit"
+      "page_key": "2ccc1131e956b4af03502b248de18a29fdf89a6f8e8734389c7dbad68d981775"
     },
     {
       "scene": "routine:record_hall:edric:line",
       "speaker_id": "edric",
-      "page_key": "e2981289a360530a169624aa3c2bb98454d4bfe2754d705629f79f13eb3e62e0",
-      "reason": "bounded_batch_limit"
+      "page_key": "e2981289a360530a169624aa3c2bb98454d4bfe2754d705629f79f13eb3e62e0"
     },
     {
       "scene": "routine:vargan_court:vargan_servant:line",
       "speaker_id": "vargan_servant",
-      "page_key": "6f1f04293f2bb0d18f5d80904d672c8774688b253241e1d90a51f73921443cd5",
-      "reason": "bounded_batch_limit"
+      "page_key": "6f1f04293f2bb0d18f5d80904d672c8774688b253241e1d90a51f73921443cd5"
     },
     {
       "scene": "regional:greeting:saga_maren",
       "speaker_id": "saga_maren",
-      "page_key": "f134d5bf03de46c5dc8651909cb35726adb79e323df2338d7bf910a9b01131cb",
-      "reason": "bounded_batch_limit"
+      "page_key": "f134d5bf03de46c5dc8651909cb35726adb79e323df2338d7bf910a9b01131cb"
     },
     {
       "scene": "regional:return:saga_maren",
       "speaker_id": "saga_maren",
-      "page_key": "b97e4ab7552ea2fe6b92e2fa23e96216b6820af2b383e29d5772e1fd6fab7890",
-      "reason": "bounded_batch_limit"
+      "page_key": "b97e4ab7552ea2fe6b92e2fa23e96216b6820af2b383e29d5772e1fd6fab7890"
     },
     {
       "scene": "regional:greeting:saga_nessa",
       "speaker_id": "saga_nessa",
-      "page_key": "307268d73373049d7fb92cb4b6edda17a72575a82a35a0b66866932b13fe9139",
-      "reason": "bounded_batch_limit"
+      "page_key": "307268d73373049d7fb92cb4b6edda17a72575a82a35a0b66866932b13fe9139"
     },
     {
       "scene": "regional:return:saga_nessa",
       "speaker_id": "saga_nessa",
-      "page_key": "090e0f7b480d2bc6bea942655d8df9a425606dae4b267ce5c4ca120d2841a081",
-      "reason": "bounded_batch_limit"
+      "page_key": "090e0f7b480d2bc6bea942655d8df9a425606dae4b267ce5c4ca120d2841a081"
     },
     {
       "scene": "regional:greeting:saga_nera",
       "speaker_id": "saga_nera",
-      "page_key": "e52bbde7d0fb6ba997fb0994da08d7df0a5f86d398105ebad576dc20ca3cc88c",
-      "reason": "bounded_batch_limit"
+      "page_key": "e52bbde7d0fb6ba997fb0994da08d7df0a5f86d398105ebad576dc20ca3cc88c"
     },
     {
       "scene": "regional:return:saga_nera",
       "speaker_id": "saga_nera",
-      "page_key": "07bef8290a4d17703fcba1b8e82718c72bf5ddf52068a3d4f820d41e6c54a645",
-      "reason": "bounded_batch_limit"
+      "page_key": "07bef8290a4d17703fcba1b8e82718c72bf5ddf52068a3d4f820d41e6c54a645"
     },
     {
       "scene": "regional:side_escort_01:dialogue:hear_recognition",
       "speaker_id": "nera",
-      "page_key": "a747f9dfc0481a483f6f6c736fd429229d701bd419c16435f047383faa1f26cf",
-      "reason": "bounded_batch_limit"
+      "page_key": "a747f9dfc0481a483f6f6c736fd429229d701bd419c16435f047383faa1f26cf"
     },
     {
       "scene": "regional:side_escort_01:dialogue:hear_recognition",
       "speaker_id": "nera",
-      "page_key": "2d457303337fba9b1fcf4a5d05ae75355d8ed515c2406f8b4e76d93514a46106",
-      "reason": "bounded_batch_limit"
+      "page_key": "2d457303337fba9b1fcf4a5d05ae75355d8ed515c2406f8b4e76d93514a46106"
     },
     {
       "scene": "regional:side_escort_01:dialogue:hear_recognition",
       "speaker_id": "nera",
-      "page_key": "87efadf0270b57cdc3748796074696f510199ed7018115e3e67c8c8e7668f4f0",
-      "reason": "bounded_batch_limit"
+      "page_key": "87efadf0270b57cdc3748796074696f510199ed7018115e3e67c8c8e7668f4f0"
     },
     {
       "scene": "regional:side_escort_03:dialogue:hear_lift_plan",
       "speaker_id": "nera",
-      "page_key": "715d79565b51a4df36722b4e35770797b846602d2b205bab7dc0f7b61eddeba4",
-      "reason": "bounded_batch_limit"
+      "page_key": "715d79565b51a4df36722b4e35770797b846602d2b205bab7dc0f7b61eddeba4"
     },
     {
       "scene": "regional:side_escort_03:dialogue:hear_lift_plan",
       "speaker_id": "nera",
-      "page_key": "6af6fc0caea118027bc7ca785d33f394a11cb446df72fcded504acb2f7345737",
-      "reason": "bounded_batch_limit"
+      "page_key": "6af6fc0caea118027bc7ca785d33f394a11cb446df72fcded504acb2f7345737"
     },
     {
       "scene": "regional:side_escort_03:dialogue:hear_lift_plan",
       "speaker_id": "nera",
-      "page_key": "90cd829699674b48f01012ffbf5d274046cbd35be8fb851284f2350ec80d5b0b",
-      "reason": "bounded_batch_limit"
+      "page_key": "90cd829699674b48f01012ffbf5d274046cbd35be8fb851284f2350ec80d5b0b"
     },
     {
       "scene": "regional:side_escort_04:dialogue:check_last_load",
       "speaker_id": "nera",
-      "page_key": "c56aa1091db94062c6d37125a70cf623237c931f33ce5732372a50b90c6e1dce",
-      "reason": "bounded_batch_limit"
+      "page_key": "c56aa1091db94062c6d37125a70cf623237c931f33ce5732372a50b90c6e1dce"
     },
     {
       "scene": "regional:side_escort_04:dialogue:check_last_load",
       "speaker_id": "nera",
-      "page_key": "873ccefcd2388d36277f5a66661e0a86497cb2cd62297216871dc107422a04dd",
-      "reason": "bounded_batch_limit"
+      "page_key": "873ccefcd2388d36277f5a66661e0a86497cb2cd62297216871dc107422a04dd"
     },
     {
       "scene": "regional:side_escort_04:dialogue:check_last_load",
       "speaker_id": "nera",
-      "page_key": "8e3128085ddcb0ce95a01db39c27f197d1e9445976733d26703bbd2844cdbc34",
-      "reason": "bounded_batch_limit"
+      "page_key": "8e3128085ddcb0ce95a01db39c27f197d1e9445976733d26703bbd2844cdbc34"
     },
     {
       "scene": "regional:side_escort_05:dialogue:hear_boundary",
       "speaker_id": "nera",
-      "page_key": "30ec6b73a65f9ad7a4528c039bfc17449f1d7f687cf0260a574ab78c0a366166",
-      "reason": "bounded_batch_limit"
+      "page_key": "30ec6b73a65f9ad7a4528c039bfc17449f1d7f687cf0260a574ab78c0a366166"
     },
     {
       "scene": "regional:side_escort_05:dialogue:hear_boundary",
       "speaker_id": "nera",
-      "page_key": "b2ffe20f9179d87cbfff7eb7e30bcd3f745faa62252283992287ee9c65d83978",
-      "reason": "bounded_batch_limit"
+      "page_key": "b2ffe20f9179d87cbfff7eb7e30bcd3f745faa62252283992287ee9c65d83978"
     },
     {
       "scene": "regional:side_escort_06:dialogue_distance:return_home",
       "speaker_id": "nera",
-      "page_key": "50a20312e53011ca96b7d64152439ae89c6de097be12016ece54d6b8ceebfe81",
-      "reason": "bounded_batch_limit"
+      "page_key": "50a20312e53011ca96b7d64152439ae89c6de097be12016ece54d6b8ceebfe81"
     },
     {
       "scene": "regional:side_escort_06:dialogue_distance:return_home",
       "speaker_id": "nera",
-      "page_key": "2403dd5edd906b9326557e99645cc3be689726661f74a9ebe93f0a80bf9ccef3",
-      "reason": "bounded_batch_limit"
+      "page_key": "2403dd5edd906b9326557e99645cc3be689726661f74a9ebe93f0a80bf9ccef3"
     },
     {
       "scene": "regional:side_escort_06:dialogue:return_home",
       "speaker_id": "nera",
-      "page_key": "18d3be2efab01bc9bd51f01d244ee17801c83689f525adbed8fe41e98e4e00ef",
-      "reason": "bounded_batch_limit"
+      "page_key": "18d3be2efab01bc9bd51f01d244ee17801c83689f525adbed8fe41e98e4e00ef"
     },
     {
       "scene": "regional:side_escort_06:dialogue:return_home",
       "speaker_id": "nera",
-      "page_key": "448b9f7350637eb6cafbd7b3a7568a2af9a69856b89cb8f8d2468cbe60c7e85e",
-      "reason": "bounded_batch_limit"
+      "page_key": "448b9f7350637eb6cafbd7b3a7568a2af9a69856b89cb8f8d2468cbe60c7e85e"
     },
     {
       "scene": "regional:side_escort_06:dialogue:return_home",
       "speaker_id": "nera",
-      "page_key": "b4884aaf794d00313f2b92147fb74a899dd9caf98bf0f6ab43d72d00aab8fc38",
-      "reason": "bounded_batch_limit"
+      "page_key": "b4884aaf794d00313f2b92147fb74a899dd9caf98bf0f6ab43d72d00aab8fc38"
     },
     {
       "scene": "regional:saga_gre_q01:account:hear_shortfall",
       "speaker_id": "saga_nessa",
-      "page_key": "29db34939eb898eafe4a21a332505757ccd8eb5e794ba7e29435feb6c4860fc6",
-      "reason": "bounded_batch_limit"
+      "page_key": "29db34939eb898eafe4a21a332505757ccd8eb5e794ba7e29435feb6c4860fc6"
     },
     {
       "scene": "regional:saga_gre_q05:account:meet_arrivals",
       "speaker_id": "saga_nessa",
-      "page_key": "f61d7c07d3b16488903cce1f1c45022df6964b399ac08269a7da0a06f314e86e",
-      "reason": "bounded_batch_limit"
+      "page_key": "f61d7c07d3b16488903cce1f1c45022df6964b399ac08269a7da0a06f314e86e"
     },
     {
       "scene": "regional:saga_roa_q02:account:hear_closure",
       "speaker_id": "saga_nera",
-      "page_key": "3cd9b3cc1272260842ae8ca7214d714bb37ea74b405fa0ab93ae456f8758e1c5",
-      "reason": "bounded_batch_limit"
+      "page_key": "3cd9b3cc1272260842ae8ca7214d714bb37ea74b405fa0ab93ae456f8758e1c5"
     },
     {
       "scene": "regional:nera:return",
       "speaker_id": "saga_maren",
-      "page_key": "dd89be70399e3cbe52b3a7e551cf83c537a6dc130f135bdcef92223e7d3a19e7",
-      "reason": "bounded_batch_limit"
+      "page_key": "dd89be70399e3cbe52b3a7e551cf83c537a6dc130f135bdcef92223e7d3a19e7"
     },
     {
       "scene": "regional:nera:return",
       "speaker_id": "saga_maren",
-      "page_key": "2083e5c18f4849b0abced4ddb290bac1db2ef2853961c65e79ec58bbe02c876d",
-      "reason": "bounded_batch_limit"
+      "page_key": "2083e5c18f4849b0abced4ddb290bac1db2ef2853961c65e79ec58bbe02c876d"
     },
     {
       "scene": "regional:nera:return",
       "speaker_id": "saga_maren",
-      "page_key": "8c22cfc7eda118f09f7c6f305eb0743deec1938653ccafa773de186b16512b4c",
-      "reason": "bounded_batch_limit"
+      "page_key": "8c22cfc7eda118f09f7c6f305eb0743deec1938653ccafa773de186b16512b4c"
     },
     {
       "scene": "regional:nera:parting:company",
       "speaker_id": "saga_maren",
-      "page_key": "0f621541a1db4c8fbfe6900e62d012f55219503ffee42bd58e3e2d22736b85dc",
-      "reason": "bounded_batch_limit"
+      "page_key": "0f621541a1db4c8fbfe6900e62d012f55219503ffee42bd58e3e2d22736b85dc"
     },
     {
       "scene": "regional:nera:parting:distance",
       "speaker_id": "saga_maren",
-      "page_key": "7ae5cd8eca083d2af465418dd100491e9210a15a0ebe3f4ecea620ef45412393",
-      "reason": "bounded_batch_limit"
+      "page_key": "7ae5cd8eca083d2af465418dd100491e9210a15a0ebe3f4ecea620ef45412393"
     },
     {
       "scene": "opening_arrival:saga_maren",
       "speaker_id": "saga_maren",
-      "page_key": "95b58f03fa22759a532653c4752329484fd74de3b28112b8b8bcb5aeecf9c90c",
-      "reason": "bounded_batch_limit"
+      "page_key": "95b58f03fa22759a532653c4752329484fd74de3b28112b8b8bcb5aeecf9c90c"
     }
   ],
   "baseline_commit": "02d03412986cd8dca84833a19b93852d19ed43d3",
