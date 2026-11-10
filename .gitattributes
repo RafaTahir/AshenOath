@@ -131,3 +131,6 @@ art_source/art_recovery_v2/tools/test_living_asset_coverage.py -text whitespace=
 # Preserve exact formatting of the archived creature source review scripts.
 art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/source_checkpoint_r3/original_review/prepare_promotion_review_r1.py -text whitespace=cr-at-eol,-blank-at-eof
 art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/source_checkpoint_r3/original_review/prepare_source_checkpoint_r1.py -text whitespace=cr-at-eol,-blank-at-eof
+
+# Preserve the exact measured Ashwing recipe snapshot.
+art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py -text whitespace=cr-at-eol,-blank-at-eof

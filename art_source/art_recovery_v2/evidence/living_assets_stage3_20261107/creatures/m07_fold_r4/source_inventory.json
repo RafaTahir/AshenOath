@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "asset": "M07",
+  "revision": "measured_fold_source_r4",
+  "scope": "Versioned editable creature source and candidate-only source evidence",
+  "base_head_at_archive_preparation": "34c1bb08e285f1edfb241980760ae65581a94c04",
+  "files": [
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/README.md",
+      "archive_relative": "README.md",
+      "source": null,
+      "bytes": 2398,
+      "sha256": "8b10b284c150ef582915cbb599a31ef0a7c7ec7d0f88919897546419c15043a7",
+      "purpose": "Portable reproduction instructions and scope limits for the preserved source receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/authoring_run/blender_author.log",
+      "archive_relative": "authoring_run/blender_author.log",
+      "source": ".verification/creatures/M07/revised_source_r4_owned/blender_author.log",
+      "bytes": 2708,
+      "sha256": "5a4bae3e0d2c868b12663989c474a897b3bb3f0a8ff29aa9ad527ed05cf57307",
+      "purpose": "Bounded Blender authoring, export and preview execution log"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/authoring_run/measured_probe_owned.json",
+      "archive_relative": "authoring_run/measured_probe_owned.json",
+      "source": ".verification/creatures/M07/retained_fold_probe_r3_owned/receipt.json",
+      "bytes": 510,
+      "sha256": "8db387d88f7ebf5b5a409ceb15b11a1b59ac9a99728bb53ff275a8b6d5adebb6",
+      "purpose": "Owned closure of the preceding accepted measured fold probe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/authoring_run/readiness.json",
+      "archive_relative": "authoring_run/readiness.json",
+      "source": ".verification/creatures/M07/revised_source_r4_readiness.json",
+      "bytes": 7596,
+      "sha256": "de97a1846f1730a99da820feb04c9060abc1ce9c5d97538dd93d0c165470f2c1",
+      "purpose": "Exact historical source and executable fingerprints, commands and process caps"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/authoring_run/receipt.json",
+      "archive_relative": "authoring_run/receipt.json",
+      "source": ".verification/creatures/M07/revised_source_r4_owned/receipt.json",
+      "bytes": 5827,
+      "sha256": "e0a465a42a9551cd6cc8a8f9d95b7dd6e23e9b0a6190527f3f3de05890f26ef0",
+      "purpose": "Exact owned process closure and output file digest receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/authoring_run/source_contract.log",
+      "archive_relative": "authoring_run/source_contract.log",
+      "source": ".verification/creatures/M07/revised_source_r4_owned/source_contract.log",
+      "bytes": 35,
+      "sha256": "2f28991c166e7bffd8c567c79bb670a311e636f59aceaa1eee3b17653e16c43b",
+      "purpose": "Maintained source validator execution log"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+      "bytes": 2166936,
+      "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+      "purpose": "Exact grafted runtime candidate bytes for later isolated native verification"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/M07_living_export.glb",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/M07_living_export.glb",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/M07_living_export.glb",
+      "bytes": 3262804,
+      "sha256": "362d34e17e061a32ff9e5db79e7238ab0bd7b082b368ba51a49c4250b48c96a7",
+      "purpose": "Unmodified intermediate Blender export used for the exact retained-base graft"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+      "bytes": 3413500,
+      "sha256": "d07f00c261ee865b79390e6a40103518f0c3d3cb70ae1efdd053ff43c68b105f",
+      "purpose": "Editable Blender source of the measured fold and four baked ambient actions"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/M07_retained_input.glb",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/M07_retained_input.glb",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/M07_retained_input.glb",
+      "bytes": 2097816,
+      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+      "purpose": "Frozen retained native source for reproducible input and protected action comparisons"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/authoring.json",
+      "bytes": 93354,
+      "sha256": "cee96e7de49b50271d014423810f51acfa40c71505d3e2255c9d07dff5cbb19e",
+      "purpose": "Exact bake provenance and 68 geometry sample records"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_contract.json",
+      "bytes": 2909,
+      "sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb",
+      "purpose": "Maintained validator proof for retained geometry, clip identity and protected action bytes"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+      "bytes": 683201,
+      "sha256": "f6c9484f38f2b5951308ac29281146729dbae9fa46490d702b9e9b5eb52cf6cf",
+      "purpose": "Exact grayscale Workbench preview for the matched source-frame review"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+      "bytes": 683646,
+      "sha256": "b421cde4341dd88db5aeece4d8cb706074b4c6f7b5d53469b90c643074b908bb",
+      "purpose": "Exact grayscale Workbench preview for the matched source-frame review"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+      "bytes": 685044,
+      "sha256": "ad09d725c2bf966e275d525e5987d14045a7df8bc2e7940a753822f40c8e3623",
+      "purpose": "Exact grayscale Workbench preview for the matched source-frame review"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+      "bytes": 685604,
+      "sha256": "b16ca5792d4e0c86c4e2727c27ff4be07882b17032194f034de8cc0371239e46",
+      "purpose": "Exact grayscale Workbench preview for the matched source-frame review"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+      "bytes": 685282,
+      "sha256": "8cc74735454b7b33972b4b18d8bb7b01d6b5643fe890b5e863abcd808d4d6de4",
+      "purpose": "Exact grayscale Workbench preview for the matched source-frame review"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+      "bytes": 684817,
+      "sha256": "624b648cbca57aae5da44eb3019b19f47f65ec98c84d196ee9fa5daa558e68bc",
+      "purpose": "Exact grayscale Workbench preview for the matched source-frame review"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+      "bytes": 685258,
+      "sha256": "ea9460ceb03128e8d702133363c44bb8a9abd0cdc4389d20f7aa3167c7813752",
+      "purpose": "Exact grayscale Workbench preview for the matched source-frame review"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+      "bytes": 684272,
+      "sha256": "98c2faa3ab60d9a864725302e2811cc8d77792bc912068e94c64bfc47c6ba150",
+      "purpose": "Exact grayscale Workbench preview for the matched source-frame review"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/creatures/M07/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "archive_relative": "models/living_assets_stage3_20261107/creatures/M07/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/creatures/M07/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "bytes": 1115249,
+      "sha256": "0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b",
+      "purpose": "Retained external image needed by the raw source and runtime candidate GLBs"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/author_living_creature_motion.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/author_living_creature_motion.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/author_living_creature_motion.py",
+      "bytes": 26682,
+      "sha256": "a0744a5bc4c598a263a9df43b47e6c1ee4a691ff3b39689039235b1be8af8bee",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/creature_morph_lineage.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/creature_morph_lineage.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/creature_morph_lineage.py",
+      "bytes": 13428,
+      "sha256": "d848da51d00e7e3ca765e852f7390e2046b70834376fe7d2b0a3caa2e4b8f890",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/graft_creature_ambient.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/graft_creature_ambient.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/graft_creature_ambient.py",
+      "bytes": 20645,
+      "sha256": "babda3e1d65a6ac83f2722d257a6da68c5d334fc4b2222167c07c74ff950be62",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_motion_profiles.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_motion_profiles.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_motion_profiles.py",
+      "bytes": 7900,
+      "sha256": "115aac66956a25126e7d996ac4f021cffaae1a6b706d190402629bfdfc0edfd6",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_preview.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_preview.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/living_creature_preview.py",
+      "bytes": 3301,
+      "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_baked_geometry.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_baked_geometry.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_baked_geometry.py",
+      "bytes": 6842,
+      "sha256": "3cbf097c1907f7f44455fb7380f62ab9d6736a490e917e663d0e026581b073a7",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_pose_support.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_pose_support.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_pose_support.py",
+      "bytes": 6253,
+      "sha256": "373292fdea058dc6162a289171bb0924dd21a7295579b6670c06423f716d0e78",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_probe_receipt.json",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_probe_receipt.json",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_fold_probe_receipt.json",
+      "bytes": 126892,
+      "sha256": "90413a7482b29d0c7edaacd2185dc95cf35721628b9f0c5a28ae5805136979d5",
+      "purpose": "Exact accepted r3 measured fold inputs, basis and trajectory used by the r4 recipe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py",
+      "bytes": 2363,
+      "sha256": "e504737faa838fea819f751a12ecf516810c3e518919eee486f0fbbfc3abda3c",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/preserve_creature_action_bytes.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/preserve_creature_action_bytes.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/preserve_creature_action_bytes.py",
+      "bytes": 9035,
+      "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/verify_living_creature_motion.py",
+      "archive_relative": "models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/verify_living_creature_motion.py",
+      "source": ".verification/creatures/M07/revised_source_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/verify_living_creature_motion.py",
+      "bytes": 8003,
+      "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d",
+      "purpose": "Frozen reproducible authoring dependency"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/reproduction/design_pack_assets.json",
+      "archive_relative": "reproduction/design_pack_assets.json",
+      "source": "outputs/AshenOathTheRoadBetweenCrowns/data/design_pack_assets.json",
+      "bytes": 80610,
+      "sha256": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e",
+      "purpose": "Frozen registry resolves the retained M07 resource path and input hash"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/reproduction/historical_runner/run_candidate_authoring.py",
+      "archive_relative": "reproduction/historical_runner/run_candidate_authoring.py",
+      "source": ".verification/creatures/run_candidate_authoring.py",
+      "bytes": 11125,
+      "sha256": "9b1361270ac48012dc087de38ac2ad01f0ad53ba88d7b059c9922b3084a81e17",
+      "purpose": "Historical bounded authoring runner source referenced by the exact execution receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/reproduction/historical_runner/run_candidate_serial.py",
+      "archive_relative": "reproduction/historical_runner/run_candidate_serial.py",
+      "source": ".verification/creatures/run_candidate_serial.py",
+      "bytes": 18067,
+      "sha256": "132d269b53bc313ae330f2451a78b88c7a1b89841685ac66faf60991d48f77e5",
+      "purpose": "Historical bounded authoring runner source referenced by the exact execution receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/reproduction/historical_runner/run_m07_revised_source_r4.py",
+      "archive_relative": "reproduction/historical_runner/run_m07_revised_source_r4.py",
+      "source": ".verification/creatures/run_m07_revised_source_r4.py",
+      "bytes": 4891,
+      "sha256": "446813cdc8d96ed286c018fe7e1500c2bdfd453554fb970e9503b8f9fe39d385",
+      "purpose": "Historical bounded authoring runner source referenced by the exact execution receipt"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/review/r2_contact_diagnosis.json",
+      "archive_relative": "review/r2_contact_diagnosis.json",
+      "source": ".verification/creatures/M07/r2_contact_diagnosis_r1.json",
+      "bytes": 4271,
+      "sha256": "0bd1c8f3d6ffbeb2f6b4efb7117d0cb90c1b33f41f78472338a2b8c04aa71b8c",
+      "purpose": "Prior geometric failure and the rationale for the measured shallower search"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/review/source_review.json",
+      "archive_relative": "review/source_review.json",
+      "source": ".verification/creatures/M07/revised_source_r4_source_review_r1.json",
+      "bytes": 12266,
+      "sha256": "7e15475cacaa034cb87fb0032f2633041ac97d5a752e682308932e6279f512f4",
+      "purpose": "All eight compared frame pairs, provenance checks and visual limitations"
+    }
+  ],
+  "file_count": 38,
+  "bytes_excluding_inventory": 18011340,
+  "maximum_file_bytes": 3413500,
+  "preserved_previous_references": [
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/source_checkpoint_r3/source_checkpoint_inventory.json",
+      "bytes": 210461,
+      "sha256": "2c9f60b94e5b18e6bdddf2e2a14425fc183712e76612f1a942c8621019eccd55"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_retained_input.glb",
+      "bytes": 2097816,
+      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_candidate.glb",
+      "bytes": 2215112,
+      "sha256": "298fb8e7ae7a03beec4e73b5f960f5f9b71d8bc2fcf46358d54334f80c832944"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/M07_living_v001.blend",
+      "bytes": 3565229,
+      "sha256": "01ff8f82962761ffa79895ead6316c98cfb599a2a2182f59a9bddd2656df06bd"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_00.png",
+      "bytes": 657120,
+      "sha256": "b20718a4d69a4f70c8bb6abc82c45d841b4b50ecfa59f981c0f3167a1c59821e"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_25.png",
+      "bytes": 657357,
+      "sha256": "0f8e984145f69ca472c3ad3fe6e76f2f8f90934443785ea952767f23887d7450"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_50.png",
+      "bytes": 657877,
+      "sha256": "50da6e8cabecdd8fd75cd79878b0aaa676d5a5823a36e1bc6229cec042667507"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Idle_75.png",
+      "bytes": 658394,
+      "sha256": "0a1eedebe663c6b3d7beb475c44be8b434b860d5c3deec87b9335a8372f454b9"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Investigate_50.png",
+      "bytes": 658143,
+      "sha256": "3e33caae080defef90f5d618665baca0e4c2274c48e247bcae27e704c441303b"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_38.png",
+      "bytes": 657531,
+      "sha256": "b5e7b6914159ee9686621b9f2eaa68cc4a912becf2fd6187ac0b9b09b132847e"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Feed_61.png",
+      "bytes": 658686,
+      "sha256": "78632c46e85d0c140e8f0ea0cebaa529e68e480b7834661b4fc4763f90a2e017"
+    },
+    {
+      "path": "art_source/art_recovery_v2/models/living_assets_stage3_20261107/creatures/M07/source_review/Sleep_50.png",
+      "bytes": 657421,
+      "sha256": "0aac0ece9fa0ea5d237ca41f6f6067a53d2bc0dd75e80bbd650f301b68ad460b"
+    }
+  ],
+  "production_resource": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
+  "retained_source_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
+  "candidate_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+  "retained_external_inputs": [
+    {
+      "uri": "textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "sha256": "0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b",
+      "archived_relative": "models/living_assets_stage3_20261107/creatures/M07/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png"
+    }
+  ],
+  "reproduction_recipe_sha256": "215d6ace2cdc27974429e5961ea932ad76b805ff9974334adf8c8fefca7a1134",
+  "baked_source_samples": {
+    "Idle": 17,
+    "Investigate": 17,
+    "Feed": 17,
+    "Sleep": 17
+  },
+  "source_contract_pass": true,
+  "native_evidence_status": "pending_separate_receipt",
+  "visual_accepted": false,
+  "attack_profiles_recalibrated": false,
+  "production_modified": false,
+  "max_windows_absolute_path_characters": 254,
+  "archive_layout_note": "Short versioned directory preserves Windows path compatibility; copied artifact bytes are unchanged."
+}

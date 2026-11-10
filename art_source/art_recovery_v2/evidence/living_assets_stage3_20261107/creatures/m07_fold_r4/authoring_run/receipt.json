@@ -1,0 +1,124 @@
+{
+  "asset": "M07",
+  "passed": true,
+  "production_overwritten": false,
+  "native_verified": false,
+  "visual_accepted": false,
+  "attack_profiles_recalibrated": false,
+  "runs": [
+    {
+      "stage": "blender_author",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 18964,
+      "active_processes_after_root_wait": 0,
+      "accounting_quiescence_seconds": 0.0,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.0,
+      "exit_code": 0,
+      "seconds": 65.141
+    },
+    {
+      "stage": "source_contract",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 11548,
+      "active_processes_after_root_wait": 0,
+      "accounting_quiescence_seconds": 0.0,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.0,
+      "exit_code": 0,
+      "seconds": 0.625
+    }
+  ],
+  "baked_clearance_samples": {
+    "Idle": 17,
+    "Investigate": 17,
+    "Feed": 17,
+    "Sleep": 17
+  },
+  "outputs": [
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\authoring.json",
+      "bytes": 93354,
+      "sha256": "cee96e7de49b50271d014423810f51acfa40c71505d3e2255c9d07dff5cbb19e"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\M07_living_candidate.glb",
+      "bytes": 2166936,
+      "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\M07_living_export.glb",
+      "bytes": 3262804,
+      "sha256": "362d34e17e061a32ff9e5db79e7238ab0bd7b082b368ba51a49c4250b48c96a7"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\M07_living_v001.blend",
+      "bytes": 3413500,
+      "sha256": "d07f00c261ee865b79390e6a40103518f0c3d3cb70ae1efdd053ff43c68b105f"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\M07_retained_input.glb",
+      "bytes": 2097816,
+      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_contract.json",
+      "bytes": 2909,
+      "sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Feed_38.png",
+      "bytes": 683201,
+      "sha256": "f6c9484f38f2b5951308ac29281146729dbae9fa46490d702b9e9b5eb52cf6cf"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Feed_61.png",
+      "bytes": 683646,
+      "sha256": "b421cde4341dd88db5aeece4d8cb706074b4c6f7b5d53469b90c643074b908bb"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Idle_00.png",
+      "bytes": 685044,
+      "sha256": "ad09d725c2bf966e275d525e5987d14045a7df8bc2e7940a753822f40c8e3623"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Idle_25.png",
+      "bytes": 685604,
+      "sha256": "b16ca5792d4e0c86c4e2727c27ff4be07882b17032194f034de8cc0371239e46"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Idle_50.png",
+      "bytes": 685282,
+      "sha256": "8cc74735454b7b33972b4b18d8bb7b01d6b5643fe890b5e863abcd808d4d6de4"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Idle_75.png",
+      "bytes": 684817,
+      "sha256": "624b648cbca57aae5da44eb3019b19f47f65ec98c84d196ee9fa5daa558e68bc"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Investigate_50.png",
+      "bytes": 685258,
+      "sha256": "ea9460ceb03128e8d702133363c44bb8a9abd0cdc4389d20f7aa3167c7813752"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\source_review\\Sleep_50.png",
+      "bytes": 684272,
+      "sha256": "98c2faa3ab60d9a864725302e2811cc8d77792bc912068e94c64bfc47c6ba150"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07\\textures\\color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "bytes": 1115249,
+      "sha256": "0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b"
+    }
+  ],
+  "candidate_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+  "candidate_bytes": 2166936,
+  "sources_unchanged": true
+}

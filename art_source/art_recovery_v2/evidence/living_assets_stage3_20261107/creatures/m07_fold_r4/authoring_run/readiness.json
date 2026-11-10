@@ -1,0 +1,164 @@
+{
+  "scope": "Fresh private M07 source derivative with accepted measured fold; no runtime replacement",
+  "work": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4",
+  "folder": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\models\\living_assets_stage3_20261107\\creatures\\M07",
+  "evidence": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4_owned",
+  "inputs": [
+    {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+      "bytes": 113041880,
+      "sha256": "9d5df7a9ac2a7c5085aa0669700021bfa5c5e92de167a2510b0d0942c34deab0"
+    },
+    {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "bytes": 107312,
+      "sha256": "3c48fbdcc2ed5c55290e39bef50bd6b1da76f43f3069a4a2624d0b8876a605f5"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\run_m07_revised_source_r4.py",
+      "bytes": 4891,
+      "sha256": "446813cdc8d96ed286c018fe7e1500c2bdfd453554fb970e9503b8f9fe39d385"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\run_candidate_authoring.py",
+      "bytes": 11125,
+      "sha256": "9b1361270ac48012dc087de38ac2ad01f0ad53ba88d7b059c9922b3084a81e17"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\run_candidate_serial.py",
+      "bytes": 18067,
+      "sha256": "132d269b53bc313ae330f2451a78b88c7a1b89841685ac66faf60991d48f77e5"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\data\\design_pack_assets.json",
+      "bytes": 80610,
+      "sha256": "7e0454e5ba4b62a7fad5ed0a3f35b7760171e4debc3f84d67721c01372317f5e"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\M07_Ashwing_Carrion_Drake.glb",
+      "bytes": 2097816,
+      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\models\\living_assets_stage3_20261107\\creatures\\M07\\M07_retained_input.glb",
+      "bytes": 2097816,
+      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\retained_fold_probe_r3\\receipt.json",
+      "bytes": 126892,
+      "sha256": "90413a7482b29d0c7edaacd2185dc95cf35721628b9f0c5a28ae5805136979d5"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\retained_fold_probe_r3\\M07_fold_probe_r3.blend",
+      "bytes": 3709234,
+      "sha256": "0fb308292c4fe56529e697c93099f438277dd8707e49678d00bda03a0c80a98c"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\retained_fold_probe_r3_owned\\receipt.json",
+      "bytes": 510,
+      "sha256": "8db387d88f7ebf5b5a409ceb15b11a1b59ac9a99728bb53ff275a8b6d5adebb6"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\author_living_creature_motion.py",
+      "bytes": 26682,
+      "sha256": "a0744a5bc4c598a263a9df43b47e6c1ee4a691ff3b39689039235b1be8af8bee"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\creature_morph_lineage.py",
+      "bytes": 13428,
+      "sha256": "d848da51d00e7e3ca765e852f7390e2046b70834376fe7d2b0a3caa2e4b8f890"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\graft_creature_ambient.py",
+      "bytes": 20645,
+      "sha256": "babda3e1d65a6ac83f2722d257a6da68c5d334fc4b2222167c07c74ff950be62"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\living_creature_motion_profiles.py",
+      "bytes": 7900,
+      "sha256": "115aac66956a25126e7d996ac4f021cffaae1a6b706d190402629bfdfc0edfd6"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\living_creature_preview.py",
+      "bytes": 3301,
+      "sha256": "809a33a7b132d940ae8202296b0df5779fa6d83c3b464d1e08944224ecafea59"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\m07_baked_geometry.py",
+      "bytes": 6842,
+      "sha256": "3cbf097c1907f7f44455fb7380f62ab9d6736a490e917e663d0e026581b073a7"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\m07_fold_pose_support.py",
+      "bytes": 6253,
+      "sha256": "373292fdea058dc6162a289171bb0924dd21a7295579b6670c06423f716d0e78"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\m07_fold_probe_receipt.json",
+      "bytes": 126892,
+      "sha256": "90413a7482b29d0c7edaacd2185dc95cf35721628b9f0c5a28ae5805136979d5"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\m07_probe_geometry.py",
+      "bytes": 2363,
+      "sha256": "e504737faa838fea819f751a12ecf516810c3e518919eee486f0fbbfc3abda3c"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\preserve_creature_action_bytes.py",
+      "bytes": 9035,
+      "sha256": "66485c15015c2a4737451ce8985302c7843038f4db57bc31e3dcd3018a03d017"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\verify_living_creature_motion.py",
+      "bytes": 8003,
+      "sha256": "62f49c25b98af89999db1e33e799c65be69dba9e0c3727d193ad3401d60a2a3d"
+    },
+    {
+      "path": "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\design_pack_v1\\creatures\\textures\\color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
+      "bytes": 1115249,
+      "sha256": "0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b"
+    }
+  ],
+  "commands": [
+    {
+      "label": "blender_author",
+      "cap_seconds": 360,
+      "argv": [
+        "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+        "--background",
+        "--factory-startup",
+        "--threads",
+        "2",
+        "--python-exit-code",
+        "1",
+        "--python",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\author_living_creature_motion.py",
+        "--",
+        "--asset",
+        "M07",
+        "--source-game",
+        "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--art-root",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4",
+        "--render"
+      ]
+    },
+    {
+      "label": "source_contract",
+      "cap_seconds": 60,
+      "argv": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\M07\\revised_source_r4\\tools\\verify_living_creature_motion.py",
+        "--asset",
+        "M07"
+      ]
+    }
+  ],
+  "minimum_window_seconds": 450,
+  "entry_exit_samples_from_exact_probe": 17,
+  "actual_baked_samples_per_clip": 17,
+  "engine_launched": false,
+  "runtime_modified": false
+}
