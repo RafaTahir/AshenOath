@@ -17,7 +17,7 @@ func _initialize() -> void:
 	var directory := args[index + 1]
 	var mounted := 0
 	for file in DirAccess.get_files_at(directory):
-		if file.ends_with(".pck"):
+		if file.ends_with(".pck") and file != "base.pck":
 			_check(ProjectSettings.load_resource_pack(directory.path_join(file)), "Cannot mount " + file)
 			mounted += 1
 	_check(mounted >= 9, "Expected all nine decoded runtime pack candidates")
@@ -72,7 +72,7 @@ func _initialize() -> void:
 			_check(bool(actor.get_meta("character_material_bindings_valid", false)), "Compiled actor material failed: " + role)
 			actor.free()
 	_check(omitted.size() >= 32, "Standalone source scenes were not excluded from the package")
-	_check(ResourceLoader.exists("res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb"), "Direct companion source was excluded")
+	_verify_companion_body()
 	# The arrow is a dynamic held/quiver/projectile load. A script string alone
 	# cannot make Godot include it in an exported pack.
 	_check(load("res://assets/characters/kael_arrow.glb") is PackedScene, "Opening pack omitted the authored hunting arrow")
@@ -80,6 +80,15 @@ func _initialize() -> void:
 	helper.free()
 	database.free()
 	_finish(seen.size(), omitted.size())
+
+func _verify_companion_body() -> void:
+	var script := load("res://scripts/companion_controller.gd") as Script
+	var path := str(script.get_script_constant_map().get("BODY_PATH", "")) if script != null else ""
+	var body := load(path) as PackedScene if not path.is_empty() else null
+	_check(body != null and body.can_instantiate(), "Packed companion body is missing: " + path)
+	if body != null and path.begins_with("res://assets_external/characters_prepared/"):
+		var contract: Variant = body.get_meta("companion_contract", {})
+		_check(contract is Dictionary and int(contract.get("schema_version", 0)) == 1, "Prepared companion body lost its raw-root contract")
 
 func _verify_resource_dependencies(directory: String) -> void:
 	var files := DirAccess.open(directory)

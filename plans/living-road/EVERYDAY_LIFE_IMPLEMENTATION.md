@@ -1192,6 +1192,52 @@ strict grip compilers. The ownership-only pass still follows both libraries.
 The focused existing-scene verification passed; the repaired production
 attempt and combined runtime checks remain separate gates.
 
+### Combined Candidate and Startup Result: 2026-11-11
+
+- The next compile exposed an LF working copy of `held_prop_geometry.gd`.
+  Applying the merged checkout's existing CRLF rule restored the exact measured
+  bytes without changing the script or its hash requirements. Both strict
+  grip compilers passed on the merged checkout before the release retry.
+- Runtime source `945101ef143429b4f419bcb07647dda9bc1454e5`; build
+  `combined-loading-cast-20261111-945101e-r2`. Complete transport, including
+  the release manifest: **173,557,840 bytes**. Manifest SHA-256:
+  `a2da849926f0784af53f0405312b5e6f3005de7cb8f5a85b1c3a3b07e4499f1c`.
+  Decoded listed artifacts are 218,509,641 bytes, not process memory.
+- All 46 build packs and the Web root exported. Two resource-only verifier
+  repairs were needed after export: inspect the packed companion controller's
+  actual prepared body rather than require the raw GLB, and resolve the tree
+  path from its declared catalog entry. These fixes did not rebuild or change
+  the runtime artifact. The actor check now excludes the standalone base from
+  the isolated mount, preserving root authority.
+- Exact-export checks passed: 498 expanded resource owners, 33 actor scenes
+  with materials and actual Bracken body, and the opening closure of 3
+  exact prepared trees and 27 textures. The incomplete and failed attempts
+  remain separately recorded.
+- Browser evidence: `D:/Temp/AshenOath/combined-release-20261111/browser-startup-945101e-r2.json`,
+  SHA-256 `8e69f1f66d6748ee5e3cde859bf10b6e39abcbc7b0e9b04d126e205fb8f31db5b`.
+  One isolated normal Chromium profile, Intel HD 620 via ANGLE D3D11, 1280x720,
+  no pre-control captures. Passed withheld menu actions, deliberate New Game,
+  movement, Quick Save, reload, and selected durable Continue.
+
+| Timing | Retained normal-profile baseline | Combined candidate |
+| --- | ---: | ---: |
+| Cold usable menu | 111.988 s | 72.976 s |
+| Cold first control, including optional intro | 121.696 s | 78.848 s |
+| Warm usable menu | 101.527 s | 52.853 s |
+| Cold first-view rendering | 59.993 s | 34.182 s |
+
+The separate retained quiet baseline was 114.996 s to cold control. These
+single-run comparisons are not controlled statistical attribution, a phone
+result, or strict reference-PC certification. The candidate's short movement
+sample was 14.98 FPS average and 11.13 FPS 1% low (34 samples); no sustained
+FPS acceptance is claimed. The **32-second aim remains unmet**. Balanced
+startup dependencies fell from 120,717,892 to 96,627,391 transport bytes relative
+to the earlier combined r2, about 38.65 seconds of transfer alone at 20 Mbps.
+The package meets the retained 256 MiB ceiling without reducing visual quality.
+
+The exact candidate has been returned to Game Assets for the remaining
+combined acceptance checks. Production is unchanged; no Git push has run.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

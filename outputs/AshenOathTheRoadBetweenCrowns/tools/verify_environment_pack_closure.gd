@@ -203,7 +203,10 @@ func _verify_prepared_trees() -> int:
 	var checked := 0
 	for source: String in sources:
 		var row: Dictionary = contract.entry(source)
-		var prepared: String = contract.resource_path(source)
+		var prepared := str(row.get("path", ""))
+		if prepared.is_empty():
+			_fail("Prepared tree has no declared runtime resource: " + source)
+			continue
 		var mesh := ResourceLoader.load(prepared, "ArrayMesh", ResourceLoader.CACHE_MODE_IGNORE) as ArrayMesh
 		if row.is_empty() or not contract.validate(mesh, source) or contract.geometry_signature(mesh) != row.get("geometry_sha256") or not ResourceLoader.get_dependencies(prepared).is_empty():
 			_fail("Exported prepared tree failed its exact geometry/material contract: " + source)
