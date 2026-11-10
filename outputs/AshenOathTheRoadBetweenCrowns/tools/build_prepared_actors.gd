@@ -17,6 +17,9 @@ const NativeFace = preload("res://tools/build_native_facial_bindings.gd")
 const FACIAL_ASSEMBLIES := ["Kael_A_Set_Atlas.gltf", "Anwen_A_Set_Atlas.gltf", "Villager_Male_Atlas.gltf", "Villager_Female_Atlas.gltf", "Villager_Worker_Atlas.gltf", "Villager_Hooded_Atlas.gltf", "Bandit_Deserter_Atlas.gltf", "Bandit_Tracker_Atlas.gltf", "Male_Ranger_Runtime.gltf"]
 
 func _initialize() -> void:
+	if "--verify-existing-scenes" in OS.get_cmdline_user_args():
+		_verify_existing_scenes()
+		return
 	if "--refresh-library-ownership" in OS.get_cmdline_user_args():
 		_refresh_library_ownership()
 		return
@@ -84,15 +87,8 @@ func _refresh_library_ownership() -> void:
 	print("PREPARED LIBRARY OWNERSHIP: %d actor records; existing scenes unchanged." % catalog.size())
 	quit(0)
 
-func _compile() -> void:
-	helper = Helper.new()
-	helper.building_prepared_assets = true
-	root.add_child(helper)
-	presets.load("res://export_presets.cfg")
+func _source_selections() -> Dictionary:
 	var selections := {}
-	var previous: Dictionary = {}
-	if FileAccess.file_exists("res://data/prepared_actors.json"):
-		previous = JSON.parse_string(FileAccess.get_file_as_string("res://data/prepared_actors.json"))
 	for manifest in ["res://curated_runtime_assets.json", "res://visual_upgrade_manifest.json"]:
 		var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(manifest))
 		for category in ["characters", "enemies"]:
@@ -102,6 +98,42 @@ func _compile() -> void:
 				if path.is_empty():
 					continue
 				selections[str(role) + "|" + path] = {"role": str(role), "path": path, "category": category}
+	return selections
+
+func _verify_existing_scenes() -> void:
+	var catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/prepared_actors.json"))
+	var selections := _source_selections()
+	if not catalog is Dictionary or selections.is_empty() or catalog.size() != selections.size():
+		_failed("Prepared actor handoff does not cover the current source selections.")
+		quit(1)
+		return
+	var hashes := {}
+	for key: String in selections:
+		var entry: Variant = catalog.get(key)
+		if not entry is Dictionary or entry.get("source") != selections[key].path or entry.get("role") != selections[key].role:
+			_failed("Prepared actor handoff has a stale role or source: " + key)
+			continue
+		var path := str(entry.get("path", ""))
+		if not path.begins_with(OUTPUT) or not path.ends_with(".scn") or path != path.simplify_path():
+			_failed("Invalid prepared actor scene path: " + key)
+			continue
+		if not hashes.has(path):
+			hashes[path] = FileAccess.get_sha256(path)
+		if str(hashes[path]).is_empty() or hashes[path] != entry.get("compiled_sha256") or not ResourceLoader.exists(entry.source, "PackedScene"):
+			_failed("Prepared actor scene or source is missing or stale: " + key)
+	if not failed:
+		print("VERIFIED PREPARED ACTORS: %d exact scenes for %d roles." % [hashes.size(), catalog.size()])
+	quit(1 if failed else 0)
+
+func _compile() -> void:
+	helper = Helper.new()
+	helper.building_prepared_assets = true
+	root.add_child(helper)
+	presets.load("res://export_presets.cfg")
+	var previous: Dictionary = {}
+	if FileAccess.file_exists("res://data/prepared_actors.json"):
+		previous = JSON.parse_string(FileAccess.get_file_as_string("res://data/prepared_actors.json"))
+	var selections := _source_selections()
 	for key in selections:
 		var entry: Dictionary = selections[key]
 		var source: String = entry.path

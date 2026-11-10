@@ -184,7 +184,13 @@ if ($HasLivingCampaign) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_world_blender.gd")) "living-world-compile"
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "verify_living_world_split.gd")) "living-world-union"
 }
-Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
+if ($HasLivingCampaign) {
+    # Measured grips are bound to exact prepared scenes. Repacking identical
+    # source geometry can change Godot's serialized bytes and break the proof.
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd"), "--", "--verify-existing-scenes") "verified-prepared-actors"
+} else {
+    Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
+}
 if ($HasLivingCampaign) {
     # Strict grip metadata binds the final prepared geometry. Refresh only
     # library ownership afterward so the verified actor bytes stay unchanged.

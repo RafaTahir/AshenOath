@@ -1177,6 +1177,21 @@ Revision 2 is enabled for the isolated combined candidate; revision 1 saves
 retain their existing graph. No combined export or Git push is implied by
 source integration.
 
+The first production attempt imported the complete merged project and passed
+runtime compilation and scenery union. The strict C01 grip gate stopped it
+before export. The handoff's measured scene had SHA-256 `f2f3b3d0...`; a prior
+canonical derivative and its rebuild differed. The asset-side archive check
+found only four changed serialized `node_ids` bytes in each of the 12 decoded
+human scene payloads (receipt SHA-256
+`6909f87d93c89114d24bce538a130d958e604f0b05cf9474cd679a637d843d9e`).
+
+The failed build's scene bytes are retained separately. The canonical build
+now consumes the handoff's 33 exact prepared scenes for 129 roles, validated
+against current role/source selections and SHA-256 before the unchanged
+strict grip compilers. The ownership-only pass still follows both libraries.
+The focused existing-scene verification passed; the repaired production
+attempt and combined runtime checks remain separate gates.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing
