@@ -3,6 +3,11 @@ extends RefCounted
 ## Loaded by the destination router after the community pack is mounted.
 const Rules = preload("res://scripts/community_campaign.gd")
 const Presentation = preload("res://scripts/community_presentation.gd")
+const LANTERN_SERVICE_ROAD := [Vector3(6.5, 0.02, -3), Vector3(7, 0.04, 1.5)]
+const APPROACH_ROADS := [
+	[Vector3(-1, 0.02, 5), Vector3(3.5, 0.04, 20)],
+	[Vector3(-2, 0.02, -7), Vector3(27, 0.04, 2.8)],
+]
 const ACTOR_POSITIONS := {
 	"lantern_reach":{"nessa":Vector3(-6,0,3.2),"elna":Vector3(-9,0,-2),"toma":Vector3(-3,0,-4.4),"tor":Vector3(1,0,-5.5),"rook":Vector3(5,0,6),"nera":Vector3(10,0,-6)},
 	"hearthward":{"anwen":Vector3(-8,0,1),"mira":Vector3(-7,0,-4),"vale":Vector3(7,0,-5),"merrow":Vector3(-2.5,0,5),"nessa":Vector3(-5.5,0,7.5),"nera":Vector3(8,0,7),"rook":Vector3(3,0,10),"tor":Vector3(-11,0,-1),"elna":Vector3(-10,0,5),"toma":Vector3(-2,0,-6),"edric":Vector3(3,0,-8),"senn":Vector3(9,0,2)}
@@ -43,12 +48,12 @@ func _ground(context: ZoneBuildContext) -> bool:
 		context.make_ground(Vector3(6.5,-0.08,9),Vector3(6,0.16,14),earth)
 		context.make_ground(Vector3(6.5,-0.55,0),Vector3(6,0.16,4),earth.darkened(0.2))
 		context.make_water_patch("LandingChannel",Vector3(6.5,-0.2,0),Vector3(6,0.025,4),Color(0.12,0.23,0.22,0.75))
-		context.make_road(Vector3(6.5,0.02,-3),Vector3(7,0.04,1.5),earth.lightened(0.16))
+		context.make_road(LANTERN_SERVICE_ROAD[0], LANTERN_SERVICE_ROAD[1], earth.lightened(0.16))
 	else:
 		context.make_ground(Vector3(0,-0.08,0),Vector3(40,0.16,32),earth)
 	context.make_play_area_bounds(40,32,earth.darkened(0.3))
-	context.make_road(Vector3(-1,0.02,5),Vector3(3.5,0.04,20),earth.lightened(0.1))
-	context.make_road(Vector3(-2,0.02,-7),Vector3(27,0.04,2.8),earth.lightened(0.1))
+	for road: Array in APPROACH_ROADS:
+		context.make_road(road[0], road[1], earth.lightened(0.1))
 	context.make_light("CommunityHearthFill",Vector3(-4,3.2,2),Color(0.72,0.54,0.32),1.7)
 	var marker := Node3D.new()
 	marker.name="CampaignSection_"+context.zone_id

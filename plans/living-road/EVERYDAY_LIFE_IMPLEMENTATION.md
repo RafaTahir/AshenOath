@@ -1280,6 +1280,31 @@ combined acceptance checks. Production is unchanged; no Git push has run.
   the other exact packs if the rebuilt archives pass ownership and artifact
   checks.
 
+### Corrected Expansion Travel and Prepared Roads
+
+- Build `combined-loading-cast-20261111-043d7d7-r3`, source `043d7d7`, complete
+  173,558,389 bytes; release manifest SHA-256
+  `7ce61520209629497a92cc89f7ce54995f4fd3900ebca3eef904dc3919b55351`.
+  Resource closure (498 expanded owners, 33 prepared actors), 89 builder/route
+  checks and 34 ambient-morph ownership checks passed. Four of 54 listed
+  transport files changed. Only `community_section.gdc` changed inside the
+  community archive. Regenerated opening scenes changed only their packed
+  `node_ids` arrays (one ID in `main`, 67 in Greyfen core), not visual payloads.
+- At 960x540 with real touch input on r3, the injected Hearthward 503, source
+  restoration, successful Retry and actual controllable arrival all worked.
+  The strict test still failed on two missing prepared Hearthward road meshes.
+  Receipt: `D:/Temp/AO_043d7d7_r3_QA/browser_touch_hearthward_http503_r1.json`,
+  SHA-256 `9361664f3535a8422ea85c87609fca52ec59c58f672d397db30f17ad2786bd80`.
+- The road baker did not include the expansion's two shared road patches or
+  Lantern Reach's service road. The builder and baker now share the same
+  authored origins and sizes, preserving the existing tiled geometry and
+  material choice. The three compiled meshes (3,318 bytes total) belong to
+  the existing deferred campaign pack. The maintained road bake and the 94
+  graph/builder/road resource checks passed in source. The refreshed forest
+  compiler receipts validate all three existing forest meshes; their resource
+  bytes are unchanged. The rebuilt export and real-input route recheck are
+  still separate release gates.
+
 ## Consolidated User Checklist
 
 1. New Game/selected Continue, quality changes and regional returns: existing

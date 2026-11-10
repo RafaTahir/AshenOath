@@ -7,6 +7,7 @@ const Routes = preload("res://scripts/story_route_catalog.gd")
 const State = preload("res://scripts/story_state.gd")
 const Quests = preload("res://scripts/quest_manager.gd")
 const Community = preload("res://scripts/community_campaign.gd")
+const PreparedGeometry = preload("res://scripts/prepared_zone_geometry.gd")
 var failures: Array[String] = []
 var checks := 0
 
@@ -44,6 +45,14 @@ func _run() -> void:
 		var script := load(Router.builder_path(target)) as Script
 		var builder = script.new() if script != null and script.can_instantiate() else null
 		_check(builder != null and builder.step_count(target) == 5,"dedicated builder has five callable construction steps for "+target)
+		if builder != null:
+			var roads: Array = script.APPROACH_ROADS.duplicate()
+			if target == "lantern_reach":
+				roads.append(script.LANTERN_SERVICE_ROAD)
+			for road: Array in roads:
+				var id := "campaign_road_" + PreparedGeometry.geometry_key(road[1], road[0])
+				var mesh := PreparedGeometry.mesh(id)
+				_check(mesh != null and mesh.get_surface_count() > 0, "prepared road exists for %s: %s" % [target, id])
 	var old_atlas := Sectors.atlas(1)
 	var new_atlas := Sectors.atlas(2)
 	for id: String in Revision.NEW_ZONES:
@@ -88,7 +97,7 @@ func _run() -> void:
 	_check(Community.presence_shift(420)=="morning" and Community.presence_shift(1080)=="evening","existing rest waits land exactly on the intended shift")
 	_check(not Community.actor_present("senn","hearthward",1080,legacy,quests),"shift cannot introduce a legacy actor")
 	for failure: String in failures: printerr("COMMUNITY ROUTES: "+failure)
-	print("COMMUNITY ROUTES: %s checks=%d (graph and builder steps, no world/input claim)" % ["PASS" if failures.is_empty() else "FAIL",checks])
+	print("COMMUNITY ROUTES: %s checks=%d (graph, builder steps and road meshes; no world/input claim)" % ["PASS" if failures.is_empty() else "FAIL",checks])
 	legacy.free(); expanded.free(); quests.free()
 	quit(0 if failures.is_empty() else 1)
 

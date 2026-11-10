@@ -127,6 +127,16 @@ func _compile_roads(only_missing: bool = false) -> void:
 		["campaign", Vector3(0,0.02,0), Vector3(8,0.05,32)],
 		["campaign", Vector3(15,0.025,9), Vector3(12,0.035,3)],
 	]
+	var community := load("res://scripts/zones/community_section.gd") as Script
+	if community != null:
+		var service_road: Array = community.LANTERN_SERVICE_ROAD
+		specs.append(["campaign", service_road[0], service_road[1]])
+		for road: Array in community.APPROACH_ROADS:
+			specs.append(["campaign", road[0], road[1]])
+	else:
+		failed = true
+		push_error("Community road specifications could not be loaded")
+		return
 	for origin in [Vector3.ZERO, Vector3(14,0,8.6)]:
 		specs.append(["greyfen", origin + Vector3(-4,0.024,-0.6), Vector3(8,0.045,2.6)])
 		specs.append(["greyfen", origin + Vector3(-0.3,0.025,-0.6), Vector3(6.8,0.045,7.4)])
