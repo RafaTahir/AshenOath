@@ -6,6 +6,7 @@ const IDS := ["C11", "C05", "C06", "C12", "C07", "C09", "C10", "C08"]
 const IDENTITIES := {"C11": "nessa", "C05": "elna", "C06": "toma", "C12": "nera", "C07": "senn", "C09": "vale", "C10": "merrow", "C08": "edric", "P01": "kael"}
 const CLIPS := {"Life_Idle_A": 6.0, "Life_Idle_B": 8.0, "Life_Work": 4.0, "Life_Listen": 4.0, "Life_Speak": 4.0}
 const FUSION = preload("res://scripts/character_animation_fusion.gd")
+const GRIPS = preload("res://tools/living_activity_grip_compile.gd")
 const OUTPUT := "res://assets_external/characters_prepared/animations/"
 
 func _initialize() -> void:
@@ -207,6 +208,14 @@ func _compile() -> void:
 				animation.set_meta("work_contact_phase", 0.5)
 			library.add_animation(clip, animation)
 			clip_report[clip] = {"duration": animation.length, "tracks": animation.get_track_count(), "skeleton_path": skeleton_path}
+		var grip_receipt := GRIPS.apply(library, target_skeleton, repository, source_root.path_join(id),
+				id, str(library.get_meta("source_sha256")), model_path, prepared_path, target_player)
+		if grip_receipt.has("error"):
+			push_error(str(grip_receipt.error))
+			carrier.free()
+			target.free()
+			quit(1)
+			return
 		var output := OUTPUT + "life_" + id + ".res"
 		error = ResourceSaver.save(library, output, ResourceSaver.FLAG_COMPRESS)
 		if error != OK:
@@ -218,6 +227,8 @@ func _compile() -> void:
 			var value: Vector3 = library.get_meta("contact_probes")[side]
 			probe_report[side] = [value.x, value.y, value.z]
 		reports.append({"asset": id, "source": source, "source_sha256": FileAccess.get_sha256(source), "model": model_path, "model_sha256": FileAccess.get_sha256(model_path), "path": output, "sha256": FileAccess.get_sha256(output), "bytes": FileAccess.get_file_as_bytes(output).size(), "maximum_rest_error": maximum_rest_error, "clips": clip_report, "contact_probes": probe_report, "contact_probe_method": str(library.get_meta("contact_probe_method", "not_required")), "runtime_reviewed": false, "user_accepted": false})
+		if not grip_receipt.is_empty():
+			reports.back()["activity_grip_receipt_sha256"] = str(grip_receipt.sha256)
 		carrier.free()
 		target.free()
 		print("LIVING_CAST_LIBRARY ", id, " ", output, " native clips=", required_clips.size())

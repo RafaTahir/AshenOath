@@ -153,6 +153,7 @@ if (-not $DesignPackCast) {
 }
 }
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_stage2_libraries.gd")) "living-cast-stage2-libraries"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_environment_dependencies.gd")) "environment-material-dependencies"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "prepared-actor-pack-layout"

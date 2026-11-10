@@ -1,0 +1,54 @@
+{
+  "runs": [
+    {
+      "stage": "opening",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 10944,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.016,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.016,
+      "exit_code": 0,
+      "seconds": 1.891
+    },
+    {
+      "stage": "stage2",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 17428,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.015,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.015,
+      "exit_code": 0,
+      "seconds": 0.984
+    },
+    {
+      "stage": "fixture",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 12276,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.016,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.016,
+      "exit_code": 0,
+      "seconds": 18.094
+    }
+  ],
+  "accepted": true,
+  "deadline_utc": "2026-11-10T20:31:40.052664+00:00",
+  "source_sha256": {
+    "living_activity_grip_compile.gd": "6cc9d2cb63f54f0e3691c35328bdbc29f25c9d5542de7ab3fb99fd389f8bfc82",
+    "build_living_cast_libraries.gd": "e12a726d04ce18fc21275c719801495fb135fea0a64b98f3598bdf94ed758f96",
+    "build_living_cast_stage2_libraries.gd": "08bbf10edeef249ea70f7d93d16a715bee45a1813e0658e7188fd1517a840518",
+    "verify_living_activity_grip_compile.gd": "0f453b7b06895fa8d6f532631f53ec6370d384f9cd710de27b5c6d6628c8e09a"
+  }
+}
