@@ -1,0 +1,42 @@
+{
+  "scope": "Editable Anwen source-only standing and forward supply fit",
+  "frames": 422,
+  "maximum_contact_error_m": 0.00030300457729026675,
+  "body_and_staff_checked": true,
+  "bread_fit_inventory": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/inventory.json",
+  "bread_fit_inventory_sha256": "2a6d7b5d506d72623a51fa51d63cf264ab380854d84dabb7bc468aeb0f2e912d",
+  "files": [
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/anwen_supply_r2/receipt.json",
+      "source": ".verification/motion/anwen_baseline_fit_r2_supply/receipt.json",
+      "bytes": 13153,
+      "sha256": "b5b11957c0e72e24458dbe667a4281fd949e75fe87dc9935b3354703d2470102"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/anwen_supply_r2/fit_receipt.json",
+      "source": ".verification/motion/anwen_baseline_fit_r2_supply/fit/receipt.json",
+      "bytes": 13442,
+      "sha256": "689fcf066344f3d4d926599977011e80de9e2f733e1c771bcada04d84d6df493"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/anwen_supply_r2/C01_supply_fit_proposal.blend",
+      "source": ".verification/motion/anwen_baseline_fit_r2_supply/fit/C01_supply_fit_proposal.blend",
+      "bytes": 9391396,
+      "sha256": "5844af9000ceba672d343d9a37880b5a6c0418fcd21c7dfa4de1b426b17c15a6"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/anwen_supply_r2/blender.log",
+      "source": ".verification/motion/anwen_baseline_fit_r2_supply/blender.log",
+      "bytes": 891,
+      "sha256": "e350f2de5ddc8300553ab2c971aef324861c81a307b17ac2bcb1920274f975df"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/anwen_supply_r2/probe_anwen_activity_fits_r2.py",
+      "source": ".verification/motion/anwen_baseline_fit_r2_supply/probe_anwen_activity_fits_r2.py",
+      "bytes": 26257,
+      "sha256": "cdecf646a07001578bd2205a94bf606d3921bfe4e52e92456423d3996c746bf3"
+    }
+  ],
+  "runtime_verified": false,
+  "in_level_accepted": false
+}
