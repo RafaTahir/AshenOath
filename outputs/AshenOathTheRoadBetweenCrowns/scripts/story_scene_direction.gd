@@ -27,7 +27,7 @@ static func checked_performance(raw: Variant) -> Dictionary:
 	for key: String in ["gesture", "listener_gesture"]:
 		if str(result.get(key, "")) != "" and not HeadControls.GESTURE_SECONDS.has(str(result[key])): return {}
 	for key: String in ["body_gesture", "body_listener_gesture"]:
-		if result.has(key) and str(result[key]) not in ["drink", "lower_book"]: return {}
+		if result.has(key) and str(result[key]) not in ["drink", "settle_ledger"]: return {}
 	if result.has("attention"):
 		var attention: Variant = result.attention
 		if not attention is Dictionary or str(attention.get("mode", "")) not in ["actor", "neutral", "point"]: return {}

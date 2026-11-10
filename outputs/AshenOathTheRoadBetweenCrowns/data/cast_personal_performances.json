@@ -2329,7 +2329,7 @@
         "reaction_delay": 0.32,
         "listener_emotion": "concerned",
         "framing": "two_shot",
-        "body_gesture": "lower_book"
+        "body_gesture": "settle_ledger"
       }
     },
     "world_scene:life2_vale_keep_the_margin:turn:1": {
