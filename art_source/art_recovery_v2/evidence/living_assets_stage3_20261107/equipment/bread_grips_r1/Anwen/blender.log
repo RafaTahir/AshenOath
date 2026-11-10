@@ -1,0 +1,17 @@
+02:48:43 | INFO: Data are loaded, start creating Blender stuff
+02:48:43 | INFO: Blender create Mesh node C01_ash_staff_C01_AshStaff
+02:48:43 | INFO: Blender create Mesh node C01_Anwen_Anwen_Continuous_Leather_Belt
+02:48:43 | INFO: Blender create Mesh node C01_Anwen_Anwen_EyeCorrected_-1
+02:48:43 | INFO: Blender create Mesh node C01_Anwen_Anwen_Brow_v004_-1
+02:48:43 | INFO: Blender create Mesh node C01_Anwen_Anwen_Hair_Stylized_LowCoil_0
+02:48:45 | INFO: glTF import finished in 1.89s
+02:53:00 | INFO: Data are loaded, start creating Blender stuff
+02:53:00 | INFO: Blender create Mesh node 0
+02:53:00 | INFO: Blender create Mesh node FlatbreadScoredCrust
+02:53:00 | INFO: glTF import finished in 0.02s
+Info: No new files have been packed
+Info: Saved as "C01_bread_fit_proposal.blend"
+C01 HAND FIT PROBE: SOURCE COMPLETE
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

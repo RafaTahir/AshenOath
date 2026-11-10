@@ -1,0 +1,135 @@
+{
+  "scope": "C11 source fitting and editable scene evidence only",
+  "completed": true,
+  "grip_verified": false,
+  "runtime_output": false,
+  "visual_accepted": false,
+  "geometry_logic_changed": false,
+  "native_or_inspection_repeated": false,
+  "source_sha256": {
+    ".verification/motion/run_c11_activity_goal_trial_blender_fit_r2.py": "bc16fd88b56bd69a7cdf5f57f8528ded294c57fd91afdf892671569c818e8ed1",
+    ".verification/motion/run_c11_activity_goal_trial_blender.py": "e15d575cf6fd19952f853196abe305d5ed30ae92d0a3fa8ca860314217544158",
+    ".verification/motion/run_c11_activity_goal_trial_native.py": "235386f0e03283ebc1cf17a2555fea97fe2756bc02abb27c84c99fecd8017dba",
+    ".verification/motion/retained_held_props_postcheck_r1/receipt.json": "7ff0fd58756ed88eb463e81fefa2066bb589901a01e690a2c48acca2b8dca965",
+    ".verification/motion/c11_activity_goal_trial_native_r1/receipt.json": "493fd7cab71edd5ea58cada612363ca836b798f26195b46fae06e10a8caeb6b1",
+    ".verification/motion/activity_blender_import_c11_20261110_r2/receipt.json": "a66dc988e539a472b7fbab9b3178487d86c5633385890f295197e53104100472",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/receipt.json": "20e40a0df100a97dccf1f7aa939ed0f66fe3d0e3e6ff2168317490f5752bf655",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/import_fidelity.json": "4f8264108861cdb828ff773c8d75cacc852cbd5d3b39eba267b186dc733ec0af",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/fit.log": "a91e2f897a803f28b09a623d1745561bc23b0f290d49ffa502bc91ec2585af92",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/inspect_living_activity_carrier.py": "07e20b4c555f43c53381384f3bd50d33c74409ca52158b38a4b75c96b0fb2609",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/activity_pose_weight_transport.py": "30a43b20aa5c93d63a7cab6f41357bc635ad9e547b9ca660f8682f4d7e921260",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/probe_c11_activity_fits.py": "c1088e3930603a75e775f30377e1bfc81709fa4596f024dc9c74321ad07e96df",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/inspect_retained_prop_carrier.py": "92858cc41fd262f69a05ed6938864419a16e3bcf2c92b607ec0e0620cab3ac74",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/activity_pose_rigid_channel_transport.py": "94e78ae488d83428c9c23de591846722f9f31a7d9fa28faa4536544945a64d01",
+    ".verification/creatures/run_candidate_serial.py": "132d269b53bc313ae330f2451a78b88c7a1b89841685ac66faf60991d48f77e5",
+    ".verification/creatures/run_candidate_authoring.py": "9b1361270ac48012dc087de38ac2ad01f0ad53ba88d7b059c9922b3084a81e17",
+    ".verification/motion/run_c11_activity_goal_trial_blender_fit_r3.py": "5b1210c0ea260b4c2b124d724ce9f82125910ef80d6190b505f74aa4c8b026e8",
+    ".verification/motion/c11_activity_goal_trial_blender_fit_r2/receipt.json": "fb3b560aee1fc4ea798f887a7de86af4423ef24f851be964b793584c4a50aa7f",
+    ".verification/motion/c11_activity_goal_trial_blender_fit_r2/fit.log": "ae05f0f1f6bb8ef5056acf7ee3cae5bd40b6cc4b93a766b0a4717802ff124cae",
+    ".verification/motion/c11_activity_goal_trial_blender_fit_r2/fit/receipt.json": "1c70e008695cb25ea4e0ecc4f487b6e10aa68221ce684e70bf8c1e9211cad354",
+    ".verification/motion/c11_activity_goal_trial_blender_fit_r2/fit/C11_bread_fit_proposal.blend": "0655d7a6bfee039cf0432f935197f712f8ce40b8701e9a00764a8e7e3d95efec"
+  },
+  "staged_source_sha256": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_fit_r3\\tools\\inspect_living_activity_carrier.py": "07e20b4c555f43c53381384f3bd50d33c74409ca52158b38a4b75c96b0fb2609",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_fit_r3\\tools\\activity_pose_weight_transport.py": "30a43b20aa5c93d63a7cab6f41357bc635ad9e547b9ca660f8682f4d7e921260",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_fit_r3\\tools\\probe_c11_activity_fits.py": "20fa2e415ab710d724342645910ba59ee4c645bb87e646deb716c4976025bb85",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_fit_r3\\tools\\inspect_retained_prop_carrier.py": "92858cc41fd262f69a05ed6938864419a16e3bcf2c92b607ec0e0620cab3ac74",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_fit_r3\\tools\\activity_pose_rigid_channel_transport.py": "94e78ae488d83428c9c23de591846722f9f31a7d9fa28faa4536544945a64d01"
+  },
+  "command": [
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+    "--background",
+    "--factory-startup",
+    "--threads",
+    "2",
+    "--python-exit-code",
+    "1",
+    "--python",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_fit_r3\\tools\\probe_c11_activity_fits.py",
+    "--",
+    "--root",
+    "D:\\Temp\\AO_LivingCast_Stages234",
+    "--activity-receipt",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C11\\66c73b8d093d874ea4c2cae2dcddd56f4cae75652dd988aca553d969461a6af6\\receipt.json",
+    "--blender-proof",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_r1\\import_fidelity.json",
+    "--props-proof",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_held_props_postcheck_r1\\receipt.json",
+    "--output",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_fit_r3\\fit",
+    "--work-seconds",
+    "300"
+  ],
+  "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\c11_activity_goal_trial_blender_fit_r3\\fit.log",
+  "process": {
+    "passed": true,
+    "timed_out": false,
+    "owned_tree_exited": true,
+    "pid": 16400,
+    "active_processes_after_root_wait": 0,
+    "accounting_quiescence_seconds": 0.0,
+    "termination_requested": false,
+    "active_processes_after_cleanup": 0,
+    "cleanup_seconds": 0.0,
+    "exit_code": 0,
+    "seconds": 79.375
+  },
+  "fitting_receipt_sha256": "0b70c2b3e50720bcf0f28489630e7e382ed7a7fdf3a4ddb4af346443a374e1fe",
+  "fits": {
+    "bread": {
+      "verified_frames": 839,
+      "expected_frames": 839,
+      "surface_clearance_verified": true,
+      "closed_component_containment_verified": true,
+      "proposal": {
+        "bone": "hand_r",
+        "palm": [
+          0.02203163504600525,
+          0.04926686733961105,
+          -0.005724973976612091
+        ],
+        "anchor": [
+          0.0,
+          0.0015067084459587932,
+          0.15883341431617737
+        ],
+        "basis": [
+          [
+            -0.028116581961512566,
+            0.6043267250061035,
+            0.7962403297424316
+          ],
+          [
+            -0.7962403297424316,
+            0.4680299162864685,
+            -0.3833397328853607
+          ],
+          [
+            -0.6043267250061035,
+            -0.6447768807411194,
+            0.4680299162864685
+          ]
+        ],
+        "measured_scale": 0.9320634041577299,
+        "palm_source": {
+          "mesh": "C11_MotionFittedAssembly",
+          "surface": 2,
+          "vertex": 4741
+        },
+        "prop_primary_vertex": 198,
+        "maximum_contact_error_m": 0.0003005092730745673
+      },
+      "editable_scene": {
+        "path": "C11_bread_fit_proposal.blend",
+        "sha256": "669c393e8b836a5918942db65f27f37cf453a156bea489485dde0dc846309aee"
+      }
+    },
+    "supply": {
+      "verified_frames": 0,
+      "expected_frames": 422,
+      "surface_clearance_verified": false,
+      "closed_component_containment_verified": false,
+      "proposal": null
+    }
+  }
+}

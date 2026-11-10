@@ -1,0 +1,105 @@
+{
+  "scope": "Editable retained-prop proposals for standing Eat; runtime and transition acceptance pending",
+  "source_fits": {
+    "C01": {
+      "actor": "Anwen",
+      "verified_frames": 839,
+      "source_fit": true,
+      "runtime_verified": false,
+      "maximum_contact_error_m": 0.00030027315369807184,
+      "editable_sha256": "78992997213e0deb1462422a0d1494ba658eb4fe665e932ade5c4b8d1987eb55",
+      "body_and_staff_checked": true
+    },
+    "C11": {
+      "actor": "Nessa",
+      "verified_frames": 839,
+      "source_fit": true,
+      "runtime_verified": false,
+      "maximum_contact_error_m": 0.0003005092730745673,
+      "editable_sha256": "669c393e8b836a5918942db65f27f37cf453a156bea489485dde0dc846309aee",
+      "body_and_staff_checked": false
+    }
+  },
+  "files": [
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/receipt.json",
+      "source": ".verification/motion/anwen_baseline_fit_r2_bread/receipt.json",
+      "bytes": 13133,
+      "sha256": "ca2e7a35e937a48eb3fcd7dbf7d82dff412b381fc765a02b7fcf44d1bd53ebbc"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/fit_receipt.json",
+      "source": ".verification/motion/anwen_baseline_fit_r2_bread/fit/receipt.json",
+      "bytes": 11910,
+      "sha256": "0c2cd0a783335348b10700d2663dda766e7918b774b7d7495d7c2ff79f233dba"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/C01_bread_fit_proposal.blend",
+      "source": ".verification/motion/anwen_baseline_fit_r2_bread/fit/C01_bread_fit_proposal.blend",
+      "bytes": 9409694,
+      "sha256": "78992997213e0deb1462422a0d1494ba658eb4fe665e932ade5c4b8d1987eb55"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/probe_anwen_activity_fits_r2.py",
+      "source": ".verification/motion/anwen_baseline_fit_r2_bread/probe_anwen_activity_fits_r2.py",
+      "bytes": 26257,
+      "sha256": "cdecf646a07001578bd2205a94bf606d3921bfe4e52e92456423d3996c746bf3"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/run_anwen_activity_fit_r2.py",
+      "source": ".verification/motion/run_anwen_activity_fit_r2.py",
+      "bytes": 9392,
+      "sha256": "d012edd5b509f8e3326b578a4104d48c937e899bd006c394711fbc89611a2188"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Anwen/blender.log",
+      "source": ".verification/motion/anwen_baseline_fit_r2_bread/blender.log",
+      "bytes": 915,
+      "sha256": "5443aef412e68a6cf05631611783efa985a1190035f80ff59aace52d9cbf646f"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/receipt.json",
+      "source": ".verification/motion/c11_activity_goal_trial_blender_fit_r3/receipt.json",
+      "bytes": 7821,
+      "sha256": "c7a08d1705175cc21fd760142dc8f8f1915d2ba45a43b5035c50714f1e3405b9"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/fit_receipt.json",
+      "source": ".verification/motion/c11_activity_goal_trial_blender_fit_r3/fit/receipt.json",
+      "bytes": 13492,
+      "sha256": "0b70c2b3e50720bcf0f28489630e7e382ed7a7fdf3a4ddb4af346443a374e1fe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/C11_bread_fit_proposal.blend",
+      "source": ".verification/motion/c11_activity_goal_trial_blender_fit_r3/fit/C11_bread_fit_proposal.blend",
+      "bytes": 7868764,
+      "sha256": "669c393e8b836a5918942db65f27f37cf453a156bea489485dde0dc846309aee"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/probe_c11_activity_fits.py",
+      "source": ".verification/motion/c11_activity_goal_trial_blender_fit_r3/tools/probe_c11_activity_fits.py",
+      "bytes": 29967,
+      "sha256": "20fa2e415ab710d724342645910ba59ee4c645bb87e646deb716c4976025bb85"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/run_c11_activity_goal_trial_blender_fit_r3.py",
+      "source": ".verification/motion/run_c11_activity_goal_trial_blender_fit_r3.py",
+      "bytes": 7778,
+      "sha256": "5b1210c0ea260b4c2b124d724ce9f82125910ef80d6190b505f74aa4c8b026e8"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/fit.log",
+      "source": ".verification/motion/c11_activity_goal_trial_blender_fit_r3/fit.log",
+      "bytes": 800,
+      "sha256": "ec721d9e3d69cf9920997baf60b0fdcffb56e02117295fc504d2278738def067"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/source_fit.json",
+      "source": ".verification/motion/c11_bread_source_fit_r1.json",
+      "bytes": 6101,
+      "sha256": "ce387442f39478abe12cb7a2b5e435f2ab42a9c8143440130f5de7125650169e"
+    }
+  ],
+  "installed": false,
+  "published": false
+}

@@ -1,0 +1,202 @@
+{
+  "scope": "C11 standing bread source clearance only",
+  "source_fit_accepted": true,
+  "runtime_output": false,
+  "visual_accepted": false,
+  "bread": {
+    "reference_time": 3.49166666666667,
+    "measured_palm_candidates": 11,
+    "reference_trials": {
+      "body/prop triangle crossing or contact": 4770,
+      "reference pass": 510
+    },
+    "verified_frames": 839,
+    "expected_frames": 839,
+    "surface_clearance_verified": true,
+    "closed_component_containment_verified": true,
+    "open_prop_components": 3,
+    "degenerate_prop_triangles": 64,
+    "shortlist_count": 8,
+    "failures": [
+      {
+        "clip": "Authoring_Eat",
+        "sample": 0,
+        "time": 0.0,
+        "reason": "body/prop triangle crossing or contact",
+        "contact_error_m": 0.00030014404910616577
+      },
+      {
+        "clip": "Authoring_Eat",
+        "sample": 137,
+        "time": 1.14166666666667,
+        "reason": "body/prop triangle crossing or contact",
+        "contact_error_m": 0.00030010213959030807
+      },
+      {
+        "clip": "Authoring_Eat",
+        "sample": 152,
+        "time": 1.26666666666667,
+        "reason": "body/prop triangle crossing or contact",
+        "contact_error_m": 0.0003000916331075132
+      },
+      {
+        "clip": "Authoring_Eat",
+        "sample": 154,
+        "time": 1.28333333333333,
+        "reason": "body/prop triangle crossing or contact",
+        "contact_error_m": 0.0003001806908287108
+      },
+      {
+        "clip": "Authoring_Eat",
+        "sample": 159,
+        "time": 1.325,
+        "reason": "body/prop triangle crossing or contact",
+        "contact_error_m": 0.00029999620164744556
+      },
+      {
+        "clip": "Authoring_Eat",
+        "sample": 165,
+        "time": 1.375,
+        "reason": "body/prop triangle crossing or contact",
+        "contact_error_m": 0.0003001661680173129
+      },
+      {
+        "clip": "Authoring_Eat",
+        "sample": 166,
+        "time": 1.38333333333333,
+        "reason": "body/prop triangle crossing or contact",
+        "contact_error_m": 0.0003003360179718584
+      }
+    ],
+    "proposal": {
+      "bone": "hand_r",
+      "palm": [
+        0.02203163504600525,
+        0.04926686733961105,
+        -0.005724973976612091
+      ],
+      "anchor": [
+        0.0,
+        0.0015067084459587932,
+        0.15883341431617737
+      ],
+      "basis": [
+        [
+          -0.028116581961512566,
+          0.6043267250061035,
+          0.7962403297424316
+        ],
+        [
+          -0.7962403297424316,
+          0.4680299162864685,
+          -0.3833397328853607
+        ],
+        [
+          -0.6043267250061035,
+          -0.6447768807411194,
+          0.4680299162864685
+        ]
+      ],
+      "measured_scale": 0.9320634041577299,
+      "palm_source": {
+        "mesh": "C11_MotionFittedAssembly",
+        "surface": 2,
+        "vertex": 4741
+      },
+      "prop_primary_vertex": 198,
+      "maximum_contact_error_m": 0.0003005092730745673
+    },
+    "reference_conflicts_by_dominant_bone": {
+      "clavicle_r": 193825,
+      "thumb_01_r": 35267,
+      "thumb_02_r": 36269,
+      "spine_03": 445212,
+      "hand_r": 121012,
+      "lowerarm_r": 186093,
+      "pinky_03_r": 68091,
+      "index_01_r": 27146,
+      "index_03_r": 27531,
+      "index_02_r": 19820,
+      "thumb_03_r": 28166,
+      "ring_01_r": 40819,
+      "middle_01_r": 31307,
+      "pinky_01_r": 44049,
+      "pinky_02_r": 44927,
+      "middle_03_r": 57600,
+      "middle_04_leaf_r": 19013,
+      "middle_02_r": 17674,
+      "ring_02_r": 29014,
+      "ring_03_r": 81533,
+      "clavicle_l": 110503,
+      "ring_04_leaf_r": 26175,
+      "pinky_04_leaf_r": 24779,
+      "ring_03_l": 5743,
+      "index_01_l": 15829,
+      "index_02_l": 7579,
+      "middle_02_l": 5836,
+      "middle_03_l": 10157,
+      "middle_01_l": 10890,
+      "ring_02_l": 5449,
+      "hand_l": 14580,
+      "thumb_03_l": 14937,
+      "thumb_02_l": 11599,
+      "thumb_01_l": 5057,
+      "spine_02": 84451,
+      "pinky_02_l": 2525,
+      "ring_01_l": 6273,
+      "pinky_01_l": 2732,
+      "index_03_l": 6647,
+      "middle_04_leaf_l": 1428,
+      "spine_01": 3129,
+      "upperarm_l": 2620,
+      "pinky_03_l": 1644,
+      "lowerarm_l": 18744,
+      "ring_04_leaf_l": 645,
+      "pinky_04_leaf_l": 738,
+      "upperarm_r": 4849,
+      "neck_01": 1666,
+      "Head": 573,
+      "Face_Jaw": 26
+    },
+    "closest_reference_overlap": {
+      "count": 4,
+      "palm_vertex": 9995,
+      "prop_primary_vertex": 222,
+      "offset_m": 0.0003,
+      "pairs": [
+        {
+          "body_face": 6527,
+          "prop_face": 562,
+          "dominant_bone": "clavicle_r"
+        },
+        {
+          "body_face": 6527,
+          "prop_face": 499,
+          "dominant_bone": "clavicle_r"
+        },
+        {
+          "body_face": 6531,
+          "prop_face": 562,
+          "dominant_bone": "clavicle_r"
+        },
+        {
+          "body_face": 6531,
+          "prop_face": 499,
+          "dominant_bone": "clavicle_r"
+        }
+      ]
+    },
+    "editable_scene": {
+      "path": "C11_bread_fit_proposal.blend",
+      "sha256": "669c393e8b836a5918942db65f27f37cf453a156bea489485dde0dc846309aee"
+    }
+  },
+  "retained_proof_sha256": {
+    ".verification/motion/c11_activity_goal_trial_blender_fit_r3/fit/receipt.json": "0b70c2b3e50720bcf0f28489630e7e382ed7a7fdf3a4ddb4af346443a374e1fe",
+    ".verification/motion/c11_activity_goal_trial_blender_fit_r3/receipt.json": "c7a08d1705175cc21fd760142dc8f8f1915d2ba45a43b5035c50714f1e3405b9",
+    ".verification/motion/c11_activity_goal_trial_blender_fit_r3/fit/C11_bread_fit_proposal.blend": "669c393e8b836a5918942db65f27f37cf453a156bea489485dde0dc846309aee",
+    ".verification/motion/c11_activity_goal_trial_native_r1/receipt.json": "493fd7cab71edd5ea58cada612363ca836b798f26195b46fae06e10a8caeb6b1",
+    ".verification/motion/c11_activity_goal_trial_blender_r1/import_fidelity.json": "4f8264108861cdb828ff773c8d75cacc852cbd5d3b39eba267b186dc733ec0af",
+    ".verification/motion/retained_held_props_postcheck_r1/receipt.json": "7ff0fd58756ed88eb463e81fefa2066bb589901a01e690a2c48acca2b8dca965"
+  }
+}
