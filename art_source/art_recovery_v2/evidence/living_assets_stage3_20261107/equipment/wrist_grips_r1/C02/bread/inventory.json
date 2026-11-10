@@ -1,0 +1,83 @@
+{
+  "actor": "C02",
+  "style": "bread",
+  "scope": "Measured source fit, no runtime output or visual acceptance",
+  "verified_frames": 839,
+  "maximum_contact_error_m": 0.00030026896274648607,
+  "owning_wrist_forward_outward_m": [
+    0.05,
+    0.06
+  ],
+  "files": {
+    "fit_receipt.json": {
+      "bytes": 9398,
+      "sha256": "320cf8c9c43a44fccea849e22c8acdfd680a0e342f8570d8b3ed95ade85f60cd",
+      "original": ".verification/motion/compatible_c02_bread_wrist_fit_r2/fit/receipt.json"
+    },
+    "C02_bread_fit_proposal.blend": {
+      "bytes": 8788765,
+      "sha256": "0ed19fc2300bd52c11010408c131963ab303c8370f4f1e69b10cf437eea89713",
+      "original": ".verification/motion/compatible_c02_bread_wrist_fit_r2/fit/C02_bread_fit_proposal.blend"
+    },
+    "inspection.json": {
+      "bytes": 622915,
+      "sha256": "b8f3519fd9724089caae696aefb527061e14d49613d3a439478593b76df440a5",
+      "original": ".verification/motion/compatible_c02_bread_wrist_fit_r2/inspection.json"
+    },
+    "receipt.json": {
+      "bytes": 25620,
+      "sha256": "ee8abadf8688e20fb8154ac0275cf5ea6df452394ca295ee773792fde36f15fc",
+      "original": ".verification/motion/compatible_c02_bread_wrist_fit_r2/receipt.json"
+    },
+    "blender.log": {
+      "bytes": 673,
+      "sha256": "7d51dddeabbeeb1eace291618896af91b2154820c195a7417e22f7a7f0eb1b0e",
+      "original": ".verification/motion/compatible_c02_bread_wrist_fit_r2/blender.log"
+    },
+    "compatible_activity_fit.py": {
+      "bytes": 24733,
+      "sha256": "a27f0a212cf6ca35e9055da53b1179ca942b2bce017e40fe066fed6acaf00ae7",
+      "original": ".verification/motion/compatible_c02_bread_wrist_fit_r2/compatible_activity_fit.py"
+    },
+    "compatible_activity_inspector.py": {
+      "bytes": 28629,
+      "sha256": "87a5e7c09357e10d262ab9e14f663bd021df6b65e5df30a4e58199e4ce0cd974",
+      "original": ".verification/motion/compatible_c02_bread_wrist_fit_r2/compatible_activity_inspector.py"
+    },
+    "pose_receipt.json": {
+      "bytes": 2920167,
+      "sha256": "f9f5160b9e29992729b9527bca9a878a40900bb5a9ad5b24a00f62f9f03930e9",
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/0c4401b43da0838ce78a77fed3a85d3900503d5828ad3f527e091daa01436591/receipt.json"
+    },
+    "native_trial_receipt.json": {
+      "bytes": 18279,
+      "sha256": "a2992272c89455af742e9d2d95e997858e7b8f7aee39fa8075a777a48a4feb29",
+      "original": ".verification/motion/wrist_goal_c02_bread_r1/receipt.json"
+    },
+    "native_parse.log": {
+      "bytes": 75,
+      "sha256": "b16651cbedbab0a7b519f9e5b498eea40cb33bfb72252e264a7f4c2412765d58",
+      "original": ".verification/motion/wrist_goal_c02_bread_r1/parse.log"
+    },
+    "native_bake.log": {
+      "bytes": 324,
+      "sha256": "70ebf6b51acd55ffd884239f6a4ebd49e50d368caec8e6410cd094960c0d49ad",
+      "original": ".verification/motion/wrist_goal_c02_bread_r1/native.log"
+    },
+    "carrier/C02_activity_poses.glb": {
+      "bytes": 9977116,
+      "sha256": "c018d1f495e3fd6e33bbdc1b8a495dc8e664ed2a248ec2608ca53d262dd840ac",
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/0c4401b43da0838ce78a77fed3a85d3900503d5828ad3f527e091daa01436591/C02_activity_poses.glb"
+    },
+    "carrier/retained_skin_manifest.json": {
+      "bytes": 6296205,
+      "sha256": "2d040cc5cc3a7dc4c036e7fccbdc12e4a79fd623e750005fb32272a3bd505d1f",
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/0c4401b43da0838ce78a77fed3a85d3900503d5828ad3f527e091daa01436591/retained_skin_manifest.json"
+    },
+    "carrier/retained_rigid_channels.json": {
+      "bytes": 71,
+      "sha256": "bbd4c2874973702e0ef0cfc8dcd447fe6ee4b92704f0d25efa66ab1150d671d9",
+      "original": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/0c4401b43da0838ce78a77fed3a85d3900503d5828ad3f527e091daa01436591/retained_rigid_channels.json"
+    }
+  }
+}
