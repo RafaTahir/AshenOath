@@ -8996,7 +8996,7 @@
     {
       "id": "rook_station_satchel",
       "path": "res://assets_external/environment_prepared/living_cast/rook_station_satchel.scn",
-      "sha256": "40b79fab8bea33afb8e848ae9ab3c56bb6b8995fb2d051c25365997f987632a9",
+      "sha256": "551a8e31e9f5c5bc9b89a74a3733153a6e2c15f9b6e599d9ac62b0fe5d03f0b8",
       "authored": true,
       "runtime_verified": false,
       "user_accepted": false,
@@ -9008,5 +9008,5 @@
       ]
     }
   ],
-  "stage1_authored_runtime_bytes": 817771
+  "stage1_authored_runtime_bytes": 817772
 }

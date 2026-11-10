@@ -1,0 +1,158 @@
+{
+  "res://assets_external/environment/forest/CommonTree_5.obj": {
+    "aabb": [
+      -1.9123549461364746,
+      -0.24277199804782867,
+      -2.162447929382324,
+      3.671165943145752,
+      7.006239891052246,
+      4.2196502685546875
+    ],
+    "compiled_bytes": 122613,
+    "compiled_sha256": "00c3c8a3d712f8883ceeb93f38310f53909fd4b5150b87d4267a94fd31420c08",
+    "compiler_fingerprints": {
+      "res://scripts/prepared_forest_trees.gd": {
+        "bytes": 7874,
+        "sha256": "0fef7fcde7f7557bda226fff302128fc89c6647e7db6c2bd1f3e1cdae0b75259"
+      },
+      "res://tools/build_prepared_zone_geometry.gd": {
+        "bytes": 14695,
+        "sha256": "1ab78df7c69a239a3a844557b4675ef16ce9879b67fa582f60a1c08e8c8b6b89"
+      },
+      "res://tools/prepared_zone_geometry_factory.gd": {
+        "bytes": 28962,
+        "sha256": "20b4914e41645bfe5c861563076a7662c255df4957d053d044709e0ad177ff38"
+      }
+    },
+    "contract_version": 1,
+    "geometry_sha256": "9f3029dce7e13638f691d341576c1a7bc0a1382ac92ec3c9b30116746f06232c",
+    "material_sha256": "dfcbb656e5e5c04b9046e8fd63001c80c1370e56e49016670c60869e4e39f538",
+    "path": "res://assets_external/environment/prepared/forest_tree_CommonTree_5.res",
+    "resource_dependencies": [],
+    "source_fingerprints": {
+      "res://assets_external/environment/forest/CommonTree_5.mtl": {
+        "bytes": 530,
+        "sha256": "6684013e6ba3c63d02a6d21c27188d4b83ad6126de05c61ab384fa5b61760afe"
+      },
+      "res://assets_external/environment/forest/CommonTree_5.obj": {
+        "bytes": 320735,
+        "sha256": "8137a19ac572de1a4056859b27f6a1a1ec67e6b825928a17e8e28fe937b61434"
+      },
+      "res://assets_external/environment/forest/CommonTree_5.obj.import": {
+        "bytes": 754,
+        "sha256": "3db64b86dcb5eb1d0a61bb8481468c5970c54e2a12afc6d4ba1a90d60754dcb7"
+      }
+    },
+    "source_geometry_sha256": "9f3029dce7e13638f691d341576c1a7bc0a1382ac92ec3c9b30116746f06232c",
+    "source_path": "res://assets_external/environment/forest/CommonTree_5.obj",
+    "source_scene_dependencies": [],
+    "surface_names": [
+      "Bark_NormalTree",
+      "Leaves_NormalTree"
+    ]
+  },
+  "res://assets_external/environment/forest/TwistedTree_2.obj": {
+    "aabb": [
+      -6.619969844818115,
+      -0.20147499442100525,
+      -5.540719032287598,
+      10.562871932983398,
+      18.949203491210938,
+      9.202588081359863
+    ],
+    "compiled_bytes": 387109,
+    "compiled_sha256": "aeec638d169224a901212e5e951e8ca3bdc0d39446e84535aae157e8e0ad304c",
+    "compiler_fingerprints": {
+      "res://scripts/prepared_forest_trees.gd": {
+        "bytes": 7874,
+        "sha256": "0fef7fcde7f7557bda226fff302128fc89c6647e7db6c2bd1f3e1cdae0b75259"
+      },
+      "res://tools/build_prepared_zone_geometry.gd": {
+        "bytes": 14695,
+        "sha256": "1ab78df7c69a239a3a844557b4675ef16ce9879b67fa582f60a1c08e8c8b6b89"
+      },
+      "res://tools/prepared_zone_geometry_factory.gd": {
+        "bytes": 28962,
+        "sha256": "20b4914e41645bfe5c861563076a7662c255df4957d053d044709e0ad177ff38"
+      }
+    },
+    "contract_version": 1,
+    "geometry_sha256": "2109afb189e5cf084669ee50402aaaac7969e4123719ab8738d4e534c5365b4f",
+    "material_sha256": "85ee2713a76dd3251696b19ba6d706f8575d01f74b369968953ef31ff80d71fe",
+    "path": "res://assets_external/environment/prepared/forest_tree_TwistedTree_2.res",
+    "resource_dependencies": [],
+    "source_fingerprints": {
+      "res://assets_external/environment/forest/TwistedTree_2.mtl": {
+        "bytes": 537,
+        "sha256": "1924dc8c88c88bccea429c26feb9e64bdb15c3d28f4ed69d02820c08aec6f7ff"
+      },
+      "res://assets_external/environment/forest/TwistedTree_2.obj": {
+        "bytes": 912505,
+        "sha256": "2341e173fcda354242962bc1bc14494c18cf8fb1190bea9f3a5310882e38d74a"
+      },
+      "res://assets_external/environment/forest/TwistedTree_2.obj.import": {
+        "bytes": 758,
+        "sha256": "54a131a74fb6adbf409114882492b5b869095bc619dd23df256f256349ec72e1"
+      }
+    },
+    "source_geometry_sha256": "2109afb189e5cf084669ee50402aaaac7969e4123719ab8738d4e534c5365b4f",
+    "source_path": "res://assets_external/environment/forest/TwistedTree_2.obj",
+    "source_scene_dependencies": [],
+    "surface_names": [
+      "Bark_TwistedTree",
+      "Leaves_TwistedTree"
+    ]
+  },
+  "res://assets_external/environment/forest/TwistedTree_4.obj": {
+    "aabb": [
+      -4.327320098876953,
+      -0.20147499442100525,
+      -7.142796039581299,
+      10.38081169128418,
+      18.738235473632813,
+      11.293086051940918
+    ],
+    "compiled_bytes": 411209,
+    "compiled_sha256": "35b41ee9e0f70a294e21efa4ec487033ec2f959e72a50142f57d02963bedbbf6",
+    "compiler_fingerprints": {
+      "res://scripts/prepared_forest_trees.gd": {
+        "bytes": 7874,
+        "sha256": "0fef7fcde7f7557bda226fff302128fc89c6647e7db6c2bd1f3e1cdae0b75259"
+      },
+      "res://tools/build_prepared_zone_geometry.gd": {
+        "bytes": 14695,
+        "sha256": "1ab78df7c69a239a3a844557b4675ef16ce9879b67fa582f60a1c08e8c8b6b89"
+      },
+      "res://tools/prepared_zone_geometry_factory.gd": {
+        "bytes": 28962,
+        "sha256": "20b4914e41645bfe5c861563076a7662c255df4957d053d044709e0ad177ff38"
+      }
+    },
+    "contract_version": 1,
+    "geometry_sha256": "30d99bace72e367c1d218aa77e65df94f2b261b124f5edd5116d18b5e51cc516",
+    "material_sha256": "85ee2713a76dd3251696b19ba6d706f8575d01f74b369968953ef31ff80d71fe",
+    "path": "res://assets_external/environment/prepared/forest_tree_TwistedTree_4.res",
+    "resource_dependencies": [],
+    "source_fingerprints": {
+      "res://assets_external/environment/forest/TwistedTree_4.mtl": {
+        "bytes": 537,
+        "sha256": "9af7729738a053e585c393deae30412e88e6f2b7aecf8aad5842121686f762a2"
+      },
+      "res://assets_external/environment/forest/TwistedTree_4.obj": {
+        "bytes": 981302,
+        "sha256": "c0fc395a551f9bed723a5310a1ecaacd37ac3e824cb0f1c936b716ea4586d70a"
+      },
+      "res://assets_external/environment/forest/TwistedTree_4.obj.import": {
+        "bytes": 759,
+        "sha256": "cbe01b60ff4b751fe799726ded9d7075936a8bc01ba498526bbbe73cf242742e"
+      }
+    },
+    "source_geometry_sha256": "30d99bace72e367c1d218aa77e65df94f2b261b124f5edd5116d18b5e51cc516",
+    "source_path": "res://assets_external/environment/forest/TwistedTree_4.obj",
+    "source_scene_dependencies": [],
+    "surface_names": [
+      "Bark_TwistedTree",
+      "Leaves_TwistedTree"
+    ]
+  }
+}
