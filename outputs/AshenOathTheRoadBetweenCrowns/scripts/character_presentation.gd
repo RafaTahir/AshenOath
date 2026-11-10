@@ -40,7 +40,7 @@ static func make_hart_witness(helper: Node, position: Vector3) -> Node3D:
 	driver.set_update_rate_hz(12.0)
 	return root
 
-static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
+static func attach_activity_tool(owner: Node3D, style: String, use_measured_grip: bool = true) -> Node3D:
 	var existing := owner.find_child("OccupationEquipment", true, false) as Node3D
 	if existing != null:
 		var hammer := existing.find_child("OccupationProp_blacksmith_tor", true, false) != null or existing.find_child("OccupationProp_forge_helper", true, false) != null
@@ -124,7 +124,7 @@ static func attach_activity_tool(owner: Node3D, style: String) -> Node3D:
 		scores.material_override = _mat(Color(.64,.42,.20),.94)
 		visual.add_child(scores)
 	var measured: Dictionary = owner.get_meta("activity_prop_grips", {})
-	if measured.has(style):
+	if use_measured_grip and measured.has(style):
 		if not _fit_activity_grip(hand, grip, visual, measured[style]):
 			push_error("Measured activity grip could not bind: " + style)
 			hand.queue_free()

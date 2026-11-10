@@ -112,6 +112,7 @@ var locomotion_step_index := 0
 var story_gesture_remaining := 0.0
 var story_dialogue_active := false
 var life_modifier
+var carried_activity_scope := ""
 var life_clip := StringName()
 var life_elapsed := 0.0
 var life_native_position := -1.0
@@ -240,6 +241,7 @@ func configure(root: Node3D, clips: Dictionary) -> bool:
 	return true
 
 func _clear_playback() -> void:
+	carried_activity_scope = ""
 	clear_story_prop()
 	_reset_ambient_morphs(true)
 	ambient_morph_bindings.clear()
@@ -473,6 +475,7 @@ func is_evaluation_scheduled() -> bool:
 
 func set_distance_suspended(suspended: bool) -> void:
 	if suspended:
+		carried_activity_scope = ""
 		clear_story_prop()
 		_reset_ambient_morphs(true)
 	if suspended and is_instance_valid(life_modifier):
@@ -807,6 +810,7 @@ func set_life_activity(kind: String) -> void:
 		_play_state("idle", 0.18)
 
 func clear_life_activity() -> void:
+	carried_activity_scope = ""
 	life_clip = StringName()
 	_reset_life_clock()
 	if life_modifier != null:
@@ -914,7 +918,10 @@ func _bind_equipment_grips(library: AnimationLibrary) -> void:
 			contract_errors.append("unsupported calibrated activity prop: " + style)
 			continue
 		var error: String = presentation.grip_record_error(skeleton,grips[style])
-		if error!="": contract_errors.append(style+": "+error)
+		if error.is_empty() and grips[style].has("wrist_goals"):
+			error = _activity_wrist_goals_error(style, grips[style])
+		if not error.is_empty():
+			contract_errors.append(style + ": " + error)
 	if not carried.is_empty():
 		var error: String = presentation.grip_record_error(skeleton,carried)
 		if str(carried.get("kind",""))!="book": error="unsupported carried equipment calibration"
@@ -926,6 +933,23 @@ func _bind_equipment_grips(library: AnimationLibrary) -> void:
 	if not carried.is_empty() and character_root.find_child("CastleRoleEquipment",true,false)!=null:
 		if not presentation.fit_carried_equipment(character_root,carried):
 			contract_errors.append("authored carried equipment could not bind its measured hand grip")
+
+func _activity_wrist_goals_error(style: String, grip: Dictionary) -> String:
+	var goals: Variant = grip.wrist_goals
+	if style not in ["bread", "supply"] or not goals is Dictionary or not goals.has("standing"):
+		return "scoped grip has no supported standing pose"
+	var route: Variant = grip.get("moving_route", "")
+	if not route is String or (not route.is_empty() and (style != "supply" or not goals.has("moving"))):
+		return "scoped grip has an invalid moving route"
+	for mode: Variant in goals:
+		if mode != "standing" and (mode != "moving" or style != "supply"):
+			return "scoped grip has an unsupported pose"
+		var goal: Variant = goals[mode]
+		if not goal is Vector2 or not goal.is_finite() or goal.length() > 0.15:
+			return "scoped grip has an invalid wrist goal"
+		if grip.bone != "hand_r" and not goal.is_zero_approx():
+			return "wrist adjustment must use the measured right hand"
+	return ""
 
 func set_relaxed_idle(enabled: bool) -> void:
 	if not life_idle_only: return
@@ -1111,11 +1135,15 @@ func set_life_rest_anchor(value: Dictionary) -> void:
 		life_modifier.rest_anchor = value
 
 func set_carried_activity(kind: String) -> void:
+	carried_activity_scope = ""
 	if kind == "" and life_modifier == null:
 		return
 	_ensure_life_modifier()
 	if life_modifier != null:
 		life_modifier.carried_activity = kind
+
+func set_carried_activity_scope(scope: String) -> void:
+	carried_activity_scope = scope if is_instance_valid(life_modifier) and life_modifier.carried_activity == "carry" else ""
 
 func set_activity_prop(kind: String) -> void:
 	if kind == "" and life_modifier == null:
@@ -1136,6 +1164,25 @@ func activity_prop_pose_ready() -> bool:
 	# fading_time can retain the previous transition's duration.
 	var outgoing := str(playback.get_fading_from_node())
 	return outgoing.is_empty() or outgoing in animation_graph.GAITS
+
+func activity_grip_pose_mode(kind: String, style: String, moving_route: String) -> String:
+	if not activity_prop_pose_ready() or not grounded:
+		return ""
+	var playback: AnimationNodeStateMachinePlayback = animation_graph.playback
+	if playback.get_current_node() != &"locomotion" or playback.get_fading_from_node() != &"":
+		return ""
+	var stationary := is_zero_approx(current_speed_mps)
+	if style == "bread" and kind == "eat" and stationary:
+		return "standing"
+	if style == "supply" and kind in ["carry", "check_supplies", "sort_supplies"]:
+		var in_transit: bool = kind == "carry" and is_instance_valid(life_modifier) and life_modifier.activity.is_empty() and life_modifier.carried_activity == "carry"
+		if in_transit:
+			if moving_route.is_empty():
+				return "moving" if is_equal_approx(current_speed_mps, animation_graph.walk_speed) else ""
+			return "moving" if current_speed_mps > 0.05 and carried_activity_scope == moving_route else ""
+		if stationary:
+			return "standing"
+	return ""
 
 func set_creature_presence(id: String, intent: String, amount: float) -> void:
 	_ensure_life_modifier()

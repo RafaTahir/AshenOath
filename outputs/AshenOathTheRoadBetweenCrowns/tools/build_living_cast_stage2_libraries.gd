@@ -209,7 +209,8 @@ func _compile() -> void:
 			library.add_animation(clip, animation)
 			clip_report[clip] = {"duration": animation.length, "tracks": animation.get_track_count(), "skeleton_path": skeleton_path}
 		var grip_receipt := GRIPS.apply(library, target_skeleton, repository, source_root.path_join(id),
-				id, str(library.get_meta("source_sha256")), model_path, prepared_path, target_player)
+				id, str(library.get_meta("source_sha256")), model_path, prepared_path, target_player,
+				args.has("--require-activity-grips") and id != "P01")
 		if grip_receipt.has("error"):
 			push_error(str(grip_receipt.error))
 			carrier.free()

@@ -22,6 +22,8 @@ var tool: Node3D
 var owns_tool := false
 var stowed_role_equipment: Dictionary = {}
 var tool_kind := ""
+var tool_uses_measured_grip := true
+var solved_wrist_goal := Vector3.INF
 var station: Dictionary = {}
 var rest_anchor: Dictionary = {}
 var last_contact_cycle := -1
@@ -146,12 +148,14 @@ func _process_modification() -> void:
 			_solve_arm(skeleton, arm, _world(skeleton, int(arm.hand)) + across * side * clearance)
 	if anwen_staff_pose:
 		_staff_pose(skeleton, delta, effective)
-	_update_tool(effective, requested and not waiting_for_station, not waiting_for_station)
+	var scoped_grip := _update_tool(effective, requested and not waiting_for_station, not waiting_for_station)
 	creature_weight = move_toward(creature_weight, creature_amount if near and not bool(driver.story_dialogue_active) else 0.0, delta*3.0)
 	if creature_weight > 0.001:
 		_creature_pose(skeleton)
 	pose_weight = move_toward(pose_weight, 1.0 if requested else 0.0, delta * 4.5)
 	if pose_weight <= 0.001 or awaiting_native:
+		if not scoped_grip.is_empty() and is_instance_valid(tool):
+			tool.visible = false
 		return
 	if effective == "sleep":
 		_pose_supported_sleep(skeleton)
@@ -192,6 +196,7 @@ func _process_modification() -> void:
 	var contact_hands := 0
 	var reached_hands := 0
 	var hammer_work := effective in ["forge", "repair"] and tool_kind == "hammer" and is_instance_valid(tool_contact)
+	var grip_reached := false
 	for arm: Dictionary in arms:
 		if authored_work and hammer_work and float(arm.side) < 0:
 			continue
@@ -297,7 +302,14 @@ func _process_modification() -> void:
 				wrist_target = hand_frame.orthonormalized()
 				goal = contact_target - hand_frame * probe_local
 		var contact_weight := smoothstep(0.22, contact_fraction, phase) * (1.0 - smoothstep(contact_fraction + 0.08, 0.80, phase)) if authored_work else 1.0
-		_solve_arm(skeleton, arm, hand.lerp(goal, pose_weight * contact_weight), wrist_target if contact_weight > 0.95 else null)
+		var wrist := hand.lerp(goal, pose_weight * contact_weight)
+		var owns_grip: bool = not scoped_grip.is_empty() and str(skeleton.get_bone_name(int(arm.hand))) == str(scoped_grip.bone)
+		if owns_grip and wrist_target == null:
+			var bias: Vector2 = scoped_grip.goal
+			wrist += (forward * bias.x + right * bias.y) * pose_weight
+		_solve_arm(skeleton, arm, wrist, wrist_target if contact_weight > 0.95 else null)
+		if owns_grip and bool(scoped_grip.visible) and wrist_target == null and is_equal_approx(pose_weight, 1.0):
+			grip_reached = solved_wrist_goal.is_finite() and _world(skeleton, int(arm.hand)).distance_squared_to(solved_wrist_goal) <= 0.000001
 		if authored_work and contact_weight > 0.95 and (not hammer_work or float(arm.side) > 0):
 			contact_hands += 1
 			var actual: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(int(arm.hand)) * probe_local
@@ -305,6 +317,8 @@ func _process_modification() -> void:
 			last_contact_samples["left" if float(arm.side) < 0 else "right"] = {"kind":probe_kind, "target":contact_target, "actual":actual, "error":error, "cycle":cycle}
 			if error <= 0.06:
 				reached_hands += 1
+	if not scoped_grip.is_empty() and is_instance_valid(tool):
+		tool.visible = bool(scoped_grip.visible) and grip_reached
 	if authored_work:
 		reached_contact = contact_hands > 0 and reached_hands == contact_hands
 	var at_contact := phase >= contact_fraction if authored_work else phase < 0.15
@@ -314,7 +328,7 @@ func _process_modification() -> void:
 		if event != "":
 			driver.activity_contact.emit(event, station.get("point", actor.global_position))
 
-func _update_tool(kind: String, visible_now: bool, allow_authored_prop: bool = true) -> void:
+func _update_tool(kind: String, visible_now: bool, allow_authored_prop: bool = true) -> Dictionary:
 	var style := str({"repair":"hammer", "forge":"hammer", "read":"book", "notice_board":"book", "check_rope":"rope", "well":"rope", "bake":"bread", "kitchen":"bread", "care":"cloth", "carry":"supply", "check_supplies":"supply", "sort_supplies":"supply", "sort_herbs":"bowl", "sort_seeds":"bowl", "tend":"bowl", "herb_stall":"bowl"}.get(kind, ""))
 	if allow_authored_prop and activity_prop != "":
 		style = activity_prop
@@ -322,11 +336,25 @@ func _update_tool(kind: String, visible_now: bool, allow_authored_prop: bool = t
 	_set_role_book_stowed(visible_now and supported_task)
 	if supported_task and not bool(station.get("held_tool", false)):
 		style = ""
+	var scoped_grip := {}
+	var use_measured_grip := true
 	if style in ["bread", "supply"]:
 		visible_now = visible_now and is_instance_valid(driver) and driver.activity_prop_pose_ready()
-	if style != "" and (style != tool_kind or not is_instance_valid(tool)):
+		var grips: Dictionary = actor.get_meta("activity_prop_grips", {})
+		var record: Dictionary = grips.get(style, {})
+		var goals: Dictionary = record.get("wrist_goals", {})
+		if not goals.is_empty():
+			var route := str(record.get("moving_route", ""))
+			var mode: String = driver.activity_grip_pose_mode(kind, style, route) if station.is_empty() and is_instance_valid(driver) else ""
+			use_measured_grip = goals.has(mode)
+			if use_measured_grip:
+				scoped_grip = {"bone": record.bone, "goal": goals[mode], "visible": visible_now}
+	if style != "" and (style != tool_kind or use_measured_grip != tool_uses_measured_grip or not is_instance_valid(tool)):
 		_release_tool()
-		tool = preload("res://scripts/character_presentation.gd").attach_activity_tool(actor, style)
+		tool = preload("res://scripts/character_presentation.gd").attach_activity_tool(actor, style, use_measured_grip)
+		tool_uses_measured_grip = use_measured_grip
+		if not scoped_grip.is_empty() and is_instance_valid(tool):
+			tool.visible = false
 		owns_tool = is_instance_valid(tool) and bool(tool.get_meta("life_generated_activity_tool", false))
 		tool_kind = style
 		tool_contact = tool.find_child("ForgedHead", true, false) as Node3D if is_instance_valid(tool) and style == "hammer" else null
@@ -342,8 +370,9 @@ func _update_tool(kind: String, visible_now: bool, allow_authored_prop: bool = t
 					if not unique.has(point):
 						unique[point] = true
 						tool_contact_points.append(point)
-	if is_instance_valid(tool):
+	if scoped_grip.is_empty() and is_instance_valid(tool):
 		tool.visible = visible_now and style == tool_kind
+	return scoped_grip
 
 func hide_activity_tool() -> void:
 	if is_instance_valid(tool):
@@ -383,6 +412,7 @@ func _release_tool() -> void:
 	tool_contact_local = Vector3.ZERO
 	tool_contact_points.clear()
 	tool_kind = ""
+	tool_uses_measured_grip = true
 	owns_tool = false
 
 func _exit_tree() -> void:
@@ -550,6 +580,7 @@ func _staff_pose(skeleton: Skeleton3D, delta: float, effective: String) -> void:
 					skeleton.set_bone_pose_rotation(bone, skeleton.get_bone_pose_rotation(bone).slerp(relaxed, staff_weight))
 
 func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_target: Variant = null, elbow_direction: Vector3 = Vector3.ZERO, wrist_weight: float = -1.0) -> void:
+	solved_wrist_goal = Vector3.INF
 	var shoulder := _world(skeleton, int(arm.upper))
 	var elbow := _world(skeleton, int(arm.lower))
 	var hand := _world(skeleton, int(arm.hand))
@@ -593,3 +624,4 @@ func _solve_arm(skeleton: Skeleton3D, arm: Dictionary, goal: Vector3, wrist_targ
 	if wrist_target is Basis:
 		var desired := ((lower_turn * local_turn * hand_parent_basis).inverse() * frame.inverse() * (wrist_target as Basis)).orthonormalized().get_rotation_quaternion()
 		skeleton.set_bone_pose_rotation(int(arm.hand), skeleton.get_bone_pose_rotation(int(arm.hand)).slerp(desired, pose_weight if wrist_weight < 0 else wrist_weight))
+	solved_wrist_goal = goal

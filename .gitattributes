@@ -137,3 +137,13 @@ art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_
 
 # Preserve the active Ashwing snapshot used by the verified source recipe.
 art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py -text whitespace=cr-at-eol,-blank-at-eof
+
+# Exact runtime grip proof sources and retained geometry inputs.
+outputs/AshenOathTheRoadBetweenCrowns/scripts/character_presentation.gd text eol=crlf
+outputs/AshenOathTheRoadBetweenCrowns/scripts/held_prop_geometry.gd text eol=crlf
+outputs/AshenOathTheRoadBetweenCrowns/scripts/character_animation_driver.gd text eol=crlf
+outputs/AshenOathTheRoadBetweenCrowns/scripts/character_life_modifier.gd text eol=crlf
+outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd text eol=crlf
+outputs/AshenOathTheRoadBetweenCrowns/tools/living_activity_grip_compile.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_activity_grip_compile.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_c11_compiled_carry_route.gd -text whitespace=cr-at-eol,-blank-at-eof

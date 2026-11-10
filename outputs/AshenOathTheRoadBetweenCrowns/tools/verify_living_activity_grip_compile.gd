@@ -33,12 +33,16 @@ func _run() -> void:
 	var skeleton := Skeleton3D.new()
 	skeleton.add_bone("hand_l")
 	var library := (load(LIFE) as AnimationLibrary).duplicate(true) as AnimationLibrary
+	if library.has_meta("activity_prop_grips"):
+		library.remove_meta("activity_prop_grips")
 	var actor := (load(PREPARED) as PackedScene).instantiate() as Node3D
 	var player := FUSION.attach_shared_library(actor)
 	var motion_hash := str(library.get_meta("source_sha256"))
 	_check(Grips.apply(library, skeleton, repository, folder, "C01", motion_hash, MODEL, PREPARED, player).is_empty(),
 		"optional missing source does not alter the retained library")
 	_check(not library.has_meta("activity_prop_grips"), "missing evidence installs no grip")
+	_check(Grips.apply(library, skeleton, repository, folder, "C01", motion_hash, MODEL, PREPARED, player, true).has("error"),
+		"release rejects a missing actor receipt")
 	var path := folder.path_join("activity_grips.json")
 	var record := {
 		"schema_version": 1,
@@ -48,6 +52,8 @@ func _run() -> void:
 		"fits": {"bread": {"evidence": EVIDENCE, "evidence_sha256": FileAccess.get_sha256(repository.path_join(EVIDENCE)), "native_pose_evidence": NATIVE}},
 	}
 	_write_json(path, record)
+	_check(Grips.apply(library, skeleton, repository, folder, "C01", motion_hash, MODEL, PREPARED, player, true).has("error"),
+		"release requires both measured styles for Anwen")
 	var result := Grips.apply(library, skeleton, repository, folder, "C01", motion_hash, MODEL, PREPARED, player)
 	_check(result.get("sha256", "") == FileAccess.get_sha256(path), "compiled library binds the exact authored receipt")
 	var grips: Dictionary = library.get_meta("activity_prop_grips", {})
@@ -56,6 +62,7 @@ func _run() -> void:
 	_check(grip.get("verified") == true and grip.get("bone") == "hand_l", "Anwen uses her free left hand")
 	_check(grip.get("palm") is Vector3 and grip.get("anchor") is Vector3 and grip.get("basis") is Basis,
 		"compiler writes the existing runtime metadata types")
+	_check(grip.get("wrist_goals") == {"standing": Vector2.ZERO}, "baseline bread is restricted to its sampled stationary pose")
 	var resource_path := "user://activity_grip_compile_fixture/proof.res"
 	_check(ResourceSaver.save(library, resource_path) == OK, "compiled metadata serializes with the library")
 	var reloaded := ResourceLoader.load(resource_path, "AnimationLibrary", ResourceLoader.CACHE_MODE_IGNORE) as AnimationLibrary
@@ -92,10 +99,87 @@ func _run() -> void:
 	_check(not unapproved.has_meta("activity_prop_grips"), "failed calibration never installs a partial grip")
 	skeleton.free()
 	actor.free()
+	_check_rook_goal(repository, folder)
+	_check_nessa_goal(repository, folder)
+	_check_nessa_route(repository, folder)
 	for failure: String in failures:
 		printerr(failure)
 	print("ACTIVITY GRIP COMPILE: %s checks=%d" % ["PASS" if failures.is_empty() else "FAIL", checks])
 	quit(0 if failures.is_empty() else 1)
+
+
+func _check_rook_goal(repository: String, folder: String) -> void:
+	var evidence := "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C02/bread"
+	_check_pose_goal(repository, folder, "C02", "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+		"res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn", "bread",
+		{"evidence": evidence + "/fit_receipt.json", "native_pose_evidence": evidence + "/pose_receipt.json"},
+		{"standing": Vector2(0.05, 0.06)})
+
+
+func _check_nessa_goal(repository: String, folder: String) -> void:
+	var evidence := "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa"
+	_check_pose_goal(repository, folder, "C11", "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+		"res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn", "bread",
+		{"evidence": evidence + "/fit_receipt.json", "native_pose_evidence": evidence + "/pose_receipt.json",
+		"legacy_wrist_source": evidence + "/source/c11_activity_goal_trial_modifier.gd"},
+		{"standing": Vector2(0.08, 0.055)})
+
+
+func _check_nessa_route(repository: String, folder: String) -> void:
+	var equipment := "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment"
+	var evidence := equipment + "/c11_supply_composite_r1"
+	var standing := Vector2(0.075, 0.12)
+	_check_pose_goal(repository, folder, "C11", "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+		"res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn", "supply",
+		{"evidence": evidence + "/fit/receipt.json", "native_pose_evidence": evidence + "/standing/pose_receipt.json",
+		"route_pose_evidence": evidence + "/route/pose_receipt.json",
+		"legacy_wrist_source": equipment + "/bread_grips_r1/Nessa/source/c11_activity_goal_trial_modifier.gd",
+		"standing_wrist_source": evidence + "/source/c11_supply_forward_trial_modifier.gd"},
+		{"standing": standing, "moving": standing + Vector2(0.012, 0.0)})
+
+
+func _check_pose_goal(repository: String, folder: String, asset: String, model: String, prepared: String, style: String,
+		fit: Dictionary, expected: Dictionary) -> void:
+	var animation_path := "res://assets_external/characters_prepared/animations/life_" + asset + ".res"
+	var library := (load(animation_path) as AnimationLibrary).duplicate(true) as AnimationLibrary
+	if library.has_meta("activity_prop_grips"):
+		library.remove_meta("activity_prop_grips")
+	var actor := (load(prepared) as PackedScene).instantiate() as Node3D
+	var player := FUSION.attach_shared_library(actor)
+	var skeleton := Skeleton3D.new()
+	skeleton.add_bone("hand_r")
+	var motion_hash := str(library.get_meta("source_sha256"))
+	var path := folder.path_join("activity_grips.json")
+	fit["evidence_sha256"] = FileAccess.get_sha256(repository.path_join(fit.evidence))
+	var fits := {}
+	fits[style] = fit
+	var record := {
+		"schema_version": 1,
+		"asset": asset,
+		"motion_sha256": motion_hash,
+		"model_sha256": FileAccess.get_sha256(model),
+		"fits": fits,
+	}
+	_write_json(path, record)
+	var result := Grips.apply(library, skeleton, repository, folder, asset, motion_hash, model, prepared, player)
+	var label := asset + ":" + style
+	_check(not result.has("error"), label + " compiles the exact verified trial: " + str(result.get("error", "")))
+	var grips: Dictionary = library.get_meta("activity_prop_grips", {})
+	var grip: Dictionary = grips.get(style, {})
+	_check(grip.get("wrist_goals") == expected, label + " preserves measured wrist goal and scope")
+	if fit.has("route_pose_evidence"):
+		_check(grip.get("moving_route") == "greyfen:saga_nessa:baker_day:4:work_to_errand", label + " keeps the calibrated moving scope")
+		fit.route_pose_evidence = fit.native_pose_evidence
+		_write_json(path, record)
+		_check(Grips.apply(library, skeleton, repository, folder, asset, motion_hash, model, prepared, player).has("error"),
+			label + " rejects substitution of stationary evidence for its route")
+	elif fit.has("legacy_wrist_source"):
+		fit.legacy_wrist_source = fit.evidence
+		_write_json(path, record)
+		_check(Grips.apply(library, skeleton, repository, folder, asset, motion_hash, model, prepared, player).has("error"),
+			label + " rejects a substituted legacy calibration script")
+	skeleton.free()
+	actor.free()
 
 
 func _write_json(path: String, data: Dictionary) -> void:

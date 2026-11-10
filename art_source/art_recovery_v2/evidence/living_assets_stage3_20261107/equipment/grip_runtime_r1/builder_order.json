@@ -1,0 +1,11 @@
+{
+  "source_sha256": "542dc1ef982260e0c2a894cad06857be21fd55c86d2e650da5848549d7af8666",
+  "preceding_sha256": "1a561c558b6fe329079f84076db249d17bbe2232d72b703fdffec61828aeb84a",
+  "order": [
+    "prepare actor scenes",
+    "strict opening grip compile",
+    "strict stage 2 grip compile",
+    "refresh actor library ownership without changing scene bytes"
+  ],
+  "maintained_combined_export_invoked": false
+}

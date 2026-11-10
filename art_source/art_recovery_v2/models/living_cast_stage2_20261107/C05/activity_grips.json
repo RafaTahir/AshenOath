@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "asset": "C05",
+  "motion_sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+  "model_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+  "fits": {
+    "bread": {
+      "evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C05/bread/fit_receipt.json",
+      "evidence_sha256": "9222d5a3e71260618035d792d76b4ca0310e8085f72fc7f8f2e3f83d8688a8e3",
+      "native_pose_evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/wrist_grips_r1/C05/bread/pose_receipt.json"
+    },
+    "supply": {
+      "evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C05/fit_receipt.json",
+      "evidence_sha256": "f63fa631395b4f1a1fdd2675808f18263483a6eaaa11e7a0aa891f144cca2b1a",
+      "native_pose_evidence": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C05/native/pose_receipt.json"
+    }
+  }
+}

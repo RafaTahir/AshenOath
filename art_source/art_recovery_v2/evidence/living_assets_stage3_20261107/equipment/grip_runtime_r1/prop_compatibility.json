@@ -1,0 +1,227 @@
+{
+  "accepted": true,
+  "project": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\p2",
+  "engine": {
+    "console_wrapper": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+    },
+    "main_executable": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+      "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+    }
+  },
+  "input_files": [
+    {
+      "path": ".verification/creatures/run_candidate_serial.py",
+      "bytes": 18067,
+      "sha256": "132d269b53bc313ae330f2451a78b88c7a1b89841685ac66faf60991d48f77e5"
+    },
+    {
+      "path": ".verification/creatures/run_isolated_creature_derivatives.py",
+      "bytes": 22821,
+      "sha256": "9817f1531b82219a3675164dd5f2a0970f382b8b9db66e871dbbbccc84dea366"
+    },
+    {
+      "path": ".verification/motion/p2/assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+      "bytes": 1095313,
+      "sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9"
+    },
+    {
+      "path": ".verification/motion/p2/assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
+      "bytes": 982112,
+      "sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769"
+    },
+    {
+      "path": ".verification/motion/p2/assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "bytes": 1730700,
+      "sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7"
+    },
+    {
+      "path": ".verification/motion/p2/assets_external/design_pack_v1/humans/C11_Nessa.glb",
+      "bytes": 1502736,
+      "sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85"
+    },
+    {
+      "path": ".verification/motion/p2/data/prepared_actors.json",
+      "bytes": 401713,
+      "sha256": "bc21f3caf9bae39533555d1f365d2b0e9890412cc6e0a3d35f43a0a9b7c2fac8"
+    },
+    {
+      "path": ".verification/motion/p2/project.godot",
+      "bytes": 6073,
+      "sha256": "9483348efecd04dd61b2873e932e574e409745e1b6831aa4b9b2591eae32a39f"
+    },
+    {
+      "path": ".verification/motion/p2/scripts/character_presentation.gd",
+      "bytes": 36093,
+      "sha256": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992"
+    },
+    {
+      "path": ".verification/motion/p2/scripts/held_prop_geometry.gd",
+      "bytes": 5895,
+      "sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1"
+    },
+    {
+      "path": ".verification/motion/run_retained_prop_scope_compatibility.py",
+      "bytes": 12979,
+      "sha256": "47ddfdd2a9ee0963af943c6b0e3231e947352d7d5b832cdf20249b7741db6c60"
+    },
+    {
+      "path": ".verification/motion/verify_retained_prop_scope_compatibility.gd",
+      "bytes": 8086,
+      "sha256": "b8e1df90f32299de496c77a930d9a859c257a9429f92288a5166d0c6acf2bb6e"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C11/66c73b8d093d874ea4c2cae2dcddd56f4cae75652dd988aca553d969461a6af6/receipt.json",
+      "bytes": 2927004,
+      "sha256": "dc9f576cc8b3068ec96eb3d60e2f4341286aadd1f8b645bc9b51ca1436b87f7f"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C02/C02_supply_fit_proposal.blend",
+      "bytes": 8772675,
+      "sha256": "736bcba53a8c86986226c566b2e2f3da20d9028528741b187149e1ad11aa172d"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C02/fit_receipt.json",
+      "bytes": 8953,
+      "sha256": "e0c9ac0d708a5f3eff106a9c08c7a813e258dc077cedee3704a7abb82113d8a3"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/baseline_supply_grips_r1/C02/native/pose_receipt.json",
+      "bytes": 2911105,
+      "sha256": "0b7b2a1d028462c26dee1dd7d2176f532d1e9bfd062491b381e7b245d2432568"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/C11_bread_fit_proposal.blend",
+      "bytes": 7868764,
+      "sha256": "669c393e8b836a5918942db65f27f37cf453a156bea489485dde0dc846309aee"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/bread_grips_r1/Nessa/fit_receipt.json",
+      "bytes": 13492,
+      "sha256": "0b70c2b3e50720bcf0f28489630e7e382ed7a7fdf3a4ddb4af346443a374e1fe"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread.glb",
+      "bytes": 37864,
+      "sha256": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread.json",
+      "bytes": 4586,
+      "sha256": "555db14802282e814ac6354bd1c867ee8dba6977945d889ea047c9870366e99f"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_channel_manifest.json",
+      "bytes": 313374,
+      "sha256": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_mesh_manifest.json",
+      "bytes": 287107,
+      "sha256": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_raw.glb",
+      "bytes": 37864,
+      "sha256": "e38d87b0e9425aa5675c9be0a19f740015b67f95094eb3cc80347125aa1577f5"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.glb",
+      "bytes": 30832,
+      "sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.json",
+      "bytes": 4290,
+      "sha256": "b95562d40dab823dcd8eb06da6d390773db38546771f8cc4016bb2c8eaf983c7"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_channel_manifest.json",
+      "bytes": 281809,
+      "sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_mesh_manifest.json",
+      "bytes": 235522,
+      "sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528"
+    },
+    {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_raw.glb",
+      "bytes": 30832,
+      "sha256": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/activity_pose_rigid_channel_transport.gd",
+      "bytes": 18441,
+      "sha256": "0853b45c62819d664689cbceefa3a72f68cace2702db680fd8ec64b631328fb6"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/activity_pose_rigid_equivalence.gd",
+      "bytes": 16200,
+      "sha256": "fe0cfc102caa081f42c96f014660689c0f8425f4d5ecebe7f79971eecd1a68e5"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/activity_pose_weight_transport.gd",
+      "bytes": 18534,
+      "sha256": "6e51220dac221691141f378d88dc057eae7f8cca8ab1dc1d7a895591d64ecbbf"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/held_prop_mesh_contract.gd",
+      "bytes": 6503,
+      "sha256": "7d5f3d845c927fc3cae531e730bc6d6a432052a3db3e0e52f4b4c8f61054c5fd"
+    },
+    {
+      "path": "art_source/art_recovery_v2/tools/native_engine_identity.py",
+      "bytes": 935,
+      "sha256": "7cb8d4839d5190e934a788b8d6f95b61b3822c153ec0c2e7377e72861872b10f"
+    },
+    {
+      "path": ".verification/motion/retained_prop_scope_compatibility_r1/spec.json",
+      "bytes": 2460,
+      "sha256": "9e232f425671354ffd5835c5cc026fce895d6377c84f3b42c93e105395fee700"
+    }
+  ],
+  "run": {
+    "command": [
+      "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "--log-file",
+      "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_prop_scope_compatibility_r1\\native.engine.log",
+      "--headless",
+      "--path",
+      "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\p2",
+      "--script",
+      "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\verify_retained_prop_scope_compatibility.gd",
+      "--",
+      "--spec=D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_prop_scope_compatibility_r1\\spec.json"
+    ],
+    "log": {
+      "path": ".verification/motion/retained_prop_scope_compatibility_r1/native.log",
+      "bytes": 2283,
+      "sha256": "7ca39ef0c51c9a9ef7f0e587a81bc404df0bf032c3eb2e02b1e37d8a3c540b1f"
+    },
+    "engine_log": {
+      "path": ".verification/motion/retained_prop_scope_compatibility_r1/native.engine.log",
+      "bytes": 2280,
+      "sha256": "babfa0da293b20b9d56012ccf390a845348669f9640e85190816b6d41e61ac4f"
+    },
+    "passed": true,
+    "timed_out": false,
+    "owned_tree_exited": true,
+    "pid": 12364,
+    "active_processes_after_root_wait": 1,
+    "accounting_quiescence_seconds": 0.015,
+    "termination_requested": false,
+    "active_processes_after_cleanup": 0,
+    "cleanup_seconds": 0.015,
+    "exit_code": 0,
+    "seconds": 13.484
+  },
+  "bridge": {
+    "path": ".verification/motion/retained_prop_scope_compatibility_r1/bridge.json",
+    "bytes": 3463,
+    "sha256": "09a4c50cb2f2ace0c8c5848d3a3ec9aafb6ec1a91781a193408f8af9085f5b2f"
+  },
+  "sources_unchanged": true
+}

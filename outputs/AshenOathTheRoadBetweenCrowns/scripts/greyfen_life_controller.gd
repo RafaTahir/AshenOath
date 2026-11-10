@@ -315,6 +315,7 @@ func _physics_process(delta: float) -> void:
 			_update_reaction(entry, float(decision_period) / 1000.0)
 			var driver: Node = entry.driver
 			if distant != was_distant:
+				entry.erase("carry_route_scope")
 				# Keep distant people in the world; only their animation/simulation
 				# budget sleeps. Walking across a distance boundary must not erase them.
 				if driver != null and driver.has_method("set_distance_suspended"):
@@ -578,6 +579,9 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 		# prior anchor. Start the next leg from their actual feet every time.
 		entry.route = _routine_route(entry, final_target)
 		entry.route_index = 1 if entry.route.size() > 1 else 0
+		entry.erase("carry_route_scope")
+		var scope := _reviewed_c11_carry_leg(entry)
+		if not scope.is_empty(): entry.carry_route_scope = scope
 		_set_agent_target(entry)
 	if entry.route.is_empty():
 		_brake_actor(entry, delta)
@@ -617,7 +621,9 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	var turn_pace: float = clampf((deg_to_rad(65.0) - turn_error) / deg_to_rad(48.0), 0.0, 1.0)
 	var arrival_pace: float = sqrt(2.0 * WALK_BRAKING * maxf(distance - ARRIVAL_DISTANCE, 0.0))
 	var desired_speed: float = minf(float(entry.speed) * turn_pace, arrival_pace)
-	desired_speed *= _crowd_pace(entry, direction, delta)
+	var crowd_pace := _crowd_pace(entry, direction, delta)
+	if not is_equal_approx(crowd_pace, 1.0): entry.erase("carry_route_scope")
+	desired_speed *= crowd_pace
 	var current_speed: float = float(entry.motion_speed)
 	var rate: float = WALK_ACCELERATION if desired_speed > current_speed else WALK_BRAKING
 	entry.motion_speed = move_toward(current_speed, desired_speed, rate * delta)
@@ -721,7 +727,9 @@ func _move_actor(entry: Dictionary, direction: Vector3, speed: float, delta: flo
 	var start: Vector3 = node.global_position
 	if entry.has("table_approach") and start.distance_to(entry.table_approach) < 0.55:
 		entry.erase("table_approach")
-	var step: float = _player_clear_step(start, direction, minf(speed * delta, remaining_distance))
+	var requested_step := minf(speed * delta, remaining_distance)
+	var step: float = _player_clear_step(start, direction, requested_step)
+	if not is_equal_approx(step, requested_step): entry.erase("carry_route_scope")
 	if direction.length_squared() < 0.001 or step <= 0.00001:
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
@@ -915,6 +923,7 @@ func _end_activity(entry: Dictionary) -> void:
 	_apply_pending_routine(entry)
 
 func _release_activity(entry: Dictionary, release_pose: bool = true) -> void:
+	entry.erase("carry_route_scope")
 	_clear_work_contact_effects(entry.node)
 	var was_active := bool(entry.get("activity_active", false))
 	var station := str(entry.get("station", ""))
@@ -2227,6 +2236,35 @@ func _precompute_routes(entry: Dictionary) -> void:
 func _set_agent_target(entry: Dictionary) -> void:
 	pass
 
+func _c11_carry_scope_live(entry: Dictionary) -> bool:
+	return entry.route.size() == 2 and int(entry.route_index) == 1 and int(entry.target) == 1 \
+		and entry.pending_routine.is_empty() and not entry.has("table_restore") and not entry.has("gathering_restore") \
+		and float(entry.get("pause", 0.0)) <= 0.0 and float(entry.get("greeting_remaining", 0.0)) <= 0.0 \
+		and float(entry.get("reaction_time", 0.0)) <= 0.0
+
+func _reviewed_c11_carry_leg(entry: Dictionary) -> String:
+	if str(entry.id) != "saga_nessa" or not bool(entry.get("regional", false)) or str(entry.get("routine_zone", "")) != "greyfen" \
+			or int(entry.get("arrived_target", -1)) != 0 or not is_equal_approx(float(entry.speed), 0.62) or not _c11_carry_scope_live(entry):
+		return ""
+	var profile: Dictionary = entry.profile
+	if not bool(profile.get("scheduled", false)) or not bool(profile.get("carry_in_transit", false)) \
+			or str(profile.get("intent_key", "")) != "baker_day:4" or str(profile.get("intent", "")) != "carry" \
+			or str(profile.get("activity", "")) != "carry" or str(profile.get("prop", "")) != "supply" \
+			or profile.get("activities", []) != ["carry", "carry"] or entry.path.size() != 2 or profile.get("path", []).size() != 2:
+		return ""
+	var authored: Dictionary = CastProfile.life_data().get("zones", {}).get("greyfen", {}).get("saga_nessa", {})
+	var labels := ["work", "errand"]
+	var tolerance := ARRIVAL_DISTANCE + 0.015
+	for index: int in 2:
+		var raw: Array = authored.get(labels[index], [])
+		if raw.size() != 3: return ""
+		var original := Vector3(float(raw[0]), float(raw[1]), float(raw[2]))
+		var resolved: Vector3 = profile.path[index]
+		var validated: Vector3 = entry.path[index]
+		var routed: Vector3 = entry.route[index]
+		if resolved != original or routed.distance_squared_to(validated) > tolerance * tolerance: return ""
+	return "greyfen:saga_nessa:baker_day:4:work_to_errand"
+
 func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.ZERO) -> void:
 	var driver = entry.driver
 	if driver != null and driver.has_method("set_locomotion"):
@@ -2249,6 +2287,11 @@ func _set_motion(entry: Dictionary, speed: float, direction: Vector3 = Vector3.Z
 		if bool(entry.profile.get("scheduled", false)):
 			var carrying := speed > 0.05 and bool(entry.profile.get("carry_in_transit", false))
 			driver.set_carried_activity("carry" if carrying else "")
+			if carrying and entry.has("carry_route_scope") and driver.has_method("set_carried_activity_scope"):
+				if _c11_carry_scope_live(entry):
+					driver.set_carried_activity_scope(str(entry.carry_route_scope))
+				else:
+					entry.erase("carry_route_scope")
 			driver.set_activity_prop(str(entry.profile.get("prop", "")) if carrying else "")
 		elif bool(entry.get("regional", false)):
 			driver.set_carried_activity("carry" if speed > 0.05 and int(entry.target) == 1 and routine_phase != "night" else "")

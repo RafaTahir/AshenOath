@@ -1,0 +1,98 @@
+{
+  "deadline_utc": "2026-11-10T21:24:00.480114+00:00",
+  "runs": [
+    {
+      "stage": "character_presentation",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 5368,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.015,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.015,
+      "exit_code": 0,
+      "seconds": 1.203
+    },
+    {
+      "stage": "character_animation_driver",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 11540,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.0,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.0,
+      "exit_code": 0,
+      "seconds": 1.047
+    },
+    {
+      "stage": "character_life_modifier",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 19708,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.015,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.015,
+      "exit_code": 0,
+      "seconds": 0.859
+    },
+    {
+      "stage": "greyfen_life_controller",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 7612,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.016,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.016,
+      "exit_code": 0,
+      "seconds": 1.531
+    },
+    {
+      "stage": "compiler",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 5172,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.016,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.016,
+      "exit_code": 0,
+      "seconds": 0.406
+    },
+    {
+      "stage": "fixture",
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 12816,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.015,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.015,
+      "exit_code": 0,
+      "seconds": 5.968
+    }
+  ],
+  "accepted": true,
+  "source_sha256": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\p2\\scripts\\character_presentation.gd": "3e15698b2bc760cc2ea249e00b3252134925ce6abc9dc91113fa651657779992",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\p2\\scripts\\character_animation_driver.gd": "84140cbbd0ec4b61ded45d8fce0c6742489c151cf3f926d1c5a24ac3c3a2df9a",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\p2\\scripts\\character_life_modifier.gd": "70fb21fc97c1473c8f25d88891b0fa531ad2224b8ad9a596a79836013b05a13f",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\p2\\scripts\\greyfen_life_controller.gd": "d3f343f84fd051172658ef631f6fb923047682e03edc979cfc14f01def8ef222",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\runtime_activity_grip_policy_draft_r1\\living_activity_grip_compile.gd": "0ca8e8c60206b1a1687b380b99a392a9fcaf9bff49c398abce6a356ab9777ee2",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\runtime_activity_grip_policy_draft_r1\\verify_living_activity_grip_compile.gd": "addf7bf8e24379b0afadda3ae5a23c18eb9a8e25f48aa8c53e006e6627661f46"
+  }
+}

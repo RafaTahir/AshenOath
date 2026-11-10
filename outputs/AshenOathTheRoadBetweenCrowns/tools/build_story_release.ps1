@@ -152,9 +152,10 @@ if (-not $DesignPackCast) {
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_bracken_asset.gd")) "bracken-asset"
 }
 }
-Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd")) "living-cast-libraries"
-Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_stage2_libraries.gd")) "living-cast-stage2-libraries"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd")) "prepared-actors"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd"), "--", "--require-activity-grips") "living-cast-libraries"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_stage2_libraries.gd"), "--", "--require-activity-grips") "living-cast-stage2-libraries"
+Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd"), "--", "--refresh-library-ownership") "prepared-actor-library-ownership"
 Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_environment_dependencies.gd")) "environment-material-dependencies"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "prepare_runtime_pack_layout.py")) "prepared-actor-pack-layout"
 Invoke-BuildProcess $PythonPath @((Join-Path $PSScriptRoot "runtime_pack_validation.py"), (Join-Path $ProjectRoot "runtime_pack_manifest.json")) "runtime-pack-graph"
