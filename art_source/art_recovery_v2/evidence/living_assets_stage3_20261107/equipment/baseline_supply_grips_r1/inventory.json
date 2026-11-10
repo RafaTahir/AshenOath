@@ -1,0 +1,1451 @@
+{
+  "schema_version": 1,
+  "scope": "Immutable source proposals for stationary and forward supply carry",
+  "source_commit_at_review": "a7bc123368820a1bf7318be5d3654dec0dd69eb9",
+  "historical_selected_runtime_input_commit": "69fa27fa331c60525507ebe21a3301fe50f31ada",
+  "historical_manifest_hashes": {
+    "res://data/prepared_actors.json": "b7d0a808c12552a942c8cf6b4ba828ca960811d5e5e5f329fcf5e3773650a520",
+    "res://runtime_asset_manifest.json": "c60093c1308547d97c275fa26c915c09225fce2519bfe431cecad4deb319108d"
+  },
+  "current_manifest_hashes": {
+    "res://data/prepared_actors.json": "bc21f3caf9bae39533555d1f365d2b0e9890412cc6e0a3d35f43a0a9b7c2fac8",
+    "res://runtime_asset_manifest.json": "bbe757501ecb8a1de06ff74e6f375fe03bd465574023698a932eb79d1191d031"
+  },
+  "historical_and_current_selected_rows_equal": true,
+  "required_runtime_prop_source": {
+    "carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+    "geometry_sha256": "26fcb893fd21f6deb452ef3f565176a3663fbcaaa74eb9f519fec249c6cbdec1",
+    "presentation_sha256": "08dac0a60133a806ee3f1fa50147b1e6f6b1fd6ff85168d59ef78066f94a1c15",
+    "archive_paths": [
+      "shared/prop/retained_props_C11.json",
+      "shared/prop/retained_supply.json",
+      "shared/prop/retained_supply.glb",
+      "shared/prop/retained_supply_raw.glb",
+      "shared/prop/retained_supply_mesh_manifest.json",
+      "shared/prop/retained_supply_channel_manifest.json",
+      "shared/prop/native_readback_receipt.json",
+      "shared/prop/prior_native_receipt.json"
+    ]
+  },
+  "assets": {
+    "C02": {
+      "role": "rook_human",
+      "style": "supply",
+      "archive_paths": {
+        "fit_receipt": "C02/fit_receipt.json",
+        "outer_receipt": "C02/receipt.json",
+        "inspection": "C02/inspection.json",
+        "blender_log": "C02/blender.log",
+        "editable_blend": "C02/C02_supply_fit_proposal.blend",
+        "compatible_activity_fit.py": "C02/compatible_activity_fit.py",
+        "compatible_activity_inspector.py": "C02/compatible_activity_inspector.py",
+        "native_process_receipt": "C02/native/receipt.json",
+        "native_process_log": "C02/native/native.log",
+        "native_pose_receipt": "C02/native/pose_receipt.json"
+      },
+      "authoring_motion": {
+        "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/C02_life_review.glb",
+        "bytes": 6472056,
+        "sha256": "a9ef10665a13385ec91c439c82e6eff5ba926961258d231978aaded44fcf96ae",
+        "tracked_at_source_review": true
+      },
+      "authoring_receipt": {
+        "path": "art_source/art_recovery_v2/models/living_cast_20261107/C02/authoring.json",
+        "bytes": 49680,
+        "sha256": "b01a8c3198d30e6d332d30f4cd9e9b737302d9984c6f343ac35aa67f01037c50",
+        "tracked_at_source_review": true
+      },
+      "runtime_body": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/C02_Rook.glb",
+        "bytes": 1730700,
+        "sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
+        "tracked_at_source_review": true
+      },
+      "prepared_actor": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
+        "bytes": 1095313,
+        "sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+        "tracked_at_source_review": true
+      },
+      "baseline_library": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C02.res",
+        "bytes": 202486,
+        "sha256": "025cb01ec9eeb950aee7ac541fd841b1176eea2e0fe82f61d0a0789637d71af3",
+        "tracked_at_source_review": true
+      },
+      "actor_catalog_key": "rook_human|res://assets_external/design_pack_v1/humans/C02_Rook.glb",
+      "current_catalog_record_sha256": "9a59bde74039bd3cc84120bd6174bb85cd4e5a0fd363c4209f6059224b88d03e",
+      "current_runtime_role_sha256": "14e28ef4227536c8fe0c050bf24d8e84dbd912bf6fd096d4c333ab924b0f5298",
+      "native_pose_input_signature": "6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c",
+      "retained_pose_artifacts": {
+        "carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/C02_activity_poses.glb",
+          "bytes": 9977128,
+          "sha256": "adea6afd223452c03cd1d5a5281c79efa80744e4f416149bee51ee6e2a3d9d59",
+          "tracked_at_source_review": false
+        },
+        "raw_carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/C02_activity_poses_raw.glb",
+          "bytes": 9977128,
+          "sha256": "a5bad0d93fa8aa8e0205235b0d2676a1bef286da5e4ce2660ff6c083296a53a1",
+          "tracked_at_source_review": false
+        },
+        "retained_skin_manifest_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/retained_skin_manifest.json",
+          "bytes": 6296205,
+          "sha256": "2d040cc5cc3a7dc4c036e7fccbdc12e4a79fd623e750005fb32272a3bd505d1f",
+          "tracked_at_source_review": false
+        }
+      },
+      "fit_frames": {
+        "Authoring_Carry_Idle": 301,
+        "Authoring_Carry_Walking": 121
+      },
+      "maximum_contact_error_m": 0.00030039879493415356,
+      "retained_supply_carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "fit_receipt_sha256": "e0c9ac0d708a5f3eff106a9c08c7a813e258dc077cedee3704a7abb82113d8a3",
+      "source_set_sha256": "4e675faf7c3184920f2171b8f59ed11b89c16eebaf9a7cce006df8f53cd43354",
+      "scope": "Stationary Eat, stationary Carry and forward Carry cycles. Other reachable supply aliases, gait blends, and interruption/reacquisition remain separate.",
+      "broader_runtime_clearance_verified": false,
+      "visual_accepted": false
+    },
+    "C05": {
+      "role": "widow_elna",
+      "style": "supply",
+      "archive_paths": {
+        "fit_receipt": "C05/fit_receipt.json",
+        "outer_receipt": "C05/receipt.json",
+        "inspection": "C05/inspection.json",
+        "blender_log": "C05/blender.log",
+        "editable_blend": "C05/C05_supply_fit_proposal.blend",
+        "compatible_activity_fit.py": "C05/compatible_activity_fit.py",
+        "compatible_activity_inspector.py": "C05/compatible_activity_inspector.py",
+        "native_process_receipt": "C05/native/receipt.json",
+        "native_process_log": "C05/native/native.log",
+        "native_pose_receipt": "C05/native/pose_receipt.json"
+      },
+      "authoring_motion": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/C05_life_review.glb",
+        "bytes": 7448700,
+        "sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+        "tracked_at_source_review": true
+      },
+      "authoring_receipt": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/authoring.json",
+        "bytes": 57657,
+        "sha256": "029028f0610a467bdf6292f97f09893d886404c8ab33fedd0d96849a9b539150",
+        "tracked_at_source_review": true
+      },
+      "runtime_body": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+        "bytes": 3794792,
+        "sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+        "tracked_at_source_review": true
+      },
+      "prepared_actor": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
+        "bytes": 2135471,
+        "sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
+        "tracked_at_source_review": true
+      },
+      "baseline_library": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C05.res",
+        "bytes": 246702,
+        "sha256": "cc53cbe9dd92cfc8913eddc573f02f5bbeaf24bab5654fa5f51167ab01cd01a6",
+        "tracked_at_source_review": true
+      },
+      "actor_catalog_key": "widow_elna|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+      "current_catalog_record_sha256": "ff631dcc6bcb50485a39d1da61e61ea8f1fcf756e0ccb16a0bdb74f7ccdcf91f",
+      "current_runtime_role_sha256": "ce02b42e0dd6e41d1db2338c473893a8daa5f542105cdba4d206319c9614d4fd",
+      "native_pose_input_signature": "0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85",
+      "retained_pose_artifacts": {
+        "carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/C05_activity_poses.glb",
+          "bytes": 11349488,
+          "sha256": "6d39546977f4985771db22942696ff2d9670440bdc515ede72a9eb92e701a6a9",
+          "tracked_at_source_review": false
+        },
+        "raw_carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/C05_activity_poses_raw.glb",
+          "bytes": 11349488,
+          "sha256": "0a5a404000f07477bd6d7a0ea5517742a998eed642c3cfc51e4a13b48ec90407",
+          "tracked_at_source_review": false
+        },
+        "retained_skin_manifest_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/retained_skin_manifest.json",
+          "bytes": 15170923,
+          "sha256": "c29b436602e5834cc22845abaddd0ec514b671d1f6718046cd28de612fbcfd49",
+          "tracked_at_source_review": false
+        }
+      },
+      "fit_frames": {
+        "Authoring_Carry_Idle": 301,
+        "Authoring_Carry_Walking": 121
+      },
+      "maximum_contact_error_m": 0.0004287147312425077,
+      "retained_supply_carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "fit_receipt_sha256": "f63fa631395b4f1a1fdd2675808f18263483a6eaaa11e7a0aa891f144cca2b1a",
+      "source_set_sha256": "45ccdf0d51a44de8870d38e0f525d217663e380c5935aa54560b0011d7df81cb",
+      "scope": "Stationary Eat, stationary Carry and forward Carry cycles. Other reachable supply aliases, gait blends, and interruption/reacquisition remain separate.",
+      "broader_runtime_clearance_verified": false,
+      "visual_accepted": false
+    },
+    "C06": {
+      "role": "farmer_toma",
+      "style": "supply",
+      "archive_paths": {
+        "fit_receipt": "C06/fit_receipt.json",
+        "outer_receipt": "C06/receipt.json",
+        "inspection": "C06/inspection.json",
+        "blender_log": "C06/blender.log",
+        "editable_blend": "C06/C06_supply_fit_proposal.blend",
+        "compatible_activity_fit.py": "C06/compatible_activity_fit.py",
+        "compatible_activity_inspector.py": "C06/compatible_activity_inspector.py",
+        "native_process_receipt": "C06/native/receipt.json",
+        "native_process_log": "C06/native/native.log",
+        "native_pose_receipt": "C06/native/pose_receipt.json"
+      },
+      "authoring_motion": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/C06_life_review.glb",
+        "bytes": 6607356,
+        "sha256": "685999766336aeb0d1735f8a8758f881fef2999023eb4cbf5a53ab420dc6897e",
+        "tracked_at_source_review": true
+      },
+      "authoring_receipt": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/authoring.json",
+        "bytes": 57825,
+        "sha256": "557db4b99ec6df1d94f032787c954de90e1bdb9d376bde950269561ac4742eed",
+        "tracked_at_source_review": true
+      },
+      "runtime_body": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+        "bytes": 1774668,
+        "sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+        "tracked_at_source_review": true
+      },
+      "prepared_actor": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
+        "bytes": 1114633,
+        "sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+        "tracked_at_source_review": true
+      },
+      "baseline_library": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C06.res",
+        "bytes": 247354,
+        "sha256": "7b1063bf9c956a723d1660d1541c3093a88761d6ff54168d1fc64d0db6da820a",
+        "tracked_at_source_review": true
+      },
+      "actor_catalog_key": "farmer_toma|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+      "current_catalog_record_sha256": "92411b605b30538deb82d7b43a2b2902fabf8a1ac78001d9d2a25421fc52817f",
+      "current_runtime_role_sha256": "2fdadd5e73b9dadf344e2ebf9c35be62fb0ca0aa98bea28e2109059d73db8804",
+      "native_pose_input_signature": "aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e",
+      "retained_pose_artifacts": {
+        "carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/C06_activity_poses.glb",
+          "bytes": 10051480,
+          "sha256": "5fa6ce34901bde4bc83c48ae879e68b8cfd51eabc00c3b465df88983694f74b5",
+          "tracked_at_source_review": false
+        },
+        "raw_carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/C06_activity_poses_raw.glb",
+          "bytes": 10051480,
+          "sha256": "3dc1792490970ae992c674f168363417891d9eb1f7c261006932a13ba37bb87e",
+          "tracked_at_source_review": false
+        },
+        "retained_skin_manifest_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/retained_skin_manifest.json",
+          "bytes": 6457621,
+          "sha256": "11f54718e64727f886148b84a5a9b1d32b857cf9e34d9731b06d10c85b0e95b5",
+          "tracked_at_source_review": false
+        }
+      },
+      "fit_frames": {
+        "Authoring_Carry_Idle": 301,
+        "Authoring_Carry_Walking": 121
+      },
+      "maximum_contact_error_m": 0.00030025377054698765,
+      "retained_supply_carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "fit_receipt_sha256": "defd211c5cf9876fc336a9713912abfd3e0f98c5fe46466009b2865aa19afb1b",
+      "source_set_sha256": "645046cf03155c6e2c638169a91565f2cf754a0eadc39baacdd9e47e48d59474",
+      "scope": "Stationary Eat, stationary Carry and forward Carry cycles. Other reachable supply aliases, gait blends, and interruption/reacquisition remain separate.",
+      "broader_runtime_clearance_verified": false,
+      "visual_accepted": false
+    },
+    "C07": {
+      "role": "captain_senn",
+      "style": "supply",
+      "archive_paths": {
+        "fit_receipt": "C07/fit_receipt.json",
+        "outer_receipt": "C07/receipt.json",
+        "inspection": "C07/inspection.json",
+        "blender_log": "C07/blender.log",
+        "editable_blend": "C07/C07_supply_fit_proposal.blend",
+        "compatible_activity_fit.py": "C07/compatible_activity_fit.py",
+        "compatible_activity_inspector.py": "C07/compatible_activity_inspector.py",
+        "native_process_receipt": "C07/native/receipt.json",
+        "native_process_log": "C07/native/native.log",
+        "native_pose_receipt": "C07/native/pose_receipt.json"
+      },
+      "authoring_motion": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/C07_life_review.glb",
+        "bytes": 8352620,
+        "sha256": "7870c57de09a373f530c59299aa93b00e4ac6980f165b90155b5f539d97ebfac",
+        "tracked_at_source_review": true
+      },
+      "authoring_receipt": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/authoring.json",
+        "bytes": 58212,
+        "sha256": "c051ba186f5adcc242a71bf2f73157a03401c846285df559878b6d988137a0ee",
+        "tracked_at_source_review": true
+      },
+      "runtime_body": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+        "bytes": 1351564,
+        "sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+        "tracked_at_source_review": true
+      },
+      "prepared_actor": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
+        "bytes": 887583,
+        "sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
+        "tracked_at_source_review": true
+      },
+      "baseline_library": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C07.res",
+        "bytes": 210129,
+        "sha256": "78f24a3a0eeb3588c6ba1f1392170e90f262678f52890aa2d8bfa9b2006b27c8",
+        "tracked_at_source_review": true
+      },
+      "actor_catalog_key": "captain_senn|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+      "current_catalog_record_sha256": "1a49b1de70b4bcd030356a4e3d01e316b36487dd71fdc40d5ca3b75df267bd83",
+      "current_runtime_role_sha256": "498bc628a3a495d4656ccb707fca9a1478724545bc874ffae624e0f62bc79ae1",
+      "native_pose_input_signature": "3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d",
+      "retained_pose_artifacts": {
+        "carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/C07_activity_poses.glb",
+          "bytes": 11792652,
+          "sha256": "1fbafb177c12ba6f5d19400a77033e52109a6dac6516d8e9ed933c8e76bb9085",
+          "tracked_at_source_review": false
+        },
+        "raw_carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/C07_activity_poses_raw.glb",
+          "bytes": 11792652,
+          "sha256": "52fb31eea79df3f7f8223eb25d359e8ebadfc682c844ecd612c809b1fd05a583",
+          "tracked_at_source_review": false
+        },
+        "retained_skin_manifest_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/retained_skin_manifest.json",
+          "bytes": 4871753,
+          "sha256": "f755eefd68ee1221feea60d7252c34bb013f2eabfdcedf8a9a4efec33c2affaa",
+          "tracked_at_source_review": false
+        }
+      },
+      "fit_frames": {
+        "Authoring_Carry_Idle": 301,
+        "Authoring_Carry_Walking": 121
+      },
+      "maximum_contact_error_m": 0.00030039396369829774,
+      "retained_supply_carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "fit_receipt_sha256": "cc35221ca11dbd967ee191fdbe77cefafc29514facc3906fd553427e926bd9b7",
+      "source_set_sha256": "3af2fea4c0c09312904cf0b24fd6f433d2d709603ebcea2ea37983d83c560b8d",
+      "scope": "Stationary Eat, stationary Carry and forward Carry cycles. Other reachable supply aliases, gait blends, and interruption/reacquisition remain separate.",
+      "broader_runtime_clearance_verified": false,
+      "visual_accepted": false
+    },
+    "C08": {
+      "role": "edric",
+      "style": "supply",
+      "archive_paths": {
+        "fit_receipt": "C08/fit_receipt.json",
+        "outer_receipt": "C08/receipt.json",
+        "inspection": "C08/inspection.json",
+        "blender_log": "C08/blender.log",
+        "editable_blend": "C08/C08_supply_fit_proposal.blend",
+        "compatible_activity_fit.py": "C08/compatible_activity_fit.py",
+        "compatible_activity_inspector.py": "C08/compatible_activity_inspector.py",
+        "native_process_receipt": "C08/native/receipt.json",
+        "native_process_log": "C08/native/native.log",
+        "native_pose_receipt": "C08/native/pose_receipt.json"
+      },
+      "authoring_motion": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/C08_life_review.glb",
+        "bytes": 6606688,
+        "sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70",
+        "tracked_at_source_review": true
+      },
+      "authoring_receipt": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/authoring.json",
+        "bytes": 58095,
+        "sha256": "1748802fb014e9d79c7a01766866c85afb49b9eb0c9bb7be6725b8c06c15b657",
+        "tracked_at_source_review": true
+      },
+      "runtime_body": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+        "bytes": 1828876,
+        "sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+        "tracked_at_source_review": true
+      },
+      "prepared_actor": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
+        "bytes": 1128431,
+        "sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
+        "tracked_at_source_review": true
+      },
+      "baseline_library": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C08.res",
+        "bytes": 249352,
+        "sha256": "7e2b221208812014f9e71426c3344407d5d34fc3125d6b02ec57c2ec7bab3eb1",
+        "tracked_at_source_review": true
+      },
+      "actor_catalog_key": "edric|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+      "current_catalog_record_sha256": "693e408472c4c8bc4a6295f63102418ab3d85d886ed432d99251fb0946587c45",
+      "current_runtime_role_sha256": "1a8cf5a04b2f4a20ba2cea4b264a4f09f460f9c49427ad7f2ddd0b17b88f6317",
+      "native_pose_input_signature": "49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd",
+      "retained_pose_artifacts": {
+        "carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/C08_activity_poses.glb",
+          "bytes": 10059300,
+          "sha256": "017c9abfa038b9b795ca6291b09f305a892a3f1370f684aed586724feac33ada",
+          "tracked_at_source_review": false
+        },
+        "raw_carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/C08_activity_poses_raw.glb",
+          "bytes": 10059300,
+          "sha256": "fc3f358a2e18dee61473234c0b7baa0dea7afb2023802c7c7de7ea75cec5c6a2",
+          "tracked_at_source_review": false
+        },
+        "retained_skin_manifest_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/retained_skin_manifest.json",
+          "bytes": 6649467,
+          "sha256": "ee4b4a7d10a7e15e695e667ce6a36da0acc70f99708f953747af0ca13ba37c57",
+          "tracked_at_source_review": false
+        }
+      },
+      "fit_frames": {
+        "Authoring_Carry_Idle": 301,
+        "Authoring_Carry_Walking": 121
+      },
+      "maximum_contact_error_m": 0.00030029925983399153,
+      "retained_supply_carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "fit_receipt_sha256": "7fab55bf61f850f14cb84a8fb35bea99e3942f94c5ce181d82261310e315dd12",
+      "source_set_sha256": "4400a94012f124e438fa42fc11aa68b65190e41ec70b1867b2c0fb988c3e6642",
+      "scope": "Stationary Eat, stationary Carry and forward Carry cycles. Other reachable supply aliases, gait blends, and interruption/reacquisition remain separate.",
+      "broader_runtime_clearance_verified": false,
+      "visual_accepted": false
+    },
+    "C12": {
+      "role": "saga_nera",
+      "style": "supply",
+      "archive_paths": {
+        "fit_receipt": "C12/fit_receipt.json",
+        "outer_receipt": "C12/receipt.json",
+        "inspection": "C12/inspection.json",
+        "blender_log": "C12/blender.log",
+        "editable_blend": "C12/C12_supply_fit_proposal.blend",
+        "compatible_activity_fit.py": "C12/compatible_activity_fit.py",
+        "compatible_activity_inspector.py": "C12/compatible_activity_inspector.py",
+        "native_process_receipt": "C12/native/receipt.json",
+        "native_process_log": "C12/native/native.log",
+        "native_pose_receipt": "C12/native/pose_receipt.json"
+      },
+      "authoring_motion": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/C12_life_review.glb",
+        "bytes": 5415572,
+        "sha256": "fc61817eb6e9231a7a440e0da563bfab0bcda306f1e54d02005836df452f6ed6",
+        "tracked_at_source_review": true
+      },
+      "authoring_receipt": {
+        "path": "art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/authoring.json",
+        "bytes": 58059,
+        "sha256": "93c4d99e4d2c4a1dfcf1f165e4df030b330b94d4d17656c51c943df38e8248e1",
+        "tracked_at_source_review": true
+      },
+      "runtime_body": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/C12_Nera.glb",
+        "bytes": 1443260,
+        "sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+        "tracked_at_source_review": true
+      },
+      "prepared_actor": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
+        "bytes": 944784,
+        "sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
+        "tracked_at_source_review": true
+      },
+      "baseline_library": {
+        "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/characters_prepared/animations/life_C12.res",
+        "bytes": 221278,
+        "sha256": "fe5e3ce0a8db84e79faf057a7b8b19d93baba0fa6c561e0bbe0aff6ca217ca8c",
+        "tracked_at_source_review": true
+      },
+      "actor_catalog_key": "saga_nera|res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+      "current_catalog_record_sha256": "d90a7ad9b6b4910fe736a10c17c9d0358246d082804768803c5c80e3499e3df0",
+      "current_runtime_role_sha256": "1e65b32eb24510bd0ae48c34237049658cb9641b77bb7940bb0aecb2c0dcc5f1",
+      "native_pose_input_signature": "2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7",
+      "retained_pose_artifacts": {
+        "carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/C12_activity_poses.glb",
+          "bytes": 8862852,
+          "sha256": "00a6c6d76e925b90c91fd468c1de030ef314c99c753e0acf17265fab5e9d1fc2",
+          "tracked_at_source_review": false
+        },
+        "raw_carrier_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/C12_activity_poses_raw.glb",
+          "bytes": 8862852,
+          "sha256": "7480ce8076abe74dfb2d8415de1434e9393d2de39f7341287903706841410765",
+          "tracked_at_source_review": false
+        },
+        "retained_skin_manifest_path": {
+          "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/retained_skin_manifest.json",
+          "bytes": 5622437,
+          "sha256": "d90423dd1cc0bceb27792caa358ef12d1a568fa991046971ae48e67da2e04056",
+          "tracked_at_source_review": false
+        }
+      },
+      "fit_frames": {
+        "Authoring_Carry_Idle": 301,
+        "Authoring_Carry_Walking": 121
+      },
+      "maximum_contact_error_m": 0.00043718903907574713,
+      "retained_supply_carrier_sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "fit_receipt_sha256": "8094712ab9875e152950c646b0fa62fef753f774698f050027a25468eef35910",
+      "source_set_sha256": "0923a7527c1e602b77c6a2c322e3ddaa2ae35e5004b7b078a457641e02264132",
+      "scope": "Stationary Eat, stationary Carry and forward Carry cycles. Other reachable supply aliases, gait blends, and interruption/reacquisition remain separate.",
+      "broader_runtime_clearance_verified": false,
+      "visual_accepted": false
+    }
+  },
+  "files": {
+    "C02/blender.log": {
+      "bytes": 649,
+      "sha256": "81fa3e74d8c2fbfadc52d41aee1af3f5cc7dbde12120b81f6a9d537487304f47",
+      "origin": ".verification/motion/compatible_c02_supply_fit_r1/blender.log"
+    },
+    "C02/C02_supply_fit_proposal.blend": {
+      "bytes": 8772675,
+      "sha256": "736bcba53a8c86986226c566b2e2f3da20d9028528741b187149e1ad11aa172d",
+      "origin": ".verification/motion/compatible_c02_supply_fit_r1/fit/C02_supply_fit_proposal.blend"
+    },
+    "C02/compatible_activity_fit.py": {
+      "bytes": 24733,
+      "sha256": "a27f0a212cf6ca35e9055da53b1179ca942b2bce017e40fe066fed6acaf00ae7",
+      "origin": ".verification/motion/compatible_c02_supply_fit_r1/compatible_activity_fit.py"
+    },
+    "C02/compatible_activity_inspector.py": {
+      "bytes": 28629,
+      "sha256": "ee86c68fa65c323ec53c7e1064beff2765ade90331fa47b1ac085741be3baf3d",
+      "origin": ".verification/motion/compatible_c02_supply_fit_r1/compatible_activity_inspector.py"
+    },
+    "C02/fit_receipt.json": {
+      "bytes": 8953,
+      "sha256": "e0c9ac0d708a5f3eff106a9c08c7a813e258dc077cedee3704a7abb82113d8a3",
+      "origin": ".verification/motion/compatible_c02_supply_fit_r1/fit/receipt.json"
+    },
+    "C02/inspection.json": {
+      "bytes": 622910,
+      "sha256": "280387c3cdfb41a77c408cbba6c6feb3a82de50ff2436834daa3f4f044c6376e",
+      "origin": ".verification/motion/compatible_c02_supply_fit_r1/inspection.json"
+    },
+    "C02/native/native.log": {
+      "bytes": 324,
+      "sha256": "ea23a236919be699f4b65d10793d6f2a953b0df569ef16d9b8f7f4ef783d6b1f",
+      "origin": ".verification/motion/activity_pose_remaining10-c02-r1/native.log"
+    },
+    "C02/native/pose_receipt.json": {
+      "bytes": 2911105,
+      "sha256": "0b7b2a1d028462c26dee1dd7d2176f532d1e9bfd062491b381e7b245d2432568",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/receipt.json"
+    },
+    "C02/native/receipt.json": {
+      "bytes": 1978,
+      "sha256": "751c88525f65f526afe3fe097527f40069d3ecd55848895e9063972da073ccbf",
+      "origin": ".verification/motion/activity_pose_remaining10-c02-r1/receipt.json"
+    },
+    "C02/receipt.json": {
+      "bytes": 11318,
+      "sha256": "70f6083554eeda251efd47d84a3385b0e42d74873d204f4f4c72aa3b216b5fe8",
+      "origin": ".verification/motion/compatible_c02_supply_fit_r1/receipt.json"
+    },
+    "C05/blender.log": {
+      "bytes": 656,
+      "sha256": "243f5396694f2c3e7e9eef799dcbaa4e99b7ba0f5c21d47b8fafdd3e98d8e0b4",
+      "origin": ".verification/motion/compatible_c05_supply_fit_r1/blender.log"
+    },
+    "C05/C05_supply_fit_proposal.blend": {
+      "bytes": 9661592,
+      "sha256": "796259f55632fa99ed3dec1c7be6fb1f68f201ba4a864990af9ce82254e453cf",
+      "origin": ".verification/motion/compatible_c05_supply_fit_r1/fit/C05_supply_fit_proposal.blend"
+    },
+    "C05/compatible_activity_fit.py": {
+      "bytes": 24733,
+      "sha256": "42f2c6207cb66b73073100aaf1e7fae1ab7259b5d21f5855e1f444203046e74d",
+      "origin": ".verification/motion/compatible_c05_supply_fit_r1/compatible_activity_fit.py"
+    },
+    "C05/compatible_activity_inspector.py": {
+      "bytes": 28629,
+      "sha256": "b62bf04278312d4b77b3d5d92338b0f5070fdde5d681f6ba52c92f3fbc052648",
+      "origin": ".verification/motion/compatible_c05_supply_fit_r1/compatible_activity_inspector.py"
+    },
+    "C05/fit_receipt.json": {
+      "bytes": 10624,
+      "sha256": "f63fa631395b4f1a1fdd2675808f18263483a6eaaa11e7a0aa891f144cca2b1a",
+      "origin": ".verification/motion/compatible_c05_supply_fit_r1/fit/receipt.json"
+    },
+    "C05/inspection.json": {
+      "bytes": 802164,
+      "sha256": "3146133f3b2c3b5567aa234ab8cc5510cad8a8691a65a1536542fe480cea210f",
+      "origin": ".verification/motion/compatible_c05_supply_fit_r1/inspection.json"
+    },
+    "C05/native/native.log": {
+      "bytes": 324,
+      "sha256": "eff09dd99bb28df146050c4e327553c8b42a67f047538f105be8deaa574b8db7",
+      "origin": ".verification/motion/activity_pose_remaining10-c05-r1/native.log"
+    },
+    "C05/native/pose_receipt.json": {
+      "bytes": 2884655,
+      "sha256": "f7e9fc8a1a3eeb5915e0cea25d98df8b62c29c5beea797f4c049a7c8894f66cb",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/receipt.json"
+    },
+    "C05/native/receipt.json": {
+      "bytes": 1977,
+      "sha256": "26276891ad9bf54a92e6e09e72da31b06b1a04467422e82684036b5290311f80",
+      "origin": ".verification/motion/activity_pose_remaining10-c05-r1/receipt.json"
+    },
+    "C05/receipt.json": {
+      "bytes": 11318,
+      "sha256": "ec8aa6f06d8009a84f87227809c1fbfeef0f05f4e18ede4e8b20a107030e7f1d",
+      "origin": ".verification/motion/compatible_c05_supply_fit_r1/receipt.json"
+    },
+    "C06/blender.log": {
+      "bytes": 656,
+      "sha256": "ee3fd61ff0b7966e36dec8de538f47b11690ad63db04aa0cf343029f033e394d",
+      "origin": ".verification/motion/compatible_c06_supply_fit_r1/blender.log"
+    },
+    "C06/C06_supply_fit_proposal.blend": {
+      "bytes": 8852805,
+      "sha256": "7ac6b3bac644daa746e2c6687c52c2fdcb548b76e094359199a59cff725964bb",
+      "origin": ".verification/motion/compatible_c06_supply_fit_r1/fit/C06_supply_fit_proposal.blend"
+    },
+    "C06/compatible_activity_fit.py": {
+      "bytes": 24733,
+      "sha256": "82e60a69996c44b8195a80b710a026e0b764c300f55320fcb1eb310881077904",
+      "origin": ".verification/motion/compatible_c06_supply_fit_r1/compatible_activity_fit.py"
+    },
+    "C06/compatible_activity_inspector.py": {
+      "bytes": 28629,
+      "sha256": "20afd8402c624c6d40b3861da9bb8730118b5b1fa832ad2f60aecd71b7cce83e",
+      "origin": ".verification/motion/compatible_c06_supply_fit_r1/compatible_activity_inspector.py"
+    },
+    "C06/fit_receipt.json": {
+      "bytes": 9614,
+      "sha256": "defd211c5cf9876fc336a9713912abfd3e0f98c5fe46466009b2865aa19afb1b",
+      "origin": ".verification/motion/compatible_c06_supply_fit_r1/fit/receipt.json"
+    },
+    "C06/inspection.json": {
+      "bytes": 624435,
+      "sha256": "70672289a1c2b096bc1e0e05c8692b31cd943a8fdb73f93ee4825c1b43949400",
+      "origin": ".verification/motion/compatible_c06_supply_fit_r1/inspection.json"
+    },
+    "C06/native/native.log": {
+      "bytes": 324,
+      "sha256": "eba72e1dac8911f949becadacb064d2d8ded1eae264e3614d925d0833b42007b",
+      "origin": ".verification/motion/activity_pose_remaining10-c06-r1/native.log"
+    },
+    "C06/native/pose_receipt.json": {
+      "bytes": 2923037,
+      "sha256": "3988e8190ad6a9fdc91963a9bb1f4ebadeb6307379d6c095471e2056b29a15db",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/receipt.json"
+    },
+    "C06/native/receipt.json": {
+      "bytes": 1978,
+      "sha256": "010362b405fccb1129dff404eac0f861b218699f151bd8a8551b5e7aeff16f0f",
+      "origin": ".verification/motion/activity_pose_remaining10-c06-r1/receipt.json"
+    },
+    "C06/receipt.json": {
+      "bytes": 11318,
+      "sha256": "a860267c5c20f720f60ba869feef476aea4be8de6f81c016f4a2cd40a1c3d5b3",
+      "origin": ".verification/motion/compatible_c06_supply_fit_r1/receipt.json"
+    },
+    "C07/blender.log": {
+      "bytes": 657,
+      "sha256": "b83ce2e1dd7e3aeeec3ca0f511e35b765f1f082b5cfd0bad7522ba6fd9144084",
+      "origin": ".verification/motion/compatible_c07_supply_fit_r1/blender.log"
+    },
+    "C07/C07_supply_fit_proposal.blend": {
+      "bytes": 10653548,
+      "sha256": "8657c9d9fb943497d710b48f49c11e05e78d0c0454482289e809471f7a02b828",
+      "origin": ".verification/motion/compatible_c07_supply_fit_r1/fit/C07_supply_fit_proposal.blend"
+    },
+    "C07/compatible_activity_fit.py": {
+      "bytes": 24733,
+      "sha256": "8a292502e01a95858a4c47a74e08a6d5c6029a5fb21fb3ad515d2461fc20fcd5",
+      "origin": ".verification/motion/compatible_c07_supply_fit_r1/compatible_activity_fit.py"
+    },
+    "C07/compatible_activity_inspector.py": {
+      "bytes": 28629,
+      "sha256": "92ed53c1af33dacc808d9ca14e67258872ef88fe1bafb717d1bcd0954f13c0b4",
+      "origin": ".verification/motion/compatible_c07_supply_fit_r1/compatible_activity_inspector.py"
+    },
+    "C07/fit_receipt.json": {
+      "bytes": 10446,
+      "sha256": "cc35221ca11dbd967ee191fdbe77cefafc29514facc3906fd553427e926bd9b7",
+      "origin": ".verification/motion/compatible_c07_supply_fit_r1/fit/receipt.json"
+    },
+    "C07/inspection.json": {
+      "bytes": 591064,
+      "sha256": "28e4af759e6158d7716ca1526e5e29be9b014e9764da019de1bcdaf0d052bd1c",
+      "origin": ".verification/motion/compatible_c07_supply_fit_r1/inspection.json"
+    },
+    "C07/native/native.log": {
+      "bytes": 324,
+      "sha256": "122684b03ace7250ceebd146ea54a8d4f9ed3f154aa5aa2a9aeb595e1e6ed725",
+      "origin": ".verification/motion/activity_pose_remaining10-c07-r1/native.log"
+    },
+    "C07/native/pose_receipt.json": {
+      "bytes": 3294333,
+      "sha256": "5c65aa293183a1fac96f208d25dc63d2a0ba9bd55ecec55cf592d24cf358a12b",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/receipt.json"
+    },
+    "C07/native/receipt.json": {
+      "bytes": 1978,
+      "sha256": "d5c65da34d40f8f729b9245f2f599dc763f8f00328f2b891666e26ccaa6432e4",
+      "origin": ".verification/motion/activity_pose_remaining10-c07-r1/receipt.json"
+    },
+    "C07/receipt.json": {
+      "bytes": 11317,
+      "sha256": "c4dc286509259a3665b87531b4a45f37b69e24d193fe6e2e481fed3ef944f05a",
+      "origin": ".verification/motion/compatible_c07_supply_fit_r1/receipt.json"
+    },
+    "C08/blender.log": {
+      "bytes": 662,
+      "sha256": "4c090a613f304213cc03d32b37864e996432cfb060489b3576ab0854b4445805",
+      "origin": ".verification/motion/compatible_c08_supply_fit_r1/blender.log"
+    },
+    "C08/C08_supply_fit_proposal.blend": {
+      "bytes": 8814801,
+      "sha256": "c9e50b00077f42f0535505bfff18e12edf4fe62c13b31a631e8341e5866bc8d2",
+      "origin": ".verification/motion/compatible_c08_supply_fit_r1/fit/C08_supply_fit_proposal.blend"
+    },
+    "C08/compatible_activity_fit.py": {
+      "bytes": 24733,
+      "sha256": "737a2c744207f13931a5f54c434ea4c566ff21afc5d9e39c0cc106720d39c83d",
+      "origin": ".verification/motion/compatible_c08_supply_fit_r1/compatible_activity_fit.py"
+    },
+    "C08/compatible_activity_inspector.py": {
+      "bytes": 28629,
+      "sha256": "dad4763c1b097c390e2c2d3117cacb9d81b5856670c46861596e6f36731aab86",
+      "origin": ".verification/motion/compatible_c08_supply_fit_r1/compatible_activity_inspector.py"
+    },
+    "C08/fit_receipt.json": {
+      "bytes": 8957,
+      "sha256": "7fab55bf61f850f14cb84a8fb35bea99e3942f94c5ce181d82261310e315dd12",
+      "origin": ".verification/motion/compatible_c08_supply_fit_r1/fit/receipt.json"
+    },
+    "C08/inspection.json": {
+      "bytes": 652963,
+      "sha256": "13484ae5e49136581d04e3ee3d1825bb7a108b0f47dfaf85a60f8ba79435da24",
+      "origin": ".verification/motion/compatible_c08_supply_fit_r1/inspection.json"
+    },
+    "C08/native/native.log": {
+      "bytes": 324,
+      "sha256": "46bf3b4503cc5e6c95f41d31069bc78972004bd14090ceb5d2724aa9e05299fe",
+      "origin": ".verification/motion/activity_pose_remaining10-c08-r1/native.log"
+    },
+    "C08/native/pose_receipt.json": {
+      "bytes": 2926289,
+      "sha256": "e9ad4b1911f145d092210a581bc79d0b77c5d621d28377561fda2ed59b92d7a7",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/receipt.json"
+    },
+    "C08/native/receipt.json": {
+      "bytes": 1978,
+      "sha256": "b354b86d4b9d33754b9194966e61929dcca1ddada6f26ce5688b7e392b1cc6a6",
+      "origin": ".verification/motion/activity_pose_remaining10-c08-r1/receipt.json"
+    },
+    "C08/receipt.json": {
+      "bytes": 11318,
+      "sha256": "bad510456140fb693ef485c964a41f0d7c4a209d751409cfeea9e2675e04f6e7",
+      "origin": ".verification/motion/compatible_c08_supply_fit_r1/receipt.json"
+    },
+    "C12/blender.log": {
+      "bytes": 650,
+      "sha256": "4eb3b4df0dbedc10d4195fcdc3710d62b8574553442b75b61245a64e23c99634",
+      "origin": ".verification/motion/compatible_c12_supply_fit_r1/blender.log"
+    },
+    "C12/C12_supply_fit_proposal.blend": {
+      "bytes": 7366795,
+      "sha256": "1543cecbc772118d662b22c418c9422d54ead89a86b5b79ec6271fa4313cd11a",
+      "origin": ".verification/motion/compatible_c12_supply_fit_r1/fit/C12_supply_fit_proposal.blend"
+    },
+    "C12/compatible_activity_fit.py": {
+      "bytes": 24733,
+      "sha256": "110e6e8aa42201320be8f2d86fa81d00c2f3073e61a8e9d7f4d581e8d83bec6b",
+      "origin": ".verification/motion/compatible_c12_supply_fit_r1/compatible_activity_fit.py"
+    },
+    "C12/compatible_activity_inspector.py": {
+      "bytes": 28629,
+      "sha256": "6313fe243052a64533f0aedd10be9be730d3c77754b3267a8d361a9d968ddfe6",
+      "origin": ".verification/motion/compatible_c12_supply_fit_r1/compatible_activity_inspector.py"
+    },
+    "C12/fit_receipt.json": {
+      "bytes": 10186,
+      "sha256": "8094712ab9875e152950c646b0fa62fef753f774698f050027a25468eef35910",
+      "origin": ".verification/motion/compatible_c12_supply_fit_r1/fit/receipt.json"
+    },
+    "C12/inspection.json": {
+      "bytes": 783496,
+      "sha256": "5afd8f539898d8592be0c9ba0d61b193ac4a9ab9359d215a78480ce0aaa688b2",
+      "origin": ".verification/motion/compatible_c12_supply_fit_r1/inspection.json"
+    },
+    "C12/native/native.log": {
+      "bytes": 324,
+      "sha256": "ce9b8156ee0d9fcef1e72d592e3b178f08f7673b4566d0b878fcc0b37192fa21",
+      "origin": ".verification/motion/activity_pose_remaining10-c12-r1/native.log"
+    },
+    "C12/native/pose_receipt.json": {
+      "bytes": 2875745,
+      "sha256": "1d84587f7a2564dcb8b752f3fc733148e86940f3e7bc288cec7efed118e4fdef",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/receipt.json"
+    },
+    "C12/native/receipt.json": {
+      "bytes": 1979,
+      "sha256": "d26023976b5e5de3e2dcfb44206ccb6e1c5537ce5d6cb49e2c080f129333533f",
+      "origin": ".verification/motion/activity_pose_remaining10-c12-r1/receipt.json"
+    },
+    "C12/receipt.json": {
+      "bytes": 11317,
+      "sha256": "1ce8585eb8f2cda81576a6d4c8061dec087e5a28d0078aa0c5bf2c745e08bf7a",
+      "origin": ".verification/motion/compatible_c12_supply_fit_r1/receipt.json"
+    },
+    "shared/fit_helpers/receipt.json": {
+      "bytes": 8259,
+      "sha256": "20e40a0df100a97dccf1f7aa939ed0f66fe3d0e3e6ff2168317490f5752bf655",
+      "origin": ".verification/motion/c11_activity_goal_trial_blender_r1/receipt.json"
+    },
+    "shared/fit_helpers/tools/activity_pose_rigid_channel_transport.py": {
+      "bytes": 3670,
+      "sha256": "94e78ae488d83428c9c23de591846722f9f31a7d9fa28faa4536544945a64d01",
+      "origin": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/activity_pose_rigid_channel_transport.py"
+    },
+    "shared/fit_helpers/tools/activity_pose_weight_transport.py": {
+      "bytes": 3531,
+      "sha256": "30a43b20aa5c93d63a7cab6f41357bc635ad9e547b9ca660f8682f4d7e921260",
+      "origin": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/activity_pose_weight_transport.py"
+    },
+    "shared/fit_helpers/tools/inspect_living_activity_carrier.py": {
+      "bytes": 28488,
+      "sha256": "07e20b4c555f43c53381384f3bd50d33c74409ca52158b38a4b75c96b0fb2609",
+      "origin": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/inspect_living_activity_carrier.py"
+    },
+    "shared/fit_helpers/tools/inspect_retained_prop_carrier.py": {
+      "bytes": 7015,
+      "sha256": "92858cc41fd262f69a05ed6938864419a16e3bcf2c92b607ec0e0620cab3ac74",
+      "origin": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/inspect_retained_prop_carrier.py"
+    },
+    "shared/fit_helpers/tools/probe_c11_activity_fits.py": {
+      "bytes": 29945,
+      "sha256": "c1088e3930603a75e775f30377e1bfc81709fa4596f024dc9c74321ad07e96df",
+      "origin": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/probe_c11_activity_fits.py"
+    },
+    "shared/native_tools/activity_pose_skin_equivalence.gd": {
+      "bytes": 15141,
+      "sha256": "156e4adec932de287f617f9dea9db5a8935d085487e4c3232d6754e99c917e6e",
+      "origin": "art_source/art_recovery_v2/tools/activity_pose_skin_equivalence.gd"
+    },
+    "shared/native_tools/activity_pose_weight_transport.gd": {
+      "bytes": 18534,
+      "sha256": "6e51220dac221691141f378d88dc057eae7f8cca8ab1dc1d7a895591d64ecbbf",
+      "origin": "art_source/art_recovery_v2/tools/activity_pose_weight_transport.gd"
+    },
+    "shared/native_tools/export_living_activity_pose_inputs.gd": {
+      "bytes": 29353,
+      "sha256": "5e11ce4f762fade2bf11f516a4e0f5307f7048bcabe7b54cd3081a9744f4fc85",
+      "origin": ".verification/motion/activity_pose_pre_rigid_sources/export_living_activity_pose_inputs.gd"
+    },
+    "shared/prop/native_readback_receipt.json": {
+      "bytes": 8094,
+      "sha256": "7ff0fd58756ed88eb463e81fefa2066bb589901a01e690a2c48acca2b8dca965",
+      "origin": ".verification/motion/retained_held_props_postcheck_r1/receipt.json"
+    },
+    "shared/prop/prior_native_receipt.json": {
+      "bytes": 53467,
+      "sha256": "a6a160aecd0d0db627db5dec52e39fc03349519e43afba5db90166304f22b1ab",
+      "origin": ".verification/motion/retained_held_props_c11_r4/receipt.json"
+    },
+    "shared/prop/retained_props_C11.json": {
+      "bytes": 10894,
+      "sha256": "7fa29b6aaf6a514ad341ea9f3254376df09eb4c0db64f44f095a0855a43ccf84",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_props_C11.json"
+    },
+    "shared/prop/retained_supply.glb": {
+      "bytes": 30832,
+      "sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.glb"
+    },
+    "shared/prop/retained_supply.json": {
+      "bytes": 4290,
+      "sha256": "b95562d40dab823dcd8eb06da6d390773db38546771f8cc4016bb2c8eaf983c7",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.json"
+    },
+    "shared/prop/retained_supply_channel_manifest.json": {
+      "bytes": 281809,
+      "sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_channel_manifest.json"
+    },
+    "shared/prop/retained_supply_mesh_manifest.json": {
+      "bytes": 235522,
+      "sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_mesh_manifest.json"
+    },
+    "shared/prop/retained_supply_raw.glb": {
+      "bytes": 30832,
+      "sha256": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e",
+      "origin": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_raw.glb"
+    }
+  },
+  "native_export_source_remap": {
+    "art_source/art_recovery_v2/tools/activity_pose_skin_equivalence.gd": "shared/native_tools/activity_pose_skin_equivalence.gd",
+    "art_source/art_recovery_v2/tools/activity_pose_weight_transport.gd": "shared/native_tools/activity_pose_weight_transport.gd",
+    "art_source/art_recovery_v2/tools/export_living_activity_pose_inputs.gd": "shared/native_tools/export_living_activity_pose_inputs.gd"
+  },
+  "measurement_input_references": {
+    ".verification/creatures/run_candidate_authoring.py": {
+      "path": ".verification/creatures/run_candidate_authoring.py",
+      "bytes": 11125,
+      "sha256": "9b1361270ac48012dc087de38ac2ad01f0ad53ba88d7b059c9922b3084a81e17",
+      "tracked_at_source_review": false
+    },
+    ".verification/creatures/run_candidate_serial.py": {
+      "path": ".verification/creatures/run_candidate_serial.py",
+      "bytes": 18067,
+      "sha256": "132d269b53bc313ae330f2451a78b88c7a1b89841685ac66faf60991d48f77e5",
+      "tracked_at_source_review": false
+    },
+    ".verification/motion/activity_pose_remaining10-c02-r1/native.log": {
+      "path": ".verification/motion/activity_pose_remaining10-c02-r1/native.log",
+      "bytes": 324,
+      "sha256": "ea23a236919be699f4b65d10793d6f2a953b0df569ef16d9b8f7f4ef783d6b1f",
+      "tracked_at_source_review": false,
+      "archive_path": "C02/native/native.log"
+    },
+    ".verification/motion/activity_pose_remaining10-c02-r1/receipt.json": {
+      "path": ".verification/motion/activity_pose_remaining10-c02-r1/receipt.json",
+      "bytes": 1978,
+      "sha256": "751c88525f65f526afe3fe097527f40069d3ecd55848895e9063972da073ccbf",
+      "tracked_at_source_review": false,
+      "archive_path": "C02/native/receipt.json"
+    },
+    ".verification/motion/activity_pose_remaining10-c05-r1/native.log": {
+      "path": ".verification/motion/activity_pose_remaining10-c05-r1/native.log",
+      "bytes": 324,
+      "sha256": "eff09dd99bb28df146050c4e327553c8b42a67f047538f105be8deaa574b8db7",
+      "tracked_at_source_review": false,
+      "archive_path": "C05/native/native.log"
+    },
+    ".verification/motion/activity_pose_remaining10-c05-r1/receipt.json": {
+      "path": ".verification/motion/activity_pose_remaining10-c05-r1/receipt.json",
+      "bytes": 1977,
+      "sha256": "26276891ad9bf54a92e6e09e72da31b06b1a04467422e82684036b5290311f80",
+      "tracked_at_source_review": false,
+      "archive_path": "C05/native/receipt.json"
+    },
+    ".verification/motion/activity_pose_remaining10-c06-r1/native.log": {
+      "path": ".verification/motion/activity_pose_remaining10-c06-r1/native.log",
+      "bytes": 324,
+      "sha256": "eba72e1dac8911f949becadacb064d2d8ded1eae264e3614d925d0833b42007b",
+      "tracked_at_source_review": false,
+      "archive_path": "C06/native/native.log"
+    },
+    ".verification/motion/activity_pose_remaining10-c06-r1/receipt.json": {
+      "path": ".verification/motion/activity_pose_remaining10-c06-r1/receipt.json",
+      "bytes": 1978,
+      "sha256": "010362b405fccb1129dff404eac0f861b218699f151bd8a8551b5e7aeff16f0f",
+      "tracked_at_source_review": false,
+      "archive_path": "C06/native/receipt.json"
+    },
+    ".verification/motion/activity_pose_remaining10-c07-r1/native.log": {
+      "path": ".verification/motion/activity_pose_remaining10-c07-r1/native.log",
+      "bytes": 324,
+      "sha256": "122684b03ace7250ceebd146ea54a8d4f9ed3f154aa5aa2a9aeb595e1e6ed725",
+      "tracked_at_source_review": false,
+      "archive_path": "C07/native/native.log"
+    },
+    ".verification/motion/activity_pose_remaining10-c07-r1/receipt.json": {
+      "path": ".verification/motion/activity_pose_remaining10-c07-r1/receipt.json",
+      "bytes": 1978,
+      "sha256": "d5c65da34d40f8f729b9245f2f599dc763f8f00328f2b891666e26ccaa6432e4",
+      "tracked_at_source_review": false,
+      "archive_path": "C07/native/receipt.json"
+    },
+    ".verification/motion/activity_pose_remaining10-c08-r1/native.log": {
+      "path": ".verification/motion/activity_pose_remaining10-c08-r1/native.log",
+      "bytes": 324,
+      "sha256": "46bf3b4503cc5e6c95f41d31069bc78972004bd14090ceb5d2724aa9e05299fe",
+      "tracked_at_source_review": false,
+      "archive_path": "C08/native/native.log"
+    },
+    ".verification/motion/activity_pose_remaining10-c08-r1/receipt.json": {
+      "path": ".verification/motion/activity_pose_remaining10-c08-r1/receipt.json",
+      "bytes": 1978,
+      "sha256": "b354b86d4b9d33754b9194966e61929dcca1ddada6f26ce5688b7e392b1cc6a6",
+      "tracked_at_source_review": false,
+      "archive_path": "C08/native/receipt.json"
+    },
+    ".verification/motion/activity_pose_remaining10-c12-r1/native.log": {
+      "path": ".verification/motion/activity_pose_remaining10-c12-r1/native.log",
+      "bytes": 324,
+      "sha256": "ce9b8156ee0d9fcef1e72d592e3b178f08f7673b4566d0b878fcc0b37192fa21",
+      "tracked_at_source_review": false,
+      "archive_path": "C12/native/native.log"
+    },
+    ".verification/motion/activity_pose_remaining10-c12-r1/receipt.json": {
+      "path": ".verification/motion/activity_pose_remaining10-c12-r1/receipt.json",
+      "bytes": 1979,
+      "sha256": "d26023976b5e5de3e2dcfb44206ccb6e1c5537ce5d6cb49e2c080f129333533f",
+      "tracked_at_source_review": false,
+      "archive_path": "C12/native/receipt.json"
+    },
+    ".verification/motion/activity_pose_remaining10_r1/receipt.json": {
+      "path": ".verification/motion/activity_pose_remaining10_r1/receipt.json",
+      "bytes": 6912,
+      "sha256": "0c8242549210940d0b63cbdb2f037fb78d65aa75be716b882996c24eb8b4e0a3",
+      "tracked_at_source_review": false
+    },
+    ".verification/motion/c11_activity_goal_trial_blender_r1/receipt.json": {
+      "path": ".verification/motion/c11_activity_goal_trial_blender_r1/receipt.json",
+      "bytes": 8259,
+      "sha256": "20e40a0df100a97dccf1f7aa939ed0f66fe3d0e3e6ff2168317490f5752bf655",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/fit_helpers/receipt.json"
+    },
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/activity_pose_rigid_channel_transport.py": {
+      "path": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/activity_pose_rigid_channel_transport.py",
+      "bytes": 3670,
+      "sha256": "94e78ae488d83428c9c23de591846722f9f31a7d9fa28faa4536544945a64d01",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/fit_helpers/tools/activity_pose_rigid_channel_transport.py"
+    },
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/activity_pose_weight_transport.py": {
+      "path": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/activity_pose_weight_transport.py",
+      "bytes": 3531,
+      "sha256": "30a43b20aa5c93d63a7cab6f41357bc635ad9e547b9ca660f8682f4d7e921260",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/fit_helpers/tools/activity_pose_weight_transport.py"
+    },
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/inspect_living_activity_carrier.py": {
+      "path": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/inspect_living_activity_carrier.py",
+      "bytes": 28488,
+      "sha256": "07e20b4c555f43c53381384f3bd50d33c74409ca52158b38a4b75c96b0fb2609",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/fit_helpers/tools/inspect_living_activity_carrier.py"
+    },
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/inspect_retained_prop_carrier.py": {
+      "path": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/inspect_retained_prop_carrier.py",
+      "bytes": 7015,
+      "sha256": "92858cc41fd262f69a05ed6938864419a16e3bcf2c92b607ec0e0620cab3ac74",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/fit_helpers/tools/inspect_retained_prop_carrier.py"
+    },
+    ".verification/motion/c11_activity_goal_trial_blender_r1/tools/probe_c11_activity_fits.py": {
+      "path": ".verification/motion/c11_activity_goal_trial_blender_r1/tools/probe_c11_activity_fits.py",
+      "bytes": 29945,
+      "sha256": "c1088e3930603a75e775f30377e1bfc81709fa4596f024dc9c74321ad07e96df",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/fit_helpers/tools/probe_c11_activity_fits.py"
+    },
+    ".verification/motion/compatible_c02_supply_fit_r1/compatible_activity_fit.py": {
+      "path": ".verification/motion/compatible_c02_supply_fit_r1/compatible_activity_fit.py",
+      "bytes": 24733,
+      "sha256": "a27f0a212cf6ca35e9055da53b1179ca942b2bce017e40fe066fed6acaf00ae7",
+      "tracked_at_source_review": false,
+      "archive_path": "C02/compatible_activity_fit.py"
+    },
+    ".verification/motion/compatible_c02_supply_fit_r1/compatible_activity_inspector.py": {
+      "path": ".verification/motion/compatible_c02_supply_fit_r1/compatible_activity_inspector.py",
+      "bytes": 28629,
+      "sha256": "ee86c68fa65c323ec53c7e1064beff2765ade90331fa47b1ac085741be3baf3d",
+      "tracked_at_source_review": false,
+      "archive_path": "C02/compatible_activity_inspector.py"
+    },
+    ".verification/motion/compatible_c05_supply_fit_r1/compatible_activity_fit.py": {
+      "path": ".verification/motion/compatible_c05_supply_fit_r1/compatible_activity_fit.py",
+      "bytes": 24733,
+      "sha256": "42f2c6207cb66b73073100aaf1e7fae1ab7259b5d21f5855e1f444203046e74d",
+      "tracked_at_source_review": false,
+      "archive_path": "C05/compatible_activity_fit.py"
+    },
+    ".verification/motion/compatible_c05_supply_fit_r1/compatible_activity_inspector.py": {
+      "path": ".verification/motion/compatible_c05_supply_fit_r1/compatible_activity_inspector.py",
+      "bytes": 28629,
+      "sha256": "b62bf04278312d4b77b3d5d92338b0f5070fdde5d681f6ba52c92f3fbc052648",
+      "tracked_at_source_review": false,
+      "archive_path": "C05/compatible_activity_inspector.py"
+    },
+    ".verification/motion/compatible_c06_supply_fit_r1/compatible_activity_fit.py": {
+      "path": ".verification/motion/compatible_c06_supply_fit_r1/compatible_activity_fit.py",
+      "bytes": 24733,
+      "sha256": "82e60a69996c44b8195a80b710a026e0b764c300f55320fcb1eb310881077904",
+      "tracked_at_source_review": false,
+      "archive_path": "C06/compatible_activity_fit.py"
+    },
+    ".verification/motion/compatible_c06_supply_fit_r1/compatible_activity_inspector.py": {
+      "path": ".verification/motion/compatible_c06_supply_fit_r1/compatible_activity_inspector.py",
+      "bytes": 28629,
+      "sha256": "20afd8402c624c6d40b3861da9bb8730118b5b1fa832ad2f60aecd71b7cce83e",
+      "tracked_at_source_review": false,
+      "archive_path": "C06/compatible_activity_inspector.py"
+    },
+    ".verification/motion/compatible_c07_supply_fit_r1/compatible_activity_fit.py": {
+      "path": ".verification/motion/compatible_c07_supply_fit_r1/compatible_activity_fit.py",
+      "bytes": 24733,
+      "sha256": "8a292502e01a95858a4c47a74e08a6d5c6029a5fb21fb3ad515d2461fc20fcd5",
+      "tracked_at_source_review": false,
+      "archive_path": "C07/compatible_activity_fit.py"
+    },
+    ".verification/motion/compatible_c07_supply_fit_r1/compatible_activity_inspector.py": {
+      "path": ".verification/motion/compatible_c07_supply_fit_r1/compatible_activity_inspector.py",
+      "bytes": 28629,
+      "sha256": "92ed53c1af33dacc808d9ca14e67258872ef88fe1bafb717d1bcd0954f13c0b4",
+      "tracked_at_source_review": false,
+      "archive_path": "C07/compatible_activity_inspector.py"
+    },
+    ".verification/motion/compatible_c08_supply_fit_r1/compatible_activity_fit.py": {
+      "path": ".verification/motion/compatible_c08_supply_fit_r1/compatible_activity_fit.py",
+      "bytes": 24733,
+      "sha256": "737a2c744207f13931a5f54c434ea4c566ff21afc5d9e39c0cc106720d39c83d",
+      "tracked_at_source_review": false,
+      "archive_path": "C08/compatible_activity_fit.py"
+    },
+    ".verification/motion/compatible_c08_supply_fit_r1/compatible_activity_inspector.py": {
+      "path": ".verification/motion/compatible_c08_supply_fit_r1/compatible_activity_inspector.py",
+      "bytes": 28629,
+      "sha256": "dad4763c1b097c390e2c2d3117cacb9d81b5856670c46861596e6f36731aab86",
+      "tracked_at_source_review": false,
+      "archive_path": "C08/compatible_activity_inspector.py"
+    },
+    ".verification/motion/compatible_c12_supply_fit_r1/compatible_activity_fit.py": {
+      "path": ".verification/motion/compatible_c12_supply_fit_r1/compatible_activity_fit.py",
+      "bytes": 24733,
+      "sha256": "110e6e8aa42201320be8f2d86fa81d00c2f3073e61a8e9d7f4d581e8d83bec6b",
+      "tracked_at_source_review": false,
+      "archive_path": "C12/compatible_activity_fit.py"
+    },
+    ".verification/motion/compatible_c12_supply_fit_r1/compatible_activity_inspector.py": {
+      "path": ".verification/motion/compatible_c12_supply_fit_r1/compatible_activity_inspector.py",
+      "bytes": 28629,
+      "sha256": "6313fe243052a64533f0aedd10be9be730d3c77754b3267a8d361a9d968ddfe6",
+      "tracked_at_source_review": false,
+      "archive_path": "C12/compatible_activity_inspector.py"
+    },
+    ".verification/motion/retained_held_props_postcheck_r1/receipt.json": {
+      "path": ".verification/motion/retained_held_props_postcheck_r1/receipt.json",
+      "bytes": 8094,
+      "sha256": "7ff0fd58756ed88eb463e81fefa2066bb589901a01e690a2c48acca2b8dca965",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/prop/native_readback_receipt.json"
+    },
+    ".verification/motion/run_anwen_activity_fit.py": {
+      "path": ".verification/motion/run_anwen_activity_fit.py",
+      "bytes": 6907,
+      "sha256": "55949e550477c14a00e67c2653ec0c4bf588b0f0ecd8603c86868e55a11b3d96",
+      "tracked_at_source_review": false
+    },
+    ".verification/motion/run_anwen_activity_fit_r2.py": {
+      "path": ".verification/motion/run_anwen_activity_fit_r2.py",
+      "bytes": 9392,
+      "sha256": "d012edd5b509f8e3326b578a4104d48c937e899bd006c394711fbc89611a2188",
+      "tracked_at_source_review": false
+    },
+    ".verification/motion/run_compatible_cast_activity_fit.py": {
+      "path": ".verification/motion/run_compatible_cast_activity_fit.py",
+      "bytes": 16741,
+      "sha256": "e92da2fba71a388bc0bc368ec8200f856d415fe0d60451ebe52284f7e38a9c69",
+      "tracked_at_source_review": false
+    },
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\__init__.py": {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\__init__.py",
+      "bytes": 89287,
+      "sha256": "29b040a623c4f32ab12d00e795e3d6610bbae67f6c517302f122e7a6b2ecaa0a",
+      "tracked_at_source_review": false
+    },
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\animation_node.py": {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\animation_node.py",
+      "bytes": 6870,
+      "sha256": "5fcda6905c3c60912366973153518b1e10a9fb30f221f7d3a51876b306ae3845",
+      "tracked_at_source_review": false
+    },
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\animation_utils.py": {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\animation_utils.py",
+      "bytes": 6975,
+      "sha256": "7dc9201b1ce8d90e1827f1523ef86367af466d402671f00c695abacac2d8d74e",
+      "tracked_at_source_review": false
+    },
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\mesh.py": {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\mesh.py",
+      "bytes": 44257,
+      "sha256": "9fbedc0de7e97f0370800b98bfd86f2b53117c72fee59e38a460f08a54fd0f71",
+      "tracked_at_source_review": false
+    },
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\vnode.py": {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\5.2\\scripts\\addons_core\\io_scene_gltf2\\blender\\imp\\vnode.py",
+      "bytes": 24733,
+      "sha256": "08a72727a16f78b965e53b27f0ac326b32b460d9ea9db61ed21312652387d0b5",
+      "tracked_at_source_review": false
+    },
+    "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe": {
+      "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+      "bytes": 113041880,
+      "sha256": "9d5df7a9ac2a7c5085aa0669700021bfa5c5e92de167a2510b0d0942c34deab0",
+      "tracked_at_source_review": false
+    },
+    "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "bytes": 107312,
+      "sha256": "3c48fbdcc2ed5c55290e39bef50bd6b1da76f43f3069a4a2624d0b8876a605f5",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/C02_activity_poses.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/C02_activity_poses.glb",
+      "bytes": 9977128,
+      "sha256": "adea6afd223452c03cd1d5a5281c79efa80744e4f416149bee51ee6e2a3d9d59",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/C02_activity_poses_raw.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/C02_activity_poses_raw.glb",
+      "bytes": 9977128,
+      "sha256": "a5bad0d93fa8aa8e0205235b0d2676a1bef286da5e4ce2660ff6c083296a53a1",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/receipt.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/receipt.json",
+      "bytes": 2911105,
+      "sha256": "0b7b2a1d028462c26dee1dd7d2176f532d1e9bfd062491b381e7b245d2432568",
+      "tracked_at_source_review": false,
+      "archive_path": "C02/native/pose_receipt.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/retained_skin_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C02/6379455e9ace88ef55a0f6a4232523ce318a3db331b862ae80b6f137a7902f2c/retained_skin_manifest.json",
+      "bytes": 6296205,
+      "sha256": "2d040cc5cc3a7dc4c036e7fccbdc12e4a79fd623e750005fb32272a3bd505d1f",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/C05_activity_poses.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/C05_activity_poses.glb",
+      "bytes": 11349488,
+      "sha256": "6d39546977f4985771db22942696ff2d9670440bdc515ede72a9eb92e701a6a9",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/C05_activity_poses_raw.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/C05_activity_poses_raw.glb",
+      "bytes": 11349488,
+      "sha256": "0a5a404000f07477bd6d7a0ea5517742a998eed642c3cfc51e4a13b48ec90407",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/receipt.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/receipt.json",
+      "bytes": 2884655,
+      "sha256": "f7e9fc8a1a3eeb5915e0cea25d98df8b62c29c5beea797f4c049a7c8894f66cb",
+      "tracked_at_source_review": false,
+      "archive_path": "C05/native/pose_receipt.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/retained_skin_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C05/0ea894d4fec09df00e095ba5fe8cd8b13b6949134a45fa8346510b5983a10b85/retained_skin_manifest.json",
+      "bytes": 15170923,
+      "sha256": "c29b436602e5834cc22845abaddd0ec514b671d1f6718046cd28de612fbcfd49",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/C06_activity_poses.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/C06_activity_poses.glb",
+      "bytes": 10051480,
+      "sha256": "5fa6ce34901bde4bc83c48ae879e68b8cfd51eabc00c3b465df88983694f74b5",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/C06_activity_poses_raw.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/C06_activity_poses_raw.glb",
+      "bytes": 10051480,
+      "sha256": "3dc1792490970ae992c674f168363417891d9eb1f7c261006932a13ba37bb87e",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/receipt.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/receipt.json",
+      "bytes": 2923037,
+      "sha256": "3988e8190ad6a9fdc91963a9bb1f4ebadeb6307379d6c095471e2056b29a15db",
+      "tracked_at_source_review": false,
+      "archive_path": "C06/native/pose_receipt.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/retained_skin_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C06/aba77d099be2020760cf3867ece4819be1ce3dcd23ab91e79885c7da43dbb90e/retained_skin_manifest.json",
+      "bytes": 6457621,
+      "sha256": "11f54718e64727f886148b84a5a9b1d32b857cf9e34d9731b06d10c85b0e95b5",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/C07_activity_poses.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/C07_activity_poses.glb",
+      "bytes": 11792652,
+      "sha256": "1fbafb177c12ba6f5d19400a77033e52109a6dac6516d8e9ed933c8e76bb9085",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/C07_activity_poses_raw.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/C07_activity_poses_raw.glb",
+      "bytes": 11792652,
+      "sha256": "52fb31eea79df3f7f8223eb25d359e8ebadfc682c844ecd612c809b1fd05a583",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/receipt.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/receipt.json",
+      "bytes": 3294333,
+      "sha256": "5c65aa293183a1fac96f208d25dc63d2a0ba9bd55ecec55cf592d24cf358a12b",
+      "tracked_at_source_review": false,
+      "archive_path": "C07/native/pose_receipt.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/retained_skin_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C07/3320acddb1de38271e18a13fcf4fb13c61eb38f6020bf971c146b469663ea39d/retained_skin_manifest.json",
+      "bytes": 4871753,
+      "sha256": "f755eefd68ee1221feea60d7252c34bb013f2eabfdcedf8a9a4efec33c2affaa",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/C08_activity_poses.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/C08_activity_poses.glb",
+      "bytes": 10059300,
+      "sha256": "017c9abfa038b9b795ca6291b09f305a892a3f1370f684aed586724feac33ada",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/C08_activity_poses_raw.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/C08_activity_poses_raw.glb",
+      "bytes": 10059300,
+      "sha256": "fc3f358a2e18dee61473234c0b7baa0dea7afb2023802c7c7de7ea75cec5c6a2",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/receipt.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/receipt.json",
+      "bytes": 2926289,
+      "sha256": "e9ad4b1911f145d092210a581bc79d0b77c5d621d28377561fda2ed59b92d7a7",
+      "tracked_at_source_review": false,
+      "archive_path": "C08/native/pose_receipt.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/retained_skin_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C08/49e7148f51cdf6c286116877e3e38e2f78a1ccae2e0257381302c6c34131b2fd/retained_skin_manifest.json",
+      "bytes": 6649467,
+      "sha256": "ee4b4a7d10a7e15e695e667ce6a36da0acc70f99708f953747af0ca13ba37c57",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/C12_activity_poses.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/C12_activity_poses.glb",
+      "bytes": 8862852,
+      "sha256": "00a6c6d76e925b90c91fd468c1de030ef314c99c753e0acf17265fab5e9d1fc2",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/C12_activity_poses_raw.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/C12_activity_poses_raw.glb",
+      "bytes": 8862852,
+      "sha256": "7480ce8076abe74dfb2d8415de1434e9393d2de39f7341287903706841410765",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/receipt.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/receipt.json",
+      "bytes": 2875745,
+      "sha256": "1d84587f7a2564dcb8b752f3fc733148e86940f3e7bc288cec7efed118e4fdef",
+      "tracked_at_source_review": false,
+      "archive_path": "C12/native/pose_receipt.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/retained_skin_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/activity_poses/C12/2cdb2661be68fe8fb5b89c124d34d525678a2a0822d5633e3b82ccbc7153e9d7/retained_skin_manifest.json",
+      "bytes": 5622437,
+      "sha256": "d90423dd1cc0bceb27792caa358ef12d1a568fa991046971ae48e67da2e04056",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread.glb",
+      "bytes": 37864,
+      "sha256": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread.json",
+      "bytes": 4586,
+      "sha256": "555db14802282e814ac6354bd1c867ee8dba6977945d889ea047c9870366e99f",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_channel_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_channel_manifest.json",
+      "bytes": 313374,
+      "sha256": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_mesh_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_mesh_manifest.json",
+      "bytes": 287107,
+      "sha256": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_raw.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_bread_raw.glb",
+      "bytes": 37864,
+      "sha256": "e38d87b0e9425aa5675c9be0a19f740015b67f95094eb3cc80347125aa1577f5",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_props_C11.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_props_C11.json",
+      "bytes": 10894,
+      "sha256": "7fa29b6aaf6a514ad341ea9f3254376df09eb4c0db64f44f095a0855a43ccf84",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/prop/retained_props_C11.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.glb",
+      "bytes": 30832,
+      "sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/prop/retained_supply.glb"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply.json",
+      "bytes": 4290,
+      "sha256": "b95562d40dab823dcd8eb06da6d390773db38546771f8cc4016bb2c8eaf983c7",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/prop/retained_supply.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_channel_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_channel_manifest.json",
+      "bytes": 281809,
+      "sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/prop/retained_supply_channel_manifest.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_mesh_manifest.json": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_mesh_manifest.json",
+      "bytes": 235522,
+      "sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/prop/retained_supply_mesh_manifest.json"
+    },
+    "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_raw.glb": {
+      "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment/retained_supply_raw.glb",
+      "bytes": 30832,
+      "sha256": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e",
+      "tracked_at_source_review": false,
+      "archive_path": "shared/prop/retained_supply_raw.glb"
+    },
+    "art_source/art_recovery_v2/tools/activity_pose_weight_transport.py": {
+      "path": "art_source/art_recovery_v2/tools/activity_pose_weight_transport.py",
+      "bytes": 3531,
+      "sha256": "30a43b20aa5c93d63a7cab6f41357bc635ad9e547b9ca660f8682f4d7e921260",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/tools/inspect_living_activity_carrier.py": {
+      "path": "art_source/art_recovery_v2/tools/inspect_living_activity_carrier.py",
+      "bytes": 28488,
+      "sha256": "924666b05deb73f30376f19194aefadb3978824717fcb8ba10c242daa96c6941",
+      "tracked_at_source_review": false
+    },
+    "art_source/art_recovery_v2/tools/probe_anwen_activity_fits.py": {
+      "path": "art_source/art_recovery_v2/tools/probe_anwen_activity_fits.py",
+      "bytes": 26071,
+      "sha256": "c310ada48bd0ce001d85f2c55812e2370a94c35c2589e9a837abed78214af0e3",
+      "tracked_at_source_review": false
+    }
+  },
+  "reproduction_note": "Original receipts retain historical absolute paths. Resolve repo files through inventory references. Large native carriers remain in the existing activity_poses directories.",
+  "runtime_installed": false,
+  "in_level_accepted": false,
+  "published": false
+}

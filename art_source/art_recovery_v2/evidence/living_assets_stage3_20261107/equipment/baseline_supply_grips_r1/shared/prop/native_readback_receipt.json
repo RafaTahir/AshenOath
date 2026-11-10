@@ -1,0 +1,186 @@
+{
+  "scope": "Retained C11 bread/supply native geometry and exact float32 postcheck",
+  "accepted": true,
+  "grip_verified": false,
+  "body_clearance_verified": false,
+  "visual_accepted": false,
+  "validation_only_retry": true,
+  "native_run_repeated": false,
+  "prior_receipt": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_held_props_c11_r4\\receipt.json",
+  "prior_receipt_sha256": "a6a160aecd0d0db627db5dec52e39fc03349519e43afba5db90166304f22b1ab",
+  "engine_identity_before": {
+    "console_wrapper": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+    },
+    "main_executable": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+      "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+    }
+  },
+  "runs": [
+    {
+      "name": "parse",
+      "passed": true,
+      "retained_native_execution": true,
+      "pid": 6856,
+      "exit_code": 0,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_held_props_c11_r4\\parse.log",
+      "prior_postcheck_errors": []
+    },
+    {
+      "name": "synthetic_contract",
+      "passed": true,
+      "retained_native_execution": true,
+      "pid": 15088,
+      "exit_code": 0,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_held_props_c11_r4\\synthetic_contract.log",
+      "prior_postcheck_errors": []
+    },
+    {
+      "name": "actual_props",
+      "passed": true,
+      "retained_native_execution": true,
+      "pid": 19072,
+      "exit_code": 0,
+      "log": "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_held_props_c11_r4\\actual_props.log",
+      "prior_postcheck_errors": [
+        "Original packed cells do not equal actual native channel readback"
+      ]
+    }
+  ],
+  "outputs": {
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_props_C11.json": {
+      "sha256": "7fa29b6aaf6a514ad341ea9f3254376df09eb4c0db64f44f095a0855a43ccf84",
+      "bytes": 10894
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread.glb": {
+      "sha256": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+      "bytes": 37864
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread.json": {
+      "sha256": "555db14802282e814ac6354bd1c867ee8dba6977945d889ea047c9870366e99f",
+      "bytes": 4586
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_mesh_manifest.json": {
+      "sha256": "3ca65df625d0413f6c2e9afd7b9d93fb33c8e9db475f53829a1d0a8654a61f10",
+      "bytes": 287107
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_raw.glb": {
+      "sha256": "e38d87b0e9425aa5675c9be0a19f740015b67f95094eb3cc80347125aa1577f5",
+      "bytes": 37864
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread_channel_manifest.json": {
+      "sha256": "ff7b1b836689a3003e268a430c16f8cb9ef92bdfb349546db30206a2f13c4d5b",
+      "bytes": 313374
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply.glb": {
+      "sha256": "2caeb1876791059a92f4c27954e181849bf55dedd84d75abc0257219ea25bec0",
+      "bytes": 30832
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply.json": {
+      "sha256": "b95562d40dab823dcd8eb06da6d390773db38546771f8cc4016bb2c8eaf983c7",
+      "bytes": 4290
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_mesh_manifest.json": {
+      "sha256": "4836119849617903c38557c802b4c5d8b1cbb933f1eae5bade4c34cffa0ea528",
+      "bytes": 235522
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_raw.glb": {
+      "sha256": "1c5ae6246a3f3f90a94b7fecce5309d1af32a7a9b5f8e4b9fd744568df58052e",
+      "bytes": 30832
+    },
+    "art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_supply_channel_manifest.json": {
+      "sha256": "e8aedb3a15b9b69f18ef64445e1b0a9f916eca44ce329737cc0e7d1797622b26",
+      "bytes": 281809
+    }
+  },
+  "raw_carrier_identity": {
+    "bread": {
+      "verified": true,
+      "explicit_native_vertex_ids": true,
+      "nearest_point_mapping": false,
+      "component_tolerance": 1e-06,
+      "meshes": [
+        {
+          "name": "RetainedActivityVisual_bread",
+          "native_path": "RetainedActivityVisual_bread",
+          "node": 1,
+          "surfaces": [
+            {
+              "surface": 0,
+              "vertices": 462,
+              "triangles": 832,
+              "native_vertex_to_glb_vertex": "same explicit index",
+              "maximum_component_errors": {
+                "NORMAL": 5.596876144436935e-05,
+                "POSITION": 4.996003610813204e-16,
+                "TANGENT": 8.431077003484555e-05,
+                "TEXCOORD_0": 4.440892098500626e-16
+              },
+              "normal_tangent_transport": "exact original uint16 cells"
+            }
+          ]
+        },
+        {
+          "name": "ScoredFlatbreadCrust",
+          "native_path": "RetainedActivityVisual_bread/ScoredFlatbreadCrust",
+          "node": 2,
+          "surfaces": [
+            {
+              "surface": 0,
+              "vertices": 144,
+              "triangles": 48,
+              "native_vertex_to_glb_vertex": "same explicit index",
+              "maximum_component_errors": {
+                "NORMAL": 3.5796314477962166e-05,
+                "POSITION": 5.551115123125783e-17,
+                "TANGENT": 5.380809307095613e-05,
+                "TEXCOORD_0": 4.683753385137379e-17
+              },
+              "normal_tangent_transport": "exact original uint16 cells"
+            }
+          ]
+        }
+      ],
+      "grip_verified": false,
+      "visual_accepted": false
+    },
+    "supply": {
+      "verified": true,
+      "explicit_native_vertex_ids": true,
+      "nearest_point_mapping": false,
+      "component_tolerance": 1e-06,
+      "meshes": [
+        {
+          "name": "RetainedActivityVisual_supply",
+          "native_path": "RetainedActivityVisual_supply",
+          "node": 1,
+          "surfaces": [
+            {
+              "surface": 0,
+              "vertices": 576,
+              "triangles": 192,
+              "native_vertex_to_glb_vertex": "same explicit index",
+              "maximum_component_errors": {
+                "NORMAL": 5.6475400925126706e-05,
+                "POSITION": 4.440892098500626e-16,
+                "TANGENT": 8.454918861355853e-05,
+                "TEXCOORD_0": 4.440892098500626e-16
+              },
+              "normal_tangent_transport": "exact original uint16 cells"
+            }
+          ]
+        }
+      ],
+      "grip_verified": false,
+      "visual_accepted": false
+    }
+  },
+  "validation_sha256": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\verify_retained_held_props_r4_readback.py": "9a99332f4c00de4c97419a2a8065580d01cfb4b959bb8d7893f5bc971d2f9296",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\retained_held_props_postcheck_r1\\pure_tests.log": "6608f9731e89427ce3b7396bfc5cd8c9c7c99553513a2cfc921a2d34c6325f45",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\inspect_retained_prop_carrier.py": "92858cc41fd262f69a05ed6938864419a16e3bcf2c92b607ec0e0620cab3ac74",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\tools\\test_inspect_retained_prop_carrier.py": "1a1b7823305d743124b13f8d94187af4ae014f47a6bedce9e986aadf488a904f"
+  }
+}
