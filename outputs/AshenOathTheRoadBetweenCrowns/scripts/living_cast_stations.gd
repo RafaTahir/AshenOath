@@ -43,7 +43,7 @@ static func ensure_doorway_attention(zone_root: Node3D) -> void:
 	# The maintained house builder embeds the retained Door_1_Flat timber at
 	# this transform. Require its actual mesh vertex before naming a doorway;
 	# a house label or the unused old procedural doorway is not evidence.
-	var point := Vector3(0.514247,1.313862,0.031246) * Vector3(0.83,0.85,0.90) + Vector3(-0.42,0.35,-1.91)
+	var point := Vector3(0.514248, 1.286234, 0.029208) * Vector3(0.83,0.85,0.90) + Vector3(-0.42,0.35,-1.91)
 	for visual: MeshInstance3D in zone_root.find_children("AuthoredHouse", "MeshInstance3D", true, false):
 		var mesh := visual.mesh as ArrayMesh
 		if mesh == null: continue

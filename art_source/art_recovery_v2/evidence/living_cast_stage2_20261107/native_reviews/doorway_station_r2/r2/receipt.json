@@ -1,0 +1,99 @@
+{
+  "scope": "Native station and doorway geometry fixture only",
+  "accepted": true,
+  "inputs": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\station_doorway_native_r2_source\\verify_living_cast_stations.gd": {
+      "path": ".verification/motion/station_doorway_native_r2_source/verify_living_cast_stations.gd",
+      "bytes": 6729,
+      "sha256": "70c4e93151c15a7f62b14d126c7d8df9502352d913a7e81c9cf44440e160fef2"
+    },
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\station_doorway_native_r2_source\\living_cast_stations.gd": {
+      "path": ".verification/motion/station_doorway_native_r2_source/living_cast_stations.gd",
+      "bytes": 14915,
+      "sha256": "5814fd66fe0450e828102504ea188ae21039f3158a72defe56b014b5234b0c21"
+    },
+    "D:\\Temp\\AO_LivingCast_Stages234\\outputs\\AshenOathTheRoadBetweenCrowns\\scripts\\living_cast_stations.gd": {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/scripts/living_cast_stations.gd",
+      "bytes": 14915,
+      "sha256": "5814fd66fe0450e828102504ea188ae21039f3158a72defe56b014b5234b0c21"
+    },
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\c\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\GreyfenHouse_Authored.res": {
+      "path": ".verification/creatures/c/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored.res",
+      "bytes": 218435,
+      "sha256": "d0cda085f0c129404eceb230f0c12974ca01b009360a01530e47fa906b9d71af"
+    },
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\c\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\GreyfenHouse_Authored_1.res": {
+      "path": ".verification/creatures/c/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_1.res",
+      "bytes": 220791,
+      "sha256": "1d02a4fbd42c0b35ca7bb0b454c428e813065b093516fc24024a83e089bf3a45"
+    },
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\c\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\GreyfenHouse_Authored_2.res": {
+      "path": ".verification/creatures/c/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_2.res",
+      "bytes": 219303,
+      "sha256": "b6b4c8f25f8f4dbf2e51895d5d5c8fb8f7ab84675e1a6bf26eb5ec866b159188"
+    },
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\c\\outputs\\AshenOathTheRoadBetweenCrowns\\assets_external\\environment\\village\\GreyfenHouse_Authored_3.res": {
+      "path": ".verification/creatures/c/outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/village/GreyfenHouse_Authored_3.res",
+      "bytes": 222155,
+      "sha256": "f6fecb2d39523374b3783816b57e90a3c4ce93dcc88c0a4f347d82958c69e24c"
+    }
+  },
+  "engine": {
+    "console_wrapper": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+    },
+    "main_executable": {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64.exe",
+      "sha256": "ef90e929ba1a6a4322860285d97f40f4aa349c90329a91b0e8b55b8df0f4cb00"
+    }
+  },
+  "runs": [
+    {
+      "name": "parse",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\c\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--check-only",
+        "--script",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\station_doorway_native_r2_source\\verify_living_cast_stations.gd"
+      ],
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 14504,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.016,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.016,
+      "exit_code": 0,
+      "seconds": 0.875
+    },
+    {
+      "name": "native",
+      "command": [
+        "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\creatures\\c\\outputs\\AshenOathTheRoadBetweenCrowns",
+        "--script",
+        "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\station_doorway_native_r2_source\\verify_living_cast_stations.gd"
+      ],
+      "passed": true,
+      "timed_out": false,
+      "owned_tree_exited": true,
+      "pid": 3620,
+      "active_processes_after_root_wait": 1,
+      "accounting_quiescence_seconds": 0.016,
+      "termination_requested": false,
+      "active_processes_after_cleanup": 0,
+      "cleanup_seconds": 0.016,
+      "exit_code": 0,
+      "seconds": 0.984
+    }
+  ],
+  "error": null
+}
