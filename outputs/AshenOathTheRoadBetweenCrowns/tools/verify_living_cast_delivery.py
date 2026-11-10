@@ -15,6 +15,8 @@ from pathlib import Path
 ASSETS = ["C11", "C05", "C06", "C12", "C07", "C09", "C10", "C08", "P01"]
 GAME = "outputs/AshenOathTheRoadBetweenCrowns"
 ART = "art_source/art_recovery_v2"
+STAGE2_PROPS = ["station_" + name for name in ("nessa", "elna", "toma", "nera", "vale", "merrow", "edric")] + ["merrow_cup"]
+PROP_RESOURCES = "res://assets_external/environment_prepared/living_cast/"
 
 
 def read(path):
@@ -94,22 +96,113 @@ def verify_asset(repository: Path, asset: str) -> dict:
     raise ValueError("no native compiler receipt matches the current authored carrier and delivered library; rebuild required")
 
 
-def verify(repository, assets=ASSETS):
+def _require_hash(path: Path, expected, label: str) -> None:
+    if digest(path) != expected:
+        raise ValueError(f"{label} hash differs: {path.name}")
+
+
+def _verify_cup_inputs(game: Path, folder: Path, authored: dict, compiled: dict) -> None:
+    calibration_hash = compiled.get("calibration_sha256")
+    _require_hash(folder / "merrow_cup_calibration.json", calibration_hash, "Cup calibration")
+    archive_name = f"merrow_cup_calibration_{calibration_hash}.json"
+    archived = str(compiled.get("calibration_archive", "")).replace("\\", "/").rsplit("/", 1)[-1]
+    if archived != archive_name:
+        raise ValueError("Cup calibration archive identity differs from its compiler receipt")
+    _require_hash(folder / "receipts" / archive_name, calibration_hash, "Archived cup calibration")
+    _require_hash(game / "tools/build_merrow_cup.gd", compiled.get("compiler_sha256"), "Cup compiler")
+    actor_folder = folder.parent / "C10"
+    actor_source = compiled.get("actor_source_sha256")
+    _require_hash(actor_folder / "C10_life_review.glb", actor_source, "Merrow motion carrier")
+    actor = read(actor_folder / "authoring.json")
+    if (not isinstance(actor, dict) or actor.get("review_glb_sha256") != actor_source
+            or actor.get("baseline_sha256") != authored["baseline_sha256"]):
+        raise ValueError("Cup and Merrow carriers do not share the recorded baseline")
+    clearance_path = actor_folder / "source_cup_clearance.json"
+    _require_hash(clearance_path, compiled.get("source_clearance_sha256"), "Cup source clearance")
+    clearance = read(clearance_path)
+    if (not isinstance(clearance, dict) or authored.get("grip_verified") is not True or authored.get("rim_calibrated") is not True
+            or compiled.get("source_full_motion_clearance_verified") is not True
+            or clearance.get("source_trajectory_clear") is not True or clearance.get("full_trajectory_sampled") is not True
+            or clearance.get("actor_carrier_sha256") != actor_source or clearance.get("cup_carrier_sha256") != authored["carrier_sha256"]):
+        raise ValueError("Cup compilation lacks current source calibration and clearance")
+
+
+def verify_stage2_prop(repository: Path, asset: str) -> dict:
+    if asset not in STAGE2_PROPS:
+        raise ValueError("unknown Stage 2 prop: " + asset)
+    game = repository / GAME
+    folder = repository / ART / "models/living_cast_stage2_20261107/props"
+    cup = asset == "merrow_cup"
+    identity = "merrow" if cup else asset.removeprefix("station_")
+    authored = read(folder / ("merrow_cup_calibration.json" if cup else asset + "_authoring.json"))
+    receipt = folder / (asset + "_compile.json")
+    compiled = read(receipt)
+    if not isinstance(authored, dict) or not isinstance(compiled, dict):
+        raise ValueError("Malformed prop authoring or compiler receipt")
+    scene_resource = PROP_RESOURCES + asset + ".scn"
+    if authored.get("identity") != identity or authored.get("runtime_resource") != scene_resource or compiled.get("path") != scene_resource:
+        raise ValueError("Prop receipt identifies a different asset or scene")
+    carrier = folder / ("merrow_cup_world.glb" if cup else asset + ".glb")
+    source_hash = digest(carrier)
+    if authored.get("carrier_sha256") != source_hash or compiled.get("source_sha256") != source_hash:
+        raise ValueError("Authored carrier differs from the prop compiler receipt")
+    sources = authored.get("sources")
+    if not isinstance(sources, list):
+        raise ValueError("Malformed retained prop source inventory")
+    for source in sources:
+        _require_hash(resource(game, source["resource"]), source["sha256"], "Retained prop source")
+    scene = resource(game, scene_resource)
+    _require_hash(scene, compiled.get("sha256"), "Compiled prop scene")
+
+    if cup:
+        _verify_cup_inputs(game, folder, authored, compiled)
+        inline_count = compiled.get("inline_mesh_count")
+        if type(inline_count) is not int or inline_count < 1:
+            raise ValueError("Cup compiler receipt lacks inline meshes")
+        components = []
+    else:
+        if (compiled.get("identity") != identity or compiled.get("geometry_contact_verified") is not True
+                or compiled.get("support_bounds_verified") is not True):
+            raise ValueError("Station compiler receipt lacks exact identity or geometry proof")
+        components = compiled.get("resources")
+        if not isinstance(components, list) or not components:
+            raise ValueError("Station compiler receipt lacks component hashes")
+        for index, component in enumerate(components):
+            expected = PROP_RESOURCES + f"{asset}_{index:02d}.res"
+            if component["path"] != expected:
+                raise ValueError("Station compiler component inventory differs")
+            _require_hash(resource(game, expected), component["sha256"], "Compiled station component")
+    pattern = "merrow_cup*.res" if cup else asset + "_*.res"
+    actual = {PROP_RESOURCES + path.name for path in scene.parent.glob(pattern)}
+    if actual != {component["path"] for component in components}:
+        raise ValueError("Actual prop component inventory differs from compiler receipt")
+    return {"asset":asset, "source_sha256":source_hash, "output":scene_resource, "output_sha256":compiled["sha256"],
+            "receipt":receipt.relative_to(repository).as_posix(), "components":components}
+
+
+def verify(repository, assets=ASSETS, *, verify_stage2_props=False):
     rows, errors = [], []
     for asset in assets:
         try: rows.append(verify_asset(repository, asset))
         except (OSError, ValueError, KeyError, TypeError) as error: errors.append(asset + ": " + str(error))
+    props = []
+    if verify_stage2_props:
+        for asset in STAGE2_PROPS:
+            try: props.append(verify_stage2_prop(repository, asset))
+            except (OSError, ValueError, KeyError, TypeError) as error: errors.append(asset + ": " + str(error))
     return {"status":"fail" if errors else "pass", "assets":rows, "errors":errors,
-            "visual_acceptance":False, "gameplay_acceptance":False}
+            "visual_acceptance":False, "gameplay_acceptance":False,
+            **({"stage2_props":props} if verify_stage2_props else {})}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository", type=Path, default=Path(__file__).resolve().parents[3])
     parser.add_argument("--asset", choices=ASSETS, action="append")
+    parser.add_argument("--verify-stage2-props", action="store_true", help="Check exact precompiled station and Merrow cup receipts")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    result = verify(args.repository.resolve(), args.asset or ASSETS)
+    result = verify(args.repository.resolve(), args.asset or ASSETS, verify_stage2_props=args.verify_stage2_props)
     encoded = json.dumps(result, indent=2) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

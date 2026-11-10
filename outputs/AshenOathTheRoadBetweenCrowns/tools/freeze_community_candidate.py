@@ -2,37 +2,14 @@
 from __future__ import annotations
 
 import argparse
-import gzip
 import hashlib
 import json
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-from community_acceptance_packs import _identity, verify_candidate
+from community_acceptance_packs import _identity, delivered, inside, verify_candidate
 from compact_runtime_packs import parse_archive
 from runtime_pack_validation import require_valid_pack_graph
-
-
-def inside(root: Path, relative: str) -> Path:
-    parts = relative.split("/")
-    if any(part in ("", ".", "..") or ":" in part or "\\" in part for part in parts):
-        raise ValueError("ambiguous or escaping artifact path: " + relative)
-    path = (root / relative).resolve()
-    if not path.is_relative_to(root.resolve()) or path == root.resolve():
-        raise ValueError("artifact path escapes its root: " + relative)
-    return path
-
-
-def delivered(path: Path, record: dict) -> bytes:
-    content = path.read_bytes()
-    if len(content) != record.get("bytes") or hashlib.sha256(content).hexdigest() != record.get("sha256"):
-        raise ValueError("transport bytes differ from the final release: " + str(path))
-    encoded = content.startswith(b"\x1f\x8b")
-    if encoded != (record.get("content_encoding") == "gzip"):
-        raise ValueError("transport encoding differs from its release receipt: " + str(path))
-    decoded = gzip.decompress(content) if encoded else content
-    _identity(decoded, record, str(path))
-    return decoded
 
 
 def freeze(export: Path, output: Path, *, required_resources=None) -> dict:

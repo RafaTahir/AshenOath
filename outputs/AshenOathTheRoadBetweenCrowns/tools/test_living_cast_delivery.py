@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from verify_living_cast_delivery import ART, GAME, digest, expected_clips, verify, resource
+from verify_living_cast_delivery import ART, GAME, PROP_RESOURCES, digest, expected_clips, verify, resource, verify_stage2_prop
 
 
 class CompiledCastIdentity(unittest.TestCase):
@@ -39,6 +39,7 @@ class CompiledCastIdentity(unittest.TestCase):
         result = self.result()
         self.assertEqual(result["status"], "pass", result)
         self.assertFalse(result["visual_acceptance"])
+        self.assertNotIn("stage2_props", result)
 
     def test_reauthored_carrier_cannot_reuse_old_native_library(self):
         self.carrier.write_bytes(b"new authored motion")
@@ -65,6 +66,83 @@ class CompiledCastIdentity(unittest.TestCase):
 
     def test_paths_cannot_escape_the_current_project(self):
         with self.assertRaises(ValueError): resource(self.root / GAME,"res://../../outside.res")
+
+
+class CompiledPropIdentity(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.game = self.root / GAME
+        self.models = self.root / ART / "models/living_cast_stage2_20261107"
+        self.props = self.models / "props"
+        self.asset = "station_nessa"
+        self.scene = PROP_RESOURCES + self.asset + ".scn"
+        self.component = PROP_RESOURCES + self.asset + "_00.res"
+        self.carrier = self.props / (self.asset + ".glb")
+        self.receipt = self.props / (self.asset + "_compile.json")
+        self.authoring = self.props / (self.asset + "_authoring.json")
+        self.authored = {"identity":"nessa", "runtime_resource":self.scene, "sources":[],
+                         "carrier_sha256":self.put(self.carrier, b"authored carrier")}
+        self.compiled = {"identity":"nessa", "path":self.scene, "geometry_contact_verified":True, "support_bounds_verified":True,
+                         "source_sha256":self.authored["carrier_sha256"],
+                         "sha256":self.put(resource(self.game, self.scene), b"compiled scene"),
+                         "resources":[{"path":self.component, "sha256":self.put(resource(self.game, self.component), b"compiled mesh")}]}
+        self.put(self.authoring, self.authored)
+        self.put(self.receipt, self.compiled)
+
+    def put(self, path, value):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(value if isinstance(value, bytes) else json.dumps(value).encode())
+        return digest(path)
+
+    def test_opt_in_requires_all_eight_prop_receipts(self):
+        result = verify(self.root, [], verify_stage2_props=True)
+        self.assertEqual(result["status"], "fail")
+        self.assertEqual([row["asset"] for row in result["stage2_props"]], [self.asset])
+        self.assertEqual(len(result["errors"]), 7)
+        self.assertTrue(any(error.startswith("merrow_cup: ") for error in result["errors"]))
+
+    def test_updated_carrier_rejects_stale_compiler_receipt(self):
+        self.authored["carrier_sha256"] = self.put(self.carrier, b"changed authored carrier")
+        self.put(self.authoring, self.authored)
+        with self.assertRaisesRegex(ValueError, "Authored carrier differs"):
+            verify_stage2_prop(self.root, self.asset)
+
+    def test_changed_or_unrecorded_component_is_rejected(self):
+        mesh = resource(self.game, self.component)
+        self.put(mesh, b"changed compiled mesh")
+        with self.assertRaisesRegex(ValueError, "Compiled station component hash differs"):
+            verify_stage2_prop(self.root, self.asset)
+        self.put(mesh, b"compiled mesh")
+        self.put(mesh.with_name("station_nessa_01.res"), b"unrecorded component")
+        with self.assertRaisesRegex(ValueError, "Actual prop component inventory differs"):
+            verify_stage2_prop(self.root, self.asset)
+
+    def test_inline_cup_binds_relocated_calibration_and_clearance(self):
+        actor = self.models / "C10"
+        scene = PROP_RESOURCES + "merrow_cup.scn"
+        cup_hash = self.put(self.props / "merrow_cup_world.glb", b"authored cup")
+        actor_hash = self.put(actor / "C10_life_review.glb", b"authored actor")
+        self.put(actor / "authoring.json", {"review_glb_sha256":actor_hash, "baseline_sha256":"b"*64})
+        clearance = actor / "source_cup_clearance.json"
+        clearance_hash = self.put(clearance, {"actor_carrier_sha256":actor_hash, "cup_carrier_sha256":cup_hash,
+                                              "source_trajectory_clear":True, "full_trajectory_sampled":True})
+        calibration = {"identity":"merrow", "runtime_resource":scene, "carrier_sha256":cup_hash, "baseline_sha256":"b"*64,
+                       "grip_verified":True, "rim_calibrated":True, "sources":[]}
+        calibration_hash = self.put(self.props / "merrow_cup_calibration.json", calibration)
+        archive = "merrow_cup_calibration_" + calibration_hash + ".json"
+        self.put(self.props / "receipts" / archive, calibration)
+        self.put(self.props / "merrow_cup_compile.json", {"path":scene, "source_sha256":cup_hash,
+                 "sha256":self.put(resource(self.game, scene), b"inline cup scene"), "inline_mesh_count":2,
+                 "calibration_sha256":calibration_hash, "calibration_archive":"C:/old/checkout/"+archive,
+                 "compiler_sha256":self.put(self.game / "tools/build_merrow_cup.gd", b"compiler"),
+                 "actor_source_sha256":actor_hash, "source_clearance_sha256":clearance_hash,
+                 "source_full_motion_clearance_verified":True})
+        self.assertEqual(verify_stage2_prop(self.root, "merrow_cup")["components"], [])
+        self.put(clearance, b"changed proof")
+        with self.assertRaisesRegex(ValueError, "Cup source clearance hash differs"):
+            verify_stage2_prop(self.root, "merrow_cup")
 
 
 if __name__ == "__main__": unittest.main()

@@ -7,13 +7,14 @@ import tempfile
 import unittest
 
 from freeze_community_candidate import freeze, inside
+from community_acceptance_packs import verify_web_export
 from compact_runtime_packs import parse_archive
 from test_community_acceptance_packs import candidate
 
 
-def exported(folder):
+def exported(folder, **candidate_options):
     folder = Path(folder)
-    root, external, receipt = candidate(folder)
+    root, external, receipt = candidate(folder, **candidate_options)
     release = json.loads(receipt.read_text())
     export = folder / "web"
     (export / "packs").mkdir(parents=True)
@@ -31,6 +32,23 @@ def exported(folder):
 
 
 class NativeCandidateFreezeTests(unittest.TestCase):
+    def test_web_export_is_checked_without_a_second_archive(self):
+        with tempfile.TemporaryDirectory() as folder:
+            export, _, _ = exported(folder, ownership={"res://data/community_campaign.json": "community"})
+            before = {p.relative_to(export).as_posix(): p.read_bytes() for p in export.rglob("*") if p.is_file()}
+            result = verify_web_export(export)
+            self.assertEqual(result["community_resource_owners_verified"], 1)
+            self.assertEqual({p.relative_to(export).as_posix(): p.read_bytes() for p in export.rglob("*") if p.is_file()}, before)
+            (export / "packs/community.pck").write_bytes(before["packs/community.pck"] + b"\0")
+            with self.assertRaisesRegex(ValueError, "transport bytes differ"):
+                verify_web_export(export)
+
+    def test_web_export_requires_the_expansion_owner_registry(self):
+        with tempfile.TemporaryDirectory() as folder:
+            export, _, _ = exported(folder)
+            with self.assertRaisesRegex(ValueError, "ownership registry"):
+                verify_web_export(export)
+
     def test_exact_final_transport_decodes_and_uses_root_class_cache(self):
         with tempfile.TemporaryDirectory() as folder:
             export, root, external = exported(folder)

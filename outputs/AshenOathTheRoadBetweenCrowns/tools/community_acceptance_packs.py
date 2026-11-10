@@ -6,6 +6,8 @@ All external packs come from the final root's manifest, not a directory glob.
 """
 from __future__ import annotations
 
+import argparse
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -43,6 +45,28 @@ def _identity(payload: bytes, record: dict, label: str) -> None:
     digest = record.get("decoded_sha256", record.get("sha256"))
     if len(payload) != size or hashlib.sha256(payload).hexdigest() != digest:
         raise ValueError(label + " differs from the maintained release receipt")
+
+
+def inside(root: Path, relative: str) -> Path:
+    parts = relative.split("/")
+    if any(part in ("", ".", "..") or ":" in part or "\\" in part for part in parts):
+        raise ValueError("ambiguous or escaping artifact path: " + relative)
+    path = (root / relative).resolve()
+    if not path.is_relative_to(root.resolve()) or path == root.resolve():
+        raise ValueError("artifact path escapes its root: " + relative)
+    return path
+
+
+def delivered(path: Path, record: dict) -> bytes:
+    content = path.read_bytes()
+    if len(content) != record.get("bytes") or hashlib.sha256(content).hexdigest() != record.get("sha256"):
+        raise ValueError("transport bytes differ from the final release: " + str(path))
+    encoded = content.startswith(b"\x1f\x8b")
+    if encoded != (record.get("content_encoding") == "gzip"):
+        raise ValueError("transport encoding differs from its release receipt: " + str(path))
+    decoded = gzip.decompress(content) if encoded else content
+    _identity(decoded, record, str(path))
+    return decoded
 
 
 def _resource_exists(path: str, resources: dict[str, bytes], visiting=None) -> bool:
@@ -143,7 +167,7 @@ def _verify_living_residency(manifest, residency, resources) -> dict[str, str]:
 
 
 def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
-                     *, required_resources=None) -> dict:
+                     *, required_resources=None, web_transport=False) -> dict:
     """Verify exact decoded release bytes, ownership and known fixture resources.
 
     This is a static container/resource inventory, not Godot resource instantiation
@@ -152,10 +176,10 @@ def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
     root_pack, pack_dir = root_pack.resolve(strict=True), pack_dir.resolve(strict=True)
     release_manifest = release_manifest.resolve(strict=True)
     release = json.loads(release_manifest.read_text(encoding="utf-8-sig"))
-    root_bytes = _raw(root_pack)
     root_record = release.get("root_pck", {})
     if root_record.get("path") != "index.pck":
         raise ValueError("A maintained final Web release manifest is required")
+    root_bytes = delivered(root_pack, root_record) if web_transport else _raw(root_pack)
     _identity(root_bytes, root_record, "Final root PCK")
     root_resources = {entry.path: entry.payload for entry in parse_archive(root_bytes).entries}
     classes = ".godot/global_script_class_cache.cfg"
@@ -166,11 +190,17 @@ def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
         raise ValueError("Final root is missing its embedded runtime pack manifest")
     _identity(manifest_bytes, release.get("runtime_pack_manifest", {}), "Embedded runtime manifest")
     manifest = json.loads(manifest_bytes.decode("utf-8-sig"))
+    if web_transport:
+        if "community_resource_owners" not in manifest:
+            raise ValueError("Expanded Web release is missing its resource ownership registry")
+        sidecar = inside(root_pack.parent, "runtime_pack_manifest.json")
+        if delivered(sidecar, release["runtime_pack_manifest"]) != manifest_bytes:
+            raise ValueError("Final runtime sidecar differs from the root manifest")
     if manifest.get("release_id") != release.get("build_id") or manifest.get("generated_from_commit") != release.get("source", {}).get("git_commit"):
         raise ValueError("Root runtime manifest and release receipt have different build identities")
     if not str(manifest.get("packs", {}).get("base", {}).get("status", "")).startswith("embedded"):
         raise ValueError("Final root must own the embedded base")
-    plan = artifact_plan(manifest, pack_dir)
+    plan = artifact_plan(manifest, pack_dir, delivered_paths=web_transport)
     release_packs = {row["id"]: row for row in release.get("packs", [])}
     if len(release_packs)!=len(release.get("packs", [])) or set(release_packs) != set(manifest["packs"]):
         raise ValueError("Release receipt and embedded runtime manifest declare different packs")
@@ -217,7 +247,7 @@ def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
         path = paths[relative]
         if path == root_pack or path.name.casefold() == "base.pck":
             raise ValueError("Standalone base cannot replace the final root")
-        payload = _raw(path)
+        payload = delivered(path, artifacts[relative]) if web_transport else _raw(path)
         _identity(payload, artifacts.get(relative, {}), "External pack " + key)
         entries = {entry.path: entry.payload for entry in parse_archive(payload).entries}
         if "runtime_pack_manifest.json" in entries:
@@ -239,3 +269,25 @@ def verify_candidate(root_pack: Path, pack_dir: Path, release_manifest: Path,
             "known_required_resources":required,"resource_count":len(resources),"resource_instantiation_validated":False,
             "unlisted_pack_policy":"ignored; never mounted","deferred_loading_tested":False,
             **({"community_resource_owners_verified":len(verified_owners)} if track_owners else {})}
+
+
+def verify_web_export(export: Path) -> dict:
+    export = export.resolve(strict=True)
+    return verify_candidate(inside(export, "index.pck"), inside(export, "packs"),
+                            inside(export, "release_manifest.json"), web_transport=True)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Verify ownership in the final expanded Web export without copying packs.")
+    parser.add_argument("--export", type=Path, required=True)
+    args = parser.parse_args()
+    try:
+        receipt = verify_web_export(args.export)
+    except (OSError, ValueError, KeyError, EOFError) as error:
+        parser.exit(2, f"Web archive verification failed: {error}\n")
+    print(json.dumps(receipt, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
