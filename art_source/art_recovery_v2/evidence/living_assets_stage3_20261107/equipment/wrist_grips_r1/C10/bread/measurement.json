@@ -1,0 +1,343 @@
+{
+  "asset": "C10",
+  "style": "bread",
+  "scope": "Exact adjusted C10 source screen; sampled surface/contact guidance only",
+  "baseline_forward_outward_m": [
+    0.035,
+    0.025
+  ],
+  "baseline_fit_frames": 23,
+  "expected_fit_frames": 839,
+  "baseline_midpoint_passes": 225,
+  "first_source_failure_s": 0.0,
+  "source_reference_placements_tested": 450,
+  "source_reference_surface_survivors": 80,
+  "sampled_full_body_surface_survivors": [],
+  "nonowning_blocked_contact_seeds": 80,
+  "blocker_counts": {
+    "torso": 390
+  },
+  "collision_witnesses": {
+    "torso": {
+      "time_s": 0.191666666666667,
+      "body_vertices": [
+        [
+          1,
+          2132
+        ],
+        [
+          1,
+          2130
+        ],
+        [
+          1,
+          1070
+        ]
+      ],
+      "dominant_joints": [
+        "spine_03",
+        "spine_03",
+        "clavicle_r"
+      ],
+      "prop_triangle": 445,
+      "seed": {
+        "palm_vertex": [
+          3,
+          1976
+        ],
+        "prop_primary_vertex": 198,
+        "prop_support_direction_index": 8,
+        "twist_degrees": 0,
+        "contact_offset_m": 0.0003,
+        "hand_local_palm": [
+          0.019577305168330998,
+          0.039130526156746316,
+          -0.006202616826012044
+        ],
+        "prop_local_anchor": [
+          0.0,
+          0.00150670844595879,
+          0.158833414316177
+        ],
+        "basis_columns": [
+          [
+            -0.04700542495353033,
+            0.6726320408374764,
+            0.7384826522429282
+          ],
+          [
+            -0.7384826522429282,
+            0.47442647541513894,
+            -0.47912721876493214
+          ],
+          [
+            -0.6726320408374764,
+            -0.5678782061885982,
+            0.47442647541513894
+          ]
+        ]
+      }
+    }
+  },
+  "samples": [
+    {
+      "time_s": 0.0,
+      "from_failed_fit": true,
+      "native_probe_error_m": 6.792009757742307e-05
+    },
+    {
+      "time_s": 0.0166666666666667,
+      "from_failed_fit": true,
+      "native_probe_error_m": null
+    },
+    {
+      "time_s": 0.025,
+      "from_failed_fit": true,
+      "native_probe_error_m": null
+    },
+    {
+      "time_s": 0.0666666666666667,
+      "from_failed_fit": true,
+      "native_probe_error_m": null
+    },
+    {
+      "time_s": 0.1,
+      "from_failed_fit": true,
+      "native_probe_error_m": null
+    },
+    {
+      "time_s": 0.133333333333333,
+      "from_failed_fit": true,
+      "native_probe_error_m": null
+    },
+    {
+      "time_s": 0.141666666666667,
+      "from_failed_fit": true,
+      "native_probe_error_m": null
+    },
+    {
+      "time_s": 0.191666666666667,
+      "from_failed_fit": true,
+      "native_probe_error_m": null
+    },
+    {
+      "time_s": 1.74166666666667,
+      "from_failed_fit": false,
+      "native_probe_error_m": 6.744862775545844e-05
+    },
+    {
+      "time_s": 3.49166666666667,
+      "from_failed_fit": false,
+      "native_probe_error_m": 6.75306761985342e-05
+    },
+    {
+      "time_s": 5.23333333333333,
+      "from_failed_fit": false,
+      "native_probe_error_m": 6.78448387502866e-05
+    },
+    {
+      "time_s": 6.98131704330444,
+      "from_failed_fit": false,
+      "native_probe_error_m": 6.741399141901343e-05
+    }
+  ],
+  "selected": {
+    "forward_m": 0.05,
+    "outward_m": 0.025,
+    "delta_forward_m": 0.015,
+    "delta_outward_m": 0,
+    "surviving_seed_count": 5,
+    "seed": {
+      "palm_vertex": [
+        3,
+        1974
+      ],
+      "prop_primary_vertex": 214,
+      "prop_support_direction_index": 5,
+      "twist_degrees": 135,
+      "contact_offset_m": 0.0003,
+      "hand_local_palm": [
+        0.0193604312720212,
+        0.044843441749449,
+        -0.021257254966647335
+      ],
+      "prop_local_anchor": [
+        1.21567756776713e-17,
+        0.00150670844595879,
+        -0.158833414316177
+      ],
+      "basis_columns": [
+        [
+          0.0838109424907703,
+          0.6891164825690143,
+          0.7197876071248511
+        ],
+        [
+          0.048630561931587005,
+          -0.724296863128198,
+          0.6877711265449219
+        ],
+        [
+          0.995294325496246,
+          -0.0226390705277948,
+          -0.09421612452553245
+        ]
+      ]
+    }
+  },
+  "direction_candidates": [
+    {
+      "forward_m": 0.05,
+      "outward_m": 0.025,
+      "delta_forward_m": 0.015,
+      "delta_outward_m": 0,
+      "surviving_seed_count": 5,
+      "seed": {
+        "palm_vertex": [
+          3,
+          1974
+        ],
+        "prop_primary_vertex": 214,
+        "prop_support_direction_index": 5,
+        "twist_degrees": 135,
+        "contact_offset_m": 0.0003,
+        "hand_local_palm": [
+          0.0193604312720212,
+          0.044843441749449,
+          -0.021257254966647335
+        ],
+        "prop_local_anchor": [
+          1.21567756776713e-17,
+          0.00150670844595879,
+          -0.158833414316177
+        ],
+        "basis_columns": [
+          [
+            0.0838109424907703,
+            0.6891164825690143,
+            0.7197876071248511
+          ],
+          [
+            0.048630561931587005,
+            -0.724296863128198,
+            0.6877711265449219
+          ],
+          [
+            0.995294325496246,
+            -0.0226390705277948,
+            -0.09421612452553245
+          ]
+        ]
+      }
+    },
+    {
+      "forward_m": 0.04,
+      "outward_m": 0.01,
+      "delta_forward_m": 0.005,
+      "delta_outward_m": -0.015,
+      "surviving_seed_count": 1,
+      "seed": {
+        "palm_vertex": [
+          3,
+          1084
+        ],
+        "prop_primary_vertex": 198,
+        "prop_support_direction_index": 8,
+        "twist_degrees": 0,
+        "contact_offset_m": 0.0003,
+        "hand_local_palm": [
+          0.018600284648661602,
+          0.05629684194511476,
+          -0.007365102525654225
+        ],
+        "prop_local_anchor": [
+          0.0,
+          0.00150670844595879,
+          0.158833414316177
+        ],
+        "basis_columns": [
+          [
+            -0.09768203235893624,
+            0.7228962725463093,
+            0.6840169586295941
+          ],
+          [
+            -0.6840169586295941,
+            0.45047044150769744,
+            -0.5737570754552664
+          ],
+          [
+            -0.7228962725463093,
+            -0.5239249569036698,
+            0.45047044150769744
+          ]
+        ]
+      }
+    },
+    {
+      "forward_m": 0.05,
+      "outward_m": 0.02,
+      "delta_forward_m": 0.015,
+      "delta_outward_m": -0.005,
+      "surviving_seed_count": 6,
+      "seed": {
+        "palm_vertex": [
+          3,
+          1974
+        ],
+        "prop_primary_vertex": 214,
+        "prop_support_direction_index": 5,
+        "twist_degrees": 135,
+        "contact_offset_m": 0.0003,
+        "hand_local_palm": [
+          0.0193604312720212,
+          0.044843441749449,
+          -0.021257254966647335
+        ],
+        "prop_local_anchor": [
+          1.21567756776713e-17,
+          0.00150670844595879,
+          -0.158833414316177
+        ],
+        "basis_columns": [
+          [
+            0.0838109424907703,
+            0.6891164825690143,
+            0.7197876071248511
+          ],
+          [
+            0.048630561931587005,
+            -0.724296863128198,
+            0.6877711265449219
+          ],
+          [
+            0.995294325496246,
+            -0.0226390705277948,
+            -0.09421612452553245
+          ]
+        ]
+      }
+    }
+  ],
+  "direction_screen_only_excluded_regions": [
+    "right arm",
+    "right fingers",
+    "right hand"
+  ],
+  "remaining_gate": "Exact native IK when retargeted; all 839 Blender frames with complete surface, containment and contact checks",
+  "grip_verified": false,
+  "runtime_output": false,
+  "visual_accepted": false,
+  "source_sha256": {
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C10\\49446da4b512350640f0d67d5906d19d7fb078cfa145c6d2431c1e108be182b5\\receipt.json": "4fc2beae1237fba003f3d7c5a04d92e89533a000ef4fce8864aab34baae42be4",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\activity_poses\\C10\\49446da4b512350640f0d67d5906d19d7fb078cfa145c6d2431c1e108be182b5\\C10_activity_poses.glb": "43a80115596ec99e4db53b188489d92f1bfe401b3c3c52dd5b0d1d817e1031d3",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\compatible_c10_bread_measured_wrist_fit_r3\\receipt.json": "9c4f3456be20db0004137695360813126aec310c225e198ae87de8a2e9beece3",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\compatible_c10_bread_measured_wrist_fit_r3\\fit\\receipt.json": "d8cb21f5b0104aa34bc3f26e1dd75ff0970fa19e52befae258255387c15d7f4d",
+    "D:\\Temp\\AO_LivingCast_Stages234\\art_source\\art_recovery_v2\\evidence\\living_assets_stage3_20261107\\equipment\\retained_bread.glb": "f35c874cb1936db8e96d44473bd1db321822dbc4a33383d6807630f194251fef",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\measure_remaining_wrist_goals.py": "49933fab0107554df3989e3e5172226748c206b0aa0509d62a27ac1581be8c58",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\measure_tor_supply_direction.py": "25972e83625c25d96d34e2830c7ae305b01670fdb63da6714c1b20c95030007d",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\diagnose_c02_bread_midpoint.py": "dbbd534d48b219dc924a616b00dc32350ecd78e95335e75d893771642479ba5e",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\run_measured_actor_wrist_fit.py": "4f7c4e5b2187a36424e00a284cb8d6b8aed167dc29dfe8d3a4477bf08f65c0ba",
+    "D:\\Temp\\AO_LivingCast_Stages234\\.verification\\motion\\measure_merrow_bread_direction.py": "a2bc1ff91226d0f55fa1d8ff6c7fc5f90fffcf32b8b0fffc2652db44a592ff9b"
+  }
+}
