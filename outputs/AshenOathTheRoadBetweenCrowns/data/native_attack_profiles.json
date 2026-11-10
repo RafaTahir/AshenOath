@@ -1,4 +1,5 @@
 {
+  "schema_version": 1,
   "policy": "native_attack_contact_v1",
   "profiles": {
     "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb": {
@@ -25,7 +26,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
-      "source_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+      "source_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
     },
     "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb": {
       "calibration_enemy": "wychwood_stalker",
@@ -51,7 +52,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
-      "source_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+      "source_sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a"
     },
     "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb": {
       "calibration_enemy": "bog_wretch",
@@ -77,7 +78,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
-      "source_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+      "source_sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701"
     },
     "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
       "calibration_enemy": "gravebound_knight",
@@ -103,7 +104,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-      "source_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+      "source_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
     },
     "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb": {
       "calibration_enemy": "bell_eater",
@@ -129,7 +130,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
-      "source_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+      "source_sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8"
     },
     "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb": {
       "calibration_enemy": "rootbound_colossus",
@@ -154,7 +155,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
-      "source_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+      "source_sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a"
     },
     "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb": {
       "calibration_enemy": "ashwing",
@@ -179,7 +180,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
-      "source_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+      "source_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
     },
     "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb": {
       "calibration_enemy": "white_hart_avatar",
@@ -205,7 +206,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
-      "source_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+      "source_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8"
     },
     "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb": {
       "calibration_enemy": "silt_maw",
@@ -230,7 +231,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
-      "source_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+      "source_sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f"
     },
     "res://assets_external/design_pack_v1/creatures/M10_Millback.glb": {
       "calibration_enemy": "millback",
@@ -255,7 +256,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
-      "source_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+      "source_sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26"
     },
     "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb": {
       "calibration_enemy": "glassmoth",
@@ -280,7 +281,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
-      "source_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+      "source_sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13"
     },
     "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb": {
       "calibration_enemy": "knell_leech",
@@ -305,7 +306,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
-      "source_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+      "source_sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0"
     },
     "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb": {
       "calibration_enemy": "hearthscale",
@@ -330,7 +331,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
-      "source_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+      "source_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26"
     },
     "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb": {
       "calibration_enemy": "gallows_weaver",
@@ -355,7 +356,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
-      "source_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+      "source_sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9"
     },
     "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb": {
       "calibration_enemy": "reed_choir",
@@ -380,7 +381,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
-      "source_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+      "source_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d"
     },
     "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb": {
       "calibration_enemy": "inkblind",
@@ -405,7 +406,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
-      "source_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+      "source_sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4"
     },
     "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb": {
       "calibration_enemy": "cairn_mother",
@@ -430,7 +431,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
-      "source_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+      "source_sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e"
     },
     "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb": {
       "calibration_enemy": "shroud_swimmer",
@@ -455,7 +456,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
-      "source_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+      "source_sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2"
     },
     "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb": {
       "calibration_enemy": "wychwood_raider",
@@ -481,7 +482,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
-      "source_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+      "source_sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c"
     },
     "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
       "calibration_enemy": "wychwood_brute",
@@ -507,8 +508,7 @@
       ],
       "sampling_hz": 120,
       "source": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
-      "source_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+      "source_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
     }
-  },
-  "schema_version": 1
+  }
 }

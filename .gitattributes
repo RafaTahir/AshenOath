@@ -134,3 +134,6 @@ art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/sour
 
 # Preserve the exact measured Ashwing recipe snapshot.
 art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/creatures/m07_fold_r4/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py -text whitespace=cr-at-eol,-blank-at-eof
+
+# Preserve the active Ashwing snapshot used by the verified source recipe.
+art_source/art_recovery_v2/models/living_assets_stage3_20261107/recipes/215d6ace2cdc2797/m07_probe_geometry.py -text whitespace=cr-at-eol,-blank-at-eof

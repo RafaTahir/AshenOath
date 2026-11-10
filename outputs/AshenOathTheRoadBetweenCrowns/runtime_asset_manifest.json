@@ -268,8 +268,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
-          "bytes": 1703908,
-          "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+          "bytes": 1759984,
+          "sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_2351fb05d815755187e1a70726f00e6e7acbee0bf59aa636016bb11b4b7cf453.png",
@@ -302,8 +302,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-          "bytes": 2620992,
-          "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+          "bytes": 2744036,
+          "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
@@ -361,8 +361,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-          "bytes": 2620992,
-          "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+          "bytes": 2744036,
+          "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
@@ -523,8 +523,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-          "bytes": 2620992,
-          "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+          "bytes": 2744036,
+          "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
@@ -1037,8 +1037,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
-          "bytes": 1941652,
-          "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+          "bytes": 2056556,
+          "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_0a4a43856c725056d82a8b004fe190ab613ef6185094328937be48d0fc4a2c9c.png",
@@ -1126,8 +1126,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
-          "bytes": 2314140,
-          "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+          "bytes": 2429516,
+          "sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_ada15327a11cdcf241ed262e46e4c0a10fa3846d7a9baadbd2503a8cfefb5cbd.png",
@@ -1230,8 +1230,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
-          "bytes": 6375916,
-          "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+          "bytes": 6424756,
+          "sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_ae316c3d8499ed4c2af443418239581fa485b2c66b61750015dfeab765fc714f.png",
@@ -1289,8 +1289,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
-          "bytes": 1885396,
-          "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+          "bytes": 1980484,
+          "sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_dbef135d6ca0825184b036864e154aace56c921484c14c84dc96b6058345f353.png",
@@ -1408,8 +1408,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-          "bytes": 2620992,
-          "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+          "bytes": 2744036,
+          "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
@@ -1467,8 +1467,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
-          "bytes": 2097816,
-          "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+          "bytes": 2166936,
+          "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
@@ -1501,8 +1501,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
-          "bytes": 1158008,
-          "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+          "bytes": 1268008,
+          "sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_627cd3f3fd3b9aa4c41ba7064e7cf20662998f7cc01f43117b50556dfd044c1a.png",
@@ -8039,8 +8039,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
-          "bytes": 1941652,
-          "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+          "bytes": 2056556,
+          "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_0a4a43856c725056d82a8b004fe190ab613ef6185094328937be48d0fc4a2c9c.png",
@@ -8128,8 +8128,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
-          "bytes": 1941652,
-          "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+          "bytes": 2056556,
+          "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_0a4a43856c725056d82a8b004fe190ab613ef6185094328937be48d0fc4a2c9c.png",
@@ -8217,8 +8217,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
-          "bytes": 1941652,
-          "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+          "bytes": 2056556,
+          "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_0a4a43856c725056d82a8b004fe190ab613ef6185094328937be48d0fc4a2c9c.png",
@@ -8306,8 +8306,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
-          "bytes": 1777228,
-          "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+          "bytes": 1906460,
+          "sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_25a1bd8b81a9b991433d47d57016a8aa96807763ac982344aeb2ff4d82904e3f.png",
@@ -8350,8 +8350,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
-          "bytes": 1777228,
-          "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+          "bytes": 1906460,
+          "sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_25a1bd8b81a9b991433d47d57016a8aa96807763ac982344aeb2ff4d82904e3f.png",
@@ -8394,8 +8394,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
-          "bytes": 1777228,
-          "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+          "bytes": 1906460,
+          "sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_25a1bd8b81a9b991433d47d57016a8aa96807763ac982344aeb2ff4d82904e3f.png",
@@ -8438,8 +8438,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
-          "bytes": 1885396,
-          "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+          "bytes": 1980484,
+          "sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_dbef135d6ca0825184b036864e154aace56c921484c14c84dc96b6058345f353.png",
@@ -8557,8 +8557,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-          "bytes": 2620992,
-          "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+          "bytes": 2744036,
+          "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
@@ -8616,8 +8616,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-          "bytes": 2620992,
-          "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+          "bytes": 2744036,
+          "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
@@ -8675,8 +8675,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-          "bytes": 2620992,
-          "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+          "bytes": 2744036,
+          "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
@@ -8734,8 +8734,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
-          "bytes": 2620992,
-          "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+          "bytes": 2744036,
+          "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_6431133292b6eb247241aa7e8da80ce344e734950e792908e05a59d896c7b550.png",
@@ -8793,8 +8793,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
-          "bytes": 2314140,
-          "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+          "bytes": 2429516,
+          "sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_ada15327a11cdcf241ed262e46e4c0a10fa3846d7a9baadbd2503a8cfefb5cbd.png",
@@ -8897,8 +8897,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
-          "bytes": 6375916,
-          "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+          "bytes": 6424756,
+          "sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_ae316c3d8499ed4c2af443418239581fa485b2c66b61750015dfeab765fc714f.png",
@@ -8956,8 +8956,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
-          "bytes": 2097816,
-          "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+          "bytes": 2166936,
+          "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
@@ -8990,8 +8990,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
-          "bytes": 2097816,
-          "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+          "bytes": 2166936,
+          "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_0cf96dfc752a853c67fe15ea7282ba98171f160a15887bf8428af5f22c36206b.png",
@@ -9024,8 +9024,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
-          "bytes": 1158008,
-          "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+          "bytes": 1268008,
+          "sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_627cd3f3fd3b9aa4c41ba7064e7cf20662998f7cc01f43117b50556dfd044c1a.png",
@@ -9058,8 +9058,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
-          "bytes": 1158008,
-          "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+          "bytes": 1268008,
+          "sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_627cd3f3fd3b9aa4c41ba7064e7cf20662998f7cc01f43117b50556dfd044c1a.png",
@@ -9092,8 +9092,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
-          "bytes": 1036332,
-          "sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+          "bytes": 1100424,
+          "sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_afa8c4b21cccf906c896c5fe8311c21d1465f0b75ac55163901264f06e955bc8.png",
@@ -9126,8 +9126,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
-          "bytes": 949016,
-          "sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+          "bytes": 1013396,
+          "sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_4ea981715797d97e987d9f5e09ac138ab062b50c740c722a605b29680fa10934.png",
@@ -9160,8 +9160,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
-          "bytes": 1356200,
-          "sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+          "bytes": 1426384,
+          "sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_971c8aa6d6b74c3e79bc52c6d82853706199faba23ce8f5785c125f40d9419fa.png",
@@ -9194,8 +9194,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
-          "bytes": 809404,
-          "sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+          "bytes": 873484,
+          "sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_40b61e6121fb21358adbb95ec345b0e1e2a201c2050b5da582416051a93b5cc1.png",
@@ -9228,8 +9228,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
-          "bytes": 1703908,
-          "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+          "bytes": 1759984,
+          "sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_2351fb05d815755187e1a70726f00e6e7acbee0bf59aa636016bb11b4b7cf453.png",
@@ -9262,8 +9262,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
-          "bytes": 1703908,
-          "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+          "bytes": 1759984,
+          "sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_2351fb05d815755187e1a70726f00e6e7acbee0bf59aa636016bb11b4b7cf453.png",
@@ -9296,8 +9296,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
-          "bytes": 1297024,
-          "sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+          "bytes": 1361664,
+          "sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_df9aa5ae9f50d0dafb81f342260f573c62d2208a47c944b1036d9cc6c9485751.png",
@@ -9330,8 +9330,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
-          "bytes": 3259856,
-          "sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+          "bytes": 3307892,
+          "sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_aca92162247d034eb28b7f3b1dad92c6b9fd99aaed36c6f9d63234dbb7c92b57.png",
@@ -9364,8 +9364,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
-          "bytes": 638424,
-          "sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+          "bytes": 1108084,
+          "sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_56bd9bb995a2311444d9b5b4ac764c142794971e12dd043a72aa5fde550fca6a.png",
@@ -9398,8 +9398,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
-          "bytes": 1615332,
-          "sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+          "bytes": 1665100,
+          "sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_59cb6dc98a4f5446fdd5944e442090f432c2917d8d03d97083e9673150aca400.png",
@@ -9432,8 +9432,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
-          "bytes": 1235028,
-          "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+          "bytes": 1315428,
+          "sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/color_b4ad89c56651074b04044916e09e266f06cc8a10bc74288a1ed1508d578c0ef3.png",
@@ -9466,8 +9466,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
-          "bytes": 1897900,
-          "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+          "bytes": 2013044,
+          "sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_46cd1611e590711b276efa70022f863851b734d890f2e523c86d7109001757f7.png",
@@ -9570,8 +9570,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
-          "bytes": 1897900,
-          "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+          "bytes": 2013044,
+          "sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_46cd1611e590711b276efa70022f863851b734d890f2e523c86d7109001757f7.png",
@@ -9674,8 +9674,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
-          "bytes": 1876176,
-          "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+          "bytes": 1964088,
+          "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_b41cc6b33472d112c61609a012c1401c3649b0f20a96d243b42451fd521da62b.png",
@@ -9778,8 +9778,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
-          "bytes": 1876176,
-          "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+          "bytes": 1964088,
+          "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_b41cc6b33472d112c61609a012c1401c3649b0f20a96d243b42451fd521da62b.png",
@@ -9882,8 +9882,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
-          "bytes": 1876176,
-          "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+          "bytes": 1964088,
+          "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_b41cc6b33472d112c61609a012c1401c3649b0f20a96d243b42451fd521da62b.png",
@@ -9986,8 +9986,8 @@
       "runtime_files": [
         {
           "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
-          "bytes": 1876176,
-          "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+          "bytes": 1964088,
+          "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
         },
         {
           "path": "res://assets_external/design_pack_v1/creatures/textures/normal_b41cc6b33472d112c61609a012c1401c3649b0f20a96d243b42451fd521da62b.png",

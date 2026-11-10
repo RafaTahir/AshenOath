@@ -162,6 +162,8 @@ func _compile() -> void:
 		if bool(creature_ambient.get("verified", false)):
 			var proof := packed.instantiate()
 			var persisted := bool(proof.get_meta("authored_creature_ambient", false)) and str(proof.get_meta("authored_creature_ambient_source_sha256", "")) == str(creature_ambient.source_sha256)
+			persisted = persisted and proof.get_meta("authored_creature_ambient_morphs", []) == creature_ambient.get("morph_bindings", [])
+			persisted = persisted and proof.get_meta("authored_creature_water_probes", []) == creature_ambient.get("water_probes", [])
 			proof.free()
 			if not persisted:
 				_failed("Verified creature metadata did not survive PackedScene compilation: " + source)

@@ -2,11 +2,11 @@
   "schema_version": 1,
   "asset": "M07",
   "status": "source_contract_pass",
-  "candidate_sha256": "298fb8e7ae7a03beec4e73b5f960f5f9b71d8bc2fcf46358d54334f80c832944",
+  "candidate_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
   "retained_source_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
-  "candidate_bytes": 2215112,
+  "candidate_bytes": 2166936,
   "retained_source_bytes": 2097816,
-  "net_source_bytes": 117296,
+  "net_source_bytes": 69120,
   "protected_action_bytes_equal": true,
   "protected_action_signatures": {
     "Attack": "5cd1306997a45b15a5f7e5c9d0cb3ea4e8e6442aeda3bd5b807b30e1017267ae",
@@ -41,34 +41,14 @@
     "Idle": {
       "active_bones": [
         "Head",
-        "Neck",
-        "Wing-1_1",
-        "Wing1_1",
-        "WingFinger-1_0",
-        "WingFinger-1_1",
-        "WingFinger-1_2",
-        "WingFinger-1_3",
-        "WingFinger1_0",
-        "WingFinger1_1",
-        "WingFinger1_2",
-        "WingFinger1_3"
+        "Neck"
       ],
       "actual_mesh_morph_bindings": {}
     },
     "Investigate": {
       "active_bones": [
         "Head",
-        "Neck",
-        "Wing-1_1",
-        "Wing1_1",
-        "WingFinger-1_0",
-        "WingFinger-1_1",
-        "WingFinger-1_2",
-        "WingFinger-1_3",
-        "WingFinger1_0",
-        "WingFinger1_1",
-        "WingFinger1_2",
-        "WingFinger1_3"
+        "Neck"
       ],
       "actual_mesh_morph_bindings": {}
     },
@@ -76,12 +56,8 @@
       "active_bones": [
         "Head",
         "Neck",
-        "Wing-1_1",
+        "Wing1_0",
         "Wing1_1",
-        "WingFinger-1_0",
-        "WingFinger-1_1",
-        "WingFinger-1_2",
-        "WingFinger-1_3",
         "WingFinger1_0",
         "WingFinger1_1",
         "WingFinger1_2",
@@ -92,17 +68,7 @@
     "Sleep": {
       "active_bones": [
         "Head",
-        "Neck",
-        "Wing-1_1",
-        "Wing1_1",
-        "WingFinger-1_0",
-        "WingFinger-1_1",
-        "WingFinger-1_2",
-        "WingFinger-1_3",
-        "WingFinger1_0",
-        "WingFinger1_1",
-        "WingFinger1_2",
-        "WingFinger1_3"
+        "Neck"
       ],
       "actual_mesh_morph_bindings": {}
     }

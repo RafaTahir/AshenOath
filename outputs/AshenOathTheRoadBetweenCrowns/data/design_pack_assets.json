@@ -673,8 +673,8 @@
     "M01": {
       "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",
       "owner": "monsters",
-      "sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5",
-      "bytes": 1941652,
+      "sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d",
+      "bytes": 2056556,
       "baseline_blender_report": {
         "id": "M01",
         "name": "Ghoulkin",
@@ -716,7 +716,7 @@
           0.31610481952307296
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "db2c36a885b4f99009ab03cc9c4c3d687e3e174f6079e0db751857205bfb8be5"
+        "asset_sha256": "2c726687dd39ab7ab5490661d8b04d9217ffa8a408bf2b05005ee8c91483734d"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -728,8 +728,8 @@
     "M02": {
       "path": "res://assets_external/design_pack_v1/creatures/M02_Wychwood_Stalker.glb",
       "owner": "monsters",
-      "sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30",
-      "bytes": 1777228,
+      "sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a",
+      "bytes": 1906460,
       "baseline_blender_report": {
         "id": "M02",
         "name": "Wychwood_Stalker",
@@ -771,7 +771,7 @@
           0.9026474652488815
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "6901266938d17b1cd947af7aca615e8878534f08991f58cf658bcc3ca6e80f30"
+        "asset_sha256": "8ab34c35c3a1ffdcb0d3341bf007518076b5f6c67e731c0e5291aec11aa55a8a"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -783,8 +783,8 @@
     "M03": {
       "path": "res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb",
       "owner": "monsters",
-      "sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366",
-      "bytes": 1885396,
+      "sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701",
+      "bytes": 1980484,
       "baseline_blender_report": {
         "id": "M03",
         "name": "Bog_Wretch",
@@ -826,7 +826,7 @@
           0.37625713251358295
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "6133406525b756e5686217a4e80e151afffc88d241659e5ce8688e7b64bff366"
+        "asset_sha256": "bb44cc9312d528dc3d98002170956c3e0434acbed5dfc47f719b3db1a2ff0701"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -838,8 +838,8 @@
     "M04": {
       "path": "res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb",
       "owner": "monsters",
-      "sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68",
-      "bytes": 2620992,
+      "sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407",
+      "bytes": 2744036,
       "baseline_blender_report": {
         "id": "M04",
         "name": "Gravebound_Knight",
@@ -881,7 +881,7 @@
           1.080713219513266
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "232c3ae694265f3e10cc72c0dd3967b63612630849130ee1899fc0bfd45a4a68"
+        "asset_sha256": "20621ce8fea5e0ba48e5ae7c406c1a73d6325ce5a6c84a571ca9031ad617c407"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -893,8 +893,8 @@
     "M05": {
       "path": "res://assets_external/design_pack_v1/creatures/M05_Bell_Eater.glb",
       "owner": "monsters",
-      "sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0",
-      "bytes": 2314140,
+      "sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8",
+      "bytes": 2429516,
       "baseline_blender_report": {
         "id": "M05",
         "name": "Bell_Eater",
@@ -936,7 +936,7 @@
           1.9577498108917526
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "80e093dec9a1123ecca2c82f27d7262657a556516702eb9cae2c25569427dff0"
+        "asset_sha256": "246525821ccb16124b8455aad7968e953a5159d5390b5b6286d2630b6b9235c8"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -948,8 +948,8 @@
     "M06": {
       "path": "res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb",
       "owner": "monsters",
-      "sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee",
-      "bytes": 6375916,
+      "sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a",
+      "bytes": 6424756,
       "baseline_blender_report": {
         "id": "M06",
         "name": "Rootbound_Colossus",
@@ -991,7 +991,7 @@
           1.771133246103501
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "bdd75c5ab5a00dc398e5de2ffc897f73445bf04501a4295f62b3935d80dc1bee"
+        "asset_sha256": "3b2705f6310f6cefc3f0d95ddd1f819d153988f98f9f82e00e48d63c0c14cc6a"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1003,8 +1003,8 @@
     "M07": {
       "path": "res://assets_external/design_pack_v1/creatures/M07_Ashwing_Carrion_Drake.glb",
       "owner": "monsters",
-      "sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc",
-      "bytes": 2097816,
+      "sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16",
+      "bytes": 2166936,
       "baseline_blender_report": {
         "id": "M07",
         "name": "Ashwing_Carrion_Drake",
@@ -1046,7 +1046,7 @@
           5.113207568330971
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "5119d6606680e45985a3a90583daa4b8558ca034abf18e264912f095cdc84ffc"
+        "asset_sha256": "ea4786b544358d76038c9b40bd4557e58f12647d6022f41befc6c656bcecfc16"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1058,8 +1058,8 @@
     "M08": {
       "path": "res://assets_external/design_pack_v1/creatures/M08_White_Hart_Avatar.glb",
       "owner": "monsters",
-      "sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993",
-      "bytes": 1158008,
+      "sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8",
+      "bytes": 1268008,
       "baseline_blender_report": {
         "id": "M08",
         "name": "White_Hart_Avatar",
@@ -1101,7 +1101,7 @@
           2.688764454002704
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "9d07afb38352251c8e1c2e60a8b2979eefe28de6fbd54c2b5a0fff0988e3b993"
+        "asset_sha256": "0c8611c7c520c26e516f548a67ad874986b0a0cf61d68fafbdcbea5602ea3cc8"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1113,8 +1113,8 @@
     "M09": {
       "path": "res://assets_external/design_pack_v1/creatures/M09_Silt_Maw.glb",
       "owner": "monsters",
-      "sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26",
-      "bytes": 1036332,
+      "sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f",
+      "bytes": 1100424,
       "baseline_blender_report": {
         "id": "M09",
         "name": "Silt_Maw",
@@ -1156,7 +1156,7 @@
           3.234753935222572
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "22208e54f85992e2757ac3e301a1479e9d9cb639c7c5d434c62807a7678eae26"
+        "asset_sha256": "760155b287ca70b541e5b81faf016e0116dda239744286afabe1a47a6ec0e29f"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1168,8 +1168,8 @@
     "M10": {
       "path": "res://assets_external/design_pack_v1/creatures/M10_Millback.glb",
       "owner": "monsters",
-      "sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5",
-      "bytes": 949016,
+      "sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26",
+      "bytes": 1013396,
       "baseline_blender_report": {
         "id": "M10",
         "name": "Millback",
@@ -1211,7 +1211,7 @@
           2.33344226786703
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "45ef595f646e24951f74caa57a8d3e9a170f2c76d28f97918cc41f6c2ab69ac5"
+        "asset_sha256": "bf6a8bfc0b64a2b1c730cb6ef6feaaae02f79b285b5582783ee197b64fb4ae26"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1223,8 +1223,8 @@
     "M11": {
       "path": "res://assets_external/design_pack_v1/creatures/M11_Glassmoth.glb",
       "owner": "monsters",
-      "sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e",
-      "bytes": 1356200,
+      "sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13",
+      "bytes": 1426384,
       "baseline_blender_report": {
         "id": "M11",
         "name": "Glassmoth",
@@ -1266,7 +1266,7 @@
           1.3257619066259758
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "e6ac2234a58363fea91bfec502a5f3868ddfbc6f6ad119b738fef6f92cea543e"
+        "asset_sha256": "b72f8ce1864ee58f75460e2feccd40f4d67ce3ebdbc486448b9db0627674ae13"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1278,8 +1278,8 @@
     "M12": {
       "path": "res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb",
       "owner": "monsters",
-      "sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1",
-      "bytes": 809404,
+      "sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0",
+      "bytes": 873484,
       "baseline_blender_report": {
         "id": "M12",
         "name": "Knell_Leech",
@@ -1321,7 +1321,7 @@
           1.6748630924361327
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "45b9a10e2c4375a472cc88afc44bb4524b4cd34a1bc3e8192ec5e9e3cff380d1"
+        "asset_sha256": "b72eecaed1c4de3af286c7658023da5bf5d5c0c233f4b4ef9439a5ee67819cd0"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1333,8 +1333,8 @@
     "M13": {
       "path": "res://assets_external/design_pack_v1/creatures/M13_Hearthscale.glb",
       "owner": "opening",
-      "sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4",
-      "bytes": 1703908,
+      "sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26",
+      "bytes": 1759984,
       "baseline_blender_report": {
         "id": "M13",
         "name": "Hearthscale",
@@ -1376,7 +1376,7 @@
           2.7225876844460863
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "61a92cf7c6db469689cff793548b27c6277b0ef989319b6cf8dcfbd690c42da4"
+        "asset_sha256": "ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1388,8 +1388,8 @@
     "M14": {
       "path": "res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb",
       "owner": "monsters",
-      "sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2",
-      "bytes": 1297024,
+      "sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9",
+      "bytes": 1361664,
       "baseline_blender_report": {
         "id": "M14",
         "name": "Gallows_Weaver",
@@ -1431,7 +1431,7 @@
           2.079201077296844
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "31fd93a70c1d7f98700b8a2fbbe34a89886c0f6276f52574a4dd9b01ca5c81d2"
+        "asset_sha256": "1dc85c0b1adbebb6a85e6acc3bfb36a7bee6ad2a569f0fa300a54edf1d6d7ba9"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1443,8 +1443,8 @@
     "M15": {
       "path": "res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb",
       "owner": "opening",
-      "sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664",
-      "bytes": 3259856,
+      "sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d",
+      "bytes": 3307892,
       "baseline_blender_report": {
         "id": "M15",
         "name": "Reed_Choir",
@@ -1486,7 +1486,7 @@
           1.4696289625483248
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "68db6df73d164ac2ef2a90a6d382de4920310ebe7fd390162c14ce2f531ba664"
+        "asset_sha256": "b90ced2dd2b89de67dd6560c5abe7360673285779f9c5e07cf52e929b358d69d"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1498,8 +1498,8 @@
     "M16": {
       "path": "res://assets_external/design_pack_v1/creatures/M16_Inkblind.glb",
       "owner": "monsters",
-      "sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6",
-      "bytes": 638424,
+      "sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4",
+      "bytes": 1108084,
       "baseline_blender_report": {
         "id": "M16",
         "name": "Inkblind",
@@ -1541,7 +1541,7 @@
           1.3375316947540459
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "6db25204440c021a357e40aa1196761cc9ea19ddde1d005e4d774bd6197f29d6"
+        "asset_sha256": "148780ab6f2b6605816c08e266edbecbd474efb2118ae30e63bae84b06b86cd4"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1553,8 +1553,8 @@
     "M17": {
       "path": "res://assets_external/design_pack_v1/creatures/M17_Cairn_Mother.glb",
       "owner": "monsters",
-      "sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7",
-      "bytes": 1615332,
+      "sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e",
+      "bytes": 1665100,
       "baseline_blender_report": {
         "id": "M17",
         "name": "Cairn_Mother",
@@ -1596,7 +1596,7 @@
           3.3253697729945086
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "d90fbb5cbd2f8d32f33844be31b822c8c60ff5674b574bfd2498bfd04455a9f7"
+        "asset_sha256": "0f5ae2c7fe7aba403cef03c7abaa009f45dffca7e96c644466340378202de79e"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1608,8 +1608,8 @@
     "M18": {
       "path": "res://assets_external/design_pack_v1/creatures/M18_Shroud_Swimmer.glb",
       "owner": "monsters",
-      "sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c",
-      "bytes": 1235028,
+      "sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2",
+      "bytes": 1315428,
       "baseline_blender_report": {
         "id": "M18",
         "name": "Shroud_Swimmer",
@@ -1651,7 +1651,7 @@
           3.860438932048889
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "83b4f3ae44befd25923fd49a63020c1aafc26077ebcaf289a70302491d89626c"
+        "asset_sha256": "8cca812834a3d08be3155e92925c8bf296007648ae964bd6cee669ef352bc9e2"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1663,8 +1663,8 @@
     "M19": {
       "path": "res://assets_external/design_pack_v1/creatures/M19_Wychwood_Raider.glb",
       "owner": "monsters",
-      "sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6",
-      "bytes": 1897900,
+      "sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c",
+      "bytes": 2013044,
       "baseline_blender_report": {
         "id": "M19",
         "name": "Wychwood_Raider",
@@ -1706,7 +1706,7 @@
           0.31178636430865503
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "f3176a355abaa3117eca8a1f0c5bf20ca33e8933ee597c932d808d704decc2d6"
+        "asset_sha256": "4f73eec84f0c5cca3c1acf833572abde174b6f6bbea54579ad19a8553979383c"
       },
       "private_review_only": false,
       "user_accepted": false,
@@ -1718,8 +1718,8 @@
     "M20": {
       "path": "res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb",
       "owner": "monsters",
-      "sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205",
-      "bytes": 1876176,
+      "sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a",
+      "bytes": 1964088,
       "baseline_blender_report": {
         "id": "M20",
         "name": "Wychwood_Brute",
@@ -1761,7 +1761,7 @@
           0.3924963930126658
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "f95445b8175e9ee84e9e1982638e29cc634669e3933977ec8bc65be2ea191205"
+        "asset_sha256": "5dc0fe44ac381f0fef79ba065c8ab67e6137b550775823ff79b5ee02fbd9b74a"
       },
       "private_review_only": false,
       "user_accepted": false,
