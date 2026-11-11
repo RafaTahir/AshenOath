@@ -167,3 +167,9 @@ outputs/AshenOathTheRoadBetweenCrowns/data/prepared_actors.json -text whitespace
 # Preserve the exact frozen scenery source bytes on Windows checkouts.
 outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Banner_1_Cloth.obj -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Fern_1.obj -text whitespace=cr-at-eol
+
+# Keep retained prop inputs identical to their measured source records.
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Crate_Wooden.obj -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Book_7.obj -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Scroll_1.obj -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Mug.gltf -text whitespace=cr-at-eol

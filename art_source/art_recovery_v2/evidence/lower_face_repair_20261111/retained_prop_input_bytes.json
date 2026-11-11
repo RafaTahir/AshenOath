@@ -1,0 +1,40 @@
+{
+  "kind": "retained_prop_source_byte_restore",
+  "checked_unique_inputs": 6,
+  "geometry_changed": false,
+  "runtime_test": false,
+  "files": [
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Crate_Wooden.obj",
+      "before_sha256": "536ee016acb1f1b1b7d98123ef8b176e4cd1aa46c6c95a3d7a8037997efff606",
+      "sha256": "5452e2aa770f6bff09db597dcaabe8d9fd221fabb72d970b0a93e34b2544426f",
+      "before_bytes": 115312,
+      "bytes": 111592,
+      "change": "restore exact LF bytes; geometry unchanged"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Book_7.obj",
+      "before_sha256": "6180990a0a696963984c81259bf301cec70e844bcd54eb733260dd4ac9bb0840",
+      "sha256": "f65e5f4f68c92b634f7610e25f7a42572618cb80b85579fb436292dcd961ae4c",
+      "before_bytes": 50205,
+      "bytes": 48541,
+      "change": "restore exact LF bytes; geometry unchanged"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Scroll_1.obj",
+      "before_sha256": "01bb83f9a58b895dee460749e031b89506b6f1803fd976435ae32b43a0dd09cf",
+      "sha256": "c8165a9f6ae3763d3b444d84b57d75eb5ca49e6d6fdea4c286fe1239d956715b",
+      "before_bytes": 35633,
+      "bytes": 34471,
+      "change": "restore exact LF bytes; geometry unchanged"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Mug.gltf",
+      "before_sha256": "8444cf44a12851b66d7de6206f31d2cf188aea00e7b11487140aa740fb2a6cfe",
+      "sha256": "73c4cb7e575685d0220a5d1dd40f1a68de9e64bfd34a54bcba6085b62a119a9d",
+      "before_bytes": 4149,
+      "bytes": 3881,
+      "change": "restore exact LF bytes; geometry unchanged"
+    }
+  ]
+}
