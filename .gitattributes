@@ -163,3 +163,7 @@ outputs/AshenOathTheRoadBetweenCrowns/tools/build_story_release.ps1 -text whites
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_cast_delivery.py -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/data/design_pack_assets.json -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/data/prepared_actors.json -text whitespace=cr-at-eol
+
+# Preserve the exact frozen scenery source bytes on Windows checkouts.
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Banner_1_Cloth.obj -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Fern_1.obj -text whitespace=cr-at-eol

@@ -1,0 +1,24 @@
+{
+  "kind": "retained_source_byte_restore",
+  "checked_unique_inputs": 6,
+  "geometry_changed": false,
+  "runtime_test": false,
+  "files": [
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Banner_1_Cloth.obj",
+      "before_sha256": "c5c0df7c6cec08b782a6fce68d8b2d15275847b95025f1b469d6d0bd1fcbf38a",
+      "sha256": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
+      "before_bytes": 9010,
+      "bytes": 8702,
+      "change": "restore exact LF bytes; geometry unchanged"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/Fern_1.obj",
+      "before_sha256": "a4e63c1f9aa7371cec24e8ec65bad45cb5d3490dd3a2b1ac4324dd81b216f21e",
+      "sha256": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86",
+      "before_bytes": 20827,
+      "bytes": 20148,
+      "change": "restore exact LF bytes; geometry unchanged"
+    }
+  ]
+}
