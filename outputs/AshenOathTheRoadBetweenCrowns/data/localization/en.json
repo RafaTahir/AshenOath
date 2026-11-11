@@ -2506,6 +2506,1302 @@
       "speaker": "",
       "context": "conversation_topics.topics.halvern_preserved_words"
     },
+    "conversation_topics.topics.life2_anwen_bad_stew.lines.0.text": {
+      "source": "Does anyone ever refuse your help?",
+      "text": "Does anyone ever refuse your help?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew.lines.0"
+    },
+    "conversation_topics.topics.life2_anwen_bad_stew.lines.1.text": {
+      "source": "Nessa has forbidden me to season the stew. She was quite firm.",
+      "text": "Nessa has forbidden me to season the stew. She was quite firm.",
+      "speaker": "Anwen",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew.lines.1"
+    },
+    "conversation_topics.topics.life2_anwen_bad_stew.lines.2.text": {
+      "source": "How bad was it?",
+      "text": "How bad was it?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew.lines.2"
+    },
+    "conversation_topics.topics.life2_anwen_bad_stew.lines.3.text": {
+      "source": "People were very thirsty. I thought that was encouraging at first.",
+      "text": "People were very thirsty. I thought that was encouraging at first.",
+      "speaker": "Anwen",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew.lines.3"
+    },
+    "conversation_topics.topics.life2_anwen_bad_stew.lines.4.text": {
+      "source": "Have you tried again?",
+      "text": "Have you tried again?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew.lines.4"
+    },
+    "conversation_topics.topics.life2_anwen_bad_stew.lines.5.text": {
+      "source": "I chop onions now. Nessa tastes it, and I try to leave the spoon alone.",
+      "text": "I chop onions now. Nessa tastes it, and I try to leave the spoon alone.",
+      "speaker": "Anwen",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew.lines.5"
+    },
+    "conversation_topics.topics.life2_anwen_bad_stew.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew"
+    },
+    "conversation_topics.topics.life2_anwen_bad_stew.summary": {
+      "source": "The thing you cannot cook.",
+      "text": "The thing you cannot cook.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew"
+    },
+    "conversation_topics.topics.life2_anwen_bad_stew.title": {
+      "source": "The thing you cannot cook",
+      "text": "The thing you cannot cook",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_anwen_bad_stew"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.lines.0.text": {
+      "source": "What do you do when nobody needs you?",
+      "text": "What do you do when nobody needs you?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes.lines.0"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.lines.1.text": {
+      "source": "I usually discover that the linen needs me. It is very persuasive linen.",
+      "text": "I usually discover that the linen needs me. It is very persuasive linen.",
+      "speaker": "Anwen",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes.lines.1"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.lines.2.text": {
+      "source": "And if I hid the basket?",
+      "text": "And if I hid the basket?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes.lines.2"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.lines.3.text": {
+      "source": "I'd sit outside. There is a patch of afternoon sun beside the wall.",
+      "text": "I'd sit outside. There is a patch of afternoon sun beside the wall.",
+      "speaker": "Anwen",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes.lines.3"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.lines.4.text": {
+      "source": "Do you want company?",
+      "text": "Do you want company?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes.lines.4"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.lines.5.text": {
+      "source": "For five minutes. You may tell me something that doesn't require an answer.",
+      "text": "For five minutes. You may tell me something that doesn't require an answer.",
+      "speaker": "Anwen",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes.lines.5"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.name": {
+      "source": "Anwen",
+      "text": "Anwen",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.summary": {
+      "source": "Five minutes of your own.",
+      "text": "Five minutes of your own.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes"
+    },
+    "conversation_topics.topics.life2_anwen_five_minutes.title": {
+      "source": "Five minutes of your own",
+      "text": "Five minutes of your own",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_anwen_five_minutes"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.lines.0.text": {
+      "source": "Have you ever made your own breakfast?",
+      "text": "Have you ever made your own breakfast?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_edric_breakfast.lines.0"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.lines.1.text": {
+      "source": "That question has more accusation in it than the last three about the stores.",
+      "text": "That question has more accusation in it than the last three about the stores.",
+      "speaker": "Edric",
+      "context": "conversation_topics.topics.life2_edric_breakfast.lines.1"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.lines.2.text": {
+      "source": "I was wondering about the eggs.",
+      "text": "I was wondering about the eggs.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_edric_breakfast.lines.2"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.lines.3.text": {
+      "source": "I can boil an egg. I have been assured that this is not a sufficient household qualification.",
+      "text": "I can boil an egg. I have been assured that this is not a sufficient household qualification.",
+      "speaker": "Edric",
+      "context": "conversation_topics.topics.life2_edric_breakfast.lines.3"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.lines.4.text": {
+      "source": "Who assured you?",
+      "text": "Who assured you?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_edric_breakfast.lines.4"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.lines.5.text": {
+      "source": "Several people, independently. It appears to be the one matter on which the household agrees.",
+      "text": "Several people, independently. It appears to be the one matter on which the household agrees.",
+      "speaker": "Edric",
+      "context": "conversation_topics.topics.life2_edric_breakfast.lines.5"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.name": {
+      "source": "Edric",
+      "text": "Edric",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_edric_breakfast"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.summary": {
+      "source": "Your own breakfast.",
+      "text": "Your own breakfast.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_edric_breakfast"
+    },
+    "conversation_topics.topics.life2_edric_breakfast.title": {
+      "source": "Your own breakfast",
+      "text": "Your own breakfast",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_edric_breakfast"
+    },
+    "conversation_topics.topics.life2_edric_tune.lines.0.text": {
+      "source": "Do you play an instrument?",
+      "text": "Do you play an instrument?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_edric_tune.lines.0"
+    },
+    "conversation_topics.topics.life2_edric_tune.lines.1.text": {
+      "source": "Badly enough that people once praised the attempt rather than the result.",
+      "text": "Badly enough that people once praised the attempt rather than the result.",
+      "speaker": "Edric",
+      "context": "conversation_topics.topics.life2_edric_tune.lines.1"
+    },
+    "conversation_topics.topics.life2_edric_tune.lines.2.text": {
+      "source": "Did you believe them?",
+      "text": "Did you believe them?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_edric_tune.lines.2"
+    },
+    "conversation_topics.topics.life2_edric_tune.lines.3.text": {
+      "source": "At first. Then somebody who had not seen me laughed outside the door.",
+      "text": "At first. Then somebody who had not seen me laughed outside the door.",
+      "speaker": "Edric",
+      "context": "conversation_topics.topics.life2_edric_tune.lines.3"
+    },
+    "conversation_topics.topics.life2_edric_tune.lines.4.text": {
+      "source": "Did you keep playing?",
+      "text": "Did you keep playing?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_edric_tune.lines.4"
+    },
+    "conversation_topics.topics.life2_edric_tune.lines.5.text": {
+      "source": "In private. I would rather have learned to hear the wrong note sooner.",
+      "text": "In private. I would rather have learned to hear the wrong note sooner.",
+      "speaker": "Edric",
+      "context": "conversation_topics.topics.life2_edric_tune.lines.5"
+    },
+    "conversation_topics.topics.life2_edric_tune.name": {
+      "source": "Edric",
+      "text": "Edric",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_edric_tune"
+    },
+    "conversation_topics.topics.life2_edric_tune.summary": {
+      "source": "The tune you get wrong.",
+      "text": "The tune you get wrong.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_edric_tune"
+    },
+    "conversation_topics.topics.life2_edric_tune.title": {
+      "source": "The tune you get wrong",
+      "text": "The tune you get wrong",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_edric_tune"
+    },
+    "conversation_topics.topics.life2_elna_blue.lines.0.text": {
+      "source": "What would you change about your room?",
+      "text": "What would you change about your room?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_elna_blue.lines.0"
+    },
+    "conversation_topics.topics.life2_elna_blue.lines.1.text": {
+      "source": "Something blue. I haven't decided what. Everyone asks what size I need before asking what I like.",
+      "text": "Something blue. I haven't decided what. Everyone asks what size I need before asking what I like.",
+      "speaker": "Elna",
+      "context": "conversation_topics.topics.life2_elna_blue.lines.1"
+    },
+    "conversation_topics.topics.life2_elna_blue.lines.2.text": {
+      "source": "What sort of blue?",
+      "text": "What sort of blue?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_elna_blue.lines.2"
+    },
+    "conversation_topics.topics.life2_elna_blue.lines.3.text": {
+      "source": "Dark enough to look green when the light goes. I saw it once on a traveler's sleeve.",
+      "text": "Dark enough to look green when the light goes. I saw it once on a traveler's sleeve.",
+      "speaker": "Elna",
+      "context": "conversation_topics.topics.life2_elna_blue.lines.3"
+    },
+    "conversation_topics.topics.life2_elna_blue.lines.4.text": {
+      "source": "You remembered the sleeve.",
+      "text": "You remembered the sleeve.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_elna_blue.lines.4"
+    },
+    "conversation_topics.topics.life2_elna_blue.lines.5.text": {
+      "source": "I remembered wanting it. That surprised me more.",
+      "text": "I remembered wanting it. That surprised me more.",
+      "speaker": "Elna",
+      "context": "conversation_topics.topics.life2_elna_blue.lines.5"
+    },
+    "conversation_topics.topics.life2_elna_blue.name": {
+      "source": "Elna",
+      "text": "Elna",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_elna_blue"
+    },
+    "conversation_topics.topics.life2_elna_blue.summary": {
+      "source": "A color for the room.",
+      "text": "A color for the room.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_elna_blue"
+    },
+    "conversation_topics.topics.life2_elna_blue.title": {
+      "source": "A color for the room",
+      "text": "A color for the room",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_elna_blue"
+    },
+    "conversation_topics.topics.life2_elna_visitor.lines.0.text": {
+      "source": "What makes a good visitor?",
+      "text": "What makes a good visitor?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_elna_visitor.lines.0"
+    },
+    "conversation_topics.topics.life2_elna_visitor.lines.1.text": {
+      "source": "One who moves the basket before sitting down. You are improving.",
+      "text": "One who moves the basket before sitting down. You are improving.",
+      "speaker": "Elna",
+      "context": "conversation_topics.topics.life2_elna_visitor.lines.1"
+    },
+    "conversation_topics.topics.life2_elna_visitor.lines.2.text": {
+      "source": "Anything else?",
+      "text": "Anything else?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_elna_visitor.lines.2"
+    },
+    "conversation_topics.topics.life2_elna_visitor.lines.3.text": {
+      "source": "Ask an ordinary question sometimes. What I ate. Whether the roof kept the rain out.",
+      "text": "Ask an ordinary question sometimes. What I ate. Whether the roof kept the rain out.",
+      "speaker": "Elna",
+      "context": "conversation_topics.topics.life2_elna_visitor.lines.3"
+    },
+    "conversation_topics.topics.life2_elna_visitor.lines.4.text": {
+      "source": "What did you eat?",
+      "text": "What did you eat?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_elna_visitor.lines.4"
+    },
+    "conversation_topics.topics.life2_elna_visitor.lines.5.text": {
+      "source": "Bread with too much butter. I enjoyed every bit. You may look less worried now.",
+      "text": "Bread with too much butter. I enjoyed every bit. You may look less worried now.",
+      "speaker": "Elna",
+      "context": "conversation_topics.topics.life2_elna_visitor.lines.5"
+    },
+    "conversation_topics.topics.life2_elna_visitor.name": {
+      "source": "Elna",
+      "text": "Elna",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_elna_visitor"
+    },
+    "conversation_topics.topics.life2_elna_visitor.summary": {
+      "source": "How to be a good visitor.",
+      "text": "How to be a good visitor.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_elna_visitor"
+    },
+    "conversation_topics.topics.life2_elna_visitor.title": {
+      "source": "How to be a good visitor",
+      "text": "How to be a good visitor",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_elna_visitor"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.lines.0.text": {
+      "source": "Do you take the shortest way home?",
+      "text": "Do you take the shortest way home?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate.lines.0"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.lines.1.text": {
+      "source": "Through the service passage. Except when I take the garden gate, which adds seven minutes.",
+      "text": "Through the service passage. Except when I take the garden gate, which adds seven minutes.",
+      "speaker": "Merrow",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate.lines.1"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.lines.2.text": {
+      "source": "You have timed it?",
+      "text": "You have timed it?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate.lines.2"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.lines.3.text": {
+      "source": "Once. Then several more times to make sure I wasn't hurrying.",
+      "text": "Once. Then several more times to make sure I wasn't hurrying.",
+      "speaker": "Merrow",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate.lines.3"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.lines.4.text": {
+      "source": "What is worth the seven minutes?",
+      "text": "What is worth the seven minutes?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate.lines.4"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.lines.5.text": {
+      "source": "The sound changes outside the walls. I like arriving home after I have stopped hearing the office.",
+      "text": "The sound changes outside the walls. I like arriving home after I have stopped hearing the office.",
+      "speaker": "Merrow",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate.lines.5"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.name": {
+      "source": "Merrow",
+      "text": "Merrow",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.summary": {
+      "source": "The way home.",
+      "text": "The way home.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate"
+    },
+    "conversation_topics.topics.life2_merrow_garden_gate.title": {
+      "source": "The way home",
+      "text": "The way home",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_merrow_garden_gate"
+    },
+    "conversation_topics.topics.life2_merrow_tea.lines.0.text": {
+      "source": "Does your tea always go cold?",
+      "text": "Does your tea always go cold?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_merrow_tea.lines.0"
+    },
+    "conversation_topics.topics.life2_merrow_tea.lines.1.text": {
+      "source": "It is usually the first thing I prepare and the last thing I remember.",
+      "text": "It is usually the first thing I prepare and the last thing I remember.",
+      "speaker": "Merrow",
+      "context": "conversation_topics.topics.life2_merrow_tea.lines.1"
+    },
+    "conversation_topics.topics.life2_merrow_tea.lines.2.text": {
+      "source": "I can wait while you drink it.",
+      "text": "I can wait while you drink it.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_merrow_tea.lines.2"
+    },
+    "conversation_topics.topics.life2_merrow_tea.lines.3.text": {
+      "source": "That is unexpectedly difficult to accept. I keep wanting to find you something to read.",
+      "text": "That is unexpectedly difficult to accept. I keep wanting to find you something to read.",
+      "speaker": "Merrow",
+      "context": "conversation_topics.topics.life2_merrow_tea.lines.3"
+    },
+    "conversation_topics.topics.life2_merrow_tea.lines.4.text": {
+      "source": "I am comfortable waiting.",
+      "text": "I am comfortable waiting.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_merrow_tea.lines.4"
+    },
+    "conversation_topics.topics.life2_merrow_tea.lines.5.text": {
+      "source": "Then I shall try being comfortable drinking. A moment, please.",
+      "text": "Then I shall try being comfortable drinking. A moment, please.",
+      "speaker": "Merrow",
+      "context": "conversation_topics.topics.life2_merrow_tea.lines.5"
+    },
+    "conversation_topics.topics.life2_merrow_tea.name": {
+      "source": "Merrow",
+      "text": "Merrow",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_merrow_tea"
+    },
+    "conversation_topics.topics.life2_merrow_tea.summary": {
+      "source": "Tea while it is hot.",
+      "text": "Tea while it is hot.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_merrow_tea"
+    },
+    "conversation_topics.topics.life2_merrow_tea.title": {
+      "source": "Tea while it is hot",
+      "text": "Tea while it is hot",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_merrow_tea"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.lines.0.text": {
+      "source": "What do you read when the weather keeps you indoors?",
+      "text": "What do you read when the weather keeps you indoors?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_mira_rain_reading.lines.0"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.lines.1.text": {
+      "source": "Travel accounts. Especially the ones written by people who plainly got lost.",
+      "text": "Travel accounts. Especially the ones written by people who plainly got lost.",
+      "speaker": "Mira",
+      "context": "conversation_topics.topics.life2_mira_rain_reading.lines.1"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.lines.2.text": {
+      "source": "For the descriptions?",
+      "text": "For the descriptions?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_mira_rain_reading.lines.2"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.lines.3.text": {
+      "source": "For the corrections. You can hear them getting less certain as the pages go on.",
+      "text": "For the corrections. You can hear them getting less certain as the pages go on.",
+      "speaker": "Mira",
+      "context": "conversation_topics.topics.life2_mira_rain_reading.lines.3"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.lines.4.text": {
+      "source": "Would you make the journeys yourself?",
+      "text": "Would you make the journeys yourself?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_mira_rain_reading.lines.4"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.lines.5.text": {
+      "source": "One or two. Somewhere with a warm room at the end, preferably. I'm quite adventurous about warm rooms.",
+      "text": "One or two. Somewhere with a warm room at the end, preferably. I'm quite adventurous about warm rooms.",
+      "speaker": "Mira",
+      "context": "conversation_topics.topics.life2_mira_rain_reading.lines.5"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_mira_rain_reading"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.summary": {
+      "source": "What you read in the rain.",
+      "text": "What you read in the rain.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_mira_rain_reading"
+    },
+    "conversation_topics.topics.life2_mira_rain_reading.title": {
+      "source": "What you read in the rain",
+      "text": "What you read in the rain",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_mira_rain_reading"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.lines.0.text": {
+      "source": "Are all the flowers you keep useful?",
+      "text": "Are all the flowers you keep useful?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers.lines.0"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.lines.1.text": {
+      "source": "The yellow ones are dreadful medicine. Very cheerful, though.",
+      "text": "The yellow ones are dreadful medicine. Very cheerful, though.",
+      "speaker": "Mira",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers.lines.1"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.lines.2.text": {
+      "source": "You planted them for the color?",
+      "text": "You planted them for the color?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers.lines.2"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.lines.3.text": {
+      "source": "Yes. Toma calls them weeds with ambition. I like them better for it.",
+      "text": "Yes. Toma calls them weeds with ambition. I like them better for it.",
+      "speaker": "Mira",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers.lines.3"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.lines.4.text": {
+      "source": "Will they stay?",
+      "text": "Will they stay?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers.lines.4"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.lines.5.text": {
+      "source": "As long as they leave room for the roots I need. I can want two things in one garden.",
+      "text": "As long as they leave room for the roots I need. I can want two things in one garden.",
+      "speaker": "Mira",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers.lines.5"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.name": {
+      "source": "Mira",
+      "text": "Mira",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.summary": {
+      "source": "The useless yellow flowers.",
+      "text": "The useless yellow flowers.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers"
+    },
+    "conversation_topics.topics.life2_mira_yellow_flowers.title": {
+      "source": "The useless yellow flowers",
+      "text": "The useless yellow flowers",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_mira_yellow_flowers"
+    },
+    "conversation_topics.topics.life2_nera_next_place.lines.0.text": {
+      "source": "Where would you go with an empty cart?",
+      "text": "Where would you go with an empty cart?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nera_next_place.lines.0"
+    },
+    "conversation_topics.topics.life2_nera_next_place.lines.1.text": {
+      "source": "Somewhere I had never been asked to take a cart. A difficult destination to put on a map.",
+      "text": "Somewhere I had never been asked to take a cart. A difficult destination to put on a map.",
+      "speaker": "Nera",
+      "context": "conversation_topics.topics.life2_nera_next_place.lines.1"
+    },
+    "conversation_topics.topics.life2_nera_next_place.lines.2.text": {
+      "source": "Sea or hills?",
+      "text": "Sea or hills?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nera_next_place.lines.2"
+    },
+    "conversation_topics.topics.life2_nera_next_place.lines.3.text": {
+      "source": "Hills. I would like to reach the top and have nothing to unload.",
+      "text": "Hills. I would like to reach the top and have nothing to unload.",
+      "speaker": "Nera",
+      "context": "conversation_topics.topics.life2_nera_next_place.lines.3"
+    },
+    "conversation_topics.topics.life2_nera_next_place.lines.4.text": {
+      "source": "Have you chosen a route?",
+      "text": "Have you chosen a route?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nera_next_place.lines.4"
+    },
+    "conversation_topics.topics.life2_nera_next_place.lines.5.text": {
+      "source": "I'm keeping that part for myself a while. Planning it has been pleasant.",
+      "text": "I'm keeping that part for myself a while. Planning it has been pleasant.",
+      "speaker": "Nera",
+      "context": "conversation_topics.topics.life2_nera_next_place.lines.5"
+    },
+    "conversation_topics.topics.life2_nera_next_place.name": {
+      "source": "Nera",
+      "text": "Nera",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nera_next_place"
+    },
+    "conversation_topics.topics.life2_nera_next_place.summary": {
+      "source": "A place you want to see.",
+      "text": "A place you want to see.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nera_next_place"
+    },
+    "conversation_topics.topics.life2_nera_next_place.title": {
+      "source": "A place you want to see",
+      "text": "A place you want to see",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nera_next_place"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.lines.0.text": {
+      "source": "What do your crew argue about when the road is easy?",
+      "text": "What do your crew argue about when the road is easy?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel.lines.0"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.lines.1.text": {
+      "source": "Where to put a wet cup. It is an argument of surprising endurance.",
+      "text": "Where to put a wet cup. It is an argument of surprising endurance.",
+      "speaker": "Nera",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel.lines.1"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.lines.2.text": {
+      "source": "Where do you put yours?",
+      "text": "Where do you put yours?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel.lines.2"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.lines.3.text": {
+      "source": "On top of whatever is least likely to fall. Apparently that is not a system.",
+      "text": "On top of whatever is least likely to fall. Apparently that is not a system.",
+      "speaker": "Nera",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel.lines.3"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.lines.4.text": {
+      "source": "Do you settle it as their leader?",
+      "text": "Do you settle it as their leader?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel.lines.4"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.lines.5.text": {
+      "source": "They have put a small cloth beside my seat. I have decided to regard it as a treaty.",
+      "text": "They have put a small cloth beside my seat. I have decided to regard it as a treaty.",
+      "speaker": "Nera",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel.lines.5"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.name": {
+      "source": "Nera",
+      "text": "Nera",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.summary": {
+      "source": "A small quarrel.",
+      "text": "A small quarrel.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel"
+    },
+    "conversation_topics.topics.life2_nera_small_quarrel.title": {
+      "source": "A small quarrel",
+      "text": "A small quarrel",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nera_small_quarrel"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.lines.0.text": {
+      "source": "Do you ever eat at someone else's table?",
+      "text": "Do you ever eat at someone else's table?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted.lines.0"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.lines.1.text": {
+      "source": "I try. Then I see how they have stacked the bowls and start rearranging them.",
+      "text": "I try. Then I see how they have stacked the bowls and start rearranging them.",
+      "speaker": "Nessa",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted.lines.1"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.lines.2.text": {
+      "source": "What if they ask you to sit down?",
+      "text": "What if they ask you to sit down?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted.lines.2"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.lines.3.text": {
+      "source": "I sit. I notice the bowls from there as well.",
+      "text": "I sit. I notice the bowls from there as well.",
+      "speaker": "Nessa",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted.lines.3"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.lines.4.text": {
+      "source": "Perhaps they want your company.",
+      "text": "Perhaps they want your company.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted.lines.4"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.lines.5.text": {
+      "source": "That is what Elna said. Quite sharply, in fact. I had a lovely evening once I believed her.",
+      "text": "That is what Elna said. Quite sharply, in fact. I had a lovely evening once I believed her.",
+      "speaker": "Nessa",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted.lines.5"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.name": {
+      "source": "Nessa",
+      "text": "Nessa",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.summary": {
+      "source": "Letting someone host you.",
+      "text": "Letting someone host you.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted"
+    },
+    "conversation_topics.topics.life2_nessa_being_hosted.title": {
+      "source": "Letting someone host you",
+      "text": "Letting someone host you",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nessa_being_hosted"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.lines.0.text": {
+      "source": "What do you make when you aren't baking?",
+      "text": "What do you make when you aren't baking?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals.lines.0"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.lines.1.text": {
+      "source": "Small animals from scrap wood. Rook says they are all potatoes with ears.",
+      "text": "Small animals from scrap wood. Rook says they are all potatoes with ears.",
+      "speaker": "Nessa",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals.lines.1"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.lines.2.text": {
+      "source": "Is he right?",
+      "text": "Is he right?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals.lines.2"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.lines.3.text": {
+      "source": "About the horse. The badger is very good. I refuse to hear otherwise.",
+      "text": "About the horse. The badger is very good. I refuse to hear otherwise.",
+      "speaker": "Nessa",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals.lines.3"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.lines.4.text": {
+      "source": "Who gets them?",
+      "text": "Who gets them?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals.lines.4"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.lines.5.text": {
+      "source": "Whoever asks nicely. I keep the badger. An artist is allowed one satisfied customer.",
+      "text": "Whoever asks nicely. I keep the badger. An artist is allowed one satisfied customer.",
+      "speaker": "Nessa",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals.lines.5"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.name": {
+      "source": "Nessa",
+      "text": "Nessa",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.summary": {
+      "source": "The little wooden animals.",
+      "text": "The little wooden animals.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals"
+    },
+    "conversation_topics.topics.life2_nessa_carved_animals.title": {
+      "source": "The little wooden animals",
+      "text": "The little wooden animals",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_nessa_carved_animals"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.lines.0.text": {
+      "source": "Do you always explain why you lost?",
+      "text": "Do you always explain why you lost?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_rook_losing_well.lines.0"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.lines.1.text": {
+      "source": "Only when the explanation is more interesting than the game.",
+      "text": "Only when the explanation is more interesting than the game.",
+      "speaker": "Rook",
+      "context": "conversation_topics.topics.life2_rook_losing_well.lines.1"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.lines.2.text": {
+      "source": "And when it isn't?",
+      "text": "And when it isn't?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_rook_losing_well.lines.2"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.lines.3.text": {
+      "source": "Then I improve it. The light is usually at fault.",
+      "text": "Then I improve it. The light is usually at fault.",
+      "speaker": "Rook",
+      "context": "conversation_topics.topics.life2_rook_losing_well.lines.3"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.lines.4.text": {
+      "source": "You could just say I played well.",
+      "text": "You could just say I played well.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_rook_losing_well.lines.4"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.lines.5.text": {
+      "source": "You played well. There. An exhausting afternoon's honesty. Shall we have another?",
+      "text": "You played well. There. An exhausting afternoon's honesty. Shall we have another?",
+      "speaker": "Rook",
+      "context": "conversation_topics.topics.life2_rook_losing_well.lines.5"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.name": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_rook_losing_well"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.summary": {
+      "source": "Losing gracefully.",
+      "text": "Losing gracefully.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_rook_losing_well"
+    },
+    "conversation_topics.topics.life2_rook_losing_well.title": {
+      "source": "Losing gracefully",
+      "text": "Losing gracefully",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_rook_losing_well"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.lines.0.text": {
+      "source": "Do you ever run out of things to say?",
+      "text": "Do you ever run out of things to say?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_rook_quiet_company.lines.0"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.lines.1.text": {
+      "source": "Frequently. I keep three old stories ready so nobody notices.",
+      "text": "Frequently. I keep three old stories ready so nobody notices.",
+      "speaker": "Rook",
+      "context": "conversation_topics.topics.life2_rook_quiet_company.lines.1"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.lines.2.text": {
+      "source": "I notice the one about the shortcut.",
+      "text": "I notice the one about the shortcut.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_rook_quiet_company.lines.2"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.lines.3.text": {
+      "source": "Everyone notices that one. It's still quicker than admitting I'm tired.",
+      "text": "Everyone notices that one. It's still quicker than admitting I'm tired.",
+      "speaker": "Rook",
+      "context": "conversation_topics.topics.life2_rook_quiet_company.lines.3"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.lines.4.text": {
+      "source": "You can be tired here.",
+      "text": "You can be tired here.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_rook_quiet_company.lines.4"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.lines.5.text": {
+      "source": "Good. Sit where you can watch the door. I would like to stop doing it for a little while.",
+      "text": "Good. Sit where you can watch the door. I would like to stop doing it for a little while.",
+      "speaker": "Rook",
+      "context": "conversation_topics.topics.life2_rook_quiet_company.lines.5"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.name": {
+      "source": "Rook",
+      "text": "Rook",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_rook_quiet_company"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.summary": {
+      "source": "An evening without a story.",
+      "text": "An evening without a story.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_rook_quiet_company"
+    },
+    "conversation_topics.topics.life2_rook_quiet_company.title": {
+      "source": "An evening without a story",
+      "text": "An evening without a story",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_rook_quiet_company"
+    },
+    "conversation_topics.topics.life2_senn_request.lines.0.text": {
+      "source": "You nearly gave that as an order.",
+      "text": "You nearly gave that as an order.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_senn_request.lines.0"
+    },
+    "conversation_topics.topics.life2_senn_request.lines.1.text": {
+      "source": "I heard it too. The first word came out before I had chosen the rest.",
+      "text": "I heard it too. The first word came out before I had chosen the rest.",
+      "speaker": "Senn",
+      "context": "conversation_topics.topics.life2_senn_request.lines.1"
+    },
+    "conversation_topics.topics.life2_senn_request.lines.2.text": {
+      "source": "What were you trying to ask?",
+      "text": "What were you trying to ask?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_senn_request.lines.2"
+    },
+    "conversation_topics.topics.life2_senn_request.lines.3.text": {
+      "source": "Whether there was room for me at the bench. I made it sound like an inspection.",
+      "text": "Whether there was room for me at the bench. I made it sound like an inspection.",
+      "speaker": "Senn",
+      "context": "conversation_topics.topics.life2_senn_request.lines.3"
+    },
+    "conversation_topics.topics.life2_senn_request.lines.4.text": {
+      "source": "You could try the question again.",
+      "text": "You could try the question again.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_senn_request.lines.4"
+    },
+    "conversation_topics.topics.life2_senn_request.lines.5.text": {
+      "source": "Would there be room? You needn't answer quickly. I am trying to remember that part.",
+      "text": "Would there be room? You needn't answer quickly. I am trying to remember that part.",
+      "speaker": "Senn",
+      "context": "conversation_topics.topics.life2_senn_request.lines.5"
+    },
+    "conversation_topics.topics.life2_senn_request.name": {
+      "source": "Senn",
+      "text": "Senn",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_senn_request"
+    },
+    "conversation_topics.topics.life2_senn_request.summary": {
+      "source": "Asking for a hand.",
+      "text": "Asking for a hand.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_senn_request"
+    },
+    "conversation_topics.topics.life2_senn_request.title": {
+      "source": "Asking for a hand",
+      "text": "Asking for a hand",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_senn_request"
+    },
+    "conversation_topics.topics.life2_senn_song.lines.0.text": {
+      "source": "You were tapping out a tune.",
+      "text": "You were tapping out a tune.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_senn_song.lines.0"
+    },
+    "conversation_topics.topics.life2_senn_song.lines.1.text": {
+      "source": "An old marching song. I cannot remember the second verse.",
+      "text": "An old marching song. I cannot remember the second verse.",
+      "speaker": "Senn",
+      "context": "conversation_topics.topics.life2_senn_song.lines.1"
+    },
+    "conversation_topics.topics.life2_senn_song.lines.2.text": {
+      "source": "Did you ever know it?",
+      "text": "Did you ever know it?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_senn_song.lines.2"
+    },
+    "conversation_topics.topics.life2_senn_song.lines.3.text": {
+      "source": "Probably not. We all sang the first verse louder and trusted the man beside us.",
+      "text": "Probably not. We all sang the first verse louder and trusted the man beside us.",
+      "speaker": "Senn",
+      "context": "conversation_topics.topics.life2_senn_song.lines.3"
+    },
+    "conversation_topics.topics.life2_senn_song.lines.4.text": {
+      "source": "Does that bother you now?",
+      "text": "Does that bother you now?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_senn_song.lines.4"
+    },
+    "conversation_topics.topics.life2_senn_song.lines.5.text": {
+      "source": "Sometimes. Today I would simply like to remember whether it was about rain or a missing boot.",
+      "text": "Sometimes. Today I would simply like to remember whether it was about rain or a missing boot.",
+      "speaker": "Senn",
+      "context": "conversation_topics.topics.life2_senn_song.lines.5"
+    },
+    "conversation_topics.topics.life2_senn_song.name": {
+      "source": "Senn",
+      "text": "Senn",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_senn_song"
+    },
+    "conversation_topics.topics.life2_senn_song.summary": {
+      "source": "A marching tune.",
+      "text": "A marching tune.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_senn_song"
+    },
+    "conversation_topics.topics.life2_senn_song.title": {
+      "source": "A marching tune",
+      "text": "A marching tune",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_senn_song"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.lines.0.text": {
+      "source": "Does your daughter take your advice?",
+      "text": "Does your daughter take your advice?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices.lines.0"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.lines.1.text": {
+      "source": "She listens closely, which fooled me for quite a while.",
+      "text": "She listens closely, which fooled me for quite a while.",
+      "speaker": "Toma",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices.lines.1"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.lines.2.text": {
+      "source": "Then does what she intended?",
+      "text": "Then does what she intended?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices.lines.2"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.lines.3.text": {
+      "source": "Sometimes she tries it my way first. I almost find that worse when hers works better.",
+      "text": "Sometimes she tries it my way first. I almost find that worse when hers works better.",
+      "speaker": "Toma",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices.lines.3"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.lines.4.text": {
+      "source": "Do you tell her?",
+      "text": "Do you tell her?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices.lines.4"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.lines.5.text": {
+      "source": "Eventually. She has learned to wait with a very patient expression. I wonder where she got it.",
+      "text": "Eventually. She has learned to wait with a very patient expression. I wonder where she got it.",
+      "speaker": "Toma",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices.lines.5"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.name": {
+      "source": "Toma",
+      "text": "Toma",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.summary": {
+      "source": "Your daughter's opinion.",
+      "text": "Your daughter's opinion.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices"
+    },
+    "conversation_topics.topics.life2_toma_daughter_choices.title": {
+      "source": "Your daughter's opinion",
+      "text": "Your daughter's opinion",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_toma_daughter_choices"
+    },
+    "conversation_topics.topics.life2_toma_supper.lines.0.text": {
+      "source": "How do you know when the day's work is finished?",
+      "text": "How do you know when the day's work is finished?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_toma_supper.lines.0"
+    },
+    "conversation_topics.topics.life2_toma_supper.lines.1.text": {
+      "source": "I don't. Usually somebody starts supper without me.",
+      "text": "I don't. Usually somebody starts supper without me.",
+      "speaker": "Toma",
+      "context": "conversation_topics.topics.life2_toma_supper.lines.1"
+    },
+    "conversation_topics.topics.life2_toma_supper.lines.2.text": {
+      "source": "Does the work suffer if you stop?",
+      "text": "Does the work suffer if you stop?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_toma_supper.lines.2"
+    },
+    "conversation_topics.topics.life2_toma_supper.lines.3.text": {
+      "source": "Most of it waits perfectly well. I come back and find it exactly as annoying as before.",
+      "text": "Most of it waits perfectly well. I come back and find it exactly as annoying as before.",
+      "speaker": "Toma",
+      "context": "conversation_topics.topics.life2_toma_supper.lines.3"
+    },
+    "conversation_topics.topics.life2_toma_supper.lines.4.text": {
+      "source": "Then why stay?",
+      "text": "Then why stay?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_toma_supper.lines.4"
+    },
+    "conversation_topics.topics.life2_toma_supper.lines.5.text": {
+      "source": "I like going indoors with an answer ready. Sometimes I ought to go indoors with muddy boots and no answer.",
+      "text": "I like going indoors with an answer ready. Sometimes I ought to go indoors with muddy boots and no answer.",
+      "speaker": "Toma",
+      "context": "conversation_topics.topics.life2_toma_supper.lines.5"
+    },
+    "conversation_topics.topics.life2_toma_supper.name": {
+      "source": "Toma",
+      "text": "Toma",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_toma_supper"
+    },
+    "conversation_topics.topics.life2_toma_supper.summary": {
+      "source": "The last job before supper.",
+      "text": "The last job before supper.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_toma_supper"
+    },
+    "conversation_topics.topics.life2_toma_supper.title": {
+      "source": "The last job before supper",
+      "text": "The last job before supper",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_toma_supper"
+    },
+    "conversation_topics.topics.life2_tor_ornament.lines.0.text": {
+      "source": "Have you ever made something just because you liked its shape?",
+      "text": "Have you ever made something just because you liked its shape?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_tor_ornament.lines.0"
+    },
+    "conversation_topics.topics.life2_tor_ornament.lines.1.text": {
+      "source": "A little iron bird. Very poor at being a hook.",
+      "text": "A little iron bird. Very poor at being a hook.",
+      "speaker": "Tor",
+      "context": "conversation_topics.topics.life2_tor_ornament.lines.1"
+    },
+    "conversation_topics.topics.life2_tor_ornament.lines.2.text": {
+      "source": "Was it meant to be a hook?",
+      "text": "Was it meant to be a hook?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_tor_ornament.lines.2"
+    },
+    "conversation_topics.topics.life2_tor_ornament.lines.3.text": {
+      "source": "That is what I told people. It was meant to be a bird.",
+      "text": "That is what I told people. It was meant to be a bird.",
+      "speaker": "Tor",
+      "context": "conversation_topics.topics.life2_tor_ornament.lines.3"
+    },
+    "conversation_topics.topics.life2_tor_ornament.lines.4.text": {
+      "source": "Do you still have it?",
+      "text": "Do you still have it?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_tor_ornament.lines.4"
+    },
+    "conversation_topics.topics.life2_tor_ornament.lines.5.text": {
+      "source": "Somewhere safe. I might try another. The wings were better than the feet.",
+      "text": "Somewhere safe. I might try another. The wings were better than the feet.",
+      "speaker": "Tor",
+      "context": "conversation_topics.topics.life2_tor_ornament.lines.5"
+    },
+    "conversation_topics.topics.life2_tor_ornament.name": {
+      "source": "Tor",
+      "text": "Tor",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_tor_ornament"
+    },
+    "conversation_topics.topics.life2_tor_ornament.summary": {
+      "source": "Making something beautiful.",
+      "text": "Making something beautiful.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_tor_ornament"
+    },
+    "conversation_topics.topics.life2_tor_ornament.title": {
+      "source": "Making something beautiful",
+      "text": "Making something beautiful",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_tor_ornament"
+    },
+    "conversation_topics.topics.life2_tor_teaching.lines.0.text": {
+      "source": "Are you a patient teacher?",
+      "text": "Are you a patient teacher?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_tor_teaching.lines.0"
+    },
+    "conversation_topics.topics.life2_tor_teaching.lines.1.text": {
+      "source": "Until somebody picks up the tool. Then my hands start reaching for it.",
+      "text": "Until somebody picks up the tool. Then my hands start reaching for it.",
+      "speaker": "Tor",
+      "context": "conversation_topics.topics.life2_tor_teaching.lines.1"
+    },
+    "conversation_topics.topics.life2_tor_teaching.lines.2.text": {
+      "source": "That sounds familiar.",
+      "text": "That sounds familiar.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_tor_teaching.lines.2"
+    },
+    "conversation_topics.topics.life2_tor_teaching.lines.3.text": {
+      "source": "I know exactly where their thumb should go. Saying it is harder than moving it.",
+      "text": "I know exactly where their thumb should go. Saying it is harder than moving it.",
+      "speaker": "Tor",
+      "context": "conversation_topics.topics.life2_tor_teaching.lines.3"
+    },
+    "conversation_topics.topics.life2_tor_teaching.lines.4.text": {
+      "source": "How do you stop yourself?",
+      "text": "How do you stop yourself?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_tor_teaching.lines.4"
+    },
+    "conversation_topics.topics.life2_tor_teaching.lines.5.text": {
+      "source": "Hands behind my back. If you see me standing like an officer, somebody is learning something.",
+      "text": "Hands behind my back. If you see me standing like an officer, somebody is learning something.",
+      "speaker": "Tor",
+      "context": "conversation_topics.topics.life2_tor_teaching.lines.5"
+    },
+    "conversation_topics.topics.life2_tor_teaching.name": {
+      "source": "Tor",
+      "text": "Tor",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_tor_teaching"
+    },
+    "conversation_topics.topics.life2_tor_teaching.summary": {
+      "source": "Letting someone else try.",
+      "text": "Letting someone else try.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_tor_teaching"
+    },
+    "conversation_topics.topics.life2_tor_teaching.title": {
+      "source": "Letting someone else try",
+      "text": "Letting someone else try",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_tor_teaching"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.lines.0.text": {
+      "source": "You have ink on your sleeve.",
+      "text": "You have ink on your sleeve.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_vale_untidy_page.lines.0"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.lines.1.text": {
+      "source": "Yes. I was drawing something in the margin and leaned across it.",
+      "text": "Yes. I was drawing something in the margin and leaned across it.",
+      "speaker": "Vale",
+      "context": "conversation_topics.topics.life2_vale_untidy_page.lines.1"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.lines.2.text": {
+      "source": "What were you drawing?",
+      "text": "What were you drawing?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_vale_untidy_page.lines.2"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.lines.3.text": {
+      "source": "A bird. It has too many feet. I kept starting the feet again.",
+      "text": "A bird. It has too many feet. I kept starting the feet again.",
+      "speaker": "Vale",
+      "context": "conversation_topics.topics.life2_vale_untidy_page.lines.3"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.lines.4.text": {
+      "source": "Will you scrape it off?",
+      "text": "Will you scrape it off?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_vale_untidy_page.lines.4"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.lines.5.text": {
+      "source": "I think I'll keep it. It is unmistakably mine.",
+      "text": "I think I'll keep it. It is unmistakably mine.",
+      "speaker": "Vale",
+      "context": "conversation_topics.topics.life2_vale_untidy_page.lines.5"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_vale_untidy_page"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.summary": {
+      "source": "Leaving a page untidy.",
+      "text": "Leaving a page untidy.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_vale_untidy_page"
+    },
+    "conversation_topics.topics.life2_vale_untidy_page.title": {
+      "source": "Leaving a page untidy",
+      "text": "Leaving a page untidy",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_vale_untidy_page"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.lines.0.text": {
+      "source": "Do you write anything for yourself?",
+      "text": "Do you write anything for yourself?",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence.lines.0"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.lines.1.text": {
+      "source": "Descriptions of weather, lately. They are all much too long.",
+      "text": "Descriptions of weather, lately. They are all much too long.",
+      "speaker": "Vale",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence.lines.1"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.lines.2.text": {
+      "source": "Let me hear one.",
+      "text": "Let me hear one.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence.lines.2"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.lines.3.text": {
+      "source": "No. I would begin correcting it as soon as you listened, and it would become work.",
+      "text": "No. I would begin correcting it as soon as you listened, and it would become work.",
+      "speaker": "Vale",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence.lines.3"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.lines.4.text": {
+      "source": "Then I won't ask again.",
+      "text": "Then I won't ask again.",
+      "speaker": "Kael",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence.lines.4"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.lines.5.text": {
+      "source": "You may ask whether I wrote today. That is a different question.",
+      "text": "You may ask whether I wrote today. That is a different question.",
+      "speaker": "Vale",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence.lines.5"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.name": {
+      "source": "Vale",
+      "text": "Vale",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.summary": {
+      "source": "A sentence nobody commissioned.",
+      "text": "A sentence nobody commissioned.",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence"
+    },
+    "conversation_topics.topics.life2_vale_weather_sentence.title": {
+      "source": "A sentence nobody commissioned",
+      "text": "A sentence nobody commissioned",
+      "speaker": "",
+      "context": "conversation_topics.topics.life2_vale_weather_sentence"
+    },
     "conversation_topics.topics.mira_medicine_labels.name": {
       "source": "Mira",
       "text": "Mira",

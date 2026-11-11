@@ -244,7 +244,7 @@
     {
       "path": "art_source/art_recovery_v2/models/living_cast_20261107/props/satchel_compile.json",
       "bytes": 985,
-      "sha256": "30b6858e6df4d47081294c797c5d8ce78fddf95a80280e4bcb0691261f92ce21"
+      "sha256": "40d835410de5e0a895e32d05f7139d264f8c90038cd72087b49ceb9cbaf8dc1c"
     },
     {
       "path": "art_source/art_recovery_v2/models/living_cast_20261107/README.md",
@@ -323,8 +323,8 @@
     },
     {
       "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/rook_station_satchel.scn",
-      "bytes": 781,
-      "sha256": "40b79fab8bea33afb8e848ae9ab3c56bb6b8995fb2d051c25365997f987632a9"
+      "bytes": 782,
+      "sha256": "551a8e31e9f5c5bc9b89a74a3733153a6e2c15f9b6e599d9ac62b0fe5d03f0b8"
     },
     {
       "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment_prepared/living_cast/rook_station_satchel_body.res",
@@ -344,7 +344,7 @@
     {
       "path": "outputs/AshenOathTheRoadBetweenCrowns/release_reports/living_cast_20261107/asset_coverage.json",
       "bytes": 266746,
-      "sha256": "4fd35795580683b319b78cacb092cddb361cd154957d2dd3fbbcc6a11a2edb1b"
+      "sha256": "0249ccfe229ab9cec77d0134e7ef45691a8045dba1c7959acbdfa0edd74f2b37"
     },
     {
       "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_libraries.gd",
@@ -352,13 +352,23 @@
       "sha256": "54dd24c1f47376598788eea319a045955b6d4748fa0ad1279a2b5ec579523ff4"
     },
     {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_libraries.gd.uid",
+      "bytes": 20,
+      "sha256": "753a8828eaf989e9810147a396bc11a45af7c7b93dad4b02c3479a22da574c91"
+    },
+    {
       "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_station_props.gd",
       "bytes": 4357,
       "sha256": "0a22ec95ee7d65e5f9521fbdb6e3ed886b0fc4cae5dbefc877d6b21f579110e4"
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_station_props.gd.uid",
+      "bytes": 19,
+      "sha256": "3e1092a94bdd8d126419a54030985e644c86d42d128024317f5140100d5cde85"
     }
   ],
   "manifest_path": "outputs/AshenOathTheRoadBetweenCrowns/release_reports/living_cast_20261107/stage1_asset_files.json",
-  "runtime_candidate_bytes": 817771,
+  "runtime_candidate_bytes": 817772,
   "source_art_in_web": false,
   "runtime_reviewed": false,
   "user_accepted": false,

@@ -1,6 +1,8 @@
 {
 	"anwen|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C01.res"
+		],
 		"compiled_sha256": "f2f3b3d06956f752674ab84bb9ab3e2627e6c092276a372faf2e37a69c2545c7",
 		"material_bindings": [
 			{
@@ -32,6 +34,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0f0e1b2d2ba9cf327b9ac36d0c276e703813ed3ef839bdfb127c1d1161130ed9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_241cc49951cc8b7d4f4047ff2568e08ba4b37345c8be90cf87cd06e65a72ecd7.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7298ef8a15335cbccc164fe8b6d10fa544dbae60042f9eff2045fafed5ad9ee5.png",
@@ -57,19 +60,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb",
@@ -104,19 +115,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb",
@@ -151,19 +170,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 29.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "b0e6b2b5428dac7edfed52ca1373a4f762890dd3b54ea9c5b7d3897519033bbb",
@@ -198,19 +225,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
@@ -255,19 +290,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
@@ -312,19 +355,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
@@ -369,19 +420,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "a6b4e45e1f24c21e8d0e0effb47a059ef8f6aebca65c76d902a163154ba98fce",
@@ -450,19 +509,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "a6b4e45e1f24c21e8d0e0effb47a059ef8f6aebca65c76d902a163154ba98fce",
@@ -525,7 +592,9 @@
 		"variant_safe": true
 	},
 	"blacksmith_tor|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -557,6 +626,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -582,19 +652,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "73e9de3fa0a89d759a0b4a6d728cb3f0eb0c88a8f7e19ee8f480a53e98555a3d",
@@ -671,19 +749,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "73e9de3fa0a89d759a0b4a6d728cb3f0eb0c88a8f7e19ee8f480a53e98555a3d",
@@ -760,19 +846,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244",
@@ -807,19 +901,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244",
@@ -854,19 +956,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 10.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 10.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 10.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 10.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "4e6551ebd5d935b4df3a1689f44b4b61758be0234143c2e39b7ddc6900275f72",
@@ -895,7 +1005,9 @@
 		"variant_safe": true
 	},
 	"captain_senn|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C07.res"
+		],
 		"compiled_sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
 		"material_bindings": [
 			{
@@ -932,6 +1044,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C07.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_35456ab8e4b0f0bff043394494928d05a18afbf34b8d84e09161f65ae33aac98.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4e333c769a5ccfb598fe146d01cc9b1fd9102fc0c5873e621c023699cfc67b5c.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -1056,7 +1169,9 @@
 		"variant_safe": true
 	},
 	"dain|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -1088,6 +1203,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -1107,7 +1223,9 @@
 		"variant_safe": true
 	},
 	"edda|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C03.res"
+		],
 		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
 		"material_bindings": [
 			{
@@ -1139,6 +1257,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C03.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_15aca17b69faf25b18994c1e9318a08915f241126bc238f4ce320bc1b42b8b83.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_d3bb3af9606a4754055e1ae6c605f541be3504aaec0d64f1f13e6811355b69e5.png",
@@ -1155,7 +1274,9 @@
 		"variant_safe": true
 	},
 	"edric_campaign|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C08.res"
+		],
 		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
 		"material_bindings": [
 			{
@@ -1187,6 +1308,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C08.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d.png",
@@ -1206,7 +1328,9 @@
 		"variant_safe": true
 	},
 	"edric_castle|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C08.res"
+		],
 		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
 		"material_bindings": [
 			{
@@ -1238,6 +1362,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C08.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d.png",
@@ -1257,7 +1382,9 @@
 		"variant_safe": true
 	},
 	"edric_vargan|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C08.res"
+		],
 		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
 		"material_bindings": [
 			{
@@ -1289,6 +1416,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C08.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d.png",
@@ -1308,7 +1436,9 @@
 		"variant_safe": true
 	},
 	"edric|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C08.res"
+		],
 		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
 		"material_bindings": [
 			{
@@ -1340,6 +1470,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C08.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d.png",
@@ -1359,7 +1490,9 @@
 		"variant_safe": true
 	},
 	"elna|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C05.res"
+		],
 		"compiled_sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
 		"material_bindings": [
 			{
@@ -1391,6 +1524,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C05.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png",
@@ -1407,7 +1541,9 @@
 		"variant_safe": true
 	},
 	"farmer_toma|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C06.res"
+		],
 		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
 		"material_bindings": [
 			{
@@ -1439,6 +1575,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C06.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png",
@@ -1458,7 +1595,9 @@
 		"variant_safe": true
 	},
 	"forge_helper|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -1490,6 +1629,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -1515,19 +1655,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "7809c02760e4af80577243e348d42e482fb9801b6237a48cdca523a8c55534d6",
@@ -1661,19 +1809,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
@@ -1742,19 +1898,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
@@ -1815,19 +1979,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "5189a8bee86d5260db1a67a731aa7e0504b9af3265408284e4757cea35157e19",
@@ -1864,19 +2036,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
@@ -1937,19 +2117,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
@@ -2010,19 +2198,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "1d0247b8ae873a264e0189431a4c8c7a7a0f6d785011df3e94a397575aa25c5f",
@@ -2083,19 +2279,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "a3422e4c85267a78d474f06fa71f81135f762791ab2e75912a3aee77ffae9411",
@@ -2135,19 +2339,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
@@ -2192,19 +2404,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
@@ -2300,19 +2520,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
@@ -2357,19 +2585,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
@@ -2414,19 +2650,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 18.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "8fe0d25726583a875df3538b501d593d91e29ecfa8447ea4173036dc14c78244",
@@ -2455,7 +2699,9 @@
 		"variant_safe": true
 	},
 	"injured_traveler|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C05.res"
+		],
 		"compiled_sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
 		"material_bindings": [
 			{
@@ -2487,6 +2733,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C05.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png",
@@ -2591,7 +2838,9 @@
 		"variant_safe": true
 	},
 	"iven|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C06.res"
+		],
 		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
 		"material_bindings": [
 			{
@@ -2623,6 +2872,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C06.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png",
@@ -2642,7 +2892,9 @@
 		"variant_safe": true
 	},
 	"jory|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -2674,6 +2926,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -2693,7 +2946,9 @@
 		"variant_safe": true
 	},
 	"kael|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_P01.res"
+		],
 		"compiled_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
 		"material_bindings": [
 			{
@@ -2730,6 +2985,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_P01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_07cb901b5efde8f4678f19a1cda83c78ea6a8d8f91123868f4d1ddf49be26d3c.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_63281cc27142d466ca86a9e47c7864976a48950baa1da59da57ce58d14a37d00.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7191aebc55d2667f70a8cf81b21b982a5c434831ea75db2659214a1c4a6c0b09.png",
@@ -2758,19 +3014,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 12.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 12.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 12.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 12.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "8c60446f7c9fcceb1be1e4e6ab40452552f33d6222bf72e116d9a07849a3ac67",
@@ -2799,7 +3063,9 @@
 		"variant_safe": true
 	},
 	"lord_edric|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C08.res"
+		],
 		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
 		"material_bindings": [
 			{
@@ -2831,6 +3097,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/c9923220f8ae43aede56298d.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C08.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_2b58bcf64fb6ae29b5e381d96ecfe39801b69a69e2caf6d4822cf4f81e27961d.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7e26c9fb2128315816f8f58898347c05e749e7a751f086e9ae84e612b79826f1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b0a7f095a0e67d55883248d0b98f74d837ac01a5162d3ef7d2292ccfefc57b8d.png",
@@ -2850,7 +3117,9 @@
 		"variant_safe": true
 	},
 	"lysa|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C09.res"
+		],
 		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
 		"material_bindings": [
 			{
@@ -2882,6 +3151,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C09.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -2898,7 +3168,9 @@
 		"variant_safe": true
 	},
 	"maelin|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C03.res"
+		],
 		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
 		"material_bindings": [
 			{
@@ -2930,6 +3202,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C03.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_15aca17b69faf25b18994c1e9318a08915f241126bc238f4ce320bc1b42b8b83.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_d3bb3af9606a4754055e1ae6c605f541be3504aaec0d64f1f13e6811355b69e5.png",
@@ -2946,7 +3219,9 @@
 		"variant_safe": true
 	},
 	"maren|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C12.res"
+		],
 		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
 		"material_bindings": [
 			{
@@ -2978,6 +3253,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C12.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_5a8972406ebfb044eae14fd6281e63a5f4baf7984cf116367f3c895345f15c20.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_beabbca278430acdec492e5a49954c055eddd5706941551a4afc3515ca0d8c37.png",
@@ -2994,7 +3270,9 @@
 		"variant_safe": true
 	},
 	"merrow|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C10.res"
+		],
 		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
 		"material_bindings": [
 			{
@@ -3026,6 +3304,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C10.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0c038645fb8ee205e5ce61d8942d228143c4e13ed9a53052a658b2e50230b064.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_5616406d5216c22fb8ace1331600fcb09a1fbcb0042fd0c7a49f0a612f0904d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -3045,7 +3324,9 @@
 		"variant_safe": true
 	},
 	"mill_second_worker|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C11.res"
+		],
 		"compiled_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
 		"material_bindings": [
 			{
@@ -3077,6 +3358,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C11.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_430872605f1c3dd30718531fcca9c6f55ff91966c52b576076f988ac9cbefba6.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_79538f82019fcf2377ff900ba856822f4c67fce9760d470f3a5d64a4ec8e7c4e.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b6637a3a91a0977d8ba1dcdb2408bac25529858b6aaad1bb493bdcc48ee79463.png",
@@ -3093,7 +3375,9 @@
 		"variant_safe": true
 	},
 	"mill_worker|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -3125,6 +3409,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -3150,19 +3435,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 22.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "aa20054977ed01879dd82970b264494a26983a7f5dc9dc897559a82ea2b1c78e",
@@ -3191,7 +3484,9 @@
 		"variant_safe": true
 	},
 	"mira_herbalist|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C03.res"
+		],
 		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
 		"material_bindings": [
 			{
@@ -3223,6 +3518,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C03.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_15aca17b69faf25b18994c1e9318a08915f241126bc238f4ce320bc1b42b8b83.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_d3bb3af9606a4754055e1ae6c605f541be3504aaec0d64f1f13e6811355b69e5.png",
@@ -3239,7 +3535,9 @@
 		"variant_safe": true
 	},
 	"mira_human|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C03.res"
+		],
 		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
 		"material_bindings": [
 			{
@@ -3271,6 +3569,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C03.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_15aca17b69faf25b18994c1e9318a08915f241126bc238f4ce320bc1b42b8b83.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_d3bb3af9606a4754055e1ae6c605f541be3504aaec0d64f1f13e6811355b69e5.png",
@@ -3287,7 +3586,9 @@
 		"variant_safe": true
 	},
 	"mira|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C03.res"
+		],
 		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
 		"material_bindings": [
 			{
@@ -3319,6 +3620,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C03.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_15aca17b69faf25b18994c1e9318a08915f241126bc238f4ce320bc1b42b8b83.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_d3bb3af9606a4754055e1ae6c605f541be3504aaec0d64f1f13e6811355b69e5.png",
@@ -3335,7 +3637,9 @@
 		"variant_safe": true
 	},
 	"nera|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C12.res"
+		],
 		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
 		"material_bindings": [
 			{
@@ -3367,6 +3671,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C12.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_5a8972406ebfb044eae14fd6281e63a5f4baf7984cf116367f3c895345f15c20.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_beabbca278430acdec492e5a49954c055eddd5706941551a4afc3515ca0d8c37.png",
@@ -3383,7 +3688,9 @@
 		"variant_safe": true
 	},
 	"nessa|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C11.res"
+		],
 		"compiled_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
 		"material_bindings": [
 			{
@@ -3415,6 +3722,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C11.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_430872605f1c3dd30718531fcca9c6f55ff91966c52b576076f988ac9cbefba6.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_79538f82019fcf2377ff900ba856822f4c67fce9760d470f3a5d64a4ec8e7c4e.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b6637a3a91a0977d8ba1dcdb2408bac25529858b6aaad1bb493bdcc48ee79463.png",
@@ -3431,7 +3739,9 @@
 		"variant_safe": true
 	},
 	"odran|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C06.res"
+		],
 		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
 		"material_bindings": [
 			{
@@ -3463,6 +3773,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C06.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png",
@@ -3488,19 +3799,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
@@ -3563,7 +3882,9 @@
 		"variant_safe": true
 	},
 	"oris|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -3595,6 +3916,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -3614,7 +3936,9 @@
 		"variant_safe": true
 	},
 	"player_human|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_P01.res"
+		],
 		"compiled_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
 		"material_bindings": [
 			{
@@ -3651,6 +3975,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_P01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_07cb901b5efde8f4678f19a1cda83c78ea6a8d8f91123868f4d1ddf49be26d3c.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_63281cc27142d466ca86a9e47c7864976a48950baa1da59da57ce58d14a37d00.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7191aebc55d2667f70a8cf81b21b982a5c434831ea75db2659214a1c4a6c0b09.png",
@@ -3673,7 +3998,9 @@
 		"variant_safe": true
 	},
 	"player_kael|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_P01.res"
+		],
 		"compiled_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
 		"material_bindings": [
 			{
@@ -3710,6 +4037,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_P01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_07cb901b5efde8f4678f19a1cda83c78ea6a8d8f91123868f4d1ddf49be26d3c.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_63281cc27142d466ca86a9e47c7864976a48950baa1da59da57ce58d14a37d00.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7191aebc55d2667f70a8cf81b21b982a5c434831ea75db2659214a1c4a6c0b09.png",
@@ -3732,7 +4060,9 @@
 		"variant_safe": true
 	},
 	"player|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_P01.res"
+		],
 		"compiled_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
 		"material_bindings": [
 			{
@@ -3769,6 +4099,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/1fec61ee4b81b380819ea472.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_P01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_07cb901b5efde8f4678f19a1cda83c78ea6a8d8f91123868f4d1ddf49be26d3c.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_63281cc27142d466ca86a9e47c7864976a48950baa1da59da57ce58d14a37d00.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7191aebc55d2667f70a8cf81b21b982a5c434831ea75db2659214a1c4a6c0b09.png",
@@ -3791,7 +4122,9 @@
 		"variant_safe": true
 	},
 	"record_keeper_vale|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C09.res"
+		],
 		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
 		"material_bindings": [
 			{
@@ -3823,6 +4156,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C09.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -3918,7 +4252,9 @@
 		"variant_safe": true
 	},
 	"ressa|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C05.res"
+		],
 		"compiled_sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
 		"material_bindings": [
 			{
@@ -3950,6 +4286,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C05.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png",
@@ -3972,19 +4309,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "e7be1e9da134937490ec8093b4c927137407492604f61fa1e7d6a18734ee5bce",
@@ -4023,7 +4368,9 @@
 		"variant_safe": true
 	},
 	"road_ranger_human|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C07.res"
+		],
 		"compiled_sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
 		"material_bindings": [
 			{
@@ -4060,6 +4407,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C07.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_35456ab8e4b0f0bff043394494928d05a18afbf34b8d84e09161f65ae33aac98.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4e333c769a5ccfb598fe146d01cc9b1fd9102fc0c5873e621c023699cfc67b5c.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -4141,7 +4489,9 @@
 		"variant_safe": true
 	},
 	"rook_human|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C02.res"
+		],
 		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
 		"material_bindings": [
 			{
@@ -4173,6 +4523,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C02.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_66bcc3a97d21b94f66470a23c116c4669c2ea721545b612c2fa134712d066ab2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_6ee640e049ef78939ec2d07d4be7569242000dce12fe70cd094aa052d4ac4bca.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_765275038fdba5277756a07514e812cfeb66d976ff1b3077a201c8e51030ccf7.png",
@@ -4192,7 +4543,9 @@
 		"variant_safe": true
 	},
 	"rook_smuggler|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C02.res"
+		],
 		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
 		"material_bindings": [
 			{
@@ -4224,6 +4577,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C02.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_66bcc3a97d21b94f66470a23c116c4669c2ea721545b612c2fa134712d066ab2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_6ee640e049ef78939ec2d07d4be7569242000dce12fe70cd094aa052d4ac4bca.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_765275038fdba5277756a07514e812cfeb66d976ff1b3077a201c8e51030ccf7.png",
@@ -4243,7 +4597,9 @@
 		"variant_safe": true
 	},
 	"rook|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C02.res"
+		],
 		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
 		"material_bindings": [
 			{
@@ -4275,6 +4631,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C02.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_66bcc3a97d21b94f66470a23c116c4669c2ea721545b612c2fa134712d066ab2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_6ee640e049ef78939ec2d07d4be7569242000dce12fe70cd094aa052d4ac4bca.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_765275038fdba5277756a07514e812cfeb66d976ff1b3077a201c8e51030ccf7.png",
@@ -4300,19 +4657,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "fabf2353fb40202815c1984aff13521bfae322dc6d5692cfe1287cf37afd8520",
@@ -4357,19 +4722,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "fabf2353fb40202815c1984aff13521bfae322dc6d5692cfe1287cf37afd8520",
@@ -4408,7 +4781,9 @@
 		"variant_safe": true
 	},
 	"saga_dain|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -4440,6 +4815,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -4459,7 +4835,9 @@
 		"variant_safe": true
 	},
 	"saga_edda|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C03.res"
+		],
 		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
 		"material_bindings": [
 			{
@@ -4491,6 +4869,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C03.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_15aca17b69faf25b18994c1e9318a08915f241126bc238f4ce320bc1b42b8b83.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_d3bb3af9606a4754055e1ae6c605f541be3504aaec0d64f1f13e6811355b69e5.png",
@@ -4507,7 +4886,9 @@
 		"variant_safe": true
 	},
 	"saga_iven|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C06.res"
+		],
 		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
 		"material_bindings": [
 			{
@@ -4539,6 +4920,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C06.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png",
@@ -4558,7 +4940,9 @@
 		"variant_safe": true
 	},
 	"saga_jory|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -4590,6 +4974,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -4609,7 +4994,9 @@
 		"variant_safe": true
 	},
 	"saga_lysa|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C09.res"
+		],
 		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
 		"material_bindings": [
 			{
@@ -4641,6 +5028,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C09.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -4657,7 +5045,9 @@
 		"variant_safe": true
 	},
 	"saga_maelin|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C03.res"
+		],
 		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
 		"material_bindings": [
 			{
@@ -4689,6 +5079,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C03.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_15aca17b69faf25b18994c1e9318a08915f241126bc238f4ce320bc1b42b8b83.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_d3bb3af9606a4754055e1ae6c605f541be3504aaec0d64f1f13e6811355b69e5.png",
@@ -4705,7 +5096,9 @@
 		"variant_safe": true
 	},
 	"saga_maren|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C12.res"
+		],
 		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
 		"material_bindings": [
 			{
@@ -4737,6 +5130,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C12.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_5a8972406ebfb044eae14fd6281e63a5f4baf7984cf116367f3c895345f15c20.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_beabbca278430acdec492e5a49954c055eddd5706941551a4afc3515ca0d8c37.png",
@@ -4753,7 +5147,9 @@
 		"variant_safe": true
 	},
 	"saga_nera|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C12.res"
+		],
 		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
 		"material_bindings": [
 			{
@@ -4785,6 +5181,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/bf1d22ef816048a229ef8e40.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C12.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_5a8972406ebfb044eae14fd6281e63a5f4baf7984cf116367f3c895345f15c20.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_beabbca278430acdec492e5a49954c055eddd5706941551a4afc3515ca0d8c37.png",
@@ -4801,7 +5198,9 @@
 		"variant_safe": true
 	},
 	"saga_nessa|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C11.res"
+		],
 		"compiled_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
 		"material_bindings": [
 			{
@@ -4833,6 +5232,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C11.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_430872605f1c3dd30718531fcca9c6f55ff91966c52b576076f988ac9cbefba6.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_79538f82019fcf2377ff900ba856822f4c67fce9760d470f3a5d64a4ec8e7c4e.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b6637a3a91a0977d8ba1dcdb2408bac25529858b6aaad1bb493bdcc48ee79463.png",
@@ -4849,7 +5249,9 @@
 		"variant_safe": true
 	},
 	"saga_odran|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C06.res"
+		],
 		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
 		"material_bindings": [
 			{
@@ -4881,6 +5283,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C06.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png",
@@ -4900,7 +5303,9 @@
 		"variant_safe": true
 	},
 	"saga_oris|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -4932,6 +5337,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -4951,7 +5357,9 @@
 		"variant_safe": true
 	},
 	"saga_ressa|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C05.res"
+		],
 		"compiled_sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
 		"material_bindings": [
 			{
@@ -4983,6 +5391,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C05.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png",
@@ -4999,7 +5408,9 @@
 		"variant_safe": true
 	},
 	"saga_tavin|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C02.res"
+		],
 		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
 		"material_bindings": [
 			{
@@ -5031,6 +5442,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C02.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_66bcc3a97d21b94f66470a23c116c4669c2ea721545b612c2fa134712d066ab2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_6ee640e049ef78939ec2d07d4be7569242000dce12fe70cd094aa052d4ac4bca.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_765275038fdba5277756a07514e812cfeb66d976ff1b3077a201c8e51030ccf7.png",
@@ -5050,7 +5462,9 @@
 		"variant_safe": true
 	},
 	"senn|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C07.res"
+		],
 		"compiled_sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
 		"material_bindings": [
 			{
@@ -5087,6 +5501,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/059afcf524f89e085d260a6e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C07.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_35456ab8e4b0f0bff043394494928d05a18afbf34b8d84e09161f65ae33aac98.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4e333c769a5ccfb598fe146d01cc9b1fd9102fc0c5873e621c023699cfc67b5c.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -5109,7 +5524,9 @@
 		"variant_safe": true
 	},
 	"shrine_pilgrim|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C01.res"
+		],
 		"compiled_sha256": "f2f3b3d06956f752674ab84bb9ab3e2627e6c092276a372faf2e37a69c2545c7",
 		"material_bindings": [
 			{
@@ -5141,6 +5558,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0f0e1b2d2ba9cf327b9ac36d0c276e703813ed3ef839bdfb127c1d1161130ed9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_241cc49951cc8b7d4f4047ff2568e08ba4b37345c8be90cf87cd06e65a72ecd7.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7298ef8a15335cbccc164fe8b6d10fa544dbae60042f9eff2045fafed5ad9ee5.png",
@@ -5166,19 +5584,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 15.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "d8007c5ae49e09825f7ee078c09873be044f940cf17e6ae55c6c36658649f249",
@@ -5247,19 +5673,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 12.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 12.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 12.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 12.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "2e29f0ec8c2c774327ca3c202bbf3923aa80dd1697f8256562305d9c968001a6",
@@ -5288,7 +5722,9 @@
 		"variant_safe": true
 	},
 	"sister_anwen_human|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C01.res"
+		],
 		"compiled_sha256": "f2f3b3d06956f752674ab84bb9ab3e2627e6c092276a372faf2e37a69c2545c7",
 		"material_bindings": [
 			{
@@ -5320,6 +5756,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0f0e1b2d2ba9cf327b9ac36d0c276e703813ed3ef839bdfb127c1d1161130ed9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_241cc49951cc8b7d4f4047ff2568e08ba4b37345c8be90cf87cd06e65a72ecd7.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7298ef8a15335cbccc164fe8b6d10fa544dbae60042f9eff2045fafed5ad9ee5.png",
@@ -5339,7 +5776,9 @@
 		"variant_safe": true
 	},
 	"sister_anwen|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C01.res"
+		],
 		"compiled_sha256": "f2f3b3d06956f752674ab84bb9ab3e2627e6c092276a372faf2e37a69c2545c7",
 		"material_bindings": [
 			{
@@ -5371,6 +5810,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0f0e1b2d2ba9cf327b9ac36d0c276e703813ed3ef839bdfb127c1d1161130ed9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_241cc49951cc8b7d4f4047ff2568e08ba4b37345c8be90cf87cd06e65a72ecd7.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7298ef8a15335cbccc164fe8b6d10fa544dbae60042f9eff2045fafed5ad9ee5.png",
@@ -5390,7 +5830,9 @@
 		"variant_safe": true
 	},
 	"steward_merrow|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C10.res"
+		],
 		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
 		"material_bindings": [
 			{
@@ -5422,6 +5864,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C10.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0c038645fb8ee205e5ce61d8942d228143c4e13ed9a53052a658b2e50230b064.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_5616406d5216c22fb8ace1331600fcb09a1fbcb0042fd0c7a49f0a612f0904d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -5441,7 +5884,9 @@
 		"variant_safe": true
 	},
 	"tavin|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C02.res"
+		],
 		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
 		"material_bindings": [
 			{
@@ -5473,6 +5918,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C02.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_66bcc3a97d21b94f66470a23c116c4669c2ea721545b612c2fa134712d066ab2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_6ee640e049ef78939ec2d07d4be7569242000dce12fe70cd094aa052d4ac4bca.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_765275038fdba5277756a07514e812cfeb66d976ff1b3077a201c8e51030ccf7.png",
@@ -5492,7 +5938,9 @@
 		"variant_safe": true
 	},
 	"toma|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C06.res"
+		],
 		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
 		"material_bindings": [
 			{
@@ -5524,6 +5972,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/8b8833ae23bc1a88a28781a8.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C06.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bf70f96cd7b148868dc2c1d95b0526f2890413881864591c8477ec684e9317d1.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_ebe5dd3db2f7a3e896d2250fdab4b4b3eb694005ebdf3a1cd396b85701fb7cb1.png",
@@ -5543,7 +5992,9 @@
 		"variant_safe": true
 	},
 	"tor|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C04.res"
+		],
 		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
 		"material_bindings": [
 			{
@@ -5575,6 +6026,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/78c1c4ab9ec59dce9a7a9a34.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C04.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0d389ea7d5b17d63e22a5d82ad27b48a333592e400bad855838e526f511c0538.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_4389cdc909cc1816f980a62bb19da07d8384d76d949d1df672be9e68016c33d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b08803379788c525861b5fe8a61bf28c366feda14b926da3fdf1d63faf73baa3.png",
@@ -5645,7 +6097,9 @@
 		"variant_safe": true
 	},
 	"vale|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C09.res"
+		],
 		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
 		"material_bindings": [
 			{
@@ -5677,6 +6131,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C09.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -5693,7 +6148,9 @@
 		"variant_safe": true
 	},
 	"vargan_gate_guard|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C10.res"
+		],
 		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
 		"material_bindings": [
 			{
@@ -5725,6 +6182,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C10.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0c038645fb8ee205e5ce61d8942d228143c4e13ed9a53052a658b2e50230b064.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_5616406d5216c22fb8ace1331600fcb09a1fbcb0042fd0c7a49f0a612f0904d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -5744,7 +6202,9 @@
 		"variant_safe": true
 	},
 	"vargan_patrol|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C02.res"
+		],
 		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
 		"material_bindings": [
 			{
@@ -5776,6 +6236,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C02.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_66bcc3a97d21b94f66470a23c116c4669c2ea721545b612c2fa134712d066ab2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_6ee640e049ef78939ec2d07d4be7569242000dce12fe70cd094aa052d4ac4bca.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_765275038fdba5277756a07514e812cfeb66d976ff1b3077a201c8e51030ccf7.png",
@@ -5795,7 +6256,9 @@
 		"variant_safe": true
 	},
 	"vargan_record_keeper|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C09.res"
+		],
 		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
 		"material_bindings": [
 			{
@@ -5827,6 +6290,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/ae95719dd448b9118c0d59d7.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C09.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_09239060d097ac83cf042070b4f6d07c5282c17898329dc0d8d7ffc038ad84f9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_42331a46629516104eca645ad05b1fe82867ed77efc95b1f88cb9f66f98d10b4.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -5843,7 +6307,9 @@
 		"variant_safe": true
 	},
 	"vargan_servant|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C11.res"
+		],
 		"compiled_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
 		"material_bindings": [
 			{
@@ -5875,6 +6341,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/dbd096eb4800fa65005f7037.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C11.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_430872605f1c3dd30718531fcca9c6f55ff91966c52b576076f988ac9cbefba6.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_79538f82019fcf2377ff900ba856822f4c67fce9760d470f3a5d64a4ec8e7c4e.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_b6637a3a91a0977d8ba1dcdb2408bac25529858b6aaad1bb493bdcc48ee79463.png",
@@ -5891,7 +6358,9 @@
 		"variant_safe": true
 	},
 	"vargan_steward|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C10.res"
+		],
 		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
 		"material_bindings": [
 			{
@@ -5923,6 +6392,7 @@
 		"owner": "characters",
 		"path": "res://assets_external/characters_prepared/characters/e68f11b9d12fdb3421675a5a.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C10.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0c038645fb8ee205e5ce61d8942d228143c4e13ed9a53052a658b2e50230b064.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_5616406d5216c22fb8ace1331600fcb09a1fbcb0042fd0c7a49f0a612f0904d3.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
@@ -6191,7 +6661,9 @@
 		"variant_safe": true
 	},
 	"walker_board|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C02.res"
+		],
 		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
 		"material_bindings": [
 			{
@@ -6223,6 +6695,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C02.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_66bcc3a97d21b94f66470a23c116c4669c2ea721545b612c2fa134712d066ab2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_6ee640e049ef78939ec2d07d4be7569242000dce12fe70cd094aa052d4ac4bca.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_765275038fdba5277756a07514e812cfeb66d976ff1b3077a201c8e51030ccf7.png",
@@ -6242,7 +6715,9 @@
 		"variant_safe": true
 	},
 	"walker_well|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C05.res"
+		],
 		"compiled_sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
 		"material_bindings": [
 			{
@@ -6274,6 +6749,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C05.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png",
@@ -6296,19 +6772,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "6647779d149f936b751a39ed13b6f34ae11eaf21a9a2bd33b43a0183df9f8ea7",
@@ -6348,19 +6832,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "6647779d149f936b751a39ed13b6f34ae11eaf21a9a2bd33b43a0183df9f8ea7",
@@ -6400,19 +6892,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 42.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "6647779d149f936b751a39ed13b6f34ae11eaf21a9a2bd33b43a0183df9f8ea7",
@@ -6446,7 +6946,9 @@
 		"variant_safe": true
 	},
 	"widow_elna|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C05.res"
+		],
 		"compiled_sha256": "5f966baa96ca6f0c7f4da6ac8f95d1ac64f409457558d01bf0485f406dbe4219",
 		"material_bindings": [
 			{
@@ -6478,6 +6980,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/f29c74d5a5f88898d0e0a68e.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C05.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_10e8b72d114b29935cfe14a99cfe43b93bfb06242c9023d19519b6d819ea0a6b.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_2ed9e7342998fee6b8d8e64a26a8e68d8aee5668647352636f196d53c32fbad2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_44930b6e8bed8e475f3815fc4d9ba491147e4ebdcffe9c7746fcbc0c04c3738c.png",
@@ -6494,7 +6997,9 @@
 		"variant_safe": true
 	},
 	"witness_-3|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C02.res"
+		],
 		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
 		"material_bindings": [
 			{
@@ -6526,6 +7031,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/0f2201717a6743db9c87e5eb.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C02.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_66bcc3a97d21b94f66470a23c116c4669c2ea721545b612c2fa134712d066ab2.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_6ee640e049ef78939ec2d07d4be7569242000dce12fe70cd094aa052d4ac4bca.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_765275038fdba5277756a07514e812cfeb66d976ff1b3077a201c8e51030ccf7.png",
@@ -6545,7 +7051,9 @@
 		"variant_safe": true
 	},
 	"witness_-7|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C03.res"
+		],
 		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
 		"material_bindings": [
 			{
@@ -6577,6 +7085,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/cd7669b118baf13b26544ba4.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C03.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_15aca17b69faf25b18994c1e9318a08915f241126bc238f4ce320bc1b42b8b83.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_bbcadf602a087d580391a696930eb102859352a14ca6f068679507510c940ec5.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_d3bb3af9606a4754055e1ae6c605f541be3504aaec0d64f1f13e6811355b69e5.png",
@@ -6593,7 +7102,9 @@
 		"variant_safe": true
 	},
 	"witness_3|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
-		"animation_resources": [],
+		"animation_resources": [
+			"res://assets_external/characters_prepared/animations/life_C01.res"
+		],
 		"compiled_sha256": "f2f3b3d06956f752674ab84bb9ab3e2627e6c092276a372faf2e37a69c2545c7",
 		"material_bindings": [
 			{
@@ -6625,6 +7136,7 @@
 		"owner": "opening",
 		"path": "res://assets_external/characters_prepared/opening/389b6010725c3e16267ca9af.scn",
 		"resource_dependencies": [
+			"res://assets_external/characters_prepared/animations/life_C01.res",
 			"res://assets_external/design_pack_v1/humans/textures/color_0f0e1b2d2ba9cf327b9ac36d0c276e703813ed3ef839bdfb127c1d1161130ed9.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_241cc49951cc8b7d4f4047ff2568e08ba4b37345c8be90cf87cd06e65a72ecd7.png",
 			"res://assets_external/design_pack_v1/humans/textures/color_7298ef8a15335cbccc164fe8b6d10fa544dbae60042f9eff2045fafed5ad9ee5.png",
@@ -6650,19 +7162,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
@@ -6731,19 +7251,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "33a2682dd7b2b11860a658a6650197691a73f5504d923cfdc5cf17309cc37a27",
@@ -6812,19 +7340,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "347fa65f2253b6dda0f3b0eb302d3719719fb03f76c834b6e303c073086f16e0",
@@ -6893,19 +7429,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 56.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "347fa65f2253b6dda0f3b0eb302d3719719fb03f76c834b6e303c073086f16e0",
@@ -6974,19 +7518,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "5189a8bee86d5260db1a67a731aa7e0504b9af3265408284e4757cea35157e19",
@@ -7023,19 +7575,27 @@
 			"native_binding_report": {
 				"Feed": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Idle": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Investigate": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				},
 				"Sleep": {
 					"bound_bone_tracks": 63.0,
-					"morph_tracks": {}
+					"morph_tracks": {
+
+					}
 				}
 			},
 			"receipt_sha256": "5189a8bee86d5260db1a67a731aa7e0504b9af3265408284e4757cea35157e19",

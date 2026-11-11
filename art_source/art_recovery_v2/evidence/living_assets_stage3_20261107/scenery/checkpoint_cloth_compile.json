@@ -1,9 +1,9 @@
 {
 	"asset": "checkpoint_cloth",
-	"authoring_receipt": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/authoring.json",
+	"authoring_receipt": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/checkpoint_cloth/authoring.json",
 	"authoring_receipt_sha256": "0732519644c71fa2d4912753014d6d8f6b9da3353698c9e4a1c6cfb352c590d6",
 	"blender_authored": true,
-	"bytes": 9649,
+	"bytes": 9650,
 	"carrier_sha256": "833112b8974bf1dcd2c1f758876ad9b78d401cc3fdccf009dc7910af08f543eb",
 	"compiler_sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
 	"dependencies": [],
@@ -76,7 +76,7 @@
 	"retained_receipt_sha256": "13800c970b4f34a92e56331d7bf25fd3c684ea05d4a818f454e560877054de70",
 	"runtime_reviewed": false,
 	"schema_version": 1,
-	"sha256": "fd990e36da5d6544b75494a636268ad88f7dcb6ac87d694f6e190ff26b1bcd0b",
+	"sha256": "ea9355cf580d594ce5acef912ad9759caf042c596886297d4ae1f7f008a5c004",
 	"source_hashes": {
 		"res://assets_external/environment/props/Banner_1_Cloth.obj": "d22fab9815ed3dbd2b7d3e88748fe7f8358972706734319357d124482d905c16",
 		"res://tools/build_campaign_wilds.gd": "daaa229b4e05ba11c47e269451baeac3b9e5143530caa9ccad085f0f1974f957",

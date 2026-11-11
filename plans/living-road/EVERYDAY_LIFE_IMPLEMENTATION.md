@@ -1352,6 +1352,63 @@ combined acceptance checks. Production is unchanged; no Git push has run.
   for every registered physical pair. Archive inspection found all three
   changed travel scripts exclusively in the Web root; no asset-pack rebuild
   or visual change is required. Exact rebuilt runtime verification is pending.
+- Build `combined-loading-cast-20261111-fcfa891-r5`, source `fcfa891`, complete
+  **173,562,388 bytes (165.5 MiB)**; release manifest SHA-256
+  `732ce4e058952d46734dff814159d58995923e51ec8a26f6e3768c4301915fa7`.
+  The 222 graph, builder, road-mesh and reciprocal ingress checks passed.
+  The decoded root differs from r4 only in its three travel scripts and
+  embedded runtime manifest. All external packs and engine files are exact.
+  Final archive integrity, 498 ownership entries and 33 prepared actors passed.
+- Exact r5 desktop browser startup passed withheld menu actions, New Game,
+  movement, Quick Save, reload and selected durable Continue, with no
+  unexpected runtime errors. Receipt
+  `D:/Temp/AshenOath/combined-release-20261111/browser-startup-fcfa891-r5.json`,
+  SHA-256 `c5af684f735e2e09f27d812612acef327849a215a27593866e6cd67217dff989`.
+  Same 1280x720 fresh normal Chromium harness/profile and Intel HD 620 ANGLE
+  renderer as the retained comparison. Cold menu **101.006 s**, cold first
+  control **108.609 s** (includes optional introduction), warm menu **77.473 s**;
+  cold first-view render wait **44.370 s**. The earlier r2 cold control of
+  78.848 s was not repeated. The decoded startup resources and rendering
+  owner did not change between r4 and r5; elapsed timing varied across runs.
+  This is a functional pass, **not** a consistent halving or a 32-second result.
+  Balanced requires 96.6 MB of encoded startup assets, roughly 38.65 seconds
+  of transfer alone at 20 Mbps; the reference timing and sustained-FPS gates
+  remain unmet/unverified. The short 39-sample movement observation was
+  15.00 FPS average and 10.87 FPS 1% low, not a sustained-play result.
+- Exact r5 native real-input run (82 inputs) observed cold handoff at
+  -1.232960 m, first controllable arrival at 0.549999 m inside Wychwood's
+  reciprocal road, lateral error below 0.000001 m, and a complete ordinary
+  walk inward with the earned Anwen objective intact. The strict fixture
+  remained FAIL because its 0.35 m down-ray could not reach from the
+  first-frame spawn height (+0.95 m clearance in the runtime support check).
+  Preserve both that assertion gap and the positive route observation.
+  Receipt `D:/Temp/AO_fcfa891_r5_QA/cold_arrival_desktop_r2/report.json`,
+  SHA-256 `42dcc534ed5860d1a3efdebf3d8365213cfba1704426916db195c6380b5491a6`.
+  The genuine auto save and resume pointer were preserved for continuation;
+  this run does not prove completion of the campaign.
+
+### Final Build-Only Delivery
+
+- The creator ended developer testing and authorized publication after the
+  existing assigned implementation was finished. The pending continuation
+  was stopped; its original earned save and preceding evidence are intact.
+  Unfinished campaign, performance, phone, art and audio acceptance are not
+  release passes. No new verification run was started after this direction.
+- Final Game Assets handoff `f28e243` was integrated as `ba93115`: supported
+  awake seating, stationary Kael linen/rope, and Mira/Tor tending bowl fits.
+  Fixed saga parts remain on their authored stations. All four changed
+  scripts compiled. Existing meshes, animation libraries, and the 22
+  measured grip resources were retained; older runtime proof is not relabelled
+  as proof of the new scheduler or modifier.
+- Delivery build `combined-loading-cast-20261111-ba93115-r6` exported the Web
+  root and reused the unchanged split packs. Packaging generated 54 listed
+  artifacts (165.5 MiB) and root transport SHA-256
+  `86fda93cba1ef2f5f9ce5bd7d172480ea3f91601c680059580a3b2fc81417f66`.
+  No content, visual quality, or browser save origin was cut. The r6 build
+  was not played or benchmarked; its startup, new poses and full campaign
+  acceptance belong to the creator after publication. The 32-second startup
+  objective remains unmet in retained measurements. Git owns the deployment;
+  do not infer a finished Vercel rollout from the push.
 
 ## Consolidated User Checklist
 

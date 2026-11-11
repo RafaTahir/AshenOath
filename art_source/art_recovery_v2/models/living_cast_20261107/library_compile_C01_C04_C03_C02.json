@@ -41,7 +41,7 @@
 			"path": "res://assets_external/characters_prepared/animations/life_C01.res",
 			"runtime_reviewed": false,
 			"sha256": "22e70197cd4f030d062e3b2741ba6f236d7edd5e1b2d735c0ba5457f3ff1c007",
-			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_20261107/C01/C01_life_review.glb",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C01/C01_life_review.glb",
 			"source_sha256": "6048b7b8ceb634d2a05d921593476acca605ddc6eaaec653c4235c952a06d567",
 			"user_accepted": false
 		},
@@ -86,7 +86,7 @@
 			"path": "res://assets_external/characters_prepared/animations/life_C04.res",
 			"runtime_reviewed": false,
 			"sha256": "c0500617dadb5bc9f3032f3feb26a552c7420e5946f2f25dce688fb488511f9a",
-			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_20261107/C04/C04_life_review.glb",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C04/C04_life_review.glb",
 			"source_sha256": "1b5132ffa7460a23b2d193e7b1162bcedb83e16f2d0304ddda23efcfbf9b849d",
 			"user_accepted": false
 		},
@@ -140,7 +140,7 @@
 			"path": "res://assets_external/characters_prepared/animations/life_C03.res",
 			"runtime_reviewed": false,
 			"sha256": "36051f9920ad11a6ef06c43c16e083e92b756da2147cc7dcc77990a9f628da07",
-			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_20261107/C03/C03_life_review.glb",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C03/C03_life_review.glb",
 			"source_sha256": "652a6bba9772b7fe8477a7f2c0afad30d665c86bebe0facef053b2b074a7f1aa",
 			"user_accepted": false
 		},
@@ -194,7 +194,7 @@
 			"path": "res://assets_external/characters_prepared/animations/life_C02.res",
 			"runtime_reviewed": false,
 			"sha256": "e599a2365745c8993bce0ca711b0cb5a2d5fef35c44271c91d10e428961e0b72",
-			"source": "D:/Temp/AO_LivingCast_Stages234/art_source/art_recovery_v2/models/living_cast_20261107/C02/C02_life_review.glb",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_20261107/C02/C02_life_review.glb",
 			"source_sha256": "a9ef10665a13385ec91c439c82e6eff5ba926961258d231978aaded44fcf96ae",
 			"user_accepted": false
 		}

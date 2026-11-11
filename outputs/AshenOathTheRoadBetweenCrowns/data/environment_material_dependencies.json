@@ -7,31 +7,7 @@
       ],
       "owner": "adjacent"
     },
-    "res://assets_external/environment/forest/Bark_NormalTree.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
-    "res://assets_external/environment/forest/Bark_NormalTree_Normal.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
-    "res://assets_external/environment/forest/Bark_TwistedTree.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
-    "res://assets_external/environment/forest/Bark_TwistedTree_Normal.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
-    "res://assets_external/environment/forest/Leaves_NormalTree_C.png": {
+    "res://assets_external/environment/forest/Leaves.png": {
       "consumers": [
         "opening"
       ],
@@ -103,24 +79,6 @@
       ],
       "owner": "opening"
     },
-    "res://assets_external/environment/village/T_Brick_BaseColor.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
-    "res://assets_external/environment/village/T_Brick_Normal.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
-    "res://assets_external/environment/village/T_Brick_Roughness.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
     "res://assets_external/environment/village/T_Plaster_BaseColor.png": {
       "consumers": [
         "opening"
@@ -128,18 +86,6 @@
       "owner": "opening"
     },
     "res://assets_external/environment/village/T_Plaster_Normal.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
-    "res://assets_external/environment/village/T_RockTrim_BaseColor.png": {
-      "consumers": [
-        "opening"
-      ],
-      "owner": "opening"
-    },
-    "res://assets_external/environment/village/T_RockTrim_Normal.png": {
       "consumers": [
         "opening"
       ],
