@@ -316,6 +316,7 @@ func _physics_process(delta: float) -> void:
 			var driver: Node = entry.driver
 			if distant != was_distant:
 				entry.erase("carry_route_scope")
+				if distant: _release_awake_seat(entry)
 				# Keep distant people in the world; only their animation/simulation
 				# budget sleeps. Walking across a distance boundary must not erase them.
 				if driver != null and driver.has_method("set_distance_suspended"):
@@ -548,6 +549,7 @@ func _update_actor(entry: Dictionary, delta: float) -> void:
 	# marker after the encounter so named villagers do not walk through a boss
 	# fight or re-enter its collision space while the player is engaged.
 	if bool(node.get_meta("bell_eater_evacuated", false)):
+		_release_awake_seat(entry)
 		entry.motion_speed = 0.0
 		_set_motion(entry, 0.0)
 		return
@@ -826,6 +828,11 @@ func _tick_greeting(entry: Dictionary, delta: float) -> bool:
 		remaining = 3.2
 		entry.greeting_started = false
 	entry.greeting_remaining = maxf(remaining - delta, 0.0)
+	if not bool(entry.get("greeting_started", false)) and not _awake_rest_support(entry).is_empty():
+		_set_activity_pose(entry, true)
+		var modifier: Node = entry.driver.life_modifier
+		if is_instance_valid(modifier) and float(modifier.awake_seat_weight) > 0.001 and float(entry.greeting_remaining) > 0.0:
+			return true
 	_brake_actor(entry, delta)
 	if float(entry.motion_speed) <= 0.05:
 		_face(node, player.global_position, delta)
@@ -901,6 +908,10 @@ func _update_activity(entry: Dictionary, delta: float) -> void:
 	var station: Dictionary = entry.profile.get("workstation", {})
 	if str(profile.get("activity", "")) == "sleep" and _supported_rest(entry):
 		anchor = entry.profile.rest_anchor.look
+	elif str(profile.get("activity", "")) == "rest":
+		var seat := _awake_rest_support(entry)
+		if not seat.is_empty() and not _player_near_rest_seat(seat):
+			anchor = node.global_position + (seat.look - seat.stand)
 	if str(profile.get("activity", "")) == str(station.get("activity", "")):
 		anchor = station.get("look", station.get("point", anchor))
 	if anchor != Vector3.ZERO:
@@ -932,6 +943,7 @@ func _release_activity(entry: Dictionary, release_pose: bool = true) -> void:
 	entry.station = ""
 	entry.activity_active = false
 	if not release_pose:
+		_release_awake_seat(entry)
 		return
 	if was_active:
 		_set_activity_pose(entry, false)
@@ -1008,24 +1020,29 @@ func _bind_workstation(profile: Dictionary, path: Array) -> void:
 
 func _bind_rest_anchor(profile: Dictionary, path: Array) -> void:
 	profile["rest_anchor"] = {}
-	if not bool(profile.get("sleeping", false)) or path.is_empty():
+	var sleeping := bool(profile.get("sleeping", false))
+	var activities: Array = profile.get("activities", [str(profile.get("activity", ""))])
+	var rest_index := 0 if sleeping else activities.find("rest")
+	if rest_index < 0 or rest_index >= path.size():
 		return
-	# A scheduled coordinate is not evidence of a bed or seat. Only authored,
-	# physically supported markers may request the seated sleeping performance.
-	for anchor: Node in host.zone_root.find_children("LifeRest_*", "Marker3D", true, false):
+	# Seated rest requires authored furniture. Awake rest only uses a seat
+	# assigned to this actor, leaving interactive and shared anchors to their owners.
+	var identity := str(profile.get("identity", ""))
+	for anchor: Marker3D in host.zone_root.find_children("LifeRest_*", "Marker3D", true, false):
 		var owner_identity := str(anchor.get_meta("rest_identity", ""))
-		if owner_identity != "" and owner_identity != str(profile.get("identity", "")): continue
+		if owner_identity.is_empty() and not sleeping or not owner_identity.is_empty() and owner_identity != identity:
+			continue
 		if not bool(anchor.get_meta("rest_supported", false)) or str(anchor.get_meta("rest_kind", "")) != "seated":
 			continue
 		var stand: Vector3 = anchor.to_global(anchor.get_meta("stand_offset", Vector3.ZERO))
 		var seat: Vector3 = anchor.global_position
 		var seat_height := seat.y - stand.y
-		if seat_height < 0.35 or seat_height > 0.65 or stand.distance_squared_to(path[0]) > 1.0:
+		if seat_height < 0.35 or seat_height > 0.65 or stand.distance_squared_to(path[rest_index]) > 1.0:
 			continue
 		if host.validate_walkable_position(stand).distance_squared_to(stand) > 0.04:
 			continue
 		profile.rest_anchor = {"node":weakref(anchor), "stand":stand, "seat":seat, "kind":"seated", "look":stand + anchor.global_basis.z}
-		path[0] = stand
+		path[rest_index] = stand
 		return
 
 func _supported_rest(entry: Dictionary) -> bool:
@@ -1033,10 +1050,37 @@ func _supported_rest(entry: Dictionary) -> bool:
 	var reference: WeakRef = rest.get("node")
 	# The player's approach takes precedence over a background occupant. This
 	# also releases the sleeping pose before the bench's interaction opens.
-	if is_instance_valid(player) and not rest.is_empty() and player.global_position.distance_squared_to(rest.get("seat", Vector3.INF)) < 1.96:
+	if _player_near_rest_seat(rest):
 		return false
 	return reference != null and is_instance_valid(reference.get_ref()) and str(rest.get("kind", "")) == "seated" \
 		and entry.node.global_position.distance_squared_to(rest.get("stand", Vector3.INF)) <= 0.16
+
+func _player_near_rest_seat(rest: Dictionary) -> bool:
+	return is_instance_valid(player) and not rest.is_empty() and player.global_position.distance_squared_to(rest.get("seat", Vector3.INF)) < 1.96
+
+func _awake_rest_support(entry: Dictionary) -> Dictionary:
+	var node: Node3D = entry.node
+	var profile: Dictionary = entry.profile
+	if str(profile.get("activity", "")) != "rest" or bool(profile.get("sleeping", false)) \
+			or not bool(entry.get("activity_active", false)) or activity_reservations.get(str(entry.get("station", ""))) != node:
+		return {}
+	var rest: Dictionary = profile.get("rest_anchor", {})
+	var reference: WeakRef = rest.get("node")
+	var marker := reference.get_ref() as Marker3D if reference != null else null
+	if not is_instance_valid(marker) or marker.is_queued_for_deletion() or not marker.is_visible_in_tree() \
+			or not bool(marker.get_meta("rest_supported", false)) or str(rest.get("kind", "")) != "seated" \
+			or str(marker.get_meta("rest_identity", "")) != str(profile.get("identity", "")) \
+			or node.global_position.distance_squared_to(rest.get("stand", Vector3.INF)) > 0.16:
+		return {}
+	return rest
+
+func _release_awake_seat(entry: Dictionary) -> void:
+	var driver: Node = entry.get("driver")
+	if not is_instance_valid(driver) or not driver.has_method("set_life_rest_anchor"):
+		return
+	var modifier: Node = driver.get("life_modifier")
+	if is_instance_valid(modifier) and int(modifier.rest_anchor.get("awake_rest_owner", 0)) == get_instance_id():
+		driver.set_life_rest_anchor({})
 
 func _set_activity_attention(entry: Dictionary, active: bool) -> void:
 	var face = entry.get("face")
@@ -1306,7 +1350,17 @@ func _set_activity_pose(entry: Dictionary, active: bool) -> void:
 		if active: driver.set_life_workstation(entry.profile.get("workstation", {}))
 		driver.set_life_activity(activity if active else "")
 		if driver.has_method("set_life_rest_anchor"):
-			driver.set_life_rest_anchor(entry.profile.get("rest_anchor", {}) if active and activity == "sleep" else {})
+			var rest: Dictionary = entry.profile.get("rest_anchor", {}) if active and activity == "sleep" else {}
+			if active and activity == "rest" and not bool(driver.dead) and not bool(driver.distance_suspended) \
+					and not driver.has_active_action() and not bool(driver.story_dialogue_active):
+				rest = _awake_rest_support(entry).duplicate()
+				if not rest.is_empty():
+					var outward: Vector3 = rest.look - rest.stand
+					var forward: Vector3 = driver.get_visible_forward()
+					rest["awake_rest_owner"] = get_instance_id()
+					rest["seat_requested"] = not _player_near_rest_seat(rest) and float(entry.get("greeting_remaining", 0.0)) <= 0.0 \
+						and forward.dot(outward.normalized()) >= 0.98
+			driver.set_life_rest_anchor(rest)
 		driver.set_activity_prop(str(entry.profile.get("prop", "")) if active else "")
 		if active:
 			driver.set_life_workstation(entry.profile.get("workstation", {}))
