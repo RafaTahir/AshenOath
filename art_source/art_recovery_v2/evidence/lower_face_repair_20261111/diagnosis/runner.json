@@ -1,0 +1,705 @@
+{
+  "schema_version": 1,
+  "kind": "community_world_input_runner",
+  "status": "diagnosis_collected",
+  "case": "lower_face_diagnostic",
+  "git_commit": "b4b52e4b6a87a0a346618484fdabd405b2980fdf",
+  "source_status": " M outputs/AshenOathTheRoadBetweenCrowns/scripts/held_prop_geometry.gd\n?? art_source/art_recovery_v2/evidence/anwen_v004/\n?? art_source/art_recovery_v2/evidence/anwen_v006/\n?? art_source/art_recovery_v2/evidence/anwen_v007/\n?? art_source/art_recovery_v2/evidence/anwen_v008/\n?? art_source/art_recovery_v2/evidence/anwen_v009/\n?? art_source/art_recovery_v2/evidence/anwen_v010/\n?? art_source/art_recovery_v2/evidence/anwen_v011/\n?? art_source/art_recovery_v2/evidence/anwen_v012_godot/\n?? art_source/art_recovery_v2/evidence/anwen_v013/\n?? art_source/art_recovery_v2/evidence/anwen_v014/\n?? art_source/art_recovery_v2/evidence/anwen_v015/\n?? art_source/art_recovery_v2/evidence/anwen_v016/\n?? art_source/art_recovery_v2/evidence/anwen_v017/\n?? art_source/art_recovery_v2/evidence/anwen_v018/\n?? art_source/art_recovery_v2/evidence/anwen_v019/\n?? art_source/art_recovery_v2/evidence/anwen_v020/\n?? art_source/art_recovery_v2/evidence/anwen_v021/\n?? art_source/art_recovery_v2/evidence/anwen_v022/\n?? art_source/art_recovery_v2/evidence/anwen_v023/\n?? art_source/art_recovery_v2/evidence/anwen_v024/\n?? art_source/art_recovery_v2/evidence/anwen_v025/\n?? art_source/art_recovery_v2/evidence/anwen_v026/\n?? art_source/art_recovery_v2/evidence/anwen_v027/\n?? art_source/art_recovery_v2/evidence/anwen_v029/\n?? art_source/art_recovery_v2/evidence/anwen_v030/\n?? art_source/art_recovery_v2/evidence/anwen_v031/\n?? art_source/art_recovery_v2/evidence/anwen_v032/\n?? art_source/art_recovery_v2/evidence/anwen_v033/\n?? art_source/art_recovery_v2/evidence/anwen_v034/\n?? art_source/art_recovery_v2/evidence/anwen_v035/\n?? art_source/art_recovery_v2/evidence/anwen_v036/\n?? art_source/art_recovery_v2/evidence/anwen_v039/\n?? art_source/art_recovery_v2/evidence/anwen_v040/\n?? art_source/art_recovery_v2/evidence/anwen_v041/\n?? art_source/art_recovery_v2/evidence/anwen_v042/\n?? art_source/art_recovery_v2/evidence/anwen_v043/\n?? art_source/art_recovery_v2/evidence/asset_inventory_20261101.jpg\n?? art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/9e9764880b034b9fd4f02d9e0b3b97ee53db9dd9b6bc34f05631c0fe4bfe073f/\n?? art_source/art_recovery_v2/evidence/stylized/C01/godot_corrected/\n?? art_source/art_recovery_v2/evidence/stylized/C01/godot_pre_private_environment/\n?? art_source/art_recovery_v2/evidence/stylized/C02/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C02/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C02/v003/\n?? art_source/art_recovery_v2/evidence/stylized/C03/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C03/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C03/waist_surface_owner/\n?? art_source/art_recovery_v2/evidence/stylized/C04/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C04/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C05/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C05/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C05/v003/\n?? art_source/art_recovery_v2/evidence/stylized/C06/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C06/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C07/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C07/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C07/v003/\n?? art_source/art_recovery_v2/evidence/stylized/C08/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C08/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C09/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C09/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C10/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C10/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C11/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C11/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C12/v001/\n?? art_source/art_recovery_v2/evidence/stylized/C12/v002/\n?? art_source/art_recovery_v2/evidence/stylized/C12/v003/\n?? art_source/art_recovery_v2/evidence/stylized/M01/godot_before_mesh_space/\n?? art_source/art_recovery_v2/evidence/stylized/M02/godot_before_mesh_space/\n?? art_source/art_recovery_v2/evidence/stylized/M03/godot_before_mesh_space/\n?? art_source/art_recovery_v2/evidence/stylized/M04/godot_before_mesh_space/\n?? art_source/art_recovery_v2/evidence/stylized/M05/godot_before_mesh_space/\n?? art_source/art_recovery_v2/evidence/stylized/M07/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M08/godot_before_mesh_space/\n?? art_source/art_recovery_v2/evidence/stylized/M08/v002/\n?? art_source/art_recovery_v2/evidence/stylized/M08/v005/\n?? art_source/art_recovery_v2/evidence/stylized/M09/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M10/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M11/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M12/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M13/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M14/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M15/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M16/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M17/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M18/v001/\n?? art_source/art_recovery_v2/evidence/stylized/M19/godot_before_mesh_space/\n?? art_source/art_recovery_v2/evidence/stylized/M20/godot_before_mesh_space/\n?? art_source/art_recovery_v2/evidence/stylized/P01/v001/\n?? art_source/art_recovery_v2/evidence/stylized/P01/v002/\n?? art_source/art_recovery_v2/evidence/stylized/level_garment_obstructed_camera/\n?? art_source/art_recovery_v2/evidence/stylized/level_obstructed_camera/\n?? art_source/art_recovery_v2/materials/\n?? art_source/art_recovery_v2/models/C01_anwen_authored_v007.blend\n?? art_source/art_recovery_v2/models/C01_anwen_authored_v008.blend\n?? art_source/art_recovery_v2/models/C01_anwen_bound_v012.blend\n?? art_source/art_recovery_v2/models/C01_anwen_brow_v014.blend\n?? art_source/art_recovery_v2/models/C01_anwen_clearance_v010.blend\n?? art_source/art_recovery_v2/models/C01_anwen_clearance_v011.blend\n?? art_source/art_recovery_v2/models/C01_anwen_contact_v020.blend\n?? art_source/art_recovery_v2/models/C01_anwen_continuous_v009.blend\n?? art_source/art_recovery_v2/models/C01_anwen_crafted_v019.blend\n?? art_source/art_recovery_v2/models/C01_anwen_details_v021.blend\n?? art_source/art_recovery_v2/models/C01_anwen_draped_v005.blend\n?? art_source/art_recovery_v2/models/C01_anwen_fitted_v006.blend\n?? art_source/art_recovery_v2/models/C01_anwen_foundation_v032.blend\n?? art_source/art_recovery_v2/models/C01_anwen_foundation_v033.blend\n?? art_source/art_recovery_v2/models/C01_anwen_foundation_v034.blend\n?? art_source/art_recovery_v2/models/C01_anwen_foundation_v035.blend\n?? art_source/art_recovery_v2/models/C01_anwen_foundation_v036.blend\n?? art_source/art_recovery_v2/models/C01_anwen_foundation_v039.blend\n?? art_source/art_recovery_v2/models/C01_anwen_foundation_v040.blend\n?? art_source/art_recovery_v2/models/C01_anwen_foundation_v041.blend\n?? art_source/art_recovery_v2/models/C01_anwen_full_v004.blend\n?? art_source/art_recovery_v2/models/C01_anwen_groom_v029.blend\n?? art_source/art_recovery_v2/models/C01_anwen_groomed_v015.blend\n?? art_source/art_recovery_v2/models/C01_anwen_likeness_v013.blend\n?? art_source/art_recovery_v2/models/C01_anwen_pattern_v017.blend\n?? art_source/art_recovery_v2/models/C01_anwen_rear_v023.blend\n?? art_source/art_recovery_v2/models/C01_anwen_reference_v042.blend\n?? art_source/art_recovery_v2/models/C01_anwen_retained_v043.blend\n?? art_source/art_recovery_v2/models/C01_anwen_review_v026.blend\n?? art_source/art_recovery_v2/models/C01_anwen_review_v027.blend\n?? art_source/art_recovery_v2/models/C01_anwen_settled_v024.blend\n?? art_source/art_recovery_v2/models/C01_anwen_settled_v025.blend\n?? art_source/art_recovery_v2/models/C01_anwen_soft_v018.blend\n?? art_source/art_recovery_v2/models/C01_anwen_strands_v030.blend\n?? art_source/art_recovery_v2/models/C01_anwen_strands_v031.blend\n?? art_source/art_recovery_v2/models/C01_anwen_tailored_v022.blend\n?? art_source/art_recovery_v2/models/C01_anwen_textiles_v016.blend\n?? art_source/art_recovery_v2/models/C01_ash_staff_v002.blend\n?? art_source/art_recovery_v2/models/C02_Rook_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C02_Rook_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C02_Rook_stylized_v003.blend\n?? art_source/art_recovery_v2/models/C03_Mira_Fen_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C03_Mira_Fen_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C03_Mira_Fen_stylized_v002_motionfit_v001.blend\n?? art_source/art_recovery_v2/models/C03_Mira_Fen_stylized_v002_motionfit_v001_motionfit_v003.blend\n?? art_source/art_recovery_v2/models/C04_Blacksmith_Tor_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C04_Blacksmith_Tor_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C04_Blacksmith_Tor_stylized_v002_motionfit_v001.blend\n?? art_source/art_recovery_v2/models/C04_Blacksmith_Tor_stylized_v002_motionfit_v001_motionfit_v002.blend\n?? art_source/art_recovery_v2/models/C04_Blacksmith_Tor_stylized_v002_motionfit_v001_motionfit_v002_motionfit_v003.blend\n?? art_source/art_recovery_v2/models/C05_Widow_Elna_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C05_Widow_Elna_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C05_Widow_Elna_stylized_v003.blend\n?? art_source/art_recovery_v2/models/C06_Farmer_Toma_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C06_Farmer_Toma_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C07_Captain_Senn_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C07_Captain_Senn_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C07_Captain_Senn_stylized_v003.blend\n?? art_source/art_recovery_v2/models/C08_Lord_Edric_Vargan_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C08_Lord_Edric_Vargan_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C09_Record_Keeper_Vale_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C09_Record_Keeper_Vale_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C09_Record_Keeper_Vale_stylized_v002_motionfit_v001.blend\n?? art_source/art_recovery_v2/models/C09_Record_Keeper_Vale_stylized_v002_motionfit_v001_motionfit_v003.blend\n?? art_source/art_recovery_v2/models/C10_Steward_Merrow_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C10_Steward_Merrow_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C10_Steward_Merrow_stylized_v002_motionfit_v001.blend\n?? art_source/art_recovery_v2/models/C11_Nessa_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C11_Nessa_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C11_Nessa_stylized_v002_motionfit_v001.blend\n?? art_source/art_recovery_v2/models/C11_Nessa_stylized_v002_motionfit_v001_motionfit_v002.blend\n?? art_source/art_recovery_v2/models/C11_Nessa_stylized_v002_motionfit_v001_motionfit_v002_motionfit_v003.blend\n?? art_source/art_recovery_v2/models/C12_Nera_stylized_v001.blend\n?? art_source/art_recovery_v2/models/C12_Nera_stylized_v002.blend\n?? art_source/art_recovery_v2/models/C12_Nera_stylized_v003.blend\n?? art_source/art_recovery_v2/models/M02_Wychwood_Stalker_stylized.blend\n?? art_source/art_recovery_v2/models/M04_Gravebound_Knight_stylized.blend\n?? art_source/art_recovery_v2/models/M05_Bell_Eater_stylized.blend\n?? art_source/art_recovery_v2/models/M05_Bell_Eater_stylized_v002.blend\n?? art_source/art_recovery_v2/models/M06_Rootbound_Colossus_stylized.blend\n?? art_source/art_recovery_v2/models/M08_White_Hart_Avatar_stylized_v002.blend\n?? art_source/art_recovery_v2/models/M20_Wychwood_Brute_stylized.blend\n?? art_source/art_recovery_v2/models/P01_Kael_stylized_v001.blend\n?? art_source/art_recovery_v2/models/P01_Kael_stylized_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M01_refined.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M01_refined_surface_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M01_refined_timing_v003.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M02_refined.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M02_refined_surface_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M03_refined.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M03_refined_surface_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M03_refined_timing_v003.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M04_refined.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M04_refined_surface_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M04_refined_timing_v003.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M05_refined.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M05_refined_surface_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M05_refined_timing_v003.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M06_refined.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M06_refined_surface_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M19_refined.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M19_refined_surface_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M19_refined_timing_v003.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M20_refined.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M20_refined_surface_v002.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/bipeds/M20_refined_timing_v003.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/wildlife/M09/M09_refined_20261101.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/wildlife/M10/M10_refined_20261101.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/wildlife/M12/M12_refined_20261101.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/wildlife/M14/M14_refined_20261101.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/wildlife/M16/M16_refined_20261101.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/wildlife/M18/M18_refined_20261101.blend\n?? art_source/art_recovery_v2/models/refinement_20261101/wildlife/M18/v002/\n?? art_source/art_recovery_v2/models/refinement_20261101/wildlife/M18/v003/repair_contacts.py\n?? art_source/art_recovery_v2/models/runtime_integration_baselines/\n?? art_source/art_recovery_v2/tools/inspect_refinement_bipeds.py\n?? art_source/art_recovery_v2/upstream/makehuman/community_hair/\n?? art_source/everyday_life/everyday_props.blend1\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/anwen_full_v011/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/anwen_full_v012/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/anwen_full_v017/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/anwen_full_v026/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/anwen_retained_v043/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/anwen_runtime_v028/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/bipeds/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/humans/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/color_134c69a07f16496728ba98cb0feba0ad4266048d6977778932bc35896ef7589c.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/color_332a34dbd70381001a65397576ad6d28f52bd6884630eb907aa12b88ddaed650.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/color_4e29eda8011f48e90ce6790830c3ec89084b9d014e06290ca0e52f93921158ee.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/color_8bdb1622c0b994b63d4a971278f2e4ab5a8e2fdd3437aa51d6fc457ab5c53dc7.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/color_b378ffb4a998578f676d69a6548d450bef5004532d2f56e19f0ee583eba92edc.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/color_d84e5d8a4ba2459b3f332a5d36bc02df0809ba96e6f1dbb76a384ebf6d6f1e54.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_0039013133dadaa09c5f5c85fe1dabb4cf521403bfcba2770525215caa70ce17.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_0ac272b612cc5801eeb9c0544b60e9dd745bd5215fcf53943d4c435ae1b3ff4e.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_2d92682363b72a4d3ac6c1c7c609c7cc7988567b2e03ce714bdfa301fd6a0dee.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_4a30300a29ebeb665ee6a20eb370f3f257e9c3534171449e2cd393f6dfa9f0f5.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_64af7da3567a210bdbd23f0a4b57947fd7609c367cbfb1c8ad6247a86b5fb5d6.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_95675a79964a99b8c10e738fd928f60bf49c97d46a15d76fa6488fe143c347c1.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_aeb509e6bf59d4a85ec57ad6e0098abe93ddf595aa21254cb0c10581d9e12068.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_bb281782172d5d02712b9a9ac02d280f070b4c57cac2b2ef9b72bf25f23b7dfa.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/linear_be056877973213a14e143b4bfddd66a137a30c65a904bdaafb40f6739c4c9a7f.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_061c55ddde681439623f354489179cc3d415d2204994d2d6643cc7f13c24fb3a.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_0b0bc54340b3b70eb772756edab249e6b2108afe717ac0aec50baa6f102308e3.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_1750855e2946e082502b097685f84f41a1106e8f8f76a9445479808ee3971197.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_50a8f597cb773aa3c20d035df55de2eb9f5205a93864c5cb9e923c132eeb605f.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_5bf0d126ea6759559a9a42fcec1cbee322aaaa7318968de3454d3298861ff2b9.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_6a8afb0f70580815dd3a4317a0b10cc071e0386c4f56937b0fbf1e308ad20b16.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_7b53e0f106a334665eee85f54f57ba6b5804794edfd67d5ddc78de7d41abadd1.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_8e5760662086d779e82cca4904d6b5375e8ac4443bd479ab27c644916e665475.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/creatures/textures/normal_fddd083aecd40a0c8cd27fca0e2a0c7e31dc97816a598ce1137a3c9d7db6f1b2.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/humans/textures/color_4d58c21460f5dc037e8e72c316e9dc3b0cb914a867e6d20487fbb92c354f1d01.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/humans/textures/color_9db21707faae76c8f2be6bf8a60cf0c5b81d435425bda45e12d8569155ae4066.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/runtime_shared/humans/textures/color_e4be0c3f080a2119a293f561ba7d40754a2b868e66a8e22fd5391bfc0b90c864.png\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M07/M07_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M08/M08_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M09/M09_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M09/candidate.json\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M09/v002/M09_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M10/M10_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M10/candidate.json\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M10/v002/M10_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M11/M11_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M12/M12_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M12/candidate.json\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M12/v002/M12_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M13/M13_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M14/M14_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M14/candidate.json\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M14/v002/M14_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M15/M15_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M16/M16_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M16/candidate.json\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M16/v002/M16_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M17/M17_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M18/M18_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M18/candidate.json\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M18/v002/M18_refined_20261101.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/refinement_20261101/wildlife/M18/v003/M18_contact_repaired_v003.glb\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C01/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C02/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C03/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C04/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C05/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C06/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C07/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C08/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C09/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C10/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C11/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/C12/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M01/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M02/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M03/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M04/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M05/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M06/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M07/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M08/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M09/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M10/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M11/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M12/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M13/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M14/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M15/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M16/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M17/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M18/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M19/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/M20/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/P01/\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/runtime_shared/shared_compilation.json\n?? outputs/AshenOathTheRoadBetweenCrowns/art_review/stylized/runtime_shared/shared_compilation_patch_C03_C04_C09_C11.json\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/C01_ash_staff_C01_StaffAshWood_authored_grain.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/C01_ash_staff_C01_StaffAshWood_fine_normal.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/C01_ash_staff_C01_StaffGrip_authored_grain.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/C01_ash_staff_C01_StaffGrip_fine_normal.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_0039013133dadaa09c5f5c85fe1dabb4cf521403bfcba2770525215caa70ce17.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_0ac272b612cc5801eeb9c0544b60e9dd745bd5215fcf53943d4c435ae1b3ff4e.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_2d92682363b72a4d3ac6c1c7c609c7cc7988567b2e03ce714bdfa301fd6a0dee.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_4a30300a29ebeb665ee6a20eb370f3f257e9c3534171449e2cd393f6dfa9f0f5.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_64af7da3567a210bdbd23f0a4b57947fd7609c367cbfb1c8ad6247a86b5fb5d6.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_95675a79964a99b8c10e738fd928f60bf49c97d46a15d76fa6488fe143c347c1.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_aeb509e6bf59d4a85ec57ad6e0098abe93ddf595aa21254cb0c10581d9e12068.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_bb281782172d5d02712b9a9ac02d280f070b4c57cac2b2ef9b72bf25f23b7dfa.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/linear_be056877973213a14e143b4bfddd66a137a30c65a904bdaafb40f6739c4c9a7f.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_061c55ddde681439623f354489179cc3d415d2204994d2d6643cc7f13c24fb3a.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_0b0bc54340b3b70eb772756edab249e6b2108afe717ac0aec50baa6f102308e3.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_1750855e2946e082502b097685f84f41a1106e8f8f76a9445479808ee3971197.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_50a8f597cb773aa3c20d035df55de2eb9f5205a93864c5cb9e923c132eeb605f.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_5bf0d126ea6759559a9a42fcec1cbee322aaaa7318968de3454d3298861ff2b9.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_6a8afb0f70580815dd3a4317a0b10cc071e0386c4f56937b0fbf1e308ad20b16.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_7b53e0f106a334665eee85f54f57ba6b5804794edfd67d5ddc78de7d41abadd1.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_8e5760662086d779e82cca4904d6b5375e8ac4443bd479ab27c644916e665475.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/creatures/textures/normal_fddd083aecd40a0c8cd27fca0e2a0c7e31dc97816a598ce1137a3c9d7db6f1b2.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/textures/color_4d58c21460f5dc037e8e72c316e9dc3b0cb914a867e6d20487fbb92c354f1d01.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/textures/color_9db21707faae76c8f2be6bf8a60cf0c5b81d435425bda45e12d8569155ae4066.png\n?? outputs/AshenOathTheRoadBetweenCrowns/assets_external/design_pack_v1/humans/textures/color_e4be0c3f080a2119a293f561ba7d40754a2b868e66a8e22fd5391bfc0b90c864.png\n?? outputs/AshenOathTheRoadBetweenCrowns/release_reports/opening_presence_20261003/\n?? outputs/AshenOath_Web_startup_fcf094c/\n",
+  "seed_contract": {
+    "suite": "lower_face_diagnostic",
+    "expected_work": []
+  },
+  "output": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check",
+  "isolated_project": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\project",
+  "candidate_closure": {
+    "schema_version": 1,
+    "kind": "verified_native_candidate_closure",
+    "build_id": "combined-loading-cast-20261111-ba93115-r6",
+    "source_commit": "ba9311574bdebb2285d0669e63df09180081111e",
+    "release_manifest": "D:\\Temp\\AO_FaceDiag_b4\\native\\release_manifest.json",
+    "root": {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\index.pck",
+      "bytes": 13434232,
+      "sha256": "39fb81f43f9b61ab9b924863179e60a24efed2d20b641cf5d83428f47430a95e"
+    },
+    "runtime_manifest_sha256": "a8847151c7ad8b0b83a0a6ac2e2c516c273a476a530aa0c8d6007bdddba75944",
+    "packs": [
+      {
+        "id": "opening",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\opening.pck",
+        "bytes": 45208748,
+        "sha256": "7a39c531b991452e17e6d4e24a862cdd11f02d6b51cbab2f467cf2a639e8565b"
+      },
+      {
+        "id": "campaign",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\campaign.pck",
+        "bytes": 7449336,
+        "sha256": "b7a9b57d46d5c753e57f8d5d922e28a3d2677317d8cf3ebdbaca0d3d0cea04a1"
+      },
+      {
+        "id": "characters",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\characters.pck",
+        "bytes": 56528,
+        "sha256": "c2c395f906f353e548a27893e9b5f2d15833506605225da4e75f7c077a55b7f2"
+      },
+      {
+        "id": "monsters",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\monsters.pck",
+        "bytes": 148220,
+        "sha256": "7c350ab6bafd1c1636f26d51f0eb7ef430f4c77d7913e1ddbfe83f15051959af"
+      },
+      {
+        "id": "audio",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\audio.pck",
+        "bytes": 21158476,
+        "sha256": "cabac82d97fe96dc446c01553d2b0e27247783994a962039743c2c44e739a092"
+      },
+      {
+        "id": "quality_materials",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\quality_materials.pck",
+        "bytes": 7172164,
+        "sha256": "ba6883162cab55716e6a49545a62b7a48a1c1dac1d562e28f0ccc3316c377b62"
+      },
+      {
+        "id": "adjacent",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\adjacent.pck",
+        "bytes": 3030648,
+        "sha256": "8d4afde46da9beef63142f1a811cf31454c82fb52b5af9dbd991f96ac3c11a58"
+      },
+      {
+        "id": "actor_shared",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_shared.pck",
+        "bytes": 5928656,
+        "sha256": "a2405a7994c16405aa1417d8be2fc2527494840ed5a74ba5607c3be2af3222e0"
+      },
+      {
+        "id": "actor_c01",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c01.pck",
+        "bytes": 4824064,
+        "sha256": "dc21b4207b57828f9a7c481b36f38609dba9db24324cfeea7cdb38c0a178011b"
+      },
+      {
+        "id": "actor_c02",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c02.pck",
+        "bytes": 2047088,
+        "sha256": "5064e16e74c59ea75ada966f8264e50d213ab1c62fdfcffdc101376a520d247d"
+      },
+      {
+        "id": "actor_c03",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c03.pck",
+        "bytes": 1947232,
+        "sha256": "4bcab46806dbd47f32e03bba4115363e8601abc54b19316aa0abbba3fc4af2d8"
+      },
+      {
+        "id": "actor_c04",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c04.pck",
+        "bytes": 1967760,
+        "sha256": "ad9586df588f55d4c1afe0c6c2e8a4ef121bb6889b6eb596bb921feb0bce934a"
+      },
+      {
+        "id": "actor_c05",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c05.pck",
+        "bytes": 3213716,
+        "sha256": "546dbb90587815a1577a2449b16ea70816f9c1c2de60a1f418ff9ed67c0f12d6"
+      },
+      {
+        "id": "actor_c06",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c06.pck",
+        "bytes": 2166296,
+        "sha256": "2047f9d6365aa57bf2d5ad3578b575f1a18aa97206331e5eea2397269ce9af09"
+      },
+      {
+        "id": "actor_c07",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c07.pck",
+        "bytes": 2429060,
+        "sha256": "91d102d8e145dec0f7c213f656ec0b7dc35db63683f934d2a1bb178d91966a48"
+      },
+      {
+        "id": "actor_c08",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c08.pck",
+        "bytes": 2128480,
+        "sha256": "608dc3aa897c3b65344b5dfde84b062f91e748ece367b8c0d94b09c38e390a41"
+      },
+      {
+        "id": "actor_c09",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c09.pck",
+        "bytes": 2037836,
+        "sha256": "044f4f543e867ae66ac443bc554ba6a47acec7ab4fdcde8e354ab5348a72cefd"
+      },
+      {
+        "id": "actor_c10",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c10.pck",
+        "bytes": 2220792,
+        "sha256": "a347438453a6aec3f6eba7d4d2acf25cda70faa5bbc2644fa53aebb4e3ae11c8"
+      },
+      {
+        "id": "actor_c11",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c11.pck",
+        "bytes": 1983052,
+        "sha256": "fc83b5bb4dfe92a40b7112dcd5861f1926a79a90d6a245a166be2a61a5be7369"
+      },
+      {
+        "id": "actor_c12",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c12.pck",
+        "bytes": 1932096,
+        "sha256": "89c8c709656d9eb60c72c4252f8e090038959c4247e4891b27c638febec60f36"
+      },
+      {
+        "id": "actor_m01",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m01.pck",
+        "bytes": 859716,
+        "sha256": "364638e2521c189e492b0108c2898cb73e80b5f0d5bc9f4da7d0961c2cacdcca"
+      },
+      {
+        "id": "actor_m02",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m02.pck",
+        "bytes": 3799268,
+        "sha256": "a6742e53b54abd91cefc2c26deb3ec7c219fe035115831210957888a15b7d7b0"
+      },
+      {
+        "id": "actor_m03",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m03.pck",
+        "bytes": 1002860,
+        "sha256": "98ce1cc5fe1e0cf1a09bbdf7cc0d79ea98e618f0381753c620b88551ef1194f9"
+      },
+      {
+        "id": "actor_m04",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m04.pck",
+        "bytes": 1002152,
+        "sha256": "999b5a4cabd87d0f38165b0cc956b3ee3bf21ab15e11bcd26ec13d1ba900b219"
+      },
+      {
+        "id": "actor_m05",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m05.pck",
+        "bytes": 1100400,
+        "sha256": "6365ccf2fb6f3806ca14b517a2cdeb4209caab729935cc8ebb4b8be232581193"
+      },
+      {
+        "id": "actor_m06",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m06.pck",
+        "bytes": 2104008,
+        "sha256": "8bee7215d497a4d88144b7edbcccf16a3ea01674b0cb3798d50ac45102cec445"
+      },
+      {
+        "id": "actor_m07",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m07.pck",
+        "bytes": 1655028,
+        "sha256": "32644acbc0301db17c880ee89c7d48b6bab7b5f91a193cadcb230588efb215eb"
+      },
+      {
+        "id": "actor_m08",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m08.pck",
+        "bytes": 1233108,
+        "sha256": "fce69699a92e89921121b00e0f89056d1959777298771595bbc0f6af55e7e1a0"
+      },
+      {
+        "id": "actor_m09",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m09.pck",
+        "bytes": 1026372,
+        "sha256": "dfee97d47ff20c0ccf989c22e4df282b8809539f40478e75473ed552317f9900"
+      },
+      {
+        "id": "actor_m10",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m10.pck",
+        "bytes": 945236,
+        "sha256": "d567930b6faea80227bcc600bad099f9e61e7ff13c02368f597d52d92da70f2e"
+      },
+      {
+        "id": "actor_m11",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m11.pck",
+        "bytes": 1105844,
+        "sha256": "2e5fc7a72132ebba9ac90802b6d0f3de1a5d2efcb1928ec0d810765127bef30e"
+      },
+      {
+        "id": "actor_m12",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m12.pck",
+        "bytes": 964900,
+        "sha256": "83f474554d55e1998d9a8c131c4beba35ec41b12e4f9db6b012cf8b0701ed368"
+      },
+      {
+        "id": "actor_m13",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m13.pck",
+        "bytes": 2044500,
+        "sha256": "6207da945230e0c2bbb2cc969ca95ecb941080b0326299532401192ac0d05f7a"
+      },
+      {
+        "id": "actor_m14",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m14.pck",
+        "bytes": 1140452,
+        "sha256": "a9c3cbffb18f75f59ff95f9b64601ebba8eb0681ad2635aea3b3a95ac4225d3c"
+      },
+      {
+        "id": "actor_m15",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m15.pck",
+        "bytes": 3984432,
+        "sha256": "0757aada4663d83cec71f966a1a7ca3bd19413e2970c6d1d5848d8c543e53907"
+      },
+      {
+        "id": "actor_m16",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m16.pck",
+        "bytes": 1108996,
+        "sha256": "6673c0da7dfaf0e5b6d6067986aee0043c59ebfe2dcc70f1c15ea723dd747f78"
+      },
+      {
+        "id": "actor_m17",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m17.pck",
+        "bytes": 1491732,
+        "sha256": "db34e65834f6067692b3da3da0d244640d8ba79946cb54f433de392c4ce39c78"
+      },
+      {
+        "id": "actor_m18",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m18.pck",
+        "bytes": 1229860,
+        "sha256": "1958d43ec13dc30cf34305fb8aa68ea00545680a42118aee0cf745073f6e4384"
+      },
+      {
+        "id": "actor_m19",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m19.pck",
+        "bytes": 875848,
+        "sha256": "e10429617b742321eaed5b384dc3dd58a6115a0fccb7b86f9da797f39a7bf3e3"
+      },
+      {
+        "id": "actor_m20",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m20.pck",
+        "bytes": 895032,
+        "sha256": "a1dc5bced7cdda2e07c9cb1cf2496e6188a41c884e2f2c077084d2e7fe9df1f5"
+      },
+      {
+        "id": "actor_p01",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_p01.pck",
+        "bytes": 2331712,
+        "sha256": "9530abba16b50ba207c9270a0fc5d5ce1f0d684d8ffff9d8c4fcb83ed59c9afb"
+      },
+      {
+        "id": "leisure",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\leisure.pck",
+        "bytes": 210356,
+        "sha256": "94583c7e1a8065690d93a49f0ac015477cb9621777b2e4f70c5ad123e76ba5d1"
+      },
+      {
+        "id": "community",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\community.pck",
+        "bytes": 252320,
+        "sha256": "f5fe15b42ac127336ccc7780b6c8452668530c506afa30b417c28f65f2b2a425"
+      },
+      {
+        "id": "community_voice",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\community_voice.pck",
+        "bytes": 5078892,
+        "sha256": "3b33f6de5f39007a5a900ee9cd4cf8c7c3749af94bdc2d8393f59dc74b45403b"
+      },
+      {
+        "id": "living_cast_voice",
+        "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\living_cast_voice.pck",
+        "bytes": 8545604,
+        "sha256": "6e1eb5a58610dfd63996772fe7458d984b582494ba5a43f224447176aad8c072"
+      }
+    ],
+    "class_cache_sha256": "8afdbc355b2a3020a7245285121774b65209e744e111e00fea9bc95afe6933f0",
+    "known_required_resources": [
+      "scenes/main.tscn",
+      "scripts/campaign_revision.gd",
+      "scripts/ending_catalog.gd",
+      "scripts/community_campaign.gd",
+      "scripts/community_activity.gd",
+      "scripts/community_ending.gd",
+      "scripts/community_presentation.gd",
+      "scripts/zones/community_section.gd",
+      "data/runtime_story_campaign.json",
+      "data/community_campaign.json",
+      "data/community_cast_life.json",
+      "data/community_story_overlay.json",
+      "world_sector_manifest.json",
+      "assets_external/environment/village/Cemetery_chapel_Authored.res",
+      "assets_external/environment/village/Cemetery_bell_frame_Authored.res",
+      "assets_external/environment/village/Cemetery_bell_Authored.res",
+      "assets_external/environment/village/Cemetery_grave_rows_Authored.res",
+      "assets_external/environment/village/Cemetery_boundary_Authored.res",
+      "assets_external/environment/village/Cemetery_grave_earth_Authored.res",
+      "assets_external/environment/village/Cemetery_memory_window_Authored.res",
+      "assets_external/environment/forest/HartAftermath_concord_Authored.res",
+      "assets_external/environment/forest/HartAftermath_open_road_Authored.res"
+    ],
+    "resource_count": 3602,
+    "resource_instantiation_validated": false,
+    "unlisted_pack_policy": "ignored; never mounted",
+    "deferred_loading_tested": false,
+    "community_resource_owners_verified": 498
+  },
+  "expected_user_data_dir": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\profile\\roaming\\AshenOathCapture\\community_20261111T142413Z_2f1f14948e",
+  "environment": {
+    "APPDATA": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\profile\\roaming",
+    "LOCALAPPDATA": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\profile\\local"
+  },
+  "profile": "AshenOathCapture/community_20261111T142413Z_2f1f14948e",
+  "command": [
+    "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+    "--path",
+    "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\project",
+    "--windowed",
+    "--rendering-method",
+    "gl_compatibility",
+    "--rendering-driver",
+    "opengl3",
+    "--script",
+    "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\project\\tools\\verify_lower_faces.gd",
+    "--log-file",
+    "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\godot.log",
+    "--",
+    "--root-pack=D:/Temp/AO_FaceDiag_b4/native/index.pck",
+    "--pack-list=D:/Temp/AO_FaceDiag_b4/single_runtime_check/project/verified_native_packs.json",
+    "--case=lower_face_diagnostic",
+    "--viewport=desktop",
+    "--output=D:/Temp/AO_FaceDiag_b4/single_runtime_check",
+    "--background-rendered=true",
+    "--input-mode=keyboard_mouse"
+  ],
+  "timeout_seconds": 720,
+  "immutable_inputs": [
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\project\\project.godot",
+      "bytes": 6118,
+      "sha256": "9593a87c0f58302204312f63945c32bdba5d641c22ed1b43ebdffa5aec5362a1"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\project\\.godot\\global_script_class_cache.cfg",
+      "bytes": 5690,
+      "sha256": "8afdbc355b2a3020a7245285121774b65209e744e111e00fea9bc95afe6933f0"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\project\\tools\\verify_lower_faces.gd",
+      "bytes": 15802,
+      "sha256": "85ee98c9da444c2db896b4237a26f101c81e943aad6a5549356eb872644da433"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\project\\verified_native_packs.json",
+      "bytes": 12157,
+      "sha256": "2682854f4588d6000e3d3cdae32041ccd5ab3ad523bc2869990f78a087d8ab23"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\single_runtime_check\\project\\tools\\verify_community_world_input.gd",
+      "bytes": 33960,
+      "sha256": "7e80af6302792a5a1605100d4cd9d63d222744a9af21adc5c86412c942787995"
+    },
+    {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_community_acceptance.py",
+      "bytes": 28050,
+      "sha256": "f76ec1c7791acd5a7f4b9aca209bd699f37f937a537a990fa1761f02783cd489"
+    },
+    {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\run_living_cast_capture.py",
+      "bytes": 36648,
+      "sha256": "a1a3554537eb482d0c5671acf15ab43a204add8455d2548eb9838a2a8025fcb2"
+    },
+    {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\background_native_capture.py",
+      "bytes": 11605,
+      "sha256": "2ae3f7eb1840c78468e11254c27bb131b5f85c3f8a982bb6e1a9820a1f416c3c"
+    },
+    {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\resume_community_acceptance.py",
+      "bytes": 863,
+      "sha256": "356204cfb37625232728c64e0c1f1eec458a1362b34f5019bf580961a1e8ea34"
+    },
+    {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\community_acceptance_packs.py",
+      "bytes": 15387,
+      "sha256": "faf3b47de532cd0b71362b875e9da71c935b190b56b43d2ca478914383b824e4"
+    },
+    {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\runtime_pack_artifacts.py",
+      "bytes": 4393,
+      "sha256": "e3c78ff3156f053390329f9b6248cf260e7fd21a892d9e68c5784ddc667a6d7f"
+    },
+    {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\runtime_pack_validation.py",
+      "bytes": 3092,
+      "sha256": "83967c5de3ed9057de0b31b37e36127c1f4feb85b61449582d6ae1d67e3719c9"
+    },
+    {
+      "path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\tools\\compact_runtime_packs.py",
+      "bytes": 14163,
+      "sha256": "21e98454d8768b89facdb59a3b8c58503704ffde6ad7a631457bf10c91f7c35f"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\release_manifest.json",
+      "bytes": 27977,
+      "sha256": "17b10ccc7515b282d82c1a8a48f2eb5ac48e908a8acb04c437d195a0b75581b7"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\source\\run_face_diagnostic.py",
+      "bytes": 4894,
+      "sha256": "f5e03f9e716725f975e860c0fa2854f5e4383684aafe134a3ed18e12a775095e"
+    },
+    {
+      "path": "D:\\Temp\\AO_LowerFace_PublishedR6_20261111\\source\\verify_lower_faces.gd",
+      "bytes": 15802,
+      "sha256": "85ee98c9da444c2db896b4237a26f101c81e943aad6a5549356eb872644da433"
+    },
+    {
+      "path": "D:\\Temp\\AO_fcfa891_r5_QA\\cold_arrival_desktop_r2\\project\\tools\\verify_community_world_input.gd",
+      "bytes": 33960,
+      "sha256": "7e80af6302792a5a1605100d4cd9d63d222744a9af21adc5c86412c942787995"
+    },
+    {
+      "path": "C:\\Users\\User\\.cache\\codex-runtimes\\godot-4.6.3\\Godot_v4.6.3-stable_win64_console.exe",
+      "bytes": 198152,
+      "sha256": "63b3b2208819714c9677fbfdd8217c5b7dee8ecf5f383502e826bc9e2227ff5a"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\index.pck",
+      "bytes": 13434232,
+      "sha256": "39fb81f43f9b61ab9b924863179e60a24efed2d20b641cf5d83428f47430a95e"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\opening.pck",
+      "bytes": 45208748,
+      "sha256": "7a39c531b991452e17e6d4e24a862cdd11f02d6b51cbab2f467cf2a639e8565b"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\campaign.pck",
+      "bytes": 7449336,
+      "sha256": "b7a9b57d46d5c753e57f8d5d922e28a3d2677317d8cf3ebdbaca0d3d0cea04a1"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\characters.pck",
+      "bytes": 56528,
+      "sha256": "c2c395f906f353e548a27893e9b5f2d15833506605225da4e75f7c077a55b7f2"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\monsters.pck",
+      "bytes": 148220,
+      "sha256": "7c350ab6bafd1c1636f26d51f0eb7ef430f4c77d7913e1ddbfe83f15051959af"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\audio.pck",
+      "bytes": 21158476,
+      "sha256": "cabac82d97fe96dc446c01553d2b0e27247783994a962039743c2c44e739a092"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\quality_materials.pck",
+      "bytes": 7172164,
+      "sha256": "ba6883162cab55716e6a49545a62b7a48a1c1dac1d562e28f0ccc3316c377b62"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\adjacent.pck",
+      "bytes": 3030648,
+      "sha256": "8d4afde46da9beef63142f1a811cf31454c82fb52b5af9dbd991f96ac3c11a58"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_shared.pck",
+      "bytes": 5928656,
+      "sha256": "a2405a7994c16405aa1417d8be2fc2527494840ed5a74ba5607c3be2af3222e0"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c01.pck",
+      "bytes": 4824064,
+      "sha256": "dc21b4207b57828f9a7c481b36f38609dba9db24324cfeea7cdb38c0a178011b"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c02.pck",
+      "bytes": 2047088,
+      "sha256": "5064e16e74c59ea75ada966f8264e50d213ab1c62fdfcffdc101376a520d247d"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c03.pck",
+      "bytes": 1947232,
+      "sha256": "4bcab46806dbd47f32e03bba4115363e8601abc54b19316aa0abbba3fc4af2d8"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c04.pck",
+      "bytes": 1967760,
+      "sha256": "ad9586df588f55d4c1afe0c6c2e8a4ef121bb6889b6eb596bb921feb0bce934a"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c05.pck",
+      "bytes": 3213716,
+      "sha256": "546dbb90587815a1577a2449b16ea70816f9c1c2de60a1f418ff9ed67c0f12d6"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c06.pck",
+      "bytes": 2166296,
+      "sha256": "2047f9d6365aa57bf2d5ad3578b575f1a18aa97206331e5eea2397269ce9af09"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c07.pck",
+      "bytes": 2429060,
+      "sha256": "91d102d8e145dec0f7c213f656ec0b7dc35db63683f934d2a1bb178d91966a48"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c08.pck",
+      "bytes": 2128480,
+      "sha256": "608dc3aa897c3b65344b5dfde84b062f91e748ece367b8c0d94b09c38e390a41"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c09.pck",
+      "bytes": 2037836,
+      "sha256": "044f4f543e867ae66ac443bc554ba6a47acec7ab4fdcde8e354ab5348a72cefd"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c10.pck",
+      "bytes": 2220792,
+      "sha256": "a347438453a6aec3f6eba7d4d2acf25cda70faa5bbc2644fa53aebb4e3ae11c8"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c11.pck",
+      "bytes": 1983052,
+      "sha256": "fc83b5bb4dfe92a40b7112dcd5861f1926a79a90d6a245a166be2a61a5be7369"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_c12.pck",
+      "bytes": 1932096,
+      "sha256": "89c8c709656d9eb60c72c4252f8e090038959c4247e4891b27c638febec60f36"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m01.pck",
+      "bytes": 859716,
+      "sha256": "364638e2521c189e492b0108c2898cb73e80b5f0d5bc9f4da7d0961c2cacdcca"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m02.pck",
+      "bytes": 3799268,
+      "sha256": "a6742e53b54abd91cefc2c26deb3ec7c219fe035115831210957888a15b7d7b0"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m03.pck",
+      "bytes": 1002860,
+      "sha256": "98ce1cc5fe1e0cf1a09bbdf7cc0d79ea98e618f0381753c620b88551ef1194f9"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m04.pck",
+      "bytes": 1002152,
+      "sha256": "999b5a4cabd87d0f38165b0cc956b3ee3bf21ab15e11bcd26ec13d1ba900b219"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m05.pck",
+      "bytes": 1100400,
+      "sha256": "6365ccf2fb6f3806ca14b517a2cdeb4209caab729935cc8ebb4b8be232581193"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m06.pck",
+      "bytes": 2104008,
+      "sha256": "8bee7215d497a4d88144b7edbcccf16a3ea01674b0cb3798d50ac45102cec445"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m07.pck",
+      "bytes": 1655028,
+      "sha256": "32644acbc0301db17c880ee89c7d48b6bab7b5f91a193cadcb230588efb215eb"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m08.pck",
+      "bytes": 1233108,
+      "sha256": "fce69699a92e89921121b00e0f89056d1959777298771595bbc0f6af55e7e1a0"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m09.pck",
+      "bytes": 1026372,
+      "sha256": "dfee97d47ff20c0ccf989c22e4df282b8809539f40478e75473ed552317f9900"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m10.pck",
+      "bytes": 945236,
+      "sha256": "d567930b6faea80227bcc600bad099f9e61e7ff13c02368f597d52d92da70f2e"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m11.pck",
+      "bytes": 1105844,
+      "sha256": "2e5fc7a72132ebba9ac90802b6d0f3de1a5d2efcb1928ec0d810765127bef30e"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m12.pck",
+      "bytes": 964900,
+      "sha256": "83f474554d55e1998d9a8c131c4beba35ec41b12e4f9db6b012cf8b0701ed368"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m13.pck",
+      "bytes": 2044500,
+      "sha256": "6207da945230e0c2bbb2cc969ca95ecb941080b0326299532401192ac0d05f7a"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m14.pck",
+      "bytes": 1140452,
+      "sha256": "a9c3cbffb18f75f59ff95f9b64601ebba8eb0681ad2635aea3b3a95ac4225d3c"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m15.pck",
+      "bytes": 3984432,
+      "sha256": "0757aada4663d83cec71f966a1a7ca3bd19413e2970c6d1d5848d8c543e53907"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m16.pck",
+      "bytes": 1108996,
+      "sha256": "6673c0da7dfaf0e5b6d6067986aee0043c59ebfe2dcc70f1c15ea723dd747f78"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m17.pck",
+      "bytes": 1491732,
+      "sha256": "db34e65834f6067692b3da3da0d244640d8ba79946cb54f433de392c4ce39c78"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m18.pck",
+      "bytes": 1229860,
+      "sha256": "1958d43ec13dc30cf34305fb8aa68ea00545680a42118aee0cf745073f6e4384"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m19.pck",
+      "bytes": 875848,
+      "sha256": "e10429617b742321eaed5b384dc3dd58a6115a0fccb7b86f9da797f39a7bf3e3"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_m20.pck",
+      "bytes": 895032,
+      "sha256": "a1dc5bced7cdda2e07c9cb1cf2496e6188a41c884e2f2c077084d2e7fe9df1f5"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\actor_p01.pck",
+      "bytes": 2331712,
+      "sha256": "9530abba16b50ba207c9270a0fc5d5ce1f0d684d8ffff9d8c4fcb83ed59c9afb"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\leisure.pck",
+      "bytes": 210356,
+      "sha256": "94583c7e1a8065690d93a49f0ac015477cb9621777b2e4f70c5ad123e76ba5d1"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\community.pck",
+      "bytes": 252320,
+      "sha256": "f5fe15b42ac127336ccc7780b6c8452668530c506afa30b417c28f65f2b2a425"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\community_voice.pck",
+      "bytes": 5078892,
+      "sha256": "3b33f6de5f39007a5a900ee9cd4cf8c7c3749af94bdc2d8393f59dc74b45403b"
+    },
+    {
+      "path": "D:\\Temp\\AO_FaceDiag_b4\\native\\packs\\living_cast_voice.pck",
+      "bytes": 8545604,
+      "sha256": "6e1eb5a58610dfd63996772fe7458d984b582494ba5a43f224447176aad8c072"
+    }
+  ],
+  "source_project_sha256": "70be5803b4627d3c13e27b5b5d6fd69cfbacba9809b025ceb540e6572aba22a5",
+  "physical_phone_coverage": false,
+  "touch_input_coverage": false,
+  "viewport": "desktop",
+  "input_mode": "keyboard_mouse",
+  "execution_mode": "background-rendered",
+  "progression_setup": "empty profile; actual New Game",
+  "initial_profile_files": [],
+  "diagnostic_only": true,
+  "authorized_engine_processes": 1,
+  "diagnostic_scope": "Kael, Anwen and Tor: normal facial evaluation versus disabled/rest facial controls; single native process",
+  "owned_pid": 508,
+  "desktop": {
+    "mode": "background-rendered",
+    "desktop": "AshenOathCapture_23a1cb5ef7d14599a6243828b5cedfab",
+    "input_desktop_before": "Default",
+    "input_desktop_after_launch": "Default",
+    "desktop_switch_requested": false,
+    "binding": "STARTUPINFO.lpDesktop",
+    "input_desktop_after_exit": "Default"
+  },
+  "exit_code": 0,
+  "diagnostic_sha256": "6a5fc16b2bba21e0fe79bacf04b7ea055912441e52407cab0de9a647dc6cc98b",
+  "engine_errors": [],
+  "diagnostic_outcome": "pass"
+}

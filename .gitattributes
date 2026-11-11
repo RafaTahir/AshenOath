@@ -147,3 +147,19 @@ outputs/AshenOathTheRoadBetweenCrowns/scripts/greyfen_life_controller.gd text eo
 outputs/AshenOathTheRoadBetweenCrowns/tools/living_activity_grip_compile.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_activity_grip_compile.gd -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/tools/verify_c11_compiled_carry_route.gd -text whitespace=cr-at-eol,-blank-at-eof
+
+# Facial repairs bind authoring and compiler bytes across Windows checkouts.
+art_source/design_pack_v1/tools/build_humans.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/repair_lower_faces.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/face_repair_provenance.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/tools/augment_face_anchor_metadata.py -text whitespace=cr-at-eol
+art_source/art_recovery_v2/models/lower_face_repair_20261111/** -text whitespace=cr-at-eol
+art_source/art_recovery_v2/evidence/lower_face_repair_20261111/** -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/face_repair_provenance.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/face_repair_provenance.gd.uid -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_actors.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_living_cast_stage2_libraries.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_story_release.ps1 -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/verify_living_cast_delivery.py -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/data/design_pack_assets.json -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/data/prepared_actors.json -text whitespace=cr-at-eol

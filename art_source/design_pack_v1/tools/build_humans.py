@@ -279,10 +279,11 @@ def anatomy(rig, obj, design, skin):
                                                     - ((z - 1.624) / .029) ** 2) * front
         if z < 1.51:
             v.co.z -= .020 * max(0, min(1, (1.53 - z) / .045))
-    # The source head includes a flared shoulder skirt. Keep its facial
-    # topology, but fit that hidden lower skirt inside the new collar.
+    # Fit only the lower neck skirt inside the collar. The Head origin lies
+    # below the chin: extending this band above it squeezes the mandible onto
+    # the neck ellipse and removes the face's forward projection.
     for vertex in obj.data.vertices:
-        if abs(vertex.co.x) < .20 and collar_base-.04 < vertex.co.z < head_base+.025:
+        if abs(vertex.co.x) < .20 and collar_base-.04 < vertex.co.z < head_base-.035:
             x, y = vertex.co.x, vertex.co.y-.025
             distance = math.sqrt((x/.047)**2 + (y/.049)**2)
             if distance > 1:

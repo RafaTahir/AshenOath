@@ -1,0 +1,49 @@
+{
+  "kind": "lower_face_source_diagnosis",
+  "baseline_commit": "b4b52e4",
+  "build_id": "combined-loading-cast-20261111-ba93115-r6",
+  "authorized_runtime_processes": 1,
+  "observed": {
+    "kael": "recessed chin persists with facial modifier disabled and all face bones at rest",
+    "tor": "recessed chin persists with facial modifier disabled and all face bones at rest",
+    "anwen": "bone poses collected; framing was overridden during the care scene, so images do not establish full-face appearance"
+  },
+  "source_cause": {
+    "tool": "art_source/design_pack_v1/tools/build_humans.py",
+    "operation": "neck ellipse fitting ceiling extended through the chin",
+    "old_ceiling": "Head origin + 0.025m",
+    "corrected_ceiling": "Head origin - 0.035m"
+  },
+  "independent_source_witness": {
+    "uv": [
+      0.548905611,
+      0.145922542
+    ],
+    "space": "glTF Y up, source bind coordinates in metres",
+    "donor_chin": [
+      0.0,
+      1.609416962,
+      0.084593989
+    ],
+    "kael_before": [
+      -0.000172323,
+      1.608171344,
+      0.024000078
+    ],
+    "tor_before": [
+      -0.000342801,
+      1.606716275,
+      0.025529567
+    ],
+    "head_origin_y": 1.599800337
+  },
+  "runtime_face_motion": {
+    "largest_sampled_lower_face_delta_m": 0.000434,
+    "static_bind_translation_error_max_m": 1.5e-07
+  },
+  "samples_uncompressed_sha256": "ea01d051791405cd5238a3e2bc638f510f6f52e55558a54705cb58dcfc755c50",
+  "post_repair_runtime_test": "not performed: one runtime diagnostic allowance was used for diagnosis",
+  "post_repair_visual_acceptance": "not established",
+  "publication": "not yet performed",
+  "report_uncompressed_sha256": "6a5fc16b2bba21e0fe79bacf04b7ea055912441e52407cab0de9a647dc6cc98b"
+}

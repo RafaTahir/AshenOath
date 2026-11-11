@@ -5,7 +5,7 @@
     "P01": {
       "path": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
       "owner": "opening",
-      "sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8",
+      "sha256": "464e71694b8dbcc38263c126a453d70916acef8bff24c90b828f8343e381934e",
       "bytes": 1325004,
       "baseline_blender_report": {
         "id": "P01",
@@ -43,14 +43,19 @@
           0.37939024914733177
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "b2a409cc2b0ef71a058882236927bfbdd1f8c67651ed38cf874603e95ac896b8"
+        "asset_sha256": "464e71694b8dbcc38263c126a453d70916acef8bff24c90b828f8343e381934e"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\P01_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/P01/P01_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\P01_Kael.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\P01\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/P01/P01_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\P01\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/P01/face_repair.json",
+        "sha256": "3ef9f8f870a023810b36ea6cb28f6fdc9cd837f3ec6d11656ebcba73f0bcc5a6",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C01": {
       "path": "res://assets_external/design_pack_v1/humans/C01_Anwen.glb",
@@ -113,7 +118,7 @@
     "C02": {
       "path": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
       "owner": "opening",
-      "sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7",
+      "sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
       "bytes": 1730700,
       "baseline_blender_report": {
         "id": "C02",
@@ -150,19 +155,24 @@
           0.36245203500652223
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "cf3cf22f22857b8e029619b476ee399f3fde6140c8ec90f3c2f06b4ad51d56d7"
+        "asset_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C02_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C02/C02_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C02_Rook.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C02\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C02/C02_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C02\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C02/face_repair.json",
+        "sha256": "6f99ba488222345df18f473192a1f8ed2420c9fb15b8bab601764e40b5a3b2f1",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C03": {
       "path": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
       "owner": "opening",
-      "sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+      "sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
       "bytes": 1549112,
       "baseline_blender_report": {
         "id": "C03",
@@ -201,20 +211,25 @@
           0.3643063896747857
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "0a39b8a9b3bae32b235e62824b4d0888d05856bdbebbaea54f72ea5081ab6e5e",
+        "asset_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
         "garment_arm_clearance_m": 0.1
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C03_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C03/C03_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C03_Mira_Fen.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C03\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C03/C03_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C03\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C03/face_repair.json",
+        "sha256": "68df221144ff654743c799e0fc7722415d620e547d9ff82b0d6e33433fc3bd2a",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C04": {
       "path": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
       "owner": "opening",
-      "sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+      "sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
       "bytes": 1593020,
       "baseline_blender_report": {
         "id": "C04",
@@ -252,15 +267,20 @@
           0.4600619146821181
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "5d49b0bf6fb725dbe5c4da5e2651f7f5387d71b49a0ac66f6420851ff95cd3e7",
+        "asset_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
         "garment_arm_clearance_m": 0.1
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C04_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C04/C04_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C04_Blacksmith_Tor.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C04\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C04/C04_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C04\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C04/face_repair.json",
+        "sha256": "f9a5bc75bec422b7e4d912b6462b82c5eb00bb1ebb946b6e443de4c082d5ee71",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C05": {
       "path": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
@@ -315,7 +335,7 @@
     "C06": {
       "path": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
       "owner": "opening",
-      "sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+      "sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
       "bytes": 1774668,
       "baseline_blender_report": {
         "id": "C06",
@@ -353,19 +373,24 @@
           0.363389182569835
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93"
+        "asset_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C06_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C06/C06_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C06_Farmer_Toma.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C06\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C06/C06_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C06\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C06/face_repair.json",
+        "sha256": "2dd70d9aff8b09aea214cad895de4171c4aa64965ee7d7a17494bdcebd5df8f9",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C07": {
       "path": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
       "owner": "characters",
-      "sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+      "sha256": "45500ffa6296d21eb8d0073ad5f2cd603653e8356fa079ebaab52c671cdbecf3",
       "bytes": 1351564,
       "baseline_blender_report": {
         "id": "C07",
@@ -404,19 +429,24 @@
           0.386760139033653
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281"
+        "asset_sha256": "45500ffa6296d21eb8d0073ad5f2cd603653e8356fa079ebaab52c671cdbecf3"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C07_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C07/C07_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C07_Captain_Senn.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C07\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C07/C07_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C07\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C07/face_repair.json",
+        "sha256": "1fdb1b3e5773a1e6074af8821984e1efbe38270bdf7712ac34fd02d4c877370e",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C08": {
       "path": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
       "owner": "characters",
-      "sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+      "sha256": "1bab719dedb1d720a15ed77403857969e5a0f15665edfabbc1642071e84840d4",
       "bytes": 1828876,
       "baseline_blender_report": {
         "id": "C08",
@@ -455,19 +485,24 @@
           0.3704700065251797
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06"
+        "asset_sha256": "1bab719dedb1d720a15ed77403857969e5a0f15665edfabbc1642071e84840d4"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C08_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C08/C08_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C08_Lord_Edric_Vargan.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C08\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C08/C08_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C08\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C08/face_repair.json",
+        "sha256": "ebed60f963521d9403c81e30b8049329f1da4eb72e3bd3c269b143ecb172f325",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C09": {
       "path": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
       "owner": "characters",
-      "sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+      "sha256": "21656637854b5c6854648bdb3b3ef830077683e3cd5a42d7eb2fb4938f9ad0b5",
       "bytes": 1384804,
       "baseline_blender_report": {
         "id": "C09",
@@ -506,20 +541,25 @@
           0.3561134731328286
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+        "asset_sha256": "21656637854b5c6854648bdb3b3ef830077683e3cd5a42d7eb2fb4938f9ad0b5",
         "garment_arm_clearance_m": 0.1
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C09_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C09/C09_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C09_Record_Keeper_Vale.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C09\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C09/C09_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C09\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C09/face_repair.json",
+        "sha256": "7aa031e9cf4a1a5a85692f43f583e9428910d53a883b369566252988cd038904",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C10": {
       "path": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
       "owner": "characters",
-      "sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+      "sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
       "bytes": 1885436,
       "baseline_blender_report": {
         "id": "C10",
@@ -557,19 +597,24 @@
           0.5036183976432693
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7"
+        "asset_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C10_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C10/C10_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C10_Steward_Merrow.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C10\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C10/C10_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C10\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C10/face_repair.json",
+        "sha256": "612ed774226b31553faea8ee3af3cb839d1362763c946af168dbb52f63cdd039",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C11": {
       "path": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
       "owner": "opening",
-      "sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+      "sha256": "828bcb7add01e9ee0838c8f17cdfda781b846d0bcb55100f0477c4f495916702",
       "bytes": 1502736,
       "baseline_blender_report": {
         "id": "C11",
@@ -608,20 +653,25 @@
           0.46849976816439964
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+        "asset_sha256": "828bcb7add01e9ee0838c8f17cdfda781b846d0bcb55100f0477c4f495916702",
         "garment_arm_clearance_m": 0.1
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C11_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C11/C11_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C11_Nessa.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C11\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C11/C11_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C11\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C11/face_repair.json",
+        "sha256": "13d738ba289868c87debe7790eedb9b995559708e03ee0e36d3644935c9f7981",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "C12": {
       "path": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
       "owner": "opening",
-      "sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+      "sha256": "4af2bc61df17edd4d84116dd6c4a5658e18b9bd0d3675ae4a15c57312ba68ca4",
       "bytes": 1443260,
       "baseline_blender_report": {
         "id": "C12",
@@ -661,14 +711,19 @@
           0.33479480286152813
         ],
         "space": "exported world bind pose; evaluated joint globals, inverse binds and normalized weights",
-        "asset_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632"
+        "asset_sha256": "4af2bc61df17edd4d84116dd6c4a5658e18b9bd0d3675ae4a15c57312ba68ca4"
       },
       "private_review_only": false,
       "user_accepted": false,
-      "candidate_source_path": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\models\\refinement_20261101\\humans\\C12_tailored_v001.blend",
+      "candidate_source_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C12/C12_face_repaired.blend",
       "status": "user_authorized_release_candidate",
-      "candidate_runtime_path": "D:\\Projects\\AshenOath\\outputs\\AshenOathTheRoadBetweenCrowns\\art_review\\refinement_20261101\\runtime_shared\\humans\\C12_Nera.glb",
-      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C12\\candidate.json"
+      "candidate_runtime_path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C12/C12_face_repaired.glb",
+      "refinement_record": "D:\\Projects\\AshenOath\\art_source\\art_recovery_v2\\evidence\\refinement_20261101\\humans\\C12\\candidate.json",
+      "face_repair_certificate": {
+        "path": "art_source/art_recovery_v2/models/lower_face_repair_20261111/C12/face_repair.json",
+        "sha256": "d3c98e007909e1d2a35011b5634754fc41f2dc587cd54efd47f8f6eddd36be48",
+        "admission_path": "art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json"
+      }
     },
     "M01": {
       "path": "res://assets_external/design_pack_v1/creatures/M01_Ghoulkin.glb",

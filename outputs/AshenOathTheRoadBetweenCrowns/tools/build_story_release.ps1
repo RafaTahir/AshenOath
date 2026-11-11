@@ -194,6 +194,10 @@ if ($HasLivingCampaign) {
 if ($HasLivingCampaign) {
     # Strict grip metadata binds the final prepared geometry. Refresh only
     # library ownership afterward so the verified actor bytes stay unchanged.
+    $FaceRepairHelper = Join-Path $RepositoryRoot 'art_source/art_recovery_v2/tools/face_repair_provenance.py'
+    if (Test-Path -LiteralPath $FaceRepairHelper -PathType Leaf) {
+        Invoke-BuildProcess $PythonPath @($FaceRepairHelper, '--repository', $RepositoryRoot, '--write-admission', 'art_source/art_recovery_v2/evidence/lower_face_repair_20261111/admission.json') 'face-repair-provenance'
+    }
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_libraries.gd"), "--", "--require-activity-grips") "living-cast-libraries"
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_living_cast_stage2_libraries.gd"), "--", "--require-activity-grips") "living-cast-stage2-libraries"
     Invoke-BuildProcess $GodotPath @("--headless", "--path", $ProjectRoot, "--script", (Join-Path $PSScriptRoot "build_prepared_actors.gd"), "--", "--refresh-library-ownership") "prepared-actor-library-ownership"

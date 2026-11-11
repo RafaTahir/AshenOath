@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import math
+import runpy
 from pathlib import Path
 
 ASSETS = ["C11", "C05", "C06", "C12", "C07", "C09", "C10", "C08", "P01"]
@@ -46,6 +47,23 @@ def expected_clips(asset):
     return clips
 
 
+def model_matches_motion_source(repository, asset, model, original_sha):
+    if digest(model) == original_sha:
+        return True
+    helper = repository / ART / "tools/face_repair_provenance.py"
+    if not helper.is_file():
+        return False
+    resolver = runpy.run_path(str(helper))["resolve_model_successor"]
+    game = repository / GAME
+    source = "res://" + model.relative_to(game).as_posix()
+    prepared = {row.get("path") for row in read(game / "data/prepared_actors.json").values()
+                if row.get("source") == source}
+    if len(prepared) != 1:
+        return False
+    successor = resolver(repository, asset, original_sha, prepared_path=prepared.pop())
+    return successor is not None
+
+
 def verify_asset(repository: Path, asset: str) -> dict:
     if asset not in ASSETS: raise ValueError("unknown living cast asset: " + asset)
     game, art = repository / GAME, repository / ART
@@ -79,7 +97,8 @@ def verify_asset(repository: Path, asset: str) -> dict:
         if row.get("source_sha256") != source_hash or row.get("sha256") != output_hash or row.get("path") != output_resource:
             continue
         model = resource(game, row.get("model"))
-        if digest(model) != row.get("model_sha256") or row.get("model_sha256") != authored.get("production_sha256"):
+        if row.get("model_sha256") != authored.get("production_sha256") \
+                or not model_matches_motion_source(repository, asset, model, row.get("model_sha256")):
             raise ValueError("retained production actor differs from compiled source")
         if row.get("bytes") != output.stat().st_size: raise ValueError("compiled library size differs")
         error = row.get("maximum_rest_error")

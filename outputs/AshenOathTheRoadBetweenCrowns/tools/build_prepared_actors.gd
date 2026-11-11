@@ -134,17 +134,37 @@ func _compile() -> void:
 	if FileAccess.file_exists("res://data/prepared_actors.json"):
 		previous = JSON.parse_string(FileAccess.get_file_as_string("res://data/prepared_actors.json"))
 	var selections := _source_selections()
+	var face_only := "--face-repair-only" in OS.get_cmdline_user_args()
+	var face_sources := {}
+	if face_only:
+		var designs: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_assets.json"))
+		for record: Dictionary in designs.get("assets", {}).values():
+			if record.has("face_repair_certificate"):
+				face_sources[str(record.path)] = true
+		if face_sources.is_empty():
+			_failed("Face repair compilation requires explicit source certificates.")
+			quit(1)
+			return
 	for key in selections:
 		var entry: Dictionary = selections[key]
 		var source: String = entry.path
 		var role: String = entry.role
+		if face_only and not face_sources.has(source):
+			var retained: Variant = previous.get(key)
+			if not retained is Dictionary or retained.get("source") != source or retained.get("role") != role \
+					or not retained.get("path") is String or not FileAccess.file_exists(retained.path) \
+					or FileAccess.get_sha256(retained.path) != retained.get("compiled_sha256"):
+				_failed("Unchanged prepared actor cannot be retained: " + str(key))
+				continue
+			entries[key] = retained.duplicate(true)
+			continue
 		var owner := _owner(source, str(entry.category))
 		var normalized := source.to_lower()
 		var hair: String = helper._hair_path_for_role(role, true) if normalized.ends_with("/male_peasant.gltf") else ""
 		var assembly_key := source + "|" + owner + "|" + str(hair)
 		var variant_safe := normalized.contains("_atlas.gltf") or normalized.ends_with("male_ranger_runtime.gltf") or normalized.begins_with("res://assets_external/design_pack_v1/")
 		if templates.has(assembly_key):
-			entries[key] = {"path": templates[assembly_key], "source": source, "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
+			entries[key] = {"path": templates[assembly_key], "source": source, "source_sha256": FileAccess.get_sha256(source), "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
 			if template_creature_ambient.has(assembly_key):
 				entries[key]["authored_creature_ambient"] = template_creature_ambient[assembly_key]
 			continue
@@ -210,7 +230,7 @@ func _compile() -> void:
 		template_materials[assembly_key] = MaterialBindings.descriptors(visual)
 		if bool(creature_ambient.get("verified", false)):
 			template_creature_ambient[assembly_key] = creature_ambient
-		entries[key] = {"path": path, "source": source, "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
+		entries[key] = {"path": path, "source": source, "source_sha256": FileAccess.get_sha256(source), "role": role, "owner": owner, "variant_safe": variant_safe, "material_bindings": template_materials[assembly_key]}
 		if template_creature_ambient.has(assembly_key):
 			entries[key]["authored_creature_ambient"] = template_creature_ambient[assembly_key]
 		visual.free()

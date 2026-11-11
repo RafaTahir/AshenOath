@@ -7,6 +7,7 @@ const IDENTITIES := {"C11": "nessa", "C05": "elna", "C06": "toma", "C12": "nera"
 const CLIPS := {"Life_Idle_A": 6.0, "Life_Idle_B": 8.0, "Life_Work": 4.0, "Life_Listen": 4.0, "Life_Speak": 4.0}
 const FUSION = preload("res://scripts/character_animation_fusion.gd")
 const GRIPS = preload("res://tools/living_activity_grip_compile.gd")
+const FACE_REPAIR = preload("res://tools/face_repair_provenance.gd")
 const OUTPUT := "res://assets_external/characters_prepared/animations/"
 
 func _initialize() -> void:
@@ -35,6 +36,7 @@ func _compile() -> void:
 	if requested == ["P01"]:
 		source_root = repository.path_join("art_source/art_recovery_v2/models/living_assets_stage3_20261107/player")
 	var reports: Array[Dictionary] = []
+	var reused_face_repair := false
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT))
 	for id: String in requested:
 		if id not in IDS and id != "P01":
@@ -55,8 +57,22 @@ func _compile() -> void:
 			return
 		var authoring_path := source_root.path_join(id).path_join("authoring.json")
 		var authoring: Variant = JSON.parse_string(FileAccess.get_file_as_string(authoring_path))
-		if not authoring is Dictionary or str(authoring.get("review_glb_sha256", "")) != FileAccess.get_sha256(source) or str(authoring.get("production_sha256", "")) != FileAccess.get_sha256(model_path):
+		if not authoring is Dictionary or str(authoring.get("review_glb_sha256", "")) != FileAccess.get_sha256(source):
 			push_error("Life source receipt no longer matches its carrier/production actor: " + id)
+			quit(1)
+			return
+		var reused := FACE_REPAIR.reuse_library(repository, id, source, model_path, prepared_path, authoring)
+		if reused.has("error"):
+			push_error(str(reused.error))
+			quit(1)
+			return
+		if not reused.is_empty():
+			reports.append(reused.row)
+			reused_face_repair = true
+			print("LIVING_CAST_LIBRARY_REUSED ", id, " exact retained life library")
+			continue
+		if str(authoring.get("production_sha256", "")) != FileAccess.get_sha256(model_path):
+			push_error("Life source receipt no longer matches its production actor: " + id)
 			quit(1)
 			return
 		var target := (load(prepared_path) as PackedScene).instantiate()
@@ -233,7 +249,8 @@ func _compile() -> void:
 		carrier.free()
 		target.free()
 		print("LIVING_CAST_LIBRARY ", id, " ", output, " native clips=", required_clips.size())
-	var report_path := source_root.path_join("library_compile_" + "_".join(requested) + ".json")
+	var report_prefix := "library_compile_face_repair_" if reused_face_repair else "library_compile_"
+	var report_path := source_root.path_join(report_prefix + "_".join(requested) + ".json")
 	var report_file := FileAccess.open(report_path, FileAccess.WRITE)
 	if report_file == null:
 		push_error("Cannot save life compile evidence")

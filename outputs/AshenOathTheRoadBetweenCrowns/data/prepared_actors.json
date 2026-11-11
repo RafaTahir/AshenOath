@@ -595,7 +595,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -643,6 +643,7 @@
 		"role": "blacksmith_tor",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"bog_wretch_creature|res://assets_external/design_pack_v1/creatures/M03_Bog_Wretch.glb": {
@@ -1008,7 +1009,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C07.res"
 		],
-		"compiled_sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
+		"compiled_sha256": "72273c028fc57217ff48f73b1d74eefe940891c15ac444e27d421e2737c00bb0",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C07_MotionFittedAssembly",
@@ -1064,11 +1065,12 @@
 		"role": "captain_senn",
 		"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "45500ffa6296d21eb8d0073ad5f2cd603653e8356fa079ebaab52c671cdbecf3",
 		"variant_safe": true
 	},
 	"castle_guard_human|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+		"compiled_sha256": "d305c1d161269bcf8343d7bdf55c240f1bce6792843d8ddfcc32c416b2902252",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C10_MotionFittedAssembly",
@@ -1115,11 +1117,12 @@
 		"role": "castle_guard_human",
 		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
 		"variant_safe": true
 	},
 	"castle_guard|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+		"compiled_sha256": "d305c1d161269bcf8343d7bdf55c240f1bce6792843d8ddfcc32c416b2902252",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C10_MotionFittedAssembly",
@@ -1166,13 +1169,14 @@
 		"role": "castle_guard",
 		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
 		"variant_safe": true
 	},
 	"dain|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -1220,13 +1224,14 @@
 		"role": "dain",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"edda|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C03.res"
 		],
-		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
+		"compiled_sha256": "7eff3e667efdf78f735e325f502a213e5bb345e3d5158107f6fc0d3c35e6504b",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C03_MotionFittedAssembly",
@@ -1271,13 +1276,14 @@
 		"role": "edda",
 		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
 		"variant_safe": true
 	},
 	"edric_campaign|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C08.res"
 		],
-		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
+		"compiled_sha256": "66ed2a6391cd34abbccc77012842b5ad4d0b5752db3ef333e8ad09406e6133ec",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C08_MotionFittedAssembly",
@@ -1325,13 +1331,14 @@
 		"role": "edric_campaign",
 		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "1bab719dedb1d720a15ed77403857969e5a0f15665edfabbc1642071e84840d4",
 		"variant_safe": true
 	},
 	"edric_castle|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C08.res"
 		],
-		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
+		"compiled_sha256": "66ed2a6391cd34abbccc77012842b5ad4d0b5752db3ef333e8ad09406e6133ec",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C08_MotionFittedAssembly",
@@ -1379,13 +1386,14 @@
 		"role": "edric_castle",
 		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "1bab719dedb1d720a15ed77403857969e5a0f15665edfabbc1642071e84840d4",
 		"variant_safe": true
 	},
 	"edric_vargan|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C08.res"
 		],
-		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
+		"compiled_sha256": "66ed2a6391cd34abbccc77012842b5ad4d0b5752db3ef333e8ad09406e6133ec",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C08_MotionFittedAssembly",
@@ -1433,13 +1441,14 @@
 		"role": "edric_vargan",
 		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "1bab719dedb1d720a15ed77403857969e5a0f15665edfabbc1642071e84840d4",
 		"variant_safe": true
 	},
 	"edric|res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C08.res"
 		],
-		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
+		"compiled_sha256": "66ed2a6391cd34abbccc77012842b5ad4d0b5752db3ef333e8ad09406e6133ec",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C08_MotionFittedAssembly",
@@ -1487,6 +1496,7 @@
 		"role": "edric",
 		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "1bab719dedb1d720a15ed77403857969e5a0f15665edfabbc1642071e84840d4",
 		"variant_safe": true
 	},
 	"elna|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
@@ -1544,7 +1554,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C06.res"
 		],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -1592,13 +1602,14 @@
 		"role": "farmer_toma",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"forge_helper|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -1646,6 +1657,7 @@
 		"role": "forge_helper",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"gallows_weaver|res://assets_external/design_pack_v1/creatures/M14_Gallows_Weaver.glb": {
@@ -1705,7 +1717,7 @@
 	},
 	"generic_villager_01|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -1752,6 +1764,7 @@
 		"role": "generic_villager_01",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"generic_villager_02|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
@@ -2464,7 +2477,7 @@
 	},
 	"guard|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+		"compiled_sha256": "d305c1d161269bcf8343d7bdf55c240f1bce6792843d8ddfcc32c416b2902252",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C10_MotionFittedAssembly",
@@ -2511,6 +2524,7 @@
 		"role": "guard",
 		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
 		"variant_safe": true
 	},
 	"halvern_boss|res://assets_external/design_pack_v1/creatures/M04_Gravebound_Knight.glb": {
@@ -2841,7 +2855,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C06.res"
 		],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -2889,13 +2903,14 @@
 		"role": "iven",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"jory|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -2943,13 +2958,14 @@
 		"role": "jory",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"kael|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_P01.res"
 		],
-		"compiled_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
+		"compiled_sha256": "759bf65fc2c0be09aeab7bb359f36772e9036dcf29c10cb4774d138434f64324",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/P01_MotionFittedAssembly",
@@ -3005,6 +3021,7 @@
 		"role": "kael",
 		"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "464e71694b8dbcc38263c126a453d70916acef8bff24c90b828f8343e381934e",
 		"variant_safe": true
 	},
 	"knell_leech|res://assets_external/design_pack_v1/creatures/M12_Knell_Leech.glb": {
@@ -3066,7 +3083,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C08.res"
 		],
-		"compiled_sha256": "08d3306b836cbb7bb94eba5c9be0d2511e6b944c28f5187534606e0c5147b173",
+		"compiled_sha256": "66ed2a6391cd34abbccc77012842b5ad4d0b5752db3ef333e8ad09406e6133ec",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C08_MotionFittedAssembly",
@@ -3114,13 +3131,14 @@
 		"role": "lord_edric",
 		"source": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "1bab719dedb1d720a15ed77403857969e5a0f15665edfabbc1642071e84840d4",
 		"variant_safe": true
 	},
 	"lysa|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C09.res"
 		],
-		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
+		"compiled_sha256": "8225f15539dbd4e9596e40eefdafad111ebb2cc7cb230e6feac34b00d3659548",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C09_MotionFittedAssembly",
@@ -3165,13 +3183,14 @@
 		"role": "lysa",
 		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "21656637854b5c6854648bdb3b3ef830077683e3cd5a42d7eb2fb4938f9ad0b5",
 		"variant_safe": true
 	},
 	"maelin|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C03.res"
 		],
-		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
+		"compiled_sha256": "7eff3e667efdf78f735e325f502a213e5bb345e3d5158107f6fc0d3c35e6504b",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C03_MotionFittedAssembly",
@@ -3216,13 +3235,14 @@
 		"role": "maelin",
 		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
 		"variant_safe": true
 	},
 	"maren|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C12.res"
 		],
-		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
+		"compiled_sha256": "8eda36670c147c18d1eb350fab78410248d385ee2e62456e36ae5449ba7d7350",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C12_MotionFittedAssembly",
@@ -3267,13 +3287,14 @@
 		"role": "maren",
 		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "4af2bc61df17edd4d84116dd6c4a5658e18b9bd0d3675ae4a15c57312ba68ca4",
 		"variant_safe": true
 	},
 	"merrow|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C10.res"
 		],
-		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+		"compiled_sha256": "d305c1d161269bcf8343d7bdf55c240f1bce6792843d8ddfcc32c416b2902252",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C10_MotionFittedAssembly",
@@ -3321,13 +3342,14 @@
 		"role": "merrow",
 		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
 		"variant_safe": true
 	},
 	"mill_second_worker|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C11.res"
 		],
-		"compiled_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+		"compiled_sha256": "205fbe1306070461eabaf3fc1e6a958ff4a2d46868807ae0ba81747d4ad624e5",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C11_MotionFittedAssembly",
@@ -3372,13 +3394,14 @@
 		"role": "mill_second_worker",
 		"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "828bcb7add01e9ee0838c8f17cdfda781b846d0bcb55100f0477c4f495916702",
 		"variant_safe": true
 	},
 	"mill_worker|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -3426,6 +3449,7 @@
 		"role": "mill_worker",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"millback|res://assets_external/design_pack_v1/creatures/M10_Millback.glb": {
@@ -3487,7 +3511,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C03.res"
 		],
-		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
+		"compiled_sha256": "7eff3e667efdf78f735e325f502a213e5bb345e3d5158107f6fc0d3c35e6504b",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C03_MotionFittedAssembly",
@@ -3532,13 +3556,14 @@
 		"role": "mira_herbalist",
 		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
 		"variant_safe": true
 	},
 	"mira_human|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C03.res"
 		],
-		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
+		"compiled_sha256": "7eff3e667efdf78f735e325f502a213e5bb345e3d5158107f6fc0d3c35e6504b",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C03_MotionFittedAssembly",
@@ -3583,13 +3608,14 @@
 		"role": "mira_human",
 		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
 		"variant_safe": true
 	},
 	"mira|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C03.res"
 		],
-		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
+		"compiled_sha256": "7eff3e667efdf78f735e325f502a213e5bb345e3d5158107f6fc0d3c35e6504b",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C03_MotionFittedAssembly",
@@ -3634,13 +3660,14 @@
 		"role": "mira",
 		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
 		"variant_safe": true
 	},
 	"nera|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C12.res"
 		],
-		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
+		"compiled_sha256": "8eda36670c147c18d1eb350fab78410248d385ee2e62456e36ae5449ba7d7350",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C12_MotionFittedAssembly",
@@ -3685,13 +3712,14 @@
 		"role": "nera",
 		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "4af2bc61df17edd4d84116dd6c4a5658e18b9bd0d3675ae4a15c57312ba68ca4",
 		"variant_safe": true
 	},
 	"nessa|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C11.res"
 		],
-		"compiled_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+		"compiled_sha256": "205fbe1306070461eabaf3fc1e6a958ff4a2d46868807ae0ba81747d4ad624e5",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C11_MotionFittedAssembly",
@@ -3736,13 +3764,14 @@
 		"role": "nessa",
 		"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "828bcb7add01e9ee0838c8f17cdfda781b846d0bcb55100f0477c4f495916702",
 		"variant_safe": true
 	},
 	"odran|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C06.res"
 		],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -3790,6 +3819,7 @@
 		"role": "odran",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"orc_skull_real|res://assets_external/design_pack_v1/creatures/M20_Wychwood_Brute.glb": {
@@ -3885,7 +3915,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -3933,13 +3963,14 @@
 		"role": "oris",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"player_human|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_P01.res"
 		],
-		"compiled_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
+		"compiled_sha256": "759bf65fc2c0be09aeab7bb359f36772e9036dcf29c10cb4774d138434f64324",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/P01_MotionFittedAssembly",
@@ -3995,13 +4026,14 @@
 		"role": "player_human",
 		"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "464e71694b8dbcc38263c126a453d70916acef8bff24c90b828f8343e381934e",
 		"variant_safe": true
 	},
 	"player_kael|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_P01.res"
 		],
-		"compiled_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
+		"compiled_sha256": "759bf65fc2c0be09aeab7bb359f36772e9036dcf29c10cb4774d138434f64324",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/P01_MotionFittedAssembly",
@@ -4057,13 +4089,14 @@
 		"role": "player_kael",
 		"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "464e71694b8dbcc38263c126a453d70916acef8bff24c90b828f8343e381934e",
 		"variant_safe": true
 	},
 	"player|res://assets_external/design_pack_v1/humans/P01_Kael.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_P01.res"
 		],
-		"compiled_sha256": "2260549f981630de0df21787e56a8169a92f13ab4ea904977a86fa978e5c4890",
+		"compiled_sha256": "759bf65fc2c0be09aeab7bb359f36772e9036dcf29c10cb4774d138434f64324",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/P01_MotionFittedAssembly",
@@ -4119,13 +4152,14 @@
 		"role": "player",
 		"source": "res://assets_external/design_pack_v1/humans/P01_Kael.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "464e71694b8dbcc38263c126a453d70916acef8bff24c90b828f8343e381934e",
 		"variant_safe": true
 	},
 	"record_keeper_vale|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C09.res"
 		],
-		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
+		"compiled_sha256": "8225f15539dbd4e9596e40eefdafad111ebb2cc7cb230e6feac34b00d3659548",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C09_MotionFittedAssembly",
@@ -4170,6 +4204,7 @@
 		"role": "record_keeper_vale",
 		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "21656637854b5c6854648bdb3b3ef830077683e3cd5a42d7eb2fb4938f9ad0b5",
 		"variant_safe": true
 	},
 	"reed_choir|res://assets_external/design_pack_v1/creatures/M15_Reed_Choir.glb": {
@@ -4371,7 +4406,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C07.res"
 		],
-		"compiled_sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
+		"compiled_sha256": "72273c028fc57217ff48f73b1d74eefe940891c15ac444e27d421e2737c00bb0",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C07_MotionFittedAssembly",
@@ -4427,11 +4462,12 @@
 		"role": "road_ranger_human",
 		"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "45500ffa6296d21eb8d0073ad5f2cd603653e8356fa079ebaab52c671cdbecf3",
 		"variant_safe": true
 	},
 	"road_ranger|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
+		"compiled_sha256": "72273c028fc57217ff48f73b1d74eefe940891c15ac444e27d421e2737c00bb0",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C07_MotionFittedAssembly",
@@ -4486,13 +4522,14 @@
 		"role": "road_ranger",
 		"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "45500ffa6296d21eb8d0073ad5f2cd603653e8356fa079ebaab52c671cdbecf3",
 		"variant_safe": true
 	},
 	"rook_human|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C02.res"
 		],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -4540,13 +4577,14 @@
 		"role": "rook_human",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"rook_smuggler|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C02.res"
 		],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -4594,13 +4632,14 @@
 		"role": "rook_smuggler",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"rook|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C02.res"
 		],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -4648,6 +4687,7 @@
 		"role": "rook",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"rootbound_colossus_boss|res://assets_external/design_pack_v1/creatures/M06_Rootbound_Colossus.glb": {
@@ -4784,7 +4824,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -4832,13 +4872,14 @@
 		"role": "saga_dain",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"saga_edda|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C03.res"
 		],
-		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
+		"compiled_sha256": "7eff3e667efdf78f735e325f502a213e5bb345e3d5158107f6fc0d3c35e6504b",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C03_MotionFittedAssembly",
@@ -4883,13 +4924,14 @@
 		"role": "saga_edda",
 		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
 		"variant_safe": true
 	},
 	"saga_iven|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C06.res"
 		],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -4937,13 +4979,14 @@
 		"role": "saga_iven",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"saga_jory|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -4991,13 +5034,14 @@
 		"role": "saga_jory",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"saga_lysa|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C09.res"
 		],
-		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
+		"compiled_sha256": "8225f15539dbd4e9596e40eefdafad111ebb2cc7cb230e6feac34b00d3659548",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C09_MotionFittedAssembly",
@@ -5042,13 +5086,14 @@
 		"role": "saga_lysa",
 		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "21656637854b5c6854648bdb3b3ef830077683e3cd5a42d7eb2fb4938f9ad0b5",
 		"variant_safe": true
 	},
 	"saga_maelin|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C03.res"
 		],
-		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
+		"compiled_sha256": "7eff3e667efdf78f735e325f502a213e5bb345e3d5158107f6fc0d3c35e6504b",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C03_MotionFittedAssembly",
@@ -5093,13 +5138,14 @@
 		"role": "saga_maelin",
 		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
 		"variant_safe": true
 	},
 	"saga_maren|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C12.res"
 		],
-		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
+		"compiled_sha256": "8eda36670c147c18d1eb350fab78410248d385ee2e62456e36ae5449ba7d7350",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C12_MotionFittedAssembly",
@@ -5144,13 +5190,14 @@
 		"role": "saga_maren",
 		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "4af2bc61df17edd4d84116dd6c4a5658e18b9bd0d3675ae4a15c57312ba68ca4",
 		"variant_safe": true
 	},
 	"saga_nera|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C12.res"
 		],
-		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
+		"compiled_sha256": "8eda36670c147c18d1eb350fab78410248d385ee2e62456e36ae5449ba7d7350",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C12_MotionFittedAssembly",
@@ -5195,13 +5242,14 @@
 		"role": "saga_nera",
 		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "4af2bc61df17edd4d84116dd6c4a5658e18b9bd0d3675ae4a15c57312ba68ca4",
 		"variant_safe": true
 	},
 	"saga_nessa|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C11.res"
 		],
-		"compiled_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+		"compiled_sha256": "205fbe1306070461eabaf3fc1e6a958ff4a2d46868807ae0ba81747d4ad624e5",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C11_MotionFittedAssembly",
@@ -5246,13 +5294,14 @@
 		"role": "saga_nessa",
 		"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "828bcb7add01e9ee0838c8f17cdfda781b846d0bcb55100f0477c4f495916702",
 		"variant_safe": true
 	},
 	"saga_odran|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C06.res"
 		],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -5300,13 +5349,14 @@
 		"role": "saga_odran",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"saga_oris|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -5354,6 +5404,7 @@
 		"role": "saga_oris",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"saga_ressa|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
@@ -5411,7 +5462,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C02.res"
 		],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -5459,13 +5510,14 @@
 		"role": "saga_tavin",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"senn|res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C07.res"
 		],
-		"compiled_sha256": "ac90e7743795b395f2d9df43abf048236d4d9d7eb2a837e9d99b675433279a1e",
+		"compiled_sha256": "72273c028fc57217ff48f73b1d74eefe940891c15ac444e27d421e2737c00bb0",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C07_MotionFittedAssembly",
@@ -5521,6 +5573,7 @@
 		"role": "senn",
 		"source": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "45500ffa6296d21eb8d0073ad5f2cd603653e8356fa079ebaab52c671cdbecf3",
 		"variant_safe": true
 	},
 	"shrine_pilgrim|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {
@@ -5833,7 +5886,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C10.res"
 		],
-		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+		"compiled_sha256": "d305c1d161269bcf8343d7bdf55c240f1bce6792843d8ddfcc32c416b2902252",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C10_MotionFittedAssembly",
@@ -5881,13 +5934,14 @@
 		"role": "steward_merrow",
 		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
 		"variant_safe": true
 	},
 	"tavin|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C02.res"
 		],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -5935,13 +5989,14 @@
 		"role": "tavin",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"toma|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C06.res"
 		],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -5989,13 +6044,14 @@
 		"role": "toma",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"tor|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C04.res"
 		],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -6043,11 +6099,12 @@
 		"role": "tor",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"traveler|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -6094,13 +6151,14 @@
 		"role": "traveler",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"vale|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C09.res"
 		],
-		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
+		"compiled_sha256": "8225f15539dbd4e9596e40eefdafad111ebb2cc7cb230e6feac34b00d3659548",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C09_MotionFittedAssembly",
@@ -6145,13 +6203,14 @@
 		"role": "vale",
 		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "21656637854b5c6854648bdb3b3ef830077683e3cd5a42d7eb2fb4938f9ad0b5",
 		"variant_safe": true
 	},
 	"vargan_gate_guard|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C10.res"
 		],
-		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+		"compiled_sha256": "d305c1d161269bcf8343d7bdf55c240f1bce6792843d8ddfcc32c416b2902252",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C10_MotionFittedAssembly",
@@ -6199,13 +6258,14 @@
 		"role": "vargan_gate_guard",
 		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
 		"variant_safe": true
 	},
 	"vargan_patrol|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C02.res"
 		],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -6253,13 +6313,14 @@
 		"role": "vargan_patrol",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"vargan_record_keeper|res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C09.res"
 		],
-		"compiled_sha256": "72d72e671c3029a11402593259038ce7288e3d3171d3e3b8095d4bddbb2de26f",
+		"compiled_sha256": "8225f15539dbd4e9596e40eefdafad111ebb2cc7cb230e6feac34b00d3659548",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C09_MotionFittedAssembly",
@@ -6304,13 +6365,14 @@
 		"role": "vargan_record_keeper",
 		"source": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "21656637854b5c6854648bdb3b3ef830077683e3cd5a42d7eb2fb4938f9ad0b5",
 		"variant_safe": true
 	},
 	"vargan_servant|res://assets_external/design_pack_v1/humans/C11_Nessa.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C11.res"
 		],
-		"compiled_sha256": "c61a08b3deb6bb75d766e97e59abe6cfa84c02514999cc1833e0426c9842e769",
+		"compiled_sha256": "205fbe1306070461eabaf3fc1e6a958ff4a2d46868807ae0ba81747d4ad624e5",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C11_MotionFittedAssembly",
@@ -6355,13 +6417,14 @@
 		"role": "vargan_servant",
 		"source": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "828bcb7add01e9ee0838c8f17cdfda781b846d0bcb55100f0477c4f495916702",
 		"variant_safe": true
 	},
 	"vargan_steward|res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C10.res"
 		],
-		"compiled_sha256": "a64ec13ce1f6e11f027cbcdf1247f0bdb3544e83b0015752839644433b96ecc4",
+		"compiled_sha256": "d305c1d161269bcf8343d7bdf55c240f1bce6792843d8ddfcc32c416b2902252",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C10_MotionFittedAssembly",
@@ -6409,6 +6472,7 @@
 		"role": "vargan_steward",
 		"source": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
 		"variant_safe": true
 	},
 	"villager_female_human|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
@@ -6461,7 +6525,7 @@
 	},
 	"villager_hooded_human|res://assets_external/design_pack_v1/humans/C12_Nera.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "23da0e799ed1d2e57babde23e3f50bb9a391532ab10f285ba9142a4b6b7fc30e",
+		"compiled_sha256": "8eda36670c147c18d1eb350fab78410248d385ee2e62456e36ae5449ba7d7350",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C12_MotionFittedAssembly",
@@ -6505,11 +6569,12 @@
 		"role": "villager_hooded_human",
 		"source": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "4af2bc61df17edd4d84116dd6c4a5658e18b9bd0d3675ae4a15c57312ba68ca4",
 		"variant_safe": true
 	},
 	"villager_human|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -6556,11 +6621,12 @@
 		"role": "villager_human",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"villager_worker_human|res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "3ad12d04baf8289a4e3a47946f515ad9937f238aa139ed7c5dc82ffbf29f190c",
+		"compiled_sha256": "daed12a5687c9256f4fbd5cfaba7b4af9ca0811a643d601ae8b742f0a930e1bb",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C04_MotionFittedAssembly",
@@ -6607,11 +6673,12 @@
 		"role": "villager_worker_human",
 		"source": "res://assets_external/design_pack_v1/humans/C04_Blacksmith_Tor.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "295a19b6ee3776fcb1f15f50a1e0f7958f06debf6f30027e52bd62847ac4c030",
 		"variant_safe": true
 	},
 	"villager|res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb": {
 		"animation_resources": [],
-		"compiled_sha256": "86a909f63134dcada78ce5e6f530b76b2fdaa321003876f9b82eae7298d2f546",
+		"compiled_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C06_MotionFittedAssembly",
@@ -6658,13 +6725,14 @@
 		"role": "villager",
 		"source": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
 		"variant_safe": true
 	},
 	"walker_board|res://assets_external/design_pack_v1/humans/C02_Rook.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C02.res"
 		],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -6712,6 +6780,7 @@
 		"role": "walker_board",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"walker_well|res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb": {
@@ -7000,7 +7069,7 @@
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C02.res"
 		],
-		"compiled_sha256": "98be4e0b60ce0766956a678ff082e7b91a71c62e6e3dd1df06ee66e6ae7ed6c9",
+		"compiled_sha256": "5329849e0d618b535622a519bece37dd272355f7c92e4d1413733665f9d2e905",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C02_MotionFittedAssembly",
@@ -7048,13 +7117,14 @@
 		"role": "witness_-3",
 		"source": "res://assets_external/design_pack_v1/humans/C02_Rook.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c2b87008952be6abaebd07ae3e970ffe8739be94dad4c4ab503f2da909884a39",
 		"variant_safe": true
 	},
 	"witness_-7|res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb": {
 		"animation_resources": [
 			"res://assets_external/characters_prepared/animations/life_C03.res"
 		],
-		"compiled_sha256": "9d34bbb7f0b6a29a0df637b01f03e07623581a62c29d9d055c60553569641127",
+		"compiled_sha256": "7eff3e667efdf78f735e325f502a213e5bb345e3d5158107f6fc0d3c35e6504b",
 		"material_bindings": [
 			{
 				"mesh": "Armature/Skeleton3D/C03_MotionFittedAssembly",
@@ -7099,6 +7169,7 @@
 		"role": "witness_-7",
 		"source": "res://assets_external/design_pack_v1/humans/C03_Mira_Fen.glb",
 		"source_scene_dependencies": [],
+		"source_sha256": "c3425e8ccc9ffaccdfc3a40c1c67913df1ca8f3563e4e833d71bbdfe366a75ba",
 		"variant_safe": true
 	},
 	"witness_3|res://assets_external/design_pack_v1/humans/C01_Anwen.glb": {

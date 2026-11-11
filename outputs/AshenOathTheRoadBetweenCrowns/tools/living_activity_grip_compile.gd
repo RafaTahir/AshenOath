@@ -3,6 +3,7 @@ extends RefCounted
 const EQUIPMENT_EVIDENCE := "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/equipment"
 const PRESENTATION := "res://scripts/character_presentation.gd"
 const GEOMETRY := "res://scripts/held_prop_geometry.gd"
+const FACE_REPAIR = preload("res://tools/face_repair_provenance.gd")
 
 ## Read actor-owned, measured generic prop fits during motion-library compilation.
 ## Missing receipts are allowed while working on a candidate. Malformed or stale
@@ -16,9 +17,13 @@ static func apply(library: AnimationLibrary, skeleton: Skeleton3D, repository: S
 		return _error(asset, "release requires measured activity grips") if required else {}
 	var receipt: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not receipt is Dictionary or int(receipt.get("schema_version", 0)) != 1 \
-			or receipt.get("asset", "") != asset or receipt.get("motion_sha256", "") != motion_sha256 \
-			or receipt.get("model_sha256", "") != FileAccess.get_sha256(model_path):
+			or receipt.get("asset", "") != asset or receipt.get("motion_sha256", "") != motion_sha256:
 		return _error(asset, "receipt does not match the actor and motion sources")
+	var successor := FACE_REPAIR.resolve(repository, asset, model_path, prepared_path, str(receipt.get("model_sha256", "")))
+	if successor.has("error"):
+		return _error(asset, str(successor.error))
+	if receipt.get("model_sha256", "") != FileAccess.get_sha256(model_path) and successor.is_empty():
+		return _error(asset, "receipt does not match the actor model")
 	var fits: Variant = receipt.get("fits")
 	if not fits is Dictionary or fits.is_empty():
 		return _error(asset, "receipt has no measured grip records")
@@ -181,9 +186,14 @@ static func _native_pose(path: String, fit_inputs: Dictionary, asset: String, mo
 	if model == prepared or not prepared.begins_with("res://assets_external/characters_prepared/") \
 			or prepared.get_extension() not in ["scn", "tscn"]:
 		return null
-	for resource: String in [model, prepared]:
-		var resource_sha := _digest(resource)
-		if resource_sha.is_empty() or proof.inputs.get(resource) != resource_sha:
+	var old_model: String = str(proof.inputs.get(model, ""))
+	var old_prepared: String = str(proof.inputs.get(prepared, ""))
+	if old_model.is_empty() or old_prepared.is_empty():
+		return null
+	if old_model != _digest(model) or old_prepared != _digest(prepared):
+		var successor := FACE_REPAIR.resolve(ProjectSettings.globalize_path("res://").path_join("../..").simplify_path(),
+				asset, model, prepared, old_model, old_prepared)
+		if successor.is_empty() or successor.has("error"):
 			return null
 	return proof
 
