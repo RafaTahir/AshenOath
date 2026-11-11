@@ -1,5 +1,7 @@
 extends SkeletonModifier3D
 
+const StationaryWorkGrip = preload("res://scripts/stationary_work_grip.gd")
+
 ## Small authored work/attention poses on the retained rig. Hands solve to
 ## bounded goals; sockets and held tools follow the actual hand bones.
 var driver: Node
@@ -25,7 +27,12 @@ var tool_kind := ""
 var tool_uses_measured_grip := true
 var solved_wrist_goal := Vector3.INF
 var station: Dictionary = {}
-var rest_anchor: Dictionary = {}
+var awake_seat_weight := 0.0
+var rest_anchor: Dictionary = {}:
+	set(value):
+		if rest_anchor.get("node") != value.get("node") or rest_anchor.get("awake_rest_owner") != value.get("awake_rest_owner"):
+			awake_seat_weight = 0.0
+		rest_anchor = value
 var last_contact_cycle := -1
 var tool_contact: Node3D
 var tool_contact_local := Vector3.ZERO
@@ -113,6 +120,7 @@ func _process_modification() -> void:
 	if bool(driver.dead) or bool(driver.distance_suspended) or driver.has_active_action():
 		pose_weight = 0.0
 		ambient_weight = 0.0
+		if rest_anchor.has("awake_rest_owner"): rest_anchor = {}
 		hide_activity_tool()
 		if anwen_staff_pose and not bool(driver.dead) and not bool(driver.distance_suspended) \
 				and (bool(driver.story_dialogue_active) or str(driver.current_state) == "greet"):
@@ -138,6 +146,13 @@ func _process_modification() -> void:
 	var native_motion: Dictionary = driver.life_motion_sample()
 	var awaiting_native: bool = driver.life_clip != StringName() and native_motion.is_empty()
 	var requested := effective != "" and near and not bool(driver.story_dialogue_active)
+	if bool(driver.story_dialogue_active) and rest_anchor.has("awake_rest_owner"):
+		rest_anchor = {}
+	if effective == "rest" and rest_anchor.has("awake_rest_owner"):
+		var sitting := requested and bool(rest_anchor.get("seat_requested", false))
+		awake_seat_weight = move_toward(awake_seat_weight, 1.0 if sitting else 0.0, delta * 4.5)
+	else:
+		awake_seat_weight = 0.0
 	_ambient_pose(skeleton, delta, near, effective, awaiting_native or not native_motion.is_empty())
 	if humanoid and near and garment_arm_clearance > 0.0 and not bool(driver.story_dialogue_active) and float(driver.current_speed_mps) > 0.08 and effective in ["", "idle", "watch", "lookout", "walk", "travel"]:
 		var across := actor.global_basis.x.normalized()
@@ -153,12 +168,16 @@ func _process_modification() -> void:
 	if creature_weight > 0.001:
 		_creature_pose(skeleton)
 	pose_weight = move_toward(pose_weight, 1.0 if requested else 0.0, delta * 4.5)
+	# The seated lower body persists while the animation graph blends idle variants.
+	if effective == "rest" and awake_seat_weight > 0.001 and pose_weight > 0.001:
+		_pose_supported_seat(skeleton, minf(pose_weight, awake_seat_weight), false)
+		return
 	if pose_weight <= 0.001 or awaiting_native:
 		if not scoped_grip.is_empty() and is_instance_valid(tool):
 			tool.visible = false
 		return
 	if effective == "sleep":
-		_pose_supported_sleep(skeleton)
+		_pose_supported_seat(skeleton, pose_weight, true)
 		return
 	if effective in ["sit", "seated_eat"]:
 		if pelvis >= 0:
@@ -317,6 +336,7 @@ func _process_modification() -> void:
 			last_contact_samples["left" if float(arm.side) < 0 else "right"] = {"kind":probe_kind, "target":contact_target, "actual":actual, "error":error, "cycle":cycle}
 			if error <= 0.06:
 				reached_hands += 1
+	StationaryWorkGrip.update(actor, tool, skeleton)
 	if not scoped_grip.is_empty() and is_instance_valid(tool):
 		tool.visible = bool(scoped_grip.visible) and grip_reached
 	if authored_work:
@@ -352,6 +372,7 @@ func _update_tool(kind: String, visible_now: bool, allow_authored_prop: bool = t
 	if style != "" and (style != tool_kind or use_measured_grip != tool_uses_measured_grip or not is_instance_valid(tool)):
 		_release_tool()
 		tool = preload("res://scripts/character_presentation.gd").attach_activity_tool(actor, style, use_measured_grip)
+		StationaryWorkGrip.bind(actor, tool, style)
 		tool_uses_measured_grip = use_measured_grip
 		if not scoped_grip.is_empty() and is_instance_valid(tool):
 			tool.visible = false
@@ -429,12 +450,16 @@ func _contact_socket_frame(contact: Node3D) -> Transform3D:
 		cursor = cursor.get_parent() as Node3D
 	return local if cursor is BoneAttachment3D else Transform3D.IDENTITY
 
-func _pose_supported_sleep(skeleton: Skeleton3D) -> void:
-	# The routine owner supplies a verified furniture anchor. Offset the pose
-	# onto its real seat while the movement root remains at its safe approach.
-	# Without that evidence this modifier never invents a seated pose.
+func _pose_supported_seat(skeleton: Skeleton3D, weight: float, sleeping: bool) -> void:
+	# Offset the pose onto the routine's real seat while keeping the movement
+	# root at its safe approach.
 	if rest_anchor.is_empty() or pelvis < 0:
 		return
+	if not sleeping:
+		var reference: WeakRef = rest_anchor.get("node")
+		var marker := reference.get_ref() as Marker3D if reference != null else null
+		if not is_instance_valid(marker) or marker.is_queued_for_deletion() or not marker.is_visible_in_tree():
+			return
 	var seat: Vector3 = rest_anchor.get("seat", Vector3.INF)
 	var stand: Vector3 = rest_anchor.get("stand", Vector3.INF)
 	if not seat.is_finite() or not stand.is_finite() or actor.global_position.distance_squared_to(stand) > 0.16:
@@ -446,16 +471,16 @@ func _pose_supported_sleep(skeleton: Skeleton3D) -> void:
 	var offset := seat + Vector3.UP * 0.12 - _world(skeleton, pelvis)
 	if offset.length() > 1.0:
 		return
-	skeleton.set_bone_pose_position(pelvis, skeleton.get_bone_pose_position(pelvis) + frame.inverse() * offset * pose_weight)
+	skeleton.set_bone_pose_position(pelvis, skeleton.get_bone_pose_position(pelvis) + frame.inverse() * offset * weight)
 	for leg: Dictionary in seated_legs:
 		if int(leg.foot) < 0: continue
 		var foot_goal := seat + forward * 0.42 + right * float(leg.side) * 0.12
 		foot_goal.y = stand.y + 0.095
 		var chain := {"upper":leg.thigh, "lower":leg.calf, "hand":leg.foot, "side":leg.side}
 		var sole_basis := (skeleton.global_basis * skeleton.get_bone_global_pose(int(leg.foot)).basis).orthonormalized()
-		_solve_arm(skeleton, chain, _world(skeleton, int(leg.foot)).lerp(foot_goal, pose_weight), sole_basis, forward)
-	if spine >= 0:
-		skeleton.set_bone_pose_rotation(spine, skeleton.get_bone_pose_rotation(spine) * Quaternion(Vector3.RIGHT, 0.08 * pose_weight))
+		_solve_arm(skeleton, chain, _world(skeleton, int(leg.foot)).lerp(foot_goal, weight), sole_basis, forward)
+	if sleeping and spine >= 0:
+		skeleton.set_bone_pose_rotation(spine, skeleton.get_bone_pose_rotation(spine) * Quaternion(Vector3.RIGHT, 0.08 * weight))
 
 func _ambient_pose(skeleton: Skeleton3D, delta: float, near: bool, effective: String, native_pose: bool = false) -> void:
 	if native_pose:

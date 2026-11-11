@@ -898,6 +898,18 @@ func _begin_work(id: String, step: Array, area: Node3D) -> void:
 	_cancel_work()
 	_work = {"id":id, "step":step, "area":weakref(area), "start":host.player.global_position, "part":_part(id, str(step[0]))}
 	_work.performance = Catalog.work_performance(id, step, int(_work.part))
+	# These work parts manipulate objects already attached to the station.
+	# The remaining linen and rope parts use the ordinary hand-held tools.
+	match id + ":" + str(step[0]):
+		"side_escort_01:steady_arrival":
+			if int(_work.part) > 0:
+				_work.surface_prop = "relief_cart"
+		"side_escort_04:coil_return_rope":
+			if int(_work.part) == 0:
+				_work.surface_prop = "rope_drying_post"
+		"saga_roa_q02:set_rescue_terms":
+			if int(_work.part) == 0:
+				_work.surface_prop = "mooring_warning_board"
 	_elapsed = 0.0
 	host.player.face_target(area.global_position)
 	host.player._request_equipment(host.player.weapon_mode, host.player.get_selected_blade_id(), false)
@@ -1126,7 +1138,11 @@ func _physics_process(delta: float) -> void:
 		return
 	host.player.set_meta("cast_work_cancel", _cancel_work)
 	if host.player.animation_driver != null:
-		host.player.animation_driver.set_life_activity(str(_work.performance.activity))
+		var activity := str(_work.performance.activity)
+		var surface_prop := str(_work.get("surface_prop", ""))
+		if surface_prop != "":
+			host.player.animation_driver.set_life_workstation({"activity": activity, "surface_prop": surface_prop})
+		host.player.animation_driver.set_life_activity(activity)
 	_elapsed += delta
 	var duration := float(_work.performance.duration)
 	WorkPresentation.animate_work(_assemblies.get(str(_work.id)), str(_work.step[3]), int(_work.part), minf(_elapsed / duration, 1.0), str(_work.step[0]))
