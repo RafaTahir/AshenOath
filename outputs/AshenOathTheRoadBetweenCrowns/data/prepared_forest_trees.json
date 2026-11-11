@@ -35,12 +35,12 @@
         "sha256": "6684013e6ba3c63d02a6d21c27188d4b83ad6126de05c61ab384fa5b61760afe"
       },
       "res://assets_external/environment/forest/CommonTree_5.obj": {
-        "bytes": 320735,
-        "sha256": "8137a19ac572de1a4056859b27f6a1a1ec67e6b825928a17e8e28fe937b61434"
+        "bytes": 330833,
+        "sha256": "8a23d31cc91d46d3fb52f5280fb7a1d050d92401e3426fe4a9b53ddece94b108"
       },
       "res://assets_external/environment/forest/CommonTree_5.obj.import": {
         "bytes": 754,
-        "sha256": "3db64b86dcb5eb1d0a61bb8481468c5970c54e2a12afc6d4ba1a90d60754dcb7"
+        "sha256": "3d0b4b8e8fd625f9cad74ab3a66d846d1e73c667caa5459767cf370ceab11d63"
       }
     },
     "source_geometry_sha256": "9f3029dce7e13638f691d341576c1a7bc0a1382ac92ec3c9b30116746f06232c",
@@ -87,12 +87,12 @@
         "sha256": "1924dc8c88c88bccea429c26feb9e64bdb15c3d28f4ed69d02820c08aec6f7ff"
       },
       "res://assets_external/environment/forest/TwistedTree_2.obj": {
-        "bytes": 912505,
-        "sha256": "2341e173fcda354242962bc1bc14494c18cf8fb1190bea9f3a5310882e38d74a"
+        "bytes": 940217,
+        "sha256": "ec6361c7806ab4ec01ea05c6c758ddcad8f2afdc8448e3ac6bfed6e58d0428d1"
       },
       "res://assets_external/environment/forest/TwistedTree_2.obj.import": {
-        "bytes": 758,
-        "sha256": "54a131a74fb6adbf409114882492b5b869095bc619dd23df256f256349ec72e1"
+        "bytes": 759,
+        "sha256": "606b9ca00ff6dbb6b78cc63f89414f0b3b1e1e65e3b78b639667acf4f29d0ba3"
       }
     },
     "source_geometry_sha256": "2109afb189e5cf084669ee50402aaaac7969e4123719ab8738d4e534c5365b4f",
@@ -139,12 +139,12 @@
         "sha256": "9af7729738a053e585c393deae30412e88e6f2b7aecf8aad5842121686f762a2"
       },
       "res://assets_external/environment/forest/TwistedTree_4.obj": {
-        "bytes": 981302,
-        "sha256": "c0fc395a551f9bed723a5310a1ecaacd37ac3e824cb0f1c936b716ea4586d70a"
+        "bytes": 1011323,
+        "sha256": "368acace6a292b8b7167d0c7447b19d9f9c6c74e7edf57c92681bc834a243fd6"
       },
       "res://assets_external/environment/forest/TwistedTree_4.obj.import": {
         "bytes": 759,
-        "sha256": "cbe01b60ff4b751fe799726ded9d7075936a8bc01ba498526bbbe73cf242742e"
+        "sha256": "75bae4f67dcd094ade5836ea95fe1ffd91bfa1495e75e85e3b2222ddeb1a1b14"
       }
     },
     "source_geometry_sha256": "30d99bace72e367c1d218aa77e65df94f2b261b124f5edd5116d18b5e51cc516",

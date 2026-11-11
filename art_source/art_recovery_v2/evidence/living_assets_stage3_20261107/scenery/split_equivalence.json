@@ -39,7 +39,7 @@
 			"id": "marsh_crossing",
 			"original_sha256": "fb6374cdf48eac17e5c08fe788536ed38ab71a09e7630fa6c10d1ac1ac9c6a7d",
 			"parts": 5,
-			"parts_sha256": "7c770b834ffae2db91d26e6c7c3a58b92b710f577dafc1bd328d5996a29e9e1b",
+			"parts_sha256": "e74fc02abb6ecab8af4d2ed8fb0b2056143562f73e721365029a9c9896f9c01d",
 			"rebuilt_sha256": "efe5fa2c6dc5f94832ffef2b6eb50287d8e9e8292046526434cd459797421945",
 			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
 		},
@@ -95,7 +95,7 @@
 			"id": "checkpoint",
 			"original_sha256": "85e660c2250bb4d32353b9007ca639dd9a2ff0670871d212c91a0236151393dc",
 			"parts": 2,
-			"parts_sha256": "ea9355cf580d594ce5acef912ad9759caf042c596886297d4ae1f7f008a5c004",
+			"parts_sha256": "cd829317851d2802ae4aed2cf0d6f714ce44459485a6038f4c3f8fd51deaa55f",
 			"rebuilt_sha256": "594d00db96b8b930e7a6e1af506773959f252356d35bf693ccce20ad1ce09775",
 			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
 		},
@@ -109,7 +109,7 @@
 			"id": "hart",
 			"original_sha256": "26cb52dc8248328a0bead4fb0629ee0638eb964b71ba79570ccdb12717a8525f",
 			"parts": 6,
-			"parts_sha256": "38a28ae2a633021d9f147cd02e64487408a9adcdfd2dc6cb01b505fbbe4c83e9",
+			"parts_sha256": "62b9146dd01511d823fe93fb664d063ac5f4752611a828081e199caeda8229f6",
 			"rebuilt_sha256": "9e38989099fa5e4f60f7f0a5cbaebd5d5bd020919b28c6ab4de5a5b98d65ae72",
 			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)"
 		},
@@ -123,7 +123,7 @@
 			"id": "mill",
 			"original_sha256": "9fecc6ce7ab506676d87e4278f24f02bde81d2817c5866bc56e61893ecae2e69",
 			"parts": 1,
-			"parts_sha256": "65b96e0833cbacb2871ec4d60337ace5d9fe83717a829d8342db6418fbff63e3",
+			"parts_sha256": "435f158dde01be6940b8390fcffc73916f7e347130365003becd7f165634b950",
 			"rebuilt_sha256": "5116aecf1386b6702d8f892210d8e10af85ee9da499d0d0d49ab4085a0750830",
 			"world_frame": "Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 0, -5.25)"
 		}

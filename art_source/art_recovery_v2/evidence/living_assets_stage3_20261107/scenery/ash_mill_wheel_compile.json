@@ -1,9 +1,9 @@
 {
 	"asset": "ash_mill_wheel",
-	"authoring_receipt": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/authoring.json",
+	"authoring_receipt": "D:/Temp/af/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/ash_mill_wheel/authoring.json",
 	"authoring_receipt_sha256": "d3f745628809dbd4fcd0daa524545e797f895d5e0021cbd2ae4173c3def8973b",
 	"blender_authored": true,
-	"bytes": 23370,
+	"bytes": 23364,
 	"carrier_sha256": "b29e189257aabe223974c6c35f134f3e0143e9a72d937d0bd1c6285d5f53bf76",
 	"compiler_sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
 	"dependencies": [],
@@ -53,7 +53,7 @@
 	"retained_receipt_sha256": "e22ef5514006f0ca23df44170243f5d0f327a2784b7a63dfba59b753a29d2cf5",
 	"runtime_reviewed": false,
 	"schema_version": 1,
-	"sha256": "65b96e0833cbacb2871ec4d60337ace5d9fe83717a829d8342db6418fbff63e3",
+	"sha256": "435f158dde01be6940b8390fcffc73916f7e347130365003becd7f165634b950",
 	"source_hashes": {
 		"res://tools/build_ash_mill.gd": "c0e0a63de15dc7bd7b348db188ff7f7b4dcd999979dee7a6c06d878c64bf7fc2",
 		"res://tools/living_world_part_baker.gd": "f7b40a610d67d693dda174e18f1cac7ca70497a1158ce2ff128a8fd09d5db5fb"

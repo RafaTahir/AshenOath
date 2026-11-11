@@ -173,3 +173,24 @@ outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Crate_Wo
 outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Book_7.obj -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Scroll_1.obj -text whitespace=cr-at-eol
 outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Mug.gltf -text whitespace=cr-at-eol
+
+# Preserve the retained opening satchel input; its compiled output is shipped.
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Bag.obj -text whitespace=cr-at-eol
+
+# Preserve the exact inputs and receipts consumed by the face package.
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/CommonTree_5.obj -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/TwistedTree_2.obj -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/TwistedTree_4.obj -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/scripts/prepared_forest_trees.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_zone_geometry.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/tools/prepared_zone_geometry_factory.gd -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/data/environment_material_dependencies.json -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/data/prepared_forest_trees.json -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/export_presets.cfg -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_candidates.json -text whitespace=cr-at-eol
+outputs/AshenOathTheRoadBetweenCrowns/runtime_pack_manifest.json -text whitespace=cr-at-eol
+
+# Generated Web transport retains its packaged CRLF line endings.
+web/index.html whitespace=cr-at-eol
+web/release_manifest.json whitespace=cr-at-eol
+web/runtime_pack_manifest.json whitespace=cr-at-eol

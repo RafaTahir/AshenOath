@@ -1,0 +1,17 @@
+{
+  "kind": "reviewed_face_web_candidate",
+  "build_id": "lower-face-repair-20261112-1653ba2-r4",
+  "source_commit": "1653ba24f6b86e7943b35a2824fe925b32611f13",
+  "previous_release_commit": "b4b52e4b6a87a0a346618484fdabd405b2980fdf",
+  "release_manifest_sha256": "97aa34fc6f610e1bc5087eb05c88835f94646f81c12cbe29f94566a954f20104",
+  "copied_export_files_match": 55,
+  "web_total_bytes": 173578703,
+  "web_total_mib": 165.5375509262085,
+  "net_growth_from_previous_bytes": 9727,
+  "publication": "pending",
+  "served_identity": "not_yet_observed",
+  "runtime_diagnostic_processes": 1,
+  "post_repair_playtest": false,
+  "user_visual_acceptance": "pending",
+  "anwen_full_face_appearance": "unconfirmed"
+}

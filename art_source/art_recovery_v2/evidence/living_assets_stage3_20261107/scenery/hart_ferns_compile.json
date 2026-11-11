@@ -1,9 +1,9 @@
 {
 	"asset": "hart_ferns",
-	"authoring_receipt": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/authoring.json",
+	"authoring_receipt": "D:/Temp/af/art_source/art_recovery_v2/models/living_assets_stage3_20261107/scenery/hart_ferns/authoring.json",
 	"authoring_receipt_sha256": "f43cf5f49f58d5d70b56296728f40226baf57660b7dc648fde7430022af1f70b",
 	"blender_authored": true,
-	"bytes": 70685,
+	"bytes": 70682,
 	"carrier_sha256": "ea11e1766e1b171d6af0b88ecafe8d6abfc98b40d851c32bdc47cb1113947208",
 	"compiler_sha256": "cce54e0cecf6a792a851b61d2f73b0ce46b19d0209d3e69d392e7073aa3e51f3",
 	"dependencies": [],
@@ -168,7 +168,7 @@
 	"retained_receipt_sha256": "672d50e9eb2b99c01720d15f1bea00891b94b7927ab60395defcba3102ed11ad",
 	"runtime_reviewed": false,
 	"schema_version": 1,
-	"sha256": "38a28ae2a633021d9f147cd02e64487408a9adcdfd2dc6cb01b505fbbe4c83e9",
+	"sha256": "62b9146dd01511d823fe93fb664d063ac5f4752611a828081e199caeda8229f6",
 	"source_hashes": {
 		"res://assets_external/environment/forest/Fern_1.obj": "11c3fe861f9cf1953ad000f3182b381e9db864c94d9bc5c85f34d6df7d6cac86",
 		"res://tools/build_hart_woodland.gd": "cf7bbff704dd355feb36ac6841e235b2c8cecd097a76f447f3cd32325e80e95e",

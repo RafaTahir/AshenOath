@@ -1,0 +1,480 @@
+{
+	"libraries": [
+		{
+			"activity_grip_receipt_sha256": "826b306397f7011dc0d8b3651c866d34416e315a047b404043567c11b5d1df11",
+			"asset": "C11",
+			"bytes": 291599.0,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53.0
+				}
+			},
+			"contact_probe_method": "actual retained front palm vertex, hand weight>=.90, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0151071548461914,
+					0.0410033464431763,
+					-0.0138885602355003
+				],
+				"right": [
+					-0.015105128288269,
+					0.0410038232803345,
+					-0.0138884261250496
+				]
+			},
+			"current_model_sha256": "828bcb7add01e9ee0838c8f17cdfda781b846d0bcb55100f0477c4f495916702",
+			"current_prepared_sha256": "205fbe1306070461eabaf3fc1e6a958ff4a2d46868807ae0ba81747d4ad624e5",
+			"face_repair_certificate_sha256": "13d738ba289868c87debe7790eedb9b995559708e03ee0e36d3644935c9f7981",
+			"maximum_rest_error": 0.00000339029907081,
+			"model": "res://assets_external/design_pack_v1/humans/C11_Nessa.glb",
+			"model_sha256": "bd15ba92f4e0429c4638a778801020d0387437731a4e879432981de262904a85",
+			"path": "res://assets_external/characters_prepared/animations/life_C11.res",
+			"reused_face_repair": true,
+			"runtime_reviewed": false,
+			"sha256": "2c2d86d640b98bb64ede190632538cb67dff45305e178859dcfaee3c98e021ff",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C11/C11_life_review.glb",
+			"source_sha256": "ebfd6dce71506ea7913eb1c79b90d074c4a909ae3ee0ae237effbd10e77943dc",
+			"user_accepted": false
+		},
+		{
+			"activity_grip_receipt_sha256": "9afd05a5d3b62826c090bee3df01c09c82ea49b4389a5f720601e47e7051d3f9",
+			"asset": "C05",
+			"bytes": 247011,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53
+				}
+			},
+			"contact_probe_method": "actual retained front palm vertex, hand weight>=.90, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.015106201171875,
+					0.041003406047821,
+					-0.0138880163431168
+				],
+				"right": [
+					-0.0151065587997437,
+					0.0410033762454987,
+					-0.0138883292675018
+				]
+			},
+			"maximum_rest_error": 0.00000339029907081567,
+			"model": "res://assets_external/design_pack_v1/humans/C05_Widow_Elna.glb",
+			"model_sha256": "f6d4a30972593cf60dc6b064a2ec35d14854a0812275fdb284c1d5e76cd6a9ae",
+			"path": "res://assets_external/characters_prepared/animations/life_C05.res",
+			"runtime_reviewed": false,
+			"sha256": "19253943044acef3e7b4bc9dd22888c6506bc48bcb15218be2d43a9a99fe4b04",
+			"source": "D:/Temp/af/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C05/C05_life_review.glb",
+			"source_sha256": "d6070d0c7c4435cd4202e99883068263de8aebbda08c50f313d6fb9d7c72f2ca",
+			"user_accepted": false
+		},
+		{
+			"activity_grip_receipt_sha256": "6be1ee48bf31c2ba3921244674251c0eef587e30efceefab4ed0b5cc60d00352",
+			"asset": "C06",
+			"bytes": 247667.0,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53.0
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.032747745513916,
+					0.0317324995994568,
+					0.0024254322052002
+				],
+				"right": [
+					-0.0327119827270508,
+					0.0317588150501251,
+					0.00238722562789917
+				]
+			},
+			"current_model_sha256": "98bb3ab2d2a8f766e88355d5c3f7060ae195e9785eae882406a0b065ff26eeca",
+			"current_prepared_sha256": "ab27a010289de8d1db2e0abe4a1990fb9514e7bdf3accbe5af6c298523e955f3",
+			"face_repair_certificate_sha256": "2dd70d9aff8b09aea214cad895de4171c4aa64965ee7d7a17494bdcebd5df8f9",
+			"maximum_rest_error": 0.00000386099145543,
+			"model": "res://assets_external/design_pack_v1/humans/C06_Farmer_Toma.glb",
+			"model_sha256": "488017b708a2534adb5ed0bcad40d4fabfb2f29b1db57eaf508690591ce38c93",
+			"path": "res://assets_external/characters_prepared/animations/life_C06.res",
+			"reused_face_repair": true,
+			"runtime_reviewed": false,
+			"sha256": "e138e6b610a3dd2862afda36eef8072c592d0082fa09381ac81589df79e23c16",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C06/C06_life_review.glb",
+			"source_sha256": "685999766336aeb0d1735f8a8758f881fef2999023eb4cbf5a53ab420dc6897e",
+			"user_accepted": false
+		},
+		{
+			"activity_grip_receipt_sha256": "b28ae165a605da01f5cb9ede9b85548cfb23c77516156b5f16d6f07d0ad9582d",
+			"asset": "C12",
+			"bytes": 221835.0,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0112015008926392,
+					0.0423622131347656,
+					-0.0141905248165131
+				],
+				"right": [
+					-0.0112016201019287,
+					0.042361855506897,
+					-0.0141898989677429
+				]
+			},
+			"current_model_sha256": "4af2bc61df17edd4d84116dd6c4a5658e18b9bd0d3675ae4a15c57312ba68ca4",
+			"current_prepared_sha256": "8eda36670c147c18d1eb350fab78410248d385ee2e62456e36ae5449ba7d7350",
+			"face_repair_certificate_sha256": "d3c98e007909e1d2a35011b5634754fc41f2dc587cd54efd47f8f6eddd36be48",
+			"maximum_rest_error": 0.00000352086885868,
+			"model": "res://assets_external/design_pack_v1/humans/C12_Nera.glb",
+			"model_sha256": "9c81d8c2b886349598938955d838cebf1de4701b379ef784a7395a184ab8f632",
+			"path": "res://assets_external/characters_prepared/animations/life_C12.res",
+			"reused_face_repair": true,
+			"runtime_reviewed": false,
+			"sha256": "f4ab0b85d8216b496dd8a329fdc2ff1b337659ce64406580108aff5943d20e57",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C12/C12_life_review.glb",
+			"source_sha256": "fc61817eb6e9231a7a440e0da563bfab0bcda306f1e54d02005836df452f6ed6",
+			"user_accepted": false
+		},
+		{
+			"activity_grip_receipt_sha256": "1fd88208f2754e685b46c42a02b116cdf29322c7dc660ecca0b2f13e9dfbc290",
+			"asset": "C07",
+			"bytes": 210719.0,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0282580256462097,
+					0.0314570069313049,
+					-0.0173485577106476
+				],
+				"right": [
+					-0.0281971096992493,
+					0.0314766764640808,
+					-0.0173996090888977
+				]
+			},
+			"current_model_sha256": "45500ffa6296d21eb8d0073ad5f2cd603653e8356fa079ebaab52c671cdbecf3",
+			"current_prepared_sha256": "72273c028fc57217ff48f73b1d74eefe940891c15ac444e27d421e2737c00bb0",
+			"face_repair_certificate_sha256": "1fdb1b3e5773a1e6074af8821984e1efbe38270bdf7712ac34fd02d4c877370e",
+			"maximum_rest_error": 0.00000379755488211,
+			"model": "res://assets_external/design_pack_v1/humans/C07_Captain_Senn.glb",
+			"model_sha256": "373a8d6ad62a4cfb4873aae79f919ae3993bf2ef3ba22479d5eb045bcac8d281",
+			"path": "res://assets_external/characters_prepared/animations/life_C07.res",
+			"reused_face_repair": true,
+			"runtime_reviewed": false,
+			"sha256": "dbeff0a0567e859fc964abc807bcae134978462ddcef9bf20bc1a2fbf4d12ed7",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C07/C07_life_review.glb",
+			"source_sha256": "7870c57de09a373f530c59299aa93b00e4ac6980f165b90155b5f539d97ebfac",
+			"user_accepted": false
+		},
+		{
+			"activity_grip_receipt_sha256": "b61548e83c01fb847be9b30356efb7e12bbb90e4716caaee4542122674acaa64",
+			"asset": "C09",
+			"bytes": 311627.0,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Settle_Ledger": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53.0
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53.0
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0151059627532959,
+					0.0410032272338867,
+					-0.0138884633779526
+				],
+				"right": [
+					-0.0151057243347168,
+					0.0410031974315643,
+					-0.01388830691576
+				]
+			},
+			"current_model_sha256": "21656637854b5c6854648bdb3b3ef830077683e3cd5a42d7eb2fb4938f9ad0b5",
+			"current_prepared_sha256": "8225f15539dbd4e9596e40eefdafad111ebb2cc7cb230e6feac34b00d3659548",
+			"face_repair_certificate_sha256": "7aa031e9cf4a1a5a85692f43f583e9428910d53a883b369566252988cd038904",
+			"maximum_rest_error": 0.00000351316634805,
+			"model": "res://assets_external/design_pack_v1/humans/C09_Record_Keeper_Vale.glb",
+			"model_sha256": "5b37714da4f4c1dd61ba484c44139cd39c345925ef842eebe452e4351d255e7b",
+			"path": "res://assets_external/characters_prepared/animations/life_C09.res",
+			"reused_face_repair": true,
+			"runtime_reviewed": false,
+			"sha256": "a5166199095b2dfb2539bc479b6090c0db32987e9f603ccc07ef9c54543ce1bc",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C09/C09_life_review.glb",
+			"source_sha256": "65ae54bf974efe41d5c02bc7b89df281dbe74897e59e74543ac5262900d6a84f",
+			"user_accepted": false
+		},
+		{
+			"activity_grip_receipt_sha256": "845895cdb7b13448c316dd7a128b359d4c54d0af8165b91e85e2ca65bf65d8d5",
+			"asset": "C10",
+			"bytes": 310594.0,
+			"clips": {
+				"Life_Cup_Hold": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Drink": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53.0
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.0327473878860474,
+					0.031731903553009,
+					0.00242564082145691
+				],
+				"right": [
+					-0.0327126979827881,
+					0.0317582786083221,
+					0.00238729268312454
+				]
+			},
+			"current_model_sha256": "c610fcdf35a6aef5292624a53e11ee2fbea5037eda3dbb8412385409ca3abe66",
+			"current_prepared_sha256": "d305c1d161269bcf8343d7bdf55c240f1bce6792843d8ddfcc32c416b2902252",
+			"face_repair_certificate_sha256": "612ed774226b31553faea8ee3af3cb839d1362763c946af168dbb52f63cdd039",
+			"maximum_rest_error": 0.00000386099145543,
+			"model": "res://assets_external/design_pack_v1/humans/C10_Steward_Merrow.glb",
+			"model_sha256": "ebb58a565390985a44dcde99f2df7a2d4e23fcf479091cf93dd0f8c6a40c66a7",
+			"path": "res://assets_external/characters_prepared/animations/life_C10.res",
+			"reused_face_repair": true,
+			"runtime_reviewed": false,
+			"sha256": "7d018f2fd58b9efbbd3ab89ca38fcffb0e0a0bbbfb3b80d438ab414f6799ee4b",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C10/C10_life_review.glb",
+			"source_sha256": "aa5f1ad2d862eb879cba08457d588b519eac8403aa615a70650dc269cc8437f3",
+			"user_accepted": false
+		},
+		{
+			"activity_grip_receipt_sha256": "405df2c1aceae818d288b3f0d8e4821c9acafad3451767ed16d64cc12ff5d952",
+			"asset": "C08",
+			"bytes": 249648.0,
+			"clips": {
+				"Life_Idle_A": {
+					"duration": 6.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Idle_B": {
+					"duration": 8.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Listen": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Speak": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 52.0
+				},
+				"Life_Work": {
+					"duration": 4.0,
+					"skeleton_path": "Armature/Skeleton3D",
+					"tracks": 53.0
+				}
+			},
+			"contact_probe_method": "actual retained front-palm surface vertex, recorded hand/adjacent-joint skin weight, measured with the exact authored contact finger pose; evaluated skin verification required at Work phase .50; converted through imported native Work pose",
+			"contact_probes": {
+				"left": [
+					0.032747745513916,
+					0.0317323803901672,
+					0.00242594629526138
+				],
+				"right": [
+					-0.032712459564209,
+					0.0317583382129669,
+					0.00238696485757828
+				]
+			},
+			"current_model_sha256": "1bab719dedb1d720a15ed77403857969e5a0f15665edfabbc1642071e84840d4",
+			"current_prepared_sha256": "66ed2a6391cd34abbccc77012842b5ad4d0b5752db3ef333e8ad09406e6133ec",
+			"face_repair_certificate_sha256": "ebed60f963521d9403c81e30b8049329f1da4eb72e3bd3c269b143ecb172f325",
+			"maximum_rest_error": 0.00000386099145543,
+			"model": "res://assets_external/design_pack_v1/humans/C08_Lord_Edric_Vargan.glb",
+			"model_sha256": "247b8e82121c63f1a66465981971d14e08b9dc23782b1b14b1f33ebe7acaaf06",
+			"path": "res://assets_external/characters_prepared/animations/life_C08.res",
+			"reused_face_repair": true,
+			"runtime_reviewed": false,
+			"sha256": "ce8665ddbcdbca252d733f66b515929734d0b1b4f53829d3d027906cd34aa2d0",
+			"source": "D:/Projects/AshenOath/art_source/art_recovery_v2/models/living_cast_stage2_20261107/C08/C08_life_review.glb",
+			"source_sha256": "d70546839543c62ebad4d031bd629d52edaaa2a84b507a47171d25f8d2765a70",
+			"user_accepted": false
+		}
+	],
+	"status": "compiled"
+}

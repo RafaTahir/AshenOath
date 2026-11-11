@@ -1,0 +1,14 @@
+{
+  "kind": "retained_input_completion",
+  "runtime_test": false,
+  "rook_source": {
+    "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/props/Bag.obj",
+    "sha256": "6aa7124265768200c3b59742a8b866fdc0fcbab002cac712e5e4f241b4b4b375",
+    "geometry_changed": false,
+    "exported_raw_source": false
+  },
+  "companion_archive": {
+    "path": "art_source/art_recovery_v2/evidence/living_assets_stage3_20261107/companion/proofs/ad3bc684c0179d6b56661f8c1ba332c4e68edf78e82308fb59d2e2f917f90f26/57c83b7539598f4a7ec381115cbf533b308cbb8dc9fb9ab437dd956ff195d1d8/bracken.scn",
+    "sha256": "57c83b7539598f4a7ec381115cbf533b308cbb8dc9fb9ab437dd956ff195d1d8"
+  }
+}

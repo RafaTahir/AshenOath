@@ -1,0 +1,49 @@
+{
+  "kind": "packaging_input_byte_closure",
+  "runtime_test": false,
+  "build_id": "lower-face-repair-20261112-1653ba2-r4",
+  "inputs": [
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/CommonTree_5.obj",
+      "sha256": "8a23d31cc91d46d3fb52f5280fb7a1d050d92401e3426fe4a9b53ddece94b108",
+      "previous_git_sha256": "8137a19ac572de1a4056859b27f6a1a1ec67e6b825928a17e8e28fe937b61434",
+      "change": "preserve_exact_CRLF_input_already_used_by_package",
+      "logical_content_changed": false
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/TwistedTree_2.obj",
+      "sha256": "ec6361c7806ab4ec01ea05c6c758ddcad8f2afdc8448e3ac6bfed6e58d0428d1",
+      "previous_git_sha256": "2341e173fcda354242962bc1bc14494c18cf8fb1190bea9f3a5310882e38d74a",
+      "change": "preserve_exact_CRLF_input_already_used_by_package",
+      "logical_content_changed": false
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/assets_external/environment/forest/TwistedTree_4.obj",
+      "sha256": "368acace6a292b8b7167d0c7447b19d9f9c6c74e7edf57c92681bc834a243fd6",
+      "previous_git_sha256": "c0fc395a551f9bed723a5310a1ecaacd37ac3e824cb0f1c936b716ea4586d70a",
+      "change": "preserve_exact_CRLF_input_already_used_by_package",
+      "logical_content_changed": false
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/scripts/prepared_forest_trees.gd",
+      "sha256": "0fef7fcde7f7557bda226fff302128fc89c6647e7db6c2bd1f3e1cdae0b75259",
+      "previous_git_sha256": "999415b65710ad2ace0e604e8ea61a48f23100921337ec70700d4c55054822be",
+      "change": "preserve_exact_CRLF_input_already_used_by_package",
+      "logical_content_changed": false
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/build_prepared_zone_geometry.gd",
+      "sha256": "2bd612132ca7d7b4211058b7b01f85549a19324241be3edbb66c8d41896db5d0",
+      "previous_git_sha256": "51cb540e06ae16104d910fa1dd0e898d19bbd752702f5596452ba0f6bb26c48c",
+      "change": "preserve_exact_CRLF_input_already_used_by_package",
+      "logical_content_changed": false
+    },
+    {
+      "path": "outputs/AshenOathTheRoadBetweenCrowns/tools/prepared_zone_geometry_factory.gd",
+      "sha256": "20b4914e41645bfe5c861563076a7662c255df4957d053d044709e0ad177ff38",
+      "previous_git_sha256": "eaa5ec3f577e88efae030d374d64a11c5c3dab280f46738ad76a3a16042129e1",
+      "change": "preserve_exact_CRLF_input_already_used_by_package",
+      "logical_content_changed": false
+    }
+  ]
+}
