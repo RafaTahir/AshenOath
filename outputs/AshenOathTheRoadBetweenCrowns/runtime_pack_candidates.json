@@ -1,22 +1,22 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-11-11T16:56:16.9888322Z",
-  "build_id": "lower-face-repair-20261112-1653ba2-r4",
-  "generated_from_commit": "1653ba24f6b86e7943b35a2824fe925b32611f13",
+  "generated_at_utc": "2026-11-13T07:53:00.9086764Z",
+  "build_id": "proximity-streaming-20261113-9031b9c-r2",
+  "generated_from_commit": "9031b9cbffab723a2ff31b22fdff5913f713f5de",
   "source_dirty": true,
-  "artifact_directory": "D:\\Temp\\af\\.release-gate\\lower-face-repair-20261112-1653ba2-r4\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\proximity-streaming-20261113-9031b9c-r2\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 171215308,
+  "total_bytes": 171181196,
   "packs": [
     {
       "id": "base",
-      "version": "lower-face-repair-20261112-1653ba2-r4",
+      "version": "proximity-streaming-20261113-9031b9c-r2",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 6167072,
-      "sha256": "2d7e0428810efd105c5dced44fc88ab37f665d4fc141cda5c084d4388eefab7d",
+      "bytes": 6132960,
+      "sha256": "2ea072cf0b2e989bbfd552388019a44f40d387d1a52240cc089dd21d6045967d",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
@@ -473,11 +473,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "lower-face-repair-20261112-1653ba2-r4",
-    "artifact_directory": "D:\\Temp\\af\\.release-gate\\lower-face-repair-20261112-1653ba2-r4\\export",
-    "generated_from_commit": "1653ba24f6b86e7943b35a2824fe925b32611f13",
-    "artifacts_total_bytes": 173550730,
-    "root_pck_sha256": "2c5a67f08f25159a3bed0fb56904d069f1ee4cf57c6b8ca3b6b5ff0ae3f849f0",
-    "note": "Selected export uses gzip transport; native pack records describe decoded build artifacts."
+    "build_id": "proximity-streaming-20261113-9031b9c-r2",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\proximity-streaming-20261113-9031b9c-r2\\export",
+    "generated_from_commit": "9031b9cbffab723a2ff31b22fdff5913f713f5de",
+    "artifacts_total_bytes": 173559933,
+    "root_pck_sha256": "405b81f392bf0beb551e4123d4881abab6e538f9ef6c08ecccd425132dc29b7a",
+    "note": "Selected export uses gzip transport; native records retain exact decoded pack provenance."
   }
 }

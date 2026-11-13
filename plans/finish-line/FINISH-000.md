@@ -16,6 +16,12 @@ the existing owners. See the current section of
 Compilation/package/publication results will be recorded independently.
 Runtime and user acceptance remain pending; this work is strictly build-only.
 
+Candidate `proximity-streaming-20261113-9031b9c-r2` compiled and passed package
+integrity: 55 complete Web files, 173,587,908 bytes. Existing deployed asset-pack
+hashes are unchanged. Code/source build is `9031b9c`; one combined Git publication
+follows. No game/browser run or benchmark was performed, and no mandatory ticket
+has gained runtime or user acceptance from compilation/publication alone.
+
 ## Current Combined Candidate - 2026-11-06
 
 ### Everyday Life, Lasting Consequences - compiled release candidate

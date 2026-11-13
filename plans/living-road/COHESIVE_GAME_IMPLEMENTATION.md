@@ -42,6 +42,25 @@ Delivery uses one combined Git publication; Vercel deploys automatically. No CLI
 deployment or wait for its rollout. Keep 256-MiB total, 200-MiB warning and
 individual Git files below 100 MiB. Implementation is not user acceptance.
 
+Build result: `proximity-streaming-20261113-9031b9c-r2`, source `9031b9c`.
+All changed GDScript owners compiled, and inline JavaScript parsed without
+execution. The first packaging attempt stopped at a metadata-compactor helper
+precondition; its output is preserved and was not published. The corrected build
+passed Web export, retained metadata authority and package-integrity checks:
+55 files, **173,587,908 complete bytes (165.546 MiB)**. All deployed asset packs
+retain their preceding exact hashes; changed payloads are the Web root, shell
+and manifests. Root transport SHA-256:
+`405b81f392bf0beb551e4123d4881abab6e538f9ef6c08ecccd425132dc29b7a`.
+Publication is the combined Git push following this source/export checkpoint.
+No current gameplay or performance result is asserted.
+
+Later acceptance scenarios: move toward north/east/west roads and change direction;
+observe normal NPC/combat/input behavior while preparation progresses; approach
+a cold road, turn away and Retry after an outage; cross and immediately return;
+change quality and Continue the exact selected journey; check all physical links,
+visible scenery, collision, audio continuity and phone input. These are pending
+user checks, not an additional authorized agent verification run.
+
 ## Current Combined Implementation - 2026-11-06
 
 Authorized scope: A Coherent, Living Campaign. Continue the retained game from
