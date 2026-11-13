@@ -84,7 +84,9 @@ func request_zone(zone_id: String, resource_path: String = "") -> void:
 	zone_progress.emit(id, 0.0)
 
 func _begin_request(id: String) -> void:
-	if not focused_destination.is_empty() and id != focused_destination: return
+	if not focused_destination.is_empty() and id != focused_destination:
+		var explicit_journey := is_instance_valid(owner_node) and (not bool(owner_node.get("game_started")) or bool(owner_node.call("_journey_load_pending")))
+		if not explicit_journey: return
 	var packs = owner_node.get("runtime_packs") if is_instance_valid(owner_node) else null
 	if packs != null and not packs.zone_packs_ready(id):
 		var failures: Array[String] = packs.zone_pack_failures(id)
@@ -108,6 +110,7 @@ func _begin_request(id: String) -> void:
 
 func request_zone_for_portal(zone_id: String) -> bool:
 	var id := zone_id.strip_edges().to_lower()
+	focused_destination = id
 	request_zone(id, str(AUTHORED_LAYER_PATHS.get(id, "")))
 	return str(requests.get(id, {}).get("state", "")) in ["waiting_pack", "loading", "ready"]
 

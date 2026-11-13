@@ -411,7 +411,7 @@ func _neighbor_dependencies_current() -> bool:
 	if _neighbor_epoch == _story_epoch: return true
 	# A partial build's recorded reads grow after every successful step. Only
 	# already-consumed state can invalidate it; later steps read current state.
-	if _neighbor_step > 0 and _neighbor_signature != host._zone_state_signature(_neighbor_scope.zone_id): return false
+	if _neighbor_scope.cursor > 0 and _neighbor_signature != host._zone_state_signature(_neighbor_scope.zone_id): return false
 	_neighbor_epoch = _story_epoch
 	return true
 

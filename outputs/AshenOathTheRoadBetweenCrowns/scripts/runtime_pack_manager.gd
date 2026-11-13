@@ -543,8 +543,10 @@ func _start_pending_downloads() -> void:
 					continue
 				if int(requests[id].get("priority",0)) >= 500:
 					var background_active := false
+					var speculative := int(requests[id].get("priority",0)) >= 1000
 					for active_id in active_downloads:
-						if int(requests[active_id].get("priority",0)) >= 500: background_active = true
+						var active_priority := int(requests[active_id].get("priority",0))
+						if active_priority >= 500 and (active_priority >= 1000) == speculative: background_active = true
 					if background_active: continue
 				_start_download(id)
 				started = true

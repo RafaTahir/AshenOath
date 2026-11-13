@@ -46,8 +46,10 @@ Get-ChildItem -LiteralPath (Join-Path $Repo 'web/packs') -File -Filter '*.pck' |
 $Layout = Get-Content -LiteralPath $Runtime -Raw | ConvertFrom-Json
 $Base = Join-Path $Changed 'base.pck'
 Invoke-Compiler $Godot @('--headless','--path',$Project,'--export-pack',[string]$Layout.pack_presets.base,$Base) 'pack-base'
-$Metadata = Join-Path $Out 'pack-metadata.json'
-Invoke-Compiler $Python @((Join-Path $PSScriptRoot 'compact_runtime_packs.py'),'--root-pack',$Base,'--pack-dir',$Changed,'--report',$Metadata) 'pack-metadata'
+$Metadata = Join-Path $Repo '.release-gate/combined-loading-cast-20261111-945101e-r2/pack-metadata-compaction.json'
+if (-not (Test-Path -LiteralPath $Metadata)) { throw 'The original complete asset-pack metadata authority receipt is required.' }
+# Base is the metadata authority, not a supplemental pack. All asset packs are
+# unchanged; the new Web root must still supply their original removed metadata.
 Copy-Item -LiteralPath $Base -Destination (Join-Path $Raw 'base.pck') -Force
 $Record = @($Candidate.packs | Where-Object id -eq 'base')
 if ($Record.Count -ne 1) { throw 'Expected one base-pack record.' }
