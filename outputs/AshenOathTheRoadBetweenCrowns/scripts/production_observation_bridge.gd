@@ -434,6 +434,9 @@ func snapshot_for_game(game: Node) -> Dictionary:
 			"buttons": _visible_menu_buttons(hud),
 		}
 	var packs := game.get("runtime_packs") as Node
+	var streaming := game.get("seamless_world") as Node
+	if streaming != null:
+		state["streaming"] = streaming.preparation_snapshot()
 	if packs != null:
 		var pack_state := {}
 		for pack_id in ["opening", "quality_materials", "campaign", "characters", "monsters", "audio"]:

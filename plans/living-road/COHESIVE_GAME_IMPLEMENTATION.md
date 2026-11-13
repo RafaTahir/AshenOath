@@ -2,6 +2,27 @@
 
 ## Proximity-Driven Streaming - 2026-11-13
 
+### Blocked-Road Follow-Up
+
+The creator reported that roads remained blocked and authorized one focused
+runtime verification. Source review confirmed the 30-second opening checkpoint
+timer still gated all neighbor preparation, transient arrival generations could
+discard valid work, and readiness waited for a per-object offscreen render of
+the complete world while repeatedly charging the active world's frame time.
+The correction starts after the two-second control grace, keys ownership to the
+stable journey ID, deduplicates entry-view render groups, and requires one real
+entry-view render rather than drawing every distant prop before opening a road.
+The prepared reverse gate opens in its private viewport before that render.
+Greyfen return construction retains its original gameplay-layer-only attachment
+instead of attaching decoration twice. All world bodies, geometry and quality
+remain present; no assets were changed. The read-only observer exposes progress.
+
+Verification is one isolated desktop Chrome case on the exact rebuilt package:
+ordinary New Game, eastern priority, northern reprioritization, a held adjacent
+pack with source movement, then Greyfen/Wychwood travel and return. No existing
+user save is imported or overwritten. Compilation/builds are separate from this
+single runtime allocation; no passing outcome is asserted before its report.
+
 Continue from `a29972e` on `codex/art-recovery-anwen`. This is the approved
 proximity-streaming implementation, not the superseded upfront-Wychwood wait.
 Greyfen's initial readiness is unchanged. Neighbor preparation starts after two

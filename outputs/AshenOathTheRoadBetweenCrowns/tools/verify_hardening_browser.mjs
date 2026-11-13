@@ -1,6 +1,6 @@
 // Focused production-UI functional checks; no FPS, memory or hardware certification.
 // node tools/verify_hardening_browser.mjs --export ../../web --report D:/Temp/AshenOath/hardening/report.json
-// --scenario startup|smoke|metadata|cold|all|combat --mode desktop|touch|both --label candidate|baseline
+// --scenario startup|smoke|metadata|cold|all|combat|streaming --mode desktop|touch|both --label candidate|baseline
 // combat is opt-in; all retains the save/loading suite.
 // combat requires --combat-phase light|heavy|bow; run each phase/viewport in a fresh invocation.
 // --fault metadata_headers_stall|metadata_body_stall|opening_unavailable selects one Retry case.
@@ -28,10 +28,10 @@ const scenario = String(options.scenario || 'all');
 const mode = String(options.mode || 'both');
 const combatPhase = String(options['combat-phase'] || '');
 const metadataFaults = options.fault ? [String(options.fault)] : ['metadata_headers_stall', 'metadata_body_stall'];
-assert(['all', 'startup', 'smoke', 'metadata', 'cold', 'combat'].includes(scenario), 'Invalid --scenario');
+assert(['all', 'startup', 'smoke', 'metadata', 'cold', 'combat', 'streaming'].includes(scenario), 'Invalid --scenario');
 assert(['both', 'desktop', 'touch'].includes(mode), 'Invalid --mode');
-if (options['profile-context']) assert(scenario === 'startup' && mode !== 'both',
-  '--profile-context requires one startup viewport, avoiding state shared between unrelated cases');
+if (options['profile-context']) assert(['startup', 'streaming'].includes(scenario) && mode !== 'both',
+  '--profile-context requires one startup/streaming viewport, avoiding state shared between unrelated cases');
 if (scenario === 'combat') assert(['light', 'heavy', 'bow'].includes(combatPhase),
   'Combat requires --combat-phase light|heavy|bow. Run each phase/viewport in a fresh process/profile; combined combat reloads are not supported.');
 assert(metadataFaults.every(kind => ['metadata_headers_stall', 'metadata_body_stall', 'opening_unavailable'].includes(kind)), 'Invalid --fault');
@@ -626,6 +626,84 @@ async function followPhysicalRoute(page, viewport, touch, route) {
     if (finger) await finger.end().catch(() => {});
   }
 }
+async function streaming(page, viewport, touch) {
+  assert(!touch, 'One focused desktop streaming run; no duplicated viewport case');
+  await startGame(page, viewport, false);
+  const started = Date.now();
+  const phases = new Set();
+  let loadingSeen = false;
+  async function walk(points, source, target = null, budget = timeoutMs) {
+    const deadline = Date.now() + budget;
+    const held = new Set();
+    try {
+      for (const waypoint of points) {
+        while (Date.now() < deadline) {
+          assert.equal(runtimeErrors.length, 0, `Runtime errors: ${runtimeErrors.join('\n')}`);
+          const s = await observe(page);
+          if (!s?.player) { await sleep(100); continue; }
+          if (s.zone === target && playable(s)) return s;
+          assert(s.zone === source || (target && s.zone === target), `Unexpected destination ${s.zone}`);
+          loadingSeen ||= Boolean(s.ui.loading_visible);
+          assert(!s.ui.loading_visible && !s.paused, 'A physical road opened modal loading or paused the world');
+          const phase = JSON.stringify([s.streaming?.selected_destination,s.streaming?.state,s.streaming?.step,s.streaming?.render_groups_remaining]);
+          if (!phases.has(phase)) { phases.add(phase); event({ event:'streaming_progress', zone:s.zone, preparation:s.streaming }); }
+          if (!playable(s)) { await sleep(100); continue; }
+          const dx = waypoint.x-s.player.position.x, dz = waypoint.z-s.player.position.z;
+          const distance = Math.hypot(dx,dz);
+          if (distance < 0.45) break;
+          const forward = (-Math.sin(s.camera.yaw)*dx-Math.cos(s.camera.yaw)*dz)/distance;
+          const right = (Math.cos(s.camera.yaw)*dx-Math.sin(s.camera.yaw)*dz)/distance;
+          const wanted = new Set();
+          if (forward > 0.35) wanted.add('w'); else if (forward < -0.35) wanted.add('s');
+          if (right > 0.35) wanted.add('d'); else if (right < -0.35) wanted.add('a');
+          for (const key of [...held]) if (!wanted.has(key)) { await page.keyboard.up(key); held.delete(key); }
+          for (const key of wanted) if (!held.has(key)) { await page.keyboard.down(key); held.add(key); }
+          await sleep(100);
+        }
+        assert(Date.now() < deadline, 'Road movement/readiness exceeded its functional deadline');
+      }
+      if (target) return waitFor(async () => { const s = await observe(page); return playable(s) && s.zone === target ? s : null; }, `arrival in ${target}`, 15000);
+      return observe(page);
+    } finally { for (const key of held) await page.keyboard.up(key).catch(() => {}); }
+  }
+  const east = await routeTo(page,'gate_vargan_approach');
+  const approach = east.points.slice(0,Math.max(1,east.points.length-2));
+  await walk(approach,'greyfen');
+  await waitFor(async () => (await observe(page))?.streaming?.selected_destination === 'vargan_approach', 'eastern road gains preparation priority', 15000);
+  event({ event:'road_priority_east', preparation:(await observe(page)).streaming });
+  await walk([...approach].reverse(),'greyfen');
+  const north = await routeTo(page,'gate_wychwood');
+  await walk(north.points,'greyfen');
+  const waiting = await waitFor(async () => {
+    const s = await observe(page);
+    assert.equal(runtimeErrors.length,0,`Runtime errors: ${runtimeErrors.join('\n')}`);
+    return playable(s) && s.zone === 'greyfen' && heldDownloads.size && s.streaming?.selected_destination === 'wychwood' ? s : null;
+  },'cold northern road stays live while its pack is held',30000);
+  const before = waiting.player.position;
+  await page.keyboard.down('s');
+  await sleep(700);
+  await page.keyboard.up('s');
+  const moved = await waitFor(async () => {
+    const s=await observe(page);
+    return playable(s) && Math.hypot(s.player.position.x-before.x,s.player.position.z-before.z)>0.35 ? s : null;
+  },'ordinary movement remains available behind the cold road',10000);
+  assert(!moved.ui.loading_visible && !moved.paused,'Source froze behind loading UI');
+  await screenshot(page,'cold-road-source-playable');
+  event({event:'cold_source_movement',before,after:moved.player.position,held_requests:heldDownloads.size});
+  armFault('','');
+  for (const held of [...heldDownloads]) { held.record.released_at=Date.now(); held.send(); }
+  const outward = {...north.crossing_point,x:north.crossing_point.x+north.crossing_direction.x*1.2,z:north.crossing_point.z+north.crossing_direction.z*1.2};
+  const arrived = await walk([north.points.at(-1),outward],'greyfen','wychwood');
+  await screenshot(page,'wychwood-arrival');
+  event({event:'physical_outward_arrival',zone:arrived.zone,position:arrived.player.position,elapsed_ms:Date.now()-started});
+  const back = await routeTo(page,'gate_greyfen');
+  const homeward={...back.crossing_point,x:back.crossing_point.x+back.crossing_direction.x*1.2,z:back.crossing_point.z+back.crossing_direction.z*1.2};
+  const returned=await walk([...back.points,homeward],'wychwood','greyfen');
+  await screenshot(page,'greyfen-return');
+  event({event:'physical_return_arrival',zone:returned.zone,position:returned.player.position,loading_ui_seen:loadingSeen,
+    elapsed_ms:Date.now()-started,performance:returned.performance});
+}
+
 async function cancelTravel(page, viewport, touch) {
   if (!touch) { await page.keyboard.press('Escape'); return; }
   // Frozen observer omits overlay buttons. Authored _loading_layout is a
@@ -685,7 +763,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
   const result = currentCase;
   const context = options['profile-context'] ? browser.defaultBrowserContext() : await browser.createBrowserContext();
   const page = await context.newPage();
-  if (scenario === 'startup') {
+  if (['startup','streaming'].includes(scenario)) {
     // A background/occluded desktop pauses preparation. Measure an uninterrupted
     // foreground launch, as the existing touch driver does, not time spent hidden.
     const focus = await page.createCDPSession();
@@ -715,7 +793,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
         zone_load_request_pending: s.zone_load_request_pending, player: s.player, camera: s.camera,
         ui: s.ui, dialogue: s.dialogue, input: s.input, runtime_packs: s.runtime_packs,
         gates: s.gates, interactions: s.interactions, focus: s.focus,
-        enemies: s.enemies, inventory: s.inventory, settings: s.settings, performance: s.performance };
+        enemies: s.enemies, inventory: s.inventory, settings: s.settings, performance: s.performance, streaming:s.streaming };
       const phase = JSON.stringify([s.zone, s.ready, s.paused, s.ui?.active_menu, s.ui?.loading_visible, s.new_game_ready]);
       if (phase !== cache.phase) { cache.phase = phase; console.log(`HARDENING STATE: ${result.name} ${phase}`); }
     } catch { /* Ignore non-observation payloads. */ }
@@ -804,6 +882,11 @@ try {
         '--disable-component-update', '--force-device-scale-factor=1'] });
     report.browser = { executable, version: await browser.version(), headless: !options.headful };
     let source;
+    if (scenario === 'streaming') {
+      assert.equal(mode,'desktop','One allocated desktop streaming case only');
+      await runCase('desktop-streaming',false,streaming,
+        () => armFault('cold_hold',new URL(packs.packs.adjacent.url,origin).pathname.replace(/^\//,'')));
+    }
     if (['all', 'startup', 'smoke'].includes(scenario)) {
       const startupDelay = () => {
         if (scenario === 'startup' && options['delay-opening']) {

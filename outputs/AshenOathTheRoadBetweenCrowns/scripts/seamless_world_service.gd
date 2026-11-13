@@ -69,13 +69,18 @@ var _render_camera: Camera3D
 var _render_current: GeometryInstance3D
 var _render_layers := 0
 var _render_frame := -1
+var _render_drawn_frame := -1
 var _render_done := false
 var _render_requested_usec := 0
 var _last_render_delay_usec := 0
+var _render_groups: Dictionary = {}
+var _entry_render_started := false
+var _render_started_ms := 0
 var _layer_cursor := 0
 var _repeat_step := false
 var _configuration_ready := false
 var _neighbor_encounter_packs: Array[String] = []
+var _neighbor_journey_id := ""
 const PREPARATION_RENDER_LAYER := 1 << 19
 
 func configure(runtime_host: Node, stream_service: Node) -> void:
@@ -105,7 +110,7 @@ func _background_work_allowed() -> bool:
 		and not get_tree().paused and not host._journey_load_pending() \
 		and is_instance_valid(host.player) and host.player.can_control \
 		and not host.player.bow_aiming and not host._story_has_active_combat() \
-		and not host.opening_checkpoint_pending and not host.zone_transition_pending
+		and not host.zone_transition_pending
 
 func _construction_node_added(node: Node) -> void:
 	if _neighbor_scope != null and is_instance_valid(_neighbor_scope.owned_root) and _neighbor_scope.owned_root.is_ancestor_of(node):
@@ -122,7 +127,7 @@ func _process(delta: float) -> void:
 	if _foreground: return
 	if _neighbor_scope != null and (not is_instance_valid(_neighbor_scope.owned_root) or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced"))): cancel_preparation()
 	if get_tree().paused or host._journey_load_pending() or not is_instance_valid(host.player) or not host.player.can_control or host._story_has_active_combat(): return
-	if host.opening_checkpoint_pending or host.opening_detail_pending or host.zone_transition_pending: return
+	if host.opening_detail_pending or host.zone_transition_pending: return
 	if host.player.bow_aiming: return
 	_playable_seconds += delta
 	_build_cooldown = maxf(0.0, _build_cooldown - delta)
@@ -199,7 +204,7 @@ func _process(delta: float) -> void:
 func _record_job(target: String, state: String, error: String = "") -> void:
 	var job: Dictionary = _jobs.get(target,{})
 	job.merge({"state":state,"error":error,"quality":str(host.settings.settings.get("quality_preset","balanced")),
-		"generation":host.journey_arrival_generation},true)
+		"generation":host.journey_arrival_generation,"journey_id":str(host.save_manager.journey_id)},true)
 	if state == "failed" and str(job.get("last_error","")) != error:
 		job["retry_after"] = Time.get_ticks_msec()+30000
 		job["last_error"] = error
@@ -369,6 +374,7 @@ func _advance_preparation() -> void:
 	_added_nodes.clear()
 	var started := Time.get_ticks_usec()
 	var layers: Array[String] = ["gameplay", "decoration"]
+	if _neighbor_scope.zone_id == "greyfen": layers = ["gameplay"]
 	var attach_layer := _layer_cursor < layers.size()
 	var configure_runtime := not _configuration_ready
 	_repeat_step = false
@@ -406,7 +412,7 @@ func _advance_preparation() -> void:
 func _neighbor_dependencies_current() -> bool:
 	if _neighbor_scope == null: return false
 	if _neighbor_encounter_packs != host._zone_encounter_packs(_neighbor_scope.zone_id): return false
-	if _neighbor_scope.cancelled or _neighbor_scope.generation != host.journey_arrival_generation:
+	if _neighbor_scope.cancelled or _neighbor_journey_id != str(host.save_manager.journey_id):
 		return false
 	if _neighbor_epoch == _story_epoch: return true
 	# A partial build's recorded reads grow after every successful step. Only
@@ -423,6 +429,7 @@ func has_prepared(zone_id: String) -> bool:
 func _valid_cached_destination(zone_id: String, refresh: bool = false) -> bool:
 	var root: Node3D = host.route_zone_cache.get(zone_id)
 	if not is_instance_valid(root): return false
+	if root.has_meta("prepared_journey_id") and str(root.get_meta("prepared_journey_id")) != str(host.save_manager.journey_id): return false
 	if root.has_meta("prepared_encounter_packs") and root.get_meta("prepared_encounter_packs") != host._zone_encounter_packs(zone_id): return false
 	var quality := str(host.settings.settings.get("quality_preset","balanced"))
 	if refresh or root != _cached_root or _cached_epoch != _story_epoch or _cached_quality != quality:
@@ -488,8 +495,10 @@ func _begin_neighbor(target: String) -> void:
 	_neighbor_builder = builder_script.new()
 	_neighbor_quality = str(host.settings.settings.get("quality_preset","balanced"))
 	_neighbor_encounter_packs = host._zone_encounter_packs(target)
+	_neighbor_journey_id = str(host.save_manager.journey_id)
 	_neighbor_epoch = _story_epoch; _neighbor_step = 0; _neighbor_state = "building"; _neighbor_failure = ""
 	_layer_cursor = 0; _render_nodes.clear(); _render_done = false; _configuration_ready = false
+	_render_groups.clear(); _entry_render_started = false; _render_started_ms = 0
 	_record_job(target,"constructing")
 
 func _construction_steps() -> int:
@@ -536,6 +545,7 @@ func _build_neighbor_step(context: ZoneBuildContext) -> bool:
 		context.zone_root.set_meta("prepared_arrival_pending",true)
 		context.zone_root.set_meta("prepared_audio_complete",true)
 		context.zone_root.set_meta("prepared_encounter_packs",_neighbor_encounter_packs.duplicate())
+		context.zone_root.set_meta("prepared_journey_id",_neighbor_journey_id)
 		context.zone_root.set_meta("runtime_light_count",context.owned_fields.runtime_light_count)
 		_neighbor_state = "render_pending"; _neighbor_signature = host._zone_state_signature(context.zone_id)
 	return true
@@ -544,12 +554,43 @@ func _render_finished() -> void:
 	if _render_frame >= 0 and not _render_done:
 		_render_done = true
 		_last_render_delay_usec = Time.get_ticks_usec()-_render_requested_usec
-		if _last_render_delay_usec > 33000:
-			_build_cooldown = maxf(_build_cooldown,minf(0.25,float(_last_render_delay_usec)/500000.0))
+		# Do not charge the active world's normal frame time to each warm-up draw.
+		var extra := maxf(0.0,float(_last_render_delay_usec)-_frame_ms*1000.0)
+		if extra > 4000:
+			_build_cooldown = maxf(_build_cooldown,minf(0.10,extra/500000.0))
+
+func _entry_camera_transform() -> Transform3D:
+	var reverse := WorldSectorManifest.connection_between(_neighbor_scope.zone_id,str(host.current_zone_id))
+	if reverse.is_empty(): return Transform3D(Basis.IDENTITY,Vector3(0,2.5,10))
+	var frame := WorldSectorManifest.crossing_frame(reverse)
+	var outward := WorldSectorManifest.direction(str(reverse.id))
+	var eye := frame.origin+outward*3.0+Vector3.UP*2.5
+	return Transform3D(Basis.IDENTITY,eye).looking_at(frame.origin-outward*6.0+Vector3.UP,Vector3.UP)
+
+func _render_group_key(visual: GeometryInstance3D) -> String:
+	var mesh: Mesh
+	var key: Array = [visual.get_class(),visual.material_override.get_rid() if visual.material_override != null else RID()]
+	if visual is MeshInstance3D:
+		mesh = visual.mesh
+		key.append(visual.skin != null)
+		if mesh != null:
+			for surface in mesh.get_surface_count():
+				var material: Material = visual.get_active_material(surface)
+				key.append(material.get_rid() if material != null else RID())
+	elif visual is MultiMeshInstance3D and visual.multimesh != null:
+		mesh = visual.multimesh.mesh
+		key.append(visual.multimesh.use_colors)
+		key.append(visual.multimesh.use_custom_data)
+	if mesh != null: key.append(mesh.get_rid())
+	else: key.append(visual.get_instance_id())
+	return str(hash(key))
 
 func _advance_render_preparation() -> void:
 	if not is_instance_valid(_neighbor_view) or _neighbor_scope == null: return
-	if _render_frame >= 0 and not _render_done: return
+	if _render_started_ms == 0: _render_started_ms = Time.get_ticks_msec()
+	if _render_frame >= 0 and not _render_done:
+		if Engine.get_frames_drawn() > _render_drawn_frame: _render_done = true
+		else: return
 	if is_instance_valid(_render_current): _render_current.layers = _render_layers
 	_render_current = null; _render_frame = -1; _render_done = false
 	if not is_instance_valid(_render_camera):
@@ -557,6 +598,9 @@ func _advance_render_preparation() -> void:
 		_render_camera.cull_mask = PREPARATION_RENDER_LAYER
 		_neighbor_view.add_child(_render_camera); _render_camera.current = true
 		_neighbor_view.size = Vector2i(64,64)
+		preload("res://scripts/connected_route_geometry.gd").open_gate(_neighbor_scope.zone_root,str(host.current_zone_id),true)
+		_render_camera.global_transform = _entry_camera_transform()
+		_render_camera.far = 90.0
 	var started := Time.get_ticks_usec()
 	while not _render_nodes.is_empty():
 		var reference: WeakRef = _render_nodes.pop_back()
@@ -568,15 +612,38 @@ func _advance_render_preparation() -> void:
 			continue
 		if visual is MeshInstance3D and visual.mesh == null: continue
 		if visual is MultiMeshInstance3D and (visual.multimesh == null or visual.multimesh.mesh == null): continue
+		_render_camera.global_transform = _entry_camera_transform()
+		var bounds := visual.global_transform * visual.get_aabb()
+		var in_entry_view := _render_camera.is_position_in_frustum(bounds.get_center())
+		if not in_entry_view:
+			for corner in 8:
+				if _render_camera.is_position_in_frustum(bounds.get_endpoint(corner)):
+					in_entry_view = true; break
+		var key := _render_group_key(visual)
+		if not in_entry_view or _render_groups.has(key):
+			if Time.get_ticks_usec()-started >= BASE_SLICE_USEC: return
+			continue
+		_render_groups[key] = true
 		_render_current = visual; _render_layers = visual.layers
 		visual.layers = PREPARATION_RENDER_LAYER
-		var bounds := visual.get_aabb()
-		var center := visual.global_transform * bounds.get_center()
-		_render_camera.global_position = center+Vector3(0,0,maxf(2.0,bounds.size.length()*1.4))
+		var local_bounds := visual.get_aabb()
+		var center := visual.global_transform * local_bounds.get_center()
+		_render_camera.global_position = center+Vector3(0,0,maxf(2.0,local_bounds.size.length()*1.4))
 		_render_camera.look_at(center,Vector3.UP)
 		_neighbor_view.render_target_update_mode = SubViewport.UPDATE_ONCE
 		_render_frame = Engine.get_process_frames()
+		_render_drawn_frame = Engine.get_frames_drawn()
 		_render_requested_usec = Time.get_ticks_usec()
+		return
+	if not _entry_render_started:
+		# Draw the actual entry view once, not every object in the whole region.
+		# All world content already exists; this changes only preparation work.
+		_entry_render_started = true
+		_render_camera.global_transform = _entry_camera_transform()
+		_render_camera.cull_mask = (1 << 20)-1
+		_neighbor_view.render_target_update_mode = SubViewport.UPDATE_ONCE
+		_render_frame = Engine.get_process_frames(); _render_requested_usec = Time.get_ticks_usec()
+		_render_drawn_frame = Engine.get_frames_drawn()
 		return
 	_neighbor_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	_render_camera.queue_free(); _render_camera = null
@@ -655,7 +722,8 @@ func preparation_snapshot() -> Dictionary:
 		"selected_destination":str(_selected_connection.get("target","")),"selection_reason":_selection_reason,
 		"last_step_usec":_last_step_usec,"background_cooldown":_build_cooldown,
 		"frame_ms":_frame_ms,"unit_overruns":_unit_overruns,"jobs":_jobs.duplicate(true),
-		"render_groups_remaining":_render_nodes.size(),"last_render_delay_usec":_last_render_delay_usec},true)
+		"render_groups_remaining":_render_nodes.size(),"last_render_delay_usec":_last_render_delay_usec,
+		"render_unique_groups":_render_groups.size(),"entry_render_started":_entry_render_started},true)
 	return result
 
 func _exit_tree() -> void:
