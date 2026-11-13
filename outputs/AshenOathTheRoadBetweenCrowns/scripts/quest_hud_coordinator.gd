@@ -144,7 +144,7 @@ func _navigation_dial_markers(view: Dictionary, player: Node3D, zone_id: String,
 func _dial_candidate_eligible(candidate: Variant, zone_root: Node3D) -> bool:
 	if not _eligible(candidate):
 		return false
-	if bool(candidate.get_meta("seamless_exterior_gate", false)) or str(candidate.get("interaction_type")) == "blocked_zone":
+	if (bool(candidate.get_meta("seamless_exterior_gate", false)) and not bool(candidate.get_meta("interactive_road_entrance", false))) or str(candidate.get("interaction_type")) == "blocked_zone":
 		return false
 	return not is_instance_valid(zone_root) or zone_root.is_ancestor_of(candidate)
 

@@ -10,6 +10,8 @@ const BASE_SLICE_USEC := 500
 const PRIORITY_INTERVAL := 0.10
 const SWITCH_ADVANTAGE := 4.0
 const SWITCH_DWELL := 0.50
+const ROAD_INTENT_RADIUS := 8.0
+const AUTOMATIC_ROAD_RETRIES := 2
 
 signal boundary_transition_requested(source_zone: String, target_zone: String, edge_id: String)
 signal sector_activated(zone_id: String)
@@ -81,6 +83,9 @@ var _repeat_step := false
 var _configuration_ready := false
 var _neighbor_encounter_packs: Array[String] = []
 var _neighbor_journey_id := ""
+var _road_travel: Dictionary = {}
+var _road_travel_serial := 0
+var _road_commit_queued := false
 const PREPARATION_RENDER_LAYER := 1 << 19
 
 func configure(runtime_host: Node, stream_service: Node) -> void:
@@ -124,11 +129,17 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(host) or not host.game_started or host.resource_shutdown_prepared:
 		cancel_preparation(); return
 	_sync_resident_camera()
+	if host._journey_load_pending():
+		_clear_road_travel()
+		return
 	if _foreground: return
 	if _neighbor_scope != null and (not is_instance_valid(_neighbor_scope.owned_root) or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced"))): cancel_preparation()
 	if get_tree().paused or host._journey_load_pending() or not is_instance_valid(host.player) or not host.player.can_control or host._story_has_active_combat(): return
 	if host.opening_detail_pending or host.zone_transition_pending: return
 	if host.player.bow_aiming: return
+	if _road_travel_current() and has_prepared(str(_road_travel.target)) and not _road_commit_queued:
+		_road_commit_queued = true
+		_commit_road_travel.call_deferred(_road_travel_serial)
 	_playable_seconds += delta
 	_build_cooldown = maxf(0.0, _build_cooldown - delta)
 	if _playable_seconds < FIRST_CONTROL_GRACE: return
@@ -156,7 +167,9 @@ func _process(delta: float) -> void:
 	# cold destination, or has_prepared() can hold the return forever.
 	if _neighbor_scope == null:
 		var job: Dictionary = _jobs.get(target,{})
-		if str(job.get("state","")) == "failed": return
+		if str(job.get("state","")) == "failed":
+			if int(job.get("automatic_retries",0)) >= AUTOMATIC_ROAD_RETRIES or Time.get_ticks_msec() < int(job.get("retry_after",0)): return
+			request_road(target,true,true)
 		if host.runtime_packs != null:
 			var extras: Array[String] = host._zone_encounter_packs(target)
 			for pack_id: String in host.runtime_packs.required_zone_packs(target,extras):
@@ -239,18 +252,19 @@ func _cache_next_destination() -> void:
 		priorities = host.runtime_packs.required_zone_packs(str(_selected_connection.target),host._zone_encounter_packs(str(_selected_connection.target)))
 	host.runtime_packs.set_background_priorities(priorities)
 
-func request_road(target: String, retry: bool = false) -> bool:
+func request_road(target: String, retry: bool = false, automatic_retry: bool = false) -> bool:
 	var edge := WorldSectorManifest.connection_between(str(host.current_zone_id),target)
 	if edge.is_empty() or not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): return false
 	_selected_connection = edge
 	_selection_reason = "deliberate_road"
 	_challenger = ""; _challenger_elapsed = 0.0
 	if retry:
-		_jobs.erase(target)
+		var previous_job: Dictionary = _jobs.get(target,{})
+		_jobs[target] = {"state":"queued","error":"","automatic_retries":int(previous_job.get("automatic_retries",0))+1 if automatic_retry else 0}
 		if streaming_service != null and streaming_service.get_state(target) == "failed": streaming_service.cancel_request(target)
 		if host.runtime_packs != null:
 			for id: String in host.runtime_packs.required_zone_packs(target,host._zone_encounter_packs(target)):
-				if host.runtime_packs.get_state(id) == "failed":
+				if host.runtime_packs.get_state(id) in ["failed","cancelled"]:
 					host.runtime_packs.requests.erase(id)
 					host.runtime_packs.request_pack(id,500)
 	if not has_prepared(target) and Time.get_ticks_msec() >= _road_notice_after:
@@ -258,6 +272,50 @@ func request_road(target: String, retry: bool = false) -> bool:
 		host.hud.post_notice("Preparing the road to %s. You can keep exploring." % host._zone_display_name(target) if error.is_empty() else "Road preparation failed. Use the road to retry.","travel",2.5,"road_preparation")
 		_road_notice_after = Time.get_ticks_msec()+3000
 	return has_prepared(target)
+
+func request_road_travel(target: String, arrival: Vector3) -> bool:
+	var edge := WorldSectorManifest.connection_between(str(host.current_zone_id),target)
+	if edge.is_empty() or not WorldSectorManifest.edge_available(edge,host.quests,host.story_state):
+		host.hud.toast("That road is not open yet.")
+		return false
+	if not host.game_started or not is_instance_valid(host.player) or host._journey_load_pending(): return false
+	_road_travel_serial += 1
+	_road_commit_queued = false
+	_road_travel = {"source":str(host.current_zone_id),"target":str(edge.target),"arrival":arrival,
+		"anchor":host.player.global_position,"journey_id":str(host.save_manager.journey_id),
+		"quality":str(host.settings.settings.get("quality_preset","balanced"))}
+	request_road(str(edge.target),str((_jobs.get(str(edge.target),{}) as Dictionary).get("state","")) == "failed")
+	return true
+
+func _clear_road_travel() -> void:
+	if _road_travel.is_empty(): return
+	_road_travel.clear()
+	_road_travel_serial += 1
+	_road_commit_queued = false
+
+func _road_travel_current() -> bool:
+	if _road_travel.is_empty(): return false
+	var valid: bool = host.game_started and not host.resource_shutdown_prepared \
+		and is_instance_valid(host.player) and host.player.health_component.health > 0.0 \
+		and str(_road_travel.source) == str(host.current_zone_id) \
+		and str(_road_travel.journey_id) == str(host.save_manager.journey_id) \
+		and str(_road_travel.quality) == str(host.settings.settings.get("quality_preset","balanced"))
+	if valid:
+		valid = host.player.global_position.distance_squared_to(_road_travel.anchor) <= ROAD_INTENT_RADIUS*ROAD_INTENT_RADIUS \
+			and WorldSectorManifest.edge_available(WorldSectorManifest.connection_between(str(_road_travel.source),str(_road_travel.target)),host.quests,host.story_state)
+	if not valid: _clear_road_travel()
+	return valid
+
+func _commit_road_travel(serial: int) -> void:
+	if serial != _road_travel_serial: return
+	_road_commit_queued = false
+	if not _road_travel_current() or get_tree().paused or host._journey_load_pending(): return
+	if not host.player.can_control or host.player.bow_aiming or host._story_has_active_combat(): return
+	var target := str(_road_travel.target)
+	if not has_prepared(target): return
+	var arrival: Vector3 = _road_travel.arrival
+	_clear_road_travel()
+	host._request_zone_load(target,arrival)
 
 func _refresh_road_status() -> void:
 	if not is_instance_valid(host.zone_root): return
@@ -271,6 +329,13 @@ func _refresh_road_status() -> void:
 			status.state_label = "Retry road" if str(job.get("state","")) == "failed" else "Prepare road"
 		if not ready:
 			preload("res://scripts/connected_route_geometry.gd").close_gate(host.zone_root,str(edge.target),host.player.global_position)
+		var entrance: Node = host.zone_root.find_child("gate_"+str(edge.target),true,false)
+		if is_instance_valid(entrance) and bool(entrance.get_meta("interactive_road_entrance",false)):
+			var job: Dictionary = _jobs.get(str(edge.target),{})
+			var label := "Road closed" if not available else ("Retry travel" if str(job.get("state","")) == "failed" else ("Preparing" if str(_road_travel.get("target","")) == str(edge.target) and not ready else ""))
+			if entrance.state_label != label:
+				entrance.state_label = label
+				host.interaction_focus_dirty = true
 
 func _nearest_connection() -> Dictionary:
 	if not is_instance_valid(host.player): return {}
@@ -293,6 +358,9 @@ func _connection_distance(edge: Dictionary) -> float:
 
 func _preparation_connection() -> Dictionary:
 	var source := str(host.current_zone_id)
+	if _road_travel_current():
+		_selection_reason = "explicit_travel"
+		return WorldSectorManifest.connection_between(source,str(_road_travel.target))
 	var retained: Dictionary = {}
 	if _neighbor_scope != null:
 		retained = WorldSectorManifest.connection_between(source,_neighbor_scope.zone_id)
@@ -726,9 +794,11 @@ func preparation_snapshot() -> Dictionary:
 		"frame_ms":_frame_ms,"unit_overruns":_unit_overruns,"jobs":_jobs.duplicate(true),
 		"render_groups_remaining":_render_nodes.size(),"last_render_delay_usec":_last_render_delay_usec,
 		"render_unique_groups":_render_groups.size(),"entry_render_started":_entry_render_started},true)
+	result["requested_travel"] = str(_road_travel.get("target",""))
 	return result
 
 func _exit_tree() -> void:
+	_clear_road_travel()
 	cancel_preparation()
 	if is_instance_valid(host) and host.runtime_packs != null and host.runtime_packs.background_work_allowed == _background_work_allowed:
 		host.runtime_packs.background_work_allowed = Callable()
@@ -837,6 +907,7 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 	return true
 
 func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) -> void:
+	_clear_road_travel()
 	_sync_resident_camera()
 	var normalized := WorldSectorManifest.canonical(zone_id)
 	if current_sector != "" and current_sector != normalized and host != null and bool(host.get("game_started")) and host.get("progression") != null:

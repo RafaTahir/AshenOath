@@ -249,6 +249,9 @@ func _handle_interaction(area) -> void:
 		_mark_interaction_removed(area)
 		area.queue_free()
 	elif area.interaction_type == "zone":
+		if bool(area.get_meta("interactive_road_entrance", false)) and seamless_world != null:
+			seamless_world.request_road_travel(str(area.zone_target), area.get_meta("spawn_pos", Vector3.ZERO))
+			return
 		var portal := area.find_child("OathGatePortal", true, false) as OathGatePortal
 		if portal != null and portal.state != OathGatePortal.PortalState.READY:
 			hud.toast("The Oath Gate is still gathering the road beyond.")
@@ -354,7 +357,7 @@ func _connect_interactable(area, owner_root: Node3D = null, owner_cache: Array =
 	area.body_entered.connect(func(body: Node):
 		if root != zone_root or not is_instance_valid(root):
 			return
-		if body == player and is_instance_valid(area) and not area.is_queued_for_deletion() and not bool(area.get_meta("seamless_exterior_gate", false)) and area not in interaction_candidates:
+		if body == player and is_instance_valid(area) and not area.is_queued_for_deletion() and (not bool(area.get_meta("seamless_exterior_gate", false)) or bool(area.get_meta("interactive_road_entrance", false))) and area not in interaction_candidates:
 			if interaction_focus != null:
 				interaction_focus.register(area)
 			interaction_candidates.append(area)
@@ -379,7 +382,7 @@ func _update_interaction_focus() -> void:
 		if candidate == null or not is_instance_valid(candidate):
 			interaction_candidates.remove_at(index)
 			continue
-		if bool(candidate.get_meta("seamless_exterior_gate", false)):
+		if bool(candidate.get_meta("seamless_exterior_gate", false)) and not bool(candidate.get_meta("interactive_road_entrance", false)):
 			interaction_candidates.remove_at(index)
 	var camera: Camera3D = _host.get_viewport().get_camera_3d()
 	var best = zone_runtime_coordinator.choose_interaction(interaction_candidates, player, camera, Callable(_host, "_interaction_target_valid")) if zone_runtime_coordinator != null else null
@@ -437,7 +440,7 @@ func _refresh_interaction_candidates() -> void:
 			continue
 		if not candidate.is_visible_in_tree() or (candidate.has_method("is_interaction_enabled") and not candidate.is_interaction_enabled()):
 			continue
-		if bool(candidate.get_meta("seamless_exterior_gate", false)):
+		if bool(candidate.get_meta("seamless_exterior_gate", false)) and not bool(candidate.get_meta("interactive_road_entrance", false)):
 			continue
 		var candidate_type := str(candidate.get("interaction_type"))
 		var range_limit := 3.6 if candidate_type in ["zone", "dialogue"] else 2.8

@@ -6,6 +6,14 @@ Scope: finish and establish acceptance of the retained game, not replace it.
 
 ## Current Streaming Work - 2026-11-13
 
+2026-11-14 follow-up under FINISH-001/005/014/016: repair ordinary road entrance
+Use, retained explicit travel requests and bounded failed-preparation retries.
+The earlier physical-walking checks did not cover this entrance path, and the
+creator reports travel still blocked. Six owners compile after static repair;
+no additional runtime allocation is inferred or used. See the current entrance
+section in the cohesive-game record. Build, Git publication and user acceptance
+remain separate; no whole FINISH acceptance or numerical performance pass.
+
 Approved proximity-driven background streaming extends FINISH-001/005/014/016
 from `a29972e` on `codex/art-recovery-anwen`. It does not wait for Wychwood at
 initial control, preload all complete worlds, or accept a full FINISH ticket.

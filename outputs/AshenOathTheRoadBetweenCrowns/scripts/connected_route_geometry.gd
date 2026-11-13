@@ -115,7 +115,16 @@ static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
 		var marker := context.zone_root.find_child("gate_"+str(edge.target),true,false) as Node3D
 		if marker == null:
 			marker = context.make_zone_gate("Road to "+str(edge.target).replace("_"," ").capitalize(),source_points[0],str(edge.target),Vector3.ZERO)
-		if marker != null: marker.position = source_points[0]
+		if marker != null:
+			marker.position = source_points[0]
+			var entrance := marker as Area3D
+			if entrance != null and str(entrance.get("interaction_type")) == "zone":
+				# Authored/cached scene markers need the same entrance contract as
+				# gates made by the procedural builder.
+				entrance.set_meta("interactive_road_entrance",true)
+				entrance.set_interaction_enabled(true)
+				entrance.set_deferred("monitoring",true)
+				entrance.set_deferred("monitorable",true)
 
 static func _route_style(edge: Dictionary) -> String:
 	var pair: Array = [str(edge.source),str(edge.target)]

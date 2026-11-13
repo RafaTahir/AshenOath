@@ -1089,14 +1089,14 @@ func _make_zone_gate(prompt: String, pos: Vector3, zone_target: String, spawn_po
 		area.set_meta("homecoming_route", true)
 		return area
 	if seamless_world != null and seamless_world.should_suppress_exterior_gate(current_zone_id, zone_target):
-		# Exterior travel is now driven by the sector boundary, not an in-world
-		# portal. Keep the Area3D as a named migration marker for old saves, but
-		# remove its focus/collision path so it cannot steal interaction priority.
+		# Retain walking crossings and a usable entrance action. A player should
+		# not need to discover the far end of a dogleg to request this journey.
 		area.set_meta("seamless_exterior_gate", true)
+		area.set_meta("interactive_road_entrance", true)
+		area.display_name = coordinator._zone_display_name(zone_target)
+		area.prompt = "Travel " + area.display_name
 		if not WorldSectorManifest.is_exterior(current_zone_id) or not WorldSectorManifest.is_exterior(zone_target):
 			area.set_meta("interior_door",true)
-		area.monitoring = false
-		area.monitorable = false
 		return area
 	if seamless_world != null and seamless_world.should_use_physical_door(current_zone_id, zone_target):
 		area.set_meta("interior_door", true)

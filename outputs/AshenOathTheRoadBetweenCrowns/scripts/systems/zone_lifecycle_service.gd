@@ -14,7 +14,13 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 			return
 		zone_id = str(request.get("zone_id", zone_id))
 		spawn_pos = request.get("spawn_position", spawn_pos)
-	if _wait_for_playable_road(zone_id,true): return
+	var road := WorldSectorManifest.connection_between(current_zone_id,zone_id)
+	if game_started and not road.is_empty() and not WorldSectorManifest.edge_available(road,quests,story_state):
+		hud.toast("That road is not open yet.")
+		return
+	if _wait_for_playable_road(zone_id,true):
+		seamless_world.request_road_travel(zone_id,spawn_pos)
+		return
 	zone_load_request_pending = true
 	requested_zone_id = zone_id.strip_edges().to_lower()
 	requested_zone_spawn = spawn_pos

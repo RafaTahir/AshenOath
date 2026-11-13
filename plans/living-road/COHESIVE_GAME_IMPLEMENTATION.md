@@ -2,6 +2,42 @@
 
 ## Proximity-Driven Streaming - 2026-11-13
 
+### Road Entrance Requests - 2026-11-14
+
+The creator still could not leave the village after `d407e04`, and directed a
+repair without more questions. Read-only production identity inspection confirms
+the live manifest is the r3/`cc35158` package, not an older rollout. Adjacent,
+campaign and actor pack URLs respond HTTP 200; raw adjacent headers include the
+expected gzip encoding. No Vercel settings were changed.
+
+The previous walking checks did not cover ordinary entrance Use. Source review
+finds that connected gates were explicitly removed from interaction targeting and
+monitoring. `_request_zone_load()` also discarded an explicit request after
+asking for background preparation. A player could neither use the normal gate
+nor rely on that request completing. Failed jobs recorded a retry time which the
+background scheduler never consumed. These are additional source-confirmed
+defects; the earlier narrow functional passes do not establish whole-road access.
+
+Connected entrances now retain their existing IDs, physical routes and door
+presentation while joining the normal nearby interaction index. This applies to
+procedural and authored scene markers. Explicit Travel is retained by the
+existing seamless service, pins destination selection, and uses the existing
+activation path once complete readiness is true. No modal road loader is added.
+Leaving the local entrance, death, quality/journey changes, a closed story gate
+or another journey load invalidates the intent; deferred completion checks its
+serial and ordinary control/dialogue/combat ownership. No menu preparation can
+start a journey. Manual retry remains available; failed jobs get at most two
+automatic retries after their existing backoff rather than permanent silence.
+
+All six changed GDScript owners pass check-only compilation. An initial inferred
+Node type compilation failure was corrected before the final compiler passes.
+No new game/browser run, screenshot, benchmark, automated test or fixture is
+authorized or performed in this continuation. Prior run evidence stays scoped to
+its exact packages; entrance-use behavior and runtime acceptance of this repair
+remain unverified. Content, population, quality, saves and story gates are retained.
+Build and package identity will be recorded before one Git publication; Vercel
+deploys automatically, without a CLI deployment or rollout wait.
+
 ### Blocked-Road Follow-Up
 
 The creator reported that roads remained blocked and authorized one focused
