@@ -38,6 +38,16 @@ remain unverified. Content, population, quality, saves and story gates are retai
 Build and package identity will be recorded before one Git publication; Vercel
 deploys automatically, without a CLI deployment or rollout wait.
 
+Candidate `proximity-streaming-entrance-20261114-622add7-r1`, source `622add7`,
+passes base/Web production export, metadata authority and full package integrity:
+55 files, **173,593,931 bytes (165.552 MiB)**. Asset-pack content is unchanged.
+Root transport SHA-256:
+`e647eec5f3f9d3d93baf24a3fe91bd6bedee3c4db6bc5316b65685573a5c498e`.
+Release manifest SHA-256:
+`b50e0bd3ec315a8c4172751de6816b897f363dffcab237b1385d9afb2fca5b19`.
+Select these exact bytes for the authorized Git push. Compilation/publication
+does not convert the prior walking evidence into a runtime entrance-Use pass.
+
 ### Blocked-Road Follow-Up
 
 The creator reported that roads remained blocked and authorized one focused

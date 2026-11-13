@@ -14,6 +14,12 @@ no additional runtime allocation is inferred or used. See the current entrance
 section in the cohesive-game record. Build, Git publication and user acceptance
 remain separate; no whole FINISH acceptance or numerical performance pass.
 
+The entrance repair production package `proximity-streaming-entrance-20261114-622add7-r1`
+has compiled and passed complete 55-file integrity at 173,593,931 bytes, with
+unchanged asset-pack content. It is selected for one combined Git publication.
+Runtime entrance-use acceptance remains unverified; earlier walking evidence
+is not extended to new behavior by compilation or publication.
+
 Approved proximity-driven background streaming extends FINISH-001/005/014/016
 from `a29972e` on `codex/art-recovery-anwen`. It does not wait for Wychwood at
 initial control, preload all complete worlds, or accept a full FINISH ticket.
