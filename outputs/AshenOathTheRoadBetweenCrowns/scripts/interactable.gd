@@ -20,6 +20,7 @@ const PROMPT_VERBS := {
 	"Enter ": "Enter", "Use ": "Use", "Open ": "Open", "Return to ": "Return to",
 	"Back to ": "Return to", "Travel ": "Travel", "Take ": "Take", "Set ": "Set",
 	"Recover ": "Recover", "Identify ": "Identify", "Examine ": "Examine",
+	"Prepare road to ": "Prepare road",
 	"Keep ": "Keep", "Choose ": "Choose", "Report ": "Report", "Follow ": "Follow",
 	"Walk ": "Walk", "Visit ": "Visit", "Name ": "Name", "Lay down ": "Lay down", "Confess ": "Confess",
 	"Sit at ": "Sit at", "Draw from ": "Draw from", "Buy ": "Buy"
@@ -89,6 +90,9 @@ func get_prompt_model() -> Dictionary:
 	if interaction_id == "sister_anwen":
 		verb = "Speak"
 		subject = "Sister Anwen"
+	if interaction_type == "road_status":
+		return {"target_id":interaction_id,"verb":state_label if not state_label.is_empty() else "Prepare road",
+			"subject":display_name,"state":"","available":is_interaction_enabled(),"legacy_text":get_context_prompt(),"action":"interact"}
 	return {"target_id":interaction_id, "verb":verb, "subject":subject, "state":state_label, "available":is_interaction_enabled(), "legacy_text":get_context_prompt(), "action":"interact"}
 
 func _extract_display_name(prompt_text: String, fallback_id: String) -> String:

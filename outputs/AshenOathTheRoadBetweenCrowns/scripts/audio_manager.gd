@@ -12,6 +12,8 @@ var voices = {}
 var voice_texts = {}
 var music = {}
 var ambient_streams = {}
+var streamed_audio_zone := ""
+var streamed_music_states: Dictionary = {}
 const SHARED_MUSIC := ["main_menu"]
 const AUTHORIZED_ARRANGEMENTS := {"greyfen_explore":"greyfen_belonging", "wychwood_tension":"road_uncertainty", "ghoulkin_combat":"hold_the_road"}
 var prepared_audio_zone := ""
@@ -336,6 +338,24 @@ func prepare_destination(zone_id: String, state: Node = null) -> void:
 	_ambient_stream(zone_id)
 	_prune_inactive_region_streams()
 
+func prepare_streamed_destination(zone_id: String, stage: int, state: Node = null) -> void:
+	if streamed_audio_zone != zone_id:
+		streamed_music_states.clear()
+		streamed_audio_zone = zone_id
+	if stage < 2:
+		var id := music_state_for_zone(zone_id) if stage == 0 else _story_music_state(state,zone_id)
+		if not id.is_empty():
+			streamed_music_states[id] = true
+			if not music.has(id): _build_music_state(id)
+	else:
+		_ambient_stream(zone_id)
+	_prune_inactive_region_streams()
+
+func release_streamed_destination(zone_id: String) -> void:
+	if streamed_audio_zone != zone_id: return
+	streamed_audio_zone = ""; streamed_music_states.clear()
+	_prune_inactive_region_streams()
+
 func _prune_inactive_region_streams() -> void:
 	# Players retain both sides of a crossfade. Retirement never stops playback,
 	# evicts voices or clears shared event cues.
@@ -349,12 +369,12 @@ func _prune_inactive_region_streams() -> void:
 			retained[player.stream.get_instance_id()] = true
 	for id in music.keys():
 		var stream: AudioStream = music[id]
-		if id not in SHARED_MUSIC and not prepared_music_states.has(id) and id != prepared_encounter_state \
+		if id not in SHARED_MUSIC and not prepared_music_states.has(id) and not streamed_music_states.has(id) and id != prepared_encounter_state \
 				and (stream == null or not retained.has(stream.get_instance_id())):
 			music.erase(id)
 	for zone_id in ambient_streams.keys():
 		var stream: AudioStream = ambient_streams[zone_id]
-		if zone_id not in ["greyfen", "wychwood", prepared_audio_zone] \
+		if zone_id not in ["greyfen", "wychwood", prepared_audio_zone, streamed_audio_zone] \
 				and (stream == null or not retained.has(stream.get_instance_id())):
 			ambient_streams.erase(zone_id)
 

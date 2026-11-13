@@ -4,6 +4,8 @@ extends Node3D
 ## on the coordinator; mutable construction state belongs to this root.
 var coordinator: Node
 var context: ZoneBuildContext
+var _stream_environment_units: Array[Callable] = []
+var _stream_environment_cursor := 0
 
 var active_enemies: Array:
 	get: return context.owned_fields["active_enemies"]
@@ -1776,8 +1778,36 @@ func flush_environment_batch_step(phase: int) -> void:
 	if phase == 6:
 		environment_batches_flushed = true
 
-func _publish_environment_0() -> void:
-	preload("res://scripts/connected_route_geometry.gd").install(ZoneBuildContext.new(self,current_zone_id))
+func flush_environment_next_unit() -> bool:
+	if _stream_environment_units.is_empty():
+		var routes: Array[Dictionary] = preload("res://scripts/world_sector_manifest.gd").connections(current_zone_id,story_state)
+		for index in routes.size():
+			_stream_environment_units.append(_publish_connected_route.bind(index))
+		_stream_environment_units.append(_publish_environment_0.bind(false))
+		_stream_environment_units.append(_publish_environment_1)
+		for key in house_batch_data: _stream_environment_units.append(_publish_environment_2.bind(str(key)))
+		for key in house_module_batch_data: _stream_environment_units.append(_publish_environment_3.bind(str(key)))
+		for key in prop_batch_data: _stream_environment_units.append(_publish_environment_4.bind(str(key)))
+		_stream_environment_units.append(_publish_environment_5)
+		var ecology: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_ecology.json"))
+		if ecology is Dictionary:
+			var sightings: Array = ecology.get("sightings",[])
+			for index in sightings.size():
+				if str(sightings[index].zone) == current_zone_id:
+					_stream_environment_units.append(_build_design_pack_ecology.bind(index))
+		_stream_environment_units.append(_publish_environment_6.bind(false))
+	if _stream_environment_cursor < _stream_environment_units.size():
+		_stream_environment_units[_stream_environment_cursor].call()
+		_stream_environment_cursor += 1
+	var complete := _stream_environment_cursor >= _stream_environment_units.size()
+	if complete: environment_batches_flushed = true
+	return complete
+
+func _publish_connected_route(index: int) -> void:
+	preload("res://scripts/connected_route_geometry.gd").install(context,index)
+
+func _publish_environment_0(install_routes: bool = true) -> void:
+	if install_routes: preload("res://scripts/connected_route_geometry.gd").install(ZoneBuildContext.new(self,current_zone_id))
 	var terrain_groups: Dictionary = {}
 	for item in terrain_patch_batch_data:
 		var terrain_key := str(item.material.get_instance_id())
@@ -1858,8 +1888,9 @@ func _publish_environment_1() -> void:
 			marker.queue_free()
 		_upload_static_batch(detail_batch, detail_transforms, detail_colors)
 
-func _publish_environment_2() -> void:
+func _publish_environment_2(only_key: String = "") -> void:
 	for house_key in house_batch_data:
+		if not only_key.is_empty() and str(house_key) != only_key: continue
 		var house_group: Dictionary = house_batch_data[house_key]
 		var house_transforms: Array = house_group.transforms
 		if house_transforms.is_empty():
@@ -1876,8 +1907,9 @@ func _publish_environment_2() -> void:
 			house_batch.set_meta("night_window_color", house_group.material.albedo_color)
 		_upload_static_batch(house_batch, house_transforms, house_group.colors)
 
-func _publish_environment_3() -> void:
+func _publish_environment_3(only_key: String = "") -> void:
 	for batch_key in house_module_batch_data:
+		if not only_key.is_empty() and str(batch_key) != only_key: continue
 		var module_group: Dictionary = house_module_batch_data[batch_key]
 		var module_transforms: Array = module_group.transforms
 		if module_transforms.is_empty():
@@ -1893,8 +1925,9 @@ func _publish_environment_3() -> void:
 		module_batch.material_override = null
 		_upload_static_batch(module_batch, module_transforms)
 
-func _publish_environment_4() -> void:
+func _publish_environment_4(only_key: String = "") -> void:
 	for batch_key in prop_batch_data:
+		if not only_key.is_empty() and str(batch_key) != only_key: continue
 		var entry: Dictionary = prop_batch_data[batch_key]
 		var transforms: Array = entry.get("transforms", [])
 		if transforms.is_empty():
@@ -1927,8 +1960,8 @@ func _publish_environment_5() -> void:
 		_upload_static_batch(trunks, trunk_transforms)
 		_upload_static_batch(crowns, crown_transforms, crown_colors)
 
-func _publish_environment_6() -> void:
-	_build_design_pack_ecology()
+func _publish_environment_6(include_ecology: bool = true) -> void:
+	if include_ecology: _build_design_pack_ecology()
 	if not deadfall_batch_data.is_empty():
 		var deadfall_mesh := CylinderMesh.new()
 		deadfall_mesh.top_radius = 0.16
@@ -1938,12 +1971,15 @@ func _publish_environment_6() -> void:
 		var deadfalls := _make_multimesh_batch("DeadfallBatch", deadfall_mesh, deadfall_batch_data.size(), world_materials.get_material("timber", str(settings.settings.get("quality_preset", "balanced")), Color(0.34, 0.25, 0.17), 0.0, false))
 		_upload_static_batch(deadfalls, deadfall_batch_data)
 
-func _build_design_pack_ecology() -> void:
+func _build_design_pack_ecology(only_index: int = -1) -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_ecology.json"))
 	if not data is Dictionary:
 		push_error("Required design-pack ecology data is unavailable")
 		return
-	for sighting: Dictionary in data.get("sightings", []):
+	var sightings: Array = data.get("sightings",[])
+	for index in sightings.size():
+		if only_index >= 0 and index != only_index: continue
+		var sighting: Dictionary = sightings[index]
 		if str(sighting.zone) != current_zone_id:
 			continue
 		var id := "design_ecology:" + str(sighting.role)
@@ -4224,8 +4260,8 @@ func _make_hut(pos: Vector3) -> void:
 func _clear_environment_batch_buffers() -> void:
 	coordinator._clear_environment_batch_buffers()
 
-func _validate_zone_render_resources(root: Node) -> Dictionary:
-	return coordinator._validate_zone_render_resources(root)
+func _validate_zone_render_resources(root: Node, descendants: bool = true) -> Dictionary:
+	return coordinator._validate_zone_render_resources(root, descendants)
 
 func _make_hit_spark(pos: Vector3, heavy: bool) -> void:
 	coordinator._make_hit_spark(pos, heavy)

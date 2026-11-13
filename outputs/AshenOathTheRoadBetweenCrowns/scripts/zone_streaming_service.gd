@@ -27,6 +27,7 @@ var owner_node: Node
 var topology: Dictionary = {}
 var resource_requests = SharedResourceRequests.acquire()
 var _status_poll_accumulator := 0.0
+var focused_destination := ""
 const STATUS_POLL_INTERVAL := 0.10
 
 func _ready() -> void:
@@ -44,17 +45,16 @@ func neighbors(zone_id: String) -> Array[String]:
 	return WorldSectorManifest.neighbors(zone_id,owner_node.get("story_state") if is_instance_valid(owner_node) else null)
 
 func prewarm_neighbors(zone_id: String) -> void:
-	var packs = owner_node.get("runtime_packs") if is_instance_valid(owner_node) else null
-	for neighbor in neighbors(zone_id):
-		# Opportunistic imports must not download every adjacent world's content.
-		# The nearest connection and explicit travel own missing-pack requests.
-		if packs != null and not packs.zone_packs_ready(neighbor):
-			continue
-		request_zone(neighbor)
+	# Proximity scheduling owns decoded resources. Merely mounting a shared pack
+	# must not start importing every neighboring scene on the arrival frame.
 	var keep_ids: Array[String] = []
 	keep_ids.append(zone_id.strip_edges().to_lower())
 	keep_ids.append_array(neighbors(zone_id))
 	retire_unneeded_zones(keep_ids)
+
+func set_focus_destination(zone_id: String) -> void:
+	focused_destination = zone_id
+	set_process(true)
 
 func get_resource(zone_id: String) -> Resource:
 	return requests.get(zone_id.strip_edges().to_lower(), {}).get("resource") as Resource
@@ -74,7 +74,7 @@ func request_zone(zone_id: String, resource_path: String = "") -> void:
 		requests[id] = {"state": "failed", "progress": 0.0}
 		zone_failed.emit(id, "No resource preparation registered for zone")
 		return
-	requests[id] = {"state": "waiting_pack", "progress": 0.0, "resource": null, "paths": paths, "resources": {}}
+	requests[id] = {"state": "waiting_pack", "progress": 0.0, "resource": null, "paths": paths, "resources": {}, "current_path":""}
 	var packs = owner_node.get("runtime_packs") if is_instance_valid(owner_node) else null
 	if packs != null:
 		for pack_id in packs.required_zone_packs(canonical):
@@ -84,6 +84,7 @@ func request_zone(zone_id: String, resource_path: String = "") -> void:
 	zone_progress.emit(id, 0.0)
 
 func _begin_request(id: String) -> void:
+	if not focused_destination.is_empty() and id != focused_destination: return
 	var packs = owner_node.get("runtime_packs") if is_instance_valid(owner_node) else null
 	if packs != null and not packs.zone_packs_ready(id):
 		var failures: Array[String] = packs.zone_pack_failures(id)
@@ -91,7 +92,9 @@ func _begin_request(id: String) -> void:
 			_fail_request(id, "Required packs failed: %s" % ", ".join(failures))
 		return
 	var request: Dictionary = requests[id]
+	if not str(request.get("current_path","")).is_empty(): return
 	for path in request.paths:
+		if request.resources.has(path): continue
 		if not ResourceLoader.exists(path):
 			_fail_request(id, "Missing resource: %s" % path)
 			return
@@ -99,6 +102,8 @@ func _begin_request(id: String) -> void:
 		if error != OK:
 			_fail_request(id, "Unable to request %s: %s" % [path, error_string(error)])
 			return
+		request["current_path"] = path
+		break
 	request.state = "loading"
 
 func request_zone_for_portal(zone_id: String) -> bool:
@@ -136,6 +141,7 @@ func clear_requests() -> void:
 		_release_request(str(id), true)
 	requests.clear()
 	_status_poll_accumulator = 0.0
+	focused_destination = ""
 	set_process(false)
 
 func _release_request(id: String, drain: bool = false) -> void:
@@ -180,11 +186,15 @@ func _process(delta: float) -> void:
 			if request.resources.has(path):
 				total += 1.0
 				continue
+			if str(request.get("current_path","")) != path:
+				complete = false
+				continue
 			var progress: Array = []
 			var status: int = resource_requests.status(path, progress)
 			total += float(progress[0]) if not progress.is_empty() else 0.0
 			if status == ResourceLoader.THREAD_LOAD_LOADED:
 				request.resources[path] = resource_requests.take(path, self, str(id))
+				request["current_path"] = ""
 			elif status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 				complete = false
 			else:
@@ -206,6 +216,8 @@ func _process(delta: float) -> void:
 			request["resource"] = resource
 			requests[id] = request
 			zone_ready.emit(str(id), resource)
+		else:
+			_begin_request(str(id))
 	if not pending:
 		set_process(false)
 

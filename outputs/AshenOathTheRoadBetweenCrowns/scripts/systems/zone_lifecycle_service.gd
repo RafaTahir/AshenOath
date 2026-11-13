@@ -14,6 +14,7 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 			return
 		zone_id = str(request.get("zone_id", zone_id))
 		spawn_pos = request.get("spawn_position", spawn_pos)
+	if _wait_for_playable_road(zone_id,true): return
 	zone_load_request_pending = true
 	requested_zone_id = zone_id.strip_edges().to_lower()
 	requested_zone_spawn = spawn_pos
@@ -28,6 +29,7 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 	if zone_transition_pending or zone_load_request_pending or player == null:
 		return false
 	var target := zone_id.strip_edges().to_lower()
+	if _wait_for_playable_road(target): return false
 	if zone_runtime_coordinator != null and (seamless_world == null or seamless_world.crossing_for(target).is_empty()):
 		var request := zone_runtime_coordinator.normalize_zone_request(target, spawn_pos)
 		if not bool(request.get("ok", false)):
@@ -46,6 +48,13 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 	# A complete neighbor is reused; a cold destination keeps its honest,
 	# cancellable preparation presentation instead of freezing an old frame.
 	_perform_direct_zone_load(target, spawn_pos)
+	return true
+
+func _wait_for_playable_road(target: String, retry: bool = false) -> bool:
+	if not game_started or seamless_world == null or not is_instance_valid(zone_root): return false
+	if WorldSectorManifest.connection_between(current_zone_id,target).is_empty(): return false
+	if seamless_world.has_prepared(target): return false
+	seamless_world.request_road(target,retry)
 	return true
 
 func _perform_direct_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
@@ -80,6 +89,9 @@ func _zone_encounter_packs(zone_id: String, recorded_journey: Dictionary = {}) -
 	return encounter_packs
 
 func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
+	if _wait_for_playable_road(zone_id):
+		if is_instance_valid(player): player.set_transition_locked(false)
+		return
 	_ensure_gameplay_runtime()
 	var encounter_packs := _zone_encounter_packs(zone_id)
 	if _zone_requires_campaign_pack(zone_id):
@@ -468,26 +480,12 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		_recover_failed_pack_load("The destination's community story could not be prepared. Your current road remains open.")
 		return
 	_begin_gameplay_handoff("zone_activation")
-	var paired_crossing := game_started and seamless_world != null and current_zone_id != zone_id and not journey_loading.pending(_host) and ZoneCompositionRouter.supports(zone_id)
+	var paired_crossing := game_started and seamless_world != null and current_zone_id != zone_id and not journey_loading.pending(_host) and not WorldSectorManifest.connection_between(current_zone_id,zone_id).is_empty()
 	if paired_crossing and seamless_world != null and is_instance_valid(zone_root) and is_instance_valid(player) and not seamless_world.has_prepared(zone_id):
-		neighbor_crossing_pending = true
-		neighbor_crossing_was_paused = _host.get_tree().paused
-		_host.get_tree().paused = true
-		audio.set_game_paused(true)
-		var serial := zone_pack_request_serial
-		hud.begin_journey_load({"summary":{"title":"the road into " + _zone_display_name(zone_id)}})
-		var ready: bool = await seamless_world.finish_preparation(zone_id,func(): return neighbor_crossing_pending and serial == zone_pack_request_serial and not resource_shutdown_prepared)
-		if not neighbor_crossing_pending or serial != zone_pack_request_serial: return
-		neighbor_crossing_pending = false
-		_host.get_tree().paused = neighbor_crossing_was_paused
-		audio.set_game_paused(neighbor_crossing_was_paused)
-		if not ready:
-			# Opportunistic preparation must never become the only way out of a
-			# region. The normal coordinator still validates the complete build
-			# and rolls back to this world if that authoritative load fails.
-			print("TRAVEL: neighbor preparation unavailable for %s: %s; using normal destination construction" % [zone_id,seamless_world.preparation_snapshot().get("failure","")])
-		neighbor_arrival_pending = true
-		hud.set_journey_load_applying("Entering " + _zone_display_name(zone_id) + "...")
+		seamless_world.request_road(zone_id)
+		player.set_transition_locked(false)
+		_finish_gameplay_handoff()
+		return
 	zone_runtime_coordinator.load_zone(zone_id, spawn_pos)
 	_finish_gameplay_handoff()
 

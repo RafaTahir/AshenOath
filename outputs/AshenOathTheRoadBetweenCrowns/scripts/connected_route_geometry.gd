@@ -44,11 +44,13 @@ static func open_authored_door(door: MeshInstance3D) -> void:
 	hinge.rotation.y = PI*0.5
 	door.set_meta("hinged_authored_door",true)
 
-static func install(context: ZoneBuildContext) -> void:
-	if context.zone_root.has_node("ConnectedRoads"): return
-	var roads := Node3D.new()
-	roads.name = "ConnectedRoads"
-	context.add_node(roads)
+static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
+	var roads := context.zone_root.get_node_or_null("ConnectedRoads") as Node3D
+	if is_instance_valid(roads) and only_edge < 0: return
+	if not is_instance_valid(roads):
+		roads = Node3D.new()
+		roads.name = "ConnectedRoads"
+		context.add_node(roads)
 	var stone := context.zone_id in ["vargan_approach","vargan_court","record_hall","undercroft"]
 	var ground := context.make_world_material("cobblestone" if stone else "forest_ground",Color(0.43,0.47,0.40)).duplicate() as BaseMaterial3D
 	var banks := context.make_world_material("medieval_brick" if stone else "forest_ground",Color(0.39,0.43,0.35)).duplicate() as BaseMaterial3D
@@ -57,7 +59,11 @@ static func install(context: ZoneBuildContext) -> void:
 	var timber := context.make_world_material("timber",Color(0.52,0.45,0.32))
 	var masonry := context.make_world_material("medieval_brick",Color(0.60,0.61,0.55)).duplicate() as BaseMaterial3D
 	masonry.cull_mode = BaseMaterial3D.CULL_DISABLED
-	for edge: Dictionary in Sectors.connections(context.zone_id,context.story_state):
+	var edges: Array[Dictionary] = Sectors.connections(context.zone_id,context.story_state)
+	for edge_index in edges.size():
+		if only_edge >= 0 and edge_index != only_edge: continue
+		var edge: Dictionary = edges[edge_index]
+		if roads.has_node("RoadTo_"+str(edge.target)): continue
 		var path := Node3D.new()
 		path.name = "RoadTo_"+str(edge.target)
 		path.set_meta("connected_target",str(edge.target))
@@ -301,6 +307,14 @@ static func _make_gate(parent: Node3D, edge: Dictionary, half: float, material: 
 	var shape := CollisionShape3D.new()
 	var box := preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(half*2,4.5,0.18))
 	shape.shape = box; body.add_child(shape); leaf.add_child(body)
+	var status := preload("res://scripts/interactable.gd").new()
+	status.setup("road_status_"+str(edge.target),"road_status","Prepare road to "+str(edge.target).replace("_"," ").capitalize())
+	status.name = "RoadPreparation"
+	status.zone_target = str(edge.target)
+	status.display_name = str(edge.target).replace("_"," ").capitalize()
+	status.position = Vector3(0,0.9,-1.6)
+	status.build_collision(1.8)
+	gate.add_child(status)
 
 static func open_gate(root: Node3D, target: String, instant: bool) -> void:
 	var gate := root.get_node_or_null("ConnectedRoads/RoadTo_"+target+"/TravelGate") as Node3D

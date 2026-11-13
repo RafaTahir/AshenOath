@@ -3,6 +3,9 @@ extends "res://scripts/systems/game_bindings.gd"
 signal interaction_focus_updated(target: Node)
 
 func _handle_interaction(area) -> void:
+	if area != null and area.interaction_type == "road_status":
+		if seamless_world != null: seamless_world.request_road(str(area.zone_target),true)
+		return
 	if preload("res://scripts/story_activity_director.gd").handle_community(_host, area): return
 	if current_zone_id == "greyfen" and area != null:
 		preload("res://scripts/greyfen_guidance.gd").learn(_host, "use")

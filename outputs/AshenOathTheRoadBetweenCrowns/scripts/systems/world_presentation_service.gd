@@ -605,7 +605,7 @@ func _ensure_mesh_surface_materials(mesh: Mesh, fallback: Material) -> int:
 			applied += 1
 	return applied
 
-func _validate_zone_render_resources(root: Node) -> Dictionary:
+func _validate_zone_render_resources(root: Node, descendants: bool = true) -> Dictionary:
 	var report := {
 		"mesh_instances": 0,
 		"multimesh_instances": 0,
@@ -616,7 +616,9 @@ func _validate_zone_render_resources(root: Node) -> Dictionary:
 	if root == null:
 		return report
 	var fallback := _valid_material_or_fallback(null)
-	for mesh_node in root.find_children("*", "MeshInstance3D", true, false):
+	var meshes: Array = [root] if root is MeshInstance3D else []
+	if descendants: meshes.append_array(root.find_children("*", "MeshInstance3D", true, false))
+	for mesh_node in meshes:
 		var mesh_instance := mesh_node as MeshInstance3D
 		report.mesh_instances += 1
 		if mesh_instance.mesh == null:
@@ -639,7 +641,9 @@ func _validate_zone_render_resources(root: Node) -> Dictionary:
 				var replacement := mesh_instance.material_override if mesh_instance.material_override != null else fallback
 				mesh_instance.set_surface_override_material(surface_index, replacement)
 				report.fallbacks_applied += 1
-	for batch_node in root.find_children("*", "MultiMeshInstance3D", true, false):
+	var batches: Array = [root] if root is MultiMeshInstance3D else []
+	if descendants: batches.append_array(root.find_children("*", "MultiMeshInstance3D", true, false))
+	for batch_node in batches:
 		var batch_instance := batch_node as MultiMeshInstance3D
 		report.multimesh_instances += 1
 		if batch_instance.multimesh == null or batch_instance.multimesh.mesh == null:

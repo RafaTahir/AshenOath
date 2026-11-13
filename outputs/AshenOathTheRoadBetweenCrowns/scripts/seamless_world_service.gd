@@ -6,6 +6,10 @@ const APPROACH_RADIUS := 18.0
 const COMMIT_RADIUS := 9.0
 const FIRST_CONTROL_GRACE := 2.0
 const BUILD_SLICE_USEC := 1500
+const BASE_SLICE_USEC := 500
+const PRIORITY_INTERVAL := 0.10
+const SWITCH_ADVANTAGE := 4.0
+const SWITCH_DWELL := 0.50
 
 signal boundary_transition_requested(source_zone: String, target_zone: String, edge_id: String)
 signal sector_activated(zone_id: String)
@@ -50,10 +54,35 @@ var _playable_seconds := 0.0
 var _build_cooldown := 0.0
 var _last_step_usec := 0
 var _selection_reason := ""
+var _challenger := ""
+var _challenger_elapsed := 0.0
+var _jobs: Dictionary = {}
+var _cache_order: Array[String] = []
+var _cache_cursor := 0
+var _cache_elapsed := 0.0
+var _road_notice_after := 0
+var _frame_usec := 0
+var _frame_ms := 0.0
+var _unit_overruns := 0
+var _render_nodes: Array[WeakRef] = []
+var _render_camera: Camera3D
+var _render_current: GeometryInstance3D
+var _render_layers := 0
+var _render_frame := -1
+var _render_done := false
+var _render_requested_usec := 0
+var _last_render_delay_usec := 0
+var _layer_cursor := 0
+var _repeat_step := false
+var _configuration_ready := false
+var _neighbor_encounter_packs: Array[String] = []
+const PREPARATION_RENDER_LAYER := 1 << 19
 
 func configure(runtime_host: Node, stream_service: Node) -> void:
 	host = runtime_host
 	streaming_service = stream_service
+	for id: String in WorldSectorManifest.all_ids():
+		_jobs[id] = {"state":"queued","error":""}
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if host.runtime_packs != null:
 		host.runtime_packs.background_work_allowed = _background_work_allowed
@@ -63,9 +92,12 @@ func configure(runtime_host: Node, stream_service: Node) -> void:
 		host.story_state.changed.connect(_sources_changed)
 	if not host.quests.changed.is_connected(_sources_changed):
 		host.quests.changed.connect(_sources_changed)
+	if not RenderingServer.frame_post_draw.is_connected(_render_finished):
+		RenderingServer.frame_post_draw.connect(_render_finished)
 
 func _sources_changed() -> void:
 	_story_epoch += 1
+	_cache_order.clear()
 
 func _background_work_allowed() -> bool:
 	return is_instance_valid(host) and not host.resource_shutdown_prepared \
@@ -78,8 +110,12 @@ func _background_work_allowed() -> bool:
 func _construction_node_added(node: Node) -> void:
 	if _neighbor_scope != null and is_instance_valid(_neighbor_scope.owned_root) and _neighbor_scope.owned_root.is_ancestor_of(node):
 		_added_nodes.append(weakref(node))
+		if node is GeometryInstance3D: _render_nodes.append(weakref(node))
 
 func _process(delta: float) -> void:
+	var now := Time.get_ticks_usec()
+	_frame_ms = float(now-_frame_usec)/1000.0 if _frame_usec > 0 else delta*1000.0
+	_frame_usec = now
 	if not is_instance_valid(host) or not host.game_started or host.resource_shutdown_prepared:
 		cancel_preparation(); return
 	_sync_resident_camera()
@@ -92,18 +128,28 @@ func _process(delta: float) -> void:
 	_build_cooldown = maxf(0.0, _build_cooldown - delta)
 	if _playable_seconds < FIRST_CONTROL_GRACE: return
 	_poll += delta
-	if _poll < 0.06: return
-	_poll = 0.0
-	_selected_connection = _preparation_connection()
+	_cache_elapsed += delta
+	if _poll >= PRIORITY_INTERVAL:
+		_poll = 0.0
+		_selected_connection = _preparation_connection()
+		_refresh_road_status()
+		if _cache_order.is_empty(): _refresh_cache_order()
+		if _cache_elapsed >= 0.50:
+			_cache_elapsed = 0.0
+			_cache_next_destination()
 	if _selected_connection.is_empty(): return
 	var target := str(_selected_connection.target)
-	if _neighbor_scope != null and _neighbor_scope.zone_id != target: cancel_preparation()
+	if _neighbor_scope != null and _neighbor_scope.zone_id != target:
+		cancel_preparation()
+		# Renderer-safe retirement owns the slot until it has released the root.
+		return
 	# Cold activation starts just before the common plane. Retain the source
 	# half while it still supports Kael, even if a state change invalidated it.
 	if contains_resident_passage(host.player.global_position) and not WorldSectorManifest.connector_contains(str(host.current_zone_id),host.player.global_position,0.0,host.story_state): return
 	if _valid_cached_destination(target):
 		if _connection_distance(_selected_connection) < APPROACH_RADIUS: _show_neighbor(_selected_connection)
 		return
+	if host.zone_residency.pending_zone_retirements > 0: return
 	if _neighbor_state == "ready":
 		if not _neighbor_dependencies_current(): cancel_preparation()
 		elif _connection_distance(_selected_connection) < APPROACH_RADIUS: _show_neighbor(_selected_connection)
@@ -111,32 +157,113 @@ func _process(delta: float) -> void:
 	if _neighbor_scope != null and not _neighbor_dependencies_current():
 		cancel_preparation(); return
 	if _neighbor_scope == null:
-		if Time.get_ticks_msec() < _retry_after: return
+		var job: Dictionary = _jobs.get(target,{})
+		if str(job.get("state","")) == "failed": return
 		if host.runtime_packs != null:
 			var extras: Array[String] = host._zone_encounter_packs(target)
 			# Share the ordinary hash-validated downloads without giving speculative
 			# travel the priority of an explicit Continue or journey request.
 			for pack_id: String in host.runtime_packs.required_zone_packs(target,extras):
 				host.runtime_packs.request_pack(pack_id,500)
-			if not host.runtime_packs.zone_packs_ready(target,extras): return
+			var failures: Array[String] = host.runtime_packs.zone_pack_failures(target,extras)
+			if not failures.is_empty():
+				_record_job(target,"failed",", ".join(failures))
+				return
+			if not host.runtime_packs.zone_packs_ready(target,extras):
+				_record_job(target,"resources")
+				return
 		if streaming_service != null:
+			streaming_service.set_focus_destination(target)
 			streaming_service.request_zone(target)
+			if streaming_service.get_state(target) == "failed":
+				_record_job(target,"failed","Destination resources could not be prepared."); return
 			if not streaming_service.is_ready(target): return
 		_begin_neighbor(target); return
 	if _build_cooldown > 0.0: return
+	if _neighbor_state == "render_pending":
+		_advance_render_preparation()
+		return
 	var slice_started := Time.get_ticks_usec()
+	var allowance := BASE_SLICE_USEC if _frame_ms >= 28.0 else mini(BUILD_SLICE_USEC,int((30.0-_frame_ms)*250.0))
 	while _neighbor_scope != null and _neighbor_state == "building":
 		_advance_preparation()
-		if Time.get_ticks_usec() - slice_started >= BUILD_SLICE_USEC:
+		if Time.get_ticks_usec() - slice_started >= allowance:
 			break
 	# A Godot scene publication is atomic. Repay an over-budget step with quiet
 	# frames instead of stacking expensive steps on an already slow frame.
 	var spent := float(Time.get_ticks_usec() - slice_started) / 1000000.0
 	_build_cooldown = minf(0.25, spent * 4.0)
 	if delta > 1.0 / 30.0: _build_cooldown = maxf(_build_cooldown,0.10)
-	if _neighbor_scope != null and _neighbor_state == "building":
-		# Continue on the next frame, not after another 60-ms routing poll.
-		_poll = 0.06
+	if _last_step_usec > BUILD_SLICE_USEC: _unit_overruns += 1
+
+func _record_job(target: String, state: String, error: String = "") -> void:
+	var job: Dictionary = _jobs.get(target,{})
+	job.merge({"state":state,"error":error,"quality":str(host.settings.settings.get("quality_preset","balanced")),
+		"generation":host.journey_arrival_generation},true)
+	if state == "failed" and str(job.get("last_error","")) != error:
+		job["retry_after"] = Time.get_ticks_msec()+30000
+		job["last_error"] = error
+	_jobs[target] = job
+
+func _refresh_cache_order() -> void:
+	_cache_order.clear(); _cache_cursor = 0
+	var visited: Dictionary = {str(host.current_zone_id):true}
+	var frontier: Array[String] = [str(host.current_zone_id)]
+	while not frontier.is_empty():
+		var source: String = frontier.pop_front()
+		for target: String in WorldSectorManifest.available_neighbors(source,host.quests,host.story_state):
+			if visited.has(target): continue
+			visited[target] = true
+			_cache_order.append(target); frontier.append(target)
+			if not _jobs.has(target): _record_job(target,"queued")
+
+func _cache_next_destination() -> void:
+	if host.runtime_packs == null or _cache_order.is_empty(): return
+	var target := _cache_order[_cache_cursor % _cache_order.size()]
+	_cache_cursor = (_cache_cursor+1) % _cache_order.size()
+	var cached := true
+	for id: String in host.runtime_packs.required_zone_packs(target,host._zone_encounter_packs(target)):
+		host.runtime_packs.request_cached_pack(id,1500)
+		if not host.runtime_packs.is_cached(id): cached = false
+	if target != str(_selected_connection.get("target","")):
+		_record_job(target,"cached" if cached else "downloading")
+	var priorities: Array[String] = []
+	if not _selected_connection.is_empty():
+		priorities = host.runtime_packs.required_zone_packs(str(_selected_connection.target),host._zone_encounter_packs(str(_selected_connection.target)))
+	host.runtime_packs.set_background_priorities(priorities)
+
+func request_road(target: String, retry: bool = false) -> bool:
+	var edge := WorldSectorManifest.connection_between(str(host.current_zone_id),target)
+	if edge.is_empty() or not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): return false
+	_selected_connection = edge
+	_selection_reason = "deliberate_road"
+	_challenger = ""; _challenger_elapsed = 0.0
+	if retry:
+		_jobs.erase(target)
+		if streaming_service != null and streaming_service.get_state(target) == "failed": streaming_service.cancel_request(target)
+		if host.runtime_packs != null:
+			for id: String in host.runtime_packs.required_zone_packs(target,host._zone_encounter_packs(target)):
+				if host.runtime_packs.get_state(id) == "failed":
+					host.runtime_packs.requests.erase(id)
+					host.runtime_packs.request_pack(id,500)
+	if not has_prepared(target) and Time.get_ticks_msec() >= _road_notice_after:
+		var error := str((_jobs.get(target,{}) as Dictionary).get("error",""))
+		host.hud.post_notice("Preparing the road to %s. You can keep exploring." % host._zone_display_name(target) if error.is_empty() else "Road preparation failed. Use the road to retry.","travel",2.5,"road_preparation")
+		_road_notice_after = Time.get_ticks_msec()+3000
+	return has_prepared(target)
+
+func _refresh_road_status() -> void:
+	if not is_instance_valid(host.zone_root): return
+	for edge: Dictionary in WorldSectorManifest.connections(str(host.current_zone_id),host.story_state):
+		var status: Node = host.zone_root.get_node_or_null("ConnectedRoads/RoadTo_"+str(edge.target)+"/TravelGate/RoadPreparation")
+		var available := WorldSectorManifest.edge_available(edge,host.quests,host.story_state)
+		var ready := available and has_prepared(str(edge.target))
+		if is_instance_valid(status):
+			status.set_interaction_enabled(available and not ready)
+			var job: Dictionary = _jobs.get(str(edge.target),{})
+			status.state_label = "Retry road" if str(job.get("state","")) == "failed" else "Prepare road"
+		if not ready:
+			preload("res://scripts/connected_route_geometry.gd").close_gate(host.zone_root,str(edge.target),host.player.global_position)
 
 func _nearest_connection() -> Dictionary:
 	if not is_instance_valid(host.player): return {}
@@ -159,48 +286,40 @@ func _connection_distance(edge: Dictionary) -> float:
 
 func _preparation_connection() -> Dictionary:
 	var source := str(host.current_zone_id)
-	var near := _nearest_connection()
 	var retained: Dictionary = {}
 	if _neighbor_scope != null:
 		retained = WorldSectorManifest.connection_between(source,_neighbor_scope.zone_id)
 	elif not _selected_connection.is_empty() and str(_selected_connection.get("source","")) == source:
 		retained = _selected_connection
 	if not retained.is_empty() and not WorldSectorManifest.edge_available(retained,host.quests,host.story_state): retained = {}
-	if not retained.is_empty() and str(retained.target) == previous_sector and _connection_distance(retained) > APPROACH_RADIUS:
-		retained = {}
-	# Explicitly approaching a different road wins, but wandering between the
-	# village services must not continually destroy a useful partial world.
-	if not near.is_empty() and _connection_distance(near) < COMMIT_RADIUS:
-		if retained.is_empty() or str(near.target) == str(retained.target) or _connection_distance(near)+4.0 < _connection_distance(retained):
-			_selection_reason = "approached_road"
-			return near
-	if not retained.is_empty():
-		_selection_reason = "retained_preparation"
-		return retained
 	var destination := ""
 	if host.quest_presentation != null:
 		destination = str(host.quest_presentation.get_objective_view_model().get("destination_zone",""))
-	var objective_edge := WorldSectorManifest.connection_between(source,destination)
-	if not objective_edge.is_empty() and WorldSectorManifest.edge_available(objective_edge,host.quests,host.story_state):
-		_selection_reason = "current_objective"
-		return objective_edge
-	# The opening promise begins inside Greyfen; prepare its next road while
-	# Kael talks and explores instead of waiting for the forest threshold.
-	if source == "greyfen" and not host.quests.is_completed("main_road_of_crows"):
-		_selection_reason = "opening_road"
-		return WorldSectorManifest.connection_between(source,"wychwood")
-	if not near.is_empty():
-		_selection_reason = "nearest_available_road"
-		return near
 	var best: Dictionary = {}
-	var distance := INF
+	var score := INF
 	for edge: Dictionary in WorldSectorManifest.connections(source,host.story_state):
-		if str(edge.target) == previous_sector or not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): continue
-		var proximity := _connection_distance(edge)
-		if proximity < distance:
-			best = edge; distance = proximity
-	_selection_reason = "next_available_road"
-	return best
+		if not WorldSectorManifest.edge_available(edge,host.quests,host.story_state): continue
+		var points := WorldSectorManifest.connector_points(edge)
+		var toward: Vector3 = (points[0]-host.player.position).normalized()
+		var approach := maxf(0.0,host.player.velocity.dot(toward))
+		var value := _connection_distance(edge)-minf(4.0,approach)
+		if str(edge.target) == destination: value -= 2.0
+		if value < score: best = edge; score = value
+	if best.is_empty(): return retained
+	if retained.is_empty() or str(retained.target) == str(best.target):
+		_challenger = ""; _challenger_elapsed = 0.0
+		_selection_reason = "proximity_and_heading"
+		return best
+	var advantage := _connection_distance(retained)-_connection_distance(best)
+	if _connection_distance(best) < COMMIT_RADIUS or advantage >= SWITCH_ADVANTAGE:
+		if _challenger != str(best.target): _challenger = str(best.target); _challenger_elapsed = 0.0
+		_challenger_elapsed += PRIORITY_INTERVAL
+		if _connection_distance(best) < COMMIT_RADIUS or _challenger_elapsed >= SWITCH_DWELL:
+			_selection_reason = "approached_road"; return best
+	else:
+		_challenger = ""; _challenger_elapsed = 0.0
+	_selection_reason = "retained_preparation"
+	return retained
 
 func _show_neighbor(edge: Dictionary) -> void:
 	var target := str(edge.target)
@@ -249,25 +368,44 @@ func complete_crossing(previous_root: Node3D) -> void:
 func _advance_preparation() -> void:
 	_added_nodes.clear()
 	var started := Time.get_ticks_usec()
-	var successful := _neighbor_scope.run_step(_build_neighbor_step)
+	var layers: Array[String] = ["gameplay", "decoration"]
+	var attach_layer := _layer_cursor < layers.size()
+	var configure_runtime := not _configuration_ready
+	_repeat_step = false
+	var successful := _neighbor_scope.run_step(func(context: ZoneBuildContext) -> bool:
+		if configure_runtime:
+			if host._zone_requires_campaign_pack(context.zone_id): host.runtime_services.configure_campaign()
+			return true
+		if attach_layer:
+			var one_layer: Array[String] = [layers[_layer_cursor]]
+			var result: Dictionary = host.ZoneSceneCatalog.attach(context.zone_id,context.zone_root,one_layer)
+			if not bool(result.ok): _neighbor_failure = str(result.errors)
+			return bool(result.ok)
+		return _build_neighbor_step(context))
 	for reference: WeakRef in _added_nodes:
 		var node: Node = reference.get_ref()
 		if is_instance_valid(node): host.zone_residency.suspend_node(_neighbor_scope.owned_root,node)
 	_added_nodes.clear()
 	_last_step_usec = Time.get_ticks_usec()-started
 	if successful:
-		_neighbor_step += 1
+		if configure_runtime: _configuration_ready = true
+		elif attach_layer: _layer_cursor += 1
+		elif not _repeat_step: _neighbor_step += 1
 		_neighbor_signature = host._zone_state_signature(_neighbor_scope.zone_id)
 		_neighbor_epoch = _story_epoch
+		_record_job(_neighbor_scope.zone_id,_neighbor_state)
 	elif _neighbor_failure.is_empty():
 		_neighbor_failure = "Construction step %d did not complete for %s." % [_neighbor_step, _neighbor_scope.zone_id]
 	if not _neighbor_failure.is_empty():
 		var error := _neighbor_failure
+		var target := _neighbor_scope.zone_id
 		cancel_preparation(); _neighbor_failure = error; _retry_after = Time.get_ticks_msec()+30000
-		push_warning("Prepared neighbor failed; ordinary travel remains available: " + error)
+		_record_job(target,"failed",error)
+		push_warning("Prepared road failed; the source remains playable: " + error)
 
 func _neighbor_dependencies_current() -> bool:
 	if _neighbor_scope == null: return false
+	if _neighbor_encounter_packs != host._zone_encounter_packs(_neighbor_scope.zone_id): return false
 	if _neighbor_scope.cancelled or _neighbor_scope.generation != host.journey_arrival_generation:
 		return false
 	if _neighbor_epoch == _story_epoch: return true
@@ -278,12 +416,14 @@ func _neighbor_dependencies_current() -> bool:
 	return true
 
 func has_prepared(zone_id: String) -> bool:
+	if host.runtime_packs != null and not host.runtime_packs.zone_packs_ready(zone_id,host._zone_encounter_packs(zone_id)): return false
 	if _valid_cached_destination(zone_id): return true
-	return _neighbor_scope != null and is_instance_valid(_neighbor_scope.owned_root) and _neighbor_scope.zone_id == zone_id and _neighbor_state == "ready" and _neighbor_quality == str(host.settings.settings.get("quality_preset","balanced")) and _neighbor_signature == host._zone_state_signature(zone_id)
+	return _neighbor_scope != null and is_instance_valid(_neighbor_scope.owned_root) and _neighbor_scope.zone_id == zone_id and _neighbor_state == "ready" and _neighbor_quality == str(host.settings.settings.get("quality_preset","balanced")) and _neighbor_signature == host._zone_state_signature(zone_id) and _neighbor_encounter_packs == host._zone_encounter_packs(zone_id)
 
 func _valid_cached_destination(zone_id: String, refresh: bool = false) -> bool:
 	var root: Node3D = host.route_zone_cache.get(zone_id)
 	if not is_instance_valid(root): return false
+	if root.has_meta("prepared_encounter_packs") and root.get_meta("prepared_encounter_packs") != host._zone_encounter_packs(zone_id): return false
 	var quality := str(host.settings.settings.get("quality_preset","balanced"))
 	if refresh or root != _cached_root or _cached_epoch != _story_epoch or _cached_quality != quality:
 		_cached_root = root; _cached_epoch = _story_epoch; _cached_quality = quality
@@ -304,7 +444,8 @@ func finish_preparation(zone_id: String, keep_waiting: Callable) -> bool:
 		if not keep_waiting.call() or _neighbor_scope == null: break
 		if not _neighbor_dependencies_current() or _neighbor_quality != str(host.settings.settings.get("quality_preset","balanced")):
 			_neighbor_failure = "The destination changed during preparation."; break
-		_advance_preparation()
+		if _neighbor_state == "render_pending": _advance_render_preparation()
+		else: _advance_preparation()
 		if _neighbor_scope == null: break
 		if _neighbor_state == "ready":
 			_foreground = false; return true
@@ -322,6 +463,7 @@ func _begin_neighbor(target: String) -> void:
 	if builder_script == null or not builder_script.can_instantiate():
 		_neighbor_failure = "The destination builder could not be loaded: " + target
 		_retry_after = Time.get_ticks_msec()+30000
+		_record_job(target,"failed",_neighbor_failure)
 		return
 	if is_instance_valid(_preview_root) and _preview_root != host.zone_root:
 		preload("res://scripts/connected_route_geometry.gd").close_gate(host.zone_root,str(_preview_root.get_meta("zone_resource_id","")),host.player.global_position)
@@ -332,6 +474,7 @@ func _begin_neighbor(target: String) -> void:
 	_neighbor_view.gui_disable_input = true
 	_neighbor_view.physics_object_picking = false
 	_neighbor_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	_neighbor_view.set_meta("prepared_zone_view",true)
 	add_child(_neighbor_view)
 	var root := Node3D.new(); root.name = target; root.process_mode = Node.PROCESS_MODE_DISABLED
 	root.set_meta("zone_resource_owner","preparing")
@@ -344,40 +487,45 @@ func _begin_neighbor(target: String) -> void:
 	_neighbor_scope.generation = host.journey_arrival_generation
 	_neighbor_builder = builder_script.new()
 	_neighbor_quality = str(host.settings.settings.get("quality_preset","balanced"))
+	_neighbor_encounter_packs = host._zone_encounter_packs(target)
 	_neighbor_epoch = _story_epoch; _neighbor_step = 0; _neighbor_state = "building"; _neighbor_failure = ""
+	_layer_cursor = 0; _render_nodes.clear(); _render_done = false; _configuration_ready = false
+	_record_job(target,"constructing")
 
 func _construction_steps() -> int:
-	if _neighbor_scope.zone_id == "greyfen": return host.OPENING_DETAIL_STAGES.size()+1
+	if _neighbor_scope.zone_id == "greyfen": return host.OPENING_DETAIL_STAGES.size()+6
 	if _neighbor_builder.has_method("step_count"): return _neighbor_builder.step_count(_neighbor_scope.zone_id)
 	return 1
 
 func _build_neighbor_step(context: ZoneBuildContext) -> bool:
 	var greyfen := context.zone_id == "greyfen"
 	var steps := _construction_steps()
-	if _neighbor_step == 0:
-		var requested_layers: Array[String] = ["gameplay"]
-		if not greyfen: requested_layers.append("decoration")
-		var layers: Dictionary = host.ZoneSceneCatalog.attach(context.zone_id,context.zone_root,requested_layers)
-		if not bool(layers.ok): _neighbor_failure = str(layers.errors); return false
 	if _neighbor_step < steps:
 		if greyfen:
-			if _neighbor_step == 0: _neighbor_builder.build(context)
+			if _neighbor_step < 6:
+				return _neighbor_builder.build_opening_step(context,_neighbor_step)
 			else:
 				context.build_profile = "opening_detail"
-				_neighbor_builder.build_detail_stage(context,str(host.OPENING_DETAIL_STAGES[_neighbor_step-1]))
+				_neighbor_builder.build_detail_stage(context,str(host.OPENING_DETAIL_STAGES[_neighbor_step-6]))
 		elif _neighbor_builder.has_method("step_count"):
 			if not _neighbor_builder.build_step(context, _neighbor_step): return false
 		else: _neighbor_builder.build(context)
-	elif _neighbor_step < steps+7:
-		context.construction_host().flush_environment_batch_step(_neighbor_step-steps)
-	elif _neighbor_step == steps+7:
+	elif _neighbor_step == steps:
+		_repeat_step = not context.construction_host().flush_environment_next_unit()
+	elif _neighbor_step == steps+1:
 		var builder := context.construction_host()
 		builder._install_world_prop_controller(context.zone_id)
+	elif _neighbor_step == steps+2:
+		var builder := context.construction_host()
 		builder._add_visual_100_layer(context.zone_id)
+	elif _neighbor_step == steps+3:
+		var builder := context.construction_host()
 		builder._apply_first_route_materials(context.zone_root)
-	elif _neighbor_step == steps+8:
+	elif _neighbor_step == steps+4:
 		context.owned_fields.spatial_service.build_navigation(context.zone_root)
-		host._validate_zone_render_resources(context.zone_root)
+	elif _neighbor_step >= steps+5 and _neighbor_step <= steps+7:
+		host.audio.prepare_streamed_destination(context.zone_id,_neighbor_step-steps-5,host.story_state)
+	elif _neighbor_step == steps+8:
 		var result := context.validate()
 		if not bool(result.ok): _neighbor_failure = str(result.errors); return false
 		for enemy: Node in context.owned_fields.active_enemies:
@@ -386,9 +534,55 @@ func _build_neighbor_step(context: ZoneBuildContext) -> bool:
 		context.zone_root.set_meta("opening_detail_complete",true)
 		context.zone_root.set_meta("prepared_neighbor_complete",true)
 		context.zone_root.set_meta("prepared_arrival_pending",true)
+		context.zone_root.set_meta("prepared_audio_complete",true)
+		context.zone_root.set_meta("prepared_encounter_packs",_neighbor_encounter_packs.duplicate())
 		context.zone_root.set_meta("runtime_light_count",context.owned_fields.runtime_light_count)
-		_neighbor_state = "ready"; _neighbor_signature = host._zone_state_signature(context.zone_id)
+		_neighbor_state = "render_pending"; _neighbor_signature = host._zone_state_signature(context.zone_id)
 	return true
+
+func _render_finished() -> void:
+	if _render_frame >= 0 and not _render_done:
+		_render_done = true
+		_last_render_delay_usec = Time.get_ticks_usec()-_render_requested_usec
+		if _last_render_delay_usec > 33000:
+			_build_cooldown = maxf(_build_cooldown,minf(0.25,float(_last_render_delay_usec)/500000.0))
+
+func _advance_render_preparation() -> void:
+	if not is_instance_valid(_neighbor_view) or _neighbor_scope == null: return
+	if _render_frame >= 0 and not _render_done: return
+	if is_instance_valid(_render_current): _render_current.layers = _render_layers
+	_render_current = null; _render_frame = -1; _render_done = false
+	if not is_instance_valid(_render_camera):
+		_render_camera = Camera3D.new(); _render_camera.name = "NeighborPreparationCamera"
+		_render_camera.cull_mask = PREPARATION_RENDER_LAYER
+		_neighbor_view.add_child(_render_camera); _render_camera.current = true
+		_neighbor_view.size = Vector2i(64,64)
+	var started := Time.get_ticks_usec()
+	while not _render_nodes.is_empty():
+		var reference: WeakRef = _render_nodes.pop_back()
+		var visual := reference.get_ref() as GeometryInstance3D
+		if is_instance_valid(visual) and not visual.is_queued_for_deletion():
+			host._validate_zone_render_resources(visual,false)
+		if not is_instance_valid(visual) or visual.is_queued_for_deletion() or not visual.is_visible_in_tree():
+			if Time.get_ticks_usec()-started >= BASE_SLICE_USEC: return
+			continue
+		if visual is MeshInstance3D and visual.mesh == null: continue
+		if visual is MultiMeshInstance3D and (visual.multimesh == null or visual.multimesh.mesh == null): continue
+		_render_current = visual; _render_layers = visual.layers
+		visual.layers = PREPARATION_RENDER_LAYER
+		var bounds := visual.get_aabb()
+		var center := visual.global_transform * bounds.get_center()
+		_render_camera.global_position = center+Vector3(0,0,maxf(2.0,bounds.size.length()*1.4))
+		_render_camera.look_at(center,Vector3.UP)
+		_neighbor_view.render_target_update_mode = SubViewport.UPDATE_ONCE
+		_render_frame = Engine.get_process_frames()
+		_render_requested_usec = Time.get_ticks_usec()
+		return
+	_neighbor_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	_render_camera.queue_free(); _render_camera = null
+	_neighbor_state = "ready"
+	_neighbor_scope.zone_root.set_meta("prepared_render_complete",true)
+	_record_job(_neighbor_scope.zone_id,"ready")
 
 func publish_prepared(zone_id: String) -> bool:
 	if _neighbor_scope == null: return false
@@ -442,9 +636,16 @@ func _sync_owner_camera(root: Node3D) -> void:
 	camera.h_offset = source.h_offset; camera.v_offset = source.v_offset
 
 func cancel_preparation() -> void:
+	if is_instance_valid(_neighbor_view): _neighbor_view.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	if is_instance_valid(_render_current): _render_current.layers = _render_layers
+	_render_current = null; _render_camera = null; _render_frame = -1; _render_nodes.clear()
 	if _neighbor_scope != null:
+		if is_instance_valid(host): _record_job(_neighbor_scope.zone_id,"cached")
+		if is_instance_valid(host) and is_instance_valid(host.audio): host.audio.release_streamed_destination(_neighbor_scope.zone_id)
+		if is_instance_valid(_neighbor_scope.owned_root):
+			if is_instance_valid(host) and is_inside_tree(): host.zone_residency._retire_zone_root(_neighbor_scope.owned_root)
+			elif is_instance_valid(_neighbor_view): _neighbor_view.queue_free()
 		_neighbor_scope.cancel()
-	if is_instance_valid(_neighbor_view): _neighbor_view.queue_free()
 	_neighbor_view = null; _neighbor_scope = null; _neighbor_builder = null
 	_neighbor_state = "idle"; _neighbor_step = 0; _added_nodes.clear()
 
@@ -452,7 +653,9 @@ func preparation_snapshot() -> Dictionary:
 	var result := _neighbor_scope.step_result(_neighbor_state) if _neighbor_scope != null else {"state":_neighbor_state,"zone":"","generation":0,"next_step":_neighbor_step,"error":_neighbor_failure}
 	result.merge({"step":_neighbor_step,"failure":_neighbor_failure,"complete":_neighbor_state == "ready",
 		"selected_destination":str(_selected_connection.get("target","")),"selection_reason":_selection_reason,
-		"last_step_usec":_last_step_usec,"background_cooldown":_build_cooldown},true)
+		"last_step_usec":_last_step_usec,"background_cooldown":_build_cooldown,
+		"frame_ms":_frame_ms,"unit_overruns":_unit_overruns,"jobs":_jobs.duplicate(true),
+		"render_groups_remaining":_render_nodes.size(),"last_render_delay_usec":_last_render_delay_usec},true)
 	return result
 
 func _exit_tree() -> void:
@@ -460,6 +663,7 @@ func _exit_tree() -> void:
 	if is_instance_valid(host) and host.runtime_packs != null and host.runtime_packs.background_work_allowed == _background_work_allowed:
 		host.runtime_packs.background_work_allowed = Callable()
 	if get_tree().node_added.is_connected(_construction_node_added): get_tree().node_added.disconnect(_construction_node_added)
+	if RenderingServer.frame_post_draw.is_connected(_render_finished): RenderingServer.frame_post_draw.disconnect(_render_finished)
 
 func open_edges_for(zone_id: String) -> Dictionary:
 	var edges := WorldSectorManifest.open_edges(zone_id,host.story_state)
@@ -495,13 +699,22 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 		on_zone_activated(source, actor.global_position)
 	if cooldown <= 0.0:
 		for connection: Dictionary in WorldSectorManifest.connections(source,host.story_state):
-			if not WorldSectorManifest.edge_available(connection,host.quests,host.story_state): continue
 			var frame := WorldSectorManifest.crossing_frame(connection)
 			var point := frame.affine_inverse()*actor.global_position
-			var threshold := 0.0 if has_prepared(str(connection.target)) else -1.25
+			var available := WorldSectorManifest.edge_available(connection,host.quests,host.story_state)
+			var prepared := available and has_prepared(str(connection.target))
+			var threshold := 0.0 if prepared else -1.25
 			if point.z < threshold or point.z > 3.0 or absf(point.x) > float(connection.half_width): continue
 			var normal := WorldSectorManifest.direction(str(connection.id))
 			if actor.velocity.dot(normal) <= 0.05: continue
+			if not prepared:
+				if available: request_road(str(connection.target))
+				# Hold only the unsupported plane; movement along and away from the
+				# road remains owned by the ordinary player controller.
+				if point.z > -0.30:
+					point.z = -0.30; actor.global_position = frame*point
+					actor.velocity -= normal*maxf(0.0,actor.velocity.dot(normal))
+				continue
 			var transform := WorldSectorManifest.crossing_transform(connection)
 			var arrival := WorldSectorManifest.crossing_arrival_transform(transform, normal, point.z)
 			_crossing = {"source":source,"target":str(connection.target),"transform":transform,"view_transform":arrival,"position":arrival*actor.global_position,"velocity":arrival.basis*actor.velocity,"basis":arrival.basis*actor.global_basis}
@@ -561,6 +774,8 @@ func on_zone_activated(zone_id: String, local_position: Vector3 = Vector3.ZERO) 
 	previous_sector = current_sector if current_sector != normalized else previous_sector
 	current_sector = normalized
 	_selected_connection = {}
+	_cache_order.clear(); _challenger = ""; _challenger_elapsed = 0.0
+	if is_instance_valid(host.audio): host.audio.release_streamed_destination(normalized)
 	_playable_seconds = 0.0
 	_arrival_edge = str(WorldSectorManifest.edge_for_position(normalized, local_position,
 		_zone_bounds(normalized), 0.85).get("id", ""))

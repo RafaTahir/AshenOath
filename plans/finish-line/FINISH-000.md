@@ -4,6 +4,18 @@ Date: 2026-10-19. Workspace: D:/Projects/AshenOath.
 Branch: codex/masterpiece-rebuild.
 Scope: finish and establish acceptance of the retained game, not replace it.
 
+## Current Streaming Work - 2026-11-13
+
+Approved proximity-driven background streaming extends FINISH-001/005/014/016
+from `a29972e` on `codex/art-recovery-anwen`. It does not wait for Wychwood at
+initial control, preload all complete worlds, or accept a full FINISH ticket.
+Road selection, cache-only downloads, bounded preparation, renderer/audio
+readiness, live-source failure/Retry and safe retirement are implemented under
+the existing owners. See the current section of
+[COHESIVE_GAME_IMPLEMENTATION](../living-road/COHESIVE_GAME_IMPLEMENTATION.md).
+Compilation/package/publication results will be recorded independently.
+Runtime and user acceptance remain pending; this work is strictly build-only.
+
 ## Current Combined Candidate - 2026-11-06
 
 ### Everyday Life, Lasting Consequences - compiled release candidate

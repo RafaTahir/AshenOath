@@ -50,7 +50,13 @@ func _deferred_free_zone(retired_root: Node) -> void:
 		# window above. Release server-owned geometry before destroying the
 		# hierarchy; this avoids leaving physics shapes and renderer instances
 		# alive when a retired procedural zone is torn down.
-		_release_zone_render_resources(retired_root)
+		await _release_retiring_resources(retired_root)
+		if not is_instance_valid(retired_root):
+			for index in range(retired_zone_roots.size()-1,-1,-1):
+				if not is_instance_valid(retired_zone_roots[index]): retired_zone_roots.remove_at(index)
+			pending_zone_retirements = maxi(0,pending_zone_retirements-1)
+			if pending_zone_retirements == 0: retired_material_anchors.clear()
+			return
 		retired_zone_roots.erase(retired_root)
 		var scene_owner := retired_root.get_parent()
 		retired_root.free()
@@ -70,6 +76,45 @@ func _deferred_free_zone(retired_root: Node) -> void:
 	# them.
 	if pending_zone_retirements == 0:
 		retired_material_anchors.clear()
+
+func _release_retiring_resources(root: Node) -> void:
+	var pending: Array[Node] = [root]
+	var geometry: Array[Node] = []
+	var slice := Time.get_ticks_usec()
+	# Clear every animation owner before releasing any mesh it may restore.
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		if not is_instance_valid(node): continue
+		for child: Node in node.get_children(): pending.append(child)
+		if node is Skeleton3D and node.has_meta("character_motion_owner"):
+			var reference := node.get_meta("character_motion_owner") as WeakRef
+			var driver: Node = reference.get_ref() if reference != null else null
+			if is_instance_valid(driver) and root.is_ancestor_of(driver) and driver.has_method("_clear_playback"):
+				driver.call("_clear_playback")
+		if node is CollisionShape3D or node is NavigationRegion3D or node is GeometryInstance3D:
+			geometry.append(node)
+		if Time.get_ticks_usec()-slice >= 500:
+			await get_tree().process_frame
+			if not is_instance_valid(root): return
+			slice = Time.get_ticks_usec()
+	while not geometry.is_empty():
+		var node: Node = geometry.pop_back()
+		if not is_instance_valid(node): continue
+		if node is CollisionShape3D:
+			node.disabled = true; node.shape = null
+		elif node is NavigationRegion3D:
+			node.enabled = false; node.navigation_mesh = null
+		elif node is MeshInstance3D:
+			node.visible = false
+			if node.mesh != null:
+				for surface in node.mesh.get_surface_count(): node.set_surface_override_material(surface,null)
+			node.material_override = null; node.mesh = null
+		elif node is MultiMeshInstance3D:
+			node.visible = false; node.material_override = null; node.multimesh = null
+		if Time.get_ticks_usec()-slice >= 500:
+			await get_tree().process_frame
+			if not is_instance_valid(root): return
+			slice = Time.get_ticks_usec()
 
 func _release_zone_render_resources(root: Node) -> void:
 	if root == null or not is_instance_valid(root):

@@ -1197,7 +1197,7 @@ func _flush_authored_tree_assets() -> bool: return _systems["world"]._flush_auth
 func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: Material, use_colors: bool = false) -> MultiMeshInstance3D: return _systems["world"]._make_multimesh_batch(node_name, mesh, count, material, use_colors)
 func _valid_material_or_fallback(material: Material) -> Material: return _systems["world"]._valid_material_or_fallback(material)
 func _ensure_mesh_surface_materials(mesh: Mesh, fallback: Material) -> int: return _systems["world"]._ensure_mesh_surface_materials(mesh, fallback)
-func _validate_zone_render_resources(root: Node) -> Dictionary: return _systems["world"]._validate_zone_render_resources(root)
+func _validate_zone_render_resources(root: Node, descendants: bool = true) -> Dictionary: return _systems["world"]._validate_zone_render_resources(root, descendants)
 func _make_road(pos: Vector3, size: Vector3, color: Color) -> void: _systems["world"]._make_road(pos, size, color)
 func _make_world_wheel(id: String, pos: Vector3, radius: float, depth: float, color: Color, rotation_degrees: Vector3 = Vector3.ZERO) -> void: _systems["world"]._make_world_wheel(id, pos, radius, depth, color, rotation_degrees)
 func _make_water_patch(id: String, pos: Vector3, size: Vector3, color: Color) -> void: _systems["world"]._make_water_patch(id, pos, size, color)

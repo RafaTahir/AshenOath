@@ -165,6 +165,7 @@ func has_embedded_content(pack_id: String) -> bool:
 
 func is_cached(pack_id: String) -> bool:
 	var id := _normalise_id(pack_id)
+	if is_ready(id) or get_state(id) == "cached": return true
 	var path := _cache_path(id)
 	return FileAccess.file_exists(path) and _validate_artifact(id, path, false).is_empty()
 
@@ -265,11 +266,7 @@ func prioritize_zone(zone_id: String, encounter_packs: Array[String] = []) -> vo
 		if is_ready(id):
 			continue
 		requests[id]["priority"] = 0 if id in foreground_pack_ids else 1000
-	# Keep useful in-flight dependencies. Only unrelated requests yield bandwidth.
-	for id in active_downloads.keys():
-		if id not in foreground_pack_ids:
-			cancel_request(str(id))
-			requests[id]["state"] = "queued"
+	# Queue changes do not discard a partly downloaded content-addressed pack.
 	scheduling_downloads = was_scheduling
 
 func zone_pack_failures(zone_id: String, encounter_packs: Array[String] = []) -> Array[String]:
@@ -314,22 +311,25 @@ func request_pack(pack_id: String, priority: int = 100) -> bool:
 			if required_id != id:
 				_fail(id, "Dependency %s failed: %s" % [required_id, get_last_error(required_id)])
 			return false
-	var needs_download := false
-	for required_id in order:
-		if get_state(required_id) == "queued":
-			needs_download = true
-			break
-	if needs_download and priority <= 10 and active_downloads.size() >= download_limit:
-		var was_scheduling := scheduling_downloads
-		scheduling_downloads = true
-		for active_id in active_downloads.keys():
-			if int(requests[active_id].get("priority", 100)) > priority:
-				cancel_request(str(active_id))
-				requests[active_id]["state"] = "queued"
-				break
-		scheduling_downloads = was_scheduling
 	_start_pending_downloads()
 	return get_state(id) != "failed"
+
+func request_cached_pack(pack_id: String, priority: int = 1500) -> bool:
+	var id := _normalise_id(pack_id)
+	var order: Array[String] = []
+	if _dependency_order(id, {}, order) != "": return false
+	for dependency: String in order:
+		if get_state(dependency) == "failed": return false
+		if not _queue_pack(dependency, priority, true): return false
+	_start_pending_downloads()
+	return get_state(id) != "failed"
+
+func set_background_priorities(pack_ids: Array[String]) -> void:
+	# Only queued speculation changes priority; do not abort useful transfers.
+	for id: String in requests:
+		if int(requests[id].get("priority", 0)) >= 500:
+			var rank := pack_ids.find(id)
+			requests[id]["priority"] = 500 + rank if rank >= 0 else 2000
 
 func _dependency_order(id: String, marks: Dictionary, order: Array[String]) -> String:
 	if int(marks.get(id, 0)) == 1:
@@ -359,7 +359,7 @@ func _dependencies_ready(id: String) -> bool:
 			return false
 	return true
 
-func _queue_pack(id: String, priority: int = 100) -> bool:
+func _queue_pack(id: String, priority: int = 100, cache_only: bool = false) -> bool:
 	if is_ready(id):
 		return true
 	var pack := get_pack(id)
@@ -368,6 +368,13 @@ func _queue_pack(id: String, priority: int = 100) -> bool:
 		return false
 	if get_state(id) in ["queued", "shell_loading", "downloading", "verifying", "verified", "mounting"]:
 		requests[id]["priority"] = mini(priority, int(requests[id].get("priority", 100)))
+		if not cache_only: requests[id]["cache_only"] = false
+		return true
+	if get_state(id) == "cached":
+		if cache_only: return true
+		requests[id]["cache_only"] = false
+		requests[id]["priority"] = priority
+		requests[id]["state"] = "queued" if OS.has_feature("web") else "verified"
 		return true
 	var url := str(source_overrides.get(id, pack.get("url", ""))).strip_edges()
 	if url == "" and not has_embedded_content(id):
@@ -386,15 +393,16 @@ func _queue_pack(id: String, priority: int = 100) -> bool:
 		"temp_path": _cache_path(id) + ".part",
 		"error": "",
 		"priority": priority,
+		"cache_only": cache_only,
 	}
 	requests[id] = request
 	return true
 
-func retry_pack(pack_id: String) -> bool:
+func retry_pack(pack_id: String, priority: int = 100) -> bool:
 	var id := _normalise_id(pack_id)
 	var request: Dictionary = requests.get(id, {})
 	if request.is_empty() or get_state(id) == "ready":
-		return request_pack(id)
+		return request_pack(id, priority)
 	var attempt := int(request.get("attempt", 0))
 	if attempt >= MAX_RETRIES:
 		return false
@@ -405,7 +413,7 @@ func retry_pack(pack_id: String) -> bool:
 	requests[id] = request
 	# Reconstruct the request from the manifest. A failure may have happened
 	# before download metadata existed (for example during cache validation).
-	return request_pack(id)
+	return request_pack(id, priority)
 
 func mount_local_pack(pack_id: String, absolute_path: String) -> bool:
 	var id := _normalise_id(pack_id)
@@ -533,6 +541,11 @@ func _start_pending_downloads() -> void:
 			if get_state(id) == "queued":
 				if active_downloads.size() >= download_limit:
 					continue
+				if int(requests[id].get("priority",0)) >= 500:
+					var background_active := false
+					for active_id in active_downloads:
+						if int(requests[active_id].get("priority",0)) >= 500: background_active = true
+					if background_active: continue
 				_start_download(id)
 				started = true
 				break
@@ -559,8 +572,9 @@ func _start_download(id: String) -> void:
 	if OS.has_feature("web") and not source_overrides.has(id):
 		var pack := get_pack(id)
 		var joined: bool = bool(JavaScriptBridge.eval(
-			"Boolean(window.__ashenOathRequestPack && window.__ashenOathRequestPack(%s, %s, %d, %s))" % [
-				JSON.stringify(id), JSON.stringify(_expected_hash(id)), _expected_bytes(id), JSON.stringify(str(pack.get("version", "")))
+			"Boolean(window.__ashenOathRequestPack && window.__ashenOathRequestPack(%s, %s, %d, %s, %s))" % [
+				JSON.stringify(id), JSON.stringify(_expected_hash(id)), _expected_bytes(id), JSON.stringify(str(pack.get("version", ""))),
+				"true" if bool(request.get("cache_only",false)) else "false"
 			], true))
 		if joined:
 			request["state"] = "shell_loading"
@@ -570,8 +584,14 @@ func _start_download(id: String) -> void:
 			return
 	var cache_path := _cache_path(id)
 	if FileAccess.file_exists(cache_path):
-		if _validate_artifact(id, cache_path, true).is_empty():
-			request["state"] = "verified"
+		request["state"] = "verifying"
+		requests[id] = request
+		active_downloads[id] = true
+		var validation: String = await _validate_artifact_sliced(id, cache_path)
+		if get_state(id) != "verifying" or not is_same(requests.get(id),request): return
+		active_downloads.erase(id)
+		if validation.is_empty():
+			request["state"] = "cached" if bool(request.get("cache_only",false)) else "verified"
 			request["path"] = cache_path
 			requests[id] = request
 			return
@@ -646,6 +666,11 @@ func _try_mount_web_preloaded_pack(id: String) -> bool:
 	request["progress"] = 0.97
 	request["path"] = path
 	requests[id] = request
+	if bool(request.get("cache_only",false)):
+		request["state"] = "cached"
+		request["path"] = path
+		requests[id] = request
+		return true
 	if not _dependencies_ready(id) or not _can_mount_now(id):
 		requests[id]["state"] = "verified"
 		return true
@@ -688,6 +713,7 @@ func _on_download_completed(result: int, response_code: int, _headers: PackedStr
 	request["state"] = "verifying"
 	request["progress"] = 0.92
 	requests[id] = request
+	active_downloads[id] = true
 	pack_progress.emit(id, 0.92)
 	var temp_path := str(request.get("temp_path", ""))
 	if body.is_empty() and not FileAccess.file_exists(temp_path):
@@ -704,7 +730,9 @@ func _on_download_completed(result: int, response_code: int, _headers: PackedStr
 		temp_file.store_buffer(body)
 		temp_file.close()
 	var verified_metadata: Dictionary = {}
-	var validation := _validate_artifact(id, temp_path, true, verified_metadata)
+	var validation: String = await _validate_artifact_sliced(id, temp_path, verified_metadata)
+	if get_state(id) != "verifying" or not is_same(requests.get(id),request): return
+	active_downloads.erase(id)
 	if not validation.is_empty():
 		_remove_file(temp_path)
 		_fail(id, validation)
@@ -727,6 +755,7 @@ func _on_download_completed(result: int, response_code: int, _headers: PackedStr
 	pack_cached.emit(id, cache_path)
 	requests[id]["state"] = "verified"
 	requests[id]["path"] = cache_path
+	if bool(requests[id].get("cache_only",false)): requests[id]["state"] = "cached"
 	_start_pending_downloads()
 
 func _mount_cached_pack(id: String, path: String) -> bool:
@@ -745,6 +774,7 @@ func _mount_cached_pack(id: String, path: String) -> bool:
 	return true
 
 func _can_mount_now(id: String) -> bool:
+	if bool(requests.get(id,{}).get("cache_only",false)): return false
 	if int(requests.get(id,{}).get("priority",0)) < 500: return true
 	return _background_mount_frame != Engine.get_process_frames() \
 		and (not background_work_allowed.is_valid() or bool(background_work_allowed.call()))
@@ -853,6 +883,31 @@ func _sha256(path: String) -> String:
 	file.close()
 	return context.finish().hex_encode()
 
+func _validate_artifact_sliced(id: String, path: String, metadata: Dictionary = {}) -> String:
+	var owner: Dictionary = requests.get(id,{})
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null: return "Unable to read pack: " + id
+	if file.get_buffer(4) != PackedByteArray([71,68,80,67]) or file.get_length() != _expected_bytes(id):
+		return "Pack header/size mismatch: " + id
+	file.seek(0)
+	var digest := HashingContext.new()
+	digest.start(HashingContext.HASH_SHA256)
+	var slice := Time.get_ticks_usec()
+	while file.get_position() < file.get_length():
+		if get_state(id) != "verifying" or not is_same(requests.get(id),owner): return "Pack verification cancelled"
+		var chunk := file.get_buffer(65536)
+		if chunk.is_empty(): return "Incomplete pack: " + id
+		digest.update(chunk)
+		if Time.get_ticks_usec()-slice >= 500:
+			await get_tree().process_frame
+			slice = Time.get_ticks_usec()
+	var hash := digest.finish().hex_encode()
+	if hash != _expected_hash(id): return "Pack SHA-256 mismatch: " + id
+	metadata["bytes"] = file.get_length()
+	metadata["sha256"] = hash
+	file.close()
+	return ""
+
 func _remove_file(path: String) -> void:
 	if path == "" or not FileAccess.file_exists(path):
 		return
@@ -869,7 +924,12 @@ func _process(delta: float) -> void:
 			if not OS.has_feature("web") or get_state(id) != "shell_loading":
 				continue
 			var state := get_web_preloaded_state(id)
-			if state == "preloaded":
+			if state == "cached":
+				active_downloads.erase(id)
+				requests[id]["state"] = "cached" if bool(requests[id].get("cache_only",false)) else "queued"
+				requests[id]["progress"] = 1.0
+				pack_cached.emit(id, "http_cache")
+			elif state == "preloaded":
 				active_downloads.erase(id)
 				if not _try_mount_web_preloaded_pack(id):
 					_fail(id, "Browser pack handoff identity or file mismatch")

@@ -403,6 +403,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		host.zone_root.set_meta("arrival_support_pending", true)
 		host.zone_root.set_meta("zone_resource_owner", "active")
 		host.zone_root.set_meta("zone_resource_id", zone_id)
+		host.zone_root.set_meta("prepared_encounter_packs",host._zone_encounter_packs(zone_id))
 		if reused_zone:
 			host.runtime_light_count = int(host.zone_root.get_meta("runtime_light_count",0))
 		else:
@@ -441,7 +442,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	# data on first use. Mark it for the first settled frame instead of making
 	# audio synthesis part of the player's transition lock. Greyfen remains on
 	# the opening path because its menu prewarm already prepares those cues.
-	if zone_id == "greyfen":
+	if zone_id == "greyfen" or bool(host.zone_root.get_meta("prepared_audio_complete",false)):
 		host._apply_zone_audio(zone_id)
 	else:
 		host.zone_root.set_meta("zone_audio_pending", true)

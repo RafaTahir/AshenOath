@@ -1,5 +1,47 @@
 # A Cohesive Ashen Oath
 
+## Proximity-Driven Streaming - 2026-11-13
+
+Continue from `a29972e` on `codex/art-recovery-anwen`. This is the approved
+proximity-streaming implementation, not the superseded upfront-Wychwood wait.
+Greyfen's initial readiness is unchanged. Neighbor preparation starts after two
+playable seconds; road distance, movement heading and the objective set priority
+at 10 Hz. A 4-metre advantage sustained for 0.5 seconds changes focus; the
+9-metre committed approach wins immediately. Camera rotation does not set focus.
+
+All atlas destinations have jobs. Accessible destinations enter a breadth-first
+HTTP/disk-cache queue; only one speculative transfer runs alongside required
+traffic. Cache-only Web transfers do not copy packs into engine memory. Queue
+reprioritization retains in-flight work. One inactive engine-resident destination
+is built at a time, with shared assets retained after a change of road. Discarded
+scene work is explicitly reset rather than reported as completed progress.
+
+Construction uses 0.5-ms cooperative slices, up to 1.5 ms when recent frames have
+headroom. Road geometry, static batch groups, ecology actors, scene resources,
+audio preparation and finalization are separate work units. Required geometry
+receives one-shot, one-group render preparation in a 64px isolated viewport,
+with quiet frames after slow render completion. No continuously rendered second
+world, population cut, texture downgrade or new engine-thread requirement.
+
+Physical road requests never start a full-screen loader while unready. The source
+world stays live behind its supported crossing guard; a local Use/Retry prompt
+requests the road. Only a ready context can commit an arrival. Existing explicit
+Continue, recovery and quality-loading presentations remain. Current story/quality
+dependencies invalidate only the owned destination. Retiring geometry releases
+in slices after the existing renderer grace period; animation owners clear before
+meshes. Prepared audio retains the current mix until legitimate activation.
+
+Build-only contract: source review, compiler invocations, asset export and package
+integrity only. No game, browser, screenshot, automated runtime test, profiling or
+benchmark is authorized. Runtime smoothness, all route crossings, memory, sound,
+phone behavior and performance acceptance remain UNVERIFIED. Atomic resource
+loads, pack mounting, driver work and final scene publication are not claimed to
+fit a hard 1.5-ms ceiling. Earlier failed measurements remain historical evidence.
+
+Delivery uses one combined Git publication; Vercel deploys automatically. No CLI
+deployment or wait for its rollout. Keep 256-MiB total, 200-MiB warning and
+individual Git files below 100 MiB. Implementation is not user acceptance.
+
 ## Current Combined Implementation - 2026-11-06
 
 Authorized scope: A Coherent, Living Campaign. Continue the retained game from
