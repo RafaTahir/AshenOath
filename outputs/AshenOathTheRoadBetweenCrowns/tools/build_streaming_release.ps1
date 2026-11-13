@@ -1,4 +1,4 @@
-param([Parameter(Mandatory)][string]$BuildId)
+param([Parameter(Mandatory)][string]$BuildId, [string]$ReuseBuildId = '')
 $ErrorActionPreference = 'Stop'
 $Project = Split-Path -Parent $PSScriptRoot
 $Repo = Split-Path -Parent (Split-Path -Parent $Project)
@@ -10,11 +10,19 @@ if (Test-Path -LiteralPath $Out) { throw 'Use a fresh output directory; previous
 $Source = (& git -C $Repo rev-parse HEAD).Trim()
 if ($LASTEXITCODE -ne 0) { throw 'Unable to identify source commit.' }
 $Runtime = Join-Path $Project 'runtime_pack_manifest.json'
-$PriorRuntime = Join-Path $Repo 'web/runtime_pack_manifest.json'
-if ((Get-FileHash -LiteralPath $Runtime).Hash -ne (Get-FileHash -LiteralPath $PriorRuntime).Hash) {
-    throw 'Runtime manifest does not match the preceding published candidate.'
+$PriorWeb = Join-Path $Repo 'web'
+$PriorCandidates = Join-Path $Project 'runtime_pack_candidates.json'
+if ($ReuseBuildId) {
+    if ($ReuseBuildId -notmatch '^proximity-streaming-[a-z0-9-]+$') { throw 'Invalid reused build ID.' }
+    $PriorBuild = Join-Path $Repo ('.release-gate/' + $ReuseBuildId)
+    $PriorWeb = Join-Path $PriorBuild 'export'
+    $PriorCandidates = Join-Path $PriorBuild 'runtime-packs/runtime_pack_candidates.json'
 }
-$Candidate = Get-Content -LiteralPath (Join-Path $Project 'runtime_pack_candidates.json') -Raw | ConvertFrom-Json -AsHashtable
+$PriorRuntime = Join-Path $PriorWeb 'runtime_pack_manifest.json'
+if ((Get-FileHash -LiteralPath $Runtime).Hash -ne (Get-FileHash -LiteralPath $PriorRuntime).Hash) {
+    throw 'Runtime manifest does not match the explicit preceding candidate.'
+}
+$Candidate = Get-Content -LiteralPath $PriorCandidates -Raw | ConvertFrom-Json -AsHashtable
 $PriorRaw = [string]$Candidate.artifact_directory
 $Raw = Join-Path $Out 'runtime-packs'
 $Changed = Join-Path $Out 'changed-packs'
@@ -42,7 +50,7 @@ foreach ($Record in $Candidate.packs) {
     }
     Copy-Item -LiteralPath $InputFile -Destination (Join-Path $Raw $Record.artifact)
 }
-Get-ChildItem -LiteralPath (Join-Path $Repo 'web/packs') -File -Filter '*.pck' | Copy-Item -Destination $Transport
+Get-ChildItem -LiteralPath (Join-Path $PriorWeb 'packs') -File -Filter '*.pck' | Copy-Item -Destination $Transport
 $Layout = Get-Content -LiteralPath $Runtime -Raw | ConvertFrom-Json
 $Base = Join-Path $Changed 'base.pck'
 Invoke-Compiler $Godot @('--headless','--path',$Project,'--export-pack',[string]$Layout.pack_presets.base,$Base) 'pack-base'

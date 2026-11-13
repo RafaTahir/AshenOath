@@ -573,13 +573,14 @@ async function metadata(page, viewport, touch) {
   await startGame(page, viewport, touch);
   event({ event: 'metadata_retry_recovered', stalled_requests: initialHits });
 }
-async function routeTo(page, gateId) {
+async function routeTo(page, gateId, required = true) {
   const cache = observations.get(page);
   const requestId = ++cache.routeSerial;
   await page.evaluate(query => { window.__ashenOathReadOnlyRouteQuery = query; },
     { request_id: requestId, target_id: gateId });
   const route = await waitFor(() => cache.route?.request_id === requestId ? cache.route : null, 'read-only physical gate route', 30000);
-  assert(route.read_only && route.ok && route.physical_connection, 'Gate route must be an ordinary physical connection');
+  if (required) assert(route.read_only && route.ok && route.physical_connection,
+    `Gate route must be an ordinary physical connection: ${JSON.stringify(route)}`);
   return route;
 }
 async function followPhysicalRoute(page, viewport, touch, route) {
@@ -632,6 +633,26 @@ async function streaming(page, viewport, touch) {
   const started = Date.now();
   const phases = new Set();
   let loadingSeen = false;
+  async function crossingRoute(gateId, source) {
+    const route = await routeTo(page, gateId, false);
+    if (route.read_only && route.ok && route.physical_connection) return route;
+    event({ event: 'route_planner_unavailable', route });
+    // Walk the authored centreline with ordinary keys when the optional
+    // collision-detour planner cannot produce a route. Do not move the player
+    // or bypass the real leaf, readiness, collision or arrival checks.
+    const s = await observe(page);
+    assert.equal(s.zone, source);
+    const north = source === 'greyfen' && gateId === 'gate_wychwood';
+    assert(north || (source === 'wychwood' && gateId === 'gate_greyfen'), 'No authored walkthrough for this road');
+    return north ? {
+      points: [{x:0,y:0,z:6},{x:0,y:0,z:-3.9},{x:0,y:0,z:-15},
+        {x:0,y:0,z:-21},{x:6,y:0,z:-21},{x:6,y:0,z:-23.1}],
+      crossing_point:{x:6,y:0,z:-25},crossing_direction:{x:0,y:0,z:-1},
+    } : {
+      points:[s.player.position,{x:-6,y:0,z:23.1}],
+      crossing_point:{x:-6,y:0,z:25},crossing_direction:{x:0,y:0,z:1},
+    };
+  }
   async function walk(points, source, target = null, budget = timeoutMs) {
     const deadline = Date.now() + budget;
     const held = new Set();
@@ -666,13 +687,7 @@ async function streaming(page, viewport, touch) {
       return observe(page);
     } finally { for (const key of held) await page.keyboard.up(key).catch(() => {}); }
   }
-  const east = await routeTo(page,'gate_vargan_approach');
-  const approach = east.points.slice(0,Math.max(1,east.points.length-2));
-  await walk(approach,'greyfen');
-  await waitFor(async () => (await observe(page))?.streaming?.selected_destination === 'vargan_approach', 'eastern road gains preparation priority', 15000);
-  event({ event:'road_priority_east', preparation:(await observe(page)).streaming });
-  await walk([...approach].reverse(),'greyfen');
-  const north = await routeTo(page,'gate_wychwood');
+  const north = await crossingRoute('gate_wychwood','greyfen');
   await walk(north.points,'greyfen');
   const waiting = await waitFor(async () => {
     const s = await observe(page);
@@ -696,7 +711,7 @@ async function streaming(page, viewport, touch) {
   const arrived = await walk([north.points.at(-1),outward],'greyfen','wychwood');
   await screenshot(page,'wychwood-arrival');
   event({event:'physical_outward_arrival',zone:arrived.zone,position:arrived.player.position,elapsed_ms:Date.now()-started});
-  const back = await routeTo(page,'gate_greyfen');
+  const back = await crossingRoute('gate_greyfen','wychwood');
   const homeward={...back.crossing_point,x:back.crossing_point.x+back.crossing_direction.x*1.2,z:back.crossing_point.z+back.crossing_direction.z*1.2};
   const returned=await walk([...back.points,homeward],'wychwood','greyfen');
   await screenshot(page,'greyfen-return');

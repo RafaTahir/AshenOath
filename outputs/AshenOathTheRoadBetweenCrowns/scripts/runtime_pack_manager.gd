@@ -508,7 +508,10 @@ func _start_pending_downloads() -> void:
 		var started := false
 		var foreground_pending := false
 		for id in foreground_pack_ids:
-			if not is_ready(id):
+			# A zone priority list can include optional encounter packs which the
+			# current operation never requested. Only an owned, outstanding request
+			# may reserve the queue; an absent pack cannot block all road downloads.
+			if get_state(id) in ["queued", "shell_loading", "downloading", "verifying", "verified", "mounting"]:
 				foreground_pending = true
 				break
 		var ordered_ids: Array = requests.keys()

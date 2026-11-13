@@ -23,6 +23,33 @@ pack with source movement, then Greyfen/Wychwood travel and return. No existing
 user save is imported or overwritten. Compilation/builds are separate from this
 single runtime allocation; no passing outcome is asserted before its report.
 
+The first run on `proximity-streaming-fix-20261113-b789b53-r1` reached real
+New Game control without engine errors, then its optional eastern-route planner
+returned no path before movement. Report:
+`D:/Temp/AshenOath/proximity-road-fix-20261113/verification.json`.
+The creator explicitly authorized one replacement crossing run on those same
+bytes. The driver now attempts the authored northern road with ordinary input if
+the optional route planner cannot produce a path; no teleport or state mutation.
+The replacement reached `(5.75, 0.03, -23.36)` on Greyfen's northern connector,
+with control enabled and no pause/modal loader, but failed waiting for its held
+adjacent download: no background HTTP request had started. Report:
+`D:/Temp/AshenOath/proximity-road-fix-20261113/replacement-verification.json`.
+Neither report verifies crossing, return, east/west prioritization or performance.
+Initial preparation was still very slow; no startup-speed target is claimed.
+
+That second result exposed an additional source-confirmed queue deadlock:
+Greyfen's general zone dependencies include optional `actor_m05`, while its
+startup dependencies deliberately do not request it. `prioritize_zone()` pins the
+general set, and the scheduler treated its unrequested member as outstanding,
+therefore refusing every non-foreground download indefinitely. Queue reservation
+now requires an actual outstanding request. Queued/downloading/verifying/mounting
+foreground work still takes priority; an absent, cancelled or failed request does
+not reserve all future slots. No pack requirement, asset or quality was removed.
+The repaired manager passes Godot check-only compilation. A further targeted
+runtime recheck requires explicit renewed authorization; none is implied by build
+success. Rebuilds reuse the explicit preceding candidate's verified asset packs,
+preserving all earlier packages and reports.
+
 Continue from `a29972e` on `codex/art-recovery-anwen`. This is the approved
 proximity-streaming implementation, not the superseded upfront-Wychwood wait.
 Greyfen's initial readiness is unchanged. Neighbor preparation starts after two
