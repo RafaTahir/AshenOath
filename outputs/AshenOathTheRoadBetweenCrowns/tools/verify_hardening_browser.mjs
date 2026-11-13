@@ -40,6 +40,14 @@ if (options['no-precontrol-captures']) options['no-loading-captures'] = true;
 assert(Number.isFinite(timeoutMs) && timeoutMs >= 30000, '--timeout must be at least 30000 ms');
 const temporaryRoot = resolve('D:/Temp/AshenOath/hardening-browser');
 const runRoot = join(temporaryRoot, `run-${Date.now()}-${process.pid}`);
+const resumeProfile = options['resume-profile'] ? resolve(options['resume-profile']) : null;
+if (resumeProfile) {
+  assert(scenario === 'streaming' && mode === 'desktop' && options['profile-context'] && options['streaming-return-only'],
+    'Preserved profiles are only for the authorized earned-save streaming return');
+  assert(resumeProfile.startsWith(temporaryRoot + sep) && existsSync(resumeProfile), 'Use an existing owned test profile');
+  assert(options.port && options['earned-journey'], 'Preserve the exact origin and earned journey');
+  options['keep-profile'] = true;
+}
 const reportPath = resolve(options.report || join(runRoot, 'report.json'));
 const evidenceRoot = reportPath.replace(/\.json$/i, '') + '_evidence';
 mkdirSync(runRoot, { recursive: true });
@@ -58,7 +66,7 @@ const report = {
   harness_sha256: createHash('sha256').update(readFileSync(new URL(import.meta.url))).digest('hex'),
   observation_mode: 'production_read_only', gameplay_input: 'Chromium mouse/keyboard/touch and file picker',
   light_loop_candidate_injected: Boolean(options['light-loop-candidate']),
-  browser_context: options['profile-context'] ? 'fresh_temporary_normal_profile' : 'incognito',
+  browser_context: resumeProfile ? 'preserved_earned_profile' : options['profile-context'] ? 'fresh_temporary_normal_profile' : 'incognito',
   limits: ['No gameplay mutation API', 'No performance thresholds or hardware/mobile-device certification',
     'Imported fixtures are test journeys, not earned campaign progression'],
   cases: [], requests: [], status: 'running',
@@ -153,12 +161,18 @@ const server = createServer((request, response) => {
   }
   send();
 });
-await new Promise(resolveListen => server.listen(0, '127.0.0.1', resolveListen));
+const serverPort = Number(options.port || 0);
+assert(Number.isInteger(serverPort) && serverPort >= 0 && serverPort <= 65535, 'Invalid local origin port');
+await new Promise((resolveListen, rejectListen) => {
+  server.once('error', rejectListen);
+  server.listen(serverPort, '127.0.0.1', resolveListen);
+});
 const origin = `http://127.0.0.1:${server.address().port}`;
+report.origin = origin;
 const sleep = ms => new Promise(resolveSleep => setTimeout(resolveSleep, ms));
 let currentCase = null;
 let browser = null;
-const profile = join(runRoot, 'chromium-profile');
+const profile = resumeProfile || join(runRoot, 'chromium-profile');
 const runtimeErrors = [];
 const observations = new WeakMap();
 function event(data) {
@@ -629,7 +643,16 @@ async function followPhysicalRoute(page, viewport, touch, route) {
 }
 async function streaming(page, viewport, touch) {
   assert(!touch, 'One focused desktop streaming run; no duplicated viewport case');
-  await startGame(page, viewport, false);
+  if (options['streaming-return-only']) {
+    assert(resumeProfile, 'Return-only requires its preserved earned profile');
+    const saved = Object.values(await persistence(page)).find(value =>
+      value.data?.journey_id === options['earned-journey'] && value.data?.zone === 'wychwood');
+    assert(saved, 'The earned Wychwood checkpoint must exist; never fabricate a replacement');
+    await clickButton(page,'Continue',viewport,false);
+    await waitFor(async () => { const s=await observe(page); return playable(s) && s.zone === 'wychwood' ? s : null; },
+      'Continue restores the earned Wychwood journey');
+    event({event:'earned_wychwood_continue',journey_id:saved.data.journey_id});
+  } else await startGame(page, viewport, false);
   const started = Date.now();
   const phases = new Set();
   let loadingSeen = false;
@@ -687,6 +710,7 @@ async function streaming(page, viewport, touch) {
       return observe(page);
     } finally { for (const key of held) await page.keyboard.up(key).catch(() => {}); }
   }
+  if (!options['streaming-return-only']) {
   const north = await crossingRoute('gate_wychwood','greyfen');
   await walk(north.points,'greyfen');
   const waiting = await waitFor(async () => {
@@ -711,6 +735,7 @@ async function streaming(page, viewport, touch) {
   const arrived = await walk([north.points.at(-1),outward],'greyfen','wychwood');
   await screenshot(page,'wychwood-arrival');
   event({event:'physical_outward_arrival',zone:arrived.zone,position:arrived.player.position,elapsed_ms:Date.now()-started});
+  }
   const back = await crossingRoute('gate_greyfen','wychwood');
   const homeward={...back.crossing_point,x:back.crossing_point.x+back.crossing_direction.x*1.2,z:back.crossing_point.z+back.crossing_direction.z*1.2};
   const returned=await walk([...back.points,homeward],'wychwood','greyfen');
@@ -900,7 +925,7 @@ try {
     if (scenario === 'streaming') {
       assert.equal(mode,'desktop','One allocated desktop streaming case only');
       await runCase('desktop-streaming',false,streaming,
-        () => armFault('cold_hold',new URL(packs.packs.adjacent.url,origin).pathname.replace(/^\//,'')));
+        () => { if (!options['streaming-return-only']) armFault('cold_hold',new URL(packs.packs.adjacent.url,origin).pathname.replace(/^\//,'')); });
     }
     if (['all', 'startup', 'smoke'].includes(scenario)) {
       const startupDelay = () => {

@@ -50,6 +50,26 @@ runtime recheck requires explicit renewed authorization; none is implied by buil
 success. Rebuilds reuse the explicit preceding candidate's verified asset packs,
 preserving all earlier packages and reports.
 
+The creator authorized the corrected-package crossing recheck. Build
+`proximity-streaming-fix-20261113-0add917-r2` compiled and passed package integrity.
+`corrected-queue-verification.json` in the same report directory proves the
+adjacent HTTP request started, ordinary movement continued while it was held,
+and the released destination reached playable Wychwood without a modal loader.
+The outward event's 277,681 ms includes route walking, deliberate hold and full
+preparation; it is not a warm/cold transition timing result. The return failed
+its 300-second functional deadline, with the source still controllable and no
+engine/browser errors. No full crossing-case pass is claimed.
+
+The cached-root fast path preceded missing-pack requests, while `has_prepared()`
+still required all current destination packs. On return, optional `actor_m05`
+had only been HTTP-cached, not mounted. Pack requests and failure handling now
+precede that fast path; a retained world cannot permanently bypass the operation
+which makes it eligible for control. The changed service passes check-only
+compilation. The creator authorized one earned-save return-only recheck: preserve
+the isolated profile/origin and use ordinary Continue into the earned Wychwood
+checkpoint. Do not replay New Game, the held-download check or outward crossing,
+import fabricated progress, or treat this authorization as another full campaign.
+
 Continue from `a29972e` on `codex/art-recovery-anwen`. This is the approved
 proximity-streaming implementation, not the superseded upfront-Wychwood wait.
 Greyfen's initial readiness is unchanged. Neighbor preparation starts after two

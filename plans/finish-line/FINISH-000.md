@@ -22,6 +22,17 @@ hashes are unchanged. Code/source build is `9031b9c`; one combined Git publicati
 follows. No game/browser run or benchmark was performed, and no mandatory ticket
 has gained runtime or user acceptance from compilation/publication alone.
 
+Blocked-road follow-up: the creator authorized focused verification and explicit
+replacement/recheck allocations. A real queue deadlock from unrequested
+foreground dependencies is repaired. The corrected run observed source movement
+under a held download and playable Greyfen-to-Wychwood travel, but failed return
+on cached-root pack readiness. That second owner is repaired and compiled; the
+authorized next check is return-only from the earned isolated Wychwood save.
+See the current cohesive-game record for exact candidate/report identities.
+No whole FINISH ticket or strict performance requirement is accepted by these
+partial functional results. The preceding production bytes remain unchanged
+until the scoped candidate is ready for its combined Git publication.
+
 ## Current Combined Candidate - 2026-11-06
 
 ### Everyday Life, Lasting Consequences - compiled release candidate

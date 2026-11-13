@@ -151,6 +151,23 @@ func _process(delta: float) -> void:
 	# Cold activation starts just before the common plane. Retain the source
 	# half while it still supports Kael, even if a state change invalidated it.
 	if contains_resident_passage(host.player.global_position) and not WorldSectorManifest.connector_contains(str(host.current_zone_id),host.player.global_position,0.0,host.story_state): return
+	# A retained root does not imply that all of its current pack requirements
+	# are mounted. Request them before the cached-root fast path, just as for a
+	# cold destination, or has_prepared() can hold the return forever.
+	if _neighbor_scope == null:
+		var job: Dictionary = _jobs.get(target,{})
+		if str(job.get("state","")) == "failed": return
+		if host.runtime_packs != null:
+			var extras: Array[String] = host._zone_encounter_packs(target)
+			for pack_id: String in host.runtime_packs.required_zone_packs(target,extras):
+				host.runtime_packs.request_pack(pack_id,500)
+			var failures: Array[String] = host.runtime_packs.zone_pack_failures(target,extras)
+			if not failures.is_empty():
+				_record_job(target,"failed",", ".join(failures))
+				return
+			if not host.runtime_packs.zone_packs_ready(target,extras):
+				_record_job(target,"resources")
+				return
 	if _valid_cached_destination(target):
 		if _connection_distance(_selected_connection) < APPROACH_RADIUS: _show_neighbor(_selected_connection)
 		return
@@ -162,21 +179,6 @@ func _process(delta: float) -> void:
 	if _neighbor_scope != null and not _neighbor_dependencies_current():
 		cancel_preparation(); return
 	if _neighbor_scope == null:
-		var job: Dictionary = _jobs.get(target,{})
-		if str(job.get("state","")) == "failed": return
-		if host.runtime_packs != null:
-			var extras: Array[String] = host._zone_encounter_packs(target)
-			# Share the ordinary hash-validated downloads without giving speculative
-			# travel the priority of an explicit Continue or journey request.
-			for pack_id: String in host.runtime_packs.required_zone_packs(target,extras):
-				host.runtime_packs.request_pack(pack_id,500)
-			var failures: Array[String] = host.runtime_packs.zone_pack_failures(target,extras)
-			if not failures.is_empty():
-				_record_job(target,"failed",", ".join(failures))
-				return
-			if not host.runtime_packs.zone_packs_ready(target,extras):
-				_record_job(target,"resources")
-				return
 		if streaming_service != null:
 			streaming_service.set_focus_destination(target)
 			streaming_service.request_zone(target)
