@@ -70,6 +70,31 @@ the isolated profile/origin and use ordinary Continue into the earned Wychwood
 checkpoint. Do not replay New Game, the held-download check or outward crossing,
 import fabricated progress, or treat this authorization as another full campaign.
 
+Final candidate: `proximity-streaming-fix-20261113-cc35158-r3`, source `cc35158`.
+Compilation and complete package integrity pass: 55 files, **173,590,711 bytes
+(165.549 MiB)**, unchanged asset-pack hashes. Root transport SHA-256:
+`64fa19e3d53cddc3e17b8582336ea87ab5c3f365d2fddcbd64e1e11f74a02a86`.
+Release manifest SHA-256:
+`12b89724db30e63802defa2c20a263fb5a519bd0d7f34574f7d92df7bcca9ec6`.
+The authorized `earned-return-verification.json` passes on these exact bytes:
+read-only persistence inspection found the earned journey
+`1794583915-219380`; ordinary Continue restored Wychwood; ordinary walking reached
+playable Greyfen with no physical-road modal loader and no engine/browser errors.
+The captured return view shows Kael and supported connector scenery, not a blank
+world. The test-owned profile and origin were preserved; user saves were not used.
+The 149,836-ms return event includes full destination preparation and movement,
+not an isolated transition measurement. Its one-frame FPS sample cannot establish
+frame-rate compliance. Startup/preparation remain slow; no speed target is passed.
+
+The earlier r2 held-download/movement and outward observations are retained,
+not re-run or relabelled as r3 observations. Continue retires prior runtime roots,
+so this final case proves the earned return, not every same-session cached-root
+permutation. The cached-root ordering repair is source-reviewed and compiled;
+other routes, priority switching, phone behavior, audible mix and strict
+performance remain outside these completed observations. No creator acceptance
+is inferred. Publish these exact Web bytes through the existing combined Git
+push; Vercel owns automatic deployment, with no CLI deployment or rollout wait.
+
 Continue from `a29972e` on `codex/art-recovery-anwen`. This is the approved
 proximity-streaming implementation, not the superseded upfront-Wychwood wait.
 Greyfen's initial readiness is unchanged. Neighbor preparation starts after two

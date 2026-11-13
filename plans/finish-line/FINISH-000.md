@@ -33,6 +33,16 @@ No whole FINISH ticket or strict performance requirement is accepted by these
 partial functional results. The preceding production bytes remain unchanged
 until the scoped candidate is ready for its combined Git publication.
 
+Scoped delivery candidate `proximity-streaming-fix-20261113-cc35158-r3` now passes
+compilation and complete package integrity (55 files, 173,590,711 bytes). The
+explicitly authorized earned-save recheck passes Continue into Wychwood and
+physical return to playable Greyfen without modal road loading or engine errors.
+Earlier held-download movement/outward evidence remains attached to r2, not
+mislabelled as a repeated r3 check. Exact identities, failures and limitations are
+in the cohesive-game record. Other route/cached-state combinations and numerical
+performance are not accepted; creator acceptance remains separate. The tested
+package is selected for the authorized Git publication, not another game run.
+
 ## Current Combined Candidate - 2026-11-06
 
 ### Everyday Life, Lasting Consequences - compiled release candidate
