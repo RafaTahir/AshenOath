@@ -29,6 +29,32 @@ No fixture, teleport or gameplay mutation is used. Run two is reserved for the
 corrected production package; compilation is not its substitute. Historical
 startup/performance failures and the separate creator save report remain intact.
 
+Run two **PASS** on the corrected production package
+`proximity-streaming-activation-20261116-e8fab7f-r1`, source `e8fab7f`:
+ordinary New Game, physical Greyfen -> Wychwood, Quick Save with the same earned
+journey confirmed by read-only IndexedDB inspection, physical Wychwood ->
+Greyfen, then displayed northern-entrance Use -> playable Wychwood again.
+The run used a fresh owned Chrome profile and unchanged production files served
+locally with their real gzip headers. No fixture or gameplay mutation was used.
+There were **zero recorded engine/browser runtime errors and zero failed HTTP
+requests**. Screenshots show the actual Wychwood scene and Kael after both entries.
+Evidence: `D:/Temp/AshenOath/travel-two-runs-20261116/corrected-second.json`
+and `corrected-second_evidence/`. Both authorized runs are consumed; no third run
+or unearned extrapolation to all routes is permitted by this result.
+
+Compilation, retained metadata authority and full package integrity pass:
+**55 files, 173,597,940 bytes (165.556 MiB)**. Every asset-pack transport hash is
+unchanged. Tested root transport SHA-256:
+`4411fb81fc6c393759f6550ccc77d2ba0b461e5bd6b5edd4aced49e0eb600833`.
+Release manifest SHA-256:
+`90a711e5b711ef86eb56fc19720dcb598b6a76cfc7d00f1a37974fce809803ab`.
+The tested bytes are selected for development/main Git publication; the preceding
+complete Web package is retained under this candidate's `previous-web/`.
+Vercel deploys automatically; no CLI deployment or rollout wait. Local functional
+results do not certify the creator's browser storage, production rollout, all
+world connections, seamless travel, strict performance or actual phones.
+No content, quality preset, save or creator browser storage was removed/reset.
+
 ### Direct Travel Restoration - 2026-11-16
 
 The creator still cannot reach Wychwood and supplied a view of the closed

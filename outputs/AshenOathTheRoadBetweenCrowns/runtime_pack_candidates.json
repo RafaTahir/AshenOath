@@ -1,22 +1,22 @@
 {
   "schema_version": 2,
-  "generated_at_utc": "2026-11-15T16:37:49.1453146Z",
-  "build_id": "proximity-streaming-direct-20261116-f72852b-r2",
-  "generated_from_commit": "f72852b7919124e878af1af9c7f01a558a9d386e",
+  "generated_at_utc": "2026-11-15T17:39:51.3041307Z",
+  "build_id": "proximity-streaming-activation-20261116-e8fab7f-r1",
+  "generated_from_commit": "e8fab7f24141dc88b4a0b3519eb711c226407224",
   "source_dirty": true,
-  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\proximity-streaming-direct-20261116-f72852b-r2\\runtime-packs",
+  "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\proximity-streaming-activation-20261116-e8fab7f-r1\\runtime-packs",
   "artifacts_are_external": true,
   "max_deployment_bytes": 268435456,
   "deployment_policy_id": "vercel-git-256mib-v1",
-  "total_bytes": 171182620,
+  "total_bytes": 171182588,
   "packs": [
     {
       "id": "base",
-      "version": "proximity-streaming-direct-20261116-f72852b-r2",
+      "version": "proximity-streaming-activation-20261116-e8fab7f-r1",
       "preset": "Runtime Pack Base",
       "artifact": "base.pck",
-      "bytes": 6134384,
-      "sha256": "e72511e393c22cf0447d1f381dcf70cfd93b9177bfb3260a871ea4a837b5ad47",
+      "bytes": 6134352,
+      "sha256": "4866ddc3e66770cb7dcf65ff29fbc68769dcf73cef66a197aa369782f0649bec",
       "status": "candidate_external",
       "log": "logs/pack-base.stdout.log"
     },
@@ -473,11 +473,11 @@
   ],
   "errors": [],
   "selected_web_export": {
-    "build_id": "proximity-streaming-direct-20261116-f72852b-r2",
-    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\proximity-streaming-direct-20261116-f72852b-r2\\export",
-    "generated_from_commit": "f72852b7919124e878af1af9c7f01a558a9d386e",
-    "artifacts_total_bytes": 173569787,
-    "root_pck_sha256": "b2648ab81f7dd9498e2f613c574881af2191ee7c8fa81c3ec67a021e40f74568",
+    "build_id": "proximity-streaming-activation-20261116-e8fab7f-r1",
+    "artifact_directory": "D:\\Projects\\AshenOath\\.release-gate\\proximity-streaming-activation-20261116-e8fab7f-r1\\export",
+    "generated_from_commit": "e8fab7f24141dc88b4a0b3519eb711c226407224",
+    "artifacts_total_bytes": 173569954,
+    "root_pck_sha256": "4411fb81fc6c393759f6550ccc77d2ba0b461e5bd6b5edd4aced49e0eb600833",
     "note": "Selected export uses gzip transport; native records retain exact decoded pack provenance."
   }
 }

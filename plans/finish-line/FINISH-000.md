@@ -15,6 +15,18 @@ persistent earned save and ordinary displayed-entrance Use. Exact evidence and
 limitations are recorded in the cohesive-game record. No whole-ticket acceptance,
 performance pass or creator save-durability repair is implied.
 
+The corrected second run **passes** physical Greyfen -> Wychwood -> Greyfen,
+then ordinary displayed-entrance Use into Wychwood. It also confirms the earned
+Wychwood save in the isolated browser's persistent storage. Zero recorded
+engine/browser runtime errors or failed HTTP requests. Both allocations are
+consumed. Source `e8fab7f`, build
+`proximity-streaming-activation-20261116-e8fab7f-r1`; full package integrity
+passes at 173,597,940 bytes / 55 files, with every asset pack unchanged.
+The exact tested export is selected for Git publication. No Vercel wait,
+whole-FINISH acceptance, all-route/performance/phone certification or repair of
+the creator's separate browser-storage warning is claimed. See the cohesive
+record for exact hashes, screenshots and the two independent run reports.
+
 2026-11-16: the creator still reports blocked travel. Restore direct, foreground
 destination loading and authored arrivals instead of requiring speculative
 scene readiness. Experimental scene construction/readiness barriers are disabled;

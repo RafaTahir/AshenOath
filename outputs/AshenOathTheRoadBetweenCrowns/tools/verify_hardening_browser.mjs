@@ -680,7 +680,9 @@ async function streaming(page, viewport, touch) {
         {x:0,y:0,z:-21},{x:6,y:0,z:-21},{x:6,y:0,z:-23.1}],
       crossing_point:{x:6,y:0,z:-25},crossing_direction:{x:0,y:0,z:-1},
     } : {
-      points:[s.player.position,{x:-6,y:0,z:23.1}],
+      points:options['direct-travel']
+        ? [s.player.position,{x:0,y:0,z:15},{x:0,y:0,z:21},{x:-6,y:0,z:21},{x:-6,y:0,z:23.1}]
+        : [s.player.position,{x:-6,y:0,z:23.1}],
       crossing_point:{x:-6,y:0,z:25},crossing_direction:{x:0,y:0,z:1},
     };
   }
@@ -741,8 +743,7 @@ async function streaming(page, viewport, touch) {
     event({event:'direct_earned_save',files:Object.fromEntries(Object.entries(saved).map(([name,value])=>[name,{
       journey_id:value.data?.journey_id,zone:value.data?.zone,bytes:value.text?.length
     }]))});
-    assert(Object.values(saved).some(value=>value.data?.zone==='wychwood'),
-      'The earned Wychwood journey was not confirmed in persistent browser storage');
+    const savedWychwood=Object.values(saved).some(value=>value.data?.zone==='wychwood');
     const paused=await observe(page);
     if(paused?.paused) await clickButton(page,'Resume',viewport,false);
     await stableGameplay(page);
@@ -758,6 +759,7 @@ async function streaming(page, viewport, touch) {
     const used=await waitFor(async()=>{const s=await observe(page);return playable(s)&&s.zone==='wychwood'?s:null;},'Use enters Wychwood');
     event({event:'direct_use_arrival',state:used});
     await screenshot(page,'wychwood-use-arrival');
+    assert(savedWychwood,'The earned Wychwood journey was not confirmed in persistent browser storage');
     return;
   }
   if (!options['streaming-return-only']) {
