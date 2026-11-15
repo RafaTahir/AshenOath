@@ -31,6 +31,9 @@ now reports `cache_skipped`, not a failed game pack, when CacheStorage is absent
 or a speculative write fails. Required downloads still validate full identity and
 can load without persistent cache. Promoting an in-flight speculative request
 also promotes its shared browser operation, not only the Godot dictionary.
+Cache open/match and speculative writes additionally have a bounded optional
+wait under the existing operation abort owner. A stalled CacheStorage promise
+cannot indefinitely prevent a required network download or pack handoff.
 Save files, settings and the truthful pending/durable/failed storage receipt are
 unchanged. The screenshot does not establish the exact save-confirmation cause;
 do not suppress the warning or claim that durable storage has been repaired.
@@ -41,6 +44,12 @@ No new gameplay/browser run, automated runtime check, screenshot or benchmark is
 authorized or performed. Package compilation and integrity remain separate from
 runtime acceptance. Produce one source-aligned package and push development/main
 once; Vercel deploys automatically, with no manual deployment or rollout wait.
+
+The first direct-travel build (`proximity-streaming-direct-20261116-5779f10-r1`)
+compiled and passed package integrity, but stays unpublished. Final static review
+found unbounded CacheStorage waits still in the required fetch path. The bounded
+shell correction requires a new source-aligned candidate; do not label the first
+build as including it or publish that intermediate package.
 
 ### Road Entrance Requests - 2026-11-14
 

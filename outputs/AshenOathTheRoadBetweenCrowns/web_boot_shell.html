@@ -472,6 +472,15 @@
           if (signal.aborted) cancelled();
         });
       }
+      async function optionalPackCache(promise, signal) {
+        let timeout;
+        try {
+          return await awaitWithAbort(Promise.race([
+            promise.catch(() => null),
+            new Promise(resolve => { timeout = window.setTimeout(() => resolve(null), 500); }),
+          ]), signal);
+        } finally { window.clearTimeout(timeout); }
+      }
       async function readPackManifest(signal) {
           const releaseResponse = await fetch('release_manifest.json', { cache: 'no-cache', signal });
           if (!releaseResponse.ok) throw new Error(`release manifest HTTP ${releaseResponse.status}`);
@@ -564,8 +573,10 @@
           let response = null;
           if ('caches' in window) {
             try {
-              packCache = await caches.open('ashenoath-runtime-packs-content-v2');
-              response = await packCache.match(packUrl);
+              const stored = await optionalPackCache(
+                caches.open('ashenoath-runtime-packs-content-v2').then(async cache =>
+                  ({ cache, response: await cache.match(packUrl) })), controller.signal);
+              if (stored) { packCache = stored.cache; response = stored.response; }
             } catch (_) { packCache = null; }
           }
           if (operation.cacheOnly && !packCache) {
@@ -585,8 +596,9 @@
           // Speculation owns HTTP-cache bytes, not a second in-memory game pack.
           if (operation.cacheOnly) {
             if (!fromCache) {
-              try { await packCache.put(packUrl, new Response(payload)); }
-              catch (_) { packCache = null; }
+              const stored = await optionalPackCache(
+                packCache.put(packUrl, new Response(payload)).then(() => true), controller.signal);
+              if (!stored) packCache = null;
             }
             if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
             if (operation.cacheOnly) {
