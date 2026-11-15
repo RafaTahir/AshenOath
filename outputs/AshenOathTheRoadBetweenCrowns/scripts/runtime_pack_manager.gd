@@ -319,6 +319,7 @@ func request_cached_pack(pack_id: String, priority: int = 1500) -> bool:
 	var order: Array[String] = []
 	if _dependency_order(id, {}, order) != "": return false
 	for dependency: String in order:
+		if get_state(dependency) == "cache_skipped": continue
 		if get_state(dependency) == "failed": return false
 		if not _queue_pack(dependency, priority, true): return false
 	_start_pending_downloads()
@@ -368,7 +369,11 @@ func _queue_pack(id: String, priority: int = 100, cache_only: bool = false) -> b
 		return false
 	if get_state(id) in ["queued", "shell_loading", "downloading", "verifying", "verified", "mounting"]:
 		requests[id]["priority"] = mini(priority, int(requests[id].get("priority", 100)))
-		if not cache_only: requests[id]["cache_only"] = false
+		if not cache_only:
+			var promote := bool(requests[id].get("cache_only",false))
+			requests[id]["cache_only"] = false
+			if promote and OS.has_feature("web") and get_state(id) == "shell_loading":
+				JavaScriptBridge.eval("window.__ashenOathRequestPack && window.__ashenOathRequestPack(%s, %s, %d, %s, false)" % [JSON.stringify(id),JSON.stringify(_expected_hash(id)),_expected_bytes(id),JSON.stringify(str(pack.get("version","")))],true)
 		return true
 	if get_state(id) == "cached":
 		if cache_only: return true
@@ -929,7 +934,11 @@ func _process(delta: float) -> void:
 			if not OS.has_feature("web") or get_state(id) != "shell_loading":
 				continue
 			var state := get_web_preloaded_state(id)
-			if state == "cached":
+			if state == "cache_skipped":
+				active_downloads.erase(id)
+				requests[id]["state"] = "cache_skipped" if bool(requests[id].get("cache_only",false)) else "queued"
+				requests[id]["progress"] = 0.0
+			elif state == "cached":
 				active_downloads.erase(id)
 				requests[id]["state"] = "cached" if bool(requests[id].get("cache_only",false)) else "queued"
 				requests[id]["progress"] = 1.0

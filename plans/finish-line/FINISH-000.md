@@ -6,6 +6,15 @@ Scope: finish and establish acceptance of the retained game, not replace it.
 
 ## Current Streaming Work - 2026-11-13
 
+2026-11-16: the creator still reports blocked travel. Restore direct, foreground
+destination loading and authored arrivals instead of requiring speculative
+scene readiness. Experimental scene construction/readiness barriers are disabled;
+optional selected-neighbor downloads remain. Open story-authorized exits at
+construction, preserve locked routes and all content/saves, and prevent optional
+CacheStorage failure from poisoning required downloads. Four owners compile and
+inline shell scripts parse without execution. No new runtime acceptance or save
+durability pass is claimed. See the direct-travel section of the cohesive record.
+
 2026-11-14 follow-up under FINISH-001/005/014/016: repair ordinary road entrance
 Use, retained explicit travel requests and bounded failed-preparation retries.
 The earlier physical-walking checks did not cover this entrance path, and the

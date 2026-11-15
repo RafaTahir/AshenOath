@@ -2,6 +2,46 @@
 
 ## Proximity-Driven Streaming - 2026-11-13
 
+### Direct Travel Restoration - 2026-11-16
+
+The creator still cannot reach Wychwood and supplied a view of the closed
+readiness leaf with a browser-save confirmation failure. The live release is
+the entrance repair from `622add7`/publication `ecc6d35`; remote main/development
+also match that publication. This is not explained by an older rollout. The
+previous narrow local results do not override the creator's continuing failure.
+
+Restore the existing demand-loaded travel path, traced against `a29972e`, rather
+than another mandatory speculative-readiness repair. `REQUIRE_PREPARED_ROADS`
+is false: available road leaves open during construction and remain open; Use
+and physical boundary entry load the requested destination directly at its
+authored arrival. Story-locked roads remain closed. Destination packs take
+foreground priority and explicit attempts can retry previously failed downloads.
+Existing complete-world construction, collision support checks, failure recovery,
+camera setup and source-world retention remain authoritative. No readiness
+result is faked, and no unsupported destination is made playable.
+
+This is a targeted travel rollback, not a reset of content, saves, characters,
+world geometry, quests or visual settings. Speculative scene construction and
+whole-campaign cache scheduling are disabled in the active policy. Optional
+selected-neighbor HTTP caching remains; normal loading presentation may appear
+while the explicit destination prepares. Seamless/instant travel is not claimed.
+
+Optional cache failures must not become required travel failures. Web prefetch
+now reports `cache_skipped`, not a failed game pack, when CacheStorage is absent
+or a speculative write fails. Required downloads still validate full identity and
+can load without persistent cache. Promoting an in-flight speculative request
+also promotes its shared browser operation, not only the Godot dictionary.
+Save files, settings and the truthful pending/durable/failed storage receipt are
+unchanged. The screenshot does not establish the exact save-confirmation cause;
+do not suppress the warning or claim that durable storage has been repaired.
+
+Four changed GDScript owners compile. Three inline JavaScript blocks parse
+without execution after correcting the syntax-check command's extraction regex.
+No new gameplay/browser run, automated runtime check, screenshot or benchmark is
+authorized or performed. Package compilation and integrity remain separate from
+runtime acceptance. Produce one source-aligned package and push development/main
+once; Vercel deploys automatically, with no manual deployment or rollout wait.
+
 ### Road Entrance Requests - 2026-11-14
 
 The creator still could not leave the village after `d407e04`, and directed a

@@ -12,6 +12,9 @@ const SWITCH_ADVANTAGE := 4.0
 const SWITCH_DWELL := 0.50
 const ROAD_INTENT_RADIUS := 8.0
 const AUTOMATIC_ROAD_RETRIES := 2
+# Keep speculative scene construction out of the required travel path until
+# it has earned runtime acceptance. Verified HTTP caching remains optional.
+const REQUIRE_PREPARED_ROADS := false
 
 signal boundary_transition_requested(source_zone: String, target_zone: String, edge_id: String)
 signal sector_activated(zone_id: String)
@@ -109,6 +112,9 @@ func _sources_changed() -> void:
 	_story_epoch += 1
 	_cache_order.clear()
 
+func uses_prepared_roads() -> bool:
+	return REQUIRE_PREPARED_ROADS
+
 func _background_work_allowed() -> bool:
 	return is_instance_valid(host) and not host.resource_shutdown_prepared \
 		and host.game_started and _playable_seconds >= FIRST_CONTROL_GRACE \
@@ -149,10 +155,13 @@ func _process(delta: float) -> void:
 		_poll = 0.0
 		_selected_connection = _preparation_connection()
 		_refresh_road_status()
-		if _cache_order.is_empty(): _refresh_cache_order()
+		if uses_prepared_roads() and _cache_order.is_empty(): _refresh_cache_order()
 		if _cache_elapsed >= 0.50:
 			_cache_elapsed = 0.0
 			_cache_next_destination()
+	if not uses_prepared_roads():
+		if _neighbor_scope != null: cancel_preparation()
+		return
 	if _selected_connection.is_empty(): return
 	var target := str(_selected_connection.target)
 	if _neighbor_scope != null and _neighbor_scope.zone_id != target:
@@ -238,7 +247,14 @@ func _refresh_cache_order() -> void:
 			if not _jobs.has(target): _record_job(target,"queued")
 
 func _cache_next_destination() -> void:
-	if host.runtime_packs == null or _cache_order.is_empty(): return
+	if host.runtime_packs == null: return
+	if not uses_prepared_roads():
+		if not _selected_connection.is_empty():
+			var selected := str(_selected_connection.target)
+			for id: String in host.runtime_packs.required_zone_packs(selected,host._zone_encounter_packs(selected)):
+				host.runtime_packs.request_cached_pack(id,1500)
+		return
+	if _cache_order.is_empty(): return
 	var target := _cache_order[_cache_cursor % _cache_order.size()]
 	_cache_cursor = (_cache_cursor+1) % _cache_order.size()
 	var cached := true
@@ -279,6 +295,11 @@ func request_road_travel(target: String, arrival: Vector3) -> bool:
 		host.hud.toast("That road is not open yet.")
 		return false
 	if not host.game_started or not is_instance_valid(host.player) or host._journey_load_pending(): return false
+	if not uses_prepared_roads():
+		_clear_road_travel()
+		cancel_preparation()
+		host._request_zone_load(str(edge.target),arrival if arrival != Vector3.ZERO else _road_arrival(edge))
+		return true
 	_road_travel_serial += 1
 	_road_commit_queued = false
 	_road_travel = {"source":str(host.current_zone_id),"target":str(edge.target),"arrival":arrival,
@@ -286,6 +307,19 @@ func request_road_travel(target: String, arrival: Vector3) -> bool:
 		"quality":str(host.settings.settings.get("quality_preset","balanced"))}
 	request_road(str(edge.target),str((_jobs.get(str(edge.target),{}) as Dictionary).get("state","")) == "failed")
 	return true
+
+func _road_arrival(edge: Dictionary) -> Vector3:
+	var marker: Node = host.zone_root.find_child("gate_"+str(edge.target),true,false)
+	if is_instance_valid(marker):
+		var authored: Variant = marker.get_meta("spawn_pos",Vector3.ZERO)
+		if authored is Vector3 and authored != Vector3.ZERO: return authored
+	var raw: Array = edge.get("arrival",[])
+	if raw.size() >= 3: return Vector3(float(raw[0]),float(raw[1]),float(raw[2]))
+	var reverse := WorldSectorManifest.connection_between(str(edge.target),str(edge.source))
+	if not reverse.is_empty():
+		var inside := WorldSectorManifest.connector_points(reverse)[0]-WorldSectorManifest.direction(str(reverse.id))
+		return Vector3(inside.x,1.0,inside.z)
+	return Vector3(0,1,0)
 
 func _clear_road_travel() -> void:
 	if _road_travel.is_empty(): return
@@ -322,13 +356,15 @@ func _refresh_road_status() -> void:
 	for edge: Dictionary in WorldSectorManifest.connections(str(host.current_zone_id),host.story_state):
 		var status: Node = host.zone_root.get_node_or_null("ConnectedRoads/RoadTo_"+str(edge.target)+"/TravelGate/RoadPreparation")
 		var available := WorldSectorManifest.edge_available(edge,host.quests,host.story_state)
-		var ready := available and has_prepared(str(edge.target))
+		var ready := available and (not uses_prepared_roads() or has_prepared(str(edge.target)))
 		if is_instance_valid(status):
 			status.set_interaction_enabled(available and not ready)
 			var job: Dictionary = _jobs.get(str(edge.target),{})
 			status.state_label = "Retry road" if str(job.get("state","")) == "failed" else "Prepare road"
 		if not ready:
 			preload("res://scripts/connected_route_geometry.gd").close_gate(host.zone_root,str(edge.target),host.player.global_position)
+		elif not uses_prepared_roads():
+			preload("res://scripts/connected_route_geometry.gd").open_gate(host.zone_root,str(edge.target),true)
 		var entrance: Node = host.zone_root.find_child("gate_"+str(edge.target),true,false)
 		if is_instance_valid(entrance) and bool(entrance.get_meta("interactive_road_entrance",false)):
 			var job: Dictionary = _jobs.get(str(edge.target),{})
@@ -795,6 +831,7 @@ func preparation_snapshot() -> Dictionary:
 		"render_groups_remaining":_render_nodes.size(),"last_render_delay_usec":_last_render_delay_usec,
 		"render_unique_groups":_render_groups.size(),"entry_render_started":_entry_render_started},true)
 	result["requested_travel"] = str(_road_travel.get("target",""))
+	result["travel_mode"] = "prepared_road" if uses_prepared_roads() else "direct"
 	return result
 
 func _exit_tree() -> void:
@@ -842,7 +879,7 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 			var frame := WorldSectorManifest.crossing_frame(connection)
 			var point := frame.affine_inverse()*actor.global_position
 			var available := WorldSectorManifest.edge_available(connection,host.quests,host.story_state)
-			var prepared := available and has_prepared(str(connection.target))
+			var prepared := available and (not uses_prepared_roads() or has_prepared(str(connection.target)))
 			var threshold := 0.0 if prepared else -1.25
 			if point.z < threshold or point.z > 3.0 or absf(point.x) > float(connection.half_width): continue
 			var normal := WorldSectorManifest.direction(str(connection.id))
@@ -854,6 +891,14 @@ func update_player(actor: Node3D, zone_id: String, delta: float) -> bool:
 				if point.z > -0.30:
 					point.z = -0.30; actor.global_position = frame*point
 					actor.velocity -= normal*maxf(0.0,actor.velocity.dot(normal))
+				continue
+			if not uses_prepared_roads():
+				_crossing.clear()
+				pending_transition = {"source":source,"target":str(connection.target),"edge":str(connection.id),"physical":true}
+				if host.request_seamless_boundary_transition(str(connection.target),_road_arrival(connection),str(connection.id)):
+					transition_count += 1
+					return true
+				pending_transition.clear()
 				continue
 			var transform := WorldSectorManifest.crossing_transform(connection)
 			var arrival := WorldSectorManifest.crossing_arrival_transform(transform, normal, point.z)

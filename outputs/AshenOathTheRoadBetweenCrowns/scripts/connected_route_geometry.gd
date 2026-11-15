@@ -110,6 +110,11 @@ static func install(context: ZoneBuildContext, only_edge: int = -1) -> void:
 		_strip(path,"BendArch",roof_left,roof_right,masonry,true,"arch")
 		_make_route_details(path,edge,points,left,right,style,timber,masonry,context)
 		_make_gate(path,edge,width,timber)
+		var travel = context.construction_host().seamless_world
+		if travel != null and not travel.uses_prepared_roads() and Sectors.edge_available(edge,context.quests,context.story_state):
+			open_gate(context.zone_root,str(edge.target),true)
+			var preparation: Node = path.get_node("TravelGate/RoadPreparation")
+			preparation.set_interaction_enabled(false)
 		_make_landmark(path,edge,width,timber,banks)
 		path.set_meta("required_ground",true)
 		var marker := context.zone_root.find_child("gate_"+str(edge.target),true,false) as Node3D

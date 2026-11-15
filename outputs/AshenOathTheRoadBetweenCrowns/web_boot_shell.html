@@ -568,6 +568,11 @@
               response = await packCache.match(packUrl);
             } catch (_) { packCache = null; }
           }
+          if (operation.cacheOnly && !packCache) {
+            const skipped = { state: 'cache_skipped', path: '', progress: 0 };
+            if (packOperations.get(id) === operation) window.__ashenOathPreloadedPacks[id] = skipped;
+            return skipped;
+          }
           const fromCache = Boolean(response);
           if (!response) response = await fetch(packUrl, { cache: operation.reload ? 'reload' : 'force-cache', signal: controller.signal });
           if (!response.ok) throw new Error(`${id} pack HTTP ${response.status}`);
@@ -579,11 +584,13 @@
           if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
           // Speculation owns HTTP-cache bytes, not a second in-memory game pack.
           if (operation.cacheOnly) {
-            if (!packCache) throw new Error('Persistent pack cache unavailable');
-            if (!fromCache) await packCache.put(packUrl, new Response(payload));
+            if (!fromCache) {
+              try { await packCache.put(packUrl, new Response(payload)); }
+              catch (_) { packCache = null; }
+            }
             if (controller.signal.aborted || packOperations.get(id) !== operation) return null;
             if (operation.cacheOnly) {
-              const cached = { ...metadata, state: 'cached', path: '', progress: 1 };
+              const cached = { ...metadata, state: packCache ? 'cached' : 'cache_skipped', path: '', progress: packCache ? 1 : 0 };
               window.__ashenOathPreloadedPacks[id] = cached;
               return cached;
             }

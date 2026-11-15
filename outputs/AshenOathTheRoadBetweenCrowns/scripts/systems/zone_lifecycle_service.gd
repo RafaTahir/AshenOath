@@ -36,6 +36,8 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 		return false
 	var target := zone_id.strip_edges().to_lower()
 	if _wait_for_playable_road(target): return false
+	var road := WorldSectorManifest.connection_between(current_zone_id,target)
+	if not road.is_empty() and not WorldSectorManifest.edge_available(road,quests,story_state): return false
 	if zone_runtime_coordinator != null and (seamless_world == null or seamless_world.crossing_for(target).is_empty()):
 		var request := zone_runtime_coordinator.normalize_zone_request(target, spawn_pos)
 		if not bool(request.get("ok", false)):
@@ -50,6 +52,8 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 	requested_zone_spawn = spawn_pos
 	loading_started_usec = Time.get_ticks_usec()
 	zone_load_request_pending = false
+	if seamless_world != null and not seamless_world.uses_prepared_roads() and hud != null:
+		hud.arm_loading("Travelling to " + _zone_display_name(target) + "...")
 	player.set_transition_locked(true)
 	# A complete neighbor is reused; a cold destination keeps its honest,
 	# cancellable preparation presentation instead of freezing an old frame.
@@ -58,6 +62,7 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 
 func _wait_for_playable_road(target: String, retry: bool = false) -> bool:
 	if not game_started or seamless_world == null or not is_instance_valid(zone_root): return false
+	if not seamless_world.uses_prepared_roads(): return false
 	if WorldSectorManifest.connection_between(current_zone_id,target).is_empty(): return false
 	if seamless_world.has_prepared(target): return false
 	seamless_world.request_road(target,retry)
@@ -106,6 +111,9 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 	_begin_gameplay_handoff("zone_travel")
 	if runtime_packs != null:
 		runtime_packs.quality_preset = str(settings.settings.get("quality_preset", "balanced"))
+		# An explicit destination must not wait behind the previous world's
+		# speculative queue or rely on its background-mount permissions.
+		runtime_packs.prioritize_zone(zone_id,encounter_packs)
 	zone_pack_request_serial += 1
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
@@ -121,7 +129,7 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 			opening_pack_waiting = true
 			if hud != null and hud.has_method("arm_loading"):
 				hud.arm_loading("Preparing Greyfen's saved encounter..." if not encounter_packs.is_empty() else "Preparing the road into Wychwood...")
-			runtime_packs.request_zone_packs(zone_id, encounter_packs)
+			runtime_packs.request_zone_packs(zone_id, encounter_packs, true)
 			_begin_travel_download(zone_id,encounter_packs)
 			_wait_for_opening_pack(zone_id, spawn_pos, zone_pack_request_serial, encounter_packs)
 			return
@@ -138,7 +146,7 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 		campaign_pack_waiting = true
 		if hud != null and hud.has_method("arm_loading"):
 			hud.arm_loading("Preparing the road beyond Greyfen...")
-		runtime_packs.request_zone_packs(zone_id,encounter_packs)
+		runtime_packs.request_zone_packs(zone_id,encounter_packs,true)
 		_begin_travel_download(zone_id,encounter_packs)
 		_wait_for_campaign_pack(zone_id, spawn_pos, zone_pack_request_serial,encounter_packs)
 		return
