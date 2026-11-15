@@ -51,6 +51,7 @@ if (resumeProfile) {
 const reportPath = resolve(options.report || join(runRoot, 'report.json'));
 const evidenceRoot = reportPath.replace(/\.json$/i, '') + '_evidence';
 mkdirSync(runRoot, { recursive: true });
+mkdirSync(dirname(reportPath), { recursive: true });
 mkdirSync(evidenceRoot, { recursive: true });
 const releaseBytes = readFileSync(join(exportRoot, 'release_manifest.json'));
 const release = JSON.parse(releaseBytes);
@@ -167,7 +168,14 @@ await new Promise((resolveListen, rejectListen) => {
   server.once('error', rejectListen);
   server.listen(serverPort, '127.0.0.1', resolveListen);
 });
-const origin = `http://127.0.0.1:${server.address().port}`;
+const origin = options.origin ? new URL(String(options.origin)).origin : `http://127.0.0.1:${server.address().port}`;
+if (options.origin) {
+  assert(scenario === 'streaming' && options['direct-travel'], 'Remote origins require the focused direct-travel case');
+  const response = await fetch(`${origin}/release_manifest.json`, { cache: 'no-store' });
+  assert(response.ok, 'Remote release manifest unavailable');
+  assert.equal(createHash('sha256').update(Buffer.from(await response.arrayBuffer())).digest('hex'),
+    report.release_manifest_sha256, 'Remote bytes do not match the selected candidate');
+}
 report.origin = origin;
 const sleep = ms => new Promise(resolveSleep => setTimeout(resolveSleep, ms));
 let currentCase = null;
@@ -688,10 +696,13 @@ async function streaming(page, viewport, touch) {
           if (s.zone === target && playable(s)) return s;
           assert(s.zone === source || (target && s.zone === target), `Unexpected destination ${s.zone}`);
           loadingSeen ||= Boolean(s.ui.loading_visible);
-          assert(!s.ui.loading_visible && !s.paused, 'A physical road opened modal loading or paused the world');
+          if (!options['direct-travel']) assert(!s.ui.loading_visible && !s.paused, 'A physical road opened modal loading or paused the world');
           const phase = JSON.stringify([s.streaming?.selected_destination,s.streaming?.state,s.streaming?.step,s.streaming?.render_groups_remaining]);
           if (!phases.has(phase)) { phases.add(phase); event({ event:'streaming_progress', zone:s.zone, preparation:s.streaming }); }
-          if (!playable(s)) { await sleep(100); continue; }
+          if (!playable(s)) {
+            for (const key of [...held]) { await page.keyboard.up(key); held.delete(key); }
+            await sleep(100); continue;
+          }
           const dx = waypoint.x-s.player.position.x, dz = waypoint.z-s.player.position.z;
           const distance = Math.hypot(dx,dz);
           if (distance < 0.45) break;
@@ -709,6 +720,45 @@ async function streaming(page, viewport, touch) {
       if (target) return waitFor(async () => { const s = await observe(page); return playable(s) && s.zone === target ? s : null; }, `arrival in ${target}`, 15000);
       return observe(page);
     } finally { for (const key of held) await page.keyboard.up(key).catch(() => {}); }
+  }
+  if (options['direct-travel']) {
+    event({event:'direct_initial_state',state:await observe(page)});
+    const north=await crossingRoute('gate_wychwood','greyfen');
+    event({event:'direct_north_route',route:north});
+    await walk(north.points,'greyfen');
+    const before=await observe(page);
+    event({event:'direct_gate_approach',state:before});
+    await screenshot(page,'north-gate');
+    const outward={...north.crossing_point,x:north.crossing_point.x+north.crossing_direction.x*1.2,z:north.crossing_point.z+north.crossing_direction.z*1.2};
+    const arrived=await walk([outward],'greyfen','wychwood');
+    event({event:'direct_outward_arrival',state:arrived,elapsed_ms:Date.now()-started});
+    await screenshot(page,'wychwood-arrival');
+    await stableGameplay(page);
+    await pause(page,viewport,false);
+    await clickButton(page,'Quick Save',viewport,false);
+    await sleep(5000);
+    const saved=await persistence(page);
+    event({event:'direct_earned_save',files:Object.fromEntries(Object.entries(saved).map(([name,value])=>[name,{
+      journey_id:value.data?.journey_id,zone:value.data?.zone,bytes:value.text?.length
+    }]))});
+    assert(Object.values(saved).some(value=>value.data?.zone==='wychwood'),
+      'The earned Wychwood journey was not confirmed in persistent browser storage');
+    const paused=await observe(page);
+    if(paused?.paused) await clickButton(page,'Resume',viewport,false);
+    await stableGameplay(page);
+    const back=await crossingRoute('gate_greyfen','wychwood');
+    event({event:'direct_return_route',route:back});
+    const homeward={...back.crossing_point,x:back.crossing_point.x+back.crossing_direction.x*1.2,z:back.crossing_point.z+back.crossing_direction.z*1.2};
+    const returned=await walk([...back.points,homeward],'wychwood','greyfen');
+    event({event:'direct_return_arrival',state:returned,loading_ui_seen:loadingSeen,elapsed_ms:Date.now()-started});
+    await screenshot(page,'greyfen-return');
+    await walk([{x:0,y:0,z:-14.4}],'greyfen');
+    await waitFor(async()=>{const s=await observe(page);return s?.focus?.id==='gate_wychwood'?s:null;},'displayed Wychwood entrance');
+    await page.keyboard.press('e');
+    const used=await waitFor(async()=>{const s=await observe(page);return playable(s)&&s.zone==='wychwood'?s:null;},'Use enters Wychwood');
+    event({event:'direct_use_arrival',state:used});
+    await screenshot(page,'wychwood-use-arrival');
+    return;
   }
   if (!options['streaming-return-only']) {
   const north = await crossingRoute('gate_wychwood','greyfen');
@@ -833,7 +883,7 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
         zone_load_request_pending: s.zone_load_request_pending, player: s.player, camera: s.camera,
         ui: s.ui, dialogue: s.dialogue, input: s.input, runtime_packs: s.runtime_packs,
         gates: s.gates, interactions: s.interactions, focus: s.focus,
-        enemies: s.enemies, inventory: s.inventory, settings: s.settings, performance: s.performance, streaming:s.streaming };
+        enemies: s.enemies, inventory: s.inventory, settings: s.settings, performance: s.performance, streaming:s.streaming, saves:s.saves };
       const phase = JSON.stringify([s.zone, s.ready, s.paused, s.ui?.active_menu, s.ui?.loading_visible, s.new_game_ready]);
       if (phase !== cache.phase) { cache.phase = phase; console.log(`HARDENING STATE: ${result.name} ${phase}`); }
     } catch { /* Ignore non-observation payloads. */ }
@@ -889,6 +939,14 @@ async function runCase(name, touch, body, beforeNavigate = () => {}) {
     if (/SCRIPT ERROR|Parse Error|\bERROR:|memory access out of bounds|RuntimeError:|Aborted\(/i.test(message.text())) runtimeErrors.push(message.text());
   });
   page.on('pageerror', error => { runtimeErrors.push(String(error)); result.console.push({ type: 'pageerror', text: String(error) }); });
+  if (options['direct-travel']) {
+    page.on('response', response => {
+      if(response.url().startsWith(origin)) report.requests.push({url:response.url(),status:response.status(),headers:response.headers(),at:Date.now()});
+    });
+    page.on('requestfailed', request => {
+      report.requests.push({url:request.url(),failure:request.failure(),at:Date.now()});
+    });
+  }
   try {
     beforeNavigate();
     await enterMenu(page, touch);
@@ -925,7 +983,7 @@ try {
     if (scenario === 'streaming') {
       assert.equal(mode,'desktop','One allocated desktop streaming case only');
       await runCase('desktop-streaming',false,streaming,
-        () => { if (!options['streaming-return-only']) armFault('cold_hold',new URL(packs.packs.adjacent.url,origin).pathname.replace(/^\//,'')); });
+        () => { if (!options['streaming-return-only'] && !options['direct-travel']) armFault('cold_hold',new URL(packs.packs.adjacent.url,origin).pathname.replace(/^\//,'')); });
     }
     if (['all', 'startup', 'smoke'].includes(scenario)) {
       const startupDelay = () => {

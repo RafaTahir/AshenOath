@@ -495,8 +495,9 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		return
 	_begin_gameplay_handoff("zone_activation")
 	var paired_crossing := game_started and seamless_world != null and current_zone_id != zone_id and not journey_loading.pending(_host) and not WorldSectorManifest.connection_between(current_zone_id,zone_id).is_empty()
-	if paired_crossing and seamless_world != null and is_instance_valid(zone_root) and is_instance_valid(player) and not seamless_world.has_prepared(zone_id):
-		seamless_world.request_road(zone_id)
+	# Use the same policy as the entrance and physical boundary. Direct travel
+	# must reach the normal builder, not wait for disabled neighbor construction.
+	if paired_crossing and _wait_for_playable_road(zone_id):
 		player.set_transition_locked(false)
 		_finish_gameplay_handoff()
 		return

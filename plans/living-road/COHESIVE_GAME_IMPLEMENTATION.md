@@ -2,6 +2,33 @@
 
 ## Proximity-Driven Streaming - 2026-11-13
 
+### Direct Activation Policy Repair - 2026-11-16
+
+The creator authorized exactly two focused runtime runs. Run one used ordinary
+Chrome keyboard/mouse input, a fresh isolated profile and the exact live
+`proximity-streaming-direct-20261116-f72852b-r2` release. The remote manifest
+matched local bytes. It reached the north road, passed the open leaf and triggered
+travel, but never activated Wychwood within the 240-second functional bound.
+No script/browser runtime error or failed HTTP response was recorded. The
+failure screenshot shows the orphaned "Travelling to Wychwood" overlay.
+Evidence: `D:/Temp/AshenOath/travel-two-runs-20261116/live-first.json` and its
+adjacent evidence directory. No creator save or browser profile was touched.
+
+Source isolation identifies a second prepared-neighbor requirement inside
+`ZoneLifecycleService._load_zone()`. It ignored the direct-travel policy, requested
+disabled speculative construction, then unlocked Greyfen without entering the
+destination builder or clearing the overlay. Activation now uses the existing
+`_wait_for_playable_road()` policy, matching entrance and physical-boundary entry.
+Direct mode therefore reaches normal complete-world construction; prepared mode
+retains its guard. No content, balance, geometry, save or hosting change is needed.
+
+The existing focused browser driver accepts a manifest-matched production origin
+and direct-travel policy, with passive HTTP/error capture. Its scoped sequence is
+physical outward/return, earned Wychwood persistence and displayed-entrance Use.
+No fixture, teleport or gameplay mutation is used. Run two is reserved for the
+corrected production package; compilation is not its substitute. Historical
+startup/performance failures and the separate creator save report remain intact.
+
 ### Direct Travel Restoration - 2026-11-16
 
 The creator still cannot reach Wychwood and supplied a view of the closed

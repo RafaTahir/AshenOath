@@ -6,6 +6,15 @@ Scope: finish and establish acceptance of the retained game, not replace it.
 
 ## Current Streaming Work - 2026-11-13
 
+2026-11-16 two-run follow-up: the first isolated live Chrome run reproduced an
+orphaned travel overlay after passing the northern leaf. A remaining activation
+guard ignored direct-travel policy and waited for disabled neighbor construction.
+It now delegates to the existing shared policy. The changed owner compiles;
+the second run is reserved for corrected-package outward travel, return,
+persistent earned save and ordinary displayed-entrance Use. Exact evidence and
+limitations are recorded in the cohesive-game record. No whole-ticket acceptance,
+performance pass or creator save-durability repair is implied.
+
 2026-11-16: the creator still reports blocked travel. Restore direct, foreground
 destination loading and authored arrivals instead of requiring speculative
 scene readiness. Experimental scene construction/readiness barriers are disabled;
