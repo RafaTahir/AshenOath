@@ -15,6 +15,12 @@ CacheStorage failure from poisoning required downloads. Four owners compile and
 inline shell scripts parse without execution. No new runtime acceptance or save
 durability pass is claimed. See the direct-travel section of the cohesive record.
 
+Direct-travel package `proximity-streaming-direct-20261116-f72852b-r2` compiled
+and passed complete 55-file integrity at 173,597,769 bytes, with existing asset
+packs unchanged. It replaces the speculative-readiness requirement, not the
+game's content or saves, and is selected for Git publication. No runtime pass,
+seamless-travel/performance certification or save-durability resolution is claimed.
+
 2026-11-14 follow-up under FINISH-001/005/014/016: repair ordinary road entrance
 Use, retained explicit travel requests and bounded failed-preparation retries.
 The earlier physical-walking checks did not cover this entrance path, and the

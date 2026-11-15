@@ -51,6 +51,18 @@ found unbounded CacheStorage waits still in the required fetch path. The bounded
 shell correction requires a new source-aligned candidate; do not label the first
 build as including it or publish that intermediate package.
 
+Final direct-travel candidate: `proximity-streaming-direct-20261116-f72852b-r2`,
+source `f72852b`. Base/Web export, retained metadata authority and full package
+integrity pass: **55 files, 173,597,769 bytes (165.556 MiB)**. Existing asset-pack
+hashes remain unchanged. Root transport SHA-256:
+`b2648ab81f7dd9498e2f613c574881af2191ee7c8fa81c3ec67a021e40f74568`.
+Release manifest SHA-256:
+`2f8ea00c75d8b3da6b7e620f38b9170ebfdd499b172305c110f9a142a4e33559`.
+These exact bytes are selected for the authorized combined Git push. No game
+execution or browser acceptance is asserted, and save durability remains a
+separate unresolved creator report. Keep the immediately preceding package for
+rollback; do not reset browser storage or force reload the creator's session.
+
 ### Road Entrance Requests - 2026-11-14
 
 The creator still could not leave the village after `d407e04`, and directed a
