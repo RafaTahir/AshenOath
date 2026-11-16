@@ -33,7 +33,7 @@
     {"id": "PACK-003", "milestone": "A", "title": "Real versioned runtime packs", "status": "verified"},
     {"id": "STREAM-003", "milestone": "A", "title": "Verified pack streaming lifecycle", "status": "verified"},
     {"id": "LOAD-QA-002", "milestone": "A", "title": "Startup and cache acceptance", "status": "verified"},
-    {"id": "BOW-001", "milestone": "C", "title": "Hybrid bow aim and release", "status": "functional_but_incomplete"},
+    {"id": "BOW-001", "milestone": "C", "title": "Hybrid bow aim and release", "status": "functional_but_incomplete", "phase_2_implementation": "complete", "verification_scope": "tools/tests/test_phase2_combat_and_bow.gd: deterministic models and rendering-disabled physics arena", "graphical_acceptance": "unverified"},
     {"id": "AMMO-001", "milestone": "C", "title": "Capped arrow families and save migration", "status": "functional_but_incomplete"},
     {"id": "SHOP-001", "milestone": "C", "title": "Tor and Mira vendor transactions", "status": "functional_but_incomplete"}
   ],

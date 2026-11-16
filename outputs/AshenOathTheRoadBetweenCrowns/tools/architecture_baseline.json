@@ -495,13 +495,13 @@
       "wallclock_calls": 0
     },
     "scripts/enemy_ai.gd": {
-      "duck_meta_calls": 37,
+      "duck_meta_calls": 13,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 2216,
-      "unseeded_rand_calls": 2,
-      "untyped_funcs": 3,
-      "wallclock_calls": 2
+      "lines": 580,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
     },
     "scripts/epilogue_resolver.gd": {
       "duck_meta_calls": 0,
@@ -1125,13 +1125,13 @@
       "wallclock_calls": 0
     },
     "scripts/player_controller.gd": {
-      "duck_meta_calls": 32,
+      "duck_meta_calls": 2,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 2760,
+      "lines": 588,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 2,
-      "wallclock_calls": 1
+      "untyped_funcs": 0,
+      "wallclock_calls": 0
     },
     "scripts/preparation_panel.gd": {
       "duck_meta_calls": 0,
@@ -1701,12 +1701,12 @@
       "wallclock_calls": 0
     },
     "scripts/systems/combat_coordinator.gd": {
-      "duck_meta_calls": 39,
+      "duck_meta_calls": 7,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 907,
+      "lines": 316,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 10,
+      "untyped_funcs": 0,
       "wallclock_calls": 0
     },
     "scripts/systems/dialogue_service.gd": {
