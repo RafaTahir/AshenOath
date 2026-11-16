@@ -5,7 +5,7 @@ signal zone_changed(zone_id: String)
 const RuntimePacks = preload("res://scripts/runtime_pack_manager.gd")
 
 func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
-	if zone_transition_pending or zone_load_request_pending:
+	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting or _journey_load_pending():
 		return
 	if zone_runtime_coordinator != null:
 		var request := zone_runtime_coordinator.normalize_zone_request(zone_id, spawn_pos)
@@ -32,7 +32,7 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	_perform_requested_zone_load()
 
 func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, edge_id: String = "") -> bool:
-	if zone_transition_pending or zone_load_request_pending or player == null:
+	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting or _journey_load_pending() or player == null:
 		return false
 	var target := zone_id.strip_edges().to_lower()
 	if _wait_for_playable_road(target): return false
@@ -128,7 +128,7 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 		if not runtime_packs.zone_packs_ready(zone_id, encounter_packs):
 			opening_pack_waiting = true
 			if hud != null and hud.has_method("arm_loading"):
-				hud.arm_loading("Preparing Greyfen's saved encounter..." if not encounter_packs.is_empty() else "Preparing the road into Wychwood...")
+				hud.arm_loading("Preparing the road into " + _zone_display_name(zone_id) + "...")
 			runtime_packs.request_zone_packs(zone_id, encounter_packs, true)
 			_begin_travel_download(zone_id,encounter_packs)
 			_wait_for_opening_pack(zone_id, spawn_pos, zone_pack_request_serial, encounter_packs)
@@ -145,7 +145,7 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 	if not runtime_packs.zone_packs_ready(zone_id,encounter_packs):
 		campaign_pack_waiting = true
 		if hud != null and hud.has_method("arm_loading"):
-			hud.arm_loading("Preparing the road beyond Greyfen...")
+			hud.arm_loading("Preparing the road into " + _zone_display_name(zone_id) + "...")
 		runtime_packs.request_zone_packs(zone_id,encounter_packs,true)
 		_begin_travel_download(zone_id,encounter_packs)
 		_wait_for_campaign_pack(zone_id, spawn_pos, zone_pack_request_serial,encounter_packs)

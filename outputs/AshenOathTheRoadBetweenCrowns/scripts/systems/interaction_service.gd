@@ -253,8 +253,10 @@ func _handle_interaction(area) -> void:
 			seamless_world.request_road_travel(str(area.zone_target), area.get_meta("spawn_pos", Vector3.ZERO))
 			return
 		var portal := area.find_child("OathGatePortal", true, false) as OathGatePortal
-		if portal != null and portal.state != OathGatePortal.PortalState.READY:
-			hud.toast("The Oath Gate is still gathering the road beyond.")
+		# Preload/visual state cannot veto an explicit journey or its retry.
+		# Destination loading owns required packs; only an authored lock blocks Use.
+		if portal != null and portal.state == OathGatePortal.PortalState.LOCKED:
+			hud.toast("That road is not open yet.")
 			return
 		if portal != null:
 			portal.mark_traveling()
@@ -447,7 +449,8 @@ func _refresh_interaction_candidates() -> void:
 		if candidate.global_position.distance_to(player.global_position) <= range_limit:
 			if str(candidate.get("interaction_type")) == "zone":
 				var portal := candidate.find_child("OathGatePortal", true, false) as OathGatePortal
-				if portal != null and portal.state == OathGatePortal.PortalState.DORMANT:
+				if portal != null and portal.state == OathGatePortal.PortalState.DORMANT \
+						and (seamless_world == null or seamless_world.uses_prepared_roads()):
 					portal.begin_preload()
 			if candidate in interaction_candidates:
 				continue

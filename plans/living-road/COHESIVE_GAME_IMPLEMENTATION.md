@@ -2,6 +2,60 @@
 
 ## Proximity-Driven Streaming - 2026-11-13
 
+### All-Connection Travel Follow-Through - 2026-11-16
+
+The activation-policy repair in `e8fab7f`/publication `9535929` is shared, not
+Greyfen/Wychwood-specific. Source review now covers all **16 physical pairs /
+32 directed connectors**, all **16 registered destination builders**, declared
+destination/Quality pack dependency closure, boundary openings, authored/fallback
+arrivals, failed-download recovery and the additional civic/legacy journey gates.
+No extra gameplay run is authorized: the two earlier allocations are consumed.
+
+| Physical Pair (Both Directions) | Retained Availability |
+| --- | --- |
+| Greyfen - Wychwood | Ordinary road |
+| Wychwood - Deep Wood | Outward `main_teeth_in_rain/name_the_dead` |
+| Deep Wood - Old Mill | Ordinary road |
+| Old Mill - Burned Farmstead | Ordinary road |
+| Burned Farmstead - Marsh Crossing | Ordinary road |
+| Marsh Crossing - Bandit Road | Ordinary road |
+| Bandit Road - Vargan Approach | Ordinary road |
+| Vargan Approach - Vargan Court | Castle doorway/road |
+| Vargan Court - Record Hall | Castle doorway/road |
+| Record Hall - Undercroft | Outward `castle_haunting_cleared` |
+| Greyfen - Deep Wood | Existing village shortcut |
+| Greyfen - Vargan Approach | Existing village shortcut |
+| Greyfen - Hart Glade | Outward confession objective |
+| Hart Glade - Ruins | Return requires the retained Hart chapter/ending access |
+| Old Mill - Lantern Reach | Expanded journeys; outward `main_empty_tables` |
+| Undercroft - Hearthward | Expanded journeys; outward `main_house_many_names` |
+
+Assembly/return-to-Greyfen, the legacy Ruins-to-Greyfen journey and homecoming
+use the same foreground destination owner outside paired walking geometry.
+Cemetery remains the existing Greyfen district, not a new standalone builder.
+All explicit story/quest/revision gates, authored arrivals and source-support
+recovery remain intact. No route is opened by fabricating progression.
+
+A remaining source-confirmed blocker exists in legacy Oath Gate interaction:
+every visual state except READY rejected Use, including ERROR and the TRAVELING
+state left by a cancelled/failed journey or a cached return. These visual/preload
+states no longer veto an explicit journey or retry. LOCKED remains blocking;
+the existing destination loader still requires verified packs and supported
+arrival before control. In direct mode, proximity does not start the redundant
+legacy scene-preload requirement. Optional selected-road HTTP caching remains.
+
+Both request entry points also reject overlapping download/restore work instead
+of replacing its serial/destination. Destination preparation labels now name the
+actual world instead of always Greyfen/Wychwood. These are scoped travel-owner
+changes, not a replacement streaming system or art/content revision.
+
+Static manifest inspection found every registered destination and its recursive
+pack dependencies present, including Quality. Its first literal-parsing command
+needed trailing-comma normalization for GDScript arrays; the corrected read-only
+inspection completed. This is not runtime travel evidence. Compile/package
+results will be recorded independently; previous Wychwood observations remain
+attached to the previously tested artifact, not all 32 connectors or new changes.
+
 ### Direct Activation Policy Repair - 2026-11-16
 
 The creator authorized exactly two focused runtime runs. Run one used ordinary

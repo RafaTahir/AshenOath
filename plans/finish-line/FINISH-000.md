@@ -6,6 +6,16 @@ Scope: finish and establish acceptance of the retained game, not replace it.
 
 ## Current Streaming Work - 2026-11-13
 
+2026-11-16 all-connection follow-through: trace the shared fix across 16 physical
+pairs (32 directed connectors), all 16 registered destinations, Castle doors,
+Assembly/homecoming and legacy return journeys. Remove legacy portal visual-state
+vetoes on explicit travel/retry while preserving LOCKED and all story gates;
+serialize requests during existing downloads/restores and use destination-specific
+loading labels. Destination/Quality pack closure is statically complete. The two
+runtime allocations are consumed: no new gameplay or all-route acceptance is
+claimed. Preserve the earlier exact Wychwood evidence and see the cohesive record
+for the complete source-review matrix and pending compilation/publication.
+
 2026-11-16 two-run follow-up: the first isolated live Chrome run reproduced an
 orphaned travel overlay after passing the northern leaf. A remaining activation
 guard ignored direct-travel policy and waited for disabled neighbor construction.
