@@ -64,6 +64,7 @@ outputs/AshenOathTheRoadBetweenCrowns/tools/_inspect_milestone_c_assets.gd
 !outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/
 outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/*
 !outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/README.md
+!outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/.gdignore
 !outputs/AshenOathTheRoadBetweenCrowns/Development_Gallery/qa_003_approval_manifest.json
 
 # Old/generated web exports outside the deploy folder
