@@ -1,11 +1,10 @@
 extends "res://scripts/systems/game_bindings.gd"
-## Owns zone lifecycle operations; configure() injects dependencies.
 signal zone_changed(zone_id: String)
 
 const RuntimePacks = preload("res://scripts/runtime_pack_manager.gd")
 
 func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
-	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting or _journey_load_pending():
+	if not world_transition.can_request_travel() or _journey_load_pending():
 		return
 	if zone_runtime_coordinator != null:
 		var request := zone_runtime_coordinator.normalize_zone_request(zone_id, spawn_pos)
@@ -21,6 +20,7 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	if _wait_for_playable_road(zone_id,true):
 		seamless_world.request_road_travel(zone_id,spawn_pos)
 		return
+	if world_transition.request_travel(zone_id) < 0: return
 	zone_load_request_pending = true
 	requested_zone_id = zone_id.strip_edges().to_lower()
 	requested_zone_spawn = spawn_pos
@@ -32,7 +32,7 @@ func _request_zone_load(zone_id: String, spawn_pos: Vector3) -> void:
 	_perform_requested_zone_load()
 
 func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, edge_id: String = "") -> bool:
-	if zone_transition_pending or zone_load_request_pending or opening_pack_waiting or campaign_pack_waiting or _journey_load_pending() or player == null:
+	if not world_transition.can_request_travel() or _journey_load_pending() or player == null:
 		return false
 	var target := zone_id.strip_edges().to_lower()
 	if _wait_for_playable_road(target): return false
@@ -48,6 +48,7 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 			return false
 		target = str(request.get("zone_id", target))
 		spawn_pos = request.get("spawn_position", spawn_pos)
+	if world_transition.request_travel(target) < 0: return false
 	requested_zone_id = target
 	requested_zone_spawn = spawn_pos
 	loading_started_usec = Time.get_ticks_usec()
@@ -55,8 +56,6 @@ func request_seamless_boundary_transition(zone_id: String, spawn_pos: Vector3, e
 	if seamless_world != null and not seamless_world.uses_prepared_roads() and hud != null:
 		hud.arm_loading("Travelling to " + _zone_display_name(target) + "...")
 	player.set_transition_locked(true)
-	# A complete neighbor is reused; a cold destination keeps its honest,
-	# cancellable preparation presentation instead of freezing an old frame.
 	_perform_direct_zone_load(target, spawn_pos)
 	return true
 
@@ -114,7 +113,8 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 		# An explicit destination must not wait behind the previous world's
 		# speculative queue or rely on its background-mount permissions.
 		runtime_packs.prioritize_zone(zone_id,encounter_packs)
-	zone_pack_request_serial += 1
+	zone_pack_request_serial = world_transition.request_travel(zone_id)
+	if zone_pack_request_serial < 0: return
 	opening_pack_waiting = false
 	campaign_pack_waiting = false
 	if _zone_requires_opening_pack(zone_id) and OS.has_feature("web"):
@@ -139,9 +139,6 @@ func _load_zone_after_runtime_pack(zone_id: String, spawn_pos: Vector3) -> void:
 	if runtime_packs == null or not runtime_packs.has_method("request_pack"):
 		_recover_failed_pack_load()
 		return
-	# The production and QA Web candidates may embed the campaign builder in the
-	# root PCK, but campaign art remains owned by the external campaign pack. The
-	# manifest-backed check below keeps the builder from bypassing that pack.
 	if not runtime_packs.zone_packs_ready(zone_id,encounter_packs):
 		campaign_pack_waiting = true
 		if hud != null and hud.has_method("arm_loading"):
@@ -175,11 +172,12 @@ func _wait_for_campaign_pack(zone_id: String, spawn_pos: Vector3, request_serial
 	var deadline := _pack_wait_now_msec() + RuntimePacks.PREPARATION_TIMEOUT_MSEC
 	while true:
 		await _host.get_tree().process_frame
-		if request_serial != zone_pack_request_serial or not campaign_pack_waiting:
+		if not world_transition.accepts(request_serial, zone_id) or not campaign_pack_waiting:
 			return
 		# Mounted content wins at the deadline; stale work never owns recovery.
 		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id,encounter_packs):
 			campaign_pack_waiting = false
+			for pack: String in runtime_packs.required_zone_packs(zone_id, encounter_packs): world_transition.pack_mounted(pack, request_serial)
 			_finish_travel_download()
 			if not neighbor_arrival_pending and hud != null and hud.has_method("hide_loading"):
 				hud.hide_loading()
@@ -197,10 +195,11 @@ func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial:
 	var deadline := _pack_wait_now_msec() + RuntimePacks.PREPARATION_TIMEOUT_MSEC
 	while true:
 		await _host.get_tree().process_frame
-		if request_serial != zone_pack_request_serial or not opening_pack_waiting:
+		if not world_transition.accepts(request_serial, zone_id) or not opening_pack_waiting:
 			return
 		if runtime_packs != null and runtime_packs.zone_packs_ready(zone_id, encounter_packs):
 			opening_pack_waiting = false
+			for pack: String in runtime_packs.required_zone_packs(zone_id, encounter_packs): world_transition.pack_mounted(pack, request_serial)
 			_finish_travel_download()
 			if not neighbor_arrival_pending and hud != null and hud.has_method("hide_loading"):
 				hud.hide_loading()
@@ -215,6 +214,7 @@ func _wait_for_opening_pack(zone_id: String, spawn_pos: Vector3, request_serial:
 	_recover_failed_pack_load("The opening pack could not be prepared. Your current location remains open; use the crossing to retry.")
 
 func _recover_failed_pack_load(reason: String = "The destination could not load. Please retry.") -> void:
+	world_transition.fail(world_transition.transition_epoch, reason)
 	if neighbor_crossing_pending:
 		_host.get_tree().paused = neighbor_crossing_was_paused
 		audio.set_game_paused(neighbor_crossing_was_paused)
@@ -222,7 +222,6 @@ func _recover_failed_pack_load(reason: String = "The destination could not load.
 	neighbor_crossing_pending = false
 	neighbor_arrival_pending = false
 	if seamless_world != null: seamless_world.cancel_preparation()
-	# No destination was constructed: the current world must remain resident.
 	zone_pack_request_serial += 1
 	journey_arrival_generation = 0
 	opening_pack_waiting = false
@@ -253,8 +252,6 @@ func _zone_requires_opening_pack(zone_id: String) -> bool:
 	return zone_id in ["greyfen", "wychwood", "cemetery", "ruins"]
 
 func _start_new_game_world() -> void:
-	# An explicit transition can be requested before the menu's deferred setup
-	# receives its first frame. Preserve that deliberate destination.
 	if game_started or not new_game_start_pending:
 		return
 	var prepared_root := route_zone_cache.get("greyfen") as Node3D
@@ -265,8 +262,6 @@ func _start_new_game_world() -> void:
 		hud.set_new_game_status("The campaign chapters could not be prepared. Please retry the download.")
 		return
 	new_game_start_pending = false
-	# Identity and reading history belong to the accepted world handoff, not a
-	# request that can remain queued while files or the first view are prepared.
 	save_manager.begin_new_journey()
 	quests.configure_campaign_revision(revision)
 	story_state.set_flag("campaign_revision", revision)
@@ -275,8 +270,6 @@ func _start_new_game_world() -> void:
 		hud.set_new_game_ready(true)
 	if hud != null and hud.has_method("set_new_game_status"):
 		hud.set_new_game_status("Greyfen is ready.")
-	# Keep the menu-prewarmed Greyfen tree while clearing any stale campaign
-	# cache. Rebuilding this scene in Web/ANGLE was the dominant New Game delay.
 	var prewarmed_greyfen = route_zone_cache.get("greyfen")
 	var prewarmed_enemies: Array = route_enemy_cache.get("greyfen", [])
 	print("LOADING: new_game_handoff prewarmed=%s cached_zones=%d" % [prewarmed_greyfen != null, route_zone_cache.size()])
@@ -328,11 +321,6 @@ func _start_new_game_world() -> void:
 	story_state.set_flag("opening_care_enabled", true)
 	story_state.set_flag("greyfen_guide_available", true)
 	print("LOADING: handoff_phase=quest_end")
-	# The opening is now playable. Remaining packs must not delay New Game or
-	# the first quest interaction. In particular, do not start the character-pack
-	# download here: Web hash/mount work can monopolize the main thread before the
-	# first input sample. The deferred visual-role stage requests that pack only
-	# after first control, while Kael and Anwen remain root-resident.
 	if runtime_packs != null and runtime_packs.has_method("request_background_packs"):
 		_host.call_deferred("_schedule_background_runtime_packs")
 	print("LOADING: new_game_stage=state_ready elapsed=%.1f" % (float(Time.get_ticks_usec() - loading_started_usec) / 1000.0))
@@ -352,35 +340,21 @@ func _start_new_game_world() -> void:
 		_host.call_deferred("_run_opening_detail_stage", opening_detail_generation)
 	var new_game_elapsed_ms := float(Time.get_ticks_usec() - new_game_started_usec) / 1000.0 if new_game_started_usec > 0 else 0.0
 	print("LOADING: new_game_stage=ready elapsed=%.1f" % new_game_elapsed_ms)
-	# Keep the legacy stage label for older diagnostics, but report the same
-	# request-to-control duration rather than the reset transition clock.
 	print("LOADING: new_game_stage=zone_return elapsed=%.1f" % new_game_elapsed_ms)
 	new_game_started_usec = 0
 	_refresh_tracker()
 	_show_current_objective_guidance(5.5)
 	_refresh_equipment_readout()
-	# FileAccess on Web can synchronously block the renderer for several seconds
-	# on the first IndexedDB transaction. Persist the new-game checkpoint after
-	# the opening frame has settled instead of making the first visible control
-	# handoff wait on storage I/O.
 	_host.call_deferred("_schedule_opening_save", opening_save_generation)
 
 func _request_background_runtime_packs() -> void:
 	if not game_started or runtime_packs == null:
 		return
-	# Optional pack mounts and neighbor imports can compile shaders and touch
-	# IndexedDB for several frames on Web/ANGLE. Keep that work out of the whole
-	# player-controlled opening route, not only the Greyfen sector: the first
-	# Wychwood clues and bridge return still run on the same critical path.
 	if _opening_route_is_active():
 		# Retry after the route is complete. The timer is intentionally the only
 		# retry mechanism so every background pack remains deferred as one batch.
 		_schedule_background_runtime_packs(BACKGROUND_RUNTIME_RETRY_SECONDS)
 		return
-	# Reuse already-mounted neighbor resources, but do not enqueue the entire
-	# campaign after a timer. Missing content belongs to the approached connection
-	# or explicit destination, not unrelated post-control background mounts.
-	# Recorded voices/foley retain their existing delayed availability owner.
 	runtime_packs.request_pack("audio", 1000)
 	if zone_streaming != null and zone_streaming.has_method("prewarm_neighbors"):
 		zone_streaming.prewarm_neighbors(current_zone_id if current_zone_id != "" else "greyfen")
@@ -391,14 +365,9 @@ func _opening_route_is_active() -> bool:
 	return quests.is_active("main_road_of_crows") and not quests.is_completed("main_road_of_crows")
 
 func should_defer_neighbor_prewarm() -> bool:
-	# Keep the first Greyfen frame free of threaded scene imports while input and
-	# opening save state settle. The delayed background request resumes prewarm.
 	return opening_checkpoint_pending and game_started and current_zone_id == "greyfen"
 
 func _schedule_background_runtime_packs(delay_seconds: float = BACKGROUND_RUNTIME_DELAY_SECONDS) -> void:
-	# Do not let a fast local download/mount compete with the first playable
-	# frames. The opening can request a campaign pack on demand; this timer only
-	# starts optional background work after the handoff has visibly settled.
 	if background_runtime_timer_pending:
 		return
 	background_runtime_timer_pending = true
@@ -416,12 +385,9 @@ func _schedule_opening_save(generation: int) -> void:
 		return
 	if resource_shutdown_prepared or player == null or not is_instance_valid(player):
 		return
-	if _journey_load_pending():
+	if not world_transition.autosave_allowed() or _journey_load_pending():
 		_host.call_deferred("_schedule_opening_save", generation)
 		return
-	# Save the current state rather than a stale Greyfen-only snapshot. If the
-	# player reaches another supported zone during the delay, the normal autosave
-	# path still owns that transition and this checkpoint remains a safe fallback.
 	save_manager.checkpoint(_host)
 	opening_checkpoint_pending = false
 
@@ -464,10 +430,6 @@ func _spawn_player(pos: Vector3) -> void:
 
 func _sync_camera_enemy_cache() -> void:
 	if neighbor_building: return
-	# Keep restored encounter actors on the same owned peer list as the camera.
-	# Cached-zone activation replaces active_enemies with a fresh filtered Array;
-	# rebinding here keeps spacing and attack-lane checks on the restored list;
-	# enemy controllers never discover peers in unrelated scene-tree groups.
 	encounter_spatial_index.clear()
 	for enemy in active_enemies:
 		if is_instance_valid(enemy):
@@ -495,13 +457,16 @@ func _load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		return
 	_begin_gameplay_handoff("zone_activation")
 	var paired_crossing := game_started and seamless_world != null and current_zone_id != zone_id and not journey_loading.pending(_host) and not WorldSectorManifest.connection_between(current_zone_id,zone_id).is_empty()
-	# Use the same policy as the entrance and physical boundary. Direct travel
-	# must reach the normal builder, not wait for disabled neighbor construction.
 	if paired_crossing and _wait_for_playable_road(zone_id):
 		player.set_transition_locked(false)
 		_finish_gameplay_handoff()
 		return
-	zone_runtime_coordinator.load_zone(zone_id, spawn_pos)
+	var epoch := world_transition.request_travel(zone_id)
+	if epoch >= 0:
+		if runtime_packs != null:
+			for pack: String in runtime_packs.required_zone_packs(zone_id, _zone_encounter_packs(zone_id)):
+				if runtime_packs.is_ready(pack): world_transition.pack_mounted(pack, epoch)
+		zone_runtime_coordinator.load_zone(zone_id, spawn_pos)
 	_finish_gameplay_handoff()
 
 func _advance_zone_transition() -> void:
@@ -525,10 +490,6 @@ func _schedule_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
 	_host.call_deferred("_finish_deferred_zone_audio", zone_id, root)
 
 func _finish_deferred_zone_audio(zone_id: String, root: Node3D) -> void:
-	# Keep first control and the measured transition clear of generated stream
-	# synthesis. The short delay is intentional: it gives the arrival camera a
-	# settled frame, while still starting the region's audio before exploration
-	# can feel silent.
 	var delay_timer := _create_owned_timer(0.45, true)
 	await delay_timer.timeout
 	if resource_shutdown_prepared or not game_started or current_zone_id != zone_id or zone_root != root:
@@ -551,8 +512,6 @@ func _schedule_zone_runtime_finalize(zone_id: String, root: Node3D, service: Nod
 	_host.call_deferred("_finish_zone_runtime_finalize", zone_id, root, service, enemies, navigation_pending)
 
 func _finish_zone_runtime_finalize(zone_id: String, root: Node3D, service: Node, enemies: Array, navigation_pending: bool) -> void:
-	# Arrival still owns input: required navigation and consequences must not
-	# create a second construction stall after the playable boundary.
 	if not game_started or current_zone_id != zone_id:
 		return
 	if root == null or not is_instance_valid(root) or zone_root != root:
@@ -583,7 +542,6 @@ func _publish_zone_arrival(zone_id: String, root: Node3D) -> void:
 	_persist_story_action()
 
 func _finish_prewarmed_greyfen_runtime() -> void:
-	# Compatibility for older prepared roots; new roots finish this under cover.
 	if not game_started or current_zone_id != "greyfen" or zone_root == null or not is_instance_valid(zone_root):
 		return
 	if not bool(zone_root.get_meta("prewarm_navigation_pending", false)):
@@ -622,8 +580,6 @@ func _valid_cached_enemies(entries: Array) -> Array:
 
 func _zone_state_signature(zone_id: String = current_zone_id) -> int:
 	var quest_world_state: Dictionary = quests.world_signature_state(zone_id).duplicate(true) if quests != null else {}
-	# HUD tracking changes by zone and must not invalidate otherwise identical
-	# cached world geometry.
 	quest_world_state.erase("tracked_quest_id")
 	quest_world_state.erase("tracker_context_zone")
 	var story_world_state: Dictionary = story_state.world_signature_state(zone_id).duplicate(true) if story_state != null else {}
@@ -784,7 +740,7 @@ func _schedule_zone_autosave() -> void:
 	delay_timer.timeout.connect(func():
 		if opening_checkpoint_pending:
 			return
-		if not resource_shutdown_prepared and game_started and player != null and is_instance_valid(player) and current_zone_id == expected_zone and not zone_transition_pending and not zone_load_request_pending and not player.transition_locked and save_manager != null:
+		if not resource_shutdown_prepared and game_started and player != null and is_instance_valid(player) and current_zone_id == expected_zone and world_transition.autosave_allowed() and not player.transition_locked and save_manager != null:
 			save_manager.autosave(_host)
 	)
 
@@ -809,6 +765,7 @@ func _clear_route_zone_cache(preserve_root: Node3D = null) -> void:
 func prepare_resource_shutdown() -> void:
 	if resource_shutdown_prepared:
 		return
+	world_transition.teardown()
 	resource_shutdown_prepared = true
 	journey_loading.cancel(_host, "", false, true)
 	neighbor_crossing_pending = false
@@ -819,9 +776,6 @@ func prepare_resource_shutdown() -> void:
 			display_bridge.call("shutdown")
 	dialogue_runtime_coordinator.release(player)
 	combat_vfx_coordinator.clear_oathfire_effects()
-	# Invalidate deferred frame continuations before releasing their scene-owned
-	# resources. A shutdown can otherwise leave a suspended GDScript state alive
-	# until process exit, even though the active route has already completed.
 	game_started = false
 	new_game_start_pending = false
 	new_game_requested_while_preparing = false
@@ -854,9 +808,6 @@ func prepare_resource_shutdown() -> void:
 	_release_active_spatial_service()
 
 func finalize_resource_shutdown() -> void:
-	# Called only after staged zone retirement has completed. Actors and camera
-	# are no longer needed, so release their scene ownership before clearing
-	# global caches held by runtime services.
 	prepare_resource_shutdown()
 	if player != null and is_instance_valid(player):
 		player.queue_free()
@@ -878,11 +829,6 @@ func finalize_resource_shutdown() -> void:
 	CombatFeedback.clear_runtime_caches()
 	preload("res://scripts/prepared_zone_geometry.gd").clear()
 	preload("res://scripts/interior_occlusion.gd").clear()
-	# These arrays are build-time ownership, not runtime state. They retain
-	# queued marker MeshInstance3D nodes and shared materials after their zone
-	# has retired, which keeps renderer instances alive outside the scene tree.
-	# Clear them only after staged retirement so no visible zone references are
-	# invalidated during normal travel.
 	tree_batch_data.clear()
 	deadfall_batch_data.clear()
 	prop_batch_data.clear()
@@ -893,10 +839,6 @@ func finalize_resource_shutdown() -> void:
 	material_cache.clear()
 	shared_box_mesh = null
 	zone_residency.release_material_anchors()
-	# These nodes are global renderer/service owners rather than part of the
-	# retired zone hierarchy. Release them explicitly after staged scene disposal
-	# so a verifier or editor preview cannot leave their WorldEnvironment,
-	# lights, timers, or service-owned render resources alive until process exit.
 	if visual_director != null and is_instance_valid(visual_director):
 		_release_zone_render_resources(visual_director)
 		visual_director.queue_free()
@@ -960,15 +902,10 @@ func _subtree_node_count(root: Node) -> int:
 	return count
 
 func release_session() -> void:
-	# Cached zones remain children of the game and are released by normal subtree
-	# destruction. Touching renderer resources during NOTIFICATION_EXIT_TREE is unsafe.
 	route_zone_cache.clear()
 	route_enemy_cache.clear()
 	route_zone_signatures.clear()
 	route_spatial_cache.clear()
-	# Do not free retired roots from NOTIFICATION_EXIT_TREE. Their parent scene
-	# owns destruction, and touching detached renderer resources during shutdown
-	# produces misleading null-material/RID diagnostics in Compatibility mode.
 	retired_zone_roots.clear()
 	pending_zone_retirements = 0
 	skinned_resource_anchors.clear()
@@ -1060,13 +997,6 @@ func _is_river_recovery_position(zone: String, pos: Vector3) -> bool:
 	var river_z := _river_center(zone)
 	if river_z >= SpatialSurfaceContract.NO_RIVER:
 		return false
-	# The bridge deck occupies the river exclusion band by design. It is flush
-	# with the banks, so identify the legal crossing by the full bridge corridor
-	# rather than by actor height. This also prevents the recovery guard from
-	# snapping a player off the deck while stepping onto the far bank.
-	# The deck is flush with the road at world Y=0, so a grounded actor root
-	# normally remains near zero while its capsule stands on the deck. Requiring
-	# Y>=0.2 incorrectly classified every ordinary bridge crossing as water.
 	var on_bridge_deck := false
 	if spatial_service != null and spatial_service.has_method("is_on_bridge"):
 		on_bridge_deck = spatial_service.is_on_bridge(pos, 0.0)

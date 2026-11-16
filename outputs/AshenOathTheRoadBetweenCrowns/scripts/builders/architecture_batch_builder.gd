@@ -1,0 +1,400 @@
+extends RefCounted
+const Api = preload("res://scripts/core/zone_construction_api.gd")
+const Scope = preload("res://scripts/core/zone_instance_scope.gd")
+var _host: Api
+var _scope: Scope
+func _init(host: Api, scope: Scope) -> void:
+	_host = host
+	_scope = scope
+func _append_prepared_detail(id: String) -> void:
+	var entry: Variant = preload("res://scripts/prepared_static_batches.gd").entry(id)
+	if entry.is_empty():
+		return
+	if _scope.environment_batches_flushed:
+		_host._make_visual_box(entry.name, entry.position, entry.size, entry.color)
+		return
+	var pos: Vector3 = entry.position
+	if _scope.zone_id not in ["record_hall", "undercroft"]:
+		pos = _host.river_safe_position(pos, entry.size.z * 0.5 + 0.18)
+	var record: Dictionary = entry
+	if pos != entry.position:
+		record = preload("res://scripts/static_multimesh_upload.gd").prepare_record(Transform3D(entry.transform.basis, pos), entry.color)
+	_scope.visual_box_batch_data.append({"prepared": record, "color": entry.color})
+func _make_prepared_prop(id: String) -> void:
+	var entry: Variant = preload("res://scripts/prepared_static_batches.gd").entry(id)
+	if not entry.is_empty():
+		_host._make_prop_box(entry.name, entry.position, entry.size, entry.color, true, entry)
+func _make_village_house_dressed(pos: Vector3, yaw: float, node_name: String) -> void:
+	var house_variant: Variant = 0
+	match node_name:
+		"DressedVillageHouse_WestLane": house_variant = 1
+		"DressedVillageHouse_EastLane": house_variant = 2
+		"DressedVillageHouse_ShrineFrame": house_variant = 3
+	var mesh_path: Variant = "res://assets_external/environment/village/GreyfenHouse_Authored.res" if house_variant == 0 else "res://assets_external/environment/village/GreyfenHouse_Authored_%d.res" % house_variant
+	var authored_mesh: Variant = load(mesh_path) as ArrayMesh
+	if authored_mesh == null or authored_mesh.get_surface_count() != 6:
+		push_error("Required Greyfen house mesh is unavailable: " + node_name)
+		return
+	var root = Node3D.new()
+	root.name = node_name
+	root.add_to_group("first_route_house")
+	root.add_to_group("greyfen_house")
+	_host.write_construction_tag(root, "visible_house", true)
+	_host.write_construction_tag(root, "house_variant", house_variant)
+	root.position = pos
+	root.rotation_degrees.y = yaw
+	_scope.zone_root.add_child(root)
+	_host._make_house_collision(root)
+	var house_visual: Variant = MeshInstance3D.new()
+	house_visual.name = "AuthoredHouse"
+	house_visual.mesh = authored_mesh
+	root.add_child(house_visual)
+	var authored_tints: Variant = {
+		"medieval_brick": Color(0.67, 0.65, 0.59),
+		"plaster": [Color(0.76, 0.70, 0.58), Color(0.65, 0.68, 0.62), Color(0.78, 0.64, 0.48), Color(0.71, 0.72, 0.68)][house_variant],
+		"timber": [Color(0.72, 0.57, 0.40), Color(0.62, 0.53, 0.43), Color(0.78, 0.54, 0.34), Color(0.53, 0.49, 0.43)][house_variant],
+		"roof_tiles": [Color(0.76, 0.47, 0.37), Color(0.63, 0.51, 0.46), Color(0.82, 0.52, 0.39), Color(0.60, 0.59, 0.57)][house_variant],
+		"glazing": Color(0.16, 0.22, 0.24),
+		"metal": Color(0.34, 0.34, 0.32),
+	}
+	var house_quality: Variant = str(_host.settings.settings.get("quality_preset", "balanced"))
+	for surface_index in authored_mesh.get_surface_count():
+		var surface_name: Variant = authored_mesh.surface_get_name(surface_index)
+		if not authored_tints.has(surface_name):
+			push_error("Unknown authored Greyfen house surface: " + surface_name)
+			return
+		var material_role: Variant = surface_name if _host.world_materials.SURFACES.has(surface_name) else "metal"
+		var surface_material: StandardMaterial3D = _host._mat(authored_tints[surface_name]) if surface_name == "glazing" else _host.world_materials.get_material(material_role, house_quality, authored_tints[surface_name], 0.0, false)
+		house_visual.set_surface_override_material(surface_index, surface_material)
+	_host.write_construction_tag(root, "roof_treatment", "authored_mesh")
+	return
+func _make_house_collision(parent: Node3D) -> void:
+	var body = StaticBody3D.new()
+	body.name = "HouseCollision"
+	parent.add_child(body)
+	var shape = CollisionShape3D.new()
+	var box = preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(4.2, 2.4, 3.4))
+	shape.shape = box
+	shape.position.y = 1.2
+	body.add_child(shape)
+	var camera_roof: Variant = StaticBody3D.new()
+	camera_roof.name = "CameraRoofCollision"
+	camera_roof.collision_layer = 1 << 6
+	camera_roof.collision_mask = 0
+	parent.add_child(camera_roof)
+	var roof_shape: Variant = CollisionShape3D.new()
+	var roof_box: Variant = preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(5.0, 1.6, 4.2))
+	roof_shape.shape = roof_box
+	roof_shape.position.y = 3.2
+	camera_roof.add_child(roof_shape)
+	if int(_host.read_construction_tag(parent, "house_variant", 0)) == 1:
+		for x in [-0.98, 0.98]:
+			var post: Variant = CollisionShape3D.new()
+			var post_box: Variant = preload("res://scripts/immutable_collision_shapes.gd").box(Vector3(0.12, 1.60, 0.12))
+			post.shape = post_box
+			post.position = Vector3(x, 0.95, -2.36)
+			body.add_child(post)
+func _make_multimesh_batch(node_name: String, mesh: Mesh, count: int, material: Material, use_colors: bool = false) -> MultiMeshInstance3D:
+	var instance: Variant = MultiMeshInstance3D.new()
+	instance.name = node_name
+	instance.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	var batch: Variant = MultiMesh.new()
+	batch.transform_format = MultiMesh.TRANSFORM_3D
+	batch.use_colors = use_colors
+	var base_mesh: Variant = mesh if mesh != null else _host.shared_box_mesh
+	_host._ensure_mesh_surface_materials(base_mesh, _host._valid_material_or_fallback(null))
+	batch.mesh = base_mesh
+	batch.instance_count = count
+	instance.multimesh = batch
+	instance.material_override = null if material == null and base_mesh.get_surface_count() > 1 else _host._valid_material_or_fallback(material)
+	instance.visibility_range_end = 58.0
+	if _host._compatibility_budget_mode():
+		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_scope.zone_root.add_child(instance)
+	return instance
+func _upload_static_batch(instance: MultiMeshInstance3D, transforms: Array, colors: Array = []) -> void:
+	preload("res://scripts/static_multimesh_upload.gd").upload(instance.multimesh, transforms, colors, preload("res://scripts/performance_comparison_options.gd").enabled("static_bounds"))
+func _flush_environment_batches() -> void:
+	for phase in range(7):
+		_host.flush_environment_batch_step(phase)
+func flush_environment_batch_step(phase: int) -> void:
+	if _host.context.zone_root == null:
+		return
+	match phase:
+		0: _host._publish_environment_0()
+		1: _host._publish_environment_1()
+		2: _host._publish_environment_2()
+		3: _host._publish_environment_3()
+		4: _host._publish_environment_4()
+		5: _host._publish_environment_5()
+		6: _host._publish_environment_6()
+	if phase == 6:
+		_scope.environment_batches_flushed = true
+func flush_environment_next_unit() -> bool:
+	if _scope.stream_environment_units.is_empty():
+		var routes: Array[Dictionary] = preload("res://scripts/world_sector_manifest.gd").connections(_scope.zone_id,_host.story_state)
+		for index in routes.size():
+			_scope.stream_environment_units.append(_host._publish_connected_route.bind(index))
+		_scope.stream_environment_units.append(_host._publish_environment_0.bind(false))
+		_scope.stream_environment_units.append(_host._publish_environment_1)
+		for key in _scope.house_batch_data: _scope.stream_environment_units.append(_host._publish_environment_2.bind(str(key)))
+		for key in _scope.house_module_batch_data: _scope.stream_environment_units.append(_host._publish_environment_3.bind(str(key)))
+		for key in _scope.prop_batch_data: _scope.stream_environment_units.append(_host._publish_environment_4.bind(str(key)))
+		_scope.stream_environment_units.append(_host._publish_environment_5)
+		var ecology: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/design_pack_ecology.json"))
+		if ecology is Dictionary:
+			var sightings: Array = ecology.get("sightings",[])
+			for index in sightings.size():
+				if str(sightings[index].zone) == _scope.zone_id:
+					_scope.stream_environment_units.append(_host._build_design_pack_ecology.bind(index))
+		_scope.stream_environment_units.append(_host._publish_environment_6.bind(false))
+	if _scope.stream_environment_cursor < _scope.stream_environment_units.size():
+		_scope.stream_environment_units[_scope.stream_environment_cursor].callv([])
+		_scope.stream_environment_cursor += 1
+	var complete: Variant = _scope.stream_environment_cursor >= _scope.stream_environment_units.size()
+	if complete: _scope.environment_batches_flushed = true
+	return complete
+func _publish_connected_route(index: int) -> void:
+	preload("res://scripts/connected_route_geometry.gd").install(_host.context,index)
+func _publish_environment_0(install_routes: bool = true) -> void:
+	if install_routes: preload("res://scripts/connected_route_geometry.gd").install(ZoneBuildContext.new(_host,_scope.zone_id))
+	var terrain_groups: Dictionary = {}
+	for item in _scope.terrain_patch_batch_data:
+		var terrain_key: Variant = str(item.material.get_instance_id())
+		if not terrain_groups.has(terrain_key):
+			terrain_groups[terrain_key] = {"material":item.material,"items":[]}
+		terrain_groups[terrain_key].items.append(item)
+	for terrain_key in terrain_groups:
+		var terrain_group: Dictionary = terrain_groups[terrain_key]
+		var terrain_items: Array = terrain_group.items
+		var terrain_batch: Variant = MeshInstance3D.new()
+		terrain_batch.name = "TerrainPatchBatch_%s" % terrain_key
+		var surface: Variant = SurfaceTool.new()
+		for i in range(terrain_items.size()):
+			var marker: Node3D = terrain_items[i].node
+			var patch_size: Vector3 = terrain_items[i].size
+			var patch_mesh: ArrayMesh = _host.world_materials.make_organic_ground_patch(patch_size, marker.position, marker.basis) if _scope.zone_id == "wychwood" else _host.world_materials.make_tiled_ground_patch(patch_size, marker.position, marker.basis)
+			surface.append_from(patch_mesh, 0, marker.transform)
+			marker.queue_free()
+		terrain_batch.mesh = surface.commit()
+		terrain_batch.material_override = terrain_group.material
+		_scope.zone_root.add_child(terrain_batch)
+func _publish_environment_1() -> void:
+	var visual_groups: Dictionary = {}
+	var separate_alpha: Variant = preload("res://scripts/performance_comparison_options.gd").enabled("alpha_batches")
+	for item in _scope.visual_box_batch_data:
+		var color: Color = item.color
+		var use_instance_colors: bool = _scope.zone_id != "record_hall"
+		var visual_key: Variant = "instance_colors" if use_instance_colors else color.to_html(true)
+		var transparent: Variant = separate_alpha and color.a < 0.999
+		if transparent:
+			visual_key = "alpha_" + visual_key
+		var night_only: bool = _host.read_construction_tag(item.node, "night_only_geometry", false) if item.has("node") else false
+		if night_only:
+			visual_key = "night_" + visual_key
+		if not visual_groups.has(visual_key):
+			var material: StandardMaterial3D
+			if use_instance_colors:
+				if not _host.material_cache.has("detail_instance_colors"):
+					var shared_material: Variant = StandardMaterial3D.new()
+					shared_material.roughness = 0.9
+					shared_material.vertex_color_use_as_albedo = true
+					_host.material_cache["detail_instance_colors"] = shared_material
+				material = _host.material_cache["detail_instance_colors"]
+			else:
+				material = _host._mat(color)
+			if transparent:
+				material = material.duplicate() as StandardMaterial3D
+				material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			visual_groups[visual_key] = {"material": material, "colors": use_instance_colors, "night_only": night_only, "items": []}
+		visual_groups[visual_key].items.append(item)
+	for visual_key in visual_groups:
+		var group: Dictionary = visual_groups[visual_key]
+		var items: Array = group.items
+		var detail_batch: Variant = _host._make_multimesh_batch("AuthoredDetailBatch_%s" % visual_key, _host.shared_box_mesh, items.size(), group.material, group.colors)
+		if group.night_only:
+			_host.write_construction_tag(detail_batch, "night_only_geometry", true)
+		var detail_transforms: Array = []
+		var detail_colors: Array = []
+		for i in range(items.size()):
+			if items[i].has("prepared"):
+				detail_transforms.append(items[i].prepared)
+				if group.colors:
+					detail_colors.append(items[i].color)
+				continue
+			var marker: Node3D = items[i].node
+			var detail_size: Vector3 = items[i].size
+			detail_transforms.append(Transform3D(marker.basis.scaled(detail_size), marker.position))
+			if group.colors:
+				detail_colors.append(items[i].color)
+			marker.queue_free()
+		_host._upload_static_batch(detail_batch, detail_transforms, detail_colors)
+func _publish_environment_2(only_key: String = "") -> void:
+	for house_key in _scope.house_batch_data:
+		if not only_key.is_empty() and str(house_key) != only_key: continue
+		var house_group: Dictionary = _scope.house_batch_data[house_key]
+		var house_transforms: Array = house_group.transforms
+		if house_transforms.is_empty():
+			continue
+		var house_batch: Variant = _host._make_multimesh_batch(
+			"HouseBatch_%s" % str(house_key).replace(":", "_"),
+			_host.shared_box_mesh,
+			house_transforms.size(),
+			house_group.material,
+			true
+		)
+		if str(house_key).begins_with("emissive_window:"):
+			_host.write_construction_tag(house_batch, "night_window_material", house_group.material)
+			_host.write_construction_tag(house_batch, "night_window_color", house_group.material.albedo_color)
+		_host._upload_static_batch(house_batch, house_transforms, house_group.colors)
+func _publish_environment_3(only_key: String = "") -> void:
+	for batch_key in _scope.house_module_batch_data:
+		if not only_key.is_empty() and str(batch_key) != only_key: continue
+		var module_group: Dictionary = _scope.house_module_batch_data[batch_key]
+		var module_transforms: Array = module_group.transforms
+		if module_transforms.is_empty():
+			continue
+		var module_batch: Variant = _host._make_multimesh_batch(
+			"HouseModuleBatch_%s" % batch_key,
+			module_group.mesh,
+			module_transforms.size(),
+			null
+		)
+		module_batch.material_override = null
+		_host._upload_static_batch(module_batch, module_transforms)
+func _publish_environment_4(only_key: String = "") -> void:
+	for batch_key in _scope.prop_batch_data:
+		if not only_key.is_empty() and str(batch_key) != only_key: continue
+		var entry: Dictionary = _scope.prop_batch_data[batch_key]
+		var transforms: Array = entry.get("transforms", [])
+		if transforms.is_empty():
+			continue
+		var batch: Variant = _host._make_multimesh_batch("WorldPropBatch_%s" % str(batch_key), _host.shared_box_mesh, transforms.size(), entry.get("material"))
+		_host._upload_static_batch(batch, transforms)
+func _publish_environment_5() -> void:
+	if not _scope.tree_batch_data.is_empty() and not _host._flush_authored_tree_assets():
+		var trunk_mesh: Variant = BoxMesh.new()
+		trunk_mesh.size = Vector3(0.42, 1.8, 0.42)
+		var trunks: Variant = _host._make_multimesh_batch("TreeTrunkBatch", trunk_mesh, _scope.tree_batch_data.size(), _host.world_materials.get_material("timber", str(_host.settings.settings.get("quality_preset", "balanced")), Color(0.42, 0.30, 0.20), 0.0, false))
+		var crown_mesh: Variant = SphereMesh.new()
+		crown_mesh.radius = 0.72
+		crown_mesh.height = 1.62
+		crown_mesh.radial_segments = 8
+		crown_mesh.rings = 4
+		var crown_material: Variant = _host._mat(Color.WHITE)
+		crown_material.vertex_color_use_as_albedo = true
+		var crowns: Variant = _host._make_multimesh_batch("TreeCrownBatch", crown_mesh, _scope.tree_batch_data.size(), crown_material, true)
+		var trunk_transforms: Array = []
+		var crown_transforms: Array = []
+		var crown_colors: Array = []
+		for i in range(_scope.tree_batch_data.size()):
+			trunk_transforms.append(_scope.tree_batch_data[i].trunk)
+			var crown_transform: Transform3D = _scope.tree_batch_data[i].crown
+			crown_transform.basis = crown_transform.basis.scaled(Vector3(1.10, 0.72, 1.10))
+			crown_transforms.append(crown_transform)
+			crown_colors.append(_scope.tree_batch_data[i].color)
+		_host._upload_static_batch(trunks, trunk_transforms)
+		_host._upload_static_batch(crowns, crown_transforms, crown_colors)
+func _publish_environment_6(include_ecology: bool = true) -> void:
+	if include_ecology: _host._build_design_pack_ecology()
+	if not _scope.deadfall_batch_data.is_empty():
+		var deadfall_mesh: Variant = CylinderMesh.new()
+		deadfall_mesh.top_radius = 0.16
+		deadfall_mesh.bottom_radius = 0.22
+		deadfall_mesh.height = 3.4
+		deadfall_mesh.radial_segments = 7
+		var deadfalls: Variant = _host._make_multimesh_batch("DeadfallBatch", deadfall_mesh, _scope.deadfall_batch_data.size(), _host.world_materials.get_material("timber", str(_host.settings.settings.get("quality_preset", "balanced")), Color(0.34, 0.25, 0.17), 0.0, false))
+		_host._upload_static_batch(deadfalls, _scope.deadfall_batch_data)
+func _make_shrine_scene(pos: Vector3) -> void:
+	var shrine_mesh: Variant = load("res://assets_external/environment/village/GreyfenShrine_Authored.res") as ArrayMesh
+	if shrine_mesh == null or shrine_mesh.get_surface_count() != 6:
+		push_error("Required authored Greyfen shrine is unavailable")
+		return
+	var shrine: Variant = MeshInstance3D.new()
+	shrine.name = "GreyfenAuthoredOathstone"
+	shrine.position = pos
+	shrine.mesh = shrine_mesh
+	_scope.zone_root.add_child(shrine)
+	preload("res://scripts/camera_controller.gd").install_visual_clearance(shrine)
+	var shrine_tints: Variant = {
+		"medieval_brick": Color(0.68, 0.68, 0.62),
+		"plaster": Color(0.70, 0.71, 0.66),
+		"timber": Color(0.37, 0.27, 0.19),
+		"roof_tiles": Color(0.39, 0.18, 0.17),
+		"glazing": Color(0.29, 0.56, 0.50),
+		"metal": Color(0.20, 0.28, 0.26),
+	}
+	var shrine_quality: Variant = str(_host.settings.settings.get("quality_preset", "balanced"))
+	for surface_index in shrine_mesh.get_surface_count():
+		var surface_name: Variant = shrine_mesh.surface_get_name(surface_index)
+		if not shrine_tints.has(surface_name):
+			push_error("Unknown authored Greyfen shrine surface: " + surface_name)
+			return
+		var material_role: Variant = surface_name if _host.world_materials.SURFACES.has(surface_name) else "metal"
+		var material: StandardMaterial3D = _host._mat(shrine_tints[surface_name]) if surface_name == "glazing" else _host.world_materials.get_material(material_role, shrine_quality, shrine_tints[surface_name], 0.0, false)
+		shrine.set_surface_override_material(surface_index, material)
+	_host._make_collision_box("ShrinePlinth", pos + Vector3(0, 0.18, 0), Vector3(2.36, 0.36, 1.64))
+	_host._make_collision_box("ShrineOathstone", pos + Vector3(0, 0.96, 0), Vector3(0.88, 1.10, 0.62))
+	_host._make_loose_role("crate", pos + Vector3(-1.15, 0, -0.65), Vector3.ONE * 0.48, -12.0)
+	_host._make_loose_role("barrel", pos + Vector3(1.2, 0, 1.40), Vector3.ONE * 0.42, 16.0)
+	_host._make_light("ShrineGlow", pos + Vector3(0, 1.7, -0.3), Color(0.56, 0.78, 0.62), 1.6)
+	_host._make_world_prop_anchor("shrine", "shrine", pos, "crow_shrine_state")
+	preload("res://scripts/living_cast_stations.gd").add_care_table(_scope.zone_root)
+func _make_blacksmith_scene(pos: Vector3) -> void:
+	var forge_mesh: Variant = load("res://assets_external/environment/village/GreyfenForge_Authored.res") as ArrayMesh
+	if forge_mesh == null or forge_mesh.get_surface_count() != 6:
+		push_error("Required authored Greyfen forge is unavailable")
+		return
+	var shop: Variant = Node3D.new()
+	shop.name = "GreyfenBlacksmithStoneShop"
+	shop.position = pos
+	_scope.zone_root.add_child(shop)
+	var workshop: Variant = MeshInstance3D.new()
+	workshop.name = "BlacksmithAuthoredForge"
+	workshop.mesh = forge_mesh
+	shop.add_child(workshop)
+	var forge_tints: Variant = {
+		"medieval_brick": Color(0.66, 0.62, 0.55),
+		"plaster": Color(0.77, 0.69, 0.57),
+		"timber": Color(0.42, 0.31, 0.21),
+		"roof_tiles": Color(0.40, 0.26, 0.20),
+		"glazing": Color(0.16, 0.22, 0.24),
+		"metal": Color(0.30, 0.30, 0.29),
+	}
+	var forge_quality: Variant = str(_host.settings.settings.get("quality_preset", "balanced"))
+	for surface_index in forge_mesh.get_surface_count():
+		var surface_name: Variant = forge_mesh.surface_get_name(surface_index)
+		if not forge_tints.has(surface_name):
+			push_error("Unknown authored Greyfen forge surface: " + surface_name)
+			return
+		var material_role: Variant = surface_name if _host.world_materials.SURFACES.has(surface_name) else "metal"
+		var material: StandardMaterial3D = _host._mat(forge_tints[surface_name]) if surface_name == "glazing" else _host.world_materials.get_material(material_role, forge_quality, forge_tints[surface_name], 0.0, false)
+		workshop.set_surface_override_material(surface_index, material)
+	_host._make_collision_box("BlacksmithRearWall", pos + Vector3(0, 1.27, 2.33), Vector3(3.4, 1.94, 0.20))
+	for side in [-1.0, 1.0]:
+		_host._make_collision_box("BlacksmithSideWall", pos + Vector3(side * 1.69, 1.27, 1.2), Vector3(0.20, 1.94, 2.4))
+	_host._make_collision_box("ForgeHearth", pos + Vector3(1.5, 0.30, -1.1), Vector3(0.96, 0.55, 0.88))
+	_host._make_collision_box("ForgeCoal", pos + Vector3(1.5, 0.38, -1.1), Vector3(0.62, 0.08, 0.48))
+	_host._make_light("ForgeLight", pos + Vector3(1.5, 1.5, -1.1), Color(1.0, 0.35, 0.12), 2.5)
+	var work: Variant = MeshInstance3D.new()
+	work.name = "BlacksmithFittedWork"
+	work.mesh = load("res://assets_external/environment/props/GreyfenForgeWork_Authored.res") as ArrayMesh
+	if work.mesh == null:
+		push_error("Greyfen requires its fitted anvil, workbench, stock and fuel")
+		work.free()
+		return
+	shop.add_child(work)
+	_host._make_loose_role("barrel", pos + Vector3(2.15, 0, 0.95), Vector3.ONE * 0.55, -20.0)
+	_host._make_torch(pos + Vector3(-1.8, 0, -1.2))
+	_host._make_world_prop_anchor("forge", "forge", pos + Vector3(1.5, 0.55, -1.1), "iron_fate")
+func _ensure_mesh_surface_materials(mesh: Mesh, fallback: Material) -> int:
+	if mesh == null or fallback == null:
+		return 0
+	var applied: Variant = 0
+	for surface_index in range(mesh.get_surface_count()):
+		if mesh.surface_get_material(surface_index) == null:
+			mesh.surface_set_material(surface_index, fallback)
+			applied += 1
+	return applied
+func _make_collision_box(name: String, pos: Vector3, size: Vector3) -> void:
+	ZoneBuildContext.add_collision_box(_scope.zone_root, name, pos, size)

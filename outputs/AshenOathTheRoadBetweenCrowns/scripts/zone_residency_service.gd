@@ -17,6 +17,8 @@ var skinned_resource_anchors: Dictionary = {}
 var retired_material_anchors: Dictionary = {}
 var retirement_material: StandardMaterial3D
 var validate_resources: Callable
+const TransitionModel = preload("res://scripts/models/world_transition_model.gd")
+var transition_model: TransitionModel
 
 func configure(validator: Callable) -> void:
 	validate_resources = validator
@@ -39,10 +41,6 @@ func release_material_anchors() -> void:
 	validate_resources = Callable()
 
 func _deferred_free_zone(retired_root: Node) -> void:
-	# Keep the complete render hierarchy intact until the scene tree disposes it.
-	# Manually detaching skins or surfaces races RenderingServer teardown. The
-	# hidden cleanup owner keeps the retired root scene-owned while queue_free()
-	# lets Godot release renderer dependencies at the end of a frame.
 	for _frame in range(ZONE_RETIRE_FRAMES):
 		await get_tree().process_frame
 	if is_instance_valid(retired_root):
@@ -69,11 +67,6 @@ func _deferred_free_zone(retired_root: Node) -> void:
 			if not is_instance_valid(retired_zone_roots[index]):
 				retired_zone_roots.remove_at(index)
 	pending_zone_retirements = maxi(pending_zone_retirements - 1, 0)
-	# Material anchors only bridge the renderer-safe retirement window. Once the
-	# final staged root has been queued and released, no retired scene owns those
-	# materials anymore; dropping the anchors here prevents shutdown retention
-	# while keeping shared materials alive for any active zone that still uses
-	# them.
 	if pending_zone_retirements == 0:
 		retired_material_anchors.clear()
 
@@ -81,7 +74,6 @@ func _release_retiring_resources(root: Node) -> void:
 	var pending: Array[Node] = [root]
 	var geometry: Array[Node] = []
 	var slice := Time.get_ticks_usec()
-	# Clear every animation owner before releasing any mesh it may restore.
 	while not pending.is_empty():
 		var node: Node = pending.pop_back()
 		if not is_instance_valid(node): continue
@@ -119,8 +111,6 @@ func _release_retiring_resources(root: Node) -> void:
 func _release_zone_render_resources(root: Node) -> void:
 	if root == null or not is_instance_valid(root):
 		return
-	# Playback cleanup restores morphs on the still-bound mesh. Clear it before
-	# detaching geometry, and never touch a driver owned by another branch.
 	for skeleton in root.find_children("*", "Skeleton3D", true, false):
 		if not skeleton.has_meta("character_motion_owner"):
 			continue
@@ -128,9 +118,6 @@ func _release_zone_render_resources(root: Node) -> void:
 		var driver := reference.get_ref() as Node if reference != null else null
 		if is_instance_valid(driver) and root.is_ancestor_of(driver) and driver.has_method("_clear_playback"):
 			driver.call("_clear_playback")
-	# CollisionShape3D owns a PhysicsServer shape RID while its shape property is
-	# populated. Clear it after the zone is disabled so the server can release
-	# the RID before the parent hierarchy is destroyed.
 	for raw_shape in root.find_children("*", "CollisionShape3D", true, false):
 		var shape_node := raw_shape as CollisionShape3D
 		if shape_node == null:
@@ -143,9 +130,6 @@ func _release_zone_render_resources(root: Node) -> void:
 			continue
 		region.enabled = false
 		region.navigation_mesh = null
-	# MeshInstance3D and MultiMeshInstance3D similarly retain renderer-side
-	# instances until their geometry reference is cleared. This is only called
-	# for hidden/retiring roots, never for an active zone.
 	for raw_mesh in root.find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := raw_mesh as MeshInstance3D
 		if mesh_instance == null:
@@ -177,6 +161,7 @@ func _retire_zone_root(retired_root: Node) -> void:
 	end_preview(retired_root)
 	_anchor_retired_materials(retired_root)
 	_anchor_shared_skinned_resources(retired_root)
+	preload("res://scripts/core/zone_instance_scope.gd").for_root(retired_root).quiesce()
 	_quiesce_zone_runtime(retired_root)
 	suspend_runtime(retired_root)
 	validate_resources.call(retired_root)
@@ -338,6 +323,7 @@ func _release_route_spatial_service(zone_id: String, protected_services: Array =
 	cached.queue_free()
 
 func _activate_cached_zone(zone_id: String) -> Node3D:
+	if transition_model != null and not transition_model.accepts(transition_model.transition_epoch, zone_id): return null
 	var cached_root = route_zone_cache.get(zone_id)
 	if cached_root == null or not is_instance_valid(cached_root):
 		return null
@@ -357,7 +343,6 @@ func suspend_runtime(root: Node) -> void:
 	for child: Node in root.find_children("*","",true,false): suspend_node(root,child)
 
 func suspend_node(root: Node, node: Node) -> void:
-	# Explicit modes bypass a disabled parent; dormant waves stay disabled.
 	if node.process_mode in [Node.PROCESS_MODE_INHERIT,Node.PROCESS_MODE_DISABLED]: return
 	if not node.has_meta("resident_process_mode"):
 		node.set_meta("resident_process_mode",node.process_mode)
@@ -382,8 +367,6 @@ func begin_preview(root: Node) -> void:
 		# Disabled CollisionObject parents otherwise remove these shapes from
 		# physics. The adjoining half must still support feet and camera rays.
 		roads.process_mode = Node.PROCESS_MODE_PAUSABLE
-	# The dogleg bounds the visible portal. Keep the complete region resident,
-	# but cull its occluded branches until it becomes the active owner.
 	var visibility: Array[Dictionary] = []
 	var pending: Array[Node] = []
 	for child: Node in root.get_children():

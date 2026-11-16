@@ -48,183 +48,144 @@ const MAX_RETIRED_MATERIAL_ANCHORS = Definitions.MAX_RETIRED_MATERIAL_ANCHORS
 const MAX_TRANSITION_HISTORY = Definitions.MAX_TRANSITION_HISTORY
 const DIALOGUE_INTERACTION_GUARD_SECONDS = Definitions.DIALOGUE_INTERACTION_GUARD_SECONDS
 const SettingsDelta = Definitions.SettingsDelta
-
 const State = preload("res://scripts/systems/game_state.gd")
+const InstanceScope = preload("res://scripts/core/zone_instance_scope.gd")
+var _construction_scope: InstanceScope
+const TransitionModel = preload("res://scripts/models/world_transition_model.gd")
+var world_transition: TransitionModel:
+	get: return _state.world_transition
 var _host: Node3D
 var _state: State
 var _systems: Dictionary = {}
 signal configured(service_name: String)
-
 func configure(host: Node3D, shared_state: State, services: Dictionary) -> void:
 	_host = host
 	_state = shared_state
 	_systems = services
 	configured.emit(str(name))
-
 var GreyfenSocialPresentation: Script:
 	get: return _state.GreyfenSocialPresentation
-
 var CemeteryEvidencePresentation: Script:
 	get: return _state.CemeteryEvidencePresentation
-
 var WychwoodEvidencePresentation: Script:
 	get: return _state.WychwoodEvidencePresentation
-
 var CampaignRecordPresentation: Script:
 	get: return _state.CampaignRecordPresentation
-
 var CampaignWildernessSection: Script:
 	get: return _state.CampaignWildernessSection
-
 var WychwoodTerrainPresentation: Script:
 	get: return _state.WychwoodTerrainPresentation
-
 var StoryActorPresence: Script:
 	get: return _state.StoryActorPresence
-
 var StoryDecisionCoordinator: Script:
 	get: return _state.StoryDecisionCoordinator
-
 var StoryWorldDirector: Script:
 	get: return _state.StoryWorldDirector
-
 var CovenantResolution: Script:
 	get: return _state.CovenantResolution
-
 var EnemyAI: Script:
 	get: return _state.EnemyAI
-
 var VisualDirector: Script:
 	get: return _state.VisualDirector
-
 var NpcAmbient: Script:
 	get: return _state.NpcAmbient
-
 var CharacterPresentation: Script:
 	get: return _state.CharacterPresentation
-
 var CharacterAnimationDriver: Script:
 	get: return _state.CharacterAnimationDriver
-
 var BoardGameOpponent: Script:
 	get: return _state.BoardGameOpponent
-
 var WorldVisualUpgrade: Script:
 	get: return _state.WorldVisualUpgrade
-
 var WorldMotionController: Script:
 	get: return _state.WorldMotionController
-
 var SurfaceFeedbackManager: Script:
 	get: return _state.SurfaceFeedbackManager
-
 var WorldVFXController: Script:
 	get: return _state.WorldVFXController
-
 var EpilogueResolver: Script:
 	get: return _state.EpilogueResolver
-
 var RuntimeActorFactory: Script:
 	get: return _state.RuntimeActorFactory
-
 var BossEncounterScript: Script:
 	get: return _state.BossEncounterScript
-
 var player:
 	get: return _state.player
 	set(value): _state.player = value
-
 var gameplay_scripts: Dictionary:
 	get: return _state.gameplay_scripts
 	set(value): _state.gameplay_scripts = value
-
 var production_observation_bridge:
 	get: return _state.production_observation_bridge
 	set(value): _state.production_observation_bridge = value
-
 var camera_rig:
 	get: return _state.camera_rig
 	set(value): _state.camera_rig = value
-
 var hud:
 	get: return _state.hud
 	set(value): _state.hud = value
-
 var quests:
 	get: return _state.quests
 	set(value): _state.quests = value
-
 var quest_presentation:
 	get: return _state.quest_presentation
 	set(value): _state.quest_presentation = value
-
 var quest_beats:
 	get: return _state.quest_beats
 	set(value): _state.quest_beats = value
-
 var dialogue:
 	get: return _state.dialogue
 	set(value): _state.dialogue = value
-
 var story_state:
 	get: return _state.story_state
 	set(value): _state.story_state = value
-
 var inventory:
 	get: return _state.inventory
 	set(value): _state.inventory = value
-
 var vendor_service:
 	get: return _state.vendor_service
 	set(value): _state.vendor_service = value
-
 var crafting:
 	get: return _state.crafting
 	set(value): _state.crafting = value
-
 var combat:
 	get: return _state.combat
 	set(value): _state.combat = value
-
 var save_manager:
 	get: return _state.save_manager
 	set(value): _state.save_manager = value
-
 var settings:
 	get: return _state.settings
 	set(value): _state.settings = value
-
 var world_materials:
 	get: return _state.world_materials
 	set(value): _state.world_materials = value
-
 var day_night:
 	get: return _state.day_night
 	set(value): _state.day_night = value
-
 var audio:
 	get: return _state.audio
 	set(value): _state.audio = value
-
 var asset_helper:
 	get: return _state.asset_helper
 	set(value): _state.asset_helper = value
-
 var visual_director:
 	get: return _state.visual_director
 	set(value): _state.visual_director = value
-
-var _unbound_zone_fields: Dictionary:
+var _unbound_zone_fields: InstanceScope:
 	get: return _state._unbound_zone_fields
 	set(value): _state._unbound_zone_fields = value
-
 var world_vfx:
-	get: return _state.world_vfx
-	set(value): _state.world_vfx = value
+	get: return _construction_scope.world_vfx if _construction_scope != null else _state.world_vfx
+	set(value):
+		if _construction_scope == null: _state.world_vfx = value
+		else: _construction_scope.world_vfx = value
 
 var world_props: WorldPropController:
-	get: return _state.world_props
-	set(value): _state.world_props = value
+	get: return _construction_scope.world_props if _construction_scope != null else _state.world_props
+	set(value):
+		if _construction_scope == null: _state.world_props = value
+		else: _construction_scope.world_props = value
 
 var minigames:
 	get: return _state.minigames
@@ -263,12 +224,16 @@ var qa_adapter:
 	set(value): _state.qa_adapter = value
 
 var zone_root: Node3D:
-	get: return _state.zone_root
-	set(value): _state.zone_root = value
+	get: return _construction_scope.zone_root if _construction_scope != null and not _construction_scope.cancelled else (null if _construction_scope != null else _state.zone_root)
+	set(value):
+		if _construction_scope == null: _state.zone_root = value
+		else: _construction_scope.zone_root = value
 
 var neighbor_building: bool:
-	get: return _state.neighbor_building
-	set(value): _state.neighbor_building = value
+	get: return _construction_scope.preparing if _construction_scope != null else _state.neighbor_building
+	set(value):
+		if _construction_scope == null: _state.neighbor_building = value
+		else: _construction_scope.preparing = value
 
 var neighbor_crossing_pending: bool:
 	get: return _state.neighbor_crossing_pending
@@ -303,20 +268,28 @@ var quest_hud_coordinator: QuestHudCoordinator:
 	set(value): _state.quest_hud_coordinator = value
 
 var interaction_candidates: Array:
-	get: return _state.interaction_candidates
-	set(value): _state.interaction_candidates = value
+	get: return _construction_scope.interaction_candidates if _construction_scope != null else _state.interaction_candidates
+	set(value):
+		if _construction_scope == null: _state.interaction_candidates = value
+		else: _construction_scope.interaction_candidates.assign(value)
 
 var interaction_area_cache: Array[Area3D]:
-	get: return _state.interaction_area_cache
-	set(value): _state.interaction_area_cache = value
+	get: return _construction_scope.interaction_area_cache if _construction_scope != null else _state.interaction_area_cache
+	set(value):
+		if _construction_scope == null: _state.interaction_area_cache = value
+		else: _construction_scope.interaction_area_cache.assign(value)
 
 var interaction_area_cache_ready: bool:
-	get: return _state.interaction_area_cache_ready
-	set(value): _state.interaction_area_cache_ready = value
+	get: return _construction_scope.interaction_area_cache_ready if _construction_scope != null else _state.interaction_area_cache_ready
+	set(value):
+		if _construction_scope == null: _state.interaction_area_cache_ready = value
+		else: _construction_scope.interaction_area_cache_ready = value
 
 var current_zone_id: String:
-	get: return _state.current_zone_id
-	set(value): _state.current_zone_id = value
+	get: return _construction_scope.zone_id if _construction_scope != null else _state.current_zone_id
+	set(value):
+		if _construction_scope == null: _state.current_zone_id = value
+		else: _construction_scope.zone_id = value
 
 var enemy_defs: Dictionary:
 	get: return _state.enemy_defs
@@ -339,8 +312,10 @@ var browser_restore_check: float:
 	set(value): _state.browser_restore_check = value
 
 var active_enemies: Array:
-	get: return _state.active_enemies
-	set(value): _state.active_enemies = value
+	get: return _construction_scope.active_enemies if _construction_scope != null else _state.active_enemies
+	set(value):
+		if _construction_scope == null: _state.active_enemies = value
+		else: _construction_scope.active_enemies.assign(value)
 
 var active_enemy_attacker: Node:
 	get: return _state.active_enemy_attacker
@@ -437,16 +412,22 @@ var material_cache: Dictionary:
 	set(value): _state.material_cache = value
 
 var runtime_light_count: int:
-	get: return _state.runtime_light_count
-	set(value): _state.runtime_light_count = value
+	get: return _construction_scope.runtime_light_count if _construction_scope != null else _state.runtime_light_count
+	set(value):
+		if _construction_scope == null: _state.runtime_light_count = value
+		else: _construction_scope.runtime_light_count = value
 
 var tree_batch_data: Array[Dictionary]:
-	get: return _state.tree_batch_data
-	set(value): _state.tree_batch_data = value
+	get: return _construction_scope.tree_batch_data if _construction_scope != null else _state.tree_batch_data
+	set(value):
+		if _construction_scope == null: _state.tree_batch_data = value
+		else: _construction_scope.tree_batch_data.assign(value)
 
 var deadfall_batch_data: Array[Transform3D]:
-	get: return _state.deadfall_batch_data
-	set(value): _state.deadfall_batch_data = value
+	get: return _construction_scope.deadfall_batch_data if _construction_scope != null else _state.deadfall_batch_data
+	set(value):
+		if _construction_scope == null: _state.deadfall_batch_data = value
+		else: _construction_scope.deadfall_batch_data.assign(value)
 
 var tree_collision_body: StaticBody3D:
 	get: return _state.tree_collision_body
@@ -509,28 +490,40 @@ var shared_box_mesh: BoxMesh:
 	set(value): _state.shared_box_mesh = value
 
 var prop_batch_data: Dictionary:
-	get: return _state.prop_batch_data
-	set(value): _state.prop_batch_data = value
+	get: return _construction_scope.prop_batch_data if _construction_scope != null else _state.prop_batch_data
+	set(value):
+		if _construction_scope == null: _state.prop_batch_data = value
+		else: _construction_scope.prop_batch_data.assign(value)
 
 var visual_box_batch_data: Array[Dictionary]:
-	get: return _state.visual_box_batch_data
-	set(value): _state.visual_box_batch_data = value
+	get: return _construction_scope.visual_box_batch_data if _construction_scope != null else _state.visual_box_batch_data
+	set(value):
+		if _construction_scope == null: _state.visual_box_batch_data = value
+		else: _construction_scope.visual_box_batch_data.assign(value)
 
 var terrain_patch_batch_data: Array[Dictionary]:
-	get: return _state.terrain_patch_batch_data
-	set(value): _state.terrain_patch_batch_data = value
+	get: return _construction_scope.terrain_patch_batch_data if _construction_scope != null else _state.terrain_patch_batch_data
+	set(value):
+		if _construction_scope == null: _state.terrain_patch_batch_data = value
+		else: _construction_scope.terrain_patch_batch_data.assign(value)
 
 var house_batch_data: Dictionary:
-	get: return _state.house_batch_data
-	set(value): _state.house_batch_data = value
+	get: return _construction_scope.house_batch_data if _construction_scope != null else _state.house_batch_data
+	set(value):
+		if _construction_scope == null: _state.house_batch_data = value
+		else: _construction_scope.house_batch_data.assign(value)
 
 var house_module_batch_data: Dictionary:
-	get: return _state.house_module_batch_data
-	set(value): _state.house_module_batch_data = value
+	get: return _construction_scope.house_module_batch_data if _construction_scope != null else _state.house_module_batch_data
+	set(value):
+		if _construction_scope == null: _state.house_module_batch_data = value
+		else: _construction_scope.house_module_batch_data.assign(value)
 
 var spatial_service: Node:
-	get: return _state.spatial_service
-	set(value): _state.spatial_service = value
+	get: return _construction_scope.spatial_service if _construction_scope != null else _state.spatial_service
+	set(value):
+		if _construction_scope == null: _state.spatial_service = value
+		else: _construction_scope.spatial_service = value
 
 var zone_runtime_coordinator: ZoneRuntimeCoordinator:
 	get: return _state.zone_runtime_coordinator
@@ -541,8 +534,10 @@ var zone_residency: ZoneResidencyService:
 	set(value): _state.zone_residency = value
 
 var environment_batches_flushed: bool:
-	get: return _state.environment_batches_flushed
-	set(value): _state.environment_batches_flushed = value
+	get: return _construction_scope.environment_batches_flushed if _construction_scope != null else _state.environment_batches_flushed
+	set(value):
+		if _construction_scope == null: _state.environment_batches_flushed = value
+		else: _construction_scope.environment_batches_flushed = value
 
 var prop_collision_body: StaticBody3D:
 	get: return _state.prop_collision_body
@@ -741,8 +736,10 @@ var target_status_refresh_cooldown: float:
 	set(value): _state.target_status_refresh_cooldown = value
 
 var interaction_focus_dirty: bool:
-	get: return _state.interaction_focus_dirty
-	set(value): _state.interaction_focus_dirty = value
+	get: return _construction_scope.interaction_focus_dirty if _construction_scope != null else _state.interaction_focus_dirty
+	set(value):
+		if _construction_scope == null: _state.interaction_focus_dirty = value
+		else: _construction_scope.interaction_focus_dirty = value
 
 var interaction_focus_cache_valid: bool:
 	get: return _state.interaction_focus_cache_valid
@@ -777,8 +774,10 @@ var last_compass_signature: String:
 	set(value): _state.last_compass_signature = value
 
 var encounter_spatial_index:
-	get: return _state.encounter_spatial_index
-	set(value): _state.encounter_spatial_index = value
+	get: return _construction_scope.encounter_spatial_index if _construction_scope != null else _state.encounter_spatial_index
+	set(value):
+		if _construction_scope == null: _state.encounter_spatial_index = value
+		else: _construction_scope.encounter_spatial_index = value
 
 var _hitstop_generation: int:
 	get: return _state._hitstop_generation
@@ -1241,5 +1240,5 @@ func _grass_material(color: Color) -> StandardMaterial3D: return _systems["world
 func _emissive_mat(color: Color, energy: float) -> StandardMaterial3D: return _systems["world"]._emissive_mat(color, energy)
 func _read_json(path: String): return _systems["session"]._read_json(path)
 func _zone_construction() -> Node3D: return _systems["world"]._zone_construction()
-func _zone_runtime_fields() -> Dictionary: return _systems["world"]._zone_runtime_fields()
+func _zone_runtime_fields() -> InstanceScope: return _construction_scope if _construction_scope != null else _systems["world"]._zone_runtime_fields()
 func _publish_opening_batches(generation: int) -> bool: return await _systems["world"]._publish_opening_batches(generation)

@@ -4,7 +4,7 @@ var _host: Node3D
 
 func _init(host: Node3D) -> void:
 	_host = host
-
+	zone_residency.transition_model = world_transition
 var GreyfenSocialPresentation: Script:
 	get: return _host._gameplay_script("greyfen_social_presentation")
 
@@ -117,14 +117,14 @@ var asset_helper
 var visual_director
 
 var _unbound_zone_fields := ZoneBuildContext.new_fields()
-
+var world_transition := preload("res://scripts/models/world_transition_model.gd").new()
 var world_vfx:
-	get: return _host._zone_runtime_fields()["world_vfx"]
-	set(value): _host._zone_runtime_fields()["world_vfx"] = value
+	get: return _host._zone_runtime_fields().world_vfx
+	set(value): _host._zone_runtime_fields().world_vfx = value
 
 var world_props: WorldPropController:
-	get: return _host._zone_runtime_fields()["world_props"]
-	set(value): _host._zone_runtime_fields()["world_props"] = value
+	get: return _host._zone_runtime_fields().world_props
+	set(value): _host._zone_runtime_fields().world_props = value
 
 var minigames
 
@@ -165,16 +165,16 @@ var combat_vfx_coordinator := CombatVfxCoordinator.new()
 var quest_hud_coordinator := QuestHudCoordinator.new()
 
 var interaction_candidates: Array:
-	get: return _host._zone_runtime_fields()["interaction_candidates"]
-	set(value): _host._zone_runtime_fields()["interaction_candidates"] = value
+	get: return _host._zone_runtime_fields().interaction_candidates
+	set(value): _host._zone_runtime_fields().interaction_candidates.assign(value)
 
 var interaction_area_cache: Array[Area3D]:
-	get: return _host._zone_runtime_fields()["interaction_area_cache"]
-	set(value): _host._zone_runtime_fields()["interaction_area_cache"] = value
+	get: return _host._zone_runtime_fields().interaction_area_cache
+	set(value): _host._zone_runtime_fields().interaction_area_cache.assign(value)
 
 var interaction_area_cache_ready: bool:
-	get: return _host._zone_runtime_fields()["interaction_area_cache_ready"]
-	set(value): _host._zone_runtime_fields()["interaction_area_cache_ready"] = value
+	get: return _host._zone_runtime_fields().interaction_area_cache_ready
+	set(value): _host._zone_runtime_fields().interaction_area_cache_ready = value
 
 var current_zone_id = "greyfen"
 
@@ -189,8 +189,8 @@ var browser_restore_revision := 0
 var browser_restore_check := 0.0
 
 var active_enemies: Array:
-	get: return _host._zone_runtime_fields()["active_enemies"]
-	set(value): _host._zone_runtime_fields()["active_enemies"] = value
+	get: return _host._zone_runtime_fields().active_enemies
+	set(value): _host._zone_runtime_fields().active_enemies.assign(value)
 
 var active_enemy_attacker: Node
 
@@ -239,16 +239,16 @@ var tutorial_flags = {}
 var material_cache: Dictionary = {}
 
 var runtime_light_count: int:
-	get: return _host._zone_runtime_fields()["runtime_light_count"]
-	set(value): _host._zone_runtime_fields()["runtime_light_count"] = value
+	get: return _host._zone_runtime_fields().runtime_light_count
+	set(value): _host._zone_runtime_fields().runtime_light_count = value
 
 var tree_batch_data: Array[Dictionary]:
-	get: return _host._zone_runtime_fields()["tree_batch_data"]
-	set(value): _host._zone_runtime_fields()["tree_batch_data"] = value
+	get: return _host._zone_runtime_fields().tree_batch_data
+	set(value): _host._zone_runtime_fields().tree_batch_data.assign(value)
 
 var deadfall_batch_data: Array[Transform3D]:
-	get: return _host._zone_runtime_fields()["deadfall_batch_data"]
-	set(value): _host._zone_runtime_fields()["deadfall_batch_data"] = value
+	get: return _host._zone_runtime_fields().deadfall_batch_data
+	set(value): _host._zone_runtime_fields().deadfall_batch_data.assign(value)
 
 var tree_collision_body: StaticBody3D:
 	get:
@@ -306,36 +306,36 @@ var active_zone_signature := -1
 var shared_box_mesh: BoxMesh
 
 var prop_batch_data: Dictionary:
-	get: return _host._zone_runtime_fields()["prop_batch_data"]
-	set(value): _host._zone_runtime_fields()["prop_batch_data"] = value
+	get: return _host._zone_runtime_fields().prop_batch_data
+	set(value): _host._zone_runtime_fields().prop_batch_data.assign(value)
 
 var visual_box_batch_data: Array[Dictionary]:
-	get: return _host._zone_runtime_fields()["visual_box_batch_data"]
-	set(value): _host._zone_runtime_fields()["visual_box_batch_data"] = value
+	get: return _host._zone_runtime_fields().visual_box_batch_data
+	set(value): _host._zone_runtime_fields().visual_box_batch_data.assign(value)
 
 var terrain_patch_batch_data: Array[Dictionary]:
-	get: return _host._zone_runtime_fields()["terrain_patch_batch_data"]
-	set(value): _host._zone_runtime_fields()["terrain_patch_batch_data"] = value
+	get: return _host._zone_runtime_fields().terrain_patch_batch_data
+	set(value): _host._zone_runtime_fields().terrain_patch_batch_data.assign(value)
 
 var house_batch_data: Dictionary:
-	get: return _host._zone_runtime_fields()["house_batch_data"]
-	set(value): _host._zone_runtime_fields()["house_batch_data"] = value
+	get: return _host._zone_runtime_fields().house_batch_data
+	set(value): _host._zone_runtime_fields().house_batch_data.assign(value)
 
 var house_module_batch_data: Dictionary:
-	get: return _host._zone_runtime_fields()["house_module_batch_data"]
-	set(value): _host._zone_runtime_fields()["house_module_batch_data"] = value
+	get: return _host._zone_runtime_fields().house_module_batch_data
+	set(value): _host._zone_runtime_fields().house_module_batch_data.assign(value)
 
 var spatial_service: Node:
-	get: return _host._zone_runtime_fields()["spatial_service"]
-	set(value): _host._zone_runtime_fields()["spatial_service"] = value
+	get: return _host._zone_runtime_fields().spatial_service
+	set(value): _host._zone_runtime_fields().spatial_service = value
 
 var zone_runtime_coordinator: ZoneRuntimeCoordinator
 
 var zone_residency := ZoneResidencyService.new()
 
 var environment_batches_flushed: bool:
-	get: return _host._zone_runtime_fields()["environment_batches_flushed"]
-	set(value): _host._zone_runtime_fields()["environment_batches_flushed"] = value
+	get: return _host._zone_runtime_fields().environment_batches_flushed
+	set(value): _host._zone_runtime_fields().environment_batches_flushed = value
 
 var prop_collision_body: StaticBody3D:
 	get:
@@ -441,8 +441,8 @@ var tutorial_refresh_cooldown := 0.0
 var target_status_refresh_cooldown := 0.0
 
 var interaction_focus_dirty: bool:
-	get: return _host._zone_runtime_fields()["interaction_focus_dirty"]
-	set(value): _host._zone_runtime_fields()["interaction_focus_dirty"] = value
+	get: return _host._zone_runtime_fields().interaction_focus_dirty
+	set(value): _host._zone_runtime_fields().interaction_focus_dirty = value
 
 var interaction_focus_cache_valid := false
 
@@ -471,8 +471,8 @@ var last_compass_signature: String:
 	set(value): quest_hud_coordinator.last_signature = value
 
 var encounter_spatial_index:
-	get: return _host._zone_runtime_fields()["encounter_spatial_index"]
-	set(value): _host._zone_runtime_fields()["encounter_spatial_index"] = value
+	get: return _host._zone_runtime_fields().encounter_spatial_index
+	set(value): _host._zone_runtime_fields().encounter_spatial_index = value
 
 var _hitstop_generation := 0
 

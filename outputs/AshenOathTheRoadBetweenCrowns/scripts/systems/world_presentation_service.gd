@@ -938,7 +938,7 @@ func _emissive_mat(color: Color, energy: float) -> StandardMaterial3D:
 func _zone_construction() -> Node3D:
 	return ZoneBuildContext.active_host(_host)
 
-func _zone_runtime_fields() -> Dictionary:
+func _zone_runtime_fields() -> InstanceScope:
 	return ZoneBuildContext.fields_for(zone_root) if is_instance_valid(zone_root) else _unbound_zone_fields
 
 func _publish_opening_batches(generation: int) -> bool:

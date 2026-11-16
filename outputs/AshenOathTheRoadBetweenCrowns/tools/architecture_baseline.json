@@ -1386,10 +1386,10 @@
       "wallclock_calls": 0
     },
     "scripts/seamless_world_service.gd": {
-      "duck_meta_calls": 25,
+      "duck_meta_calls": 24,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 1042,
+      "lines": 1022,
       "unseeded_rand_calls": 0,
       "untyped_funcs": 0,
       "wallclock_calls": 23
@@ -1722,7 +1722,7 @@
       "duck_meta_calls": 0,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 1245,
+      "lines": 1244,
       "unseeded_rand_calls": 0,
       "untyped_funcs": 24,
       "wallclock_calls": 0
@@ -1785,7 +1785,7 @@
       "duck_meta_calls": 50,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 1007,
+      "lines": 949,
       "unseeded_rand_calls": 0,
       "untyped_funcs": 1,
       "wallclock_calls": 30
@@ -1830,7 +1830,7 @@
       "duck_meta_calls": 36,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 1098,
+      "lines": 1028,
       "unseeded_rand_calls": 0,
       "untyped_funcs": 4,
       "wallclock_calls": 13
@@ -2007,10 +2007,10 @@
       "wallclock_calls": 0
     },
     "scripts/zone_build_context.gd": {
-      "duck_meta_calls": 18,
+      "duck_meta_calls": 11,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 502,
+      "lines": 490,
       "unseeded_rand_calls": 0,
       "untyped_funcs": 10,
       "wallclock_calls": 0
@@ -2025,31 +2025,28 @@
       "wallclock_calls": 0
     },
     "scripts/zone_construction_host.gd": {
-      "duck_meta_calls": 88,
-      "dynamic_get_set_funcs": [
-        "_get",
-        "_set"
-      ],
-      "has_dynamic_get_set": true,
-      "lines": 4283,
-      "unseeded_rand_calls": 2,
-      "untyped_funcs": 26,
+      "duck_meta_calls": 5,
+      "dynamic_get_set_funcs": [],
+      "has_dynamic_get_set": false,
+      "lines": 339,
+      "unseeded_rand_calls": 0,
+      "untyped_funcs": 0,
       "wallclock_calls": 0
     },
     "scripts/zone_residency_service.gd": {
       "duck_meta_calls": 35,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 480,
+      "lines": 463,
       "unseeded_rand_calls": 0,
       "untyped_funcs": 0,
       "wallclock_calls": 5
     },
     "scripts/zone_runtime_coordinator.gd": {
-      "duck_meta_calls": 38,
+      "duck_meta_calls": 33,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 716,
+      "lines": 688,
       "unseeded_rand_calls": 0,
       "untyped_funcs": 0,
       "wallclock_calls": 12

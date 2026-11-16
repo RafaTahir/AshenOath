@@ -69,10 +69,10 @@ func load_game(game, path: String = SAVE_PATH) -> bool:
 	return _request_model(_model_for_path(path))
 
 func autosave(game) -> bool:
-	return save_game(game, AUTOSAVE_PATH, "Autosaved.")
+	return is_instance_valid(game) and game.world_transition.autosave_allowed() and save_game(game, AUTOSAVE_PATH, "Autosaved.")
 
 func checkpoint(game) -> bool:
-	if _save_is_gated(game):
+	if not is_instance_valid(game) or not game.world_transition.autosave_allowed() or _save_is_gated(game):
 		return false
 	capture_chapter(game)
 	return save_game(game, CHECKPOINT_PATH, "Checkpoint reached.")
@@ -91,7 +91,7 @@ func _has_valid_player(game) -> bool:
 	return runtime_player != null and is_instance_valid(runtime_player)
 
 func _save_is_gated(game) -> bool:
-	if not _pending_load.is_empty():
+	if not _pending_load.is_empty() or (is_instance_valid(game) and not game.world_transition.manual_save_allowed()):
 		return true
 	if game != null and is_instance_valid(game):
 		var arrival_root: Node = game.get("zone_root")
