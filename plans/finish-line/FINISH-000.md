@@ -16,6 +16,13 @@ runtime allocations are consumed: no new gameplay or all-route acceptance is
 claimed. Preserve the earlier exact Wychwood evidence and see the cohesive record
 for the complete source-review matrix and pending compilation/publication.
 
+All-connection candidate `proximity-streaming-connections-20261116-6a9329a-r1`
+now passes both changed-owner compilation, base/Web export, metadata authority
+and full 55-file package integrity at **173,598,000 bytes**. All asset-pack hashes
+are unchanged. The exact candidate is selected for development/main Git publication,
+with the preceding complete Web package preserved. No new runtime allocation was
+used; source/build/publication do not establish all-route or whole-FINISH acceptance.
+
 2026-11-16 two-run follow-up: the first isolated live Chrome run reproduced an
 orphaned travel overlay after passing the northern leaf. A remaining activation
 guard ignored direct-travel policy and waited for disabled neighbor construction.

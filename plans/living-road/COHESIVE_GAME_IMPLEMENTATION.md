@@ -56,6 +56,22 @@ inspection completed. This is not runtime travel evidence. Compile/package
 results will be recorded independently; previous Wychwood observations remain
 attached to the previously tested artifact, not all 32 connectors or new changes.
 
+Both changed GDScript owners compile. Candidate
+`proximity-streaming-connections-20261116-6a9329a-r1`, source `6a9329a`, passes
+base/Web export, retained metadata authority and complete package integrity:
+**55 files, 173,598,000 bytes (165.556 MiB)**. Every asset-pack transport hash
+matches the preceding release; no content or visual quality was reduced.
+Root transport SHA-256:
+`8cb740f1c4e930ff9cbf12341f6fb461f152f3ef87a1b243d114f7e1e4cde28e`.
+Release manifest SHA-256:
+`797cacb0aaeb9f3f584eb28c875d8cd2c440d5ade2f31648ced80e11d3031828`.
+Select these exact bytes for development/main publication. The previous complete
+package is retained under the new candidate's `previous-web/`. Vercel deploys
+from Git; no manual deployment or rollout wait. No additional game execution,
+browser run, screenshot, benchmark or test fixture was used. All-connection runtime
+acceptance remains unverified; the source review and successful build do not
+extend the earlier isolated Wychwood run to this new candidate or every world.
+
 ### Direct Activation Policy Repair - 2026-11-16
 
 The creator authorized exactly two focused runtime runs. Run one used ordinary
