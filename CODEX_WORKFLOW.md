@@ -1,5 +1,29 @@
 # Codex Production Workflow
 
+## Unified Source Checks - Phase 5
+
+For the extracted deterministic contracts, use one command from the repository:
+
+```text
+python3 outputs/AshenOathTheRoadBetweenCrowns/tools/run_checks.py --require-godot
+```
+
+Set `GODOT_BIN` or provide Godot 4.6.x on PATH. The runner checks architecture,
+JSON schemas/item references, script-resource paths, archive integrity and five
+headless suites; CI pins/cache-installs official Godot 4.6.3 on push/PR.
+It imports only the four original UI resources used by the headless HUD checks.
+It derives Godot's ignored global-class index from actual script declarations,
+so fresh checkouts do not depend on a developer's editor cache.
+Hash-validated imports are reused. Logs and timing summaries stay in
+`.release-gate/phase5/`, not in live release bundles.
+
+These are source/simulation and rendering-disabled integration checks, not
+browser-GPU, actual-phone, listening or reference-PC performance acceptance.
+Keep referenced release checks and `DEPLOYMENT_POLICY.md` requirements intact.
+Historical unreferenced verifiers moved to the project `docs/archive/`; its
+`phase5-index.json` preserves original paths and byte hashes. Current plans remain.
+This entry point never exports, synchronizes `web/`, pushes or deploys.
+
 ## Current Delivery Override - 2026-10-27
 
 Use `DEPLOYMENT_POLICY.md` and `DEPLOYMENT_WORKFLOW.md`: local Godot export and

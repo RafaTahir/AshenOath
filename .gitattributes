@@ -1,5 +1,7 @@
 # Certified Web exports must survive Git checkout byte-for-byte.
 .gitattributes -text whitespace=cr-at-eol
+# Phase 5 archives preserve historical worktree bytes across Windows/Linux checkout.
+outputs/AshenOathTheRoadBetweenCrowns/docs/archive/phase5/** -text whitespace=cr-at-eol,-blank-at-eol
 web/** -text
 # Captured verification artifacts keep the bytes used by their evidence hashes.
 outputs/AshenOathTheRoadBetweenCrowns/release_reports/hardening_stage2_20261101/** -text whitespace=cr-at-eol
