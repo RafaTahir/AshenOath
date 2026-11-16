@@ -136,7 +136,7 @@ func request(game, prepared: Dictionary) -> void:
 		return
 	game.hud.set_journey_load_applying()
 	game.hud.clear_journey_transients(true)
-	game._apply_loaded_journey(claimed.get("data", {}))
+	game._systems["save"]._apply_loaded_journey(claimed.get("data", {}))
 	try_finish(game)
 func try_finish(game) -> void:
 	var staged: Dictionary = game.journey_continuity.restore_request()

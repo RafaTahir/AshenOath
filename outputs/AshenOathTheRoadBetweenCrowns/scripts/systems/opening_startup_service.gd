@@ -559,7 +559,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	if not _opening_attempt_current(generation):
 		return
 	phase_started = Time.get_ticks_msec()
-	_spawn_player(Vector3(0, 1, 9.8))
+	_systems["zone_lifecycle"]._spawn_player(Vector3(0, 1, 9.8))
 	if player == null or not player.has_required_body():
 		_abort_opening_prewarm(prewarm_root, prewarm_service, "Kael's authored body or colours could not be loaded. Select Retry to try again.")
 		return
@@ -682,7 +682,7 @@ func _prewarm_greyfen_after_menu_frame(generation: int = -1) -> void:
 	])
 	if new_game_start_pending:
 		_host.get_tree().paused = false
-		_start_new_game_world()
+		_systems["zone_lifecycle"]._start_new_game_world()
 
 func _apply_web_opening_boot_material_budget(world_root: Node, player_root: Node, force_for_test := false) -> void:
 	opening_boot_material_restore_generation += 1

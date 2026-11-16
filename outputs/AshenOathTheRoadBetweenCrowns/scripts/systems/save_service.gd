@@ -78,7 +78,7 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 		pos = Vector3(-7,1,11)
 		story_state.set_flag("saga_bog_arena_owner", "wychwood")
 		story_state.record_evidence("saga_bog_migration", {"zone":"deep_wood", "title":"The memory's northern clearing", "text":"The Bog Wretch and its pending memory core now have one owner in northern Wychwood. Return south along the existing path. Your recorded fight, choices, health and supplies are unchanged."})
-	pos = _safe_loaded_position(zone, pos)
+	pos = _systems["zone_lifecycle"]._safe_loaded_position(zone, pos)
 	# Campaign saves must follow the same streamed-pack handoff as a gate
 	# transition. Otherwise a legacy save opened directly in a later sector
 	# reaches the lazy builder before its script pack is mounted.

@@ -54,7 +54,7 @@ func _on_enemy_died(enemy: Variant) -> void:
 			var ending = _actor.pending_ending if _actor.pending_ending != "" else "kill"
 			_actor.pending_ending = ""
 			_actor.story_state.set_flag("hart_defeated", true)
-			_actor._show_ending_consequence(ending)
+			_actor._systems["quest"]._show_ending_consequence(ending)
 	elif _actor.current_zone_id == "greyfen" and bool(_actor.read_presentation_tag(enemy, "act_one_cemetery_ambush", false)):
 		_actor.quests.complete_objective("main_bell_beneath_greyfen", "cemetery_ambush")
 		_actor.story_state.set_flag("cemetery_ambush_cleared", true)

@@ -121,7 +121,7 @@ func _on_enemy_windup_started(enemy: Variant) -> void:
 		_actor.hud.show_enemy(enemy.display_name, enemy.health_component.health, enemy.health_component.max_health)
 	var guide_guard_pending: Variant = str(_actor.story_state.get_flag("greyfen_guide", "")) == "active" and (not bool(_actor.story_state.get_flag("greyfen_lesson:block", false)) or not bool(_actor.story_state.get_flag("greyfen_lesson:parry", false)))
 	if _actor.current_zone_id == "wychwood" and (guide_guard_pending or not bool(_actor.tutorial_flags.get("block_hint_done", false))):
-		_actor.hud.set_guidance_hint(_actor._guard_tutorial_hint(), 4.2)
+		_actor.hud.set_guidance_hint(_actor._systems["hud"]._guard_tutorial_hint(), 4.2)
 
 func _on_enemy_attack_resolved(enemy: Variant, parried: bool, contact_position: Vector3) -> void:
 	if parried:

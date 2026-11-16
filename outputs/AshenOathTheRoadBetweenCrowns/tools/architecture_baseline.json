@@ -612,13 +612,13 @@
       "wallclock_calls": 0
     },
     "scripts/greyfen_life_controller.gd": {
-      "duck_meta_calls": 107,
+      "duck_meta_calls": 11,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 2430,
+      "lines": 378,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 9,
-      "wallclock_calls": 20
+      "untyped_funcs": 2,
+      "wallclock_calls": 0
     },
     "scripts/greyfen_social_presentation.gd": {
       "duck_meta_calls": 1,
@@ -714,13 +714,13 @@
       "duck_meta_calls": 0,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 994,
+      "lines": 942,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 10,
+      "untyped_funcs": 9,
       "wallclock_calls": 0
     },
     "scripts/hud/hud_input.gd": {
-      "duck_meta_calls": 10,
+      "duck_meta_calls": 3,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
       "lines": 328,
@@ -774,21 +774,21 @@
       "wallclock_calls": 0
     },
     "scripts/hud/inventory_panel.gd": {
-      "duck_meta_calls": 17,
+      "duck_meta_calls": 15,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 918,
+      "lines": 442,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 45,
+      "untyped_funcs": 26,
       "wallclock_calls": 0
     },
     "scripts/hud/menu_panel.gd": {
-      "duck_meta_calls": 43,
+      "duck_meta_calls": 6,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 912,
+      "lines": 417,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 40,
+      "untyped_funcs": 35,
       "wallclock_calls": 0
     },
     "scripts/hud/quest_panel.gd": {
@@ -903,10 +903,10 @@
       "duck_meta_calls": 1,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 1526,
+      "lines": 415,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 1,
-      "wallclock_calls": 12
+      "untyped_funcs": 0,
+      "wallclock_calls": 3
     },
     "scripts/interactable.gd": {
       "duck_meta_calls": 0,
@@ -1332,10 +1332,10 @@
       "wallclock_calls": 3
     },
     "scripts/saga_activities.gd": {
-      "duck_meta_calls": 53,
+      "duck_meta_calls": 8,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 1287,
+      "lines": 373,
       "unseeded_rand_calls": 0,
       "untyped_funcs": 1,
       "wallclock_calls": 0
@@ -1722,9 +1722,9 @@
       "duck_meta_calls": 0,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 1244,
+      "lines": 683,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 24,
+      "untyped_funcs": 21,
       "wallclock_calls": 0
     },
     "scripts/systems/game_definitions.gd": {
@@ -1800,7 +1800,7 @@
       "wallclock_calls": 0
     },
     "scripts/systems/save_service.gd": {
-      "duck_meta_calls": 4,
+      "duck_meta_calls": 3,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
       "lines": 187,

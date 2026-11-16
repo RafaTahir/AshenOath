@@ -140,7 +140,7 @@ func _relocate_anwen_to_cemetery() -> void:
 	safe_position.y = 0.0
 	anwen.global_position = safe_position + Vector3.UP * 0.02
 	anwen.set("prompt", "Meet Sister Anwen at the cemetery gate")
-	_face_npc_toward_player(anwen)
+	_systems["dialogue"]._face_npc_toward_player(anwen)
 
 func _quest_required_objectives_done(quest_id: String) -> bool:
 	var definition: Dictionary = quests.quest_defs.get(quest_id, {})

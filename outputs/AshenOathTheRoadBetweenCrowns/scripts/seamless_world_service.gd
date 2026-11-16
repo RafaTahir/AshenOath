@@ -290,7 +290,7 @@ func request_road_travel(target: String, arrival: Vector3) -> bool:
 	if not uses_prepared_roads():
 		_clear_road_travel()
 		cancel_preparation()
-		host._request_zone_load(str(edge.target),arrival if arrival != Vector3.ZERO else _road_arrival(edge))
+		host._systems["zone_lifecycle"]._request_zone_load(str(edge.target),arrival if arrival != Vector3.ZERO else _road_arrival(edge))
 		return true
 	_road_travel_serial += 1
 	_road_commit_queued = false
@@ -341,7 +341,7 @@ func _commit_road_travel(serial: int) -> void:
 	if not has_prepared(target): return
 	var arrival: Vector3 = _road_travel.arrival
 	_clear_road_travel()
-	host._request_zone_load(target,arrival)
+	host._systems["zone_lifecycle"]._request_zone_load(target,arrival)
 
 func _refresh_road_status() -> void:
 	if not is_instance_valid(host.zone_root): return

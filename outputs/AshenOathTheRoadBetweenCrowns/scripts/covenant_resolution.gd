@@ -132,4 +132,4 @@ static func finish_if_ready(game) -> void:
 		return
 	var ending := str(game.pending_ending)
 	if not steps_for(ending,game.story_state).is_empty() and ready_to_finish(ending,game.story_state):
-		game._show_ending_consequence(ending)
+		game._systems["quest"]._show_ending_consequence(ending)

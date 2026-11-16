@@ -187,7 +187,7 @@ func crow_shrine_choice_ready() -> bool:
 	return _host._crow_shrine_choice_ready()
 
 func road_ready_to_report() -> bool:
-	return _host._road_ready_to_report()
+	return _host._systems["quest"]._road_ready_to_report()
 
 func wychwood_wave_progress() -> int:
 	return clampi(int(_host.wychwood_pack_kills), 0, 5)

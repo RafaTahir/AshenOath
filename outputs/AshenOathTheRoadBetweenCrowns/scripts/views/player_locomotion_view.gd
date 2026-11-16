@@ -8,6 +8,8 @@ func _init(actor: CharacterBody3D) -> void:
 
 func _movement_input() -> Vector2:
 	if _actor.input_source != null and (_actor.input_source != null):
+		var frame: Variant = _actor.input_source.get("input_frame")
+		if frame != null: return Vector2(frame.move_x, frame.move_y)
 		return _actor.input_source.movement_vector()
 	# Character fixtures and portrait captures can instantiate the controller
 	# before InputRouter has installed its actions. Missing actions are neutral

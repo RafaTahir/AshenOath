@@ -101,7 +101,7 @@ func _evacuate_bell_eater_bystanders() -> void:
 		var driver: Variant = actor.find_child("CharacterAnimationDriver", true, false)
 		if driver != null and (driver != null):
 			driver.set_dialogue_pose(true)
-		_actor._face_npc_toward_player(actor)
+		_actor._systems["dialogue"]._face_npc_toward_player(actor)
 
 func _restore_bell_eater_bystanders() -> void:
 	if _actor.zone_root == null:

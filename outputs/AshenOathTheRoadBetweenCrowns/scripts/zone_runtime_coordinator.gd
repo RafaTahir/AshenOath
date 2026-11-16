@@ -92,7 +92,7 @@ func record_playable_transition(zone_id: String, elapsed_ms: float, support_read
 	last_activation["playable_ms"] = elapsed_ms
 	last_activation["support_ready"] = support_ready
 	if support_ready:
-		host._on_progression_arrival(zone_id)
+		host._systems["quest"]._on_progression_arrival(zone_id)
 
 func begin_transition(zone_id: String, previous_zone: String, spawn_position: Vector3) -> void:
 	preload("res://scripts/greyfen_archery_range.gd").stop_activity(host)
@@ -368,7 +368,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 			])
 			if host.zone_runtime_coordinator != null:
 				host.zone_runtime_coordinator.rollback(zone_id, previous_zone_id, build_validation.get("errors", []))
-			host._recover_failed_zone_load(previous_zone_id)
+			host._systems["zone_lifecycle"]._recover_failed_zone_load(previous_zone_id)
 			return
 		host._flush_environment_batches()
 		host._install_world_prop_controller(zone_id)
@@ -382,7 +382,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 		# visible frame.
 		host._end_zone_world_reads()
 		host.active_zone_signature = host._zone_state_signature(zone_id)
-	host._bind_spatial_player_body()
+	host._systems["zone_lifecycle"]._bind_spatial_player_body()
 	host.interaction_candidates.clear()
 	host.interaction_area_cache_ready = false
 	host.interaction_focus_dirty = true
@@ -420,12 +420,12 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	if host.zone_streaming != null and host.zone_streaming.has_method("prewarm_neighbors") and not host.should_defer_neighbor_prewarm():
 		host.zone_streaming.prewarm_neighbors(zone_id)
 	if zone_id == "greyfen" or bool(host.zone_root.get_meta("prepared_audio_complete",false)):
-		host._apply_zone_audio(zone_id)
+		host._systems["zone_lifecycle"]._apply_zone_audio(zone_id)
 	else:
 		host.zone_root.set_meta("zone_audio_pending", true)
 	var safe_spawn: Vector3 = _continuous_arrival.position if not _continuous_arrival.is_empty() else (spawn_pos if WorldSectorManifest.connector_contains(zone_id,spawn_pos,0.0,host.story_state) else host.spatial_service.validate_position(spawn_pos, 0.8, host.spatial_service.bank_for(spawn_pos)))
 	if host.player == null:
-		host._spawn_player(safe_spawn)
+		host._systems["zone_lifecycle"]._spawn_player(safe_spawn)
 	else:
 		host.player.visible = true
 		if not using_prewarmed_spatial:
@@ -435,9 +435,9 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 				var gameplay_camera = host.camera_rig.find_child("Camera3D", true, false) as Camera3D
 				if gameplay_camera != null:
 					gameplay_camera.current = true
-	host._apply_pending_player_restore()
+	host._systems["save"]._apply_pending_player_restore()
 	if zone_id == "greyfen":
-		host._restore_greyfen_cemetery_state()
+		host._systems["quest"]._restore_greyfen_cemetery_state()
 	if life_controller != null:
 		life_controller.player = host.player
 	host._install_opening_soundscape(zone_id)
@@ -446,7 +446,7 @@ func load_zone(zone_id: String, spawn_pos: Vector3 = Vector3.ZERO) -> void:
 	var actors := preload("res://scripts/character_animation_driver.gd").zone_contract(host.zone_root)
 	if not bool(actors.ok):
 		rollback(zone_id, previous_zone_id, actors.errors)
-		host._recover_failed_zone_load(previous_zone_id)
+		host._systems["zone_lifecycle"]._recover_failed_zone_load(previous_zone_id)
 		return
 	if host.performance_budget_monitor != null:
 		var quality_preset = str(host.settings.settings.get("quality_preset", "balanced")) if host.settings != null else "balanced"
@@ -512,8 +512,8 @@ func advance_transition() -> void:
 				return
 			var failed_zone: String = host.current_zone_id
 			rollback(failed_zone, source_zone, ["No confirmed destination collision beneath the arrival or recovery position."])
-			host._record_loading_metrics({"zone": failed_zone, "support_ready": false, "error": "arrival_support_missing"})
-			host._recover_failed_zone_load(source_zone)
+			host._systems["zone_lifecycle"]._record_loading_metrics({"zone": failed_zone, "support_ready": false, "error": "arrival_support_missing"})
+			host._systems["zone_lifecycle"]._recover_failed_zone_load(source_zone)
 		return
 	if host.zone_transition_frames < 2:
 		return
@@ -528,10 +528,10 @@ func _complete_supported_arrival(grounded: Vector3) -> void:
 	if host.combat != null:
 		host.combat.activate_devices(host)
 	if _prewarmed_runtime_pending:
-		host._activate_prewarmed_player_runtime()
+		host._systems["zone_lifecycle"]._activate_prewarmed_player_runtime()
 		_prewarmed_runtime_pending = false
 	if zone_id in ZoneCompositionRouter.CAMPAIGN_ZONES:
-		host._apply_campaign_arrival(zone_id)
+		host._systems["quest"]._apply_campaign_arrival(zone_id)
 	var scope := preload("res://scripts/core/zone_instance_scope.gd").for_root(host.zone_root)
 	for flag_id: String in scope.prepared_story_flags:
 		host.story_state.set_flag(flag_id, scope.prepared_story_flags[flag_id])
@@ -539,7 +539,7 @@ func _complete_supported_arrival(grounded: Vector3) -> void:
 	scope.preparing = false
 	host.zone_root.remove_meta("prepared_arrival_pending")
 	host.zone_root.remove_meta("arrival_support_pending")
-	host._publish_zone_arrival(zone_id, host.zone_root)
+	host._systems["zone_lifecycle"]._publish_zone_arrival(zone_id, host.zone_root)
 	host.active_zone_signature = host._zone_state_signature(zone_id)
 	sync_zone(zone_id)
 	host._refresh_tracker()
@@ -562,7 +562,7 @@ func _complete_supported_arrival(grounded: Vector3) -> void:
 		host.seamless_world.on_zone_activated(zone_id, grounded)
 	_release_source()
 	var elapsed_ms = float(Time.get_ticks_usec() - host.loading_started_usec) / 1000.0
-	host._record_loading_metrics({
+	host._systems["zone_lifecycle"]._record_loading_metrics({
 		"zone": host.current_zone_id,
 		"to_playable_ms": elapsed_ms,
 		"support_ready": true,
@@ -575,11 +575,11 @@ func _complete_supported_arrival(grounded: Vector3) -> void:
 	print("LOADING: zone=%s playable_ms=%.1f" % [host.current_zone_id, elapsed_ms])
 	host.loading_started_usec = 0
 	host.hud.hide_loading()
-	host._start_campaign_visual_prewarm()
-	host._schedule_deferred_visual_roles(host.zone_root)
-	host._schedule_deferred_zone_audio(host.current_zone_id, host.zone_root)
+	host._systems["startup"]._start_campaign_visual_prewarm()
+	host._systems["startup"]._schedule_deferred_visual_roles(host.zone_root)
+	host._systems["zone_lifecycle"]._schedule_deferred_zone_audio(host.current_zone_id, host.zone_root)
 	if host.game_started:
-		host._schedule_zone_autosave()
+		host._systems["zone_lifecycle"]._schedule_zone_autosave()
 
 func _release_source() -> void:
 	if is_instance_valid(_source_root) and _source_root != host.zone_root and not host.route_zone_cache.values().has(_source_root):
@@ -629,7 +629,7 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		if host.asset_helper != null:
 			host.asset_helper.set_zone_scope(previous_zone_id)
 		activate(previous_zone_id, host.zone_root, true)
-		host._bind_spatial_player_body()
+		host._systems["zone_lifecycle"]._bind_spatial_player_body()
 		if host.camera_rig != null:
 			host.camera_rig.set_zone(previous_zone_id)
 		if host.visual_director != null:
@@ -640,7 +640,7 @@ func recover_failed_transition(previous_zone_id: String) -> void:
 		host.compass_cache_valid = false
 		host.interaction_focus_dirty = true
 		host.interaction_focus_cache_valid = false
-		host._apply_zone_audio(previous_zone_id)
+		host._systems["zone_lifecycle"]._apply_zone_audio(previous_zone_id)
 	host._sync_camera_enemy_cache()
 	var restored := is_instance_valid(host.zone_root)
 	if host.player != null:
