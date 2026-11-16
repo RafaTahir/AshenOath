@@ -194,6 +194,6 @@ func _purchase_from_vendor(vendor_id: String, item_id: String, quantity: int = 1
 func _sell_to_vendor(vendor_id: String, item_id: String, quantity: int) -> void:
 	if vendor_service == null or inventory == null or not game_started: return
 	preparation_action_in_progress = true
-	var result: Dictionary = vendor_service.sell(vendor_id,item_id,quantity,inventory)
+	var result: Dictionary = vendor_service.sell(vendor_id,item_id,quantity,inventory,story_state,quests)
 	preparation_action_in_progress = false
 	_finish_preparation_operation(result,vendor_id)

@@ -707,22 +707,13 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 	_prepare_inventory_surface(true)
 	var vendor: Dictionary = vendor_service.get_vendor(vendor_id)
 	var heading: String = "%s\n%s\nCoin: %d\n\n" % [str(vendor.get("name", "Vendor")).to_upper(), str(vendor.get("subtitle", "")), int(inventory.coin)]
-	var stock: Array[Dictionary] = _journal_model("vendor:" + vendor_id, [vendor_service, inventory, story_state, quests], func(): return vendor_service.list_stock(vendor_id, inventory, story_state, quests, true))
-	var request_ids: Array[String] = []
-	for entry: Dictionary in stock:
-		request_ids.append(str(entry.get("item_id", "")))
-	if vendor_id == "tor_forge":
-		request_ids.append("__emergency_arrows__")
-	elif vendor_id == "mira_apothecary":
-		request_ids.append("__emergency_healing__")
 	var selection: Dictionary = _preparation_selection.get(_inventory_screen, {})
-	var selected_id: String = str(selection.get("id", ""))
-	if not request_ids.has(selected_id) and not request_ids.is_empty():
-		selected_id = request_ids[0]
-		_preparation_selection[_inventory_screen] = {"kind":"item", "id":selected_id}
+	var display: Dictionary = vendor_service.presentation(vendor_id, str(selection.get("id", "")), inventory, story_state, quests)
+	var selected_id: String = str(display.selected_id)
+	_preparation_selection[_inventory_screen] = {"kind": "item", "id": selected_id}
 	inventory_text.text = heading + "Supplies and fittings"
 	if selected_id != "":
-		var quote: Dictionary = vendor_service.quote(vendor_id, selected_id, 1, inventory, story_state, quests)
+		var quote: Dictionary = display.quote
 		var received_id: String = str(quote.get("item_id", selected_id))
 		var preparation_progression: Variant = _journal_context.get("progression")
 		if is_instance_valid(_game_owner):
@@ -730,32 +721,27 @@ func show_vendor(vendor_id: String, vendor_service, inventory, quests = null, st
 		var detail: Dictionary = PreparationViewModel.item_detail(received_id, inventory, preparation_progression, _preparation_context, story_state, quests)
 		detail["actions"] = []
 		inventory_text.text = heading + PreparationPanel.item_text(detail) + "\n" + PreparationPanel.purchase_text(quote)
-		var emergency: bool = selected_id.begins_with("__emergency")
-		var purchase_label: String = "Claim emergency reserve" if emergency else ("Fit · %d coin" % int(quote.get("total_price", 0)) if bool(quote.get("upgrade", false)) else "Buy %d · %d coin" % [int(quote.get("quantity", 1)), int(quote.get("total_price", 0))])
-		if not bool(quote.get("ok", false)):
-			purchase_label = "Already fitted" if bool(quote.get("upgrade", false)) and int(quote.get("owned", 0)) > 0 else "Unavailable"
-		var buy: Button = _preparation_button(purchase_label, "action:buy:" + selected_id, _preparation_actions, bool(quote.get("ok", false)))
-		buy.pressed.connect(func(id_value: String = selected_id): vendor_purchase_requested.emit(vendor_id, id_value, 1))
-		if not emergency and not bool(quote.get("upgrade",false)):
-			var five: Dictionary = vendor_service.quote(vendor_id,selected_id,5,inventory,story_state,quests)
-			if bool(five.get("ok",false)) and int(five.get("quantity",0)) == 5:
-				var bundle := _preparation_button("Buy 5 · %d coin" % int(five.total_price),"action:buy5:"+selected_id,_preparation_actions)
-				bundle.pressed.connect(func(id_value: String = selected_id): vendor_purchase_requested.emit(vendor_id,id_value,5))
+		var buy: Button = _preparation_button(str(display.purchase_label), "action:buy:" + selected_id, _preparation_actions, bool(quote.get("ok", false)))
+		buy.pressed.connect(func(id_value: String = selected_id) -> void: vendor_purchase_requested.emit(vendor_id, id_value, 1))
+		if bool(display.bundle):
+			var bundle: Button = _preparation_button("Buy 5 · %d coin" % int(display.bundle_price), "action:buy5:" + selected_id, _preparation_actions)
+			bundle.pressed.connect(func(id_value: String = selected_id) -> void: vendor_purchase_requested.emit(vendor_id, id_value, 5))
 	_add_preparation_heading("SUPPLIES AND SERVICES")
-	for request_id: String in request_ids:
-		var title: String = "Emergency arrows" if request_id == "__emergency_arrows__" else ("Emergency medicine" if request_id == "__emergency_healing__" else str(inventory.get_item_name(request_id)))
+	for entry: Dictionary in display.entries:
+		var request_id: String = str(entry.id)
+		var title: String = str(entry.title)
 		var entry_button: Button = _preparation_button(title, "item:" + request_id, craft_buttons)
 		entry_button.toggle_mode = true
 		entry_button.button_pressed = selected_id == request_id
-		entry_button.pressed.connect(func(id_value: String = request_id): _select_preparation_entry("item", id_value))
-	var surplus: Array[Dictionary] = vendor_service.list_surplus(vendor_id,inventory)
+		entry_button.pressed.connect(func(id_value: String = request_id) -> void: _select_preparation_entry("item", id_value))
+	var surplus: Array = display.surplus
 	if not surplus.is_empty():
 		_add_preparation_heading("SELL SURPLUS · ROAD RESERVES RETAINED")
 		for offer: Dictionary in surplus:
 			var item_id: String = str(offer.item_id)
 			var sale := _preparation_button("Sell 1 %s · +%d coin" % [inventory.get_item_name(item_id),int(offer.unit_price)],"action:sell:"+item_id,craft_buttons)
 			sale.tooltip_text = str(offer.message)
-			sale.pressed.connect(func(id_value: String = item_id): vendor_sale_requested.emit(vendor_id,id_value,1))
+			sale.pressed.connect(func(id_value: String = item_id) -> void: vendor_sale_requested.emit(vendor_id,id_value,1))
 	_add_preparation_close()
 	_queue_responsive_layout()
 	view.call_deferred("_restore_inventory_state", _inventory_screen, _inventory_generation)

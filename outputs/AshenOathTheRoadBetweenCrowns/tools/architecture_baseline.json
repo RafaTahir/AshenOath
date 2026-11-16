@@ -777,9 +777,9 @@
       "duck_meta_calls": 17,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 932,
+      "lines": 918,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 50,
+      "untyped_funcs": 45,
       "wallclock_calls": 0
     },
     "scripts/hud/menu_panel.gd": {
@@ -1368,12 +1368,12 @@
       "wallclock_calls": 0
     },
     "scripts/save_manager.gd": {
-      "duck_meta_calls": 8,
+      "duck_meta_calls": 7,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 1395,
+      "lines": 945,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 21,
+      "untyped_funcs": 20,
       "wallclock_calls": 3
     },
     "scripts/saved_journey_model.gd": {
@@ -1875,9 +1875,9 @@
       "duck_meta_calls": 0,
       "dynamic_get_set_funcs": [],
       "has_dynamic_get_set": false,
-      "lines": 350,
+      "lines": 156,
       "unseeded_rand_calls": 0,
-      "untyped_funcs": 12,
+      "untyped_funcs": 11,
       "wallclock_calls": 0
     },
     "scripts/village_consequence_routines.gd": {

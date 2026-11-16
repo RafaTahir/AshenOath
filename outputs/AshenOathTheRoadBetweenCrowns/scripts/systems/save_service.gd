@@ -8,7 +8,7 @@ func load_save_state(data: Dictionary) -> void:
 	# Direct payload callers retain the same preparation boundary as file-backed
 	# selections. SaveManager owns identity/history for ordinary UI loads.
 	var migrated_data: Dictionary = data
-	if save_manager != null and save_manager.has_method("migrate_save_data"):
+	if save_manager != null:
 		migrated_data = save_manager.migrate_save_data(data)
 		if migrated_data.is_empty():
 			if hud != null:
@@ -64,7 +64,7 @@ func _apply_loaded_journey(data: Dictionary) -> void:
 	var discovered: Dictionary = seamless_world.discovered_sectors if seamless_world != null else {}
 	progression.restore_journey(quests, story_state, saved_sector, discovered)
 	# Restore entitlement ownership before migrating a legacy coating duration.
-	inventory.load_state(data.get("inventory", {}), int(data.get("migrated_from_version", data.get("version", 0))) < 13)
+	inventory.load_state(preload("res://scripts/models/ammo_loadout_model.gd").migrate_inventory(data.get("inventory", {}), data.get("equipment", {})), int(data.get("migrated_from_version", data.get("version", 0))) < 13)
 	if int(data.get("version", 0)) < 3 and quests.is_completed("main_road_of_crows"):
 		story_state.set_flag("legacy_report_choice_required", true)
 	load_world_state(data.get("world_state", {}))
